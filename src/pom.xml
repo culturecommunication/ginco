@@ -102,7 +102,7 @@
 						<source>1.7</source>
 						<target>1.7</target>
 						<debug>true</debug>
-						<opt>true</opt>
+						<!--<optimize>true</optimize>-->
 					</configuration>
 				</plugin>
 				<plugin>
