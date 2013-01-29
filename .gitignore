@@ -9,7 +9,10 @@
 .metadata
 .project
 .classpath/
+**/*.classpath/*
 .settings/
+**/*.settings/*
 
 # Maven target folder #
-target/
+target/*
+**/target*/*
