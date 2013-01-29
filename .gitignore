@@ -8,5 +8,8 @@
 # Eclipse files #
 .metadata
 .project
-.classpath
-.settings
+.classpath/
+.settings/
+
+# Maven target folder #
+target/
