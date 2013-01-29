@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>ginco</artifactId>
+		<groupId>fr.smile.mcc.ginco</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>admin</artifactId>
+	<packaging>war</packaging>
+	<build>
+		<finalName>ginco-admin</finalName>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>fr.smile.mcc.ginco</groupId>
+			<artifactId>ginco-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>fr.smile.mcc.ginco</groupId>
+			<artifactId>ginco-impl</artifactId>
+		</dependency>
+		<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+		</dependency>
+			<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-bundle-jaxrs</artifactId>
+		</dependency>
+	</dependencies>
+</project>
