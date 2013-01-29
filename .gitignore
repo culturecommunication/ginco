@@ -15,4 +15,4 @@
 
 # Maven target folder #
 target/*
-**/target*/*
+**/target/*
