@@ -1,17 +1,19 @@
-package fr.mcc.ginco.rest.services;
+package fr.mcc.ginco.log;
 
-import fr.mcc.ginco.IVocabulary;
-import fr.mcc.ginco.log.Log;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import java.lang.reflect.Field;
 
 /**
+ * <p/>
+ * Custom bean that implements behaviour of custom <b>Log annotation</b>
+ * also taking Spring advantages as injection of this field into your class.
+ * <p/>
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
  * <p/>
@@ -44,21 +46,35 @@ import javax.ws.rs.Produces;
  * <p/>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
+ *
+ * @see fr.mcc.ginco.log.Log
  */
+@Component
+public class LoggerPostProcessor implements BeanPostProcessor {
 
-@Service
-@Path("/vocabulary")
-public class VocabularyRestService {
-    @Inject private IVocabulary vocabulary;
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws
+            BeansException {
+        return bean;
+    }
 
-    @Log Logger logger;
+    public Object postProcessBeforeInitialization(final Object bean, String beanName)
+            throws BeansException {
+        ReflectionUtils.doWithFields(bean.getClass(), new ReflectionUtils.FieldCallback() {
 
-    @GET
-    @Path("/getVocabulary/{id}")
-    @Produces({"application/json"})
-    public IVocabulary getVocabularyById(@PathParam("id") String id) {
-        logger.info("Param passed to me : " + id);
-        vocabulary.setParam(id);
-        return vocabulary;
+            public void doWith(Field field) throws IllegalArgumentException,
+                    IllegalAccessException {
+                ReflectionUtils.makeAccessible(field);
+
+                //Check if the field is annotated with @Log
+                if (field.getAnnotation(Log.class) != null) {
+                    Log logAnnotation = field.getAnnotation(Log.class);
+                    Logger logger = LoggerFactory.getLogger(bean.getClass());
+                    field.set(bean, logger);
+                }
+            }
+        });
+
+        return bean;
     }
 }
+

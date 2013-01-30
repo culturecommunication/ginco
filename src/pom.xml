@@ -12,9 +12,10 @@
 		<org.apache.cxf.version>2.7.2</org.apache.cxf.version>
 		<org.hibernate.version>4.1.9.Final</org.hibernate.version>
         <org.codehaus.jackson.version>1.9.11</org.codehaus.jackson.version>
-		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.8.2</junit.version>
         <javax.inject.version>1</javax.inject.version>
+        <logback.version>1.0.9</logback.version>
+        <org.slf4j.version>1.6.6</org.slf4j.version>
 	</properties>
 	<scm>
 	<connection>scm:git:git@github.com:culturecommunication/ginco.git</connection>
@@ -100,6 +101,11 @@
 				<version>${project.version}</version>
 			</dependency>
             <dependency>
+                <groupId>fr.smile.mcc.ginco</groupId>
+                <artifactId>ginco-commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>${javax.inject.version}</version>
@@ -113,6 +119,26 @@
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-jaxrs</artifactId>
                 <version>${org.codehaus.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${org.slf4j.version}</version>
             </dependency>
         </dependencies>
 	</dependencyManagement>

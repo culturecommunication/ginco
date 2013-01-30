@@ -1,7 +1,8 @@
 package fr.mcc.ginco;
 
+import fr.mcc.ginco.log.Log;
 import org.springframework.stereotype.Component;
-
+import org.slf4j.Logger;
 /**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
@@ -39,6 +40,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class VocabularyImpl implements IVocabulary {
 
+    @Log Logger springLog;
+
     @Override
     public String SayHello(String person) {
         System.out.println("Hello, " + person);
@@ -49,6 +52,7 @@ public class VocabularyImpl implements IVocabulary {
 
     @Override
     public void setParam(String id) {
+        springLog.info("SPRING Logger says : " + id);
         this.id = id;
     }
 

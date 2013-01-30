@@ -18,6 +18,10 @@
             <artifactId>ginco-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>fr.smile.mcc.ginco</groupId>
+            <artifactId>ginco-commons</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
@@ -32,6 +36,10 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -1,17 +1,12 @@
-package fr.mcc.ginco.rest.services;
+package fr.mcc.ginco.log;
 
-import fr.mcc.ginco.IVocabulary;
-import fr.mcc.ginco.log.Log;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import java.lang.annotation.*;
 
 /**
+ * <p/>
+ * Custom annotation that encapsulates all the manipulation with <b>Log</b>,
+ * also taking Spring advantages as injection of this field into your class.
+ * <p/>
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
  * <p/>
@@ -45,20 +40,7 @@ import javax.ws.rs.Produces;
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-@Service
-@Path("/vocabulary")
-public class VocabularyRestService {
-    @Inject private IVocabulary vocabulary;
-
-    @Log Logger logger;
-
-    @GET
-    @Path("/getVocabulary/{id}")
-    @Produces({"application/json"})
-    public IVocabulary getVocabularyById(@PathParam("id") String id) {
-        logger.info("Param passed to me : " + id);
-        vocabulary.setParam(id);
-        return vocabulary;
-    }
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@Documented
+public @interface Log { }
