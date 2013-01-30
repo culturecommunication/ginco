@@ -7,21 +7,51 @@
 	<name>Ginco</name>
 	<packaging>pom</packaging>
 	<properties>
+		<!-- utils -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.6</java.version>
+		<!-- dependencies versions -->
 		<org.springframework.version>3.2.0.RELEASE</org.springframework.version>
 		<org.apache.cxf.version>2.7.2</org.apache.cxf.version>
 		<org.hibernate.version>4.1.9.Final</org.hibernate.version>
-        <org.codehaus.jackson.version>1.9.11</org.codehaus.jackson.version>
+		<org.codehaus.jackson.version>1.9.11</org.codehaus.jackson.version>
 		<junit.version>4.8.2</junit.version>
-        <javax.inject.version>1</javax.inject.version>
-        <logback.version>1.0.9</logback.version>
-        <org.slf4j.version>1.6.6</org.slf4j.version>
+		<javax.inject.version>1</javax.inject.version>
+		<logback.version>1.0.9</logback.version>
+		<org.slf4j.version>1.6.6</org.slf4j.version>
+		<!-- cargo deployment - default development configuration -->
+		<tomcat.base>http://hadoc.lxc:80/</tomcat.base>
+		<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
+		<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
+		<cargo.remote.uri>${tomcat.base}manager</cargo.remote.uri>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>integration</id>
+			<properties>
+				<!-- cargo deployment -->
+				<tomcat.base>http://hadoc-int.eqx.intranet:80/</tomcat.base>
+				<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
+				<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>recette</id>
+			<properties>
+				<!-- cargo deployment -->
+				<tomcat.base>http://hadoc-rec.eqx.intranet:80/</tomcat.base>
+				<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
+				<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
+			</properties>
+		</profile>
+	</profiles>
+
 	<scm>
-	<connection>scm:git:git@github.com:culturecommunication/ginco.git</connection>
-	<url>scm:git:git@github.com:culturecommunication/ginco.git</url>
-	<developerConnection>scm:git:git@github.com:culturecommunication/ginco.git</developerConnection>
-  </scm>
+		<url>scm:git:https://github.com/culturecommunication/ginco.git</url>
+		<connection>scm:git:git://github.com/culturecommunication/ginco.git</connection>
+		<developerConnection>scm:git:git@github.com:culturecommunication/ginco.git</developerConnection>
+	</scm>
 	<ciManagement>
 		<system>continuum</system>
 		<url>
@@ -46,20 +76,53 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>MCC hadoc</name>
+			<post>mcc-hadoc@smile.fr</post>
+		</mailingList>
+	</mailingLists>
+
+	<developers>
+		<developer>
+			<id>dabel</id>
+			<name>Daphné Bellemin</name>
+			<email>dabel@smile.fr</email>
+			<organization>Smile</organization>
+			<organizationUrl>http://www.smile.fr</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>ilizo</id>
+			<name>Illia Izotov</name>
+			<email>ilizo@smile.fr</email>
+			<organization>Smile</organization>
+			<organizationUrl>http://www.smile.fr</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>frsto</id>
+			<name>François-Régis Storez</name>
+			<email>frsto@smile.fr</email>
+			<organization>Smile</organization>
+			<organizationUrl>http://www.smile.fr</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
 	<dependencyManagement>
 		<dependencies>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-bundle-jaxrs</artifactId>
-                <version>${org.apache.cxf.version}</version>
-
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-servlet_3.0_spec</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-bundle-jaxrs</artifactId>
+				<version>${org.apache.cxf.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
@@ -100,95 +163,66 @@
 				<artifactId>ginco-impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-            <dependency>
-                <groupId>fr.smile.mcc.ginco</groupId>
-                <artifactId>ginco-commons</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.inject</groupId>
-                <artifactId>javax.inject</artifactId>
-                <version>${javax.inject.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-jaxrs</artifactId>
-                <version>${org.codehaus.jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-access</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${org.slf4j.version}</version>
-            </dependency>
-        </dependencies>
+			<dependency>
+				<groupId>fr.smile.mcc.ginco</groupId>
+				<artifactId>ginco-commons</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>${javax.inject.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-jaxrs</artifactId>
+				<version>${org.codehaus.jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-access</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${org.slf4j.version}</version>
+			</dependency>
+		</dependencies>
 	</dependencyManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
 					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-						<debug>true</debug>
-						<!--<optimize>true</optimize>-->
+						<source>${java.version}</source>
+						<target>${java.version}</target>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>2.1.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.cargo</groupId>
-					<artifactId>cargo-maven2-plugin</artifactId>
+					<artifactId>maven-deploy-plugin</artifactId>
 					<configuration>
-						<container>
-							<containerId>tomcat6x</containerId>
-							 
-							<type>remote</type>
-						</container>
-						<configuration>
-							  
-							<type>runtime</type>
-							<properties>
-								<cargo.remote.username>admin</cargo.remote.username>
-								<cargo.remote.password>admin</cargo.remote.password>
-								<cargo.hostname>hadoc.lxc</cargo.hostname>
-								<cargo.servlet.port>80</cargo.servlet.port>
-							</properties>
-						</configuration>
+						<skip>true</skip>
 					</configuration>
 				</plugin>
-				<!-- 
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>tomcat-maven-plugin</artifactId>
-					<configuration>
-						<url>http://hadoc.lxc/manager</url>
-					</configuration>
-				</plugin>
-				 -->
 			</plugins>
 		</pluginManagement>
 	</build>
