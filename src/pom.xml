@@ -11,6 +11,7 @@
 		<org.springframework.version>3.2.0.RELEASE</org.springframework.version>
 		<org.apache.cxf.version>2.7.2</org.apache.cxf.version>
 		<org.hibernate.version>4.1.9.Final</org.hibernate.version>
+        <org.codehaus.jackson.version>1.9.11</org.codehaus.jackson.version>
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.8.2</junit.version>
         <javax.inject.version>1</javax.inject.version>
@@ -24,12 +25,12 @@
 		<system>continuum</system>
 		<url>
          https://pic-java.smile.fr/continuum/projectGroupSummary.action?projectGroupId=331
-        </url>      
+        </url>
 		<notifiers>
 			<notifier>
 				<sendOnSuccess>false</sendOnSuccess>
 				<sendOnWarning>false</sendOnWarning>
-				<sendOnFailure>true</sendOnFailure>				
+				<sendOnFailure>true</sendOnFailure>
 				<configuration>
 					<address>mcc-hadoc@smile.fr</address>
 				</configuration>
@@ -37,7 +38,7 @@
 			<notifier>
 				<sendOnSuccess>false</sendOnSuccess>
 				<sendOnWarning>false</sendOnWarning>
-				<sendOnFailure>true</sendOnFailure>				
+				<sendOnFailure>true</sendOnFailure>
 				<configuration>
 					<address>mcc-hadoc@smile.fr</address>
 				</configuration>
@@ -46,12 +47,18 @@
 	</ciManagement>
 	<dependencyManagement>
 		<dependencies>
-		     		
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-bundle-jaxrs</artifactId>
-				<version>${org.apache.cxf.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-bundle-jaxrs</artifactId>
+                <version>${org.apache.cxf.version}</version>
+
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-servlet_3.0_spec</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
@@ -102,7 +109,12 @@
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
             </dependency>
-		</dependencies>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-jaxrs</artifactId>
+                <version>${org.codehaus.jackson.version}</version>
+            </dependency>
+        </dependencies>
 	</dependencyManagement>
 	<build>
 		<pluginManagement>

@@ -7,9 +7,15 @@
        http://cxf.apache.org/jaxrs
        http://cxf.apache.org/schemas/jaxrs.xsd">
 
+    <bean id="jsonProvider"
+          class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+
     <jaxrs:server id="uiServices" address="/ui">
         <jaxrs:serviceBeans>
             <bean class="fr.mcc.ginco.rest.services.VocabularyRestService"/>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"  />
+        </jaxrs:providers>
     </jaxrs:server>
 </beans>

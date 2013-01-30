@@ -36,4 +36,6 @@ package fr.mcc.ginco;
  */
 public interface IVocabulary {
     public String SayHello(String person);
+    public void setParam(String id);
+    public String getId();
 }

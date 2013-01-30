@@ -44,4 +44,16 @@ public class VocabularyImpl implements IVocabulary {
         System.out.println("Hello, " + person);
         return ("Hello, " + person);
     }
+
+    private String id;
+
+    @Override
+    public void setParam(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
 }

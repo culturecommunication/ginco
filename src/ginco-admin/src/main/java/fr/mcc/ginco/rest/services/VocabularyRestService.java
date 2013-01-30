@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import java.util.List;
 
 /**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
@@ -46,13 +47,14 @@ import javax.ws.rs.Produces;
 
 @Service
 @Path("/vocabulary")
-@Produces("application/json")
 public class VocabularyRestService {
     @Inject private IVocabulary vocabulary;
 
     @GET
     @Path("/getVocabulary/{id}")
-    public String getVocabularyById(@PathParam("id") String id) {
-        return vocabulary.SayHello(id);
+    @Produces({"application/json"})
+    public IVocabulary getVocabularyById(@PathParam("id") String id) {
+        vocabulary.setParam(id);
+        return vocabulary;
     }
 }
