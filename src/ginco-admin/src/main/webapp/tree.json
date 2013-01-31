@@ -1,0 +1,20 @@
+{
+    children: [
+    { id:1, label: "Vocabulaire1_TEST", expanded: true, children : [
+        { id:2,label: "Arborescence des concepts",expanded:true, children:[{ id:3,label:"Concept TT 1",expanded: false
+         ,children : [{ id:4,
+             label : "Sous Concept TT4", expanded:false,leaf:true, children : []}]},
+        { id:5,label:"Concept TT 2",expanded: false,leaf:true,children : []},
+        { id:6,label:"Concept TT 3",expanded: false,leaf:true,children : []}] },
+        
+        {id:7,label:"Bac à sable",expanded:false,children:[{id:8,
+            label: "Terme sans concept 1", leaf:true}]},
+        {id:9,label:"Concepts orphelins",expanded:false,children:[{id:10,
+            label: "Concept sans parent1", leaf:true}]},
+        {id:11,label:"Groupes",expanded:true,children:[{
+            label:"Groupe de concept 1",children:[{id:12,
+                label:"Sous groupe de concept 2",leaf:true}]},{id:12,label:"Groupe de concept 2",leaf:true,children:[]}]}]},
+            { id:13,label: "Vocabulaire2", expanded: false, children : [] },
+            { id:14,label: "Vocabulaire3 avec Ajax", expanded: false }
+    ]
+}
