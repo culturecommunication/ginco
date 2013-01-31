@@ -1,7 +1,8 @@
 Ext.define('HadocApp.view.LeftPanel', {
     extend: 'Ext.panel.Panel',
-    alias: 'widget.mypanel5',
-
+    alias: 'widget.leftPanel',
+    xThesaurusLabel: "Thesaurus Explorer",
+    localized: true,
     frame: false,
     width: 250,
     collapsible: true,
@@ -18,23 +19,13 @@ Ext.define('HadocApp.view.LeftPanel', {
                     dock: 'top',
                     autoScroll: true,
                     collapsible: false,
-                    title: 'Vocabulaires',
+                    title: me.xThesaurusLabel,
                     forceFit: false,
                     scroll: 'vertical',
                     // store: 'ThesaurusTreeStore',
                     displayField: 'label',
                     rootVisible: false,
                     useArrows: true,
-                    viewConfig: {
-
-                    }
-                },
-                {
-                    xtype: 'treepanel',
-                    dock: 'bottom',
-                    collapsible: true,
-                    title: 'Administration',
-                    store: 'AdminTreeStore',
                     viewConfig: {
 
                     }

@@ -1,10 +1,24 @@
 Ext.define('HadocApp.view.TopToolbar', {
     extend: 'Ext.toolbar.Toolbar',
-    alias: 'widget.mytoolbar',
-
+    alias: 'widget.topToolBar',
+    localized: true,
+    xNewLabel: "New",
+    xAdministrationLabel: "Administration",
+    xControlLabel: "Control",
+    xTopWelcomeLabel: "Hadoc GINCO Back-office",
+    xJournalLabel: "Journal",
+    xExportLabel: "Exports",
+    xAboutLabel: "About",
+    xSearchLabel: "Search",
+    xSearchFieldText: "Search a term",
+    xConnectedAsLabel: "Connected as",
+    xNewMenu_ThesaurusLabel: "Thesaurus",
+    xNewMenu_ConceptLabel: "Concept",
+    xNewMenu_TermLabel: "Term",
+    xNewMenu_GroupLabel: "Group of Concepts",
     height: 64,
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         Ext.applyIf(me, {
@@ -12,22 +26,44 @@ Ext.define('HadocApp.view.TopToolbar', {
                 {
                     xtype: 'label',
                     width: 100,
-                    text: 'Gestionnaire Hadoc GINCO'
+                    text: me.xTopWelcomeLabel
                 },
                 {
                     xtype: 'buttongroup',
-                    title: 'Gestion',
-                    columns: 2,
+                    title: me.xControlLabel,
+                    columns: 1,
                     items: [
                         {
                             xtype: 'splitbutton',
                             disabled: false,
-                            text: 'Nouveau',
+                            text: me.xNewLabel,
                             menu: {
                                 xtype: 'menu',
-                                width: 120,
+                                width: 200,
                                 items: [
-
+                                    {
+                                        xtype: 'menuitem',
+                                        disabled: true,
+                                        text: me.xNewMenu_ThesaurusLabel
+                                    },
+                                    {
+                                        xtype: 'menuitem',
+                                        disabled: true,
+                                        text: me.xNewMenu_ConceptLabel
+                                    },
+                                    {
+                                        xtype: 'menuitem',
+                                        disabled: true,
+                                        text: me.xNewMenu_TermLabel
+                                    },
+                                    {
+                                        xtype: 'menuseparator'
+                                    },
+                                    {
+                                        xtype: 'menuitem',
+                                        disabled: true,
+                                        text: me.xNewMenu_GroupLabel
+                                    }
                                 ]
                             }
                         }
@@ -35,28 +71,30 @@ Ext.define('HadocApp.view.TopToolbar', {
                 },
                 {
                     xtype: 'buttongroup',
-                    title: 'Administration',
+                    title: me.xAdministrationLabel,
                     columns: 2,
                     items: [
                         {
                             xtype: 'button',
-                            text: 'Journal'
+                            text: me.xJournalLabel,
+                            disabled: true
                         },
                         {
                             xtype: 'button',
-                            text: 'Exports'
+                            disabled: true,
+                            text: me.xExportLabel
                         }
                     ]
                 },
                 {
                     xtype: 'buttongroup',
                     title: 'Aide',
-                    columns: 2,
+                    columns: 1,
                     items: [
                         {
                             xtype: 'button',
                             id: 'aproposbtn',
-                            text: 'À propos'
+                            text: me.xAboutLabel
                         }
                     ]
                 },
@@ -69,14 +107,15 @@ Ext.define('HadocApp.view.TopToolbar', {
                 {
                     xtype: 'triggerfield',
                     width: 276,
-                    fieldLabel: 'Recherche',
-                    emptyText: 'Rechercher un terme',
+                    fieldLabel: me.xSearchLabel,
+                    emptyText: me.xSearchFieldText,
                     hideTrigger: false,
-                    repeatTriggerClick: false
+                    repeatTriggerClick: false,
+                    disabled: true
                 },
                 {
                     xtype: 'label',
-                    text: 'Connecté en tant que Admin'
+                    text: me.xConnectedAsLabel
                 }
             ]
         });

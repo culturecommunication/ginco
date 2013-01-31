@@ -21,11 +21,11 @@ Ext.define('HadocApp.view.HadocViewPort', {
                     region: 'center'
                 },
                 {
-                    xtype: 'mytoolbar',
+                    xtype: 'topToolBar',
                     region: 'north'
                 },
                 {
-                    xtype: 'mypanel5',
+                    xtype: 'leftPanel',
                     region: 'west',
                     split: true
                 }
