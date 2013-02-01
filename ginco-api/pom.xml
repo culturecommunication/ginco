@@ -9,6 +9,11 @@
 	</parent>
 	<artifactId>ginco-api</artifactId>
 	<packaging>jar</packaging>
+	<scm>
+		<url>scm:git:https://github.com/culturecommunication/ginco.git</url>
+		<connection>scm:git:git://github.com/culturecommunication/ginco.git ginco-api</connection>
+		<developerConnection>scm:git:git@github.com:culturecommunication/ginco.git</developerConnection>
+	</scm>
 	<build>
 		<finalName>ginco-api</finalName>
 	</build>	
