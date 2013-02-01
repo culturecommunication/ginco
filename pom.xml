@@ -28,6 +28,7 @@
 		<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
 		<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
 		<cargo.remote.uri>${tomcat.base}manager</cargo.remote.uri>
+        <postgresql.jdbc.version>9.1-901.jdbc4</postgresql.jdbc.version>
 	</properties>
 
 	<profiles>
@@ -241,6 +242,11 @@
 				<version>${h2database.version}</version>
 				<scope>test</scope>
 			</dependency>
+            <dependency>
+                <groupId>postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.jdbc.version}</version>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>

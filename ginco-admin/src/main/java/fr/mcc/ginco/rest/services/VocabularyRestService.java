@@ -1,15 +1,21 @@
 package fr.mcc.ginco.rest.services;
 
+import fr.mcc.ginco.IGenericDAO;
 import fr.mcc.ginco.IVocabulary;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.dao.hibernate.GenericHibernateDAO;
+import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
 import fr.mcc.ginco.log.Log;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import java.util.List;
 
 /**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
@@ -49,16 +55,24 @@ import javax.ws.rs.Produces;
 @Service
 @Path("/vocabulary")
 public class VocabularyRestService {
-    @Inject private IVocabulary vocabulary;
+    @Inject
+    @Named("vocabularyService")
+    private IVocabulary vocabularyImpl;
 
     @Log Logger logger;
 
     @GET
     @Path("/getVocabulary/{id}")
     @Produces({"application/json"})
-    public IVocabulary getVocabularyById(@PathParam("id") String id) {
+    public Thesaurus getVocabularyById(@PathParam("id") String id) {
         logger.info("Param passed to me : " + id);
-        vocabulary.setParam(id);
-        return vocabulary;
+        return vocabularyImpl.getThesaurusById(id);
     }
+
+    /*@GET
+    @Path("/getVocabularies")
+    @Produces({"application/json"})
+    public List<Thesaurus> getVocabularies() {
+        return vocabularyImpl.findAll();
+    } */
 }

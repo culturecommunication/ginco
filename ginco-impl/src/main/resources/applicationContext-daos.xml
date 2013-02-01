@@ -11,38 +11,30 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-	<bean id="abstractDAO"
-		class="org.springframework.orm.hibernate3.support.HibernateDaoSupport"
-		abstract="true" p:sessionFactory-ref="gincoSessionFactory" />
-
 	<!-- Definition of the Data Access Objects of Ginco Application -->
 	<!-- All Data Access Objects are injected by spring, using GenericHibernateDAO -->
 	<!-- Exception for thesaurusDAO, more sophisticated, which have its own implementation  -->
-	<bean id="languagesDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO"
-		scope="singleton">
+	<bean id="languagesDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.Languages" />
-		<property name="sessionFactory" ref="gincoSessionFactory" />
 	</bean>
 
-	<bean id="thesaurusDAO" class="fr.mcc.ginco.dao.hibernate.ThesaurusDAO" parent="abstractDAO" />
+	<bean id="thesaurusDAO" class="fr.mcc.ginco.dao.hibernate.ThesaurusDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.Thesaurus" />
+    </bean>
 
-	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="singleton">
+	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
-		<property name="sessionFactory" ref="gincoSessionFactory" />
 	</bean>
 
-	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="singleton">
+	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusOrganization" />
-		<property name="sessionFactory" ref="gincoSessionFactory" />
 	</bean>
 
-	<bean id="thesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="singleton">
+	<bean id="thesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusType" />
-		<property name="sessionFactory" ref="gincoSessionFactory" />
 	</bean>
 
-	<bean id="thesaurusVersionHistoryDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="singleton">
+	<bean id="thesaurusVersionHistoryDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusVersionHistory" />
-		<property name="sessionFactory" ref="gincoSessionFactory" />
 	</bean>
 </beans>
