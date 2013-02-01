@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="Thesaurus" table="thesaurus">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+			<generator class="native" />
+		</id>
+		<property name="contributor" />
+		<property name="coverage" />
+		<property name="date" />
+		<property name="description" />
+		<property name="publisher" />
+		<property name="relation" />
+		<property name="rights" />
+		<property name="source" />
+		<property name="subject" />
+		<property name="title" not-null="true" />
+		<property name="created" not-null="true" />
+
+		<!-- <many-to-one name="format" column="format" />
+		<many-to-one name="type" column="type" />
+		<many-to-one name="creator" column="creator" />
+
+		<set name="versions">
+			<key column="identifier" />
+			<one-to-many class="ThesaurusVersionHistory" />
+		</set>
+
+		<set name="lang" table="thesaurus_languages">
+			<key column="thesaurus_identifier" />
+			<many-to-many class="LanguagesIso639" column="iso639_id" />
+		</set> -->
+
+	</class>
+</hibernate-mapping>

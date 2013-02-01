@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="ThesaurusFormat" table="thesaurus_format">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+			<generator class="native" />
+		</id>
+		<property name="label" not-null="true" />
+		
+		<!-- <set name="thesauruses" inverse="true">
+			<key column="identifier" />
+			<one-to-many class="Thesaurus" />
+		</set> -->
+		
+	</class>
+</hibernate-mapping>

@@ -1,7 +1,3 @@
-package fr.mcc.ginco;
-
-import fr.mcc.ginco.beans.Thesaurus;
-
 /**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
@@ -29,16 +25,30 @@ import fr.mcc.ginco.beans.Thesaurus;
  * therefore means that it is reserved for developers and experienced
  * professionals having in-depth computer knowledge. Users are therefore
  * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systemsand/or
+ * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and, more generally, to use and operate it in the
  * same conditions as regards security.
  * <p/>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-public interface IVocabulary {
-    public String SayHello(String person);
-    public void setParam(String id);
-    public String getId();
-    public Thesaurus getThesaurusById(String id);
+package fr.mcc.ginco.dao.hibernate;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import fr.mcc.ginco.beans.Thesaurus;
+
+@Transactional
+@Repository
+public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> {
+
+	public ThesaurusDAO(Class<Thesaurus> clazz) {
+		super(clazz);
+		// TODO Auto-generated constructor stub
+	}
+	public ThesaurusDAO() {
+		super(Thesaurus.class);
+		// TODO Auto-generated constructor stub
+	}
 }

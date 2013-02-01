@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="Languages" table="languages_iso639">
+		<cache usage="read-write" />
+		<id name="id" column="id">
+			<generator class="native" />
+		</id>
+		<property name="part2b" />
+		<property name="part2t" />
+		<property name="part1" />
+		<property name="scope" not-null="true" />
+		<property name="type" not-null="true" />
+		<property name="ref_name" not-null="true" />
+		<property name="comment" />
+		
+		<!-- <set name="thesauruses" table="thesaurus_languages" >
+			<key column="iso639_id" />
+			<many-to-many class="Thesaurus" column="thesaurus_identifier" />
+		</set> -->
+	</class>
+</hibernate-mapping>

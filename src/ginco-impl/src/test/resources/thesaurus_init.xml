@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<table name="thesaurus">
+		<column>identifier</column>
+		<column>contributor</column>
+		<column>coverage</column>
+		<column>date</column>
+		<column>description</column>
+		<column>format</column>
+		<column>publisher</column>
+		<column>relation</column>
+		<column>rights</column>
+		<column>source</column>
+		<column>subject</column>
+		<column>title</column>
+		<column>type</column>
+		<column>creator</column>
+		<column>created</column>
+		<row>
+			<value>0</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>0</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+		</row>
+	</table>
+</dataset>

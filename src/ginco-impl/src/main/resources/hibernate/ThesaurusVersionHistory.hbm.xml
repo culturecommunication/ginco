@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="ThesaurusVersionHistory" table="thesaurus_version_history">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+			<generator class="native" />
+		</id>
+		<property name="date" not-null="true" />
+		<property name="versionnote" />
+		<property name="currentversion" />
+		<property name="thisversion" />
+
+		<!-- <many-to-one name="thesaurus_identifier" column="thesaurus_identifier" not-null="true" />
+		 -->
+	</class>
+</hibernate-mapping>
