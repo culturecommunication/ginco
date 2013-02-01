@@ -14,3 +14,7 @@
 
 # Maven target folder #
 target
+
+# IDEA
+.idea/
+ */.idea/*

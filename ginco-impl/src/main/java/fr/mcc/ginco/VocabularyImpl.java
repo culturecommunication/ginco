@@ -78,7 +78,7 @@ import fr.mcc.ginco.log.Log;
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-@Service
+@Service("vocabularyService")
 public class VocabularyImpl implements IVocabulary {
 
     @Log Logger springLog;

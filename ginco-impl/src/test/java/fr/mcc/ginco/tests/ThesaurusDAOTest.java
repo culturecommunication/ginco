@@ -59,7 +59,9 @@ import fr.mcc.ginco.IVocabulary;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-        "classpath*:applicationContext*.xml"
+        "classpath:applicationContext.xml",
+        "classpath:applicationContext-daos.xml",
+        "classpath:applicationContext-hibernate.xml"
 })
 @TransactionConfiguration
 @Transactional
