@@ -28,7 +28,7 @@
 		<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
 		<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
 		<cargo.remote.uri>${tomcat.base}manager</cargo.remote.uri>
-        <postgresql.jdbc.version>9.1-901.jdbc4</postgresql.jdbc.version>
+		<postgresql.jdbc.version>9.1-901.jdbc4</postgresql.jdbc.version>
 	</properties>
 
 	<profiles>
@@ -183,7 +183,7 @@
 				<groupId>fr.smile.mcc.ginco</groupId>
 				<artifactId>ginco-commons</artifactId>
 				<version>${project.version}</version>
-			</dependency>
+			</dependency>			
 			<dependency>
 				<groupId>javax.inject</groupId>
 				<artifactId>javax.inject</artifactId>
@@ -242,13 +242,13 @@
 				<version>${h2database.version}</version>
 				<scope>test</scope>
 			</dependency>
-            <dependency>
-                <groupId>postgresql</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>${postgresql.jdbc.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgresql.jdbc.version}</version>
+			</dependency>
 		</dependencies>
-	</dependencyManagement>
+	</dependencyManagement>	
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -267,24 +267,56 @@
 						<skip>true</skip>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<version>1.2.3</version>
+					<configuration>
+						<container>
+							<containerId>tomcat6x</containerId>
+							<type>remote</type>
+							<timeout>60000</timeout>
+						</container>
+						<configuration>
+							<type>runtime</type>
+							<properties>
+								<cargo.datasource.datasource />
+								<cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
+								<cargo.remote.username>${cargo.tomcat.manager.login}</cargo.remote.username>
+								<cargo.remote.password>${cargo.tomcat.manager.password}</cargo.remote.password>
+							</properties>
+						</configuration>
+
+						<deployables>
+							<deployable>
+								<location>./ginco-admin/target/ginco-admin.war</location>							    
+							    <type>war</type>
+							</deployable>
+							<deployable>
+								<location>./ginco-webservices/target/ginco-webservices.war</location>							    
+							    <type>war</type>
+							</deployable>
+						</deployables>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-	
-    <distributionManagement>
-        <repository>
-            <id>nexus.internal.releases</id>
-            <url>https://pic-java.smile.fr/nexus/content/repositories/InternalSmileReleases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus.internal.snapshots</id>
-            <url>https://pic-java.smile.fr/nexus/content/repositories/InternalSmileSnapshots/</url>
-        </snapshotRepository>
-        <site>
-            <id>maven.doc.smile</id>
-            <url>scp://pic-java.vitry.intranet/var/www/Belambra/belambra-parent</url>
-        </site>
-    </distributionManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>nexus.internal.releases</id>
+			<url>https://pic-java.smile.fr/nexus/content/repositories/InternalSmileReleases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus.internal.snapshots</id>
+			<url>https://pic-java.smile.fr/nexus/content/repositories/InternalSmileSnapshots/</url>
+		</snapshotRepository>
+		<site>
+			<id>maven.doc.smile</id>
+			<url>scp://pic-java.vitry.intranet/var/www/Belambra/belambra-parent</url>
+		</site>
+	</distributionManagement>
 	<modules>
 		<module>ginco-impl</module>
 		<module>ginco-api</module>

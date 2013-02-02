@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>ginco-commons</artifactId>
 	<packaging>jar</packaging>
+	<name>ginco-commons</name>
 	<build>
 		<finalName>ginco-commons</finalName>
 	</build>

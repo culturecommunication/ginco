@@ -9,18 +9,8 @@
 	</parent>
 	<artifactId>ginco-api</artifactId>
 	<packaging>jar</packaging>
-
+	<name>ginco-api</name>
 	<build>
-	<finalName>ginco-api</finalName>
-	<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-scm-plugin</artifactId>
-			<version>1.8.1</version>
-			<configuration>
-				<basedir>ginco-api/</basedir>
-			</configuration>			
-		</plugin>
-	</plugins>
+		<finalName>ginco-api</finalName>
 	</build>
 </project>

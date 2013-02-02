@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>ginco-webservices</artifactId>
 	<packaging>war</packaging>
+	<name>ginco-webservices</name>
 	<properties>
 		<finalName>ginco-webservices</finalName>
 	</properties>
