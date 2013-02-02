@@ -70,15 +70,7 @@
 				<configuration>
 					<address>mcc-hadoc@smile.fr</address>
 				</configuration>
-			</notifier>
-			<notifier>
-				<sendOnSuccess>false</sendOnSuccess>
-				<sendOnWarning>false</sendOnWarning>
-				<sendOnFailure>true</sendOnFailure>
-				<configuration>
-					<address>mcc-hadoc@smile.fr</address>
-				</configuration>
-			</notifier>
+			</notifier>			
 		</notifiers>
 	</ciManagement>
 
