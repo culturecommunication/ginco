@@ -11,8 +11,10 @@ Ext.Loader.setLocale({
 
 Ext.application({
     models: [
+        'MainTreeModel'
     ],
     stores: [
+        'MainTreeStore'
     ],
     views: [
         'HadocViewPort',

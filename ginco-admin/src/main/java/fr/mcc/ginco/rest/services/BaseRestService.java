@@ -46,6 +46,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
@@ -71,7 +72,7 @@ public class BaseRestService {
      */
     @GET
     @Path("/getVocabulary/{id}")
-    @Produces({"application/json"})
+    @Produces({MediaType.APPLICATION_JSON})
     public Thesaurus getVocabularyById(@PathParam("id") String id) {
         logger.info("Param passed to me : " + id);
         return thesaurusService.getThesaurusById(id);
@@ -85,7 +86,7 @@ public class BaseRestService {
      */
     @GET
     @Path("/getVocabularies")
-    @Produces({"application/json"})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<Thesaurus> getVocabularies() {
         return thesaurusService.getThesaurusList();
     }
