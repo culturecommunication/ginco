@@ -69,7 +69,7 @@ public abstract class BaseDAOTest extends BaseTest {
 	}
 
 	private IDataSet getDataset(String datasetPath) throws DataSetException {
-		InputStream is = ThesaurusDAOTest.class
+		InputStream is = BaseDAOTest.class
 				.getResourceAsStream(datasetPath);
 		return new XmlDataSet(is);
 	}
