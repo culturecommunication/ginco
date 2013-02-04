@@ -6,18 +6,29 @@
         </encoder>
     </appender>
 
-    <logger name="fr.mcc.ginco.rest.services.VocabularyRestService">
-        <level value="ALL" />
-        <appender-ref ref="CONSOLE" />
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>/var/log/tomcat6/ginco.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>logFile.%d{yyyy-MM-dd}.log</FileNamePattern>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern>
+        </layout>
+    </appender>
+
+    <logger name="org.apache.cxf">
+        <level value="WARNING" />
+        <appender-ref ref="FILE" />
     </logger>
 
     <logger name="org.springframework">
-        <level value="INFO" />
-        <appender-ref ref="CONSOLE" />
+        <level value="WARNING" />
+        <appender-ref ref="FILE" />
     </logger>
 
     <root>
         <level value="DEBUG" />
+        <appender-ref ref="FILE" />
         <appender-ref ref="CONSOLE" />
     </root>
 </configuration>
