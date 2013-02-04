@@ -34,67 +34,31 @@
  */
 package fr.mcc.ginco.tests;
 
-import java.io.InputStream;
-
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
 import fr.mcc.ginco.IThesaurusService;
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.XmlDataSet;
-import org.dbunit.operation.DatabaseOperation;
+
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-        "classpath:applicationContext.xml",
-        "classpath:applicationContext-daos.xml",
-        "classpath:applicationContext-hibernate.xml"
+        "classpath*:applicationContext*.xml"
 })
-@TransactionConfiguration
-@Transactional
-public class ThesaurusDAOTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class ThesaurusServiceTest {
 
     @Inject
-    IThesaurusService testVocabulary;
-    
-    @Inject
-    private DataSource dataSourceTest;
-    
-	// needed to initialize DBUnit
-	@Before
-	public void handleSetUpOperation() throws Exception {
-		// init db
-		final IDatabaseConnection conn = new DatabaseDataSourceConnection(dataSourceTest);
-		final IDataSet data = getDataset("/thesaurus_init.xml");
-		try {
-			DatabaseOperation.CLEAN_INSERT.execute(conn, data);
-		} finally {
-			conn.close();
-		}
-	}
-
-	private IDataSet getDataset(String datasetPath) throws DataSetException {
-		InputStream is = ThesaurusDAOTest.class.getResourceAsStream(datasetPath);
-		return new XmlDataSet(is);
-	}
+    IThesaurusService thesaurusService;
 
     @Test
-    public final void testGetThesaurusById() {
-    	String idThesaurus = "0";
-    	String expectedResponse = "test";
-        String actualResponse = testVocabulary.getThesaurusById(idThesaurus).getTitle();
-		Assert.assertEquals("Error while getting Thesaurus By Id !", expectedResponse, actualResponse);
+    public final void testHello() {
+        String parameter = "toto";
+        String expectedResponse = "Param id = " + parameter;
+        String actualResponse = thesaurusService.setParam(parameter);
+        Assert.assertEquals("Object returned unexpected reponse while passing param to him !", expectedResponse, actualResponse);
     }
+    
 }

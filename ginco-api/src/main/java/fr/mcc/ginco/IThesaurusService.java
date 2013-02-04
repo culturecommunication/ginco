@@ -1,22 +1,3 @@
-package fr.mcc.ginco.rest.services;
-
-import fr.mcc.ginco.IGenericDAO;
-import fr.mcc.ginco.IVocabulary;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.hibernate.GenericHibernateDAO;
-import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
-import fr.mcc.ginco.log.Log;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import java.util.List;
-
 /**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
@@ -51,28 +32,35 @@ import java.util.List;
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco;
 
-@Service
-@Path("/vocabulary")
-public class VocabularyRestService {
-    @Inject
-    @Named("vocabularyService")
-    private IVocabulary vocabularyImpl;
+import fr.mcc.ginco.beans.Thesaurus;
 
-    @Log Logger logger;
+/**
+ * Service used to work with {@link Thesaurus} objects, contains basic
+ * methods exposed to client part. For example, to get a single
+ * Thesaurus object, use {@link #getThesaurusById(String)}
+ *
+ * @see fr.mcc.ginco.beans
+ */
+public interface IThesaurusService {
+    /**
+     * Set fake parameter, only for test purposes
+     * @param id
+     */
+    public String setParam(String id);
 
-    @GET
-    @Path("/getVocabulary/{id}")
-    @Produces({"application/json"})
-    public Thesaurus getVocabularyById(@PathParam("id") String id) {
-        logger.info("Param passed to me : " + id);
-        return vocabularyImpl.getThesaurusById(id);
-    }
+    /**
+     * Get fake parameter, only for test purposes
+     * @return
+     */
+    public String getId();
 
-    /*@GET
-    @Path("/getVocabularies")
-    @Produces({"application/json"})
-    public List<Thesaurus> getVocabularies() {
-        return vocabularyImpl.findAll();
-    } */
+    /**
+     * Get a single object by its id
+     *
+     * @param id to search
+     * @return {@code null} if not found
+     */
+    public Thesaurus getThesaurusById(String id);
 }

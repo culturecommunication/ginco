@@ -1,7 +1,3 @@
-package fr.mcc.ginco;
-
-import fr.mcc.ginco.beans.Thesaurus;
-
 /**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
@@ -36,9 +32,46 @@ import fr.mcc.ginco.beans.Thesaurus;
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-public interface IVocabulary {
-    public String SayHello(String person);
-    public void setParam(String id);
-    public String getId();
-    public Thesaurus getThesaurusById(String id);
+package fr.mcc.ginco.rest.services;
+
+import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.log.Log;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+/**
+ * Base REST service intended to be used for getting tree of {@link Thesaurus},
+ * and its children.
+ */
+@Service
+@Path("/baseservice")
+public class BaseRestService {
+    @Inject
+    @Named("thesaurusService")
+    private IThesaurusService thesaurusService;
+
+    @Log Logger logger;
+
+    @GET
+    @Path("/getVocabulary/{id}")
+    @Produces({"application/json"})
+    public Thesaurus getVocabularyById(@PathParam("id") String id) {
+        logger.info("Param passed to me : " + id);
+        return thesaurusService.getThesaurusById(id);
+    }
+
+    /*@GET
+    @Path("/getVocabularies")
+    @Produces({"application/json"})
+    public List<Thesaurus> getVocabularies() {
+        return thesaurusService.findAll();
+    } */
 }

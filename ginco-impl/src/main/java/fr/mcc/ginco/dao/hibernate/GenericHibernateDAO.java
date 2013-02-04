@@ -43,7 +43,7 @@ import javax.inject.Named;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import fr.mcc.ginco.IGenericDAO;
+import fr.mcc.ginco.dao.IGenericDAO;
 
 public class GenericHibernateDAO<T, ID extends Serializable> implements IGenericDAO<T, ID> {
 
