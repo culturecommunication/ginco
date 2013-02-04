@@ -29,6 +29,7 @@
 		<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
 		<cargo.remote.uri>${tomcat.base}manager</cargo.remote.uri>
 		<postgresql.jdbc.version>9.1-901.jdbc4</postgresql.jdbc.version>
+		<maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
 	</properties>
 
 	<profiles>
@@ -70,7 +71,7 @@
 				<configuration>
 					<address>mcc-hadoc@smile.fr</address>
 				</configuration>
-			</notifier>			
+			</notifier>
 		</notifiers>
 	</ciManagement>
 
@@ -175,7 +176,7 @@
 				<groupId>fr.smile.mcc.ginco</groupId>
 				<artifactId>ginco-commons</artifactId>
 				<version>${project.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>javax.inject</groupId>
 				<artifactId>javax.inject</artifactId>
@@ -240,10 +241,10 @@
 				<version>${postgresql.jdbc.version}</version>
 			</dependency>
 		</dependencies>
-	</dependencyManagement>	
+	</dependencyManagement>
 	<build>
 		<pluginManagement>
-			<plugins>
+			<plugins>	
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.0</version>
@@ -270,25 +271,14 @@
 							<timeout>60000</timeout>
 						</container>
 						<configuration>
-							<type>runtime</type>
+							<type>runtime</type>							
 							<properties>
 								<cargo.datasource.datasource />
 								<cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
 								<cargo.remote.username>${cargo.tomcat.manager.login}</cargo.remote.username>
 								<cargo.remote.password>${cargo.tomcat.manager.password}</cargo.remote.password>
 							</properties>
-						</configuration>
-
-						<deployables>
-							<deployable>
-								<location>./ginco-admin/target/ginco-admin.war</location>							    
-							    <type>war</type>
-							</deployable>
-							<deployable>
-								<location>./ginco-webservices/target/ginco-webservices.war</location>							    
-							    <type>war</type>
-							</deployable>
-						</deployables>
+						</configuration>					
 					</configuration>
 				</plugin>
 			</plugins>
@@ -306,7 +296,7 @@
 		</snapshotRepository>
 		<site>
 			<id>maven.doc.smile</id>
-			<url>scp://pic-java.vitry.intranet/var/www/Belambra/belambra-parent</url>
+			<url>scp://pic-java.vitry.intranet/var/www/ginco/ginco</url>
 		</site>
 	</distributionManagement>
 	<modules>
@@ -316,4 +306,12 @@
 		<module>ginco-admin</module>
 		<module>ginco-webservices</module>
 	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>properties-maven-plugin</artifactId>
+			<version>${maven.properties.plugin.version}</version>
+			<type>maven-plugin</type>
+		</dependency>
+	</dependencies>
 </project>

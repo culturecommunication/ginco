@@ -12,46 +12,7 @@
 	<name>ginco-webservices</name>
 	<properties>
 		<finalName>ginco-webservices</finalName>
-	</properties>
-	<build>
-		<finalName>${finalName}</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-				<version>1.2.3</version>
-				<configuration>
-					<container>
-						<containerId>tomcat6x</containerId>
-						<type>remote</type>
-						<timeout>60000</timeout>
-					</container>
-					<configuration>
-						<type>runtime</type>
-						<properties>
-							<cargo.datasource.datasource />
-							<cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
-							<cargo.remote.username>${cargo.tomcat.manager.login}</cargo.remote.username>
-							<cargo.remote.password>${cargo.tomcat.manager.password}</cargo.remote.password>
-						</properties>
-					</configuration>
-					<deployables>
-						<deployable>
-							<pingURL>${tomcat.base}${project.build.finalName}</pingURL>
-							<pingTimeout>120000</pingTimeout>
-						</deployable>
-					</deployables>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>	
+	</properties>	
 	<dependencies>	
 		<dependency>
 			<groupId>fr.smile.mcc.ginco</groupId>
@@ -70,4 +31,53 @@
 			<artifactId>cxf-bundle-jaxrs</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<finalName>${finalName}</finalName>
+		<pluginManagement>
+			<plugins>			
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<version>1.2.3</version>
+					<configuration>
+						<container>
+							<containerId>tomcat6x</containerId>
+							<type>remote</type>
+							<timeout>60000</timeout>
+						</container>
+						<configuration>
+							<type>runtime</type>							
+							<properties>
+								<cargo.datasource.datasource />
+								<cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
+								<cargo.remote.username>${cargo.tomcat.manager.login}</cargo.remote.username>
+								<cargo.remote.password>${cargo.tomcat.manager.password}</cargo.remote.password>
+							</properties>
+						</configuration>
+						<deployables>
+							<deployable>
+								<location>${project.build.directory}/${finalName}.war</location>
+								<type>war</type>	
+							</deployable>							
+						</deployables>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
