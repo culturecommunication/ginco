@@ -7,7 +7,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>/var/log/tomcat6/ginco.log</File>
+        <File>${ginco.log.file}</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>logFile.%d{yyyy-MM-dd}.log</FileNamePattern>
         </rollingPolicy>
@@ -27,7 +27,7 @@
     </logger>
 
     <root>
-        <level value="DEBUG" />
+        <level value="INFO" />
         <appender-ref ref="FILE" />
         <appender-ref ref="CONSOLE" />
     </root>

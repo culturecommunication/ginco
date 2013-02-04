@@ -23,16 +23,15 @@
 		<javax.inject.version>1</javax.inject.version>
 		<logback.version>1.0.9</logback.version>
 		<org.slf4j.version>1.6.6</org.slf4j.version>
-		<!-- cargo deployment - default development configuration 
-		Define a new profile n your settings.xml file if you have
-		 another development configuration
-		-->		
+		<!-- cargo deployment - default development configuration Define a new 
+			profile n your settings.xml file if you have another development configuration -->
 		<tomcat.base>http://hadoc.lxc:80/</tomcat.base>
 		<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
 		<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
 		<cargo.remote.uri>${tomcat.base}manager</cargo.remote.uri>
 		<postgresql.jdbc.version>9.1-901.jdbc4</postgresql.jdbc.version>
 		<maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
+		<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
 	</properties>
 
 	<profiles>
@@ -43,6 +42,7 @@
 				<tomcat.base>http://hadoc-int.eqx.intranet:80/</tomcat.base>
 				<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
 				<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
+				<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
 			</properties>
 		</profile>
 		<profile>
@@ -52,6 +52,7 @@
 				<tomcat.base>http://hadoc-rec.eqx.intranet:80/</tomcat.base>
 				<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
 				<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
+				<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
 			</properties>
 		</profile>
 	</profiles>
@@ -246,8 +247,17 @@
 		</dependencies>
 	</dependencyManagement>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>		
+		</resources> 
 		<pluginManagement>
-			<plugins>	
+			<plugins>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.0</version>
@@ -274,14 +284,14 @@
 							<timeout>60000</timeout>
 						</container>
 						<configuration>
-							<type>runtime</type>							
+							<type>runtime</type>
 							<properties>
 								<cargo.datasource.datasource />
 								<cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
 								<cargo.remote.username>${cargo.tomcat.manager.login}</cargo.remote.username>
 								<cargo.remote.password>${cargo.tomcat.manager.password}</cargo.remote.password>
 							</properties>
-						</configuration>					
+						</configuration>
 					</configuration>
 				</plugin>
 			</plugins>
