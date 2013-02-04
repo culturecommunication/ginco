@@ -34,19 +34,9 @@
  */
 package fr.mcc.ginco.tests.dao;
 
-import java.io.InputStream;
-
 import javax.inject.Inject;
-import javax.sql.DataSource;
 
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.XmlDataSet;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
