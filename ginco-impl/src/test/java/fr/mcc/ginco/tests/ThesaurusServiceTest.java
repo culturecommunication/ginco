@@ -46,7 +46,7 @@ import javax.inject.Inject;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-        "classpath*:applicationContext*.xml"
+        "classpath:applicationContext.xml"
 })
 public class ThesaurusServiceTest {
 
