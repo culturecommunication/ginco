@@ -3,7 +3,7 @@ Ext.define('HadocApp.view.GlobalTabPanel', {
     alias: 'widget.topTabs',
 
     requires: [
-       /* 'HadocApp.view.ThesaurusPanel',
+        'HadocApp.view.ThesaurusPanel'/*,
         'HadocApp.view.TermPanel',
         'HadocApp.view.SearchPanel',
         'HadocApp.view.ConceptPanel',
@@ -16,9 +16,11 @@ Ext.define('HadocApp.view.GlobalTabPanel', {
         var me = this;
 
         Ext.applyIf(me, {
-            items: [
-
-            ]
+           /* items: [
+                    {
+                        xtype: 'thesaurusPanel'
+                    }
+            ]*/
         });
 
         me.callParent(arguments);

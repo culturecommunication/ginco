@@ -44,6 +44,7 @@ public interface IIdentifierProvider {
 	 *      NMA and NAAN from application.properties
 	 *      NQ : randomly generated
 	 * Returns a String containing an ARK Id
+	 * @param The type of the object we want to generate an ARK Id
 	 * @return An object of type String containing an ARK identifier fitted for the object given in argument
 	 */
 	public String getArkId(Class aClass);

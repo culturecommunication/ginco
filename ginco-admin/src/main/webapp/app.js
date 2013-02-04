@@ -19,7 +19,8 @@ Ext.application({
         'GlobalTabPanel',
         'LeftPanel',
         'TopToolbar',
-        'AProposWin'
+        'AProposWin',
+        'ThesaurusPanel'
     ],
     autoCreateViewport: true,
     name: 'HadocApp',

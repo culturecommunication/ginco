@@ -43,7 +43,7 @@ Ext.define('HadocApp.view.TopToolbar', {
                                 items: [
                                     {
                                         xtype: 'menuitem',
-                                        disabled: true,
+                                        id: 'newThesaurusBtn',
                                         text: me.xNewMenu_ThesaurusLabel
                                     },
                                     {
