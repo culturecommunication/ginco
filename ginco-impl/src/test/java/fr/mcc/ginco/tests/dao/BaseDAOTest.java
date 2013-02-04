@@ -60,7 +60,7 @@ public abstract class BaseDAOTest extends BaseTest {
 		// init db
 		final IDatabaseConnection conn = new DatabaseDataSourceConnection(
 				dataSourceTest);
-		final IDataSet data = getDataset(getXmlDataFileInit());//"/thesaurus_init.xml");
+		final IDataSet data = getDataset(getXmlDataFileInit());
 		try {
 			DatabaseOperation.CLEAN_INSERT.execute(conn, data);
 		} finally {
