@@ -23,7 +23,10 @@
 		<javax.inject.version>1</javax.inject.version>
 		<logback.version>1.0.9</logback.version>
 		<org.slf4j.version>1.6.6</org.slf4j.version>
-		<!-- cargo deployment - default development configuration -->
+		<!-- cargo deployment - default development configuration 
+		Define a new profile n your settings.xml file if you have
+		 another development configuration
+		-->		
 		<tomcat.base>http://hadoc.lxc:80/</tomcat.base>
 		<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
 		<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
