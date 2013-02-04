@@ -59,7 +59,8 @@ public class BaseRestService {
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
 
-    @Log Logger logger;
+    @Log 
+    private Logger logger;
 
     /**
      * Public method used to get {@link Thesaurus} object by providing its id.
