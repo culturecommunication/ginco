@@ -32,51 +32,35 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests;
+package fr.mcc.ginco.tests.dao;
 
 import java.io.InputStream;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import fr.mcc.ginco.IThesaurusService;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "classpath:applicationContext.xml",
-        "classpath:applicationContext-daos.xml"
-})
-@TransactionConfiguration
-@Transactional
-public class ThesaurusDAOTest extends AbstractTransactionalJUnit4SpringContextTests {
+import fr.mcc.ginco.tests.BaseTest;
 
-    @Inject
-    IThesaurusService testVocabulary;
-    
-    @Inject
-    private DataSource dataSourceTest;
-    
-	// needed to initialize DBUnit
+public abstract class BaseDAOTest extends BaseTest {	
+	
+	@Inject
+	private DataSource dataSourceTest;
+	
+
 	@Before
 	public void handleSetUpOperation() throws Exception {
 		// init db
-		final IDatabaseConnection conn = new DatabaseDataSourceConnection(dataSourceTest);
-		final IDataSet data = getDataset("/thesaurus_init.xml");
+		final IDatabaseConnection conn = new DatabaseDataSourceConnection(
+				dataSourceTest);
+		final IDataSet data = getDataset(getXmlDataFileInit());
 		try {
 			DatabaseOperation.CLEAN_INSERT.execute(conn, data);
 		} finally {
@@ -85,15 +69,11 @@ public class ThesaurusDAOTest extends AbstractTransactionalJUnit4SpringContextTe
 	}
 
 	private IDataSet getDataset(String datasetPath) throws DataSetException {
-		InputStream is = ThesaurusDAOTest.class.getResourceAsStream(datasetPath);
+		InputStream is = BaseDAOTest.class
+				.getResourceAsStream(datasetPath);
 		return new XmlDataSet(is);
 	}
-
-    @Test
-    public final void testGetThesaurusById() {
-    	String idThesaurus = "0";
-    	String expectedResponse = "test";
-        String actualResponse = testVocabulary.getThesaurusById(idThesaurus).getTitle();
-		Assert.assertEquals("Error while getting Thesaurus By Id !", expectedResponse, actualResponse);
-    }
+	
+	abstract String getXmlDataFileInit();
+	
 }

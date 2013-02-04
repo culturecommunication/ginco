@@ -22,10 +22,10 @@ Ext.define('HadocApp.view.LeftPanel', {
                     title: me.xThesaurusLabel,
                     forceFit: false,
                     scroll: 'vertical',
-                    // store: 'ThesaurusTreeStore',
-                    displayField: 'label',
+                    store: 'MainTreeStore',
+                    displayField: 'title',
                     rootVisible: false,
-                    useArrows: true,
+                    useArrows: false,
                     viewConfig: {
 
                     }

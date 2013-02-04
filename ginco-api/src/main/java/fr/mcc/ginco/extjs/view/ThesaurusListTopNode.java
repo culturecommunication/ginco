@@ -32,27 +32,54 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests;
+package fr.mcc.ginco.extjs.view;
 
-import javax.inject.Inject;
+import fr.mcc.ginco.beans.Thesaurus;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.ArrayList;
 
-import fr.mcc.ginco.IThesaurusService;
+public class ThesaurusListTopNode {
+    private boolean expanded;
+    private ArrayList<String> children;
+    private String title;
+    private String id;
 
-
-public class ThesaurusServiceTest extends BaseTest {
-
-    @Inject
-    IThesaurusService thesaurusService;
-
-    @Test
-    public final void testHello() {
-        String parameter = "toto";
-        String expectedResponse = "Param id = " + parameter;
-        String actualResponse = thesaurusService.setParam(parameter);
-        Assert.assertEquals("Object returned unexpected reponse while passing param to him !", expectedResponse, actualResponse);
+    public ThesaurusListTopNode(Thesaurus thesaurus) {
+        this.expanded = false;
+        children = new ArrayList<String>();
+        this.title = thesaurus.getTitle();
+        this.id = thesaurus.getIdentifier();
     }
-    
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    public ArrayList<String> getChildren() {
+        return children;
+    }
+
+    public void setChildren(ArrayList<String> children) {
+        this.children = children;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

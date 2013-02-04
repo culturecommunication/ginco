@@ -47,11 +47,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fr.mcc.ginco.IIdentifierProvider;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "classpath:applicationContext.xml"
-})
-public class SimpleArkProviderTest extends AbstractTransactionalJUnit4SpringContextTests {
+
+public class SimpleArkProviderTest extends BaseTest {
 	
 	@Inject
 	@Named("simpleArkProviderImpl")

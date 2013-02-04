@@ -34,25 +34,16 @@
  */
 package fr.mcc.ginco.tests;
 
-import javax.inject.Inject;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import org.junit.Assert;
-import org.junit.Test;
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:applicationContext.xml",
+        "classpath*:applicationContext-*.xml"
+})
+public abstract class BaseTest extends AbstractTransactionalJUnit4SpringContextTests {
 
-import fr.mcc.ginco.IThesaurusService;
-
-
-public class ThesaurusServiceTest extends BaseTest {
-
-    @Inject
-    IThesaurusService thesaurusService;
-
-    @Test
-    public final void testHello() {
-        String parameter = "toto";
-        String expectedResponse = "Param id = " + parameter;
-        String actualResponse = thesaurusService.setParam(parameter);
-        Assert.assertEquals("Object returned unexpected reponse while passing param to him !", expectedResponse, actualResponse);
-    }
-    
 }

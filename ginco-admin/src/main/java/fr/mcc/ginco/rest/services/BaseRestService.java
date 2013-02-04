@@ -36,6 +36,7 @@ package fr.mcc.ginco.rest.services;
 
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.extjs.view.ThesaurusListTopNode;
 import fr.mcc.ginco.log.Log;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,7 +62,8 @@ public class BaseRestService {
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
 
-    @Log Logger logger;
+    @Log 
+    private Logger logger;
 
     /**
      * Public method used to get {@link Thesaurus} object by providing its id.
@@ -70,7 +74,7 @@ public class BaseRestService {
      */
     @GET
     @Path("/getVocabulary/{id}")
-    @Produces({"application/json"})
+    @Produces({MediaType.APPLICATION_JSON})
     public Thesaurus getVocabularyById(@PathParam("id") String id) {
         logger.info("Param passed to me : " + id);
         return thesaurusService.getThesaurusById(id);
@@ -84,8 +88,13 @@ public class BaseRestService {
      */
     @GET
     @Path("/getVocabularies")
-    @Produces({"application/json"})
-    public List<Thesaurus> getVocabularies() {
-        return thesaurusService.getThesaurusList();
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<ThesaurusListTopNode> getVocabularies() {
+        List<ThesaurusListTopNode> result = new ArrayList<ThesaurusListTopNode>();
+
+        for(Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
+            result.add(new ThesaurusListTopNode(thesaurus));
+        }
+        return result;
     }
 }

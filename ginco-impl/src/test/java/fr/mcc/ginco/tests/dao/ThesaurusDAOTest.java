@@ -32,27 +32,34 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests;
+package fr.mcc.ginco.tests.dao;
 
 import javax.inject.Inject;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.IThesaurusService;
 
-
-public class ThesaurusServiceTest extends BaseTest {
+@TransactionConfiguration
+@Transactional
+public class ThesaurusDAOTest extends BaseDAOTest {
 
     @Inject
-    IThesaurusService thesaurusService;
+    IThesaurusService testVocabulary;  
 
     @Test
-    public final void testHello() {
-        String parameter = "toto";
-        String expectedResponse = "Param id = " + parameter;
-        String actualResponse = thesaurusService.setParam(parameter);
-        Assert.assertEquals("Object returned unexpected reponse while passing param to him !", expectedResponse, actualResponse);
+    public final void testGetThesaurusById() {
+    	String idThesaurus = "0";
+    	String expectedResponse = "test";
+        String actualResponse = testVocabulary.getThesaurusById(idThesaurus).getTitle();
+		Assert.assertEquals("Error while getting Thesaurus By Id !", expectedResponse, actualResponse);
     }
-    
+
+	@Override
+	public String  getXmlDataFileInit() {
+		return "/thesaurus_init.xml";		
+	}
 }
