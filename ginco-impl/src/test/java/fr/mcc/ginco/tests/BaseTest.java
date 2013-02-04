@@ -34,61 +34,16 @@
  */
 package fr.mcc.ginco.tests;
 
-import java.io.InputStream;
-
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
-import fr.mcc.ginco.IThesaurusService;
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.XmlDataSet;
-import org.dbunit.operation.DatabaseOperation;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-@TransactionConfiguration
-@Transactional
-public class ThesaurusDAOTest extends BaseTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:applicationContext.xml",
+        "classpath*:applicationContext-*.xml"
+})
+public abstract class BaseTest extends AbstractTransactionalJUnit4SpringContextTests {
 
-    @Inject
-    IThesaurusService testVocabulary;
-    
-    @Inject
-    private DataSource dataSourceTest;
-    
-	// needed to initialize DBUnit
-	@Before
-	public void handleSetUpOperation() throws Exception {
-		// init db
-		final IDatabaseConnection conn = new DatabaseDataSourceConnection(dataSourceTest);
-		final IDataSet data = getDataset("/thesaurus_init.xml");
-		try {
-			DatabaseOperation.CLEAN_INSERT.execute(conn, data);
-		} finally {
-			conn.close();
-		}
-	}
-
-	private IDataSet getDataset(String datasetPath) throws DataSetException {
-		InputStream is = ThesaurusDAOTest.class.getResourceAsStream(datasetPath);
-		return new XmlDataSet(is);
-	}
-
-    @Test
-    public final void testGetThesaurusById() {
-    	String idThesaurus = "0";
-    	String expectedResponse = "test";
-        String actualResponse = testVocabulary.getThesaurusById(idThesaurus).getTitle();
-		Assert.assertEquals("Error while getting Thesaurus By Id !", expectedResponse, actualResponse);
-    }
 }

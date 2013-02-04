@@ -34,21 +34,15 @@
  */
 package fr.mcc.ginco.tests;
 
-import fr.mcc.ginco.IThesaurusService;
+import javax.inject.Inject;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.inject.Inject;
+import fr.mcc.ginco.IThesaurusService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "classpath:applicationContext.xml"
-})
-public class ThesaurusServiceTest {
+
+public class ThesaurusServiceTest extends BaseTest {
 
     @Inject
     IThesaurusService thesaurusService;
