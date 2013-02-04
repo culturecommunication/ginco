@@ -44,6 +44,8 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
 import fr.mcc.ginco.log.Log;
 
+import java.util.List;
+
 @Service("thesaurusService")
 public class ThesaurusServiceImpl implements IThesaurusService {
 
@@ -69,6 +71,13 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Override
 	public Thesaurus getThesaurusById(String id) {
-		return thesaurusDAO.getById(id);
+		log.info("Trying to get Thesaurus with id = " + id);
+        return thesaurusDAO.getById(id);
 	}
+
+    @Override
+    public List<Thesaurus> getThesaurusList() {
+        log.info("List of all Thesaurus was demanded.");
+        return thesaurusDAO.findAll();
+    }
 }

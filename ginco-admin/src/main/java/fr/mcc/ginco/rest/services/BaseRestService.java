@@ -46,6 +46,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import java.util.List;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -60,6 +61,13 @@ public class BaseRestService {
 
     @Log Logger logger;
 
+    /**
+     * Public method used to get {@link Thesaurus} object by providing its id.
+     * @param id {@link String} identifier to try with
+     *
+     * @return {@link Thesaurus} object in JSON format or
+     * {@code null} if not found
+     */
     @GET
     @Path("/getVocabulary/{id}")
     @Produces({"application/json"})
@@ -68,10 +76,16 @@ public class BaseRestService {
         return thesaurusService.getThesaurusById(id);
     }
 
-    /*@GET
+    /**
+     * Public method used to get list of all existing Thesaurus objects
+     * in database.
+     *
+     * @return list of objects, if not found - {@code null}
+     */
+    @GET
     @Path("/getVocabularies")
     @Produces({"application/json"})
     public List<Thesaurus> getVocabularies() {
-        return thesaurusService.findAll();
-    } */
+        return thesaurusService.getThesaurusList();
+    }
 }

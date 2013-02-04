@@ -36,6 +36,8 @@ package fr.mcc.ginco;
 
 import fr.mcc.ginco.beans.Thesaurus;
 
+import java.util.List;
+
 /**
  * Service used to work with {@link Thesaurus} objects, contains basic
  * methods exposed to client part. For example, to get a single
@@ -63,4 +65,10 @@ public interface IThesaurusService {
      * @return {@code null} if not found
      */
     public Thesaurus getThesaurusById(String id);
+
+    /**
+     * Get list of all objects.
+     * @return
+     */
+    public List<Thesaurus> getThesaurusList();
 }
