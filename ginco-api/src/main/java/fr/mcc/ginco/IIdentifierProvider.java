@@ -32,61 +32,20 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
+package fr.mcc.ginco;
 
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.log.Log;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+public interface IIdentifierProvider {
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import java.util.List;
-
-/**
- * Base REST service intended to be used for getting tree of {@link Thesaurus},
- * and its children.
- */
-@Service
-@Path("/baseservice")
-public class BaseRestService {
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
-
-    @Log 
-    private Logger logger;
-
-    /**
-     * Public method used to get {@link Thesaurus} object by providing its id.
-     * @param id {@link String} identifier to try with
-     *
-     * @return {@link Thesaurus} object in JSON format or
-     * {@code null} if not found
-     */
-    @GET
-    @Path("/getVocabulary/{id}")
-    @Produces({"application/json"})
-    public Thesaurus getVocabularyById(@PathParam("id") String id) {
-        logger.info("Param passed to me : " + id);
-        return thesaurusService.getThesaurusById(id);
-    }
-
-    /**
-     * Public method used to get list of all existing Thesaurus objects
-     * in database.
-     *
-     * @return list of objects, if not found - {@code null}
-     */
-    @GET
-    @Path("/getVocabularies")
-    @Produces({"application/json"})
-    public List<Thesaurus> getVocabularies() {
-        return thesaurusService.getThesaurusList();
-    }
+	/**
+	 * 
+	 * Generate an ID in ARK format
+	 * Ex : http://www.domain.com/ark:/123456/456
+	 *      |---------NMA-------------|-NAAN-|-NQ-
+	 *      NMA and NAAN from application.properties
+	 *      NQ : randomly generated
+	 * Returns a String containing an ARK Id
+	 * @return An object of type String containing an ARK identifier fitted for the object given in argument
+	 */
+	public String getArkId(Class aClass);
+	
 }

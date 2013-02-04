@@ -49,7 +49,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * 
 	 * @return An object of type T matching with the value given in argument
 	 */
-	public T getByValue(String value);
+	T getByValue(String value);
 
 	/**
 	 * Get an object of type T by id
@@ -64,7 +64,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * 
 	 * @return A list of all the objects of type T
 	 */
-	public List<T> findAll();
+	List<T> findAll();
 
 	/**
 	 * Delete an object of type T

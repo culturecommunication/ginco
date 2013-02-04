@@ -32,61 +32,39 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
-
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.log.Log;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+package fr.mcc.ginco.tests;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import java.util.List;
 
-/**
- * Base REST service intended to be used for getting tree of {@link Thesaurus},
- * and its children.
- */
-@Service
-@Path("/baseservice")
-public class BaseRestService {
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-    @Log 
-    private Logger logger;
+import fr.mcc.ginco.IIdentifierProvider;
 
-    /**
-     * Public method used to get {@link Thesaurus} object by providing its id.
-     * @param id {@link String} identifier to try with
-     *
-     * @return {@link Thesaurus} object in JSON format or
-     * {@code null} if not found
-     */
-    @GET
-    @Path("/getVocabulary/{id}")
-    @Produces({"application/json"})
-    public Thesaurus getVocabularyById(@PathParam("id") String id) {
-        logger.info("Param passed to me : " + id);
-        return thesaurusService.getThesaurusById(id);
-    }
-
-    /**
-     * Public method used to get list of all existing Thesaurus objects
-     * in database.
-     *
-     * @return list of objects, if not found - {@code null}
-     */
-    @GET
-    @Path("/getVocabularies")
-    @Produces({"application/json"})
-    public List<Thesaurus> getVocabularies() {
-        return thesaurusService.getThesaurusList();
-    }
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:applicationContext.xml"
+})
+public class SimpleArkProviderTest extends AbstractTransactionalJUnit4SpringContextTests {
+	
+	@Inject
+	@Named("simpleArkProviderImpl")
+	IIdentifierProvider arkProvider;
+	
+	private @Value("${application.ark.nma}") String nma;
+	private @Value("${application.ark.naan}") String naan;
+	
+	 @Test
+	 public final void getArkId(){
+		 //Since ARK is randomly generated, we can only test the static part of the ID
+		 String expectedResponse= nma + "/ark:/" + naan ;
+		 String actualResponse = arkProvider.getArkId(this.getClass());
+		 Assert.assertTrue("Error while generating ARK Id !" +actualResponse+" expected "+expectedResponse, actualResponse.startsWith(expectedResponse));
+	 }
 }
