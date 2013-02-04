@@ -36,6 +36,7 @@ package fr.mcc.ginco.rest.services;
 
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.extjs.view.ThesaurusListTopNode;
 import fr.mcc.ginco.log.Log;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,7 +89,12 @@ public class BaseRestService {
     @GET
     @Path("/getVocabularies")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Thesaurus> getVocabularies() {
-        return thesaurusService.getThesaurusList();
+    public List<ThesaurusListTopNode> getVocabularies() {
+        List<ThesaurusListTopNode> result = new ArrayList<ThesaurusListTopNode>();
+
+        for(Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
+            result.add(new ThesaurusListTopNode(thesaurus));
+        }
+        return result;
     }
 }
