@@ -253,8 +253,15 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>**/*.xml</include>
-				</includes>
+				</includes>				
 			</resource>		
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
 		</resources> 
 		<pluginManagement>
 			<plugins>
