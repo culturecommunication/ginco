@@ -34,167 +34,166 @@
  */
 package fr.mcc.ginco.beans;
 
-public class Thesaurus {
-	String identifier;
-	String contributor;
-	String coverage;
-	String date;
-	String description;
-	String publisher;
-	String relation;
-	String rights;
-	String source;
-	String subject;
-	String title;
-	String created;
-	String format;
-	String type;
-	String creator;
+import java.io.Serializable;
 
-	public Thesaurus() {
-		super();
-	}
+public class Thesaurus implements Serializable {
+    private String identifier;
+    private String contributor;
+    private String coverage;
+    private String date;
+    private String description;
+    private String publisher;
+    private String relation;
+    private String rights;
+    private String source;
+    private String subject;
+    private String title;
+    private String created;
+    private String format;
+    private String type;
+    private String creator;
 
-	public Thesaurus(String identifier, String contributor, String coverage,
-			String date, String description, String publisher, String relation,
-			String rights, String source, String subject, String title,
-			String created, String format, String type, String creator) {
-		super();
-		this.identifier = identifier;
-		this.contributor = contributor;
-		this.coverage = coverage;
-		this.date = date;
-		this.description = description;
-		this.publisher = publisher;
-		this.relation = relation;
-		this.rights = rights;
-		this.source = source;
-		this.subject = subject;
-		this.title = title;
-		this.created = created;
-		this.format = format;
-		this.type = type;
-		this.creator = creator;
-	}
+    public Thesaurus() {
+    }
 
-	public String getIdentifier() {
-		return identifier;
-	}
+    public Thesaurus(String identifier, String contributor, String coverage,
+                     String date, String description, String publisher, String relation,
+                     String rights, String source, String subject, String title,
+                     String created, String format, String type, String creator) {
+        this.identifier = identifier;
+        this.contributor = contributor;
+        this.coverage = coverage;
+        this.date = date;
+        this.description = description;
+        this.publisher = publisher;
+        this.relation = relation;
+        this.rights = rights;
+        this.source = source;
+        this.subject = subject;
+        this.title = title;
+        this.created = created;
+        this.format = format;
+        this.type = type;
+        this.creator = creator;
+    }
 
-	public String getContributor() {
-		return contributor;
-	}
+    public String getIdentifier() {
+        return identifier;
+    }
 
-	public String getCoverage() {
-		return coverage;
-	}
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getContributor() {
+        return contributor;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setContributor(String contributor) {
+        this.contributor = contributor;
+    }
 
-	public String getPublisher() {
-		return publisher;
-	}
+    public String getCoverage() {
+        return coverage;
+    }
 
-	public String getRelation() {
-		return relation;
-	}
+    public void setCoverage(String coverage) {
+        this.coverage = coverage;
+    }
 
-	public String getRights() {
-		return rights;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public String getSource() {
-		return source;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-	public String getSubject() {
-		return subject;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getCreated() {
-		return created;
-	}
+    public String getPublisher() {
+        return publisher;
+    }
 
-	public String getFormat() {
-		return format;
-	}
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getRelation() {
+        return relation;
+    }
 
-	public String getCreator() {
-		return creator;
-	}
+    public void setRelation(String relation) {
+        this.relation = relation;
+    }
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
+    public String getRights() {
+        return rights;
+    }
 
-	public void setContributor(String contributor) {
-		this.contributor = contributor;
-	}
+    public void setRights(String rights) {
+        this.rights = rights;
+    }
 
-	public void setCoverage(String coverage) {
-		this.coverage = coverage;
-	}
+    public String getSource() {
+        return source;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getSubject() {
+        return subject;
+    }
 
-	public void setPublisher(String publisher) {
-		this.publisher = publisher;
-	}
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
-	public void setRelation(String relation) {
-		this.relation = relation;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setRights(String rights) {
-		this.rights = rights;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    public String getCreated() {
+        return created;
+    }
 
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
+    public void setCreated(String created) {
+        this.created = created;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getFormat() {
+        return format;
+    }
 
-	public void setCreated(String created) {
-		this.created = created;
-	}
+    public void setFormat(String format) {
+        this.format = format;
+    }
 
-	public void setFormat(String format) {
-		this.format = format;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
+    public String getCreator() {
+        return creator;
+    }
 
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 }

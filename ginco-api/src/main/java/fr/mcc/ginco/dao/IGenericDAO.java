@@ -95,7 +95,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @param entity
 	 * @return Object
 	 */
-	public T update(T entity);
+	T update(T entity);
 
 	/**
 	 * Flush

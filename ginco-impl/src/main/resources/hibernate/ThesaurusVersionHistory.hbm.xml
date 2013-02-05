@@ -7,9 +7,9 @@
 			<generator class="native" />
 		</id>
 		<property name="date" not-null="true" />
-		<property name="versionnote" />
-		<property name="currentversion" />
-		<property name="thisversion" />
+		<property name="versionNote" column="versionnote" />
+		<property name="currentVersion" column="currentversion" />
+		<property name="thisVersion" column="thisversion" />
 
 		<!-- <many-to-one name="thesaurus_identifier" column="thesaurus_identifier" not-null="true" />
 		 -->

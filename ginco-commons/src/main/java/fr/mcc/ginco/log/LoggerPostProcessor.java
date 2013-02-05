@@ -1,19 +1,4 @@
-package fr.mcc.ginco.log;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
-
-import java.lang.reflect.Field;
-
 /**
- * <p/>
- * Custom bean that implements behaviour of custom <b>Log annotation</b>
- * also taking Spring advantages as injection of this field into your class.
- * <p/>
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
  * <p/>
@@ -46,6 +31,21 @@ import java.lang.reflect.Field;
  * <p/>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
+ */
+package fr.mcc.ginco.log;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
+
+/**
+ * Custom bean that implements behaviour of custom <b>Log annotation</b>
+ * also taking Spring advantages as injection of this field into your class.
  *
  * @see fr.mcc.ginco.log.Log
  */
@@ -67,7 +67,6 @@ public class LoggerPostProcessor implements BeanPostProcessor {
 
                 //Check if the field is annotated with @Log
                 if (field.getAnnotation(Log.class) != null) {
-                    Log logAnnotation = field.getAnnotation(Log.class);
                     Logger logger = LoggerFactory.getLogger(bean.getClass());
                     field.set(bean, logger);
                 }

@@ -38,10 +38,30 @@ import fr.mcc.ginco.beans.Thesaurus;
 
 import java.util.ArrayList;
 
+/**
+ * Class (basically, View) intended to be used by ExtJS in JSON format,
+ * implements native ExtJS features for list, such as {@link #expanded},
+ * {@link #children} and {@link #id}.
+ *
+ * For more details about proper format of JSON follow this link :
+ * http://docs.sencha.com/ext-js/4-1/#!/api/Ext.tree.Panel
+ */
 public class ThesaurusListTopNode {
+    /**
+     * Indicates if node should be expanded by default.
+     */
     private boolean expanded;
+    /**
+     * List of all children, now only String lines.
+     */
     private ArrayList<String> children;
+    /**
+     * Title to display for user.
+     */
     private String title;
+    /**
+     * Service tag - not visible in UI.
+     */
     private String id;
 
     public ThesaurusListTopNode(Thesaurus thesaurus) {

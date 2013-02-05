@@ -50,13 +50,13 @@ public interface IThesaurusService {
      * Set fake parameter, only for test purposes
      * @param id
      */
-    public String setParam(String id);
+    String setParam(String id);
 
     /**
      * Get fake parameter, only for test purposes
      * @return
      */
-    public String getId();
+    String getId();
 
     /**
      * Get a single object by its id
@@ -64,11 +64,11 @@ public interface IThesaurusService {
      * @param id to search
      * @return {@code null} if not found
      */
-    public Thesaurus getThesaurusById(String id);
+    Thesaurus getThesaurusById(String id);
 
     /**
      * Get list of all objects.
      * @return
      */
-    public List<Thesaurus> getThesaurusList();
+    List<Thesaurus> getThesaurusList();
 }
