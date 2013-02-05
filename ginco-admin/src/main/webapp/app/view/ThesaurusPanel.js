@@ -5,6 +5,9 @@
  */
 Ext.define('HadocApp.view.ThesaurusPanel', {
     extend: 'Ext.panel.Panel',
+
+    thesaurusId: '',
+
     alias: 'widget.thesaurusPanel',
     localized: true,
     autoScroll: true,

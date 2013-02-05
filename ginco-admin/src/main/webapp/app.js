@@ -27,7 +27,8 @@ Ext.application({
     autoCreateViewport: true,
     name: 'HadocApp',
     controllers: [
-        'TopToolbarController'
+        'TopToolbarController',
+        'MainTreeController'
     ],
     launch: function() {
     	Ext.FocusManager.enable();

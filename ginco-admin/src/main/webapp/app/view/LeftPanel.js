@@ -16,8 +16,10 @@ Ext.define('HadocApp.view.LeftPanel', {
             dockedItems: [
                 {
                     xtype: 'treepanel',
+                    id: 'mainTreeView',
                     dock: 'top',
                     autoScroll: true,
+                    dblClickExpand: false,
                     collapsible: false,
                     title: me.xThesaurusLabel,
                     forceFit: false,

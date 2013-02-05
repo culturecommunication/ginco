@@ -35,6 +35,7 @@
 package fr.mcc.ginco.extjs.view.node;
 
 import fr.mcc.ginco.extjs.view.ClassificationFolderType;
+import fr.mcc.ginco.extjs.view.ThesaurusListNodeType;
 
 import java.util.ArrayList;
 
@@ -52,6 +53,7 @@ public class ThesaurusListClassificationFolderNode extends ThesaurusListBasicNod
         this.children = new ArrayList<IThesaurusListNode>();
         this.expanded = false;
         this.id = type.toString() + "_" + parentId;
+        this.nodeType = ThesaurusListNodeType.FOLDER;
         this.setTitle(title);
     }
 }

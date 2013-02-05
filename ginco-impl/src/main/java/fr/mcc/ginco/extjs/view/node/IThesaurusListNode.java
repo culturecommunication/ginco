@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.extjs.view.node;
 
+import fr.mcc.ginco.extjs.view.ThesaurusListNodeType;
+
 import java.util.List;
 
 /**
@@ -51,6 +53,10 @@ public interface IThesaurusListNode {
     String getTitle();
 
     void setTitle(String title);
+
+    ThesaurusListNodeType getType();
+
+    void setType(ThesaurusListNodeType type);
 
     String getId();
 

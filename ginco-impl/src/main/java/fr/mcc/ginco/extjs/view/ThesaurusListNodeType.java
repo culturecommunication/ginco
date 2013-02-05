@@ -32,84 +32,11 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.node;
-
-import fr.mcc.ginco.extjs.view.ThesaurusListNodeType;
-
-import java.util.List;
+package fr.mcc.ginco.extjs.view;
 
 /**
- * Class with general behaviour to be shared with every implementation.
+ * Enum intended to be used for mark type of node.
  */
-public  class ThesaurusListBasicNode implements IThesaurusListNode {
-    /**
-     * Indicates if node should be expanded by default.
-     */
-    protected boolean expanded;
-    /**
-     * List of all children, now only String lines.
-     */
-    protected List<IThesaurusListNode> children;
-    /**
-     * Title to display for user.
-     */
-    protected String title;
-    /**
-     * Service tag - not visible in UI.
-     */
-    protected String id;
-    /**
-     * Type of visual node.
-     */
-    protected ThesaurusListNodeType nodeType;
-
-    @Override
-    public boolean isExpanded() {
-        return expanded;
-    }
-
-    @Override
-    public void setExpanded(boolean expanded) {
-        this.expanded = expanded;
-    }
-
-    @Override
-    public List<IThesaurusListNode> getChildren() {
-        return children;
-    }
-
-    @Override
-    public void setChildren(List<IThesaurusListNode> children) {
-        this.children = children;
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public ThesaurusListNodeType getType() {
-        return nodeType;
-    }
-
-    @Override
-    public void setType(ThesaurusListNodeType type) {
-        this.nodeType = type;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+public enum ThesaurusListNodeType {
+    THESAURUS, FOLDER
 }

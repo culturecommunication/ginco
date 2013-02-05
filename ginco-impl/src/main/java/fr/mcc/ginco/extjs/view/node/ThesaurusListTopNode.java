@@ -35,6 +35,7 @@
 package fr.mcc.ginco.extjs.view.node;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.extjs.view.ThesaurusListNodeType;
 
 /**
  * Class (basically, View) for top-level nodes representing Thesauruses
@@ -50,5 +51,6 @@ public class ThesaurusListTopNode extends ThesaurusListBasicNode {
         this.expanded = true;
         this.title = thesaurus.getTitle();
         this.id = thesaurus.getIdentifier();
+        this.nodeType = ThesaurusListNodeType.THESAURUS;
     }
 }
