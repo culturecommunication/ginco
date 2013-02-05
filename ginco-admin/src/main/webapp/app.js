@@ -28,5 +28,17 @@ Ext.application({
     name: 'HadocApp',
     controllers: [
         'TopToolbarController'
-    ]
+    ],
+    launch: function() {
+    	Ext.FocusManager.enable(true);
+        var map = new Ext.util.KeyMap(Ext.getBody(), {
+            key: Ext.EventObject.ONE,
+            ctrl: true,
+            handler: function() {
+                 this.getController("TopToolbarController").onNewThesaurusBtnClick();
+            },
+            scope: this,
+            defaultEventAction: "stopEvent"
+        });
+     }
 });

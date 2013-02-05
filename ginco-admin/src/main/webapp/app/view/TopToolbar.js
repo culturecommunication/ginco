@@ -26,7 +26,7 @@ Ext.define('HadocApp.view.TopToolbar', {
                 {
                     xtype: 'label',
                     width: 100,
-                    text: me.xTopWelcomeLabel
+                    html: '<h1>'+me.xTopWelcomeLabel+'</h1>'
                 },
                 {
                     xtype: 'buttongroup',
@@ -42,9 +42,10 @@ Ext.define('HadocApp.view.TopToolbar', {
                                 width: 200,
                                 items: [
                                     {
-                                        xtype: 'menuitem',
+                                        xtype: 'keymenuitem',
                                         id: 'newThesaurusBtn',
-                                        text: me.xNewMenu_ThesaurusLabel
+                                        text: me.xNewMenu_ThesaurusLabel,
+                                        cmdTxt: 'Ctrl+1'
                                     },
                                     {
                                         xtype: 'menuitem',
