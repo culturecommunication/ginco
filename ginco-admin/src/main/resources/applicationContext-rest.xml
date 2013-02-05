@@ -13,6 +13,7 @@
     <jaxrs:server id="uiServices" address="/ui">
         <jaxrs:serviceBeans>
             <bean class="fr.mcc.ginco.rest.services.BaseRestService"/>
+            <bean class="fr.mcc.ginco.rest.services.InfoRestService"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider"  />
