@@ -38,5 +38,21 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class ThesaurusFormat implements Serializable {
-
+	private Integer identifier;
+	private String label;
+	
+	
+	public Integer getIdentifier() {
+		return identifier;
+	}
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
 }

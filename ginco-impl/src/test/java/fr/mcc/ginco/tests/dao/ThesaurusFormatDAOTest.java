@@ -32,68 +32,39 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
+package fr.mcc.ginco.tests.dao;
 
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.log.Log;
 
-/**
- * Thesaurus REST service for all operation on a unique thesaurus
- * 
- */
-@Service
-@Path("/thesaurusservice")
-@Produces({MediaType.APPLICATION_JSON})
-public class ThesaurusRestService {
-
-	@Inject
-	@Named("thesaurusTypeService")
-	private IThesaurusTypeService thesaurusTypeService;
+@TransactionConfiguration
+@Transactional
+public class ThesaurusFormatDAOTest extends BaseDAOTest {
 	
 	@Inject
-	@Named("thesaurusFormatService")
-	private IThesaurusFormatService thesaurusFormatService;
-
-	@Log
-	private Logger logger;
-
-	/**
-	 * Public method used to get list of all existing ThesaurusType objects in
-	 * database.
-	 * 
-	 * @return list of objects, if not found - {@code null}
-	 */
-	@GET
-	@Path("/getThesaurusTypes")
-	public List<ThesaurusType> getAllThesaurusTypes() {
-		return thesaurusTypeService.getThesaurusTypeList();
-	}
+	private IThesaurusFormatService thesaurusFormatService;	
 	
-	/**
-	 * Public method used to get list of all existing ThesaurusFormat objects in
-	 * database.
-	 * 
-	 * @return list of objects, if not found - {@code null}
-	 */
-	@GET
-	@Path("/getThesaurusFormats")
-	public List<ThesaurusFormat> getAllThesaurusFormats() {
-		return thesaurusFormatService.getThesaurusFormatList();
+	@Test
+    public final void testGetThesaurusFormatList() {
+        List<ThesaurusFormat> actualResponse = thesaurusFormatService.getThesaurusFormatList();
+		Assert.assertEquals("Error fetching all ThesaurusFormat", 3, actualResponse.size());
+		Assert.assertEquals("Error fetching name of second ThesaurusFormat (expecting CSV))", "CSV", actualResponse.get(1).getLabel());
+
+    }
+	
+	@Override
+	public String  getXmlDataFileInit() {
+		return "/thesaurusformat_init.xml";
+		
 	}
 
 }

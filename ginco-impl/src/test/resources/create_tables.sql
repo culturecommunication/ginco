@@ -2,6 +2,7 @@
 
 DROP TABLE IF EXISTS thesaurus;
 DROP TABLE IF EXISTS thesaurus_type;
+DROP TABLE IF EXISTS thesaurus_format;
 
 CREATE TABLE thesaurus
 (
@@ -23,6 +24,11 @@ CREATE TABLE thesaurus
 );
 
 CREATE TABLE thesaurus_type (
+    identifier integer NOT NULL,
+    label text NOT NULL
+);
+
+CREATE TABLE thesaurus_format (
     identifier integer NOT NULL,
     label text NOT NULL
 );

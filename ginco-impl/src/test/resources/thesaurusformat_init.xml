@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<table name="thesaurus_format">
+		<column>identifier</column>
+		<column>label</column>		
+		<row>
+			<value>0</value>
+			<value>PDF 1.7</value>			
+		</row>
+		<row>
+			<value>1</value>
+			<value>CSV</value>			
+		</row>
+		<row>
+			<value>2</value>
+			<value>XML/SKOS</value>			
+		</row>
+	</table>
+</dataset>

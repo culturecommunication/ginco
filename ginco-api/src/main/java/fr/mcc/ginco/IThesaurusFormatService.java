@@ -32,68 +32,24 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
+package fr.mcc.ginco;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.log.Log;
 
 /**
- * Thesaurus REST service for all operation on a unique thesaurus
- * 
+ * Service used to work with {@link ThesaurusFormat} objects, contains basic
+ * methods exposed to client part. For example, to get all
+ * ThesaurusFormat objects, use {@link #getThesaurusFormatList(String)}
+ *
+ * @see fr.mcc.ginco.beans
  */
-@Service
-@Path("/thesaurusservice")
-@Produces({MediaType.APPLICATION_JSON})
-public class ThesaurusRestService {
-
-	@Inject
-	@Named("thesaurusTypeService")
-	private IThesaurusTypeService thesaurusTypeService;
-	
-	@Inject
-	@Named("thesaurusFormatService")
-	private IThesaurusFormatService thesaurusFormatService;
-
-	@Log
-	private Logger logger;
-
-	/**
-	 * Public method used to get list of all existing ThesaurusType objects in
-	 * database.
-	 * 
-	 * @return list of objects, if not found - {@code null}
-	 */
-	@GET
-	@Path("/getThesaurusTypes")
-	public List<ThesaurusType> getAllThesaurusTypes() {
-		return thesaurusTypeService.getThesaurusTypeList();
-	}
-	
-	/**
-	 * Public method used to get list of all existing ThesaurusFormat objects in
-	 * database.
-	 * 
-	 * @return list of objects, if not found - {@code null}
-	 */
-	@GET
-	@Path("/getThesaurusFormats")
-	public List<ThesaurusFormat> getAllThesaurusFormats() {
-		return thesaurusFormatService.getThesaurusFormatList();
-	}
-
+public interface IThesaurusFormatService {
+	 /**
+     * Get list of all ThesaurusFormat.
+     * @return
+     */
+    List<ThesaurusFormat> getThesaurusFormatList();
 }
