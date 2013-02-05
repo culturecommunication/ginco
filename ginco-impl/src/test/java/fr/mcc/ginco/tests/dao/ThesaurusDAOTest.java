@@ -48,7 +48,7 @@ import fr.mcc.ginco.IThesaurusService;
 public class ThesaurusDAOTest extends BaseDAOTest {
 
     @Inject
-    IThesaurusService testVocabulary;  
+    private IThesaurusService testVocabulary;  
 
     @Test
     public final void testGetThesaurusById() {

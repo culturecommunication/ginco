@@ -48,7 +48,7 @@ public class ThesaurusServiceTest extends BaseTest {
     IThesaurusService thesaurusService;
 
     @Test
-    public final void testHello() {
+    public final void testsetParam() {
         String parameter = "toto";
         String expectedResponse = "Param id = " + parameter;
         String actualResponse = thesaurusService.setParam(parameter);

@@ -34,9 +34,31 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class ThesaurusType implements Serializable {
-
+public class ThesaurusType implements IGenericBean{
+	private Integer identifier;
+	private String label;
+	
+	public ThesaurusType() {
+		super();		
+	}
+	public ThesaurusType(Integer identifier, String label) {
+		super();
+		this.identifier = identifier;
+		this.label = label;
+	}
+	public Integer getIdentifier() {
+		return identifier;
+	}
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}	
+	
 }

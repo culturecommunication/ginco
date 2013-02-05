@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -41,10 +43,8 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.log.Log;
-
-import java.util.List;
 
 @Service("thesaurusService")
 public class ThesaurusServiceImpl implements IThesaurusService {
@@ -53,7 +53,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     
     @Inject
     @Named("thesaurusDAO")
-	private ThesaurusDAO thesaurusDAO;
+	private IThesaurusDAO thesaurusDAO;
 
     private String id;
 

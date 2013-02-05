@@ -34,18 +34,21 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Thesaurus;
-
-import javax.inject.Inject;
-import javax.inject.Named;
+import fr.mcc.ginco.dao.IThesaurusDAO;
 
 @Transactional
-@Repository
-public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> {
+@Repository("thesaurusDAO")
+public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> implements IThesaurusDAO  {
 
     @Inject
     @Named("gincoSessionFactory")
@@ -53,10 +56,8 @@ public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> {
 
 	public ThesaurusDAO(Class<Thesaurus> clazz) {
 		super(clazz);
-		// TODO Auto-generated constructor stub
 	}
 	public ThesaurusDAO() {
 		super(Thesaurus.class);
-		// TODO Auto-generated constructor stub
-	}
+	}	
 }

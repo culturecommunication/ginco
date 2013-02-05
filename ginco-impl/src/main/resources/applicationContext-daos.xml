@@ -18,10 +18,6 @@
 		<constructor-arg value="fr.mcc.ginco.beans.Languages" />
 	</bean>
 
-	<bean id="thesaurusDAO" class="fr.mcc.ginco.dao.hibernate.ThesaurusDAO">
-        <constructor-arg value="fr.mcc.ginco.beans.Thesaurus" />
-    </bean>
-
 	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
 	</bean>
