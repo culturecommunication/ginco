@@ -30,7 +30,7 @@ Ext.application({
         'TopToolbarController'
     ],
     launch: function() {
-    	Ext.FocusManager.enable(true);
+    	Ext.FocusManager.enable();
         var map = new Ext.util.KeyMap(Ext.getBody(), {
             key: Ext.EventObject.ONE,
             ctrl: true,
