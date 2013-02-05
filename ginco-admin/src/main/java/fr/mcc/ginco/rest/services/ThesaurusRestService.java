@@ -46,8 +46,10 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusFormatService;
 import fr.mcc.ginco.IThesaurusTypeService;
+import fr.mcc.ginco.beans.Languages;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.log.Log;
@@ -68,6 +70,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("thesaurusFormatService")
 	private IThesaurusFormatService thesaurusFormatService;
+	
+	@Inject
+	@Named("languagesService")
+	private ILanguagesService languagesService;
 
 	@Log
 	private Logger logger;
@@ -82,6 +88,18 @@ public class ThesaurusRestService {
 	@Path("/getThesaurusTypes")
 	public List<ThesaurusType> getAllThesaurusTypes() {
 		return thesaurusTypeService.getThesaurusTypeList();
+	}
+	
+	/**
+	 * Public method used to get list of all existing Languages objects in
+	 * database.
+	 * 
+	 * @return list of objects, if not found - {@code null}
+	 */
+	@GET
+	@Path("/getLanguages")
+	public List<Languages> getAllLanguages() {
+		return languagesService.getLanguagesList();
 	}
 	
 	/**

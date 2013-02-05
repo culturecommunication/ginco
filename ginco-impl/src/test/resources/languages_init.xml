@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<table name="languages_iso639">
+		<column>id</column>
+		<column>part2b</column>	
+		<column>part2t</column>		
+		<column>part1</column>		
+		<column>scope</column>		
+		<column>type</column>		
+		<column>ref_name</column>		
+		<column>comment</column>				
+		<row>
+			<value>aaa</value>
+			<value></value>
+			<value></value>			
+			<value></value>			
+			<value>I</value>			
+			<value>L</value>
+			<value>Ghotuo</value>
+		</row>
+		<row>
+			<value>aab</value>
+			<value></value>
+			<value></value>			
+			<value></value>			
+			<value>I</value>			
+			<value>L</value>
+			<value>Alumu-Tesu</value>
+		</row>
+		<row>
+			<value>aac</value>
+			<value></value>
+			<value></value>			
+			<value></value>			
+			<value>I</value>			
+			<value>L</value>
+			<value>Ari</value>
+		</row>
+		<row>
+			<value>aad</value>
+			<value></value>
+			<value></value>			
+			<value></value>			
+			<value>I</value>			
+			<value>L</value>
+			<value>Amal</value>
+		</row>
+		<row>
+			<value>aae</value>
+			<value></value>
+			<value></value>			
+			<value></value>			
+			<value>I</value>			
+			<value>L</value>
+			<value>Arbëreshë Albanian</value>
+		</row>
+		<row>
+			<value>aaf</value>
+			<value></value>
+			<value></value>			
+			<value></value>			
+			<value>I</value>			
+			<value>L</value>
+			<value>Aranadan</value>
+		</row>
+	</table>
+</dataset>
