@@ -15,7 +15,7 @@ Ext.define('HadocApp.view.AProposWin', {
             items: [
                 {
                     xtype: 'label',
-                    html: '<h1>Hadoc GINCO</h1><p>Gestionnaire de thesaurus du MCC</p>'
+                    html: '<h1>Hadoc GINCO</h1><br /><p>Gestionnaire de thesaurus du MCC.</p>'
                 }
             ]
         });
