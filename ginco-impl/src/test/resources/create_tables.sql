@@ -1,6 +1,7 @@
--- Table: thesaurus
+-- Table: thesaurus, thesaurus_type
 
 DROP TABLE IF EXISTS thesaurus;
+DROP TABLE IF EXISTS thesaurus_type;
 
 CREATE TABLE thesaurus
 (
@@ -19,4 +20,9 @@ CREATE TABLE thesaurus
   type integer,
   creator integer,
   created text
-)
+);
+
+CREATE TABLE thesaurus_type (
+    identifier integer NOT NULL,
+    label text NOT NULL
+);
