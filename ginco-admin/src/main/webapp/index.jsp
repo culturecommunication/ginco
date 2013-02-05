@@ -9,6 +9,7 @@
     <script type="text/javascript" src="ext-locale-loader.js"></script>
     <script type="text/javascript" src="ext-custom-comp.js"></script>
     <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="extjs/locale/ext-lang-fr.js"></script>
 </head>
 <body></body>
 </html>
