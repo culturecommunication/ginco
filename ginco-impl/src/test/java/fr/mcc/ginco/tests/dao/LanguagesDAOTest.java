@@ -57,7 +57,7 @@ public class LanguagesDAOTest extends BaseDAOTest {
     public final void testGetLanguagesListList() {
         List<Languages> actualResponse = languageService.getLanguagesList();
 		Assert.assertEquals("Error fetching all Languages", 6, actualResponse.size());
-		Assert.assertEquals("Error fetching name of second Language (expecting Ghotuo))", "Ghotuo", actualResponse.get(0).getRef_name());
+		Assert.assertEquals("Error fetching name of second Language (expecting Ghotuo))", "Ghotuo", actualResponse.get(0).getRefname());
 
     }
 	

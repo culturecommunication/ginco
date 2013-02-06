@@ -11,7 +11,7 @@
 		<property name="part1" />
 		<property name="scope" not-null="true" />
 		<property name="type" not-null="true" />
-		<property name="ref_name" not-null="true" />
+		<property column="ref_name" name="refname" not-null="true" />
 		<property name="comment" />
 		
 		<!-- <set name="thesauruses" table="thesaurus_languages" >

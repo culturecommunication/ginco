@@ -44,7 +44,7 @@ public class Languages implements Serializable {
 	private String part1;
 	private String scope;
 	private String type;
-	private String ref_name;
+	private String refname;
 	private String comment;
 	public String getId() {
 		return id;
@@ -81,18 +81,17 @@ public class Languages implements Serializable {
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
-	public String getRef_name() {
-		return ref_name;
-	}
-	public void setRef_name(String ref_name) {
-		this.ref_name = ref_name;
-	}
+	}	
 	public String getComment() {
 		return comment;
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
-	}	
-
+	}
+	public String getRefname() {
+		return refname;
+	}
+	public void setRefname(String refname) {
+		this.refname = refname;
+	}
 }
