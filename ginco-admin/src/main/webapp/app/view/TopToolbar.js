@@ -34,7 +34,7 @@ Ext.define('HadocApp.view.TopToolbar', {
                     columns: 1,
                     items: [
                         {
-                            xtype: 'splitbutton',
+                            xtype: 'button',
                             disabled: false,
                             text: me.xNewLabel,
                             menu: {
