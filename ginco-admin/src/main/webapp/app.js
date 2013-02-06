@@ -11,7 +11,8 @@ Ext.Loader.setLocale({
 
 Ext.application({
     models: [
-        'MainTreeModel'
+        'MainTreeModel',
+        'ThesaurusModel'
     ],
     stores: [
         'MainTreeStore',
@@ -29,7 +30,8 @@ Ext.application({
     name: 'HadocApp',
     controllers: [
         'TopToolbarController',
-        'MainTreeController'
+        'MainTreeController',
+        'ThesaurusFormController'
     ],
     launch: function() {
     	Ext.FocusManager.enable();
