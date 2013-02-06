@@ -103,8 +103,9 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	protected Session getCurrentSession() {
 		Session session = sessionFactory.getCurrentSession();
 		if (session.getTransaction() == null
-				|| !session.getTransaction().isActive())
+				|| !session.getTransaction().isActive()) {
 			session.beginTransaction();
+		}
 		return session;
 	}
 
