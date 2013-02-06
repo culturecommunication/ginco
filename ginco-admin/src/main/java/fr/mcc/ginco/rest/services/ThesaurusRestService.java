@@ -40,9 +40,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Thesaurus;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -74,6 +77,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
+
+    @Inject
+    @Named("thesaurusService")
+    private IThesaurusService thesaurusService;
 
 	@Log
 	private Logger logger;
@@ -113,5 +120,21 @@ public class ThesaurusRestService {
 	public List<ThesaurusFormat> getAllThesaurusFormats() {
 		return thesaurusFormatService.getThesaurusFormatList();
 	}
+
+
+    /**
+     * Public method used to get {@link fr.mcc.ginco.beans.Thesaurus} object by providing its id.
+     * @param id {@link String} identifier to try with
+     *
+     * @return {@link fr.mcc.ginco.beans.Thesaurus} object in JSON format or
+     * {@code null} if not found
+     */
+    @GET
+    @Path("/getVocabulary/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Thesaurus getVocabularyById(@PathParam("id") String id) {
+        logger.info("Param passed to me : " + id);
+        return thesaurusService.getThesaurusById(id);
+    }
 
 }

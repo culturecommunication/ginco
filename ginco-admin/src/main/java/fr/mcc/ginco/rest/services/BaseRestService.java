@@ -67,21 +67,6 @@ public class BaseRestService {
     private Logger logger;
 
     /**
-     * Public method used to get {@link Thesaurus} object by providing its id.
-     * @param id {@link String} identifier to try with
-     *
-     * @return {@link Thesaurus} object in JSON format or
-     * {@code null} if not found
-     */
-    @GET
-    @Path("/getVocabulary/{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Thesaurus getVocabularyById(@PathParam("id") String id) {
-        logger.info("Param passed to me : " + id);
-        return thesaurusService.getThesaurusById(id);
-    }
-
-    /**
      * Public method used to get list of all existing Thesaurus objects
      * in database.
      *
