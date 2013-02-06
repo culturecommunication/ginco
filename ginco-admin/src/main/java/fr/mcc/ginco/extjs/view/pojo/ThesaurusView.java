@@ -36,11 +36,22 @@ package fr.mcc.ginco.extjs.view.pojo;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusFormat;
+import fr.mcc.ginco.beans.ThesaurusType;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * View class corresponding to {@link Thesaurus} bean, but fully serializable;
+ * contains all links to other business-objects (full beans
+ * {@link ThesaurusType} and {@link ThesaurusFormat}).
+ *
+ * @see fr.mcc.ginco.beans
+ */
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ThesaurusView implements Serializable {
     private String identifier;
     private String contributor;
@@ -54,29 +65,31 @@ public class ThesaurusView implements Serializable {
     private String subject;
     private String title;
     private String created;
-    private String format;
-    private String type;
+    private ThesaurusFormat format;
+    private ThesaurusType type;
     private String creator;
 
     private List<Language> languages = new ArrayList<Language>();
 
     public ThesaurusView(Thesaurus source) {
-        this.identifier = source.getIdentifier();
-        this.contributor = source.getContributor();
-        this.coverage = source.getCoverage();
-        this.date = source.getDate();
-        this.description = source.getDescription();
-        this.publisher = source.getPublisher();
-        this.relation = source.getRelation();
-        this.rights = source.getRights();
-        this.source = source.getSource();
-        this.subject = source.getSubject();
-        this.title = source.getTitle();
-        this.created = source.getCreated();
-        this.format = source.getFormat();
-        this.type = source.getType();
-        this.creator = source.getCreator();
-        this.languages = new ArrayList<Language>(source.getLang());
+        if(source != null) {
+            this.identifier = source.getIdentifier();
+            this.contributor = source.getContributor();
+            this.coverage = source.getCoverage();
+            this.date = source.getDate();
+            this.description = source.getDescription();
+            this.publisher = source.getPublisher();
+            this.relation = source.getRelation();
+            this.rights = source.getRights();
+            this.source = source.getSource();
+            this.subject = source.getSubject();
+            this.title = source.getTitle();
+            this.created = source.getCreated();
+            this.format = source.getFormat();
+            this.type = source.getType();
+            this.creator = source.getCreator();
+            this.languages = new ArrayList<Language>(source.getLang());
+        }
     }
 
     public String getIdentifier() {
@@ -175,19 +188,19 @@ public class ThesaurusView implements Serializable {
         this.created = created;
     }
 
-    public String getFormat() {
+    public ThesaurusFormat getFormat() {
         return format;
     }
 
-    public void setFormat(String format) {
+    public void setFormat(ThesaurusFormat format) {
         this.format = format;
     }
 
-    public String getType() {
+    public ThesaurusType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(ThesaurusType type) {
         this.type = type;
     }
 

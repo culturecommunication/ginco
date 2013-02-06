@@ -66,8 +66,6 @@ Ext.define('HadocApp.model.ThesaurusModel', {
         }
     ],
 
-    hasMany: 'Language',
-
     proxy: {
         type: 'rest',
         url: 'services/ui/thesaurusservice/getVocabulary',
