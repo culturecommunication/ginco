@@ -148,12 +148,11 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         	name : 'type',
                         	fieldLabel : me.xTypeLabel,
                         	editable : true,
-                        	displayField : 'type',
+                        	displayField : 'label',
                         	valueField : 'identifier',
                         	forceSelection : false,
-                        	multiSelect : false
-                        	//store : 'typesStore'
-                        	//=> to implement a store with identifier + type name
+                        	multiSelect : false,
+                        	store : 'ThesaurusTypeStore'
                         },
                         {
                         	xtype: 'combobox',
