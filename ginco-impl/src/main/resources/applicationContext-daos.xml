@@ -14,23 +14,23 @@
 	<!-- Definition of the Data Access Objects of Ginco Application -->
 	<!-- All Data Access Objects are injected by spring, using GenericHibernateDAO -->
 	<!-- Exception for thesaurusDAO, more sophisticated, which have its own implementation  -->
-	<bean id="languagesDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+	<bean id="languagesDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
 		<constructor-arg value="fr.mcc.ginco.beans.Languages" />
 	</bean>
 
-	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
 	</bean>
 
-	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusOrganization" />
 	</bean>
 
-	<bean id="thesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+	<bean id="thesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusType" />
 	</bean>
 
-	<bean id="thesaurusVersionHistoryDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+	<bean id="thesaurusVersionHistoryDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusVersionHistory" />
 	</bean>
 </beans>

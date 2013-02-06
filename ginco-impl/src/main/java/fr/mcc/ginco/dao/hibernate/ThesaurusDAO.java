@@ -34,12 +34,11 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.hibernate.SessionFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +47,7 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 
 @Transactional
 @Repository("thesaurusDAO")
+@Scope("prototype")
 public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> implements IThesaurusDAO  {
 
     @Inject
