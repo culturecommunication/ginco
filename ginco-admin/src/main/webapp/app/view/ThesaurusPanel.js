@@ -147,7 +147,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         	xtype : 'combobox',
                         	name : 'type',
                         	fieldLabel : me.xTypeLabel,
-                        	editable : true,
+                        	editable : false,
                         	displayField : 'label',
                         	valueField : 'identifier',
                         	forceSelection : false,
@@ -159,24 +159,23 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         	name:'format',
                         	fieldLabel: me.xFormatLabel,
                         	editable : false,
-                        	displayField : 'format',
+                        	displayField : 'label',
                         	valueField : 'identifier',
                         	forceSelection : false,
-                        	multiSelect : false
-                        	//store : 'formatsStore'
-                        	//=> to implement a store with identifier + format name
+                        	multiSelect : false,
+                        	store : 'ThesaurusFormatStore'
                         },
                         {
                         	xtype: 'combobox',
                         	name:'languages',
                         	fieldLabel: me.xLanguagesLabel,
                         	editable : false,
-                        	displayField : 'language',
-                        	valueField : 'identifier',
+                        	displayField : 'refname',
+                        	valueField : 'id',
                         	forceSelection : true,
-                        	multiSelect : true
-                        	//store : 'languagesStore'
-                        	//=> to implement a store with identifier + language name
+                        	multiSelect : true,
+                        	store : 'ThesaurusLanguageStore',
+                        	pageSize: 10
                         },
                         {
                             xtype: 'htmleditor',

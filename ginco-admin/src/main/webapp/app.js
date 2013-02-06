@@ -16,7 +16,9 @@ Ext.application({
     ],
     stores: [
         'MainTreeStore',
-        'ThesaurusTypeStore'
+        'ThesaurusTypeStore',
+        'ThesaurusFormatStore',
+        'ThesaurusLanguageStore'
     ],
     views: [
         'HadocViewPort',

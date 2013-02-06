@@ -1,6 +1,6 @@
 /*
  * Thesaurus Type Store 
- * 
+ * This file contains all Thesaurus types displayed in dropdown lists
  */
 Ext.define('HadocApp.store.ThesaurusTypeStore', {
     extend: 'Ext.data.Store',
@@ -10,7 +10,7 @@ Ext.define('HadocApp.store.ThesaurusTypeStore', {
         cfg = cfg || {};
         me.callParent([Ext.apply({
             autoLoad: true,
-            storeId: 'JsonThesaurusStore',
+            storeId: 'JsonThesaurusTypeStore',
             proxy: {
                 type: 'ajax',
                 url: 'services/ui/thesaurusservice/getThesaurusTypes',
