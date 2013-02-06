@@ -34,6 +34,10 @@
  */
 package fr.mcc.ginco;
 
+/**
+ * Provides methods to generate and use ARK identifiers
+ *
+ */
 public interface IIdentifierProvider {
 
 	/**
@@ -47,6 +51,6 @@ public interface IIdentifierProvider {
 	 * @param aClass the type of the object we want to generate an ARK Id
 	 * @return An object of type String containing an ARK identifier fitted for the object given in argument
 	 */
-	public String getArkId(Class aClass);
+	String getArkId(Class<?> aClass);
 	
 }
