@@ -45,7 +45,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
             items: [
                 {
                     xtype: 'form',
-                    title: 'Vocabulaire : scientifique (ID)',
+                    title: me.xThesaurusTitle,
                     defaults: {
                         anchor: '70%'
                     },

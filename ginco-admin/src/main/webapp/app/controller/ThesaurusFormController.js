@@ -16,6 +16,8 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
         if( id != '' ) {
             model.load(id, {
                 success:function(model){
+                	theForm.up('thesaurusPanel').setTitle(model.data.title);
+                	theForm.setTitle(model.data.title);
                     theForm.loadRecord(model);
                 }
             });
