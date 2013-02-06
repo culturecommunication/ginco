@@ -8,10 +8,10 @@
 		</id>
 		<property name="label" not-null="true" />
 		
-		<!-- <set name="thesauruses" inverse="true">
+		<set name="thesauruses" inverse="true">
 			<key column="identifier" />
 			<one-to-many class="Thesaurus" />
-		</set> -->
+		</set>
 		
 	</class>
 </hibernate-mapping>

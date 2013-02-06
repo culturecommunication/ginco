@@ -13,4 +13,10 @@
 	<build>
 		<finalName>ginco-api</finalName>
 	</build>
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+        </dependency>
+    </dependencies>
 </project>

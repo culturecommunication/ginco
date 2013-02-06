@@ -14,9 +14,9 @@
 		<property column="ref_name" name="refname" not-null="true" />
 		<property name="comment" />
 		
-		<!--<set name="thesauruses" table="thesaurus_languages" >
+		<set name="thesauruses" table="thesaurus_languages" >
 			<key column="iso639_id" />
 			<many-to-many class="Thesaurus" column="thesaurus_identifier" />
-		</set>-->
+		</set>
 	</class>
 </hibernate-mapping>

@@ -48,7 +48,7 @@ import fr.mcc.ginco.IThesaurusService;
 public class ThesaurusDAOTest extends BaseDAOTest {
 
     @Inject
-    private IThesaurusService testVocabulary;  
+    private IThesaurusService testVocabulary;
 
     @Test
     public final void testGetThesaurusById() {
@@ -56,6 +56,22 @@ public class ThesaurusDAOTest extends BaseDAOTest {
     	String expectedResponse = "test";
         String actualResponse = testVocabulary.getThesaurusById(idThesaurus).getTitle();
 		Assert.assertEquals("Error while getting Thesaurus By Id !", expectedResponse, actualResponse);
+    }
+
+    @Test
+    public final void testGetThesaurusType() {
+        String idThesaurus = "0";
+        String expectedThesaurusTypeTitle = "thesaurus type 2";
+        String actualThesaurusTypeTitle = testVocabulary.getThesaurusById(idThesaurus).getType().getLabel();
+        Assert.assertEquals("Error while getting ThesaurusType!", expectedThesaurusTypeTitle, actualThesaurusTypeTitle);
+    }
+
+    @Test
+    public final void testGetThesaurusFormat() {
+        String idThesaurus = "0";
+        String expectedThesaurusFormatTitle = "PDF 1.7";
+        String actualThesaurusFormatTitle = testVocabulary.getThesaurusById(idThesaurus).getFormat().getLabel();
+        Assert.assertEquals("Error while getting ThesaurusFormat!", expectedThesaurusFormatTitle, actualThesaurusFormatTitle);
     }
 
 	@Override

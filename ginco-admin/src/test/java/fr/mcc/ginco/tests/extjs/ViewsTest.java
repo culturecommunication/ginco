@@ -32,11 +32,13 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.extjs.view;
+package fr.mcc.ginco.tests.extjs;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.extjs.view.factory.ThesaurusTopNodeFactory;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,10 +53,14 @@ public class ViewsTest {
     public final void setUp() {
         testThesaurus.setTitle("testNode");
         testThesaurus.setIdentifier("555");
+        ThesaurusType type = new ThesaurusType();
+        type.setIdentifier(1);
+        type.setLabel("testType");
+        testThesaurus.setType(type);
     }
 
     @Test
-    public final void TestFolderCreation() {
+    public final void testFolderCreation() {
         IThesaurusListNode node = topNodeFactory.createNode(testThesaurus, true);
 
         String idOfFirstChild = node.getChildren().get(0).getId();
@@ -65,7 +71,7 @@ public class ViewsTest {
     }
 
     @Test
-    public final void TestNodeCreation() {
+    public final void testNodeCreation() {
         IThesaurusListNode node = topNodeFactory.createNode(testThesaurus, true);
 
         String idOfNode = node.getId();
@@ -76,5 +82,14 @@ public class ViewsTest {
 
         Assert.assertEquals("Error creating node! Title of node does not correspond to one of parent!",
                 titleOfNode, testThesaurus.getTitle());
+    }
+
+    @Test
+    public final void testThesaurusViewCreation() {
+        ThesaurusView view = new ThesaurusView(null);
+        Assert.assertEquals("Expected null String !", view.getTitle(), null);
+
+        view = new ThesaurusView(testThesaurus);
+        Assert.assertEquals("Expected type = testType !", view.getType().getLabel(), "testType");
     }
 }
