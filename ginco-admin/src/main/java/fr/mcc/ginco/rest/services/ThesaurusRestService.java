@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,14 +46,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusFormatService;
 import fr.mcc.ginco.IThesaurusTypeService;
-import fr.mcc.ginco.beans.Languages;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.log.Log;
@@ -98,14 +100,14 @@ public class ThesaurusRestService {
 	}
 	
 	/**
-	 * Public method used to get list of all existing Languages objects in
+	 * Public method used to get list of all existing Language objects in
 	 * database.
 	 * 
 	 * @return list of objects, if not found - {@code null}
 	 */
 	@GET
 	@Path("/getLanguages")
-	public List<Languages> getAllLanguages() {
+	public List<Language> getAllLanguages() {
 		return languagesService.getLanguagesList();
 	}
 	
@@ -133,8 +135,6 @@ public class ThesaurusRestService {
     @Path("/getVocabulary/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Thesaurus getVocabularyById(@PathParam("id") String id) {
-        logger.info("Param passed to me : " + id);
         return thesaurusService.getThesaurusById(id);
     }
-
 }

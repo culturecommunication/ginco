@@ -29,8 +29,8 @@
 
 		<set name="lang" table="thesaurus_languages">
 			<key column="thesaurus_identifier" />
-			<many-to-many class="LanguagesIso639" column="iso639_id" />
-		</set> -->
+			<many-to-many class="fr.mcc.ginco.beans.Language" column="iso639_id" />
+		</set>-->
 
 	</class>
 </hibernate-mapping>

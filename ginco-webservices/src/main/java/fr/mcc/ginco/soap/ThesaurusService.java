@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.soap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -42,6 +43,7 @@ import javax.jws.WebService;
 
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.data.ReducedThesaurus;
 
 /**
  * This class exposes all SOAP services related to thesaurus objects
@@ -56,8 +58,16 @@ public class ThesaurusService {
 	/**
 	 * @return the list of all existing thesaurus
 	 */
-	public List<Thesaurus> getAllThesaurus() {
-		return thesaurusService.getThesaurusList();
+	public List<ReducedThesaurus> getAllThesaurus() {
+		List<ReducedThesaurus> results = new ArrayList<ReducedThesaurus>();
+
+		for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
+			ReducedThesaurus reducedThesaurus = new ReducedThesaurus();
+			reducedThesaurus.setIdentifier(thesaurus.getIdentifier());
+			reducedThesaurus.setTitle(thesaurus.getTitle());
+			results.add(reducedThesaurus);
+		}
+		return results;
 	}
 
 }
