@@ -29,9 +29,43 @@
 			<value>test</value>
 			<value>test</value>
 			<value>test</value>
-			<value>0</value>
+			<value>1</value>
 			<value>0</value>
 			<value></value>
 		</row>
 	</table>
+
+    <table name="thesaurus_format">
+        <column>identifier</column>
+        <column>label</column>
+        <row>
+            <value>0</value>
+            <value>PDF 1.7</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>CSV</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>XML/SKOS</value>
+        </row>
+    </table>
+
+    <table name="thesaurus_type">
+        <column>identifier</column>
+        <column>label</column>
+        <row>
+            <value>0</value>
+            <value>thesaurus type 1</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>thesaurus type 2</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>thesaurus type 3</value>
+        </row>
+    </table>
 </dataset>

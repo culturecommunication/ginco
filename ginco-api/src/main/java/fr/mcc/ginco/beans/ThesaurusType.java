@@ -35,10 +35,16 @@
 package fr.mcc.ginco.beans;
 
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import java.util.HashSet;
+import java.util.Set;
+
 @SuppressWarnings("serial")
 public class ThesaurusType implements IGenericBean{
 	private Integer identifier;
 	private String label;
+    private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
 	
 	public ThesaurusType() {
 		super();		
@@ -59,6 +65,14 @@ public class ThesaurusType implements IGenericBean{
 	}
 	public void setLabel(String label) {
 		this.label = label;
-	}	
-	
+	}
+
+    @JsonIgnore
+    public Set<Thesaurus> getThesauruses() {
+        return thesauruses;
+    }
+
+    public void setThesauruses(Set<Thesaurus> thesauruses) {
+        this.thesauruses = thesauruses;
+    }
 }

@@ -25,22 +25,34 @@
  * therefore means that it is reserved for developers and experienced
  * professionals having in-depth computer knowledge. Users are therefore
  * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systems and/or
+ * requirements in conditions enabling the security of their systemsand/or
  * data to be ensured and, more generally, to use and operate it in the
  * same conditions as regards security.
  * <p/>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.extjs.view.pojo;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusFormat;
+import fr.mcc.ginco.beans.ThesaurusType;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Thesaurus implements Serializable {
+/**
+ * View class corresponding to {@link Thesaurus} bean, but fully serializable;
+ * contains all links to other business-objects (full beans
+ * {@link ThesaurusType} and {@link ThesaurusFormat}).
+ *
+ * @see fr.mcc.ginco.beans
+ */
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class ThesaurusView implements Serializable {
     private String identifier;
     private String contributor;
     private String coverage;
@@ -57,30 +69,27 @@ public class Thesaurus implements Serializable {
     private ThesaurusType type;
     private String creator;
 
-    private Set<Language> lang = new HashSet<Language>();
+    private List<Language> languages = new ArrayList<Language>();
 
-    public Thesaurus() {
-    }
-
-    public Thesaurus(String identifier, String contributor, String coverage,
-                     String date, String description, String publisher, String relation,
-                     String rights, String source, String subject, String title,
-                     String created, ThesaurusFormat format, ThesaurusType type, String creator) {
-        this.identifier = identifier;
-        this.contributor = contributor;
-        this.coverage = coverage;
-        this.date = date;
-        this.description = description;
-        this.publisher = publisher;
-        this.relation = relation;
-        this.rights = rights;
-        this.source = source;
-        this.subject = subject;
-        this.title = title;
-        this.created = created;
-        this.format = format;
-        this.type = type;
-        this.creator = creator;
+    public ThesaurusView(Thesaurus source) {
+        if(source != null) {
+            this.identifier = source.getIdentifier();
+            this.contributor = source.getContributor();
+            this.coverage = source.getCoverage();
+            this.date = source.getDate();
+            this.description = source.getDescription();
+            this.publisher = source.getPublisher();
+            this.relation = source.getRelation();
+            this.rights = source.getRights();
+            this.source = source.getSource();
+            this.subject = source.getSubject();
+            this.title = source.getTitle();
+            this.created = source.getCreated();
+            this.format = source.getFormat();
+            this.type = source.getType();
+            this.creator = source.getCreator();
+            this.languages = new ArrayList<Language>(source.getLang());
+        }
     }
 
     public String getIdentifier() {
@@ -203,12 +212,11 @@ public class Thesaurus implements Serializable {
         this.creator = creator;
     }
 
-    @JsonIgnore
-    public Set<Language> getLang() {
-        return lang;
+    public List<Language> getLanguges() {
+        return languages;
     }
 
-    public void setLang(Set<Language> lang) {
-        this.lang = lang;
+    public void setLanguges(List<Language> lang) {
+        this.languages = lang;
     }
 }

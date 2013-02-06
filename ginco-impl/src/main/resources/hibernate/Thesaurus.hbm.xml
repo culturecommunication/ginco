@@ -18,19 +18,19 @@
 		<property name="title" not-null="true" />
 		<property name="created" not-null="true" />
 
-		<!-- <many-to-one name="format" column="format" />
-		<many-to-one name="type" column="type" />
+		<many-to-one name="format" lazy="false" />
+		<many-to-one name="type" lazy="false" /> <!--
 		<many-to-one name="creator" column="creator" />
 
 		<set name="versions">
 			<key column="identifier" />
 			<one-to-many class="ThesaurusVersionHistory" />
-		</set>
+		</set>-->
 
 		<set name="lang" table="thesaurus_languages">
 			<key column="thesaurus_identifier" />
 			<many-to-many class="fr.mcc.ginco.beans.Language" column="iso639_id" />
-		</set>-->
+		</set>
 
 	</class>
 </hibernate-mapping>

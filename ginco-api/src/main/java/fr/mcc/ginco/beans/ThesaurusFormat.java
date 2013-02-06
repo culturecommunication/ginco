@@ -34,13 +34,17 @@
  */
 package fr.mcc.ginco.beans;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("serial")
 public class ThesaurusFormat implements Serializable {
 	private Integer identifier;
 	private String label;
-	
+	private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
 	
 	public Integer getIdentifier() {
 		return identifier;
@@ -54,5 +58,13 @@ public class ThesaurusFormat implements Serializable {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
+
+    @JsonIgnore
+    public Set<Thesaurus> getThesauruses() {
+        return thesauruses;
+    }
+
+    public void setThesauruses(Set<Thesaurus> thesauruses) {
+        this.thesauruses = thesauruses;
+    }
 }

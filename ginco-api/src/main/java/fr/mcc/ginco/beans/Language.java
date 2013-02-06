@@ -34,7 +34,11 @@
  */
 package fr.mcc.ginco.beans;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Language implements Serializable {
 	private String id;
@@ -45,6 +49,8 @@ public class Language implements Serializable {
 	private String type;
 	private String refname;
 	private String comment;
+
+    private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
 
 	public String getId() {
 		return id;
@@ -94,4 +100,13 @@ public class Language implements Serializable {
 	public void setRefname(String refname) {
 		this.refname = refname;
 	}
+
+    @JsonIgnore
+    public Set<Thesaurus> getThesauruses() {
+        return thesauruses;
+    }
+
+    public void setThesauruses(Set<Thesaurus> thesauruses) {
+        this.thesauruses = thesauruses;
+    }
 }

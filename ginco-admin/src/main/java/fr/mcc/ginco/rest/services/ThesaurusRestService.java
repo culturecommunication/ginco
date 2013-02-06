@@ -134,7 +134,7 @@ public class ThesaurusRestService {
     @GET
     @Path("/getVocabulary/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Thesaurus getVocabularyById(@PathParam("id") String id) {
-        return thesaurusService.getThesaurusById(id);
+    public ThesaurusView getVocabularyById(@PathParam("id") String id) {
+        return new ThesaurusView(thesaurusService.getThesaurusById(id));
     }
 }
