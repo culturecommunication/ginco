@@ -12,29 +12,33 @@
 	<name>ginco-webservices</name>
 	<properties>
 		<finalName>ginco-webservices</finalName>
-	</properties>	
-	<dependencies>	
+	</properties>
+	<dependencies>
 		<dependency>
 			<groupId>fr.smile.mcc.ginco</groupId>
 			<artifactId>ginco-api</artifactId>
 		</dependency>
-	<dependency>
+		<dependency>
 			<groupId>fr.smile.mcc.ginco</groupId>
 			<artifactId>ginco-impl</artifactId>
 		</dependency>
 		<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-bundle-jaxrs</artifactId>
+		</dependency>		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${finalName}</finalName>
 		<pluginManagement>
-			<plugins>			
+			<plugins>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.0</version>
@@ -61,7 +65,7 @@
 							<timeout>60000</timeout>
 						</container>
 						<configuration>
-							<type>runtime</type>							
+							<type>runtime</type>
 							<properties>
 								<cargo.datasource.datasource />
 								<cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
@@ -72,8 +76,8 @@
 						<deployables>
 							<deployable>
 								<location>${project.build.directory}/${finalName}.war</location>
-								<type>war</type>	
-							</deployable>							
+								<type>war</type>
+							</deployable>
 						</deployables>
 					</configuration>
 				</plugin>

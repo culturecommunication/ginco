@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.extjs.tests;
+package fr.mcc.ginco.tests.extjs.view;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.extjs.view.factory.ThesaurusTopNodeFactory;

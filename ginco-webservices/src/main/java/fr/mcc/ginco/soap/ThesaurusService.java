@@ -32,56 +32,32 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
+package fr.mcc.ginco.soap;
 
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.extjs.view.factory.ThesaurusTopNodeFactory;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListTopNode;
-import fr.mcc.ginco.log.Log;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
+import javax.jws.WebService;
+
+import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Thesaurus;
 
 /**
- * Base REST service intended to be used for getting tree of {@link Thesaurus},
- * and its children.
+ * This class exposes all SOAP services related to thesaurus objects
+ * 
  */
-@Service
-@Path("/baseservice")
-public class BaseRestService {
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
+@WebService
+public class ThesaurusService {
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
-    @Log 
-    private Logger logger;
+	/**
+	 * @return the list of all existing thesaurus
+	 */
+	public List<Thesaurus> getAllThesaurus() {
+		return thesaurusService.getThesaurusList();
+	}
 
-    /**
-     * Public method used to get list of all existing Thesaurus objects
-     * in database.
-     *
-     * @return list of objects, if not found - {@code null}
-     */
-    @GET
-    @Path("/getVocabularies")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<ThesaurusListTopNode> getVocabularies() {
-        List<ThesaurusListTopNode> result = new ArrayList<ThesaurusListTopNode>();
-        ThesaurusTopNodeFactory factory = new ThesaurusTopNodeFactory();
-
-        for(Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
-            result.add((ThesaurusListTopNode)factory.createNode(thesaurus, true));
-        }
-        return result;
-    }
 }

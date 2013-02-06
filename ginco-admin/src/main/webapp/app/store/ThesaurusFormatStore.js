@@ -1,8 +1,8 @@
 /*
- * Thesaurus Type Store 
- * This file contains all Thesaurus types displayed in dropdown lists
+ * Thesaurus Format Store 
+ * This file contains all Thesaurus formats displayed in dropdown lists
  */
-Ext.define('HadocApp.store.ThesaurusTypeStore', {
+Ext.define('HadocApp.store.ThesaurusFormatStore', {
     extend: 'Ext.data.Store',
 
     constructor: function(cfg) {
@@ -10,10 +10,10 @@ Ext.define('HadocApp.store.ThesaurusTypeStore', {
         cfg = cfg || {};
         me.callParent([Ext.apply({
             autoLoad: true,
-            storeId: 'JsonThesaurusTypeStore',
+            storeId: 'JsonThesaurusFormatStore',
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurusservice/getThesaurusTypes',
+                url: 'services/ui/thesaurusservice/getThesaurusFormats',
                 reader: {
                     type: 'json',
                     idProperty: 'identifier'

@@ -57,9 +57,11 @@ public class SimpleArkProviderTest extends BaseTest {
 	private @Value("${application.ark.nma}") String nma;
 	private @Value("${application.ark.naan}") String naan;
 	
-	 @Test
+	 /**
+	 * Since ARK is randomly generated, this method only test the static part of the ID
+	 */
+	@Test
 	 public final void getArkId(){
-		 //Since ARK is randomly generated, we can only test the static part of the ID
 		 String expectedResponse= nma + "/ark:/" + naan ;
 		 String actualResponse = arkProvider.getArkId(this.getClass());
 		 Assert.assertTrue("Error while generating ARK Id !" +actualResponse+" expected "+expectedResponse, actualResponse.startsWith(expectedResponse));

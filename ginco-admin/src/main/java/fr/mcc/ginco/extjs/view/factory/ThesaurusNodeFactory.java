@@ -40,5 +40,14 @@ import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
  * Internal usage only - abstract Factory pattern.
  */
 abstract class ThesaurusNodeFactory {
+    /**
+     * Generic method which generates a concrete type of node, based on
+     * factory implementation, node should <b>extends</b>
+     * {@link IThesaurusListNode}.
+     * @param source object to get values from (depends on node type)
+     * @param generateFolders only needed for top-level nodes, creates
+     *                        classification folders under node.
+     * @return Newly created node.
+     */
     public abstract IThesaurusListNode createNode(Object source, boolean generateFolders);
 }
