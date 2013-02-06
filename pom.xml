@@ -132,6 +132,11 @@
 				</exclusions>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-frontend-jaxws</artifactId>
+				<version>${org.apache.cxf.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
 				<version>${org.hibernate.version}</version>
@@ -253,8 +258,8 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>**/*.xml</include>
-				</includes>				
-			</resource>		
+				</includes>
+			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>false</filtering>
@@ -262,7 +267,7 @@
 					<include>**/*.properties</include>
 				</includes>
 			</resource>
-		</resources> 
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>
