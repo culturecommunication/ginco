@@ -32,42 +32,28 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.soap;
+package fr.mcc.ginco.data;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ReducedThesaurus {
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.jws.WebService;
+	private String identifier;
+	
+	private String title;
 
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.data.ReducedThesaurus;
-
-/**
- * This class exposes all SOAP services related to thesaurus objects
- * 
- */
-@WebService
-public class ThesaurusService {
-	@Inject
-	@Named("thesaurusService")
-	private IThesaurusService thesaurusService;
-
-	/**
-	 * @return the list of all existing thesaurus
-	 */
-	public List<ReducedThesaurus> getAllThesaurus() {
-		List<ReducedThesaurus> results = new ArrayList<ReducedThesaurus>();
-
-		for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
-			ReducedThesaurus reducedThesaurus = new ReducedThesaurus();
-			reducedThesaurus.setIdentifier(thesaurus.getIdentifier());
-			reducedThesaurus.setTitle(thesaurus.getTitle());
-			results.add(reducedThesaurus);
-		}
-		return results;
+	public String getIdentifier() {
+		return identifier;
 	}
 
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}	
+	
 }
