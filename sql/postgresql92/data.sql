@@ -7909,3 +7909,23 @@ INSERT INTO languages_iso639 VALUES ('zzj', '   ', '   ', '  ', 'I', 'L', 'Zuoji
 -- PostgreSQL database dump complete
 --
 
+-- Added test data
+--
+-- Data for Name: thesaurus_format; Type: TABLE DATA; Schema: public; Owner: hadocdb
+--
+
+INSERT INTO thesaurus_format VALUES (2, 'PDF 1.7');
+INSERT INTO thesaurus_format VALUES (1, 'CSV');
+INSERT INTO thesaurus_format VALUES (3, 'XML/SKOS');
+
+--
+-- Data for Name: thesaurus_type; Type: TABLE DATA; Schema: public; Owner: hadocdb
+--
+
+INSERT INTO thesaurus_type VALUES (1, 'Liste contrôlée');
+INSERT INTO thesaurus_type VALUES (2, 'Taxonomie');
+INSERT INTO thesaurus_type VALUES (3, 'Thesaurus');
+
+
+
+
