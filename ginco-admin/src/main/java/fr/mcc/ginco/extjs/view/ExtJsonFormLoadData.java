@@ -32,49 +32,36 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
+package fr.mcc.ginco.extjs.view;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.GitInfo;
 
 /**
- * Base REST service intended to be used for getting tree of {@link Thesaurus},
- * and its children.
+ * Class for JSON representation of a data object for extjs.
  */
-@Service
-@Path("/infoservice")
-public class InfoRestService {
+public  class ExtJsonFormLoadData<T>  {
    
-    @Inject
-    @Named("gitInfoService")
-    private GitInfo gitInfo;
+	public boolean isSuccess() {
+		return success;
+	}
 
-    @Log 
-    private Logger logger;
-    
-    /**
-     * Public method used to get the status of the last  git commit
-     * in database.
-     *
-     * @return list of objects, if not found - {@code null}
-     */
-    @GET
-    @Path("/getGitInfo")
-    @Produces({MediaType.APPLICATION_JSON})
-    public ExtJsonFormLoadData<GitInfo> getGitInfo() {
-       
-        return new ExtJsonFormLoadData<GitInfo>(gitInfo);
-    }
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
+	protected boolean success;
+	protected T data;
+	
+	public ExtJsonFormLoadData (T aData)
+	{
+		success = true;
+		data = aData;
+	}
 }
