@@ -11,16 +11,15 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
 
     loadPanel : function(theForm)
     {
-        debugger;
         var model = this.getThesaurusModelModel();
         var id = theForm.up('thesaurusPanel').thesaurusId;
-        model.load(id, {
-            success:function(model){
-                console.log(model);
-//                debugger;
-                theForm.loadRecord(model);
-            }
-        });
+        if( id != '' ) {
+            model.load(id, {
+                success:function(model){
+                    theForm.loadRecord(model);
+                }
+            });
+        }
     },
 
     init: function(application) {
