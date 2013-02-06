@@ -38,13 +38,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import fr.mcc.ginco.beans.Language;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.ILanguagesService;
-import fr.mcc.ginco.beans.Languages;
 
 @TransactionConfiguration
 @Transactional
@@ -55,7 +55,7 @@ public class LanguagesDAOTest extends BaseDAOTest {
 	
 	@Test
     public final void testGetLanguagesListList() {
-        List<Languages> actualResponse = languageService.getLanguagesList();
+        List<Language> actualResponse = languageService.getLanguagesList();
 		Assert.assertEquals("Error fetching all Languages", 6, actualResponse.size());
 		Assert.assertEquals("Error fetching name of second Language (expecting Ghotuo))", "Ghotuo", actualResponse.get(0).getRefname());
 

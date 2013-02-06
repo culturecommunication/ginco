@@ -36,12 +36,12 @@ package fr.mcc.ginco;
 
 import java.util.List;
 
-import fr.mcc.ginco.beans.Languages;
+import fr.mcc.ginco.beans.Language;
 
 /**
  * Service used to work with {@link Language} objects, contains basic
  * methods exposed to client part. For example, to get all
- * Languages objects, use {@link #getLanguageList()}
+ * Language objects, use {@link #getLanguagesList()}
  *
  * @see fr.mcc.ginco.beans
  */
@@ -50,5 +50,5 @@ public interface ILanguagesService {
      * Get list of all ThesaurusFormat.
      * @return
      */
-    List<Languages> getLanguagesList();
+    List<Language> getLanguagesList();
 }

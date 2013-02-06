@@ -42,7 +42,7 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.Languages;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.log.Log;
 
@@ -55,18 +55,18 @@ public class LanguagesServiceImpl implements ILanguagesService {
 	    
 	@Inject
 	@Named("languagesDAO")
-    private IGenericDAO<Languages, Integer> languagesDAO;
+    private IGenericDAO<Language, Integer> languagesDAO;
 	
 	
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.ILanguagesService#getLanguagesList()
 	 */
 	@Override
-	public List<Languages> getLanguagesList() {
+	public List<Language> getLanguagesList() {
 		return languagesDAO.findAll();
 	}
 
-	public IGenericDAO<Languages, Integer> getLanguagesDAO() {
+	public IGenericDAO<Language, Integer> getLanguagesDAO() {
 		return languagesDAO;
 	}
 	

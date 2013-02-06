@@ -36,8 +36,7 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
-public class Languages implements Serializable {
+public class Language implements Serializable {
 	private String id;
 	private String part2b;
 	private String part2t;
@@ -46,6 +45,7 @@ public class Languages implements Serializable {
 	private String type;
 	private String refname;
 	private String comment;
+
 	public String getId() {
 		return id;
 	}
