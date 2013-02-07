@@ -48,177 +48,180 @@ import java.util.List;
  * View class corresponding to {@link Thesaurus} bean, but fully serializable;
  * contains all links to other business-objects (full beans
  * {@link ThesaurusType} and {@link ThesaurusFormat}).
- *
+ * 
  * @see fr.mcc.ginco.beans
  */
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusView implements Serializable {
-    private String identifier;
-    private String contributor;
-    private String coverage;
-    private String date;
-    private String description;
-    private String publisher;
-    private String relation;
-    private String rights;
-    private String source;
-    private String subject;
-    private String title;
-    private String created;
-    private Integer format;
-    private Integer type;
-    private String creatorName;
-    private String creatorHomepage;
+	private String identifier;
+	private String contributor;
+	private String coverage;
+	private String date;
+	private String description;
+	private String publisher;
+	private String relation;
+	private String rights;
+	private String source;
+	private String subject;
+	private String title;
+	private String created;
+	private Integer format;
+	private Integer type;
+	private String creatorName;
+	private String creatorHomepage;
 
+	private List<String> languages = new ArrayList<String>();
 
-    private List<String> languages = new ArrayList<String>();
+	public ThesaurusView(Thesaurus source) {
+		if (source != null) {
+			this.identifier = source.getIdentifier();
+			this.contributor = source.getContributor();
+			this.coverage = source.getCoverage();
+			this.date = source.getDate();
+			this.description = source.getDescription();
+			this.publisher = source.getPublisher();
+			this.relation = source.getRelation();
+			this.rights = source.getRights();
+			this.source = source.getSource();
+			this.subject = source.getSubject();
+			this.title = source.getTitle();
+			this.created = source.getCreated();
 
-    public ThesaurusView(Thesaurus source) {
-        if(source != null) {
-            this.identifier = source.getIdentifier();
-            this.contributor = source.getContributor();
-            this.coverage = source.getCoverage();
-            this.date = source.getDate();
-            this.description = source.getDescription();
-            this.publisher = source.getPublisher();
-            this.relation = source.getRelation();
-            this.rights = source.getRights();
-            this.source = source.getSource();
-            this.subject = source.getSubject();
-            this.title = source.getTitle();
-            this.created = source.getCreated();
+			if (source.getCreator().getName() != null) {
+				this.creatorName = source.getCreator().getName();
+			}
 
-            this.creatorName = source.getCreator().getName();
-            this.creatorHomepage = source.getCreator().getHomepage();
+			if (source.getCreator().getHomepage() != null) {
+				this.creatorHomepage = source.getCreator().getHomepage();
+			}
+			if (source.getFormat() != null) {
+				this.format = source.getFormat().getIdentifier();
+			}
+			if (source.getType() != null) {
+				this.type = source.getType().getIdentifier();
+			}
 
-            if (source.getFormat() != null) {
-                this.format = source.getFormat().getIdentifier();
-            }
-            if (source.getType() != null) {
-                this.type = source.getType().getIdentifier();
-            }
+			ArrayList<String> langList = new ArrayList<String>();
+			for (Language lang : source.getLang()) {
+				langList.add(lang.getId());
+			}
+			this.languages = langList;
+		}
+	}
 
-            ArrayList<String> langList = new ArrayList<String>();
-            for(Language lang : source.getLang()) {
-                langList.add(lang.getId());
-            }
-            this.languages = langList;
-        }
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public String getContributor() {
+		return contributor;
+	}
 
-    public String getContributor() {
-        return contributor;
-    }
+	public void setContributor(String contributor) {
+		this.contributor = contributor;
+	}
 
-    public void setContributor(String contributor) {
-        this.contributor = contributor;
-    }
+	public String getCoverage() {
+		return coverage;
+	}
 
-    public String getCoverage() {
-        return coverage;
-    }
+	public void setCoverage(String coverage) {
+		this.coverage = coverage;
+	}
 
-    public void setCoverage(String coverage) {
-        this.coverage = coverage;
-    }
+	public String getDate() {
+		return date;
+	}
 
-    public String getDate() {
-        return date;
-    }
+	public void setDate(String date) {
+		this.date = date;
+	}
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getPublisher() {
+		return publisher;
+	}
 
-    public String getPublisher() {
-        return publisher;
-    }
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+	public String getRelation() {
+		return relation;
+	}
 
-    public String getRelation() {
-        return relation;
-    }
+	public void setRelation(String relation) {
+		this.relation = relation;
+	}
 
-    public void setRelation(String relation) {
-        this.relation = relation;
-    }
+	public String getRights() {
+		return rights;
+	}
 
-    public String getRights() {
-        return rights;
-    }
+	public void setRights(String rights) {
+		this.rights = rights;
+	}
 
-    public void setRights(String rights) {
-        this.rights = rights;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public String getSubject() {
+		return subject;
+	}
 
-    public String getSubject() {
-        return subject;
-    }
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getCreated() {
+		return created;
+	}
 
-    public String getCreated() {
-        return created;
-    }
+	public void setCreated(String created) {
+		this.created = created;
+	}
 
-    public void setCreated(String created) {
-        this.created = created;
-    }
+	public Integer getFormat() {
+		return format;
+	}
 
-    public Integer getFormat() {
-        return format;
-    }
+	public void setFormat(Integer formatId) {
+		this.format = formatId;
+	}
 
-    public void setFormat(Integer formatId) {
-        this.format = formatId;
-    }
+	public Integer getType() {
+		return type;
+	}
 
-    public Integer getType() {
-        return type;
-    }
+	public void setType(Integer typeId) {
+		this.type = typeId;
+	}
 
-    public void setType(Integer typeId) {
-        this.type = typeId;
-    }
-    
-    public String getCreatorName() {
+	public String getCreatorName() {
 		return creatorName;
 	}
 
@@ -235,10 +238,10 @@ public class ThesaurusView implements Serializable {
 	}
 
 	public List<String> getLanguages() {
-        return languages;
-    }
+		return languages;
+	}
 
-    public void setLanguages(List<String> lang) {
-        this.languages = lang;
-    }
+	public void setLanguages(List<String> lang) {
+		this.languages = lang;
+	}
 }
