@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.dao;
+package fr.mcc.ginco.tests.services;
 
 import javax.inject.Inject;
 
@@ -45,16 +45,16 @@ import fr.mcc.ginco.IThesaurusService;
 
 @TransactionConfiguration
 @Transactional
-public class ThesaurusDAOTest extends BaseDAOTest {
+public class ThesaurusServiceTest extends BaseServiceTest {
 
     @Inject
-    private IThesaurusService testVocabulary;
+    private IThesaurusService thesaurusService;
 
     @Test
     public final void testGetThesaurusById() {
     	String idThesaurus = "0";
     	String expectedResponse = "test";
-        String actualResponse = testVocabulary.getThesaurusById(idThesaurus).getTitle();
+        String actualResponse = thesaurusService.getThesaurusById(idThesaurus).getTitle();
 		Assert.assertEquals("Error while getting Thesaurus By Id !", expectedResponse, actualResponse);
     }
 
@@ -62,7 +62,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
     public final void testGetThesaurusType() {
         String idThesaurus = "0";
         String expectedThesaurusTypeTitle = "thesaurus type 2";
-        String actualThesaurusTypeTitle = testVocabulary.getThesaurusById(idThesaurus).getType().getLabel();
+        String actualThesaurusTypeTitle = thesaurusService.getThesaurusById(idThesaurus).getType().getLabel();
         Assert.assertEquals("Error while getting ThesaurusType!", expectedThesaurusTypeTitle, actualThesaurusTypeTitle);
     }
 
@@ -70,7 +70,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
     public final void testGetThesaurusFormat() {
         String idThesaurus = "0";
         String expectedThesaurusFormatTitle = "PDF 1.7";
-        String actualThesaurusFormatTitle = testVocabulary.getThesaurusById(idThesaurus).getFormat().getLabel();
+        String actualThesaurusFormatTitle = thesaurusService.getThesaurusById(idThesaurus).getFormat().getLabel();
         Assert.assertEquals("Error while getting ThesaurusFormat!", expectedThesaurusFormatTitle, actualThesaurusFormatTitle);
     }
 

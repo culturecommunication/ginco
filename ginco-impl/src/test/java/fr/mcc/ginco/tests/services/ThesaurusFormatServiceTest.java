@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.dao;
+package fr.mcc.ginco.tests.services;
 
 import java.util.List;
 
@@ -48,7 +48,7 @@ import fr.mcc.ginco.beans.ThesaurusFormat;
 
 @TransactionConfiguration
 @Transactional
-public class ThesaurusFormatDAOTest extends BaseDAOTest {
+public class ThesaurusFormatServiceTest extends BaseServiceTest {
 	
 	@Inject
 	private IThesaurusFormatService thesaurusFormatService;	

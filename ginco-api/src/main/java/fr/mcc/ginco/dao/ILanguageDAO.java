@@ -34,8 +34,11 @@
  */
 package fr.mcc.ginco.dao;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.Language;
 
 public interface ILanguageDAO extends IGenericDAO<Language, String> {
+	List<Language> findPaginatedItems(Integer start, Integer limit);
 
 }

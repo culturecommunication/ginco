@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.dao;
+package fr.mcc.ginco.tests.services;
 
 import java.io.InputStream;
 
@@ -49,7 +49,7 @@ import org.junit.Before;
 
 import fr.mcc.ginco.tests.BaseTest;
 
-public abstract class BaseDAOTest extends BaseTest {	
+public abstract class BaseServiceTest extends BaseTest {	
 	
 	@Inject
 	private DataSource dataSourceTest;
@@ -69,7 +69,7 @@ public abstract class BaseDAOTest extends BaseTest {
 	}
 
 	private IDataSet getDataset(String datasetPath) throws DataSetException {
-		InputStream is = BaseDAOTest.class
+		InputStream is = BaseServiceTest.class
 				.getResourceAsStream(datasetPath);
 		return new XmlDataSet(is);
 	}

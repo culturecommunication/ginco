@@ -43,14 +43,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface IGenericDAO<T, ID extends Serializable> {
-
-	/**
-	 * Returns an object of type T with value
-	 * 
-	 * @return An object of type T matching with the value given in argument
-	 */
-	T getByValue(String value);
-
+	
 	/**
 	 * Get an object of type T by id
 	 * 
@@ -64,22 +57,8 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * 
 	 * @return A list of all the objects of type T
 	 */
-	List<T> findAll();
-	
-	/**
-	 * Delete an object of type T
-	 * 
-	 * @param entity
-	 * 
-	 */
-	void delete(T entity);
+	List<T> findAll();	
 
-	/**
-	 * Delete an object of type T by id
-	 * 
-	 * @param id
-	 */
-	void deleteById(ID id);
 
 	/**
 	 * Save an object of type T
@@ -95,20 +74,8 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @param entity
 	 * @return Object
 	 */
-	T update(T entity);
-
-	/**
-	 * Flush
-	 */
-	void flush();
+	T update(T entity);	
 	
-	/**
-	 * Find elements with a start index and an offset
-	 * @param Integer start : index of the first element
-	 * @param Integer limit : number of elements to return
-	 * @return List<T> A list of items 
-	 */
-	List <T> findPaginatedItems(Integer start, Integer limit);
 	
 	/**
 	 * @return The number of DB rows matching to the DAO

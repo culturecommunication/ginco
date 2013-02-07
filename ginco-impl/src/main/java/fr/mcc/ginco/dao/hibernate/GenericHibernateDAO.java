@@ -44,7 +44,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.IGenericDAO;
 
 public class GenericHibernateDAO<T, ID extends Serializable> implements IGenericDAO<T, ID> {
@@ -60,58 +59,32 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	}
 
 	@Override
-	public T getById(ID id) {
+	final public T getById(ID id) {
 		return (T) getCurrentSession().get(persistentClass, id);
-	}
+	}	
 
 	@Override
-	public T getByValue(String value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<T> findAll() {
+	final public List<T> findAll() {
 		return getCurrentSession().createCriteria(persistentClass).list();
-	}
+	}	
 	
 	@Override
-	public List<T> findPaginatedItems(Integer start, Integer limit) {
-		return getCurrentSession().createCriteria(persistentClass).setMaxResults(limit).setFirstResult(start).list();
-	}
-	
-	public Long count(){
+	final public Long count(){
 		return (Long) getCurrentSession().createCriteria(persistentClass).setProjection(Projections.rowCount()).list().get(0);
-		}
-
-	@Override
-	public void delete(T entity) {
-		getCurrentSession().delete(entity);
 	}
 
 	@Override
-	public void deleteById(ID id) {
-		T entity = this.getById(id);
-		getCurrentSession().delete(entity);
-	}
-
-	@Override
-	public T makePersistent(T entity) {
+	final public T makePersistent(T entity) {
 		getCurrentSession().saveOrUpdate(entity);
 		return entity;
 	}
 
 	@Override
-	public T update(T entity) {
+	final public T update(T entity) {
 		return makePersistent(entity);
-	}
-
-	@Override
-	public void flush() {
-		getCurrentSession().flush();
-	}
+	}	
 	
-	protected Session getCurrentSession() {
+	final protected Session getCurrentSession() {
 		Session session = sessionFactory.getCurrentSession();
 		if (session.getTransaction() == null
 				|| !session.getTransaction().isActive()) {
@@ -120,12 +93,12 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 		return session;
 	}
 
-	public SessionFactory getSessionFactory() {
+	final public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
-	public void setSessionFactory(SessionFactory sessionFactory) {
+	final public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-	}
+	}	
 
 }
