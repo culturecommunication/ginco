@@ -59,13 +59,22 @@ public class LanguagesDAOTest extends BaseDAOTest {
 	 * - The other languages are listed alphabetically
 	 * - With a start index + limit of items > items present in DB
 	 */
-	@Test
+    @Test
     public final void testGetLanguagesListList() {
         List<Language> actualResponse = languagesService.getLanguagesList(0,50);
 		Assert.assertEquals("Error fetching all Languages", 6, actualResponse.size());
 		Assert.assertEquals("Error fetching name TopLanguage (expecting Amal))", "Amal", actualResponse.get(0).getRefname());
 		Assert.assertEquals("Error fetching sorted language (expecting Alumu-Tesu))", "Alumu-Tesu", actualResponse.get(1).getRefname());
     }
+    
+    /**
+	 * Test getting the number of languages
+	 */
+  	@Test
+      public final void testCountLanguages() {
+          Long actualResponse = languagesService.getLanguageCount();
+  		Assert.assertEquals("Error counting Languages", 6, actualResponse.longValue());
+      }
 	
 	@Override
 	public String  getXmlDataFileInit() {

@@ -49,6 +49,7 @@ import javax.ws.rs.core.MediaType;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,7 @@ import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.GitInfo;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
@@ -109,10 +111,15 @@ public class ThesaurusRestService {
 	@GET
 	@Path("/getLanguages")
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<Language> getAllLanguages(@QueryParam("start") Integer startIndex, @QueryParam("limit") Integer limit) {
+	public ExtJsonFormLoadData<List<Language> > getAllLanguages(@QueryParam("start") Integer startIndex, @QueryParam("limit") Integer limit) {
 		logger.info("Param passed to me : " + startIndex);
 		logger.info("Param passed to me : " + limit);
-		return languagesService.getLanguagesList(startIndex, limit);
+		List<Language> languages = languagesService.getLanguagesList(startIndex, limit);
+		Long total = languagesService.getLanguageCount();
+		
+		ExtJsonFormLoadData<List<Language> > extLanguages = new  ExtJsonFormLoadData<List<Language> > (languages);
+		extLanguages.setTotal(total);
+		return extLanguages;
 	}
 	
 	/**

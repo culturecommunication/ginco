@@ -17,7 +17,8 @@ Ext.define('HadocApp.store.ThesaurusLanguageStore', {
                 url: 'services/ui/thesaurusservice/getLanguages',
                 reader: {
                     type: 'json',
-                    idProperty: 'id'
+                    idProperty: 'id',
+                    root: 'data'
                 }
             },
             fields: [

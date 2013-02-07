@@ -51,4 +51,10 @@ public interface ILanguagesService {
      * @return
      */
     List<Language> getLanguagesList(Integer startIndex, Integer endIndex);
+    
+    /**
+     * The number of DB rows matching to the DAO
+     * @return
+     */
+    Long getLanguageCount();
 }
