@@ -63,5 +63,9 @@ public class LanguagesServiceImpl implements ILanguagesService {
 	@Override
 	public List<Language> getLanguagesList(Integer startIndex, Integer limit) {
 		return languagesDAO.findPaginatedItems(startIndex, limit);
-	}	
+	}
+	
+	public Long getLanguageCount(){
+		return languagesDAO.count();
+	}
 }

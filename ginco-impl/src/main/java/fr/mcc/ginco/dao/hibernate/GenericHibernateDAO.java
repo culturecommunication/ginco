@@ -42,7 +42,9 @@ import javax.inject.Named;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.IGenericDAO;
 
 public class GenericHibernateDAO<T, ID extends Serializable> implements IGenericDAO<T, ID> {
@@ -77,6 +79,10 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	public List<T> findPaginatedItems(Integer start, Integer limit) {
 		return getCurrentSession().createCriteria(persistentClass).setMaxResults(limit).setFirstResult(start).list();
 	}
+	
+	public Long count(){
+		return (Long) getCurrentSession().createCriteria(persistentClass).setProjection(Projections.rowCount()).list().get(0);
+		}
 
 	@Override
 	public void delete(T entity) {

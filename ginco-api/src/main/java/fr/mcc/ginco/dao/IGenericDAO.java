@@ -65,7 +65,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @return A list of all the objects of type T
 	 */
 	List<T> findAll();
-
+	
 	/**
 	 * Delete an object of type T
 	 * 
@@ -109,5 +109,10 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @return List<T> A list of items 
 	 */
 	List <T> findPaginatedItems(Integer start, Integer limit);
+	
+	/**
+	 * @return The number of DB rows matching to the DAO
+	 */
+	Long count();
 
 }
