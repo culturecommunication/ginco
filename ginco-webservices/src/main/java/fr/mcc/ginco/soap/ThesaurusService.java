@@ -42,7 +42,9 @@ import javax.inject.Named;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.data.FullThesaurus;
 import fr.mcc.ginco.data.ReducedThesaurus;
 
 /**
@@ -56,6 +58,8 @@ public class ThesaurusService {
 	private IThesaurusService thesaurusService;
 
 	/**
+	 * 	This service returns a list of all existing thesaurus
+	 * in a simplified format (id and title)
 	 * @return the list of all existing thesaurus
 	 */
 	public List<ReducedThesaurus> getAllThesaurus() {
@@ -69,5 +73,44 @@ public class ThesaurusService {
 		}
 		return results;
 	}
+	/**
+	 * This service returns the details of a thesaurus
+	 * 
+	 * @param id {@link String} identifier of the thesaurus to get - mandatory
+	 * 
+	 * @return full thesaurus informations
+	 */
+	public FullThesaurus getThesaurusById(String id) {
+    	Thesaurus thesaurus = thesaurusService.getThesaurusById(id);
+    	FullThesaurus fullThesaurus = new FullThesaurus();
+    	fullThesaurus.setContributor(thesaurus.getContributor());
+    	fullThesaurus.setCoverage(thesaurus.getCoverage());
+    	fullThesaurus.setCreated(thesaurus.getCreated());
+    	if (thesaurus.getCreator() != null) {
+    		fullThesaurus.setCreatorName(thesaurus.getCreator().getName());
+    		fullThesaurus.setCreatorHomepage(thesaurus.getCreator().getHomepage());
+    	}
+    	fullThesaurus.setDate(thesaurus.getDate());
+    	fullThesaurus.setDescription(thesaurus.getDescription());
+    	if (thesaurus.getFormat()!= null) {
+    		fullThesaurus.setFormat(thesaurus.getFormat().getLabel());
+    	}    	
+    	fullThesaurus.setIdentifier(thesaurus.getIdentifier());
+    	ArrayList<String> langList = new ArrayList<String>();
+		for (Language lang : thesaurus.getLang()) {
+			langList.add(lang.getId());
+		}
+    	fullThesaurus.setLanguages(langList);
+    	fullThesaurus.setPublisher(thesaurus.getPublisher());
+    	fullThesaurus.setRelation(thesaurus.getRelation());
+    	fullThesaurus.setRights(thesaurus.getRights());
+    	fullThesaurus.setSource(thesaurus.getSource());
+    	fullThesaurus.setSubject(thesaurus.getSubject());
+    	fullThesaurus.setTitle(thesaurus.getTitle());
+    	if (thesaurus.getType() != null) {
+    		fullThesaurus.setType(thesaurus.getType().getLabel());
+    	}
+        return fullThesaurus;
+    }
 
 }

@@ -34,11 +34,11 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Language implements Serializable {
 	private String id;

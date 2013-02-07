@@ -34,11 +34,11 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Thesaurus implements Serializable {
     private String identifier;
@@ -56,7 +56,6 @@ public class Thesaurus implements Serializable {
     private ThesaurusFormat format;
     private ThesaurusType type;
     private ThesaurusOrganization creator;
-
     private Set<Language> lang = new HashSet<Language>();
 
     public Thesaurus() {
