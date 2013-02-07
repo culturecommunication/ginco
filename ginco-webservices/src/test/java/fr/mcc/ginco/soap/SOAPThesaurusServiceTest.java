@@ -59,9 +59,9 @@ import fr.mcc.ginco.data.ReducedThesaurus;
  * Unit tests class for the ThesaurusService
  * 
  */
-public class ThesaurusServiceTest {
+public class SOAPThesaurusServiceTest {
 
-	private ThesaurusService thesaurusService = new ThesaurusService();
+	private SOAPThesaurusServiceImpl thesaurusService = new SOAPThesaurusServiceImpl();
 
 	/**
 	 * Test the getThesaurusById method with empty values for non mandatory

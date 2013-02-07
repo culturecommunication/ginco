@@ -48,11 +48,11 @@ import fr.mcc.ginco.data.FullThesaurus;
 import fr.mcc.ginco.data.ReducedThesaurus;
 
 /**
- * This class exposes all SOAP services related to thesaurus objects
+ * This class is the implementation of all SOAP services related to thesaurus objects
  * 
  */
-@WebService
-public class ThesaurusService {
+@WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusService")
+public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{	
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -63,7 +63,8 @@ public class ThesaurusService {
 	 * 
 	 * @return the list of all existing thesaurus
 	 */
-	public List<ReducedThesaurus> getAllThesaurus() {
+	@Override
+	final public List<ReducedThesaurus> getAllThesaurus() {
 		List<ReducedThesaurus> results = new ArrayList<ReducedThesaurus>();
 
 		for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
@@ -83,7 +84,8 @@ public class ThesaurusService {
 	 * 
 	 * @return full thesaurus informations
 	 */
-	public FullThesaurus getThesaurusById(String id) {
+	@Override
+	final public FullThesaurus getThesaurusById(String id) {
 		Thesaurus thesaurus = thesaurusService.getThesaurusById(id);
 		FullThesaurus fullThesaurus = new FullThesaurus();
 		fullThesaurus.setContributor(thesaurus.getContributor());
@@ -115,13 +117,9 @@ public class ThesaurusService {
 			fullThesaurus.setType(thesaurus.getType().getLabel());
 		}
 		return fullThesaurus;
-	}
+	}	
 
-	public IThesaurusService getThesaurusService() {
-		return thesaurusService;
-	}
-
-	public void setThesaurusService(IThesaurusService thesaurusService) {
+	final public void setThesaurusService(IThesaurusService thesaurusService) {
 		this.thesaurusService = thesaurusService;
 	}
 

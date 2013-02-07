@@ -8,7 +8,9 @@
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd 
 	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">	
 	
-	<jaxws:endpoint id="ThesaurusService"
-		implementor="fr.mcc.ginco.soap.ThesaurusService" address="/thesaurus" />		
+	 <bean id="thesaurusSOAPService" class="fr.mcc.ginco.soap.SOAPThesaurusServiceImpl" />
+	
+	<jaxws:endpoint id="ThesaurusService" 
+		implementor="#thesaurusSOAPService" address="/thesaurus" />		
    
 </beans>
