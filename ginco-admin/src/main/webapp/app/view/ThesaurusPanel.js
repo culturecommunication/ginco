@@ -89,20 +89,25 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         },
                         {
                         	 xtype: 'container',
+                        	 title : 'test container',
                         	 layout: 'column',
                         	 defaults: {
                                  margin:'0 50 5 0',
-                                 layout: 'anchor'
+                                 layout: 'anchor',
                              },
                         	 items: [{
 	                        	xtype: 'textfield',
 	                        	name:'creatorName',
+	                        	columnWidth: 0.50,
 	                        	fieldLabel: me.xServiceLabel
 	                        },
 	                        {
 	                        	xtype: 'textfield',
 	                        	name:'creatorHomepage',
+	                        	columnWidth: 0.50,
+	                        	margin:'0 0 5 0',
 	                        	fieldLabel: me.xUrlLabel,
+	                        	labelWidth: 50,
 	                        	vtype:'url'
 	                        }]
                         },
