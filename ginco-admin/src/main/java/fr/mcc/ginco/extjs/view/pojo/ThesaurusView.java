@@ -65,8 +65,8 @@ public class ThesaurusView implements Serializable {
     private String subject;
     private String title;
     private String created;
-    private int format;
-    private int type;
+    private Integer format;
+    private Integer type;
     private String creatorName;
     private String creatorHomepage;
 
@@ -202,19 +202,19 @@ public class ThesaurusView implements Serializable {
         this.created = created;
     }
 
-    public int getFormat() {
+    public Integer getFormat() {
         return format;
     }
 
-    public void setFormat(int formatId) {
+    public void setFormat(Integer formatId) {
         this.format = formatId;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int typeId) {
+    public void setType(Integer typeId) {
         this.type = typeId;
     }
     
