@@ -6,7 +6,6 @@ Ext.define('HadocApp.controller.MainTreeController', {
     ],
 
     onNodeDblClick: function(tree, record, item, index, e, eOpts) {
-        console.log(record);
         if(record.data.type == "THESAURUS") {
             var topTabs = Ext.ComponentQuery.query('topTabs')[0];
             var tabExists = false;
