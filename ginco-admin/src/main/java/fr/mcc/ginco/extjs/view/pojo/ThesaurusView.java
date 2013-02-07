@@ -85,8 +85,12 @@ public class ThesaurusView implements Serializable {
             this.subject = source.getSubject();
             this.title = source.getTitle();
             this.created = source.getCreated();
-            this.format = source.getFormat().getIdentifier();
-            this.type = source.getType().getIdentifier();
+            if (source.getFormat() != null) {
+                this.format = source.getFormat().getIdentifier();
+            }
+            if (source.getType() != null) {
+                this.type = source.getType().getIdentifier();
+            }
             this.creator = source.getCreator();
             ArrayList<String> langList = new ArrayList<String>();
             for(Language lang : source.getLang()) {
