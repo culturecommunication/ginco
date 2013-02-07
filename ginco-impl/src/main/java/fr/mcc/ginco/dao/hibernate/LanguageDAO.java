@@ -32,23 +32,33 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
-import fr.mcc.ginco.beans.Language;
+import org.hibernate.criterion.Order;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service used to work with {@link Language} objects, contains basic
- * methods exposed to client part. For example, to get all
- * Language objects, use {@link #getLanguagesList()}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface ILanguagesService {
-	 /**
-     * Get list of all ThesaurusFormat.
-     * @return
-     */
-    List<Language> getLanguagesList(Integer startIndex, Integer endIndex);
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.dao.ILanguageDAO;
+
+@Transactional
+@Repository("languagesDAO")
+@Scope("prototype")
+public class LanguageDAO extends GenericHibernateDAO<Language, String> implements ILanguageDAO {
+	
+	public LanguageDAO() {
+		super(Language.class);
+	}
+	
+	/**
+	 * @return List of Language with favorites Language first, and the other elements sorted alphabetically
+	 * with a starting index and a limit of items to be returned
+	 */
+	@Override
+	public List<Language> findPaginatedItems(Integer start, Integer limit) {
+		return getCurrentSession().createCriteria(Language.class).setMaxResults(limit).setFirstResult(start).addOrder(Order.desc("toplanguage")).addOrder(Order.asc("refname")).list();
+	}
 }

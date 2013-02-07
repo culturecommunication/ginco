@@ -72,6 +72,11 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	public List<T> findAll() {
 		return getCurrentSession().createCriteria(persistentClass).list();
 	}
+	
+	@Override
+	public List<T> findPaginatedItems(Integer start, Integer limit) {
+		return getCurrentSession().createCriteria(persistentClass).setMaxResults(limit).setFirstResult(start).list();
+	}
 
 	@Override
 	public void delete(T entity) {

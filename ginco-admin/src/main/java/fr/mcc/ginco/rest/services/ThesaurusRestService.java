@@ -43,6 +43,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import fr.mcc.ginco.IThesaurusService;
@@ -107,8 +108,11 @@ public class ThesaurusRestService {
 	 */
 	@GET
 	@Path("/getLanguages")
-	public List<Language> getAllLanguages() {
-		return languagesService.getLanguagesList();
+	@Produces({MediaType.APPLICATION_JSON})
+	public List<Language> getAllLanguages(@QueryParam("start") Integer startIndex, @QueryParam("limit") Integer limit) {
+		logger.info("Param passed to me : " + startIndex);
+		logger.info("Param passed to me : " + limit);
+		return languagesService.getLanguagesList(startIndex, limit);
 	}
 	
 	/**

@@ -42,5 +42,6 @@ CREATE TABLE languages_iso639 (
     scope character(1) NOT NULL,
     type character(1) NOT NULL,
     ref_name character varying(150) NOT NULL,
+    toplanguage boolean NOT NULL DEFAULT FALSE,
     comment character varying(150)
 );

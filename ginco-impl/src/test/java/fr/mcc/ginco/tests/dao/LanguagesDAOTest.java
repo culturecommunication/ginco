@@ -51,14 +51,20 @@ import fr.mcc.ginco.ILanguagesService;
 public class LanguagesDAOTest extends BaseDAOTest {
 	
 	@Inject
-	private ILanguagesService languageService;	
+	private ILanguagesService languagesService;	
 	
+	/**
+	 * Test getting languages list with 3 cases :
+	 * - The favorites languages are listed firstly
+	 * - The other languages are listed alphabetically
+	 * - With a start index + limit of items > items present in DB
+	 */
 	@Test
     public final void testGetLanguagesListList() {
-        List<Language> actualResponse = languageService.getLanguagesList();
+        List<Language> actualResponse = languagesService.getLanguagesList(0,50);
 		Assert.assertEquals("Error fetching all Languages", 6, actualResponse.size());
-		Assert.assertEquals("Error fetching name of second Language (expecting Ghotuo))", "Ghotuo", actualResponse.get(0).getRefname());
-
+		Assert.assertEquals("Error fetching name TopLanguage (expecting Amal))", "Amal", actualResponse.get(0).getRefname());
+		Assert.assertEquals("Error fetching sorted language (expecting Alumu-Tesu))", "Alumu-Tesu", actualResponse.get(1).getRefname());
     }
 	
 	@Override

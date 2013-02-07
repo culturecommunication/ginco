@@ -48,6 +48,7 @@ public class Language implements Serializable {
 	private String scope;
 	private String type;
 	private String refname;
+	private boolean toplanguage;
 	private String comment;
 
     private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
@@ -109,4 +110,18 @@ public class Language implements Serializable {
     public void setThesauruses(Set<Thesaurus> thesauruses) {
         this.thesauruses = thesauruses;
     }
+    
+    /**
+	 * @return True if the tested language belongs to most-used languages in the application, and false if it's a language used rarely
+	 */
+	public boolean isToplanguage() {
+		return toplanguage;
+	}
+	/**
+	 * @param toplanguage
+	 * If set to true, the language is declared as frequently used in the application.
+	 */
+	public void setToplanguage(boolean toplanguage) {
+		this.toplanguage = toplanguage;
+	}
 }

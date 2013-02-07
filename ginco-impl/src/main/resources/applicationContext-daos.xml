@@ -13,11 +13,6 @@
 
 	<!-- Definition of the Data Access Objects of Ginco Application -->
 	<!-- All Data Access Objects are injected by spring, using GenericHibernateDAO -->
-	<!-- Exception for thesaurusDAO, more sophisticated, which have its own implementation  -->
-	<bean id="languagesDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
-		<constructor-arg value="fr.mcc.ginco.beans.Language" />
-	</bean>
-
 	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
 	</bean>

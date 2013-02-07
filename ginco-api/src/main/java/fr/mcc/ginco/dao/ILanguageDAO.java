@@ -32,23 +32,10 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
-
-import java.util.List;
+package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.Language;
 
-/**
- * Service used to work with {@link Language} objects, contains basic
- * methods exposed to client part. For example, to get all
- * Language objects, use {@link #getLanguagesList()}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface ILanguagesService {
-	 /**
-     * Get list of all ThesaurusFormat.
-     * @return
-     */
-    List<Language> getLanguagesList(Integer startIndex, Integer endIndex);
+public interface ILanguageDAO extends IGenericDAO<Language, String> {
+
 }

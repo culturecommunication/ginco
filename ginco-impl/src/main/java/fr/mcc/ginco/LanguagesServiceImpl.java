@@ -43,9 +43,8 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.log.Log;
-
 
 @Service("languagesService")
 public class LanguagesServiceImpl implements ILanguagesService {
@@ -55,19 +54,14 @@ public class LanguagesServiceImpl implements ILanguagesService {
 	    
 	@Inject
 	@Named("languagesDAO")
-    private IGenericDAO<Language, Integer> languagesDAO;
+    private ILanguageDAO languagesDAO;
 	
 	
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.ILanguagesService#getLanguagesList()
 	 */
 	@Override
-	public List<Language> getLanguagesList() {
-		return languagesDAO.findAll();
-	}
-
-	public IGenericDAO<Language, Integer> getLanguagesDAO() {
-		return languagesDAO;
-	}
-	
+	public List<Language> getLanguagesList(Integer startIndex, Integer limit) {
+		return languagesDAO.findPaginatedItems(startIndex, limit);
+	}	
 }
