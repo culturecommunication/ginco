@@ -21,10 +21,12 @@ Ext.define('HadocApp.store.ThesaurusFormatStore', {
             },
             fields: [
                 {
-                    name: 'identifier'
+                    name : 'identifier',
+                    type : 'int'
                 },
                 {
-                    name: 'label'
+                    name: 'label',
+                    type : 'string'
                 }
             ]
         }, cfg)]);

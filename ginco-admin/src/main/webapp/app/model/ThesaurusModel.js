@@ -16,8 +16,7 @@ Ext.define('HadocApp.model.ThesaurusModel', {
         },
         {
             name: 'date',
-            type: 'date',
-            dateFormat: 'Y-m-d'
+            type: 'date'
         },
         {
             name: 'description',
@@ -49,20 +48,23 @@ Ext.define('HadocApp.model.ThesaurusModel', {
         },
         {
             name: 'created',
-            type: 'date',
-            dateFormat: 'Y-m-d'
+            type: 'date'
         },
         {
             name: 'format',
-            type: 'string'
+            type: 'int'
         },
         {
             name: 'type',
-            type: 'string'
+            type: 'int'
         },
         {
             name: 'creator',
             type: 'string'
+        },
+        {
+            name: 'languages',
+            type: 'array_of_string'
         }
     ],
 

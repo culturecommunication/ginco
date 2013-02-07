@@ -65,11 +65,11 @@ public class ThesaurusView implements Serializable {
     private String subject;
     private String title;
     private String created;
-    private ThesaurusFormat format;
-    private ThesaurusType type;
+    private int format;
+    private int type;
     private String creator;
 
-    private List<Language> languages = new ArrayList<Language>();
+    private List<String> languages = new ArrayList<String>();
 
     public ThesaurusView(Thesaurus source) {
         if(source != null) {
@@ -85,10 +85,14 @@ public class ThesaurusView implements Serializable {
             this.subject = source.getSubject();
             this.title = source.getTitle();
             this.created = source.getCreated();
-            this.format = source.getFormat();
-            this.type = source.getType();
+            this.format = source.getFormat().getIdentifier();
+            this.type = source.getType().getIdentifier();
             this.creator = source.getCreator();
-            this.languages = new ArrayList<Language>(source.getLang());
+            ArrayList<String> langList = new ArrayList<String>();
+            for(Language lang : source.getLang()) {
+                langList.add(lang.getId());
+            }
+            this.languages = langList;
         }
     }
 
@@ -188,20 +192,20 @@ public class ThesaurusView implements Serializable {
         this.created = created;
     }
 
-    public ThesaurusFormat getFormat() {
+    public int getFormat() {
         return format;
     }
 
-    public void setFormat(ThesaurusFormat format) {
-        this.format = format;
+    public void setFormat(int formatId) {
+        this.format = formatId;
     }
 
-    public ThesaurusType getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(ThesaurusType type) {
-        this.type = type;
+    public void setType(int typeId) {
+        this.type = typeId;
     }
 
     public String getCreator() {
@@ -212,11 +216,11 @@ public class ThesaurusView implements Serializable {
         this.creator = creator;
     }
 
-    public List<Language> getLanguges() {
+    public List<String> getLanguages() {
         return languages;
     }
 
-    public void setLanguges(List<Language> lang) {
+    public void setLanguages(List<String> lang) {
         this.languages = lang;
     }
 }

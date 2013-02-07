@@ -146,7 +146,9 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         {
                         	xtype : 'combobox',
                         	name : 'type',
-                        	fieldLabel : me.xTypeLabel,
+                            id : 'comboboxTypeId',
+                            queryMode : 'local',
+                            fieldLabel : me.xTypeLabel,
                         	editable : false,
                         	displayField : 'label',
                         	valueField : 'identifier',
@@ -161,7 +163,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         	editable : false,
                         	displayField : 'label',
                         	valueField : 'identifier',
-                        	forceSelection : false,
+                        	forceSelection : true,
                         	multiSelect : false,
                         	store : 'ThesaurusFormatStore'
                         },

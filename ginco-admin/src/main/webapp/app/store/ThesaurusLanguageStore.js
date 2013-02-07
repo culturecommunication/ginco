@@ -22,10 +22,12 @@ Ext.define('HadocApp.store.ThesaurusLanguageStore', {
             },
             fields: [
                 {
-                    name: 'id'
+                    name: 'id',
+                    type: 'string'
                 },
                 {
-                    name: 'refname'
+                    name: 'refname',
+                    type: 'string'
                 }
             ]
         }, cfg)]);

@@ -83,13 +83,4 @@ public class ViewsTest {
         Assert.assertEquals("Error creating node! Title of node does not correspond to one of parent!",
                 titleOfNode, testThesaurus.getTitle());
     }
-
-    @Test
-    public final void testThesaurusViewCreation() {
-        ThesaurusView view = new ThesaurusView(null);
-        Assert.assertEquals("Expected null String !", view.getTitle(), null);
-
-        view = new ThesaurusView(testThesaurus);
-        Assert.assertEquals("Expected type = testType !", view.getType().getLabel(), "testType");
-    }
 }
