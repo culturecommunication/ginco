@@ -19,9 +19,9 @@
 		<property name="created" not-null="true" />
 
 		<many-to-one name="format" lazy="false" />
-		<many-to-one name="type" lazy="false" /> <!--
+		<many-to-one name="type" lazy="false" /> 
 		<many-to-one name="creator" column="creator" />
-
+		<!-- 
 		<set name="versions">
 			<key column="identifier" />
 			<one-to-many class="ThesaurusVersionHistory" />

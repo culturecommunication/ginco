@@ -96,12 +96,12 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                              },
                         	 items: [{
 	                        	xtype: 'textfield',
-	                        	name:'service',
+	                        	name:'creatorName',
 	                        	fieldLabel: me.xServiceLabel
 	                        },
 	                        {
 	                        	xtype: 'textfield',
-	                        	name:'url',
+	                        	name:'creatorHomepage',
 	                        	fieldLabel: me.xUrlLabel,
 	                        	vtype:'url'
 	                        }]

@@ -7,12 +7,12 @@
 			<generator class="native" />
 		</id>
 		<property name="name" not-null="true" />
-		<property name="homepage" />
+		<property name="homepage" />		
 		
-		<!-- <set name="thesauruses" inverse="true">
+		<set name="thesauruses" inverse="true">
 			<key column="identifier" />
 			<one-to-many class="Thesaurus" />
-		</set> -->
+		</set>
 
 	</class>
 </hibernate-mapping>

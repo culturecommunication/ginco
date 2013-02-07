@@ -55,7 +55,7 @@ public class Thesaurus implements Serializable {
     private String created;
     private ThesaurusFormat format;
     private ThesaurusType type;
-    private String creator;
+    private ThesaurusOrganization creator;
 
     private Set<Language> lang = new HashSet<Language>();
 
@@ -65,7 +65,7 @@ public class Thesaurus implements Serializable {
     public Thesaurus(String identifier, String contributor, String coverage,
                      String date, String description, String publisher, String relation,
                      String rights, String source, String subject, String title,
-                     String created, ThesaurusFormat format, ThesaurusType type, String creator) {
+                     String created, ThesaurusFormat format, ThesaurusType type, ThesaurusOrganization creator) {
         this.identifier = identifier;
         this.contributor = contributor;
         this.coverage = coverage;
@@ -195,11 +195,11 @@ public class Thesaurus implements Serializable {
         this.type = type;
     }
 
-    public String getCreator() {
+    public ThesaurusOrganization getCreator() {
         return creator;
     }
 
-    public void setCreator(String creator) {
+    public void setCreator(ThesaurusOrganization creator) {
         this.creator = creator;
     }
 

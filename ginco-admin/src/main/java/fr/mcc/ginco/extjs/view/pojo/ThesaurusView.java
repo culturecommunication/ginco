@@ -67,7 +67,9 @@ public class ThesaurusView implements Serializable {
     private String created;
     private int format;
     private int type;
-    private String creator;
+    private String creatorName;
+    private String creatorHomepage;
+
 
     private List<String> languages = new ArrayList<String>();
 
@@ -87,7 +89,9 @@ public class ThesaurusView implements Serializable {
             this.created = source.getCreated();
             this.format = source.getFormat().getIdentifier();
             this.type = source.getType().getIdentifier();
-            this.creator = source.getCreator();
+            this.creatorName = source.getCreator().getName();
+            this.creatorHomepage = source.getCreator().getHomepage();
+
             ArrayList<String> langList = new ArrayList<String>();
             for(Language lang : source.getLang()) {
                 langList.add(lang.getId());
@@ -207,16 +211,24 @@ public class ThesaurusView implements Serializable {
     public void setType(int typeId) {
         this.type = typeId;
     }
+    
+    public String getCreatorName() {
+		return creatorName;
+	}
 
-    public String getCreator() {
-        return creator;
-    }
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
+	}
 
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
+	public String getCreatorHomepage() {
+		return creatorHomepage;
+	}
 
-    public List<String> getLanguages() {
+	public void setCreatorHomepage(String creatorHomepage) {
+		this.creatorHomepage = creatorHomepage;
+	}
+
+	public List<String> getLanguages() {
         return languages;
     }
 

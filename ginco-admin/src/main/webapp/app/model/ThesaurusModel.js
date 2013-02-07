@@ -59,7 +59,11 @@ Ext.define('HadocApp.model.ThesaurusModel', {
             type: 'int'
         },
         {
-            name: 'creator',
+            name: 'creatorName',
+            type: 'string'
+        },
+        {
+            name: 'creatorHomepage',
             type: 'string'
         },
         {

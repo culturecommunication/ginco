@@ -35,8 +35,54 @@
 package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @SuppressWarnings("serial")
 public class ThesaurusOrganization implements Serializable {
+	private Integer identifier;
+	private String name;
+	private String homepage;
+	private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
+
+
+	public ThesaurusOrganization() {
+		super();
+	}
+
+	public Integer getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getHomepage() {
+		return homepage;
+	}
+
+	public void setHomepage(String homepage) {
+		this.homepage = homepage;
+	}
+	
+	@JsonIgnore
+    public Set<Thesaurus> getThesauruses() {
+        return thesauruses;
+    }
+
+    public void setThesauruses(Set<Thesaurus> thesauruses) {
+        this.thesauruses = thesauruses;
+    }
 
 }
