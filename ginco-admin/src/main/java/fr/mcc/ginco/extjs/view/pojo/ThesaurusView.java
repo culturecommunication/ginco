@@ -87,13 +87,11 @@ public class ThesaurusView implements Serializable {
 			this.title = source.getTitle();
 			this.created = source.getCreated();
 
-			if (source.getCreator().getName() != null) {
+			if (source.getCreator() != null) {
 				this.creatorName = source.getCreator().getName();
-			}
-
-			if (source.getCreator().getHomepage() != null) {
 				this.creatorHomepage = source.getCreator().getHomepage();
 			}
+			
 			if (source.getFormat() != null) {
 				this.format = source.getFormat().getIdentifier();
 			}
