@@ -48,6 +48,7 @@ import fr.mcc.ginco.enums.ServiceCRUDResults;
  * @see fr.mcc.ginco.beans
  */
 public interface IThesaurusService {
+
     /**
      * Get a single object by its id
      *
