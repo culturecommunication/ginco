@@ -45,23 +45,23 @@ public  class ThesaurusListBasicNode implements IThesaurusListNode {
     /**
      * Indicates if node should be expanded by default.
      */
-    protected boolean expanded;
+    private boolean expanded;
     /**
      * List of all children, now only String lines.
      */
-    protected List<IThesaurusListNode> children;
+    private List<IThesaurusListNode> children;
     /**
      * Title to display for user.
      */
-    protected String title;
+    private String title;
     /**
      * Service tag - not visible in UI.
      */
-    protected String id;
+    private String id;
     /**
      * Type of visual node.
      */
-    protected ThesaurusListNodeType nodeType;
+    private ThesaurusListNodeType nodeType;
 
     @Override
     public boolean isExpanded() {

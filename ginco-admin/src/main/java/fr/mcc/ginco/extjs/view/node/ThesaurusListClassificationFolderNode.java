@@ -50,10 +50,10 @@ import java.util.ArrayList;
  */
 public class ThesaurusListClassificationFolderNode extends ThesaurusListBasicNode {
     public ThesaurusListClassificationFolderNode(String title, String parentId, ClassificationFolderType type) {
-        this.children = new ArrayList<IThesaurusListNode>();
-        this.expanded = false;
-        this.id = type.toString() + "_" + parentId;
-        this.nodeType = ThesaurusListNodeType.FOLDER;
-        this.setTitle(title);
+        setChildren(new ArrayList<IThesaurusListNode>());
+        setExpanded(false);
+        setId(type.toString() + "_" + parentId);
+        setType(ThesaurusListNodeType.FOLDER);
+        setTitle(title);
     }
 }
