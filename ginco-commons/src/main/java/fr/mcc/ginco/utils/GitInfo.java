@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service("gitInfoService")
 public class GitInfo {
 
-	private @Value("${git.commit.id}") String commitId;
-	private @Value("${git.branch}") String gitBranch;
-	private @Value("${git.build.time}") String gitBuildTime;
-	private @Value("${git.commit.user.name}") String gitCommitUserName;
+	@Value("${git.commit.id}") private String commitId;
+	@Value("${git.branch}") private String gitBranch;
+	@Value("${git.build.time}") private String gitBuildTime;
+	@Value("${git.commit.user.name}") private String gitCommitUserName;
 
 	public String getGitBuildTime() {
 		return gitBuildTime;

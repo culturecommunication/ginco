@@ -32,35 +32,68 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
-
-import java.util.List;
+package fr.mcc.ginco.tests.services;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Service;
+import junit.framework.Assert;
 
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.dao.IGenericDAO;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 
-/**
- * @author dabel
- *
- */
-@Service("thesaurusFormatService")
-public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
+import fr.mcc.ginco.tests.BaseTest;
+import fr.mcc.ginco.utils.GitInfo;
+
+
+public class GitInfoServiceTest extends BaseTest {
 	
-	    
 	@Inject
-	@Named("thesaurusFormatDAO")
-    private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
+	@Named("gitInfoService")
+	GitInfo gitInfo;
 	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.IThesaurusFormatService#getThesaurusFormatList()
+	@Value("${git.commit.id}") private String commitId;
+	@Value("${git.branch}") private String gitBranch;
+	@Value("${git.build.time}") private String buildTime;
+	@Value("${git.commit.user.name}") private String commitUsername;
+
+	 /**
+	 * Test getting Git Commit Id from properties
 	 */
-	@Override
-	public List<ThesaurusFormat> getThesaurusFormatList() {
-		return thesaurusFormatDAO.findAll();
-	}
+	@Test
+	 public final void getGitCommitId(){
+		 String expectedResponse= commitId ;
+		 String actualResponse = gitInfo.getCommitId();
+		 Assert.assertEquals("Error while getting git build time !", expectedResponse, actualResponse);
+	 }
+	
+	/**
+	 * Test getting Git Branch from properties
+	 */
+	@Test
+	 public final void getGitBranch(){
+		 String expectedResponse= gitBranch ;
+		 String actualResponse = gitInfo.getGitBranch();
+		 Assert.assertEquals("Error while getting git build time !", expectedResponse, actualResponse);
+	 }
+	
+	/**
+	 * Test getting Git build time from properties
+	 */
+	@Test
+	 public final void getGitBuildTime(){
+		 String expectedResponse= buildTime ;
+		 String actualResponse = gitInfo.getGitBuildTime();
+		 Assert.assertEquals("Error while getting git build time !", expectedResponse, actualResponse);
+	 }
+	
+	/**
+	 * Test getting Git Commit Username from properties
+	 */
+	@Test
+	 public final void getGitCommitUsername(){
+		 String expectedResponse= commitUsername ;
+		 String actualResponse = gitInfo.getGitCommitUserName();
+		 Assert.assertEquals("Error while getting git build time !", expectedResponse, actualResponse);
+	 }
 }
