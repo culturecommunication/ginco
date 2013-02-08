@@ -70,6 +70,7 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 	public List<ThesaurusType> getThesaurusTypeList() {
 		return thesaurusTypeDAO.findAll();
 	}
+<<<<<<< HEAD
 
     /* (non-Javadoc)
 	 * @see fr.mcc.ginco.IThesaurusTypeService#getThesaurusTypeById()
@@ -84,4 +85,6 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 		return thesaurusTypeDAO;
 	}
 	
+=======
+>>>>>>> UStests
 }

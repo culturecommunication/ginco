@@ -50,7 +50,11 @@ public class ThesaurusServiceTest extends BaseServiceTest {
 
     @Inject
     private IThesaurusService thesaurusService;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> UStests
     @Test
     public final void testGetThesaurusById() {
     	String idThesaurus = "0";
