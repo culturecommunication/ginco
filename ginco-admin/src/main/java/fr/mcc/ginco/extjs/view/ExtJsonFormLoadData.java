@@ -40,6 +40,10 @@ package fr.mcc.ginco.extjs.view;
  */
 public  class ExtJsonFormLoadData<T>  {
    
+	private boolean success;
+	private T data;
+	private Long total; 
+	
 	public boolean isSuccess() {
 		return success;
 	}
@@ -54,12 +58,7 @@ public  class ExtJsonFormLoadData<T>  {
 
 	public void setData(T data) {
 		this.data = data;
-	}
-
-	protected boolean success;
-	protected T data;
-	protected Long total; 
-	
+	}	
 	public Long getTotal() {
 		return total;
 	}
