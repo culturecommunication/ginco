@@ -37,7 +37,6 @@ package fr.mcc.ginco.soap;
 import java.util.List;
 
 import javax.jws.WebService;
-import javax.xml.bind.annotation.XmlElement;
 
 import fr.mcc.ginco.data.FullThesaurus;
 import fr.mcc.ginco.data.ReducedThesaurus;
@@ -66,6 +65,6 @@ public interface ISOAPThesaurusService {
 	 * 
 	 * @return full thesaurus informations
 	 */
-	FullThesaurus getThesaurusById(@XmlElement(required=true) String id) ;
+	FullThesaurus getThesaurusById(String id) ;
 
 }
