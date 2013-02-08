@@ -14,11 +14,13 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
         var model = this.getThesaurusModelModel();
         var id = theForm.up('thesaurusPanel').thesaurusId;
         if( id != '' ) {
+        	theForm.getEl().mask("Chargemenet");
             model.load(id, {
                 success:function(model){
                 	theForm.up('thesaurusPanel').setTitle(model.data.title);
                 	theForm.setTitle(model.data.title);
                     theForm.loadRecord(model);
+                    theForm.getEl().unmask();
                 }
             });
         }
