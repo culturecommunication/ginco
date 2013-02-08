@@ -36,6 +36,7 @@ package fr.mcc.ginco.tests.services;
 
 import javax.inject.Inject;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.tests.services.BaseServiceTest;
 import org.junit.Assert;
 import org.junit.Test;
