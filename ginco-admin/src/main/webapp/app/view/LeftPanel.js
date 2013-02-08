@@ -27,7 +27,7 @@ Ext.define('HadocApp.view.LeftPanel', {
                     store: 'MainTreeStore',
                     displayField: 'title',
                     rootVisible: false,
-                    useArrows: false,
+                    useArrows: true,
                     viewConfig: {
 
                     }
