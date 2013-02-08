@@ -47,7 +47,8 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                     title: me.xThesaurusTitle,
                     pollForChanges : true,
                     defaults: {
-                        anchor: '70%'
+                        anchor: '70%',
+                        afterLabelTextTpl: new Ext.XTemplate('<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>', { disableFormats: true })
                     },
                     dockedItems: [
                         {

@@ -30,9 +30,7 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
     {
     	var MainTreeStore = this.getMainTreeStoreStore();
     	MainTreeStore.load();
-    	
     },
-
 
     saveForm : function(theButton)
     {
@@ -46,6 +44,7 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
 	        updatedModel.save({
 	        	success: function(record, operation)
 	            {
+	        		theForm.loadRecord(record);
 	        		 theForm.getEl().unmask();
 	        		 Thesaurus.ext.utils.msg('Succès', 'Le thesaurus a été enregistré!');
 	        		 me.updateTreeView();
