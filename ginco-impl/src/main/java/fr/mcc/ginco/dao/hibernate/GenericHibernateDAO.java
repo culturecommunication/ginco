@@ -40,18 +40,22 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.log.Log;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.IGenericDAO;
+import org.slf4j.Logger;
 
 public class GenericHibernateDAO<T, ID extends Serializable> implements IGenericDAO<T, ID> {
 
 	private final Class<T> persistentClass;
-	
-	@Inject
+
+    @Inject
 	@Named("gincoSessionFactory")
 	private SessionFactory sessionFactory;
 
@@ -97,13 +101,13 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 
 	@Override
 	public T makePersistent(T entity) {
-		getCurrentSession().saveOrUpdate(entity);
+        getCurrentSession().saveOrUpdate(entity);
 		return entity;
 	}
 
 	@Override
 	public T update(T entity) {
-		return makePersistent(entity);
+        return makePersistent(entity);
 	}
 
 	@Override

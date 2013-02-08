@@ -38,6 +38,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.utils.DateUtil;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -79,7 +80,10 @@ public class ThesaurusView implements Serializable {
 			this.id = source.getIdentifier();
 			this.contributor = source.getContributor();
 			this.coverage = source.getCoverage();
-			this.date = source.getDate();
+
+            if(source.getDate() != null) {
+                this.date = DateUtil.toString(source.getDate());
+            }
 			this.description = source.getDescription();
 			this.publisher = source.getPublisher();
 			this.relation = source.getRelation();
@@ -87,7 +91,7 @@ public class ThesaurusView implements Serializable {
 			this.source = source.getSource();
 			this.subject = source.getSubject();
 			this.title = source.getTitle();
-			this.created = source.getCreated();
+			this.created = DateUtil.toString(source.getCreated());
 
 			if (source.getCreator() != null) {
 				this.creatorName = source.getCreator().getName();

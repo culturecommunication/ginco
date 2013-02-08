@@ -34,23 +34,20 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBElement;
 
 import fr.mcc.ginco.*;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
+import fr.mcc.ginco.utils.DateUtil;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -154,8 +151,6 @@ public class ThesaurusRestService {
     @Path("/getVocabulary/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response putVocabularyById(@PathParam("id") String id, ThesaurusView thesaurusViewJAXBElement) {
-        logger.warn("INto method");
-        logger.warn(thesaurusViewJAXBElement.getTitle());
         Thesaurus object = convert(thesaurusViewJAXBElement);
         if(object != null) {
             thesaurusService.updateThesaurus(object);
@@ -167,10 +162,8 @@ public class ThesaurusRestService {
     private Thesaurus convert(ThesaurusView source) {
         Thesaurus hibernateRes = thesaurusService.getThesaurusById(source.getId());
         hibernateRes.setContributor(source.getContributor());
-
-        hibernateRes.setContributor(source.getContributor());
         hibernateRes.setCoverage(source.getCoverage());
-        hibernateRes.setDate("2013-02-06 15:29:59.66325");
+        hibernateRes.setDate(DateUtil.nowTimestamp());
         hibernateRes.setDescription(source.getDescription());
         hibernateRes.setPublisher(source.getPublisher());
         hibernateRes.setRelation(source.getRelation());
@@ -178,34 +171,25 @@ public class ThesaurusRestService {
         hibernateRes.setSource(source.getSource());
         hibernateRes.setSubject(source.getSubject());
         hibernateRes.setTitle(source.getTitle());
-        hibernateRes.setCreated(source.getCreated());
+//        hibernateRes.setCreated(DateUtil.timestampFromString(source.getCreated()));
         hibernateRes.setFormat(thesaurusFormatService.getThesaurusFormatById(source.getFormat()));
         hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source.getType()));
         hibernateRes.setCreator(thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(),
                 source.getCreatorHomepage()));
 
-        return hibernateRes;
-/*
-                "2013-02-06 15:29:59.66325", source.getDescription(),
-                source.getPublisher(), source.getRelation(),
-                source.getRights(), source.getSource(),
-                source.getSubject(), source.getTitle(),
-                source.getCreated(),
-                thesaurusFormatService.getThesaurusFormatById(source.getFormat()),
-                thesaurusTypeService.getThesaurusTypeById(source.getType()),
-                thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(),
-                        source.getCreatorHomepage()));
         List<String> languages = source.getLanguages();
         Set<Language> realLanguages = new HashSet<Language>();
-        /*
+
         for(String language : languages) {
             Language lang = languagesService.getLanguageById(language);
-            realLanguages.add(lang);
+            if(lang != null) {
+                realLanguages.add(lang);
+            }
         }
 
-        result.setLang(realLanguages);*/
+        hibernateRes.setLang(realLanguages);
 
-        //return result;
+        return hibernateRes;
     }
 
 }

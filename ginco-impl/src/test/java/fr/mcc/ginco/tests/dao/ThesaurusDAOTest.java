@@ -36,6 +36,7 @@ package fr.mcc.ginco.tests.dao;
 
 import javax.inject.Inject;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -72,6 +73,16 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         String expectedThesaurusFormatTitle = "PDF 1.7";
         String actualThesaurusFormatTitle = testVocabulary.getThesaurusById(idThesaurus).getFormat().getLabel();
         Assert.assertEquals("Error while getting ThesaurusFormat!", expectedThesaurusFormatTitle, actualThesaurusFormatTitle);
+    }
+
+    @Test
+    public final void testUpateThesaurus() {
+        Thesaurus test = testVocabulary.getThesaurusById("0");
+        String old = test.getTitle();
+        test.setTitle("trololo");
+        testVocabulary.updateThesaurus(test);
+        Thesaurus test2 = testVocabulary.getThesaurusById("0");
+        Assert.assertEquals("Not changed title !!", test2.getTitle(), "trololo");
     }
 
 	@Override

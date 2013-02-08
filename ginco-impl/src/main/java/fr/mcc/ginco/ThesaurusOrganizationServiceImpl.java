@@ -39,11 +39,13 @@ import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.log.Log;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
+@Transactional
 @Service("thesaurusOrganizationService")
 public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationService {
     @Log
@@ -61,7 +63,7 @@ public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationS
     public ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String URL) {
         List<ThesaurusOrganization> all = thesaurusOrganizationDAO.findAll();
         for(ThesaurusOrganization organization : all) {
-            if (organization.getHomepage() == URL && organization.getName() == name) {
+            if (organization.getHomepage().equals(URL) && organization.getName().equals(name)) {
                 return organization;
             }
         }

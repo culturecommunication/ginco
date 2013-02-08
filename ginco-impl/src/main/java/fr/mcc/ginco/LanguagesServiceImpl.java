@@ -45,7 +45,9 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.log.Log;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service("languagesService")
 public class LanguagesServiceImpl implements ILanguagesService {
 	
@@ -74,6 +76,6 @@ public class LanguagesServiceImpl implements ILanguagesService {
 	 */
     @Override
     public Language getLanguageById(String id) {
-        return languagesDAO.getLanguageById(id);
+        return languagesDAO.getById(id);
     }
 }

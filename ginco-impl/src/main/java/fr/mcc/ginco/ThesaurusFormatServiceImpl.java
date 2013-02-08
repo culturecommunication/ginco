@@ -45,11 +45,13 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.log.Log;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author dabel
  *
  */
+@Transactional
 @Service("thesaurusFormatService")
 public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
 	

@@ -32,9 +32,52 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.utils;
 
-import fr.mcc.ginco.beans.Language;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
-public interface ILanguageDAO extends IGenericDAO<Language, String> {
+public class DateUtil {
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static String toString(Date date) {
+        if(date != null) {
+            return formatter.format(date);
+        }
+        return null;
+    }
+
+    public static Timestamp toTimestamp(Date date) {
+        if(date != null) {
+            return new Timestamp(date.getTime());
+        }
+        return null;
+    }
+
+    public static Timestamp timestampFromString(String date) {
+        Date dateParsed = dateFromString(date);
+        if(date != null) {
+            return new Timestamp(dateParsed.getTime());
+        }
+        return null;
+    }
+
+    public static Date dateFromString(String date) {
+        try {
+            return formatter.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Timestamp nowTimestamp() {
+        return new Timestamp(GregorianCalendar.getInstance().getTime().getTime());
+    }
+
+    public static Date nowDate() {
+        return GregorianCalendar.getInstance().getTime();
+    }
 }

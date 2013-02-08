@@ -46,7 +46,6 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
 
-@Transactional
 @Repository("languagesDAO")
 @Scope("prototype")
 public class LanguageDAO extends GenericHibernateDAO<Language, String> implements ILanguageDAO {
@@ -63,15 +62,4 @@ public class LanguageDAO extends GenericHibernateDAO<Language, String> implement
 	public List<Language> findPaginatedItems(Integer start, Integer limit) {
 		return getCurrentSession().createCriteria(Language.class).setMaxResults(limit).setFirstResult(start).addOrder(Order.desc("toplanguage")).addOrder(Order.asc("refname")).list();
 	}
-
-
-    @Override
-    public Language getLanguageById(String id) {
-        for(Language language : findAll()) {
-            if(language.getId() == id) {
-                return language;
-            }
-        }
-        return null;
-    }
 }
