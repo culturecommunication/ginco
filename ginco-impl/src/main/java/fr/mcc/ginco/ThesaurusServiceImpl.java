@@ -55,20 +55,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
-    private String id;
-
-    @Override
-    public String setParam(String id) {
-        log.info("Setting parameter id = " + id);
-        this.id = id;
-        return "Param id = " + id;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
 	@Override
 	public Thesaurus getThesaurusById(String id) {
 		log.info("Trying to get Thesaurus with id = " + id);

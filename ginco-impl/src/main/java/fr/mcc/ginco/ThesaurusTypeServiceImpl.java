@@ -63,9 +63,4 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 	public List<ThesaurusType> getThesaurusTypeList() {
 		return thesaurusTypeDAO.findAll();
 	}
-
-	public IGenericDAO<ThesaurusType, Integer> getThesaurusTypeDAO() {
-		return thesaurusTypeDAO;
-	}
-	
 }

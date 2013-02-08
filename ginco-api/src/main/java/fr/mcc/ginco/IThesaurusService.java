@@ -46,17 +46,6 @@ import java.util.List;
  * @see fr.mcc.ginco.beans
  */
 public interface IThesaurusService {
-    /**
-     * Set fake parameter, only for test purposes
-     * @param id
-     */
-    String setParam(String id);
-
-    /**
-     * Get fake parameter, only for test purposes
-     * @return
-     */
-    String getId();
 
     /**
      * Get a single object by its id

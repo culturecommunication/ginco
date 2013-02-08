@@ -49,14 +49,6 @@ public class ThesaurusServiceTest extends BaseServiceTest {
 
     @Inject
     private IThesaurusService thesaurusService;
-
-    @Test
-    public final void testsetParam() {
-        String parameter = "toto";
-        String expectedResponse = "Param id = " + parameter;
-        String actualResponse = thesaurusService.setParam(parameter);
-        Assert.assertEquals("Object returned unexpected reponse while passing param to him !", expectedResponse, actualResponse);
-    }
     
     @Test
     public final void testGetThesaurusById() {
