@@ -16,7 +16,7 @@ Ext.define('HadocApp.model.ThesaurusModel', {
         },
         {
             name: 'date',
-            type: 'date'
+            type: 'string'
         },
         {
             name: 'description',
@@ -48,7 +48,7 @@ Ext.define('HadocApp.model.ThesaurusModel', {
         },
         {
             name: 'created',
-            type: 'date'
+            type: 'string'
         },
         {
             name: 'format',
@@ -73,7 +73,7 @@ Ext.define('HadocApp.model.ThesaurusModel', {
     ],
 
     proxy: {
-        type: 'rest',
+        type: 'ajax',
         url: 'services/ui/thesaurusservice/getVocabulary',
         reader: {
             type: 'json',
