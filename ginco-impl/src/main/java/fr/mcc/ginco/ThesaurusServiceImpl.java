@@ -39,13 +39,17 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.mcc.ginco.enums.ServiceCRUDResults;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.log.Log;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service("thesaurusService")
 public class ThesaurusServiceImpl implements IThesaurusService {
 
@@ -54,20 +58,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Inject
     @Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
-
-    private String id;
-
-    @Override
-    public String setParam(String id) {
-        log.info("Setting parameter id = " + id);
-        this.id = id;
-        return "Param id = " + id;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
 
 	@Override
 	public Thesaurus getThesaurusById(String id) {
@@ -79,5 +69,15 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     public List<Thesaurus> getThesaurusList() {
         log.info("List of all Thesaurus was demanded.");
         return thesaurusDAO.findAll();
+    }
+
+    @Override
+    public ServiceCRUDResults updateThesaurus(Thesaurus object) {
+        log.debug("updateThesaurus method called");
+        if(thesaurusDAO.update(object) != null) {
+            thesaurusDAO.flush();
+            return ServiceCRUDResults.SUCCESS;
+        }
+        return ServiceCRUDResults.FAILURE;
     }
 }

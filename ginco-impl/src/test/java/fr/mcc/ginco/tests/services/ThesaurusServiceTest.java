@@ -36,6 +36,7 @@ package fr.mcc.ginco.tests.services;
 
 import javax.inject.Inject;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -87,6 +88,16 @@ public class ThesaurusServiceTest extends BaseServiceTest {
         Integer expectedThesaurusListSize = 3;
         Integer actualThesaurusListSize = thesaurusService.getThesaurusList().size();
         Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+    }
+
+    @Test
+    public final void testUpateThesaurus() {
+        Thesaurus test = testVocabulary.getThesaurusById("0");
+        String old = test.getTitle();
+        test.setTitle("trololo");
+        testVocabulary.updateThesaurus(test);
+        Thesaurus test2 = testVocabulary.getThesaurusById("0");
+        Assert.assertEquals("Not changed title !!", test2.getTitle(), "trololo");
     }
 
 	@Override

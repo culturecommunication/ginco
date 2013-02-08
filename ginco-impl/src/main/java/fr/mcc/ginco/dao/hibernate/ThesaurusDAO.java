@@ -41,7 +41,6 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 
-@Transactional
 @Repository("thesaurusDAO")
 @Scope("prototype")
 public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> implements IThesaurusDAO  {

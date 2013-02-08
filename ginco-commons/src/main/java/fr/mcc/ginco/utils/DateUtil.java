@@ -32,61 +32,52 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.utils;
 
-import java.util.List;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+public class DateUtil {
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+    public static String toString(Date date) {
+        if(date != null) {
+            return formatter.format(date);
+        }
+        return null;
+    }
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.log.Log;
-import org.springframework.transaction.annotation.Transactional;
+    public static Timestamp toTimestamp(Date date) {
+        if(date != null) {
+            return new Timestamp(date.getTime());
+        }
+        return null;
+    }
 
-@Transactional
-@Service("languagesService")
-public class LanguagesServiceImpl implements ILanguagesService {
-	
-	
-	@Log private Logger log;
-	    
-	@Inject
-	@Named("languagesDAO")
-    private ILanguageDAO languagesDAO;
-	
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguagesList()
-	 */
-	@Override
-	public List<Language> getLanguagesList(Integer startIndex, Integer limit) {
-		return languagesDAO.findPaginatedItems(startIndex, limit);
-	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getTopLanguagesList()
-	 */
-	@Override
-	public List<Language> getTopLanguagesList() {
-		return languagesDAO.findTopLanguages();
-	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguageCount()
-	 */
-	public Long getLanguageCount(){
-		return languagesDAO.count();
-	}
+    public static Timestamp timestampFromString(String date) {
+        Date dateParsed = dateFromString(date);
+        if(date != null) {
+            return new Timestamp(dateParsed.getTime());
+        }
+        return null;
+    }
 
-    /* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguageById()
-	 */
-    @Override
-    public Language getLanguageById(String id) {
-        return languagesDAO.getById(id);
+    public static Date dateFromString(String date) {
+        try {
+            return formatter.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static Timestamp nowTimestamp() {
+        return new Timestamp(GregorianCalendar.getInstance().getTime().getTime());
+    }
+
+    public static Date nowDate() {
+        return GregorianCalendar.getInstance().getTime();
     }
 }

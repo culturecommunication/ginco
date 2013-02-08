@@ -8,7 +8,7 @@
 		</id>
 		<property name="contributor" />
 		<property name="coverage" />
-		<property name="date" />
+		<property name="date" type="timestamp" />
 		<property name="description" />
 		<property name="publisher" />
 		<property name="relation" />
@@ -16,11 +16,11 @@
 		<property name="source" />
 		<property name="subject" />
 		<property name="title" not-null="true" />
-		<property name="created" not-null="true" />
+		<property name="created" not-null="true" type="timestamp" />
 
 		<many-to-one name="format" lazy="false" />
 		<many-to-one name="type" lazy="false" /> 
-		<many-to-one name="creator" column="creator" />
+		<many-to-one name="creator" lazy="false"/>
 		<!-- 
 		<set name="versions">
 			<key column="identifier" />

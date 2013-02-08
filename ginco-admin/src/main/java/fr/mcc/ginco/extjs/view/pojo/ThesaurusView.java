@@ -38,6 +38,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.utils.DateUtil;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -53,7 +54,7 @@ import java.util.List;
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusView implements Serializable {
-	private String identifier;
+	private String id;
 	private String contributor;
 	private String coverage;
 	private String date;
@@ -72,12 +73,17 @@ public class ThesaurusView implements Serializable {
 
 	private List<String> languages = new ArrayList<String>();
 
+    public ThesaurusView() {}
+
 	public ThesaurusView(Thesaurus source) {
 		if (source != null) {
-			this.identifier = source.getIdentifier();
+			this.id = source.getIdentifier();
 			this.contributor = source.getContributor();
 			this.coverage = source.getCoverage();
-			this.date = source.getDate();
+
+            if(source.getDate() != null) {
+                this.date = DateUtil.toString(source.getDate());
+            }
 			this.description = source.getDescription();
 			this.publisher = source.getPublisher();
 			this.relation = source.getRelation();
@@ -85,7 +91,7 @@ public class ThesaurusView implements Serializable {
 			this.source = source.getSource();
 			this.subject = source.getSubject();
 			this.title = source.getTitle();
-			this.created = source.getCreated();
+			this.created = DateUtil.toString(source.getCreated());
 
 			if (source.getCreator() != null) {
 				this.creatorName = source.getCreator().getName();
@@ -107,12 +113,12 @@ public class ThesaurusView implements Serializable {
 		}
 	}
 
-	public String getIdentifier() {
-		return identifier;
+	public String getId() {
+		return id;
 	}
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getContributor() {

@@ -26,10 +26,27 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
         }
     },
 
+
+    saveForm : function(theButton)
+    {
+        var theForm = theButton.up('form');
+        theForm.getForm().updateRecord();
+        var updatedModel = theForm.getForm().getRecord();
+        updatedModel.save();
+    },
+
     init: function(application) {
-        this.control({ 'thesaurusPanel form' : {
-            afterrender : this.loadPanel
-        }
-        });
+        this.control(
+            {
+                'thesaurusPanel form' :
+                {
+                    afterrender : this.loadPanel
+                },
+                'thesaurusPanel button[cls=save]' :
+                {
+                    click : this.saveForm
+                }
+
+            });
     }
 });

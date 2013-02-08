@@ -35,6 +35,8 @@
 package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,7 +46,7 @@ public class Thesaurus implements Serializable {
     private String identifier;
     private String contributor;
     private String coverage;
-    private String date;
+    private Date date;
     private String description;
     private String publisher;
     private String relation;
@@ -52,7 +54,7 @@ public class Thesaurus implements Serializable {
     private String source;
     private String subject;
     private String title;
-    private String created;
+    private Date created;
     private ThesaurusFormat format;
     private ThesaurusType type;
     private ThesaurusOrganization creator;
@@ -62,13 +64,13 @@ public class Thesaurus implements Serializable {
     }
 
     public Thesaurus(String identifier, String contributor, String coverage,
-                     String date, String description, String publisher, String relation,
+                     Date date, String description, String publisher, String relation,
                      String rights, String source, String subject, String title,
-                     String created, ThesaurusFormat format, ThesaurusType type, ThesaurusOrganization creator) {
+                     Date created, ThesaurusFormat format, ThesaurusType type, ThesaurusOrganization creator) {
         this.identifier = identifier;
         this.contributor = contributor;
         this.coverage = coverage;
-        this.date = date;
+        this.date = new Timestamp(date.getTime());
         this.description = description;
         this.publisher = publisher;
         this.relation = relation;
@@ -76,7 +78,7 @@ public class Thesaurus implements Serializable {
         this.source = source;
         this.subject = subject;
         this.title = title;
-        this.created = created;
+        this.created = new Timestamp(created.getTime());
         this.format = format;
         this.type = type;
         this.creator = creator;
@@ -106,11 +108,11 @@ public class Thesaurus implements Serializable {
         this.coverage = coverage;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -170,11 +172,11 @@ public class Thesaurus implements Serializable {
         this.title = title;
     }
 
-    public String getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 

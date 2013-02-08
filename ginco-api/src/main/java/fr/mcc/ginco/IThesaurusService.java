@@ -35,6 +35,7 @@
 package fr.mcc.ginco;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.enums.ServiceCRUDResults;
 
 import java.util.List;
 
@@ -47,18 +48,6 @@ import java.util.List;
  */
 public interface IThesaurusService {
     /**
-     * Set fake parameter, only for test purposes
-     * @param id
-     */
-    String setParam(String id);
-
-    /**
-     * Get fake parameter, only for test purposes
-     * @return
-     */
-    String getId();
-
-    /**
      * Get a single object by its id
      *
      * @param id to search
@@ -68,7 +57,12 @@ public interface IThesaurusService {
 
     /**
      * Get list of all objects.
-     * @return
+     * @return List of all objects.
      */
     List<Thesaurus> getThesaurusList();
+
+    /**
+     * Update a single object
+     */
+    ServiceCRUDResults updateThesaurus(Thesaurus object);
 }

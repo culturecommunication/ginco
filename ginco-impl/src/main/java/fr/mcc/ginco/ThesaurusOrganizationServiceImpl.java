@@ -34,59 +34,40 @@
  */
 package fr.mcc.ginco;
 
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.log.Log;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.log.Log;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Transactional
-@Service("languagesService")
-public class LanguagesServiceImpl implements ILanguagesService {
-	
-	
-	@Log private Logger log;
-	    
-	@Inject
-	@Named("languagesDAO")
-    private ILanguageDAO languagesDAO;
-	
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguagesList()
-	 */
-	@Override
-	public List<Language> getLanguagesList(Integer startIndex, Integer limit) {
-		return languagesDAO.findPaginatedItems(startIndex, limit);
-	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getTopLanguagesList()
-	 */
-	@Override
-	public List<Language> getTopLanguagesList() {
-		return languagesDAO.findTopLanguages();
-	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguageCount()
-	 */
-	public Long getLanguageCount(){
-		return languagesDAO.count();
-	}
+@Service("thesaurusOrganizationService")
+public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationService {
+    @Log
+    private Logger log;
 
-    /* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguageById()
-	 */
+    @Inject
+    @Named("thesaurusOrganizationDAO")
+    private IGenericDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
+
+    /**
+     * (non-Javadoc)
+     * @see IThesaurusOrganizationService#getThesaurusOrganizationByNameAndURL(String, String)
+     */
     @Override
-    public Language getLanguageById(String id) {
-        return languagesDAO.getById(id);
+    public ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String URL) {
+        List<ThesaurusOrganization> all = thesaurusOrganizationDAO.findAll();
+        for(ThesaurusOrganization organization : all) {
+            if (organization.getHomepage().equals(URL) && organization.getName().equals(name)) {
+                return organization;
+            }
+        }
+
+        return null;
     }
 }

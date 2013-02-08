@@ -39,18 +39,24 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.log.Log;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author dabel
  *
  */
+@Transactional
 @Service("thesaurusFormatService")
 public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
 	
+	
+	@Log private Logger log;
 	    
 	@Inject
 	@Named("thesaurusFormatDAO")
@@ -63,4 +69,17 @@ public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
 	public List<ThesaurusFormat> getThesaurusFormatList() {
 		return thesaurusFormatDAO.findAll();
 	}
+
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.IThesaurusFormatService#getThesaurusFormatById()
+	 */
+    @Override
+    public ThesaurusFormat getThesaurusFormatById(Integer id) {
+        return thesaurusFormatDAO.getById(id);
+    }
+
+    public IGenericDAO<ThesaurusFormat, Integer> getThesaurusFormatDAO() {
+		return thesaurusFormatDAO;
+	}
+	
 }

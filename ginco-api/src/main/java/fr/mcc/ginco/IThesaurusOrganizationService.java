@@ -34,59 +34,21 @@
  */
 package fr.mcc.ginco;
 
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.log.Log;
-import org.springframework.transaction.annotation.Transactional;
-
-@Transactional
-@Service("languagesService")
-public class LanguagesServiceImpl implements ILanguagesService {
-	
-	
-	@Log private Logger log;
-	    
-	@Inject
-	@Named("languagesDAO")
-    private ILanguageDAO languagesDAO;
-	
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguagesList()
-	 */
-	@Override
-	public List<Language> getLanguagesList(Integer startIndex, Integer limit) {
-		return languagesDAO.findPaginatedItems(startIndex, limit);
-	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getTopLanguagesList()
-	 */
-	@Override
-	public List<Language> getTopLanguagesList() {
-		return languagesDAO.findTopLanguages();
-	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguageCount()
-	 */
-	public Long getLanguageCount(){
-		return languagesDAO.count();
-	}
-
-    /* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILanguagesService#getLanguageById()
-	 */
-    @Override
-    public Language getLanguageById(String id) {
-        return languagesDAO.getById(id);
-    }
+/**
+ * Service used to work with {@link fr.mcc.ginco.beans.ThesaurusOrganization} objects, contains basic
+ * methods exposed to client part.
+ *
+ * @see fr.mcc.ginco.beans
+ */
+public interface IThesaurusOrganizationService {
+    /**
+     * Get single object by its {@link fr.mcc.ginco.beans.ThesaurusOrganization#getName()}
+     * and {@link fr.mcc.ginco.beans.ThesaurusOrganization#getHomepage()}.
+     * @param name value of property.
+     * @param URL value of property.
+     * @return {@code null} if not found; object otherwise.
+     */
+    ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String URL);
 }

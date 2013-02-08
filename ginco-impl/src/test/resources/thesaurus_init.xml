@@ -20,7 +20,7 @@
 			<value>0</value>
 			<value>test</value>
 			<value>test</value>
-			<value>test</value>
+			<value>2013-02-06 15:29:59.66325</value>
 			<value>test</value>
 			<value>0</value>
 			<value>test</value>
@@ -31,7 +31,7 @@
 			<value>test</value>
 			<value>1</value>
 			<value>0</value>
-			<value></value>
+			<value>2013-02-06 15:29:59.66325</value>
 		</row>
 		<row>
 			<value>1</value>
@@ -100,6 +100,17 @@
         <row>
             <value>2</value>
             <value>thesaurus type 3</value>
+        </row>
+    </table>
+
+    <table name="thesaurus_organization">
+        <column>identifier</column>
+        <column>name</column>
+        <column>homepage</column>
+        <row>
+            <value>0</value>
+            <value>Smile</value>
+            <value>http://smile.fr</value>
         </row>
     </table>
 </dataset>

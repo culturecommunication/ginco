@@ -76,6 +76,13 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 */
 	T update(T entity);	
 	
+	/**
+	 * Find elements with a start index and an offset
+	 * @param start index of the first element
+	 * @param limit number of elements to return
+	 * @return List<T> A list of items 
+	 */
+	List <T> findPaginatedItems(Integer start, Integer limit);
 	
 	/**
 	 * @return The number of DB rows matching to the DAO

@@ -45,7 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
 
-@Transactional
 @Repository("languagesDAO")
 @Scope("prototype")
 public class LanguageDAO extends GenericHibernateDAO<Language, String> implements ILanguageDAO {
