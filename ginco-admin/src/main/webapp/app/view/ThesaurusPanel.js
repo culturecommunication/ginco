@@ -66,7 +66,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                                 {
                                     xtype: 'button',
                                     text: 'Créer version',
-                                    disabled: true,
+                                    disabled: true
                                 }
                             ]
                         }
@@ -99,7 +99,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         	 layout: 'column',
                         	 defaults: {
                                  margin:'0 50 5 0',
-                                 layout: 'anchor',
+                                 layout: 'anchor'
                              },
                         	 items: [{
 	                        	xtype: 'textfield',

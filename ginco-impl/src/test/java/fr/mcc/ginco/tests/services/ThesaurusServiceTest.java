@@ -82,6 +82,13 @@ public class ThesaurusServiceTest extends BaseServiceTest {
         Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
     }
 
+    @Test
+    public final void testCreateNewThesaurus() {
+        Thesaurus newThesaurus = new Thesaurus();
+        newThesaurus.setTitle("test");
+        thesaurusService.updateThesaurus(newThesaurus);
+    }
+
 	@Override
 	public String  getXmlDataFileInit() {
 		return "/thesaurus_init.xml";		

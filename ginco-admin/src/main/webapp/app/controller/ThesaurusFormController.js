@@ -24,6 +24,10 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
                     theForm.getEl().unmask();
                 }
             });
+        } else {
+            model = Ext.create('HadocApp.model.ThesaurusModel');
+            model.id = -1;
+            theForm.loadRecord(model);
         }
     },
     updateTreeView: function()
@@ -57,7 +61,7 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
             {
                 'thesaurusPanel form' :
                 {
-                    afterrender : this.loadPanel,
+                    afterrender : this.loadPanel
                 },
                 'thesaurusPanel button[cls=save]' :
                 {
