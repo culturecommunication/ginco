@@ -23,6 +23,7 @@ Ext.define('HadocApp.view.TopToolbar', {
 
         Ext.applyIf(me, {
             items: [
+                {	xtype: 'box',autoEl: {tag: 'img', src:'images/ginco-logo-xs.png', width:'32px'}},
                 {
                     xtype: 'label',
                     width: 100,
