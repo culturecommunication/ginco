@@ -63,4 +63,15 @@ public class LanguageDAO extends GenericHibernateDAO<Language, String> implement
 	public List<Language> findPaginatedItems(Integer start, Integer limit) {
 		return getCurrentSession().createCriteria(Language.class).setMaxResults(limit).setFirstResult(start).addOrder(Order.desc("toplanguage")).addOrder(Order.asc("refname")).list();
 	}
+
+
+    @Override
+    public Language getLanguageById(String id) {
+        for(Language language : findAll()) {
+            if(language.getId() == id) {
+                return language;
+            }
+        }
+        return null;
+    }
 }

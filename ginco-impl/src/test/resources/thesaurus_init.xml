@@ -68,4 +68,15 @@
             <value>thesaurus type 3</value>
         </row>
     </table>
+
+    <table name="thesaurus_organization">
+        <column>identifier</column>
+        <column>name</column>
+        <column>homepage</column>
+        <row>
+            <value>0</value>
+            <value>Smile</value>
+            <value>http://smile.fr</value>
+        </row>
+    </table>
 </dataset>

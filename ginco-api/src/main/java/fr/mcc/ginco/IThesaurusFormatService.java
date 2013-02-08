@@ -42,7 +42,7 @@ import fr.mcc.ginco.beans.ThesaurusType;
 /**
  * Service used to work with {@link ThesaurusFormat} objects, contains basic
  * methods exposed to client part. For example, to get all
- * ThesaurusFormat objects, use {@link #getThesaurusFormatList(String)}
+ * ThesaurusFormat objects, use {@link #getThesaurusFormatList()}
  *
  * @see fr.mcc.ginco.beans
  */
@@ -52,4 +52,11 @@ public interface IThesaurusFormatService {
      * @return
      */
     List<ThesaurusFormat> getThesaurusFormatList();
+
+    /**
+     * Get single ThesaurusFormat by its id.
+     * @param id of object
+     * @return {@code null} if not found; object otherwise.
+     */
+    ThesaurusFormat getThesaurusFormatById(Integer id);
 }

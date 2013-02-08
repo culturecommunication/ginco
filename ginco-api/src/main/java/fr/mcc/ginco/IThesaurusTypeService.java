@@ -41,7 +41,7 @@ import fr.mcc.ginco.beans.ThesaurusType;
 /**
  * Service used to work with {@link ThesaurusType} objects, contains basic
  * methods exposed to client part. For example, to get all
- * ThesaurusType objects, use {@link #getThesaurusTypeList(String)}
+ * ThesaurusType objects, use {@link #getThesaurusTypeList()}
  *
  * @see fr.mcc.ginco.beans
  */
@@ -51,4 +51,11 @@ public interface IThesaurusTypeService {
      * @return
      */
     List<ThesaurusType> getThesaurusTypeList();
+
+    /**
+     * Get single object by its id.
+     * @param id object id.
+     * @return {@code null} if not found; object otherwise.
+     */
+    ThesaurusType getThesaurusTypeById(Integer id);
 }

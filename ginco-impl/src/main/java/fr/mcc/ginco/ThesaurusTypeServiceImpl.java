@@ -69,7 +69,16 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 		return thesaurusTypeDAO.findAll();
 	}
 
-	public IGenericDAO<ThesaurusType, Integer> getThesaurusTypeDAO() {
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.IThesaurusTypeService#getThesaurusTypeById()
+	 */
+    @Override
+    public ThesaurusType getThesaurusTypeById(Integer id) {
+        return thesaurusTypeDAO.getById(id);
+    }
+
+
+    public IGenericDAO<ThesaurusType, Integer> getThesaurusTypeDAO() {
 		return thesaurusTypeDAO;
 	}
 	

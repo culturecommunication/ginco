@@ -68,4 +68,12 @@ public class LanguagesServiceImpl implements ILanguagesService {
 	public Long getLanguageCount(){
 		return languagesDAO.count();
 	}
+
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.ILanguagesService#getLanguageById()
+	 */
+    @Override
+    public Language getLanguageById(String id) {
+        return languagesDAO.getLanguageById(id);
+    }
 }

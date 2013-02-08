@@ -34,35 +34,38 @@
  */
 package fr.mcc.ginco;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.enums.ServiceCRUDResults;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.log.Log;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
-/**
- * Service used to work with {@link Thesaurus} objects, contains basic
- * methods exposed to client part. For example, to get a single
- * Thesaurus object, use {@link #getThesaurusById(String)}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusService {
-    /**
-     * Get a single object by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
-     */
-    Thesaurus getThesaurusById(String id);
+@Service("thesaurusOrganizationService")
+public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationService {
+    @Log
+    private Logger log;
+
+    @Inject
+    @Named("thesaurusOrganizationDAO")
+    private IGenericDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
 
     /**
-     * Get list of all objects.
-     * @return List of all objects.
+     * (non-Javadoc)
+     * @see IThesaurusOrganizationService#getThesaurusOrganizationByNameAndURL(String, String)
      */
-    List<Thesaurus> getThesaurusList();
+    @Override
+    public ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String URL) {
+        List<ThesaurusOrganization> all = thesaurusOrganizationDAO.findAll();
+        for(ThesaurusOrganization organization : all) {
+            if (organization.getHomepage() == URL && organization.getName() == name) {
+                return organization;
+            }
+        }
 
-    /**
-     * Update a single object
-     */
-    ServiceCRUDResults updateThesaurus(Thesaurus object);
+        return null;
+    }
 }

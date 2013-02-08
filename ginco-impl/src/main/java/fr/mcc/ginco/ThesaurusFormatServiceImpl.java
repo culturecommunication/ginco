@@ -68,7 +68,15 @@ public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
 		return thesaurusFormatDAO.findAll();
 	}
 
-	public IGenericDAO<ThesaurusFormat, Integer> getThesaurusFormatDAO() {
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.IThesaurusFormatService#getThesaurusFormatById()
+	 */
+    @Override
+    public ThesaurusFormat getThesaurusFormatById(Integer id) {
+        return thesaurusFormatDAO.getById(id);
+    }
+
+    public IGenericDAO<ThesaurusFormat, Integer> getThesaurusFormatDAO() {
 		return thesaurusFormatDAO;
 	}
 	

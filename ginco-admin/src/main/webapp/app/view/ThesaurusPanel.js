@@ -56,7 +56,8 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                             items: [
                                 {
                                     xtype: 'button',
-                                    text: 'Enregistrer'
+                                    text: 'Enregistrer',
+                                    cls: 'save'
                                 },
                                 {
                                     xtype: 'button',
@@ -68,7 +69,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                     items: [
                         {
                         	xtype: 'displayfield',
-                        	name:'identifier',
+                        	name:'id',
                         	fieldLabel: me.xIdentifierLabel
                         },
                         {
@@ -157,7 +158,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         	editable : false,
                         	displayField : 'label',
                         	valueField : 'identifier',
-                        	forceSelection : false,
+                        	forceSelection : true,
                         	multiSelect : false,
                         	store : 'ThesaurusTypeStore'
                         },

@@ -32,27 +32,23 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests;
+package fr.mcc.ginco;
 
-import javax.inject.Inject;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import fr.mcc.ginco.IThesaurusService;
-
-
-public class ThesaurusServiceTest extends BaseTest {
-
-    @Inject
-    IThesaurusService thesaurusService;
-
-    @Test
-    public final void testsetParam() {
-        String parameter = "toto";
-        String expectedResponse = "Param id = " + parameter;
-        String actualResponse = thesaurusService.setParam(parameter);
-        Assert.assertEquals("Object returned unexpected reponse while passing param to him !", expectedResponse, actualResponse);
-    }
-    
+/**
+ * Service used to work with {@link fr.mcc.ginco.beans.ThesaurusOrganization} objects, contains basic
+ * methods exposed to client part.
+ *
+ * @see fr.mcc.ginco.beans
+ */
+public interface IThesaurusOrganizationService {
+    /**
+     * Get single object by its {@link fr.mcc.ginco.beans.ThesaurusOrganization#getName()}
+     * and {@link fr.mcc.ginco.beans.ThesaurusOrganization#getHomepage()}.
+     * @param name value of property.
+     * @param URL value of property.
+     * @return {@code null} if not found; object otherwise.
+     */
+    ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String URL);
 }

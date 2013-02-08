@@ -20,7 +20,7 @@
 
 		<many-to-one name="format" lazy="false" />
 		<many-to-one name="type" lazy="false" /> 
-		<many-to-one name="creator" column="creator" />
+		<many-to-one name="creator" column="creator" lazy="false"/>
 		<!-- 
 		<set name="versions">
 			<key column="identifier" />

@@ -40,8 +40,8 @@ import fr.mcc.ginco.beans.Language;
 
 /**
  * Service used to work with {@link Language} objects, contains basic
- * methods exposed to client part. For example, to get all
- * Language objects, use {@link #getLanguagesList()}
+ * methods exposed to client part. For example, to get some
+ * Language objects, use {@link #getLanguagesList(Integer, Integer)} ()}
  *
  * @see fr.mcc.ginco.beans
  */
@@ -57,4 +57,11 @@ public interface ILanguagesService {
      * @return
      */
     Long getLanguageCount();
+
+    /**
+     * Get single object by its id.
+     * @param id
+     * @return
+     */
+    Language getLanguageById(String id);
 }

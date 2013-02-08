@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS thesaurus;
 DROP TABLE IF EXISTS thesaurus_type;
 DROP TABLE IF EXISTS thesaurus_format;
 DROP TABLE IF EXISTS languages_iso639;
+DROP TABLE IF EXISTS thesaurus_organization;
 
 CREATE TABLE thesaurus
 (
@@ -44,4 +45,10 @@ CREATE TABLE languages_iso639 (
     ref_name character varying(150) NOT NULL,
     toplanguage boolean NOT NULL DEFAULT FALSE,
     comment character varying(150)
+);
+
+CREATE TABLE thesaurus_organization (
+  identifier integer NOT NULL,
+  name text NOT NULL,
+  homepage text
 );

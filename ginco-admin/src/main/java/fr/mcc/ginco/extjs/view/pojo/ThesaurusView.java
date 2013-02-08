@@ -53,7 +53,7 @@ import java.util.List;
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusView implements Serializable {
-	private String identifier;
+	private String id;
 	private String contributor;
 	private String coverage;
 	private String date;
@@ -72,9 +72,11 @@ public class ThesaurusView implements Serializable {
 
 	private List<String> languages = new ArrayList<String>();
 
+    public ThesaurusView() {}
+
 	public ThesaurusView(Thesaurus source) {
 		if (source != null) {
-			this.identifier = source.getIdentifier();
+			this.id = source.getIdentifier();
 			this.contributor = source.getContributor();
 			this.coverage = source.getCoverage();
 			this.date = source.getDate();
@@ -107,12 +109,12 @@ public class ThesaurusView implements Serializable {
 		}
 	}
 
-	public String getIdentifier() {
-		return identifier;
+	public String getId() {
+		return id;
 	}
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getContributor() {

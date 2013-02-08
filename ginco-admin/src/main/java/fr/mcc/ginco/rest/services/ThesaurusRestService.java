@@ -35,18 +35,18 @@
 package fr.mcc.ginco.rest.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBElement;
 
-import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.*;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -54,18 +54,15 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.ILanguagesService;
-import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.GitInfo;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
  * 
  */
+@SuppressWarnings("SpringJavaAutowiringInspection")
 @Service
 @Path("/thesaurusservice")
 @Produces({MediaType.APPLICATION_JSON})
@@ -78,6 +75,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("thesaurusFormatService")
 	private IThesaurusFormatService thesaurusFormatService;
+
+    @Inject
+    @Named("thesaurusOrganizationService")
+    private IThesaurusOrganizationService thesaurusOrganizationService;
 	
 	@Inject
 	@Named("languagesService")
@@ -136,10 +137,10 @@ public class ThesaurusRestService {
 
 
     /**
-     * Public method used to get {@link fr.mcc.ginco.beans.Thesaurus} object by providing its id.
+     * Public method used to get {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object by providing its id.
      * @param id {@link String} identifier to try with
      *
-     * @return {@link fr.mcc.ginco.beans.Thesaurus} object in JSON format or
+     * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object in JSON format or
      * {@code null} if not found
      */
     @GET
@@ -148,4 +149,63 @@ public class ThesaurusRestService {
     public ThesaurusView getVocabularyById(@PathParam("id") String id) {
         return new ThesaurusView(thesaurusService.getThesaurusById(id));
     }
+
+    @PUT
+    @Path("/getVocabulary/{id}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response putVocabularyById(@PathParam("id") String id, ThesaurusView thesaurusViewJAXBElement) {
+        logger.warn("INto method");
+        logger.warn(thesaurusViewJAXBElement.getTitle());
+        Thesaurus object = convert(thesaurusViewJAXBElement);
+        if(object != null) {
+            thesaurusService.updateThesaurus(object);
+            return Response.ok().build();
+        }
+        return Response.notModified().build();
+    }
+
+    private Thesaurus convert(ThesaurusView source) {
+        Thesaurus hibernateRes = thesaurusService.getThesaurusById(source.getId());
+        hibernateRes.setContributor(source.getContributor());
+
+        hibernateRes.setContributor(source.getContributor());
+        hibernateRes.setCoverage(source.getCoverage());
+        hibernateRes.setDate("2013-02-06 15:29:59.66325");
+        hibernateRes.setDescription(source.getDescription());
+        hibernateRes.setPublisher(source.getPublisher());
+        hibernateRes.setRelation(source.getRelation());
+        hibernateRes.setRights(source.getRights());
+        hibernateRes.setSource(source.getSource());
+        hibernateRes.setSubject(source.getSubject());
+        hibernateRes.setTitle(source.getTitle());
+        hibernateRes.setCreated(source.getCreated());
+        hibernateRes.setFormat(thesaurusFormatService.getThesaurusFormatById(source.getFormat()));
+        hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source.getType()));
+        hibernateRes.setCreator(thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(),
+                source.getCreatorHomepage()));
+
+        return hibernateRes;
+/*
+                "2013-02-06 15:29:59.66325", source.getDescription(),
+                source.getPublisher(), source.getRelation(),
+                source.getRights(), source.getSource(),
+                source.getSubject(), source.getTitle(),
+                source.getCreated(),
+                thesaurusFormatService.getThesaurusFormatById(source.getFormat()),
+                thesaurusTypeService.getThesaurusTypeById(source.getType()),
+                thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(),
+                        source.getCreatorHomepage()));
+        List<String> languages = source.getLanguages();
+        Set<Language> realLanguages = new HashSet<Language>();
+        /*
+        for(String language : languages) {
+            Language lang = languagesService.getLanguageById(language);
+            realLanguages.add(lang);
+        }
+
+        result.setLang(realLanguages);*/
+
+        //return result;
+    }
+
 }

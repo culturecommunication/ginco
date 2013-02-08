@@ -3,7 +3,7 @@ Ext.define('HadocApp.model.ThesaurusModel', {
 
     fields: [
         {
-            name: 'identifier',
+            name: 'id',
             type: 'string'
         },
         {
@@ -76,7 +76,12 @@ Ext.define('HadocApp.model.ThesaurusModel', {
         type: 'rest',
         url: 'services/ui/thesaurusservice/getVocabulary',
         reader: {
-            type: 'json'
+            type: 'json',
+            idProperty: 'id'
+        },
+        writer: {
+            type: 'json',
+            idProperty: 'id'
         }
     }
 });

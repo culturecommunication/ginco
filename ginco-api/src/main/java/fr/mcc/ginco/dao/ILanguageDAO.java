@@ -37,5 +37,5 @@ package fr.mcc.ginco.dao;
 import fr.mcc.ginco.beans.Language;
 
 public interface ILanguageDAO extends IGenericDAO<Language, String> {
-
+    Language getLanguageById(String id);
 }
