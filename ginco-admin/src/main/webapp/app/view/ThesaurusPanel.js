@@ -12,7 +12,6 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
     localized: true,
     autoScroll: true,
     closable: true,
-    layout: 'anchor',
     
     /*Fields with auto generated values*/
     xIdentifierLabel : 'Identifier',
@@ -151,7 +150,6 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         {
                         	xtype : 'combobox',
                         	name : 'type',
-                            id : 'comboboxTypeId',
                             queryMode : 'local',
                             fieldLabel : me.xTypeLabel,
                         	editable : false,
