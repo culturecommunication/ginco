@@ -29,7 +29,7 @@ Ext.define('HadocApp.view.LeftPanel', {
                     rootVisible: false,
                     useArrows: true,
                     viewConfig: {
-
+                    	loadMask : true
                     }
                 }
             ]
