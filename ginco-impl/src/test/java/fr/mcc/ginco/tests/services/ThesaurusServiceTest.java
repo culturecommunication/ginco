@@ -109,7 +109,9 @@ public class ThesaurusServiceTest extends BaseServiceTest {
     public final void testCreateNewThesaurus() {
         Thesaurus newThesaurus = new Thesaurus();
         newThesaurus.setTitle("test");
-        thesaurusService.updateThesaurus(newThesaurus);
+        IUser user = new SimpleUserImpl();
+        user.setName("test1");
+        thesaurusService.updateThesaurus(newThesaurus, user);
     }
 
 	@Override
