@@ -8,6 +8,7 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
     models: [
         'ThesaurusModel'
     ],
+    stores : ['MainTreeStore'],
 
     loadPanel : function(theForm)
     {
@@ -25,22 +26,39 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
             });
         }
     },
+    updateTreeView: function()
+    {
+    	var MainTreeStore = this.getMainTreeStoreStore();
+    	MainTreeStore.load();
+    	
+    },
 
 
     saveForm : function(theButton)
     {
+    	var me = this;
         var theForm = theButton.up('form');
-        theForm.getForm().updateRecord();
-        var updatedModel = theForm.getForm().getRecord();
-        updatedModel.save();
+        if (theForm.getForm().isValid())
+        {
+        	theForm.getEl().mask("Chargemenet");
+	        theForm.getForm().updateRecord();
+	        var updatedModel = theForm.getForm().getRecord();
+	        updatedModel.save({
+	        	success: function(record, operation)
+	            {
+	        		 theForm.getEl().unmask();
+	        		 Thesaurus.ext.utils.msg('Succès', 'Le thesaurus a été enregistré!');
+	        		 me.updateTreeView();
+	            }
+	        });
+        }
     },
-
     init: function(application) {
         this.control(
             {
                 'thesaurusPanel form' :
                 {
-                    afterrender : this.loadPanel
+                    afterrender : this.loadPanel,
                 },
                 'thesaurusPanel button[cls=save]' :
                 {

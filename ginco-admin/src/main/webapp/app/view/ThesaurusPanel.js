@@ -45,6 +45,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                 {
                     xtype: 'form',
                     title: me.xThesaurusTitle,
+                    pollForChanges : true,
                     defaults: {
                         anchor: '70%'
                     },
@@ -56,11 +57,15 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                                 {
                                     xtype: 'button',
                                     text: 'Enregistrer',
-                                    cls: 'save'
+                                    disabled: true,
+                                    formBind: true,
+                                    cls: 'save',
+                                    iconCls : 'icon-save'
                                 },
                                 {
                                     xtype: 'button',
-                                    text: 'Créer version'
+                                    text: 'Créer version',
+                                    disabled: true,
                                 }
                             ]
                         }
