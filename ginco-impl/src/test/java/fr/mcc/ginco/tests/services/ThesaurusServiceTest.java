@@ -36,9 +36,7 @@ package fr.mcc.ginco.tests.services;
 
 import javax.inject.Inject;
 
-import org.dbunit.Assertion;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
