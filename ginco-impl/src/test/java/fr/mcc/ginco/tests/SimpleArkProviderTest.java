@@ -34,25 +34,15 @@
  */
 package fr.mcc.ginco.tests;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.ark.CustomGenerator;
+import org.hibernate.id.IdentifierGenerator;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import fr.mcc.ginco.IIdentifierProvider;
-
 
 public class SimpleArkProviderTest extends BaseTest {
 	
-	@Inject
-	@Named("simpleArkProviderImpl")
-	IIdentifierProvider arkProvider;
+    private IdentifierGenerator arkProvider = new CustomGenerator();
 	
 	private @Value("${application.ark.nma}") String nma;
 	private @Value("${application.ark.naan}") String naan;
@@ -62,8 +52,8 @@ public class SimpleArkProviderTest extends BaseTest {
 	 */
 	@Test
 	 public final void getArkId(){
-		 String expectedResponse= nma + "/ark:/" + naan ;
-		 String actualResponse = arkProvider.getArkId(this.getClass());
-		 Assert.assertTrue("Error while generating ARK Id !" +actualResponse+" expected "+expectedResponse, actualResponse.startsWith(expectedResponse));
+        String expectedResponse= nma + "/ark:/" + naan;
+		String actualResponse = arkProvider.generate(null, "").toString();
+        Assert.assertTrue("Error while generating ARK Id !" + actualResponse + " expected " + expectedResponse, actualResponse.startsWith(expectedResponse));
 	 }
 }

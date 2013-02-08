@@ -105,6 +105,13 @@ public class ThesaurusServiceTest extends BaseServiceTest {
         
     }
 
+    @Test
+    public final void testCreateNewThesaurus() {
+        Thesaurus newThesaurus = new Thesaurus();
+        newThesaurus.setTitle("test");
+        thesaurusService.updateThesaurus(newThesaurus);
+    }
+
 	@Override
 	public String  getXmlDataFileInit() {
 		return "/thesaurus_init.xml";		

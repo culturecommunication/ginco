@@ -178,6 +178,13 @@ public class ThesaurusRestService {
         return new ThesaurusView(thesaurusService.getThesaurusById(id));
     }
 
+    @POST
+    @Path("/getVocabulary")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createVocabulary(ThesaurusView thesaurusViewJAXBElement) {
+        return putVocabularyById("-1", thesaurusViewJAXBElement);
+    }
+
     @PUT
     @Path("/getVocabulary/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -194,7 +201,15 @@ public class ThesaurusRestService {
     }
 
     private Thesaurus convert(ThesaurusView source) {
-        Thesaurus hibernateRes = thesaurusService.getThesaurusById(source.getId());
+        Thesaurus hibernateRes;
+
+        if(source.getId().equals("")) {
+            hibernateRes = new Thesaurus();
+            hibernateRes.setCreated(DateUtil.nowDate());
+        } else {
+            hibernateRes = thesaurusService.getThesaurusById(source.getId());
+        }
+
         hibernateRes.setContributor(source.getContributor());
         hibernateRes.setCoverage(source.getCoverage());
         hibernateRes.setDate(DateUtil.nowDate());
@@ -205,7 +220,6 @@ public class ThesaurusRestService {
         hibernateRes.setSource(source.getSource());
         hibernateRes.setSubject(source.getSubject());
         hibernateRes.setTitle(source.getTitle());
-//        hibernateRes.setCreated(DateUtil.timestampFromString(source.getCreated()));
         hibernateRes.setFormat(thesaurusFormatService.getThesaurusFormatById(source.getFormat()));
         hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source.getType()));
         hibernateRes.setCreator(thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(),
@@ -225,5 +239,4 @@ public class ThesaurusRestService {
 
         return hibernateRes;
     }
-
 }

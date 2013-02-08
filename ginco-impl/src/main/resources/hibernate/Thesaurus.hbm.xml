@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="fr.mcc.ginco.beans">
 	<class name="Thesaurus" table="thesaurus">
 		<cache usage="read-write" />
 		<id name="identifier" column="identifier">
-			<generator class="native" />
+			<generator class="fr.mcc.ginco.ark.CustomGenerator" />
 		</id>
 		<property name="contributor" />
 		<property name="coverage" />

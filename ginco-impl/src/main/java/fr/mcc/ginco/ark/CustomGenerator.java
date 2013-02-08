@@ -32,25 +32,27 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.ark;
 
-/**
- * Provides methods to generate and use ARK identifiers
- *
- */
-public interface IIdentifierProvider {
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.id.IdentifierGenerator;
 
-	/**
-	 * 
-	 * Generate an ID in ARK format
-	 * Ex : http://www.domain.com/ark:/123456/456
-	 *      |---------NMA-------------|-NAAN-|-NQ-
-	 *      NMA and NAAN from application.properties
-	 *      NQ : randomly generated
-	 * Returns a String containing an ARK Id
-	 * @param aClass the type of the object we want to generate an ARK Id
-	 * @return An object of type String containing an ARK identifier fitted for the object given in argument
-	 */
-	String getArkId(Class<?> aClass);
-	
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.UUID;
+
+public class CustomGenerator implements IdentifierGenerator {
+
+    private String nma = "http://culturecommunication.gouv.fr";
+    private String naan = "12345";
+
+    @Override
+    public Serializable generate(SessionImplementor session, Object object) throws HibernateException {
+        String arkId;
+        UUID nq = UUID.randomUUID();
+        arkId = nma + "/ark:/"+ naan + "/" + nq.toString();
+        return arkId;
+    }
 }
