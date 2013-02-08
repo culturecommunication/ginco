@@ -47,10 +47,16 @@ import fr.mcc.ginco.beans.Language;
  */
 public interface ILanguagesService {
 	 /**
-     * Get list of all ThesaurusFormat.
+     * Get list of all Languages.
      * @return
      */
     List<Language> getLanguagesList(Integer startIndex, Integer endIndex);
+    
+    /**
+     * Get list of all Top Languages.
+     * @return
+     */
+    List<Language> getTopLanguagesList();
     
     /**
      * The number of DB rows matching to the DAO

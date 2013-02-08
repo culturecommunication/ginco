@@ -10,11 +10,10 @@ Ext.define('HadocApp.store.ThesaurusLanguageStore', {
         cfg = cfg || {};
         me.callParent([Ext.apply({
             autoLoad: true,
-            pageSize: 50,
             storeId: 'JsonThesaurusLanguageStore',
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurusservice/getLanguages',
+                url: 'services/ui/thesaurusservice/getTopLanguages',
                 reader: {
                     type: 'json',
                     idProperty: 'id',

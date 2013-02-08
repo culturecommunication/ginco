@@ -68,6 +68,16 @@ public class LanguagesServiceTest extends BaseServiceTest {
     }
     
     /**
+	 * Test getting top languages
+	 */
+    @Test
+    public final void testGetTopLanguagesList() {
+        List<Language> actualResponse = languagesService.getTopLanguagesList();
+		Assert.assertEquals("Error fetching all top languages", 1, actualResponse.size());
+		Assert.assertEquals("Error fetching name TopLanguage (expecting Amal))", "Amal", actualResponse.get(0).getRefname());
+    }
+    
+    /**
 	 * Test getting the number of languages
 	 */
   	@Test

@@ -36,9 +36,8 @@ package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,5 +61,13 @@ public class LanguageDAO extends GenericHibernateDAO<Language, String> implement
 	@Override
 	public List<Language> findPaginatedItems(Integer start, Integer limit) {
 		return getCurrentSession().createCriteria(Language.class).setMaxResults(limit).setFirstResult(start).addOrder(Order.desc("toplanguage")).addOrder(Order.asc("refname")).list();
+	}
+
+	/**
+	 * @return List of top Languages
+	 */
+	@Override
+	public List<Language> findTopLanguages() {
+		return getCurrentSession().createCriteria(Language.class).add(Restrictions.eq("toplanguage",true)).list();
 	}
 }

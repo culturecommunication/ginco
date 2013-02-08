@@ -39,6 +39,16 @@ import java.util.List;
 import fr.mcc.ginco.beans.Language;
 
 public interface ILanguageDAO extends IGenericDAO<Language, String> {
+	/**
+	 * @param start Beginning index
+	 * @param limit Number of items
+	 * @return List<Language> List of languages available for Thesauruses
+	 */
 	List<Language> findPaginatedItems(Integer start, Integer limit);
+	
+	/**
+	 * @return List<Language> List of top languages
+	 */
+	List<Language> findTopLanguages();
 
 }

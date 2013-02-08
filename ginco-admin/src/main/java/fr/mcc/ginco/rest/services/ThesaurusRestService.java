@@ -109,7 +109,7 @@ public class ThesaurusRestService {
 	 * @return list of objects, if not found - {@code null}
 	 */
 	@GET
-	@Path("/getLanguages")
+	@Path("/getAllLanguages")
 	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<Language> > getAllLanguages(@QueryParam("start") Integer startIndex, @QueryParam("limit") Integer limit) {
 		logger.info("Param passed to me : " + startIndex);
@@ -123,9 +123,21 @@ public class ThesaurusRestService {
 	}
 	
 	/**
-	 * Public method used to get list of all existing ThesaurusFormat objects in
-	 * database.
-	 * 
+	 * Public method used to get list of existing top Languages in the database.
+	 * @return list of objects, if not found - {@code null}
+	 */
+	@GET
+	@Path("/getTopLanguages")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<Language> > getTopLanguages() {
+		logger.info("Getting Top Languages");
+		List<Language> topLanguages = languagesService.getTopLanguagesList();
+		ExtJsonFormLoadData<List<Language> > extTopLanguages = new  ExtJsonFormLoadData<List<Language> > (topLanguages);
+		return extTopLanguages;
+	}
+	
+	/**
+	 * Public method used to get list of all existing ThesaurusFormat objects in database.
 	 * @return list of objects, if not found - {@code null}
 	 */
 	@GET

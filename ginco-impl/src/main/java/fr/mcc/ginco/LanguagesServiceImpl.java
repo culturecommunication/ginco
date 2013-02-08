@@ -60,6 +60,17 @@ public class LanguagesServiceImpl implements ILanguagesService {
 		return languagesDAO.findPaginatedItems(startIndex, limit);
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.ILanguagesService#getTopLanguagesList()
+	 */
+	@Override
+	public List<Language> getTopLanguagesList() {
+		return languagesDAO.findTopLanguages();
+	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.ILanguagesService#getLanguageCount()
+	 */
 	public Long getLanguageCount(){
 		return languagesDAO.count();
 	}

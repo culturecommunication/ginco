@@ -181,8 +181,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                         	valueField : 'id',
                         	forceSelection : true,
                         	multiSelect : true,
-                        	store : 'ThesaurusLanguageStore',
-                        	pageSize: 10
+                        	store : 'ThesaurusLanguageStore'
                         },
                         {
                             xtype: 'htmleditor',
