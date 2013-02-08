@@ -41,12 +41,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.GitInfo;
 
 /**
@@ -60,9 +58,7 @@ public class InfoRestService {
     @Inject
     @Named("gitInfoService")
     private GitInfo gitInfo;
-
-    @Log 
-    private Logger logger;
+   
     
     /**
      * Public method used to get the status of the last  git commit

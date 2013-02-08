@@ -39,18 +39,13 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.log.Log;
 
 @Service("languagesService")
 public class LanguagesServiceImpl implements ILanguagesService {
-	
-	
-	@Log private Logger log;
 	    
 	@Inject
 	@Named("languagesDAO")

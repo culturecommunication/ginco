@@ -39,13 +39,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.dao.hibernate.GenericHibernateDAO;
-import fr.mcc.ginco.log.Log;
 
 /**
  * @author dabel
@@ -54,8 +51,6 @@ import fr.mcc.ginco.log.Log;
 @Service("thesaurusTypeService")
 public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 	
-	
-	@Log private Logger log;
 	    
 	@Inject
 	@Named("thesaurusTypeDAO")

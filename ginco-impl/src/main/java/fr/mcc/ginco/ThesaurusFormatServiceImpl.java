@@ -39,12 +39,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.log.Log;
 
 /**
  * @author dabel
@@ -53,8 +51,6 @@ import fr.mcc.ginco.log.Log;
 @Service("thesaurusFormatService")
 public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
 	
-	
-	@Log private Logger log;
 	    
 	@Inject
 	@Named("thesaurusFormatDAO")

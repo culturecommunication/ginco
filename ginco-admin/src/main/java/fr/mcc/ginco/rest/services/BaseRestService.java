@@ -34,23 +34,22 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.extjs.view.factory.ThesaurusTopNodeFactory;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListTopNode;
-import fr.mcc.ginco.log.Log;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.extjs.view.factory.ThesaurusTopNodeFactory;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListTopNode;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -61,10 +60,7 @@ import java.util.List;
 public class BaseRestService {
     @Inject
     @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
-
-    @Log 
-    private Logger logger;
+    private IThesaurusService thesaurusService;  
 
     /**
      * Public method used to get list of all existing Thesaurus objects
