@@ -35,6 +35,7 @@
 		<maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
 		<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
 		<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
+		<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
 	</properties>
 
 	<profiles>
@@ -46,7 +47,8 @@
 				<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
 				<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
 				<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
-				<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>				
+				<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
+				<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>							
 			</properties>
 		</profile>
 		<profile>
@@ -57,7 +59,8 @@
 				<cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
 				<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
 				<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
-				<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>				
+				<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
+				<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
 			</properties>
 		</profile>
 	</profiles>
@@ -274,12 +277,12 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>src/main/resources</directory>				
 				<filtering>true</filtering>
 				<includes>
-					<include>**/*.xml</include>
+					<include>**/*.xml</include>					
 				</includes>
-			</resource>
+			</resource>			
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>false</filtering>

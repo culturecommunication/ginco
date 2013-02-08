@@ -42,30 +42,37 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-	</dependencies>	
+	</dependencies>
 	<build>
-	   <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-        </resources>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/webapp</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.jsp</include>
+				</includes>
+			</resource>
+		</resources>
 		<finalName>${finalName}</finalName>
-        <plugins>
-	        <plugin>
+		<plugins>
+			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
 				<version>2.1.4</version>
 				<executions>
-				    <execution>
-				        <goals>
-				            <goal>revision</goal>
-				         </goals>
-				    </execution>
+					<execution>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
 				</executions>
 				<configuration>
 					<prefix>git</prefix>
@@ -73,9 +80,25 @@
 					<generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webResources>
+						<resource>
+							<filtering>true</filtering>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>**/*.jsp</include>
+								<!-- include any other file types you want to filter -->
+							</includes>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
 		</plugins>
 		<pluginManagement>
-			<plugins>			
+			<plugins>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.0</version>
@@ -102,7 +125,7 @@
 							<timeout>60000</timeout>
 						</container>
 						<configuration>
-							<type>runtime</type>							
+							<type>runtime</type>
 							<properties>
 								<cargo.datasource.datasource />
 								<cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
@@ -113,8 +136,8 @@
 						<deployables>
 							<deployable>
 								<location>${project.build.directory}/${finalName}.war</location>
-								<type>war</type>	
-							</deployable>							
+								<type>war</type>
+							</deployable>
 						</deployables>
 					</configuration>
 				</plugin>
