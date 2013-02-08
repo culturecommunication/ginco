@@ -61,21 +61,17 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Override
 	public Thesaurus getThesaurusById(String id) {
-		log.info("Trying to get Thesaurus with id = " + id);
         return thesaurusDAO.getById(id);
 	}
 
     @Override
     public List<Thesaurus> getThesaurusList() {
-        log.info("List of all Thesaurus was demanded.");
         return thesaurusDAO.findAll();
     }
 
     @Override
     public ServiceCRUDResults updateThesaurus(Thesaurus object) {
-        log.debug("updateThesaurus method called");
         if(thesaurusDAO.update(object) != null) {
-            thesaurusDAO.flush();
             return ServiceCRUDResults.SUCCESS;
         }
         return ServiceCRUDResults.FAILURE;

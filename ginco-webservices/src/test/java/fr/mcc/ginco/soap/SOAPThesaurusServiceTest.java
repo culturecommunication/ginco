@@ -34,11 +34,9 @@
  */
 package fr.mcc.ginco.soap;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import fr.mcc.ginco.utils.DateUtil;
 import junit.framework.Assert;
 import junitx.framework.ListAssert;
 
@@ -83,8 +81,11 @@ public class SOAPThesaurusServiceTest {
 		Assert.assertEquals("mock1", fullThesaurus.getIdentifier());
 		Assert.assertEquals("Fake Contributor", fullThesaurus.getContributor());
 		Assert.assertEquals("Fake Coverage", fullThesaurus.getCoverage());
-		Assert.assertEquals("Fake Created", fullThesaurus.getCreated());
-		Assert.assertEquals("Fake Date", fullThesaurus.getDate());
+        Calendar gregCalendar = new GregorianCalendar();
+        gregCalendar.setTime(DateUtil.dateFromString("2013-02-15 02:02:02"));
+		Assert.assertEquals(DateUtil.toString(gregCalendar.getTime()), fullThesaurus.getCreated());
+
+		Assert.assertEquals(DateUtil.toString(gregCalendar.getTime()), fullThesaurus.getDate());
 		Assert.assertEquals("Fake Description", fullThesaurus.getDescription());
 		List<String> expectedLanguages = new ArrayList<String>();
 		expectedLanguages.add("fra");
@@ -179,8 +180,11 @@ public class SOAPThesaurusServiceTest {
 		Mockito.when(mockedThesaurus.getContributor()).thenReturn(
 				"Fake Contributor");
 		Mockito.when(mockedThesaurus.getCoverage()).thenReturn("Fake Coverage");
-		Mockito.when(mockedThesaurus.getCreated()).thenReturn("Fake Created");
-		Mockito.when(mockedThesaurus.getDate()).thenReturn("Fake Date");
+
+        Calendar gregCalendar = new GregorianCalendar();
+        gregCalendar.setTime(DateUtil.dateFromString("2013-02-15 02:02:02"));
+		Mockito.when(mockedThesaurus.getCreated()).thenReturn(gregCalendar.getTime());
+		Mockito.when(mockedThesaurus.getDate()).thenReturn(gregCalendar.getTime());
 		Mockito.when(mockedThesaurus.getDescription()).thenReturn(
 				"Fake Description");
 		Set<Language> mockedLanguages = getMockedLanguages();

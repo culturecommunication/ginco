@@ -52,14 +52,6 @@ public class ThesaurusServiceTest extends BaseServiceTest {
     private IThesaurusService thesaurusService;
 
     @Test
-    public final void testsetParam() {
-        String parameter = "toto";
-        String expectedResponse = "Param id = " + parameter;
-        String actualResponse = thesaurusService.setParam(parameter);
-        Assert.assertEquals("Object returned unexpected reponse while passing param to him !", expectedResponse, actualResponse);
-    }
-    
-    @Test
     public final void testGetThesaurusById() {
     	String idThesaurus = "0";
     	String expectedResponse = "test";
@@ -88,16 +80,6 @@ public class ThesaurusServiceTest extends BaseServiceTest {
         Integer expectedThesaurusListSize = 3;
         Integer actualThesaurusListSize = thesaurusService.getThesaurusList().size();
         Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
-    }
-
-    @Test
-    public final void testUpateThesaurus() {
-        Thesaurus test = testVocabulary.getThesaurusById("0");
-        String old = test.getTitle();
-        test.setTitle("trololo");
-        testVocabulary.updateThesaurus(test);
-        Thesaurus test2 = testVocabulary.getThesaurusById("0");
-        Assert.assertEquals("Not changed title !!", test2.getTitle(), "trololo");
     }
 
 	@Override

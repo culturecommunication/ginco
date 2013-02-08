@@ -34,15 +34,22 @@
  */
 package fr.mcc.ginco.utils;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Util desined to deal with Date/String/Timestamp convertions.
+ */
 public class DateUtil {
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * Converts Date to String.
+     * @param date object to convert.
+     * @return String in format yyyy-MM-dd HH:mm:ss.
+     */
     public static String toString(Date date) {
         if(date != null) {
             return formatter.format(date);
@@ -50,21 +57,11 @@ public class DateUtil {
         return null;
     }
 
-    public static Timestamp toTimestamp(Date date) {
-        if(date != null) {
-            return new Timestamp(date.getTime());
-        }
-        return null;
-    }
-
-    public static Timestamp timestampFromString(String date) {
-        Date dateParsed = dateFromString(date);
-        if(date != null) {
-            return new Timestamp(dateParsed.getTime());
-        }
-        return null;
-    }
-
+    /**
+     * Parse String to Date object.
+     * @param date String in format yyyy-MM-dd HH:mm:ss.
+     * @return Date object or {@code null} if wrong format.
+     */
     public static Date dateFromString(String date) {
         try {
             return formatter.parse(date);
@@ -73,10 +70,10 @@ public class DateUtil {
         }
     }
 
-    public static Timestamp nowTimestamp() {
-        return new Timestamp(GregorianCalendar.getInstance().getTime().getTime());
-    }
-
+    /**
+     * Get current time.
+     * @return Date object.
+     */
     public static Date nowDate() {
         return GregorianCalendar.getInstance().getTime();
     }

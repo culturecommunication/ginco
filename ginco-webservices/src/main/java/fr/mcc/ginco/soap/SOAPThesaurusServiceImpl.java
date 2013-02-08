@@ -46,6 +46,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.data.FullThesaurus;
 import fr.mcc.ginco.data.ReducedThesaurus;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This class is the implementation of all SOAP services related to thesaurus objects
@@ -90,13 +91,13 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 		FullThesaurus fullThesaurus = new FullThesaurus();
 		fullThesaurus.setContributor(thesaurus.getContributor());
 		fullThesaurus.setCoverage(thesaurus.getCoverage());
-		fullThesaurus.setCreated(thesaurus.getCreated());
+		fullThesaurus.setCreated(DateUtil.toString(thesaurus.getCreated()));
 		if (thesaurus.getCreator() != null) {
 			fullThesaurus.setCreatorName(thesaurus.getCreator().getName());
 			fullThesaurus.setCreatorHomepage(thesaurus.getCreator()
 					.getHomepage());
 		}
-		fullThesaurus.setDate(thesaurus.getDate());
+		fullThesaurus.setDate(DateUtil.toString(thesaurus.getDate()));
 		fullThesaurus.setDescription(thesaurus.getDescription());
 		if (thesaurus.getFormat() != null) {
 			fullThesaurus.setFormat(thesaurus.getFormat().getLabel());

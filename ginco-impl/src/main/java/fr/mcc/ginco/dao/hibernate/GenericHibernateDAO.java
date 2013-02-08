@@ -40,15 +40,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.log.Log;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 
 import fr.mcc.ginco.dao.IGenericDAO;
-import org.slf4j.Logger;
 
 public class GenericHibernateDAO<T, ID extends Serializable> implements IGenericDAO<T, ID> {
 

@@ -57,7 +57,6 @@ import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusFormatService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTypeService;
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.log.Log;
@@ -182,7 +181,7 @@ public class ThesaurusRestService {
         Thesaurus hibernateRes = thesaurusService.getThesaurusById(source.getId());
         hibernateRes.setContributor(source.getContributor());
         hibernateRes.setCoverage(source.getCoverage());
-        hibernateRes.setDate(DateUtil.nowTimestamp());
+        hibernateRes.setDate(DateUtil.nowDate());
         hibernateRes.setDescription(source.getDescription());
         hibernateRes.setPublisher(source.getPublisher());
         hibernateRes.setRelation(source.getRelation());
