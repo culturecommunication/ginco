@@ -33,6 +33,40 @@
 			<value>0</value>
 			<value></value>
 		</row>
+		<row>
+			<value>1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>0</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>1</value>
+			<value>0</value>
+			<value></value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>test2</value>
+			<value>test2</value>
+			<value>test2</value>
+			<value>test2</value>
+			<value>0</value>
+			<value>test2</value>
+			<value>test2</value>
+			<value>test2</value>
+			<value>test2</value>
+			<value>test2</value>
+			<value>test2</value>
+			<value>1</value>
+			<value>0</value>
+			<value></value>
+		</row>
 	</table>
 
     <table name="thesaurus_format">
