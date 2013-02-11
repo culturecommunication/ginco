@@ -60,9 +60,9 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListTopNode;
 public class BaseRestService {
     @Inject
     @Named("thesaurusService")
-    private IThesaurusService thesaurusService;  
+    private IThesaurusService thesaurusService;
 
-    /**
+	/**
      * Public method used to get list of all existing Thesaurus objects
      * in database.
      *
@@ -80,4 +80,10 @@ public class BaseRestService {
         }
         return result;
     }
+    
+
+    public void setThesaurusService(IThesaurusService thesaurusService) {
+		this.thesaurusService = thesaurusService;
+	}
+    
 }
