@@ -50,8 +50,7 @@
                 <value>hibernate/ThesaurusFormat.hbm.xml</value>
                 <value>hibernate/LanguagesIso639.hbm.xml</value>
                 <value>hibernate/ThesaurusOrganization.hbm.xml</value>
-                <!--
-                     <value>hibernate/ThesaurusVersionHistory.hbm.xml</value> -->
+                <value>hibernate/ThesaurusVersionHistory.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">

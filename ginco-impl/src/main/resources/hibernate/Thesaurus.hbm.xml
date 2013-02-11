@@ -21,11 +21,11 @@
 		<many-to-one name="format" lazy="false" />
 		<many-to-one name="type" lazy="false" /> 
 		<many-to-one name="creator" lazy="false"/>
-		<!-- 
+		
 		<set name="versions">
 			<key column="identifier" />
 			<one-to-many class="ThesaurusVersionHistory" />
-		</set>-->
+		</set>
 
 		<set name="lang" table="thesaurus_languages">
 			<key column="thesaurus_identifier" />

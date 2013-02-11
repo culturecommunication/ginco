@@ -59,6 +59,7 @@ public class Thesaurus implements Serializable {
     private ThesaurusType type;
     private ThesaurusOrganization creator;
     private Set<Language> lang = new HashSet<Language>();
+    private Set<ThesaurusVersionHistory> versions;
 
     public Thesaurus() {
     }
@@ -212,4 +213,14 @@ public class Thesaurus implements Serializable {
     public void setLang(Set<Language> lang) {
         this.lang = lang;
     }
+    
+    @JsonIgnore
+    public Set<ThesaurusVersionHistory> getVersions() {
+                return versions;
+        }
+
+        public void setVersions(Set<ThesaurusVersionHistory> versions) {
+                this.versions = versions;
+        }
+
 }
