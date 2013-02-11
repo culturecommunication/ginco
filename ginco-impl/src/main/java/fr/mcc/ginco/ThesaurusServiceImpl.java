@@ -53,8 +53,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("thesaurusService")
 public class ThesaurusServiceImpl implements IThesaurusService {
 
-    @Log private Logger log;
-    
     @Inject
     @Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;

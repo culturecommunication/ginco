@@ -55,9 +55,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("thesaurusFormatService")
 public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
 	
-	
-	@Log private Logger log;
-	    
 	@Inject
 	@Named("thesaurusFormatDAO")
     private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;

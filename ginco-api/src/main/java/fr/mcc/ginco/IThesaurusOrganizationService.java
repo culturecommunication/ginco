@@ -47,8 +47,8 @@ public interface IThesaurusOrganizationService {
      * Get single object by its {@link fr.mcc.ginco.beans.ThesaurusOrganization#getName()}
      * and {@link fr.mcc.ginco.beans.ThesaurusOrganization#getHomepage()}.
      * @param name value of property.
-     * @param URL value of property.
+     * @param url value of property.
      * @return {@code null} if not found; object otherwise.
      */
-    ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String URL);
+    ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String url);
 }

@@ -51,9 +51,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("languagesService")
 public class LanguagesServiceImpl implements ILanguagesService {
 	
-	
-	@Log private Logger log;
-	    
 	@Inject
 	@Named("languagesDAO")
     private ILanguageDAO languagesDAO;
