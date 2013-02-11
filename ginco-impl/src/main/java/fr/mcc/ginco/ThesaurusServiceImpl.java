@@ -54,8 +54,6 @@ import fr.mcc.ginco.log.Log;
 @Service("thesaurusService")
 public class ThesaurusServiceImpl implements IThesaurusService {
 
-    @Log private Logger log;
-    
     @Inject
     @Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;

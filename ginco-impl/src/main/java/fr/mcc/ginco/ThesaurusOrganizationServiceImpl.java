@@ -48,9 +48,7 @@ import java.util.List;
 @Transactional
 @Service("thesaurusOrganizationService")
 public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationService {
-    @Log
-    private Logger log;
-
+	
     @Inject
     @Named("thesaurusOrganizationDAO")
     private IGenericDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
@@ -60,10 +58,10 @@ public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationS
      * @see IThesaurusOrganizationService#getThesaurusOrganizationByNameAndURL(String, String)
      */
     @Override
-    public ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String URL) {
+    public ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String url) {
         List<ThesaurusOrganization> all = thesaurusOrganizationDAO.findAll();
         for(ThesaurusOrganization organization : all) {
-            if (organization.getHomepage().equals(URL) && organization.getName().equals(name)) {
+            if (organization.getHomepage().equals(url) && organization.getName().equals(name)) {
                 return organization;
             }
         }

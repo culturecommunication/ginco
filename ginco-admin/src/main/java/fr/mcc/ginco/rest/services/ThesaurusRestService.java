@@ -149,8 +149,7 @@ public class ThesaurusRestService {
 	public ExtJsonFormLoadData<List<Language> > getTopLanguages() {
 		logger.info("Getting Top Languages");
 		List<Language> topLanguages = languagesService.getTopLanguagesList();
-		ExtJsonFormLoadData<List<Language> > extTopLanguages = new  ExtJsonFormLoadData<List<Language> > (topLanguages);
-		return extTopLanguages;
+		return new  ExtJsonFormLoadData<List<Language> > (topLanguages);
 	}
 	
 	/**
