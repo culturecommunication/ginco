@@ -43,7 +43,7 @@ public class ThesaurusVersionHistory implements Serializable, IBaseBean {
     private  String versionNote;
     private Boolean currentVersion;
     private Boolean thisVersion;
-    private String thesaurusIdentifier;
+    private Thesaurus thesaurusIdentifier;
 
     public ThesaurusVersionHistory() {
 		super();
@@ -51,7 +51,7 @@ public class ThesaurusVersionHistory implements Serializable, IBaseBean {
 
 	public ThesaurusVersionHistory(String identifier, Date date,
 			String versionVote, Boolean currentVersion, Boolean thisVersion,
-			String thesaurusIdentifier) {
+			Thesaurus thesaurusIdentifier) {
 		super();
 		this.identifier = identifier;
 		this.date = date;
@@ -101,11 +101,11 @@ public class ThesaurusVersionHistory implements Serializable, IBaseBean {
         this.thisVersion = thisVersion;
     }
 
-    public String getThesaurusIdentifier() {
+    public Thesaurus getThesaurusIdentifier() {
         return thesaurusIdentifier;
     }
 
-    public void setThesaurusIdentifier(String thesaurusIdentifier) {
+    public void setThesaurusIdentifier(Thesaurus thesaurusIdentifier) {
         this.thesaurusIdentifier = thesaurusIdentifier;
     }
 

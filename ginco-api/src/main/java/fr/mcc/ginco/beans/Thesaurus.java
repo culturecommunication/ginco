@@ -42,180 +42,191 @@ import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-public class Thesaurus implements Serializable,IBaseBean {
-    private String identifier;
-    private String contributor;
-    private String coverage;
-    private Date date;
-    private String description;
-    private String publisher;
-    private String relation;
-    private String rights;
-    private String source;
-    private String subject;
-    private String title;
-    private Date created;
-    private ThesaurusFormat format;
-    private ThesaurusType type;
-    private ThesaurusOrganization creator;
-    private Set<Language> lang = new HashSet<Language>();
+public class Thesaurus implements Serializable, IBaseBean {
+	private String identifier;
+	private String contributor;
+	private String coverage;
+	private Date date;
+	private String description;
+	private String publisher;
+	private String relation;
+	private String rights;
+	private String source;
+	private String subject;
+	private String title;
+	private Date created;
+	private ThesaurusFormat format;
+	private ThesaurusType type;
+	private ThesaurusOrganization creator;
+	private Set<Language> lang = new HashSet<Language>();
+	private Set<ThesaurusVersionHistory> versions;
 
-    public Thesaurus() {
-    }
+	public Thesaurus() {
+	}
 
-    public Thesaurus(String identifier, String contributor, String coverage,
-                     Date date, String description, String publisher, String relation,
-                     String rights, String source, String subject, String title,
-                     Date created, ThesaurusFormat format, ThesaurusType type, ThesaurusOrganization creator) {
-        this.identifier = identifier;
-        this.contributor = contributor;
-        this.coverage = coverage;
-        this.date = new Timestamp(date.getTime());
-        this.description = description;
-        this.publisher = publisher;
-        this.relation = relation;
-        this.rights = rights;
-        this.source = source;
-        this.subject = subject;
-        this.title = title;
-        this.created = new Timestamp(created.getTime());
-        this.format = format;
-        this.type = type;
-        this.creator = creator;
-    }
+	public Thesaurus(String identifier, String contributor, String coverage,
+			Date date, String description, String publisher, String relation,
+			String rights, String source, String subject, String title,
+			Date created, ThesaurusFormat format, ThesaurusType type,
+			ThesaurusOrganization creator) {
+		this.identifier = identifier;
+		this.contributor = contributor;
+		this.coverage = coverage;
+		this.date = new Timestamp(date.getTime());
+		this.description = description;
+		this.publisher = publisher;
+		this.relation = relation;
+		this.rights = rights;
+		this.source = source;
+		this.subject = subject;
+		this.title = title;
+		this.created = new Timestamp(created.getTime());
+		this.format = format;
+		this.type = type;
+		this.creator = creator;
+	}
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public String getContributor() {
-        return contributor;
-    }
+	public String getContributor() {
+		return contributor;
+	}
 
-    public void setContributor(String contributor) {
-        this.contributor = contributor;
-    }
+	public void setContributor(String contributor) {
+		this.contributor = contributor;
+	}
 
-    public String getCoverage() {
-        return coverage;
-    }
+	public String getCoverage() {
+		return coverage;
+	}
 
-    public void setCoverage(String coverage) {
-        this.coverage = coverage;
-    }
+	public void setCoverage(String coverage) {
+		this.coverage = coverage;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getPublisher() {
-        return publisher;
-    }
+	public String getPublisher() {
+		return publisher;
+	}
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
 
-    public String getRelation() {
-        return relation;
-    }
+	public String getRelation() {
+		return relation;
+	}
 
-    public void setRelation(String relation) {
-        this.relation = relation;
-    }
+	public void setRelation(String relation) {
+		this.relation = relation;
+	}
 
-    public String getRights() {
-        return rights;
-    }
+	public String getRights() {
+		return rights;
+	}
 
-    public void setRights(String rights) {
-        this.rights = rights;
-    }
+	public void setRights(String rights) {
+		this.rights = rights;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public String getSubject() {
-        return subject;
-    }
+	public String getSubject() {
+		return subject;
+	}
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public Date getCreated() {
-        return created;
-    }
+	public Date getCreated() {
+		return created;
+	}
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 
-    public ThesaurusFormat getFormat() {
-        return format;
-    }
+	public ThesaurusFormat getFormat() {
+		return format;
+	}
 
-    public void setFormat(ThesaurusFormat format) {
-        this.format = format;
-    }
+	public void setFormat(ThesaurusFormat format) {
+		this.format = format;
+	}
 
-    public ThesaurusType getType() {
-        return type;
-    }
+	public ThesaurusType getType() {
+		return type;
+	}
 
-    public void setType(ThesaurusType type) {
-        this.type = type;
-    }
+	public void setType(ThesaurusType type) {
+		this.type = type;
+	}
 
-    public ThesaurusOrganization getCreator() {
-        return creator;
-    }
+	public ThesaurusOrganization getCreator() {
+		return creator;
+	}
 
-    public void setCreator(ThesaurusOrganization creator) {
-        this.creator = creator;
-    }
+	public void setCreator(ThesaurusOrganization creator) {
+		this.creator = creator;
+	}
 
-    @JsonIgnore
-    public Set<Language> getLang() {
-        return lang;
-    }
+	@JsonIgnore
+	public Set<Language> getLang() {
+		return lang;
+	}
 
-    public void setLang(Set<Language> lang) {
-        this.lang = lang;
-    }
+	public void setLang(Set<Language> lang) {
+		this.lang = lang;
+	}
 
 	@Override
 	public String getId() {
 		return identifier;
 	}
-    
+
+	@JsonIgnore
+	public Set<ThesaurusVersionHistory> getVersions() {
+		return versions;
+	}
+
+	public void setVersions(Set<ThesaurusVersionHistory> versions) {
+		this.versions = versions;
+	}
+
 }
