@@ -43,6 +43,9 @@ import java.util.GregorianCalendar;
  * Util desined to deal with Date/String/Timestamp convertions.
  */
 public class DateUtil {
+	
+	private DateUtil(){};
+	
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
