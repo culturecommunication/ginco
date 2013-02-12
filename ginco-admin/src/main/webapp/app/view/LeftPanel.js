@@ -2,6 +2,7 @@ Ext.define('HadocApp.view.LeftPanel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.leftPanel',
     xThesaurusLabel: "Thesaurus Explorer",
+    xRefreshBtnTooltip: "Refresh explorer",
     localized: true,
     frame: false,
     width: 250,
@@ -30,8 +31,13 @@ Ext.define('HadocApp.view.LeftPanel', {
                     useArrows: true,
                     viewConfig: {
                     	loadMask : true
-                    }
-                }
+                    },
+	                tools:[{
+	                    type:'refresh',
+	                    tooltip: this.xRefreshBtnTooltip,
+	                }]
+	          }
+                
             ]
         });
 

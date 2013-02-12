@@ -4,6 +4,7 @@ Ext.define('HadocApp.controller.MainTreeController', {
     views: [
         'LeftPanel'
     ],
+    stores : ['MainTreeStore'],
 
     onNodeDblClick: function(tree, record, item, index, e, eOpts) {
     	this.openThesaurusTab(record);
@@ -51,11 +52,18 @@ Ext.define('HadocApp.controller.MainTreeController', {
     	});
 
     },
+    onRefreshBtnClick : function () {
+    	var MainTreeStore = this.getMainTreeStoreStore();
+    	MainTreeStore.load();
+    },
     init: function(application) {
         this.control({
             "#mainTreeView": {
                 beforeitemdblclick: this.onNodeDblClick,
-                afterrender : this.onTreeRender,
+                afterrender : this.onTreeRender
+            },
+            '#mainTreeView tool[type="refresh"]' : {
+            	click : this.onRefreshBtnClick
             }
         });
     }
