@@ -73,6 +73,11 @@ Ext.define('HadocApp.model.ThesaurusModel', {
     ],
 
     proxy: {
+    	api: {
+    	    create  : 'services/ui/thesaurusservice/updateVocabulary',
+    	    read    : 'services/ui/thesaurusservice/getVocabulary',
+    	    update  : 'services/ui/thesaurusservice/updateVocabulary',
+    	},
         type: 'ajax',
         url: 'services/ui/thesaurusservice/getVocabulary',
         reader: {

@@ -71,11 +71,9 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
     @Override
     @GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUS)
-    public ServiceCRUDResults updateThesaurus(Thesaurus object, IUser user) {
-        if(thesaurusDAO.update(object) != null) {
-            return ServiceCRUDResults.SUCCESS;
-        }
-        return ServiceCRUDResults.FAILURE;
+    public Thesaurus updateThesaurus(Thesaurus object, IUser user) {
+    	Thesaurus result = thesaurusDAO.update(object);
+        return result;
     }
     
 }

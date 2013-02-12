@@ -66,5 +66,7 @@ public interface IThesaurusService {
     /**
      * Update a single object
      */
-    ServiceCRUDResults updateThesaurus(Thesaurus object, IUser user);
+
+    Thesaurus updateThesaurus(Thesaurus object, IUser user);
+
 }

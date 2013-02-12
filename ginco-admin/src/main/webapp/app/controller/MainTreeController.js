@@ -34,8 +34,9 @@ Ext.define('HadocApp.controller.MainTreeController',
 			},
 			onEnterKey : function(theTree) {
 				var node = theTree.getSelectionModel().getSelection();
-				if (node.length > 0)
-					this.openThesaurusTab(node[0]);
+				if (node.length > 0) {
+					this.openThesaurusTab(node[0]); 
+				}
 
 			},
 			onTreeRender : function(theTree) {
