@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -64,6 +65,7 @@ import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -221,8 +223,28 @@ public class ThesaurusRestService {
         hibernateRes.setTitle(source.getTitle());
         hibernateRes.setFormat(thesaurusFormatService.getThesaurusFormatById(source.getFormat()));
         hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source.getType()));
-        hibernateRes.setCreator(thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(),
-                source.getCreatorHomepage()));
+        
+        if (thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(), source.getCreatorHomepage()) == null)
+        {
+        	//ThesaurusOrganization given by the client is empty, so we drop any reference to ThesaurusOrganization
+        	if (source.getCreatorName().isEmpty() && source.getCreatorHomepage().isEmpty()){
+        		hibernateRes.setCreator(null);
+        	}
+        	//ThesaurusOrganization given by the client doesn't yet exist - need to create it (only if service or url <> null)
+        	if (!source.getCreatorName().isEmpty() || !source.getCreatorHomepage().isEmpty()){
+        	ThesaurusOrganization myThesaurusOrganization = new ThesaurusOrganization();
+        	myThesaurusOrganization.setName(source.getCreatorName());
+        	myThesaurusOrganization.setHomepage(source.getCreatorHomepage());
+        	thesaurusOrganizationService.setThesaurusOrganizationPersistent(myThesaurusOrganization);
+        	hibernateRes.setCreator(myThesaurusOrganization);
+        	logger.info("Creating a new Thesaurus Organization");
+        	}
+        } else
+        {
+        	//Getting an existing ThesaurusOrganization
+        	hibernateRes.setCreator(thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(), source.getCreatorHomepage()));
+        	logger.info("Getting an existing Thesaurus Organization");
+        }
 
         List<String> languages = source.getLanguages();
         Set<Language> realLanguages = new HashSet<Language>();

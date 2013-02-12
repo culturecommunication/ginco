@@ -39,7 +39,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +47,6 @@ import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.enums.ServiceCRUDResults;
 import fr.mcc.ginco.journal.GincoLog;
-import fr.mcc.ginco.log.Log;
 
 @Transactional
 @Service("thesaurusService")
@@ -76,4 +74,5 @@ public class ThesaurusServiceImpl implements IThesaurusService {
         }
         return ServiceCRUDResults.FAILURE;
     }
+    
 }
