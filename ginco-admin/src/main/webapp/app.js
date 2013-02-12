@@ -53,7 +53,6 @@ Ext.application({
         'GlobalTabPanelController'
     ],
     init: function(){
-    	//Ext.getBody().mask('Loading...');
     },
     launch: function() {
         // Setup a task to fadeOut the splashscreen
