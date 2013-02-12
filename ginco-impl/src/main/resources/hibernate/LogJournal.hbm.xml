@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="LogJournal" table="log_journal">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+			<generator class="sequence">
+					<param name="sequence">log_journal_identifier_seq</param>
+			</generator>
+		</id>
+		
+		<property name="action" not-null="true" />		
+		<property name="author" not-null="true" />		
+		<property name="date" not-null="true" type="timestamp" />		
+		<property name="entityId" not-null="true" column="entityid"/>		
+		<property name="entityType" not-null="true" column="entitytype"/>				
+	</class>
+</hibernate-mapping>

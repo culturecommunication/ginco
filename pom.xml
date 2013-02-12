@@ -25,6 +25,7 @@
 		<javax.inject.version>1</javax.inject.version>
 		<logback.version>1.0.9</logback.version>
 		<org.slf4j.version>1.6.6</org.slf4j.version>
+		<aspectj.version>1.7.1</aspectj.version>
 		<!-- cargo deployment - default development configuration Define a new 
 			profile n your settings.xml file if you have another development configuration -->
 		<tomcat.base>http://hadoc.lxc:80/</tomcat.base>
@@ -180,6 +181,11 @@
 				<version>${org.springframework.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${org.springframework.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>fr.smile.mcc.ginco</groupId>
 				<artifactId>ginco-api</artifactId>
 				<version>${project.version}</version>
@@ -272,6 +278,16 @@
 				<artifactId>junit-addons</artifactId>
 				<version>${junit.addons.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>

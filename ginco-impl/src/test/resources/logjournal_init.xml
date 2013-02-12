@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<table name="log_journal">
+		<column>identifier</column>
+		<column>action</column>
+		<column>author</column>
+		<column>date</column>
+		<column>entityid</column>
+		<column>entitytype</column>
+		<row>
+			<value>0</value>
+			<value>CREATE</value>
+			<value>unknown</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>http://www.culturecommunication.gouv.fr/thesaurus</value>
+			<value>Thesaurus</value>
+		</row>
+	</table>
+
+</dataset>

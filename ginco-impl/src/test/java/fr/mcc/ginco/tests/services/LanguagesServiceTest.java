@@ -39,6 +39,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.tests.BaseServiceTest;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -83,7 +85,7 @@ public class LanguagesServiceTest extends BaseServiceTest {
   	@Test
       public final void testCountLanguages() {
           Long actualResponse = languagesService.getLanguageCount();
-  		Assert.assertEquals("Error counting Languages", 6, actualResponse.longValue());
+  		  Assert.assertEquals("Error counting Languages", 6, actualResponse.longValue());
       }
 	
 	@Override

@@ -32,40 +32,46 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.services;
+package fr.mcc.ginco;
 
-import java.util.List;
+import java.sql.Timestamp;
+import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.tests.BaseServiceTest;
+import fr.mcc.ginco.beans.LogJournal;
+import fr.mcc.ginco.dao.ILogJournalDAO;
 
-@TransactionConfiguration
+/**
+ * Implementation of the ILogJournalService with storage in the database
+ *
+ */
+@Service("logJournalService")
 @Transactional
-public class ThesaurusFormatServiceTest extends BaseServiceTest {
-	
+public class LogJournalServiceImpl implements ILogJournalService {
+	    
+	/**
+	 * DAO to access log_journal table
+	 */
 	@Inject
-	private IThesaurusFormatService thesaurusFormatService;	
-	
-	@Test
-    public final void testGetThesaurusFormatList() {
-        List<ThesaurusFormat> actualResponse = thesaurusFormatService.getThesaurusFormatList();
-		Assert.assertEquals("Error fetching all ThesaurusFormat", 3, actualResponse.size());
-		Assert.assertEquals("Error fetching name of second ThesaurusFormat (expecting CSV))", "CSV", actualResponse.get(1).getLabel());
+	@Named("logJournalDAO")
+    private ILogJournalDAO logJournalDAO;
 
-    }
-	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.ILogJournalService#addLogJournalEntry(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
-	public String  getXmlDataFileInit() {
-		return "/thesaurusformat_init.xml";
-		
-	}
-
+	public void addLogJournalEntry(String action, String entityId, String entityType, String author ) {		
+		LogJournal logJournal = new LogJournal();
+		logJournal.setAction(action);
+		logJournal.setAuthor(author);
+		logJournal.setDate(new Timestamp(GregorianCalendar.getInstance().getTimeInMillis()));
+		logJournal.setEntityId(entityId);
+		logJournal.setEntityType(entityType);
+		logJournalDAO.insertLogJournal(logJournal);
+	}		
 }

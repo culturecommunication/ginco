@@ -41,7 +41,7 @@ import java.util.Set;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 @SuppressWarnings("serial")
-public class ThesaurusOrganization implements Serializable {
+public class ThesaurusOrganization implements Serializable, IBaseBean {
 	private Integer identifier;
 	private String name;
 	private String homepage;
@@ -84,5 +84,10 @@ public class ThesaurusOrganization implements Serializable {
     public void setThesauruses(Set<Thesaurus> thesauruses) {
         this.thesauruses = thesauruses;
     }
+
+	@Override
+	public String getId() {
+		return Integer.toString(identifier);
+	}
 
 }

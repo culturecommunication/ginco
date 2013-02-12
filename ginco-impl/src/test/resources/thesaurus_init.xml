@@ -113,4 +113,13 @@
             <value>http://smile.fr</value>
         </row>
     </table>
+    
+    <table name="log_journal">
+		<column>identifier</column>
+		<column>action</column>
+		<column>author</column>		
+		<column>date</column>		
+		<column>entityid</column>		
+		<column>entitytype</column>	
+   </table>
 </dataset>

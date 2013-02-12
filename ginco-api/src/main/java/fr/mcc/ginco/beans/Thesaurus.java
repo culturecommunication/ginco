@@ -42,7 +42,7 @@ import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-public class Thesaurus implements Serializable {
+public class Thesaurus implements Serializable,IBaseBean {
     private String identifier;
     private String contributor;
     private String coverage;
@@ -212,4 +212,10 @@ public class Thesaurus implements Serializable {
     public void setLang(Set<Language> lang) {
         this.lang = lang;
     }
+
+	@Override
+	public String getId() {
+		return identifier;
+	}
+    
 }

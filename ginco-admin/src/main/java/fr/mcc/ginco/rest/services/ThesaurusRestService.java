@@ -34,32 +34,43 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.ws.WebServiceContext;
 
-import fr.mcc.ginco.*;
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
-import fr.mcc.ginco.utils.DateUtil;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusFormatService;
+import fr.mcc.ginco.IThesaurusOrganizationService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTypeService;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.users.SimpleUserImpl;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
@@ -70,7 +81,9 @@ import fr.mcc.ginco.log.Log;
 @Path("/thesaurusservice")
 @Produces({MediaType.APPLICATION_JSON})
 public class ThesaurusRestService {
-
+	@Resource
+    private WebServiceContext wsContext;
+	
 	@Inject
 	@Named("thesaurusTypeService")
 	private IThesaurusTypeService thesaurusTypeService;
@@ -170,8 +183,11 @@ public class ThesaurusRestService {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response putVocabularyById(@PathParam("id") String id, ThesaurusView thesaurusViewJAXBElement) {
         Thesaurus object = convert(thesaurusViewJAXBElement);
+        Principal principal = wsContext.getUserPrincipal();
+        IUser user = new SimpleUserImpl();
+        user.setName(principal.getName());        
         if(object != null) {
-            thesaurusService.updateThesaurus(object);
+            thesaurusService.updateThesaurus(object, user);
             return Response.ok().build();
         }
         return Response.notModified().build();

@@ -32,40 +32,66 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.services;
+package fr.mcc.ginco.tests;
 
-import java.util.List;
+import java.io.InputStream;
+import java.sql.SQLException;
 
 import javax.inject.Inject;
+import javax.sql.DataSource;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.dbunit.DatabaseUnitException;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.DatabaseDataSourceConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.XmlDataSet;
+import org.dbunit.operation.DatabaseOperation;
+import org.junit.After;
+import org.junit.Before;
 
-import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.tests.BaseServiceTest;
 
-@TransactionConfiguration
-@Transactional
-public class ThesaurusFormatServiceTest extends BaseServiceTest {
+public abstract class BaseServiceTest extends BaseTest {	
 	
 	@Inject
-	private IThesaurusFormatService thesaurusFormatService;	
+	private DataSource dataSourceTest;
 	
-	@Test
-    public final void testGetThesaurusFormatList() {
-        List<ThesaurusFormat> actualResponse = thesaurusFormatService.getThesaurusFormatList();
-		Assert.assertEquals("Error fetching all ThesaurusFormat", 3, actualResponse.size());
-		Assert.assertEquals("Error fetching name of second ThesaurusFormat (expecting CSV))", "CSV", actualResponse.get(1).getLabel());
+	private IDataSet dataset;
+	
 
-    }
+	@Before
+	public void handleSetUpOperation() throws Exception {
+		// init db
+		final IDatabaseConnection conn = new DatabaseDataSourceConnection(
+				dataSourceTest);
+		this.dataset = getDataset(getXmlDataFileInit());
+		try {
+			DatabaseOperation.CLEAN_INSERT.execute(conn, dataset);
+		} finally {
+			conn.close();
+		}
+	}
 	
-	@Override
-	public String  getXmlDataFileInit() {
-		return "/thesaurusformat_init.xml";
-		
+	@After
+	public void handleCleanOperation() throws Exception {
+		// init db
+		final IDatabaseConnection conn = new DatabaseDataSourceConnection(
+				dataSourceTest);
+		final IDataSet data = getDataset(getXmlDataFileInit());
+		try {
+			DatabaseOperation.DELETE_ALL.execute(conn, data);
+		} finally {
+			conn.close();
+		}
 	}
 
+	public IDataSet getDataset(String datasetPath) throws DataSetException {
+		InputStream is = BaseServiceTest.class
+				.getResourceAsStream(datasetPath);
+		return new XmlDataSet(is);
+	}
+
+	public abstract String getXmlDataFileInit();
+	
 }

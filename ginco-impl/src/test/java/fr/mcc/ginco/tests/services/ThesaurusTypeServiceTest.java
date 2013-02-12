@@ -45,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.tests.BaseServiceTest;
 
 @TransactionConfiguration
 @Transactional

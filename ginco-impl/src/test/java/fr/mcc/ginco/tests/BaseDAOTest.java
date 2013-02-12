@@ -34,19 +34,69 @@
  */
 package fr.mcc.ginco.tests;
 
+import java.io.InputStream;
+import java.sql.Connection;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.DatabaseDataSourceConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.XmlDataSet;
+import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.SessionFactory;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.junit.After;
+import org.junit.Before;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "classpath:applicationContext.xml",
-        "classpath*:applicationContext-*.xml"
-})
-public abstract class BaseTest extends AbstractTransactionalJUnit4SpringContextTests {	
+public abstract class BaseDAOTest extends BaseTest {
+
+	@Inject
+	@Named("gincoSessionFactory")
+	private SessionFactory gincoSessionFactory;
+
+	@Before
+	public void handleSetUpOperation() throws Exception {
+		// init db
+
+		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
+				gincoSessionFactory).getConnection();
+		final IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
+		final IDataSet dataset = getDataset(getXmlDataFileInit());
+		try {
+			DatabaseOperation.CLEAN_INSERT.execute(connection, dataset);
+		} finally {
+			connection.close();
+		}
+	}
+
+	@After
+	public void handleCleanOperation() throws Exception {
+		// init db
+		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
+				gincoSessionFactory).getConnection();
+		final IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
+		
+		final IDataSet data = getDataset(getXmlDataFileInit());
+		try {
+			DatabaseOperation.DELETE_ALL.execute(connection, data);
+		} finally {
+			connection.close();
+		}
+	}
+
+	public IDataSet getDataset(String datasetPath) throws DataSetException {
+		InputStream is = BaseDAOTest.class.getResourceAsStream(datasetPath);
+		return new XmlDataSet(is);
+	}
+
+	public SessionFactory getSessionFactory() {
+		return this.gincoSessionFactory;
+	}
+
+	public abstract String getXmlDataFileInit();
+
 }

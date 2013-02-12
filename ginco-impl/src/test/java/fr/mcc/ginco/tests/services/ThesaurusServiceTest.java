@@ -36,13 +36,20 @@ package fr.mcc.ginco.tests.services;
 
 import javax.inject.Inject;
 
-import fr.mcc.ginco.beans.Thesaurus;
+import org.dbunit.Assertion;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.enums.ServiceCRUDResults;
+import fr.mcc.ginco.tests.BaseServiceTest;
+import fr.mcc.ginco.users.SimpleUserImpl;
 
 @TransactionConfiguration
 @Transactional
@@ -80,6 +87,24 @@ public class ThesaurusServiceTest extends BaseServiceTest {
         Integer expectedThesaurusListSize = 3;
         Integer actualThesaurusListSize = thesaurusService.getThesaurusList().size();
         Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+    }
+    
+    @Test
+    public final void testUpdateThesaurus() throws Exception{
+        Integer expectedThesaurusListSize = 3;
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
+        th.setTitle("title");
+        IUser user = new SimpleUserImpl();
+        user.setName("user1");
+        ServiceCRUDResults actualThesaurusListSize = thesaurusService.updateThesaurus(th, user);
+       // Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+        
+        //Test the log_journal addition
+     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
+     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
+     	//Assert.assertEquals(1, databaseTableSize);
+        
     }
 
 	@Override

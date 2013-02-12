@@ -39,15 +39,16 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import fr.mcc.ginco.enums.ServiceCRUDResults;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.enums.ServiceCRUDResults;
+import fr.mcc.ginco.journal.GincoLog;
 import fr.mcc.ginco.log.Log;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service("thesaurusService")
@@ -70,7 +71,8 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     }
 
     @Override
-    public ServiceCRUDResults updateThesaurus(Thesaurus object) {
+    @GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUS)
+    public ServiceCRUDResults updateThesaurus(Thesaurus object, IUser user) {
         if(thesaurusDAO.update(object) != null) {
             return ServiceCRUDResults.SUCCESS;
         }
