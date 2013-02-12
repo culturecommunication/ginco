@@ -39,7 +39,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
@@ -50,10 +49,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.ws.WebServiceContext;
 
+import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -83,8 +83,8 @@ import fr.mcc.ginco.utils.DateUtil;
 @Path("/thesaurusservice")
 @Produces({MediaType.APPLICATION_JSON})
 public class ThesaurusRestService {
-	@Resource
-    private WebServiceContext wsContext;
+	@Context 
+	private MessageContext context;
 	
 	@Inject
 	@Named("thesaurusTypeService")
@@ -191,9 +191,9 @@ public class ThesaurusRestService {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response putVocabularyById(@PathParam("id") String id, ThesaurusView thesaurusViewJAXBElement) {
         Thesaurus object = convert(thesaurusViewJAXBElement);
-        Principal principal = wsContext.getUserPrincipal();
+        String principal = context.getHttpServletRequest().getRemoteAddr();
         IUser user = new SimpleUserImpl();
-        user.setName(principal.getName());        
+        user.setName(principal);        
         if(object != null) {
             thesaurusService.updateThesaurus(object, user);
             return Response.ok().build();

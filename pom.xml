@@ -37,6 +37,7 @@
 		<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
 		<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
 		<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
+		<servlet.api.version>2.5</servlet.api.version>
 	</properties>
 
 	<profiles>
@@ -292,6 +293,11 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>${aspectj.version}</version>
 		</dependency>
+		<dependency>
+      		<groupId>javax.servlet</groupId>
+      		<artifactId>servlet-api</artifactId>
+      		<version>${servlet.api.version}</version>
+    	</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
