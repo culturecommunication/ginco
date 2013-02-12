@@ -48,7 +48,7 @@ import fr.mcc.ginco.extjs.view.ThesaurusListNodeType;
  */
 public class ThesaurusListTopNode extends ThesaurusListBasicNode {
     public ThesaurusListTopNode(Thesaurus thesaurus) {
-        setExpanded(true);
+        setExpanded(false);
         setTitle(thesaurus.getTitle());
         setId(thesaurus.getIdentifier());
         setType(ThesaurusListNodeType.THESAURUS);

@@ -74,6 +74,6 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 
     public IGenericDAO<ThesaurusType, Integer> getThesaurusTypeDAO() {
 		return thesaurusTypeDAO;
-	}	
+	}
 
 }

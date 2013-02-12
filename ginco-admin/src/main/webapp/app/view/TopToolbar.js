@@ -16,6 +16,7 @@ Ext.define('HadocApp.view.TopToolbar', {
     xNewMenu_ConceptLabel: "Concept",
     xNewMenu_TermLabel: "Term",
     xNewMenu_GroupLabel: "Group of Concepts",
+    xHelpLabel: "Help",
     height: 64,
 
     initComponent: function () {
@@ -90,7 +91,7 @@ Ext.define('HadocApp.view.TopToolbar', {
                 },
                 {
                     xtype: 'buttongroup',
-                    title: 'Aide',
+                    title: me.xHelpLabel,
                     columns: 1,
                     items: [
                         {

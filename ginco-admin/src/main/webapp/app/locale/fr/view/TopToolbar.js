@@ -12,5 +12,6 @@
     xNewMenu_ConceptLabel: "Concept",
     xNewMenu_TermLabel: "Terme",
     xNewMenu_GroupLabel: "Groupe de Concepts",
-    xExportLabel: "Exports"
+    xExportLabel: "Exports",
+    xHelpLabel: "Aide"
 });

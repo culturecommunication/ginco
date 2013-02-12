@@ -44,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.enums.ServiceCRUDResults;
 import fr.mcc.ginco.journal.GincoLog;

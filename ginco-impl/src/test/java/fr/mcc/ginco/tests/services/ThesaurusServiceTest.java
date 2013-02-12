@@ -112,7 +112,7 @@ public class ThesaurusServiceTest extends BaseServiceTest {
         IUser user = new SimpleUserImpl();
         user.setName("test1");
         thesaurusService.updateThesaurus(newThesaurus, user);
-    }
+    }   
 
 	@Override
 	public String  getXmlDataFileInit() {
