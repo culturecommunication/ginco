@@ -49,7 +49,8 @@ Ext.application({
     controllers: [
         'TopToolbarController',
         'MainTreeController',
-        'ThesaurusFormController'
+        'ThesaurusFormController',
+        'GlobalTabPanelController'
     ],
     init: function(){
     	//Ext.getBody().mask('Loading...');

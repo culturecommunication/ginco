@@ -16,11 +16,6 @@ Ext.define('HadocApp.view.GlobalTabPanel', {
         var me = this;
 
         Ext.applyIf(me, {
-           /* items: [
-                    {
-                        xtype: 'thesaurusPanel'
-                    }
-            ]*/
         });
 
         me.callParent(arguments);

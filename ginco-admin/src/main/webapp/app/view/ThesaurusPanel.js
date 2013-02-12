@@ -50,6 +50,7 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                 	flex: 1,
                 	autoScroll: true,
                     pollForChanges : true,
+                    trackResetOnLoad : true,
                     defaults: {
                         anchor: '70%',
                         afterLabelTextTpl: new Ext.XTemplate('<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>', { disableFormats: true })
