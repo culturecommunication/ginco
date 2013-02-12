@@ -102,9 +102,9 @@ public class ThesaurusServiceTest extends BaseServiceTest {
         th.setTitle("title");
         IUser user = new SimpleUserImpl();
         user.setName("user1");
-        ServiceCRUDResults actualThesaurusListSize = thesaurusService.updateThesaurus(th, user);
+        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(th, user);
        // Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
-        
+        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);
         //Test the log_journal addition
      	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
      	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();

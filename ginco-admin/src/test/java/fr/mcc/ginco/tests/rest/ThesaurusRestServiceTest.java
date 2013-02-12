@@ -37,7 +37,7 @@ public class ThesaurusRestServiceTest {
 		thesaurusRestService.setThesaurusTypeService(getMockedIThesaurusTypeService());
 		
 		//Testing putVocabularyById method
-		thesaurusRestService.putVocabularyById("mock1", mockedThesaurusView1);
+		thesaurusRestService.updateVocabulary(mockedThesaurusView1);
 		
 		//DBUnit verification
 		//TODO IMPLEMENTATION

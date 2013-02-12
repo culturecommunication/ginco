@@ -194,7 +194,7 @@ public class ThesaurusRestService {
         IUser user = new SimpleUserImpl();
         user.setName(principal); 
         if(object != null) {
-        	Thesaurus result=thesaurusService.updateThesaurus(object);
+        	Thesaurus result=thesaurusService.updateThesaurus(object,user);
         	if (result!=null)
         	{
         		return new ThesaurusView(result);
