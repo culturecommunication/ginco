@@ -69,11 +69,9 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     }
 
     @Override
-    public ServiceCRUDResults updateThesaurus(Thesaurus object) {
-        if(thesaurusDAO.update(object) != null) {
-            return ServiceCRUDResults.SUCCESS;
-        }
-        return ServiceCRUDResults.FAILURE;
+    public Thesaurus updateThesaurus(Thesaurus object) {
+    	Thesaurus result = thesaurusDAO.update(object);
+        return result;
     }
     
 }

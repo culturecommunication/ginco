@@ -165,24 +165,32 @@ public class ThesaurusRestService {
         return new ThesaurusView(thesaurusService.getThesaurusById(id));
     }
 
+    /**
+     * Public method used to create or update {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object
+     * @param id {@link ThesaurusView} thesaurus JSON object send by extjs
+     *
+     * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} updated object in JSON format or
+     * {@code null} if not found
+     */
     @POST
-    @Path("/getVocabulary")
+    @Path("/updateVocabulary")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createVocabulary(ThesaurusView thesaurusViewJAXBElement) {
-        return putVocabularyById("-1", thesaurusViewJAXBElement);
+    public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
+    	Thesaurus object = convert(thesaurusViewJAXBElement);
+        if(object != null) {
+        	Thesaurus result=thesaurusService.updateThesaurus(object);
+        	if (result!=null)
+        	{
+        		return new ThesaurusView(result);
+        	} else 
+        	{
+        		logger.error("Failed to update thesaurus");
+        		return null;
+        	}
+        }
+        return null;
     }
 
-    @PUT
-    @Path("/getVocabulary/{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response putVocabularyById(@PathParam("id") String id, ThesaurusView thesaurusViewJAXBElement) {
-        Thesaurus object = convert(thesaurusViewJAXBElement);
-        if(object != null) {
-            thesaurusService.updateThesaurus(object);
-            return Response.ok().build();
-        }
-        return Response.notModified().build();
-    }
 
     private Thesaurus convert(ThesaurusView source) {
         Thesaurus hibernateRes;
