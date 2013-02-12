@@ -51,4 +51,6 @@ public interface IThesaurusOrganizationService {
      * @return {@code null} if not found; object otherwise.
      */
     ThesaurusOrganization getThesaurusOrganizationByNameAndURL(String name, String url);
+    
+    void setThesaurusOrganizationPersistent(ThesaurusOrganization organizationToPersist);
 }

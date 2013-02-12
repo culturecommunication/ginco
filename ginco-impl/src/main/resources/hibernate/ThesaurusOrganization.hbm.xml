@@ -4,7 +4,9 @@
 	<class name="ThesaurusOrganization" table="thesaurus_organization">
 		<cache usage="read-write" />
 		<id name="identifier" column="identifier">
-			<generator class="native" />
+			<generator class="sequence">
+				<param name="sequence">thesaurus_creator_identifier_seq</param>
+			</generator>
 		</id>
 		<property name="name" not-null="true" />
 		<property name="homepage" />		

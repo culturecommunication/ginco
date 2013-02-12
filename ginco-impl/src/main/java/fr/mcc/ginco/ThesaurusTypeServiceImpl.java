@@ -55,9 +55,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service("thesaurusTypeService")
 public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
-	
-	
-	@Log private Logger log;
 	    
 	@Inject
 	@Named("thesaurusTypeDAO")

@@ -42,7 +42,7 @@ import java.util.GregorianCalendar;
 /**
  * Util desined to deal with Date/String/Timestamp convertions.
  */
-public class DateUtil {
+public final class DateUtil {
 	
 	private DateUtil(){};
 	

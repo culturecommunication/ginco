@@ -42,7 +42,7 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
         var theForm = theButton.up('form');
         if (theForm.getForm().isValid())
         {
-        	theForm.getEl().mask("Chargemenet");
+        	theForm.getEl().mask("Chargement");
 	        theForm.getForm().updateRecord();
 	        var updatedModel = theForm.getForm().getRecord();
 	        updatedModel.save({

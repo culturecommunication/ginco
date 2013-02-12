@@ -68,4 +68,8 @@ public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationS
 
         return null;
     }
+    
+    public void setThesaurusOrganizationPersistent(ThesaurusOrganization organizationToPersist){
+    	thesaurusOrganizationDAO.makePersistent(organizationToPersist);
+    }
 }

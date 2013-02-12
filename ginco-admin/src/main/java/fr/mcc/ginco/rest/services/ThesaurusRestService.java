@@ -47,6 +47,7 @@ import javax.ws.rs.core.Response;
 import fr.mcc.ginco.*;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.utils.DateUtil;
@@ -205,8 +206,28 @@ public class ThesaurusRestService {
         hibernateRes.setTitle(source.getTitle());
         hibernateRes.setFormat(thesaurusFormatService.getThesaurusFormatById(source.getFormat()));
         hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source.getType()));
-        hibernateRes.setCreator(thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(),
-                source.getCreatorHomepage()));
+        
+        if (thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(), source.getCreatorHomepage()) == null)
+        {
+        	//ThesaurusOrganization given by the client is empty, so we drop any reference to ThesaurusOrganization
+        	if (source.getCreatorName().isEmpty() && source.getCreatorHomepage().isEmpty()){
+        		hibernateRes.setCreator(null);
+        	}
+        	//ThesaurusOrganization given by the client doesn't yet exist - need to create it (only if service or url <> null)
+        	if (!source.getCreatorName().isEmpty() || !source.getCreatorHomepage().isEmpty()){
+        	ThesaurusOrganization myThesaurusOrganization = new ThesaurusOrganization();
+        	myThesaurusOrganization.setName(source.getCreatorName());
+        	myThesaurusOrganization.setHomepage(source.getCreatorHomepage());
+        	thesaurusOrganizationService.setThesaurusOrganizationPersistent(myThesaurusOrganization);
+        	hibernateRes.setCreator(myThesaurusOrganization);
+        	logger.info("Creating a new Thesaurus Organization");
+        	}
+        } else
+        {
+        	//Getting an existing ThesaurusOrganization
+        	hibernateRes.setCreator(thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(), source.getCreatorHomepage()));
+        	logger.info("Getting an existing Thesaurus Organization");
+        }
 
         List<String> languages = source.getLanguages();
         Set<Language> realLanguages = new HashSet<Language>();
