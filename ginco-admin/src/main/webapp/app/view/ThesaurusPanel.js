@@ -10,9 +10,11 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
 
     alias: 'widget.thesaurusPanel',
     localized: true,
-    autoScroll: true,
     closable: true,
-    
+    layout: {
+    	type: 'vbox',
+    	align: 'stretch'
+    },
     /*Fields with auto generated values*/
     xIdentifierLabel : 'Identifier',
     xCreatedDateLabel : 'Creation date',
@@ -45,7 +47,10 @@ Ext.define('HadocApp.view.ThesaurusPanel', {
                 {
                     xtype: 'form',
                     title: me.xThesaurusTitle,
+                	flex: 1,
+                	autoScroll: true,
                     pollForChanges : true,
+                    trackResetOnLoad : true,
                     defaults: {
                         anchor: '70%',
                         afterLabelTextTpl: new Ext.XTemplate('<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>', { disableFormats: true })

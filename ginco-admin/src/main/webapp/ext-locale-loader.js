@@ -145,10 +145,10 @@ Ext.apply(Ext.Loader, {
                                 var localeClass = Ext.create(dependency);
                                 var localeProperties = {};
                                 for (var member in localeClass) {
-                                    if (member[0] === 'x') {
+                                    if (member.charAt(0) === 'x') {
                                         localeProperties[member] = localeClass[member];
                                     }
-                                };
+                                }
                                 Ext.apply(data, localeProperties);
                             },
                             failure: function () {
