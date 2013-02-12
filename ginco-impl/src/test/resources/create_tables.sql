@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS thesaurus_type;
 DROP TABLE IF EXISTS thesaurus_format;
 DROP TABLE IF EXISTS languages_iso639;
 DROP TABLE IF EXISTS thesaurus_organization;
+DROP TABLE IF EXISTS log_journal;
+DROP SEQUENCE IF EXISTS log_journal_identifier_seq;
 
 CREATE TABLE thesaurus
 (
@@ -52,3 +54,15 @@ CREATE TABLE thesaurus_organization (
   name text NOT NULL,
   homepage text
 );
+
+CREATE TABLE log_journal (
+    identifier integer NOT NULL,
+    action text NOT NULL,
+    author text NOT NULL,
+    date text,
+    entityid text NOT NULL,
+    entitytype text NOT NULL
+);
+CREATE SEQUENCE log_journal_identifier_seq START WITH 1  INCREMENT BY 1;
+
+   

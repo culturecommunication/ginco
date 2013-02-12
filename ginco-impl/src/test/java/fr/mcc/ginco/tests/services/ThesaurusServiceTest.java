@@ -36,14 +36,18 @@ package fr.mcc.ginco.tests.services;
 
 import javax.inject.Inject;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.tests.services.BaseServiceTest;
+import org.dbunit.dataset.IDataSet;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.enums.ServiceCRUDResults;
+import fr.mcc.ginco.tests.BaseServiceTest;
+import fr.mcc.ginco.users.SimpleUserImpl;
 
 @TransactionConfiguration
 @Transactional
@@ -80,15 +84,42 @@ public class ThesaurusServiceTest extends BaseServiceTest {
     public final void testGetThesaurusList() {
         Integer expectedThesaurusListSize = 3;
         Integer actualThesaurusListSize = thesaurusService.getThesaurusList().size();
-        Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+        Assert.assertEquals("Wrong number of elements when getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+    }
+    
+    @Test
+    public final void testGetAscThesaurusList() {
+        String expectedThesaurusName = "essai";
+        String actualThesaurusName = thesaurusService.getThesaurusList().get(0).getTitle();
+        Assert.assertEquals("Wrong ascendant sorting when getting Thesaurus List!", expectedThesaurusName, actualThesaurusName);
+    }
+    
+    @Test
+    public final void testUpdateThesaurus() throws Exception{
+        Integer expectedThesaurusListSize = 3;
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
+        th.setTitle("title");
+        IUser user = new SimpleUserImpl();
+        user.setName("user1");
+        ServiceCRUDResults actualThesaurusListSize = thesaurusService.updateThesaurus(th, user);
+       // Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+        
+        //Test the log_journal addition
+     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
+     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
+     	//Assert.assertEquals(1, databaseTableSize);
+        
     }
 
     @Test
     public final void testCreateNewThesaurus() {
         Thesaurus newThesaurus = new Thesaurus();
         newThesaurus.setTitle("test");
-        thesaurusService.updateThesaurus(newThesaurus);
-    }
+        IUser user = new SimpleUserImpl();
+        user.setName("test1");
+        thesaurusService.updateThesaurus(newThesaurus, user);
+    }   
 
 	@Override
 	public String  getXmlDataFileInit() {

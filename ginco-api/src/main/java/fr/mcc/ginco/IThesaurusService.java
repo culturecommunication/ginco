@@ -34,10 +34,11 @@
  */
 package fr.mcc.ginco;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.enums.ServiceCRUDResults;
-
 import java.util.List;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.enums.ServiceCRUDResults;
 
 /**
  * Service used to work with {@link Thesaurus} objects, contains basic
@@ -47,6 +48,7 @@ import java.util.List;
  * @see fr.mcc.ginco.beans
  */
 public interface IThesaurusService {
+
     /**
      * Get a single object by its id
      *
@@ -64,5 +66,7 @@ public interface IThesaurusService {
     /**
      * Update a single object
      */
-    Thesaurus updateThesaurus(Thesaurus object);
+
+    Thesaurus updateThesaurus(Thesaurus object, IUser user);
+
 }

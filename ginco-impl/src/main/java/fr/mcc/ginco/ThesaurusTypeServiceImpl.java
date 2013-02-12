@@ -39,17 +39,13 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.dao.hibernate.GenericHibernateDAO;
-import fr.mcc.ginco.log.Log;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author dabel
  *
  */
 @Transactional
@@ -75,4 +71,9 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
     public ThesaurusType getThesaurusTypeById(Integer id) {
         return thesaurusTypeDAO.getById(id);
     }
+
+    public IGenericDAO<ThesaurusType, Integer> getThesaurusTypeDAO() {
+		return thesaurusTypeDAO;
+	}
+
 }

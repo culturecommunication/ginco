@@ -40,7 +40,7 @@ import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-public class Language implements Serializable {
+public class Language implements Serializable, IBaseBean {
 	private String id;
 	private String part2b;
 	private String part2t;

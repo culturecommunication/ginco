@@ -42,7 +42,8 @@ import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-public class Thesaurus implements Serializable {
+
+public class Thesaurus implements Serializable, IBaseBean {
     private String identifier;
     private String contributor;
     private String coverage;
@@ -185,25 +186,39 @@ public class Thesaurus implements Serializable {
         return format;
     }
 
-    public void setFormat(ThesaurusFormat format) {
-        this.format = format;
-    }
+	public void setFormat(ThesaurusFormat format) {
+		this.format = format;
+	}
 
-    public ThesaurusType getType() {
-        return type;
-    }
+	public ThesaurusType getType() {
+		return type;
+	}
 
-    public void setType(ThesaurusType type) {
-        this.type = type;
-    }
+	public void setType(ThesaurusType type) {
+		this.type = type;
+	}
 
-    public ThesaurusOrganization getCreator() {
-        return creator;
-    }
+	public ThesaurusOrganization getCreator() {
+		return creator;
+	}
 
-    public void setCreator(ThesaurusOrganization creator) {
-        this.creator = creator;
-    }
+	public void setCreator(ThesaurusOrganization creator) {
+		this.creator = creator;
+	}	
+
+	@Override
+	public String getId() {
+		return identifier;
+	}
+
+	@JsonIgnore
+	public Set<ThesaurusVersionHistory> getVersions() {
+		return versions;
+	}
+
+	public void setVersions(Set<ThesaurusVersionHistory> versions) {
+		this.versions = versions;
+	}
 
     @JsonIgnore
     public Set<Language> getLang() {
@@ -213,14 +228,5 @@ public class Thesaurus implements Serializable {
     public void setLang(Set<Language> lang) {
         this.lang = lang;
     }
-    
-    @JsonIgnore
-    public Set<ThesaurusVersionHistory> getVersions() {
-                return versions;
-        }
-
-        public void setVersions(Set<ThesaurusVersionHistory> versions) {
-                this.versions = versions;
-        }
 
 }

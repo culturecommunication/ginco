@@ -37,7 +37,7 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ThesaurusVersionHistory implements Serializable {
+public class ThesaurusVersionHistory implements Serializable, IBaseBean {
 	private String identifier;
     private Date date;
     private  String versionNote;
@@ -108,4 +108,9 @@ public class ThesaurusVersionHistory implements Serializable {
     public void setThesaurusIdentifier(Thesaurus thesaurusIdentifier) {
         this.thesaurusIdentifier = thesaurusIdentifier;
     }
+
+	@Override
+	public String getId() {		
+		return identifier;
+	}
 }

@@ -32,48 +32,21 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.services;
+package fr.mcc.ginco.dao;
 
-import java.io.InputStream;
+import fr.mcc.ginco.beans.LogJournal;
 
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.XmlDataSet;
-import org.dbunit.operation.DatabaseOperation;
-import org.junit.Before;
-
-import fr.mcc.ginco.tests.BaseTest;
-
-public abstract class BaseServiceTest extends BaseTest {	
+/**
+ * Data Access Object to manipulate LogJournal
+ * entries in the database
+ *
+ */
+public interface ILogJournalDAO extends IGenericDAO<LogJournal, String> {
 	
-	@Inject
-	private DataSource dataSourceTest;
-	
-
-	@Before
-	public void handleSetUpOperation() throws Exception {
-		// init db
-		final IDatabaseConnection conn = new DatabaseDataSourceConnection(
-				dataSourceTest);
-		final IDataSet data = getDataset(getXmlDataFileInit());
-		try {
-			DatabaseOperation.CLEAN_INSERT.execute(conn, data);
-		} finally {
-			conn.close();
-		}
-	}
-
-	private IDataSet getDataset(String datasetPath) throws DataSetException {
-		InputStream is = BaseServiceTest.class
-				.getResourceAsStream(datasetPath);
-		return new XmlDataSet(is);
-	}
-	
-	abstract String getXmlDataFileInit();
+	/**
+	 * Inserts a LogJurnal entry in the database
+	 * @param logJournal
+	 */
+	void insertLogJournal(LogJournal logJournal);	
 	
 }

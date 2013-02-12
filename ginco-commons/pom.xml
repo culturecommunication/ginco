@@ -34,5 +34,17 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 		</dependency>
+		<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+		</dependency>		
+		<dependency>
+				<groupId>fr.smile.mcc.ginco</groupId>
+				<artifactId>ginco-api</artifactId>
+		</dependency>		
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+		</dependency>
     </dependencies>
 </project>

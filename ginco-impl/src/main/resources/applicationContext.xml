@@ -4,13 +4,16 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
         http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
-
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+        
     <context:annotation-config />
     <context:component-scan base-package="fr.mcc.ginco" />
 
@@ -44,12 +47,12 @@
 
         <property name="mappingResources">
             <list>
-                <!-- <value>hibernate/LanguagesIso639.hbm.xml</value> -->
                 <value>hibernate/Thesaurus.hbm.xml</value>
                 <value>hibernate/ThesaurusType.hbm.xml</value>
                 <value>hibernate/ThesaurusFormat.hbm.xml</value>
                 <value>hibernate/LanguagesIso639.hbm.xml</value>
                 <value>hibernate/ThesaurusOrganization.hbm.xml</value>
+                <value>hibernate/LogJournal.hbm.xml</value>  
                 <value>hibernate/ThesaurusVersionHistory.hbm.xml</value>
             </list>
         </property>
@@ -84,4 +87,10 @@
 			</list>
 		</property>
 	</bean>
+	
+	<!-- Aspect : all operations of save/update and delete should be logged in a specific table -->
+	<aop:aspectj-autoproxy/>
+	<bean id="logJournalAspect" class="fr.mcc.ginco.journal.GincoLogAspect" />
+	
+
 </beans>

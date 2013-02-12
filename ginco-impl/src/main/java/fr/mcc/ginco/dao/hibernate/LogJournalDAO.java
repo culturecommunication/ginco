@@ -32,40 +32,35 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.services;
+package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
 
-import javax.inject.Inject;
+import fr.mcc.ginco.beans.LogJournal;
+import fr.mcc.ginco.dao.ILogJournalDAO;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.tests.BaseServiceTest;
-
-@TransactionConfiguration
-@Transactional
-public class ThesaurusFormatServiceTest extends BaseServiceTest {
+/**
+ * Implementation of the ILogJournalDAO to manipulate
+ * LogJournal entries in the database
+ */
+@Repository("logJournalDAO")
+@Scope("prototype")
+public class LogJournalDAO extends GenericHibernateDAO<LogJournal, String> implements ILogJournalDAO {
 	
-	@Inject
-	private IThesaurusFormatService thesaurusFormatService;	
-	
-	@Test
-    public final void testGetThesaurusFormatList() {
-        List<ThesaurusFormat> actualResponse = thesaurusFormatService.getThesaurusFormatList();
-		Assert.assertEquals("Error fetching all ThesaurusFormat", 3, actualResponse.size());
-		Assert.assertEquals("Error fetching name of second ThesaurusFormat (expecting CSV))", "CSV", actualResponse.get(1).getLabel());
-
-    }
-	
-	@Override
-	public String  getXmlDataFileInit() {
-		return "/thesaurusformat_init.xml";
-		
+	/**
+	 * Default constructor
+	 */
+	public LogJournalDAO() {
+		super(LogJournal.class);
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.ILogJournalDAO#insertLogJournal(fr.mcc.ginco.beans.LogJournal)
+	 */
+	@Override
+	public void insertLogJournal(LogJournal logJournal) {
+		makePersistent(logJournal);		
+	}	
+	
 }

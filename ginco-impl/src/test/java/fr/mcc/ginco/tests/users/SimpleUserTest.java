@@ -32,40 +32,24 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.services;
+package fr.mcc.ginco.tests.users;
 
-import java.util.List;
+import junit.framework.Assert;
 
-import javax.inject.Inject;
-
-import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.tests.BaseServiceTest;
+import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.tests.BaseTest;
+import fr.mcc.ginco.users.SimpleUserImpl;
 
-@TransactionConfiguration
-@Transactional
-public class ThesaurusFormatServiceTest extends BaseServiceTest {
-	
-	@Inject
-	private IThesaurusFormatService thesaurusFormatService;	
-	
-	@Test
-    public final void testGetThesaurusFormatList() {
-        List<ThesaurusFormat> actualResponse = thesaurusFormatService.getThesaurusFormatList();
-		Assert.assertEquals("Error fetching all ThesaurusFormat", 3, actualResponse.size());
-		Assert.assertEquals("Error fetching name of second ThesaurusFormat (expecting CSV))", "CSV", actualResponse.get(1).getLabel());
 
-    }
-	
-	@Override
-	public String  getXmlDataFileInit() {
-		return "/thesaurusformat_init.xml";
+public class SimpleUserTest extends BaseTest {	
 		
+	@Test
+    public final void testGetThesaurusTypeList() {		
+		IUser usr =new SimpleUserImpl();
+		usr.setName("user1");
+		Assert.assertEquals("user1", usr.getName());
 	}
 
 }

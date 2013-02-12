@@ -40,8 +40,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings("serial")
-public class ThesaurusType implements IGenericBean{
+public class ThesaurusType implements IBaseBean{
 	private Integer identifier;
 	private String label;
     private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
@@ -75,4 +74,8 @@ public class ThesaurusType implements IGenericBean{
     public void setThesauruses(Set<Thesaurus> thesauruses) {
         this.thesauruses = thesauruses;
     }
+	@Override
+	public String getId() {		
+		return Integer.toString(identifier);
+	}
 }

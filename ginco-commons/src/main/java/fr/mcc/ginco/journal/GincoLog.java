@@ -32,40 +32,33 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.services;
+package fr.mcc.ginco.journal;
 
-import java.util.List;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import javax.inject.Inject;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.tests.BaseServiceTest;
-
-@TransactionConfiguration
-@Transactional
-public class ThesaurusFormatServiceTest extends BaseServiceTest {
+/**
+ * Custom annotation to indicate that the method action
+ * should be logged in the dedicated system
+ * The annotation is processed by an aspect
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Documented
+public @interface GincoLog {
 	
-	@Inject
-	private IThesaurusFormatService thesaurusFormatService;	
-	
-	@Test
-    public final void testGetThesaurusFormatList() {
-        List<ThesaurusFormat> actualResponse = thesaurusFormatService.getThesaurusFormatList();
-		Assert.assertEquals("Error fetching all ThesaurusFormat", 3, actualResponse.size());
-		Assert.assertEquals("Error fetching name of second ThesaurusFormat (expecting CSV))", "CSV", actualResponse.get(1).getLabel());
-
-    }
-	
-	@Override
-	public String  getXmlDataFileInit() {
-		return "/thesaurusformat_init.xml";
-		
-	}
-
+	 /**
+	 * type of the entoty the action is performed on
+	 */
+	public enum EntityType{ THESAURUS}
+	 EntityType entityType();
+	 /**
+	 * type of the action wihtin CREATE, UPDATE, DELETE
+	 *
+	 */
+	public enum Action{ CREATE, UPDATE, DELETE}
+	 Action action();	
 }
