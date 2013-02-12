@@ -45,6 +45,8 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.enums.ServiceCRUDResults;
 import fr.mcc.ginco.journal.GincoLog;
@@ -64,7 +66,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
     @Override
     public List<Thesaurus> getThesaurusList() {
-        return thesaurusDAO.findAll();
+        return thesaurusDAO.findAll("title", SortingTypes.asc);
     }
 
     @Override

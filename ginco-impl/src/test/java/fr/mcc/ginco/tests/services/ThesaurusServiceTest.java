@@ -84,7 +84,14 @@ public class ThesaurusServiceTest extends BaseServiceTest {
     public final void testGetThesaurusList() {
         Integer expectedThesaurusListSize = 3;
         Integer actualThesaurusListSize = thesaurusService.getThesaurusList().size();
-        Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+        Assert.assertEquals("Wrong number of elements when getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+    }
+    
+    @Test
+    public final void testGetAscThesaurusList() {
+        String expectedThesaurusName = "essai";
+        String actualThesaurusName = thesaurusService.getThesaurusList().get(0).getTitle();
+        Assert.assertEquals("Wrong ascendant sorting when getting Thesaurus List!", expectedThesaurusName, actualThesaurusName);
     }
     
     @Test

@@ -44,6 +44,11 @@ import java.util.List;
 
 public interface IGenericDAO<T, ID extends Serializable> {
 	
+	public enum SortingTypes {
+		asc,
+		desc
+	}
+	
 	/**
 	 * Get an object of type T by id
 	 * 
@@ -58,8 +63,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @return A list of all the objects of type T
 	 */
 	List<T> findAll();	
-
-
+	
 	/**
 	 * Save an object of type T
 	 * 
@@ -80,5 +84,12 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @return The number of DB rows matching to the DAO
 	 */
 	Long count();
+
+	/**
+	 * Returns all the objects of type T with a sort asc/desc on a column
+	 * 
+	 * @return A list of all the objects of type T
+	 */
+	List<T> findAll(String sortColumn, SortingTypes order);
 
 }

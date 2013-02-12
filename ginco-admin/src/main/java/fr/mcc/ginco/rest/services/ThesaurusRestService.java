@@ -259,4 +259,46 @@ public class ThesaurusRestService {
 
         return hibernateRes;
     }
+
+	public IThesaurusTypeService getThesaurusTypeService() {
+		return thesaurusTypeService;
+	}
+
+	public void setThesaurusTypeService(IThesaurusTypeService thesaurusTypeService) {
+		this.thesaurusTypeService = thesaurusTypeService;
+	}
+
+	public IThesaurusFormatService getThesaurusFormatService() {
+		return thesaurusFormatService;
+	}
+
+	public void setThesaurusFormatService(
+			IThesaurusFormatService thesaurusFormatService) {
+		this.thesaurusFormatService = thesaurusFormatService;
+	}
+
+	public IThesaurusOrganizationService getThesaurusOrganizationService() {
+		return thesaurusOrganizationService;
+	}
+
+	public void setThesaurusOrganizationService(
+			IThesaurusOrganizationService thesaurusOrganizationService) {
+		this.thesaurusOrganizationService = thesaurusOrganizationService;
+	}
+
+	public ILanguagesService getLanguagesService() {
+		return languagesService;
+	}
+
+	public void setLanguagesService(ILanguagesService languagesService) {
+		this.languagesService = languagesService;
+	}
+
+	public IThesaurusService getThesaurusService() {
+		return thesaurusService;
+	}
+
+	public void setThesaurusService(IThesaurusService thesaurusService) {
+		this.thesaurusService = thesaurusService;
+	}
 }

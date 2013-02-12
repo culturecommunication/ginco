@@ -42,6 +42,7 @@ import javax.inject.Named;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 
 import fr.mcc.ginco.dao.IGenericDAO;
@@ -67,6 +68,15 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	final public List<T> findAll() {
 		return getCurrentSession().createCriteria(persistentClass).list();
 	}	
+	
+	@Override
+	final public List<T> findAll(String sortColumn, SortingTypes order) {
+		if (order.asc.equals(order)){
+			return getCurrentSession().createCriteria(persistentClass).addOrder(Order.asc(sortColumn)).list();
+		}else {
+			return getCurrentSession().createCriteria(persistentClass).addOrder(Order.desc(sortColumn)).list();
+		}
+	}
 	
 	@Override
 	final public Long count(){
@@ -99,6 +109,6 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 
 	final public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-	}	
+	}
 
 }
