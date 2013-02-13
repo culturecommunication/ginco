@@ -1,13 +1,13 @@
-Ext.define('HadocApp.view.GlobalTabPanel', {
+Ext.define('GincoApp.view.GlobalTabPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.topTabs',
 
     requires: [
-        'HadocApp.view.ThesaurusPanel'/*,
-        'HadocApp.view.TermPanel',
-        'HadocApp.view.SearchPanel',
-        'HadocApp.view.ConceptPanel',
-        'HadocApp.view.ConceptGroupPanel'    */
+        /*'GincoApp.view.ThesaurusPanel'/*,
+        'GincoApp.view.TermPanel',
+        'GincoApp.view.SearchPanel',
+        'GincoApp.view.ConceptPanel',
+        'GincoApp.view.ConceptGroupPanel'    */
     ],
 
     activeTab: 0,

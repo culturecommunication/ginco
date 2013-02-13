@@ -1,4 +1,4 @@
-Ext.define('HadocApp.model.MainTreeModel', {
+Ext.define('GincoApp.model.MainTreeModel', {
     extend: 'Ext.data.Model',
 
     fields: [

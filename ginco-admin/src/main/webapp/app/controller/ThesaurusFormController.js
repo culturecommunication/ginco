@@ -1,4 +1,4 @@
-Ext.define('HadocApp.controller.ThesaurusFormController', {
+Ext.define('GincoApp.controller.ThesaurusFormController', {
 	extend : 'Ext.app.Controller',
 
 	views : [ 'ThesaurusPanel' ],
@@ -11,7 +11,7 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
 		var model = this.getThesaurusModelModel();
 		var id = theForm.up('thesaurusPanel').thesaurusId;
 		if (id != '') {
-			theForm.getEl().mask("Chargemenet");
+			theForm.getEl().mask("Chargement");
 			model.load(id, {
 				success : function(model) {
 					me.loadData(theForm, model);
@@ -19,7 +19,7 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
 				}
 			});
 		} else {
-			model = Ext.create('HadocApp.model.ThesaurusModel');
+			model = Ext.create('GincoApp.model.ThesaurusModel');
 			model.id = -1;
 			theForm.loadRecord(model);
 		}
@@ -28,11 +28,27 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
 		var MainTreeStore = this.getMainTreeStoreStore();
 		MainTreeStore.load();
 	},
-	loadData : function(aForm, aModel)
-	{
-		aForm.up('thesaurusPanel').setTitle(aModel.data.title);
+	loadData : function(aForm, aModel) {
+		var thesaurusPanel = aForm.up('thesaurusPanel');
+		thesaurusPanel.setTitle(aModel.data.title);
 		aForm.setTitle(aModel.data.title);
 		aForm.loadRecord(aModel);
+		thesaurusPanel.down('button[cls=newBtnMenu]').setDisabled(false);
+		
+	},
+	onNewTermBtnClick : function(theButton, e, options) {
+		var thePanel = theButton.up('thesaurusPanel');
+		var termPanel = this.createPanel('GincoApp.view.TermPanel');
+		termPanel.thesaurusId =  thePanel.thesaurusId;
+	},
+	createPanel : function(aType)
+	{
+		var aNewPanel = Ext.create(aType);
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		var tab = topTabs.add(aNewPanel);
+		topTabs.setActiveTab(tab);
+		tab.show();
+		return aNewPanel;
 	},
 
 	saveForm : function(theButton) {
@@ -65,6 +81,9 @@ Ext.define('HadocApp.controller.ThesaurusFormController', {
 			},
 			'thesaurusPanel button[cls=save]' : {
 				click : this.saveForm
+			},
+			"thesaurusPanel #newTermBtn" : {
+				click : this.onNewTermBtnClick
 			}
 
 		});

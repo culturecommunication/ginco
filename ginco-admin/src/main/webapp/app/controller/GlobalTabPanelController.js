@@ -1,4 +1,4 @@
-Ext.define('HadocApp.controller.GlobalTabPanelController', {
+Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
 
@@ -44,6 +44,9 @@ Ext.define('HadocApp.controller.GlobalTabPanelController', {
 	init : function(application) {
 		this.control({
 			'thesaurusPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'termPanel' : {
 				beforeclose : this.onPanelBeforeClose
 			}
 		});

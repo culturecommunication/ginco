@@ -2,7 +2,7 @@
  * Thesaurus Type Store 
  * This file contains all Thesaurus types displayed in dropdown lists
  */
-Ext.define('HadocApp.store.ThesaurusTypeStore', {
+Ext.define('GincoApp.store.ThesaurusTypeStore', {
     extend: 'Ext.data.Store',
 
     constructor: function(cfg) {

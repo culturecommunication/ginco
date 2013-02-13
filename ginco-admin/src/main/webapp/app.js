@@ -37,15 +37,14 @@ Ext.application({
         'ThesaurusLanguageStore'
     ],
     views: [
-        'HadocViewPort',
+        'GincoViewPort',
         'GlobalTabPanel',
         'LeftPanel',
         'TopToolbar',
-        'AProposWin',
-        'ThesaurusPanel'
+        'AProposWin'
     ],
     autoCreateViewport: true,
-    name: 'HadocApp',
+    name: 'GincoApp',
     controllers: [
         'TopToolbarController',
         'MainTreeController',

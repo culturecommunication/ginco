@@ -3,7 +3,7 @@
  * Thesaurus Translated Items
  * 
  */
-Ext.define('HadocApp.locale.fr.view.ThesaurusPanel', {
+Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xIdentifierLabel : 'Identifiant',
 	    xCreatedDateLabel : 'Date de création',
 	    xDateLabel : 'Dernière modification',
@@ -22,5 +22,7 @@ Ext.define('HadocApp.locale.fr.view.ThesaurusPanel', {
 	    xLanguagesLabel : 'Langue(s)',
 	    xRelationLabel : 'Publication(s) associée(s)',
 	    xSourceLabel : 'Ressource(s) liée(s)',
-	    xThesaurusTitle : 'Thesaurus'
+	    xThesaurusTitle : 'Nouveau Vocabulaire',
+	    xNewLabel : 'Nouveau',
+	    xNewMenu_TermLabel : 'Terme'
 });

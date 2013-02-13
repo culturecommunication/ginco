@@ -1,4 +1,4 @@
-Ext.define('HadocApp.view.SearchPanel', {
+Ext.define('GincoApp.view.SearchPanel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.mypanel3',
 

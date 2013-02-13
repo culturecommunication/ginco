@@ -1,4 +1,4 @@
-Ext.define('HadocApp.controller.MainTreeController',
+Ext.define('GincoApp.controller.MainTreeController',
 		{
 			extend : 'Ext.app.Controller',
 
@@ -21,7 +21,7 @@ Ext.define('HadocApp.controller.MainTreeController',
 
 					if (!tabExists) {
 						var ThesaurusPanel = Ext
-								.create('HadocApp.view.ThesaurusPanel');
+								.create('GincoApp.view.ThesaurusPanel');
 						ThesaurusPanel.thesaurusId = aRecord.data.id;
 
 						var tab = topTabs.add(ThesaurusPanel);

@@ -1,10 +1,10 @@
-Ext.define('HadocApp.view.HadocViewPort', {
+Ext.define('GincoApp.view.GincoViewPort', {
     extend: 'Ext.container.Viewport',
 
     requires: [
-        'HadocApp.view.GlobalTabPanel',
-        'HadocApp.view.TopToolbar',
-        'HadocApp.view.LeftPanel'
+        'GincoApp.view.GlobalTabPanel',
+        'GincoApp.view.TopToolbar',
+        'GincoApp.view.LeftPanel'
     ],
 
     layout: {
