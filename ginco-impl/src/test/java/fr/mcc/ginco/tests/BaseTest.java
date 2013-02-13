@@ -34,10 +34,6 @@
  */
 package fr.mcc.ginco.tests;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.hibernate.SessionFactory;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;

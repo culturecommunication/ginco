@@ -34,13 +34,13 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class LogJournal {
 	private Integer identifier;
 	private String action;
 	private String author;
-	private Timestamp date;
+	private Date date;
 	private String entityId;
 	private String entityType;	
 
@@ -68,11 +68,11 @@ public class LogJournal {
 		this.author = author;
 	}
 
-	public Timestamp getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

@@ -43,14 +43,11 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
@@ -58,7 +55,6 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.IThesaurusOrganizationService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.Language;
@@ -91,11 +87,7 @@ public class ThesaurusRestService {
 	
 	@Inject
 	@Named("thesaurusFormatService")
-	private IThesaurusFormatService thesaurusFormatService;
-
-    @Inject
-    @Named("thesaurusOrganizationService")
-    private IThesaurusOrganizationService thesaurusOrganizationService;
+	private IThesaurusFormatService thesaurusFormatService;   
 	
 	@Inject
 	@Named("languagesService")
@@ -190,7 +182,10 @@ public class ThesaurusRestService {
     @Consumes({MediaType.APPLICATION_JSON})
     public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
     	Thesaurus object = convert(thesaurusViewJAXBElement);
-        String principal = context.getHttpServletRequest().getRemoteAddr();
+    	String principal = "unknown";
+    	if (context!=null) {
+    		principal = context.getHttpServletRequest().getRemoteAddr();
+    	} 
         IUser user = new SimpleUserImpl();
         user.setName(principal); 
         if(object != null) {
@@ -211,7 +206,7 @@ public class ThesaurusRestService {
     private Thesaurus convert(ThesaurusView source) {
         Thesaurus hibernateRes;
 
-        if(source.getId().equals("")) {
+        if("".equals(source.getId())) {
             hibernateRes = new Thesaurus();
             hibernateRes.setCreated(DateUtil.nowDate());
         } else {
@@ -230,28 +225,10 @@ public class ThesaurusRestService {
         hibernateRes.setTitle(source.getTitle());
         hibernateRes.setFormat(thesaurusFormatService.getThesaurusFormatById(source.getFormat()));
         hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source.getType()));
-        
-        if (thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(), source.getCreatorHomepage()) == null)
-        {
-        	//ThesaurusOrganization given by the client is empty, so we drop any reference to ThesaurusOrganization
-        	if (source.getCreatorName().isEmpty() && source.getCreatorHomepage().isEmpty()){
-        		hibernateRes.setCreator(null);
-        	}
-        	//ThesaurusOrganization given by the client doesn't yet exist - need to create it (only if service or url <> null)
-        	if (!source.getCreatorName().isEmpty() || !source.getCreatorHomepage().isEmpty()){
-        	ThesaurusOrganization myThesaurusOrganization = new ThesaurusOrganization();
-        	myThesaurusOrganization.setName(source.getCreatorName());
-        	myThesaurusOrganization.setHomepage(source.getCreatorHomepage());
-        	thesaurusOrganizationService.setThesaurusOrganizationPersistent(myThesaurusOrganization);
-        	hibernateRes.setCreator(myThesaurusOrganization);
-        	logger.info("Creating a new Thesaurus Organization");
-        	}
-        } else
-        {
-        	//Getting an existing ThesaurusOrganization
-        	hibernateRes.setCreator(thesaurusOrganizationService.getThesaurusOrganizationByNameAndURL(source.getCreatorName(), source.getCreatorHomepage()));
-        	logger.info("Getting an existing Thesaurus Organization");
-        }
+        ThesaurusOrganization myThesaurusOrganization = new ThesaurusOrganization();
+    	myThesaurusOrganization.setName(source.getCreatorName());
+    	myThesaurusOrganization.setHomepage(source.getCreatorHomepage());
+    	hibernateRes.setCreator(myThesaurusOrganization);  
 
         List<String> languages = source.getLanguages();
         Set<Language> realLanguages = new HashSet<Language>();
@@ -283,16 +260,7 @@ public class ThesaurusRestService {
 	public void setThesaurusFormatService(
 			IThesaurusFormatService thesaurusFormatService) {
 		this.thesaurusFormatService = thesaurusFormatService;
-	}
-
-	public IThesaurusOrganizationService getThesaurusOrganizationService() {
-		return thesaurusOrganizationService;
-	}
-
-	public void setThesaurusOrganizationService(
-			IThesaurusOrganizationService thesaurusOrganizationService) {
-		this.thesaurusOrganizationService = thesaurusOrganizationService;
-	}
+	}	
 
 	public ILanguagesService getLanguagesService() {
 		return languagesService;
@@ -308,5 +276,5 @@ public class ThesaurusRestService {
 
 	public void setThesaurusService(IThesaurusService thesaurusService) {
 		this.thesaurusService = thesaurusService;
-	}
+	}	
 }

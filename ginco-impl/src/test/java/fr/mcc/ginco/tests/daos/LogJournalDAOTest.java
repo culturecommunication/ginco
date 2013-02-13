@@ -34,23 +34,31 @@
  */
 package fr.mcc.ginco.tests.daos;
 
+import javax.inject.Inject;
+
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
+import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
+import fr.mcc.ginco.ILogJournalService;
 import fr.mcc.ginco.beans.LogJournal;
 import fr.mcc.ginco.dao.hibernate.LogJournalDAO;
 import fr.mcc.ginco.journal.GincoLog;
 import fr.mcc.ginco.tests.BaseDAOTest;
+import fr.mcc.ginco.utils.DateUtil;
 
 public class LogJournalDAOTest extends BaseDAOTest {
 
 	private LogJournalDAO logJournalDAO;
+	
+	@Inject
+	private ILogJournalService logJournalService;	
 	
 	@Before
 	public void handleSetUpOperation() throws Exception {
@@ -68,14 +76,15 @@ public class LogJournalDAOTest extends BaseDAOTest {
 				.setEntityId("http://www.culturecommunication.gouv.fr/thesaurus2");
 		logJournal.setEntityType(GincoLog.EntityType.THESAURUS.toString());
 		logJournal.setAuthor("unknown");
-		//logJournal.setDate(DateUtil.dateFromString("2013-02-11 12:00:00").getTime());
+		logJournal.setDate(DateUtil.dateFromString("2013-02-11 12:00:00"));		
 		logJournalDAO.insertLogJournal(logJournal);
-		
+
 		// compare data set
+		
 		IDataSet expectedDataSet = getDataset("/logjournal_expected.xml");		
 		
 		IDatabaseConnection conn = new DatabaseConnection(SessionFactoryUtils
-				.getDataSource(getSessionFactory())
+				.getDataSource(logJournalDAO.getSessionFactory())
 				.getConnection());
 		IDataSet databaseDataSet = conn.createDataSet();	
 
@@ -83,7 +92,7 @@ public class LogJournalDAOTest extends BaseDAOTest {
 		ITable expectedTable = expectedDataSet.getTable("log_journal");
 		ITable databaseTable = databaseDataSet.getTable("log_journal");
 		/*Assert.assertEquals(expectedTable.getRowCount(),
-				databaseTable.getRowCount());		*/
+				databaseTable.getRowCount());*/		
 
 	}	
 

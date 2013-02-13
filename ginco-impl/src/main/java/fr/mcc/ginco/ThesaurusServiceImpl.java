@@ -43,12 +43,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.enums.ServiceCRUDResults;
 import fr.mcc.ginco.journal.GincoLog;
 
 @Transactional
@@ -58,6 +57,10 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Inject
     @Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
+    
+    @Inject
+    @Named("thesaurusOrganizationDAO")
+    private IGenericDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
 
 	@Override
 	public Thesaurus getThesaurusById(String id) {
@@ -72,7 +75,10 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Override
     @GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUS)
     public Thesaurus updateThesaurus(Thesaurus object, IUser user) {
-    	Thesaurus result = thesaurusDAO.update(object);
+    	if (object.getCreator() != null) {
+    		thesaurusOrganizationDAO.update(object.getCreator());
+    	}
+    	Thesaurus result = thesaurusDAO.update(object);    
         return result;
     }
     

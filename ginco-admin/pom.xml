@@ -49,7 +49,12 @@
 		<dependency>
       		<groupId>javax.servlet</groupId>
       		<artifactId>servlet-api</artifactId>
-    	</dependency>
+    	</dependency>    
+    	<dependency>
+			<groupId>junit-addons</groupId>
+			<artifactId>junit-addons</artifactId>
+			<scope>test</scope>
+		</dependency>	
 	</dependencies>
 	<build>
 		<resources>
