@@ -31,6 +31,11 @@
 			<key column="thesaurus_identifier" />
 			<many-to-many class="fr.mcc.ginco.beans.Language" column="iso639_id" />
 		</set>
+		
+		<set name="thesaurusesTerms">
+			<key column="identifier" />
+			<one-to-many class="ThesaurusTerm" />
+		</set>
 
 	</class>
 </hibernate-mapping>

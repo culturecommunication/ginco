@@ -1,3 +1,4 @@
+-- Table: log_journal
 CREATE TABLE log_journal (
     identifier integer NOT NULL,
     action text NOT NULL,
@@ -18,3 +19,26 @@ CREATE SEQUENCE log_journal_identifier_seq
     CACHE 1;
 
 ALTER SEQUENCE log_journal_identifier_seq OWNED BY log_journal.identifier;
+
+-- Table: thesaurus_term
+CREATE TABLE thesaurus_term
+(
+  identifier text NOT NULL,
+  lexicalvalue text NOT NULL,
+  created timestamp without time zone NOT NULL DEFAULT now(),
+  modified timestamp without time zone NOT NULL DEFAULT now(),
+  source text,
+  prefered boolean,
+  status integer,
+  role integer,
+  conceptid text,
+  thesaurusid text NOT NULL,
+  lang character varying(3) NOT NULL,
+  CONSTRAINT pk_term_identifier PRIMARY KEY (identifier),
+  CONSTRAINT fk_term_languages_iso639 FOREIGN KEY (lang)
+      REFERENCES languages_iso639 (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_term_thesaurus FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)

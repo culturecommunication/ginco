@@ -40,6 +40,7 @@ import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+@SuppressWarnings("serial")
 public class Language implements Serializable, IBaseBean {
 	private String id;
 	private String part2b;
@@ -52,6 +53,7 @@ public class Language implements Serializable, IBaseBean {
 	private String comment;
 
     private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
+    private Set<ThesaurusTerm> thesaurusesTerms  = new HashSet<ThesaurusTerm>();
 
 	public String getId() {
 		return id;
@@ -123,5 +125,12 @@ public class Language implements Serializable, IBaseBean {
 	 */
 	public void setToplanguage(boolean toplanguage) {
 		this.toplanguage = toplanguage;
+	}
+	
+	public Set<ThesaurusTerm> getThesaurusesTerms() {
+		return thesaurusesTerms;
+	}
+	public void setThesaurusesTerms(Set<ThesaurusTerm> thesaurusesTerms) {
+		this.thesaurusesTerms = thesaurusesTerms;
 	}
 }

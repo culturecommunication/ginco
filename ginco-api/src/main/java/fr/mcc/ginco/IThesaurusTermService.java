@@ -34,38 +34,23 @@
  */
 package fr.mcc.ginco;
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
- * Service used to work with {@link Thesaurus} objects, contains basic
+ * Service used to work with {@link ThesaurusTerm} objects, contains basic
  * methods exposed to client part. For example, to get a single
- * Thesaurus object, use {@link #getThesaurusById(String)}
+ * ThesaurusTerm object, use {@link #getThesaurusTermById(String)}
  *
  * @see fr.mcc.ginco.beans
  */
-public interface IThesaurusService {
-
-    /**
-     * Get a single object by its id
+public interface IThesaurusTermService {
+	
+	/**
+     * Get a single Thesaurus Term by its id
      *
      * @param id to search
      * @return {@code null} if not found
      */
-    Thesaurus getThesaurusById(String id);
-
-    /**
-     * Get list of all objects.
-     * @return List of all objects.
-     */
-    List<Thesaurus> getThesaurusList();
-
-    /**
-     * Update a single object
-     */
-
-    Thesaurus updateThesaurus(Thesaurus object, IUser user);
-
+	ThesaurusTerm getThesaurusTermById(String id);
+	
 }

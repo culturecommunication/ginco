@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="ThesaurusTerm" table="thesaurus_term">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+			<generator class="fr.mcc.ginco.ark.CustomGenerator" />
+		</id>
+		<property name="lexicalValue" column="lexicalvalue" not-null="true" />
+		<property name="created"  type="timestamp" not-null="true" />
+		<property name="modified" type="timestamp" not-null="true" />
+		<property name="source" />
+		<property name="prefered" />
+		<property name="status" />
+		<property name="role" />
+		<property name="conceptId" column="conceptid" />
+		
+		<many-to-one name="language" column="lang" lazy="false" />
+		<many-to-one name="thesaurusId" column="thesaurusId" lazy="false" />
+	</class>
+</hibernate-mapping>

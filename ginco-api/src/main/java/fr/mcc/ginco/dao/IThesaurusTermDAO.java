@@ -32,40 +32,10 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.dao;
 
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.users.IUser;
-
-/**
- * Service used to work with {@link Thesaurus} objects, contains basic
- * methods exposed to client part. For example, to get a single
- * Thesaurus object, use {@link #getThesaurusById(String)}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusService {
-
-    /**
-     * Get a single object by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
-     */
-    Thesaurus getThesaurusById(String id);
-
-    /**
-     * Get list of all objects.
-     * @return List of all objects.
-     */
-    List<Thesaurus> getThesaurusList();
-
-    /**
-     * Update a single object
-     */
-
-    Thesaurus updateThesaurus(Thesaurus object, IUser user);
+public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 
 }

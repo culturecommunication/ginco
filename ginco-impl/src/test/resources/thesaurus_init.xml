@@ -122,4 +122,53 @@
 		<column>entityid</column>		
 		<column>entitytype</column>	
    </table>
+   
+	<table name="thesaurus_term">
+   		<column>identifier</column>
+		<column>lexicalvalue</column>
+		<column>created</column>
+		<column>modified</column>
+		<column>source</column>
+		<column>prefered</column>
+		<column>status</column>
+		<column>role</column>
+		<column>conceptid</column>
+		<column>thesaurusid</column>
+		<column>lang</column>
+		<row>
+			<value>0</value>
+			<value>lexical value</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>test</value>
+			<value>false</value>
+			<value>1</value>
+			<value>1</value>
+			<value>test</value>
+			<value>1</value>
+			<value>aaa</value>
+		</row>
+   	</table>
+   	
+   	<table name="languages_iso639">
+		<column>id</column>
+		<column>part2b</column>	
+		<column>part2t</column>		
+		<column>part1</column>		
+		<column>scope</column>		
+		<column>type</column>		
+		<column>ref_name</column>
+		<column>toplanguage</column>		
+		<column>comment</column>				
+		<row>
+			<value>aaa</value>
+			<value></value>
+			<value></value>			
+			<value></value>			
+			<value>I</value>			
+			<value>L</value>
+			<value>Ghotuo</value>
+			<value>false</value>
+		</row>
+	</table>
 </dataset>

@@ -34,38 +34,25 @@
  */
 package fr.mcc.ginco;
 
-import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.users.IUser;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service used to work with {@link Thesaurus} objects, contains basic
- * methods exposed to client part. For example, to get a single
- * Thesaurus object, use {@link #getThesaurusById(String)}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusService {
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
 
-    /**
-     * Get a single object by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
-     */
-    Thesaurus getThesaurusById(String id);
+@Transactional
+@Service("thesaurusTermService")
+public class ThesaurusTermServiceImpl implements IThesaurusTermService {
+	
+    @Inject
+    @Named("thesaurusTermDAO")
+	private IThesaurusTermDAO thesaurusTermDAO;
 
-    /**
-     * Get list of all objects.
-     * @return List of all objects.
-     */
-    List<Thesaurus> getThesaurusList();
-
-    /**
-     * Update a single object
-     */
-
-    Thesaurus updateThesaurus(Thesaurus object, IUser user);
-
+	@Override
+	public ThesaurusTerm getThesaurusTermById(String id) {
+		return thesaurusTermDAO.getById(id);
+	}
 }

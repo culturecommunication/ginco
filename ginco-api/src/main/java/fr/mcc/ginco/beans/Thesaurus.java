@@ -43,6 +43,11 @@ import java.util.Set;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 
+/**
+ * @author frsto
+ *
+ */
+@SuppressWarnings("serial")
 public class Thesaurus implements Serializable, IBaseBean {
     private String identifier;
     private String contributor;
@@ -61,6 +66,7 @@ public class Thesaurus implements Serializable, IBaseBean {
     private ThesaurusOrganization creator;
     private Set<Language> lang = new HashSet<Language>();
     private Set<ThesaurusVersionHistory> versions;
+    private Set<ThesaurusTerm> thesaurusesTerms  = new HashSet<ThesaurusTerm>();
 
     public Thesaurus() {
     }
@@ -220,13 +226,33 @@ public class Thesaurus implements Serializable, IBaseBean {
 		this.versions = versions;
 	}
 
+    /**
+     * @return All languages avalaible for this Thesaurus
+     */
     @JsonIgnore
     public Set<Language> getLang() {
         return lang;
     }
 
+    /**
+     * @param lang
+     */
     public void setLang(Set<Language> lang) {
         this.lang = lang;
     }
+
+	/**
+	 * @return the thesaurusesTerms
+	 */
+	public Set<ThesaurusTerm> getThesaurusesTerms() {
+		return thesaurusesTerms;
+	}
+
+	/**
+	 * @param thesaurusesTerms the thesaurusesTerms to set
+	 */
+	public void setThesaurusesTerms(Set<ThesaurusTerm> thesaurusesTerms) {
+		this.thesaurusesTerms = thesaurusesTerms;
+	}
 
 }
