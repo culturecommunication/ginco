@@ -1,4 +1,4 @@
-Ext.define('HadocApp.view.LeftPanel', {
+Ext.define('GincoApp.view.LeftPanel', {
 	extend : 'Ext.panel.Panel',
 	alias : 'widget.leftPanel',
 	xThesaurusLabel : "Thesaurus Explorer",

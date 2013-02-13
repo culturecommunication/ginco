@@ -1,4 +1,4 @@
-Ext.define('HadocApp.view.AProposWin', {
+Ext.define('GincoApp.view.AProposWin', {
     extend: 'Ext.window.Window',
 
     autoShow: true,

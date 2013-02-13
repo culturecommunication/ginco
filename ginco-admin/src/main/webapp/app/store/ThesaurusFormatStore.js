@@ -2,7 +2,7 @@
  * Thesaurus Format Store 
  * This file contains all Thesaurus formats displayed in dropdown lists
  */
-Ext.define('HadocApp.store.ThesaurusFormatStore', {
+Ext.define('GincoApp.store.ThesaurusFormatStore', {
     extend: 'Ext.data.Store',
 
     constructor: function(cfg) {

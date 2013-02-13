@@ -1,8 +1,8 @@
-Ext.define('HadocApp.view.Viewport', {
-    extend: 'HadocApp.view.HadocViewPort',
+Ext.define('GincoApp.view.Viewport', {
+    extend: 'GincoApp.view.GincoViewPort',
     renderTo: Ext.getBody(),
     requires: [
-        'HadocApp.view.HadocViewPort',
-        'HadocApp.view.AProposWin'
+        'GincoApp.view.GincoViewPort',
+        'GincoApp.view.AProposWin'
     ]
 });

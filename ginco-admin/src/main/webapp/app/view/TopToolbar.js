@@ -1,4 +1,4 @@
-Ext.define('HadocApp.view.TopToolbar', {
+Ext.define('GincoApp.view.TopToolbar', {
     extend: 'Ext.toolbar.Toolbar',
     alias: 'widget.topToolBar',
     localized: true,
@@ -13,9 +13,6 @@ Ext.define('HadocApp.view.TopToolbar', {
     xSearchFieldText: "Search a term",
     xConnectedAsLabel: "Connected as",
     xNewMenu_ThesaurusLabel: "Thesaurus",
-    xNewMenu_ConceptLabel: "Concept",
-    xNewMenu_TermLabel: "Term",
-    xNewMenu_GroupLabel: "Group of Concepts",
     xHelpLabel: "Help",
     height: 64,
 
@@ -47,27 +44,9 @@ Ext.define('HadocApp.view.TopToolbar', {
                                 items: [
                                     {
                                         xtype: 'keymenuitem',
-                                        id: 'newThesaurusBtn',
+                                        itemId: 'newThesaurusBtn',
                                         text: me.xNewMenu_ThesaurusLabel,
                                         cmdTxt: 'Ctrl+1'
-                                    },
-                                    {
-                                        xtype: 'menuitem',
-                                        disabled: true,
-                                        text: me.xNewMenu_ConceptLabel
-                                    },
-                                    {
-                                        xtype: 'menuitem',
-                                        disabled: true,
-                                        text: me.xNewMenu_TermLabel
-                                    },
-                                    {
-                                        xtype: 'menuseparator'
-                                    },
-                                    {
-                                        xtype: 'menuitem',
-                                        disabled: true,
-                                        text: me.xNewMenu_GroupLabel
                                     }
                                 ]
                             }
@@ -98,12 +77,12 @@ Ext.define('HadocApp.view.TopToolbar', {
                     items: [
                         {
                             xtype: 'button',
-                            id: 'aproposbtn',
+                            itemId: 'aproposbtn',
                             text: me.xAboutLabel
                         },
                         {
                             xtype: 'button',
-                            id: 'accessibilitybtn',
+                            itemId: 'accessibilitybtn',
                             text: "Accessibilité",
                             enableToggle: true
                         }

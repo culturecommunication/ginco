@@ -1,8 +1,8 @@
-Ext.define('HadocApp.store.MainTreeStore', {
+Ext.define('GincoApp.store.MainTreeStore', {
     extend: 'Ext.data.TreeStore',
 
     requires: [
-        'HadocApp.model.MainTreeModel'
+        'GincoApp.model.MainTreeModel'
     ],
 
     constructor: function(cfg) {
@@ -11,7 +11,7 @@ Ext.define('HadocApp.store.MainTreeStore', {
         me.callParent([Ext.apply({
             autoLoad: true,
             storeId: 'JsonMainTreeStore',
-            model: 'HadocApp.model.MainTreeModel',
+            model: 'GincoApp.model.MainTreeModel',
             proxy: {
                 type: 'ajax',
                 url: 'services/ui/baseservice/getVocabularies',
