@@ -9,7 +9,7 @@ Ext
 				{
 					extend : 'Ext.panel.Panel',
 
-					thesaurusId : '',
+					thesaurusData : null,
 
 					alias : 'widget.thesaurusPanel',
 					localized : true,
