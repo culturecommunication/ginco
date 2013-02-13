@@ -24,11 +24,13 @@ Ext.define('HadocApp.view.TopToolbar', {
 
         Ext.applyIf(me, {
             items: [
-                {	xtype: 'box',autoEl: {tag: 'img', src:'images/ginco-logo-xs.png', width:'32px'}},
+                {	xtype: 'box',autoEl: {tag: 'img', src:'images/ginco-logo-xs.png', width:'32px', alt:'logo ginco'}},
+                { xtype: 'box', autoEl: { tag: 'div', cls: 'title-bar', html: '<h1>Gestionnaire Thesaurus GINCO</h1>' }},
                 {
-                    xtype: 'label',
-                    width: 100,
-                    html: '<h1>'+me.xTopWelcomeLabel+'</h1>'
+                    xtype: 'tbseparator',
+                    flex: 2,
+                    height: 10,
+                    width: 10
                 },
                 {
                     xtype: 'buttongroup',
@@ -92,12 +94,18 @@ Ext.define('HadocApp.view.TopToolbar', {
                 {
                     xtype: 'buttongroup',
                     title: me.xHelpLabel,
-                    columns: 1,
+                    columns: 2,
                     items: [
                         {
                             xtype: 'button',
                             id: 'aproposbtn',
                             text: me.xAboutLabel
+                        },
+                        {
+                            xtype: 'button',
+                            id: 'accessibilitybtn',
+                            text: "Accessibilité",
+                            enableToggle: true
                         }
                     ]
                 },

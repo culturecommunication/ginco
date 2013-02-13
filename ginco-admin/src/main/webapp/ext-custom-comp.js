@@ -28,6 +28,25 @@ Ext.define('Thesaurus.ext.KeyMenuItem', {
     }
 });
 
+// Override treeView to add 'alt' attribute to img in the tree.
+Ext.define('Thesaurus.ext.tree.Column', {
+    override: 'Ext.tree.Column',
+    imgText: '<img src="{1}" class="{0}" alt="treenode" />',
+    constructor: function (config) {
+        this.callSuper(arguments);
+    }
+});
+
+Ext.define('Thesaurus.panel.Tool', {
+    override: 'Ext.panel.Tool',
+    renderTpl: [
+                '<img id="{id}-toolEl" src="{blank}" class="{baseCls}-{type}" alt="{type}" role="presentation"/>'
+            ],
+    constructor: function (config) {
+        this.callSuper(arguments);
+    }
+});
+
 Thesaurus.ext.utils = function(){
 	var msgCt;
 	function createBox(t, s){

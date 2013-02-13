@@ -77,7 +77,7 @@ Ext.application({
         // Run the fade 500 milliseconds after launch.
         task.delay(500);
     	//Ext.FocusManager.enable();
-        var map = new Ext.util.KeyMap(Ext.getBody(), {
+        var map = new Ext.util.KeyMap(Ext.getBody(), [{
             key: Ext.EventObject.ONE,
             ctrl: true,
             handler: function() {
@@ -85,6 +85,19 @@ Ext.application({
             },
             scope: this,
             defaultEventAction: "stopEvent"
-        });
+        },
+        {
+            key: Ext.EventObject.W, // W to close
+            ctrl: true,
+            fn: function(){
+                var el = Ext.FocusManager.focusedCmp;
+                if (el.xtype === 'tab' && el.closable) {
+                    el.up().focus();
+                    el.destroy();
+                }
+            },
+            scope: this
+        }]
+        );
      }
 });

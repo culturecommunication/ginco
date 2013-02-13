@@ -44,7 +44,7 @@ Ext.define('HadocApp.controller.MainTreeController',
 				this.nav = new Ext.util.KeyNav({
 					target : theTree.getEl(),
 
-					enter : function() {
+					"enter" : function() {
 						me.onEnterKey(theTree);
 					},
 					scope : me

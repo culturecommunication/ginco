@@ -16,6 +16,13 @@ Ext.define('HadocApp.controller.TopToolbarController', {
     	topTabs.setActiveTab(tab);
     	tab.show();
     },
+    onAccessibilityClick: function(theButton)
+    {
+    	if (theButton.pressed) 
+    		Ext.FocusManager.enable(true);
+    	else
+    		Ext.FocusManager.disable();
+    },
 
     init: function(application) {
         this.control({
@@ -25,6 +32,9 @@ Ext.define('HadocApp.controller.TopToolbarController', {
         
         "#newThesaurusBtn":{
         	click: this.onNewThesaurusBtnClick
+        },
+        "#accessibilitybtn":{
+        	click: this.onAccessibilityClick
         }
         });
     }
