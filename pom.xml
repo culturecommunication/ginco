@@ -62,7 +62,6 @@
 				<scp.user>root</scp.user>
 				<scp.password>hadoc-int</scp.password>
 				<scp.host>hadoc-int.eqx.intranet</scp.host>
-				<scp.folder.tomcat>/var/lib/tomcat6</scp.folder.tomcat>
 				<scp.folder.tomcat.conf>${scp.folder.tomcat}/shared/classes</scp.folder.tomcat.conf>
 				<folder.conf>${basedir}/conf/integration</folder.conf>
 			</properties>
@@ -81,7 +80,6 @@
 				<scp.user>root</scp.user>
 				<scp.password>hadoc-rec</scp.password>
 				<scp.host>hadoc-rec.eqx.intranet</scp.host>
-				<scp.folder.tomcat>/var/lib/tomcat6</scp.folder.tomcat>
 				<scp.folder.tomcat.conf>${scp.folder.tomcat}/shared/classes</scp.folder.tomcat.conf>
 				<folder.conf>${basedir}/conf/recette</folder.conf>
 			</properties>
