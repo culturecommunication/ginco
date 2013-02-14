@@ -65,8 +65,7 @@
                 <prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
                 <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
                 <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
-                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
-                
+                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>                
             </props>
         </property>
 
@@ -80,15 +79,17 @@
     <tx:annotation-driven transaction-manager="transactionManager" />
     
     <bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">		
 		<property name="locations">
 			<list>
 				<value>classpath:hibernate.properties</value>
 				<value>classpath:application.properties</value>
 				<value>classpath:git.properties</value>
+				<value>file:${ginco-properties}</value>
 			</list>
 		</property>
 	</bean>
+	
 	
 	<!-- Aspect : all operations of save/update and delete should be logged in a specific table -->
 	<aop:aspectj-autoproxy/>

@@ -12,6 +12,37 @@
 	<name>ginco-impl</name>
 	<build>
 		<finalName>ginco-impl</finalName>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.7</version>
+					<configuration>
+						<target>
+							<scp password="${scp.password}" todir="${scp.user}@${scp.host}:${scp.folder.tomcat}"
+								trust="true">
+								<fileset dir="${folder.conf}" />
+							</scp>
+						</target>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.ant</groupId>
+							<artifactId>ant-jsch</artifactId>
+							<version>1.8.4</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<argLine>-Dginco-properties=${basedir}/conf/local/ginco.properties</argLine>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
 		<dependency>

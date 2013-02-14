@@ -38,7 +38,13 @@
 		<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
 		<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
 		<servlet.api.version>2.5</servlet.api.version>
-		<apache.commons.lang.version>3.1</apache.commons.lang.version>		
+		<apache.commons.lang.version>3.1</apache.commons.lang.version>
+		<!-- remote configuration -->
+		<scp.user>root</scp.user>
+		<scp.password>hadoc</scp.password>
+		<scp.host>hadoc.lxc</scp.host>
+		<scp.folder.tomcat>/etc/tomcat6/</scp.folder.tomcat>
+		<folder.conf>${basedir}/conf/local</folder.conf>
 	</properties>
 
 	<profiles>
@@ -51,7 +57,14 @@
 				<cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
 				<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
 				<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
-				<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>							
+				<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
+				<!-- remote configuration -->
+				<scp.user>root</scp.user>
+				<scp.password>hadoc-int</scp.password>
+				<scp.host>hadoc-int.eqx.intranet</scp.host>
+				<scp.folder.tomcat>/var/lib/tomcat6</scp.folder.tomcat>
+				<scp.folder.tomcat.conf>${scp.folder.tomcat}/shared/classes</scp.folder.tomcat.conf>
+				<folder.conf>${basedir}/conf/integration</folder.conf>
 			</properties>
 		</profile>
 		<profile>
@@ -64,6 +77,13 @@
 				<ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
 				<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
 				<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
+				<!-- remote configuration -->
+				<scp.user>root</scp.user>
+				<scp.password>hadoc-rec</scp.password>
+				<scp.host>hadoc-rec.eqx.intranet</scp.host>
+				<scp.folder.tomcat>/var/lib/tomcat6</scp.folder.tomcat>
+				<scp.folder.tomcat.conf>${scp.folder.tomcat}/shared/classes</scp.folder.tomcat.conf>
+				<folder.conf>${basedir}/conf/recette</folder.conf>
 			</properties>
 		</profile>
 	</profiles>
@@ -218,11 +238,11 @@
 				<artifactId>jackson-jaxrs</artifactId>
 				<version>${org.codehaus.jackson.version}</version>
 			</dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                 <artifactId>jackson-core-asl</artifactId>
-                 <version>${org.codehaus.jackson.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-core-asl</artifactId>
+				<version>${org.codehaus.jackson.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
@@ -290,31 +310,31 @@
 				<version>${aspectj.version}</version>
 			</dependency>
 			<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>${aspectj.version}</version>
-		</dependency>
-		<dependency>
-      		<groupId>javax.servlet</groupId>
-      		<artifactId>servlet-api</artifactId>
-      		<version>${servlet.api.version}</version>
-    	</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${apache.commons.lang.version}</version>
-		</dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>${servlet.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${apache.commons.lang.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>				
+				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
-					<include>**/*.xml</include>					
+					<include>**/*.xml</include>
 				</includes>
-			</resource>			
+			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>false</filtering>
@@ -331,13 +351,6 @@
 					<configuration>
 						<source>${java.version}</source>
 						<target>${java.version}</target>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<configuration>
-						<skip>true</skip>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -361,8 +374,15 @@
 						</configuration>
 					</configuration>
 				</plugin>
-			</plugins>
-		</pluginManagement>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>				
+		</pluginManagement>				
 	</build>
 
 	<distributionManagement>
