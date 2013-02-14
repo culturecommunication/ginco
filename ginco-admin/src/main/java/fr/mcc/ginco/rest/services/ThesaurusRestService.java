@@ -49,12 +49,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusFormatService;
+import fr.mcc.ginco.IThesaurusOrganizationService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.Language;
@@ -76,26 +78,30 @@ import fr.mcc.ginco.utils.DateUtil;
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Service
 @Path("/thesaurusservice")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
 public class ThesaurusRestService {
-	@Context 
+	@Context
 	private MessageContext context;
-	
+
 	@Inject
 	@Named("thesaurusTypeService")
 	private IThesaurusTypeService thesaurusTypeService;
-	
+
 	@Inject
 	@Named("thesaurusFormatService")
-	private IThesaurusFormatService thesaurusFormatService;   
-	
+	private IThesaurusFormatService thesaurusFormatService;
+
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
 
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
+	
+	@Inject
+	@Named("thesaurusOrganizationService")
+	private IThesaurusOrganizationService thesaurusOrganizationService;
 
 	@Log
 	private Logger logger;
@@ -111,7 +117,7 @@ public class ThesaurusRestService {
 	public List<ThesaurusType> getAllThesaurusTypes() {
 		return thesaurusTypeService.getThesaurusTypeList();
 	}
-	
+
 	/**
 	 * Public method used to get list of all existing Language objects in
 	 * database.
@@ -120,33 +126,40 @@ public class ThesaurusRestService {
 	 */
 	@GET
 	@Path("/getAllLanguages")
-	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<Language> > getAllLanguages(@QueryParam("start") Integer startIndex, @QueryParam("limit") Integer limit) {
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<Language>> getAllLanguages(
+			@QueryParam("start") Integer startIndex,
+			@QueryParam("limit") Integer limit) {
 		logger.info("Param passed to me : " + startIndex);
 		logger.info("Param passed to me : " + limit);
-		List<Language> languages = languagesService.getLanguagesList(startIndex, limit);
+		List<Language> languages = languagesService.getLanguagesList(
+				startIndex, limit);
 		Long total = languagesService.getLanguageCount();
-		
-		ExtJsonFormLoadData<List<Language> > extLanguages = new  ExtJsonFormLoadData<List<Language> > (languages);
+
+		ExtJsonFormLoadData<List<Language>> extLanguages = new ExtJsonFormLoadData<List<Language>>(
+				languages);
 		extLanguages.setTotal(total);
 		return extLanguages;
 	}
-	
+
 	/**
 	 * Public method used to get list of existing top Languages in the database.
+	 * 
 	 * @return list of objects, if not found - {@code null}
 	 */
 	@GET
 	@Path("/getTopLanguages")
-	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<Language> > getTopLanguages() {
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<Language>> getTopLanguages() {
 		logger.info("Getting Top Languages");
 		List<Language> topLanguages = languagesService.getTopLanguagesList();
-		return new  ExtJsonFormLoadData<List<Language> > (topLanguages);
+		return new ExtJsonFormLoadData<List<Language>>(topLanguages);
 	}
-	
+
 	/**
-	 * Public method used to get list of all existing ThesaurusFormat objects in database.
+	 * Public method used to get list of all existing ThesaurusFormat objects in
+	 * database.
+	 * 
 	 * @return list of objects, if not found - {@code null}
 	 */
 	@GET
@@ -155,101 +168,119 @@ public class ThesaurusRestService {
 		return thesaurusFormatService.getThesaurusFormatList();
 	}
 
+	/**
+	 * Public method used to get
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object by providing
+	 * its id.
+	 * 
+	 * @param id
+	 *            {@link String} identifier to try with
+	 * 
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object in JSON
+	 *         format or {@code null} if not found
+	 */
+	@GET
+	@Path("/getVocabulary")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ThesaurusView getVocabularyById(@QueryParam("id") String id) {
+		return new ThesaurusView(thesaurusService.getThesaurusById(id));
+	}
 
-    /**
-     * Public method used to get {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object by providing its id.
-     * @param id {@link String} identifier to try with
-     *
-     * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object in JSON format or
-     * {@code null} if not found
-     */
-    @GET
-    @Path("/getVocabulary")
-    @Produces({MediaType.APPLICATION_JSON})
-    public ThesaurusView getVocabularyById(@QueryParam("id") String id) {
-        return new ThesaurusView(thesaurusService.getThesaurusById(id));
-    }
+	/**
+	 * Public method used to create or update
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object
+	 * 
+	 * @param id
+	 *            {@link ThesaurusView} thesaurus JSON object send by extjs
+	 * 
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} updated object
+	 *         in JSON format or {@code null} if not found
+	 */
+	@POST
+	@Path("/updateVocabulary")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
+		Thesaurus object = convert(thesaurusViewJAXBElement);
+		String principal = "unknown";
+		if (context != null) {
+			principal = context.getHttpServletRequest().getRemoteAddr();
+		}
+		IUser user = new SimpleUserImpl();
+		user.setName(principal);
+		if (object != null) {
+			Thesaurus result = thesaurusService.updateThesaurus(object, user);
+			if (result != null) {
+				return new ThesaurusView(result);
+			} else {
+				logger.error("Failed to update thesaurus");
+				return null;
+			}
+		}
+		return null;
+	}
 
-    /**
-     * Public method used to create or update {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object
-     * @param id {@link ThesaurusView} thesaurus JSON object send by extjs
-     *
-     * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} updated object in JSON format or
-     * {@code null} if not found
-     */
-    @POST
-    @Path("/updateVocabulary")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
-    	Thesaurus object = convert(thesaurusViewJAXBElement);
-    	String principal = "unknown";
-    	if (context!=null) {
-    		principal = context.getHttpServletRequest().getRemoteAddr();
-    	} 
-        IUser user = new SimpleUserImpl();
-        user.setName(principal); 
-        if(object != null) {
-        	Thesaurus result=thesaurusService.updateThesaurus(object,user);
-        	if (result!=null)
-        	{
-        		return new ThesaurusView(result);
-        	} else 
-        	{
-        		logger.error("Failed to update thesaurus");
-        		return null;
-        	}
-        }
-        return null;
-    }
+	private Thesaurus convert(ThesaurusView source) {
+		Thesaurus hibernateRes;
 
+		if ("".equals(source.getId())) {
+			hibernateRes = new Thesaurus();
+			hibernateRes.setCreated(DateUtil.nowDate());
+		} else {
+			hibernateRes = thesaurusService.getThesaurusById(source.getId());
+		}
 
-    private Thesaurus convert(ThesaurusView source) {
-        Thesaurus hibernateRes;
+		hibernateRes.setContributor(source.getContributor());
+		hibernateRes.setCoverage(source.getCoverage());
+		hibernateRes.setDate(DateUtil.nowDate());
+		hibernateRes.setDescription(source.getDescription());
+		hibernateRes.setPublisher(source.getPublisher());
+		hibernateRes.setRelation(source.getRelation());
+		hibernateRes.setRights(source.getRights());
+		hibernateRes.setSource(source.getSource());
+		hibernateRes.setSubject(source.getSubject());
+		hibernateRes.setTitle(source.getTitle());
+		hibernateRes.setFormat(thesaurusFormatService
+				.getThesaurusFormatById(source.getFormat()));
+		hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source
+				.getType()));
+		ThesaurusOrganization thesaurusOrganization;
+		if (StringUtils.isNotEmpty(source.getCreatorName())
+				|| StringUtils.isNotEmpty(source.getCreatorHomepage())) {
+			if (hibernateRes.getCreator() != null) {
+				thesaurusOrganization = hibernateRes.getCreator();
 
-        if("".equals(source.getId())) {
-            hibernateRes = new Thesaurus();
-            hibernateRes.setCreated(DateUtil.nowDate());
-        } else {
-            hibernateRes = thesaurusService.getThesaurusById(source.getId());
-        }
+			} else {
+				thesaurusOrganization = new ThesaurusOrganization();
+			}
+			thesaurusOrganization.setName(source.getCreatorName());
+			thesaurusOrganization.setHomepage(source.getCreatorHomepage());
+			hibernateRes.setCreator(thesaurusOrganization);
+		} else {
+			if (hibernateRes.getCreator() != null) {
+				hibernateRes.setCreator(null);
+			}
+		}
+		List<String> languages = source.getLanguages();
+		Set<Language> realLanguages = new HashSet<Language>();
 
-        hibernateRes.setContributor(source.getContributor());
-        hibernateRes.setCoverage(source.getCoverage());
-        hibernateRes.setDate(DateUtil.nowDate());
-        hibernateRes.setDescription(source.getDescription());
-        hibernateRes.setPublisher(source.getPublisher());
-        hibernateRes.setRelation(source.getRelation());
-        hibernateRes.setRights(source.getRights());
-        hibernateRes.setSource(source.getSource());
-        hibernateRes.setSubject(source.getSubject());
-        hibernateRes.setTitle(source.getTitle());
-        hibernateRes.setFormat(thesaurusFormatService.getThesaurusFormatById(source.getFormat()));
-        hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source.getType()));
-        ThesaurusOrganization myThesaurusOrganization = new ThesaurusOrganization();
-    	myThesaurusOrganization.setName(source.getCreatorName());
-    	myThesaurusOrganization.setHomepage(source.getCreatorHomepage());
-    	hibernateRes.setCreator(myThesaurusOrganization);  
+		for (String language : languages) {
+			Language lang = languagesService.getLanguageById(language);
+			if (lang != null) {
+				realLanguages.add(lang);
+			}
+		}
 
-        List<String> languages = source.getLanguages();
-        Set<Language> realLanguages = new HashSet<Language>();
+		hibernateRes.setLang(realLanguages);
 
-        for(String language : languages) {
-            Language lang = languagesService.getLanguageById(language);
-            if(lang != null) {
-                realLanguages.add(lang);
-            }
-        }
-
-        hibernateRes.setLang(realLanguages);
-
-        return hibernateRes;
-    }
+		return hibernateRes;
+	}
 
 	public IThesaurusTypeService getThesaurusTypeService() {
 		return thesaurusTypeService;
 	}
 
-	public void setThesaurusTypeService(IThesaurusTypeService thesaurusTypeService) {
+	public void setThesaurusTypeService(
+			IThesaurusTypeService thesaurusTypeService) {
 		this.thesaurusTypeService = thesaurusTypeService;
 	}
 
@@ -260,7 +291,7 @@ public class ThesaurusRestService {
 	public void setThesaurusFormatService(
 			IThesaurusFormatService thesaurusFormatService) {
 		this.thesaurusFormatService = thesaurusFormatService;
-	}	
+	}
 
 	public ILanguagesService getLanguagesService() {
 		return languagesService;
@@ -276,5 +307,5 @@ public class ThesaurusRestService {
 
 	public void setThesaurusService(IThesaurusService thesaurusService) {
 		this.thesaurusService = thesaurusService;
-	}	
+	}
 }

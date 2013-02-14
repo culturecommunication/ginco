@@ -38,6 +38,7 @@
 		<ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
 		<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
 		<servlet.api.version>2.5</servlet.api.version>
+		<apache.commons.lang.version>3.1</apache.commons.lang.version>		
 	</properties>
 
 	<profiles>
@@ -298,6 +299,11 @@
       		<artifactId>servlet-api</artifactId>
       		<version>${servlet.api.version}</version>
     	</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${apache.commons.lang.version}</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>

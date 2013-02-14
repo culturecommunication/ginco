@@ -44,13 +44,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.users.IUser;
-import fr.mcc.ginco.enums.ServiceCRUDResults;
 import fr.mcc.ginco.tests.BaseServiceTest;
 import fr.mcc.ginco.users.SimpleUserImpl;
 
-@TransactionConfiguration
-@Transactional
+//@TransactionConfiguration()
+//@Transactional
 public class ThesaurusServiceTest extends BaseServiceTest {
 
     @Inject
@@ -96,30 +96,84 @@ public class ThesaurusServiceTest extends BaseServiceTest {
     
     @Test
     public final void testUpdateThesaurus() throws Exception{
-        Integer expectedThesaurusListSize = 3;
         Thesaurus th = new Thesaurus();
         th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
         th.setTitle("title");
         IUser user = new SimpleUserImpl();
         user.setName("user1");
         Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(th, user);
-       // Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
         Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);
+        
         //Test the log_journal addition
      	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
      	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
      	//Assert.assertEquals(1, databaseTableSize);
         
     }
-
+    
     @Test
-    public final void testCreateNewThesaurus() {
+    public final void testCreateNewThesaurusWithEmptyCreator() {
         Thesaurus newThesaurus = new Thesaurus();
         newThesaurus.setTitle("test");
+        newThesaurus.setCreator(null);
         IUser user = new SimpleUserImpl();
         user.setName("test1");
-        thesaurusService.updateThesaurus(newThesaurus, user);
+        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(newThesaurus, user);
+        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);
     }   
+    
+    @Test
+    public final void testCreateNewThesaurusWithCreator() {
+        Thesaurus newThesaurus = new Thesaurus();
+        ThesaurusOrganization thOrg = new ThesaurusOrganization();
+        thOrg.setName("Un auteur");
+        newThesaurus.setTitle("test");
+        newThesaurus.setCreator(thOrg);
+        IUser user = new SimpleUserImpl();
+        user.setName("test1");
+        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(newThesaurus, user);
+        Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());
+    }   
+    
+    @Test
+    public final void testUpdateThesaurusWithEmptyCreator() throws Exception{
+        Integer expectedThesaurusListSize = 3;
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
+        th.setTitle("title");
+        th.setCreator(null);
+        IUser user = new SimpleUserImpl();
+        user.setName("user1");
+        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(th, user);
+       // Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
+        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);
+        //Test the log_journal addition
+     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
+     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
+     	//Assert.assertEquals(1, databaseTableSize);
+        
+    }
+    @Test
+    public final void testUpdateThesaurusWithCreator() throws Exception{
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
+        th.setTitle("title");
+        ThesaurusOrganization thOrg = new ThesaurusOrganization();
+        thOrg.setName("Un auteur");
+        th.setCreator(thOrg);
+        IUser user = new SimpleUserImpl();
+        user.setName("user1");
+        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(th, user);
+        
+        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);
+        Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());
+        //Test the log_journal addition
+     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
+     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
+     	//Assert.assertEquals(1, databaseTableSize);
+        
+    }
+    
 
 	@Override
 	public String  getXmlDataFileInit() {

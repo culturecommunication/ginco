@@ -37,6 +37,7 @@ package fr.mcc.ginco;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.users.IUser;
 
 /**
@@ -67,5 +68,13 @@ public interface IThesaurusService {
      */
 
     Thesaurus updateThesaurus(Thesaurus object, IUser user);
+    
+    /**
+     * Get a single ThesaurusOrganization by its id
+     *
+     * @param id to search
+     * @return {@code null} if not found
+     */
+    ThesaurusOrganization getThesaurusOrganizationById(Integer id);
 
 }

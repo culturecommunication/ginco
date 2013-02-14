@@ -69,52 +69,60 @@ public class GincoLogAspect {
 
 	/**
 	 * Processes the GincoLog Annotation to add a log journal entry
-	 * @param pjp 
-	 * @param gincoLog the annotation
+	 * 
+	 * @param pjp
+	 * @param gincoLog
+	 *            the annotation
 	 * @return
 	 * @throws Throwable
 	 */
 	@Around("@annotation(gincoLog)")
-	public Object logAction(ProceedingJoinPoint pjp, GincoLog gincoLog)
-			throws Throwable {
-		Object res =  pjp.proceed();
-		log.debug("Into GincoLogAspect with action = "
-				+ gincoLog.action().toString());
-		String entityType = gincoLog.entityType().toString();
-		String action = gincoLog.action().toString();
-		String entityId = "";
-		String author = UNKNOWN_AUTHOR;
+	public Object logAction(ProceedingJoinPoint pjp, GincoLog gincoLog) {
+		Object res = null;
+		try {
+			res = pjp.proceed();
 
-		Object[] args = pjp.getArgs();
-		for (Object arg : args) {
-			if (arg instanceof IBaseBean) {
-				entityId = ((IBaseBean) arg).getId();
-			} else if (arg instanceof IUser) {
-				author = ((IUser) arg).getName();
+			log.debug("Into GincoLogAspect with action = "
+					+ gincoLog.action().toString());
+			String entityType = gincoLog.entityType().toString();
+			String action = gincoLog.action().toString();
+			String entityId = "";
+			String author = UNKNOWN_AUTHOR;
+
+			Object[] args = pjp.getArgs();
+			for (Object arg : args) {
+				if (arg instanceof IBaseBean) {
+					entityId = ((IBaseBean) arg).getId();
+				} else if (arg instanceof IUser) {
+					author = ((IUser) arg).getName();
+				}
 			}
-		}
-		// TODO Add the author of the action
-		log.debug("Saving new LogJournal entry =  {");
-		log.debug("		action: " + gincoLog.action().toString());
-		log.debug("		entityId: " + entityId);
-		log.debug("		entityType: " + entityType);
-		log.debug("		author: " + author);
-		log.debug("}");
-		if (!"".equals(entityId) && !"".equals(author)) {
-			logJournalService.addLogJournalEntry(action.toString(), entityId,
-					entityType, author);
-		} else {
-			log.warn("Some data are missing in order to process correctly the GincoLog annotation");
-			log.warn("Datas are : {");
-			log.warn("		action: " + gincoLog.action().toString());
-			log.warn("		entityId: " + entityId);
-			log.warn("		entityType: " + entityType);
-			log.warn("		author: " + author);
-			log.warn("}");
-			log.warn("All data are mandatory");
+			// TODO Add the author of the action
+			log.debug("Saving new LogJournal entry =  {");
+			log.debug("		action: " + gincoLog.action().toString());
+			log.debug("		entityId: " + entityId);
+			log.debug("		entityType: " + entityType);
+			log.debug("		author: " + author);
+			log.debug("}");
+			if (!"".equals(entityId) && !"".equals(author)) {
+				logJournalService.addLogJournalEntry(action, entityId,
+						entityType, author);
+			} else {
+				log.warn("Some data are missing in order to process correctly the GincoLog annotation");
+				log.warn("Datas are : {");
+				log.warn("		action: " + gincoLog.action().toString());
+				log.warn("		entityId: " + entityId);
+				log.warn("		entityType: " + entityType);
+				log.warn("		author: " + author);
+				log.warn("}");
+				log.warn("All data are mandatory");
 
-		}
+			}
 
+		} catch (Throwable e) {
+			log.error("Error in GincoLogAspect", e);
+		}
 		return res;
+
 	}
 }

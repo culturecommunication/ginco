@@ -73,13 +73,16 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     }
 
     @Override
+	public ThesaurusOrganization getThesaurusOrganizationById(Integer id) {
+        return thesaurusOrganizationDAO.getById(id);
+	}   
+    
+    @Override
     @GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUS)
     public Thesaurus updateThesaurus(Thesaurus object, IUser user) {
-    	if (object.getCreator() != null) {
-    		thesaurusOrganizationDAO.update(object.getCreator());
-    	}
-    	Thesaurus result = thesaurusDAO.update(object);    
-        return result;
+    	//ThesaurusOrganization org = thesaurusOrganizationDAO.update(object.getCreator());
+    	return thesaurusDAO.update(object);
+    	//return object;    
     }
     
 }
