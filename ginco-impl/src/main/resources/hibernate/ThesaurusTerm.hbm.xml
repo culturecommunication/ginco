@@ -16,6 +16,6 @@
 		<property name="conceptId" column="conceptid" />
 		
 		<many-to-one name="language" column="lang" lazy="false" />
-		<many-to-one name="thesaurusId" column="thesaurusId" lazy="false" />
+		<many-to-one name="thesaurusId" column="thesaurusid" lazy="false" />
 	</class>
 </hibernate-mapping>

@@ -50,7 +50,7 @@ public interface ILanguagesService {
      * Get list of all Languages.
      * @return
      */
-    List<Language> getLanguagesList(Integer startIndex, Integer endIndex);
+    List<Language> getLanguagesList(Integer startIndex, Integer limit);
     
     /**
      * Get list of all Top Languages.

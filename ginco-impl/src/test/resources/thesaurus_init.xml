@@ -148,6 +148,19 @@
 			<value>1</value>
 			<value>aaa</value>
 		</row>
+		<row>
+			<value>1</value>
+			<value>lexical value 2</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>test</value>
+			<value>true</value>
+			<value>1</value>
+			<value>1</value>
+			<value>test</value>
+			<value>1</value>
+			<value>aaa</value>
+		</row>
    	</table>
    	
    	<table name="languages_iso639">

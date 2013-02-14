@@ -34,6 +34,9 @@
  */
 package fr.mcc.ginco;
 
+import java.util.List;
+
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
@@ -53,4 +56,12 @@ public interface IThesaurusTermService {
      */
 	ThesaurusTerm getThesaurusTermById(String id);
 	
+    /**
+     * Get list of paginated Thesaurus Terms.
+     * @return List of Thesaurus Terms (the number given in argument), from the start index
+     */
+    List<ThesaurusTerm> getPaginatedThesaurusList(Integer startIndex, Integer limit, String idThesaurus);
+
+	Long getCount();
+    
 }

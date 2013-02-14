@@ -33,7 +33,7 @@
 		</set>
 		
 		<set name="thesaurusesTerms">
-			<key column="identifier" />
+			<key column="thesaurusid" />
 			<one-to-many class="ThesaurusTerm" />
 		</set>
 

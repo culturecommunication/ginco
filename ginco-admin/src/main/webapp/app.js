@@ -28,7 +28,8 @@ Ext.Loader.setLocale({
 Ext.application({
     models: [
         'MainTreeModel',
-        'ThesaurusModel'
+        'ThesaurusModel',
+        'ThesaurusTermModel'
     ],
     stores: [
         'MainTreeStore',

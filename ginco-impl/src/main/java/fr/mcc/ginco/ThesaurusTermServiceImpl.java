@@ -34,12 +34,15 @@
  */
 package fr.mcc.ginco;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 
@@ -55,4 +58,16 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	public ThesaurusTerm getThesaurusTermById(String id) {
 		return thesaurusTermDAO.getById(id);
 	}
+
+	@Override
+	public List<ThesaurusTerm> getPaginatedThesaurusList(Integer startIndex,
+			Integer limit, String idThesaurus) {
+		return thesaurusTermDAO.findPaginatedItems(startIndex, limit, idThesaurus);
+	}
+
+	@Override
+	public Long getCount() {
+		return thesaurusTermDAO.count();
+	}
+	
 }

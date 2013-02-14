@@ -27,6 +27,22 @@ public class ThesaurusTermServiceTest extends BaseServiceTest {
         String actualResponse = thesaurusTermService.getThesaurusTermById(idThesaurusTerm).getLexicalValue();
 		Assert.assertEquals("Error while getting ThesaurusTerm By Id !", expectedResponse, actualResponse);
     }
+	
+	/**
+	 * @return Test getting a paginated list of Thesaurus Terms for a Thesaurus
+	 */
+	@Test
+    public final void testGetPaginatedThesaurusTermsList() {
+    	Integer expectedResponse = 2;
+    	Integer startIndex = 0;
+    	Integer limit= 2;
+    	String idThesaurus = "0";
+    	Integer actualResponse = thesaurusTermService.getPaginatedThesaurusList(startIndex, limit, idThesaurus).size();
+    	
+    	// compare size and first/last elements
+        //String actualResponse = thesaurusTermService.getThesaurusTermById(idThesaurusTerm).getLexicalValue();
+		//Assert.assertEquals("Error while getting ThesaurusTerm By Id !", expectedResponse, actualResponse);
+    }
 
 	@Override
 	public String getXmlDataFileInit() {

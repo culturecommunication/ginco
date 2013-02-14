@@ -227,7 +227,7 @@ public class Thesaurus implements Serializable, IBaseBean {
 	}
 
     /**
-     * @return All languages avalaible for this Thesaurus
+     * @return All languages available for this Thesaurus
      */
     @JsonIgnore
     public Set<Language> getLang() {
