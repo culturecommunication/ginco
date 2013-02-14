@@ -64,10 +64,17 @@ public interface IThesaurusService {
     List<Thesaurus> getThesaurusList();
 
     /**
-     * Update a single object
+     * Update a single ThesaurusObject
      */
 
     Thesaurus updateThesaurus(Thesaurus object, IUser user);
+    
+    
+    /**
+     * Create a single ThesaurusObject
+     */
+    Thesaurus createThesaurus(Thesaurus object, IUser user);
+
     
     /**
      * Get a single ThesaurusOrganization by its id
