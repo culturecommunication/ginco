@@ -91,7 +91,7 @@ public class ThesaurusTermRestService {
 	@Path("/getAllThesaurusTerms")
 	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<ThesaurusTermView> > getAllThesaurusTerms(@QueryParam("start") Integer startIndex, @QueryParam("limit") Integer limit, @QueryParam("idThesaurus") String idThesaurus) {
-		logger.info("Getting Thesaurus Terms with following parameters : " + "index start " +startIndex + "and limit of " + limit);
+		logger.info("Getting Thesaurus Terms with following parameters : " + "index start " +startIndex + " and limit of " + limit);
 		List<ThesaurusTerm> thesaurusTerms = thesaurusTermService.getPaginatedThesaurusList(startIndex, limit, idThesaurus);
 		Long total = thesaurusTermService.getCount();
 		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();

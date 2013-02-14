@@ -19,34 +19,30 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 
 		Ext.applyIf(me, {
 			title : me.xSandBoxPanelTitle,
-			items : [ {
+			items : [
+				{
 				xtype : 'gridpanel',
 				title : me.xSandBoxPanelTitle,
-				columns : [ {
-					flex: 1,
-					xtype : 'gridcolumn',
-					dataIndex : 'string',
-					text : 'Valeur lexicale'
-				}, {
-					xtype : 'numbercolumn',
-					dataIndex : 'number',
-					text : 'Langue'
-				}, {
-					xtype : 'datecolumn',
-					dataIndex : 'created',
-					text : 'Date de création'
-				}, {
-					xtype : 'booleancolumn',
-					dataIndex : 'modified',
-					text : 'Date de modification'
-				} ],
+				store : 'ThesaurusTermStore',
+				columns : [
+				           {dataIndex : 'identifier', text : 'Identifiant',flex: 1},
+				           {dataIndex : 'lexicalValue', text : 'Valeur lexicale'},
+				           {dataIndex : 'created', text : 'Date de création'},
+				           {dataIndex : 'modified', text : 'Date de mofication'},
+				           {dataIndex : 'source', text : 'Source'},
+				           {dataIndex : 'prefered', text : 'Préférentiel'},
+				           {dataIndex : 'status', text : 'Statut'},
+				           {dataIndex : 'role', text : 'Role'},
+				           {dataIndex : 'language', text : 'Langue'}
+				           ],
 				dockedItems: [{
 			        xtype: 'pagingtoolbar',
-			        //store: store,   // same store GridPanel is using
+			        store : 'ThesaurusTermStore',
 			        dock: 'bottom',
 			        displayInfo: true
 			    }]
-			} ]
+				}]
+		
 		});
 
 		me.callParent(arguments);

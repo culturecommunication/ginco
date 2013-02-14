@@ -35,7 +35,8 @@ Ext.application({
         'MainTreeStore',
         'ThesaurusTypeStore',
         'ThesaurusFormatStore',
-        'ThesaurusLanguageStore'
+        'ThesaurusLanguageStore',
+        'ThesaurusTermStore'
     ],
     views: [
         'GincoViewPort',

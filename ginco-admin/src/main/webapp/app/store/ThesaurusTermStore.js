@@ -2,7 +2,7 @@
  * Thesaurus Term Store 
  * This file contains all Thesaurus formats displayed in dropdown lists
  */
-Ext.define('HadocApp.store.ThesaurusTermStore', {
+Ext.define('GincoApp.store.ThesaurusTermStore', {
     extend: 'Ext.data.Store',
 
     constructor: function(cfg) {
@@ -11,12 +11,15 @@ Ext.define('HadocApp.store.ThesaurusTermStore', {
         me.callParent([Ext.apply({
             autoLoad: true,
             storeId: 'JsonThesaurusTermStore',
+            pageSize: 50,
             proxy: {
                 type: 'ajax',
+                extraParams:{idThesaurus:'1'},
                 url: 'services/ui/thesaurustermservice/getAllThesaurusTerms',
                 reader: {
                     type: 'json',
-                    idProperty: 'identifier'
+                    idProperty: 'identifier',
+                    root: 'data'
                 }
             },
             fields: [
@@ -26,6 +29,42 @@ Ext.define('HadocApp.store.ThesaurusTermStore', {
                 },
                 {
                     name: 'lexicalValue',
+                    type : 'string'
+                },
+                {
+                    name: 'created',
+                    type : 'string'
+                },
+                {
+                    name: 'modified',
+                    type : 'string'
+                },
+                {
+                    name: 'source',
+                    type : 'string'
+                },
+                {
+                    name: 'prefered',
+                    type : 'boolean'
+                },
+                {
+                    name: 'status',
+                    type : 'int'
+                },
+                {
+                    name: 'role',
+                    type : 'int'
+                },
+                {
+                    name: 'conceptId',
+                    type : 'string'
+                },
+                {
+                    name: 'thesaurusId',
+                    type : 'string'
+                },
+                {
+                    name: 'language',
                     type : 'string'
                 }
             ]
