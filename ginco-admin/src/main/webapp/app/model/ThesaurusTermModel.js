@@ -47,6 +47,7 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
             type: 'string'
         }
     ],
+    idProperty : 'identifier',
     
     proxy : {
 		api : {

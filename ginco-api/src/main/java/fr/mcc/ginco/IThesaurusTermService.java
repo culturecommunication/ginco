@@ -35,9 +35,8 @@
 package fr.mcc.ginco;
 
 import java.util.List;
-
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.users.IUser;
 
 /**
  * Service used to work with {@link ThesaurusTerm} objects, contains basic
@@ -63,5 +62,15 @@ public interface IThesaurusTermService {
     List<ThesaurusTerm> getPaginatedThesaurusList(Integer startIndex, Integer limit, String idThesaurus);
 
 	Long getCount();
+	
+    /**
+     * Create a single Thesaurus Term Object
+     */
+    ThesaurusTerm createThesaurusTerm(ThesaurusTerm object, IUser user);   
+    
+    /**
+     * Update a single Thesaurus Term Object
+     */
+    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user);  
     
 }
