@@ -218,6 +218,7 @@ Ext
 															valueField : 'id',
 															forceSelection : true,
 															multiSelect : true,
+															allowBlank : false,
 															store : 'ThesaurusLanguageStore'
 														},
 														{
