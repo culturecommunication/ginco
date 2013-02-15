@@ -51,9 +51,9 @@ import java.lang.annotation.Target;
 public @interface GincoLog {
 	
 	 /**
-	 * type of the entoty the action is performed on
+	 * type of the entity the action is performed on
 	 */
-	public enum EntityType{ THESAURUS}
+	public enum EntityType{ THESAURUS, THESAURUSTERM }
 	 EntityType entityType();
 	 /**
 	 * type of the action wihtin CREATE, UPDATE, DELETE

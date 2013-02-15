@@ -43,8 +43,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.journal.GincoLog;
 
 @Transactional
 @Service("thesaurusTermService")
@@ -72,5 +74,15 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	public Long getCount() {
 		return thesaurusTermDAO.count();
 	}
+	
+	@GincoLog(action = GincoLog.Action.CREATE, entityType=GincoLog.EntityType.THESAURUSTERM)
+    public ThesaurusTerm createThesaurusTerm(ThesaurusTerm object, IUser user) {
+    	return thesaurusTermDAO.update(object);
+    }
+	
+	@GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUSTERM)
+    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user) {
+    	return thesaurusTermDAO.update(object);
+    }
 	
 }
