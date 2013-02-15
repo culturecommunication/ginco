@@ -61,7 +61,7 @@ public class ThesaurusTermDAO extends GenericHibernateDAO<ThesaurusTerm, String>
 	 */
 	@Override
 	public List<ThesaurusTerm> findPaginatedItems(Integer start, Integer limit, String idThesaurus) {
-		return getCurrentSession().createCriteria(ThesaurusTerm.class).setMaxResults(limit).add(Restrictions.eq("thesaurusId.identifier", idThesaurus)).setFirstResult(start).addOrder(Order.desc("prefered")).addOrder(Order.asc("lexicalValue")).list();
+		return getCurrentSession().createCriteria(ThesaurusTerm.class).setMaxResults(limit).add(Restrictions.eq("thesaurusId.identifier", idThesaurus)).setFirstResult(start).addOrder(Order.asc("lexicalValue")).list();
 	}
 
 }

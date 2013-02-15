@@ -16,16 +16,29 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	openSandBoxTab : function(aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var sandBoxPanel = Ext.create('GincoApp.view.SandBoxPanel');
-		sandBoxPanel.thesaurusData = aRecord.data;
-		var tab = topTabs.add(sandBoxPanel);
-		topTabs.setActiveTab(tab);
-		tab.show();
+		var sandBoxTabs = Ext.ComponentQuery.query('topTabs sandboxPanel');
+		var tabExists = false;
+		Ext.Array.each(sandBoxTabs,function(element, index, array) {
+			if (element.thesaurusData!=null && element.thesaurusData.id == aRecord.data.id) {
+				tabExists = element;
+			}
+		});
+		if (!tabExists) {
+			var sandBoxPanel = Ext.create('GincoApp.view.SandBoxPanel');
+			sandBoxPanel.thesaurusData = aRecord.data;
+			var tab = topTabs.add(sandBoxPanel);
+			topTabs.setActiveTab(tab);
+			tab.show();
+		}
+		else {
+			topTabs.setActiveTab(tabExists);
+		}
 	},
 	openThesaurusTab : function(aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		var thesaurusTabs = Ext.ComponentQuery.query('topTabs thesaurusPanel');
 		var tabExists = false;
-		topTabs.items.each(function(element, index, array) {
+		Ext.Array.each(thesaurusTabs,function(element, index, array) {
 			if (element.thesaurusData!=null && element.thesaurusData.id == aRecord.data.id) {
 				tabExists = element;
 			}

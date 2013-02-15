@@ -14,6 +14,14 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 		align : 'stretch'
 	},
 	xSandBoxPanelTitle : "Sandbox",
+	xIdentifierColumnLabel : "Identifier",
+	xLexicalValueColumnLabel : "Lexical Value",
+	xCreatedColumnLabel: "Created",
+	xModifiedColumnLabel:"Modified",
+	xSourceColumnLabel:"Source",
+	xStatusColumnLabel:"Status",
+	xLangueColumnLabel:"Language",
+	
 	initComponent : function() {
 		var me = this;
 
@@ -25,15 +33,13 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 				title : me.xSandBoxPanelTitle,
 				store : 'ThesaurusTermStore',
 				columns : [
-				           {dataIndex : 'identifier', text : 'Identifiant',flex: 1},
-				           {dataIndex : 'lexicalValue', text : 'Valeur lexicale'},
-				           {dataIndex : 'created', text : 'Date de création'},
-				           {dataIndex : 'modified', text : 'Date de mofication'},
-				           {dataIndex : 'source', text : 'Source'},
-				           {dataIndex : 'prefered', text : 'Préférentiel'},
-				           {dataIndex : 'status', text : 'Statut'},
-				           {dataIndex : 'role', text : 'Role'},
-				           {dataIndex : 'language', text : 'Langue'}
+				           {dataIndex : 'identifier', text : me.xIdentifierColumnLabel},
+				           {dataIndex : 'lexicalValue', text : me.xLexicalValueColumnLabel, flex: 1},
+				           {dataIndex : 'created', text : me.xCreatedColumnLabel},
+				           {dataIndex : 'modified', text : me.xModifiedColumnLabel},
+				           {dataIndex : 'source', text : me.xSourceColumnLabel,  hidden: true},
+				           {dataIndex : 'status', text : me.xStatusColumnLabel,  hidden: true},
+				           {dataIndex : 'language', text : me.xLangueColumnLabel}
 				           ],
 				dockedItems: [{
 			        xtype: 'pagingtoolbar',

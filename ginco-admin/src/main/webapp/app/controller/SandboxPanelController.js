@@ -1,4 +1,4 @@
-Ext.define('GincoApp.controller.ThesaurusTermController', {
+Ext.define('GincoApp.controller.SandboxPanelController', {
 	extend:'Ext.app.Controller',
 	
 	views : [ 'SandBoxPanel' ],
@@ -9,6 +9,7 @@ Ext.define('GincoApp.controller.ThesaurusTermController', {
 		var theStore= theGrid.getStore();
 		theStore.getProxy().setExtraParam('idThesaurus',thePanel.thesaurusData.id);
 		theStore.load();
+		thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 	},
 	
     init:function(){
