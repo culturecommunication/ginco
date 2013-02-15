@@ -5,7 +5,6 @@ Ext.define('GincoApp.controller.SandboxPanelController', {
 	
 	onGridRender : function(theGrid){
 		var thePanel = theGrid.up('sandboxPanel');
-		console.log('GridRendered');
 		var theStore= theGrid.getStore();
 		theStore.getProxy().setExtraParam('idThesaurus',thePanel.thesaurusData.id);
 		theStore.load();
