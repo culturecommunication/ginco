@@ -1,4 +1,4 @@
-Ext.define('HadocApp.model.ThesaurusTermModel', {
+Ext.define('GincoApp.model.ThesaurusTermModel', {
     extend: 'Ext.data.Model',
 
     fields: [
@@ -46,5 +46,23 @@ Ext.define('HadocApp.model.ThesaurusTermModel', {
             name: 'language',
             type: 'string'
         }
-    ]
+    ],
+    
+    proxy : {
+		api : {
+			create : 'services/ui/thesaurustermservice/updateTerm',
+			update : 'services/ui/thesaurustermservice/updateTerm'
+		},
+		type : 'ajax',
+		url : 'services/ui/thesaurustermservice/updateTerm',
+		reader : {
+			type : 'json',
+			idProperty : 'identifier'
+		},
+		writer : {
+			type : 'json',
+			idProperty : 'identifier'
+		}
+	}
+    
 });

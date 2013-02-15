@@ -6,8 +6,8 @@
 Ext.define('GincoApp.view.TermPanel', {
     extend: 'Ext.panel.Panel',
 
-    termId: '',
-    thesaurusId : '',
+    termId: null,
+    thesaurusData : '',
 
     alias: 'widget.termPanel',
     localized: true,
@@ -64,7 +64,7 @@ Ext.define('GincoApp.view.TermPanel', {
                     items: [
                         {
                         	xtype: 'displayfield',
-                        	name:'id',
+                        	name:'identifier',
                         	fieldLabel: me.xIdentifierLabel
                         },
                         {
@@ -74,12 +74,12 @@ Ext.define('GincoApp.view.TermPanel', {
                         },
                         {
                             xtype: 'displayfield',
-                            name:'date',
+                            name:'modified',
                             fieldLabel: me.xDateLabel
                         },
                         {
                             xtype: 'textfield',
-                            name:'lexicalvalue',
+                            name:'lexicalValue',
                             fieldLabel: me.xLexicalValueLabel,
                             allowBlank: false
                         },
@@ -91,8 +91,28 @@ Ext.define('GincoApp.view.TermPanel', {
                         	grow: true
                         },
                         {
+                        	xtype: 'hiddenfield',
+                        	name:'prefered'
+                        },
+                        {
+                        	xtype: 'hiddenfield',
+                        	name:'status'
+                        },
+                        {
+                        	xtype: 'hiddenfield',
+                        	name:'role'
+                        },
+                        {
+                        	xtype: 'hiddenfield',
+                        	name:'conceptId'
+                        },
+                        {
+                        	xtype: 'hiddenfield',
+                        	name:'thesaurusId'
+                        },
+                        {
                         	xtype: 'combobox',
-                        	name:'languages',
+                        	name:'language',
                         	fieldLabel: me.xLanguagesLabel,
                         	editable : false,
                         	displayField : 'refname',

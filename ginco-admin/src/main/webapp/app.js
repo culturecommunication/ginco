@@ -52,6 +52,7 @@ Ext.application({
         'MainTreeController',
         'ThesaurusFormController',
         'SandboxPanelController',
+        'TermPanelController',
         'GlobalTabPanelController'
     ],
     init: function(){
