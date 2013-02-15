@@ -39,12 +39,12 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	},
 	onNewTermBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusPanel');
-		var termPanel = this.createPanel('GincoApp.view.TermPanel');
-		termPanel.thesaurusId =  thePanel.thesaurusId;
+		var termPanel = this.createPanel('GincoApp.view.TermPanel',thePanel.thesaurusData );
 	},
-	createPanel : function(aType)
+	createPanel : function(aType, thesaurusData)
 	{
 		var aNewPanel = Ext.create(aType);
+		aNewPanel.thesaurusData = thesaurusData;
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		var tab = topTabs.add(aNewPanel);
 		topTabs.setActiveTab(tab);
