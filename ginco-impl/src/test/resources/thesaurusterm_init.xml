@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<table name="thesaurus_term">
+		<column>identifier</column>
+		<column>lexicalvalue</column>
+		<column>created</column>
+		<column>modified</column>
+		<column>source</column>
+		<column>prefered</column>
+		<column>status</column>
+		<column>role</column>
+		<column>conceptid</column>
+		<column>thesaurusid</column>	
+		<column>lang</column>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter2</value>
+			<value>yellow submarine</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>false</value>
+			<value>0</value>
+			<value>0</value>
+			<value>http://www.culturecommunication.gouv.fr/co2</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>		
+			<value>eng</value>				
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter1</value>
+			<value>Eleanor Rigby</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>false</value>
+			<value>0</value>
+			<value>0</value>
+			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>	
+			<value>eng</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter1</value>
+			<value>Across the universe</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>false</value>
+			<value>0</value>
+			<value>0</value>
+			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<value>http://www.culturecommunication.gouv.fr/th2</value>	
+			<value>eng</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter3</value>
+			<value>taxman</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>false</value>
+			<value>0</value>
+			<value>0</value>
+			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>eng</value>
+		</row>
+	</table>  
+		<table name="languages_iso639">
+		<column>id</column>
+		<column>part2b</column>	
+		<column>part2t</column>		
+		<column>part1</column>		
+		<column>scope</column>		
+		<column>type</column>		
+		<column>ref_name</column>
+		<column>toplanguage</column>		
+		<column>comment</column>				
+		<row>
+			<value>eng</value>
+			<value></value>
+			<value></value>			
+			<value></value>			
+			<value>I</value>			
+			<value>L</value>
+			<value>English</value>
+			<value>false</value>
+		</row>
+	</table>
+	<table name="thesaurus">
+		<column>identifier</column>
+		<column>title</column>		
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>album revolver</value>			
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/th2</value>
+			<value>album let it be</value>			
+		</row>
+	</table>	
+</dataset>

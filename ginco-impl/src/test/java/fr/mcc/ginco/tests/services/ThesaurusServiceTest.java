@@ -155,10 +155,13 @@ public class ThesaurusServiceTest extends BaseTest {
 		Set<Language> langs = new HashSet<Language>();
 		Language lang1 = new Language();
 		lang1.setId("rus");
+		lang1.setRefname("Russian");
 		Language lang2 = new Language();
 		lang2.setId("fra");
+		lang2.setRefname("French");
 		Language lang3 = new Language();
 		lang3.setId("jpn");
+		lang3.setRefname("Japanese");
 		langs.add(lang1);
 		langs.add(lang2);
 		langs.add(lang3);

@@ -41,27 +41,36 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 
+/**
+ * Implementation of the data access object to the thesaurus_term database table
+ *
+ */
 @Repository("thesaurusTermDAO")
 @Scope("prototype")
-public class ThesaurusTermDAO extends GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
+public class ThesaurusTermDAO extends
+		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
 	public ThesaurusTermDAO(Class<ThesaurusTerm> clazz) {
 		super(clazz);
 	}
+
 	public ThesaurusTermDAO() {
 		super(ThesaurusTerm.class);
 	}
 	
-	/**
-	 * @return List of Thesaurus Terms with prefered Thesaurus Terms first, and the other elements sorted alphabetically
-	 * with a starting index and a limit of items to be returned
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findPaginatedItems(java.lang.Integer, java.lang.Integer, java.lang.String)
 	 */
 	@Override
-	public List<ThesaurusTerm> findPaginatedItems(Integer start, Integer limit, String idThesaurus) {
-		return getCurrentSession().createCriteria(ThesaurusTerm.class).setMaxResults(limit).add(Restrictions.eq("thesaurusId.identifier", idThesaurus)).setFirstResult(start).addOrder(Order.asc("lexicalValue")).list();
+	public List<ThesaurusTerm> findPaginatedItems(Integer start, Integer limit,
+			String idThesaurus) {
+		return getCurrentSession().createCriteria(ThesaurusTerm.class)
+				.setMaxResults(limit)
+				.add(Restrictions.eq("thesaurusId.identifier", idThesaurus))
+				.setFirstResult(start).addOrder(Order.asc("lexicalValue"))
+				.list();
 	}
 
 }

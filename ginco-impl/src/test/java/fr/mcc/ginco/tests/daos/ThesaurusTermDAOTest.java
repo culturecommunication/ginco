@@ -32,36 +32,42 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.tests.daos;
 
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.dao.hibernate.ThesaurusTermDAO;
+import fr.mcc.ginco.tests.BaseDAOTest;
 
-/**
- * Service used to work with {@link ThesaurusTerm} objects, contains basic
- * methods exposed to client part. For example, to get a single
- * ThesaurusTerm object, use {@link #getThesaurusTermById(String)}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusTermService {
+@TransactionConfiguration()
+@Transactional
+public class ThesaurusTermDAOTest extends BaseDAOTest {
 	
-	/**
-     * Get a single Thesaurus Term by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
-     */
-	ThesaurusTerm getThesaurusTermById(String id) throws BusinessException;
-	
-    /**
-     * Get list of paginated Thesaurus Terms.
-     * @return List of Thesaurus Terms (the number given in argument), from the start index
-     */
-    List<ThesaurusTerm> getPaginatedThesaurusList(Integer startIndex, Integer limit, String idThesaurus);
+    private ThesaurusTermDAO thesaurusTermDAO; ;     
+    @Before
+	public void handleSetUpOperation() throws Exception {
+		super.handleSetUpOperation();
+		thesaurusTermDAO = new ThesaurusTermDAO();		
+		thesaurusTermDAO.setSessionFactory(getSessionFactory());
+	}
+    @Test
+    public final void testFindPaginatedItems() {
+        List<ThesaurusTerm> actualResponse = thesaurusTermDAO.findPaginatedItems(0, 2, "http://www.culturecommunication.gouv.fr/th1");
+		Assert.assertEquals("Error while getting thessaurus terms - invalid number of results", 2, actualResponse.size());
+		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "Eleanor Rigby", actualResponse.get(0).getLexicalValue());
+		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "taxman", actualResponse.get(1).getLexicalValue());
 
-	Long getCount();
-    
+    }
+     
+	@Override
+	public String  getXmlDataFileInit() {
+		return "/thesaurusterm_init.xml";		
+	}
 }
