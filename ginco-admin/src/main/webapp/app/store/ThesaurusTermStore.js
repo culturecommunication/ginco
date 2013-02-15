@@ -9,12 +9,11 @@ Ext.define('GincoApp.store.ThesaurusTermStore', {
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
-            autoLoad: true,
+            autoLoad: false,
             storeId: 'JsonThesaurusTermStore',
             pageSize: 50,
             proxy: {
                 type: 'ajax',
-                extraParams:{idThesaurus:'1'},
                 url: 'services/ui/thesaurustermservice/getAllThesaurusTerms',
                 reader: {
                     type: 'json',

@@ -61,7 +61,7 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.log.Log;
 
 /**
- * Thesaurus REST service for all operations on Thesauruses Terms
+ * Thesaurus Term REST service for all operations on Thesauruses Terms
  * 
  */
 @SuppressWarnings("SpringJavaAutowiringInspection")

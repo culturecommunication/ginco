@@ -10,7 +10,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		}
 		if (aRecord.data.type == "FOLDER"
 				&& aRecord.data.id.indexOf("SANDBOX") === 0) {
-			this.openSandBoxTab(aRecord);
+			this.openSandBoxTab(aRecord.parentNode);
 		}
 		return false;
 	},
