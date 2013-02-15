@@ -54,6 +54,13 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		}
 	},
 	
+	loadLanguages : function(theCombo) {
+		var thePanel=theCombo.up('termPanel');
+		var theStore= theCombo.getStore();
+		theStore.getProxy().setExtraParam('thesaurusId',thePanel.thesaurusData.id);
+		theStore.load();
+	},
+	
     init:function(){
          this.control({
         	 'termPanel form' : {
@@ -61,7 +68,11 @@ Ext.define('GincoApp.controller.TermPanelController', {
  			},
         	 'termPanel button[cls=save]' : {
  				click : this.saveForm
+ 			},
+ 			'termPanel #languageCombo' : {
+ 				render : this.loadLanguages
  			}
+ 			
          });
     }
 });
