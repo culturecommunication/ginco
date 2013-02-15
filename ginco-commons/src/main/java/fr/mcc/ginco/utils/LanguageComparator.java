@@ -32,36 +32,35 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.utils;
 
-import java.util.List;
+import java.util.Comparator;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.beans.Language;
 
-/**
- * Service used to work with {@link ThesaurusTerm} objects, contains basic
- * methods exposed to client part. For example, to get a single
- * ThesaurusTerm object, use {@link #getThesaurusTermById(String)}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusTermService {
+public class LanguageComparator implements Comparator<Language>{
+
+	private String defaultLanguage;	
 	
-	/**
-     * Get a single Thesaurus Term by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
-     */
-	ThesaurusTerm getThesaurusTermById(String id) throws BusinessException;
 	
-    /**
-     * Get list of paginated Thesaurus Terms.
-     * @return List of Thesaurus Terms (the number given in argument), from the start index
-     */
-    List<ThesaurusTerm> getPaginatedThesaurusList(Integer startIndex, Integer limit, String idThesaurus);
+	public LanguageComparator(String defaultLanguage) {
+		super();
+		this.defaultLanguage = defaultLanguage;
+	}
 
-	Long getCount();
-    
+	@Override
+	public int compare(Language o1, Language o2) {
+		if (o1.getId().equals(defaultLanguage)) {
+			if (o2.getId().equals(defaultLanguage)) {
+				return 0;
+			} else {
+				return 1;
+			}
+		}else if (o2.getId().equals(defaultLanguage)) {			
+				return -1;			
+		}else {
+			return o1.getRefname().compareTo(o2.getRefname());
+		}		
+	}
+
 }

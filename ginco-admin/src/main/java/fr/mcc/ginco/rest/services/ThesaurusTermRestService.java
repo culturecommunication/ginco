@@ -51,20 +51,16 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.IThesaurusTermService;
-import fr.mcc.ginco.IThesaurusTypeService;
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.log.Log;
 
 /**
  * Thesaurus Term REST service for all operations on Thesauruses Terms
  * 
  */
-@SuppressWarnings("SpringJavaAutowiringInspection")
 @Service
 @Path("/thesaurustermservice")
 @Produces({MediaType.APPLICATION_JSON})
@@ -101,5 +97,20 @@ public class ThesaurusTermRestService {
 		ExtJsonFormLoadData<List<ThesaurusTermView> > extTerms = new  ExtJsonFormLoadData<List<ThesaurusTermView> > (results);
 		extTerms.setTotal(total);
 		return extTerms;
+	}
+	
+	/**
+	 * Public method used to get the details of a single ThesaurusTerm
+	 * 
+	 * @return list of ThesaurusTermView, if not found - {@code null}
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getThesaurusTerm")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ThesaurusTermView getThesaurusTerm(@QueryParam("termId") String idTerm) throws BusinessException {
+		ThesaurusTerm thesaurusTerm = thesaurusTermService.getThesaurusTermById(idTerm);		
+		ThesaurusTermView result = new ThesaurusTermView(thesaurusTerm);		
+		return result;
 	}
 }

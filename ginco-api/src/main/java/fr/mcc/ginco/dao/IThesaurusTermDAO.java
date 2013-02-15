@@ -36,13 +36,18 @@ package fr.mcc.ginco.dao;
 
 import java.util.List;
 
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
+/**
+ * Data Access Object for thesaurus_term
+ */
 public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	
+	
 	 /**
-     * Get list of paginated Thesaurus Terms for a specified Thesaurus.
+     *  Returns a list of Thesaurus Terms filtered by thesaurusId with prefered Thesaurus Terms first, and
+	 *         the other elements sorted alphabetically with a starting index
+	 *         and a limit of items to be returned
 	 * @param start Beginning index
 	 * @param limit Number of items
 	 * @return List<ThesaurusTerm> Paginated list of Thesaurus Terms for a specified Thesaurus

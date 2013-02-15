@@ -44,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional
 @Service("thesaurusTermService")
@@ -54,8 +55,11 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@Override
-	public ThesaurusTerm getThesaurusTermById(String id) {
-		return thesaurusTermDAO.getById(id);
+	public ThesaurusTerm getThesaurusTermById(String id) throws BusinessException {
+		ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(id);
+		if (thesaurusTerm != null) {
+			return thesaurusTerm;
+		} else throw new BusinessException("Invalid termId requested : " + id);
 	}
 
 	@Override
