@@ -32,26 +32,12 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.exceptions;
 
-import fr.mcc.ginco.beans.ThesaurusOrganization;
+public class BusinessException extends Exception {
 
-/**
- * Service used to work with {@link ThesaurusOrganization} objects, contains basic
- * methods exposed to client part. For example, to get a single
- * ThesaurusOrganization object, use {@link #getThesaurusOrganizationById(String)}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusOrganizationService {
-
-    /**
-     * Get a single ThesaurusOrganization by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
-     */
-    ThesaurusOrganization getThesaurusOrganizationById(Integer id);
-    
+	public BusinessException(String message) {
+		super(message);
+	}
 
 }

@@ -34,25 +34,36 @@
  */
 package fr.mcc.ginco;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.journal.GincoLog;
 
+/**
+ *Implementation of the thesaurus service
+ *Contains methods relatives to the Thesaurus object
+ */
 @Transactional
 @Service("thesaurusService")
 public class ThesaurusServiceImpl implements IThesaurusService {
+
+	@Value("${ginco.default.language}") private String defaultLang;
 
     @Inject
     @Named("thesaurusDAO")
@@ -62,31 +73,59 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Named("thesaurusOrganizationDAO")
     private IGenericDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.IThesaurusService#getThesaurusById(java.lang.String)
+	 */
 	@Override
 	public Thesaurus getThesaurusById(String id) {
         return thesaurusDAO.getById(id);
 	}
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.IThesaurusService#getThesaurusList()
+     */
     @Override
     public List<Thesaurus> getThesaurusList() {
         return thesaurusDAO.findAll("title", SortingTypes.asc);
-    }
-
-    @Override
-	public ThesaurusOrganization getThesaurusOrganizationById(Integer id) {
-        return thesaurusOrganizationDAO.getById(id);
-	}   
+    }  
     
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.IThesaurusService#updateThesaurus(fr.mcc.ginco.beans.Thesaurus, fr.mcc.ginco.beans.users.IUser)
+     */
     @Override
     @GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUS)
     public Thesaurus updateThesaurus(Thesaurus object, IUser user) {
     	return thesaurusDAO.update(object);
     }
     
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.IThesaurusService#createThesaurus(fr.mcc.ginco.beans.Thesaurus, fr.mcc.ginco.beans.users.IUser)
+     */
     @Override
     @GincoLog(action = GincoLog.Action.CREATE, entityType=GincoLog.EntityType.THESAURUS)
     public Thesaurus createThesaurus(Thesaurus object, IUser user) {
     	return thesaurusDAO.update(object);
+    }
+    
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.IThesaurusService#getThesaurusLanguages(java.lang.String)
+     */
+    @Override
+    public List<Language> getThesaurusLanguages(String thesaurusId) throws BusinessException {
+    	Thesaurus th = thesaurusDAO.getById(thesaurusId);
+    	if (th == null) {
+    		throw new BusinessException("Invalid thesaurusId : " + thesaurusId);
+    	}
+    	Set<Language> languages = th.getLang();
+    	List<Language> orderedLangs = new LinkedList<Language>();
+    	for (Language lang: languages) {
+    		if (lang.getId().equals(defaultLang)) {
+    			orderedLangs.add(0, lang);
+    		} else {
+    			orderedLangs.add(lang);
+    		}
+    	}
+    	return orderedLangs;
     }
     
 }

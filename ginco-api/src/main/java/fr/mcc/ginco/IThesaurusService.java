@@ -36,9 +36,11 @@ package fr.mcc.ginco;
 
 import java.util.List;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link Thesaurus} objects, contains basic
@@ -67,21 +69,22 @@ public interface IThesaurusService {
      * Update a single ThesaurusObject
      */
 
-    Thesaurus updateThesaurus(Thesaurus object, IUser user);
-    
+    Thesaurus updateThesaurus(Thesaurus object, IUser user);    
     
     /**
      * Create a single ThesaurusObject
      */
-    Thesaurus createThesaurus(Thesaurus object, IUser user);
-
+    Thesaurus createThesaurus(Thesaurus object, IUser user);   
+  
+    
     
     /**
-     * Get a single ThesaurusOrganization by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
+     * Builds the list of the thesauruses languages, where the first language is
+     * the default language defined in the property ginco.default.language
+     * @param thesaurusId
+     * @return
      */
-    ThesaurusOrganization getThesaurusOrganizationById(Integer id);
+    List<Language> getThesaurusLanguages(String thesaurusId) throws BusinessException;
+
 
 }

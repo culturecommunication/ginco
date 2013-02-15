@@ -97,7 +97,6 @@ public class GincoLogAspect {
 					author = ((IUser) arg).getName();
 				}
 			}
-			// TODO Add the author of the action
 			log.debug("Saving new LogJournal entry =  {");
 			log.debug("		action: " + gincoLog.action().toString());
 			log.debug("		entityId: " + entityId);
