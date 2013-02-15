@@ -34,149 +34,135 @@
  */
 package fr.mcc.ginco.tests.services;
 
-import javax.inject.Inject;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.dbunit.dataset.IDataSet;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.ReflectionUtils;
 
-import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.ThesaurusServiceImpl;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.users.IUser;
-import fr.mcc.ginco.tests.BaseServiceTest;
-import fr.mcc.ginco.users.SimpleUserImpl;
+import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
+import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.tests.BaseTest;
 
-//@TransactionConfiguration()
-//@Transactional
-public class ThesaurusServiceTest extends BaseServiceTest {
+public class ThesaurusServiceTest extends BaseTest {
 
-    @Inject
-    private IThesaurusService thesaurusService;
+	@Mock(name = "thesaurusDAO")
+	private IThesaurusDAO thesaurusDAO;
 
-    @Test
-    public final void testGetThesaurusById() {
-    	String idThesaurus = "0";
-    	String expectedResponse = "test";
-        String actualResponse = thesaurusService.getThesaurusById(idThesaurus).getTitle();
-		Assert.assertEquals("Error while getting Thesaurus By Id !", expectedResponse, actualResponse);
-    }
+	@InjectMocks
+	private ThesaurusServiceImpl thesaurusService;
 
-    @Test
-    public final void testGetThesaurusType() {
-        String idThesaurus = "0";
-        String expectedThesaurusTypeTitle = "thesaurus type 2";
-        String actualThesaurusTypeTitle = thesaurusService.getThesaurusById(idThesaurus).getType().getLabel();
-        Assert.assertEquals("Error while getting ThesaurusType!", expectedThesaurusTypeTitle, actualThesaurusTypeTitle);
-    }
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
 
-    @Test
-    public final void testGetThesaurusFormat() {
-        String idThesaurus = "0";
-        String expectedThesaurusFormatTitle = "PDF 1.7";
-        String actualThesaurusFormatTitle = thesaurusService.getThesaurusById(idThesaurus).getFormat().getLabel();
-        Assert.assertEquals("Error while getting ThesaurusFormat!", expectedThesaurusFormatTitle, actualThesaurusFormatTitle);
-    }
-    
-    @Test
-    public final void testGetThesaurusList() {
-        Integer expectedThesaurusListSize = 3;
-        Integer actualThesaurusListSize = thesaurusService.getThesaurusList().size();
-        Assert.assertEquals("Wrong number of elements when getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
-    }
-    
-    @Test
-    public final void testGetAscThesaurusList() {
-        String expectedThesaurusName = "essai";
-        String actualThesaurusName = thesaurusService.getThesaurusList().get(0).getTitle();
-        Assert.assertEquals("Wrong ascendant sorting when getting Thesaurus List!", expectedThesaurusName, actualThesaurusName);
-    }
-    
-    @Test
-    public final void testUpdateThesaurus() throws Exception{
-        Thesaurus th = new Thesaurus();
-        th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
-        th.setTitle("title");
-        IUser user = new SimpleUserImpl();
-        user.setName("user1");
-        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(th, user);
-        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);
-        
-        //Test the log_journal addition
-     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
-     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
-     	//Assert.assertEquals(1, databaseTableSize);
-        
-    }
-    
-    @Test
-    public final void testCreateNewThesaurusWithEmptyCreator() {
-        Thesaurus newThesaurus = new Thesaurus();
-        newThesaurus.setTitle("test");
-        newThesaurus.setCreator(null);
-        IUser user = new SimpleUserImpl();
-        user.setName("test1");
-        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(newThesaurus, user);
-        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);
-    }   
-    
-    @Test
-    public final void testCreateNewThesaurusWithCreator() {
-        Thesaurus newThesaurus = new Thesaurus();
-        ThesaurusOrganization thOrg = new ThesaurusOrganization();
-        thOrg.setName("Un auteur");
-        newThesaurus.setTitle("test");
-        newThesaurus.setCreator(thOrg);
-        IUser user = new SimpleUserImpl();
-        user.setName("test1");
-        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(newThesaurus, user);
-        Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());
-    }   
-    
-    @Test
-    public final void testUpdateThesaurusWithEmptyCreator() throws Exception{
-        Integer expectedThesaurusListSize = 3;
-        Thesaurus th = new Thesaurus();
-        th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
-        th.setTitle("title");
-        th.setCreator(null);
-        IUser user = new SimpleUserImpl();
-        user.setName("user1");
-        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(th, user);
-       // Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
-        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);
-        //Test the log_journal addition
-     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
-     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
-     	//Assert.assertEquals(1, databaseTableSize);
-        
-    }
-    @Test
-    public final void testUpdateThesaurusWithCreator() throws Exception{
-        Thesaurus th = new Thesaurus();
-        th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
-        th.setTitle("title");
-        ThesaurusOrganization thOrg = new ThesaurusOrganization();
-        thOrg.setName("Un auteur");
-        th.setCreator(thOrg);
-        IUser user = new SimpleUserImpl();
-        user.setName("user1");
-        Thesaurus updatedThesaurus = thesaurusService.updateThesaurus(th, user);
-        
-        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);
-        Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());
-        //Test the log_journal addition
-     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
-     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
-     	//Assert.assertEquals(1, databaseTableSize);
-        
-    }
-    
+		ReflectionUtils.doWithFields(thesaurusService.getClass(),
+				new ReflectionUtils.FieldCallback() {
 
-	@Override
-	public String  getXmlDataFileInit() {
-		return "/thesaurus_init.xml";		
+					public void doWith(Field field)
+							throws IllegalArgumentException,
+							IllegalAccessException {
+						ReflectionUtils.makeAccessible(field);
+
+						if (field.getAnnotation(Log.class) != null) {
+							Logger logger = LoggerFactory
+									.getLogger(thesaurusService.getClass());
+							field.set(thesaurusService, logger);
+						}
+					}
+				});
 	}
+
+	@Test
+	public final void testGetThesaurusById() {
+		Thesaurus mockThesaurus = mock(Thesaurus.class);
+		when(thesaurusDAO.getById(anyString())).thenReturn(mockThesaurus);
+		Thesaurus thesaurusRes = thesaurusService.getThesaurusById("not-empty");
+		Assert.assertNotNull("Error while getting Thesaurus By Id",
+				thesaurusRes);
+	}
+
+	@Test
+	public final void testCreateThesaurus() {
+		Thesaurus mockThesaurus = mock(Thesaurus.class);
+		IUser user = mock(IUser.class);
+		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
+				mockThesaurus);
+		Thesaurus thesaurusRes = thesaurusService.createThesaurus(
+				mockThesaurus, user);
+		Assert.assertNotNull("Error while creating Thesaurus", thesaurusRes);
+	}
+
+	@Test
+	public final void testUpdateThesaurus() {
+		Thesaurus mockThesaurus = mock(Thesaurus.class);
+		IUser user = mock(IUser.class);
+		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
+				mockThesaurus);
+		Thesaurus thesaurusRes = thesaurusService.updateThesaurus(
+				mockThesaurus, user);
+		Assert.assertNotNull("Error while updating Thesaurus", thesaurusRes);
+	}
+
+	@Test
+	public final void testGetThesaurusList() {
+		Thesaurus mockThesaurus1 = mock(Thesaurus.class);
+		Thesaurus mockThesaurus2 = mock(Thesaurus.class);
+		List<Thesaurus> mockedThesaurus = new ArrayList<Thesaurus>();
+		mockedThesaurus.add(mockThesaurus1);
+		mockedThesaurus.add(mockThesaurus2);
+		when(thesaurusDAO.findAll(anyString(), any(SortingTypes.class)))
+				.thenReturn(mockedThesaurus);
+		List<Thesaurus> thesaurusRes = thesaurusService.getThesaurusList();
+		Assert.assertEquals("Error while getting Thesaurus list !", 2,
+				thesaurusRes.size());
+	}
+
+	@Test
+	public final void testGetThesaurusLanguages() throws Exception {
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setLang(getFakeLanguages());
+		when(thesaurusDAO.getById(anyString())).thenReturn(fakeThesaurus);
+
+		List<Language> actualLanguages = thesaurusService
+				.getThesaurusLanguages("mockedThesaurus");
+		Assert.assertEquals("fra", actualLanguages.get(0).getId());
+		Assert.assertEquals("error while getting thesaurus language list", 3,
+				actualLanguages.size());
+	}
+
+	private Set<Language> getFakeLanguages() {
+		Set<Language> langs = new HashSet<Language>();
+		Language lang1 = new Language();
+		lang1.setId("rus");
+		Language lang2 = new Language();
+		lang2.setId("fra");
+		Language lang3 = new Language();
+		lang3.setId("jpn");
+		langs.add(lang1);
+		langs.add(lang2);
+		langs.add(lang3);
+		return langs;
+	}
+
 }

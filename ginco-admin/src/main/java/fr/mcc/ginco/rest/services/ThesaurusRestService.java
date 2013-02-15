@@ -56,7 +56,6 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.IThesaurusOrganizationService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.Language;
@@ -65,6 +64,7 @@ import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.log.Log;
@@ -75,7 +75,6 @@ import fr.mcc.ginco.utils.DateUtil;
  * Thesaurus REST service for all operation on a unique thesaurus
  * 
  */
-@SuppressWarnings("SpringJavaAutowiringInspection")
 @Service
 @Path("/thesaurusservice")
 @Produces({ MediaType.APPLICATION_JSON })
@@ -99,9 +98,6 @@ public class ThesaurusRestService {
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
 	
-	@Inject
-	@Named("thesaurusOrganizationService")
-	private IThesaurusOrganizationService thesaurusOrganizationService;
 
 	@Log
 	private Logger logger;
@@ -119,41 +115,27 @@ public class ThesaurusRestService {
 	}
 
 	/**
-	 * Public method used to get list of all existing Language objects in
-	 * database.
-	 * 
-	 * @return list of objects, if not found - {@code null}
-	 */
-	@GET
-	@Path("/getAllLanguages")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<Language>> getAllLanguages(
-			@QueryParam("start") Integer startIndex,
-			@QueryParam("limit") Integer limit) {
-		logger.info("Param passed to me : " + startIndex);
-		logger.info("Param passed to me : " + limit);
-		List<Language> languages = languagesService.getLanguagesList(
-				startIndex, limit);
-		Long total = languagesService.getLanguageCount();
-
-		ExtJsonFormLoadData<List<Language>> extLanguages = new ExtJsonFormLoadData<List<Language>>(
-				languages);
-		extLanguages.setTotal(total);
-		return extLanguages;
-	}
-
-	/**
 	 * Public method used to get list of existing top Languages in the database.
 	 * 
 	 * @return list of objects, if not found - {@code null}
+	 * @throws BusinessException 
 	 */
 	@GET
 	@Path("/getTopLanguages")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<Language>> getTopLanguages() {
+	public ExtJsonFormLoadData<List<Language>> getTopLanguages(
+			@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
 		logger.info("Getting Top Languages");
-		List<Language> topLanguages = languagesService.getTopLanguagesList();
+		logger.info("thesaurusId = " + thesaurusId);
+
+		List<Language> topLanguages;
+		if (StringUtils.isNotEmpty(thesaurusId)) {
+			topLanguages = thesaurusService.getThesaurusLanguages(thesaurusId);
+		} else {
+			topLanguages = languagesService.getTopLanguagesList();
+		}
 		return new ExtJsonFormLoadData<List<Language>>(topLanguages);
+
 	}
 
 	/**
@@ -212,7 +194,7 @@ public class ThesaurusRestService {
 			if (StringUtils.isEmpty(object.getIdentifier())) {
 				result = thesaurusService.createThesaurus(object, user);
 
-			}else {
+			} else {
 				result = thesaurusService.updateThesaurus(object, user);
 			}
 			if (result != null) {
@@ -279,39 +261,5 @@ public class ThesaurusRestService {
 		hibernateRes.setLang(realLanguages);
 
 		return hibernateRes;
-	}
-
-	public IThesaurusTypeService getThesaurusTypeService() {
-		return thesaurusTypeService;
-	}
-
-	public void setThesaurusTypeService(
-			IThesaurusTypeService thesaurusTypeService) {
-		this.thesaurusTypeService = thesaurusTypeService;
-	}
-
-	public IThesaurusFormatService getThesaurusFormatService() {
-		return thesaurusFormatService;
-	}
-
-	public void setThesaurusFormatService(
-			IThesaurusFormatService thesaurusFormatService) {
-		this.thesaurusFormatService = thesaurusFormatService;
-	}
-
-	public ILanguagesService getLanguagesService() {
-		return languagesService;
-	}
-
-	public void setLanguagesService(ILanguagesService languagesService) {
-		this.languagesService = languagesService;
-	}
-
-	public IThesaurusService getThesaurusService() {
-		return thesaurusService;
-	}
-
-	public void setThesaurusService(IThesaurusService thesaurusService) {
-		this.thesaurusService = thesaurusService;
 	}
 }

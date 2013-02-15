@@ -80,7 +80,7 @@
     
     <bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="ignoreResourceNotFound" value="true"/>		
+		<property name="ignoreResourceNotFound" value="true"/>
 		<property name="locations">
 			<list>
 				<value>classpath:hibernate.properties</value>

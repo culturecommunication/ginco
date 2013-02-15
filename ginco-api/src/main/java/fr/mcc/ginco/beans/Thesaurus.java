@@ -240,6 +240,13 @@ public class Thesaurus implements Serializable, IBaseBean {
     public void setLang(Set<Language> lang) {
         this.lang = lang;
     }
+    
+    /**
+     * @param lang
+     */
+    public void addLang(Language lang) {
+        this.lang.add(lang);
+    }
 
 	/**
 	 * @return the thesaurusesTerms
