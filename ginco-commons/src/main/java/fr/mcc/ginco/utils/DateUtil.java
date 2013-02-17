@@ -44,8 +44,6 @@ import java.util.GregorianCalendar;
  */
 public final class DateUtil {
 	
-	private DateUtil(){};
-	
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**

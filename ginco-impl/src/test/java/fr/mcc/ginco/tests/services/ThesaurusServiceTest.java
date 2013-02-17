@@ -146,9 +146,12 @@ public class ThesaurusServiceTest extends BaseTest {
 
 		List<Language> actualLanguages = thesaurusService
 				.getThesaurusLanguages("mockedThesaurus");
-		Assert.assertEquals("fra", actualLanguages.get(0).getId());
 		Assert.assertEquals("error while getting thesaurus language list", 3,
 				actualLanguages.size());
+		
+		Assert.assertEquals("fra", actualLanguages.get(0).getId());
+		Assert.assertEquals("jpn", actualLanguages.get(1).getId());
+		Assert.assertEquals("rus", actualLanguages.get(2).getId());
 	}
 
 	private Set<Language> getFakeLanguages() {

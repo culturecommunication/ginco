@@ -32,33 +32,63 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.journal;
+package fr.mcc.ginco.utils;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-/**
- * Custom annotation to indicate that the method action
- * should be logged in the dedicated system
- * The annotation is processed by an aspect
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-@Documented
-public @interface GincoLog {
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+import fr.mcc.ginco.beans.Language;
+
+public class LanguageComparatorTest {	
 	
-	 /**
-	 * type of the entity the action is performed on
-	 */
-	public enum EntityType{ THESAURUS, THESAURUSTERM }
-	 EntityType entityType();
-	 /**
-	 * type of the action within CREATE, UPDATE, DELETE
-	 *
-	 */
-	public enum Action{ CREATE, UPDATE, DELETE}
-	 Action action();	
+	
+	@Test
+	public void testCompareWithOneTopLanguage() {
+		Language l1 = new Language();
+		Language l2 = new Language();
+				l1.setId("fra");
+				l2.setId("rus");
+		LanguageComparator comp = new LanguageComparator("fra");
+		int actual  = comp.compare(l1, l2);
+		Assert.assertEquals(1, actual);
+	}
+	@Test
+	public void testCompareWithTwoTopLanguage() {
+		Language l1 = new Language();
+		Language l2 = new Language();
+				l1.setId("fra");
+				l2.setId("fra");
+		LanguageComparator comp = new LanguageComparator("fra");
+		int actual  = comp.compare(l1, l2);
+		Assert.assertEquals(0, actual);
+	}
+	@Test
+	public void testCompareWithOneTopLanguage2() {
+		Language l1 = new Language();
+		Language l2 = new Language();
+				l1.setId("rus");
+				l2.setId("fra");
+		LanguageComparator comp = new LanguageComparator("fra");
+		int actual  = comp.compare(l1, l2);
+		Assert.assertEquals(-1, actual);
+	}
+	
+	@Test
+	public void testCompareWithNoTopLanguage() {
+		Language l1 = new Language();
+		Language l2 = new Language();
+				l1.setId("rus");
+				l1.setRefname("Russian");
+				l2.setId("fra");
+				l2.setRefname("French");
+		LanguageComparator comp = new LanguageComparator("fra");
+		int actual  = comp.compare(l1, l2);
+		Assert.assertEquals(-1, actual);
+	}
+
+
 }

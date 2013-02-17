@@ -48,9 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.users.IUser;
-import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -72,9 +70,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
-	@Inject
-	@Named("thesaurusOrganizationDAO")
-	private IGenericDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
 
 	/*
 	 * (non-Javadoc)
@@ -139,6 +134,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 		List<Language> orderedLangs = new ArrayList<Language>();
 		orderedLangs.addAll(languages);
 		Collections.sort(orderedLangs, new LanguageComparator(defaultLang));
+		Collections.reverse(orderedLangs);
 		return orderedLangs;
 	}
 

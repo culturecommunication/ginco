@@ -59,7 +59,7 @@ public class LanguageComparator implements Comparator<Language>{
 		}else if (o2.getId().equals(defaultLanguage)) {			
 				return -1;			
 		}else {
-			return o1.getRefname().compareTo(o2.getRefname());
+			return o2.getRefname().compareTo(o1.getRefname());
 		}		
 	}
 

@@ -1,14 +1,5 @@
-import java.text.ParseException;
+package fr.mcc.ginco.utils;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
-
-import fr.mcc.ginco.utils.DateUtil;
-
 /**
  * Copyright or © or Copr. Ministère Français chargé de la Culture et de la
  * Communication (2013)
@@ -41,6 +32,14 @@ import fr.mcc.ginco.utils.DateUtil;
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+
 
 public class DateUtilTest {
 

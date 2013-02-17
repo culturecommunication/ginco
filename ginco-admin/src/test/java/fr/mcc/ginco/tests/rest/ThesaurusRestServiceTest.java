@@ -287,7 +287,7 @@ public class ThesaurusRestServiceTest {
 	 */
 	@Test
 	public final void testGetTopLanguagesAll() throws BusinessException {
-		List<Language> langs = getMockLanguages();
+		List<Language> langs = getFakeLanguages();
 		when(languagesService.getTopLanguagesList()).thenReturn(langs);
 		ExtJsonFormLoadData<List<Language>> allLanguages = thesaurusRestService
 				.getTopLanguages("");
@@ -299,19 +299,21 @@ public class ThesaurusRestServiceTest {
 	 */
 	@Test
 	public final void testGetTopLanguagesByThesaurus() throws BusinessException{
-		List<Language> langs = getMockLanguages();
+		List<Language> langs = getFakeLanguages();
 		when(thesaurusService.getThesaurusLanguages(anyString())).thenReturn(
 				langs);
 		ExtJsonFormLoadData<List<Language>> allLanguages = thesaurusRestService
 				.getTopLanguages("notempty");
 		Assert.assertEquals(2, allLanguages.getData().size());
+		Assert.assertEquals("fra", allLanguages.getData().get(0).getId());
+
 	}
 	
-	private List<Language> getMockLanguages() {
+	private List<Language> getFakeLanguages() {
 		List<Language> langs = new LinkedList<Language>();
-		Language lang1 = mock(Language.class);
+		Language lang1 = new Language();
 		lang1.setId("rus");
-		Language lang2 = mock(Language.class);
+		Language lang2 = new Language();
 		lang1.setId("fra");
 		langs.add(lang1);
 		langs.add(lang2);

@@ -61,7 +61,9 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(id);
 		if (thesaurusTerm != null) {
 			return thesaurusTerm;
-		} else throw new BusinessException("Invalid termId requested : " + id);
+		} else {
+			throw new BusinessException("Invalid termId requested : " + id);
+		}
 	}
 
 	@Override
