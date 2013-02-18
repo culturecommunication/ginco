@@ -10,7 +10,7 @@ Ext.define('GincoApp.store.ThesaurusTermStore', {
         cfg = cfg || {};
         me.callParent([Ext.apply({
             autoLoad: false,
-            storeId: 'JsonThesaurusTermStore',
+            alias: 'store.termstore',
             pageSize: 50,
             proxy: {
                 type: 'ajax',

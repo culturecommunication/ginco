@@ -1,10 +1,10 @@
 Ext.define('GincoApp.controller.TermPanelController', {
-	extend:'Ext.app.Controller',
+	extend : 'Ext.app.Controller',
 	localized : true,
-	
+
 	views : [ 'TermPanel' ],
 	models : [ 'ThesaurusTermModel' ],
-	
+
 	xLoading : 'Loading',
 	xDeleteMsgLabel : 'Do you want to delete this term?',
 	xDeleteMsgTitle : 'Delete this term?',
@@ -14,7 +14,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 	xProblemLabel : 'Problem',
 	xProblemSaveMsg : 'Impossible to save the term !',
 	xProblemDeleteMsg : 'Impossible to delete the term !',
-	xProblemLoadMsg: 'Unable to load the term',
+	xProblemLoadMsg : 'Unable to load the term',
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -38,11 +38,11 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		} else {
 			model = Ext.create('GincoApp.model.ThesaurusTermModel');
 			model.data.thesaurusId = theForm.up('termPanel').thesaurusData.id;
-			model.data.identifier= "";
+			model.data.identifier = "";
 			theForm.loadRecord(model);
 		}
 	},
-	
+
 	loadData : function(aForm, aModel) {
 		var termPanel = aForm.up('termPanel');
 		var deleteBtn = aForm.down('#delete');
@@ -63,8 +63,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 				success : function(record, operation) {
 					me.loadData(theForm, record);
 					theForm.getEl().unmask();
-					Thesaurus.ext.utils.msg(me.xSucessLabel,
-							me.xSucessSavedMsg);
+					Thesaurus.ext.utils
+							.msg(me.xSucessLabel, me.xSucessSavedMsg);
 				},
 				failure : function() {
 					theForm.getEl().unmask();
@@ -74,14 +74,14 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			});
 		}
 	},
-	
-	deleteForm : function(theButton){
+
+	deleteForm : function(theButton) {
 		var me = this;
 		var theForm = theButton.up('form');
 		var updatedModel = theForm.getForm().getRecord();
 		var globalTabs = theForm.up('topTabs');
 		var thePanel = theForm.up('termPanel');
-		
+
 		Ext.MessageBox.show({
 			title : me.xDeleteMsgTitle,
 			msg : me.xDeleteMsgLabel,
@@ -100,7 +100,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 						failure : function() {
 							Thesaurus.ext.utils.msg(me.xProblemLabel,
 									me.xProblemDeleteMsg);
-						}});
+						}
+					});
 					break;
 				case 'cancel':
 					break; // leave blank if no action required on
@@ -109,30 +110,31 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			},
 			scope : this
 		});
-		},
-	
+	},
+
 	loadLanguages : function(theCombo) {
-		var thePanel=theCombo.up('termPanel');
-		var theStore= theCombo.getStore();
-		theStore.getProxy().setExtraParam('thesaurusId',thePanel.thesaurusData.id);
+		var thePanel = theCombo.up('termPanel');
+		var theStore = theCombo.getStore();
+		theStore.getProxy().setExtraParam('thesaurusId',
+				thePanel.thesaurusData.id);
 		theStore.load();
 	},
-	
-    init:function(){
-         this.control({
-        	 'termPanel form' : {
- 				afterrender : this.loadPanel
- 			},
-        	 'termPanel button[cls=save]' : {
- 				click : this.saveForm
- 			},
- 			'termPanel button[cls=delete]' : {
- 				click : this.deleteForm
- 			},
- 			'termPanel #languageCombo' : {
- 				render : this.loadLanguages
- 			}
- 			
-         });
-    }
+
+	init : function() {
+		this.control({
+			'termPanel form' : {
+				afterrender : this.loadPanel
+			},
+			'termPanel button[cls=save]' : {
+				click : this.saveForm
+			},
+			'termPanel button[cls=delete]' : {
+				click : this.deleteForm
+			},
+			'termPanel #languageCombo' : {
+				render : this.loadLanguages
+			}
+
+		});
+	}
 });

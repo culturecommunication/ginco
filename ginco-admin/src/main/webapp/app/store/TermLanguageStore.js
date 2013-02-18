@@ -10,7 +10,7 @@ Ext.define('GincoApp.store.TermLanguageStore', {
         cfg = cfg || {};
         me.callParent([Ext.apply({
             autoLoad: false,
-            storeId: 'JsonTermLanguageStore',
+            storeId: 'JsonTermLanguageStore'
         }, cfg)]);
     }
 });

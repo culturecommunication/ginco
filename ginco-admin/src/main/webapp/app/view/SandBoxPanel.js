@@ -21,10 +21,10 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 	xSourceColumnLabel:"Source",
 	xStatusColumnLabel:"Status",
 	xLangueColumnLabel:"Language",
-	
+	termStore : null,
 	initComponent : function() {
 		var me = this;
-
+		me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
 		Ext.applyIf(me, {
 			title : me.xSandBoxPanelTitle,
 			items : [
@@ -33,7 +33,7 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 				title : me.xSandBoxPanelTitle,
 				autoScroll:true,
 				flex:1,
-				store : 'ThesaurusTermStore',
+				store : me.termStore,
 				columns : [
 				           {dataIndex : 'identifier', text : me.xIdentifierColumnLabel},
 				           {dataIndex : 'lexicalValue', text : me.xLexicalValueColumnLabel, flex: 1},
@@ -45,7 +45,7 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 				           ],
 				dockedItems: [{
 			        xtype: 'pagingtoolbar',
-			        store : 'ThesaurusTermStore',
+			        store :  me.termStore,
 			        dock: 'bottom',
 			        displayInfo: true
 			    }]

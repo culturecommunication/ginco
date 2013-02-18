@@ -40,7 +40,7 @@ Ext.define('GincoApp.controller.SandboxPanelController', {
         	 'sandboxPanel gridpanel' : {
  				render : this.onGridRender,
  				itemdblclick : this.onNodeDblClick
- 			},         	
+ 			}         	
          });
 
        
