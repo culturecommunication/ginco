@@ -62,7 +62,7 @@ Ext.define('GincoApp.view.TermPanel', {
                                     xtype: 'button',
                                     text: 'Supprimer',
                                     disabled: true,
-                                    formBind: true,
+                                    itemId: 'delete',
                                     cls: 'delete',
                                     iconCls : 'icon-delete'
                                 }
