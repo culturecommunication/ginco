@@ -161,6 +161,47 @@ public class ThesaurusTermRestServiceTest{
 		Assert.assertEquals("fake1", actualResponse.getIdentifier());
 	}
 	
+	/**
+	 * Test the createTerm method
+	 * @throws BusinessException 
+	 */
+	@Test
+	public final void testCreateTerm() throws BusinessException {
+		
+		//Generating mocked objects
+		ThesaurusTerm fakeThesaurusTerm1 = new ThesaurusTerm();
+		fakeThesaurusTerm1.setIdentifier("");
+		ThesaurusTerm fakeThesaurusCreationReturn = new ThesaurusTerm();
+
+		
+		Language fakeLanguage1 = new Language();
+		fakeLanguage1.setId("fra");
+		fakeLanguage1.setRefname("fra");
+		
+		Thesaurus fakeThesaurus1 =  new Thesaurus();
+		fakeThesaurus1.setIdentifier("mockTh1");
+		
+		fakeThesaurusCreationReturn.setIdentifier("mock1");
+		fakeThesaurusCreationReturn.setThesaurusId(fakeThesaurus1);
+		fakeThesaurusCreationReturn.setLanguage(fakeLanguage1);
+
+		//Creating a Thesaurus View for the test
+		ThesaurusTermView fakeThesaurusTermView = new ThesaurusTermView();
+		fakeThesaurusTermView.setIdentifier("mock1");
+		fakeThesaurusTermView.setLexicalValue("lexicale value");
+		
+		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
+		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString())).thenReturn(fakeThesaurus1);
+		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
+		
+		Mockito.when(termService.createThesaurusTerm(any(ThesaurusTerm.class), any(IUser.class))).thenReturn(fakeThesaurusCreationReturn);
+		
+		ThesaurusTermView actualResponse = thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
+		
+		//Assert
+		Assert.assertEquals("mock1", actualResponse.getIdentifier());
+	}
+	
 	private ThesaurusTerm getFakeThesaurusTermWithNonMandatoryEmptyFields(String id) {
 		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
 		fakeThesaurusTerm.setIdentifier(id);
