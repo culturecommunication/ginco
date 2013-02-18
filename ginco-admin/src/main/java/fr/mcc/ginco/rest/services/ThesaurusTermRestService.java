@@ -125,7 +125,7 @@ public class ThesaurusTermRestService {
 	@GET
 	@Path("/getThesaurusTerm")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ThesaurusTermView getThesaurusTerm(@QueryParam("termId") String idTerm) throws BusinessException {
+	public ThesaurusTermView getThesaurusTerm(@QueryParam("id") String idTerm) throws BusinessException {
 		ThesaurusTerm thesaurusTerm = thesaurusTermService.getThesaurusTermById(idTerm);		
 		return new ThesaurusTermView(thesaurusTerm);		
 	}
