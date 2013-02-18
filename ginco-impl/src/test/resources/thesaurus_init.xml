@@ -126,7 +126,7 @@
 		<column>entityid</column>		
 		<column>entitytype</column>	
    </table>
-   
+
 	<table name="thesaurus_term">
    		<column>identifier</column>
 		<column>lexicalvalue</column>
@@ -148,7 +148,7 @@
 			<value>false</value>
 			<value>1</value>
 			<value>1</value>
-			<value>test</value>
+			<null />
 			<value>1</value>
 			<value>aaa</value>
 		</row>
@@ -161,7 +161,7 @@
 			<value>true</value>
 			<value>1</value>
 			<value>1</value>
-			<value>test</value>
+            <null />
 			<value>1</value>
 			<value>aaa</value>
 		</row>

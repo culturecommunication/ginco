@@ -13,9 +13,9 @@
 		<property name="prefered" />
 		<property name="status" />
 		<property name="role" />
-		<property name="conceptId" column="conceptid" />
 		
 		<many-to-one name="language" column="lang" lazy="false" />
 		<many-to-one name="thesaurusId" column="thesaurusid" lazy="false" />
+        <many-to-one name="conceptId" column="conceptid" lazy="false" />
 	</class>
 </hibernate-mapping>

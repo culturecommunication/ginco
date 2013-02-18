@@ -1,23 +1,23 @@
 /**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
- * <p/>
+ *
  * contact.gincoculture_at_gouv.fr
- * <p/>
+ *
  * This software is a computer program whose purpose is to provide a thesaurus
  * management solution.
- * <p/>
+ *
  * This software is governed by the CeCILL license under French law and
  * abiding by the rules of distribution of free software. You can use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * <p/>
+ *
  * As a counterpart to the access to the source code and rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty and the software's author, the holder of the
  * economic rights, and the successive licensors have only limited liability.
- * <p/>
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading, using, modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -25,52 +25,81 @@
  * therefore means that it is reserved for developers and experienced
  * professionals having in-depth computer knowledge. Users are therefore
  * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systemsand/or
+ * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and, more generally, to use and operate it in the
  * same conditions as regards security.
- * <p/>
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
+package fr.mcc.ginco.beans;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Date;
 
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
+public class ThesaurusConcept implements Serializable, IBaseBean {
+    private String identifier;
+    private String label;
+    private Date created;
+    private Date modified;
+    private String status;
+    private String notation;
+    private Boolean topConcept;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
+    public String getIdentifier() {
+        return identifier;
+    }
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+    public String getLabel() {
+        return label;
+    }
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    @Override
+    public String getId() {
+        return identifier;
+    }
 
-/**
- * Implementation of the data access object to the thesaurus_term database table
- *
- */
-@Repository("thesaurusTermDAO")
-@Scope("prototype")
-public class ThesaurusTermDAO extends
-		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
-	public ThesaurusTermDAO(Class<ThesaurusTerm> clazz) {
-		super(clazz);
-	}
+    public Date getCreated() {
+        return created;
+    }
 
-	public ThesaurusTermDAO() {
-		super(ThesaurusTerm.class);
-	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findPaginatedItems(java.lang.Integer, java.lang.Integer, java.lang.String)
-	 */
-	@Override
-	public List<ThesaurusTerm> findPaginatedSandboxedItems(Integer start, Integer limit,
-			String idThesaurus) {
-		return getCurrentSession().createCriteria(ThesaurusTerm.class)
-				.setMaxResults(limit)
-				.add(Restrictions.eq("thesaurusId.identifier", idThesaurus))
-				.add(Restrictions.isNull("conceptId"))
-				.setFirstResult(start).addOrder(Order.asc("lexicalValue"))
-				.list();
-	}
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getNotation() {
+        return notation;
+    }
+
+    public void setNotation(String notation) {
+        this.notation = notation;
+    }
+
+    public Boolean getTopConcept() {
+        return topConcept;
+    }
+
+    public void setTopConcept(Boolean topConcept) {
+        this.topConcept = topConcept;
+    }
 }

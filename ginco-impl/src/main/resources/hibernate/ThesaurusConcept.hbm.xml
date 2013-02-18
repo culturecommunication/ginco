@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+    <class name="ThesaurusConcept" table="thesaurus_concept">
+        <cache usage="read-write" />
+        <id name="identifier" column="identifier">
+            <generator class="fr.mcc.ginco.ark.CustomGenerator" />
+        </id>
+        <property name="created"  type="timestamp" not-null="true" />
+        <property name="modified" type="timestamp" not-null="true" />
+        <property name="status" />
+        <property name="notation" />
+        <property name="topConcept" column="topconcept" />
+    </class>
+</hibernate-mapping>

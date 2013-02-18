@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS languages_iso639;
 DROP TABLE IF EXISTS thesaurus_organization;
 DROP TABLE IF EXISTS log_journal;
 DROP TABLE IF EXISTS thesaurus_term;
+DROP TABLE IF EXISTS thesaurus_concept;
 DROP SEQUENCE IF EXISTS log_journal_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
 CREATE TABLE thesaurus
@@ -68,6 +69,17 @@ CREATE TABLE log_journal (
     entitytype text NOT NULL
 );
 CREATE SEQUENCE log_journal_identifier_seq START WITH 1  INCREMENT BY 1;
+
+CREATE TABLE thesaurus_concept
+(
+  identifier text NOT NULL,
+  created text NOT NULL,
+  modified text NOT NULL,
+  status text,
+  notation text,
+  topconcept boolean
+);
+
 CREATE TABLE thesaurus_term
 (
   identifier text NOT NULL,
@@ -81,4 +93,8 @@ CREATE TABLE thesaurus_term
   conceptid text,
   thesaurusid text NOT NULL,
   lang character varying(3) NOT NULL
-)   
+);
+
+ALTER TABLE thesaurus_term
+    ADD FOREIGN KEY (conceptid)
+    REFERENCES thesaurus_concept (identifier);

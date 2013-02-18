@@ -46,6 +46,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import fr.mcc.ginco.IThesaurusConceptService;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
@@ -86,6 +89,10 @@ public class ThesaurusTermRestService {
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
+
+    @Inject
+    @Named("thesaurusConceptService")
+    private IThesaurusConceptService thesaurusConceptService;
 	
 	@Log
 	private Logger logger;
@@ -116,7 +123,6 @@ public class ThesaurusTermRestService {
 	}
 	
 	/**
-
 	 * Public method used to get the details of a single ThesaurusTerm
 	 * 
 	 * @return list of ThesaurusTermView, if not found - {@code null}
@@ -126,16 +132,14 @@ public class ThesaurusTermRestService {
 	@Path("/getThesaurusTerm")
 	@Produces({MediaType.APPLICATION_JSON})
 	public ThesaurusTermView getThesaurusTerm(@QueryParam("id") String idTerm) throws BusinessException {
-		ThesaurusTerm thesaurusTerm = thesaurusTermService.getThesaurusTermById(idTerm);		
+		ThesaurusTerm thesaurusTerm = thesaurusTermService.getThesaurusTermById(idTerm);
 		return new ThesaurusTermView(thesaurusTerm);		
 	}
 
 	/**
 	 * Public method used to create or update
-	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} object
-	 * 
-	 * @param id
-	 *            {@link ThesaurusTermView} thesaurus term JSON object send by extjs
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} -
+     * thesaurus term JSON object send by extjs
 	 * 
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} updated object
 	 *         in JSON format or {@code null} if not found
@@ -217,7 +221,12 @@ public class ThesaurusTermRestService {
 		hibernateRes.setPrefered(source.getPrefered());
 		hibernateRes.setStatus(source.getStatus());
 		hibernateRes.setRole(source.getRole());
-		hibernateRes.setConceptId(source.getConceptId());
+        if(source.getConceptId() != null && !source.getConceptId().equals("")) {
+            ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(source.getConceptId());
+            if(concept != null) {
+                hibernateRes.setConceptId(concept);
+            }
+        }
 		hibernateRes.setThesaurusId(thesaurusService.getThesaurusById(source.getThesaurusId()));
 		if ("".equals(source.getLanguage())) {
 			//If not filled in, the language for the term is "ginco.default.language" property in application.properties

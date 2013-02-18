@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
+
+    <table name="thesaurus_concept">
+        <column>identifier</column>
+        <column>created</column>
+        <column>modified</column>
+        <column>status</column>
+        <column>notation</column>
+        <column>topconcept</column>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>test</value>
+            <value>test</value>
+            <value>false</value>
+        </row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>test</value>
+            <value>test</value>
+            <value>true</value>
+        </row>
+    </table>
+
 	<table name="thesaurus_term">
 		<column>identifier</column>
 		<column>lexicalvalue</column>
@@ -21,7 +47,7 @@
 			<value>false</value>
 			<value>0</value>
 			<value>0</value>
-			<value>http://www.culturecommunication.gouv.fr/co2</value>
+            <null />
 			<value>http://www.culturecommunication.gouv.fr/th1</value>		
 			<value>eng</value>				
 		</row>
@@ -34,21 +60,8 @@
 			<value>false</value>
 			<value>0</value>
 			<value>0</value>
-			<value></value>
+			<null />
 			<value>http://www.culturecommunication.gouv.fr/th1</value>	
-			<value>eng</value>
-		</row>
-		<row>
-			<value>http://www.culturecommunication.gouv.fr/ter1</value>
-			<value>Across the universe</value>
-			<value>2013-02-06 15:29:59.66325</value>
-			<value>2013-02-06 15:29:59.66325</value>
-			<value>revolver</value>
-			<value>false</value>
-			<value>0</value>
-			<value>0</value>
-			<value>http://www.culturecommunication.gouv.fr/co1</value>
-			<value>http://www.culturecommunication.gouv.fr/th2</value>	
 			<value>eng</value>
 		</row>
 		<row>
@@ -60,7 +73,7 @@
 			<value>false</value>
 			<value>0</value>
 			<value>0</value>
-			<value></value>
+            <null />
 			<value>http://www.culturecommunication.gouv.fr/th1</value>
 			<value>eng</value>
 		</row>
@@ -73,7 +86,7 @@
 			<value>false</value>
 			<value>0</value>
 			<value>0</value>
-			<value></value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
 			<value>http://www.culturecommunication.gouv.fr/th3</value>
 			<value>eng</value>
 		</row>
@@ -86,7 +99,7 @@
 			<value>false</value>
 			<value>0</value>
 			<value>0</value>
-			<value></value>
+            <null />
 			<value>http://www.culturecommunication.gouv.fr/th3</value>
 			<value>eng</value>
 		</row>
@@ -123,5 +136,5 @@
 			<value>http://www.culturecommunication.gouv.fr/th2</value>
 			<value>album let it be</value>			
 		</row>
-	</table>	
+	</table>
 </dataset>

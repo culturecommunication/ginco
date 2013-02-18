@@ -77,8 +77,12 @@ public class ThesaurusTermView implements Serializable {
             this.source = source.getSource();
             this.prefered = source.getPrefered();
             this.status = source.getStatus();
-    		this.role = source.getRole();
-    		this.conceptId = source.getConceptId();
+            this.role = source.getRole();
+
+            if(source.getConceptId() != null) {
+                this.conceptId = source.getConceptId().getId();
+            }
+
     		this.thesaurusId = source.getThesaurusId().getId();
     		if(source.getLanguage() != null) {
     		this.language = source.getLanguage().getId();

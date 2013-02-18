@@ -1,4 +1,4 @@
--- Table: log_journal
+﻿-- Table: log_journal
 CREATE TABLE log_journal (
     identifier integer NOT NULL,
     action text NOT NULL,
@@ -40,8 +40,23 @@ CREATE TABLE thesaurus_term
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_term_thesaurus FOREIGN KEY (thesaurusid)
       REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_term_thesaurus_concept FOREIGN KEY (conceptid)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
+);
+
+-- Table: thesaurus_concept
+CREATE TABLE thesaurus_concept
+(
+  identifier text NOT NULL,
+  created timestamp without time zone,
+  modified timestamp without time zone,
+  status text,
+  notation text,
+  topconcept boolean,
+  CONSTRAINT pk_thesaurus_concept_identifier PRIMARY KEY (identifier)
+);)
 
 -- Table: thesaurus -- adding defaulttopconcept
 alter table thesaurus add defaulttopconcept boolean NOT NULL DEFAULT FALSE

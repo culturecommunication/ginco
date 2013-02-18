@@ -32,45 +32,46 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
+package fr.mcc.ginco;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IGenericDAO;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
-
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-
 /**
- * Implementation of the data access object to the thesaurus_term database table
- *
+ * Implementation of the thesaurus concept service.
+ * Contains methods relatives to the ThesaurusConcept object
  */
-@Repository("thesaurusTermDAO")
-@Scope("prototype")
-public class ThesaurusTermDAO extends
-		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
-	public ThesaurusTermDAO(Class<ThesaurusTerm> clazz) {
-		super(clazz);
-	}
+@Transactional
+@Service("thesaurusConceptService")
+public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
 
-	public ThesaurusTermDAO() {
-		super(ThesaurusTerm.class);
-	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findPaginatedItems(java.lang.Integer, java.lang.Integer, java.lang.String)
+    @Inject
+    @Named("thesaurusConceptDAO")
+    private IGenericDAO<ThesaurusConcept, String> thesaurusConceptDAO;
+
+    /*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptList()
 	 */
-	@Override
-	public List<ThesaurusTerm> findPaginatedSandboxedItems(Integer start, Integer limit,
-			String idThesaurus) {
-		return getCurrentSession().createCriteria(ThesaurusTerm.class)
-				.setMaxResults(limit)
-				.add(Restrictions.eq("thesaurusId.identifier", idThesaurus))
-				.add(Restrictions.isNull("conceptId"))
-				.setFirstResult(start).addOrder(Order.asc("lexicalValue"))
-				.list();
-	}
+    @Override
+    public List<ThesaurusConcept> getThesaurusConceptList() {
+        return thesaurusConceptDAO.findAll();
+    }
+
+    /*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang.String)
+	 */
+    @Override
+    public ThesaurusConcept getThesaurusConceptById(String id) {
+        return thesaurusConceptDAO.getById(id);
+    }
 }

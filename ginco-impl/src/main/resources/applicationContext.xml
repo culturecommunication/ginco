@@ -54,6 +54,7 @@
                 <value>hibernate/ThesaurusOrganization.hbm.xml</value>
                 <value>hibernate/LogJournal.hbm.xml</value>  
                 <value>hibernate/ThesaurusVersionHistory.hbm.xml</value>
+                <value>hibernate/ThesaurusConcept.hbm.xml</value>
                 <value>hibernate/ThesaurusTerm.hbm.xml</value>
             </list>
         </property>
