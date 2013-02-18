@@ -54,6 +54,22 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		}
 	},
 	
+	deleteForm : function(theButton){
+		var me = this;
+		var theForm = theButton.up('form');
+		var updatedModel = theForm.getForm().getRecord();
+		updatedModel.destroy({
+			success : function(record, operation) {
+				Thesaurus.ext.utils.msg('Succès',
+						'Le terme a été supprimé !');
+			},
+			failure : function() {
+				Thesaurus.ext.utils.msg('Problème',
+						"Impossible de supprimer le terme!");
+			}});
+			
+		},
+	
 	loadLanguages : function(theCombo) {
 		var thePanel=theCombo.up('termPanel');
 		var theStore= theCombo.getStore();
@@ -68,6 +84,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
  			},
         	 'termPanel button[cls=save]' : {
  				click : this.saveForm
+ 			},
+ 			'termPanel button[cls=delete]' : {
+ 				click : this.deleteForm
  			},
  			'termPanel #languageCombo' : {
  				render : this.loadLanguages

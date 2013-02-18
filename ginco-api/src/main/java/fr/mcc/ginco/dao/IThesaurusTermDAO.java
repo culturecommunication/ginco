@@ -53,4 +53,5 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @return List<ThesaurusTerm> Paginated list of Thesaurus Terms for a specified Thesaurus
 	 */
 	List<ThesaurusTerm> findPaginatedSandboxedItems(Integer start, Integer limit, String idThesaurus);
+
 }
