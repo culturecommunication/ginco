@@ -56,7 +56,7 @@ CREATE TABLE thesaurus_concept
   notation text,
   topconcept boolean,
   CONSTRAINT pk_thesaurus_concept_identifier PRIMARY KEY (identifier)
-);)
+);
 
 -- Table: thesaurus -- adding defaulttopconcept
-alter table thesaurus add defaulttopconcept boolean NOT NULL DEFAULT FALSE
+alter table thesaurus add defaulttopconcept boolean NOT NULL DEFAULT FALSE;
