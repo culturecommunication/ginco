@@ -39,6 +39,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,4 +88,10 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	return thesaurusTermDAO.update(object);
     }
 	
+	@GincoLog(action = GincoLog.Action.DELETE, entityType=GincoLog.EntityType.THESAURUSTERM)
+    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) {
+		Session session = thesaurusTermDAO.getCurrentSession();
+		session.delete(object);
+		return object;
+    }
 }

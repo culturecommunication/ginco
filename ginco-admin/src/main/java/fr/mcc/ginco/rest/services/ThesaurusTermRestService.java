@@ -170,6 +170,35 @@ public class ThesaurusTermRestService {
 		return null;
 	}
 	
+	/**
+	 * Public method used to delete
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} object
+	 * 
+	 * @param id
+	 *            {@link ThesaurusTermView} thesaurus term JSON object send by extjs
+	 * 
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} deleted object
+	 *         in JSON format or {@code null} if not found
+	 * @throws BusinessException 
+	 */
+	@POST
+	@Path("/destroyTerm")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
+		ThesaurusTerm object = convert(thesaurusViewJAXBElement);
+		String principal = "unknown";
+		if (context != null) {
+			principal = context.getHttpServletRequest().getRemoteAddr();
+		}
+		IUser user = new SimpleUserImpl();
+		user.setName(principal);
+		if (object != null) {
+			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object, user);
+			return new ThesaurusTermView(result);
+		}
+		return null;
+	}
+	
 	private ThesaurusTerm convert(ThesaurusTermView source) throws BusinessException {
 		ThesaurusTerm hibernateRes;
 

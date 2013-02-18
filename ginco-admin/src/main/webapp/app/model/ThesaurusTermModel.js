@@ -52,10 +52,10 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
     proxy : {
 		api : {
 			create : 'services/ui/thesaurustermservice/updateTerm',
-			update : 'services/ui/thesaurustermservice/updateTerm'
+			update : 'services/ui/thesaurustermservice/updateTerm',
+			destroy: 'services/ui/thesaurustermservice/destroyTerm'
 		},
 		type : 'ajax',
-		url : 'services/ui/thesaurustermservice/updateTerm',
 		reader : {
 			type : 'json',
 			idProperty : 'identifier'
