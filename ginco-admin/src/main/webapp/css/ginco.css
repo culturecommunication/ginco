@@ -61,3 +61,7 @@
 .icon-save {
     background-image: url(../images/save.png) !important;
 }
+
+.icon-delete {
+    background-image: url(../images/delete.png) !important;
+}

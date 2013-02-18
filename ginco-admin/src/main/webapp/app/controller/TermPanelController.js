@@ -45,9 +45,11 @@ Ext.define('GincoApp.controller.TermPanelController', {
 	
 	loadData : function(aForm, aModel) {
 		var termPanel = aForm.up('termPanel');
+		var deleteBtn = aForm.down('#delete');
 		termPanel.setTitle(aModel.data.lexicalValue);
 		aForm.setTitle(aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
+		deleteBtn.setDisabled(false);
 	},
 
 	saveForm : function(theButton) {
