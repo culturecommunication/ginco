@@ -36,6 +36,7 @@ Ext.application({
         'ThesaurusTypeStore',
         'ThesaurusFormatStore',
         'ThesaurusLanguageStore',
+        'TermLanguageStore',
         'ThesaurusTermStore'
     ],
     views: [

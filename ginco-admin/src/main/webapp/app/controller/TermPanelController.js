@@ -19,8 +19,16 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		} else {
 			model = Ext.create('GincoApp.model.ThesaurusTermModel');
 			model.data.thesaurusId = theForm.up('termPanel').thesaurusData.id;
+			model.data.identifier= "";
 			theForm.loadRecord(model);
 		}
+	},
+	
+	loadData : function(aForm, aModel) {
+		var termPanel = aForm.up('termPanel');
+		termPanel.setTitle(aModel.data.lexicalValue);
+		aForm.setTitle(aModel.data.lexicalValue);
+		aForm.loadRecord(aModel);
 	},
 
 	saveForm : function(theButton) {
@@ -36,7 +44,6 @@ Ext.define('GincoApp.controller.TermPanelController', {
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils.msg('Succès',
 							'Le terme a été enregistré!');
-					me.updateTreeView();
 				},
 				failure : function() {
 					theForm.getEl().unmask();
@@ -47,6 +54,13 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		}
 	},
 	
+	loadLanguages : function(theCombo) {
+		var thePanel=theCombo.up('termPanel');
+		var theStore= theCombo.getStore();
+		theStore.getProxy().setExtraParam('thesaurusId',thePanel.thesaurusData.id);
+		theStore.load();
+	},
+	
     init:function(){
          this.control({
         	 'termPanel form' : {
@@ -54,7 +68,11 @@ Ext.define('GincoApp.controller.TermPanelController', {
  			},
         	 'termPanel button[cls=save]' : {
  				click : this.saveForm
+ 			},
+ 			'termPanel #languageCombo' : {
+ 				render : this.loadLanguages
  			}
+ 			
          });
     }
 });

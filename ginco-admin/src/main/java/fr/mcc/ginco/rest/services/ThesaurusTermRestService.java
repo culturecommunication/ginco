@@ -36,35 +36,37 @@ package fr.mcc.ginco.rest.services;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import fr.mcc.ginco.ILanguagesService;
+import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTermService;
-import fr.mcc.ginco.IThesaurusTypeService;
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.users.SimpleUserImpl;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Thesaurus Term REST service for all operations on Thesauruses Terms
  * 
  */
-@SuppressWarnings("SpringJavaAutowiringInspection")
 @Service
 @Path("/thesaurustermservice")
 @Produces({MediaType.APPLICATION_JSON})
@@ -77,8 +79,18 @@ public class ThesaurusTermRestService {
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
 	
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
+	
+	@Inject
+	@Named("languagesService")
+	private ILanguagesService languagesService;
+	
 	@Log
 	private Logger logger;
+	
+	@Value("${ginco.default.language}") private String language;
 	
 
 	/**
@@ -101,5 +113,92 @@ public class ThesaurusTermRestService {
 		ExtJsonFormLoadData<List<ThesaurusTermView> > extTerms = new  ExtJsonFormLoadData<List<ThesaurusTermView> > (results);
 		extTerms.setTotal(total);
 		return extTerms;
+	}
+	
+	/**
+
+	 * Public method used to get the details of a single ThesaurusTerm
+	 * 
+	 * @return list of ThesaurusTermView, if not found - {@code null}
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getThesaurusTerm")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ThesaurusTermView getThesaurusTerm(@QueryParam("termId") String idTerm) throws BusinessException {
+		ThesaurusTerm thesaurusTerm = thesaurusTermService.getThesaurusTermById(idTerm);		
+		return new ThesaurusTermView(thesaurusTerm);		
+	}
+
+	/**
+	 * Public method used to create or update
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} object
+	 * 
+	 * @param id
+	 *            {@link ThesaurusTermView} thesaurus term JSON object send by extjs
+	 * 
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} updated object
+	 *         in JSON format or {@code null} if not found
+	 * @throws BusinessException 
+	 */
+	@POST
+	@Path("/updateTerm")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
+		ThesaurusTerm object = convert(thesaurusViewJAXBElement);
+		String principal = "unknown";
+		if (context != null) {
+			principal = context.getHttpServletRequest().getRemoteAddr();
+		}
+		IUser user = new SimpleUserImpl();
+		user.setName(principal);
+		if (object != null) {
+			ThesaurusTerm result;
+			if (StringUtils.isEmpty(object.getIdentifier())) {
+				result = thesaurusTermService.createThesaurusTerm(object, user);
+
+			} else {
+				result = thesaurusTermService.updateThesaurusTerm(object, user);
+			}
+			if (result != null) {
+				return new ThesaurusTermView(result);
+			} else {
+				logger.error("Failed to update thesaurus term");
+				return null;
+			}
+		}
+		return null;
+	}
+	
+	private ThesaurusTerm convert(ThesaurusTermView source) throws BusinessException {
+		ThesaurusTerm hibernateRes;
+
+		if ("".equals(source.getIdentifier())) {
+			hibernateRes = new ThesaurusTerm();
+			hibernateRes.setCreated(DateUtil.nowDate());
+			logger.info("Creating a new term");
+		} else {
+			hibernateRes = thesaurusTermService.getThesaurusTermById(source.getIdentifier());
+			logger.info("Getting an existing term");
+		}
+		
+		hibernateRes.setLexicalValue(source.getLexicalValue());
+		hibernateRes.setModified(DateUtil.nowDate());
+		hibernateRes.setSource(source.getSource());
+		hibernateRes.setPrefered(source.getPrefered());
+		hibernateRes.setStatus(source.getStatus());
+		hibernateRes.setRole(source.getRole());
+		hibernateRes.setConceptId(source.getConceptId());
+		hibernateRes.setThesaurusId(thesaurusService.getThesaurusById(source.getThesaurusId()));
+		if ("".equals(source.getLanguage())) {
+			//If not filled in, the language for the term is "ginco.default.language" property in application.properties
+			hibernateRes.setLanguage(languagesService.getLanguageById(language));
+
+		} else
+		{
+			hibernateRes.setLanguage(languagesService.getLanguageById(source.getLanguage()));			
+		}
+		
+		return hibernateRes;
 	}
 }

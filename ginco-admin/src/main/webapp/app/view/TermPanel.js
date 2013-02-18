@@ -113,12 +113,13 @@ Ext.define('GincoApp.view.TermPanel', {
                         {
                         	xtype: 'combobox',
                         	name:'language',
+                        	itemId: 'languageCombo',
                         	fieldLabel: me.xLanguagesLabel,
                         	editable : false,
                         	displayField : 'refname',
                         	valueField : 'id',
                         	forceSelection : true,
-                        	store : 'ThesaurusLanguageStore'
+                        	store : 'TermLanguageStore'
                         }
                     ]
                 }

@@ -32,46 +32,63 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.utils;
 
-import java.util.List;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.beans.users.IUser;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-/**
- * Service used to work with {@link ThesaurusTerm} objects, contains basic
- * methods exposed to client part. For example, to get a single
- * ThesaurusTerm object, use {@link #getThesaurusTermById(String)}
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusTermService {
-	
-	/**
-     * Get a single Thesaurus Term by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
-     */
-	ThesaurusTerm getThesaurusTermById(String id) throws BusinessException;
-	
-    /**
-     * Get list of paginated Thesaurus Terms.
-     * @return List of Thesaurus Terms (the number given in argument), from the start index
-     */
-    List<ThesaurusTerm> getPaginatedThesaurusList(Integer startIndex, Integer limit, String idThesaurus);
+import junit.framework.Assert;
 
-	Long getCount();
+import org.junit.Test;
+
+import fr.mcc.ginco.beans.Language;
+
+public class LanguageComparatorTest {	
 	
-    /**
-     * Create a single Thesaurus Term Object
-     */
-    ThesaurusTerm createThesaurusTerm(ThesaurusTerm object, IUser user);   
-    
-    /**
-     * Update a single Thesaurus Term Object
-     */
-    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user);  
-    
+	
+	@Test
+	public void testCompareWithOneTopLanguage() {
+		Language l1 = new Language();
+		Language l2 = new Language();
+				l1.setId("fra");
+				l2.setId("rus");
+		LanguageComparator comp = new LanguageComparator("fra");
+		int actual  = comp.compare(l1, l2);
+		Assert.assertEquals(1, actual);
+	}
+	@Test
+	public void testCompareWithTwoTopLanguage() {
+		Language l1 = new Language();
+		Language l2 = new Language();
+				l1.setId("fra");
+				l2.setId("fra");
+		LanguageComparator comp = new LanguageComparator("fra");
+		int actual  = comp.compare(l1, l2);
+		Assert.assertEquals(0, actual);
+	}
+	@Test
+	public void testCompareWithOneTopLanguage2() {
+		Language l1 = new Language();
+		Language l2 = new Language();
+				l1.setId("rus");
+				l2.setId("fra");
+		LanguageComparator comp = new LanguageComparator("fra");
+		int actual  = comp.compare(l1, l2);
+		Assert.assertEquals(-1, actual);
+	}
+	
+	@Test
+	public void testCompareWithNoTopLanguage() {
+		Language l1 = new Language();
+		Language l2 = new Language();
+				l1.setId("rus");
+				l1.setRefname("Russian");
+				l2.setId("fra");
+				l2.setRefname("French");
+		LanguageComparator comp = new LanguageComparator("fra");
+		int actual  = comp.compare(l1, l2);
+		Assert.assertEquals(-1, actual);
+	}
+
+
 }
