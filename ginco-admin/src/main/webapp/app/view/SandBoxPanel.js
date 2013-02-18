@@ -31,6 +31,8 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 				{
 				xtype : 'gridpanel',
 				title : me.xSandBoxPanelTitle,
+				autoScroll:true,
+				flex:1,
 				store : 'ThesaurusTermStore',
 				columns : [
 				           {dataIndex : 'identifier', text : me.xIdentifierColumnLabel},
