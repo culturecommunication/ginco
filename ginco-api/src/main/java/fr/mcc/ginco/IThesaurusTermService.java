@@ -72,6 +72,11 @@ public interface IThesaurusTermService {
     /**
      * Update a single Thesaurus Term Object
      */
-    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user);  
+    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user);
+    
+    /**
+     * Delete a single Thesaurus Term Object
+     */
+    ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user);
     
 }

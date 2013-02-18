@@ -81,6 +81,14 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	T update(T entity);
 	
 	/**
+	 * Delete an object of type T
+	 * 
+	 * @param entity
+	 * @return Object
+	 */
+	T delete(T entity);
+	
+	/**
 	 * @return The number of DB rows matching to the DAO
 	 */
 	Long count();

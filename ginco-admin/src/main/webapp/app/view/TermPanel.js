@@ -57,6 +57,14 @@ Ext.define('GincoApp.view.TermPanel', {
                                     formBind: true,
                                     cls: 'save',
                                     iconCls : 'icon-save'
+                                },
+                                {
+                                    xtype: 'button',
+                                    text: 'Supprimer',
+                                    disabled: true,
+                                    formBind: true,
+                                    cls: 'delete',
+                                    iconCls : 'icon-delete'
                                 }
                             ]
                         }

@@ -54,10 +54,9 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
 			create : 'services/ui/thesaurustermservice/updateTerm',
 			update : 'services/ui/thesaurustermservice/updateTerm',
 			read :   'services/ui/thesaurustermservice/getThesaurusTerm',
-
+			destroy: 'services/ui/thesaurustermservice/destroyTerm'
 		},
 		type : 'ajax',
-		url : 'services/ui/thesaurustermservice/updateTerm',
 		reader : {
 			type : 'json',
 			idProperty : 'identifier'
