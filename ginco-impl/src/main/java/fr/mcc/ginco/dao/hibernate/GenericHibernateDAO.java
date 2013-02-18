@@ -92,7 +92,13 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	@Override
 	final public T update(T entity) {
 		return makePersistent(entity);
-	}	
+	}
+	
+	@Override
+	final public T delete(T entity) {
+		this.getCurrentSession().delete(entity);
+		return entity;
+	}
 	
 	final public Session getCurrentSession() {
 		Session session = sessionFactory.getCurrentSession();

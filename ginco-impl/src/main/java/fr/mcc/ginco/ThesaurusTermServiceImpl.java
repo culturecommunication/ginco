@@ -90,8 +90,6 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	
 	@GincoLog(action = GincoLog.Action.DELETE, entityType=GincoLog.EntityType.THESAURUSTERM)
     public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) {
-		Session session = thesaurusTermDAO.getCurrentSession();
-		session.delete(object);
-		return object;
+		return thesaurusTermDAO.delete(object);
     }
 }

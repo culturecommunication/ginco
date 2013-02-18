@@ -36,8 +36,6 @@ package fr.mcc.ginco.dao;
 
 import java.util.List;
 
-import org.hibernate.Session;
-
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
@@ -56,5 +54,4 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 */
 	List<ThesaurusTerm> findPaginatedSandboxedItems(Integer start, Integer limit, String idThesaurus);
 
-	Session getCurrentSession();
 }
