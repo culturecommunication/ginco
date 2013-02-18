@@ -227,6 +227,7 @@ public class ThesaurusRestService {
 		hibernateRes.setSource(source.getSource());
 		hibernateRes.setSubject(source.getSubject());
 		hibernateRes.setTitle(source.getTitle());
+		hibernateRes.setDefaultTopConcept(source.getDefaultTopConcept());
 		hibernateRes.setFormat(thesaurusFormatService
 				.getThesaurusFormatById(source.getFormat()));
 		hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source
@@ -236,7 +237,6 @@ public class ThesaurusRestService {
 				|| StringUtils.isNotEmpty(source.getCreatorHomepage())) {
 			if (hibernateRes.getCreator() != null) {
 				thesaurusOrganization = hibernateRes.getCreator();
-
 			} else {
 				thesaurusOrganization = new ThesaurusOrganization();
 			}

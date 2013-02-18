@@ -16,6 +16,7 @@
 		<column>type</column>
 		<column>creator</column>
 		<column>created</column>
+		<column>defaulttopconcept</column>
 		<row>
 			<value>0</value>
 			<value>test</value>
@@ -32,6 +33,7 @@
 			<value>1</value>
 			<value>0</value>
 			<value>2013-02-06 15:29:59.66325</value>
+			<value>false</value>
 		</row>
 		<row>
 			<value>1</value>
@@ -49,6 +51,7 @@
 			<value>1</value>
 			<value>0</value>
 			<value>2013-02-06 15:29:59.66325</value>
+			<value>false</value>
 		</row>
 		<row>
 			<value>2</value>
@@ -66,6 +69,7 @@
 			<value>1</value>
 			<value>0</value>
 			<value>2013-02-06 15:29:59.66325</value>
+			<value>false</value>
 		</row>
 	</table>
 

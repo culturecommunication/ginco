@@ -141,6 +141,8 @@ public class ThesaurusRestServiceTest {
 		Assert.assertEquals(mockedThesaurusView1.getDate(), view.getDate());
 		Assert.assertEquals(mockedThesaurusView1.getDescription(),
 				view.getDescription());
+		Assert.assertEquals(mockedThesaurusView1.getDefaultTopConcept(),
+				view.getDefaultTopConcept());
 		Assert.assertEquals(mockedThesaurusView1.getId(), view.getId());
 		Assert.assertEquals(mockedThesaurusView1.getPublisher(),
 				view.getPublisher());
@@ -168,6 +170,7 @@ public class ThesaurusRestServiceTest {
 		when(mockedThesaurusView.getId()).thenReturn(id);
 		when(mockedThesaurusView.getTitle()).thenReturn("Title");
 		when(mockedThesaurusView.getRights()).thenReturn("Fake Rights");
+		when(mockedThesaurusView.getDefaultTopConcept()).thenReturn(false);
 
 		// Optional fields (return null)
 		when(mockedThesaurusView.getContributor()).thenReturn(null);
@@ -210,6 +213,7 @@ public class ThesaurusRestServiceTest {
 		when(mockedThesaurusView.getSubject()).thenReturn("Fake Subject");
 		when(mockedThesaurusView.getCreated())
 				.thenReturn("2013-02-15 02:02:02");
+		when(mockedThesaurusView.getDefaultTopConcept()).thenReturn(false);
 		when(mockedThesaurusView.getFormat()).thenReturn(1);
 		when(mockedThesaurusView.getType()).thenReturn(1);
 		when(mockedThesaurusView.getCreatorName()).thenReturn("Creator");
@@ -254,6 +258,7 @@ public class ThesaurusRestServiceTest {
 		when(mockedThesaurus.getCreated()).thenReturn(gregCalendar.getTime());
 		when(mockedThesaurus.getDate()).thenReturn(gregCalendar.getTime());
 		when(mockedThesaurus.getDescription()).thenReturn("Fake Description");
+		when(mockedThesaurus.isDefaultTopConcept()).thenReturn(false);
 
 		Set<Language> mockedLanguages = getMockedLanguages();
 		when(mockedThesaurus.getLang()).thenReturn(mockedLanguages);
