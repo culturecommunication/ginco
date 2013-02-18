@@ -14,6 +14,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 	xProblemLabel : 'Problem',
 	xProblemSaveMsg : 'Impossible to save the term !',
 	xProblemDeleteMsg : 'Impossible to delete the term !',
+	xProblemLoadMsg: 'Unable to load the term',
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -25,6 +26,13 @@ Ext.define('GincoApp.controller.TermPanelController', {
 				success : function(model) {
 					me.loadData(theForm, model);
 					theForm.getEl().unmask();
+				},
+				failure : function(model) {
+					Thesaurus.ext.utils.msg(me.xProblemLabel,
+							me.xProblemLoadMsg);
+					var globalTabs = theForm.up('topTabs');
+					var thePanel = theForm.up('termPanel');
+					globalTabs.remove(thePanel);
 				}
 			});
 		} else {
