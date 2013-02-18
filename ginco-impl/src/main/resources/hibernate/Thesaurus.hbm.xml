@@ -17,6 +17,7 @@
 		<property name="subject" />
 		<property name="title" not-null="true" />
 		<property name="created" not-null="true" type="timestamp" />
+		<property name="defaultTopConcept" column="defaulttopconcept" not-null="true" />
 
 		<many-to-one name="format" lazy="false" />
 		<many-to-one name="type" lazy="false" /> 

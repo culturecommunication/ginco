@@ -66,6 +66,7 @@ public class ThesaurusView implements Serializable {
 	private String subject;
 	private String title;
 	private String created;
+	private Boolean defaultTopConcept;
 	private Integer format;
 	private Integer type;
 	private String creatorName;
@@ -97,7 +98,11 @@ public class ThesaurusView implements Serializable {
 				this.creatorName = source.getCreator().getName();
 				this.creatorHomepage = source.getCreator().getHomepage();
 			}
-			
+			if (source.isDefaultTopConcept() != null) {
+				this.defaultTopConcept = source.isDefaultTopConcept();
+			} else {
+				this.defaultTopConcept = false;
+				}
 			if (source.getFormat() != null) {
 				this.format = source.getFormat().getIdentifier();
 			}
@@ -247,5 +252,13 @@ public class ThesaurusView implements Serializable {
 
 	public void setLanguages(List<String> lang) {
 		this.languages = lang;
+	}
+
+	public Boolean getDefaultTopConcept() {
+		return defaultTopConcept;
+	}
+
+	public void setDefaultTopConcept(Boolean defaulttopconcept) {
+		this.defaultTopConcept = defaulttopconcept;
 	}
 }

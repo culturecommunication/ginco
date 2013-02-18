@@ -38,6 +38,9 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 		name : 'created',
 		type : 'string'
 	}, {
+		name : 'defaultTopConcept',
+		type : 'boolean'
+	}, {
 		name : 'format',
 		type : 'int'
 	}, {

@@ -42,3 +42,6 @@ CREATE TABLE thesaurus_term
       REFERENCES thesaurus (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
+
+-- Table: thesaurus -- adding defaulttopconcept
+alter table thesaurus add defaulttopconcept boolean NOT NULL DEFAULT FALSE

@@ -61,6 +61,7 @@ public class Thesaurus implements Serializable, IBaseBean {
     private String subject;
     private String title;
     private Date created;
+    private Boolean defaultTopConcept;
     private ThesaurusFormat format;
     private ThesaurusType type;
     private ThesaurusOrganization creator;
@@ -260,6 +261,14 @@ public class Thesaurus implements Serializable, IBaseBean {
 	 */
 	public void setThesaurusesTerms(Set<ThesaurusTerm> thesaurusesTerms) {
 		this.thesaurusesTerms = thesaurusesTerms;
+	}
+
+	public Boolean isDefaultTopConcept() {
+		return defaultTopConcept;
+	}
+
+	public void setDefaultTopConcept(Boolean defaultTopConcept) {
+		this.defaultTopConcept = defaultTopConcept;
 	}
 
 }
