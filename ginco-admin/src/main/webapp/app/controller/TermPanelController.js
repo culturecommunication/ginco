@@ -1,8 +1,19 @@
 Ext.define('GincoApp.controller.TermPanelController', {
 	extend:'Ext.app.Controller',
+	localized : true,
 	
 	views : [ 'TermPanel' ],
 	models : [ 'ThesaurusTermModel' ],
+	
+	xLoading : 'Loading',
+	xDeleteMsgLabel : 'Do you want to delete this term?',
+	xDeleteMsgTitle : 'Delete this term?',
+	xSucessLabel : 'Success',
+	xSucessSavedMsg : 'Thesaurus Term Successfully Saved',
+	xSucessRemovedMsg : 'Thesaurus Term Successfully Deleted',
+	xProblemLabel : 'Problem',
+	xProblemSaveMsg : 'Impossible to save the term !',
+	xProblemDeleteMsg : 'Impossible to delete the term !',
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -35,20 +46,20 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var me = this;
 		var theForm = theButton.up('form');
 		if (theForm.getForm().isValid()) {
-			theForm.getEl().mask("Chargement");
+			theForm.getEl().mask(me.xLoading);
 			theForm.getForm().updateRecord();
 			var updatedModel = theForm.getForm().getRecord();
 			updatedModel.save({
 				success : function(record, operation) {
 					me.loadData(theForm, record);
 					theForm.getEl().unmask();
-					Thesaurus.ext.utils.msg('Succès',
-							'Le terme a été enregistré!');
+					Thesaurus.ext.utils.msg(me.xSucessLabel,
+							me.xSucessSavedMsg);
 				},
 				failure : function() {
 					theForm.getEl().unmask();
-					Thesaurus.ext.utils.msg('Problème',
-							"Impossible d'enregistrer le terme!");
+					Thesaurus.ext.utils.msg(me.xProblemLabel,
+							me.xProblemSaveMsg);
 				}
 			});
 		}
@@ -58,16 +69,36 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var me = this;
 		var theForm = theButton.up('form');
 		var updatedModel = theForm.getForm().getRecord();
-		updatedModel.destroy({
-			success : function(record, operation) {
-				Thesaurus.ext.utils.msg('Succès',
-						'Le terme a été supprimé !');
+		var globalTabs = theForm.up('topTabs');
+		var thePanel = theForm.up('termPanel');
+		
+		Ext.MessageBox.show({
+			title : me.xDeleteMsgTitle,
+			msg : me.xDeleteMsgLabel,
+			buttons : Ext.MessageBox.YESNOCANCEL,
+			fn : function(buttonId) {
+				switch (buttonId) {
+				case 'no':
+					break; // manually removes tab from tab panel
+				case 'yes':
+					updatedModel.destroy({
+						success : function(record, operation) {
+							Thesaurus.ext.utils.msg(me.xSucessLabel,
+									me.xSucessRemovedMsg);
+							globalTabs.remove(thePanel);
+						},
+						failure : function() {
+							Thesaurus.ext.utils.msg(me.xProblemLabel,
+									me.xProblemDeleteMsg);
+						}});
+					break;
+				case 'cancel':
+					break; // leave blank if no action required on
+				// cancel
+				}
 			},
-			failure : function() {
-				Thesaurus.ext.utils.msg('Problème',
-						"Impossible de supprimer le terme!");
-			}});
-			
+			scope : this
+		});
 		},
 	
 	loadLanguages : function(theCombo) {
