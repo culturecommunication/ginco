@@ -64,13 +64,13 @@ public class ThesaurusTermDAO extends
 	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findPaginatedItems(java.lang.Integer, java.lang.Integer, java.lang.String)
 	 */
 	@Override
-	public List<ThesaurusTerm> findPaginatedItems(Integer start, Integer limit,
+	public List<ThesaurusTerm> findPaginatedSandboxedItems(Integer start, Integer limit,
 			String idThesaurus) {
 		return getCurrentSession().createCriteria(ThesaurusTerm.class)
 				.setMaxResults(limit)
 				.add(Restrictions.eq("thesaurusId.identifier", idThesaurus))
+				.add(Restrictions.or(Restrictions.isNull("conceptId"), Restrictions.eq("conceptId", "")))
 				.setFirstResult(start).addOrder(Order.asc("lexicalValue"))
 				.list();
 	}
-
 }

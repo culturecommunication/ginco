@@ -67,9 +67,9 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
 
 	@Override
-	public List<ThesaurusTerm> getPaginatedThesaurusList(Integer startIndex,
+	public List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex,
 			Integer limit, String idThesaurus) {
-		return thesaurusTermDAO.findPaginatedItems(startIndex, limit, idThesaurus);
+		return thesaurusTermDAO.findPaginatedSandboxedItems(startIndex, limit, idThesaurus);
 	}
 
 	@Override

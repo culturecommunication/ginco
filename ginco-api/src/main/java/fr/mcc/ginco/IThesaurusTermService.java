@@ -60,7 +60,7 @@ public interface IThesaurusTermService {
      * Get list of paginated Thesaurus Terms.
      * @return List of Thesaurus Terms (the number given in argument), from the start index
      */
-    List<ThesaurusTerm> getPaginatedThesaurusList(Integer startIndex, Integer limit, String idThesaurus);
+    List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex, Integer limit, String idThesaurus);
 
 	Long getCount();
 	

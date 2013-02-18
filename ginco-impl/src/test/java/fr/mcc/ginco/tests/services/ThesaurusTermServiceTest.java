@@ -61,15 +61,15 @@ public class ThesaurusTermServiceTest extends BaseTest {
 	 * @return Test getting a paginated list of Thesaurus Terms for a Thesaurus
 	 */
 	@Test
-    public final void testGetPaginatedThesaurusTermsList() {
+    public final void testGetPaginatedThesaurusSandoxedTermsList() {
 		ThesaurusTerm thesaurusTerm1 = new ThesaurusTerm();
 		ThesaurusTerm thesaurusTerm2 = new ThesaurusTerm();
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 		terms.add(thesaurusTerm1);
 		terms.add(thesaurusTerm2);
 
-		when(thesaurusTermDAO.findPaginatedItems(0, 10, "fake-id")).thenReturn(terms);    	
-    	List<ThesaurusTerm> actualResponse = thesaurusTermService.getPaginatedThesaurusList(0, 10, "fake-id");
+		when(thesaurusTermDAO.findPaginatedSandboxedItems(0, 10, "fake-id")).thenReturn(terms);    	
+    	List<ThesaurusTerm> actualResponse = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(0, 10, "fake-id");
 		Assert.assertEquals(2, actualResponse.size());
     }	
 }

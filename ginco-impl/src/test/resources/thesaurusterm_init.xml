@@ -34,7 +34,7 @@
 			<value>false</value>
 			<value>0</value>
 			<value>0</value>
-			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<value></value>
 			<value>http://www.culturecommunication.gouv.fr/th1</value>	
 			<value>eng</value>
 		</row>
@@ -60,8 +60,34 @@
 			<value>false</value>
 			<value>0</value>
 			<value>0</value>
-			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<value></value>
 			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>eng</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter4</value>
+			<value>xylophon</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>false</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>http://www.culturecommunication.gouv.fr/th3</value>
+			<value>eng</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter5</value>
+			<value>xyn</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>false</value>
+			<value>0</value>
+			<value>0</value>
+			<value></value>
+			<value>http://www.culturecommunication.gouv.fr/th3</value>
 			<value>eng</value>
 		</row>
 	</table>  

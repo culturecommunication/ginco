@@ -58,8 +58,8 @@ public class ThesaurusTermDAOTest extends BaseDAOTest {
 		thesaurusTermDAO.setSessionFactory(getSessionFactory());
 	}
     @Test
-    public final void testFindPaginatedItems() {
-        List<ThesaurusTerm> actualResponse = thesaurusTermDAO.findPaginatedItems(0, 2, "http://www.culturecommunication.gouv.fr/th1");
+    public final void testFindPaginatedSandboxedItems() {
+        List<ThesaurusTerm> actualResponse = thesaurusTermDAO.findPaginatedSandboxedItems(0, 2, "http://www.culturecommunication.gouv.fr/th1");
 		Assert.assertEquals("Error while getting thessaurus terms - invalid number of results", 2, actualResponse.size());
 		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "Eleanor Rigby", actualResponse.get(0).getLexicalValue());
 		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "taxman", actualResponse.get(1).getLexicalValue());

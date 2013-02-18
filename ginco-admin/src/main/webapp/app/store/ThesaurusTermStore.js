@@ -14,7 +14,7 @@ Ext.define('GincoApp.store.ThesaurusTermStore', {
             pageSize: 50,
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurustermservice/getAllThesaurusTerms',
+                url: 'services/ui/thesaurustermservice/getSandboxedThesaurusTerms',
                 reader: {
                     type: 'json',
                     idProperty: 'identifier',
