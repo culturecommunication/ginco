@@ -1,7 +1,6 @@
 Ext.define('GincoApp.controller.TermPanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
-
 	views : [ 'TermPanel' ],
 	models : [ 'ThesaurusTermModel' ],
 

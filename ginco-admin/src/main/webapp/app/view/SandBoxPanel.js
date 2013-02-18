@@ -27,8 +27,7 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 		me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
 		Ext.applyIf(me, {
 			title : me.xSandBoxPanelTitle,
-			items : [
-				{
+			items : [ {
 				xtype : 'gridpanel',
 				title : me.xSandBoxPanelTitle,
 				autoScroll:true,
@@ -49,8 +48,8 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 			        dock: 'bottom',
 			        displayInfo: true
 			    }]
-				}]
-		
+				}]	
+
 		});
 
 		me.callParent(arguments);

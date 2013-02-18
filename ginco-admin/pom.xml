@@ -47,18 +47,18 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-      		<groupId>javax.servlet</groupId>
-      		<artifactId>servlet-api</artifactId>
-    	</dependency>    
-    	<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit-addons</groupId>
 			<artifactId>junit-addons</artifactId>
 			<scope>test</scope>
-		</dependency>	
-		<dependency>		
+		</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-		</dependency>	
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -95,13 +95,15 @@
 					<prefix>git</prefix>
 					<dotGitDirectory>${project.basedir}/../.git</dotGitDirectory>
 					<generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
-					<gitDescribe><skip>true</skip></gitDescribe>
+					<gitDescribe>
+						<skip>true</skip>
+					</gitDescribe>
 				</configuration>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>			
-				<version>2.1.1</version>	
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
 				<configuration>
 					<webResources>
 						<resource>
@@ -114,7 +116,24 @@
 						</resource>
 					</webResources>
 				</configuration>
-			</plugin>			
+			</plugin>
+			<plugin>
+				<groupId>com.googlecode.jslint4java</groupId>
+				<artifactId>jslint4java-maven-plugin</artifactId>
+				<version>2.0.3</version>
+				<configuration>
+					<options>
+						<predef>Ext</predef>
+						<white>true</white>
+						<sloppy>true</sloppy>
+						 <evil>true</evil>
+						<eqeq>true</eqeq> 
+					</options>
+					<sourceFolders>
+						<sourceFolder>${basedir}/src/main/webapp/app/</sourceFolder>
+					</sourceFolders>							
+				</configuration>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -132,7 +151,7 @@
 					<configuration>
 						<skip>true</skip>
 					</configuration>
-				</plugin>				
+				</plugin>
 				<plugin>
 					<groupId>org.codehaus.cargo</groupId>
 					<artifactId>cargo-maven2-plugin</artifactId>
@@ -159,7 +178,8 @@
 							</deployable>
 						</deployables>
 					</configuration>
-				</plugin>					
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>

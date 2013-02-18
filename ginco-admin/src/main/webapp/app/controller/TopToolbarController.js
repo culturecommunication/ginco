@@ -22,10 +22,11 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		tab.show();
 	},
 	onAccessibilityClick : function(theButton) {
-		if (theButton.pressed)
+		if (theButton.pressed) {
 			Ext.FocusManager.enable(true);
-		else
+		} else {
 			Ext.FocusManager.disable();
+		}
 	},
 
 	init : function(application) {

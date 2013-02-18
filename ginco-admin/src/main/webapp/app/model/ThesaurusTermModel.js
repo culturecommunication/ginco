@@ -58,12 +58,10 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
 		},
 		type : 'ajax',
 		reader : {
-			type : 'json',
-			idProperty : 'identifier'
+			type : 'json'
 		},
 		writer : {
-			type : 'json',
-			idProperty : 'identifier'
+			type : 'json'
 		}
 	}
     
