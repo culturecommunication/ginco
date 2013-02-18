@@ -37,6 +37,7 @@ Ext
 					xTypeLabel : 'Type',
 					xFormatLabel : 'Format',
 					xLanguagesLabel : 'Languages',
+					xdefaultTopConceptLabel : 'TopTerm by default',
 					xRelationLabel : 'Relation',
 					xSourceLabel : 'Source',
 					xThesaurusTitle : 'New Thesaurus',
@@ -220,6 +221,14 @@ Ext
 															multiSelect : true,
 															allowBlank : false,
 															store : 'ThesaurusLanguageStore'
+														},
+														{
+															xtype : 'checkbox',
+															name : 'defaultTopConcept',
+															fieldLabel : me.xdefaultTopConceptLabel,
+															displayField : 'defaultTopConcept',
+															valueField : 'id',
+															allowBlank : true
 														},
 														{
 															xtype : 'htmleditor',

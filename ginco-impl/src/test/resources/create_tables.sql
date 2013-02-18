@@ -25,7 +25,8 @@ CREATE TABLE thesaurus
   title text NOT NULL,
   type integer,
   creator integer,
-  created text
+  created text,
+  defaulttopconcept boolean NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE thesaurus_type (
