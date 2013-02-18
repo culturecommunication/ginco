@@ -9,13 +9,13 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var model = this.getThesaurusTermModelModel();
 		var termId = theForm.up('termPanel').termId;
 		if (termId != null) {
-			/*theForm.getEl().mask("Chargement");
-			model.load(thesaurusData.id, {
+			theForm.getEl().mask("Chargement");
+			model.load(termId, {
 				success : function(model) {
 					me.loadData(theForm, model);
 					theForm.getEl().unmask();
 				}
-			});*/
+			});
 		} else {
 			model = Ext.create('GincoApp.model.ThesaurusTermModel');
 			model.data.thesaurusId = theForm.up('termPanel').thesaurusData.id;
