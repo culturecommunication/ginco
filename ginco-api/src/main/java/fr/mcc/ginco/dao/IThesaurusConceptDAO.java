@@ -32,34 +32,23 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
+package fr.mcc.ginco.dao;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-import fr.mcc.ginco.beans.LogJournal;
-import fr.mcc.ginco.dao.ILogJournalDAO;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.BusinessException;
 
-/**
- * Implementation of the ILogJournalDAO to manipulate
- * LogJournal entries in the database
- */
-@Repository("logJournalDAO")
-public class LogJournalDAO extends GenericHibernateDAO<LogJournal, String> implements ILogJournalDAO {
-	
+public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
+
 	/**
-	 * Default constructor
+	 * Gets the ThesaurusConcept whiche are not top term given
+	 * a thesaurusID
+	 * @param thesaurusId
+	 * @return
 	 */
-	public LogJournalDAO() {
-		super(LogJournal.class);
-	}
-
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.ILogJournalDAO#insertLogJournal(fr.mcc.ginco.beans.LogJournal)
-	 */
-	@Override
-	public void insertLogJournal(LogJournal logJournal) {
-		makePersistent(logJournal);		
-	}	
+	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus) throws BusinessException ;
+		
 	
 }

@@ -38,8 +38,6 @@ import org.dbunit.dataset.IDataSet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
@@ -49,8 +47,7 @@ import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
 import fr.mcc.ginco.tests.BaseDAOTest;
 import fr.mcc.ginco.users.SimpleUserImpl;
 
-@TransactionConfiguration()
-@Transactional
+
 public class ThesaurusDAOTest extends BaseDAOTest {
 	
     private ThesaurusDAO thesaurusDAO; ;     

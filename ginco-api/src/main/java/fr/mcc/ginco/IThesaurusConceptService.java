@@ -35,6 +35,7 @@
 package fr.mcc.ginco;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 import java.util.List;
 
@@ -51,4 +52,12 @@ public interface IThesaurusConceptService {
      * @return {@code null} if not found; object otherwise.
      */
     ThesaurusConcept getThesaurusConceptById(String id);
+    
+    /**
+     * Get the ThesaurusConcepts which are not top term in a given thesaurus
+     * @param thesaurusId
+     * @return
+     */
+    List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId) throws BusinessException ;
+
 }

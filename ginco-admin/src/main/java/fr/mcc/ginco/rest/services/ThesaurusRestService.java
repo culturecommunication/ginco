@@ -55,11 +55,13 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.ILanguagesService;
+import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.IThesaurusFormatService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.ThesaurusType;
@@ -93,6 +95,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
+	
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusService")
@@ -135,6 +141,24 @@ public class ThesaurusRestService {
 			topLanguages = languagesService.getTopLanguagesList();
 		}
 		return new ExtJsonFormLoadData<List<Language>>(topLanguages);
+
+	}
+	
+	/**
+	 * Public method used to get list of orphans concepts of one given thesaurus
+	 * 
+	 * @return list of objects, if not found - {@code null}
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getOrphansConcepts")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusConcept>> getOrphansConcepts(
+			@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+		logger.info("Getting Orphan Concepts");
+		logger.info("thesaurusId = " + thesaurusId);
+		List<ThesaurusConcept> orphans = thesaurusConceptService.getOrphanThesaurusConcepts(thesaurusId);		
+		return new ExtJsonFormLoadData<List<ThesaurusConcept>>(orphans);
 
 	}
 

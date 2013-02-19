@@ -58,6 +58,11 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	public GenericHibernateDAO(Class<T> clazz) {
 		this.persistentClass = clazz;
 	}
+	
+	@Override
+	final public T loadById(ID id) {
+		return (T) getCurrentSession().load(persistentClass, id);
+	}	
 
 	@Override
 	final public T getById(ID id) {

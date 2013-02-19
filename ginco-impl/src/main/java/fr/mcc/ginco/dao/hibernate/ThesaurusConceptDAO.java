@@ -34,32 +34,64 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import org.springframework.context.annotation.Scope;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.LogJournal;
-import fr.mcc.ginco.dao.ILogJournalDAO;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.log.Log;
 
 /**
- * Implementation of the ILogJournalDAO to manipulate
- * LogJournal entries in the database
+ * Implementation of the data access object to the thesaurus_term database table
+ * 
  */
-@Repository("logJournalDAO")
-public class LogJournalDAO extends GenericHibernateDAO<LogJournal, String> implements ILogJournalDAO {
+@Repository("thesaurusConceptDAO")
+public class ThesaurusConceptDAO extends
+		GenericHibernateDAO<ThesaurusConcept, String> implements
+		IThesaurusConceptDAO {
 	
-	/**
-	 * Default constructor
-	 */
-	public LogJournalDAO() {
-		super(LogJournal.class);
+
+	public ThesaurusConceptDAO(Class<ThesaurusConcept> clazz) {
+		super(clazz);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.ILogJournalDAO#insertLogJournal(fr.mcc.ginco.beans.LogJournal)
+	public ThesaurusConceptDAO() {
+		super(ThesaurusConcept.class);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConcept(java
+	 * .lang.String)
 	 */
 	@Override
-	public void insertLogJournal(LogJournal logJournal) {
-		makePersistent(logJournal);		
-	}	
-	
+	public List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus)
+			throws BusinessException {		
+		DetachedCriteria d = DetachedCriteria.forClass(ThesaurusTerm.class, "tt");
+		d.setProjection(Projections.projectionList().add(Projections.property("tt.conceptId")));
+		d.add(Restrictions.eq("thesaurusId", thesaurus));
+		
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
+		criteria.add(Subqueries.propertyIn("tc.id", d));
+		criteria.add(Restrictions.eq("topConcept", false));		
+
+		return  criteria.list();		
+		
+	}
 }

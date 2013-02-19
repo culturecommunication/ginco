@@ -46,7 +46,6 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
 
 @Repository("languagesDAO")
-@Scope("prototype")
 public class LanguageDAO extends GenericHibernateDAO<Language, String> implements ILanguageDAO {
 	
 	public LanguageDAO() {

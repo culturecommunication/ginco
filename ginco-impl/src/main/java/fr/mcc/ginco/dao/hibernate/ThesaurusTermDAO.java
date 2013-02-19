@@ -49,7 +49,6 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
  *
  */
 @Repository("thesaurusTermDAO")
-@Scope("prototype")
 public class ThesaurusTermDAO extends
 		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
 	public ThesaurusTermDAO(Class<ThesaurusTerm> clazz) {

@@ -56,6 +56,9 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @return An object of type T matching with the given id
 	 */
 	T getById(ID id);
+	
+	T loadById(ID id);
+
 
 	/**
 	 * Returns all the objects of type T
