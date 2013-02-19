@@ -37,6 +37,7 @@ package fr.mcc.ginco.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
@@ -72,5 +73,15 @@ public class ThesaurusTermDAO extends
 				.add(Restrictions.isNull("conceptId"))
 				.setFirstResult(start).addOrder(Order.asc("lexicalValue"))
 				.list();
+	}
+
+	@Override
+	public Long countSandboxedTerms(String idThesaurus) {
+		return (Long) getCurrentSession()
+				.createCriteria(ThesaurusTerm.class)
+				.add(Restrictions.eq("thesaurusId.identifier", idThesaurus))
+				.add(Restrictions.isNull("conceptId"))
+				.setProjection(Projections.rowCount())
+				.list().get(0);
 	}
 }
