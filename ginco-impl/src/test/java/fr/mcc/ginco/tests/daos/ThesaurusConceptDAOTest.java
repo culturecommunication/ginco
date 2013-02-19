@@ -54,7 +54,7 @@ import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class ThesaurusConceptDAOTest extends BaseDAOTest {	
 	
-	private ThesaurusConceptDAO thesaurusConceptDAO= new ThesaurusConceptDAO();
+	private ThesaurusConceptDAO thesaurusConceptDAO = new ThesaurusConceptDAO();
 
 	@Before
 	public void handleSetUpOperation() throws Exception {
@@ -87,6 +87,15 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 				.getOrphansThesaurusConcept(th);
 		Assert.assertEquals(2,actualConcepts.size());
 	}
+
+    @Test
+    public void testGetThesaurusFromConcept() throws BusinessException {
+        String thesaurusConceptId = "http://www.culturecommunication.gouv.fr/co1";
+        ThesaurusConcept thesaurusConcept = thesaurusConceptDAO.getById(thesaurusConceptId);
+        String expectedThesaurusTitle = "test";
+        Assert.assertEquals("Parent thesaurus is not as expected !", thesaurusConcept.getThesaurus().getTitle(),
+                expectedThesaurusTitle);
+    }
 	
 
 	@Override

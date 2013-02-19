@@ -45,6 +45,7 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
     private String status;
     private String notation;
     private Boolean topConcept;
+    private Thesaurus thesaurus;
 
     public String getIdentifier() {
         return identifier;
@@ -101,5 +102,13 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
 
     public void setTopConcept(Boolean topConcept) {
         this.topConcept = topConcept;
+    }
+
+    public Thesaurus getThesaurus() {
+        return thesaurus;
+    }
+
+    public void setThesaurus(Thesaurus thesaurus) {
+        this.thesaurus = thesaurus;
     }
 }

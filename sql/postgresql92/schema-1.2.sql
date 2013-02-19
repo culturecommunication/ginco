@@ -24,8 +24,8 @@ ALTER SEQUENCE log_journal_identifier_seq OWNED BY log_journal.identifier;
 CREATE TABLE thesaurus_concept
 (
   identifier text NOT NULL,
-  created timestamp without time zone,
-  modified timestamp without time zone,
+  created timestamp without time zone NOT NULL DEFAULT now(),
+  modified timestamp without time zone NOT NULL DEFAULT now(),
   status text,
   notation text,
   topconcept boolean,
@@ -63,7 +63,7 @@ ALTER TABLE thesaurus_term
   ADD CONSTRAINT fk_term_thesaurus_concept FOREIGN KEY (conceptid)
       REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
-      
+
 -- Indexes on table thesaurus_term
 CREATE INDEX idx_thesaurus_term_conceptid
   ON thesaurus_term
@@ -77,9 +77,14 @@ CREATE INDEX idx_thesaurus_term_thesaurusid
 ALTER TABLE thesaurus_concept ADD COLUMN thesaurusid text;
 ALTER TABLE thesaurus_concept ALTER COLUMN thesaurusid SET NOT NULL;
 
--- Adding index for column thesaurusid in thesaurus_concept table
+-- ALTER TABLE thesaurus_concept DROP CONSTRAINT fk_concept_thesaurus;
 ALTER TABLE thesaurus_concept
-  ADD CONSTRAINT fk_thesaurus_concept_thesaurusid FOREIGN KEY (thesaurusid) REFERENCES thesaurus (identifier)
-   ON UPDATE NO ACTION ON DELETE NO ACTION;
-CREATE INDEX fki_thesaurus_concept_thesaurusid
-  ON thesaurus_concept(thesaurusid);
+  ADD CONSTRAINT fk_concept_thesaurus FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+-- DROP INDEX fki_concept_thesaurus;
+CREATE INDEX fki_concept_thesaurus
+  ON thesaurus_concept
+  USING btree
+  (thesaurusid COLLATE pg_catalog."default");

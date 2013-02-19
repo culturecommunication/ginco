@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
-
+    <table name="thesaurus">
+        <column>identifier</column>
+        <column>title</column>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value>album revolver</value>
+        </row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/th2</value>
+            <value>album let it be</value>
+        </row>
+    </table>
     <table name="thesaurus_concept">
         <column>identifier</column>
         <column>created</column>
@@ -8,6 +19,7 @@
         <column>status</column>
         <column>notation</column>
         <column>topconcept</column>
+        <column>thesaurusid</column>
         <row>
             <value>http://www.culturecommunication.gouv.fr/co1</value>
             <value>2013-02-04 15:29:59.66325</value>
@@ -15,6 +27,7 @@
             <value>test</value>
             <value>test</value>
             <value>false</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
         </row>
         <row>
             <value>http://www.culturecommunication.gouv.fr/co2</value>
@@ -23,6 +36,7 @@
             <value>test</value>
             <value>test</value>
             <value>true</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
         </row>
     </table>
 
@@ -123,18 +137,6 @@
 			<value>L</value>
 			<value>English</value>
 			<value>false</value>
-		</row>
-	</table>
-	<table name="thesaurus">
-		<column>identifier</column>
-		<column>title</column>		
-		<row>
-			<value>http://www.culturecommunication.gouv.fr/th1</value>
-			<value>album revolver</value>			
-		</row>
-		<row>
-			<value>http://www.culturecommunication.gouv.fr/th2</value>
-			<value>album let it be</value>			
 		</row>
 	</table>
 </dataset>

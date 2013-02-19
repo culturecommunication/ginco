@@ -11,5 +11,7 @@
         <property name="status" />
         <property name="notation" />
         <property name="topConcept" column="topconcept" />
+
+        <many-to-one name="thesaurus" column="thesaurusid" lazy="false" />
     </class>
 </hibernate-mapping>

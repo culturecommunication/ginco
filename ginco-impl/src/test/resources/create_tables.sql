@@ -77,7 +77,8 @@ CREATE TABLE thesaurus_concept
   modified text NOT NULL,
   status text,
   notation text,
-  topconcept boolean
+  topconcept boolean,
+  thesaurusid text
 );
 
 CREATE TABLE thesaurus_term
@@ -98,3 +99,7 @@ CREATE TABLE thesaurus_term
 ALTER TABLE thesaurus_term
     ADD FOREIGN KEY (conceptid)
     REFERENCES thesaurus_concept (identifier);
+
+ALTER TABLE thesaurus_concept
+    ADD FOREIGN KEY (thesaurusid)
+    REFERENCES thesaurus (identifier);
