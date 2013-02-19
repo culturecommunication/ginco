@@ -3,7 +3,8 @@ Ext
 				'GincoApp.view.CreateTermWin',
 				{
 					extend : 'Ext.window.Window',
-					alias: 'widget.createTermWin' ,
+					alias: 'widget.createTermWin',
+					localized: true,
 					
 					thesaurusData: null,
 
@@ -12,6 +13,7 @@ Ext
 				    xLanguagesLabel : 'Languages',
 				    xSourceLabel : 'Source',
 				    xCreateTermWinTitle : 'New Term',
+				    xSave: 'Save',
 					store : null,
 					width : 500,
 					title : 'Création de nouveau terme',
@@ -36,7 +38,7 @@ Ext
 															dock : 'top',
 															items : [ {
 																xtype : 'button',
-																text : 'Enregistrer',
+																text : me.xSave,
 																formBind : true,
 																itemId : 'saveTermFromConcept',
 																iconCls : 'icon-save'
