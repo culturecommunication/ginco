@@ -41,6 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -53,7 +54,6 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListTopNode;
 import fr.mcc.ginco.rest.services.BaseRestService;
 import fr.mcc.ginco.utils.DateUtil;
 
@@ -80,7 +80,7 @@ public class BaseRestServiceTest {
 		baseRestService.setThesaurusService(getMockedIThesaurusService(allThesaurus));
 		
 		//Getting thesauruses from rest webservice method and testing
-		List<ThesaurusListTopNode> listThesauruses = baseRestService.getVocabularies();
+		List<IThesaurusListNode> listThesauruses = baseRestService.getVocabularies();
 		Assert.assertEquals(3, listThesauruses.size());
 	}
 	

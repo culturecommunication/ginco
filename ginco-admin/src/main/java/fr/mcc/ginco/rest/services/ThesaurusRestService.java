@@ -170,11 +170,9 @@ public class ThesaurusRestService {
 
 	/**
 	 * Public method used to create or update
-	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object
-	 * 
-	 * @param id
-	 *            {@link ThesaurusView} thesaurus JSON object send by extjs
-	 * 
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView}
+     * thesaurus JSON object send by extjs.
+     *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} updated object
 	 *         in JSON format or {@code null} if not found
 	 */
@@ -189,7 +187,8 @@ public class ThesaurusRestService {
 		}
 		IUser user = new SimpleUserImpl();
 		user.setName(principal);
-		if (object != null) {
+		ThesaurusView view = null;
+        if (object != null) {
 			Thesaurus result;
 			if (StringUtils.isEmpty(object.getIdentifier())) {
 				result = thesaurusService.createThesaurus(object, user);
@@ -197,14 +196,14 @@ public class ThesaurusRestService {
 			} else {
 				result = thesaurusService.updateThesaurus(object, user);
 			}
-			if (result != null) {
-				return new ThesaurusView(result);
+
+            if (result != null) {
+                view = new ThesaurusView(result);
 			} else {
 				logger.error("Failed to update thesaurus");
-				return null;
 			}
 		}
-		return null;
+		return view;
 	}
 
 	private Thesaurus convert(ThesaurusView source) {
