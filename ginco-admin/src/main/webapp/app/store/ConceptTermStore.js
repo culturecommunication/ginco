@@ -2,7 +2,7 @@
  * Thesaurus Term Store 
  * This file contains all Thesaurus formats displayed in dropdown lists
  */
-Ext.define('GincoApp.store.ThesaurusTermStore', {
+Ext.define('GincoApp.store.ConceptTermStore', {
     extend: 'Ext.data.Store',
 
     constructor: function(cfg) {
@@ -15,13 +15,14 @@ Ext.define('GincoApp.store.ThesaurusTermStore', {
             model : 'GincoApp.model.ThesaurusTermModel',
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurustermservice/getSandboxedThesaurusTerms',
+                url: 'services/ui/thesaurustermservice/getConceptTerms',
                 reader: {
                     type: 'json',
                     idProperty: 'identifier',
                     root: 'data'
                 }
             }
+
         }, cfg)]);
     }
 });
