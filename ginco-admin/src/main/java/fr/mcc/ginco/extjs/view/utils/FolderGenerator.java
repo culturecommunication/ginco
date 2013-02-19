@@ -32,80 +32,60 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.factory;
+package fr.mcc.ginco.extjs.view.utils;
 
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Factory is used to produce specific view type (top) of node
- */
-public class ThesaurusTopNodeFactory implements ThesaurusNodeFactory {
-
-    /**
-     * Creates {@link fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode}
-     * based on real object.
-     * @param source should be {@link Thesaurus} object, is used to
-     *               get properties from it
-     *               ({@link fr.mcc.ginco.beans.Thesaurus#getIdentifier()}
-     *               and {@link fr.mcc.ginco.beans.Thesaurus#getTitle()})
-     * @param generateFolders flag marking necessity of generating
-     *                        categorizing folders under this node.
-     * @return {@code if(source instanceof Thesaurus)} created node
-     *                  or {@code null} otherwise
-     */
-    @Override
-    public IThesaurusListNode createNode(Object source, boolean generateFolders) {
-        IThesaurusListNode node;
-
-        if(source instanceof Thesaurus) {
-            node = new ThesaurusListBasicNode((Thesaurus) source);
-        } else {
-            node = null;
-        }
-
-        if(node != null && generateFolders) {
-            node.setChildren(getFolders(node.getId()));
-        }
-
-        return node;
-    }
-
-    @Override
-    public IThesaurusListNode createNode(Object source) {
-        return createNode(source, false);
-    }
+public class FolderGenerator {
 
     /**
      * Creates categorization folders.
      * @param parentId id of top node.
      * @return created list of folders.
      */
-    private List<IThesaurusListNode> getFolders(String parentId) {
+    public List<IThesaurusListNode> generateFolders(String parentId) {
         List<IThesaurusListNode> list = new ArrayList<IThesaurusListNode>();
 
-        ThesaurusListBasicNode concepts =
-                new ThesaurusListBasicNode("Arborescence des concepts",
-                        parentId, ClassificationFolderType.CONCEPTS);
+        IThesaurusListNode concepts = new ThesaurusListBasicNode();
+        concepts.setTitle("Arborescence des concepts");
+        concepts.setId(ClassificationFolderType.CONCEPTS.toString() + "_" + parentId);
+        concepts.setType(ThesaurusListNodeType.FOLDER);
+        concepts.setExpanded(false);
+        concepts.setChildren(new ArrayList<IThesaurusListNode>());
         list.add(concepts);
-        ThesaurusListBasicNode sandbox =
-                new ThesaurusListBasicNode("Bac à sable",
-                        parentId, ClassificationFolderType.SANDBOX);
+
+        IThesaurusListNode sandbox = new ThesaurusListBasicNode();
+        sandbox.setTitle("Bac à sable");
+        sandbox.setId(ClassificationFolderType.SANDBOX.toString() + "_" + parentId);
+        sandbox.setType(ThesaurusListNodeType.FOLDER);
+        sandbox.setExpanded(false);
+        sandbox.setChildren(new ArrayList<IThesaurusListNode>());
         list.add(sandbox);
-        ThesaurusListBasicNode orphans =
-                new ThesaurusListBasicNode("Concepts orphelins",
-                        parentId, ClassificationFolderType.ORPHANS);
+
+        IThesaurusListNode orphans = new ThesaurusListBasicNode();
+        orphans.setTitle("Concepts orphelins");
+        orphans.setId(ClassificationFolderType.ORPHANS.toString() + "_" + parentId);
+        orphans.setType(ThesaurusListNodeType.FOLDER);
+        orphans.setExpanded(false);
+        orphans.setChildren(new ArrayList<IThesaurusListNode>());
         list.add(orphans);
-        ThesaurusListBasicNode groups =
-                new ThesaurusListBasicNode("Groupes",
-                        parentId, ClassificationFolderType.GROUPS);
+
+        IThesaurusListNode groups = new ThesaurusListBasicNode();
+        groups.setTitle("Groupes");
+        groups.setId(ClassificationFolderType.GROUPS.toString() + "_" + parentId);
+        groups.setType(ThesaurusListNodeType.FOLDER);
+        groups.setExpanded(false);
+        groups.setChildren(new ArrayList<IThesaurusListNode>());
         list.add(groups);
 
         return list;
     }
+
 }

@@ -176,11 +176,9 @@ public class ThesaurusTermRestService {
 	
 	/**
 	 * Public method used to delete
-	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} object
-	 * 
-	 * @param id
-	 *            {@link ThesaurusTermView} thesaurus term JSON object send by extjs
-	 * 
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} -
+     * thesaurus term JSON object send by extjs
+     *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} deleted object
 	 *         in JSON format or {@code null} if not found
 	 * @throws BusinessException 

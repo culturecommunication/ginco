@@ -45,11 +45,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.extjs.view.factory.ThesaurusTopNodeFactory;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -62,6 +63,8 @@ public class BaseRestService {
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
 
+    private FolderGenerator folderGenerator = new FolderGenerator();
+
 	/**
      * Public method used to get list of all existing Thesaurus objects
      * in database.
@@ -73,17 +76,15 @@ public class BaseRestService {
     @Produces({MediaType.APPLICATION_JSON})
     public List<IThesaurusListNode> getVocabularies() {
         List<IThesaurusListNode> result = new ArrayList<IThesaurusListNode>();
-        ThesaurusTopNodeFactory factory = new ThesaurusTopNodeFactory();
 
         for(Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
-            result.add(factory.createNode(thesaurus, true));
+            IThesaurusListNode node = new ThesaurusListBasicNode();
+            node.setExpanded(false);
+            node.setTitle(thesaurus.getTitle());
+            node.setId(thesaurus.getIdentifier());
+            node.setChildren(folderGenerator.generateFolders(thesaurus.getId()));
+            result.add(node);
         }
         return result;
     }
-    
-
-    public void setThesaurusService(IThesaurusService thesaurusService) {
-		this.thesaurusService = thesaurusService;
-	}
-    
 }

@@ -2,10 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://cxf.apache.org/jaxrs
-       http://cxf.apache.org/schemas/jaxrs.xsd">
+       http://cxf.apache.org/schemas/jaxrs.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd">
 
     <bean id="jsonProvider"
           class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
@@ -14,7 +17,7 @@
         <jaxrs:serviceBeans>
             <bean class="fr.mcc.ginco.rest.services.BaseRestService"/>
             <bean class="fr.mcc.ginco.rest.services.InfoRestService"/>
-            <bean class="fr.mcc.ginco.rest.services.ThesaurusRestService"/>            
+            <bean class="fr.mcc.ginco.rest.services.ThesaurusRestService"/>
             <bean class="fr.mcc.ginco.rest.services.ThesaurusTermRestService"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>

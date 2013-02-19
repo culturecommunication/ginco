@@ -36,18 +36,18 @@ package fr.mcc.ginco.tests.extjs;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.extjs.view.factory.ThesaurusTopNodeFactory;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ViewsTest {
+
     private Thesaurus testThesaurus = new Thesaurus();
-    private ThesaurusTopNodeFactory topNodeFactory = new ThesaurusTopNodeFactory();
 
-
+    private FolderGenerator folderGenerator = new FolderGenerator();
 
     @Before
     public final void setUp() {
@@ -61,7 +61,12 @@ public class ViewsTest {
 
     @Test
     public final void testFolderCreation() {
-        IThesaurusListNode node = topNodeFactory.createNode(testThesaurus, true);
+        IThesaurusListNode node = new ThesaurusListBasicNode();
+
+        node.setExpanded(false);
+        node.setTitle(testThesaurus.getTitle());
+        node.setId(testThesaurus.getIdentifier());
+        node.setChildren(folderGenerator.generateFolders(testThesaurus.getId()));
 
         String idOfFirstChild = node.getChildren().get(0).getId();
         String realId = idOfFirstChild.split("_")[1];
@@ -72,7 +77,11 @@ public class ViewsTest {
 
     @Test
     public final void testNodeCreation() {
-        IThesaurusListNode node = topNodeFactory.createNode(testThesaurus, true);
+        IThesaurusListNode node = new ThesaurusListBasicNode();
+
+        node.setExpanded(false);
+        node.setTitle(testThesaurus.getTitle());
+        node.setId(testThesaurus.getIdentifier());
 
         String idOfNode = node.getId();
         String titleOfNode = node.getTitle();

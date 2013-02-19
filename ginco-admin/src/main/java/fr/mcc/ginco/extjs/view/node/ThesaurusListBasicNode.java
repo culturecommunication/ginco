@@ -34,11 +34,8 @@
  */
 package fr.mcc.ginco.extjs.view.node;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,29 +63,8 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
      */
     private ThesaurusListNodeType nodeType;
 
-    /**
-     * ThesaurusListClassificationFolderNode
-     * @param title
-     * @param parentId
-     * @param type
-     */
-    public ThesaurusListBasicNode(String title, String parentId, ClassificationFolderType type) {
-        setChildren(new ArrayList<IThesaurusListNode>());
-        setExpanded(false);
-        setId(type.toString() + "_" + parentId);
-        setType(ThesaurusListNodeType.FOLDER);
-        setTitle(title);
-    }
+    public ThesaurusListBasicNode() {
 
-    /**
-     * ThesaurusListTopNode
-     * @param thesaurus
-     */
-    public ThesaurusListBasicNode(Thesaurus thesaurus) {
-        setExpanded(false);
-        setTitle(thesaurus.getTitle());
-        setId(thesaurus.getIdentifier());
-        setType(ThesaurusListNodeType.THESAURUS);
     }
 
     @Override
