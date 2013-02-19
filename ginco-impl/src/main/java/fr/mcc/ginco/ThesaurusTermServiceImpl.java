@@ -74,8 +74,8 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
 
 	@Override
-	public Long getCount() {
-		return thesaurusTermDAO.count();
+	public Long getSandboxedTermsCount(String idThesaurus) {
+		return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
 	}
 	
 	@GincoLog(action = GincoLog.Action.CREATE, entityType=GincoLog.EntityType.THESAURUSTERM)

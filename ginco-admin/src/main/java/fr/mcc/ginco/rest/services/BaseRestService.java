@@ -44,12 +44,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.extjs.view.factory.ThesaurusTopNodeFactory;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListTopNode;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -71,12 +71,12 @@ public class BaseRestService {
     @GET
     @Path("/getVocabularies")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<ThesaurusListTopNode> getVocabularies() {
-        List<ThesaurusListTopNode> result = new ArrayList<ThesaurusListTopNode>();
+    public List<IThesaurusListNode> getVocabularies() {
+        List<IThesaurusListNode> result = new ArrayList<IThesaurusListNode>();
         ThesaurusTopNodeFactory factory = new ThesaurusTopNodeFactory();
 
         for(Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
-            result.add((ThesaurusListTopNode)factory.createNode(thesaurus, true));
+            result.add(factory.createNode(thesaurus, true));
         }
         return result;
     }

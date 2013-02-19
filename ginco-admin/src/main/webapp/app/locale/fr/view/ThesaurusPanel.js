@@ -25,5 +25,6 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xSourceLabel : 'Ressource(s) liée(s)',
 	    xThesaurusTitle : 'Nouveau Vocabulaire',
 	    xNewLabel : 'Nouveau',
-	    xNewMenu_TermLabel : 'Terme'
+	    xNewMenu_TermLabel : 'Terme',
+	    xNewMenu_ConceptLabel: 'Concept'
 });

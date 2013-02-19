@@ -34,7 +34,7 @@
  */
 package fr.mcc.ginco.extjs.view.node;
 
-import fr.mcc.ginco.extjs.view.ThesaurusListNodeType;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 
 import java.util.List;
 

@@ -112,7 +112,7 @@ public class ThesaurusTermRestService {
 	public ExtJsonFormLoadData<List<ThesaurusTermView> > getSandboxedThesaurusTerms(@QueryParam("start") Integer startIndex, @QueryParam("limit") Integer limit, @QueryParam("idThesaurus") String idThesaurus) {
 		logger.info("Getting Thesaurus Sandboxed Terms with following parameters : " + "index start " +startIndex + " and limit of " + limit);
 		List<ThesaurusTerm> thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(startIndex, limit, idThesaurus);
-		Long total = thesaurusTermService.getCount();
+		Long total = thesaurusTermService.getSandboxedTermsCount(idThesaurus);
 		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			results.add(new ThesaurusTermView(thesaurusTerm));

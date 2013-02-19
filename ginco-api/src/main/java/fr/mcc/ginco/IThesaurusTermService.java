@@ -62,7 +62,12 @@ public interface IThesaurusTermService {
      */
     List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex, Integer limit, String idThesaurus);
 
-	Long getCount();
+    /**
+     * Get number of Thesaurus Sandboxed Terms
+     * @param Id of a Thesaurus
+     * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
+     */
+    Long getSandboxedTermsCount(String idThesaurus);
 	
     /**
      * Create a single Thesaurus Term Object
