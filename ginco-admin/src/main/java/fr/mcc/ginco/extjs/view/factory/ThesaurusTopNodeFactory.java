@@ -65,7 +65,6 @@ public class ThesaurusTopNodeFactory implements ThesaurusNodeFactory {
 
         if(source instanceof Thesaurus) {
             node = new ThesaurusListBasicNode((Thesaurus) source);
-            return node;
         } else {
             node = null;
         }
