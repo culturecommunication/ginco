@@ -44,6 +44,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
@@ -82,6 +83,7 @@ public class BaseRestService {
             node.setExpanded(false);
             node.setTitle(thesaurus.getTitle());
             node.setId(thesaurus.getIdentifier());
+            node.setType(ThesaurusListNodeType.THESAURUS);
             node.setChildren(folderGenerator.generateFolders(thesaurus.getId()));
             result.add(node);
         }
