@@ -32,74 +32,67 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.tests.daos;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.ReflectionUtils;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.hibernate.ThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.tests.BaseDAOTest;
 
-/**
- * Implementation of the thesaurus concept service.
- * Contains methods relatives to the ThesaurusConcept object
- */
-@Transactional
-@Service("thesaurusConceptService")
-public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
-
-	@Log
-	private Logger logger;
+public class ThesaurusConceptDAOTest extends BaseDAOTest {	
 	
-    @Inject
-    @Named("thesaurusConceptDAO")
-    private IThesaurusConceptDAO thesaurusConceptDAO;
-    
-    @Inject
-    @Named("thesaurusDAO")
-    private IThesaurusDAO thesaurusDAO;
+	private ThesaurusConceptDAO thesaurusConceptDAO= new ThesaurusConceptDAO();
 
+	@Before
+	public void handleSetUpOperation() throws Exception {
+		super.handleSetUpOperation();
+		thesaurusConceptDAO.setSessionFactory(getSessionFactory());
+		ReflectionUtils.doWithFields(thesaurusConceptDAO.getClass(),
+				new ReflectionUtils.FieldCallback() {
 
-    /*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptList()
-	 */
-    @Override
-    public List<ThesaurusConcept> getThesaurusConceptList() {
-        return thesaurusConceptDAO.findAll();
-    }
+					public void doWith(Field field)
+							throws IllegalArgumentException,
+							IllegalAccessException {
+						ReflectionUtils.makeAccessible(field);
 
-    /*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang.String)
-	 */
-    @Override
-    public ThesaurusConcept getThesaurusConceptById(String id) {
-        return thesaurusConceptDAO.getById(id);
-    }
-    
-    @Override
-    public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId) throws BusinessException {
-    	Thesaurus thesaurus = thesaurusDAO.getById(thesaurusId);
-		if (thesaurus == null) {
-			throw new BusinessException("Invalid thesaurusId : "
-					+ thesaurusId);
-		} else {
-			logger.info("thesaurus found");
+						if (field.getAnnotation(Log.class) != null) {
+							Logger logger = LoggerFactory
+									.getLogger(thesaurusConceptDAO.getClass());
+							field.set(thesaurusConceptDAO, logger);
+						}
+					}
+				});
 
-		}
-    	return thesaurusConceptDAO.getOrphansThesaurusConcept(thesaurus);
-    }
+		MockitoAnnotations.initMocks(this);
+
+	}
+
+	@Test
+	public void testGetOrphansThesaurusConcept() throws BusinessException {
+		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+		Thesaurus th = new Thesaurus();
+		th.setIdentifier(thesaurusId);
+		List<ThesaurusConcept> actualConcepts = thesaurusConceptDAO
+				.getOrphansThesaurusConcept(th);
+		Assert.assertEquals(2,actualConcepts.size());
+	}
+	
+
+	@Override
+	public String getXmlDataFileInit() {
+		return "/thesaurusconcept_init.xml";
+	}
 }

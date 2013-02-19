@@ -41,7 +41,6 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 
 @Repository("thesaurusDAO")
-@Scope("prototype")
 public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> implements IThesaurusDAO  {
 
 	public ThesaurusDAO(Class<Thesaurus> clazz) {
