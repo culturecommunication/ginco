@@ -44,7 +44,12 @@ import java.util.GregorianCalendar;
  */
 public final class DateUtil {
 	
-    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    //DateUtil is an utility class => declaring its constructor as private 
+	private DateUtil() {
+		super();
+	}
+
+	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Converts Date to String.
