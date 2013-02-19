@@ -63,3 +63,23 @@ ALTER TABLE thesaurus_term
   ADD CONSTRAINT fk_term_thesaurus_concept FOREIGN KEY (conceptid)
       REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
+      
+-- Indexes on table thesaurus_term
+CREATE INDEX idx_thesaurus_term_conceptid
+  ON thesaurus_term
+  USING btree (conceptid);
+
+CREATE INDEX idx_thesaurus_term_thesaurusid
+  ON thesaurus_term
+  USING btree (thesaurusid);
+
+-- Adding column thesaurusid to the thesaurus_concept table
+ALTER TABLE thesaurus_concept ADD COLUMN thesaurusid text;
+ALTER TABLE thesaurus_concept ALTER COLUMN thesaurusid SET NOT NULL;
+
+-- Adding index for column thesaurusid in thesaurus_concept table
+ALTER TABLE thesaurus_concept
+  ADD CONSTRAINT fk_thesaurus_concept_thesaurusid FOREIGN KEY (thesaurusid) REFERENCES thesaurus (identifier)
+   ON UPDATE NO ACTION ON DELETE NO ACTION;
+CREATE INDEX fki_thesaurus_concept_thesaurusid
+  ON thesaurus_concept(thesaurusid);
