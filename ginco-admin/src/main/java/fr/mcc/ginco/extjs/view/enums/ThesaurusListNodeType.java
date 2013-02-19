@@ -32,12 +32,11 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view;
+package fr.mcc.ginco.extjs.view.enums;
 
 /**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
+ * Enum intended to be used for mark type of node.
  */
-public enum ClassificationFolderType {
-    CONCEPTS, SANDBOX, ORPHANS, GROUPS
+public enum ThesaurusListNodeType {
+    THESAURUS, FOLDER
 }

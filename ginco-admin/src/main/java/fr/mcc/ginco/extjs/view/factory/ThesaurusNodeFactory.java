@@ -39,7 +39,7 @@ import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 /**
  * Internal usage only - abstract Factory pattern.
  */
-abstract class ThesaurusNodeFactory {
+public interface ThesaurusNodeFactory {
     /**
      * Generic method which generates a concrete type of node, based on
      * factory implementation, node should <b>extends</b>
@@ -49,5 +49,7 @@ abstract class ThesaurusNodeFactory {
      *                        classification folders under node.
      * @return Newly created node.
      */
-    public abstract IThesaurusListNode createNode(Object source, boolean generateFolders);
+    IThesaurusListNode createNode(Object source, boolean generateFolders);
+
+    IThesaurusListNode createNode(Object source);
 }

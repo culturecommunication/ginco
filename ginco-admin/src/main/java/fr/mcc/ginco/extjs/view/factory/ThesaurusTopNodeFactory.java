@@ -35,10 +35,9 @@
 package fr.mcc.ginco.extjs.view.factory;
 
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.extjs.view.ClassificationFolderType;
+import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListClassificationFolderNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListTopNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +45,14 @@ import java.util.List;
 /**
  * Factory is used to produce specific view type (top) of node
  */
-public class ThesaurusTopNodeFactory extends ThesaurusNodeFactory {
+public class ThesaurusTopNodeFactory implements ThesaurusNodeFactory {
 
     /**
-     * Creates {@link ThesaurusListTopNode} based on real object.
+     * Creates {@link fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode}
+     * based on real object.
      * @param source should be {@link Thesaurus} object, is used to
-     *               get properties from it ({@link fr.mcc.ginco.beans.Thesaurus#getIdentifier()}
+     *               get properties from it
+     *               ({@link fr.mcc.ginco.beans.Thesaurus#getIdentifier()}
      *               and {@link fr.mcc.ginco.beans.Thesaurus#getTitle()})
      * @param generateFolders flag marking necessity of generating
      *                        categorizing folders under this node.
@@ -60,15 +61,25 @@ public class ThesaurusTopNodeFactory extends ThesaurusNodeFactory {
      */
     @Override
     public IThesaurusListNode createNode(Object source, boolean generateFolders) {
+        IThesaurusListNode node;
+
         if(source instanceof Thesaurus) {
-            IThesaurusListNode node = new ThesaurusListTopNode((Thesaurus) source);
-            if(generateFolders) {
-                node.setChildren(getFolders(node.getId()));
-            }
+            node = new ThesaurusListBasicNode((Thesaurus) source);
             return node;
         } else {
-            return null;
+            node = null;
         }
+
+        if(node != null && generateFolders) {
+            node.setChildren(getFolders(node.getId()));
+        }
+
+        return node;
+    }
+
+    @Override
+    public IThesaurusListNode createNode(Object source) {
+        return createNode(source, false);
     }
 
     /**
@@ -79,20 +90,20 @@ public class ThesaurusTopNodeFactory extends ThesaurusNodeFactory {
     private List<IThesaurusListNode> getFolders(String parentId) {
         List<IThesaurusListNode> list = new ArrayList<IThesaurusListNode>();
 
-        ThesaurusListClassificationFolderNode concepts =
-                new ThesaurusListClassificationFolderNode("Arborescence des concepts",
+        ThesaurusListBasicNode concepts =
+                new ThesaurusListBasicNode("Arborescence des concepts",
                         parentId, ClassificationFolderType.CONCEPTS);
         list.add(concepts);
-        ThesaurusListClassificationFolderNode sandbox =
-                new ThesaurusListClassificationFolderNode("Bac à sable",
+        ThesaurusListBasicNode sandbox =
+                new ThesaurusListBasicNode("Bac à sable",
                         parentId, ClassificationFolderType.SANDBOX);
         list.add(sandbox);
-        ThesaurusListClassificationFolderNode orphans =
-                new ThesaurusListClassificationFolderNode("Concepts orphelins",
+        ThesaurusListBasicNode orphans =
+                new ThesaurusListBasicNode("Concepts orphelins",
                         parentId, ClassificationFolderType.ORPHANS);
         list.add(orphans);
-        ThesaurusListClassificationFolderNode groups =
-                new ThesaurusListClassificationFolderNode("Groupes",
+        ThesaurusListBasicNode groups =
+                new ThesaurusListBasicNode("Groupes",
                         parentId, ClassificationFolderType.GROUPS);
         list.add(groups);
 
