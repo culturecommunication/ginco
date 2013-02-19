@@ -76,8 +76,6 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 					}
 				});
 
-		MockitoAnnotations.initMocks(this);
-
 	}
 
 	@Test
