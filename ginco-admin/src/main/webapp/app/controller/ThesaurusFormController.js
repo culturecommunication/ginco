@@ -91,6 +91,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			},
 			"thesaurusPanel #newTermBtn" : {
 				click : this.onNewTermBtnClick
+			},
+			"thesaurusPanel #newConceptBtn" : {
+				click : this.onNewConceptBtnClick
 			}
 
 		});
