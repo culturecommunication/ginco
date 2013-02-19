@@ -44,7 +44,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	
 	onNewConceptBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusPanel');
-		var termPanel = this.createPanel('GincoApp.view.ConceptPanel',thePanel.thesaurusData );
+		var conceptPanel = this.createPanel('GincoApp.view.ConceptPanel',thePanel.thesaurusData );
 	},
 	
 	createPanel : function(aType, thesaurusData)

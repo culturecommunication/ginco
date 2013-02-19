@@ -37,7 +37,8 @@ Ext.application({
         'ThesaurusFormatStore',
         'ThesaurusLanguageStore',
         'TermLanguageStore',
-        'ThesaurusTermStore'
+        'ThesaurusTermStore',
+        'ConceptTermStore'
     ],
     views: [
         'GincoViewPort',
@@ -54,7 +55,8 @@ Ext.application({
         'ThesaurusFormController',
         'SandboxPanelController',
         'TermPanelController',
-        'GlobalTabPanelController'
+        'GlobalTabPanelController',
+        'ConceptController'
     ],
     init: function(){
     },

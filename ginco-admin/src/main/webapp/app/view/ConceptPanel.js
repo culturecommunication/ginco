@@ -19,16 +19,22 @@ Ext
 						align : 'stretch'
 					},
 
-					/*Fields with auto generated values*/
+					//Labels
 					xIdentifierLabel : 'Identifier',
 					xCreatedDateLabel : 'Creation date',
-
-					/*Fields prompting values*/
 					xLexicalValueLabel : 'Lexical value',
 					xLanguagesLabel : 'Languages',
 					xRoleColumnLabel : 'Role',
 					xPreferedColumnLabel : 'Prefered',
 					xConceptPanelTitle : 'New Concept',
+					xTermListGridTitle : 'Terms list', 
+					xSave: 'Save',
+					xDelete: 'Delete',
+					xAddTerm: 'Add a term',
+					xPreferedTerm: 'Prefered Term',
+					xNonPreferedTerm: 'Non Prefered Term',
+					xCreateTerm: 'Create Term',
+					xExistingTerm: 'Select Existing Term',
 
 					initComponent : function() {
 						var me = this;
@@ -58,14 +64,14 @@ Ext
 													dock : 'top',
 													items : [ {
 														xtype : 'button',
-														text : 'Enregistrer',
+														text : me.xSave,
 														disabled : true,
 														formBind : true,
 														cls : 'save',
 														iconCls : 'icon-save'
 													}, {
 														xtype : 'button',
-														text : 'Supprimer',
+														text : me.xDelete,
 														disabled : true,
 														itemId : 'delete',
 														cls : 'delete',
@@ -90,50 +96,50 @@ Ext
 														},
 														{
 															xtype : 'gridpanel',
-															title : 'Liste des termes',
+															title : me.xTermListGridTitle,
 
 															dockedItems : [ {
 																xtype : 'toolbar',
 																dock : 'top',
 																items : [ {
 																	xtype : 'button',
-																	text : 'Ajouter un terme',
+																	text : me.xAddTerm,
 																	menu : {
 																		xtype : 'menu',
 																		items : [
 																				{
 																					xtype : 'menuitem',
-																					text : 'Terme préférentiel ',
+																					text : me.xPreferedTerm,
 																					menu : {
 																						xtype : 'menu',
 																						items : [
 																								{
 																									xtype : 'menuitem',
-																									disabled : true,
-																									text : 'Créer le terme '
+																									itemId : 'newTermFromConceptPrefBtn',
+																									text : me.xCreateTerm
 																								},
 																								{
 																									xtype : 'menuitem',
 																									disabled : true,
-																									text : 'Sélectionner le terme'
+																									text : me.xExistingTerm
 																								} ]
 																					}
 																				},
 																				{
 																					xtype : 'menuitem',
-																					text : 'Terme non préférentiel',
+																					text : me.xNonPreferedTerm,
 																					menu : {
 																						xtype : 'menu',
 																						items : [
 																								{
 																									xtype : 'menuitem',
 																									disabled : true,
-																									text : 'Créer le terme '
+																									text : me.xCreateTerm
 																								},
 																								{
 																									xtype : 'menuitem',
 																									disabled : true,
-																									text : 'Sélectionner le terme'
+																									text : me.xExistingTerm
 																								} ]
 																					}
 																				} ]
@@ -157,10 +163,7 @@ Ext
 																		text : me.xLanguagesLabel
 																	},
 																	{
-																		dataIndex : 'role',
-																		text : me.xRoleColumnLabel
-																	},
-																	{
+																		xtype: 'booleancolumn',
 																		dataIndex : 'prefered',
 																		text : me.xPreferedColumnLabel
 																	},

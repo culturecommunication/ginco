@@ -12,63 +12,17 @@ Ext.define('GincoApp.store.ConceptTermStore', {
             autoLoad: false,
             alias: 'store.termstore',
             pageSize: 50,
+            model : 'GincoApp.model.ThesaurusTermModel',
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurustermservice/getSandboxedThesaurusTerms',
+                url: 'services/ui/thesaurustermservice/getConceptTerms',
                 reader: {
                     type: 'json',
                     idProperty: 'identifier',
                     root: 'data'
                 }
-            },
-            model : 'ThesaurusTermModel'
-            /*
-            fields: [
-                {
-                    name : 'identifier',
-                    type : 'string'
-                },
-                {
-                    name: 'lexicalValue',
-                    type : 'string'
-                },
-                {
-                    name: 'created',
-                    type : 'string'
-                },
-                {
-                    name: 'modified',
-                    type : 'string'
-                },
-                {
-                    name: 'source',
-                    type : 'string'
-                },
-                {
-                    name: 'prefered',
-                    type : 'boolean'
-                },
-                {
-                    name: 'status',
-                    type : 'int'
-                },
-                {
-                    name: 'role',
-                    type : 'int'
-                },
-                {
-                    name: 'conceptId',
-                    type : 'string'
-                },
-                {
-                    name: 'thesaurusId',
-                    type : 'string'
-                },
-                {
-                    name: 'language',
-                    type : 'string'
-                }
-            ]*/
+            }
+
         }, cfg)]);
     }
 });

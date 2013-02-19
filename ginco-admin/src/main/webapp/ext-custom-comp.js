@@ -47,6 +47,35 @@ Ext.define('Thesaurus.panel.Tool', {
     }
 });
 
+//This function permits to send related objects when we save a model in case of 'hasmany' relation
+Ext.data.writer.Json.override({
+	    getRecordData: function(record) {
+	        var me = this, i, association, childStore, data = {}; 
+	        data = me.callParent([record]);
+
+	        /* Iterate over all the hasMany associations */
+	        for (i = 0; i < record.associations.length; i++) {
+	            association = record.associations.get(i);
+	            if (association.type == 'hasMany')  {
+	                data[association.name] = []; 
+	                childStore = eval('record.'+association.name+'()');
+
+	                //Iterate over all the children in the current association
+	                childStore.each(function(childRecord) {
+
+	                    //Recursively get the record data for children (depth first)
+	                    var childData = this.getRecordData.call(this, childRecord);
+	                    if (childRecord.dirty | childRecord.phantom | (childData != null)){
+	                        data[association.name].push(childData);
+	                        record.setDirty();
+	                    }   
+	                }, me);
+	            }   
+	        }   
+	        return data;
+	    }   
+	}); 
+
 Thesaurus.ext.utils = function(){
 	var msgCt;
 	function createBox(t, s){
