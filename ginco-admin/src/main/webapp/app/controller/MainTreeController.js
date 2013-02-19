@@ -57,12 +57,13 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	onEnterKey : function(theTree) {
 		var node = theTree.getSelectionModel().getSelection();
 		if (node.length > 0) {
-			this.openThesaurusTab(node[0]);
+			this.onNodeDblClick(theTree, node[0]);
 		}
 
 	},
 	onTreeRender : function(theTree) {
 		var me = this;
+		
 		this.nav = new Ext.util.KeyNav({
 			target : theTree.getEl(),
 
@@ -77,11 +78,18 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var MainTreeStore = this.getMainTreeStoreStore();
 		MainTreeStore.load();
 	},
+	onTreeLoad : function()
+	{
+		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
+		theTree.getView().focus();
+		theTree.getSelectionModel().select(0);
+	},
 	init : function(application) {
 		this.control({
 			"#mainTreeView" : {
 				beforeitemdblclick : this.onNodeDblClick,
-				afterrender : this.onTreeRender
+				afterrender : this.onTreeRender,
+				load : this.onTreeLoad
 			},
 			'#mainTreeView tool[type="refresh"]' : {
 				click : this.onRefreshBtnClick
