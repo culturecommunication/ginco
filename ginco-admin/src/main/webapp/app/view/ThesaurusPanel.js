@@ -233,9 +233,7 @@ Ext
 															xtype : 'checkbox',
 															name : 'defaultTopConcept',
 															fieldLabel : me.xdefaultTopConceptLabel,
-															displayField : 'defaultTopConcept',
-															valueField : 'id',
-															allowBlank : true
+															displayField : 'defaultTopConcept'
 														},
 														{
 															xtype : 'htmleditor',

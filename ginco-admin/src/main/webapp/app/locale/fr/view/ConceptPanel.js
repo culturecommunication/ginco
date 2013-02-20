@@ -2,6 +2,8 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
     {
 	xIdentifierLabel : 'Identifiant',
 	xCreatedDateLabel : 'Date de création',
+	xModificationDateLabel : 'Date de modification',
+	xTopTermConceptLabel: 'Le concept est TopTerme',
 	xLexicalValueLabel : 'Valeur lexicale',
 	xLanguagesLabel : 'Langue',
 	xRoleColumnLabel : 'Role',

@@ -8,6 +8,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 		model = Ext.create('GincoApp.model.ConceptModel');
 		model.data.thesaurusId = thePanel.thesaurusData.id;
+		model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
 		model.data.identifier = "";
 		theForm.loadRecord(model);
 	},

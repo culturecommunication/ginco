@@ -22,6 +22,8 @@ Ext
 					//Labels
 					xIdentifierLabel : 'Identifier',
 					xCreatedDateLabel : 'Creation date',
+					xModificationDateLabel : 'Modification date',
+					xTopTermConceptLabel: 'Is a TopTerm Concept',
 					xLexicalValueLabel : 'Lexical value',
 					xLanguagesLabel : 'Languages',
 					xRoleColumnLabel : 'Role',
@@ -92,7 +94,12 @@ Ext
 														{
 															xtype : 'displayfield',
 															name : 'modified',
-															fieldLabel : me.xDateLabel
+															fieldLabel : me.xModificationDateLabel
+														},
+														{
+															xtype : 'checkbox',
+															name : 'topconcept',
+															fieldLabel : me.xTopTermConceptLabel
 														},
 														{
 															xtype : 'gridpanel',
