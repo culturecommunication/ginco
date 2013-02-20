@@ -8,12 +8,17 @@ Ext.define('GincoApp.controller.ConceptController', {
 		thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 		model = Ext.create('GincoApp.model.ConceptModel');
 		model.data.thesaurusId = thePanel.thesaurusData.id;
+		model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
 		model.data.identifier = "";
 		theForm.loadRecord(model);
 	},
 	
 	newTermFromConceptPrefBtn : function(theButton){
 		this.newTermFromConceptBtn(theButton, true);
+	},
+	
+	newTermFromConceptNonPrefBtn : function(theButton){
+		this.newTermFromConceptBtn(theButton, false);
 	},
 	
 	newTermFromConceptBtn : function(theButton, prefered) {
@@ -69,6 +74,9 @@ Ext.define('GincoApp.controller.ConceptController', {
  			},
  			'conceptPanel #newTermFromConceptPrefBtn' : {
 				click : this.newTermFromConceptPrefBtn
+			},
+			'conceptPanel #newTermFromConceptNonPrefBtn' : {
+				click : this.newTermFromConceptNonPrefBtn
 			},
 			'form #saveTermFromConcept' : {
 				click : this.saveTermFromConceptBtn

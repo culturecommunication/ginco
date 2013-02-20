@@ -15,6 +15,10 @@ Ext.define('GincoApp.model.ConceptModel', {
             type: 'string'
         },
         {
+            name: 'topconcept',
+            type: 'boolean'
+        },
+        {
             name: 'thesaurusId',
             type: 'string'
         }
