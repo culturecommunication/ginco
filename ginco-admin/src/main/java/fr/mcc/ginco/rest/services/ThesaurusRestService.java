@@ -95,6 +95,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
+	
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusService")
@@ -140,7 +144,6 @@ public class ThesaurusRestService {
 
 	}
 	
-
 	/**
 	 * Public method used to get list of all existing ThesaurusFormat objects in
 	 * database.

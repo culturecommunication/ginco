@@ -32,57 +32,54 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.extjs.view.utils;
 
+import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.log.Log;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
 import java.util.List;
 
-public interface IThesaurusConceptService {
-    /**
-     * Get list of all ThesaurusFormat.
-     * @return
-     */
-    List<ThesaurusConcept> getThesaurusConceptList();
+@Component(value = "topTermGenerator")
+public class TopTermGenerator {
+
+    @Inject
+    @Named("thesaurusConceptService")
+    private IThesaurusConceptService thesaurusConceptService;
+    @Log
+    private Logger logger;
 
     /**
-     * Get single ThesaurusFormat by its id.
-     * @param id of object
-     * @return {@code null} if not found; object otherwise.
+     * Creates categorization folders.
+     *
+     * @param parentId id of top node.
+     * @return created list of folders.
      */
-    ThesaurusConcept getThesaurusConceptById(String id);
-    
-    /**
-     * Get the ThesaurusConcepts which are not top term in a given thesaurus
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId) throws BusinessException ;    
-    
-  
-	/**
-	 * Gets the preferred term of a concept
-	 * @param conceptId
-	 * @return
-	 * @throws BusinessException
-	 */
-	ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException;
-	
-	
-	/**
-	 * Gets the label of a concept
-	 * @param conceptId
-	 * @return
-	 * @throws BusinessException
-	 */
-	String getConceptLabel(String conceptId) throws BusinessException;
+    public List<IThesaurusListNode> generateTopTerm(String parentId)
+            throws BusinessException {
+        logger.debug("Generating top term concepts list");
+        List<ThesaurusConcept> orphans = thesaurusConceptService
+                .getTopTermThesaurusConcepts(parentId);
+        logger.debug(orphans.size() + " top terms found");
 
-    /**
-     * Get the ThesaurusConcepts which are top term in a given thesaurus
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId) throws BusinessException ;
+        List<IThesaurusListNode> newOrphans = new ArrayList<IThesaurusListNode>();
+        for (ThesaurusConcept orphan : orphans) {
+            ThesaurusListBasicNode orphanNode = new ThesaurusListBasicNode();
+            orphanNode.setTitle("Test");
+            orphanNode.setId(orphan.getIdentifier());
+            orphanNode.setType(ThesaurusListNodeType.CONCEPT);
+            orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
+            newOrphans.add(orphanNode);
+        }
+        return newOrphans;
+    }
 }

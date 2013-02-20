@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.tests.extjs;
 
+import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,6 +62,9 @@ public class ViewsTest {
 	
     @Mock(name="orphansGenerator")
     private OrphansGenerator orphansGenerator;
+
+    @Mock(name="topTermGenerator")
+    private TopTermGenerator topTermGenerator;
     
 	@InjectMocks
     private FolderGenerator folderGenerator = new FolderGenerator();

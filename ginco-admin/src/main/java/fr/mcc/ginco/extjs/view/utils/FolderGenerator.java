@@ -54,6 +54,10 @@ public class FolderGenerator {
 	@Inject
 	@Named("orphansGenerator")
     private OrphansGenerator orphansGenerator;
+
+    @Inject
+    @Named("topTermGenerator")
+    private TopTermGenerator topTermGenerator;
 	
     /**
      * Creates categorization folders.
@@ -68,7 +72,7 @@ public class FolderGenerator {
         concepts.setId(ClassificationFolderType.CONCEPTS.toString() + "_" + parentId);
         concepts.setType(ThesaurusListNodeType.FOLDER);
         concepts.setExpanded(false);
-        concepts.setChildren(new ArrayList<IThesaurusListNode>());
+        concepts.setChildren(topTermGenerator.generateTopTerm(parentId));
         list.add(concepts);
 
         IThesaurusListNode sandbox = new ThesaurusListBasicNode();
