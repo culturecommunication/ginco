@@ -76,6 +76,7 @@ Ext.application({
     init: function(){
     },
     launch: function() {
+    	 Ext.History.init();
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
             // Fade out the body mask

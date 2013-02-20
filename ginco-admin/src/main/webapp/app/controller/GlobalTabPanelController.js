@@ -75,6 +75,42 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		}
 		return true;
 	},
+	onTabChange : function ( tabPanel, tab, oldCard, eOpts )
+	{
+		// History handling
+		var tabs = [],
+        ownerCt = tabPanel.ownerCt, 
+        oldToken, newToken;
+		var tokenDelimiter = ':';
+		if (tab.thesaurusData && tab.thesaurusData.id) {
+			tabs.push(tab.id);
+			tabs.push(encodeURIComponent(tab.thesaurusData.id));
+		    newToken = tabs.reverse().join(tokenDelimiter);
+		    
+		    oldToken = Ext.History.getToken();
+		   
+		    if (oldToken === null || oldToken.search(newToken) === -1) {
+		        Ext.History.add(newToken);
+		    }
+		}
+	},
+	onTabsAfterRender : function (tabPanel)
+	{
+		var tokenDelimiter = ':';
+		Ext.History.on('change', function(token) {
+            var parts, length;
+            
+            if (token) {
+                parts = token.split(tokenDelimiter);
+                length = parts.length;
+                
+                // setActiveTab in all nested tabs
+                	
+               	tabPanel.setActiveTab(Ext.getCmp(parts[1]));
+                
+            }
+        });
+	},
 
 	init : function(application) {
 		this.control({
@@ -92,6 +128,10 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			},
 			'conceptGroupPanel' : {
 				beforeclose : this.onPanelBeforeClose
+			},
+			'topTabs' :  {
+				tabchange : this.onTabChange,
+				afterrender: this.onTabsAfterRender
 			}
 		});
 	}
