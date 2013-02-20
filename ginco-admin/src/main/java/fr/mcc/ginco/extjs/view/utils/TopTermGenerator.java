@@ -55,12 +55,10 @@ import java.util.List;
 @Component(value = "topTermGenerator")
 public class TopTermGenerator {
 
-    @Value("${ginco.default.language}")
-    private String defaultLang;
-
     @Inject
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
+
     @Log
     private Logger logger;
 

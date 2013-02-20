@@ -96,11 +96,15 @@ public class ThesaurusTermDAO extends
                 .add(Restrictions.eq("prefered", Boolean.TRUE))
                 .list();
 
-        if(list.size() == 0) throw new BusinessException("No preferred term found ! " +
-                "Please check your database !");
+        if(list.size() == 0) {
+            throw new BusinessException("No preferred term found ! " +
+                    "Please check your database !");
+        }
 
-        if(list.size() != 1) throw new BusinessException("More than one preferred term found ! " +
-                "Please check your database !");
+        if(list.size() != 1) {
+            throw new BusinessException("More than one preferred term found ! " +
+                    "Please check your database !");
+        }
 
         return list.get(0);
 	}
