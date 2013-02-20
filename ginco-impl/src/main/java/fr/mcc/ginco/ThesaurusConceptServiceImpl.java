@@ -132,21 +132,21 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
         return thesaurusConceptDAO.getTopTermThesaurusConcept(thesaurus);
     }
 
-    @Override
-    public ThesaurusTerm getConceptPreferredTerm(String conceptId)
-            throws BusinessException {
-        ThesaurusTerm preferredTerm = thesaurusTermDAO
-                .getConceptPreferredTerm(conceptId);
-        if (preferredTerm == null) {
-            throw new BusinessException("The concept " + conceptId
-                    + "has no preferred term");
-        }
-        return preferredTerm;
-    }
+	@Override
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
+			throws BusinessException {
+		ThesaurusTerm preferredTerm = thesaurusTermDAO
+				.getConceptPreferredTerm(conceptId);
+		if (preferredTerm == null) {
+			throw new BusinessException("The concept " + conceptId
+					+ "has no preferred term");
+		}
+		return preferredTerm;
+	}
 
-    @Override
-    public String getConceptLabel(String conceptId) throws BusinessException {
-        ThesaurusTerm term = getConceptPreferredTerm(conceptId);
-        return LabelUtil.getConceptLabel(term, defaultLang);
-    }
+	@Override
+	public String getConceptLabel(String conceptId) throws BusinessException {
+		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
+		return LabelUtil.getConceptLabel(term, defaultLang);
+	}
 }

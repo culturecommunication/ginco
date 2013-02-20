@@ -32,61 +32,67 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.utils;
+package fr.mcc.ginco.tests.extjs.view.utils;
 
 import fr.mcc.ginco.IThesaurusConceptService;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.LabelUtil;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
+import fr.mcc.ginco.tests.LoggerTestUtil;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component(value = "topTermGenerator")
-public class TopTermGenerator {
+public class TopTermGeneratorTest {
 
-    @Value("${ginco.default.language}")
-    private String defaultLang;
-
-    @Inject
-    @Named("thesaurusConceptService")
+    @Mock(name = "thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
-    @Log
-    private Logger logger;
 
-    /**
-     * Creates categorization folders.
-     *
-     * @param parentId id of top node.
-     * @return created list of folders.
-     */
-    public List<IThesaurusListNode> generateTopTerm(String parentId)
-            throws BusinessException {
-        logger.debug("Generating top term concepts list");
-        List<ThesaurusConcept> topTerms = thesaurusConceptService
-                .getTopTermThesaurusConcepts(parentId);
-        logger.debug(topTerms.size() + " top terms found");
+    @InjectMocks
+    private TopTermGenerator topTermGenerator = new TopTermGenerator();
 
-        List<IThesaurusListNode> newOrphans = new ArrayList<IThesaurusListNode>();
-        for (ThesaurusConcept topTerm : topTerms) {
-            ThesaurusListBasicNode topTermNode = new ThesaurusListBasicNode();
-            topTermNode.setTitle(thesaurusConceptService.getConceptLabel(topTerm
-                    .getIdentifier()));
-            topTermNode.setId(topTerm.getIdentifier());
-            topTermNode.setType(ThesaurusListNodeType.CONCEPT);
-            topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
-            newOrphans.add(topTermNode);
-        }
-        return newOrphans;
+    @Before
+    public final void setUp() {
+        MockitoAnnotations.initMocks(this);
+        LoggerTestUtil.initLogger(topTermGenerator);
     }
+
+    @Test
+    public void testGenerateOrphans() throws BusinessException {
+        List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+        ThesaurusConcept co1 = new ThesaurusConcept();
+        co1.setIdentifier("co1");
+        ThesaurusConcept co2 = new ThesaurusConcept();
+        co2.setIdentifier("co2");
+        concepts.add(co1);
+        concepts.add(co2);
+        Language lang = new Language();
+        lang.setId("fra");
+
+        ThesaurusTerm preft1 = new ThesaurusTerm();
+        preft1.setLexicalValue("First preferred term");
+        preft1.setLanguage(lang);
+        ThesaurusTerm preft2 = new ThesaurusTerm();
+        preft2.setLexicalValue("Second preferred term");
+        preft2.setLanguage(lang);
+
+        Mockito.when(thesaurusConceptService
+                .getTopTermThesaurusConcepts(Mockito.anyString())).thenReturn(concepts);
+        Mockito.when(thesaurusConceptService.getConceptPreferredTerm("co1")).thenReturn(preft1);
+        Mockito.when(thesaurusConceptService.getConceptPreferredTerm("co2")).thenReturn(preft2);
+
+        List<IThesaurusListNode> nodes = topTermGenerator.generateTopTerm("anystring");
+        Assert.assertEquals(2, nodes.size());
+    }
+	
 }
