@@ -92,7 +92,8 @@ public class ThesaurusConceptDAO extends
 	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConcept
 	 */
     @Override
-    public List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus) throws BusinessException {
+    public List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus)
+            throws BusinessException {
         return getListByThesaurusAndTopConcept(thesaurus, true);
     }
 

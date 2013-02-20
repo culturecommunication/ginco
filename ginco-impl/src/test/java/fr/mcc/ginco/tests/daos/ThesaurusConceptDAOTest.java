@@ -89,6 +89,16 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
     @Test
+    public void testGetTopTermThesaurusConcept() throws BusinessException {
+        String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier(thesaurusId);
+        List<ThesaurusConcept> actualConcepts = thesaurusConceptDAO
+                .getTopTermThesaurusConcept(th);
+        Assert.assertEquals(1,actualConcepts.size());
+    }
+
+    @Test
     public void testGetThesaurusFromConcept() throws BusinessException {
         String thesaurusConceptId = "http://www.culturecommunication.gouv.fr/co1";
         ThesaurusConcept thesaurusConcept = thesaurusConceptDAO.getById(thesaurusConceptId);

@@ -39,7 +39,6 @@ import java.util.Date;
 
 public class ThesaurusConcept implements Serializable, IBaseBean {
     private String identifier;
-    private String label;
     private Date created;
     private Date modified;
     private String status;
@@ -52,12 +51,6 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
     }
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
-    }
-    public String getLabel() {
-        return label;
-    }
-    public void setLabel(String label) {
-        this.label = label;
     }
     @Override
     public String getId() {
