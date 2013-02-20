@@ -62,6 +62,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
+import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.users.SimpleUserImpl;
 import fr.mcc.ginco.utils.DateUtil;
@@ -94,10 +95,14 @@ public class ThesaurusTermRestService {
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
 	
+    @Inject
+    @Named("termViewConverter")
+    private TermViewConverter termViewConverter;
+    
 	@Log
 	private Logger logger;
 	
-	@Value("${ginco.default.language}") private String language;
+	
 	
 
 	/**
@@ -152,7 +157,7 @@ public class ThesaurusTermRestService {
 	@Path("/updateTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
-		ThesaurusTerm object = convert(thesaurusViewJAXBElement);
+		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement);
 		String principal = "unknown";
 		if (context != null) {
 			principal = context.getHttpServletRequest().getRemoteAddr();
@@ -190,7 +195,7 @@ public class ThesaurusTermRestService {
 	@Path("/destroyTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
-		ThesaurusTerm object = convert(thesaurusViewJAXBElement);
+		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement);
 		String principal = "unknown";
 		if (context != null) {
 			principal = context.getHttpServletRequest().getRemoteAddr();
@@ -202,42 +207,5 @@ public class ThesaurusTermRestService {
 			return new ThesaurusTermView(result);
 		}
 		return null;
-	}
-	
-	private ThesaurusTerm convert(ThesaurusTermView source) throws BusinessException {
-		ThesaurusTerm hibernateRes;
-
-		if ("".equals(source.getIdentifier())) {
-			hibernateRes = new ThesaurusTerm();
-			hibernateRes.setCreated(DateUtil.nowDate());
-			logger.info("Creating a new term");
-		} else {
-			hibernateRes = thesaurusTermService.getThesaurusTermById(source.getIdentifier());
-			logger.info("Getting an existing term");
-		}
-		
-		hibernateRes.setLexicalValue(source.getLexicalValue());
-		hibernateRes.setModified(DateUtil.nowDate());
-		hibernateRes.setSource(source.getSource());
-		hibernateRes.setPrefered(source.getPrefered());
-		hibernateRes.setStatus(source.getStatus());
-		hibernateRes.setRole(source.getRole());
-        if(source.getConceptId() != null && !source.getConceptId().equals("")) {
-            ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(source.getConceptId());
-            if(concept != null) {
-                hibernateRes.setConceptId(concept);
-            }
-        }
-		hibernateRes.setThesaurusId(thesaurusService.getThesaurusById(source.getThesaurusId()));
-		if ("".equals(source.getLanguage())) {
-			//If not filled in, the language for the term is "ginco.default.language" property in application.properties
-			hibernateRes.setLanguage(languagesService.getLanguageById(language));
-
-		} else
-		{
-			hibernateRes.setLanguage(languagesService.getLanguageById(source.getLanguage()));			
-		}
-		
-		return hibernateRes;
 	}
 }

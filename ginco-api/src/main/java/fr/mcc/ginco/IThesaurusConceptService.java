@@ -36,6 +36,7 @@ package fr.mcc.ginco;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 import java.util.List;
@@ -70,7 +71,6 @@ public interface IThesaurusConceptService {
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException;
 	
-	
 	/**
 	 * Gets the label of a concept
 	 * @param conceptId
@@ -78,6 +78,12 @@ public interface IThesaurusConceptService {
 	 * @throws BusinessException
 	 */
 	String getConceptLabel(String conceptId) throws BusinessException;
+
+	 /**
+     * Create a single Thesaurus Concept Object
+     */
+    ThesaurusConcept createThesaurusConcept(ThesaurusConcept object, IUser user);
+    
 
     /**
      * Get the ThesaurusConcepts which are top term in a given thesaurus

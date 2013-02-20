@@ -48,9 +48,11 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.journal.GincoLog;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 
@@ -147,9 +149,17 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
 		return preferredTerm;
 	}
 
+
 	@Override
 	public String getConceptLabel(String conceptId) throws BusinessException {
 		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
 		return LabelUtil.getConceptLabel(term, defaultLang);
 	}
+
+	
+	@GincoLog(action = GincoLog.Action.CREATE, entityType=GincoLog.EntityType.THESAURUSCONCEPT)
+	public ThesaurusConcept createThesaurusConcept(ThesaurusConcept object, IUser user) {
+    	return thesaurusConceptDAO.update(object);
+    }
+
 }

@@ -15,7 +15,7 @@ Ext.define('GincoApp.store.ConceptTermStore', {
             model : 'GincoApp.model.ThesaurusTermModel',
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurustermservice/getConceptTerms',
+                url: 'services/ui/thesaurusconceptservice/getConceptTerms',
                 reader: {
                     type: 'json',
                     idProperty: 'identifier',

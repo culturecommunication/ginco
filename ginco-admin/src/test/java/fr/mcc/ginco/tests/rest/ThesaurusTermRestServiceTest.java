@@ -42,6 +42,9 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -61,6 +64,7 @@ import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
+import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusTermRestService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -75,6 +79,8 @@ public class ThesaurusTermRestServiceTest{
 	@Mock(name="languagesService")
 	private ILanguagesService languagesService;
 	
+    @Mock(name="termViewConverter")
+    private TermViewConverter termViewConverter;
 	
 	@InjectMocks
 	private ThesaurusTermRestService thesaurusTermRestService = new ThesaurusTermRestService();
@@ -86,6 +92,7 @@ public class ThesaurusTermRestServiceTest{
 	}
 	/**
 	 * Test to get all Thesaurus Sandboxed Items method
+	 * @throws BusinessException 
 	 */
 	@Test
 	public final void getAllThesaurusSandboxedTerms() throws BusinessException {
@@ -135,6 +142,7 @@ public class ThesaurusTermRestServiceTest{
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString())).thenReturn(fakeThesaurus1);
 		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class))).thenReturn(fakeThesaurusTerm1);
 		
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class), any(IUser.class))).thenReturn(fakeThesaurusTerm1);
 
@@ -143,7 +151,6 @@ public class ThesaurusTermRestServiceTest{
 		//Assert
 		Assert.assertEquals("fake1", actualResponse.getIdentifier());
 	}
-	
 	/**
 	 * Test the createTerm method
 	 * @throws BusinessException 
@@ -176,6 +183,7 @@ public class ThesaurusTermRestServiceTest{
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString())).thenReturn(fakeThesaurus1);
 		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class))).thenReturn(fakeThesaurusTerm1);
 		
 		Mockito.when(termService.createThesaurusTerm(any(ThesaurusTerm.class), any(IUser.class))).thenReturn(fakeThesaurusCreationReturn);
 		

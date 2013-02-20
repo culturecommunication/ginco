@@ -31,10 +31,10 @@ Ext.define('GincoApp.model.ConceptModel', {
     
     proxy : {
 		api : {
-			create : 'services/ui/thesaurustermservice/updateConcept',
-			update : 'services/ui/thesaurustermservice/updateConcept',
-			read :   'services/ui/thesaurustermservice/getConcept',
-			destroy: 'services/ui/thesaurustermservice/destroyTerm'
+			create : 'services/ui/thesaurusconceptservice/updateConcept',
+			update : 'services/ui/thesaurusconceptservice/updateConcept',
+			read :   'services/ui/thesaurusconceptservice/getConcept',
+			destroy: 'services/ui/thesaurusconceptservice/destroyTerm'
 		},
 		type : 'ajax',
 		reader : {

@@ -84,4 +84,11 @@ public interface IThesaurusTermService {
      */
     ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user);
     
+    /**
+     * @param listOfTerms
+     * @return
+     * This method returns all the prefered terms
+     */
+    List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms);
+    
 }
