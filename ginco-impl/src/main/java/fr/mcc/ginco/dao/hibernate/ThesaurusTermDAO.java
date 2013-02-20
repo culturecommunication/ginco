@@ -38,9 +38,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.log.Log;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -61,7 +63,7 @@ public class ThesaurusTermDAO extends
 	public ThesaurusTermDAO() {
 		super(ThesaurusTerm.class);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findPaginatedItems(java.lang.Integer, java.lang.Integer, java.lang.String)
 	 */
@@ -88,13 +90,16 @@ public class ThesaurusTermDAO extends
 	
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
-		List<ThesaurusTerm> list = getCurrentSession()
+        List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq("conceptId.identifier", conceptId))
                 .add(Restrictions.eq("prefered", Boolean.TRUE))
                 .list();
 
-        if(list.size() != 1) throw new BusinessException("No or more than one preferred terms found ! " +
+        if(list.size() == 0) throw new BusinessException("No preferred term found ! " +
+                "Please check your database !");
+
+        if(list.size() != 1) throw new BusinessException("More than one preferred term found ! " +
                 "Please check your database !");
 
         return list.get(0);

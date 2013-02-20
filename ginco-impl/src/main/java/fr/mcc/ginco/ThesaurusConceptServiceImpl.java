@@ -135,7 +135,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException {
-		ThesaurusTerm preferredTerm = thesaurusTermDAO
+
+        logger.debug("ConceptId : " + conceptId);
+
+        ThesaurusTerm preferredTerm = thesaurusTermDAO
 				.getConceptPreferredTerm(conceptId);
 		if (preferredTerm == null) {
 			throw new BusinessException("The concept " + conceptId

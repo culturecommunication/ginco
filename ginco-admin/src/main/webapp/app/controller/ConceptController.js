@@ -81,7 +81,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'form #saveTermFromConcept' : {
 				click : this.saveTermFromConceptBtn
 			},
-			'form #languageCombo' : {
+			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
 			}
          });
