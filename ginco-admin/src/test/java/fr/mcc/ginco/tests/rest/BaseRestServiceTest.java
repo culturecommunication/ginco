@@ -37,10 +37,6 @@ package fr.mcc.ginco.tests.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -49,13 +45,16 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.rest.services.BaseRestService;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import fr.mcc.ginco.IThesaurusService;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.rest.services.BaseRestService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

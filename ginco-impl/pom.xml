@@ -33,7 +33,7 @@
 							<version>1.8.4</version>
 						</dependency>
 					</dependencies>
-				</plugin>				
+				</plugin>					
 			</plugins>
 		</pluginManagement>
 	</build>

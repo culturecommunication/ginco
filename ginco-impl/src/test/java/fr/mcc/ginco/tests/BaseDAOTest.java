@@ -40,11 +40,13 @@ import java.sql.Connection;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
+import org.dbunit.ext.h2.H2DataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.SessionFactory;
 import org.junit.After;
@@ -64,6 +66,8 @@ public abstract class BaseDAOTest extends BaseTest {
 		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
 				gincoSessionFactory).getConnection();
 		final IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
+		DatabaseConfig config = connection.getConfig();
+		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new H2DataTypeFactory());
 		final IDataSet dataset = getDataset(getXmlDataFileInit());
 		try {
 			DatabaseOperation.CLEAN_INSERT.execute(connection, dataset);

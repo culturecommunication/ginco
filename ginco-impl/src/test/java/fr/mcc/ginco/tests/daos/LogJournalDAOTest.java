@@ -40,8 +40,6 @@ import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
-import org.hibernate.Transaction;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;

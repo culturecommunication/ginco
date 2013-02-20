@@ -39,7 +39,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -51,9 +50,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.ReflectionUtils;
 
 import fr.mcc.ginco.ThesaurusServiceImpl;
 import fr.mcc.ginco.beans.Language;
@@ -61,8 +57,8 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.tests.BaseTest;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusServiceTest extends BaseTest {
 
@@ -75,22 +71,7 @@ public class ThesaurusServiceTest extends BaseTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-
-		ReflectionUtils.doWithFields(thesaurusService.getClass(),
-				new ReflectionUtils.FieldCallback() {
-
-					public void doWith(Field field)
-							throws IllegalArgumentException,
-							IllegalAccessException {
-						ReflectionUtils.makeAccessible(field);
-
-						if (field.getAnnotation(Log.class) != null) {
-							Logger logger = LoggerFactory
-									.getLogger(thesaurusService.getClass());
-							field.set(thesaurusService, logger);
-						}
-					}
-				});
+		LoggerTestUtil.initLogger(thesaurusService);
 	}
 
 	@Test

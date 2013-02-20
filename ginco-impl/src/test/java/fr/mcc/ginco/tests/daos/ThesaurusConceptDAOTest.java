@@ -34,23 +34,18 @@
  */
 package fr.mcc.ginco.tests.daos;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.ReflectionUtils;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.hibernate.ThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.tests.BaseDAOTest;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusConceptDAOTest extends BaseDAOTest {	
 	
@@ -59,23 +54,8 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	@Before
 	public void handleSetUpOperation() throws Exception {
 		super.handleSetUpOperation();
+		LoggerTestUtil.initLogger(thesaurusConceptDAO);
 		thesaurusConceptDAO.setSessionFactory(getSessionFactory());
-		ReflectionUtils.doWithFields(thesaurusConceptDAO.getClass(),
-				new ReflectionUtils.FieldCallback() {
-
-					public void doWith(Field field)
-							throws IllegalArgumentException,
-							IllegalAccessException {
-						ReflectionUtils.makeAccessible(field);
-
-						if (field.getAnnotation(Log.class) != null) {
-							Logger logger = LoggerFactory
-									.getLogger(thesaurusConceptDAO.getClass());
-							field.set(thesaurusConceptDAO, logger);
-						}
-					}
-				});
-
 	}
 
 	@Test
