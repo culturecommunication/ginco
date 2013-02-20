@@ -34,14 +34,23 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.IThesaurusConceptService;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -61,7 +70,30 @@ public class OrphansGeneratorTest {
 	
 	@Test
 	public void testGenerateOrphans() throws BusinessException {
-		orphanGenerator.generateOrphans("toto");
+		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+		ThesaurusConcept co1 = new ThesaurusConcept();
+		co1.setIdentifier("co1");
+		ThesaurusConcept co2 = new ThesaurusConcept();
+		co2.setIdentifier("co2");
+		concepts.add(co1);
+		concepts.add(co2);
+		Language lang = new Language();
+		lang.setId("fra");		
+		
+		ThesaurusTerm preft1 = new ThesaurusTerm();
+		preft1.setLexicalValue("First preferred term");
+		preft1.setLanguage(lang);
+		ThesaurusTerm preft2 = new ThesaurusTerm();
+		preft2.setLexicalValue("Second preferred term");
+		preft2.setLanguage(lang);
+
+		 Mockito.when(thesaurusConceptService
+			.getOrphanThesaurusConcepts(Mockito.anyString())).thenReturn(concepts);
+		 Mockito.when(thesaurusConceptService.getConceptPreferredTerm("co1")).thenReturn(preft1);
+		 Mockito.when(thesaurusConceptService.getConceptPreferredTerm("co2")).thenReturn(preft2);
+		 
+		 List<IThesaurusListNode> nodes = orphanGenerator.generateOrphans("anystring");
+		 Assert.assertEquals(2, nodes.size());
 	}
 	
 }

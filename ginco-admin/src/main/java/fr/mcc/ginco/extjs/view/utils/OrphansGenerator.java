@@ -46,22 +46,18 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.LabelUtil;
 
 /**
- *Genrator in charge of building concept orphans list
+ * Genrator in charge of building concept orphans list
  */
-@Component(value="orphansGenerator")
+@Component(value = "orphansGenerator")
 public class OrphansGenerator {
-	@Value("${ginco.default.language}")
-	private String defaultLang;
-	
+
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
@@ -86,8 +82,8 @@ public class OrphansGenerator {
 		List<IThesaurusListNode> newOrphans = new ArrayList<IThesaurusListNode>();
 		for (ThesaurusConcept orphan : orphans) {
 			ThesaurusListBasicNode orphanNode = new ThesaurusListBasicNode();
-			ThesaurusTerm  term = thesaurusConceptService.getConceptPreferredTerm(orphan.getIdentifier());
-			orphanNode.setTitle(LabelUtil.getConceptLabel(term, defaultLang));
+			orphanNode.setTitle(thesaurusConceptService.getConceptLabel(orphan
+					.getIdentifier()));
 			orphanNode.setId(orphan.getIdentifier());
 			orphanNode.setType(ThesaurusListNodeType.CONCEPT);
 			orphanNode.setChildren(new ArrayList<IThesaurusListNode>());

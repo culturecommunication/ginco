@@ -21,11 +21,7 @@
 		<dependency>
 			<groupId>fr.smile.mcc.ginco</groupId>
 			<artifactId>ginco-impl</artifactId>
-		</dependency>		
-		<dependency>
-            <groupId>fr.smile.mcc.ginco</groupId>
-            <artifactId>ginco-commons</artifactId>
-        </dependency>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
