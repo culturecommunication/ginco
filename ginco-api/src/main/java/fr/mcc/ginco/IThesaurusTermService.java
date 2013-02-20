@@ -64,10 +64,10 @@ public interface IThesaurusTermService {
 
     /**
      * Get number of Thesaurus Sandboxed Terms
-     * @param Id of a Thesaurus
+     * @param idThesaurus of a Thesaurus
      * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
      */
-    Long getSandboxedTermsCount(String idThesaurus);
+    Long getSandboxedTermsCount(String idThesaurus) throws BusinessException;
 	
     /**
      * Create a single Thesaurus Term Object

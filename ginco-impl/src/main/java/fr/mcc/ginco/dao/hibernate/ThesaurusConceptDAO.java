@@ -105,7 +105,7 @@ public class ThesaurusConceptDAO extends
         }
 
         Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
-        criteria.add(Restrictions.eq("tc.thesaurus", thesaurus));
+        criteria.add(Restrictions.eq("tc.thesaurus.identifier", thesaurus.getId()));
         criteria.add(Restrictions.eq("topConcept", topConcept));
 
         return criteria.list();

@@ -34,8 +34,10 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import fr.mcc.ginco.exceptions.BusinessException;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -75,7 +77,7 @@ public class ThesaurusTermDAO extends
 	}
 
 	@Override
-	public Long countSandboxedTerms(String idThesaurus) {
+	public Long countSandboxedTerms(String idThesaurus) throws BusinessException {
 		return (Long) getCurrentSession()
 				.createCriteria(ThesaurusTerm.class)
 				.add(Restrictions.eq("thesaurusId.identifier", idThesaurus))
@@ -85,11 +87,16 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
-	public ThesaurusTerm getConceptPreferredTerm(String conceptId){
-		return (ThesaurusTerm) getCurrentSession()
-				.createCriteria(ThesaurusTerm.class)
-				.add(Restrictions.eq("conceptId.identifier", conceptId))
-				.add(Restrictions.eq("prefered", Boolean.TRUE))
-				.list().get(0);
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
+		List<ThesaurusTerm> list = getCurrentSession()
+                .createCriteria(ThesaurusTerm.class)
+                .add(Restrictions.eq("conceptId.identifier", conceptId))
+                .add(Restrictions.eq("prefered", Boolean.TRUE))
+                .list();
+
+        if(list.size() != 1) throw new BusinessException("No or more than one preferred terms found ! " +
+                "Please check your database !");
+
+        return list.get(0);
 	}
 }

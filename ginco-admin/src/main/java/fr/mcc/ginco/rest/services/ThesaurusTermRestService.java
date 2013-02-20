@@ -109,7 +109,10 @@ public class ThesaurusTermRestService {
 	@GET
 	@Path("/getSandboxedThesaurusTerms")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<ThesaurusTermView> > getSandboxedThesaurusTerms(@QueryParam("start") Integer startIndex, @QueryParam("limit") Integer limit, @QueryParam("idThesaurus") String idThesaurus) {
+	public ExtJsonFormLoadData<List<ThesaurusTermView> > getSandboxedThesaurusTerms
+    (@QueryParam("start") Integer startIndex,
+     @QueryParam("limit") Integer limit,
+     @QueryParam("idThesaurus") String idThesaurus) throws BusinessException{
 		logger.info("Getting Thesaurus Sandboxed Terms with following parameters : " + "index start " +startIndex + " and limit of " + limit);
 		List<ThesaurusTerm> thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(startIndex, limit, idThesaurus);
 		Long total = thesaurusTermService.getSandboxedTermsCount(idThesaurus);

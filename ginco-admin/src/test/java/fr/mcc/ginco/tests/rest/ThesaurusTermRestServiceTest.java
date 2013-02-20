@@ -88,8 +88,8 @@ public class ThesaurusTermRestServiceTest{
 	 * Test to get all Thesaurus Sandboxed Items method
 	 */
 	@Test
-	public final void getAllThesaurusSandboxedTerms() {
-		
+	public final void getAllThesaurusSandboxedTerms() throws BusinessException {
+
 		//Generating mocked Thesauruses in a single list "allThesaurus"
 		ThesaurusTerm fakeThesaurusTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("mock1");
 		ThesaurusTerm fakeThesaurusTerm2 = getFakeThesaurusTermWithNonMandatoryEmptyFields("mock2");

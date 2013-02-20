@@ -74,7 +74,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
 
 	@Override
-	public Long getSandboxedTermsCount(String idThesaurus) {
+	public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException{
 		return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
 	}
 	

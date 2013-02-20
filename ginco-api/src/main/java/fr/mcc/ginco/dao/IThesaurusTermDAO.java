@@ -37,6 +37,7 @@ package fr.mcc.ginco.dao;
 import java.util.List;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Data Access Object for thesaurus_term
@@ -56,17 +57,17 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
     
 	/**
      * Get number of Thesaurus Sandboxed Terms
-     * @param Id of a Thesaurus
+     * @param idThesaurus of a Thesaurus
      * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
      */
-	Long countSandboxedTerms(String idThesaurus);
+	Long countSandboxedTerms(String idThesaurus) throws BusinessException;
 	
 	/**
 	 * Returns the preferred ThesaurusTerm of a concept
 	 * @param conceptId
 	 * @return
 	 */
-	ThesaurusTerm getConceptPreferredTerm(String conceptId);
+	ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException;
 
 
 }
