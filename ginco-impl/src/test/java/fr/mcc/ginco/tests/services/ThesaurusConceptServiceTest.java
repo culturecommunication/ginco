@@ -99,7 +99,7 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 						.getOrphansThesaurusConcept(any(Thesaurus.class)))
 				.thenReturn(concepts);
 
-		List<ThesaurusConcept> thesaurusRes = thesaurusConceptService
+		thesaurusConceptService
 				.getOrphanThesaurusConcepts("any-thesaurus-id");
 	}
 
