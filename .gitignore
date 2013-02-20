@@ -18,6 +18,7 @@ target
 # IDEA
 .idea/
  */.idea/*
+*.iml
 
 #JRebel files
 rebel.xml
