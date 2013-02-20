@@ -36,6 +36,7 @@ package fr.mcc.ginco.tests.extjs;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
@@ -73,6 +74,9 @@ public class ViewsTest {
 
         Assert.assertEquals("Error creating folders! Id of folder does not correspond to one of parent!",
                 realId, testThesaurus.getIdentifier());
+
+        Assert.assertEquals("Service sent wrong reponse ! Type should be FOLDER for second level node !",
+                node.getChildren().get(0).getType(), ThesaurusListNodeType.FOLDER);
     }
 
     @Test
@@ -82,6 +86,7 @@ public class ViewsTest {
         node.setExpanded(false);
         node.setTitle(testThesaurus.getTitle());
         node.setId(testThesaurus.getIdentifier());
+        node.setType(ThesaurusListNodeType.THESAURUS);
 
         String idOfNode = node.getId();
         String titleOfNode = node.getTitle();
@@ -91,5 +96,8 @@ public class ViewsTest {
 
         Assert.assertEquals("Error creating node! Title of node does not correspond to one of parent!",
                 titleOfNode, testThesaurus.getTitle());
+
+        Assert.assertEquals("Service sent wrong reponse ! Type should be THESAURUS for first level node !",
+                node.getType(), ThesaurusListNodeType.THESAURUS);
     }
 }
