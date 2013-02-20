@@ -29,7 +29,7 @@
     <bean id="dataSourceTest" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource"
           lazy-init="true" destroy-method="close" scope="singleton">
         <property name="driverClassName" value="org.h2.Driver" />
-        <property name="url" value="jdbc:h2:mem:test_db;INIT=RUNSCRIPT FROM 'src/test/resources/create_tables.sql';DB_CLOSE_DELAY=-1" />
+        <property name="url" value="jdbc:h2:mem:test_db;INIT=RUNSCRIPT FROM 'classpath:create_tables.sql';DB_CLOSE_DELAY=-1" />
         <property name="username" value="" />
         <property name="password" value="" />
         <property name="maxActive" value="50" />
