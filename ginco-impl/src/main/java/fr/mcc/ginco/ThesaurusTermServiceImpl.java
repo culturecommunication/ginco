@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -92,4 +93,15 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) {
 		return thesaurusTermDAO.delete(object);
     }
+
+	@Override
+	public List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
+		List<ThesaurusTerm>  preferedTerms = new ArrayList<ThesaurusTerm>();
+		for (ThesaurusTerm thesaurusTerm : listOfTerms) {
+			if (thesaurusTerm.getPrefered()==true){
+				preferedTerms.add(thesaurusTerm);
+			}
+		}
+		return preferedTerms;
+	}
 }

@@ -39,8 +39,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	loadLanguages : function(theCombo) {
 		var thePanel = theCombo.up('createTermWin');
 		var theStore = theCombo.getStore();
-		theStore.getProxy().setExtraParam('thesaurusId',
-				thePanel.thesaurusData.id);
+		theStore.getProxy().setExtraParam('thesaurusId', thePanel.thesaurusData.id);
 		theStore.load();
 	},
 	
@@ -81,7 +80,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'form #saveTermFromConcept' : {
 				click : this.saveTermFromConceptBtn
 			},
-			'form #languageCombo' : {
+			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
 			}
          });

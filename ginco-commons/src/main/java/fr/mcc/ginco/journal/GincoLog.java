@@ -53,7 +53,7 @@ public @interface GincoLog {
 	 /**
 	 * type of the entity the action is performed on
 	 */
-	public enum EntityType{ THESAURUS, THESAURUSTERM }
+	public enum EntityType{ THESAURUS, THESAURUSTERM, THESAURUSCONCEPT}
 	 EntityType entityType();
 	 /**
 	 * type of the action within CREATE, UPDATE, DELETE
