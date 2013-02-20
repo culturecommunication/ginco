@@ -34,34 +34,72 @@
  */
 package fr.mcc.ginco.tests.extjs;
 
+import java.lang.reflect.Field;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.ReflectionUtils;
+
+import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
+import fr.mcc.ginco.log.Log;
 
 public class ViewsTest {
 
     private Thesaurus testThesaurus = new Thesaurus();
-
+   
+    @Mock(name="thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;	
+	
+    @Mock(name="orphansGenerator")
+    private OrphansGenerator orphansGenerator;
+    
+	@InjectMocks
     private FolderGenerator folderGenerator = new FolderGenerator();
 
     @Before
     public final void setUp() {
+        MockitoAnnotations.initMocks(this);
         testThesaurus.setTitle("testNode");
         testThesaurus.setIdentifier("555");
         ThesaurusType type = new ThesaurusType();
         type.setIdentifier(1);
         type.setLabel("testType");
         testThesaurus.setType(type);
+        
+    	ReflectionUtils.doWithFields(folderGenerator.getClass(),
+				new ReflectionUtils.FieldCallback() {
+
+					public void doWith(Field field)
+							throws IllegalArgumentException,
+							IllegalAccessException {
+						ReflectionUtils.makeAccessible(field);
+
+						if (field.getAnnotation(Log.class) != null) {
+							Logger logger = LoggerFactory
+									.getLogger(folderGenerator.getClass());
+							field.set(folderGenerator, logger);
+						}
+					}
+				});
+        
     }
 
     @Test
-    public final void testFolderCreation() {
+    public final void testFolderCreation() throws BusinessException {
         IThesaurusListNode node = new ThesaurusListBasicNode();
 
         node.setExpanded(false);

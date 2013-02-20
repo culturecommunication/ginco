@@ -37,6 +37,7 @@ package fr.mcc.ginco.tests.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
@@ -83,7 +84,7 @@ public class BaseRestServiceTest {
 	 * fields in Thesauruses objects
 	 */
 	@Test
-	public final void testGetVocabularies() {
+	public final void testGetVocabularies()  throws BusinessException {
         //Generating mocked Thesauruses in a single list "allThesaurus"
 		Thesaurus mockedThesaurus1 = new Thesaurus();
 		Thesaurus mockedThesaurus2 = new Thesaurus();
@@ -99,8 +100,8 @@ public class BaseRestServiceTest {
 		Assert.assertEquals(3, listThesauruses.size());
 	}
 	
-	private IThesaurusService initServicesForGetVocabulariesTest(
-			List<Thesaurus> mockedThesauruses) {
+	private IThesaurusService initServicesForGetVocabulariesTest (
+			List<Thesaurus> mockedThesauruses)  throws BusinessException {
 		for (int i = 0; i < mockedThesauruses.size(); i++) {
 			Mockito.when(
                     thesaurusService.getThesaurusById(mockedThesauruses.get(i)

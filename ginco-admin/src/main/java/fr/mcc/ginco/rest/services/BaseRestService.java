@@ -44,6 +44,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
@@ -64,7 +65,9 @@ public class BaseRestService {
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
 
-    private FolderGenerator folderGenerator = new FolderGenerator();
+    @Inject
+    @Named("folderGenerator")
+    private FolderGenerator folderGenerator;
 
 	/**
      * Public method used to get list of all existing Thesaurus objects
@@ -75,7 +78,7 @@ public class BaseRestService {
     @GET
     @Path("/getVocabularies")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<IThesaurusListNode> getVocabularies() {
+    public List<IThesaurusListNode> getVocabularies()  throws BusinessException{
         List<IThesaurusListNode> result = new ArrayList<IThesaurusListNode>();
 
         for(Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
