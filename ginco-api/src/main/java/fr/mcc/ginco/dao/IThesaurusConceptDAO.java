@@ -43,12 +43,20 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
 
 	/**
-	 * Gets the ThesaurusConcept whiche are not top term given
+	 * Gets the list of ThesaurusConcept which are not top term given
 	 * a thesaurusID
-	 * @param thesaurusId
+	 * @param thesaurus object Thesaurus
 	 * @return
+     * @throws BusinessException in case of error.
 	 */
 	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus) throws BusinessException ;
-		
-	
+
+    /**
+     * Gets the list of ThesaurusConcept which are top term given
+     * a thesaurusID
+     * @param thesaurus object Thesaurus
+     * @return
+     * @throws BusinessException in case of error.
+     */
+	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus) throws BusinessException;
 }
