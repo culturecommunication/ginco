@@ -16,6 +16,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 		this.newTermFromConceptBtn(theButton, true);
 	},
 	
+	newTermFromConceptNonPrefBtn : function(theButton){
+		this.newTermFromConceptBtn(theButton, false);
+	},
+	
 	newTermFromConceptBtn : function(theButton, prefered) {
 		var thePanel = theButton.up('conceptPanel');
 		var win = Ext.create('GincoApp.view.CreateTermWin');
@@ -69,6 +73,9 @@ Ext.define('GincoApp.controller.ConceptController', {
  			},
  			'conceptPanel #newTermFromConceptPrefBtn' : {
 				click : this.newTermFromConceptPrefBtn
+			},
+			'conceptPanel #newTermFromConceptNonPrefBtn' : {
+				click : this.newTermFromConceptNonPrefBtn
 			},
 			'form #saveTermFromConcept' : {
 				click : this.saveTermFromConceptBtn

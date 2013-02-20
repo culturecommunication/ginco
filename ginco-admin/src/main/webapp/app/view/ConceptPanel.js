@@ -133,7 +133,7 @@ Ext
 																						items : [
 																								{
 																									xtype : 'menuitem',
-																									disabled : true,
+																									itemId : 'newTermFromConceptNonPrefBtn',
 																									text : me.xCreateTerm
 																								},
 																								{
