@@ -95,10 +95,6 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
-	
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusService")
@@ -144,23 +140,6 @@ public class ThesaurusRestService {
 
 	}
 	
-	/**
-	 * Public method used to get list of orphans concepts of one given thesaurus
-	 * 
-	 * @return list of objects, if not found - {@code null}
-	 * @throws BusinessException 
-	 */
-	@GET
-	@Path("/getOrphansConcepts")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<ThesaurusConcept>> getOrphansConcepts(
-			@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
-		logger.info("Getting Orphan Concepts");
-		logger.info("thesaurusId = " + thesaurusId);
-		List<ThesaurusConcept> orphans = thesaurusConceptService.getOrphanThesaurusConcepts(thesaurusId);		
-		return new ExtJsonFormLoadData<List<ThesaurusConcept>>(orphans);
-
-	}
 
 	/**
 	 * Public method used to get list of all existing ThesaurusFormat objects in

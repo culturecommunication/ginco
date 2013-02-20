@@ -34,52 +34,31 @@
  */
 package fr.mcc.ginco.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
- * Util desined to deal with Date/String/Timestamp convertions.
+ * utility class to get objects labels
+ * 
  */
-public final class DateUtil {
-	
-    //DateUtil is an utility class => declaring its constructor as private 
-	private DateUtil() {
+public class LabelUtil {
+
+	private static final String LANGUAGE_SEPARATOR = "@";
+
+	/**
+	 * Return the label of a concept based on a term
+	 * 
+	 * @param preferredTerm
+	 * @param defaultLang
+	 * @return the term lexical value + @ language if the language is not the
+	 *         specified default language
+	 */
+	public static final String getConceptLabel(ThesaurusTerm preferredTerm,
+			String defaultLang) {
+		String conceptLabel = preferredTerm.getLexicalValue();
+		if (!defaultLang.equals(preferredTerm.getLanguage().getId())) {
+			conceptLabel += LANGUAGE_SEPARATOR
+					+ preferredTerm.getLanguage().getId();
+		}
+		return conceptLabel;
 	}
-
-	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    /**
-     * Converts Date to String.
-     * @param date object to convert.
-     * @return String in format yyyy-MM-dd HH:mm:ss.
-     */
-    public static String toString(Date date) {
-        if(date != null) {
-            return formatter.format(date);
-        }
-        return null;
-    }
-
-    /**
-     * Parse String to Date object.
-     * @param date String in format yyyy-MM-dd HH:mm:ss.
-     * @return Date object or {@code null} if wrong format.
-     */
-    public static Date dateFromString(String date) {
-        try {
-            return formatter.parse(date);
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Get current time.
-     * @return Date object.
-     */
-    public static Date nowDate() {
-        return GregorianCalendar.getInstance().getTime();
-    }
 }

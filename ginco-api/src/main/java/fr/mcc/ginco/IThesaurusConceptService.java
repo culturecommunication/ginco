@@ -35,6 +35,7 @@
 package fr.mcc.ginco;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 import java.util.List;
@@ -58,6 +59,16 @@ public interface IThesaurusConceptService {
      * @param thesaurusId
      * @return
      */
-    List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId) throws BusinessException ;
+    List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId) throws BusinessException ;    
+    
+  
+	/**
+	 * Gets the preferred term of a concept
+	 * @param conceptId
+	 * @return
+	 * @throws BusinessException
+	 */
+	ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException;
+
 
 }

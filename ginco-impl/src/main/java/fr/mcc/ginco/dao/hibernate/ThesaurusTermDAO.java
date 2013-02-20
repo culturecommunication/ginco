@@ -83,4 +83,13 @@ public class ThesaurusTermDAO extends
 				.setProjection(Projections.rowCount())
 				.list().get(0);
 	}
+	
+	@Override
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId){
+		return (ThesaurusTerm) getCurrentSession()
+				.createCriteria(ThesaurusTerm.class)
+				.add(Restrictions.eq("conceptId.identifier", conceptId))
+				.add(Restrictions.eq("prefered", Boolean.TRUE))
+				.list().get(0);
+	}
 }

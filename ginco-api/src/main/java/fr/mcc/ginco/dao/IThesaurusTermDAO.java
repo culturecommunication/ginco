@@ -60,5 +60,13 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
      * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
      */
 	Long countSandboxedTerms(String idThesaurus);
+	
+	/**
+	 * Returns the preferred ThesaurusTerm of a concept
+	 * @param conceptId
+	 * @return
+	 */
+	ThesaurusTerm getConceptPreferredTerm(String conceptId);
+
 
 }

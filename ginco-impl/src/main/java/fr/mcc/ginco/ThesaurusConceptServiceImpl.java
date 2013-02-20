@@ -45,8 +45,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
@@ -68,6 +70,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
     @Inject
     @Named("thesaurusDAO")
     private IThesaurusDAO thesaurusDAO;
+    
+    @Inject
+    @Named("thesaurusTermDAO")
+	private IThesaurusTermDAO thesaurusTermDAO;
 
 
     /*
@@ -102,4 +108,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
 		}
     	return thesaurusConceptDAO.getOrphansThesaurusConcept(thesaurus);
     }
+
+	@Override
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
+		ThesaurusTerm preferredTerm = thesaurusTermDAO.getConceptPreferredTerm(conceptId);
+		if (preferredTerm == null ) {
+			throw new BusinessException("The concept "
+					+ conceptId + "has no preferred term");
+		}
+		return preferredTerm;
+	}
 }

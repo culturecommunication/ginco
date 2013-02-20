@@ -32,54 +32,8 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.utils;
+package fr.mcc.ginco.tests.extjs.view.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
+public class OrphansGeneratorTest {
 
-/**
- * Util desined to deal with Date/String/Timestamp convertions.
- */
-public final class DateUtil {
-	
-    //DateUtil is an utility class => declaring its constructor as private 
-	private DateUtil() {
-	}
-
-	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    /**
-     * Converts Date to String.
-     * @param date object to convert.
-     * @return String in format yyyy-MM-dd HH:mm:ss.
-     */
-    public static String toString(Date date) {
-        if(date != null) {
-            return formatter.format(date);
-        }
-        return null;
-    }
-
-    /**
-     * Parse String to Date object.
-     * @param date String in format yyyy-MM-dd HH:mm:ss.
-     * @return Date object or {@code null} if wrong format.
-     */
-    public static Date dateFromString(String date) {
-        try {
-            return formatter.parse(date);
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Get current time.
-     * @return Date object.
-     */
-    public static Date nowDate() {
-        return GregorianCalendar.getInstance().getTime();
-    }
 }
