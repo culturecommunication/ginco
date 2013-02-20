@@ -69,6 +69,14 @@ public interface IThesaurusConceptService {
 	 * @throws BusinessException
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException;
-
+	
+	
+	/**
+	 * Gets the label of a concept
+	 * @param conceptId
+	 * @return
+	 * @throws BusinessException
+	 */
+	String getConceptLabel(String conceptId) throws BusinessException;
 
 }

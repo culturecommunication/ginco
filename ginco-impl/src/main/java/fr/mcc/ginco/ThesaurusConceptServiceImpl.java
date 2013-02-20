@@ -40,6 +40,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,71 +52,84 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.LabelUtil;
 
 /**
- * Implementation of the thesaurus concept service.
- * Contains methods relatives to the ThesaurusConcept object
+ * Implementation of the thesaurus concept service. Contains methods relatives
+ * to the ThesaurusConcept object
  */
 @Transactional
 @Service("thesaurusConceptService")
-public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
+public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Log
 	private Logger logger;
-	
-    @Inject
-    @Named("thesaurusConceptDAO")
-    private IThesaurusConceptDAO thesaurusConceptDAO;
-    
-    @Inject
-    @Named("thesaurusDAO")
-    private IThesaurusDAO thesaurusDAO;
-    
-    @Inject
-    @Named("thesaurusTermDAO")
+
+	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
+
+	@Inject
+	@Named("thesaurusDAO")
+	private IThesaurusDAO thesaurusDAO;
+
+	@Inject
+	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
 
+	@Value("${ginco.default.language}")
+	private String defaultLang;
 
-    /*
+	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptList()
 	 */
-    @Override
-    public List<ThesaurusConcept> getThesaurusConceptList() {
-        return thesaurusConceptDAO.findAll();
-    }
+	@Override
+	public List<ThesaurusConcept> getThesaurusConceptList() {
+		return thesaurusConceptDAO.findAll();
+	}
 
-    /*
+	/*
 	 * (non-Javadoc)
-	 *
-	 * @see fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang.String)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang
+	 * .String)
 	 */
-    @Override
-    public ThesaurusConcept getThesaurusConceptById(String id) {
-        return thesaurusConceptDAO.getById(id);
-    }
-    
-    @Override
-    public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId) throws BusinessException {
-    	Thesaurus thesaurus = thesaurusDAO.getById(thesaurusId);
+	@Override
+	public ThesaurusConcept getThesaurusConceptById(String id) {
+		return thesaurusConceptDAO.getById(id);
+	}
+
+	@Override
+	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId)
+			throws BusinessException {
+		Thesaurus thesaurus = thesaurusDAO.getById(thesaurusId);
 		if (thesaurus == null) {
-			throw new BusinessException("Invalid thesaurusId : "
-					+ thesaurusId);
+			throw new BusinessException("Invalid thesaurusId : " + thesaurusId);
 		} else {
 			logger.info("thesaurus found");
 
 		}
-    	return thesaurusConceptDAO.getOrphansThesaurusConcept(thesaurus);
-    }
+		return thesaurusConceptDAO.getOrphansThesaurusConcept(thesaurus);
+	}
 
 	@Override
-	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
-		ThesaurusTerm preferredTerm = thesaurusTermDAO.getConceptPreferredTerm(conceptId);
-		if (preferredTerm == null ) {
-			throw new BusinessException("The concept "
-					+ conceptId + "has no preferred term");
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
+			throws BusinessException {
+		ThesaurusTerm preferredTerm = thesaurusTermDAO
+				.getConceptPreferredTerm(conceptId);
+		if (preferredTerm == null) {
+			throw new BusinessException("The concept " + conceptId
+					+ "has no preferred term");
 		}
 		return preferredTerm;
+	}
+
+	@Override
+	public String getConceptLabel(String conceptId) throws BusinessException {
+		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
+		return LabelUtil.getConceptLabel(term, defaultLang);
 	}
 }
