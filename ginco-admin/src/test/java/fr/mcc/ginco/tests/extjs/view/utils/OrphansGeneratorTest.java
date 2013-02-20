@@ -34,6 +34,34 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import fr.mcc.ginco.IThesaurusConceptService;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
+import fr.mcc.ginco.tests.LoggerTestUtil;
+
 public class OrphansGeneratorTest {
 
+	@Mock(name = "thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
+	@InjectMocks
+	private OrphansGenerator orphanGenerator = new OrphansGenerator();
+
+	@Before
+	public final void setUp() {
+		MockitoAnnotations.initMocks(this);
+		LoggerTestUtil.initLogger(orphanGenerator);
+	}
+	
+	@Test
+	public void testGenerateOrphans() throws BusinessException {
+		orphanGenerator.generateOrphans("toto");
+	}
+	
 }

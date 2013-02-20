@@ -39,7 +39,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -56,9 +55,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.ReflectionUtils;
 
 import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusFormatService;
@@ -70,8 +66,8 @@ import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.rest.services.ThesaurusRestService;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class ThesaurusRestServiceTest {
@@ -94,22 +90,7 @@ public class ThesaurusRestServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		ReflectionUtils.doWithFields(thesaurusRestService.getClass(),
-				new ReflectionUtils.FieldCallback() {
-
-					public void doWith(Field field)
-							throws IllegalArgumentException,
-							IllegalAccessException {
-						ReflectionUtils.makeAccessible(field);
-
-						if (field.getAnnotation(Log.class) != null) {
-							Logger logger = LoggerFactory
-									.getLogger(thesaurusRestService.getClass());
-							field.set(thesaurusRestService, logger);
-						}
-					}
-				});
-
+		LoggerTestUtil.initLogger(thesaurusRestService);
 	}
 
 	/**

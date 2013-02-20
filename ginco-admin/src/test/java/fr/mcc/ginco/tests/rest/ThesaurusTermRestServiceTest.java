@@ -39,7 +39,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +50,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.ReflectionUtils;
 
 import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusService;
@@ -65,8 +61,8 @@ import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.rest.services.ThesaurusTermRestService;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusTermRestServiceTest{
 	
@@ -86,19 +82,7 @@ public class ThesaurusTermRestServiceTest{
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		 ReflectionUtils.doWithFields(thesaurusTermRestService.getClass(), new ReflectionUtils.FieldCallback() {
-
-	            public void doWith(Field field) throws IllegalArgumentException,
-	                    IllegalAccessException {
-	                ReflectionUtils.makeAccessible(field);
-
-	                if (field.getAnnotation(Log.class) != null) {
-	                    Logger logger = LoggerFactory.getLogger(thesaurusTermRestService.getClass());
-	                    field.set(thesaurusTermRestService, logger);
-	                }
-	            }
-	        });
-		 
+		LoggerTestUtil.initLogger(thesaurusTermRestService);
 	}
 	/**
 	 * Test to get all Thesaurus Sandboxed Items method
