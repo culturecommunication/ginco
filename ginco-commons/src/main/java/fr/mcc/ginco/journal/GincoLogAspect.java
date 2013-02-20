@@ -61,7 +61,7 @@ public class GincoLogAspect {
 	private Logger log;
 
 	/**
-	 * Service class to manipualte LogJournal
+	 * Service class to manipulate LogJournal
 	 */
 	@Inject
 	@Named("logJournalService")
@@ -92,9 +92,15 @@ public class GincoLogAspect {
 			Object[] args = pjp.getArgs();
 			for (Object arg : args) {
 				if (arg instanceof IBaseBean) {
-					entityId = ((IBaseBean) arg).getId();
+					IBaseBean baseBean = (IBaseBean) arg;
+					if (baseBean.getId() != null) {
+						entityId = ((IBaseBean) arg).getId();
+					}
 				} else if (arg instanceof IUser) {
-					author = ((IUser) arg).getName();
+					IUser usr = (IUser) arg;
+					if (usr.getName() != null) {
+						author = ((IUser) arg).getName();
+					}
 				}
 			}
 			log.debug("Saving new LogJournal entry =  {");
@@ -106,6 +112,7 @@ public class GincoLogAspect {
 			if (!"".equals(entityId) && !"".equals(author)) {
 				logJournalService.addLogJournalEntry(action, entityId,
 						entityType, author);
+				log.info("New LogJournal entry has been saved");
 			} else {
 				log.warn("Some data are missing in order to process correctly the GincoLog annotation");
 				log.warn("Datas are : {");
