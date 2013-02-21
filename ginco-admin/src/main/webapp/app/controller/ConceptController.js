@@ -2,6 +2,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	extend:'Ext.app.Controller',
 	
 	views : [ 'ConceptPanel' ],
+	stores : [ 'MainTreeStore' ],
 	
 	onConceptFormRender : function(theForm){
 		var thePanel = theForm.up('conceptPanel');
@@ -122,7 +123,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg('Succès',
 						'Le concept a été enregistré!');
-				//update treeview needed ?
+				
+				var MainTreeStore = this.getMainTreeStoreStore();
+				MainTreeStore.load();
 			},
 			failure : function() {
 				theForm.getEl().unmask();
