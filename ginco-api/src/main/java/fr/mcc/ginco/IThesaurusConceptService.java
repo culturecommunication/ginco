@@ -84,6 +84,10 @@ public interface IThesaurusConceptService {
      */
     ThesaurusConcept createThesaurusConcept(ThesaurusConcept object, IUser user);
     
+	 /**
+     * Update a single Thesaurus Concept Object
+     */
+    ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object, IUser user);
 
     /**
      * Get the ThesaurusConcepts which are top term in a given thesaurus

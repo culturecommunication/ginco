@@ -188,5 +188,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
 	public ThesaurusConcept createThesaurusConcept(ThesaurusConcept object, IUser user) {
     	return thesaurusConceptDAO.update(object);
     }
+	
+	@GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUSCONCEPT)
+	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object, IUser user) {
+    	return thesaurusConceptDAO.update(object);
+    }
 
 }

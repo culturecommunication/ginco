@@ -142,8 +142,9 @@ public class ThesaurusConceptRestService {
 			logger.info("Creating a new concept in DB");
 			returnConcept = thesaurusConceptService.createThesaurusConcept(convertedConcept, user);
 		} else {
-			//Case of existing concept - not yet implemented
-			//concept = thesaurusConceptService.updateThesaurusConcept(concept, user);
+			//Case of existing concept
+			logger.info("Updating an existing concept in DB");
+			returnConcept = thesaurusConceptService.updateThesaurusConcept(convertedConcept, user);
 		}
 		
 		//We save or update the terms
@@ -154,8 +155,9 @@ public class ThesaurusConceptRestService {
 				thesaurusTerm.setConceptId(returnConcept);
 				returnTerms.add(thesaurusTermService.createThesaurusTerm(thesaurusTerm, user));
 			} else {
-				//Case of existing term - not yet implemented
-				//term = thesaurusTermService.updateThesaurusConcept(concept, user);
+				//Case of existing term
+				logger.info("Updating an existing term in DB");
+				returnTerms.add(thesaurusTermService.updateThesaurusTerm(thesaurusTerm, user));
 			}
 		}
 		
