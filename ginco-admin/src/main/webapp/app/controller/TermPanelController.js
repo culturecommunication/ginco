@@ -53,12 +53,14 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		termPanel.setTitle(aModel.data.lexicalValue);
 		aForm.setTitle(aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
+		termPanel.termId = aModel.data.identifier;
 		deleteBtn.setDisabled(false);
 	},
 
 	saveForm : function(theButton) {
 		var me = this;
 		var theForm = theButton.up('form');
+		var thePanel = theForm.up('termPanel');
 		if (theForm.getForm().isValid()) {
 			theForm.getEl().mask(me.xLoading);
 			theForm.getForm().updateRecord();
@@ -69,6 +71,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils
 							.msg(me.xSucessLabel, me.xSucessSavedMsg);
+					me.application.fireEvent('termupdated',thePanel.thesaurusData);
 				},
 				failure : function() {
 					theForm.getEl().unmask();
@@ -99,6 +102,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 						success : function(record, operation) {
 							Thesaurus.ext.utils.msg(me.xSucessLabel,
 									me.xSucessRemovedMsg);
+							me.application.fireEvent('termdeleted',thePanel.thesaurusData);
 							globalTabs.remove(thePanel);
 						},
 						failure : function() {
