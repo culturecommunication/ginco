@@ -34,16 +34,21 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Value;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.utils.DateUtil;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.utils.LanguageComparator;
 
 /**
  * View class corresponding to {@link Thesaurus} bean, but fully serializable;
@@ -54,6 +59,10 @@ import java.util.List;
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusView implements Serializable {
+	
+	@Value("${ginco.default.language}")
+	private String defaultLang;
+	
 	private String id;
 	private String contributor;
 	private String coverage;
@@ -74,49 +83,7 @@ public class ThesaurusView implements Serializable {
 
 	private List<String> languages = new ArrayList<String>();
 
-    public ThesaurusView() {}
-
-	public ThesaurusView(Thesaurus source) {
-		if (source != null) {
-			this.id = source.getIdentifier();
-			this.contributor = source.getContributor();
-			this.coverage = source.getCoverage();
-
-            if(source.getDate() != null) {
-                this.date = DateUtil.toString(source.getDate());
-            }
-			this.description = source.getDescription();
-			this.publisher = source.getPublisher();
-			this.relation = source.getRelation();
-			this.rights = source.getRights();
-			this.source = source.getSource();
-			this.subject = source.getSubject();
-			this.title = source.getTitle();
-			this.created = DateUtil.toString(source.getCreated());
-
-			if (source.getCreator() != null) {
-				this.creatorName = source.getCreator().getName();
-				this.creatorHomepage = source.getCreator().getHomepage();
-			}
-			if (source.isDefaultTopConcept() != null) {
-				this.defaultTopConcept = source.isDefaultTopConcept();
-			} else {
-				this.defaultTopConcept = false;
-				}
-			if (source.getFormat() != null) {
-				this.format = source.getFormat().getIdentifier();
-			}
-			if (source.getType() != null) {
-				this.type = source.getType().getIdentifier();
-			}
-
-			ArrayList<String> langList = new ArrayList<String>();
-			for (Language lang : source.getLang()) {
-				langList.add(lang.getId());
-			}
-			this.languages = langList;
-		}
-	}
+    public ThesaurusView() {}	
 
 	public String getId() {
 		return id;

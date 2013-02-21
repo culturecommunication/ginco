@@ -36,6 +36,7 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -70,28 +71,7 @@ public class Thesaurus implements Serializable, IBaseBean {
     private Set<ThesaurusTerm> thesaurusesTerms  = new HashSet<ThesaurusTerm>();
 
     public Thesaurus() {
-    }
-
-    public Thesaurus(String identifier, String contributor, String coverage,
-                     Date date, String description, String publisher, String relation,
-                     String rights, String source, String subject, String title,
-                     Date created, ThesaurusFormat format, ThesaurusType type, ThesaurusOrganization creator) {
-        this.identifier = identifier;
-        this.contributor = contributor;
-        this.coverage = coverage;
-        this.date = new Timestamp(date.getTime());
-        this.description = description;
-        this.publisher = publisher;
-        this.relation = relation;
-        this.rights = rights;
-        this.source = source;
-        this.subject = subject;
-        this.title = title;
-        this.created = new Timestamp(created.getTime());
-        this.format = format;
-        this.type = type;
-        this.creator = creator;
-    }
+    }   
 
     public String getIdentifier() {
         return identifier;

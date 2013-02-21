@@ -34,9 +34,7 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -61,17 +59,15 @@ import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTypeService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.users.SimpleUserImpl;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
@@ -104,6 +100,9 @@ public class ThesaurusRestService {
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
 	
+	@Inject
+	@Named("thesaurusViewConverter")
+	private ThesaurusViewConverter thesaurusViewConverter;
 
 	@Log
 	private Logger logger;
@@ -171,7 +170,7 @@ public class ThesaurusRestService {
 	@Path("/getVocabulary")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusView getVocabularyById(@QueryParam("id") String id) {
-		return new ThesaurusView(thesaurusService.getThesaurusById(id));
+		return thesaurusViewConverter.convert(thesaurusService.getThesaurusById(id));
 	}
 
 	/**
@@ -185,8 +184,8 @@ public class ThesaurusRestService {
 	@POST
 	@Path("/updateVocabulary")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
-		Thesaurus object = convert(thesaurusViewJAXBElement);
+	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
+		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 		String principal = "unknown";
 		if (context != null) {
 			principal = context.getHttpServletRequest().getRemoteAddr();
@@ -204,67 +203,12 @@ public class ThesaurusRestService {
 			}
 
             if (result != null) {
-                view = new ThesaurusView(result);
+                view = thesaurusViewConverter.convert(result);
 			} else {
 				logger.error("Failed to update thesaurus");
 			}
 		}
 		return view;
 	}
-
-	private Thesaurus convert(ThesaurusView source) {
-		Thesaurus hibernateRes;
-
-		if ("".equals(source.getId())) {
-			hibernateRes = new Thesaurus();
-			hibernateRes.setCreated(DateUtil.nowDate());
-		} else {
-			hibernateRes = thesaurusService.getThesaurusById(source.getId());
-		}
-
-		hibernateRes.setContributor(source.getContributor());
-		hibernateRes.setCoverage(source.getCoverage());
-		hibernateRes.setDate(DateUtil.nowDate());
-		hibernateRes.setDescription(source.getDescription());
-		hibernateRes.setPublisher(source.getPublisher());
-		hibernateRes.setRelation(source.getRelation());
-		hibernateRes.setRights(source.getRights());
-		hibernateRes.setSource(source.getSource());
-		hibernateRes.setSubject(source.getSubject());
-		hibernateRes.setTitle(source.getTitle());
-		hibernateRes.setDefaultTopConcept(source.getDefaultTopConcept());
-		hibernateRes.setFormat(thesaurusFormatService
-				.getThesaurusFormatById(source.getFormat()));
-		hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source
-				.getType()));
-		ThesaurusOrganization thesaurusOrganization;
-		if (StringUtils.isNotEmpty(source.getCreatorName())
-				|| StringUtils.isNotEmpty(source.getCreatorHomepage())) {
-			if (hibernateRes.getCreator() != null) {
-				thesaurusOrganization = hibernateRes.getCreator();
-			} else {
-				thesaurusOrganization = new ThesaurusOrganization();
-			}
-			thesaurusOrganization.setName(source.getCreatorName());
-			thesaurusOrganization.setHomepage(source.getCreatorHomepage());
-			hibernateRes.setCreator(thesaurusOrganization);
-		} else {
-			if (hibernateRes.getCreator() != null) {
-				hibernateRes.setCreator(null);
-			}
-		}
-		List<String> languages = source.getLanguages();
-		Set<Language> realLanguages = new HashSet<Language>();
-
-		for (String language : languages) {
-			Language lang = languagesService.getLanguageById(language);
-			if (lang != null) {
-				realLanguages.add(lang);
-			}
-		}
-
-		hibernateRes.setLang(realLanguages);
-
-		return hibernateRes;
-	}
+	
 }
