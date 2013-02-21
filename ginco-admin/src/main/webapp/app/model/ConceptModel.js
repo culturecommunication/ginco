@@ -38,7 +38,8 @@ Ext.define('GincoApp.model.ConceptModel', {
 		},
 		type : 'ajax',
 		reader : {
-			type : 'json'
+			type : 'json',
+			messageProperty: 'message'
 		},
 		writer : {
 			type : 'json'

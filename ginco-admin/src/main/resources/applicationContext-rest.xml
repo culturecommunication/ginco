@@ -23,6 +23,7 @@
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider"  />
+            <bean class="fr.mcc.ginco.rest.services.BusinessExceptionMapper"/>  
         </jaxrs:providers>
     </jaxrs:server>
 </beans>

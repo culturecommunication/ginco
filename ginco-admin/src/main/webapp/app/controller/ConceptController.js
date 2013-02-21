@@ -126,10 +126,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 				
 				me.application.fireEvent('conceptupdated');
 			},
-			failure : function() {
+			failure : function(record, operation) {
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg('Problème',
-						"Impossible d'enregistrer le concept !");
+						"Impossible d'enregistrer le concept ! "+operation.error);
 			}
 		});
 	},
