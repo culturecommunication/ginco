@@ -138,9 +138,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 				me.application.fireEvent('conceptupdated');
 			},
 			failure : function(record, operation) {
-				console.log(operation);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
 				theForm.getEl().unmask();
-				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
 			}
 		});
 	},
