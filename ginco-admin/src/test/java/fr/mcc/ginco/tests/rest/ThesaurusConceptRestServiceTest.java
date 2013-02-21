@@ -37,6 +37,9 @@ package fr.mcc.ginco.tests.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -47,25 +50,43 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.IThesaurusConceptService;
+import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTermService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
+import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusConceptRestService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
+import fr.mcc.ginco.users.SimpleUserImpl;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class ThesaurusConceptRestServiceTest {
+	
+	
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
+	
+	@Inject
+	@Named("thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
 	
 	@Mock(name="thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 	
 	@InjectMocks
 	private ThesaurusConceptRestService thesaurusConceptRestService = new ThesaurusConceptRestService();
+	
+    @Inject
+    @Named("termViewConverter")
+    private TermViewConverter termViewConverter;
 	
 	
 	@Before
@@ -80,25 +101,35 @@ public class ThesaurusConceptRestServiceTest {
 	 * @throws BusinessException 
 	 */
 	/*@Test
-	public final void putNewConceptWithTwoTermsWithOnePrefered() throws BusinessException {
+	public final void putNewConceptTopWithOnlyOneTermWhichIsPrefered() throws BusinessException {
 		ThesaurusTerm fakeTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm1");
-		ThesaurusTerm fakeTerm2 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm2");
 		fakeTerm1.setPrefered(true);
 		
 		ThesaurusTermView fakeTermView1 = new ThesaurusTermView(fakeTerm1);
-		ThesaurusTermView fakeTermView2 = new ThesaurusTermView(fakeTerm2);
 		
+		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+		terms.add(fakeTerm1);
 		List<ThesaurusTermView> termViews = new ArrayList<ThesaurusTermView>();
 		termViews.add(fakeTermView1);
-		termViews.add(fakeTermView2);
 		
-		//ThesaurusConcept fakeThesaurusConcept = getFakeThesaurusConceptWithNonMandatoryEmptyFields("");
-		ThesaurusConceptView fakeConceptView = new ThesaurusConceptView("", "", "", "", termViews);
+		ThesaurusConcept fakeThesaurusConcept = getFakeThesaurusConceptWithNonMandatoryEmptyFields("fakeConcept1");
+		ThesaurusConceptView fakeConceptView = new ThesaurusConceptView("", "", "", "1",termViews);
 		
-		//Mockito.when(thesaurusConceptService.getThesaurusConceptById("fakeConcept1")).thenReturn(fakeThesaurusConcept);
+		String principal = "unknown";
+		IUser user = new SimpleUserImpl();
+		user.setName(principal);
+		
+		//Mockito.when(thesaurusConceptService.getThesaurusConceptById("")).thenReturn(fakeThesaurusConcept);
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("1");
+		Mockito.when(thesaurusService.getThesaurusById("1")).thenReturn(fakeThesaurus);
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class))).thenReturn(fakeTerm1);
+		Mockito.when(thesaurusTermService.getPreferedTerms(terms)).thenReturn(terms);
+		Mockito.when(thesaurusConceptService.createThesaurusConcept(Mockito.any(ThesaurusConcept.class), Mockito.any(IUser.class))).thenReturn(fakeThesaurusConcept);
+		Mockito.when(thesaurusTermService.updateThesaurusTerm(Mockito.any(ThesaurusTerm.class), Mockito.any(IUser.class))).thenReturn(fakeTerm1);
 		
 		ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);
-		Assert.assertEquals(fakeConceptView.getIdentifier(), actualResponse.getIdentifier());
+		Assert.assertEquals(fakeConceptView.getTerms().get(0).getIdentifier(), actualResponse.getTerms().get(0).getIdentifier());
 		
 	}*/
 	
