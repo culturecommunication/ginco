@@ -30,6 +30,7 @@ Ext.define('GincoApp.view.TermPanel', {
    
     initComponent: function() {
         var me = this;
+
         
         Ext.applyIf(me, {
         	title: me.xTermPanelTitle,

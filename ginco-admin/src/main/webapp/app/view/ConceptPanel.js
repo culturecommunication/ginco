@@ -41,6 +41,7 @@ Ext
 
 					initComponent : function() {
 						var me = this;
+						me.conceptTermStore = Ext.create('GincoApp.store.ThesaurusTermStore');
 
 						Ext
 								.applyIf(
@@ -105,6 +106,7 @@ Ext
 														{
 															xtype : 'gridpanel',
 															title : me.xTermListGridTitle,
+															store : me.conceptTermStore,
 
 															dockedItems : [ {
 																xtype : 'toolbar',

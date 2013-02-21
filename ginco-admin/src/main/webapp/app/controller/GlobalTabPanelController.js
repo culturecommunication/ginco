@@ -2,7 +2,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
 
-	views : [ 'ThesaurusPanel', 'TermPanel' ],
+	views : [ 'ThesaurusPanel', 'TermPanel', 'ConceptPanel' ],
 	xSaveMsgLabel : 'Do you want to save changes?',
 	xSaveMsgTitle : 'Save changes?',
 	onPanelBeforeClose : function(thePanel) {
@@ -47,6 +47,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 				beforeclose : this.onPanelBeforeClose
 			},
 			'termPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'conceptPanel' : {
 				beforeclose : this.onPanelBeforeClose
 			}
 		});
