@@ -92,12 +92,13 @@ CREATE INDEX fki_concept_thesaurus
 
 CREATE TABLE thesaurus_term_role
 (
-  identifier integer NOT NULL,
-  role text NOT NULL
+  code text NOT NULL,
+  label text NOT NULL,
+  defaultrole boolean NOT NULL
 );
 
 ALTER TABLE ONLY thesaurus_term_role
-    ADD CONSTRAINT pk_role_identifier PRIMARY KEY (identifier);
+    ADD CONSTRAINT pk_role_identifier PRIMARY KEY (code);
 
 CREATE SEQUENCE role_identifier_seq
     START WITH 1
@@ -106,15 +107,17 @@ CREATE SEQUENCE role_identifier_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER SEQUENCE role_identifier_seq OWNED BY thesaurus_term_role.identifier;
-
 -- Temp hack to add foreign key
 UPDATE thesaurus_term SET role = null;
+
+ALTER TABLE thesaurus_term DROP COLUMN role;
+
+ALTER TABLE thesaurus_term ADD COLUMN role text;
 
 -- ALTER TABLE thesaurus_term DROP CONSTRAINT fk_term_thesaurus_concept;
 ALTER TABLE thesaurus_term
   ADD CONSTRAINT fk_term_thesaurus_term_role FOREIGN KEY (role)
-      REFERENCES thesaurus_term_role (identifier) MATCH SIMPLE
+      REFERENCES thesaurus_term_role (code) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 CREATE INDEX idx_thesaurus_term_role

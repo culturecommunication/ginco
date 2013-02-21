@@ -147,7 +147,7 @@
 			<value>test</value>
 			<value>false</value>
 			<value>1</value>
-			<value>1</value>
+            <null />
 			<null />
 			<value>1</value>
 			<value>aaa</value>
@@ -160,7 +160,7 @@
 			<value>test</value>
 			<value>true</value>
 			<value>1</value>
-			<value>1</value>
+            <null />
             <null />
 			<value>1</value>
 			<value>aaa</value>

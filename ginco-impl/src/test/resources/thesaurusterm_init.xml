@@ -60,7 +60,7 @@
 			<value>revolver</value>
 			<value>false</value>
 			<value>0</value>
-			<value>0</value>
+            <null />
             <null />
 			<value>http://www.culturecommunication.gouv.fr/th1</value>		
 			<value>eng</value>				
@@ -73,7 +73,7 @@
 			<value>revolver</value>
 			<value>false</value>
 			<value>0</value>
-			<value>0</value>
+            <null />
 			<null />
 			<value>http://www.culturecommunication.gouv.fr/th1</value>	
 			<value>eng</value>
@@ -86,7 +86,7 @@
 			<value>revolver</value>
 			<value>false</value>
 			<value>0</value>
-			<value>0</value>
+            <null />
             <null />
 			<value>http://www.culturecommunication.gouv.fr/th1</value>
 			<value>eng</value>
@@ -99,7 +99,7 @@
 			<value>revolver</value>
 			<value>false</value>
 			<value>0</value>
-			<value>0</value>
+            <null />
             <value>http://www.culturecommunication.gouv.fr/co1</value>
 			<value>http://www.culturecommunication.gouv.fr/th3</value>
 			<value>eng</value>
@@ -112,7 +112,7 @@
 			<value>revolver</value>
 			<value>false</value>
 			<value>0</value>
-			<value>0</value>
+            <null />
             <null />
 			<value>http://www.culturecommunication.gouv.fr/th3</value>
 			<value>eng</value>
