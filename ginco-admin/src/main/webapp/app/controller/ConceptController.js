@@ -4,6 +4,18 @@ Ext.define('GincoApp.controller.ConceptController', {
 	views : [ 'ConceptPanel' ],
 	stores : [ 'MainTreeStore' ],
 	
+	localized : true,
+	
+	xLoading : 'Loading',
+	xDeleteMsgLabel : 'Are you sure to delete this concept?',
+	xDeleteMsgTitle : 'Delete this concept?',
+	xSucessLabel : 'Success!',
+	xSucessSavedMsg : 'Concept saved successfully',
+	xSucessRemovedMsg : 'Concept removed successfully',
+	xProblemLabel : 'Error !',
+	xProblemSaveMsg : 'Unable to save this concept!',
+	xProblemDeleteMsg : 'Unable to delete this concept!',
+	
 	onConceptFormRender : function(theForm){
 		var thePanel = theForm.up('conceptPanel');
 		thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
@@ -113,7 +125,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var theStore = theGrid.getStore();
 		var termsData = theStore.getRange();
 		
-		theForm.getEl().mask("Chargement");
+		theForm.getEl().mask(me.xLoading);
 		var updatedModel = theForm.getForm().getRecord();
 		updatedModel.terms().add(termsData);
 		updatedModel.save({
@@ -121,15 +133,14 @@ Ext.define('GincoApp.controller.ConceptController', {
 				var resultRecord = operation.getResultSet().records[0];
 				me.loadData(theForm, resultRecord);
 				theForm.getEl().unmask();
-				Thesaurus.ext.utils.msg('Succès',
-						'Le concept a été enregistré!');
+				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
 				
 				me.application.fireEvent('conceptupdated');
 			},
-			failure : function() {
+			failure : function(record, operation) {
+				console.log(operation);
 				theForm.getEl().unmask();
-				Thesaurus.ext.utils.msg('Problème',
-						"Impossible d'enregistrer le concept !");
+				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
 			}
 		});
 	},
