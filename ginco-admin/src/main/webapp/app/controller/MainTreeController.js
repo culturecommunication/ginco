@@ -3,6 +3,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 
 	views : [ 'LeftPanel' ],
 	stores : [ 'MainTreeStore' ],
+	xProblemLabel : 'Problem',
+	xProblemLoadMsg : 'Unable to load thesaurus tree',
 
 	onNodeDblClick : function(tree, aRecord, item, index, e, eOpts) {
 		if (aRecord.data.type == "THESAURUS") {
@@ -62,8 +64,40 @@ Ext.define('GincoApp.controller.MainTreeController', {
 
 	},
 	onTreeRender : function(theTree) {
+		this.loadTreeView();
+
+	},
+	loadTreeView : function() {
 		var me = this;
+		var MainTreeStore = this.getMainTreeStoreStore();
+		MainTreeStore.load({
+				callback: function (theStore, aOperation){
+					if (aOperation.success==false)
+					{
+						Thesaurus.ext.utils.msg(me.xProblemLabel,
+								me.xProblemLoadMsg+ " : "+ aOperation.error.statusText);
+					} else{
+						this.getRootNode().expand();
+					}
+					
+			        
+			    }
+		});
+	},
+	onRefreshBtnClick : function() {
+		this.loadTreeView();
+	},
+	onTreeLoad : function()
+	{
 		
+		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
+		
+		theTree.getView().focus();
+		try {
+			theTree.getSelectionModel().select(0);
+		} catch(e) {}
+		
+		var me = this;
 		this.nav = new Ext.util.KeyNav({
 			target : theTree.getEl(),
 
@@ -72,23 +106,12 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			},
 			scope : me
 		});
-
-	},
-	onRefreshBtnClick : function() {
-		var MainTreeStore = this.getMainTreeStoreStore();
-		MainTreeStore.load();
-	},
-	onTreeLoad : function()
-	{
-		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
-		theTree.getView().focus();
-		theTree.getSelectionModel().select(0);
 	},
 	init : function(application) {
 		this.control({
 			"#mainTreeView" : {
 				beforeitemdblclick : this.onNodeDblClick,
-				afterrender : this.onTreeRender,
+				render : this.onTreeRender,
 				load : this.onTreeLoad
 			},
 			'#mainTreeView tool[type="refresh"]' : {
