@@ -38,16 +38,29 @@ import java.util.Comparator;
 
 import fr.mcc.ginco.beans.Language;
 
-public class LanguageComparator implements Comparator<Language>{
+/**
+ * Compares Language, ordered by default language first, then alphabetical order
+ * on the language refname
+ * 
+ */
+public class LanguageComparator implements Comparator<Language> {
 
-	private String defaultLanguage;	
-	
-	
+	private String defaultLanguage;
+
+	/**
+	 * Constructs a new language comparator with a default language
+	 * @param defaultLanguage default application language
+	 */
 	public LanguageComparator(String defaultLanguage) {
 		super();
 		this.defaultLanguage = defaultLanguage;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
 	@Override
 	public int compare(Language o1, Language o2) {
 		if (o1.getId().equals(defaultLanguage)) {
@@ -56,11 +69,11 @@ public class LanguageComparator implements Comparator<Language>{
 			} else {
 				return 1;
 			}
-		}else if (o2.getId().equals(defaultLanguage)) {			
-				return -1;			
-		}else {
+		} else if (o2.getId().equals(defaultLanguage)) {
+			return -1;
+		} else {
 			return o2.getRefname().compareTo(o1.getRefname());
-		}		
+		}
 	}
 
 }
