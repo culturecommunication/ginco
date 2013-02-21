@@ -88,3 +88,23 @@ CREATE INDEX fki_concept_thesaurus
   ON thesaurus_concept
   USING btree
   (thesaurusid COLLATE pg_catalog."default");
+
+
+CREATE TABLE role
+(
+  identifier integer NOT NULL,
+  role text NOT NULL
+);
+
+ALTER TABLE ONLY role
+    ADD CONSTRAINT pk_role_identifier PRIMARY KEY (identifier);
+
+CREATE SEQUENCE role_identifier_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE role_identifier_seq OWNED BY role.identifier;
+
