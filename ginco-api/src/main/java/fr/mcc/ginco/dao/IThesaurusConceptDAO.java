@@ -59,4 +59,21 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @throws BusinessException in case of error.
      */
 	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus) throws BusinessException;
+	
+	
+	/**
+	 * Gets the number of orphan concepts for a given thesaurus
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
+	long getOrphansThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+
+	/**
+	 * Gets the number of top concept for a given thesaurus
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
+	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
 }

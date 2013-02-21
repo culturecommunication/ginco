@@ -43,6 +43,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import ch.qos.logback.classic.Logger;
+import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
@@ -56,15 +57,11 @@ public class FolderGenerator {
 	public static final String ORPHANS_PREFIX = ClassificationFolderType.ORPHANS
 			.toString() + "_";
 	public static final String CONCEPTS_PREFIX = ClassificationFolderType.CONCEPTS
-			.toString() + "_";
-
+			.toString() + "_";	
+	
 	@Inject
-	@Named("orphansGenerator")
-	private OrphansGenerator orphansGenerator;
-
-	@Inject
-	@Named("topTermGenerator")
-	private TopTermGenerator topTermGenerator;
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 	@Log
 	private Logger logger;
@@ -89,7 +86,12 @@ public class FolderGenerator {
 		concepts.setId(CONCEPTS_PREFIX + parentId);
 		concepts.setType(ThesaurusListNodeType.FOLDER);
 		concepts.setExpanded(false);
-		concepts.setChildren(null);
+		long nbTopConcepts = thesaurusConceptService.getTopTermThesaurusConceptsCount(parentId);
+		if (nbTopConcepts > 0) {
+			concepts.setChildren(null);
+		} else {
+			concepts.setChildren(new ArrayList<IThesaurusListNode>());
+		}
 		list.add(concepts);
 
 		IThesaurusListNode sandbox = new ThesaurusListBasicNode();
@@ -106,8 +108,12 @@ public class FolderGenerator {
 		orphans.setId(ORPHANS_PREFIX + parentId);
 		orphans.setType(ThesaurusListNodeType.FOLDER);
 		orphans.setExpanded(false);
-		orphans.setChildren(null);
-
+		long nbOrphans = thesaurusConceptService.getOrphanThesaurusConceptsCount(parentId);
+		if (nbOrphans > 0) {
+			orphans.setChildren(null);
+		} else {
+			orphans.setChildren(new ArrayList<IThesaurusListNode>());
+		}
 		list.add(orphans);
 
 		IThesaurusListNode groups = new ThesaurusListBasicNode();
