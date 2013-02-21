@@ -17,6 +17,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 
 	loadPanel : function(theForm) {
 		var me = this;
+		var termPanel = theForm.up('termPanel');
+		var thesaurusData = theForm.up('termPanel').thesaurusData;
+		
 		var model = this.getThesaurusTermModelModel();
 		var termId = theForm.up('termPanel').termId;
 		if (termId != null) {
@@ -38,6 +41,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			model = Ext.create('GincoApp.model.ThesaurusTermModel');
 			model.data.thesaurusId = theForm.up('termPanel').thesaurusData.id;
 			model.data.identifier = "";
+			model.data.language=thesaurusData.languages[0];
+			
 			theForm.loadRecord(model);
 		}
 	},
