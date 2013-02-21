@@ -34,57 +34,63 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.LabelUtil;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Generator in charge of building top term concepts
+ */
 @Component(value = "topTermGenerator")
 public class TopTermGenerator {
 
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-    @Log
-    private Logger logger;
+	@Log
+	private Logger logger;
 
-    /**
-     * Creates categorization folders.
-     *
-     * @param parentId id of top node.
-     * @return created list of folders.
-     */
-    public List<IThesaurusListNode> generateTopTerm(String parentId)
-            throws BusinessException {
-        logger.debug("Generating top term concepts list");
-        List<ThesaurusConcept> topTerms = thesaurusConceptService
-                .getTopTermThesaurusConcepts(parentId);
-        logger.debug(topTerms.size() + " top terms found");
+	/**
+	 * Creates the list of top concepts for a givent thesaurusId
+	 * 
+	 * @param parentId
+	 *            id of top node.
+	 * @return created list of leafs.
+	 */
+	public List<IThesaurusListNode> generateTopTerm(String parentId)
+			throws BusinessException {
+		logger.debug("Generating top term concepts list for parentId : "
+				+ parentId);
+		List<ThesaurusConcept> topTerms = thesaurusConceptService
+				.getTopTermThesaurusConcepts(parentId);
+		logger.debug(topTerms.size() + " top terms found");
 
-        List<IThesaurusListNode> newOrphans = new ArrayList<IThesaurusListNode>();
-        for (ThesaurusConcept topTerm : topTerms) {
-            ThesaurusListBasicNode topTermNode = new ThesaurusListBasicNode();
-            topTermNode.setTitle(thesaurusConceptService.getConceptLabel(topTerm
-                    .getIdentifier()));
-            topTermNode.setId(topTerm.getIdentifier());
-            topTermNode.setType(ThesaurusListNodeType.CONCEPT);
-            topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
-            newOrphans.add(topTermNode);
-        }
-        return newOrphans;
-    }
+		List<IThesaurusListNode> topConcepts = new ArrayList<IThesaurusListNode>();
+		for (ThesaurusConcept topTerm : topTerms) {
+			ThesaurusListBasicNode topTermNode = new ThesaurusListBasicNode();
+			topTermNode.setTitle(thesaurusConceptService
+					.getConceptLabel(topTerm.getIdentifier()));
+			topTermNode.setId(topTerm.getIdentifier());
+			topTermNode.setType(ThesaurusListNodeType.CONCEPT);
+			topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
+			topTermNode.setLeaf(true);
+
+			topConcepts.add(topTermNode);
+		}
+		return topConcepts;
+	}
 }

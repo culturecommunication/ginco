@@ -41,24 +41,71 @@ import java.util.List;
 /**
  * Interface for generic node in list of nodes.
  */
-public interface IThesaurusListNode {
+public interface IThesaurusListNode {	
+	
+    /**
+     * @return true if the node should be expanded by default.
+     */
     boolean isExpanded();
-
+   
+    /**
+     * sets whether the node should be expanded by default
+     * @param expanded
+     */
     void setExpanded(boolean expanded);
 
+    /**
+     * @return the list of all node children
+     */
     List<IThesaurusListNode> getChildren();
 
+    /**
+     * sets the list of all node children
+     * @param children
+     */
     void setChildren(List<IThesaurusListNode> children);
 
+    /**
+     * @return the node title displayed to the user
+     */
     String getTitle();
 
+    /**
+     * sets the node title displayed to the user
+     * @param title
+     */
     void setTitle(String title);
 
+    /**
+     * @return  the node type
+     */
     ThesaurusListNodeType getType();
 
+    /**
+     * Sets the node type
+     * @param type
+     */
     void setType(ThesaurusListNodeType type);
 
+    /**
+     * @return the service tag (not visible in UI)
+     */
     String getId();
 
+    /**
+     * Sets the service tag (not visible in UI.)
+     * @param id
+     */
     void setId(String id);
+    
+    /**
+     * @return true if the current node is a leaf
+     */
+    boolean isLeaf();
+
+	/**
+	 * Sets whether the currentnode is a leaf
+	 * @param leaf
+	 */
+	void setLeaf(boolean leaf);
 }

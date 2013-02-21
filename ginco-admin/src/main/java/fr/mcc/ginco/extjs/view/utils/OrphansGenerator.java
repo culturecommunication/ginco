@@ -41,7 +41,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.IThesaurusConceptService;
@@ -53,7 +52,7 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
 
 /**
- * Genrator in charge of building concept orphans list
+ * Generator in charge of building concept orphans list
  */
 @Component(value = "orphansGenerator")
 public class OrphansGenerator {
@@ -70,11 +69,11 @@ public class OrphansGenerator {
 	 * 
 	 * @param parentId
 	 *            id of the thesaurus.
-	 * @return created list of folders.
+	 * @return created list of leafs.
 	 */
 	public List<IThesaurusListNode> generateOrphans(String parentId)
 			throws BusinessException {
-		logger.debug("Generating orphans concepts list");
+		logger.debug("Generating orphans concepts list for vocabularyId : " + parentId);
 		List<ThesaurusConcept> orphans = thesaurusConceptService
 				.getOrphanThesaurusConcepts(parentId);
 		logger.debug(orphans.size() + " orphans found");
@@ -86,7 +85,9 @@ public class OrphansGenerator {
 					.getIdentifier()));
 			orphanNode.setId(orphan.getIdentifier());
 			orphanNode.setType(ThesaurusListNodeType.CONCEPT);
+			orphanNode.setExpanded(false);
 			orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
+			orphanNode.setLeaf(true);
 			newOrphans.add(orphanNode);
 		}
 		return newOrphans;

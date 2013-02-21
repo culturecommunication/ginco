@@ -17,7 +17,7 @@ Ext.define('GincoApp.store.MainTreeStore', {
             model: 'GincoApp.model.MainTreeModel',
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/baseservice/getVocabularies',
+                url: 'services/ui/baseservice/getTreeContent',
                 reader: {
                     type: 'json'
                 }
