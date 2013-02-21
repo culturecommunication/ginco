@@ -62,58 +62,112 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
      * Type of visual node.
      */
     private ThesaurusListNodeType nodeType;
+    
+    /**
+     * if the node is a leaf.
+     */
+    private boolean leaf;
+    
+    
 
     public ThesaurusListBasicNode() {
 
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#isExpanded()
+     */
     @Override
     public boolean isExpanded() {
         return expanded;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setExpanded(boolean)
+     */
     @Override
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getChildren()
+     */
     @Override
     public List<IThesaurusListNode> getChildren() {
         return children;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setChildren(java.util.List)
+     */
     @Override
     public void setChildren(List<IThesaurusListNode> children) {
         this.children = children;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getTitle()
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setTitle(java.lang.String)
+     */
     @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getType()
+     */
     @Override
     public ThesaurusListNodeType getType() {
         return nodeType;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setType(fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType)
+     */
     @Override
     public void setType(ThesaurusListNodeType type) {
         this.nodeType = type;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getId()
+     */
     @Override
     public String getId() {
         return id;
     }
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setId(java.lang.String)
+     */
     @Override
     public void setId(String id) {
         this.id = id;
     }
+
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#isLeaf()
+	 */
+	public boolean isLeaf() {
+		return leaf;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setLeaf(boolean)
+	 */
+	public void setLeaf(boolean leaf) {
+		this.leaf = leaf;
+	}
+    
+    
 }

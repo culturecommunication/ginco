@@ -67,6 +67,16 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 				.getOrphansThesaurusConcept(th);
 		Assert.assertEquals(2,actualConcepts.size());
 	}
+	
+	@Test
+	public void testGetOrphansThesaurusConceptCount() throws BusinessException {
+		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+		Thesaurus th = new Thesaurus();
+		th.setIdentifier(thesaurusId);
+		long actualCount = thesaurusConceptDAO
+				.getOrphansThesaurusConceptCount(th);
+		Assert.assertEquals(2,actualCount);
+	}
 
     @Test
     public void testGetTopTermThesaurusConcept() throws BusinessException {
@@ -76,6 +86,15 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
         List<ThesaurusConcept> actualConcepts = thesaurusConceptDAO
                 .getTopTermThesaurusConcept(th);
         Assert.assertEquals(1,actualConcepts.size());
+    }
+    @Test
+    public void testGetTopTermThesaurusConceptCount() throws BusinessException {
+        String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier(thesaurusId);
+        long actualCount = thesaurusConceptDAO
+                .getTopTermThesaurusConceptCount(th);
+        Assert.assertEquals(1,actualCount);
     }
 
     @Test

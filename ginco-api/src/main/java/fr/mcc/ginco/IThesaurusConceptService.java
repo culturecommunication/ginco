@@ -91,4 +91,22 @@ public interface IThesaurusConceptService {
      * @return
      */
     List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId) throws BusinessException ;
+    
+    /**
+     * Get the number of orphan thesaurus concept for a given thesaurusId
+     * @param thesaurusId
+     * @return
+     * @throws BusinessException
+     */
+    long getOrphanThesaurusConceptsCount(String thesaurusId) throws BusinessException;
+    
+    /**
+     * Get the number of top concept for a given thesaurus
+     * @param thesaurusId
+     * @return
+     * @throws BusinessException
+     */
+    long getTopTermThesaurusConceptsCount(String thesaurusId) throws BusinessException;
+
+
 }

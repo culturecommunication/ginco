@@ -29,6 +29,10 @@
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusVersionHistory" />
 	</bean>
 
+    <bean id="thesaurusTermRoleDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
+        <constructor-arg value="fr.mcc.ginco.beans.ThesaurusTermRole" />
+    </bean>
+
 <!-- 
     <bean id="thesaurusConceptDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
         <constructor-arg value="fr.mcc.ginco.beans.ThesaurusConcept" />

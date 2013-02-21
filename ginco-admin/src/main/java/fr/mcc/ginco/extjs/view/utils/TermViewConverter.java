@@ -37,14 +37,11 @@ package fr.mcc.ginco.extjs.view.utils;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.mcc.ginco.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.ILanguagesService;
-import fr.mcc.ginco.IThesaurusConceptService;
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.IThesaurusTermService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -70,6 +67,10 @@ public class TermViewConverter {
     @Inject
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
+
+    @Inject
+    @Named("thesaurusTermRoleService")
+    private IThesaurusTermRoleService thesaurusTermRoleService;
 	
 	@Log
 	private Logger logger;
@@ -93,7 +94,13 @@ public class TermViewConverter {
 		hibernateRes.setSource(source.getSource());
 		hibernateRes.setPrefered(source.getPrefered());
 		hibernateRes.setStatus(source.getStatus());
-		hibernateRes.setRole(source.getRole());
+
+//          ********* RESERVED for further usage !!
+
+//        if(source.getRole() != null) {
+//            hibernateRes.setRole(thesaurusTermRoleService.getThesaurusTermRoleByCode(source.getRole()));
+//        }
+
         if(source.getConceptId() != null && !source.getConceptId().equals("")) {
             ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(source.getConceptId());
             if(concept != null) {

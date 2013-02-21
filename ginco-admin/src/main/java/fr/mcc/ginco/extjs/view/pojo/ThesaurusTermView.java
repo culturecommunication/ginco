@@ -59,7 +59,6 @@ public class ThesaurusTermView implements Serializable {
 	private String source;
 	private Boolean prefered;
 	private Integer status;
-	private Integer role;
 	private String conceptId;
 	private String thesaurusId;
 	private String language;
@@ -77,7 +76,6 @@ public class ThesaurusTermView implements Serializable {
             this.source = source.getSource();
             this.prefered = source.getPrefered();
             this.status = source.getStatus();
-            this.role = source.getRole();
 
             if(source.getConceptId() != null) {
                 this.conceptId = source.getConceptId().getId();
@@ -144,14 +142,6 @@ public class ThesaurusTermView implements Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
-	}
-
-	public Integer getRole() {
-		return role;
-	}
-
-	public void setRole(Integer role) {
-		this.role = role;
 	}
 
 	public String getConceptId() {

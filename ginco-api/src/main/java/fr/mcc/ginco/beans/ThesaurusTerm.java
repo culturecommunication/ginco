@@ -47,7 +47,7 @@ public class ThesaurusTerm implements Serializable, IBaseBean {
     private String source;
     private Boolean prefered;
     private Integer status;
-    private Integer role;
+    private ThesaurusTermRole role;
     private ThesaurusConcept conceptId;
     private Thesaurus thesaurusId;
     private Language language;
@@ -108,11 +108,11 @@ public class ThesaurusTerm implements Serializable, IBaseBean {
         this.status = status;
     }
 
-    public Integer getRole() {
+    public ThesaurusTermRole getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(ThesaurusTermRole role) {
         this.role = role;
     }
 

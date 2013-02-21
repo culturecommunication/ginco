@@ -36,10 +36,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			},
 			"#newThesaurusBtn" : {
 				click : this.onNewThesaurusBtnClick
-			},
-			/*"#newTermBtn" : {
-				click : this.onNewTermBtnClick
-			},*/
+			},			
 			"#accessibilitybtn" : {
 				click : this.onAccessibilityClick
 			}

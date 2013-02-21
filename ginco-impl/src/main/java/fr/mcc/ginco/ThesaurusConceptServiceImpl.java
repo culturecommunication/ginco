@@ -115,6 +115,19 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
 		}
     	return thesaurusConceptDAO.getOrphansThesaurusConcept(thesaurus);
     }
+    
+    @Override
+    public long getOrphanThesaurusConceptsCount(String thesaurusId) throws BusinessException {
+    	Thesaurus thesaurus = thesaurusDAO.getById(thesaurusId);
+		if (thesaurus == null) {
+			throw new BusinessException("Invalid thesaurusId : "
+					+ thesaurusId);
+		} else {
+			logger.info("thesaurus found");
+
+		}
+    	return thesaurusConceptDAO.getOrphansThesaurusConceptCount(thesaurus);
+    }
 
     /*
 	 * (non-Javadoc)
@@ -132,7 +145,21 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService  {
 
         }
         return thesaurusConceptDAO.getTopTermThesaurusConcept(thesaurus);
-    }
+    }   
+    
+    @Override
+    public long getTopTermThesaurusConceptsCount(String thesaurusId) throws BusinessException {
+        Thesaurus thesaurus = thesaurusDAO.getById(thesaurusId);
+        if (thesaurus == null) {
+            throw new BusinessException("Invalid thesaurusId : "
+                    + thesaurusId);
+        } else {
+            logger.info("thesaurus found");
+
+        }
+        return thesaurusConceptDAO.getTopTermThesaurusConceptCount(thesaurus);
+    }   
+   
 
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId)

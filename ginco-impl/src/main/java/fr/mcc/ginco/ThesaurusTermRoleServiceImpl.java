@@ -32,48 +32,29 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco;
 
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusTermRole;
+import fr.mcc.ginco.dao.IGenericDAO;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
+@Transactional
+@Service("thesaurusTermRoleService")
+public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
 
-	/**
-	 * Gets the list of ThesaurusConcept which are not top term given
-	 * a thesaurusID
-	 * @param thesaurus object Thesaurus
-	 * @return
-     * @throws BusinessException in case of error.
+    @Inject
+    @Named("thesaurusTermRoleDAO")
+    private IGenericDAO<ThesaurusTermRole, String> thesaurusTermRoleDAO;
+
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.IThesaurusTermRoleService#getThesaurusTermRoleByCode(String)
 	 */
-	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus) throws BusinessException ;
-
-    /**
-     * Gets the list of ThesaurusConcept which are top term given
-     * a thesaurusID
-     * @param thesaurus object Thesaurus
-     * @return
-     * @throws BusinessException in case of error.
-     */
-	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus) throws BusinessException;
-	
-	
-	/**
-	 * Gets the number of orphan concepts for a given thesaurus
-	 * @param thesaurus
-	 * @return
-	 * @throws BusinessException
-	 */
-	long getOrphansThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
-
-	/**
-	 * Gets the number of top concept for a given thesaurus
-	 * @param thesaurus
-	 * @return
-	 * @throws BusinessException
-	 */
-	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+    @Override
+    public ThesaurusTermRole getThesaurusTermRoleByCode(String code) {
+        return thesaurusTermRoleDAO.getById(code);
+    }
 }

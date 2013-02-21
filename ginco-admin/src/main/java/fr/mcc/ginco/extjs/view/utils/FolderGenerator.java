@@ -42,64 +42,90 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import ch.qos.logback.classic.Logger;
+import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.log.Log;
 
-@Component(value="folderGenerator")
+@Component(value = "folderGenerator")
 public class FolderGenerator {
 
-	@Inject
-	@Named("orphansGenerator")
-    private OrphansGenerator orphansGenerator;
-
-    @Inject
-    @Named("topTermGenerator")
-    private TopTermGenerator topTermGenerator;
+	public static final String ORPHANS_PREFIX = ClassificationFolderType.ORPHANS
+			.toString() + "_";
+	public static final String CONCEPTS_PREFIX = ClassificationFolderType.CONCEPTS
+			.toString() + "_";	
 	
-    /**
-     * Creates categorization folders.
-     * @param parentId id of top node.
-     * @return created list of folders.
-     */
-    public List<IThesaurusListNode> generateFolders(String parentId)  throws BusinessException {
-        List<IThesaurusListNode> list = new ArrayList<IThesaurusListNode>();
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-        IThesaurusListNode concepts = new ThesaurusListBasicNode();
-        concepts.setTitle("Arborescence des concepts");
-        concepts.setId(ClassificationFolderType.CONCEPTS.toString() + "_" + parentId);
-        concepts.setType(ThesaurusListNodeType.FOLDER);
-        concepts.setExpanded(false);
-        concepts.setChildren(topTermGenerator.generateTopTerm(parentId));
-        list.add(concepts);
+	@Log
+	private Logger logger;
 
-        IThesaurusListNode sandbox = new ThesaurusListBasicNode();
-        sandbox.setTitle("Bac à sable");
-        sandbox.setId(ClassificationFolderType.SANDBOX.toString() + "_" + parentId);
-        sandbox.setType(ThesaurusListNodeType.FOLDER);
-        sandbox.setExpanded(false);
-        sandbox.setChildren(new ArrayList<IThesaurusListNode>());
-        list.add(sandbox);
+	/**
+	 * Creates categorization folders.
+	 * 
+	 * @param parentId
+	 *            id of top node.
+	 * @return created list of folders.
+	 */
+	public List<IThesaurusListNode> generateFolders(String parentId)
+			throws BusinessException {
+		logger.debug("Calling FolderGenerator.generateFolders with parameters : {");
+		logger.debug("	parentId : " + parentId);
+		logger.debug("	} ");
 
-        IThesaurusListNode orphans = new ThesaurusListBasicNode();
-        orphans.setTitle("Concepts orphelins");
-        orphans.setId(ClassificationFolderType.ORPHANS.toString() + "_" + parentId);
-        orphans.setType(ThesaurusListNodeType.FOLDER);
-        orphans.setExpanded(true);        	
-        orphans.setChildren(orphansGenerator.generateOrphans(parentId));
-        list.add(orphans);        
+		List<IThesaurusListNode> list = new ArrayList<IThesaurusListNode>();
 
-        IThesaurusListNode groups = new ThesaurusListBasicNode();
-        groups.setTitle("Groupes");
-        groups.setId(ClassificationFolderType.GROUPS.toString() + "_" + parentId);
-        groups.setType(ThesaurusListNodeType.FOLDER);
-        groups.setExpanded(false);
-        groups.setChildren(new ArrayList<IThesaurusListNode>());
-        list.add(groups);
+		IThesaurusListNode concepts = new ThesaurusListBasicNode();
+		concepts.setTitle("Arborescence des concepts");
+		concepts.setId(CONCEPTS_PREFIX + parentId);
+		concepts.setType(ThesaurusListNodeType.FOLDER);
+		concepts.setExpanded(false);
+		long nbTopConcepts = thesaurusConceptService.getTopTermThesaurusConceptsCount(parentId);
+		if (nbTopConcepts > 0) {
+			concepts.setChildren(null);
+		} else {
+			concepts.setChildren(new ArrayList<IThesaurusListNode>());
+		}
+		list.add(concepts);
 
-        return list;
-    }
+		IThesaurusListNode sandbox = new ThesaurusListBasicNode();
+		sandbox.setTitle("Bac à sable");
+		sandbox.setId(ClassificationFolderType.SANDBOX.toString() + "_"
+				+ parentId);
+		sandbox.setType(ThesaurusListNodeType.FOLDER);
+		sandbox.setExpanded(false);
+		sandbox.setChildren(new ArrayList<IThesaurusListNode>());
+		list.add(sandbox);
+
+		IThesaurusListNode orphans = new ThesaurusListBasicNode();
+		orphans.setTitle("Concepts orphelins");
+		orphans.setId(ORPHANS_PREFIX + parentId);
+		orphans.setType(ThesaurusListNodeType.FOLDER);
+		orphans.setExpanded(false);
+		long nbOrphans = thesaurusConceptService.getOrphanThesaurusConceptsCount(parentId);
+		if (nbOrphans > 0) {
+			orphans.setChildren(null);
+		} else {
+			orphans.setChildren(new ArrayList<IThesaurusListNode>());
+		}
+		list.add(orphans);
+
+		IThesaurusListNode groups = new ThesaurusListBasicNode();
+		groups.setTitle("Groupes");
+		groups.setId(ClassificationFolderType.GROUPS.toString() + "_"
+				+ parentId);
+		groups.setType(ThesaurusListNodeType.FOLDER);
+		groups.setExpanded(false);
+		groups.setChildren(new ArrayList<IThesaurusListNode>());
+		list.add(groups);
+
+		return list;
+	}
 
 }

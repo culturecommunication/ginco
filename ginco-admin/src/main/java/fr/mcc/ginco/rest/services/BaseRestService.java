@@ -42,17 +42,21 @@ import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
+import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -61,35 +65,59 @@ import fr.mcc.ginco.beans.Thesaurus;
 @Service
 @Path("/baseservice")
 public class BaseRestService {
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
-    @Inject
-    @Named("folderGenerator")
-    private FolderGenerator folderGenerator;
+	@Inject
+	@Named("folderGenerator")
+	private FolderGenerator folderGenerator;
+
+	@Inject
+	@Named("orphansGenerator")
+	private OrphansGenerator orphansGenerator;
+
+	@Inject
+	@Named("topTermGenerator")
+	private TopTermGenerator topTermGenerator;
 
 	/**
-     * Public method used to get list of all existing Thesaurus objects
-     * in database.
-     *
-     * @return list of objects, if not found - {@code null}
-     */
-    @GET
-    @Path("/getVocabularies")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<IThesaurusListNode> getVocabularies()  throws BusinessException{
-        List<IThesaurusListNode> result = new ArrayList<IThesaurusListNode>();
+	 * Public method used to get list of all existing Thesaurus objects in
+	 * database.
+	 * 
+	 * @return list of objects, if not found - {@code null}
+	 */
+	@GET
+	@Path("/getTreeContent")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<IThesaurusListNode> getTreeContent(
+			@QueryParam("id") String nodeParam) throws BusinessException {
+		List<IThesaurusListNode> result;
+		if (nodeParam.startsWith(FolderGenerator.ORPHANS_PREFIX)) {
+			String vocId = getIdFromParam(nodeParam,
+					FolderGenerator.ORPHANS_PREFIX);
+			result = orphansGenerator.generateOrphans(vocId);
+		} else if (nodeParam.startsWith(FolderGenerator.CONCEPTS_PREFIX)) {
+			String vocId = getIdFromParam(nodeParam,
+					FolderGenerator.CONCEPTS_PREFIX);
+			result = topTermGenerator.generateTopTerm(vocId);
+		} else {
+			result = new ArrayList<IThesaurusListNode>();
+			for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
+				IThesaurusListNode node = new ThesaurusListBasicNode();
+				node.setExpanded(false);
+				node.setTitle(thesaurus.getTitle());
+				node.setId(thesaurus.getIdentifier());
+				node.setType(ThesaurusListNodeType.THESAURUS);
+				node.setChildren(folderGenerator.generateFolders(thesaurus
+						.getId()));
+				result.add(node);
+			}
+		}
+		return result;
+	}
 
-        for(Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
-            IThesaurusListNode node = new ThesaurusListBasicNode();
-            node.setExpanded(false);
-            node.setTitle(thesaurus.getTitle());
-            node.setId(thesaurus.getIdentifier());
-            node.setType(ThesaurusListNodeType.THESAURUS);
-            node.setChildren(folderGenerator.generateFolders(thesaurus.getId()));
-            result.add(node);
-        }
-        return result;
-    }
+	private String getIdFromParam(String param, String prefix) {
+		return param.substring(param.indexOf(prefix) + prefix.length());
+	}
 }

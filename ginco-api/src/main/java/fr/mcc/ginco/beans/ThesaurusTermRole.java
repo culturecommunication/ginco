@@ -32,48 +32,40 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.beans;
 
-import java.util.List;
+public class ThesaurusTermRole implements IBaseBean {
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
+    private String code;
+    private String label;
+    private boolean defaultRole;
 
-public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
+    @Override
+    public String getId() {
+        return getCode();
+    }
 
-	/**
-	 * Gets the list of ThesaurusConcept which are not top term given
-	 * a thesaurusID
-	 * @param thesaurus object Thesaurus
-	 * @return
-     * @throws BusinessException in case of error.
-	 */
-	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus) throws BusinessException ;
+    public String getCode() {
+        return code;
+    }
 
-    /**
-     * Gets the list of ThesaurusConcept which are top term given
-     * a thesaurusID
-     * @param thesaurus object Thesaurus
-     * @return
-     * @throws BusinessException in case of error.
-     */
-	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus) throws BusinessException;
-	
-	
-	/**
-	 * Gets the number of orphan concepts for a given thesaurus
-	 * @param thesaurus
-	 * @return
-	 * @throws BusinessException
-	 */
-	long getOrphansThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	/**
-	 * Gets the number of top concept for a given thesaurus
-	 * @param thesaurus
-	 * @return
-	 * @throws BusinessException
-	 */
-	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public boolean getDefaultRole() {
+        return defaultRole;
+    }
+
+    public void setDefaultRole(boolean defaultRole) {
+        this.defaultRole = defaultRole;
+    }
 }

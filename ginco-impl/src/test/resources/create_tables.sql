@@ -7,8 +7,11 @@ DROP TABLE IF EXISTS languages_iso639;
 DROP TABLE IF EXISTS thesaurus_organization;
 DROP TABLE IF EXISTS log_journal;
 DROP TABLE IF EXISTS thesaurus_term;
+DROP TABLE IF EXISTS thesaurus_term_role;
 DROP TABLE IF EXISTS thesaurus_concept;
+
 DROP SEQUENCE IF EXISTS log_journal_identifier_seq;
+DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
 CREATE TABLE thesaurus
 (
@@ -81,6 +84,12 @@ CREATE TABLE thesaurus_concept
   thesaurusid text
 );
 
+CREATE TABLE thesaurus_term_role (
+    code text NOT NULL,
+    label text NOT NULL,
+    defaultrole boolean NOT NULL
+);
+
 CREATE TABLE thesaurus_term
 (
   identifier text NOT NULL,
@@ -90,7 +99,7 @@ CREATE TABLE thesaurus_term
   source text,
   prefered boolean,
   status integer,
-  role integer,
+  role text,
   conceptid text,
   thesaurusid text NOT NULL,
   lang character varying(3) NOT NULL
@@ -99,6 +108,10 @@ CREATE TABLE thesaurus_term
 ALTER TABLE thesaurus_term
     ADD FOREIGN KEY (conceptid)
     REFERENCES thesaurus_concept (identifier);
+
+ALTER TABLE thesaurus_term
+    ADD FOREIGN KEY (role)
+    REFERENCES thesaurus_term_role (code);
 
 ALTER TABLE thesaurus_concept
     ADD FOREIGN KEY (thesaurusid)

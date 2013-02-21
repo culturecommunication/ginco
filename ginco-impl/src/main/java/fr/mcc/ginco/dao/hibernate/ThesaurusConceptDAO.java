@@ -63,7 +63,6 @@ import fr.mcc.ginco.log.Log;
 public class ThesaurusConceptDAO extends
 		GenericHibernateDAO<ThesaurusConcept, String> implements
 		IThesaurusConceptDAO {
-	
 
 	public ThesaurusConceptDAO(Class<ThesaurusConcept> clazz) {
 		super(clazz);
@@ -76,38 +75,72 @@ public class ThesaurusConceptDAO extends
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConcept
+	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConcept
 	 */
 	@Override
 	public List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus)
-			throws BusinessException {		
+			throws BusinessException {
 		return getListByThesaurusAndTopConcept(thesaurus, false);
 	}
-
-    /*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConcept
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConceptCount(fr.mcc.ginco.beans.Thesaurus)
 	 */
-    @Override
-    public List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus)
-            throws BusinessException {
-        return getListByThesaurusAndTopConcept(thesaurus, true);
-    }
+	@Override
+	public long getOrphansThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException {
+		return getListByThesaurusAndTopConceptCount(thesaurus, false);
+	}
 
-    private List<ThesaurusConcept> getListByThesaurusAndTopConcept(Thesaurus thesaurus, boolean topConcept)
-        throws BusinessException {
 
-        if(thesaurus == null) {
-            throw new BusinessException("Object thesaurus can't be null !");
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConcept
+	 */
+	@Override
+	public List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus)
+			throws BusinessException {
+		return getListByThesaurusAndTopConcept(thesaurus, true);
+	}
 
-        Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
-        criteria.add(Restrictions.eq("tc.thesaurus.identifier", thesaurus.getId()));
-        criteria.add(Restrictions.eq("topConcept", topConcept));
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConceptCount(fr.mcc.ginco.beans.Thesaurus)
+	 */
+	@Override
+	public long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException {
+		return getListByThesaurusAndTopConceptCount(thesaurus, true);
+	}
 
-        return criteria.list();
-    }
+	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
+			Thesaurus thesaurus, boolean topConcept) throws BusinessException {
+
+		if (thesaurus == null) {
+			throw new BusinessException("Object thesaurus can't be null !");
+		}
+
+		return getCriteriaByThesaurusAndTopConcept(thesaurus, topConcept)
+				.list();
+	}
+
+	private long getListByThesaurusAndTopConceptCount(Thesaurus thesaurus,
+			boolean topConcept) throws BusinessException {
+
+		if (thesaurus == null) {
+			throw new BusinessException("Object thesaurus can't be null !");
+		}
+		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
+				topConcept).setProjection(Projections.rowCount());
+		return (Long) crit.list().get(0);
+	}
+
+	private Criteria getCriteriaByThesaurusAndTopConcept(Thesaurus thesaurus,
+			boolean topConcept) {
+
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConcept.class, "tc");
+		criteria.add(Restrictions.eq("tc.thesaurus.identifier",
+				thesaurus.getId()));
+		criteria.add(Restrictions.eq("topConcept", topConcept));
+		return criteria;
+	}
 }

@@ -12,8 +12,8 @@
 		<property name="source" />
 		<property name="prefered" />
 		<property name="status" />
-		<property name="role" />
-		
+
+        <many-to-one name="role" column="role" lazy="false" />
 		<many-to-one name="language" column="lang" lazy="false" />
 		<many-to-one name="thesaurusId" column="thesaurusid" lazy="false"/>
         <many-to-one name="conceptId" column="conceptid" lazy="false" />

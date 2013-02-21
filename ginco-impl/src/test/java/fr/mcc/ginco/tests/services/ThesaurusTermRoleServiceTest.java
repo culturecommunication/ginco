@@ -32,48 +32,38 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.tests.services;
 
-import java.util.List;
+import fr.mcc.ginco.IThesaurusTermRoleService;
+import fr.mcc.ginco.beans.ThesaurusTermRole;
+import fr.mcc.ginco.tests.BaseServiceTest;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
+import javax.inject.Inject;
 
-public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
+@TransactionConfiguration
+@Transactional
+public class ThesaurusTermRoleServiceTest extends BaseServiceTest {
 
-	/**
-	 * Gets the list of ThesaurusConcept which are not top term given
-	 * a thesaurusID
-	 * @param thesaurus object Thesaurus
-	 * @return
-     * @throws BusinessException in case of error.
-	 */
-	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus) throws BusinessException ;
+    @Inject
+    private IThesaurusTermRoleService thesaurusTermRoleService;
 
-    /**
-     * Gets the list of ThesaurusConcept which are top term given
-     * a thesaurusID
-     * @param thesaurus object Thesaurus
-     * @return
-     * @throws BusinessException in case of error.
-     */
-	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus) throws BusinessException;
-	
-	
-	/**
-	 * Gets the number of orphan concepts for a given thesaurus
-	 * @param thesaurus
-	 * @return
-	 * @throws BusinessException
-	 */
-	long getOrphansThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+    @Test
+    public final void testGetThesaurusTermRole() {
+        ThesaurusTermRole actualResponse = thesaurusTermRoleService.getThesaurusTermRoleByCode("P");
+        Assert.assertEquals("Error in data !", "Partitive", actualResponse.getLabel());
+        Assert.assertEquals("Error in data !", true, actualResponse.getDefaultRole());
 
-	/**
-	 * Gets the number of top concept for a given thesaurus
-	 * @param thesaurus
-	 * @return
-	 * @throws BusinessException
-	 */
-	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+        actualResponse = thesaurusTermRoleService.getThesaurusTermRoleByCode("I");
+        Assert.assertEquals("Error in data !", "Instance", actualResponse.getLabel());
+        Assert.assertEquals("Error in data !", false, actualResponse.getDefaultRole());
+    }
+
+    @Override
+    public String getXmlDataFileInit() {
+        return "/thesaurustermrole_init.xml";
+    }
 }

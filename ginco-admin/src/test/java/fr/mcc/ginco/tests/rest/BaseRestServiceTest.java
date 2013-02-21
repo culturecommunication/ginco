@@ -52,6 +52,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.rest.services.BaseRestService;
@@ -95,7 +96,7 @@ public class BaseRestServiceTest {
         initServicesForGetVocabulariesTest(allThesaurus);
 
 		//Getting thesauruses from rest webservice method and testing
-		List<IThesaurusListNode> listThesauruses = baseRestService.getVocabularies();
+        List<IThesaurusListNode> listThesauruses = baseRestService.getTreeContent("");
 		Assert.assertEquals(3, listThesauruses.size());
 	}
 	
