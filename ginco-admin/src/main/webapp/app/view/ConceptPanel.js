@@ -10,6 +10,7 @@ Ext
 					extend : 'Ext.panel.Panel',
 
 					thesaurusData : '',
+					conceptData : '',
 
 					alias : 'widget.conceptPanel',
 					localized : true,

@@ -35,6 +35,7 @@
 package fr.mcc.ginco.extjs.view.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -75,10 +76,10 @@ public class ThesaurusConceptView implements Serializable {
 		this.setModified(concept.getModified().toString());
 		this.setTopconcept(concept.getTopConcept());
 		this.setThesaurusId(concept.getThesaurus().getIdentifier());
-		
-		/*for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
+		terms = new ArrayList<ThesaurusTermView>();
+		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			terms.add(new ThesaurusTermView(thesaurusTerm));
-		}*/
+		}
 	}
 
 	public String getIdentifier() {

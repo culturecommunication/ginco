@@ -43,6 +43,28 @@ Ext.define('GincoApp.controller.ConceptController', {
 		theStore.load();
 	},
 	
+	loadData : function(aForm, aModel) {
+		var conceptPanel = aForm.up('conceptPanel');
+		conceptPanel.conceptData = aModel.data;
+	
+		aForm.loadRecord(aModel);
+		var terms = aModel.terms().getRange();
+		
+		length = terms.length;
+		for (i = 0; i < length ; i++) {
+			
+			if (terms[i].data.prefered == true) {
+				conceptTitle = terms[i].data.lexicalValue;
+			}
+		}
+		conceptPanel.setTitle(conceptTitle);
+		
+		var theGrid = aForm.down('gridpanel');
+		var theGridStore = theGrid.getStore();
+		theGridStore.removeAll();
+		theGridStore.add(terms);
+	},
+
 	saveTermFromConceptBtn : function(theButton){
 		var theForm = theButton.up('form');
 		var theWin = theButton.up('createTermWin');
@@ -53,14 +75,31 @@ Ext.define('GincoApp.controller.ConceptController', {
 	},
 	
 	saveConcept : function(theButton){
+		var me = this;
 		var theForm = theButton.up('form');
 		var theGrid = theForm.down('gridpanel');
 		theForm.getForm().updateRecord();
 		var theStore = theGrid.getStore();
 		var termsData = theStore.getRange();
+		
+		theForm.getEl().mask("Chargement");
 		var updatedModel = theForm.getForm().getRecord();
 		updatedModel.terms().add(termsData);
-		updatedModel.save();
+		updatedModel.save({
+			success : function(record, operation) {
+				var resultRecord = operation.getResultSet().records[0];
+				me.loadData(theForm, resultRecord);
+				theForm.getEl().unmask();
+				Thesaurus.ext.utils.msg('Succès',
+						'Le concept a été enregistré!');
+				//update treeview needed ?
+			},
+			failure : function() {
+				theForm.getEl().unmask();
+				Thesaurus.ext.utils.msg('Problème',
+						"Impossible d'enregistrer le concept !");
+			}
+		});
 	},
 	
     init:function(){
