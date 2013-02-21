@@ -87,10 +87,6 @@ public class ThesaurusConceptRestService {
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
 	
-	@Inject
-	@Named("languagesService")
-	private ILanguagesService languagesService;
-
     @Inject
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
@@ -166,7 +162,7 @@ public class ThesaurusConceptRestService {
 	}
 	
 	/**
-	 * @param ThesaurusConceptView source
+	 * @param source source to work with
 	 * @return ThesaurusConcept
 	 * @throws BusinessException
 	 * This method extracts a ThesaurusConcept from a ThesaurusConceptView given in argument
@@ -198,8 +194,8 @@ public class ThesaurusConceptRestService {
 	}
 	
 	/**
-	 * @param ThesaurusConceptView source
-	 * @return List<ThesaurusTerm>
+	 * @param source source to work with
+	 * @return {@code List<ThesaurusTerm>}
 	 * @throws BusinessException
 	 * This method extracts a list of ThesaurusTerm from a ThesaurusConceptView given in argument
 	 */

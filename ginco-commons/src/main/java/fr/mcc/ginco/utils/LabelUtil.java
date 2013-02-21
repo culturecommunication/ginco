@@ -44,6 +44,9 @@ public class LabelUtil {
 
 	private static final String LANGUAGE_SEPARATOR = "@";
 
+    private LabelUtil() {
+    }
+
 	/**
 	 * Return the label of a concept based on a term
 	 * 

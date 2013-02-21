@@ -98,7 +98,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	public List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
 		List<ThesaurusTerm>  preferedTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm thesaurusTerm : listOfTerms) {
-			if (thesaurusTerm.getPrefered()==true){
+			if (thesaurusTerm.getPrefered()){
 				preferedTerms.add(thesaurusTerm);
 			}
 		}

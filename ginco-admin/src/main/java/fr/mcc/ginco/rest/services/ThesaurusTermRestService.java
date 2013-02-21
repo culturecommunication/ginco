@@ -83,27 +83,12 @@ public class ThesaurusTermRestService {
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
 	
-	@Inject
-	@Named("thesaurusService")
-	private IThesaurusService thesaurusService;
-	
-	@Inject
-	@Named("languagesService")
-	private ILanguagesService languagesService;
-
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-	
     @Inject
     @Named("termViewConverter")
     private TermViewConverter termViewConverter;
     
 	@Log
 	private Logger logger;
-	
-	
-	
 
 	/**
 	 * Public method used to get list of all existing Thesaurus terms objects in
