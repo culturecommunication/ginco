@@ -100,13 +100,6 @@ CREATE TABLE thesaurus_term_role
 ALTER TABLE ONLY thesaurus_term_role
     ADD CONSTRAINT pk_role_identifier PRIMARY KEY (code);
 
-CREATE SEQUENCE role_identifier_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
 -- Temp hack to add foreign key
 UPDATE thesaurus_term SET role = null;
 
