@@ -95,9 +95,11 @@ public class TermViewConverter {
 		hibernateRes.setPrefered(source.getPrefered());
 		hibernateRes.setStatus(source.getStatus());
 
-        if(source.getRole() != null) {
-            hibernateRes.setRole(thesaurusTermRoleService.getThesaurusTermRoleByCode(source.getRole()));
-        }
+//          ********* RESERVED for further usage !!
+
+//        if(source.getRole() != null) {
+//            hibernateRes.setRole(thesaurusTermRoleService.getThesaurusTermRoleByCode(source.getRole()));
+//        }
 
         if(source.getConceptId() != null && !source.getConceptId().equals("")) {
             ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(source.getConceptId());
