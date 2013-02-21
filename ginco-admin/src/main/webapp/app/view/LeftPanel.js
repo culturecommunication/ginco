@@ -16,6 +16,9 @@ Ext.define('GincoApp.view.LeftPanel', {
 
 	initComponent : function() {
 		var me = this;
+		this.addEvents({
+		    refreshtree: true
+		});
 
 		Ext.applyIf(me, {
 			items : [ {

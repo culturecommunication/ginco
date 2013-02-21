@@ -124,8 +124,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 				Thesaurus.ext.utils.msg('Succès',
 						'Le concept a été enregistré!');
 				
-				var MainTreeStore = this.getMainTreeStoreStore();
-				MainTreeStore.load();
+				me.application.fireEvent('conceptupdated');
 			},
 			failure : function() {
 				theForm.getEl().unmask();

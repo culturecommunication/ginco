@@ -31,10 +31,6 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
             type: 'int'
         },
         {
-            name: 'role',
-            type: 'int'
-        },
-        {
             name: 'conceptId',
             type: 'string'
         },

@@ -24,10 +24,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			theForm.loadRecord(model);
 		}
 	},
-	updateTreeView : function() {
-		var MainTreeStore = this.getMainTreeStoreStore();
-		MainTreeStore.load();
-	},
 	loadData : function(aForm, aModel) {
 		var thesaurusPanel = aForm.up('thesaurusPanel');
 		thesaurusPanel.setTitle(aModel.data.title);
@@ -71,7 +67,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils.msg('Succès',
 							'Le thesaurus a été enregistré!');
-					me.updateTreeView();
+					me.application.fireEvent('thesaurusupdated');
 				},
 				failure : function() {
 					theForm.getEl().unmask();

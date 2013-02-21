@@ -107,7 +107,17 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			scope : me
 		});
 	},
+	onRefreshTreeEvent : function()
+	{
+		Ext.log({},'onRefreshTreeEvent');
+		this.loadTreeView();
+	},
 	init : function(application) {
+		 this.application.on({
+			 	thesaurusupdated: this.onRefreshTreeEvent,
+			 	conceptupdated: this.onRefreshTreeEvent,
+		        scope: this
+		 });
 		this.control({
 			"#mainTreeView" : {
 				beforeitemdblclick : this.onNodeDblClick,
