@@ -90,13 +90,13 @@ CREATE INDEX fki_concept_thesaurus
   (thesaurusid COLLATE pg_catalog."default");
 
 
-CREATE TABLE role
+CREATE TABLE thesaurus_term_role
 (
   identifier integer NOT NULL,
   role text NOT NULL
 );
 
-ALTER TABLE ONLY role
+ALTER TABLE ONLY thesaurus_term_role
     ADD CONSTRAINT pk_role_identifier PRIMARY KEY (identifier);
 
 CREATE SEQUENCE role_identifier_seq
@@ -106,5 +106,19 @@ CREATE SEQUENCE role_identifier_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER SEQUENCE role_identifier_seq OWNED BY role.identifier;
+ALTER SEQUENCE role_identifier_seq OWNED BY thesaurus_term_role.identifier;
+
+-- Temp hack to add foreign key
+UPDATE thesaurus_term SET role = null;
+
+-- ALTER TABLE thesaurus_term DROP CONSTRAINT fk_term_thesaurus_concept;
+ALTER TABLE thesaurus_term
+  ADD CONSTRAINT fk_term_thesaurus_term_role FOREIGN KEY (role)
+      REFERENCES thesaurus_term_role (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+CREATE INDEX idx_thesaurus_term_role
+  ON thesaurus_term
+  USING btree (role);
+
 
