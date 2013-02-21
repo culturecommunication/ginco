@@ -13,12 +13,27 @@ Ext.define('GincoApp.controller.ConceptController', {
 		theForm.loadRecord(model);
 	},
 	
+	onGridRender : function(theGrid){
+		var thePanel = theGrid.up('selectTermWin');
+		var theStore= theGrid.getStore();
+		theStore.getProxy().setExtraParam('idThesaurus',thePanel.thesaurusData.id);
+		theStore.load();
+	},
+	
 	newTermFromConceptPrefBtn : function(theButton){
 		this.newTermFromConceptBtn(theButton, true);
 	},
 	
 	newTermFromConceptNonPrefBtn : function(theButton){
 		this.newTermFromConceptBtn(theButton, false);
+	},
+	
+	selectTermFromConceptPrefBtn : function(theButton){
+		this.selectTermFromConceptBtn(theButton, true);
+	},
+	
+	selectTermFromConceptNonPrefBtn : function(theButton){
+		this.selectTermFromConceptBtn(theButton, false);
 	},
 	
 	newTermFromConceptBtn : function(theButton, prefered) {
@@ -34,6 +49,21 @@ Ext.define('GincoApp.controller.ConceptController', {
 		model.data.identifier = "";
 		theForm.loadRecord(model);
 		win.show();
+	},
+	
+	selectTermFromConceptBtn : function(theButton, prefered){
+		var thePanel = theButton.up('conceptPanel');
+		var win = Ext.create('GincoApp.view.SelectTermWin');
+		var theGrid = theButton.up('gridpanel');
+		win.store = theGrid.getStore();
+		win.thesaurusData = thePanel.thesaurusData;
+		win.show();
+	},
+	
+	onSelectTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
+		var theWin = theGrid.up('selectTermWin');
+		theWin.store.add(record);
+		theWin.close();
 	},
 	
 	loadLanguages : function(theCombo) {
@@ -116,12 +146,23 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'conceptPanel #newTermFromConceptNonPrefBtn' : {
 				click : this.newTermFromConceptNonPrefBtn
 			},
+			'conceptPanel #selectTermFromConceptPrefBtn' : {
+				click : this.selectTermFromConceptPrefBtn
+			},
+			'conceptPanel #selectTermFromConceptNonPrefBtn' : {
+				click : this.selectTermFromConceptNonPrefBtn
+			},
 			'form #saveTermFromConcept' : {
 				click : this.saveTermFromConceptBtn
 			},
 			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
-			}
+			},
+			'selectTermWin gridpanel' : {
+ 				render : this.onGridRender,
+ 				itemdblclick : this.onSelectTermDblClick
+ 			}
+			
          });
     }
 });

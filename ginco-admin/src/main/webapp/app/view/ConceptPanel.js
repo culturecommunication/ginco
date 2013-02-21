@@ -130,7 +130,7 @@ Ext
 																								},
 																								{
 																									xtype : 'menuitem',
-																									disabled : true,
+																									itemId : 'selectTermFromConceptPrefBtn',
 																									text : me.xExistingTerm
 																								} ]
 																					}
@@ -148,7 +148,7 @@ Ext
 																								},
 																								{
 																									xtype : 'menuitem',
-																									disabled : true,
+																									itemId : 'selectTermFromConceptNonPrefBtn',
 																									text : me.xExistingTerm
 																								} ]
 																					}
