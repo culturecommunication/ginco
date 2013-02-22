@@ -22,7 +22,7 @@ Ext
 				    xSave: 'Save',
 					store : null,
 					width : 500,
-					height : 500,
+					height : 530,
 					title : 'Sélection d\'un terme',
 					titleAlign : 'center',
 					modal : true,
@@ -31,6 +31,7 @@ Ext
 						var me = this;
 						
 						me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
+						me.termStore.pageSize=20;
 
 						Ext
 								.applyIf(
