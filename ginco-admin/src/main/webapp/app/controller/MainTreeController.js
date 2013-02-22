@@ -21,11 +21,23 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	openConceptTab: function (aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var conceptPanel = Ext.create('GincoApp.view.ConceptPanel');
-		conceptPanel.conceptId = aRecord.data.id;
-		var tab = topTabs.add(conceptPanel);
-		topTabs.setActiveTab(tab);
-		tab.show();
+		var conceptTabs = Ext.ComponentQuery.query('topTabs conceptPanel');
+		var tabExists = false;
+		Ext.Array.each(conceptTabs,function(element, index, array) {
+			if (element.conceptId!=null && element.conceptId == aRecord.data.id) {
+				tabExists = element;
+			}
+		});
+		if (!tabExists) {
+			var conceptPanel = Ext.create('GincoApp.view.ConceptPanel');
+			conceptPanel.conceptId = aRecord.data.id;
+			var tab = topTabs.add(conceptPanel);
+			topTabs.setActiveTab(tab);
+			tab.show();
+		} else {
+			topTabs.setActiveTab(tabExists);
+		}
+		
 	},
 	openSandBoxTab : function(aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
@@ -42,8 +54,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			var tab = topTabs.add(sandBoxPanel);
 			topTabs.setActiveTab(tab);
 			tab.show();
-		}
-		else {
+		} else {
 			topTabs.setActiveTab(tabExists);
 		}
 	},
