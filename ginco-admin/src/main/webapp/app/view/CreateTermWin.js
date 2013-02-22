@@ -43,6 +43,7 @@ Ext
 														} ],
 														defaults : {
 															labelWidth : 150,
+															anchor: '90%',
 															afterLabelTextTpl : new Ext.XTemplate(
 																	'<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>',
 																	{
