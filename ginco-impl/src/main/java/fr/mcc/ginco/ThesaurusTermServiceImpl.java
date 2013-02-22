@@ -72,6 +72,11 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 			Integer limit, String idThesaurus) {
 		return thesaurusTermDAO.findPaginatedSandboxedItems(startIndex, limit, idThesaurus);
 	}
+	
+	@Override
+	public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
+		return thesaurusTermDAO.findTermsByConceptId(idConcept);
+	}
 
 	@Override
 	public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException{

@@ -91,4 +91,12 @@ public interface IThesaurusTermService {
      */
     List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms);
     
+    /**
+     * @param listOfTerms
+     * @return
+     * This method returns all the terms that belong to a concept
+     * @throws BusinessException 
+     */
+    List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;
+    
 }

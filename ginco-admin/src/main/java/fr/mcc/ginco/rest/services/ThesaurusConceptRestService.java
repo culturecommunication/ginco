@@ -40,9 +40,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -59,6 +61,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.log.Log;
@@ -99,6 +102,27 @@ public class ThesaurusConceptRestService {
 	
 	@Log
 	private Logger logger;
+	
+	/**
+	 * Public method used to get
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object by providing
+	 * its id.
+	 * 
+	 * @param id
+	 *            {@link String} identifier to try with
+	 * 
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object in JSON
+	 *         format or {@code null} if not found
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getConcept")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ThesaurusConceptView getConceptById(@QueryParam("id") String conceptId) throws BusinessException {
+		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+		terms = thesaurusTermService.getTermsByConceptId(conceptId);
+		return thesaurusConceptViewConverter.convert(thesaurusConceptService.getThesaurusConceptById(conceptId), terms);
+	}
 	
 	/**
 	 * Public method used to create or update a concept

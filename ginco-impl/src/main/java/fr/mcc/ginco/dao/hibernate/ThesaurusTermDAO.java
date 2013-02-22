@@ -104,4 +104,18 @@ public class ThesaurusTermDAO extends
 
         return list.get(0);
 	}
+
+	@Override
+	public List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException {
+		List<ThesaurusTerm> list = getCurrentSession()
+                .createCriteria(ThesaurusTerm.class)
+                .add(Restrictions.eq("conceptId.identifier", conceptId))
+                .add(Restrictions.eq("prefered", Boolean.TRUE))
+                .list();
+		if(list.size() == 0) {
+            throw new BusinessException("No term found for this concept id ! " + conceptId +
+                    "Please check your database !");
+        }
+		return list;
+	}
 }

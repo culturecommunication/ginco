@@ -68,6 +68,14 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @return
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException;
+	
+	/**
+	 * Returns a list of ThesaurusTerm that belong to the same concept (id given in parameter)
+	 * @param conceptId
+	 * @return List of ThesaurusTerm
+	 * @throws BusinessException 
+	 */
+	List<ThesaurusTerm> findTermsByConceptId(String idConcept) throws BusinessException;
 
 
 }
