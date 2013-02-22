@@ -71,8 +71,8 @@ public class ThesaurusConceptViewConverter {
 			List<ThesaurusTerm> thesaurusTerms) {
 		ThesaurusConceptView view = new ThesaurusConceptView();
 		view.setIdentifier(concept.getIdentifier());
-		view.setCreated(concept.getCreated().toString());
-		view.setModified(concept.getModified().toString());
+		view.setCreated(DateUtil.toString(concept.getCreated()));
+		view.setModified(DateUtil.toString(concept.getModified()));
 		view.setTopconcept(concept.getTopConcept());
 		view.setThesaurusId(concept.getThesaurus().getIdentifier());
 		List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
@@ -100,7 +100,6 @@ public class ThesaurusConceptViewConverter {
 		if ("".equals(source.getIdentifier())) {
 			thesaurusConcept = new ThesaurusConcept();
 			thesaurusConcept.setCreated(DateUtil.nowDate());
-			thesaurusConcept.setModified(DateUtil.nowDate());
 			logger.info("Creating a new concept");
 		} else {
 			thesaurusConcept = thesaurusConceptService
