@@ -42,9 +42,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import junit.framework.Assert;
 
 import org.junit.Before;

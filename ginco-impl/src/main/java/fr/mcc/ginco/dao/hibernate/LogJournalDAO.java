@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.LogJournal;

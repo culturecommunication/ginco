@@ -37,7 +37,6 @@ package fr.mcc.ginco;
 import java.util.List;
 
 import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusType;
 
 /**
  * Service used to work with {@link ThesaurusFormat} objects, contains basic

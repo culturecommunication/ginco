@@ -37,8 +37,6 @@ package fr.mcc.ginco.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.mcc.ginco.beans.Language;
-
 /**
  *  POJO to return a full thesaurus informations when requesting for one thesaurus details
  *

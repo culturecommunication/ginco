@@ -35,13 +35,10 @@
 package fr.mcc.ginco.tests;
 
 import java.io.InputStream;
-import java.sql.SQLException;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;

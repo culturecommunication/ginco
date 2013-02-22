@@ -53,7 +53,6 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.ILanguagesService;
-import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.IThesaurusFormatService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTypeService;
@@ -91,10 +90,6 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
-	
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusService")

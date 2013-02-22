@@ -52,7 +52,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.rest.services.BaseRestService;

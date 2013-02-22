@@ -40,7 +40,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
  * utility class to get objects labels
  * 
  */
-public class LabelUtil {
+public final class LabelUtil {
 
 	private static final String LANGUAGE_SEPARATOR = "@";
 

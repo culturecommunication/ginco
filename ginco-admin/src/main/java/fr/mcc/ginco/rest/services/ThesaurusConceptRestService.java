@@ -51,7 +51,6 @@ import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.ILanguagesService;
 import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTermService;
@@ -106,11 +105,11 @@ public class ThesaurusConceptRestService {
 	@POST
 	@Path("/updateConcept")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public ThesaurusConceptView updateConcept(ThesaurusConceptView ThesaurusConceptViewJAXBElement) throws BusinessException {
+	public ThesaurusConceptView updateConcept(ThesaurusConceptView thesaurusConceptViewJAXBElement) throws BusinessException {
 		
-		ThesaurusConcept convertedConcept = convertConcept(ThesaurusConceptViewJAXBElement);
+		ThesaurusConcept convertedConcept = convertConcept(thesaurusConceptViewJAXBElement);
 		
-		List <ThesaurusTerm> terms = convertTermViewsInTerms(ThesaurusConceptViewJAXBElement);
+		List <ThesaurusTerm> terms = convertTermViewsInTerms(thesaurusConceptViewJAXBElement);
 		logger.info("Number of converted terms : " + terms.size());
 		
 		List <ThesaurusTerm> preferedTerm = thesaurusTermService.getPreferedTerms(terms);

@@ -34,14 +34,12 @@
  */
 package fr.mcc.ginco.ark;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentifierGenerator;
-
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.UUID;
 
 public class CustomGenerator implements IdentifierGenerator {
 

@@ -36,24 +36,15 @@ package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.hibernate.Criteria;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table

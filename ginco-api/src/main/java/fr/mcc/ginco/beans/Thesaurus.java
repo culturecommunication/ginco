@@ -35,8 +35,6 @@
 package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

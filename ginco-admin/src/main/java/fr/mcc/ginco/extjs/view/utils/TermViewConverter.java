@@ -66,11 +66,7 @@ public class TermViewConverter {
 
     @Inject
     @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-
-    @Inject
-    @Named("thesaurusTermRoleService")
-    private IThesaurusTermRoleService thesaurusTermRoleService;
+    private IThesaurusConceptService thesaurusConceptService;   
 	
 	@Log
 	private Logger logger;

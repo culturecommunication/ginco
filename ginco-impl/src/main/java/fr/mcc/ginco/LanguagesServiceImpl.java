@@ -39,13 +39,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.log.Log;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service("languagesService")

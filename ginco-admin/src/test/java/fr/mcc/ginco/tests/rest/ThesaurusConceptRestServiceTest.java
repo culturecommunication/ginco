@@ -34,19 +34,12 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.IThesaurusConceptService;
@@ -56,15 +49,10 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusConceptRestService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
-import fr.mcc.ginco.users.SimpleUserImpl;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class ThesaurusConceptRestServiceTest {
@@ -101,7 +89,7 @@ public class ThesaurusConceptRestServiceTest {
 	 * @throws BusinessException 
 	 */
 	/*@Test
-	public final void putNewConceptTopWithOnlyOneTermWhichIsPrefered() throws BusinessException {
+	public final void putNewTopConceptWithOnlyOneTermWhichIsPrefered() throws BusinessException {
 		ThesaurusTerm fakeTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm1");
 		fakeTerm1.setPrefered(true);
 		

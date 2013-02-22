@@ -34,9 +34,6 @@
  */
 package fr.mcc.ginco.utils;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import junit.framework.Assert;
 
 import org.junit.Test;

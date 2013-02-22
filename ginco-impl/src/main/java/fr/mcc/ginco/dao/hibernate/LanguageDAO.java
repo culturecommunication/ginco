@@ -38,9 +38,7 @@ import java.util.List;
 
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;

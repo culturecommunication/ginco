@@ -36,19 +36,13 @@ package fr.mcc.ginco.extjs.view.pojo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.annotation.Value;
 
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.LanguageComparator;
 
 /**
  * View class corresponding to {@link Thesaurus} bean, but fully serializable;
@@ -58,10 +52,7 @@ import fr.mcc.ginco.utils.LanguageComparator;
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusView implements Serializable {
-	
-	@Value("${ginco.default.language}")
-	private String defaultLang;
+public class ThesaurusView implements Serializable {	
 	
 	private String id;
 	private String contributor;
