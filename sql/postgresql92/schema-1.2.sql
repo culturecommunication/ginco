@@ -1,4 +1,4 @@
-﻿-- Table: log_journal
+-- Table: log_journal
 CREATE TABLE log_journal (
     identifier integer NOT NULL,
     action text NOT NULL,
