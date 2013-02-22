@@ -110,7 +110,6 @@ public class ThesaurusTermDAO extends
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq("conceptId.identifier", conceptId))
-                .add(Restrictions.eq("prefered", Boolean.TRUE))
                 .list();
 		if(list.size() == 0) {
             throw new BusinessException("No term found for this concept id ! " + conceptId +
