@@ -152,6 +152,7 @@ public class ThesaurusConceptRestService {
 			} else {
 				//Case of existing term
 				logger.info("Updating an existing term in DB");
+				thesaurusTerm.setConceptId(returnConcept);
 				returnTerms.add(thesaurusTermService.updateThesaurusTerm(thesaurusTerm, user));
 			}
 		}
