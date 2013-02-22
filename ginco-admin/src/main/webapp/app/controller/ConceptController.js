@@ -3,6 +3,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	
 	views : [ 'ConceptPanel' ],
 	stores : [ 'MainTreeStore' ],
+	models : [ 'ConceptModel' ],
 	
 	localized : true,
 	
@@ -16,15 +17,39 @@ Ext.define('GincoApp.controller.ConceptController', {
 	xProblemSaveMsg : 'Unable to save this concept!',
 	xProblemDeleteMsg : 'Unable to delete this concept!',
 	xErrorDoubleRecord : 'This record has already been selected!',
+	xProblemLoadMsg : 'Unable to load the concept',
 	
 	onConceptFormRender : function(theForm){
+		var me = this;
 		var thePanel = theForm.up('conceptPanel');
-		thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
-		model = Ext.create('GincoApp.model.ConceptModel');
-		model.data.thesaurusId = thePanel.thesaurusData.id;
-		model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
-		model.data.identifier = "";
-		theForm.loadRecord(model);
+		var conceptId = thePanel.conceptId;
+		var model = this.getConceptModelModel();
+		if (conceptId!='')
+		{
+			theForm.getEl().mask("Chargement");
+			model.load(conceptId, {
+				success : function(model) {
+					me.loadData(theForm, model);
+					theForm.getEl().unmask();
+					// Disable the save button because we don't implement concept updating!
+					var saveButton = thePanel.down('button[cls=save]');
+					saveButton.setDisabled(true);
+				},
+				failure : function(model) {
+					Thesaurus.ext.utils.msg(me.xProblemLabel,
+							me.xProblemLoadMsg);
+					var globalTabs = theForm.up('topTabs');
+					globalTabs.remove(thePanel);
+				}
+			});
+		} else {
+			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
+			model = Ext.create('GincoApp.model.ConceptModel');
+			model.data.thesaurusId = thePanel.thesaurusData.id;
+			model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
+			model.data.identifier = "";
+			theForm.loadRecord(model);
+		}
 	},
 	
 	onGridRender : function(theGrid){
@@ -108,7 +133,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	
 	loadData : function(aForm, aModel) {
 		var conceptPanel = aForm.up('conceptPanel');
-		conceptPanel.conceptData = aModel.data;
+		conceptPanel.conceptId = aModel.data.identifier;
 	
 		aForm.loadRecord(aModel);
 		var terms = aModel.terms().getRange();
