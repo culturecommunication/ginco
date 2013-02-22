@@ -10,11 +10,22 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		if (aRecord.data.type == "THESAURUS") {
 			this.openThesaurusTab(aRecord);
 		}
+		if (aRecord.data.type == "CONCEPT") {
+			this.openConceptTab(aRecord);
+		}
 		if (aRecord.data.type == "FOLDER"
 				&& aRecord.data.id.indexOf("SANDBOX") === 0) {
 			this.openSandBoxTab(aRecord.parentNode);
 		}
 		return false;
+	},
+	openConceptTab: function (aRecord) {
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		var conceptPanel = Ext.create('GincoApp.view.ConceptPanel');
+		conceptPanel.conceptId = aRecord.data.id;
+		var tab = topTabs.add(conceptPanel);
+		topTabs.setActiveTab(tab);
+		tab.show();
 	},
 	openSandBoxTab : function(aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
