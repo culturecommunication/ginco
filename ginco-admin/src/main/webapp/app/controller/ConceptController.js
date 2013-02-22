@@ -119,9 +119,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 		if (theWin.store.findRecord('identifier', record.data.identifier) !== null ){
 			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
+		} else {
+			theWin.store.add(record);
+			theWin.close();
 		}
-		theWin.store.add(record);
-		theWin.close();
 	},
 	
 	loadLanguages : function(theCombo) {
