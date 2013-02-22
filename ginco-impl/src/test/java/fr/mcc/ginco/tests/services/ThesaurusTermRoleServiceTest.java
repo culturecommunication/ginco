@@ -34,36 +34,47 @@
  */
 package fr.mcc.ginco.tests.services;
 
-import fr.mcc.ginco.IThesaurusTermRoleService;
-import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.tests.BaseServiceTest;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
+import fr.mcc.ginco.ThesaurusTermRoleServiceImpl;
+import fr.mcc.ginco.beans.ThesaurusTermRole;
+import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.tests.BaseTest;
 
 @TransactionConfiguration
 @Transactional
-public class ThesaurusTermRoleServiceTest extends BaseServiceTest {
+public class ThesaurusTermRoleServiceTest extends BaseTest {
 
-    @Inject
-    private IThesaurusTermRoleService thesaurusTermRoleService;
+	@Mock(name = "thesaurusTermRoleDAO")
+	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
 
+	@InjectMocks	
+    private ThesaurusTermRoleServiceImpl thesaurusTermRoleService ;
+
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
     @Test
-    public final void testGetThesaurusTermRole() {
-        ThesaurusTermRole actualResponse = thesaurusTermRoleService.getThesaurusTermRoleByCode("P");
-        Assert.assertEquals("Error in data !", "Partitive", actualResponse.getLabel());
-        Assert.assertEquals("Error in data !", true, actualResponse.getDefaultRole());
+    public final void testGetDefaultThesaurusTermRole() throws BusinessException {
+    	ThesaurusTermRole role = new ThesaurusTermRole();
+    	role.setCode("CODE-ROLE");
+    	role.setDefaultRole(true);
+    	role.setLabel("default role label");
+    	Mockito.when(thesaurusTermRoleDAO.getDefaultThesaurusTermRole()).thenReturn(role);
+        ThesaurusTermRole actualResponse = thesaurusTermRoleService.getDefaultThesaurusTermRole();
+        Assert.assertEquals("Error in data !", "CODE-ROLE", actualResponse.getCode());
+        Assert.assertEquals("Error in data !", true, actualResponse.getDefaultRole()); 
+        Assert.assertEquals("Error in data !", "default role label", actualResponse.getLabel());       
 
-        actualResponse = thesaurusTermRoleService.getThesaurusTermRoleByCode("I");
-        Assert.assertEquals("Error in data !", "Instance", actualResponse.getLabel());
-        Assert.assertEquals("Error in data !", false, actualResponse.getDefaultRole());
-    }
-
-    @Override
-    public String getXmlDataFileInit() {
-        return "/thesaurustermrole_init.xml";
-    }
+    }  
 }

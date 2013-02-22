@@ -35,6 +35,7 @@
 package fr.mcc.ginco;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusTermRole} objects, contains basic
@@ -44,11 +45,12 @@ import fr.mcc.ginco.beans.ThesaurusTermRole;
  * @see fr.mcc.ginco.beans
  */
 public interface IThesaurusTermRoleService {
+
     /**
-     * Get a single Thesaurus Term by its code
-     *
-     * @param code to search
-     * @return {@code null} if not found
+     * Gets the deault term roles
+     * @return
+     * @throws BusinessException
      */
-    ThesaurusTermRole getThesaurusTermRoleByCode(String code);
+    ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException;
+
 }

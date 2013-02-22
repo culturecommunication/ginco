@@ -32,32 +32,39 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.tests.daos;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
+import fr.mcc.ginco.dao.hibernate.ThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.tests.BaseDAOTest;
 
+@TransactionConfiguration()
 @Transactional
-@Service("thesaurusTermRoleService")
-public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
-
-    @Inject
-    @Named("thesaurusTermRoleDAO")
-    private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
-    
-    
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.IThesaurusTermRoleService#getDefaultThesaurusTermRole()
-     */
-    @Override
-    public ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException {
-        return thesaurusTermRoleDAO.getDefaultThesaurusTermRole();
+public class ThesaurusTermRoleDAOTest extends BaseDAOTest {
+	
+    private ThesaurusTermRoleDAO thesaurusTermRoleDAO; ;     
+    @Before
+	public void handleSetUpOperation() throws Exception {
+		super.handleSetUpOperation();
+		thesaurusTermRoleDAO = new ThesaurusTermRoleDAO();		
+		thesaurusTermRoleDAO.setSessionFactory(getSessionFactory());
+	}
+    @Test
+    public final void testGetDefaultThesaurusTermRole() throws BusinessException {
+    	ThesaurusTermRole defaultRole = thesaurusTermRoleDAO.getDefaultThesaurusTermRole();
+		Assert.assertEquals("Error while getting thessaurus terms - invalid number of results", "P", defaultRole.getCode());
+		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "Partitive", defaultRole.getLabel());
     }
+     
+	@Override
+	public String  getXmlDataFileInit() {
+		return "/thesaurustermrole_init.xml";		
+	}
 }

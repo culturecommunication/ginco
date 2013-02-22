@@ -25,39 +25,46 @@
  * therefore means that it is reserved for developers and experienced
  * professionals having in-depth computer knowledge. Users are therefore
  * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systemsand/or
+ * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and, more generally, to use and operate it in the
  * same conditions as regards security.
  * <p/>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.dao.hibernate;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.List;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional
-@Service("thesaurusTermRoleService")
-public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
+@Repository("thesaurusTermRoleDAO")
+public class ThesaurusTermRoleDAO extends GenericHibernateDAO<ThesaurusTermRole, String> implements IThesaurusTermRoleDAO  {
 
-    @Inject
-    @Named("thesaurusTermRoleDAO")
-    private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
-    
-    
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.IThesaurusTermRoleService#getDefaultThesaurusTermRole()
-     */
-    @Override
-    public ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException {
-        return thesaurusTermRoleDAO.getDefaultThesaurusTermRole();
-    }
+	public ThesaurusTermRoleDAO(Class<ThesaurusTermRole> clazz) {
+		super(clazz);
+	}
+	public ThesaurusTermRoleDAO() {
+		super(ThesaurusTermRole.class);
+	}	
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermRoleDAO#getDefaultThesaurusTermRole()
+	 */
+	public ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException {
+		List<ThesaurusTermRole> defaultRoles = getCurrentSession().createCriteria(ThesaurusTermRole.class)
+				.setMaxResults(1)
+				.add(Restrictions.eq("defaultRole", Boolean.TRUE))				
+				.list();
+		if (defaultRoles != null && defaultRoles.size()==1) {
+			return defaultRoles.get(0);
+		} else {
+			throw new BusinessException("No defaultRole defined", "no-default-role-defined");
+		}
+	}
 }

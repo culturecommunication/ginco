@@ -32,32 +32,20 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional
-@Service("thesaurusTermRoleService")
-public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
+/**
+ * Data Access Object for thesaurus_term_role
+ */
+public interface IThesaurusTermRoleDAO extends IGenericDAO<ThesaurusTermRole, String> {
+	/**
+	 * Returns the default term role
+	 * @return
+	 * @throws BusinessException if there is no default role defined
+	 */
+	ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException;
 
-    @Inject
-    @Named("thesaurusTermRoleDAO")
-    private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
-    
-    
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.IThesaurusTermRoleService#getDefaultThesaurusTermRole()
-     */
-    @Override
-    public ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException {
-        return thesaurusTermRoleDAO.getDefaultThesaurusTermRole();
-    }
 }

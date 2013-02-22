@@ -41,6 +41,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import fr.mcc.ginco.*;
+
+import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -70,6 +72,10 @@ public class TermViewConverter {
     @Inject
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;   
+    
+    @Inject
+    @Named("thesaurusTermRoleService")
+    private IThesaurusTermRoleService thesaurusTermRoleService;   
 	
 	@Log
 	private Logger logger;
@@ -79,7 +85,7 @@ public class TermViewConverter {
 	public ThesaurusTerm convert(ThesaurusTermView source) throws BusinessException {
 		ThesaurusTerm hibernateRes;
 
-		if ("".equals(source.getIdentifier())) {
+		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusTerm();
 			hibernateRes.setCreated(DateUtil.nowDate());
 			logger.info("Creating a new term");
@@ -92,22 +98,19 @@ public class TermViewConverter {
 		hibernateRes.setModified(DateUtil.nowDate());
 		hibernateRes.setSource(source.getSource());
 		hibernateRes.setPrefered(source.getPrefered());
-		hibernateRes.setStatus(source.getStatus());
+		hibernateRes.setStatus(source.getStatus());	
 
-//          ********* RESERVED for further usage !!
-
-//        if(source.getRole() != null) {
-//            hibernateRes.setRole(thesaurusTermRoleService.getThesaurusTermRoleByCode(source.getRole()));
-//        }
-
-        if(source.getConceptId() != null && !source.getConceptId().equals("")) {
+        if(StringUtils.isNotEmpty(source.getConceptId())) {
             ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(source.getConceptId());
             if(concept != null) {
                 hibernateRes.setConceptId(concept);
+            	if (!source.getPrefered()) {
+            		hibernateRes.setRole(thesaurusTermRoleService.getDefaultThesaurusTermRole());
+            	}
             }
         }
 		hibernateRes.setThesaurusId(thesaurusService.getThesaurusById(source.getThesaurusId()));
-		if ("".equals(source.getLanguage())) {
+		if (StringUtils.isEmpty(source.getLanguage())) {
 			//If not filled in, the language for the term is "ginco.default.language" property in application.properties
 			hibernateRes.setLanguage(languagesService.getLanguageById(language));
 
