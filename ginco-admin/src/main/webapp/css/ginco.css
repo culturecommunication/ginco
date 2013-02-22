@@ -58,6 +58,10 @@
     margin: 0;
 }
 
+.sandbox {
+    background-image: url(../images/basket.png) !important;
+}
+
 .icon-save {
     background-image: url(../images/save.png) !important;
 }

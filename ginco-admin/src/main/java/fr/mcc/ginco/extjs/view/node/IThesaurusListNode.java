@@ -108,4 +108,15 @@ public interface IThesaurusListNode {
 	 * @param leaf
 	 */
 	void setLeaf(boolean leaf);
+	
+	 /**
+     * @return the css class of the icon node
+     */
+    String getIconCls();
+
+	/**
+	 * Set the css class of the icon node
+	 * @param leaf
+	 */
+	void setIconCls(String cls);
 }

@@ -99,6 +99,7 @@ public class FolderGenerator {
 		sandbox.setId(ClassificationFolderType.SANDBOX.toString() + "_"
 				+ parentId);
 		sandbox.setType(ThesaurusListNodeType.FOLDER);
+		sandbox.setIconCls("sandbox");
 		sandbox.setExpanded(false);
 		sandbox.setChildren(new ArrayList<IThesaurusListNode>());
 		list.add(sandbox);

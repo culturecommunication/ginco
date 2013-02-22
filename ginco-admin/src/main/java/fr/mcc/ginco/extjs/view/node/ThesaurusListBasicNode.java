@@ -68,6 +68,12 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
      */
     private boolean leaf;
     
+    /**
+     * Css class of the node
+     */
+    private String iconcls;
+    
+    
     
 
     public ThesaurusListBasicNode() {
@@ -167,6 +173,23 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	 */
 	public void setLeaf(boolean leaf) {
 		this.leaf = leaf;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getCls()
+	 */
+	public String getIconCls() {
+		// TODO Auto-generated method stub
+		return iconcls;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setCls(string)
+	 */
+	public void setIconCls(String iconcls) {
+		// TODO Auto-generated method stub
+		this.iconcls = iconcls;
 	}
     
     
