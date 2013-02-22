@@ -149,7 +149,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				.getConceptPreferredTerm(conceptId);
 		if (preferredTerm == null) {
 			throw new BusinessException("The concept " + conceptId
-					+ "has no preferred term");
+					+ "has no preferred term", "concept-does-not-have-a-preferred-term");
 		}
 		return preferredTerm;
 	}
@@ -176,7 +176,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			throws BusinessException {
 		Thesaurus thesaurus = thesaurusDAO.getById(thesaurusId);
 		if (thesaurus == null) {
-			throw new BusinessException("Invalid thesaurusId : " + thesaurusId);
+			throw new BusinessException("Invalid thesaurusId : " + thesaurusId,"invalid-thesaurus-id");
 		} else {
 			logger.info("thesaurus found");
 

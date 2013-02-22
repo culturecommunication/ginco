@@ -63,7 +63,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 		if (thesaurusTerm != null) {
 			return thesaurusTerm;
 		} else {
-			throw new BusinessException("Invalid termId requested : " + id);
+			throw new BusinessException("Invalid termId requested : " + id, "invalid-term-id");
 		}
 	}
 

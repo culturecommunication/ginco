@@ -106,7 +106,7 @@ public class ThesaurusConceptDAO extends
 			Thesaurus thesaurus, boolean topConcept) throws BusinessException {
 
 		if (thesaurus == null) {
-			throw new BusinessException("Object thesaurus can't be null !");
+			throw new BusinessException("Object thesaurus can't be null !", "empty-thesaurus");
 		}
 
 		return getCriteriaByThesaurusAndTopConcept(thesaurus, topConcept)
@@ -117,7 +117,7 @@ public class ThesaurusConceptDAO extends
 			boolean topConcept) throws BusinessException {
 
 		if (thesaurus == null) {
-			throw new BusinessException("Object thesaurus can't be null !");
+			throw new BusinessException("Object thesaurus can't be null !", "empty-thesaurus");
 		}
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
 				topConcept).setProjection(Projections.rowCount());

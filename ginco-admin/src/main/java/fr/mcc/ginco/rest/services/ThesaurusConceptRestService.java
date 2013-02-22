@@ -142,12 +142,12 @@ public class ThesaurusConceptRestService {
 		
 		//Business rule : a concept must have at least 1 term
 		if (preferedTerm.size() == 0) {
-			throw new BusinessException("A concept must have a prefered term");
+			throw new BusinessException("A concept must have a prefered term", "missing-preferred-term-for-concept");
 		}
 
 		//Business rule : a concept mustn't have more than one prefered term
 		if (preferedTerm.size() > 1) {
-			throw new BusinessException("A concept must have at only one prefered term");
+			throw new BusinessException("A concept must have at only one prefered term", "to-many-preferred-terms-for-concept");
 		}
 		
 		String principal = "unknown";

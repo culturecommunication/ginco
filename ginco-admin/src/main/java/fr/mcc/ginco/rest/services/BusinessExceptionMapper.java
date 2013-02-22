@@ -34,26 +34,31 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.util.ResourceBundle;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 
 import ch.qos.logback.classic.Logger;
-
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.EncodedControl;
 
 public class BusinessExceptionMapper implements
-ExceptionMapper<BusinessException> {
-	 
+ExceptionMapper<BusinessException> {	 
 		@Log
 		private Logger log;
 	
 		@Override
-	    public Response toResponse(BusinessException e) {
+	    public Response toResponse(BusinessException e) {			
+			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));	
+			String msg  = res.getString(e.getUserMessageKey());				
 			log.error("Business Exception in REST services : "+e.getMessage());
+			log.debug("Business Exception in REST services : "+msg);
 	        return Response.status(Status.OK)
-	        		.entity("{success:false, message: '"+e.getMessage()+"'}")
+	        		.entity("{success:false, message: '"+msg+"'}")
 	        		.build();
-	    }
+	    }	
+		
 }

@@ -58,16 +58,15 @@ import fr.mcc.ginco.utils.DateUtil;
 public class ThesaurusConceptViewConverter {
 	@Log
 	private Logger logger;
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
-	
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-    
-	
+
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
 	public ThesaurusConceptView convert(ThesaurusConcept concept,
 			List<ThesaurusTerm> thesaurusTerms) {
 		ThesaurusConceptView view = new ThesaurusConceptView();
@@ -83,38 +82,44 @@ public class ThesaurusConceptViewConverter {
 		view.setTerms(terms);
 		return view;
 	}
-	
+
 	/**
-	 * @param source source to work with
+	 * @param source
+	 *            source to work with
 	 * @return ThesaurusConcept
 	 * @throws BusinessException
-	 * This method extracts a ThesaurusConcept from a ThesaurusConceptView given in argument
+	 *             This method extracts a ThesaurusConcept from a
+	 *             ThesaurusConceptView given in argument
 	 */
-	public ThesaurusConcept convert(ThesaurusConceptView source) throws BusinessException {
+	public ThesaurusConcept convert(ThesaurusConceptView source)
+			throws BusinessException {
 		ThesaurusConcept thesaurusConcept;
-		
-		//Test if ThesaurusConcept already exists. If yes we get it, if no we create a new one
+
+		// Test if ThesaurusConcept already exists. If yes we get it, if no we
+		// create a new one
 		if ("".equals(source.getIdentifier())) {
 			thesaurusConcept = new ThesaurusConcept();
 			thesaurusConcept.setCreated(DateUtil.nowDate());
 			thesaurusConcept.setModified(DateUtil.nowDate());
 			logger.info("Creating a new concept");
 		} else {
-			thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(source.getIdentifier());
+			thesaurusConcept = thesaurusConceptService
+					.getThesaurusConceptById(source.getIdentifier());
 			logger.info("Getting an existing concept");
 		}
-		
-		if ("".equals(source.getThesaurusId())){
-			throw new BusinessException("ThesaurusId is mandatory to save a concept");
+
+		if ("".equals(source.getThesaurusId())) {
+			throw new BusinessException(
+					"ThesaurusId is mandatory to save a concept", "mandatory-thesaurus");
 		} else {
 			Thesaurus thesaurus = new Thesaurus();
-			thesaurus = thesaurusService.getThesaurusById(source.getThesaurusId());
+			thesaurus = thesaurusService.getThesaurusById(source
+					.getThesaurusId());
 			thesaurusConcept.setThesaurus(thesaurus);
 		}
 		thesaurusConcept.setModified(DateUtil.nowDate());
 		thesaurusConcept.setTopConcept(source.getTopconcept());
 		return thesaurusConcept;
 	}
-	
-	
+
 }

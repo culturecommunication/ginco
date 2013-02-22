@@ -94,12 +94,12 @@ public class ThesaurusTermDAO extends
 
         if(list.size() == 0) {
             throw new BusinessException("No preferred term found ! " +
-                    "Please check your database !");
+                    "Please check your database !", "no-preferred-term-found");
         }
 
         if(list.size() != 1) {
             throw new BusinessException("More than one preferred term found ! " +
-                    "Please check your database !");
+                    "Please check your database !", "too-many-preferred-terms-found");
         }
 
         return list.get(0);
@@ -113,7 +113,7 @@ public class ThesaurusTermDAO extends
                 .list();
 		if(list.size() == 0) {
             throw new BusinessException("No term found for this concept id ! " + conceptId +
-                    "Please check your database !");
+                    "Please check your database !", "invalid-term-id");
         }
 		return list;
 	}

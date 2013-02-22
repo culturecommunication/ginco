@@ -128,7 +128,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 			throws BusinessException {
 		Thesaurus th = thesaurusDAO.getById(thesaurusId);
 		if (th == null) {
-			throw new BusinessException("Invalid thesaurusId : " + thesaurusId);
+			throw new BusinessException("Invalid thesaurusId : " + thesaurusId, "invalid-thesaurus-id");
 		}
 		Set<Language> languages = th.getLang();
 		List<Language> orderedLangs = new ArrayList<Language>();
