@@ -8,5 +8,6 @@ Ext.define('GincoApp.locale.fr.controller.ConceptController',
 			xSucessRemovedMsg : 'Le concept a été supprimé avec succès',
 			xProblemLabel : 'Erreur !',
 			xProblemSaveMsg : 'Impossible de sauvegarder le concept !',
-			xProblemDeleteMsg : 'Impossible de supprimer le concept !'
+			xProblemDeleteMsg : 'Impossible de supprimer le concept !',
+			xErrorDoubleRecord : 'Ce terme a déjà été sélectionné !'
 		});

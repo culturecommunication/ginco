@@ -7,5 +7,5 @@ Ext.define('GincoApp.locale.fr.view.SelectTermWin',
 	xSourceColumnLabel:"Source",
 	xStatusColumnLabel:"Statut",
 	xLangueColumnLabel:"Langue",
-    xSelectTermWinTitle : 'Sélectionner un terme',
+    xSelectTermWinTitle : 'Sélectionner un terme'
 });

@@ -20,7 +20,6 @@ Ext
 					xLangueColumnLabel:"Language",
 				    xSelectTermWinTitle : 'Select a Term',
 				    xSave: 'Save',
-					store : null,
 					width : 500,
 					height : 530,
 					title : 'Sélection d\'un terme',
