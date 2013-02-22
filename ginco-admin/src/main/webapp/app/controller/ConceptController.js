@@ -60,6 +60,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		model.data.prefered = prefered;
 		model.data.thesaurusId = thePanel.thesaurusData.id;
 		model.data.identifier = "";
+		model.data.language=thePanel.thesaurusData.languages[0];
 		theForm.loadRecord(model);
 		win.show();
 	},
@@ -88,8 +89,15 @@ Ext.define('GincoApp.controller.ConceptController', {
 	loadLanguages : function(theCombo) {
 		var thePanel = theCombo.up('createTermWin');
 		var theStore = theCombo.getStore();
+		var theForm = thePanel.down('form');
 		theStore.getProxy().setExtraParam('thesaurusId', thePanel.thesaurusData.id);
-		theStore.load();
+		theStore.load({
+			callback: function (theStore, aOperation){
+				var record = theForm.getRecord();
+				record.data.language=thePanel.thesaurusData.languages[0];
+				theForm.loadRecord(record);
+			}
+		});
 	},
 	
 	loadData : function(aForm, aModel) {

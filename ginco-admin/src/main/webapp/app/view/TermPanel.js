@@ -128,7 +128,7 @@ Ext.define('GincoApp.view.TermPanel', {
                         	displayField : 'refname',
                         	valueField : 'id',
                         	forceSelection : true,
-                        	store : 'TermLanguageStore'
+                        	store :  Ext.create('GincoApp.store.TermLanguageStore')
                         }
                     ]
                 }
