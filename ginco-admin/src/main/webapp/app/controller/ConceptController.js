@@ -107,14 +107,14 @@ Ext.define('GincoApp.controller.ConceptController', {
 		aForm.loadRecord(aModel);
 		var terms = aModel.terms().getRange();
 		
-		length = terms.length;
+		var length = terms.length;
 		for (i = 0; i < length ; i++) {
 			
 			if (terms[i].data.prefered == true) {
 				conceptTitle = terms[i].data.lexicalValue;
 			}
 		}
-		conceptPanel.setTitle(conceptTitle);
+		conceptPanel.setTitle("Concept : "+conceptTitle);
 		
 		var theGrid = aForm.down('gridpanel');
 		var theGridStore = theGrid.getStore();
