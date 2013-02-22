@@ -161,7 +161,6 @@ Ext
 																	{
 																		dataIndex : 'identifier',
 																		text : me.xIdentifierLabel,
-																		id : 'identifier'
 																	},
 																	{
 																		dataIndex : 'lexicalValue',
