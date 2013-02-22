@@ -29,9 +29,6 @@ Ext
 											items : [
 													{
 														xtype : 'form',
-														defaults : {
-															labelWidth : 150
-														},
 														
 														dockedItems : [ {
 															xtype : 'toolbar',
@@ -45,6 +42,7 @@ Ext
 															}]
 														} ],
 														defaults : {
+															labelWidth : 150,
 															afterLabelTextTpl : new Ext.XTemplate(
 																	'<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>',
 																	{

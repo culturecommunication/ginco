@@ -42,7 +42,6 @@ Ext
 					xSourceLabel : 'Source',
 					xThesaurusTitle : 'New Thesaurus',
 					xNewLabel : 'New',
-					xNewMenu_ConceptLabel : "Concept",
 					xNewMenu_TermLabel : "Term",
 					xNewMenu_ConceptLabel: "Concept",
 					xNewMenu_GroupLabel : "Group of Concepts",

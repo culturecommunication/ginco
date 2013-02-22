@@ -15,6 +15,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	xProblemLabel : 'Error !',
 	xProblemSaveMsg : 'Unable to save this concept!',
 	xProblemDeleteMsg : 'Unable to delete this concept!',
+	xErrorDoubleRecord : 'This record has already been selected!',
 	
 	onConceptFormRender : function(theForm){
 		var thePanel = theForm.up('conceptPanel');
@@ -69,6 +70,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var thePanel = theButton.up('conceptPanel');
 		var win = Ext.create('GincoApp.view.SelectTermWin');
 		var theGrid = theButton.up('gridpanel');
+		win.conceptGrid = theGrid;
 		win.store = theGrid.getStore();
 		win.thesaurusData = thePanel.thesaurusData;
 		win.prefered = prefered;
@@ -81,6 +83,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 			record.data.prefered = true;
 		} else {
 			record.data.prefered = false;
+		}
+		
+		if (theWin.store.findRecord('identifier', record.data.identifier) !== null ){
+			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
 		}
 		theWin.store.add(record);
 		theWin.close();
@@ -106,14 +112,12 @@ Ext.define('GincoApp.controller.ConceptController', {
 	
 		aForm.loadRecord(aModel);
 		var terms = aModel.terms().getRange();
-		
-		length = terms.length;
-		for (i = 0; i < length ; i++) {
-			
-			if (terms[i].data.prefered == true) {
-				conceptTitle = terms[i].data.lexicalValue;
+		Ext.Array.each(terms, function(term) {
+			if (term.data.prefered == true) {
+				conceptTitle = term.data.lexicalValue;
 			}
-		}
+		});
+
 		conceptPanel.setTitle(conceptTitle);
 		
 		var theGrid = aForm.down('gridpanel');
