@@ -70,7 +70,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	loadTreeView : function() {
 		var me = this;
 		var MainTreeStore = this.getMainTreeStoreStore();
-		MainTreeStore.load({
+		if (MainTreeStore.isLoading()==false) {
+			MainTreeStore.load({
 				callback: function (theStore, aOperation){
 					if (aOperation.success==false)
 					{
@@ -82,7 +83,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 					
 			        
 			    }
-		});
+			});
+		}
 	},
 	onRefreshBtnClick : function() {
 		this.loadTreeView();
