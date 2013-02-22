@@ -3,7 +3,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	
 	views : [ 'ConceptPanel' ],
 	stores : [ 'MainTreeStore' ],
-	models : [ 'ConceptModel' ],
+	models : [ 'ConceptModel','ThesaurusModel' ],
 	
 	localized : true,
 	
@@ -27,13 +27,20 @@ Ext.define('GincoApp.controller.ConceptController', {
 		if (conceptId!='')
 		{
 			theForm.getEl().mask("Chargement");
+			var thesaurusId= thePanel.thesaurusData.data.id;
+			var thesaurusModel= this.getThesaurusModelModel();
+			thesaurusModel.load(thesaurusId, {
+				success : function(model) {
+					thePanel.thesaurusData = model.data;
+				}
+			});
 			model.load(conceptId, {
 				success : function(model) {
 					me.loadData(theForm, model);
 					theForm.getEl().unmask();
 					// Disable the save button because we don't implement concept updating!
-					var saveButton = thePanel.down('button[cls=save]');
-					saveButton.setDisabled(true);
+					//var saveButton = thePanel.down('button[cls=save]');
+					//saveButton.setDisabled(true);
 				},
 				failure : function(model) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,

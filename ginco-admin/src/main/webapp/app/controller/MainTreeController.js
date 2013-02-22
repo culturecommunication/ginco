@@ -30,6 +30,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		});
 		if (!tabExists) {
 			var conceptPanel = Ext.create('GincoApp.view.ConceptPanel');
+			conceptPanel.thesaurusData=aRecord.parentNode.parentNode;
 			conceptPanel.conceptId = aRecord.data.id;
 			var tab = topTabs.add(conceptPanel);
 			topTabs.setActiveTab(tab);
