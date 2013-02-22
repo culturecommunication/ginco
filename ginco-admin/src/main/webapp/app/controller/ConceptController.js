@@ -70,11 +70,17 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var theGrid = theButton.up('gridpanel');
 		win.store = theGrid.getStore();
 		win.thesaurusData = thePanel.thesaurusData;
+		win.prefered = prefered;
 		win.show();
 	},
 	
 	onSelectTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
 		var theWin = theGrid.up('selectTermWin');
+		if (theWin.prefered == true) {
+			record.data.prefered = true;
+		} else {
+			record.data.prefered = false;
+		}
 		theWin.store.add(record);
 		theWin.close();
 	},

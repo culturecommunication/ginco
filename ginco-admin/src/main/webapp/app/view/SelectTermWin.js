@@ -8,6 +8,7 @@ Ext
 					
 					thesaurusData : null,
 					store : null,
+					prefered: null,
 
 				    /*Fields prompting values*/
 					xIdentifierColumnLabel : "Identifier",
