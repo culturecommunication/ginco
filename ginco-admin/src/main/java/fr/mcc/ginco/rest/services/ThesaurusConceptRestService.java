@@ -54,17 +54,15 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.IThesaurusService;
 import fr.mcc.ginco.IThesaurusTermService;
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.users.SimpleUserImpl;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Thesaurus Concept REST service for all operation on a thesaurus' concepts
@@ -94,6 +92,10 @@ public class ThesaurusConceptRestService {
     @Inject
     @Named("termViewConverter")
     private TermViewConverter termViewConverter;
+    
+    @Inject
+    @Named("thesaurusConceptViewConverter")
+    private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
 	
 	@Log
 	private Logger logger;
@@ -107,9 +109,9 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusConceptView updateConcept(ThesaurusConceptView thesaurusConceptViewJAXBElement) throws BusinessException {
 		
-		ThesaurusConcept convertedConcept = convertConcept(thesaurusConceptViewJAXBElement);
+		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter.convert(thesaurusConceptViewJAXBElement);
 		
-		List <ThesaurusTerm> terms = convertTermViewsInTerms(thesaurusConceptViewJAXBElement);
+		List <ThesaurusTerm> terms = termViewConverter.convertTermViewsInTerms(thesaurusConceptViewJAXBElement.getTerms());
 		logger.info("Number of converted terms : " + terms.size());
 		
 		List <ThesaurusTerm> preferedTerm = thesaurusTermService.getPreferedTerms(terms);
@@ -157,54 +159,8 @@ public class ThesaurusConceptRestService {
 		}
 		
 		//Return ThesaurusConceptView created/updated
-		return new ThesaurusConceptView(returnConcept, returnTerms);
+		return thesaurusConceptViewConverter.convert(returnConcept, returnTerms);
 	}
 	
-	/**
-	 * @param source source to work with
-	 * @return ThesaurusConcept
-	 * @throws BusinessException
-	 * This method extracts a ThesaurusConcept from a ThesaurusConceptView given in argument
-	 */
-	private ThesaurusConcept convertConcept(ThesaurusConceptView source) throws BusinessException {
-		ThesaurusConcept thesaurusConcept;
-		
-		//Test if ThesaurusConcept already exists. If yes we get it, if no we create a new one
-		if ("".equals(source.getIdentifier())) {
-			thesaurusConcept = new ThesaurusConcept();
-			thesaurusConcept.setCreated(DateUtil.nowDate());
-			thesaurusConcept.setModified(DateUtil.nowDate());
-			logger.info("Creating a new concept");
-		} else {
-			thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(source.getIdentifier());
-			logger.info("Getting an existing concept");
-		}
-		
-		if ("".equals(source.getThesaurusId())){
-			throw new BusinessException("ThesaurusId is mandatory to save a concept");
-		} else {
-			Thesaurus thesaurus = new Thesaurus();
-			thesaurus = thesaurusService.getThesaurusById(source.getThesaurusId());
-			thesaurusConcept.setThesaurus(thesaurus);
-		}
-		thesaurusConcept.setModified(DateUtil.nowDate());
-		thesaurusConcept.setTopConcept(source.getTopconcept());
-		return thesaurusConcept;
-	}
 	
-	/**
-	 * @param source source to work with
-	 * @return {@code List<ThesaurusTerm>}
-	 * @throws BusinessException
-	 * This method extracts a list of ThesaurusTerm from a ThesaurusConceptView given in argument
-	 */
-	private List<ThesaurusTerm> convertTermViewsInTerms(ThesaurusConceptView source) throws BusinessException {
-		List<ThesaurusTermView> termViews = source.getTerms();
-		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
-		
-		for (ThesaurusTermView thesaurusTermView : termViews) {
-			terms.add(termViewConverter.convert(thesaurusTermView));
-		}
-		return terms;
-	}
 }

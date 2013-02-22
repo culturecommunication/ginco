@@ -35,13 +35,11 @@
 package fr.mcc.ginco.extjs.view.pojo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 
 
 /**
@@ -57,30 +55,7 @@ public class ThesaurusConceptView implements Serializable {
 	private String thesaurusId;
 	private List<ThesaurusTermView> terms;
 	
-	public ThesaurusConceptView() {}
-	
-	public ThesaurusConceptView(String identifier, String created,
-			String modified, String thesaurusId, List<ThesaurusTermView> terms) {
-		super();
-		this.identifier = identifier;
-		this.created = created;
-		this.modified = modified;
-		this.thesaurusId = thesaurusId;
-		this.terms = terms;
-	}
-	
-	public ThesaurusConceptView(ThesaurusConcept concept,
-			List<ThesaurusTerm> thesaurusTerms) {
-		this.setIdentifier(concept.getIdentifier());
-		this.setCreated(concept.getCreated().toString());
-		this.setModified(concept.getModified().toString());
-		this.setTopconcept(concept.getTopConcept());
-		this.setThesaurusId(concept.getThesaurus().getIdentifier());
-		terms = new ArrayList<ThesaurusTermView>();
-		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
-			terms.add(new ThesaurusTermView(thesaurusTerm));
-		}
-	}
+	public ThesaurusConceptView() {}	
 
 	public String getIdentifier() {
 		return identifier;

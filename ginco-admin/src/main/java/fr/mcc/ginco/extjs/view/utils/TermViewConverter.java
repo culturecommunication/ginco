@@ -34,6 +34,9 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -114,5 +117,20 @@ public class TermViewConverter {
 		}
 		
 		return hibernateRes;
+	}
+	
+	/**
+	 * @param source source to work with
+	 * @return {@code List<ThesaurusTerm>}
+	 * @throws BusinessException
+	 * This method extracts a list of ThesaurusTerm from a ThesaurusConceptView given in argument
+	 */
+	public List<ThesaurusTerm> convertTermViewsInTerms(List<ThesaurusTermView> termViews) throws BusinessException {
+		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+		
+		for (ThesaurusTermView thesaurusTermView : termViews) {
+			terms.add(convert(thesaurusTermView));
+		}
+		return terms;
 	}
 }
