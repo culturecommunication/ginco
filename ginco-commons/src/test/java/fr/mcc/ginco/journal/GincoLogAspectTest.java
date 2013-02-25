@@ -47,7 +47,6 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
-
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import fr.mcc.ginco.beans.IBaseBean;
@@ -80,9 +79,7 @@ public class GincoLogAspectTest {
 							IllegalAccessException {
 						ReflectionUtils.makeAccessible(field);
 
-						if (field.getAnnotation(Log.class) != null) {
-							/*Logger logger = LoggerFactory.getLogger(aspect
-									.getClass());*/
+						if (field.getAnnotation(Log.class) != null) {							
 							ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(aspect.getClass());
 							root.addAppender(mockAppender);
 							field.set(aspect, root);
