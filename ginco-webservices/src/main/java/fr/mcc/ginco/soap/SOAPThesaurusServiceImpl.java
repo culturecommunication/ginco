@@ -41,11 +41,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 
-import fr.mcc.ginco.IThesaurusService;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.data.FullThesaurus;
 import fr.mcc.ginco.data.ReducedThesaurus;
+import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
 
 /**

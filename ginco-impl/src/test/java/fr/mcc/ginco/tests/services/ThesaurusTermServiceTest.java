@@ -15,10 +15,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.ThesaurusTermServiceImpl;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.services.ThesaurusTermServiceImpl;
 import fr.mcc.ginco.tests.BaseTest;
 
 @TransactionConfiguration

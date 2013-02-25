@@ -32,21 +32,46 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.services;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
+import fr.mcc.ginco.beans.ThesaurusFormat;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.services.IThesaurusFormatService;
 
 /**
- * Service used to work with {@link LogJournal} objects
- * and meant to log users action of add/update and delete
  *
- * @see fr.mcc.ginco.beans
  */
-public interface ILogJournalService {    
-    /**
-     * Adds an entry in the action log journal
-     *
-     */   
-    void addLogJournalEntry(String action, String entityId, String entityType, String author );
-    
+@Transactional
+@Service("thesaurusFormatService")
+public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
+	
+	@Inject
+	@Named("thesaurusFormatDAO")
+    private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.IThesaurusFormatService#getThesaurusFormatList()
+	 */
+	@Override
+	public List<ThesaurusFormat> getThesaurusFormatList() {
+		return thesaurusFormatDAO.findAll();
+	}
+
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.IThesaurusFormatService#getThesaurusFormatById()
+	 */
+    @Override
+    public ThesaurusFormat getThesaurusFormatById(Integer id) {
+        return thesaurusFormatDAO.getById(id);
+    }
+	
 }

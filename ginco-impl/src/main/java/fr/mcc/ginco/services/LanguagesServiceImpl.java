@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.services;
 
 import java.util.List;
 
@@ -42,38 +42,48 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.dao.IGenericDAO;
 
-/**
- *
- */
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.dao.ILanguageDAO;
+import fr.mcc.ginco.services.ILanguagesService;
+
 @Transactional
-@Service("thesaurusTypeService")
-public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
-	    
+@Service("languagesService")
+public class LanguagesServiceImpl implements ILanguagesService {
+	
 	@Inject
-	@Named("thesaurusTypeDAO")
-    private IGenericDAO<ThesaurusType, Integer> thesaurusTypeDAO;
+	@Named("languagesDAO")
+    private ILanguageDAO languagesDAO;
+	
 	
 	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.IThesaurusTypeService#getThesaurusTypeList()
+	 * @see fr.mcc.ginco.ILanguagesService#getLanguagesList()
 	 */
 	@Override
-	public List<ThesaurusType> getThesaurusTypeList() {
-		return thesaurusTypeDAO.findAll();
+	public List<Language> getLanguagesList(Integer startIndex, Integer limit) {
+		return languagesDAO.findPaginatedItems(startIndex, limit);
+	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.ILanguagesService#getTopLanguagesList()
+	 */
+	@Override
+	public List<Language> getTopLanguagesList() {
+		return languagesDAO.findTopLanguages();
+	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.ILanguagesService#getLanguageCount()
+	 */
+	public Long getLanguageCount(){
+		return languagesDAO.count();
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.IThesaurusTypeService#getThesaurusTypeById()
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.ILanguagesService#getLanguageById()
 	 */
     @Override
-    public ThesaurusType getThesaurusTypeById(Integer id) {
-        return thesaurusTypeDAO.getById(id);
+    public Language getLanguageById(String id) {
+        return languagesDAO.getById(id);
     }
-
-    public IGenericDAO<ThesaurusType, Integer> getThesaurusTypeDAO() {
-		return thesaurusTypeDAO;
-	}
-
 }

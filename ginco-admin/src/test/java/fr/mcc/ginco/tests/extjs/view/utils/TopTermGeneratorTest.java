@@ -34,13 +34,13 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
-import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,6 +49,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
 
 import java.util.ArrayList;
 import java.util.List;

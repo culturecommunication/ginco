@@ -47,14 +47,15 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
+
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
-import fr.mcc.ginco.ILogJournalService;
 import fr.mcc.ginco.beans.IBaseBean;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.journal.GincoLog.Action;
 import fr.mcc.ginco.journal.GincoLog.EntityType;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.ILogJournalService;
 
 public class GincoLogAspectTest {
 

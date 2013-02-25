@@ -42,14 +42,15 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+
 import ch.qos.logback.classic.Logger;
-import fr.mcc.ginco.IThesaurusConceptService;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 @Component(value = "folderGenerator")
 public class FolderGenerator {

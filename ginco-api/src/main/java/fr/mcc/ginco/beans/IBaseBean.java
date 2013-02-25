@@ -34,13 +34,15 @@
  */
 package fr.mcc.ginco.beans;
 
+import java.io.Serializable;
+
 /**
  * All hibernate beans should implement this interface
  * in order to be able to log events in the dedicated
  * logjournal table
  *
  */
-public interface IBaseBean {
+public interface IBaseBean extends Serializable{
 	
 	/**
 	 * @return the database identifier of the object

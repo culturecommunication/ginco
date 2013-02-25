@@ -49,10 +49,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.ILanguagesService;
-import fr.mcc.ginco.IThesaurusFormatService;
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.IThesaurusTypeService;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.users.IUser;
@@ -61,6 +58,10 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusRestService;
+import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.IThesaurusFormatService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IThesaurusTypeService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusRestServiceTest {

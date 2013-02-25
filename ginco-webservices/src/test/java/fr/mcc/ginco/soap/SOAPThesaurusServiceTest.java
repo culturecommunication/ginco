@@ -36,6 +36,8 @@ package fr.mcc.ginco.soap;
 
 import java.util.*;
 
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.ThesaurusServiceImpl;
 import fr.mcc.ginco.utils.DateUtil;
 import junit.framework.Assert;
 import junitx.framework.ListAssert;
@@ -43,8 +45,7 @@ import junitx.framework.ListAssert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import fr.mcc.ginco.IThesaurusService;
-import fr.mcc.ginco.ThesaurusServiceImpl;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;

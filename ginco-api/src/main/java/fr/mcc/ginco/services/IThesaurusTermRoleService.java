@@ -32,44 +32,25 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.services;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.beans.ThesaurusTermRole;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
+ * Service used to work with {@link ThesaurusTermRole} objects, contains basic
+ * methods exposed to client part. For example, to get a single
+ * ThesaurusTerm object, use {@link #getThesaurusTermRoleByCode(String)}
  *
+ * @see fr.mcc.ginco.beans
  */
-@Transactional
-@Service("thesaurusFormatService")
-public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
-	
-	@Inject
-	@Named("thesaurusFormatDAO")
-    private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.IThesaurusFormatService#getThesaurusFormatList()
-	 */
-	@Override
-	public List<ThesaurusFormat> getThesaurusFormatList() {
-		return thesaurusFormatDAO.findAll();
-	}
+public interface IThesaurusTermRoleService {
 
-    /* (non-Javadoc)
-	 * @see fr.mcc.ginco.IThesaurusFormatService#getThesaurusFormatById()
-	 */
-    @Override
-    public ThesaurusFormat getThesaurusFormatById(Integer id) {
-        return thesaurusFormatDAO.getById(id);
-    }
-	
+    /**
+     * Gets the deault term roles
+     * @return
+     * @throws BusinessException
+     */
+    ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException;
+
 }

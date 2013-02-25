@@ -42,10 +42,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 
-import fr.mcc.ginco.ILogJournalService;
+
 import fr.mcc.ginco.beans.IBaseBean;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.ILogJournalService;
 
 /**
  * Aspect to insert a LogJournal entry on events
@@ -77,7 +78,7 @@ public class GincoLogAspect {
 	 * @throws Throwable
 	 */
 	@Around("@annotation(gincoLog)")
-	public Object logAction(ProceedingJoinPoint pjp, GincoLog gincoLog) {
+	public Object logAction(ProceedingJoinPoint pjp, GincoLog gincoLog) throws Throwable {
 		Object res = null;
 		try {
 			res = pjp.proceed();
@@ -125,7 +126,7 @@ public class GincoLogAspect {
 
 			}
 
-		} catch (Throwable t) {
+		} catch (Exception t) {
 			log.error("Error in GincoLog aspect", t);
 		}
 		return res;

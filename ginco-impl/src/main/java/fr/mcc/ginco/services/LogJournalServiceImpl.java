@@ -32,30 +32,48 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.services;
 
-import java.util.List;
+import java.sql.Timestamp;
+import java.util.GregorianCalendar;
 
-import fr.mcc.ginco.beans.ThesaurusFormat;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
+import fr.mcc.ginco.beans.LogJournal;
+import fr.mcc.ginco.dao.ILogJournalDAO;
+import fr.mcc.ginco.services.ILogJournalService;
 
 /**
- * Service used to work with {@link ThesaurusFormat} objects, contains basic
- * methods exposed to client part. For example, to get all
- * ThesaurusFormat objects, use {@link #getThesaurusFormatList()}
+ * Implementation of the ILogJournalService with storage in the database
  *
- * @see fr.mcc.ginco.beans
  */
-public interface IThesaurusFormatService {
-	 /**
-     * Get list of all ThesaurusFormat.
-     * @return
-     */
-    List<ThesaurusFormat> getThesaurusFormatList();
+@Service("logJournalService")
+@Transactional
+public class LogJournalServiceImpl implements ILogJournalService {
+	    
+	/**
+	 * DAO to access log_journal table
+	 */
+	@Inject
+	@Named("logJournalDAO")
+    private ILogJournalDAO logJournalDAO;
 
-    /**
-     * Get single ThesaurusFormat by its id.
-     * @param id of object
-     * @return {@code null} if not found; object otherwise.
-     */
-    ThesaurusFormat getThesaurusFormatById(Integer id);
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.ILogJournalService#addLogJournalEntry(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void addLogJournalEntry(String action, String entityId, String entityType, String author ) {		
+		LogJournal logJournal = new LogJournal();
+		logJournal.setAction(action);
+		logJournal.setAuthor(author);
+		logJournal.setDate(new Timestamp(GregorianCalendar.getInstance().getTimeInMillis()));
+		logJournal.setEntityId(entityId);
+		logJournal.setEntityType(entityType);
+		logJournalDAO.insertLogJournal(logJournal);
+	}		
 }

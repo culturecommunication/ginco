@@ -32,42 +32,21 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.services;
 
-import java.util.List;
 
-import fr.mcc.ginco.beans.Language;
 
 /**
- * Service used to work with {@link Language} objects, contains basic
- * methods exposed to client part. For example, to get some
- * Language objects, use {@link #getLanguagesList(Integer, Integer)} ()}
+ * Service used to work with {@link LogJournal} objects
+ * and meant to log users action of add/update and delete
  *
  * @see fr.mcc.ginco.beans
  */
-public interface ILanguagesService {
-	 /**
-     * Get list of all Languages.
-     * @return
-     */
-    List<Language> getLanguagesList(Integer startIndex, Integer limit);
+public interface ILogJournalService {    
+    /**
+     * Adds an entry in the action log journal
+     *
+     */   
+    void addLogJournalEntry(String action, String entityId, String entityType, String author );
     
-    /**
-     * Get list of all Top Languages.
-     * @return
-     */
-    List<Language> getTopLanguagesList();
-    
-    /**
-     * The number of DB rows matching to the DAO
-     * @return
-     */
-    Long getLanguageCount();
-
-    /**
-     * Get single object by its id.
-     * @param id
-     * @return
-     */
-    Language getLanguageById(String id);
 }

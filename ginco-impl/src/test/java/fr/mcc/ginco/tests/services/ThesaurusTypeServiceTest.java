@@ -43,8 +43,9 @@ import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.IThesaurusTypeService;
+
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.services.IThesaurusTypeService;
 import fr.mcc.ginco.tests.BaseServiceTest;
 
 @TransactionConfiguration

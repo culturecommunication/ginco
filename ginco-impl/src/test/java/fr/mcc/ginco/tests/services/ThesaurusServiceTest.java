@@ -51,12 +51,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.ThesaurusServiceImpl;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.services.ThesaurusServiceImpl;
 import fr.mcc.ginco.tests.BaseTest;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 

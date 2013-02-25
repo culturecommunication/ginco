@@ -32,25 +32,58 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
+package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.ThesaurusTermRole;
+import java.util.List;
+
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
- * Service used to work with {@link ThesaurusTermRole} objects, contains basic
+ * Service used to work with {@link Thesaurus} objects, contains basic
  * methods exposed to client part. For example, to get a single
- * ThesaurusTerm object, use {@link #getThesaurusTermRoleByCode(String)}
+ * Thesaurus object, use {@link #getThesaurusById(String)}
  *
  * @see fr.mcc.ginco.beans
  */
-public interface IThesaurusTermRoleService {
+public interface IThesaurusService {
 
     /**
-     * Gets the deault term roles
-     * @return
-     * @throws BusinessException
+     * Get a single object by its id
+     *
+     * @param id to search
+     * @return {@code null} if not found
      */
-    ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException;
+    Thesaurus getThesaurusById(String id);
+
+    /**
+     * Get list of all objects.
+     * @return List of all objects.
+     */
+    List<Thesaurus> getThesaurusList();
+
+    /**
+     * Update a single ThesaurusObject
+     */
+
+    Thesaurus updateThesaurus(Thesaurus object, IUser user);    
+    
+    /**
+     * Create a single ThesaurusObject
+     */
+    Thesaurus createThesaurus(Thesaurus object, IUser user);   
+  
+    
+    
+    /**
+     * Builds the list of the thesauruses languages, where the first language is
+     * the default language defined in the property ginco.default.language
+     * @param thesaurusId
+     * @return
+     */
+    List<Language> getThesaurusLanguages(String thesaurusId) throws BusinessException;
+
 
 }

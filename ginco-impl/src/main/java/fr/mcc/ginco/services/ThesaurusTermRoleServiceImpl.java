@@ -32,10 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco;
-
-import java.sql.Timestamp;
-import java.util.GregorianCalendar;
+package fr.mcc.ginco.services;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,35 +40,26 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.LogJournal;
-import fr.mcc.ginco.dao.ILogJournalDAO;
 
-/**
- * Implementation of the ILogJournalService with storage in the database
- *
- */
-@Service("logJournalService")
+import fr.mcc.ginco.beans.ThesaurusTermRole;
+import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.services.IThesaurusTermRoleService;
+
 @Transactional
-public class LogJournalServiceImpl implements ILogJournalService {
-	    
-	/**
-	 * DAO to access log_journal table
-	 */
-	@Inject
-	@Named("logJournalDAO")
-    private ILogJournalDAO logJournalDAO;
+@Service("thesaurusTermRoleService")
+public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.ILogJournalService#addLogJournalEntry(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void addLogJournalEntry(String action, String entityId, String entityType, String author ) {		
-		LogJournal logJournal = new LogJournal();
-		logJournal.setAction(action);
-		logJournal.setAuthor(author);
-		logJournal.setDate(new Timestamp(GregorianCalendar.getInstance().getTimeInMillis()));
-		logJournal.setEntityId(entityId);
-		logJournal.setEntityType(entityType);
-		logJournalDAO.insertLogJournal(logJournal);
-	}		
+    @Inject
+    @Named("thesaurusTermRoleDAO")
+    private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
+    
+    
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.IThesaurusTermRoleService#getDefaultThesaurusTermRole()
+     */
+    @Override
+    public ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException {
+        return thesaurusTermRoleDAO.getDefaultThesaurusTermRole();
+    }
 }

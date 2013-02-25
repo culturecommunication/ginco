@@ -44,10 +44,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
-import fr.mcc.ginco.ILogJournalService;
+
 import fr.mcc.ginco.beans.LogJournal;
 import fr.mcc.ginco.dao.hibernate.LogJournalDAO;
 import fr.mcc.ginco.journal.GincoLog;
+import fr.mcc.ginco.services.ILogJournalService;
 import fr.mcc.ginco.tests.BaseDAOTest;
 import fr.mcc.ginco.utils.DateUtil;
 

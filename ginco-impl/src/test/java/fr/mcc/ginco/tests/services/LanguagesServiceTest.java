@@ -39,6 +39,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.tests.BaseServiceTest;
 
 import org.junit.Assert;
@@ -46,7 +47,7 @@ import org.junit.Test;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.ILanguagesService;
+
 
 @TransactionConfiguration
 @Transactional
