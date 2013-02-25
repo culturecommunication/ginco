@@ -41,14 +41,10 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -57,13 +53,6 @@ import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.rest.services.BaseRestService;
 import fr.mcc.ginco.services.IThesaurusService;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "classpath:applicationContext.xml",
-        "classpath:applicationContext-daos.xml",
-        "classpath:applicationContext-rest.xml"
-})
 public class BaseRestServiceTest {
 
     @Mock(name = "thesaurusService")

@@ -230,6 +230,7 @@
 				<artifactId>dbcp</artifactId>
 				<version>${dbcp.version}</version>
 				<type>jar</type>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.jackson</groupId>
@@ -277,6 +278,7 @@
 				<groupId>postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>${postgresql.jdbc.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
@@ -316,6 +318,7 @@
 				<groupId>javax.servlet</groupId>
 				<artifactId>servlet-api</artifactId>
 				<version>${servlet.api.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
