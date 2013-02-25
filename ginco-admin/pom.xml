@@ -151,7 +151,7 @@
 					<configuration>
 						<skip>true</skip>
 					</configuration>
-				</plugin>
+				</plugin>				
 				<plugin>
 					<groupId>org.codehaus.cargo</groupId>
 					<artifactId>cargo-maven2-plugin</artifactId>
