@@ -9,10 +9,13 @@ DROP TABLE IF EXISTS log_journal;
 DROP TABLE IF EXISTS thesaurus_term;
 DROP TABLE IF EXISTS thesaurus_term_role;
 DROP TABLE IF EXISTS thesaurus_concept;
+DROP TABLE IF EXISTS hierarchical_relationship;
+DROP TABLE IF EXISTS top_relationship;
 
 DROP SEQUENCE IF EXISTS log_journal_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
+
 CREATE TABLE thesaurus
 (
   identifier text NOT NULL,
@@ -105,6 +108,20 @@ CREATE TABLE thesaurus_term
   lang character varying(3) NOT NULL
 );
 
+CREATE TABLE hierarchical_relationship
+(
+  childconceptid text NOT NULL,
+  parentconceptid text NOT NULL,
+  CONSTRAINT pk_hierarchical_relationship PRIMARY KEY (childconceptid, parentconceptid)
+);
+
+CREATE TABLE top_relationship
+(
+  childconceptid text NOT NULL,
+  rootconceptid text NOT NULL,
+  CONSTRAINT pk_top_relationship PRIMARY KEY (childconceptid, rootconceptid)
+);
+
 ALTER TABLE thesaurus_term
     ADD FOREIGN KEY (conceptid)
     REFERENCES thesaurus_concept (identifier);
@@ -116,3 +133,19 @@ ALTER TABLE thesaurus_term
 ALTER TABLE thesaurus_concept
     ADD FOREIGN KEY (thesaurusid)
     REFERENCES thesaurus (identifier);
+    
+ALTER TABLE hierarchical_relationship
+   ADD FOREIGN KEY (childconceptid)
+   REFERENCES thesaurus_concept (identifier);
+   
+ALTER TABLE hierarchical_relationship
+   ADD FOREIGN KEY (parentconceptid)
+   REFERENCES thesaurus_concept (identifier);
+
+ALTER TABLE top_relationship
+   ADD FOREIGN KEY (childconceptid)
+   REFERENCES thesaurus_concept (identifier);
+      
+ALTER TABLE top_relationship
+   ADD FOREIGN KEY (rootconceptid)
+   REFERENCES thesaurus_concept (identifier);
