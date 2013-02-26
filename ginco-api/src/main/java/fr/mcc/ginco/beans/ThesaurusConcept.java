@@ -36,6 +36,9 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ThesaurusConcept implements Serializable, IBaseBean {
     private String identifier;
@@ -45,6 +48,7 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
     private String notation;
     private Boolean topConcept;
     private Thesaurus thesaurus;
+    private Set<ThesaurusConcept> parentConcepts  = new HashSet<ThesaurusConcept>();
 
     public String getIdentifier() {
         return identifier;
@@ -104,4 +108,10 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
     public void setThesaurus(Thesaurus thesaurus) {
         this.thesaurus = thesaurus;
     }
+	public Set<ThesaurusConcept> getParentConcepts() {
+		return parentConcepts;
+	}
+	public void setParentConcepts(Set<ThesaurusConcept> parentConcepts) {
+		this.parentConcepts = parentConcepts;
+	}
 }

@@ -23,13 +23,13 @@ CREATE INDEX idx_hierarchical_relationship_childconceptid
 ALTER TABLE hierarchical_relationship
   ADD CONSTRAINT fk_child_hierarchical_relationship_thesaurus_concept FOREIGN KEY (childconceptid)
       REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+      ON UPDATE NO ACTION ON DELETE CASCADE;
 
 -- Foreign Key to reference the parent concept
 ALTER TABLE hierarchical_relationship
   ADD CONSTRAINT fk_parent_hierarchical_relationship_thesaurus_concept FOREIGN KEY (parentconceptid)
       REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+      ON UPDATE NO ACTION ON DELETE CASCADE;
   
 -- Table: top_relationship
 CREATE TABLE top_relationship
@@ -55,11 +55,10 @@ CREATE INDEX idx_top_relationship_rootconceptid
 ALTER TABLE top_relationship
   ADD CONSTRAINT fk_child_top_relationship_thesaurus_concept FOREIGN KEY (childconceptid)
       REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+      ON UPDATE NO ACTION ON DELETE CASCADE;
       
 -- Foreign Key to reference the root concept
 ALTER TABLE top_relationship
   ADD CONSTRAINT fk_root_top_relationship_thesaurus_concept FOREIGN KEY (rootconceptid)
       REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-      
+      ON UPDATE NO ACTION ON DELETE CASCADE;
