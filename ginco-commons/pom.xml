@@ -12,6 +12,17 @@
 	<name>ginco-commons</name>
 	<build>
 		<finalName>ginco-commons</finalName>
+		<pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>${deploy.plugin.skip}</skip>
+                    </configuration>
+                </plugin>               
+            </plugins>
+        </pluginManagement>
 	</build>
     <dependencies>
         <dependency>

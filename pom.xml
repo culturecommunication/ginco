@@ -45,6 +45,7 @@
 		<scp.host>hadoc.lxc</scp.host>
 		<scp.folder.tomcat>/etc/tomcat6/</scp.folder.tomcat>
 		<folder.conf>${basedir}/conf/local</folder.conf>
+		<deploy.plugin.skip>true</deploy.plugin.skip>		
 	</properties>
 
 	<profiles>
@@ -64,6 +65,7 @@
 				<scp.host>hadoc-int.eqx.intranet</scp.host>
 				<scp.folder.tomcat.conf>${scp.folder.tomcat}/shared/classes</scp.folder.tomcat.conf>
 				<folder.conf>${basedir}/conf/integration</folder.conf>
+				 <deploy.plugin.skip>false</deploy.plugin.skip>				
 			</properties>
 		</profile>
 		<profile>
@@ -389,6 +391,13 @@
 						</configuration>
 					</configuration>
 				</plugin>
+				<plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>               
 			</plugins>
 		</pluginManagement>
 	</build>

@@ -50,14 +50,7 @@
 	<build>
 		<finalName>${finalName}</finalName>
 		<pluginManagement>
-			<plugins>				
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<configuration>
-						<skip>true</skip>
-					</configuration>
-				</plugin>
+			<plugins>	
 				<plugin>
 					<groupId>org.codehaus.cargo</groupId>
 					<artifactId>cargo-maven2-plugin</artifactId>
