@@ -2,6 +2,8 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 		{
 			extend : 'Ext.app.Controller',
 
+			models : [ 'ThesaurusModel' ],
+			
 			views : [ 'SandBoxPanel' ],
 
 			onGridRender : function(theGrid) {
@@ -12,6 +14,14 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 				theStore.load();
 				thePanel.setTitle(thePanel.title + ' : '
 						+ thePanel.thesaurusData.title);
+				
+				var thesaurusId= thePanel.thesaurusData.id;
+				var thesaurusModel= this.getThesaurusModelModel();
+				thesaurusModel.load(thesaurusId, {
+					success : function(model) {
+						thePanel.thesaurusData = model.data;
+					}
+				});
 			},
 
 			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {

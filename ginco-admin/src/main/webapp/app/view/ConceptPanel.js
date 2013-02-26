@@ -11,6 +11,7 @@ Ext
 
 					thesaurusData : '',
 					conceptId : '',
+					initPreferedTermBeforeLoad : '',
 
 					alias : 'widget.conceptPanel',
 					localized : true,

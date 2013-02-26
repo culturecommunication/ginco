@@ -50,10 +50,15 @@ Ext.define('GincoApp.controller.TermPanelController', {
 	loadData : function(aForm, aModel) {
 		var termPanel = aForm.up('termPanel');
 		var deleteBtn = aForm.down('#delete');
+		var createConceptBtn = aForm.down('#createconcept');
 		termPanel.setTitle(aModel.data.lexicalValue);
 		aForm.setTitle(aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
 		termPanel.termId = aModel.data.identifier;
+		
+		if (Ext.isEmpty(aModel.data.conceptId)){
+			createConceptBtn.setDisabled(false);
+		}
 		deleteBtn.setDisabled(false);
 	},
 
@@ -127,6 +132,26 @@ Ext.define('GincoApp.controller.TermPanelController', {
 				thePanel.thesaurusData.id);
 		theStore.load();
 	},
+	
+	loadCreateConceptFromTerm : function(theButton) {
+		var thePanel = theButton.up('termPanel');
+		var theForm = theButton.up('form');
+		var theTermModel = theForm.getForm().getRecord();
+		var termId = theButton.up('termPanel').termId;
+		var conceptPanel = this.createPanel('GincoApp.view.ConceptPanel', thePanel.thesaurusData, theTermModel);
+	},
+	
+	createPanel : function(aType,thesaurusData, theTermModel)
+	{
+		var aNewPanel = Ext.create(aType);
+		aNewPanel.thesaurusData = thesaurusData;
+		aNewPanel.initPreferedTermBeforeLoad = theTermModel;
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		var tab = topTabs.add(aNewPanel);
+		topTabs.setActiveTab(tab);
+		tab.show();
+		return aNewPanel;
+	},
 
 	init : function() {
 		this.control({
@@ -141,8 +166,10 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			},
 			'termPanel #languageCombo' : {
 				render : this.loadLanguages
+			},
+			'termPanel #createconcept' : {
+				click : this.loadCreateConceptFromTerm
 			}
-
 		});
 	}
 });

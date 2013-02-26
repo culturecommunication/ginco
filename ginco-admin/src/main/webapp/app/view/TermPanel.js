@@ -66,6 +66,13 @@ Ext.define('GincoApp.view.TermPanel', {
                                     itemId: 'delete',
                                     cls: 'delete',
                                     iconCls : 'icon-delete'
+                                },
+                                {
+                                    xtype: 'button',
+                                    text: 'Créer un concept depuis ce terme',
+                                    disabled: true,
+                                    itemId: 'createconcept',
+                                    iconCls : 'icon-add'
                                 }
                             ]
                         }

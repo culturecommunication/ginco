@@ -38,9 +38,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 				success : function(model) {
 					me.loadData(theForm, model);
 					theForm.getEl().unmask();
-					// Disable the save button because we don't implement concept updating!
-					//var saveButton = thePanel.down('button[cls=save]');
-					//saveButton.setDisabled(true);
 				},
 				failure : function(model) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
@@ -55,6 +52,16 @@ Ext.define('GincoApp.controller.ConceptController', {
 			model.data.thesaurusId = thePanel.thesaurusData.id;
 			model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
 			model.data.identifier = "";
+			
+			if (!Ext.isEmpty(thePanel.initPreferedTermBeforeLoad)){
+				if (!Ext.isEmpty(thePanel.initPreferedTermBeforeLoad.data.identifier)) {
+					//adding a term as prefered term (creation of a concept from a sandboxed term)
+					var theGrid = thePanel.down('gridpanel');
+					var theStore= theGrid.getStore();
+					thePanel.initPreferedTermBeforeLoad.data.prefered = true;
+					theStore.add(thePanel.initPreferedTermBeforeLoad);
+				}
+			}
 			theForm.loadRecord(model);
 		}
 	},
