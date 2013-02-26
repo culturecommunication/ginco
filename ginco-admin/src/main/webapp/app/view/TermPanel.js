@@ -100,10 +100,16 @@ Ext.define('GincoApp.view.TermPanel', {
                             allowBlank: false
                         },
                         {
-                        	xtype: 'textareafield',
+                        	xtype : 'htmleditor',
                         	name:'source',
                         	fieldLabel: me.xSourceLabel,
-                        	grow: true
+                        	enableAlignments : false,
+							enableColors : false,
+							enableFont : false,
+							enableFontSize : false,
+							enableFormat : false,
+							enableLists : false,
+							enableSourceEdit : false
                         },
                         {
                         	xtype: 'hiddenfield',
