@@ -36,10 +36,13 @@ package fr.mcc.ginco.rest.services;
 
 import java.util.ResourceBundle;
 
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -57,9 +60,9 @@ ExceptionMapper<BusinessException> {
 			String msg  = res.getString(e.getUserMessageKey());				
 			log.error("Business Exception in REST services : "+e.getMessage());
 			log.debug("Business Exception in REST services : "+msg);
+			msg = StringEscapeUtils.escapeEcmaScript(msg);
 	        return Response.status(Status.OK)
 	        		.entity("{success:false, message: '"+msg+"'}")
 	        		.build();
-	    }	
-		
+	    }
 }
