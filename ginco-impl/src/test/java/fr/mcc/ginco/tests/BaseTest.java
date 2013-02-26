@@ -42,7 +42,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:applicationContext.xml",
-        "classpath*:applicationContext-*.xml"
+        "classpath*:spring/applicationContext-*.xml"
 })
 public abstract class BaseTest extends AbstractTransactionalJUnit4SpringContextTests {	
 }

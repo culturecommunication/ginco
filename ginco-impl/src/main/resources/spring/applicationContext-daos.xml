@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- We define the context of the application for business layer and reference 
+	beans to the DAOs -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"	
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">    
+  
+
+    <!-- Declaration de la SessionFactory d'Hibernate -->
+    <bean id="gincoSessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/Thesaurus.hbm.xml</value>
+                <value>hibernate/ThesaurusType.hbm.xml</value>
+                <value>hibernate/ThesaurusFormat.hbm.xml</value>
+                <value>hibernate/LanguagesIso639.hbm.xml</value>
+                <value>hibernate/ThesaurusOrganization.hbm.xml</value>
+                <value>hibernate/LogJournal.hbm.xml</value>  
+                <value>hibernate/ThesaurusVersionHistory.hbm.xml</value>
+                <value>hibernate/ThesaurusConcept.hbm.xml</value>
+                <value>hibernate/ThesaurusTermRole.hbm.xml</value>
+                <value>hibernate/ThesaurusTerm.hbm.xml</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="current_session_context_class">${hibernate.current_session_context_class}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
+                <prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+                <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+                <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
+                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>                
+            </props>
+        </property>
+
+    </bean>
+
+    <!-- Transaction manager -->
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+          p:sessionFactory-ref="gincoSessionFactory" />
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    
+	<!-- Definition of the Data Access Objects of Ginco Application -->
+	<!-- All Data Access Objects are injected by spring, using GenericHibernateDAO -->
+	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
+		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
+	</bean>
+
+	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
+		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusOrganization" />
+	</bean>
+
+	<bean id="thesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
+		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusType" />
+	</bean>
+
+	<bean id="thesaurusVersionHistoryDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
+		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusVersionHistory" />
+	</bean>
+
+</beans>

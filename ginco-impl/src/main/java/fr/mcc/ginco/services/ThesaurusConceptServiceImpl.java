@@ -34,17 +34,17 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -52,10 +52,10 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.journal.GincoLog;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.utils.LabelUtil;
 
 /**
@@ -163,15 +163,32 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@GincoLog(action = GincoLog.Action.CREATE, entityType = GincoLog.EntityType.THESAURUSCONCEPT)
-	public ThesaurusConcept createThesaurusConcept(ThesaurusConcept object,
+	public ThesaurusConcept createThesaurusConcept(ThesaurusConcept object, List <ThesaurusTerm>  terms,
 			IUser user) {
-		return thesaurusConceptDAO.update(object);
+		ThesaurusConcept concept =  thesaurusConceptDAO.update(object);
+		updateConceptTerms(concept,terms);
+		return concept;
+			
+	}
+	
+	private void updateConceptTerms(ThesaurusConcept concept, List <ThesaurusTerm>  terms) {
+		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
+		for (ThesaurusTerm thesaurusTerm : terms) {
+			if (StringUtils.isEmpty(thesaurusTerm.getIdentifier())){
+					logger.info("Creating a new term in DB");
+					thesaurusTerm.setConceptId(concept);
+					returnTerms.add(thesaurusTermDAO.update(thesaurusTerm));
+			}
+		}
 	}
 
 	@GincoLog(action = GincoLog.Action.UPDATE, entityType = GincoLog.EntityType.THESAURUSCONCEPT)
-	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			IUser user) {
-		return thesaurusConceptDAO.update(object);
+	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object, List <ThesaurusTerm> terms, 
+			IUser user) {		
+		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
+		updateConceptTerms(concept,terms);
+		return concept;
+
 	}
 
 	private Thesaurus checkThesaurusId(String thesaurusId)

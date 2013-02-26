@@ -1,85 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd        
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
         
     <context:annotation-config />
-    <context:component-scan base-package="fr.mcc.ginco" />
-
-    <alias alias="dataSource" name="dataSource${application.dataSourceType}"/>
-
+    <context:component-scan base-package="fr.mcc.ginco" /> 
+    
     <!-- Main Datasource -->
-    <bean id="dataSourceJNDI" class="org.springframework.jndi.JndiObjectFactoryBean"
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"
           lazy-init="true">
         <property name="jndiName" value="java:comp/env/jdbc/GincoPool" />
     </bean>
-
-    <!-- Datasource for tests -->
-    <bean id="dataSourceTest" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource"
-          lazy-init="true" destroy-method="close" scope="singleton">
-        <property name="driverClassName" value="org.h2.Driver" />
-        <property name="url" value="jdbc:h2:mem:test_db;INIT=RUNSCRIPT FROM 'classpath:create_tables.sql';DB_CLOSE_DELAY=-1" />
-        <property name="username" value="" />
-        <property name="password" value="" />
-        <property name="maxActive" value="50" />
-        <property name="maxIdle" value="20" />
-        <property name="maxWait" value="60000" />
-        <property name="initialSize" value="25" />
-        <property name="removeAbandoned" value="true" />
-        <property name="removeAbandonedTimeout" value="300" />
-    </bean>
-
-    <!-- Declaration de la SessionFactory d'Hibernate -->
-    <bean id="gincoSessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/Thesaurus.hbm.xml</value>
-                <value>hibernate/ThesaurusType.hbm.xml</value>
-                <value>hibernate/ThesaurusFormat.hbm.xml</value>
-                <value>hibernate/LanguagesIso639.hbm.xml</value>
-                <value>hibernate/ThesaurusOrganization.hbm.xml</value>
-                <value>hibernate/LogJournal.hbm.xml</value>  
-                <value>hibernate/ThesaurusVersionHistory.hbm.xml</value>
-                <value>hibernate/ThesaurusConcept.hbm.xml</value>
-                <value>hibernate/ThesaurusTermRole.hbm.xml</value>
-                <value>hibernate/ThesaurusTerm.hbm.xml</value>
-            </list>
-        </property>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="current_session_context_class">${hibernate.current_session_context_class}</prop>
-                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
-                <prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
-                <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
-                <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
-                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>                
-            </props>
-        </property>
-
-    </bean>
-
-    <!-- Transaction manager -->
-    <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager"
-          p:sessionFactory-ref="gincoSessionFactory" />
-
-    <tx:annotation-driven transaction-manager="transactionManager" />
-    
+     
     <bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreResourceNotFound" value="true"/>

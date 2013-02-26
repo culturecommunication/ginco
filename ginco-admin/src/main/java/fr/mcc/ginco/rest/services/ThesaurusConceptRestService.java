@@ -53,18 +53,15 @@ import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.users.SimpleUserImpl;
 
@@ -82,11 +79,7 @@ public class ThesaurusConceptRestService {
 	
 	@Inject
 	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
-	
-	@Inject
-	@Named("thesaurusService")
-	private IThesaurusService thesaurusService;
+	private IThesaurusTermService thesaurusTermService;	
 	
     @Inject
     @Named("thesaurusConceptService")
@@ -162,30 +155,16 @@ public class ThesaurusConceptRestService {
 		ThesaurusConcept returnConcept = null;
 		if (StringUtils.isEmpty(convertedConcept.getIdentifier())) {
 			logger.info("Creating a new concept in DB");
-			returnConcept = thesaurusConceptService.createThesaurusConcept(convertedConcept, user);
+			returnConcept = thesaurusConceptService.createThesaurusConcept(convertedConcept, terms, user);
 		} else {
 			//Case of existing concept
 			logger.info("Updating an existing concept in DB");
-			returnConcept = thesaurusConceptService.updateThesaurusConcept(convertedConcept, user);
-		}
+			returnConcept = thesaurusConceptService.updateThesaurusConcept(convertedConcept, terms, user);
+		}		
 		
-		//We save or update the terms
-		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusTerm thesaurusTerm : terms) {
-			if (StringUtils.isEmpty(thesaurusTerm.getIdentifier())){
-				logger.info("Creating a new term in DB");
-				thesaurusTerm.setConceptId(returnConcept);
-				returnTerms.add(thesaurusTermService.createThesaurusTerm(thesaurusTerm, user));
-			} else {
-				//Case of existing term
-				logger.info("Updating an existing term in DB");
-				thesaurusTerm.setConceptId(returnConcept);
-				returnTerms.add(thesaurusTermService.updateThesaurusTerm(thesaurusTerm, user));
-			}
-		}
 		
 		//Return ThesaurusConceptView created/updated
-		return thesaurusConceptViewConverter.convert(returnConcept, returnTerms);
+		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
 	
 	

@@ -34,83 +34,97 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-import java.util.List;
-
 public interface IThesaurusConceptService {
-    /**
-     * Get list of all ThesaurusFormat.
-     * @return
-     */
-    List<ThesaurusConcept> getThesaurusConceptList();
+	/**
+	 * Get list of all ThesaurusFormat.
+	 * 
+	 * @return
+	 */
+	List<ThesaurusConcept> getThesaurusConceptList();
 
-    /**
-     * Get single ThesaurusFormat by its id.
-     * @param id of object
-     * @return {@code null} if not found; object otherwise.
-     */
-    ThesaurusConcept getThesaurusConceptById(String id);
-    
-    /**
-     * Get the ThesaurusConcepts which are not top term in a given thesaurus
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId) throws BusinessException ;    
-    
-  
+	/**
+	 * Get single ThesaurusFormat by its id.
+	 * 
+	 * @param id
+	 *            of object
+	 * @return {@code null} if not found; object otherwise.
+	 */
+	ThesaurusConcept getThesaurusConceptById(String id);
+
+	/**
+	 * Get the ThesaurusConcepts which are not top term in a given thesaurus
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 */
+	List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId)
+			throws BusinessException;
+
 	/**
 	 * Gets the preferred term of a concept
+	 * 
 	 * @param conceptId
 	 * @return
 	 * @throws BusinessException
 	 */
-	ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException;
-	
+	ThesaurusTerm getConceptPreferredTerm(String conceptId)
+			throws BusinessException;
+
 	/**
 	 * Gets the label of a concept
+	 * 
 	 * @param conceptId
 	 * @return
 	 * @throws BusinessException
 	 */
 	String getConceptLabel(String conceptId) throws BusinessException;
 
-	 /**
-     * Create a single Thesaurus Concept Object
-     */
-    ThesaurusConcept createThesaurusConcept(ThesaurusConcept object, IUser user);
-    
-	 /**
-     * Update a single Thesaurus Concept Object
-     */
-    ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object, IUser user);
+	/**
+	 * Create a single Thesaurus Concept Object
+	 */
+	ThesaurusConcept createThesaurusConcept(ThesaurusConcept object,
+			List<ThesaurusTerm> terms, IUser user);
 
-    /**
-     * Get the ThesaurusConcepts which are top term in a given thesaurus
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId) throws BusinessException ;
-    
-    /**
-     * Get the number of orphan thesaurus concept for a given thesaurusId
-     * @param thesaurusId
-     * @return
-     * @throws BusinessException
-     */
-    long getOrphanThesaurusConceptsCount(String thesaurusId) throws BusinessException;
-    
-    /**
-     * Get the number of top concept for a given thesaurus
-     * @param thesaurusId
-     * @return
-     * @throws BusinessException
-     */
-    long getTopTermThesaurusConceptsCount(String thesaurusId) throws BusinessException;
+	/**
+	 * Update a single Thesaurus Concept Object
+	 */
+	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
+			List<ThesaurusTerm> terms, IUser user);
 
+	/**
+	 * Get the ThesaurusConcepts which are top term in a given thesaurus
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 */
+	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId)
+			throws BusinessException;
+
+	/**
+	 * Get the number of orphan thesaurus concept for a given thesaurusId
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
+	long getOrphanThesaurusConceptsCount(String thesaurusId)
+			throws BusinessException;
+
+	/**
+	 * Get the number of top concept for a given thesaurus
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
+	long getTopTermThesaurusConceptsCount(String thesaurusId)
+			throws BusinessException;
 
 }
