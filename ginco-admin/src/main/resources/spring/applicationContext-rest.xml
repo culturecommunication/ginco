@@ -3,17 +3,32 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:cxf="http://cxf.apache.org/core"        
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://cxf.apache.org/jaxrs
        http://cxf.apache.org/schemas/jaxrs.xsd
        http://www.springframework.org/schema/util
-       http://www.springframework.org/schema/util/spring-util.xsd">
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://cxf.apache.org/core 
+       http://cxf.apache.org/schemas/core.xsd">
+
+<bean id="loggerPrereqs"
+    class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="targetObject" value="#{@systemProperties}" />
+    <property name="targetMethod" value="putAll" />
+    <property name="arguments">
+        <!-- The new Properties -->
+        <util:properties>
+            <prop key="org.apache.cxf.Logger">org.apache.cxf.common.logging.Slf4jLogger</prop>
+        </util:properties>
+    </property>
+</bean>
 
     <bean id="jsonProvider"
-          class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+          class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
 
-    <jaxrs:server id="uiServices" address="/ui">
+    <jaxrs:server id="uiServices" address="/ui" depends-on="loggerPrereqs">
         <jaxrs:serviceBeans>
             <bean class="fr.mcc.ginco.rest.services.BaseRestService"/>
             <bean class="fr.mcc.ginco.rest.services.InfoRestService"/>
@@ -22,8 +37,11 @@
             <bean class="fr.mcc.ginco.rest.services.ThesaurusConceptRestService"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-            <ref bean="jsonProvider"  />
+            <ref bean="jsonProvider" />
             <bean class="fr.mcc.ginco.rest.services.BusinessExceptionMapper"/>  
         </jaxrs:providers>
+        <jaxrs:features>
+            <cxf:logging/>
+        </jaxrs:features>
     </jaxrs:server>
 </beans>

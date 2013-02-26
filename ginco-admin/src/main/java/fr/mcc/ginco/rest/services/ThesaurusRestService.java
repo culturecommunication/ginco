@@ -48,10 +48,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.cxf.interceptor.InInterceptors;
+import org.apache.cxf.interceptor.OutInterceptors;
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
-
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -179,7 +180,7 @@ public class ThesaurusRestService {
 	 */
 	@POST
 	@Path("/updateVocabulary")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })	
 	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
 		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 		String principal = "unknown";

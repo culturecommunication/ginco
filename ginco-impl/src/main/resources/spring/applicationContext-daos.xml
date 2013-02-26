@@ -56,7 +56,8 @@
     <tx:annotation-driven transaction-manager="transactionManager" />
     
 	<!-- Definition of the Data Access Objects of Ginco Application -->
-	<!-- All Data Access Objects are injected by spring, using GenericHibernateDAO -->
+	<!-- All Data Access Objects are inject
+	ed by spring, using GenericHibernateDAO -->
 	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO" scope="prototype">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
 	</bean>

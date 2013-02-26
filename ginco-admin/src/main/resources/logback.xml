@@ -14,21 +14,17 @@
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern>
         </layout>
-    </appender>
-
-    <logger name="org.apache.cxf">
-        <level value="WARNING" />
+    </appender>  
+    
+    <logger name="org.springframework" level="WARN" additivity="false">
+        <appender-ref ref="FILE" />
+    </logger>
+    
+     <logger name="fr.mcc.ginco" level="DEBUG" additivity="false">
         <appender-ref ref="FILE" />
     </logger>
 
-    <logger name="org.springframework">
-        <level value="WARNING" />
+    <root level="INFO" >
         <appender-ref ref="FILE" />
-    </logger>
-
-    <root>
-        <level value="DEBUG" />
-        <appender-ref ref="FILE" />
-        <appender-ref ref="CONSOLE" />
     </root>
 </configuration>

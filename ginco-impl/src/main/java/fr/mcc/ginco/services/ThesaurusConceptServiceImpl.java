@@ -197,7 +197,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		if (thesaurus == null) {
 			throw new BusinessException("Invalid thesaurusId : " + thesaurusId,"invalid-thesaurus-id");
 		} else {
-			logger.info("thesaurus found");
+			logger.debug("thesaurus with id =  " + thesaurusId + " found");
 
 		}
 		return thesaurus;
