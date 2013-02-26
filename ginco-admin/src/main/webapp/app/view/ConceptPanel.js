@@ -160,7 +160,7 @@ Ext
 															columns : [
 																	{
 																		dataIndex : 'identifier',
-																		text : me.xIdentifierLabel,
+																		text : me.xIdentifierLabel
 																	},
 																	{
 																		dataIndex : 'lexicalValue',

@@ -108,6 +108,23 @@ Ext.define('GincoApp.controller.ConceptController', {
 		win.prefered = prefered;
 		win.show();
 	},
+
+    createPanel : function(aType, thesaurusData, termId)
+    {
+        var aNewPanel = Ext.create(aType);
+        aNewPanel.thesaurusData = thesaurusData;
+        aNewPanel.termId = termId;
+        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+        var tab = topTabs.add(aNewPanel);
+        topTabs.setActiveTab(tab);
+        tab.show();
+        return aNewPanel;
+    },
+
+    onTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
+        var thePanel = theGrid.up('conceptPanel');
+        var termPanel = this.createPanel('GincoApp.view.TermPanel', thePanel.thesaurusData, record.data.identifier);
+    },
 	
 	onSelectTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
 		var theWin = theGrid.up('selectTermWin');
@@ -221,6 +238,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
 			},
+            'conceptPanel gridpanel' : {
+                itemdblclick : this.onTermDblClick
+            },
 			'selectTermWin gridpanel' : {
  				render : this.onGridRender,
  				itemdblclick : this.onSelectTermDblClick
