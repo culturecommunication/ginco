@@ -174,11 +174,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	private void updateConceptTerms(ThesaurusConcept concept, List <ThesaurusTerm>  terms) {
 		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm thesaurusTerm : terms) {
-			if (StringUtils.isEmpty(thesaurusTerm.getIdentifier())){
 					logger.info("Creating a new term in DB");
 					thesaurusTerm.setConceptId(concept);
 					returnTerms.add(thesaurusTermDAO.update(thesaurusTerm));
-			}
 		}
 	}
 
