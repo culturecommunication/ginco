@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.exceptions;
 
-import java.util.ResourceBundle;
 
 /**
  * This exception  is thrown when a business exception is encountered
@@ -43,7 +42,6 @@ import java.util.ResourceBundle;
 public class BusinessException extends Exception {
 
 	private String userMessageKey;
-	private String[] messageArgs;
 
 	
 	/**
@@ -54,25 +52,11 @@ public class BusinessException extends Exception {
 	public BusinessException(String logMessage, String userMessageKey) {
 		super(logMessage);
 		this.userMessageKey =userMessageKey;
-	}
-	/**
-	 * 	Creates a new Business Exception
-	 * !! Not implemented yet!!!
-	 * @param logMessage message to log
-	 * @param userMessageKey key of the message to display
-	 * @param messageArgs arguments to build the user message
-	 */
-	public BusinessException(String logMessage, String userMessageKey, String[] messageArgs) {
-		super(logMessage);	
-		this.userMessageKey =userMessageKey;
-		this.messageArgs = messageArgs;
-	}
+	}	
 
 	public String getUserMessageKey() {
 		return userMessageKey;
 	}
-	public String[] getMessageArgs() {
-		return messageArgs;
-	}
+	
 
 }
