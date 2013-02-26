@@ -75,7 +75,6 @@ Ext
 										                        	xtype: 'textareafield',
 										                        	name:'source',
 										                        	fieldLabel: me.xSourceLabel,
-										                        	allowBlank: false,
 										                        	grow: true
 										                        },
 										                        {

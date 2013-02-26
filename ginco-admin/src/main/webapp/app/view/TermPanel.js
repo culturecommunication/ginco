@@ -96,7 +96,6 @@ Ext.define('GincoApp.view.TermPanel', {
                         	xtype: 'textareafield',
                         	name:'source',
                         	fieldLabel: me.xSourceLabel,
-                        	allowBlank: false,
                         	grow: true
                         },
                         {
