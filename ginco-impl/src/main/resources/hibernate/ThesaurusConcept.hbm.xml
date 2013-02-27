@@ -16,7 +16,13 @@
         
         <set name="parentConcepts" table="hierarchical_relationship">
 			<key column="childconceptid" />
-			<many-to-many column="identifier"  class="fr.mcc.ginco.beans.ThesaurusConcept" />
+			<many-to-many column="parentconceptid"  class="fr.mcc.ginco.beans.ThesaurusConcept" />
 		</set>
+		
+		<set name="rootConcepts" table="top_relationship">
+			<key column="childconceptid" />
+			<many-to-many column="rootconceptid" class="fr.mcc.ginco.beans.ThesaurusConcept" />
+		</set>
+		
     </class>
 </hibernate-mapping>

@@ -49,6 +49,7 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
     private Boolean topConcept;
     private Thesaurus thesaurus;
     private Set<ThesaurusConcept> parentConcepts  = new HashSet<ThesaurusConcept>();
+    private Set<ThesaurusConcept> rootConcepts  = new HashSet<ThesaurusConcept>();
 
     public String getIdentifier() {
         return identifier;
@@ -113,5 +114,11 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
 	}
 	public void setParentConcepts(Set<ThesaurusConcept> parentConcepts) {
 		this.parentConcepts = parentConcepts;
+	}
+	public Set<ThesaurusConcept> getRootConcepts() {
+		return rootConcepts;
+	}
+	public void setRootConcepts(Set<ThesaurusConcept> rootConcepts) {
+		this.rootConcepts = rootConcepts;
 	}
 }
