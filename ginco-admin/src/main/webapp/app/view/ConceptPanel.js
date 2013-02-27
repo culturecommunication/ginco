@@ -192,22 +192,12 @@ Ext
                                                                     {
                                                                         xtype:'actioncolumn',
                                                                         items: [{
-                                                                             icon: '../images/detach.png',
+                                                                             icon: 'images/detach.png',
                                                                              tooltip: me.xDetach,
                                                                              handler: function(view, rowIndex, colIndex, item, e, record, row) {
                                                                              }
                                                                         }]
-                                                                    }/*,
-                                                                    {
-                                                                        header: 'Action',
-                                                                        width: 70,
-                                                                        sortable: false,
-                                                                        renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-                                                                            debugger;
-                                                                            return '<input type="button" value="Detacher" id="'+record.id+'"/>';
-                                                                        },
-                                                                        dataIndex: 'id'
-                                                                    }*/
+                                                                    }
                                                             ]
 														} ]
 											} ]
