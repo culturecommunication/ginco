@@ -34,83 +34,97 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.journal.GincoLog;
-import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.log.Log;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 @Transactional
 @Service("thesaurusTermService")
 public class ThesaurusTermServiceImpl implements IThesaurusTermService {
-	
+
     @Inject
     @Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;
+    private IThesaurusTermDAO thesaurusTermDAO;
 
-	@Override
-	public ThesaurusTerm getThesaurusTermById(String id) throws BusinessException {
-		ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(id);
-		if (thesaurusTerm != null) {
-			return thesaurusTerm;
-		} else {
-			throw new BusinessException("Invalid termId requested : " + id, "invalid-term-id");
-		}
-	}
+    @Log
+    Logger logger;
 
-	@Override
-	public List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex,
-			Integer limit, String idThesaurus) {
-		return thesaurusTermDAO.findPaginatedSandboxedItems(startIndex, limit, idThesaurus);
-	}
-	
-	@Override
-	public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
-		return thesaurusTermDAO.findTermsByConceptId(idConcept);
-	}
+    @Override
+    public ThesaurusTerm getThesaurusTermById(String id) throws BusinessException {
+        ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(id);
+        if (thesaurusTerm != null) {
+            return thesaurusTerm;
+        } else {
+            throw new BusinessException("Invalid termId requested : " + id, "invalid-term-id");
+        }
+    }
 
-	@Override
-	public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException{
-		return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
-	}
-	
-	@GincoLog(action = GincoLog.Action.CREATE, entityType=GincoLog.EntityType.THESAURUSTERM)
+    @Override
+    public List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex,
+                                                                      Integer limit, String idThesaurus) {
+        return thesaurusTermDAO.findPaginatedSandboxedItems(startIndex, limit, idThesaurus);
+    }
+
+    @Override
+    public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
+        return thesaurusTermDAO.findTermsByConceptId(idConcept);
+    }
+
+    @Override
+    public void markTermsAsSandboxed(List<ThesaurusTerm> sent, List<ThesaurusTerm> origin) throws BusinessException {
+
+        for (ThesaurusTerm old : origin) {
+            if (!sent.contains(old)) {
+                ThesaurusTerm term = thesaurusTermDAO.getById(old.getId());
+                term.setConceptId(null);
+                thesaurusTermDAO.update(term);
+                logger.info("Marking Term with ID " + old.getId() + " as SandBoxed.");
+            }
+        }
+    }
+
+    @Override
+    public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException {
+        return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
+    }
+
+    @GincoLog(action = GincoLog.Action.CREATE, entityType = GincoLog.EntityType.THESAURUSTERM)
     public ThesaurusTerm createThesaurusTerm(ThesaurusTerm object, IUser user) {
-    	return thesaurusTermDAO.update(object);
-    }
-	
-	@GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUSTERM)
-    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user) {
-    	return thesaurusTermDAO.update(object);
-    }
-	
-    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) throws BusinessException {
-		if (object.getConceptId() == null ) {
-			return thesaurusTermDAO.delete(object);
-		} else {
-			throw new BusinessException("It's not possible to delete a term still attached to a concept", "delete-attached-term");
-		}
+        return thesaurusTermDAO.update(object);
     }
 
-	@Override
-	public List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
-		List<ThesaurusTerm>  preferedTerms = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusTerm thesaurusTerm : listOfTerms) {
-			if (thesaurusTerm.getPrefered()){
-				preferedTerms.add(thesaurusTerm);
-			}
-		}
-		return preferedTerms;
-	}
+    @GincoLog(action = GincoLog.Action.UPDATE, entityType = GincoLog.EntityType.THESAURUSTERM)
+    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user) {
+        return thesaurusTermDAO.update(object);
+    }
+
+    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) throws BusinessException {
+        if (object.getConceptId() == null ) {
+            return thesaurusTermDAO.delete(object);
+        } else {
+            throw new BusinessException("It's not possible to delete a term still attached to a concept", "delete-attached-term");
+        }
+    }
+
+    @Override
+    public List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
+        List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
+        for (ThesaurusTerm thesaurusTerm : listOfTerms) {
+            if (thesaurusTerm.getPrefered()) {
+                preferedTerms.add(thesaurusTerm);
+            }
+        }
+        return preferedTerms;
+    }
 }

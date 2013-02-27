@@ -34,10 +34,11 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.beans.users.IUser;
+import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 /**
  * Service used to work with {@link ThesaurusTerm} objects, contains basic
@@ -93,11 +94,18 @@ public interface IThesaurusTermService {
     List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms);
     
     /**
-     * @param listOfTerms
+     * @param idConcept
      * @return
      * This method returns all the terms that belong to a concept
      * @throws BusinessException 
      */
     List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;
-    
+
+    /**
+     * This method compares lists of terms - if previosly presented term has been deleted
+     * (so it is not anymore in Concept) it will be marked as SandBoxed.
+     * @param sent new list of Terms
+     * @param origin old list of Terms
+     */
+    void markTermsAsSandboxed(List<ThesaurusTerm> sent, List<ThesaurusTerm> origin) throws BusinessException;
 }

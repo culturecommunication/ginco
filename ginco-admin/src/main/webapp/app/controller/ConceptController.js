@@ -132,8 +132,14 @@ Ext.define('GincoApp.controller.ConceptController', {
         var thePanel = theGrid.up('conceptPanel');
         var termPanel = this.createPanel('GincoApp.view.TermPanel', thePanel.thesaurusData, record.data.identifier);
     },
-	
-	onSelectTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
+
+    onDetachClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
+        var theGrid = gridview.up('gridpanel');
+        var theStore = theGrid.getStore();
+        theStore.remove(rec);
+    },
+
+    onSelectTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
 		var theWin = theGrid.up('selectTermWin');
 		if (theWin.prefered == true) {
 			record.data.prefered = true;
@@ -202,7 +208,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 		theForm.getEl().mask(me.xLoading);
 		var updatedModel = theForm.getForm().getRecord();
-		updatedModel.terms().add(termsData);
+		updatedModel.terms().removeAll();
+        updatedModel.terms().add(termsData);
 		updatedModel.save({
 			success : function(record, operation) {
 				var resultRecord = operation.getResultSet().records[0];
@@ -221,7 +228,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	
     init:function(){
          this.control({
-        	 'conceptPanel form' : {
+        	'conceptPanel form' : {
  				afterrender : this.onConceptFormRender
  			},
  			'conceptPanel  button[cls=save]' : {
@@ -251,8 +258,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'selectTermWin gridpanel' : {
  				render : this.onGridRender,
  				itemdblclick : this.onSelectTermDblClick
- 			}
-			
+ 			},
+            'conceptPanel gridpanel actioncolumn' : {
+                click : this.onDetachClick
+            }
          });
     }
 });

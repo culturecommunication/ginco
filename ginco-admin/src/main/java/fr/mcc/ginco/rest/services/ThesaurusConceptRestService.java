@@ -102,8 +102,7 @@ public class ThesaurusConceptRestService {
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object by providing
 	 * its id.
 	 * 
-	 * @param id
-	 *            {@link String} identifier to try with
+	 * @param conceptId {@link String} identifier to try with
 	 * 
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object in JSON
 	 *         format or {@code null} if not found
@@ -143,6 +142,10 @@ public class ThesaurusConceptRestService {
 		if (preferedTerm.size() > 1) {
 			throw new BusinessException("A concept must have at only one prefered term", "to-many-preferred-terms-for-concept");
 		}
+
+        List<ThesaurusTerm> origin = thesaurusTermService.getTermsByConceptId(convertedConcept.getId());
+
+        thesaurusTermService.markTermsAsSandboxed(terms, origin);
 		
 		String principal = "unknown";
 		if (context != null) {

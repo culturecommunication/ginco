@@ -6,7 +6,7 @@
 }
 
 .x-mask.splashscreen {
-    background-color: white;*/
+    background-color: white;
     opacity: 1;
 }
 
@@ -60,6 +60,10 @@
 
 .sandbox {
     background-image: url(../images/basket.png) !important;
+}
+
+.icon-detach {
+    background-image: url(../images/detach.png) !important;
 }
 
 .icon-save {

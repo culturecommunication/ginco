@@ -16,5 +16,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
 	xPreferedTerm: 'Terme préférentiel',
 	xNonPreferedTerm: 'Terme non préférentiel',
 	xCreateTerm: 'Créer un nouveau terme',
-	xExistingTerm: 'Sélectionner un terme existant'
+	xExistingTerm: 'Sélectionner un terme existant',
+    xDetach: 'Detacher'
 });

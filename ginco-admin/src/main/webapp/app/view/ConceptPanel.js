@@ -39,6 +39,7 @@ Ext
 					xNonPreferedTerm: 'Non Prefered Term',
 					xCreateTerm: 'Create Term',
 					xExistingTerm: 'Select Existing Term',
+                    xDetach: 'Detach from Concept',
 
 					initComponent : function() {
 						var me = this;
@@ -176,11 +177,38 @@ Ext
 																		xtype: 'booleancolumn',
 																		dataIndex : 'prefered',
 																		text : me.xPreferedColumnLabel
+
+//                                                                        xtype:'templatecolumn',
+//                                                                        tpl:new Ext.XTemplate('<tpl for=".">',
+//                                                                            '<input type="checkbox" checked />',
+//                                                                            '</tpl>'),
+//                                                                        dataIndex : 'prefered',
+//                                                                        text : me.xPreferedColumnLabel
 																	},
 																	{
 																		dataIndex : 'created',
 																		text : me.xCreatedDateLabel
-																	} ]
+																	},
+                                                                    {
+                                                                        xtype:'actioncolumn',
+                                                                        items: [{
+                                                                             icon: '../images/detach.png',
+                                                                             tooltip: me.xDetach,
+                                                                             handler: function(view, rowIndex, colIndex, item, e, record, row) {
+                                                                             }
+                                                                        }]
+                                                                    }/*,
+                                                                    {
+                                                                        header: 'Action',
+                                                                        width: 70,
+                                                                        sortable: false,
+                                                                        renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+                                                                            debugger;
+                                                                            return '<input type="button" value="Detacher" id="'+record.id+'"/>';
+                                                                        },
+                                                                        dataIndex: 'id'
+                                                                    }*/
+                                                            ]
 														} ]
 											} ]
 										});
