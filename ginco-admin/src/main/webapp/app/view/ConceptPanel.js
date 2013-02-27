@@ -3,6 +3,13 @@
  * Term Creation/Edition Form
  * 
  */
+
+Ext.Loader.setPath('Ext.ux', 'extjs/ux');
+
+Ext.require([
+    'Ext.ux.CheckColumn'
+]);
+
 Ext
 		.define(
 				'GincoApp.view.ConceptPanel',
@@ -174,16 +181,10 @@ Ext
 																		text : me.xLanguagesLabel
 																	},
 																	{
-																		xtype: 'booleancolumn',
+																		xtype: 'checkcolumn',
 																		dataIndex : 'prefered',
-																		text : me.xPreferedColumnLabel
-
-//                                                                        xtype:'templatecolumn',
-//                                                                        tpl:new Ext.XTemplate('<tpl for=".">',
-//                                                                            '<input type="checkbox" checked />',
-//                                                                            '</tpl>'),
-//                                                                        dataIndex : 'prefered',
-//                                                                        text : me.xPreferedColumnLabel
+                                                                        header : me.xPreferedColumnLabel,
+                                                                        stopSelection: false
 																	},
 																	{
 																		dataIndex : 'created',

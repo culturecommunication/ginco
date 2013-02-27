@@ -6,6 +6,7 @@
     <script src="extjs/${ginco.ext.js.file}"></script>
     <link rel="stylesheet" href="extjs/resources/css/ext-all.css">
     <link rel="stylesheet" href="css/ginco.css">
+    <link rel="stylesheet" href="css/ux/CheckHeader.css">
     <script type="text/javascript" src="ext-locale-loader.js"></script>
     <script type="text/javascript" src="ext-custom-comp.js"></script>
     <script type="text/javascript" src="app.js"></script>
