@@ -34,25 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.cxf.common.util.StringUtils;
-import org.apache.cxf.jaxrs.ext.MessageContext;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.users.IUser;
@@ -64,6 +45,18 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.users.SimpleUserImpl;
+import org.apache.cxf.common.util.StringUtils;
+import org.apache.cxf.jaxrs.ext.MessageContext;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Thesaurus Concept REST service for all operation on a thesaurus' concepts
@@ -143,9 +136,10 @@ public class ThesaurusConceptRestService {
 			throw new BusinessException("A concept must have at only one prefered term", "to-many-preferred-terms-for-concept");
 		}
 
-        List<ThesaurusTerm> origin = thesaurusTermService.getTermsByConceptId(convertedConcept.getId());
-
-        thesaurusTermService.markTermsAsSandboxed(terms, origin);
+        if(!convertedConcept.getId().isEmpty()) {
+            List<ThesaurusTerm> origin = thesaurusTermService.getTermsByConceptId(convertedConcept.getId());
+            thesaurusTermService.markTermsAsSandboxed(terms, origin);
+        }
 		
 		String principal = "unknown";
 		if (context != null) {
