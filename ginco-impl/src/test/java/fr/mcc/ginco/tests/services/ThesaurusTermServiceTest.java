@@ -1,11 +1,10 @@
 package fr.mcc.ginco.tests.services;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.services.ThesaurusTermServiceImpl;
+import fr.mcc.ginco.tests.BaseTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,16 +14,16 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.ThesaurusTermServiceImpl;
-import fr.mcc.ginco.tests.BaseTest;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 @TransactionConfiguration
 @Transactional
 public class ThesaurusTermServiceTest extends BaseTest {
-	
+
 
 	@Mock(name = "thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
@@ -71,5 +70,20 @@ public class ThesaurusTermServiceTest extends BaseTest {
 		when(thesaurusTermDAO.findPaginatedSandboxedItems(0, 10, "fake-id")).thenReturn(terms);    	
     	List<ThesaurusTerm> actualResponse = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(0, 10, "fake-id");
 		Assert.assertEquals(2, actualResponse.size());
-    }	
+    }
+
+    @Test(expected=BusinessException.class)
+    public final void testMarkSandboxedTerms() throws BusinessException {
+        List<ThesaurusTerm> old_list = thesaurusTermService.getTermsByConceptId("http://www.culturecommunication.gouv.fr/co1");
+        ThesaurusTerm termToDetach = thesaurusTermService.getThesaurusTermById("http://www.culturecommunication.gouv.fr/ter2");
+        List<ThesaurusTerm> new_list = new ArrayList<ThesaurusTerm>();
+        new_list.add(termToDetach);
+        thesaurusTermService.markTermsAsSandboxed(old_list, new_list);
+
+        Assert.assertEquals("Term has not been detached !", 1,
+                thesaurusTermService.getTermsByConceptId("http://www.culturecommunication.gouv.fr/co1").size());
+        Assert.assertEquals("Wrong term detached !", "xylophon",
+                thesaurusTermService.getTermsByConceptId("http://www.culturecommunication.gouv.fr/co1")
+                        .get(0).getLexicalValue());
+    }
 }

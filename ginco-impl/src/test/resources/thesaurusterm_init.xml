@@ -61,7 +61,7 @@
 			<value>false</value>
 			<value>0</value>
             <null />
-            <null />
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
 			<value>http://www.culturecommunication.gouv.fr/th1</value>		
 			<value>eng</value>				
 		</row>
@@ -97,7 +97,7 @@
 			<value>2013-02-04 15:29:59.66325</value>
 			<value>2013-02-04 15:29:59.66325</value>
 			<value>revolver</value>
-			<value>false</value>
+			<value>true</value>
 			<value>0</value>
             <null />
             <value>http://www.culturecommunication.gouv.fr/co1</value>
