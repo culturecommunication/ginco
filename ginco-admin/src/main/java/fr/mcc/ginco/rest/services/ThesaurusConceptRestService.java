@@ -136,9 +136,11 @@ public class ThesaurusConceptRestService {
 			throw new BusinessException("A concept must have at only one prefered term", "to-many-preferred-terms-for-concept");
 		}
 
-        if(!convertedConcept.getId().isEmpty()) {
-            List<ThesaurusTerm> origin = thesaurusTermService.getTermsByConceptId(convertedConcept.getId());
-            thesaurusTermService.markTermsAsSandboxed(terms, origin);
+        if(convertedConcept.getId() != null) {
+            if(!convertedConcept.getId().isEmpty()) {
+                List<ThesaurusTerm> origin = thesaurusTermService.getTermsByConceptId(convertedConcept.getId());
+                thesaurusTermService.markTermsAsSandboxed(terms, origin);
+            }
         }
 		
 		String principal = "unknown";
