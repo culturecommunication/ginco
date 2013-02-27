@@ -81,8 +81,9 @@ public interface IThesaurusTermService {
     
     /**
      * Delete a single Thesaurus Term Object
+     * @throws BusinessException 
      */
-    ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user);
+    ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) throws BusinessException;
     
     /**
      * @param listOfTerms

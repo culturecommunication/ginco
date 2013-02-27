@@ -79,9 +79,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 					me.application.fireEvent('termupdated',thePanel.thesaurusData);
 				},
 				failure : function() {
-					theForm.getEl().unmask();
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
 							me.xProblemSaveMsg);
+					theForm.getEl().unmask();
 				}
 			});
 		}
@@ -110,9 +110,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 							me.application.fireEvent('termdeleted',thePanel.thesaurusData);
 							globalTabs.remove(thePanel);
 						},
-						failure : function() {
+						failure : function(record, operation) {
 							Thesaurus.ext.utils.msg(me.xProblemLabel,
-									me.xProblemDeleteMsg);
+									operation.error);
 						}
 					});
 					break;

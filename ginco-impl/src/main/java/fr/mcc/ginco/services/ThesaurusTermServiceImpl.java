@@ -95,9 +95,12 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	return thesaurusTermDAO.update(object);
     }
 	
-	@GincoLog(action = GincoLog.Action.DELETE, entityType=GincoLog.EntityType.THESAURUSTERM)
-    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) {
-		return thesaurusTermDAO.delete(object);
+    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) throws BusinessException {
+		if (object.getConceptId() == null ) {
+			return thesaurusTermDAO.delete(object);
+		} else {
+			throw new BusinessException("It's not possible to delete a term still attached to a concept", "delete-attached-term");
+		}
     }
 
 	@Override
