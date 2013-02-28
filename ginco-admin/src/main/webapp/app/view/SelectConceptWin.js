@@ -60,7 +60,7 @@ Ext.define(
                                 text : me.xSelect,
                                 formBind : true,
                                 itemId : 'selectConceptAsParent',
-                                iconCls : 'icon-select-parent'
+                                iconCls : 'icon-save'
                             }]
                         } ]
                     }]

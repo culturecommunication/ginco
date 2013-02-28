@@ -77,3 +77,7 @@
 .icon-add {
     background-image: url(../images/add.png) !important;
 }
+
+.icon-add-parent {
+    background-image: url(../images/add-parent.png) !important;
+}
