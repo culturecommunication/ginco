@@ -60,157 +60,159 @@ Ext
 										{
 											title : me.xConceptPanelTitle,
 											items : [ {
-												
-												xtype : 'tabpanel',
-												items : [ {
-												
-												xtype : 'form',
-												title : me.xConceptPanelTitle,
-												flex : 1,
-												autoScroll : true,
-												pollForChanges : true,
-												trackResetOnLoad : true,
-												defaults : {
-													anchor : '100%',
-													afterLabelTextTpl : new Ext.XTemplate(
-															'<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>',
-															{
-																disableFormats : true
-															})
-												},
-												dockedItems : [ {
-													xtype : 'toolbar',
-													dock : 'top',
-													items : [ {
-														xtype : 'button',
-														text : me.xSave,
-														disabled : true,
-														formBind : true,
-														cls : 'save',
-														iconCls : 'icon-save'
-													}, {
-														xtype : 'button',
-														text : me.xDelete,
-														disabled : true,
-														itemId : 'delete',
-														cls : 'delete',
-														iconCls : 'icon-delete'
-													} ]
-												} ],
-												items : [
-														{
-															xtype : 'displayfield',
-															name : 'identifier',
-															fieldLabel : me.xIdentifierLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'created',
-															fieldLabel : me.xCreatedDateLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'modified',
-															fieldLabel : me.xModificationDateLabel
-														},
-														{
-															xtype : 'checkbox',
-															name : 'topconcept',
-															fieldLabel : me.xTopTermConceptLabel
-														},
-														{
-															xtype : 'gridpanel',
-															title : me.xTermListGridTitle,
-															store : me.conceptTermStore,
-
-															dockedItems : [ {
-																xtype : 'toolbar',
-																dock : 'top',
-																items : [ {
-																	xtype : 'button',
-																	text : me.xAddTerm,
-																	menu : {
-																		xtype : 'menu',
-																		items : [
-																				{
-																					xtype : 'menuitem',
-																					text : me.xPreferedTerm,
-																					menu : {
-																						xtype : 'menu',
-																						items : [
-																								{
-																									xtype : 'menuitem',
-																									itemId : 'newTermFromConceptPrefBtn',
-																									text : me.xCreateTerm
-																								},
-																								{
-																									xtype : 'menuitem',
-																									itemId : 'selectTermFromConceptPrefBtn',
-																									text : me.xExistingTerm
-																								} ]
-																					}
-																				},
-																				{
-																					xtype : 'menuitem',
-																					text : me.xNonPreferedTerm,
-																					menu : {
-																						xtype : 'menu',
-																						items : [
-																								{
-																									xtype : 'menuitem',
-																									itemId : 'newTermFromConceptNonPrefBtn',
-																									text : me.xCreateTerm
-																								},
-																								{
-																									xtype : 'menuitem',
-																									itemId : 'selectTermFromConceptNonPrefBtn',
-																									text : me.xExistingTerm
-																								} ]
-																					}
-																				} ]
-																	}
-																} ]
-															} ],
-
-															columns : [
-																	{
-																		dataIndex : 'identifier',
-																		text : me.xIdentifierLabel
-																	},
-																	{
-																		dataIndex : 'lexicalValue',
-																		text : me.xLexicalValueLabel,
-																		flex : 1
-																	},
-																	{
-																		dataIndex : 'language',
-																		text : me.xLanguagesLabel
-																	},
-																	{
-																		xtype: 'checkcolumn',
-																		dataIndex : 'prefered',
-                                                                        header : me.xPreferedColumnLabel,
-                                                                        stopSelection: false
-																	},
-																	{
-																		dataIndex : 'created',
-																		text : me.xCreatedDateLabel
-																	},
-                                                                    {
-                                                                        xtype:'actioncolumn',
-                                                                        items: [{
-                                                                             icon: 'images/detach.png',
-                                                                             tooltip: me.xDetach,
-                                                                             handler: function(view, rowIndex, colIndex, item, e, record, row) {
-                                                                             }
-                                                                        }]
-                                                                    }
-                                                            ]
+													xtype : 'tabpanel',
+													items : [{
+													xtype : 'form',
+													title : me.xConceptPanelTitle,
+													flex : 1,
+													autoScroll : true,
+													pollForChanges : true,
+													trackResetOnLoad : true,
+													defaults : {
+														anchor : '100%',
+														afterLabelTextTpl : new Ext.XTemplate(
+																'<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>',
+																{
+																	disableFormats : true
+																})
+													},
+													dockedItems : [ {
+														xtype : 'toolbar',
+														dock : 'top',
+														items : [ {
+															xtype : 'button',
+															text : me.xSave,
+															disabled : true,
+															formBind : true,
+															cls : 'save',
+															iconCls : 'icon-save',
+															itemId : 'saveConcept'
+														}, {
+															xtype : 'button',
+															text : me.xDelete,
+															disabled : true,
+															itemId : 'delete',
+															cls : 'delete',
+															iconCls : 'icon-delete'
 														} ]
-											},{
+													} ],
+													items : [
+															{
+																xtype : 'displayfield',
+																name : 'identifier',
+																fieldLabel : me.xIdentifierLabel
+															},
+															{
+																xtype : 'displayfield',
+																name : 'created',
+																fieldLabel : me.xCreatedDateLabel
+															},
+															{
+																xtype : 'displayfield',
+																name : 'modified',
+																fieldLabel : me.xModificationDateLabel
+															},
+															{
+																xtype : 'checkbox',
+																name : 'topconcept',
+																fieldLabel : me.xTopTermConceptLabel
+															},
+															{
+																xtype : 'gridpanel',
+																title : me.xTermListGridTitle,
+																store : me.conceptTermStore,
+	
+																dockedItems : [ {
+																	xtype : 'toolbar',
+																	dock : 'top',
+																	items : [ {
+																		xtype : 'button',
+																		text : me.xAddTerm,
+																		menu : {
+																			xtype : 'menu',
+																			items : [
+																					{
+																						xtype : 'menuitem',
+																						text : me.xPreferedTerm,
+																						menu : {
+																							xtype : 'menu',
+																							items : [
+																									{
+																										xtype : 'menuitem',
+																										itemId : 'newTermFromConceptPrefBtn',
+																										text : me.xCreateTerm
+																									},
+																									{
+																										xtype : 'menuitem',
+																										itemId : 'selectTermFromConceptPrefBtn',
+																										text : me.xExistingTerm
+																									} ]
+																						}
+																					},
+																					{
+																						xtype : 'menuitem',
+																						text : me.xNonPreferedTerm,
+																						menu : {
+																							xtype : 'menu',
+																							items : [
+																									{
+																										xtype : 'menuitem',
+																										itemId : 'newTermFromConceptNonPrefBtn',
+																										text : me.xCreateTerm
+																									},
+																									{
+																										xtype : 'menuitem',
+																										itemId : 'selectTermFromConceptNonPrefBtn',
+																										text : me.xExistingTerm
+																									} ]
+																						}
+																					} ]
+																		}
+																	} ]
+																} ],
+	
+																columns : [
+																		{
+																			dataIndex : 'identifier',
+																			text : me.xIdentifierLabel
+																		},
+																		{
+																			dataIndex : 'lexicalValue',
+																			text : me.xLexicalValueLabel,
+																			flex : 1
+																		},
+																		{
+																			dataIndex : 'language',
+																			text : me.xLanguagesLabel
+																		},
+																		{
+																			xtype: 'checkcolumn',
+																			dataIndex : 'prefered',
+	                                                                        header : me.xPreferedColumnLabel,
+	                                                                        stopSelection: false
+																		},
+																		{
+																			dataIndex : 'created',
+																			text : me.xCreatedDateLabel
+																		},
+	                                                                    {
+	                                                                        xtype:'actioncolumn',
+	                                                                        items: [{
+	                                                                             icon: 'images/detach.png',
+	                                                                             tooltip: me.xDetach,
+	                                                                             handler: function(view, rowIndex, colIndex, item, e, record, row) {
+	                                                                             }
+	                                                                        }]
+	                                                                    }
+	                                                            ]
+															} ]
+											},
+											{
 										        title: me.xNotesTab,
 										        xtype: 'noteConceptPanel',
-										        }]
+										        closable: false
+										     }
+											]
 											}]
 										});
 

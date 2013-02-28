@@ -22,12 +22,13 @@ Ext.define('GincoApp.controller.ConceptController', {
 	onConceptFormRender : function(theForm){
 		var me = this;
 		var thePanel = theForm.up('conceptPanel');
+		
 		var conceptId = thePanel.conceptId;
 		var model = this.getConceptModelModel();
 		if (conceptId!='')
 		{
 			theForm.getEl().mask("Chargement");
-			var thesaurusId= thePanel.thesaurusData.data.id;
+			var thesaurusId= thePanel.thesaurusData.id;
 			var thesaurusModel= this.getThesaurusModelModel();
 			thesaurusModel.load(thesaurusId, {
 				success : function(model) {
@@ -231,7 +232,7 @@ Ext.define('GincoApp.controller.ConceptController', {
         	'conceptPanel form' : {
  				afterrender : this.onConceptFormRender
  			},
- 			'conceptPanel  button[cls=save]' : {
+ 			'conceptPanel #saveConcept' : {
  				click : this.saveConcept
  			},
  			'conceptPanel #newTermFromConceptPrefBtn' : {

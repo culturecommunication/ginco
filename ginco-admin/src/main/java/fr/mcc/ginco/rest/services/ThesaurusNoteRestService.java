@@ -77,7 +77,7 @@ public class ThesaurusNoteRestService {
 	/**
 	 * Public method used to get the list of all concept note types in the database.
 	 * 
-	 * @return list of NoteType objects, if not found - {@code null}
+	 * @return list of NoteType objects for a concept, if not found - {@code null}
 	 * @throws BusinessException 
 	 */
 	@GET
@@ -92,9 +92,9 @@ public class ThesaurusNoteRestService {
 	}
 	
 	/**
-	 * Public method used to get the list of all concept note types in the database.
+	 * Public method used to get the list of all term note types in the database.
 	 * 
-	 * @return list of NoteType objects, if not found - {@code null}
+	 * @return list of NoteType objects for a term, if not found - {@code null}
 	 * @throws BusinessException 
 	 */
 	@GET

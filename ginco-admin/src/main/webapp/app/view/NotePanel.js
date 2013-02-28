@@ -19,17 +19,17 @@ Ext.define('GincoApp.view.NotePanel', {
     /*Fields with auto generated values*/
     xIdentifierLabel : 'Identifier',
     xCreatedDateLabel : 'Creation date',
-    xDateLabel : 'Last Modification Date',
+    xLexicalValueLabel : 'Lexical Value',
 
     /*Fields prompting values*/
-    xNoteListGridTitle : 'Liste des notes',
+    xNoteConceptListGridTitle : 'Liste des notes de concept',
     xLanguageLabel : 'Language',
     xAddNote: 'Add a note',
     
     initComponent: function() {
         var me = this;
+        me.noteConceptStore = Ext.create('GincoApp.store.ThesaurusNoteStore');
 
-        
         Ext.applyIf(me, {
             items: [
                 {
@@ -53,7 +53,8 @@ Ext.define('GincoApp.view.NotePanel', {
                                     disabled: true,
                                     formBind: true,
                                     cls: 'save',
-                                    iconCls : 'icon-save'
+                                    iconCls : 'icon-save',
+                                    itemId : 'saveNote'
                                 },
                                 {
                                     xtype: 'button',
@@ -68,8 +69,8 @@ Ext.define('GincoApp.view.NotePanel', {
                     ],
                     items: [{
 							xtype : 'gridpanel',
-							title : me.xNoteListGridTitle,
-							store : me.noteTermStore,
+							title : me.xNoteConceptListGridTitle,
+							store : me.noteConceptStore,
 
 							dockedItems : [ {
 								xtype : 'toolbar',
