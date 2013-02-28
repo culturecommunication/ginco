@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="Note" table="note">
+		<cache usage="read-write" />
+		<id name="identifier" />
+		<property name="lexicalValue" column="lexicalvalue" />
+		<property name="source" />
+		<property name="noteTypeCode" column="notetypecode" />
+		
+		<many-to-one name="language" column="lang" lazy="false" />
+		<many-to-one name="concept" column="conceptid" lazy="false" />
+		<many-to-one name="term" column="termid" lazy="false" />
+		 
+	</class>
+</hibernate-mapping>

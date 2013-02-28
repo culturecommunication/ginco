@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="NoteType" table="note_type">
+		<cache usage="read-write" />
+		<id name="code" />
+		<property name="label" />
+		<property name="isTerm" column="isterm" />
+		<property name="isConcept" column="isConcept" />
+	</class>
+</hibernate-mapping>
