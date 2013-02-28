@@ -1,7 +1,6 @@
 Ext.define('GincoApp.controller.TermPanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
-	views : [ 'TermPanel' ],
 	models : [ 'ThesaurusTermModel' ],
 
 	xLoading : 'Loading',
@@ -59,7 +58,10 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		if (Ext.isEmpty(aModel.data.conceptId)){
 			createConceptBtn.setDisabled(false);
 		}
-		deleteBtn.setDisabled(false);
+		
+		if (Ext.isEmpty(aModel.data.conceptId)){
+			deleteBtn.setDisabled(false);
+		}
 	},
 
 	saveForm : function(theButton) {
