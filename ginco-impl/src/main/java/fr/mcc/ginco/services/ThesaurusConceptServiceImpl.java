@@ -139,8 +139,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
     @Override
-    public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, String thesaurusId) {
-        return thesaurusConceptDAO.getChildrenConcepts(conceptId, thesaurusId);
+    public List<ThesaurusConcept> getChildrenByConceptId(String conceptId,
+                                                         String thesaurusId,
+                                                         boolean searchOrphans) {
+        return thesaurusConceptDAO.getChildrenConcepts(conceptId, thesaurusId, searchOrphans);
     }
 
     @Override

@@ -102,21 +102,35 @@ public class ThesaurusConceptDAO extends
 	}
 
     @Override
+    public List<ThesaurusConcept> getRootConcepts(String thesaurusId, boolean searchOrphans) {
+        return getChildrenConcepts(null, thesaurusId, searchOrphans);
+    }
+
+    @Override
     public List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId) {
+        return getChildrenConcepts(conceptId, thesaurusId, true);
+    }
+
+    @Override
+    public List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrhapns) {
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusConcept.class, "tc");
 
         if(conceptId == null || conceptId.isEmpty()) {
             criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
             criteria.add(Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
-                            Restrictions.isEmpty("tc.parentConcepts")));
-
-            return criteria.list();
+                    Restrictions.isEmpty("tc.parentConcepts")));
+        } else {
+            criteria.createCriteria("tc.parentConcepts", "pc")
+                    .add(Restrictions.eq("pc.identifier",
+                            conceptId));
         }
 
-        criteria.createCriteria("tc.parentConcepts", "pc")
-                .add(Restrictions.eq("pc.identifier",
-                        conceptId));
+        if(!searchOrhapns) {
+            criteria.add(Restrictions.eq("topConcept",true));
+        }
+
+
         return criteria.list();
     }
 

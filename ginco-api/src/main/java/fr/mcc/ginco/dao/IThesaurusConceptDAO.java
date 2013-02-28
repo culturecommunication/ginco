@@ -78,5 +78,27 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
 
 
-    List<ThesaurusConcept> getChildrenConcepts(String conveptId, String thesaurusId);
+    /**
+     * Get list of all root concepts by thesaurusId.
+     * @param thesaurusId should not be null !
+     * @param searchOrphans indicates if orphan concepts should be included in result
+     * @return list
+     */
+    List<ThesaurusConcept> getRootConcepts(String thesaurusId, boolean searchOrphans);
+
+    /**
+     * Get list of all children concepts by id of parent Concept (with orphans).
+     * @param conceptId
+     * @param thesaurusId
+     * @return list of children or all root concepts if conceptId is null.
+     */
+    List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId);
+
+    /**
+     * Get lsit of all children concepts by id of parent Concept.
+     * @param conceptId
+     * @param thesaurusId
+     * @return list of children or all root concepts if conceptId is null.
+     */
+    List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrhapns);
 }

@@ -128,10 +128,13 @@ public interface IThesaurusConceptService {
 			throws BusinessException;
 
     /**
-     *
-     * @param conceptId
-     * @param thesaurusId
-     * @return
+     * Search children of concept or thesaurus (if conceptId is null or empty)
+     * with given parameter (orphan or not).
+     * @param conceptId id of concept.
+     * @param thesaurusId id of thesaurus.
+     * @param searchOrphans indicates if concepts with topConcept==false should be
+     *                      included in result
+     * @return list of objects.
      */
-    List<ThesaurusConcept> getChildrenByConceptId(String conceptId, String thesaurusId);
+    List<ThesaurusConcept> getChildrenByConceptId(String conceptId, String thesaurusId, boolean searchOrphans);
 }

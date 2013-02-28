@@ -38,6 +38,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
@@ -65,17 +66,14 @@ public class ThesaurusConceptViewConverter {
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-    public List<ThesaurusConceptView> convert(List<ThesaurusConcept> conceptList) {
+    public List<ThesaurusConceptReducedView> convert(List<ThesaurusConcept> conceptList) throws BusinessException{
 
-        List<ThesaurusConceptView> result = new ArrayList<ThesaurusConceptView>();
+        List<ThesaurusConceptReducedView> result = new ArrayList<ThesaurusConceptReducedView>();
 
         for(ThesaurusConcept concept : conceptList) {
-            ThesaurusConceptView view = new ThesaurusConceptView();
+            ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
             view.setIdentifier(concept.getIdentifier());
-            view.setCreated(DateUtil.toString(concept.getCreated()));
-            view.setModified(DateUtil.toString(concept.getModified()));
-            view.setTopconcept(concept.getTopConcept());
-            view.setThesaurusId(concept.getThesaurus().getIdentifier());
+            view.setLabel(thesaurusConceptService.getConceptLabel(concept.getId()));
             result.add(view);
         }
 
