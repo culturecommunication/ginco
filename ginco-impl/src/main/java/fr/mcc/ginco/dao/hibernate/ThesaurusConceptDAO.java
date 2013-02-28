@@ -116,11 +116,15 @@ public class ThesaurusConceptDAO extends
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusConcept.class, "tc");
 
-        if(conceptId == null || conceptId.isEmpty()) {
-            criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
-            criteria.add(Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
-                    Restrictions.isEmpty("tc.parentConcepts")));
-        } else {
+        if ((conceptId != null && !conceptId.isEmpty()) &&
+            (thesaurusId != null && !thesaurusId.isEmpty()))
+        {
+            selectRoot(criteria, thesaurusId, conceptId);
+        }
+        else if (conceptId == null || conceptId.isEmpty()) {
+            selectRoot(criteria, thesaurusId);
+        }
+        else {
             criteria.createCriteria("tc.parentConcepts", "pc")
                     .add(Restrictions.eq("pc.identifier",
                             conceptId));
@@ -132,6 +136,21 @@ public class ThesaurusConceptDAO extends
 
 
         return criteria.list();
+    }
+
+    private void selectRoot(Criteria criteria, String thesaurusId) {
+        selectRoot(criteria, thesaurusId, null);
+    }
+
+    private void selectRoot(Criteria criteria, String thesaurusId, String excludeId) {
+        if(excludeId != null && !excludeId.isEmpty()) {
+           criteria.add(Restrictions.not
+                   (Restrictions.eq("tc.identifier", excludeId)));
+        }
+
+        criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
+        criteria.add(Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
+                Restrictions.isEmpty("tc.parentConcepts")));
     }
 
     private List<ThesaurusConcept> getListByThesaurusAndTopConcept(

@@ -5,25 +5,19 @@ Ext.define(
         alias: 'widget.selectConceptWin',
         localized: true,
 
-        thesaurusData : null,
-        store : null,
-        conceptId : null,
-        searchOrphans : true,
-        showTree : false,
+        config: {
+            thesaurusData : null,
+            conceptId : null,
+            searchOrphans : true,
+            showTree : false
+        },
 
         /*Fields prompting values*/
         xIdentifierColumnLabel : "Identifier",
         xLexicalValueColumnLabel : "Label",
-//        xCreatedColumnLabel: "Created",
-//        xModifiedColumnLabel:"Modified",
-//        xSourceColumnLabel:"Source",
-//        xStatusColumnLabel:"Status",
-//        xLangueColumnLabel:"Language",
-//        xSelectTermWinTitle : 'Select a Term',
-//        xSave: 'Save',
+        xSelect : "Select as parent",
 
         width : 500,
-        height : 530,
         title : 'Sélection d\'un concept',
         titleAlign : 'center',
         modal : true,
@@ -32,11 +26,12 @@ Ext.define(
             var me = this;
 
             me.conceptReducedStore = Ext.create('GincoApp.store.ConceptReducedStore');
-
-            me.conceptReducedStore.thesaurusId = me.thesaurusData.id,
-            me.conceptReducedStore.conceptId = me.conceptId;
-            //me.conceptReducedStore.searchOrphans = me.searchOrphans;
-//            me.conceptReducedStore.pageSize=20;
+            me.conceptReducedStore.getProxy().extraParams = {
+                id: me.conceptId,
+                thesaurusId: me.thesaurusData.id,
+                searchOrphans: me.searchOrphans
+            };
+            me.conceptReducedStore.load();
 
             Ext
                 .applyIf(
@@ -57,7 +52,17 @@ Ext.define(
                             store :  me.conceptReducedStore,
                             dock: 'bottom',
                             displayInfo: true
-                        }]
+                        }, {
+                            xtype : 'toolbar',
+                            dock : 'top',
+                            items : [ {
+                                xtype : 'button',
+                                text : me.xSelect,
+                                formBind : true,
+                                itemId : 'selectConceptAsParent',
+                                iconCls : 'icon-select-parent'
+                            }]
+                        } ]
                     }]
                 });
 

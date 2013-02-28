@@ -18,5 +18,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
 	xCreateTerm: 'Créer un nouveau terme',
 	xExistingTerm: 'Sélectionner un terme existant',
     xDetach: 'Detacher',
-    xNotesTab: 'Notes du concept'
+    xNotesTab: 'Notes du concept',
+    xAddParent: 'Ajouter un Concept parent'
 });

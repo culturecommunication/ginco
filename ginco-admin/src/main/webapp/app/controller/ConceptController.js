@@ -153,7 +153,30 @@ Ext.define('GincoApp.controller.ConceptController', {
 			theWin.close();
 		}
 	},
-	
+
+    addParent : function(theButton) {
+        var thePanel = theButton.up('conceptPanel');
+        var win = Ext.create('GincoApp.view.SelectConceptWin', {
+            thesaurusData : thePanel.thesaurusData,
+            conceptId : thePanel.conceptId,
+            showTree : false
+        });
+        win.show();
+    },
+
+    //*********** Start SelectConceptWin.js
+
+    /**
+     * User clicks on button "Select as parent"
+     * @param theButton
+     */
+    selectConceptAsParentBtn : function(theButton) {
+
+    },
+
+    //*********** End SelectConceptWin.js
+
+
 	loadLanguages : function(theCombo) {
 		var thePanel = theCombo.up('createTermWin');
 		var theStore = theCombo.getStore();
@@ -233,6 +256,9 @@ Ext.define('GincoApp.controller.ConceptController', {
  			'conceptPanel  button[cls=save]' : {
  				click : this.saveConcept
  			},
+            'conceptPanel  button[cls=addParent]' : {
+                click : this.addParent
+            },
  			'conceptPanel #newTermFromConceptPrefBtn' : {
 				click : this.newTermFromConceptPrefBtn
 			},
@@ -248,6 +274,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'form #saveTermFromConcept' : {
 				click : this.saveTermFromConceptBtn
 			},
+            'form #selectConceptAsParent' : {
+                click : this.selectConceptAsParentBtn
+            },
 			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
 			},
