@@ -7,7 +7,8 @@
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
 
 Ext.require([
-    'Ext.ux.CheckColumn'
+    'Ext.ux.CheckColumn',
+    'GincoApp.view.NoteConceptPanel'
 ]);
 
 Ext
@@ -47,6 +48,7 @@ Ext
 					xCreateTerm: 'Create Term',
 					xExistingTerm: 'Select Existing Term',
                     xDetach: 'Detach from Concept',
+                    xNotesTab: 'Notes of this concept',
 
 					initComponent : function() {
 						var me = this;
@@ -58,6 +60,10 @@ Ext
 										{
 											title : me.xConceptPanelTitle,
 											items : [ {
+												
+												xtype : 'tabpanel',
+												items : [ {
+												
 												xtype : 'form',
 												title : me.xConceptPanelTitle,
 												flex : 1,
@@ -201,7 +207,11 @@ Ext
                                                                     }
                                                             ]
 														} ]
-											} ]
+											},{
+										        title: me.xNotesTab,
+										        xtype: 'noteConceptPanel',
+										        }]
+											}]
 										});
 
 						me.callParent(arguments);
