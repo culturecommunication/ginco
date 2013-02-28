@@ -1,8 +1,6 @@
 Ext.define('GincoApp.controller.ThesaurusFormController', {
 	extend : 'Ext.app.Controller',
 
-	views : [ 'ThesaurusPanel' ],
-
 	models : [ 'ThesaurusModel' ],
 	stores : [ 'MainTreeStore' ],
 

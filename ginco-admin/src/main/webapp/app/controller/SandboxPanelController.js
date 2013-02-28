@@ -3,8 +3,6 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 			extend : 'Ext.app.Controller',
 
 			models : [ 'ThesaurusModel' ],
-			
-			views : [ 'SandBoxPanel' ],
 
 			onGridRender : function(theGrid) {
 				var thePanel = theGrid.up('sandboxPanel');

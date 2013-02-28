@@ -100,6 +100,7 @@ Ext.apply(Ext.Loader, {
                 scope.applyLocaleForExtJS();
             }
             if (type) {
+            	console.log(className);
                 var dependencies = data.requires = data.requires || [];
                 var appName = className.substring(0, className.indexOf("." + type));
                 var dependency = appName + ".locale." + scope.locale.language + "." + className.substring(appName.length + 1);
@@ -160,6 +161,6 @@ Ext.apply(Ext.Loader, {
                 }
                 
             }
-        }, true).setDefaultPreprocessorPosition('localeLoader', 'last');
+        }, true,'last');
     }
 });
