@@ -1,7 +1,6 @@
 Ext.define('GincoApp.controller.ConceptController', {
 	extend:'Ext.app.Controller',
 	
-	views : [ 'ConceptPanel' ],
 	stores : [ 'MainTreeStore' ],
 	models : [ 'ConceptModel','ThesaurusModel' ],
 	
