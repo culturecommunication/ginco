@@ -32,6 +32,7 @@
 			<bean class="fr.mcc.ginco.rest.services.ThesaurusRestService" />
 			<bean class="fr.mcc.ginco.rest.services.ThesaurusTermRestService" />
 			<bean class="fr.mcc.ginco.rest.services.ThesaurusConceptRestService" />
+			<bean class="fr.mcc.ginco.rest.services.ThesaurusNoteRestService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />
