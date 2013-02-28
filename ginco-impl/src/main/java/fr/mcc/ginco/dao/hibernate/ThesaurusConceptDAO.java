@@ -34,17 +34,16 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.util.List;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -102,7 +101,26 @@ public class ThesaurusConceptDAO extends
 		return getListByThesaurusAndTopConceptCount(thesaurus, true);
 	}
 
-	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
+    @Override
+    public List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId) {
+        Criteria criteria = getCurrentSession().createCriteria(
+                ThesaurusConcept.class, "tc");
+
+        if(conceptId == null || conceptId.isEmpty()) {
+            criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
+            criteria.add(Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
+                            Restrictions.isEmpty("tc.parentConcepts")));
+
+            return criteria.list();
+        }
+
+        criteria.createCriteria("tc.parentConcepts", "pc")
+                .add(Restrictions.eq("pc.identifier",
+                        conceptId));
+        return criteria.list();
+    }
+
+    private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
 			Thesaurus thesaurus, boolean topConcept) throws BusinessException {
 
 		if (thesaurus == null) {

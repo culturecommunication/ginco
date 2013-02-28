@@ -34,12 +34,12 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 public interface IThesaurusConceptService {
 	/**
@@ -127,4 +127,11 @@ public interface IThesaurusConceptService {
 	long getTopTermThesaurusConceptsCount(String thesaurusId)
 			throws BusinessException;
 
+    /**
+     *
+     * @param conceptId
+     * @param thesaurusId
+     * @return
+     */
+    List<ThesaurusConcept> getChildrenByConceptId(String conceptId, String thesaurusId);
 }

@@ -165,6 +165,13 @@ public class ThesaurusConceptRestService {
 		//Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
-	
-	
+
+    @GET
+    @Path("/getChildren")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<ThesaurusConceptView> getChildrenByConceptId(@QueryParam("id") String conceptId,
+                                                             @QueryParam("thesaurusId") String thesaurusId)
+            throws BusinessException {
+        return thesaurusConceptViewConverter.convert(thesaurusConceptService.getChildrenByConceptId(conceptId, thesaurusId));
+    }
 }

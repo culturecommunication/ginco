@@ -34,11 +34,11 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
 
@@ -76,4 +76,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 * @throws BusinessException
 	 */
 	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+
+
+    List<ThesaurusConcept> getChildrenConcepts(String conveptId, String thesaurusId);
 }

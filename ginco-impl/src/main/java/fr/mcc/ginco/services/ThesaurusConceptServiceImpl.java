@@ -34,18 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -57,6 +45,15 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.journal.GincoLog;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -141,7 +138,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return thesaurusConceptDAO.getTopTermThesaurusConceptCount(thesaurus);
 	}
 
-	@Override
+    @Override
+    public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, String thesaurusId) {
+        return thesaurusConceptDAO.getChildrenConcepts(conceptId, thesaurusId);
+    }
+
+    @Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException {
 

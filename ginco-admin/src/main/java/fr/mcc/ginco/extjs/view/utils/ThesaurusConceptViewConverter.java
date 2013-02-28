@@ -34,16 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -54,6 +44,13 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component("thesaurusConceptViewConverter")
 public class ThesaurusConceptViewConverter {
@@ -67,6 +64,23 @@ public class ThesaurusConceptViewConverter {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+
+    public List<ThesaurusConceptView> convert(List<ThesaurusConcept> conceptList) {
+
+        List<ThesaurusConceptView> result = new ArrayList<ThesaurusConceptView>();
+
+        for(ThesaurusConcept concept : conceptList) {
+            ThesaurusConceptView view = new ThesaurusConceptView();
+            view.setIdentifier(concept.getIdentifier());
+            view.setCreated(DateUtil.toString(concept.getCreated()));
+            view.setModified(DateUtil.toString(concept.getModified()));
+            view.setTopconcept(concept.getTopConcept());
+            view.setThesaurusId(concept.getThesaurus().getIdentifier());
+            result.add(view);
+        }
+
+        return result;
+    }
 
 	public ThesaurusConceptView convert(ThesaurusConcept concept,
 			List<ThesaurusTerm> thesaurusTerms) {
