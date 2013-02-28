@@ -43,13 +43,9 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.journal.GincoLog;
-import fr.mcc.ginco.services.IThesaurusTermService;
 
 @Transactional
 @Service("thesaurusTermService")
@@ -57,7 +53,8 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	
     @Inject
     @Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;
+	private IThesaurusTermDAO thesaurusTermDAO;    
+   
 
 	@Override
 	public ThesaurusTerm getThesaurusTermById(String id) throws BusinessException {
@@ -84,19 +81,13 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException{
 		return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
 	}
+  
 	
-	@GincoLog(action = GincoLog.Action.CREATE, entityType=GincoLog.EntityType.THESAURUSTERM)
-    public ThesaurusTerm createThesaurusTerm(ThesaurusTerm object, IUser user) {
+    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) {
     	return thesaurusTermDAO.update(object);
     }
 	
-	@GincoLog(action = GincoLog.Action.UPDATE, entityType=GincoLog.EntityType.THESAURUSTERM)
-    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user) {
-    	return thesaurusTermDAO.update(object);
-    }
-	
-	@GincoLog(action = GincoLog.Action.DELETE, entityType=GincoLog.EntityType.THESAURUSTERM)
-    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) {
+    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) {
 		return thesaurusTermDAO.delete(object);
     }
 

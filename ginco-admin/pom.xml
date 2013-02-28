@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>fr.smile.mcc.ginco</groupId>
 			<artifactId>ginco-impl</artifactId>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
@@ -47,9 +47,13 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-        </dependency>        
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -62,6 +66,23 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-envers</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
@@ -130,12 +151,12 @@
 						<predef>Ext</predef>
 						<white>true</white>
 						<sloppy>true</sloppy>
-						 <evil>true</evil>
-						<eqeq>true</eqeq> 
+						<evil>true</evil>
+						<eqeq>true</eqeq>
 					</options>
 					<sourceFolders>
 						<sourceFolder>${basedir}/src/main/webapp/app/</sourceFolder>
-					</sourceFolders>							
+					</sourceFolders>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -148,7 +169,7 @@
 						<source>${java.version}</source>
 						<target>${java.version}</target>
 					</configuration>
-				</plugin>							
+				</plugin>
 				<plugin>
 					<groupId>org.codehaus.cargo</groupId>
 					<artifactId>cargo-maven2-plugin</artifactId>

@@ -55,7 +55,6 @@ import org.mockito.MockitoAnnotations;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
@@ -142,7 +141,7 @@ public class ThesaurusTermRestServiceTest{
 		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
 		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class))).thenReturn(fakeThesaurusTerm1);
 		
-		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class), any(IUser.class))).thenReturn(fakeThesaurusTerm1);
+		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusTerm1);
 
 		ThesaurusTermView actualResponse = thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
 		
@@ -183,7 +182,7 @@ public class ThesaurusTermRestServiceTest{
 		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
 		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class))).thenReturn(fakeThesaurusTerm1);
 		
-		Mockito.when(termService.createThesaurusTerm(any(ThesaurusTerm.class), any(IUser.class))).thenReturn(fakeThesaurusCreationReturn);
+		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusCreationReturn);
 		
 		ThesaurusTermView actualResponse = thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
 		

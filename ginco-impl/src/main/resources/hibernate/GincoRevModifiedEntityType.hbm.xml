@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC  "-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+    <class name="GincoRevModifiedEntityType" table="revinfoentitytypes">
+        <id name="id" type="int" column="id">
+            <generator class="sequence">
+                <param name="sequence">revinfoentitytypes_identifier_seq</param>
+            </generator>
+        </id>
+        <property name="entityClassName" type="string" />
+        <property name="revision" not-null="false" type="int"/>        
+    </class>
+</hibernate-mapping>

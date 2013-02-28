@@ -48,8 +48,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.cxf.interceptor.InInterceptors;
-import org.apache.cxf.interceptor.OutInterceptors;
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -58,7 +56,6 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
@@ -68,7 +65,6 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
-import fr.mcc.ginco.users.SimpleUserImpl;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
@@ -182,22 +178,11 @@ public class ThesaurusRestService {
 	@Path("/updateVocabulary")
 	@Consumes({ MediaType.APPLICATION_JSON })	
 	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
-		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
-		String principal = "unknown";
-		if (context != null) {
-			principal = context.getHttpServletRequest().getRemoteAddr();
-		}
-		IUser user = new SimpleUserImpl();
-		user.setName(principal);
+		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);		
+
 		ThesaurusView view = null;
         if (object != null) {
-			Thesaurus result;
-			if (StringUtils.isEmpty(object.getIdentifier())) {
-				result = thesaurusService.createThesaurus(object, user);
-
-			} else {
-				result = thesaurusService.updateThesaurus(object, user);
-			}
+			Thesaurus result = thesaurusService.updateThesaurus(object);			
 
             if (result != null) {
                 view = thesaurusViewConverter.convert(result);

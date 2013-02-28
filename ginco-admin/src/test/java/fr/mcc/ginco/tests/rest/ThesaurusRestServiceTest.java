@@ -49,10 +49,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
@@ -98,7 +96,7 @@ public class ThesaurusRestServiceTest {
 	@Test
 	public final void testCreateThesaurus() throws BusinessException {
 		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn( new Thesaurus());
-		when(thesaurusService.createThesaurus(any(Thesaurus.class), any(IUser.class))).thenReturn(new Thesaurus());
+		when(thesaurusService.updateThesaurus(any(Thesaurus.class))).thenReturn(new Thesaurus());
 		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
 
 		ThesaurusView view = thesaurusRestService
@@ -113,7 +111,7 @@ public class ThesaurusRestServiceTest {
 		Thesaurus existingTh = new Thesaurus();
 		existingTh.setIdentifier("any-id");
 		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn(existingTh);		
-		when(thesaurusService.updateThesaurus(any(Thesaurus.class), any(IUser.class))).thenReturn(new Thesaurus());
+		when(thesaurusService.updateThesaurus(any(Thesaurus.class))).thenReturn(new Thesaurus());
 		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
 
 		// Testing putVocabularyById method

@@ -38,7 +38,6 @@ import java.util.List;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 public interface IThesaurusConceptService {
@@ -90,13 +89,13 @@ public interface IThesaurusConceptService {
 	 * Create a single Thesaurus Concept Object
 	 */
 	ThesaurusConcept createThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, IUser user);
+			List<ThesaurusTerm> terms);
 
 	/**
 	 * Update a single Thesaurus Concept Object
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, IUser user);
+			List<ThesaurusTerm> terms);
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus

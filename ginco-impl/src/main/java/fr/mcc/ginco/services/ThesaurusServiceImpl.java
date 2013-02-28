@@ -46,15 +46,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.journal.GincoLog;
-import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.LanguageComparator;
 
 /**
@@ -101,23 +97,9 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 * , fr.mcc.ginco.beans.users.IUser)
 	 */
 	@Override
-	@GincoLog(action = GincoLog.Action.UPDATE, entityType = GincoLog.EntityType.THESAURUS)
-	public Thesaurus updateThesaurus(Thesaurus object, IUser user) {
+	public Thesaurus updateThesaurus(Thesaurus object) {
 		return thesaurusDAO.update(object);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * fr.mcc.ginco.IThesaurusService#createThesaurus(fr.mcc.ginco.beans.Thesaurus
-	 * , fr.mcc.ginco.beans.users.IUser)
-	 */
-	@Override
-	@GincoLog(action = GincoLog.Action.CREATE, entityType = GincoLog.EntityType.THESAURUS)
-	public Thesaurus createThesaurus(Thesaurus object, IUser user) {
-		return thesaurusDAO.update(object);
-	}
+	}	
 
 	/*
 	 * (non-Javadoc)

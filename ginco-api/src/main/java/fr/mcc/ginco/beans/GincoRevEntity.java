@@ -32,23 +32,41 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans.users;
+package fr.mcc.ginco.beans;
 
-/**
- * Interface to modelize a user of the application
- */
-public interface IUser {
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
-	/**
-	 * Gets the logical name of the user
-	 * @return
-	 */
-	String getName();
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionEntity;
 
-	/**
-	 * Sets the logical name of the user
-	 * @param name
-	 */
-	void setName(String name);
+@RevisionEntity
+public class GincoRevEntity extends DefaultRevisionEntity implements Serializable {
+	private String username;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	
+	private Set<GincoRevModifiedEntityType> modifiedEntityTypes = new HashSet<GincoRevModifiedEntityType>();
+
+	public void addModifiedEntityType(GincoRevModifiedEntityType revEntity) {		
+		modifiedEntityTypes.add(revEntity);
+	}
+
+	public Set<GincoRevModifiedEntityType> getModifiedEntityTypes() {
+		return modifiedEntityTypes;
+	}
+
+	public void setModifiedEntityTypes(
+			Set<GincoRevModifiedEntityType> modifiedEntityTypes) {
+		this.modifiedEntityTypes = modifiedEntityTypes;
+	}
+
 }

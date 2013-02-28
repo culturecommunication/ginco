@@ -45,24 +45,18 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.users.SimpleUserImpl;
 
 /**
  * Thesaurus Term REST service for all operations on Thesauruses Terms
@@ -71,10 +65,7 @@ import fr.mcc.ginco.users.SimpleUserImpl;
 @Service
 @Path("/thesaurustermservice")
 @Produces({MediaType.APPLICATION_JSON})
-public class ThesaurusTermRestService {
-	
-	@Context 
-	private MessageContext context;
+public class ThesaurusTermRestService {	
 	
 	@Inject
 	@Named("thesaurusTermService")
@@ -140,20 +131,10 @@ public class ThesaurusTermRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
 		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement);
-		String principal = "unknown";
-		if (context != null) {
-			principal = context.getHttpServletRequest().getRemoteAddr();
-		}
-		IUser user = new SimpleUserImpl();
-		user.setName(principal);
+		String principal = "unknown";	
+		
 		if (object != null) {
-			ThesaurusTerm result;
-			if (StringUtils.isEmpty(object.getIdentifier())) {
-				result = thesaurusTermService.createThesaurusTerm(object, user);
-
-			} else {
-				result = thesaurusTermService.updateThesaurusTerm(object, user);
-			}
+			ThesaurusTerm result = thesaurusTermService.updateThesaurusTerm(object);			
 			if (result != null) {
 				return new ThesaurusTermView(result);
 			} else {
@@ -178,14 +159,9 @@ public class ThesaurusTermRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
 		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement);
-		String principal = "unknown";
-		if (context != null) {
-			principal = context.getHttpServletRequest().getRemoteAddr();
-		}
-		IUser user = new SimpleUserImpl();
-		user.setName(principal);
+	
 		if (object != null) {
-			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object, user);
+			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
 			return new ThesaurusTermView(result);
 		}
 		return null;

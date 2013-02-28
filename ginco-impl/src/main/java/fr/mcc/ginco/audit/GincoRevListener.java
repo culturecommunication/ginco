@@ -32,33 +32,52 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
+package fr.mcc.ginco.audit;
 
-import org.springframework.stereotype.Repository;
+import java.io.Serializable;
 
-import fr.mcc.ginco.beans.LogJournal;
-import fr.mcc.ginco.dao.ILogJournalDAO;
+import javax.servlet.http.HttpServletRequest;
 
-/**
- * Implementation of the ILogJournalDAO to manipulate
- * LogJournal entries in the database
- */
-@Repository("logJournalDAO")
-public class LogJournalDAO extends GenericHibernateDAO<LogJournal, String> implements ILogJournalDAO {
-	
-	/**
-	 * Default constructor
-	 */
-	public LogJournalDAO() {
-		super(LogJournal.class);
+import org.hibernate.envers.EntityTrackingRevisionListener;
+import org.hibernate.envers.RevisionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
+
+@Component
+public class GincoRevListener implements EntityTrackingRevisionListener {
+
+	private Logger logger = LoggerFactory.getLogger(GincoRevListener.class);
+
+	@Override
+	public void entityChanged(Class entityClass, String entityName,
+			Serializable entityId, RevisionType revisionType,
+			Object revisionEntity) {
+		GincoRevModifiedEntityType revEntity = new GincoRevModifiedEntityType();
+		revEntity.setEntityClassName(entityClass.getName());
+		revEntity.setRevision(((GincoRevEntity) revisionEntity).getId());
+		((GincoRevEntity) revisionEntity).addModifiedEntityType(revEntity);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.ILogJournalDAO#insertLogJournal(fr.mcc.ginco.beans.LogJournal)
-	 */
 	@Override
-	public void insertLogJournal(LogJournal logJournal) {
-		makePersistent(logJournal);		
-	}	
-	
+	public void newRevision(Object revisionEntity) {
+		GincoRevEntity gincoRevEntity = (GincoRevEntity) revisionEntity;
+		if (RequestContextHolder.getRequestAttributes() == null) {
+			logger.error("The RequestContext is empty!!!!!");
+		} else {
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+					.getRequestAttributes()).getRequest();
+
+			/*
+			 * Authentication authentication =
+			 * SecurityContextHolder.getContext().getAuthentication();
+			 */
+			gincoRevEntity.setUsername(request.getRemoteAddr());
+		}
+	}
 }

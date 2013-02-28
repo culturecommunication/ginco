@@ -32,21 +32,41 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.beans;
 
-import fr.mcc.ginco.beans.LogJournal;
+import java.io.Serializable;
 
-/**
- * Data Access Object to manipulate LogJournal
- * entries in the database
- *
- */
-public interface ILogJournalDAO extends IGenericDAO<LogJournal, String> {
-	
-	/**
-	 * Inserts a LogJurnal entry in the database
-	 * @param logJournal
-	 */
-	void insertLogJournal(LogJournal logJournal);	
-	
+public class GincoRevModifiedEntityType implements Serializable {
+	private Integer id;
+
+	private Integer revision;
+
+	private String entityClassName;
+
+	public GincoRevModifiedEntityType() {
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getRevision() {
+		return revision;
+	}
+
+	public void setRevision(Integer revision) {
+		this.revision = revision;
+	}
+
+	public String getEntityClassName() {
+		return entityClassName;
+	}
+
+	public void setEntityClassName(String entityClassName) {
+		this.entityClassName = entityClassName;
+	}
 }

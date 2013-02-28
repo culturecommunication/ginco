@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
+
+	<classpath>
+		<dir name="/home/dabel/projets/HADOC/dev/ginco/ginco-admin/target/classes">
+		</dir>
+	</classpath>
+
+	<web>
+		<link target="/">
+			<dir name="/home/dabel/projets/HADOC/dev/ginco/ginco-admin/target/m2e-wtp/web-resources">
+				<exclude name="/"/>
+			</dir>
+		</link>
+		<link target="/">
+			<dir name="/home/dabel/projets/HADOC/dev/ginco/ginco-admin/src/main/webapp">
+			</dir>
+		</link>
+	</web>
+
+</application>

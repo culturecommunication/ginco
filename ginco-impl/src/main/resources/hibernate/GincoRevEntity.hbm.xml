@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC  "-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="GincoRevEntity" table="revinfo">
+		<id name="id" type="int" column="rev">
+			<generator class="sequence">
+				<param name="sequence">revinfo_identifier_seq</param>
+			</generator>
+		</id>
+		<property name="timestamp" column="revtstmp" type="long" />
+		<property name="username" type="string" />		
+		<set name="modifiedEntityTypes" cascade="save-update,delete">
+               <key column="revision"/>
+               <one-to-many class="GincoRevModifiedEntityType"/>
+         </set>
+	</class>
+</hibernate-mapping>

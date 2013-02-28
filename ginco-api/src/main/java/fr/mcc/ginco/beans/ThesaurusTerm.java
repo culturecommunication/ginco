@@ -37,14 +37,20 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
+@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 @SuppressWarnings("serial")
 public class ThesaurusTerm implements Serializable, IBaseBean {
 
     private String identifier;
+
     private String lexicalValue;
     private Date created;
     private Date modified;
     private String source;
+    
     private Boolean prefered;
     private Integer status;
     private ThesaurusTermRole role;
@@ -95,7 +101,6 @@ public class ThesaurusTerm implements Serializable, IBaseBean {
     public Boolean getPrefered() {
         return prefered;
     }
-
     public void setPrefered(Boolean prefered) {
         this.prefered = prefered;
     }
