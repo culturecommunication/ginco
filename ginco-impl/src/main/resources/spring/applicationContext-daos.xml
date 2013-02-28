@@ -32,6 +32,8 @@
                 <value>hibernate/ThesaurusConcept.hbm.xml</value>
                 <value>hibernate/ThesaurusTermRole.hbm.xml</value>
                 <value>hibernate/ThesaurusTerm.hbm.xml</value>
+                <value>hibernate/NoteType.hbm.xml</value>
+                <value>hibernate/Note.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">

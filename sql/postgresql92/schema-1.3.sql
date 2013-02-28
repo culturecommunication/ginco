@@ -66,7 +66,7 @@ ALTER TABLE top_relationship
 CREATE TABLE note_type
 (
   code text NOT NULL,
-  libelle text NOT NULL,
+  label text NOT NULL,
   isterm boolean NOT NULL,
   isconcept boolean NOT NULL,
   CONSTRAINT pk_note_type PRIMARY KEY (code),
