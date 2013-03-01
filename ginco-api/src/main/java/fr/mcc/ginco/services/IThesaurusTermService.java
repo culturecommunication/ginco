@@ -34,11 +34,10 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.users.IUser;
-import fr.mcc.ginco.exceptions.BusinessException;
-
 import java.util.List;
+
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusTerm} objects, contains basic
@@ -68,23 +67,20 @@ public interface IThesaurusTermService {
      * @param idThesaurus of a Thesaurus
      * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
      */
-    Long getSandboxedTermsCount(String idThesaurus) throws BusinessException;
-	
-    /**
-     * Create a single Thesaurus Term Object
-     */
-    ThesaurusTerm createThesaurusTerm(ThesaurusTerm object, IUser user);   
+    Long getSandboxedTermsCount(String idThesaurus) throws BusinessException;	
+   
     
     /**
      * Update a single Thesaurus Term Object
      */
-    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user);
+    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object);
     
     /**
      * Delete a single Thesaurus Term Object
      * @throws BusinessException 
      */
-    ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) throws BusinessException;
+    ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException;
+
     
     /**
      * @param listOfTerms

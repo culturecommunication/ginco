@@ -45,11 +45,4 @@
 		</property>
 	</bean>
 
-
-	<!-- Aspect : all operations of save/update and delete should be logged 
-		in a specific table -->
-	<aop:aspectj-autoproxy />
-	<bean id="logJournalAspect" class="fr.mcc.ginco.journal.GincoLogAspect" />
-
-
 </beans>

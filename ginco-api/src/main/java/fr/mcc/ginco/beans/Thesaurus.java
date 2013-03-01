@@ -40,12 +40,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 
 /**
  * @author frsto
  *
  */
+@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 @SuppressWarnings("serial")
 public class Thesaurus implements Serializable, IBaseBean {
     private String identifier;
@@ -64,6 +68,7 @@ public class Thesaurus implements Serializable, IBaseBean {
     private ThesaurusFormat format;
     private ThesaurusType type;
     private ThesaurusOrganization creator;
+    
     private Set<Language> lang = new HashSet<Language>();
     private Set<ThesaurusVersionHistory> versions;
     private Set<ThesaurusTerm> thesaurusesTerms  = new HashSet<ThesaurusTerm>();
@@ -208,6 +213,7 @@ public class Thesaurus implements Serializable, IBaseBean {
     /**
      * @return All languages available for this Thesaurus
      */
+	 @NotAudited
     @JsonIgnore
     public Set<Language> getLang() {
         return lang;

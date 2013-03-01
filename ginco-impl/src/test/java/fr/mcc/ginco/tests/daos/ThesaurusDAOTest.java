@@ -41,11 +41,9 @@ import org.junit.Test;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
 import fr.mcc.ginco.tests.BaseDAOTest;
-import fr.mcc.ginco.users.SimpleUserImpl;
 
 
 public class ThesaurusDAOTest extends BaseDAOTest {
@@ -155,8 +153,6 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         ThesaurusOrganization thOrg = new ThesaurusOrganization();
         thOrg.setName("Un auteur");
         th.setCreator(thOrg);
-        IUser user = new SimpleUserImpl();
-        user.setName("user1");
         Thesaurus updatedThesaurus = thesaurusDAO.update(th);
 
         Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);

@@ -34,20 +34,22 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.users.IUser;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.journal.GincoLog;
-import fr.mcc.ginco.log.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.log.Log;
+
 
 @Transactional
 @Service("thesaurusTermService")
@@ -76,6 +78,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         return thesaurusTermDAO.findPaginatedSandboxedItems(startIndex, limit, idThesaurus);
     }
 
+
     @Override
     public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
         return thesaurusTermDAO.findTermsByConceptId(idConcept);
@@ -99,17 +102,15 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
     }
 
-    @GincoLog(action = GincoLog.Action.CREATE, entityType = GincoLog.EntityType.THESAURUSTERM)
-    public ThesaurusTerm createThesaurusTerm(ThesaurusTerm object, IUser user) {
+    public ThesaurusTerm createThesaurusTerm(ThesaurusTerm object) {
         return thesaurusTermDAO.update(object);
     }
 
-    @GincoLog(action = GincoLog.Action.UPDATE, entityType = GincoLog.EntityType.THESAURUSTERM)
-    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object, IUser user) {
+    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) {
         return thesaurusTermDAO.update(object);
     }
 
-    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object, IUser user) throws BusinessException {
+    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException {
         if (object.getConceptId() == null ) {
             return thesaurusTermDAO.delete(object);
         } else {

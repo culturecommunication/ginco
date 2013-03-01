@@ -53,7 +53,6 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.users.IUser;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.services.ThesaurusServiceImpl;
@@ -86,22 +85,20 @@ public class ThesaurusServiceTest extends BaseTest {
 	@Test
 	public final void testCreateThesaurus() {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
-		IUser user = mock(IUser.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);
-		Thesaurus thesaurusRes = thesaurusService.createThesaurus(
-				mockThesaurus, user);
+		Thesaurus thesaurusRes = thesaurusService.updateThesaurus(
+				mockThesaurus);
 		Assert.assertNotNull("Error while creating Thesaurus", thesaurusRes);
 	}
 
 	@Test
 	public final void testUpdateThesaurus() {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
-		IUser user = mock(IUser.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);
 		Thesaurus thesaurusRes = thesaurusService.updateThesaurus(
-				mockThesaurus, user);
+				mockThesaurus);
 		Assert.assertNotNull("Error while updating Thesaurus", thesaurusRes);
 	}
 

@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.envers.NotAudited;
 
 @SuppressWarnings("serial")
 public class Language implements Serializable, IBaseBean {	
