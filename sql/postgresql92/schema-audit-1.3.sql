@@ -242,7 +242,7 @@ ALTER TABLE ONLY thesaurus_thesaurusversionhistory_aud
     
     
     
-    --
+--
 -- Name: hierarchical_relationship_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
 --
 
