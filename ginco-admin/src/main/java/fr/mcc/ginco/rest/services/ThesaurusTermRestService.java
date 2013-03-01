@@ -130,7 +130,7 @@ public class ThesaurusTermRestService {
 	@Path("/updateTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
-		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement);
+		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement, false);
 		String principal = "unknown";	
 		
 		if (object != null) {
@@ -158,7 +158,7 @@ public class ThesaurusTermRestService {
 	@Path("/destroyTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
-		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement);
+		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement, false);
 	
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);

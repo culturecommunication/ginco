@@ -131,7 +131,7 @@ public class ThesaurusConceptRestService {
 
 		List<ThesaurusTerm> terms = termViewConverter
 				.convertTermViewsInTerms(thesaurusConceptViewJAXBElement
-						.getTerms());
+						.getTerms(), true);
 		logger.info("Number of converted terms : " + terms.size());
 
 		List<ThesaurusTerm> preferedTerm = thesaurusTermService

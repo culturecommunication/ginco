@@ -139,7 +139,7 @@ public class ThesaurusTermRestServiceTest{
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString())).thenReturn(fakeThesaurus1);
 		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
-		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class))).thenReturn(fakeThesaurusTerm1);
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class), Mockito.anyBoolean())).thenReturn(fakeThesaurusTerm1);
 		
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusTerm1);
 
@@ -180,7 +180,7 @@ public class ThesaurusTermRestServiceTest{
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString())).thenReturn(fakeThesaurus1);
 		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
-		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class))).thenReturn(fakeThesaurusTerm1);
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class), Mockito.anyBoolean())).thenReturn(fakeThesaurusTerm1);
 		
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusCreationReturn);
 		

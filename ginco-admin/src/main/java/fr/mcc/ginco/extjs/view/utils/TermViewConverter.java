@@ -59,83 +59,113 @@ import fr.mcc.ginco.utils.DateUtil;
 
 @Component("termViewConverter")
 public class TermViewConverter {
-	
+
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
-	
+
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
 
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;   
-    
-    @Inject
-    @Named("thesaurusTermRoleService")
-    private IThesaurusTermRoleService thesaurusTermRoleService;   
-	
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
+	@Inject
+	@Named("thesaurusTermRoleService")
+	private IThesaurusTermRoleService thesaurusTermRoleService;
+
 	@Log
 	private Logger logger;
-	
-	@Value("${ginco.default.language}") private String language;
-	
-	public ThesaurusTerm convert(ThesaurusTermView source) throws BusinessException {
+
+	@Value("${ginco.default.language}")
+	private String language;
+
+	private ThesaurusTerm getNewThesaurusTerm() {
+		ThesaurusTerm hibernateRes = new ThesaurusTerm();
+		hibernateRes.setCreated(DateUtil.nowDate());
+		logger.info("Creating a new term");
+
+		return hibernateRes;
+	}
+
+	private ThesaurusTerm getExistingThesaurusTerm(String identifier)
+			throws BusinessException {
+		ThesaurusTerm hibernateRes = thesaurusTermService
+				.getThesaurusTermById(identifier);
+		logger.info("Getting an existing term with identifier " + identifier);
+		return hibernateRes;
+	}
+
+	public ThesaurusTerm convert(ThesaurusTermView source, boolean fromConcept)
+			throws BusinessException {
 		ThesaurusTerm hibernateRes;
 
 		if (StringUtils.isEmpty(source.getIdentifier())) {
-			hibernateRes = new ThesaurusTerm();
-			hibernateRes.setCreated(DateUtil.nowDate());
-			logger.info("Creating a new term");
+			hibernateRes = getNewThesaurusTerm();
 		} else {
-			hibernateRes = thesaurusTermService.getThesaurusTermById(source.getIdentifier());
-			logger.info("Getting an existing term");
+			hibernateRes = getExistingThesaurusTerm(source.getIdentifier());
 		}
-		
+
 		hibernateRes.setLexicalValue(source.getLexicalValue());
 		hibernateRes.setModified(DateUtil.nowDate());
 		hibernateRes.setSource(source.getSource());
-		hibernateRes.setPrefered(source.getPrefered());
-		hibernateRes.setStatus(source.getStatus());	
-
-        if(StringUtils.isNotEmpty(source.getConceptId())) {
-            ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(source.getConceptId());
-            if(concept != null) {
-                hibernateRes.setConcept(concept);
-            	if (!source.getPrefered()) {
-            		hibernateRes.setRole(thesaurusTermRoleService.getDefaultThesaurusTermRole());
-            	}
-            }
-        }
-		hibernateRes.setThesaurus(thesaurusService.getThesaurusById(source.getThesaurusId()));
-		if (StringUtils.isEmpty(source.getLanguage())) {
-			//If not filled in, the language for the term is "ginco.default.language" property in application.properties
-			hibernateRes.setLanguage(languagesService.getLanguageById(language));
-
-		} else
-		{
-			hibernateRes.setLanguage(languagesService.getLanguageById(source.getLanguage()));			
+		if (fromConcept) {
+			hibernateRes.setPrefered(source.getPrefered());
 		}
-		
+		hibernateRes.setStatus(source.getStatus());
+
+		if (fromConcept) {
+
+			if (StringUtils.isNotEmpty(source.getConceptId())) {
+				ThesaurusConcept concept = thesaurusConceptService
+						.getThesaurusConceptById(source.getConceptId());
+				if (concept != null) {
+					hibernateRes.setConcept(concept);
+					if (!source.getPrefered()) {
+						hibernateRes.setRole(thesaurusTermRoleService
+								.getDefaultThesaurusTermRole());
+					}
+				}
+			}
+		}
+		if (fromConcept) {
+
+		}
+		hibernateRes.setThesaurus(thesaurusService.getThesaurusById(source
+				.getThesaurusId()));
+		if (StringUtils.isEmpty(source.getLanguage())) {
+			// If not filled in, the language for the term is
+			// "ginco.default.language" property in application.properties
+			hibernateRes
+					.setLanguage(languagesService.getLanguageById(language));
+		} else {
+			hibernateRes.setLanguage(languagesService.getLanguageById(source
+					.getLanguage()));
+		}
+
 		return hibernateRes;
 	}
-	
+
 	/**
-	 * @param source source to work with
+	 * @param source
+	 *            source to work with
 	 * @return {@code List<ThesaurusTerm>}
 	 * @throws BusinessException
-	 * This method extracts a list of ThesaurusTerm from a ThesaurusConceptView given in argument
+	 *             This method extracts a list of ThesaurusTerm from a
+	 *             ThesaurusConceptView given in argument
 	 */
-	public List<ThesaurusTerm> convertTermViewsInTerms(List<ThesaurusTermView> termViews) throws BusinessException {
+	public List<ThesaurusTerm> convertTermViewsInTerms(
+			List<ThesaurusTermView> termViews, boolean fromConcept) throws BusinessException {
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
-		
+
 		for (ThesaurusTermView thesaurusTermView : termViews) {
-			terms.add(convert(thesaurusTermView));
+			terms.add(convert(thesaurusTermView, fromConcept));
 		}
 		return terms;
 	}
