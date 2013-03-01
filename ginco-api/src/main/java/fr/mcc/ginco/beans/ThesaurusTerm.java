@@ -42,7 +42,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 @SuppressWarnings("serial")
-public class ThesaurusTerm implements Serializable, IBaseBean {
+public class ThesaurusTerm implements Serializable, IAuditableBean {
 
     private String identifier;
 
@@ -54,8 +54,8 @@ public class ThesaurusTerm implements Serializable, IBaseBean {
     private Boolean prefered;
     private Integer status;
     private ThesaurusTermRole role;
-    private ThesaurusConcept conceptId;
-    private Thesaurus thesaurusId;
+    private ThesaurusConcept concept;
+    private Thesaurus thesaurus;
     private Language language;
 
     public String getIdentifier() {
@@ -121,20 +121,20 @@ public class ThesaurusTerm implements Serializable, IBaseBean {
         this.role = role;
     }
 
-    public ThesaurusConcept getConceptId() {
-        return conceptId;
+    public ThesaurusConcept getConcept() {
+        return concept;
     }
 
-    public void setConceptId(ThesaurusConcept conceptId) {
-        this.conceptId = conceptId;
+    public void setConcept(ThesaurusConcept concept) {
+        this.concept = concept;
     }
 
-    public Thesaurus getThesaurusId() {
-        return thesaurusId;
+    public Thesaurus getThesaurus() {
+        return thesaurus;
     }
 
-    public void setThesaurusId(Thesaurus thesaurusId) {
-        this.thesaurusId = thesaurusId;
+    public void setThesaurus(Thesaurus thesaurusId) {
+        this.thesaurus = thesaurusId;
     }
 
     public Language getLanguage() {
@@ -145,9 +145,10 @@ public class ThesaurusTerm implements Serializable, IBaseBean {
         this.language = language;
     }
 
-    @Override
-    public String getId() {
-        return identifier;
-    }
+	@Override
+	public String getThesaurusId() {		
+		return thesaurus.getIdentifier();
+	}
+   
 
 }

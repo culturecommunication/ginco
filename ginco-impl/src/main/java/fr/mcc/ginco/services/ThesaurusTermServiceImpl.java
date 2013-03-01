@@ -89,10 +89,10 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
         for (ThesaurusTerm old : origin) {
             if (!sent.contains(old)) {
-                ThesaurusTerm term = thesaurusTermDAO.getById(old.getId());
-                term.setConceptId(null);
+                ThesaurusTerm term = thesaurusTermDAO.getById(old.getIdentifier());
+                term.setConcept(null);
                 thesaurusTermDAO.update(term);
-                logger.info("Marking Term with ID " + old.getId() + " as SandBoxed.");
+                logger.info("Marking Term with ID " + old.getIdentifier() + " as SandBoxed.");
             }
         }
     }
@@ -111,7 +111,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     }
 
     public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException {
-        if (object.getConceptId() == null ) {
+        if (object.getConcept() == null ) {
             return thesaurusTermDAO.delete(object);
         } else {
             throw new BusinessException("It's not possible to delete a term still attached to a concept", "delete-attached-term");

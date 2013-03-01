@@ -34,15 +34,16 @@
  */
 package fr.mcc.ginco.beans;
 
+import java.io.Serializable;
+
 @SuppressWarnings("serial")
-public class NoteType implements IBaseBean {
+public class NoteType  implements Serializable{
 
     private String code;
     private String label;
     private boolean isTerm;
     private boolean isConcept;
     
-    @Override
     public String getId() {
         return getCode();
     }

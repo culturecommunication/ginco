@@ -89,6 +89,8 @@ CREATE TABLE thesaurus_languages_aud (
 
 
 
+
+
 --
 -- Name: thesaurus_term_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
 --
@@ -237,3 +239,85 @@ ALTER TABLE ONLY revinfoentitytypes
 
 ALTER TABLE ONLY thesaurus_thesaurusversionhistory_aud
     ADD CONSTRAINT fke9bd902d0d1bcb5 FOREIGN KEY (rev) REFERENCES revinfo(rev);
+    
+    
+    
+    --
+-- Name: hierarchical_relationship_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
+--
+
+CREATE TABLE hierarchical_relationship_aud (
+    rev integer NOT NULL,
+    childconceptid character varying(255) NOT NULL,
+    parentconceptid character varying(255) NOT NULL,
+    revtype smallint
+);
+
+--
+-- Name: thesaurus_concept_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
+--
+
+CREATE TABLE thesaurus_concept_aud (
+    identifier character varying(255) NOT NULL,
+    rev integer NOT NULL,
+    revtype smallint,
+    created timestamp without time zone,
+    modified timestamp without time zone,
+    status character varying(255),
+    notation character varying(255),
+    topconcept boolean,
+    thesaurusid character varying(255)
+);
+
+--
+-- Name: top_relationship_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
+--
+
+CREATE TABLE top_relationship_aud (
+    rev integer NOT NULL,
+    childconceptid character varying(255) NOT NULL,
+    rootconceptid character varying(255) NOT NULL,
+    revtype smallint
+);
+
+--
+-- Name: hierarchical_relationship_aud_pkey; Type: CONSTRAINT; Schema: public; Owner: hadocdb; Tablespace: 
+--
+
+ALTER TABLE ONLY hierarchical_relationship_aud
+    ADD CONSTRAINT hierarchical_relationship_aud_pkey PRIMARY KEY (rev, childconceptid, parentconceptid);
+
+    --
+-- Name: fkcd658dffd0d1bcb5; Type: FK CONSTRAINT; Schema: public; Owner: hadocdb
+--
+
+ALTER TABLE ONLY hierarchical_relationship_aud
+    ADD CONSTRAINT fkcd658dffd0d1bcb5 FOREIGN KEY (rev) REFERENCES revinfo(rev);
+
+--
+-- Name: thesaurus_concept_aud_pkey; Type: CONSTRAINT; Schema: public; Owner: hadocdb; Tablespace: 
+--
+
+ALTER TABLE ONLY thesaurus_concept_aud
+    ADD CONSTRAINT thesaurus_concept_aud_pkey PRIMARY KEY (identifier, rev);
+    
+    --
+-- Name: fk2cf9f474d0d1bcb5; Type: FK CONSTRAINT; Schema: public; Owner: hadocdb
+--
+
+ALTER TABLE ONLY thesaurus_concept_aud
+    ADD CONSTRAINT fk2cf9f474d0d1bcb5 FOREIGN KEY (rev) REFERENCES revinfo(rev);
+
+    --
+-- Name: top_relationship_aud_pkey; Type: CONSTRAINT; Schema: public; Owner: hadocdb; Tablespace: 
+--
+
+ALTER TABLE ONLY top_relationship_aud
+    ADD CONSTRAINT top_relationship_aud_pkey PRIMARY KEY (rev, childconceptid, rootconceptid);
+
+--
+-- Name: fkb18c9db3d0d1bcb5; Type: FK CONSTRAINT; Schema: public; Owner: hadocdb
+--
+
+ALTER TABLE ONLY top_relationship_aud
+    ADD CONSTRAINT fkb18c9db3d0d1bcb5 FOREIGN KEY (rev) REFERENCES revinfo(rev);

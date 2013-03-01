@@ -42,11 +42,11 @@ import java.io.Serializable;
  * logjournal table
  *
  */
-public interface IBaseBean extends Serializable{
+public interface IAuditableBean extends Serializable{
 	
 	/**
 	 * @return the database identifier of the object
 	 */
-	String getId();
+	String getThesaurusId();
 
 }

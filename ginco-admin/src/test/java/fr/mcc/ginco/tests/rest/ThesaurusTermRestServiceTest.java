@@ -169,7 +169,7 @@ public class ThesaurusTermRestServiceTest{
 		fakeThesaurus1.setIdentifier("mockTh1");
 		
 		fakeThesaurusCreationReturn.setIdentifier("mock1");
-		fakeThesaurusCreationReturn.setThesaurusId(fakeThesaurus1);
+		fakeThesaurusCreationReturn.setThesaurus(fakeThesaurus1);
 		fakeThesaurusCreationReturn.setLanguage(fakeLanguage1);
 
 		//Creating a Thesaurus View for the test
@@ -193,7 +193,7 @@ public class ThesaurusTermRestServiceTest{
 	private ThesaurusTerm getFakeThesaurusTermWithNonMandatoryEmptyFields(String id) {
 		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
 		fakeThesaurusTerm.setIdentifier(id);
-		fakeThesaurusTerm.setThesaurusId(new Thesaurus());
+		fakeThesaurusTerm.setThesaurus(new Thesaurus());
 		fakeThesaurusTerm.setLanguage(new Language());
 		fakeThesaurusTerm.setLexicalValue("lexicale value");
 		return fakeThesaurusTerm;

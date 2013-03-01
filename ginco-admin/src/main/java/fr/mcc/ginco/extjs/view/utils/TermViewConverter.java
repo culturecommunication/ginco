@@ -40,13 +40,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import fr.mcc.ginco.*;
-
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -109,13 +106,13 @@ public class TermViewConverter {
         if(StringUtils.isNotEmpty(source.getConceptId())) {
             ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(source.getConceptId());
             if(concept != null) {
-                hibernateRes.setConceptId(concept);
+                hibernateRes.setConcept(concept);
             	if (!source.getPrefered()) {
             		hibernateRes.setRole(thesaurusTermRoleService.getDefaultThesaurusTermRole());
             	}
             }
         }
-		hibernateRes.setThesaurusId(thesaurusService.getThesaurusById(source.getThesaurusId()));
+		hibernateRes.setThesaurus(thesaurusService.getThesaurusById(source.getThesaurusId()));
 		if (StringUtils.isEmpty(source.getLanguage())) {
 			//If not filled in, the language for the term is "ginco.default.language" property in application.properties
 			hibernateRes.setLanguage(languagesService.getLanguageById(language));

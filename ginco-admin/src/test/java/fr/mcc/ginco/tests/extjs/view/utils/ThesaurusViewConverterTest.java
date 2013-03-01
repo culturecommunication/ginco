@@ -105,7 +105,7 @@ public class ThesaurusViewConverterTest {
 
 		Assert.assertEquals("Fake Description", th.getDescription());
 		Assert.assertEquals(false, th.isDefaultTopConcept());
-		Assert.assertEquals("view1", th.getId());
+		Assert.assertEquals("view1", th.getIdentifier());
 		Assert.assertEquals("Fake Publisher", th.getPublisher());
 		Assert.assertEquals("Fake Relation", th.getRelation());
 		Assert.assertEquals("Fake Source", th.getSource());

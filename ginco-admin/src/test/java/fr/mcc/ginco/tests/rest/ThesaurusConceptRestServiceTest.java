@@ -125,7 +125,7 @@ public class ThesaurusConceptRestServiceTest {
 	private ThesaurusTerm getFakeThesaurusTermWithNonMandatoryEmptyFields(String id) {
 		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
 		fakeThesaurusTerm.setIdentifier(id);
-		fakeThesaurusTerm.setThesaurusId(new Thesaurus());
+		fakeThesaurusTerm.setThesaurus(new Thesaurus());
 		fakeThesaurusTerm.setLanguage(new Language());
 		fakeThesaurusTerm.setLexicalValue("lexicale value");
 		return fakeThesaurusTerm;

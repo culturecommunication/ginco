@@ -37,10 +37,13 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class ThesaurusConcept implements Serializable, IBaseBean {
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
+@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
+public class ThesaurusConcept implements Serializable, IAuditableBean {
     private String identifier;
     private Date created;
     private Date modified;
@@ -56,11 +59,7 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
     }
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
-    }
-    @Override
-    public String getId() {
-        return identifier;
-    }
+    }   
 
     public Date getCreated() {
         return created;
@@ -120,5 +119,9 @@ public class ThesaurusConcept implements Serializable, IBaseBean {
 	}
 	public void setRootConcepts(Set<ThesaurusConcept> rootConcepts) {
 		this.rootConcepts = rootConcepts;
+	}
+	@Override
+	public String getThesaurusId() {		
+		return thesaurus.getIdentifier();
 	}
 }

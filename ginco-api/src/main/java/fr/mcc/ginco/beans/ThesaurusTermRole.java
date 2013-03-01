@@ -34,16 +34,14 @@
  */
 package fr.mcc.ginco.beans;
 
-public class ThesaurusTermRole implements IBaseBean {
+import java.io.Serializable;
+
+public class ThesaurusTermRole implements Serializable {
 
     private String code;
     private String label;
     private boolean defaultRole;
-
-    @Override
-    public String getId() {
-        return getCode();
-    }
+  
 
     public String getCode() {
         return code;

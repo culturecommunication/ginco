@@ -170,33 +170,27 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public String getConceptLabel(String conceptId) throws BusinessException {
 		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
 		return LabelUtil.getConceptLabel(term, defaultLang);
-	}
+	}	
+	
 
-	public ThesaurusConcept createThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms) {
-		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
-		updateConceptTerms(concept, terms);
-		return concept;
-
-	}
-
-	private void updateConceptTerms(ThesaurusConcept concept,
-			List<ThesaurusTerm> terms) {
-		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusTerm thesaurusTerm : terms) {
-			logger.info("Creating a new term in DB");
-			thesaurusTerm.setConceptId(concept);
-			returnTerms.add(thesaurusTermDAO.update(thesaurusTerm));
-
-		}
-	}
-
+	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
 			List<ThesaurusTerm> terms) {
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
 		return concept;
 
+	}
+	
+	private void updateConceptTerms(ThesaurusConcept concept,
+			List<ThesaurusTerm> terms) {
+		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
+		for (ThesaurusTerm thesaurusTerm : terms) {
+			logger.info("Creating a new term in DB");
+			thesaurusTerm.setConcept(concept);
+			returnTerms.add(thesaurusTermDAO.update(thesaurusTerm));
+
+		}
 	}
 
 	private Thesaurus checkThesaurusId(String thesaurusId)

@@ -34,8 +34,10 @@
  */
 package fr.mcc.ginco.beans;
 
+import java.io.Serializable;
+
 @SuppressWarnings("serial")
-public class Note implements IBaseBean {
+public class Note implements Serializable {
 
     private String identifier;
     private String lexicalValue;
@@ -43,12 +45,8 @@ public class Note implements IBaseBean {
     private String source;
     private String noteTypeCode;
     private ThesaurusConcept concept;
-    private ThesaurusTerm term;
+    private ThesaurusTerm term;    
     
-    @Override
-    public String getId() {
-        return getIdentifier();
-    }
 
 	public String getIdentifier() {
 		return identifier;

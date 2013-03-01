@@ -73,7 +73,7 @@ public class ThesaurusConceptViewConverter {
         for(ThesaurusConcept concept : conceptList) {
             ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
             view.setIdentifier(concept.getIdentifier());
-            view.setLabel(thesaurusConceptService.getConceptLabel(concept.getId()));
+            view.setLabel(thesaurusConceptService.getConceptLabel(concept.getIdentifier()));
             result.add(view);
         }
 

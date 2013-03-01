@@ -68,8 +68,8 @@ public class ThesaurusTermDAO extends
 			String idThesaurus) {
 		return getCurrentSession().createCriteria(ThesaurusTerm.class)
 				.setMaxResults(limit)
-				.add(Restrictions.eq("thesaurusId.identifier", idThesaurus))
-				.add(Restrictions.isNull("conceptId"))
+				.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+				.add(Restrictions.isNull("concept"))
 				.setFirstResult(start).addOrder(Order.asc("lexicalValue"))
 				.list();
 	}
@@ -78,8 +78,8 @@ public class ThesaurusTermDAO extends
 	public Long countSandboxedTerms(String idThesaurus) throws BusinessException {
 		return (Long) getCurrentSession()
 				.createCriteria(ThesaurusTerm.class)
-				.add(Restrictions.eq("thesaurusId.identifier", idThesaurus))
-				.add(Restrictions.isNull("conceptId"))
+				.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+				.add(Restrictions.isNull("concept"))
 				.setProjection(Projections.rowCount())
 				.list().get(0);
 	}
@@ -88,7 +88,7 @@ public class ThesaurusTermDAO extends
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
         List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("conceptId.identifier", conceptId))
+                .add(Restrictions.eq("concept.identifier", conceptId))
                 .add(Restrictions.eq("prefered", Boolean.TRUE))
                 .list();
 
@@ -109,7 +109,7 @@ public class ThesaurusTermDAO extends
 	public List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException {
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("conceptId.identifier", conceptId))
+                .add(Restrictions.eq("concept.identifier", conceptId))
                 .list();
 		if(list.size() == 0) {
             throw new BusinessException("No term found for this concept id ! " + conceptId +

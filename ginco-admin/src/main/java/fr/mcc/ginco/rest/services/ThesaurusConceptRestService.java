@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.cxf.common.util.StringUtils;
+import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -63,7 +62,6 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
-
 /**
  * Thesaurus Concept REST service for all operation on a thesaurus' concepts
  * 
@@ -72,95 +70,100 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 @Path("/thesaurusconceptservice")
 @Produces({ MediaType.APPLICATION_JSON })
 public class ThesaurusConceptRestService {
-	
+
 	@Inject
 	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;	
-	
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-    
-	
-    @Inject
-    @Named("termViewConverter")
-    private TermViewConverter termViewConverter;
-    
-    @Inject
-    @Named("thesaurusConceptViewConverter")
-    private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
-	
+	private IThesaurusTermService thesaurusTermService;
+
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
+	@Inject
+	@Named("termViewConverter")
+	private TermViewConverter termViewConverter;
+
+	@Inject
+	@Named("thesaurusConceptViewConverter")
+	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+
 	@Log
 	private Logger logger;
-	
+
 	/**
 	 * Public method used to get
-	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object by providing
-	 * its id.
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object by
+	 * providing its id.
 	 * 
-	 * @param conceptId {@link String} identifier to try with
+	 * @param conceptId
+	 *            {@link String} identifier to try with
 	 * 
-	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object in JSON
-	 *         format or {@code null} if not found
-	 * @throws BusinessException 
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object
+	 *         in JSON format or {@code null} if not found
+	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getConcept")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ThesaurusConceptView getConceptById(@QueryParam("id") String conceptId) throws BusinessException {
+	public ThesaurusConceptView getConceptById(
+			@QueryParam("id") String conceptId) throws BusinessException {
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 		terms = thesaurusTermService.getTermsByConceptId(conceptId);
-		return thesaurusConceptViewConverter.convert(thesaurusConceptService.getThesaurusConceptById(conceptId), terms);
+		return thesaurusConceptViewConverter.convert(
+				thesaurusConceptService.getThesaurusConceptById(conceptId),
+				terms);
 	}
-	
+
 	/**
 	 * Public method used to create or update a concept
-	 * @throws BusinessException 
+	 * 
+	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/updateConcept")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public ThesaurusConceptView updateConcept(ThesaurusConceptView thesaurusConceptViewJAXBElement) throws BusinessException {
-		
-		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter.convert(thesaurusConceptViewJAXBElement);
-		
-		List <ThesaurusTerm> terms = termViewConverter.convertTermViewsInTerms(thesaurusConceptViewJAXBElement.getTerms());
+	public ThesaurusConceptView updateConcept(
+			ThesaurusConceptView thesaurusConceptViewJAXBElement)
+			throws BusinessException {
+
+		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter
+				.convert(thesaurusConceptViewJAXBElement);
+
+		List<ThesaurusTerm> terms = termViewConverter
+				.convertTermViewsInTerms(thesaurusConceptViewJAXBElement
+						.getTerms());
 		logger.info("Number of converted terms : " + terms.size());
-		
-		List <ThesaurusTerm> preferedTerm = thesaurusTermService.getPreferedTerms(terms);
-		
-		//Business rule : a concept must have at least 1 term
+
+		List<ThesaurusTerm> preferedTerm = thesaurusTermService
+				.getPreferedTerms(terms);
+
+		// Business rule : a concept must have at least 1 term
 		if (preferedTerm.size() == 0) {
-			throw new BusinessException("A concept must have a prefered term", "missing-preferred-term-for-concept");
+			throw new BusinessException("A concept must have a prefered term",
+					"missing-preferred-term-for-concept");
 		}
 
-		//Business rule : a concept mustn't have more than one prefered term
+		// Business rule : a concept mustn't have more than one prefered term
 		if (preferedTerm.size() > 1) {
-			throw new BusinessException("A concept must have at only one prefered term", "to-many-preferred-terms-for-concept");
+			throw new BusinessException(
+					"A concept must have at only one prefered term",
+					"to-many-preferred-terms-for-concept");
 		}
 
-        if(convertedConcept.getId() != null) {
-            if(!convertedConcept.getId().isEmpty()) {
-                List<ThesaurusTerm> origin = thesaurusTermService.getTermsByConceptId(convertedConcept.getId());
-                thesaurusTermService.markTermsAsSandboxed(terms, origin);
-            }
-        }
-		
-		
-		
-		//We save or update the concept
-		ThesaurusConcept returnConcept = null;
-		if (StringUtils.isEmpty(convertedConcept.getIdentifier())) {
-			logger.info("Creating a new concept in DB");
-			returnConcept = thesaurusConceptService.createThesaurusConcept(convertedConcept, terms);
-		} else {
-			//Case of existing concept
-			logger.info("Updating an existing concept in DB");
-			returnConcept = thesaurusConceptService.updateThesaurusConcept(convertedConcept, terms);
-		}		
-		
-		
-		//Return ThesaurusConceptView created/updated
+		if (StringUtils.isNotEmpty(convertedConcept.getIdentifier())) {
+				List<ThesaurusTerm> origin = thesaurusTermService
+						.getTermsByConceptId(convertedConcept.getIdentifier());
+				thesaurusTermService.markTermsAsSandboxed(terms, origin);
+			
+		}
+
+		// We save or update the concept
+		logger.info("Saving concept in DB");
+
+		ThesaurusConcept returnConcept = thesaurusConceptService
+				.updateThesaurusConcept(convertedConcept, terms);
+
+		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
 
@@ -190,5 +193,6 @@ public class ThesaurusConceptRestService {
         return thesaurusConceptViewConverter
                 .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId, searchOrphans));
     }
+
 
 }

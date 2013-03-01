@@ -37,7 +37,7 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class ThesaurusOrganization implements Serializable, IBaseBean {
+public class ThesaurusOrganization implements Serializable {
 	private Integer identifier;
 	private String name;
 	private String homepage;
@@ -70,10 +70,5 @@ public class ThesaurusOrganization implements Serializable, IBaseBean {
 	public void setHomepage(String homepage) {
 		this.homepage = homepage;
 	}	
-
-	@Override
-	public String getId() {
-		return Integer.toString(identifier);
-	}
 
 }

@@ -84,12 +84,7 @@ public interface IThesaurusConceptService {
 	 * @throws BusinessException
 	 */
 	String getConceptLabel(String conceptId) throws BusinessException;
-
-	/**
-	 * Create a single Thesaurus Concept Object
-	 */
-	ThesaurusConcept createThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms);
+	
 
 	/**
 	 * Update a single Thesaurus Concept Object

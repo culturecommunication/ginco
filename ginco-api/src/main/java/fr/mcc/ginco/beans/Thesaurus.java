@@ -51,7 +51,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
  */
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 @SuppressWarnings("serial")
-public class Thesaurus implements Serializable, IBaseBean {
+public class Thesaurus implements Serializable, IAuditableBean {
     private String identifier;
     private String contributor;
     private String coverage;
@@ -194,12 +194,7 @@ public class Thesaurus implements Serializable, IBaseBean {
 
 	public void setCreator(ThesaurusOrganization creator) {
 		this.creator = creator;
-	}	
-
-	@Override
-	public String getId() {
-		return identifier;
-	}
+	}		
 
 	@JsonIgnore
 	public Set<ThesaurusVersionHistory> getVersions() {
@@ -253,6 +248,11 @@ public class Thesaurus implements Serializable, IBaseBean {
 
 	public void setDefaultTopConcept(Boolean defaultTopConcept) {
 		this.defaultTopConcept = defaultTopConcept;
+	}
+
+	@Override
+	public String getThesaurusId() {		
+		return identifier;
 	}
 
 }
