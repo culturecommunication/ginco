@@ -63,6 +63,7 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 				this.application.on({
 					termdeleted : this.refreshSandBoxList,
 					termupdated : this.refreshSandBoxList,
+                    conceptupdated : this.refreshSandBoxList,
 			        scope: this
 				});
 				this.control({

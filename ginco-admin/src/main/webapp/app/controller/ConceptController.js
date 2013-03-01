@@ -227,7 +227,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 		theForm.getForm().updateRecord();
 		var theStore = theGrid.getStore();
 		var termsData = theStore.getRange();
-		
+        var thePanel = theForm.up('conceptPanel');
+
 		theForm.getEl().mask(me.xLoading);
 		var updatedModel = theForm.getForm().getRecord();
 		updatedModel.terms().removeAll();
@@ -239,7 +240,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
 				
-				me.application.fireEvent('conceptupdated');
+				me.application.fireEvent('conceptupdated', thePanel.thesaurusData);
 			},
 			failure : function(record, operation) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
