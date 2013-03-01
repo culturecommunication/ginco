@@ -48,6 +48,7 @@ Ext
 					xCreateTerm: 'Create Term',
 					xExistingTerm: 'Select Existing Term',
                     xDetach: 'Detach from Concept',
+                    xAddParent: 'Add parent Concept',
                     xNotesTab: 'Notes of this concept',
 
 					initComponent : function() {
@@ -95,7 +96,14 @@ Ext
 														itemId : 'delete',
 														cls : 'delete',
 														iconCls : 'icon-delete'
-													} ]
+													}, {
+                                                        xtype : 'button',
+                                                        text : me.xAddParent,
+                                                        disabled : false,
+                                                        itemId : 'addParent',
+                                                        cls : 'addParent',
+                                                        iconCls : 'icon-add-parent'
+                                                    } ]
 												} ],
 												items : [
 														{
@@ -209,7 +217,7 @@ Ext
 														} ]
 											},{
 										        title: me.xNotesTab,
-										        xtype: 'noteConceptPanel',
+										        xtype: 'noteConceptPanel'
 										        }]
 											}]
 										});

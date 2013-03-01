@@ -38,14 +38,16 @@ Ext.application({
         'ThesaurusLanguageStore',
         'TermLanguageStore',
         'ThesaurusTermStore',
-        'ConceptTermStore'
+        'ConceptTermStore',
+        'ConceptReducedStore'
     ],
     views: [
         'GincoViewPort',
         'GlobalTabPanel',
         'LeftPanel',
         'TopToolbar',
-        'AProposWin'
+        'AProposWin',
+        'SelectConceptWin'
     ],
     autoCreateViewport: true,
     name: 'GincoApp',

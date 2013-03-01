@@ -34,11 +34,11 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
 
@@ -76,4 +76,37 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 * @throws BusinessException
 	 */
 	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+
+
+    /**
+     * Get list of all root concepts by thesaurusId.
+     * @param thesaurusId should not be null !
+     * @param searchOrphans indicates if orphan concepts should be included in result
+     * @return list
+     */
+    List<ThesaurusConcept> getRootConcepts(String thesaurusId, boolean searchOrphans);
+
+    /**
+     * Get list of all children concepts by id of parent Concept (with orphans).
+     * @param conceptId
+     * @param thesaurusId
+     * @return list of children or all root concepts if conceptId is null.
+     */
+    List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId);
+
+    /**
+     * Get lsit of all children concepts by id of parent Concept.
+     * @param conceptId
+     * @param thesaurusId
+     * @return list of children or all root concepts if conceptId is null.
+     */
+    List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrphans);
+
+    /**
+     * Get lsit of all children concepts by id of parent Concept.
+     * @param excludeConceptId
+     * @param thesaurusId
+     * @return list of children or all root concepts if conceptId is null.
+     */
+    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans);
 }

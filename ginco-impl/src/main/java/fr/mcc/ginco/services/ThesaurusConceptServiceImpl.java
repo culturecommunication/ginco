@@ -138,7 +138,19 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return thesaurusConceptDAO.getTopTermThesaurusConceptCount(thesaurus);
 	}
 
-	@Override
+    @Override
+    public List<ThesaurusConcept> getChildrenByConceptId(String conceptId,
+                                                         String thesaurusId,
+                                                         boolean searchOrphans) {
+        return thesaurusConceptDAO.getChildrenConcepts(conceptId, thesaurusId, searchOrphans);
+    }
+
+    @Override
+    public List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans) {
+        return thesaurusConceptDAO.getAllConceptsByThesaurusId(excludeConceptId, thesaurusId, searchOrphans);
+    }
+
+    @Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException {
 

@@ -55,6 +55,7 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
@@ -162,6 +163,32 @@ public class ThesaurusConceptRestService {
 		//Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
-	
-	
+
+    @GET
+    @Path("/getChildren")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<ThesaurusConceptReducedView> getChildrenByConceptId(
+            @QueryParam("id") String conceptId,
+            @QueryParam("thesaurusId") String thesaurusId,
+            @QueryParam("searchOrphans") boolean searchOrphans)
+            throws BusinessException {
+
+        return thesaurusConceptViewConverter
+                .convert(thesaurusConceptService.getChildrenByConceptId(conceptId, thesaurusId, searchOrphans));
+    }
+
+
+    @GET
+    @Path("/getConcepts")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<ThesaurusConceptReducedView> getConceptsByThesaurusId(
+            @QueryParam("id") String conceptId,
+            @QueryParam("thesaurusId") String thesaurusId,
+            @QueryParam("searchOrphans") boolean searchOrphans)
+            throws BusinessException {
+
+        return thesaurusConceptViewConverter
+                .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId, searchOrphans));
+    }
+
 }

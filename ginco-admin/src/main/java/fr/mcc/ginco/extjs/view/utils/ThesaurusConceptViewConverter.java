@@ -34,26 +34,24 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component("thesaurusConceptViewConverter")
 public class ThesaurusConceptViewConverter {
@@ -67,6 +65,20 @@ public class ThesaurusConceptViewConverter {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+
+    public List<ThesaurusConceptReducedView> convert(List<ThesaurusConcept> conceptList) throws BusinessException{
+
+        List<ThesaurusConceptReducedView> result = new ArrayList<ThesaurusConceptReducedView>();
+
+        for(ThesaurusConcept concept : conceptList) {
+            ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
+            view.setIdentifier(concept.getIdentifier());
+            view.setLabel(thesaurusConceptService.getConceptLabel(concept.getId()));
+            result.add(view);
+        }
+
+        return result;
+    }
 
 	public ThesaurusConceptView convert(ThesaurusConcept concept,
 			List<ThesaurusTerm> thesaurusTerms) {
