@@ -198,6 +198,7 @@ Ext
 																				},
 																				{
 																					xtype : 'actioncolumn',
+																					itemId : 'conceptTermDelete',
 																					items : [ {
 																						icon : 'images/detach.png',
 																						tooltip : me.xDetach,

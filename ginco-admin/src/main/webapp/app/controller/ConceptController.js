@@ -262,7 +262,7 @@ Ext.define('GincoApp.controller.ConceptController', {
  				render : this.onGridRender,
  				itemdblclick : this.onSelectTermDblClick
  			},
-            'conceptPanel gridpanel actioncolumn' : {
+            'conceptPanel gridpanel #conceptTermDelete' : {
                 click : this.onDetachClick
             }
          });

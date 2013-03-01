@@ -42,6 +42,7 @@ import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -49,10 +50,14 @@ import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusNoteViewConverter;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.INoteTypeService;
 
 /**
@@ -69,7 +74,15 @@ public class ThesaurusNoteRestService {
 	
 	@Inject
 	@Named("noteTypeService")
-	private INoteTypeService noteTypeService;	
+	private INoteTypeService noteTypeService;
+	
+	@Inject
+	@Named("noteService")
+	private INoteService noteService;
+	
+    @Inject
+    @Named("thesaurusNoteViewConverter")
+    private ThesaurusNoteViewConverter thesaurusNoteViewConverter;
 	
 	@Log
 	private Logger logger;
@@ -108,4 +121,23 @@ public class ThesaurusNoteRestService {
 		return types;
 	}
 	
+	/**
+	 * Public method used to get the list of all notes for a concept or term.
+	 * 
+	 * @return list of Note objects for a term, if not found - {@code null}
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getNotes")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusNoteView>> getNotes(
+			@QueryParam("conceptId") String conceptId,
+			@QueryParam("termId") String termId) throws BusinessException {
+		
+		logger.info("Getting Notes for a concept or a term with following parameters : " + "conceptId " +conceptId + " and termId " + termId);
+		List<Note> notes = noteService.getConceptOrTermNoteList(conceptId, termId);
+		ExtJsonFormLoadData<List<ThesaurusNoteView>> result = new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(notes));
+		result.setTotal((long)notes.size());
+		return result;
+	}
 }

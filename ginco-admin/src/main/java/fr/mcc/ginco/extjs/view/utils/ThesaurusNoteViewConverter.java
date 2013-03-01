@@ -34,6 +34,9 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Note;
@@ -64,5 +67,13 @@ public class ThesaurusNoteViewConverter {
 		}
 		
 		return view;
-	}	
+	}
+	
+	public List<ThesaurusNoteView> convert(List<Note> source) {
+		List<ThesaurusNoteView> views = new ArrayList<ThesaurusNoteView>();
+		for (Note thesaurusNote : source) {
+			views.add(convert(thesaurusNote));
+		}
+		return views;
+	}
 }

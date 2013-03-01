@@ -42,7 +42,7 @@ import fr.mcc.ginco.beans.NoteType;
  * Service used to work with {@link NoteType} objects, contains basic
  * methods exposed to client part.
  *
- * @see fr.mcc.ginco.beans.NoteType.java
+ * @see fr.mcc.ginco.beans.NoteType
  */
 public interface INoteTypeService {
 	

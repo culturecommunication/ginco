@@ -4,15 +4,19 @@
  */
 Ext.define('GincoApp.store.ThesaurusNoteStore', {
     extend: 'Ext.data.Store',
+    requires: [
+               'GincoApp.model.ThesaurusNoteModel'
+     ],
 
     constructor: function(cfg) {
-    	var writer = new Ext.data.JsonWriter({
+    	/*var writer = new Ext.data.JsonWriter({
             type: 'json',
             encode: false,
             allowSingle : false,
             writeAllFields: true,
             returnJson: true
-        });
+        });*/
+    	
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
@@ -24,14 +28,19 @@ Ext.define('GincoApp.store.ThesaurusNoteStore', {
                 api: {
                     read: 'services/ui/thesaurusnoteservice/getNotes',
                     update: 'services/ui/thesaurusnoteservice/updateNotes',
-                    create: 'services/ui/thesaurusnoteservice/updateNotes'
+                    create: 'services/ui/thesaurusnoteservice/createNotes',
+                    destroy: 'services/ui/thesaurusnoteservice/destroyNotes'
+                },
+                writer: {
+                	type: 'json',
+                	//a single note must be sent in an array :
+                	allowSingle : false
                 },
                 reader: {
-                    type: 'json',
-                    idProperty: 'identifier',
-                    root: 'data'
-                },
-                writer: writer
+                	type: 'json',
+                    root: 'data',
+                    idProperty: 'identifier'
+                }
             }
         }, cfg)]);
     }

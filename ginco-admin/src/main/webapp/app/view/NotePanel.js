@@ -27,6 +27,7 @@ Ext.define('GincoApp.view.NotePanel', {
     xNoteConceptListGridTitle : 'Liste des notes de concept',
     xLanguageLabel : 'Language',
     xAddNote: 'Add a note',
+    xDetach: 'Delete a note',
     
     initComponent: function() {
         var me = this;
@@ -97,6 +98,23 @@ Ext.define('GincoApp.view.NotePanel', {
 										dataIndex : 'modified',
 										text : me.xModifiedDateLabel,
 										//hidden: true
+									},
+									{
+										xtype : 'actioncolumn',
+										itemId : 'noteDelete',
+										items : [ {
+											icon : 'images/detach.png',
+											tooltip : me.xDetach,
+											handler : function(
+													view,
+													rowIndex,
+													colIndex,
+													item,
+													e,
+													record,
+													row) {
+											}
+										} ]
 									}
                             ]
 						}

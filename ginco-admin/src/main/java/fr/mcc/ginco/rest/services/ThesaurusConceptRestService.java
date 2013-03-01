@@ -161,7 +161,6 @@ public class ThesaurusConceptRestService {
 			returnConcept = thesaurusConceptService.updateThesaurusConcept(convertedConcept, terms, user);
 		}		
 		
-		
 		//Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}

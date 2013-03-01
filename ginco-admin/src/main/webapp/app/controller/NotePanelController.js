@@ -50,8 +50,13 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		theWin.close();
 	},
 	
+	onDeleteNote : function (gridview, el, rowIndex, colIndex, e, rec, rowEl) {
+		var theGrid = gridview.up('gridpanel');
+        var theStore = theGrid.getStore();
+        theStore.remove(rec);
+	},
+	
 	saveNoteBtn : function(theButton) {
-		var me = this;
 		var theGrid = theButton.up('panel').down('gridpanel');
 		theGrid.getStore().sync();
 		
@@ -74,7 +79,10 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			},
 			'createNoteWin #saveNote' : {
 				click : this.saveNoteWinBtn
-			}
+			},
+			'notePanel gridpanel #noteDelete' : {
+                click : this.onDeleteNote
+            }
 		});
 	}
 });
