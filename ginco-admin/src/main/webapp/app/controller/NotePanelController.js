@@ -2,6 +2,18 @@ Ext.define('GincoApp.controller.NotePanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
 	
+	onRenderGrid : function(theGrid) {
+		if (theGrid.up('conceptPanel') != null) {
+			var theConceptId = theGrid.up('conceptPanel').conceptId;
+			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
+		} else {
+			//TODO
+			var theTermId = theGrid.up('termPanel').termId;
+			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
+		}
+		theGrid.getStore().load();
+	},
+
 	newNoteBtn : function(theButton){
 		var win = Ext.create('GincoApp.view.CreateNoteWin');
 		var theGrid = theButton.up('gridpanel');
@@ -39,11 +51,18 @@ Ext.define('GincoApp.controller.NotePanelController', {
 	},
 	
 	saveNoteBtn : function(theButton) {
-		//to implement
+		var me = this;
+		var theGrid = theButton.up('panel').down('gridpanel');
+		theGrid.getStore().sync();
+		
+		//to implement : loading in progess and exception messages
 	},
 
 	init : function() {
 		this.control({
+			'notePanel gridpanel' : {
+ 				render : this.onRenderGrid
+ 			},
 			'notePanel #saveNote' : {
  				click : this.saveNoteBtn
  			},

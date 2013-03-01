@@ -131,7 +131,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 
     onTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
         var thePanel = theGrid.up('conceptPanel');
-        var termPanel = this.createPanel('GincoApp.view.TermPanel', thePanel.thesaurusData, record.data.identifier);
+        this.createPanel('GincoApp.view.TermPanel', thePanel.thesaurusData, record.data.identifier);
     },
 
     onDetachClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
@@ -188,6 +188,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var theGridStore = theGrid.getStore();
 		theGridStore.removeAll();
 		theGridStore.add(terms);
+		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
+		noteTab.setDisabled(false);
 	},
 
 	saveTermFromConceptBtn : function(theButton){

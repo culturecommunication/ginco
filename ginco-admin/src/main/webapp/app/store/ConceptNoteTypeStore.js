@@ -1,6 +1,6 @@
 /*
- * Term Language Store 
- * This file contains all Term languages displayed in dropdown lists
+ * Concept Note Type Store 
+ * This file contains all note types displayed in dropdown lists
  */
 Ext.define('GincoApp.store.ConceptNoteTypeStore', {
     extend: 'Ext.data.Store',

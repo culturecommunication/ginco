@@ -7,6 +7,8 @@
 		<property name="lexicalValue" column="lexicalvalue" />
 		<property name="source" />
 		<property name="noteTypeCode" column="notetypecode" />
+		<property name="created" />
+		<property name="modified" />
 		
 		<many-to-one name="language" column="lang" lazy="false" />
 		<many-to-one name="concept" column="conceptid" lazy="false" />

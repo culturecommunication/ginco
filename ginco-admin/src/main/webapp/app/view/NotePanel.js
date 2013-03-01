@@ -19,7 +19,9 @@ Ext.define('GincoApp.view.NotePanel', {
     /*Fields with auto generated values*/
     xIdentifierLabel : 'Identifier',
     xCreatedDateLabel : 'Creation date',
+    xModifiedDateLabel : 'Modification date',
     xLexicalValueLabel : 'Lexical Value',
+    xTypeLabel : 'Type',
 
     /*Fields prompting values*/
     xNoteConceptListGridTitle : 'Liste des notes de concept',
@@ -33,15 +35,10 @@ Ext.define('GincoApp.view.NotePanel', {
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'form',
+                    xtype: 'panel',
                 	flex: 1,
                 	autoScroll: true,
-                    pollForChanges : true,
-                    trackResetOnLoad : true,
-                    defaults: {
-                        anchor: '100%',
-                        afterLabelTextTpl: new Ext.XTemplate('<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>', { disableFormats: true })
-                    },
+
                     dockedItems: [
                         {
                             xtype: 'toolbar',
@@ -50,19 +47,9 @@ Ext.define('GincoApp.view.NotePanel', {
                                 {
                                     xtype: 'button',
                                     text: 'Enregistrer',
-                                    disabled: true,
-                                    formBind: true,
                                     cls: 'save',
                                     iconCls : 'icon-save',
                                     itemId : 'saveNote'
-                                },
-                                {
-                                    xtype: 'button',
-                                    text: 'Supprimer',
-                                    disabled: true,
-                                    itemId: 'delete',
-                                    cls: 'delete',
-                                    iconCls : 'icon-delete'
                                 }
                             ]
                         }
@@ -85,7 +72,8 @@ Ext.define('GincoApp.view.NotePanel', {
 							columns : [
 									{
 										dataIndex : 'identifier',
-										text : me.xIdentifierLabel
+										text : me.xIdentifierLabel,
+										hidden: true
 									},
 									{
 										dataIndex : 'lexicalValue',
@@ -97,8 +85,18 @@ Ext.define('GincoApp.view.NotePanel', {
 										text : me.xLanguageLabel
 									},
 									{
+										dataIndex : 'type',
+										text : me.xTypeLabel
+									},
+									{
 										dataIndex : 'created',
-										text : me.xCreatedDateLabel
+										text : me.xCreatedDateLabel,
+										//hidden: true
+									},
+									{
+										dataIndex : 'modified',
+										text : me.xModifiedDateLabel,
+										//hidden: true
 									}
                             ]
 						}

@@ -15,31 +15,22 @@ Ext.define('GincoApp.model.ThesaurusNoteModel', {
             type: 'string'
         },
         {
+            name: 'type',
+            type: 'string'
+        },
+        {
             name: 'source',
             type: 'string'
         },
         {
-            name: 'type',
+            name: 'created',
+            type: 'string'
+        },
+        {
+            name: 'modified',
             type: 'string'
         }
     ],
-    idProperty : 'identifier',
-    
-    proxy : {
-		api : {
-			create : 'services/ui/thesaurusnoteservice/updateNote',
-			update : 'services/ui/thesaurusnoteservice/updateNote',
-			read :   'services/ui/thesaurusnoteservice/getThesaurusNote',
-			destroy: 'services/ui/thesaurusnoteservice/destroyNote'
-		},
-		type : 'ajax',
-		reader : {
-			type : 'json',
-			messageProperty: 'message'
-		},
-		writer : {
-			type : 'json'
-		}
-	}
-    
+    idProperty : 'identifier'
+
 });
