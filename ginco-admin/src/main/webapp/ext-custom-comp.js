@@ -93,3 +93,43 @@ Thesaurus.ext.utils = function(){
         }
 	};
 }();
+
+// Permit validation (AllowBlank) on htmlEditor
+Ext.define('Thesaurus.form.HtmlEditor', {
+    override: 'Ext.form.field.HtmlEditor',
+    validate : function() {
+        var me = this,
+            isValid = me.isValid();
+        if (isValid !== me.wasValid) {
+            me.wasValid = isValid;
+            me.fireEvent('validitychange', me, isValid);
+        }
+        return isValid;
+    },
+    isEmpty:function(){
+        var value =this.getValue();
+        value = value.replace(/&nbsp;/gi,"");
+        value = value.replace(/<p>/gi,"");
+        value = value.replace(/<p align=left>/gi,"");
+        value = value.replace(/<p align=right>/gi,"");
+        value = value.replace(/<p align=center>/gi,"");
+        value = value.replace(/<.p>/gi,"");
+        value = value.replace(/<br>/gi,"");
+        value = value.trim();
+        if(value != '')
+            return false;
+        return true;
+    },
+    isValid:function(){
+        if(this.allowBlank==false){
+            if(this.isEmpty()==false){
+                return true;
+             }
+            else{
+                return false;
+                }
+        }else{
+            return true;
+        }
+    }
+});
