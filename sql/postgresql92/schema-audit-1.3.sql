@@ -10,7 +10,6 @@ CREATE TABLE revinfo (
 );
 
 
-ALTER TABLE public.revinfo OWNER TO hadocdb;
 
 --
 -- Name: revinfo_identifier_seq; Type: SEQUENCE; Schema: public; Owner: hadocdb
@@ -24,7 +23,6 @@ CREATE SEQUENCE revinfo_identifier_seq
     CACHE 1;
 
 
-ALTER TABLE public.revinfo_identifier_seq OWNER TO hadocdb;
 
 --
 -- Name: revinfoentitytypes; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
@@ -37,7 +35,6 @@ CREATE TABLE revinfoentitytypes (
 );
 
 
-ALTER TABLE public.revinfoentitytypes OWNER TO hadocdb;
 
 --
 -- Name: revinfoentitytypes_identifier_seq; Type: SEQUENCE; Schema: public; Owner: hadocdb
@@ -51,7 +48,6 @@ CREATE SEQUENCE revinfoentitytypes_identifier_seq
     CACHE 1;
 
 
-ALTER TABLE public.revinfoentitytypes_identifier_seq OWNER TO hadocdb;
 
 --
 -- Name: thesaurus_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
@@ -79,7 +75,6 @@ CREATE TABLE thesaurus_aud (
 );
 
 
-ALTER TABLE public.thesaurus_aud OWNER TO hadocdb;
 
 --
 -- Name: thesaurus_languages_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
@@ -93,7 +88,6 @@ CREATE TABLE thesaurus_languages_aud (
 );
 
 
-ALTER TABLE public.thesaurus_languages_aud OWNER TO hadocdb;
 
 --
 -- Name: thesaurus_term_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
@@ -116,7 +110,6 @@ CREATE TABLE thesaurus_term_aud (
 );
 
 
-ALTER TABLE public.thesaurus_term_aud OWNER TO hadocdb;
 
 --
 -- Name: thesaurus_thesaurusterm_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
@@ -130,7 +123,6 @@ CREATE TABLE thesaurus_thesaurusterm_aud (
 );
 
 
-ALTER TABLE public.thesaurus_thesaurusterm_aud OWNER TO hadocdb;
 
 --
 -- Name: thesaurus_thesaurusversionhistory_aud; Type: TABLE; Schema: public; Owner: hadocdb; Tablespace: 
@@ -143,7 +135,6 @@ CREATE TABLE thesaurus_thesaurusversionhistory_aud (
 );
 
 
-ALTER TABLE public.thesaurus_thesaurusversionhistory_aud OWNER TO hadocdb;
 
 --
 -- Name: revinfo_pkey; Type: CONSTRAINT; Schema: public; Owner: hadocdb; Tablespace: 
