@@ -5,10 +5,6 @@
 Ext.define('GincoApp.store.ConceptReducedStore', {
     extend: 'Ext.data.Store',
 
-    thesaurusId : null,
-    conceptId : null,
-    searchOrphans : true,
-
     constructor: function(cfg) {
         var me = this;
         cfg = cfg || {};
@@ -17,9 +13,6 @@ Ext.define('GincoApp.store.ConceptReducedStore', {
             proxy: {
                 type: 'ajax',
                 url: 'services/ui/thesaurusconceptservice/getConcepts',
-                extraParams: {  id: me.conceptId,
-                                thesaurusId: me.thesaurusId,
-                                searchOrphans: me.searchOrphans },
                 reader: {
                     type: 'json',
                     idProperty: 'identifier',

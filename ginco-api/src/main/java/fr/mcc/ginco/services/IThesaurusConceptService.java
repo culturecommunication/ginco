@@ -40,6 +40,13 @@ import fr.mcc.ginco.exceptions.BusinessException;
 
 import java.util.List;
 
+/**
+ * Service used to work with {@link ThesaurusConcept} objects, contains basic
+ * methods exposed to client part. For example, to get some
+ * Language objects, use {@link #getThesaurusConceptList()} ()}
+ *
+ * @see fr.mcc.ginco.beans
+ */
 public interface IThesaurusConceptService {
 	/**
 	 * Get list of all ThesaurusFormat.
@@ -122,24 +129,27 @@ public interface IThesaurusConceptService {
 			throws BusinessException;
 
     /**
-     * Search children of concept or thesaurus (if conceptId is null or empty)
-     * with given parameter (orphan or not).
+     * Search children of concept with given id (orphan or not).
      * @param conceptId id of concept.
-     * @param thesaurusId id of thesaurus.
-     * @param searchOrphans indicates if concepts with topConcept==false should be
-     *                      included in result
      * @return list of objects.
      */
-    List<ThesaurusConcept> getChildrenByConceptId(String conceptId, String thesaurusId, boolean searchOrphans);
+    List<ThesaurusConcept> getChildrenByConceptId(String conceptId);
 
     /**
-     * Search children of concept or thesaurus (if conceptId is null or empty)
+     * Search concepts of thesaurus excluding given conceptId
      * with given parameter (orphan or not).
-     * @param excludeConceptId id of concept.
+     * @param excludeConceptId id of concept to exclude.
      * @param thesaurusId id of thesaurus.
      * @param searchOrphans indicates if concepts with topConcept==false should be
-     *                      included in result
+     *                      included in result. Could be null if doesn't matters.
      * @return list of objects.
      */
-    List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans);
+    List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans);
+
+    /**
+     * Indicates whether concept has children.
+     * @param conceptId
+     * @return
+     */
+    boolean hasChildren(String conceptId);
 }

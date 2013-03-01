@@ -34,17 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -54,6 +43,15 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -139,15 +137,20 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
     @Override
-    public List<ThesaurusConcept> getChildrenByConceptId(String conceptId,
-                                                         String thesaurusId,
-                                                         boolean searchOrphans) {
-        return thesaurusConceptDAO.getChildrenConcepts(conceptId, thesaurusId, searchOrphans);
+    public List<ThesaurusConcept> getChildrenByConceptId(String conceptId) {
+        return thesaurusConceptDAO.getChildrenConcepts(conceptId);
     }
 
     @Override
-    public List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans) {
+    public List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId,
+                                                           String thesaurusId,
+                                                           Boolean searchOrphans) {
         return thesaurusConceptDAO.getAllConceptsByThesaurusId(excludeConceptId, thesaurusId, searchOrphans);
+    }
+
+    @Override
+    public boolean hasChildren(String conceptId) {
+        return (thesaurusConceptDAO.getChildrenConcepts(conceptId).size() > 0);
     }
 
     @Override

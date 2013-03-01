@@ -50,43 +50,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generator in charge of building top term concepts
+ * Class used to generate nodes containing children
+ * of given concept (by its ID).
  */
-@Component(value = "topTermGenerator")
-public class TopTermGenerator {
+@Component(value = "childrenGenerator")
+public class ChildrenGenerator {
 
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
+    public static final String ID_PREFIX = ThesaurusListNodeType.CONCEPT
+            .toString() + "_";
 
-	@Log
-	private Logger logger;
+    /**
+     * Separator between parent ID and ID of child.
+     * For example, Root node has id "CONCEPT_co1".
+     * So, ID of all children will be "CONCEPT_co1<b>*</b>CHILDREN_ID"
+     */
+    public static final String PARENT_SEPARATOR = "*";
 
-	/**
-	 * Creates the list of top concepts for a given thesaurusId
-	 * 
-	 * @param thesaurusId
-	 *            id of top node.
-	 * @return created list of leafs.
-	 */
-	public List<IThesaurusListNode> generateTopTerm(String thesaurusId)
-			throws BusinessException {
-		logger.debug("Generating top term concepts list for thesaurusId : "
-				+ thesaurusId);
-		List<ThesaurusConcept> topTerms = thesaurusConceptService
-				.getTopTermThesaurusConcepts(thesaurusId);
-		logger.debug(topTerms.size() + " top terms found");
+    @Inject
+    @Named("thesaurusConceptService")
+    private IThesaurusConceptService thesaurusConceptService;
 
-		List<IThesaurusListNode> topConcepts = new ArrayList<IThesaurusListNode>();
-		for (ThesaurusConcept topTerm : topTerms) {
-			ThesaurusListBasicNode topTermNode = new ThesaurusListBasicNode();
-			topTermNode.setTitle(thesaurusConceptService
-					.getConceptLabel(topTerm.getIdentifier()));
-			topTermNode
-                    .setId(ChildrenGenerator.ID_PREFIX
-                            + ChildrenGenerator.PARENT_SEPARATOR
-                            + topTerm.getIdentifier());
-			topTermNode.setType(ThesaurusListNodeType.CONCEPT);
+    @Log
+    private Logger logger;
+
+    public List<IThesaurusListNode> getChildrenByConceptId(String conceptTopTermId)
+            throws BusinessException {
+        logger.debug("Generating children concepts list for conceptTopTermId : "
+                + conceptTopTermId);
+
+        String resultId =
+            conceptTopTermId.substring(
+                    conceptTopTermId.indexOf(
+                            ChildrenGenerator.PARENT_SEPARATOR) + ChildrenGenerator.PARENT_SEPARATOR.length(),
+                                     conceptTopTermId.length());
+
+        List<ThesaurusConcept> children = thesaurusConceptService.getChildrenByConceptId(resultId);
+        logger.debug(children.size() + " children found");
+
+        List<IThesaurusListNode> childrenNodes = new ArrayList<IThesaurusListNode>();
+        for (ThesaurusConcept topTerm : children) {
+            ThesaurusListBasicNode topTermNode = new ThesaurusListBasicNode();
+            topTermNode.setTitle(thesaurusConceptService
+                    .getConceptLabel(topTerm.getIdentifier()));
+            topTermNode.setId(ID_PREFIX + resultId +
+                    PARENT_SEPARATOR + topTerm.getIdentifier());
+            topTermNode.setType(ThesaurusListNodeType.CONCEPT);
             topTermNode.setThesaurusId(topTerm.getThesaurusId());
 
             if(!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
@@ -97,8 +105,9 @@ public class TopTermGenerator {
                 topTermNode.setLeaf(false);
             }
 
-			topConcepts.add(topTermNode);
-		}
-		return topConcepts;
-	}
+            childrenNodes.add(topTermNode);
+        }
+
+        return childrenNodes;
+    }
 }

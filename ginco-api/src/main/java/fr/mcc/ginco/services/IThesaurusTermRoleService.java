@@ -39,8 +39,8 @@ import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusTermRole} objects, contains basic
- * methods exposed to client part. For example, to get a single
- * ThesaurusTerm object, use {@link #getThesaurusTermRoleByCode(String)}
+ * methods exposed to client part. For example, to get a default
+ * ThesaurusTermRole object, use {@link #getDefaultThesaurusTermRole()}
  *
  * @see fr.mcc.ginco.beans
  */

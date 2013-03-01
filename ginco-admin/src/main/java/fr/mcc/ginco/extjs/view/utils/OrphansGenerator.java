@@ -34,16 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
@@ -51,6 +41,13 @@ import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Generator in charge of building concept orphans list
@@ -58,7 +55,7 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 @Component(value = "orphansGenerator")
 public class OrphansGenerator {
 
-	@Inject
+  	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
@@ -84,11 +81,22 @@ public class OrphansGenerator {
 			ThesaurusListBasicNode orphanNode = new ThesaurusListBasicNode();
 			orphanNode.setTitle(thesaurusConceptService.getConceptLabel(orphan
 					.getIdentifier()));
-			orphanNode.setId(orphan.getIdentifier());
+			orphanNode
+                    .setId(ChildrenGenerator.ID_PREFIX
+                            + ChildrenGenerator.PARENT_SEPARATOR
+                            + orphan.getIdentifier());
 			orphanNode.setType(ThesaurusListNodeType.CONCEPT);
 			orphanNode.setExpanded(false);
-			orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
-			orphanNode.setLeaf(true);
+            orphanNode.setThesaurusId(orphan.getThesaurusId());
+
+            if(!thesaurusConceptService.hasChildren(orphan.getIdentifier())) {
+                orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
+			    orphanNode.setLeaf(true);
+            } else {
+                orphanNode.setChildren(null);
+                orphanNode.setLeaf(false);
+            }
+
 			newOrphans.add(orphanNode);
 		}
 		return newOrphans;

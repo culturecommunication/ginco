@@ -34,8 +34,17 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
+import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
+import fr.mcc.ginco.services.IThesaurusService;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,19 +53,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import org.springframework.stereotype.Service;
-
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
-import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
-import fr.mcc.ginco.services.IThesaurusService;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -81,6 +79,10 @@ public class BaseRestService {
 	@Named("topTermGenerator")
 	private TopTermGenerator topTermGenerator;
 
+    @Inject
+    @Named("childrenGenerator")
+    private ChildrenGenerator childrenGenerator;
+
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in
 	 * database.
@@ -93,6 +95,7 @@ public class BaseRestService {
 	public List<IThesaurusListNode> getTreeContent(
 			@QueryParam("id") String nodeParam) throws BusinessException {
 		List<IThesaurusListNode> result;
+
 		if (nodeParam.startsWith(FolderGenerator.ORPHANS_PREFIX)) {
 			String vocId = getIdFromParam(nodeParam,
 					FolderGenerator.ORPHANS_PREFIX);
@@ -101,7 +104,11 @@ public class BaseRestService {
 			String vocId = getIdFromParam(nodeParam,
 					FolderGenerator.CONCEPTS_PREFIX);
 			result = topTermGenerator.generateTopTerm(vocId);
-		} else {
+		} else if (nodeParam.startsWith(ChildrenGenerator.ID_PREFIX)) {
+            String conceptTopTermId = getIdFromParam(nodeParam,
+                    ChildrenGenerator.ID_PREFIX);
+            result = childrenGenerator.getChildrenByConceptId(conceptTopTermId);
+        } else {
 			result = new ArrayList<IThesaurusListNode>();
 			for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
 				IThesaurusListNode node = new ThesaurusListBasicNode();

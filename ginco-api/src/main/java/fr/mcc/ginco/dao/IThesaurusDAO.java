@@ -36,6 +36,9 @@ package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.Thesaurus;
 
+/**
+ * Data Access Object for thesaurus
+ */
 public interface IThesaurusDAO extends IGenericDAO<Thesaurus, String> {
 	
 	

@@ -34,10 +34,13 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Language;
 
+import java.util.List;
+
+/**
+ * Data Access Object for languages_iso639
+ */
 public interface ILanguageDAO extends IGenericDAO<Language, String> {
 	/**
 	 * @param start Beginning index

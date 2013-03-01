@@ -40,6 +40,9 @@ import fr.mcc.ginco.exceptions.BusinessException;
 
 import java.util.List;
 
+/**
+ * Data Access Object for thesaurus_concept
+ */
 public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
 
 	/**
@@ -81,32 +84,26 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
     /**
      * Get list of all root concepts by thesaurusId.
      * @param thesaurusId should not be null !
-     * @param searchOrphans indicates if orphan concepts should be included in result
+     * @param searchOrphans indicates if orphan concepts should be included in result,
+     *                      could be null if doesn't matters.
      * @return list
      */
-    List<ThesaurusConcept> getRootConcepts(String thesaurusId, boolean searchOrphans);
+    List<ThesaurusConcept> getRootConcepts(String thesaurusId, Boolean searchOrphans);
 
     /**
-     * Get list of all children concepts by id of parent Concept (with orphans).
+     * Get list of all children concepts by id of parent Concept.
      * @param conceptId
-     * @param thesaurusId
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId);
+    List<ThesaurusConcept> getChildrenConcepts(String conceptId);
 
     /**
-     * Get lsit of all children concepts by id of parent Concept.
-     * @param conceptId
-     * @param thesaurusId
-     * @return list of children or all root concepts if conceptId is null.
-     */
-    List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrphans);
-
-    /**
-     * Get lsit of all children concepts by id of parent Concept.
+     * Get list of all concepts by id of Thesaurus, excluding given conceptId and
+     * filtering by TopTerm property.
      * @param excludeConceptId
      * @param thesaurusId
+     * @param searchOrphans could be null if doesn't matter.
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans);
+    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans);
 }

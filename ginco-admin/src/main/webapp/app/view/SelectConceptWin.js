@@ -8,7 +8,7 @@ Ext.define(
         config: {
             thesaurusData : null,
             conceptId : null,
-            searchOrphans : true,
+            searchOrphans : null,
             showTree : false
         },
 

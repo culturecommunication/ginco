@@ -38,6 +38,10 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
 
+/**
+ * Reduced view for {@link fr.mcc.ginco.beans.ThesaurusConcept}
+ * to use in lists.
+ */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusConceptReducedView implements Serializable {
     private String identifier;

@@ -3,6 +3,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 
 	views : [ 'LeftPanel' ],
 	stores : [ 'MainTreeStore' ],
+    models : [ 'ThesaurusModel' ],
 	xProblemLabel : 'Problem',
 	xProblemLoadMsg : 'Unable to load thesaurus tree',
 
@@ -29,18 +30,30 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			}
 		});
 		if (!tabExists) {
-			var conceptPanel = Ext.create('GincoApp.view.ConceptPanel');
-			conceptPanel.thesaurusData=aRecord.parentNode.parentNode;
-			conceptPanel.conceptId = aRecord.data.id;
-			var tab = topTabs.add(conceptPanel);
-			topTabs.setActiveTab(tab);
-			tab.show();
+            var model = this.getThesaurusModelModel();
+
+            model.load(aRecord.data.thesaurusId, {
+                success : function(model) {
+
+                    var conceptPanel = Ext.create('GincoApp.view.ConceptPanel', {
+                        thesaurusData : model,
+                        conceptId : aRecord.data.id
+                    });
+
+                    var tab = topTabs.add(conceptPanel);
+                    topTabs.setActiveTab(tab);
+                    tab.show();
+                }
+            });
+
+
 		} else {
 			topTabs.setActiveTab(tabExists);
 		}
 		
 	},
-	openSandBoxTab : function(aRecord) {
+
+    openSandBoxTab : function(aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		var sandBoxTabs = Ext.ComponentQuery.query('topTabs sandboxPanel');
 		var tabExists = false;

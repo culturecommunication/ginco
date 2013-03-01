@@ -9,6 +9,10 @@ Ext.define('GincoApp.model.MainTreeModel', {
         {
             name: 'type',
             type: 'string'
+        },
+        {
+            name: 'thesaurusId',
+            type: 'string'
         }
     ]
 });

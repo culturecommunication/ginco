@@ -34,20 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
@@ -59,7 +45,18 @@ import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LanguageComparator;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.*;
+
+/**
+ * Small class responsible for converting between
+ * {@link Thesaurus} object and its view {@link ThesaurusView}.
+ */
 @Component("thesaurusViewConverter")
 public class ThesaurusViewConverter {
 	
@@ -81,6 +78,12 @@ public class ThesaurusViewConverter {
 	
 	@Value("${ginco.default.language}") private String defaultLanguage;
 
+    /**
+     * Main method for conversion from view to object.
+     * @param source view to get data from.
+     * @return real object.
+     * @throws BusinessException
+     */
 	public Thesaurus convert(ThesaurusView source) throws BusinessException {
 		Thesaurus hibernateRes;
 
@@ -136,7 +139,13 @@ public class ThesaurusViewConverter {
 
 		return hibernateRes;
 	}
-	
+
+    /**
+     * Main method for conversion from object to view.
+     * @param source object to get data from.
+     * @return view object.
+     * @throws BusinessException
+     */
 	public ThesaurusView convert(Thesaurus source) {
 		ThesaurusView view = new ThesaurusView();
 		if (source != null) {

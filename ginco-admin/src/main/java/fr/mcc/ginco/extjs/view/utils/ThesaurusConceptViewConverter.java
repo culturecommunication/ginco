@@ -53,6 +53,11 @@ import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Small class responsible for converting real
+ * {@link ThesaurusConcept} object into its view
+ * {@link ThesaurusConceptReducedView}.
+ */
 @Component("thesaurusConceptViewConverter")
 public class ThesaurusConceptViewConverter {
 	@Log

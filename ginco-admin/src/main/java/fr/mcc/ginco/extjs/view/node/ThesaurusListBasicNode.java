@@ -72,6 +72,11 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
      * Css class of the node
      */
     private String iconcls;
+
+    /**
+     * Parent Thesaurus of the node
+     */
+    private String thesaurusId;
     
     
     
@@ -164,6 +169,7 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#isLeaf()
 	 */
+    @Override
 	public boolean isLeaf() {
 		return leaf;
 	}
@@ -171,6 +177,7 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setLeaf(boolean)
 	 */
+    @Override
 	public void setLeaf(boolean leaf) {
 		this.leaf = leaf;
 	}
@@ -179,18 +186,33 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getCls()
 	 */
+    @Override
 	public String getIconCls() {
-		// TODO Auto-generated method stub
 		return iconcls;
 	}
 
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setCls(string)
 	 */
+    @Override
 	public void setIconCls(String iconcls) {
-		// TODO Auto-generated method stub
 		this.iconcls = iconcls;
 	}
-    
-    
+
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getThesaurusId
+	 */
+    @Override
+    public String getThesaurusId() {
+        return thesaurusId;
+    }
+
+    /* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setThesaurusId(string)
+	 */
+    @Override
+    public void setThesaurusId(String thesaurusId) {
+        this.thesaurusId = thesaurusId;
+    }
+
 }

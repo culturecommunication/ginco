@@ -42,6 +42,11 @@ package fr.mcc.ginco.dao;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Data Access Object - generic type.
+ * @param <T> type of object.
+ * @param <ID> primary key.
+ */
 public interface IGenericDAO<T, ID extends Serializable> {
 	
 	public enum SortingTypes {

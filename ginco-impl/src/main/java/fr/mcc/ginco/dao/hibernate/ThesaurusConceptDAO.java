@@ -102,17 +102,16 @@ public class ThesaurusConceptDAO extends
 	}
 
     @Override
-    public List<ThesaurusConcept> getRootConcepts(String thesaurusId, boolean searchOrphans) {
-        return getChildrenConcepts(null, thesaurusId, searchOrphans);
+    public List<ThesaurusConcept> getRootConcepts(String thesaurusId, Boolean searchOrphans) {
+        return getConcepts(null, thesaurusId, searchOrphans);
     }
 
     @Override
-    public List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId) {
-        return getChildrenConcepts(conceptId, thesaurusId, true);
+    public List<ThesaurusConcept> getChildrenConcepts(String conceptId) {
+        return getConcepts(conceptId, null, null);
     }
 
-    @Override
-    public List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrphans) {
+    public List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId, Boolean searchOrphans) {
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusConcept.class, "tc");
 
@@ -136,7 +135,7 @@ public class ThesaurusConceptDAO extends
     }
 
     @Override
-    public List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans) {
+    public List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans) {
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusConcept.class, "tc");
 
@@ -147,16 +146,28 @@ public class ThesaurusConceptDAO extends
         return criteria.list();
     }
 
+    /**
+     * Selects TopTerm concepts by ThesaurusId without excluding.
+     * @param criteria
+     * @param thesaurusId
+     */
     private void selectRoot(Criteria criteria, String thesaurusId) {
         selectRoot(criteria, thesaurusId, null);
     }
 
+    /**
+     * Selects TopTerm concepts by ThesaurusId with excluding.
+     * @param criteria
+     * @param thesaurusId
+     * @param excludeId
+     */
     private void selectRoot(Criteria criteria, String thesaurusId, String excludeId) {
-
         excludeConcept(criteria, excludeId);
-
         selectThesaurus(criteria, thesaurusId);
+        selectNoParents(criteria);
+    }
 
+    private void selectNoParents(Criteria criteria) {
         criteria.add(Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
                 Restrictions.isEmpty("tc.parentConcepts")));
     }
@@ -165,9 +176,9 @@ public class ThesaurusConceptDAO extends
         criteria.add(Restrictions.eq("tc.thesaurus.identifier", thesaurusId));
     }
 
-    private void selectOrphans(Criteria criteria, boolean searchOrphans) {
-        if(!searchOrphans) {
-            criteria.add(Restrictions.eq("topConcept",true));
+    private void selectOrphans(Criteria criteria, Boolean searchOrphans) {
+        if(searchOrphans != null) {
+            criteria.add(Restrictions.eq("topConcept", !searchOrphans));
         }
     }
 
@@ -205,9 +216,10 @@ public class ThesaurusConceptDAO extends
 
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConcept.class, "tc");
-		criteria.add(Restrictions.eq("tc.thesaurus.identifier",
-				thesaurus.getIdentifier()));
-		criteria.add(Restrictions.eq("topConcept", topConcept));
+		selectThesaurus(criteria, thesaurus.getIdentifier());
+        selectOrphans(criteria, !topConcept);
+        //criteria.add(Restrictions.eq("topConcept", topConcept));
+        selectNoParents(criteria);
 		return criteria;
 	}
 }

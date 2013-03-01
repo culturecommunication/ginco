@@ -34,29 +34,28 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.services.IThesaurusTermRoleService;
-import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.*;
 import fr.mcc.ginco.utils.DateUtil;
+import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Small class responsible for converting real
+ * {@link ThesaurusTerm} object into its view
+ * {@link ThesaurusViewConverter}.
+ */
 @Component("termViewConverter")
 public class TermViewConverter {
 
@@ -102,6 +101,13 @@ public class TermViewConverter {
 		return hibernateRes;
 	}
 
+    /**
+     * Main method used to do conversion.
+     * @param source source to work with
+     * @param fromConcept
+     * @return converted item.
+     * @throws BusinessException
+     */
 	public ThesaurusTerm convert(ThesaurusTermView source, boolean fromConcept)
 			throws BusinessException {
 		ThesaurusTerm hibernateRes;
@@ -153,12 +159,14 @@ public class TermViewConverter {
 	}
 
 	/**
-	 * @param source
-	 *            source to work with
+     * This method extracts a list of ThesaurusTerm from a
+     *  ThesaurusConceptView given in argument
+     *
+	 * @param termViews array of view.
+     * @param fromConcept
+	 *
 	 * @return {@code List<ThesaurusTerm>}
 	 * @throws BusinessException
-	 *             This method extracts a list of ThesaurusTerm from a
-	 *             ThesaurusConceptView given in argument
 	 */
 	public List<ThesaurusTerm> convertTermViewsInTerms(
 			List<ThesaurusTermView> termViews, boolean fromConcept) throws BusinessException {

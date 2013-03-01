@@ -34,15 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
@@ -50,7 +41,18 @@ import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Class used to generate categorization folder nodes
+ * of given thesaurus (by its ID).
+ */
 @Component(value = "folderGenerator")
 public class FolderGenerator {
 

@@ -116,7 +116,19 @@ public interface IThesaurusListNode {
 
 	/**
 	 * Set the css class of the icon node
-	 * @param leaf
+	 * @param cls
 	 */
 	void setIconCls(String cls);
+
+    /**
+     * Get the parent ThesaurusId
+     * @return
+     */
+    String getThesaurusId();
+
+    /**
+     * Set the parent ThesaurusId
+     * @param thesaurusId
+     */
+    void setThesaurusId(String thesaurusId);
 }
