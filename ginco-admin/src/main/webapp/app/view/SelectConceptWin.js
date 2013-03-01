@@ -15,10 +15,10 @@ Ext.define(
         /*Fields prompting values*/
         xIdentifierColumnLabel : "Identifier",
         xLexicalValueColumnLabel : "Label",
-        xSelect : "Select as parent",
+        xSelect : "Select",
 
         width : 500,
-        title : 'Sélection d\'un concept',
+        title : 'Sélectionner un concept',
         titleAlign : 'center',
         modal : true,
         conceptReducedStore: null,
