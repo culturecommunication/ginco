@@ -50,6 +50,7 @@ Ext
                     xDetach: 'Detach from Concept',
                     xAddParent: 'Add parent Concept',
                     xNotesTab: 'Notes of this concept',
+                    xActions: 'Actions',
 
 					initComponent : function() {
 						var me = this;
@@ -206,6 +207,7 @@ Ext
 																	},
                                                                     {
                                                                         xtype:'actioncolumn',
+                                                                        header: me.xActions,
                                                                         items: [{
                                                                              icon: 'images/detach.png',
                                                                              tooltip: me.xDetach,
