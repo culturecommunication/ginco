@@ -9,18 +9,11 @@ Ext.define('GincoApp.store.ThesaurusNoteStore', {
      ],
 
     constructor: function(cfg) {
-    	/*var writer = new Ext.data.JsonWriter({
-            type: 'json',
-            encode: false,
-            allowSingle : false,
-            writeAllFields: true,
-            returnJson: true
-        });*/
-    	
-        var me = this;
+    	var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
-            autoLoad: false,
+            //TODO : keep autoload false ?
+        	autoLoad: false,
             alias: 'store.notestore',
             model : 'GincoApp.model.ThesaurusNoteModel',
             proxy: {
@@ -33,7 +26,7 @@ Ext.define('GincoApp.store.ThesaurusNoteStore', {
                 },
                 writer: {
                 	type: 'json',
-                	//a single note must be sent in an array :
+                	//A single note must be sent in an array :
                 	allowSingle : false
                 },
                 reader: {

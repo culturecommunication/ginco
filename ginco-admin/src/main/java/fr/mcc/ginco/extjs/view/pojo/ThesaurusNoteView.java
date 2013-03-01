@@ -54,6 +54,8 @@ public class ThesaurusNoteView implements Serializable {
 	private String source;
 	private String created;
 	private String modified;
+	private String conceptId;
+	private String termId;
 	
     public ThesaurusNoteView() {}
 
@@ -111,5 +113,21 @@ public class ThesaurusNoteView implements Serializable {
 
 	public void setModified(String modified) {
 		this.modified = modified;
+	}
+
+	public String getConceptId() {
+		return conceptId;
+	}
+
+	public void setConceptId(String conceptId) {
+		this.conceptId = conceptId;
+	}
+
+	public String getTermId() {
+		return termId;
+	}
+
+	public void setTermId(String termId) {
+		this.termId = termId;
 	}
 }

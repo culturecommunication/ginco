@@ -7,9 +7,9 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			var theConceptId = theGrid.up('conceptPanel').conceptId;
 			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
 		} else {
-			//TODO
-			var theTermId = theGrid.up('termPanel').termId;
-			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
+			//TODO keep it for US 33
+			//var theTermId = theGrid.up('termPanel').termId;
+			//theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
 		}
 		theGrid.getStore().load();
 	},
@@ -60,7 +60,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		var theGrid = theButton.up('panel').down('gridpanel');
 		theGrid.getStore().sync();
 		
-		//to implement : loading in progess and exception messages
+		//TODO: to implement : saving message and exception messages
 	},
 
 	init : function() {

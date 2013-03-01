@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -42,37 +43,67 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.NoteType;
-import fr.mcc.ginco.dao.INoteTypeDAO;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.dao.INoteDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional
-@Service("noteTypeService")
-public class NoteTypeServiceImpl implements INoteTypeService {
+@Service("noteService")
+public class NoteServiceImpl implements INoteService {
 	
 	@Inject
-	@Named("noteTypeDAO")
-	private INoteTypeDAO noteTypeDAO;
+	@Named("noteDAO")
+	private INoteDAO noteDAO;
 
 	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.INoteTypeService#getConceptNoteTypeList()
+	 * @see fr.mcc.ginco.services.INoteService#getConceptNoteList(java.lang.String)
 	 */
 	@Override
-	public List<NoteType> getConceptNoteTypeList() {
-		return noteTypeDAO.findConceptNoteTypes();
+	public List<Note> getConceptNoteList(String conceptId) {
+		return noteDAO.findConceptNotes(conceptId);
 	}
 
 	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.INoteTypeService#getTermNoteTypeList()
+	 * @see fr.mcc.ginco.services.INoteService#getTermNoteList(java.lang.String)
 	 */
 	@Override
-	public List<NoteType> getTermNoteTypeList() {
-		return noteTypeDAO.findTermNoteTypes();
+	public List<Note> getTermNoteList(String termId) {
+		return noteDAO.findTermNotes(termId);
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteService#getConceptOrTermNoteList(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<Note> getConceptOrTermNoteList(String conceptId, String termId) throws BusinessException {
+		List<Note> notes = new ArrayList<Note>();
+		if (conceptId != null) {
+			//Getting notes for a concept
+			notes = getConceptNoteList(conceptId);
+		} else if (termId != null) {
+			//Getting notes for a term
+			notes = getTermNoteList(termId);
+		} else {
+			//Throw exception : you need to specify an id for the concept or the term
+			throw new BusinessException("You need to specify an id for the concept or the term", "conceptid-or-termid-needed");
+		}
+		return notes;
 	}
 	
 	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.INoteTypeService#getNoteTypeById(java.lang.String)
+	 * @see fr.mcc.ginco.services.INoteService#getNoteById(java.lang.String)
 	 */
-	public NoteType getNoteTypeById(String typeId){
-		return noteTypeDAO.getById(typeId);
+	@Override
+	public Note getNoteById(String id) {
+		return noteDAO.getById(id);
 	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteService#createNote(fr.mcc.ginco.beans.Note)
+	 */
+	@Override
+	public Note createNote(Note note) {
+		return noteDAO.update(note);
+	}
+
 }

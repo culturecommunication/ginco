@@ -39,7 +39,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -122,7 +124,7 @@ public class ThesaurusNoteRestService {
 	}
 	
 	/**
-	 * Public method used to get the list of all notes for a concept or term.
+	 * Public method used to get the list of all notes for a concept or a term.
 	 * 
 	 * @return list of Note objects for a term, if not found - {@code null}
 	 * @throws BusinessException 
@@ -139,5 +141,38 @@ public class ThesaurusNoteRestService {
 		ExtJsonFormLoadData<List<ThesaurusNoteView>> result = new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(notes));
 		result.setTotal((long)notes.size());
 		return result;
+	}
+	
+	/**
+	 * Public method used to create new notes
+	 * @throws BusinessException 
+	 */
+	@POST
+	@Path("/createNotes")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusNoteView>> createNotes(List<ThesaurusNoteView> noteViews, @QueryParam("conceptId") String conceptId, @QueryParam("termId") String termId) throws BusinessException {
+		//We set for each note if it belongs to a concept or a term
+		for (ThesaurusNoteView view : noteViews) {
+			if(conceptId != null) {
+				logger.info("Updating notes for conceptid : " + conceptId);
+				view.setConceptId(conceptId);
+			} else if (termId != null){
+				logger.info("Updating notes for termid : " + termId);
+				view.setTermId(termId);
+			} else {
+				throw new BusinessException("You need to specify an id for the concept or the term", "conceptid-or-termid-needed");
+			}
+		}
+		
+		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
+		
+		List<Note> resultNotes = new ArrayList<Note>() ;
+		for (Note note : notes) {
+			resultNotes.add(noteService.createNote(note));
+		}
+
+		//Returns all the created notes converted
+		return new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(resultNotes));
+		
 	}
 }

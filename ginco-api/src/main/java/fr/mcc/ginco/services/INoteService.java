@@ -36,33 +36,48 @@ package fr.mcc.ginco.services;
 
 import java.util.List;
 
-import fr.mcc.ginco.beans.NoteType;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
- * Service used to work with {@link NoteType} objects, contains basic
+ * Service used to work with {@link Note} objects, contains basic
  * methods exposed to client part.
  *
- * @see fr.mcc.ginco.beans.NoteType
+ * @see fr.mcc.ginco.beans.Note
  */
-public interface INoteTypeService {
+public interface INoteService {
 	
 	/**
-     * Get list of all Note Types available for a concept.
+     * Get list of all notes available for a concept or a term.
+     * @return
+	 * @throws BusinessException 
+     */
+    List<Note> getConceptOrTermNoteList(String conceptId, String termId) throws BusinessException;
+	
+	/**
+     * Get list of all notes available for a concept.
      * @return
      */
-    List<NoteType> getConceptNoteTypeList();
+    List<Note> getConceptNoteList(String conceptId);
     
 	/**
-     * Get list of all Note Types available for a term.
+     * Get list of all notes available for a term.
      * @return
      */
-    List<NoteType> getTermNoteTypeList();
-    
-    /**
-     * Get a NoteType by its id
-     * @param typeId
-     * @return The NoteType that fits to the typeId given in parameter
-     */
-    NoteType getNoteTypeById(String typeId);
-    
+    List<Note> getTermNoteList(String termId);
+
+	/**
+	 * Get a note by id
+	 * @param id
+	 * @return Note
+	 */
+	Note getNoteById(String id);
+	
+	
+	/**
+	 * Create a new note
+	 * @param note
+	 * @return the created note
+	 */
+	Note createNote(Note note);
 }

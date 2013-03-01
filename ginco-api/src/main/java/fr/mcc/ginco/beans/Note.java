@@ -43,9 +43,10 @@ public class Note implements IBaseBean {
     private String lexicalValue;
     private Language language;
     private String source;
-    private String noteTypeCode;
     private Date created;
     private Date modified;
+    
+    private NoteType noteType;
     private ThesaurusConcept concept;
     private ThesaurusTerm term;
     
@@ -86,12 +87,12 @@ public class Note implements IBaseBean {
 		this.source = source;
 	}
 
-	public String getNoteTypeCode() {
-		return noteTypeCode;
+	public NoteType getNoteType() {
+		return noteType;
 	}
 
-	public void setNoteTypeCode(String noteTypeCode) {
-		this.noteTypeCode = noteTypeCode;
+	public void setNoteType(NoteType noteType) {
+		this.noteType = noteType;
 	}
 
 	public ThesaurusConcept getConcept() {

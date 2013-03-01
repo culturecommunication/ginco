@@ -32,37 +32,37 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
-import fr.mcc.ginco.beans.NoteType;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
-/**
- * Service used to work with {@link NoteType} objects, contains basic
- * methods exposed to client part.
- *
- * @see fr.mcc.ginco.beans.NoteType
- */
-public interface INoteTypeService {
-	
-	/**
-     * Get list of all Note Types available for a concept.
-     * @return
-     */
-    List<NoteType> getConceptNoteTypeList();
-    
-	/**
-     * Get list of all Note Types available for a term.
-     * @return
-     */
-    List<NoteType> getTermNoteTypeList();
-    
-    /**
-     * Get a NoteType by its id
-     * @param typeId
-     * @return The NoteType that fits to the typeId given in parameter
-     */
-    NoteType getNoteTypeById(String typeId);
-    
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.dao.INoteDAO;
+
+@Repository("noteDAO")
+public class NoteDAO extends GenericHibernateDAO<Note, String>
+		implements INoteDAO {
+
+	public NoteDAO() {
+		super(Note.class);
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.INoteDAO#findConceptNotes(java.lang.String)
+	 */
+	@Override
+	public List<Note> findConceptNotes(String conceptId) {
+		return getCurrentSession().createCriteria(Note.class).add(Restrictions.eq("concept.identifier",conceptId)).list();
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.INoteDAO#findTermNotes(java.lang.String)
+	 */
+	@Override
+	public List<Note> findTermNotes(String termId) {
+		return getCurrentSession().createCriteria(Note.class).add(Restrictions.eq("term.identifier",termId)).list();
+		}
 }

@@ -32,37 +32,21 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.dao;
 
 import java.util.List;
 
-import fr.mcc.ginco.beans.NoteType;
+import fr.mcc.ginco.beans.Note;
 
-/**
- * Service used to work with {@link NoteType} objects, contains basic
- * methods exposed to client part.
- *
- * @see fr.mcc.ginco.beans.NoteType
- */
-public interface INoteTypeService {
+public interface INoteDAO extends IGenericDAO<Note, String> {
+	/**
+	 * @return List<Note> List of notes available for a concept
+	 */
+	List<Note> findConceptNotes(String conceptId);
 	
 	/**
-     * Get list of all Note Types available for a concept.
-     * @return
-     */
-    List<NoteType> getConceptNoteTypeList();
-    
-	/**
-     * Get list of all Note Types available for a term.
-     * @return
-     */
-    List<NoteType> getTermNoteTypeList();
-    
-    /**
-     * Get a NoteType by its id
-     * @param typeId
-     * @return The NoteType that fits to the typeId given in parameter
-     */
-    NoteType getNoteTypeById(String typeId);
-    
+	 * @return List<Note> List of notes available for a term
+	 */
+	List<Note> findTermNotes(String termId);
+
 }
