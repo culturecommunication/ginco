@@ -112,7 +112,7 @@ public class ThesaurusConceptDAO extends
     }
 
     @Override
-    public List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrhapns) {
+    public List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrphans) {
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusConcept.class, "tc");
 
@@ -130,10 +130,19 @@ public class ThesaurusConceptDAO extends
                             conceptId));
         }
 
-        if(!searchOrhapns) {
-            criteria.add(Restrictions.eq("topConcept",true));
-        }
+        selectOrphans(criteria, searchOrphans);
 
+        return criteria.list();
+    }
+
+    @Override
+    public List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans) {
+        Criteria criteria = getCurrentSession().createCriteria(
+                ThesaurusConcept.class, "tc");
+
+        selectThesaurus(criteria, thesaurusId);
+        selectOrphans(criteria, searchOrphans);
+        excludeConcept(criteria, excludeConceptId);
 
         return criteria.list();
     }
@@ -143,14 +152,30 @@ public class ThesaurusConceptDAO extends
     }
 
     private void selectRoot(Criteria criteria, String thesaurusId, String excludeId) {
-        if(excludeId != null && !excludeId.isEmpty()) {
-           criteria.add(Restrictions.not
-                   (Restrictions.eq("tc.identifier", excludeId)));
-        }
 
-        criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
+        excludeConcept(criteria, excludeId);
+
+        selectThesaurus(criteria, thesaurusId);
+
         criteria.add(Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
                 Restrictions.isEmpty("tc.parentConcepts")));
+    }
+
+    private void selectThesaurus(Criteria criteria, String thesaurusId) {
+        criteria.add(Restrictions.eq("tc.thesaurus.identifier", thesaurusId));
+    }
+
+    private void selectOrphans(Criteria criteria, boolean searchOrphans) {
+        if(!searchOrphans) {
+            criteria.add(Restrictions.eq("topConcept",true));
+        }
+    }
+
+    private void excludeConcept(Criteria criteria, String excludeId) {
+        if(excludeId != null && !excludeId.isEmpty()) {
+            criteria.add(Restrictions.not
+                    (Restrictions.eq("tc.identifier", excludeId)));
+        }
     }
 
     private List<ThesaurusConcept> getListByThesaurusAndTopConcept(

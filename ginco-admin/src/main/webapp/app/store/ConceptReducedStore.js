@@ -16,7 +16,7 @@ Ext.define('GincoApp.store.ConceptReducedStore', {
             autoLoad: false,
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurusconceptservice/getChildren',
+                url: 'services/ui/thesaurusconceptservice/getConcepts',
                 extraParams: {  id: me.conceptId,
                                 thesaurusId: me.thesaurusId,
                                 searchOrphans: me.searchOrphans },

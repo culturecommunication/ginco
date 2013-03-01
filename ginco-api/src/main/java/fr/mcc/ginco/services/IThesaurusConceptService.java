@@ -137,4 +137,15 @@ public interface IThesaurusConceptService {
      * @return list of objects.
      */
     List<ThesaurusConcept> getChildrenByConceptId(String conceptId, String thesaurusId, boolean searchOrphans);
+
+    /**
+     * Search children of concept or thesaurus (if conceptId is null or empty)
+     * with given parameter (orphan or not).
+     * @param excludeConceptId id of concept.
+     * @param thesaurusId id of thesaurus.
+     * @param searchOrphans indicates if concepts with topConcept==false should be
+     *                      included in result
+     * @return list of objects.
+     */
+    List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans);
 }

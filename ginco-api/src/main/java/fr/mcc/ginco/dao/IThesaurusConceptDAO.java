@@ -100,5 +100,13 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param thesaurusId
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrhapns);
+    List<ThesaurusConcept> getChildrenConcepts(String conceptId, String thesaurusId, boolean searchOrphans);
+
+    /**
+     * Get lsit of all children concepts by id of parent Concept.
+     * @param excludeConceptId
+     * @param thesaurusId
+     * @return list of children or all root concepts if conceptId is null.
+     */
+    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans);
 }

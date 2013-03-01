@@ -146,6 +146,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
     }
 
     @Override
+    public List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, boolean searchOrphans) {
+        return thesaurusConceptDAO.getAllConceptsByThesaurusId(excludeConceptId, thesaurusId, searchOrphans);
+    }
+
+    @Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException {
 

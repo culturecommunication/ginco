@@ -170,10 +170,28 @@ public class ThesaurusConceptRestService {
     @GET
     @Path("/getChildren")
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<ThesaurusConceptReducedView> getChildrenByConceptId(@QueryParam("id") String conceptId,
-                                                             @QueryParam("thesaurusId") String thesaurusId,
-                                                             @QueryParam("searchOrphans") boolean searchOrphans)
+    public List<ThesaurusConceptReducedView> getChildrenByConceptId(
+            @QueryParam("id") String conceptId,
+            @QueryParam("thesaurusId") String thesaurusId,
+            @QueryParam("searchOrphans") boolean searchOrphans)
             throws BusinessException {
-        return thesaurusConceptViewConverter.convert(thesaurusConceptService.getChildrenByConceptId(conceptId, thesaurusId, searchOrphans));
+
+        return thesaurusConceptViewConverter
+                .convert(thesaurusConceptService.getChildrenByConceptId(conceptId, thesaurusId, searchOrphans));
     }
+
+
+    @GET
+    @Path("/getConcepts")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<ThesaurusConceptReducedView> getConceptsByThesaurusId(
+            @QueryParam("id") String conceptId,
+            @QueryParam("thesaurusId") String thesaurusId,
+            @QueryParam("searchOrphans") boolean searchOrphans)
+            throws BusinessException {
+
+        return thesaurusConceptViewConverter
+                .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId, searchOrphans));
+    }
+
 }
