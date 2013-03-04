@@ -19,7 +19,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	xProblemLoadMsg : 'Unable to load the concept',
 	
 	onConceptFormRender : function(theForm){
-		var me = this;
+        var me = this;
 		var thePanel = theForm.up('conceptPanel');
 		
 		var conceptId = thePanel.conceptId;
@@ -27,7 +27,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		if (conceptId!='')
 		{
 			theForm.getEl().mask("Chargement");
-			var thesaurusId= thePanel.thesaurusData.id;
+			var thesaurusId= thePanel.thesaurusData.data.id;
 			var thesaurusModel= this.getThesaurusModelModel();
 			thesaurusModel.load(thesaurusId, {
 				success : function(model) {
