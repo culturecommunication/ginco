@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link Note} objects, contains basic
@@ -46,13 +45,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
  * @see fr.mcc.ginco.beans.Note
  */
 public interface INoteService {
-	
-	/**
-     * Get list of all notes available for a concept or a term.
-     * @return
-	 * @throws BusinessException 
-     */
-    List<Note> getConceptOrTermNoteList(String conceptId, String termId) throws BusinessException;
 	
 	/**
      * Get list of all notes available for a concept.

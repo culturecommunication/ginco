@@ -95,12 +95,12 @@ Ext.define('GincoApp.view.NotePanel', {
 									{
 										dataIndex : 'created',
 										text : me.xCreatedDateLabel,
-										//hidden: true
+										hidden: true
 									},
 									{
 										dataIndex : 'modified',
 										text : me.xModifiedDateLabel,
-										//hidden: true
+										hidden: true
 									},
 									{
 										xtype : 'actioncolumn',
