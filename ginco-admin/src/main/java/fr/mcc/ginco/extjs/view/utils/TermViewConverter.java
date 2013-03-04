@@ -140,9 +140,7 @@ public class TermViewConverter {
 				}
 			}
 		}
-		if (fromConcept) {
-
-		}
+		
 		hibernateRes.setThesaurus(thesaurusService.getThesaurusById(source
 				.getThesaurusId()));
 		if (StringUtils.isEmpty(source.getLanguage())) {

@@ -164,6 +164,15 @@ Ext.define('GincoApp.controller.ConceptController', {
         });
         win.show();
     },
+    addAssociativeRelationship : function(theButton) {
+        var thePanel = theButton.up('conceptPanel');
+        var win = Ext.create('GincoApp.view.SelectConceptWin', {
+            thesaurusData : thePanel.thesaurusData,
+            conceptId : thePanel.conceptId,
+            showTree : false
+        });
+        win.show();
+    },
 
     //*********** Start SelectConceptWin.js
 
@@ -262,6 +271,9 @@ Ext.define('GincoApp.controller.ConceptController', {
  			},
             'conceptPanel  button[cls=addParent]' : {
                 click : this.addParent
+            },
+            'conceptPanel  button[cls=addAssociativeRelationship]' : {
+                click : this.addAssociativeRelationship
             },
  			'conceptPanel #newTermFromConceptPrefBtn' : {
 				click : this.newTermFromConceptPrefBtn

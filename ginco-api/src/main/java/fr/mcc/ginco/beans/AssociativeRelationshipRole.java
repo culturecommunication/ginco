@@ -32,51 +32,38 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.audit;
+package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
-import javax.servlet.http.HttpServletRequest;
+public class AssociativeRelationshipRole implements Serializable {
 
-import org.hibernate.envers.EntityTrackingRevisionListener;
-import org.hibernate.envers.RevisionType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+    private String code;
+    private String label;
+    private boolean defaultRole;
+  
 
-import fr.mcc.ginco.beans.GincoRevEntity;
-import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
+    public String getCode() {
+        return code;
+    }
 
-public class GincoRevListener implements EntityTrackingRevisionListener {
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	private Logger logger = LoggerFactory.getLogger(GincoRevListener.class);
+    public String getLabel() {
+        return label;
+    }
 
-	@Override
-	public void entityChanged(Class entityClass, String entityName,
-			Serializable entityId, RevisionType revisionType,
-			Object revisionEntity) {
-		GincoRevModifiedEntityType revEntity = new GincoRevModifiedEntityType();
-		revEntity.setEntityClassName(entityClass.getName());
-		revEntity.setRevision(((GincoRevEntity) revisionEntity).getId());
-		((GincoRevEntity) revisionEntity).addModifiedEntityType(revEntity);
-	}
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
-	@Override
-	public void newRevision(Object revisionEntity) {
-		GincoRevEntity gincoRevEntity = (GincoRevEntity) revisionEntity;
-		if (RequestContextHolder.getRequestAttributes() == null) {
-			logger.error("The RequestContext is empty!!!!!");
-		} else {
-			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-					.getRequestAttributes()).getRequest();
+    public boolean getDefaultRole() {
+        return defaultRole;
+    }
 
-			/*
-			 * Authentication authentication =
-			 * SecurityContextHolder.getContext().getAuthentication();
-			 */
-			gincoRevEntity.setUsername(request.getRemoteAddr());
-		}
-	}
+    public void setDefaultRole(boolean defaultRole) {
+        this.defaultRole = defaultRole;
+    }
 }

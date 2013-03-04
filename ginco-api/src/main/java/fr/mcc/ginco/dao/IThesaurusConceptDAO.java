@@ -34,11 +34,11 @@
  */
 package fr.mcc.ginco.dao;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-
-import java.util.List;
 
 /**
  * Data Access Object for thesaurus_concept
@@ -106,4 +106,13 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @return list of children or all root concepts if conceptId is null.
      */
     List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans);
+
+    
+    /**
+     * Gets the list of asssociated concepts
+     * @param concept
+     * @return
+     */
+    List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept);
+
 }

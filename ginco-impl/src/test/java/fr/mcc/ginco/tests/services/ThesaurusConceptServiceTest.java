@@ -48,8 +48,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -64,6 +67,9 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 
 	@Mock(name = "thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
+	
+	@Mock(name = "associativeRelationshipDAO")
+	private IGenericDAO<AssociativeRelationship,Class<?>> associativeRelationshipDAO;
 
 	@InjectMocks
 	private ThesaurusConceptServiceImpl thesaurusConceptService;
@@ -101,6 +107,20 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 
 		thesaurusConceptService
 				.getOrphanThesaurusConcepts("any-thesaurus-id");
+	}
+	
+	@Test
+	public final void testAddAssociativeRelationship() {
+		ThesaurusConcept concept1 = new ThesaurusConcept();
+		concept1.setIdentifier("id-concept-1");
+		ThesaurusConcept concept2 = new ThesaurusConcept();
+		concept2.setIdentifier("id-concept-2");
+		AssociativeRelationshipRole role = new AssociativeRelationshipRole();
+		
+		AssociativeRelationship association1 = new AssociativeRelationship();
+		when(associativeRelationshipDAO.makePersistent(any(AssociativeRelationship.class))).thenReturn(association1);
+		AssociativeRelationship sh1 = thesaurusConceptService.addAssociativeRelationship(concept1, concept2, role);
+		Assert.assertNotNull(sh1);
 	}
 
 }

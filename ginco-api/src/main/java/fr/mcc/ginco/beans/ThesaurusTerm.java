@@ -128,16 +128,16 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
     public void setConcept(ThesaurusConcept concept) {
         this.concept = concept;
     }
-
+   
     public Thesaurus getThesaurus() {
-        return thesaurus;
-    }
+		return thesaurus;
+	}
 
-    public void setThesaurus(Thesaurus thesaurusId) {
-        this.thesaurus = thesaurusId;
-    }
+	public void setThesaurus(Thesaurus thesaurus) {
+		this.thesaurus = thesaurus;
+	}
 
-    public Language getLanguage() {
+	public Language getLanguage() {
         return language;
     }
 
@@ -148,7 +148,6 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
 	@Override
 	public String getThesaurusId() {		
 		return thesaurus.getIdentifier();
-	}
-   
+	}   
 
 }

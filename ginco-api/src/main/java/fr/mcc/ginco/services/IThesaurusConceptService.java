@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -152,4 +154,15 @@ public interface IThesaurusConceptService {
      * @return
      */
     boolean hasChildren(String conceptId);
+
+    
+    
+	/**
+	 * *Saves the associative relationship between two concepts, affecting a role to the relation
+	 * @param concept1
+	 * @param concept2
+	 * @param role
+	 * @return
+	 */
+	AssociativeRelationship addAssociativeRelationship(ThesaurusConcept concept1, ThesaurusConcept concept2, AssociativeRelationshipRole role);
 }

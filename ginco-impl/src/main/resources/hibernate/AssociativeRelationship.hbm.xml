@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC  "-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="AssociativeRelationship" table="associative_relationship">
+		<cache usage="read-write" />
+
+		<composite-id mapped="true">
+			<key-many-to-one name="concept1" column="conceptid1"
+				entity-name="fr.mcc.ginco.beans.ThesaurusConcept" />
+			<key-many-to-one name="concept2" column="conceptid2"
+				entity-name="fr.mcc.ginco.beans.ThesaurusConcept" />
+		</composite-id>
+		<many-to-one name="relationshipRole" column="role" lazy="false" />
+	</class>
+</hibernate-mapping>     

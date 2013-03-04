@@ -34,16 +34,20 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
+import org.springframework.stereotype.Repository;
+
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -142,6 +146,25 @@ public class ThesaurusConceptDAO extends
         selectThesaurus(criteria, thesaurusId);
         selectOrphans(criteria, searchOrphans);
         excludeConcept(criteria, excludeConceptId);
+
+        return criteria.list();
+    }
+    
+    @Override
+    public List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept) {
+    
+        DetachedCriteria d1 = DetachedCriteria.forClass(AssociativeRelationship.class, "ar1");
+		d1.setProjection(Projections.projectionList().add(Projections.property("ar1.concept1")));
+		d1.add(Restrictions.eq("concept2", concept));
+		
+		DetachedCriteria d2 = DetachedCriteria.forClass(AssociativeRelationship.class, "ar2");
+		d2.setProjection(Projections.projectionList().add(Projections.property("ar2.concept2")));
+		d2.add(Restrictions.eq("concept1", concept));
+			
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
+		.add(Restrictions.or(
+				Subqueries.propertyIn("tc.identifier", d1),
+				Subqueries.propertyIn("tc.identifier", d2)));		
 
         return criteria.list();
     }

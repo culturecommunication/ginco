@@ -32,7 +32,9 @@
                 <value>hibernate/NoteType.hbm.xml</value>
                 <value>hibernate/Note.hbm.xml</value>
                 <value>hibernate/GincoRevEntity.hbm.xml</value>
-                <value>hibernate/GincoRevModifiedEntityType.hbm.xml</value>     
+                <value>hibernate/GincoRevModifiedEntityType.hbm.xml</value>
+                <value>hibernate/AssociativeRelationship.hbm.xml</value>
+                <value>hibernate/AssociativeRelationshipRole.hbm.xml</value>      
             </list>
         </property>
         <property name="hibernateProperties">
@@ -45,7 +47,7 @@
                 <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
                 <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop> 
                 <prop key="org.hibernate.envers.revision_listener">fr.mcc.ginco.audit.GincoRevListener</prop>   
-                <prop key="org.hibernate.envers.revision_on_collection_change">false</prop>               
+                <prop key="org.hibernate.envers.revision_on_collection_change">false</prop>
             </props>
         </property>
 	</bean>
@@ -59,24 +61,24 @@
 
 	<!-- Definition of the Data Access Objects of Ginco Application -->
 	<!-- All Data Access Objects are inject ed by spring, using GenericHibernateDAO -->
-	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO"
-		scope="prototype">
+	<bean id="thesaurusFormatDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
 	</bean>
 
-	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO"
-		scope="prototype">
+	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusOrganization" />
 	</bean>
 
-	<bean id="thesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO"
-		scope="prototype">
+	<bean id="thesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusType" />
 	</bean>
 
-	<bean id="thesaurusVersionHistoryDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO"
-		scope="prototype">
+	<bean id="thesaurusVersionHistoryDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusVersionHistory" />
 	</bean>
+	
+	<bean id="associativeRelationshipDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.AssociativeRelationship" />
+    </bean>
 
 </beans>

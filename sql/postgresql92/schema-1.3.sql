@@ -119,4 +119,42 @@ CREATE INDEX fki_note_thesaurus_term
   
 ALTER TABLE note ADD COLUMN created timestamp without time zone DEFAULT now() NOT NULL;
 ALTER TABLE note ADD COLUMN modified timestamp without time zone DEFAULT now() NOT NULL;
+ CREATE TABLE associative_relationship
+(
+  conceptid1 character varying(255) NOT NULL,
+  conceptid2 character varying(255) NOT NULL,
+  "role" character varying(255),
+  CONSTRAINT associative_relationship_pkey PRIMARY KEY (conceptid1, conceptid2),  
+  CONSTRAINT fk2b76ee66da7e7931 FOREIGN KEY ("role")
+      REFERENCES associative_relationship_role (code) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk2b76ee66fdebaa20 FOREIGN KEY (conceptid1)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk2b76ee66fdebaa21 FOREIGN KEY (conceptid2)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE TABLE associative_relationship_role
+(
+  code character varying(255) NOT NULL,
+  label character varying(255),
+  defaultrole boolean,
+  CONSTRAINT associative_relationship_role_pkey PRIMARY KEY (code)
+);
+CREATE INDEX fki_associative_relationship_concept1
+  ON associative_relationship
+  USING btree
+  (conceptid1);
+  
+CREATE INDEX fki_associative_relationship_concept2
+  ON associative_relationship
+  USING btree
+  (conceptid2);
+  
+CREATE INDEX fki_associative_relationship_role
+  ON associative_relationship
+  USING btree
+  (role);
 

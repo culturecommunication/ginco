@@ -36,6 +36,8 @@ package fr.mcc.ginco.tests.daos;
 
 import java.util.List;
 
+import junitx.framework.ListAssert;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -104,6 +106,13 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
         String expectedThesaurusTitle = "test";
         Assert.assertEquals("Parent thesaurus is not as expected !", thesaurusConcept.getThesaurus().getTitle(),
                 expectedThesaurusTitle);
+    }
+    
+    @Test
+    public void testGetAssociatedConcepts(){  
+    	ThesaurusConcept concept1 = thesaurusConceptDAO.getById("http://www.culturecommunication.gouv.fr/co1");
+        List<ThesaurusConcept> thesaurusConcepts = thesaurusConceptDAO.getAssociatedConcepts(concept1);
+        Assert.assertEquals(2, thesaurusConcepts.size());      
     }
 	
 

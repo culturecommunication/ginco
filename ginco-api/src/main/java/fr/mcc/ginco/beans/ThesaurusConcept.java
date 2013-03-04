@@ -53,7 +53,10 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
     private Thesaurus thesaurus;
     private Set<ThesaurusConcept> parentConcepts  = new HashSet<ThesaurusConcept>();
     private Set<ThesaurusConcept> rootConcepts  = new HashSet<ThesaurusConcept>();
+    private Set<AssociativeRelationship> associativeRelationshipLeft; 
+    private Set<AssociativeRelationship> associativeRelationshipRight; 
 
+    
     public String getIdentifier() {
         return identifier;
     }
@@ -119,6 +122,20 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	}
 	public void setRootConcepts(Set<ThesaurusConcept> rootConcepts) {
 		this.rootConcepts = rootConcepts;
+	}			
+	public Set<AssociativeRelationship> getAssociativeRelationshipLeft() {
+		return associativeRelationshipLeft;
+	}
+	public void setAssociativeRelationshipLeft(
+			Set<AssociativeRelationship> associativeRelationshipLeft) {
+		this.associativeRelationshipLeft = associativeRelationshipLeft;
+	}
+	public Set<AssociativeRelationship> getAssociativeRelationshipRight() {
+		return associativeRelationshipRight;
+	}
+	public void setAssociativeRelationshipRight(
+			Set<AssociativeRelationship> associativeRelationshipRight) {
+		this.associativeRelationshipRight = associativeRelationshipRight;
 	}
 	@Override
 	public String getThesaurusId() {		

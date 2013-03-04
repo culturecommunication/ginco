@@ -105,5 +105,35 @@
             <value>eng</value>
         </row>
 	</table>
+	 <table name="associative_relationship_role">
+        <column>code</column>
+         <column>label</column>
+         <column>defaultrole</column>
+         <row>
+            <value>TA</value>
+            <value>Terme associé</value>
+            <value>true</value>
+         </row>
+    </table>
+	<table name="associative_relationship">
+        <column>conceptid1</column>
+        <column>conceptid2</column>
+        <column>role</column>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>TA</value>
+        </row>
+         <row>
+            <value>http://www.culturecommunication.gouv.fr/co3</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value>TA</value>
+        </row>
+         <row>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>http://www.culturecommunication.gouv.fr/co3</value>
+            <value>TA</value>
+        </row>
+    </table>   
 </dataset>
   

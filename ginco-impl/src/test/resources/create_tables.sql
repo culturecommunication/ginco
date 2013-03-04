@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS thesaurus_term_role;
 DROP TABLE IF EXISTS thesaurus_concept;
 DROP TABLE IF EXISTS hierarchical_relationship;
 DROP TABLE IF EXISTS top_relationship;
+DROP TABLE IF EXISTS associative_relationship;
+DROP TABLE IF EXISTS associative_relationship_role;
 
 DROP SEQUENCE IF EXISTS log_journal_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
@@ -122,6 +124,22 @@ CREATE TABLE top_relationship
   CONSTRAINT pk_top_relationship PRIMARY KEY (childconceptid, rootconceptid)
 );
 
+CREATE TABLE associative_relationship
+(
+  conceptid1 text NOT NULL,
+  conceptid2 text NOT NULL,
+  role text,
+  CONSTRAINT pk_associative_relationship PRIMARY KEY (conceptid1, conceptid2)
+); 
+
+CREATE TABLE associative_relationship_role
+(
+  code text NOT NULL,
+  label text,
+  defaultrole boolean,
+  CONSTRAINT pk_associative_relationship_role PRIMARY KEY (code)
+);
+
 ALTER TABLE thesaurus_term
     ADD FOREIGN KEY (conceptid)
     REFERENCES thesaurus_concept (identifier);
@@ -149,3 +167,15 @@ ALTER TABLE top_relationship
 ALTER TABLE top_relationship
    ADD FOREIGN KEY (rootconceptid)
    REFERENCES thesaurus_concept (identifier);
+   
+ALTER TABLE associative_relationship
+      ADD FOREIGN KEY (role)
+      REFERENCES associative_relationship_role (code);
+   
+ALTER TABLE associative_relationship
+      ADD FOREIGN KEY (conceptid1)      
+      REFERENCES thesaurus_concept (identifier);
+      
+ALTER TABLE associative_relationship
+      ADD FOREIGN KEY (conceptid2)
+      REFERENCES thesaurus_concept (identifier);
