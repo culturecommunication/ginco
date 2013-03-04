@@ -24,7 +24,7 @@ Ext.define('GincoApp.view.NotePanel', {
     xTypeLabel : 'Type',
 
     /*Fields prompting values*/
-    xNoteConceptListGridTitle : 'Liste des notes de concept',
+    xNoteConceptListGridTitle : 'List of the concept notes',
     xLanguageLabel : 'Language',
     xAddNote: 'Add a note',
     xDetach: 'Delete a note',
@@ -85,22 +85,18 @@ Ext.define('GincoApp.view.NotePanel', {
 										text : me.xLanguageLabel
 									},
 									{
-										dataIndex : 'created',
-										text : me.xCreatedDateLabel
-									},
-									{
 										dataIndex : 'type',
 										text : me.xTypeLabel
 									},
 									{
 										dataIndex : 'created',
-										text : me.xCreatedDateLabel,
-										hidden: true
+										//hidden: true,
+										text : me.xCreatedDateLabel
 									},
 									{
 										dataIndex : 'modified',
-										text : me.xModifiedDateLabel,
-										hidden: true
+										//hidden: true,
+										text : me.xModifiedDateLabel
 									},
 									{
 										xtype : 'actioncolumn',
