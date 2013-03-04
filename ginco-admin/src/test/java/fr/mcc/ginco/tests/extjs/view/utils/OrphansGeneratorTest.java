@@ -34,9 +34,15 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,15 +51,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrphansGeneratorTest {
 
@@ -72,10 +71,16 @@ public class OrphansGeneratorTest {
 	@Test
 	public void testGenerateOrphans() throws BusinessException {
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
-		ThesaurusConcept co1 = new ThesaurusConcept();
-		co1.setIdentifier("co1");
-		ThesaurusConcept co2 = new ThesaurusConcept();
-		co2.setIdentifier("co2");
+
+        Thesaurus mockThesaurus = new Thesaurus();
+        mockThesaurus.setIdentifier("th1");
+
+        ThesaurusConcept co1 = new ThesaurusConcept();
+        co1.setIdentifier("co1");
+        co1.setThesaurus(mockThesaurus);
+        ThesaurusConcept co2 = new ThesaurusConcept();
+        co2.setIdentifier("co2");
+        co2.setThesaurus(mockThesaurus);
 		concepts.add(co1);
 		concepts.add(co2);
 		Language lang = new Language();

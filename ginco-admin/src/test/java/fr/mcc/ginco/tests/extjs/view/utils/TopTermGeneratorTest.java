@@ -35,6 +35,7 @@
 package fr.mcc.ginco.tests.extjs.view.utils;
 
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -49,7 +50,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,12 +69,18 @@ public class TopTermGeneratorTest {
     }
 
     @Test
-    public void testGenerateOrphans() throws BusinessException {
+    public void testGenerateTopTerms() throws BusinessException {
         List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+
+        Thesaurus mockThesaurus = new Thesaurus();
+        mockThesaurus.setIdentifier("th1");
+
         ThesaurusConcept co1 = new ThesaurusConcept();
         co1.setIdentifier("co1");
+        co1.setThesaurus(mockThesaurus);
         ThesaurusConcept co2 = new ThesaurusConcept();
         co2.setIdentifier("co2");
+        co2.setThesaurus(mockThesaurus);
         concepts.add(co1);
         concepts.add(co2);
         Language lang = new Language();
