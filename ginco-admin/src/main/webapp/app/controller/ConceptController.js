@@ -21,12 +21,13 @@ Ext.define('GincoApp.controller.ConceptController', {
 	onConceptFormRender : function(theForm){
 		var me = this;
 		var thePanel = theForm.up('conceptPanel');
+		
 		var conceptId = thePanel.conceptId;
 		var model = this.getConceptModelModel();
 		if (conceptId!='')
 		{
 			theForm.getEl().mask("Chargement");
-			var thesaurusId= thePanel.thesaurusData.data.id;
+			var thesaurusId= thePanel.thesaurusData.id;
 			var thesaurusModel= this.getThesaurusModelModel();
 			thesaurusModel.load(thesaurusId, {
 				success : function(model) {
@@ -129,7 +130,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 
     onTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
         var thePanel = theGrid.up('conceptPanel');
-        var termPanel = this.createPanel('GincoApp.view.TermPanel', thePanel.thesaurusData, record.data.identifier);
+        this.createPanel('GincoApp.view.TermPanel', thePanel.thesaurusData, record.data.identifier);
     },
 
     onDetachClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
@@ -209,6 +210,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var theGridStore = theGrid.getStore();
 		theGridStore.removeAll();
 		theGridStore.add(terms);
+		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
+		noteTab.setDisabled(false);
 	},
 
 	saveTermFromConceptBtn : function(theButton){
@@ -254,7 +257,7 @@ Ext.define('GincoApp.controller.ConceptController', {
         	'conceptPanel form' : {
  				afterrender : this.onConceptFormRender
  			},
- 			'conceptPanel  button[cls=save]' : {
+ 			'conceptPanel #saveConcept' : {
  				click : this.saveConcept
  			},
             'conceptPanel  button[cls=addParent]' : {
@@ -288,7 +291,7 @@ Ext.define('GincoApp.controller.ConceptController', {
  				render : this.onGridRender,
  				itemdblclick : this.onSelectTermDblClick
  			},
-            'conceptPanel gridpanel actioncolumn' : {
+ 			'conceptPanel gridpanel actioncolumn' : {
                 click : this.onDetachClick
             }
          });

@@ -32,96 +32,37 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.dao.hibernate;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
-@SuppressWarnings("serial")
-public class Note implements Serializable {
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+import fr.mcc.ginco.beans.NoteType;
+import fr.mcc.ginco.dao.INoteTypeDAO;
 
-    private String identifier;
-    private String lexicalValue;
-    private Language language;
-    private String source;
-    private Date created;
-    private Date modified;
-    
-    private NoteType noteType;
-    private ThesaurusConcept concept;
-    private ThesaurusTerm term;    
-    
+@Repository("noteTypeDAO")
+public class NoteTypeDAO extends GenericHibernateDAO<NoteType, String>
+		implements INoteTypeDAO {
 
-	public String getIdentifier() {
-		return identifier;
+	public NoteTypeDAO() {
+		super(NoteType.class);
 	}
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.INoteTypeDAO#findConceptNoteTypes()
+	 */
+	@Override
+	public List<NoteType> findConceptNoteTypes() {
+		return getCurrentSession().createCriteria(NoteType.class).add(Restrictions.eq("isConcept",true)).list();
 	}
+	
 
-	public String getLexicalValue() {
-		return lexicalValue;
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.INoteTypeDAO#findTermNoteTypes()
+	 */
+	@Override
+	public List<NoteType> findTermNoteTypes() {
+		return getCurrentSession().createCriteria(NoteType.class).add(Restrictions.eq("isTerm",true)).list();
 	}
-
-	public void setLexicalValue(String lexicalValue) {
-		this.lexicalValue = lexicalValue;
-	}
-
-	public Language getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(Language lang) {
-		this.language = lang;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
-	public NoteType getNoteType() {
-		return noteType;
-	}
-
-	public void setNoteType(NoteType noteType) {
-		this.noteType = noteType;
-	}
-
-	public ThesaurusConcept getConcept() {
-		return concept;
-	}
-
-	public void setConcept(ThesaurusConcept conceptId) {
-		this.concept = conceptId;
-	}
-
-	public ThesaurusTerm getTerm() {
-		return term;
-	}
-
-	public void setTerm(ThesaurusTerm termId) {
-		this.term = termId;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public Date getModified() {
-		return modified;
-	}
-
-	public void setModified(Date modified) {
-		this.modified = modified;
-	}
-
 }

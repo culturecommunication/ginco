@@ -1,15 +1,11 @@
 /*
- * File: app/view/ThesaurusPanel.js
- * Term Creation/Edition Form
+ * File: app/view/ConceptPanel.js
+ * Concept Creation/Edition Form + Notes
  * 
  */
 
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
-
-Ext.require([
-    'Ext.ux.CheckColumn',
-    'GincoApp.view.NoteConceptPanel'
-]);
+Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteConceptPanel' ]);
 
 Ext
 		.define(
@@ -33,28 +29,29 @@ Ext
 					xIdentifierLabel : 'Identifier',
 					xCreatedDateLabel : 'Creation date',
 					xModificationDateLabel : 'Modification date',
-					xTopTermConceptLabel: 'Is a TopTerm Concept',
+					xTopTermConceptLabel : 'Is a TopTerm Concept',
 					xLexicalValueLabel : 'Lexical value',
 					xLanguagesLabel : 'Languages',
 					xRoleColumnLabel : 'Role',
 					xPreferedColumnLabel : 'Prefered',
 					xConceptPanelTitle : 'New Concept',
-					xTermListGridTitle : 'Terms list', 
-					xSave: 'Save',
-					xDelete: 'Delete',
-					xAddTerm: 'Add a term',
-					xPreferedTerm: 'Prefered Term',
-					xNonPreferedTerm: 'Non Prefered Term',
-					xCreateTerm: 'Create Term',
-					xExistingTerm: 'Select Existing Term',
-                    xDetach: 'Detach from Concept',
-                    xAddParent: 'Add parent Concept',
-                    xNotesTab: 'Notes of this concept',
-                    xActions: 'Actions',
+					xTermListGridTitle : 'Terms list',
+					xSave : 'Save',
+					xDelete : 'Delete',
+					xAddTerm : 'Add a term',
+					xPreferedTerm : 'Prefered Term',
+					xNonPreferedTerm : 'Non Prefered Term',
+					xCreateTerm : 'Create Term',
+					xExistingTerm : 'Select Existing Term',
+					xDetach : 'Detach from Concept',
+					xAddParent: 'Add parent Concept',
+					xNotesTab : 'Notes of this concept',
+					xActions: 'Actions',
 
 					initComponent : function() {
 						var me = this;
-						me.conceptTermStore = Ext.create('GincoApp.store.ThesaurusTermStore');
+						me.conceptTermStore = Ext
+								.create('GincoApp.store.ThesaurusTermStore');
 
 						Ext
 								.applyIf(
@@ -62,7 +59,6 @@ Ext
 										{
 											title : me.xConceptPanelTitle,
 											items : [ {
-												
 												xtype : 'tabpanel',
 												items : [ {
 												
@@ -89,7 +85,8 @@ Ext
 														disabled : true,
 														formBind : true,
 														cls : 'save',
-														iconCls : 'icon-save'
+														iconCls : 'icon-save',
+														itemId : 'saveConcept'
 													}, {
 														xtype : 'button',
 														text : me.xDelete,
@@ -219,7 +216,9 @@ Ext
 														} ]
 											},{
 										        title: me.xNotesTab,
-										        xtype: 'noteConceptPanel'
+										        xtype: 'noteConceptPanel',
+										        closable : false,
+										        disabled : true
 										        }]
 											}]
 										});

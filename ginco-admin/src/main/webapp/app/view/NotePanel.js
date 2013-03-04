@@ -1,6 +1,6 @@
 /*
- * File: app/view/ThesaurusPanel.js
- * Term Creation/Edition Form
+ * File: app/view/NotePanel.js
+ * Note Creation/Edition
  * 
  */
 Ext.define('GincoApp.view.NotePanel', {
@@ -19,29 +19,26 @@ Ext.define('GincoApp.view.NotePanel', {
     /*Fields with auto generated values*/
     xIdentifierLabel : 'Identifier',
     xCreatedDateLabel : 'Creation date',
-    xDateLabel : 'Last Modification Date',
+    xModifiedDateLabel : 'Modification date',
+    xLexicalValueLabel : 'Lexical Value',
+    xTypeLabel : 'Type',
 
     /*Fields prompting values*/
-    xNoteListGridTitle : 'Liste des notes',
+    xNoteConceptListGridTitle : 'Liste des notes de concept',
     xLanguageLabel : 'Language',
     xAddNote: 'Add a note',
+    xDetach: 'Delete a note',
     
     initComponent: function() {
         var me = this;
+        me.noteConceptStore = Ext.create('GincoApp.store.ThesaurusNoteStore');
 
-        
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'form',
+                    xtype: 'panel',
                 	flex: 1,
                 	autoScroll: true,
-                    pollForChanges : true,
-                    trackResetOnLoad : true,
-                    defaults: {
-                        anchor: '100%',
-                        afterLabelTextTpl: new Ext.XTemplate('<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>', { disableFormats: true })
-                    },
                     dockedItems: [
                         {
                             xtype: 'toolbar',
@@ -50,26 +47,17 @@ Ext.define('GincoApp.view.NotePanel', {
                                 {
                                     xtype: 'button',
                                     text: 'Enregistrer',
-                                    disabled: true,
-                                    formBind: true,
                                     cls: 'save',
-                                    iconCls : 'icon-save'
-                                },
-                                {
-                                    xtype: 'button',
-                                    text: 'Supprimer',
-                                    disabled: true,
-                                    itemId: 'delete',
-                                    cls: 'delete',
-                                    iconCls : 'icon-delete'
+                                    iconCls : 'icon-save',
+                                    itemId : 'saveNote'
                                 }
                             ]
                         }
                     ],
                     items: [{
 							xtype : 'gridpanel',
-							title : me.xNoteListGridTitle,
-							store : me.noteTermStore,
+							title : me.xNoteConceptListGridTitle,
+							store : me.noteConceptStore,
 
 							dockedItems : [ {
 								xtype : 'toolbar',
@@ -84,7 +72,8 @@ Ext.define('GincoApp.view.NotePanel', {
 							columns : [
 									{
 										dataIndex : 'identifier',
-										text : me.xIdentifierLabel
+										text : me.xIdentifierLabel,
+										hidden: true
 									},
 									{
 										dataIndex : 'lexicalValue',
@@ -98,6 +87,37 @@ Ext.define('GincoApp.view.NotePanel', {
 									{
 										dataIndex : 'created',
 										text : me.xCreatedDateLabel
+									},
+									{
+										dataIndex : 'type',
+										text : me.xTypeLabel
+									},
+									{
+										dataIndex : 'created',
+										text : me.xCreatedDateLabel,
+										//hidden: true
+									},
+									{
+										dataIndex : 'modified',
+										text : me.xModifiedDateLabel,
+										//hidden: true
+									},
+									{
+										xtype : 'actioncolumn',
+										itemId : 'noteDelete',
+										items : [ {
+											icon : 'images/detach.png',
+											tooltip : me.xDetach,
+											handler : function(
+													view,
+													rowIndex,
+													colIndex,
+													item,
+													e,
+													record,
+													row) {
+											}
+										} ]
 									}
                             ]
 						}

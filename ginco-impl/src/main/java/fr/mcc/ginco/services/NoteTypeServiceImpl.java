@@ -32,96 +32,47 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.services;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
-@SuppressWarnings("serial")
-public class Note implements Serializable {
+import javax.inject.Inject;
+import javax.inject.Named;
 
-    private String identifier;
-    private String lexicalValue;
-    private Language language;
-    private String source;
-    private Date created;
-    private Date modified;
-    
-    private NoteType noteType;
-    private ThesaurusConcept concept;
-    private ThesaurusTerm term;    
-    
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-	public String getIdentifier() {
-		return identifier;
+import fr.mcc.ginco.beans.NoteType;
+import fr.mcc.ginco.dao.INoteTypeDAO;
+
+@Transactional
+@Service("noteTypeService")
+public class NoteTypeServiceImpl implements INoteTypeService {
+	
+	@Inject
+	@Named("noteTypeDAO")
+	private INoteTypeDAO noteTypeDAO;
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteTypeService#getConceptNoteTypeList()
+	 */
+	@Override
+	public List<NoteType> getConceptNoteTypeList() {
+		return noteTypeDAO.findConceptNoteTypes();
 	}
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteTypeService#getTermNoteTypeList()
+	 */
+	@Override
+	public List<NoteType> getTermNoteTypeList() {
+		return noteTypeDAO.findTermNoteTypes();
 	}
-
-	public String getLexicalValue() {
-		return lexicalValue;
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteTypeService#getNoteTypeById(java.lang.String)
+	 */
+	public NoteType getNoteTypeById(String typeId){
+		return noteTypeDAO.getById(typeId);
 	}
-
-	public void setLexicalValue(String lexicalValue) {
-		this.lexicalValue = lexicalValue;
-	}
-
-	public Language getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(Language lang) {
-		this.language = lang;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
-	public NoteType getNoteType() {
-		return noteType;
-	}
-
-	public void setNoteType(NoteType noteType) {
-		this.noteType = noteType;
-	}
-
-	public ThesaurusConcept getConcept() {
-		return concept;
-	}
-
-	public void setConcept(ThesaurusConcept conceptId) {
-		this.concept = conceptId;
-	}
-
-	public ThesaurusTerm getTerm() {
-		return term;
-	}
-
-	public void setTerm(ThesaurusTerm termId) {
-		this.term = termId;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public Date getModified() {
-		return modified;
-	}
-
-	public void setModified(Date modified) {
-		this.modified = modified;
-	}
-
 }

@@ -32,25 +32,32 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.extjs.view.pojo;
 
 import java.io.Serializable;
-import java.util.Date;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+/**
+ * View class corresponding to {@link ThesaurusNote} bean, but fully serializable;
+ * 
+ * @see fr.mcc.ginco.beans
+ */
 @SuppressWarnings("serial")
-public class Note implements Serializable {
-
-    private String identifier;
-    private String lexicalValue;
-    private Language language;
-    private String source;
-    private Date created;
-    private Date modified;
-    
-    private NoteType noteType;
-    private ThesaurusConcept concept;
-    private ThesaurusTerm term;    
-    
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class ThesaurusNoteView implements Serializable {
+	
+	private String identifier;
+	private String lexicalValue;
+	private String language;
+	private String type;
+	private String source;
+	private String created;
+	private String modified;
+	private String conceptId;
+	private String termId;
+	
+    public ThesaurusNoteView() {}
 
 	public String getIdentifier() {
 		return identifier;
@@ -68,12 +75,20 @@ public class Note implements Serializable {
 		this.lexicalValue = lexicalValue;
 	}
 
-	public Language getLanguage() {
+	public String getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(Language lang) {
-		this.language = lang;
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getSource() {
@@ -84,44 +99,35 @@ public class Note implements Serializable {
 		this.source = source;
 	}
 
-	public NoteType getNoteType() {
-		return noteType;
-	}
-
-	public void setNoteType(NoteType noteType) {
-		this.noteType = noteType;
-	}
-
-	public ThesaurusConcept getConcept() {
-		return concept;
-	}
-
-	public void setConcept(ThesaurusConcept conceptId) {
-		this.concept = conceptId;
-	}
-
-	public ThesaurusTerm getTerm() {
-		return term;
-	}
-
-	public void setTerm(ThesaurusTerm termId) {
-		this.term = termId;
-	}
-
-	public Date getCreated() {
+	public String getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	public void setCreated(String created) {
 		this.created = created;
 	}
 
-	public Date getModified() {
+	public String getModified() {
 		return modified;
 	}
 
-	public void setModified(Date modified) {
+	public void setModified(String modified) {
 		this.modified = modified;
 	}
 
+	public String getConceptId() {
+		return conceptId;
+	}
+
+	public void setConceptId(String conceptId) {
+		this.conceptId = conceptId;
+	}
+
+	public String getTermId() {
+		return termId;
+	}
+
+	public void setTermId(String termId) {
+		this.termId = termId;
+	}
 }

@@ -116,3 +116,7 @@ CREATE INDEX fki_note_thesaurus_term
   ON note
   USING btree
   (termid);
+  
+ALTER TABLE note ADD COLUMN created timestamp without time zone DEFAULT now() NOT NULL;
+ALTER TABLE note ADD COLUMN modified timestamp without time zone DEFAULT now() NOT NULL;
+
