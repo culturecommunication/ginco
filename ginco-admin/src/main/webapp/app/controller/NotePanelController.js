@@ -7,22 +7,33 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			var theConceptId = theGrid.up('conceptPanel').conceptId;
 			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
 		} else {
-			//TODO keep it for US 33
-			//var theTermId = theGrid.up('termPanel').termId;
-			//theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
+			var theTermId = theGrid.up('termPanel').termId;
+			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
 		}
 		theGrid.getStore().load();
 	},
 
 	newNoteBtn : function(theButton){
-		var win = Ext.create('GincoApp.view.CreateNoteWin');
 		var theGrid = theButton.up('gridpanel');
-		var theForm = win.down('form');
 		var model = Ext.create('GincoApp.model.ThesaurusNoteModel');
 		
-		win.thesaurusData = theButton.up('conceptPanel').thesaurusData;
+		var win = null;
+		if (theButton.up('conceptPanel') != null) {
+			//we are creating a note for a concept
+			win = Ext.create('GincoApp.view.CreateNoteWin', {
+				storeNoteTypes : Ext.create('GincoApp.store.ConceptNoteTypeStore'),
+				thesaurusData : theButton.up('conceptPanel').thesaurusData
+					});
+		} else {
+			//we are creating a note for a term
+			win = Ext.create('GincoApp.view.CreateNoteWin', {
+				storeNoteTypes : Ext.create('GincoApp.store.TermNoteTypeStore'),
+				thesaurusData : theButton.up('termPanel').thesaurusData
+					});
+		}
 		win.store = theGrid.getStore();
 		model.data.language=win.thesaurusData.languages[0];
+		var theForm = win.down('form');
 		theForm.loadRecord(model);
 		win.show();
 	},

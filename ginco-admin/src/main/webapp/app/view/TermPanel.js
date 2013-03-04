@@ -3,6 +3,9 @@
  * Term Creation/Edition Form
  * 
  */
+Ext.Loader.setPath('Ext.ux', 'extjs/ux');
+Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteTermPanel' ]);
+
 Ext.define('GincoApp.view.TermPanel', {
     extend: 'Ext.panel.Panel',
 
@@ -27,6 +30,7 @@ Ext.define('GincoApp.view.TermPanel', {
     xRelationLabel : 'Relation',
     xSourceLabel : 'Source',
     xTermPanelTitle : 'New Term',
+    xNotesTab : 'Notes of this term',
    
     initComponent: function() {
         var me = this;
@@ -34,8 +38,10 @@ Ext.define('GincoApp.view.TermPanel', {
         
         Ext.applyIf(me, {
         	title: me.xTermPanelTitle,
-            items: [
-                {
+			items : [ {
+				xtype : 'tabpanel',
+				items : [ {
+					
                     xtype: 'form',
                     title: me.xTermPanelTitle,
                 	flex: 1,
@@ -57,7 +63,8 @@ Ext.define('GincoApp.view.TermPanel', {
                                     disabled: true,
                                     formBind: true,
                                     cls: 'save',
-                                    iconCls : 'icon-save'
+                                    iconCls : 'icon-save',
+                                    itemId : 'saveTerm'
                                 },
                                 {
                                     xtype: 'button',
@@ -143,8 +150,13 @@ Ext.define('GincoApp.view.TermPanel', {
                         	store :  Ext.create('GincoApp.store.TermLanguageStore')
                         }
                     ]
-                }
-            ]
+                },{
+			        title: me.xNotesTab,
+			        xtype: 'noteTermPanel',
+			        closable : false,
+			        disabled : true
+			        }]
+				}]
         });
 
         me.callParent(arguments);

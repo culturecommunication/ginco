@@ -12,5 +12,5 @@ Ext.define('GincoApp.locale.fr.view.NotePanel', {
 	xLanguageLabel : 'Langue',
 	xAddNote: 'Nouvelle note',
 	xDetach: 'Supprimer la note',
-	xNoteConceptListGridTitle : 'Liste des notes de concept'
+	xNoteConceptListGridTitle : 'Liste des notes'
 });

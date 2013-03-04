@@ -6,6 +6,11 @@ Ext
 					alias: 'widget.createNoteWin',
 					localized: true,
 					
+					config: {
+						storeNoteTypes : null,
+						thesaurusData : null
+			        },
+					
 					xSave: 'Save',
 					xCreateTermWinTitle : 'New Note',
 					xLexicalValueLabel : 'Lexical value',
@@ -101,7 +106,7 @@ Ext
 										                        	displayField : 'label',
 										                        	valueField : 'id',
 										                        	forceSelection : true,
-										                        	store :  Ext.create('GincoApp.store.ConceptNoteTypeStore'),
+										                        	store :  me.storeNoteTypes,
 										                        	allowBlank : false
 										                        }
 										                        

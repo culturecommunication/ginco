@@ -62,6 +62,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		if (Ext.isEmpty(aModel.data.conceptId)){
 			deleteBtn.setDisabled(false);
 		}
+		var noteTab= aForm.up('tabpanel').down('noteTermPanel');
+		noteTab.setDisabled(false);
 	},
 
 	saveForm : function(theButton) {
@@ -160,7 +162,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			'termPanel form' : {
 				afterrender : this.loadPanel
 			},
-			'termPanel button[cls=save]' : {
+			'termPanel #saveTerm' : {
 				click : this.saveForm
 			},
 			'termPanel button[cls=delete]' : {

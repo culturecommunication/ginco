@@ -1,5 +1,5 @@
 /*
- * File: app/view/ThesaurusPanel.js
+ * File: app/view/NoteTermPanel.js
  * Term Creation/Edition Form
  * 
  */

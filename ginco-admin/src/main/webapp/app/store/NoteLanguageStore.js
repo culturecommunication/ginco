@@ -3,7 +3,7 @@
  * This file contains all Note languages displayed in dropdown lists
  */
 Ext.define('GincoApp.store.NoteLanguageStore', {
-    extend: 'GincoApp.store.VirtualLanguageStore',
+    extend: 'GincoApp.store.ThesaurusLanguageStore',
 
     constructor: function(cfg) {
         var me = this;
