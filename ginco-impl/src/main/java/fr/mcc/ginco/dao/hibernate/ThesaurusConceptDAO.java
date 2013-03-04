@@ -196,7 +196,7 @@ public class ThesaurusConceptDAO extends
     }
 
     private void selectThesaurus(Criteria criteria, String thesaurusId) {
-        criteria.add(Restrictions.eq("tc.thesaurus.identifier", thesaurusId));
+        criteria.add(Restrictions.eq("tc.thesaurus.identifier", (String)thesaurusId));
     }
 
     private void selectOrphans(Criteria criteria, Boolean searchOrphans) {

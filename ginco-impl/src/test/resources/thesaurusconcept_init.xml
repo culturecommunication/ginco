@@ -56,6 +56,24 @@
 			<value>true</value>
             <value>http://www.culturecommunication.gouv.fr/th1</value>
 		</row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co2_1</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>test</value>
+            <value>test</value>
+            <value>false</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+        </row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co2_2</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>test</value>
+            <value>test</value>
+            <value>false</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+        </row>
 		<row>
             <value>http://www.culturecommunication.gouv.fr/co3</value>
             <value>2013-02-04 15:29:59.66325</value>
@@ -105,6 +123,19 @@
             <value>eng</value>
         </row>
 	</table>
+
+    <table name="hierarchical_relationship">
+        <column>childconceptid</column>
+        <column>parentconceptid</column>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co2_1</value>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+        </row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co2_2</value>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+        </row>
+    </table>
 	 <table name="associative_relationship_role">
         <column>code</column>
          <column>label</column>

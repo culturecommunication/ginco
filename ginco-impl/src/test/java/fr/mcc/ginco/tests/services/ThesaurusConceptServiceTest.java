@@ -67,7 +67,7 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 
 	@Mock(name = "thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
-	
+
 	@Mock(name = "associativeRelationshipDAO")
 	private IGenericDAO<AssociativeRelationship,Class<?>> associativeRelationshipDAO;
 
@@ -108,7 +108,7 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 		thesaurusConceptService
 				.getOrphanThesaurusConcepts("any-thesaurus-id");
 	}
-	
+
 	@Test
 	public final void testAddAssociativeRelationship() {
 		ThesaurusConcept concept1 = new ThesaurusConcept();
@@ -116,11 +116,35 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 		ThesaurusConcept concept2 = new ThesaurusConcept();
 		concept2.setIdentifier("id-concept-2");
 		AssociativeRelationshipRole role = new AssociativeRelationshipRole();
-		
+
 		AssociativeRelationship association1 = new AssociativeRelationship();
 		when(associativeRelationshipDAO.makePersistent(any(AssociativeRelationship.class))).thenReturn(association1);
 		AssociativeRelationship sh1 = thesaurusConceptService.addAssociativeRelationship(concept1, concept2, role);
 		Assert.assertNotNull(sh1);
 	}
 
+    @Test
+    public final void testGetTopTermThesaurusConceptsCount() throws BusinessException {
+        List<ThesaurusConcept> list = new ArrayList<ThesaurusConcept>();
+        ThesaurusConcept co1 = new ThesaurusConcept();
+        co1.setIdentifier("co1");
+        list.add(co1);
+        when(thesaurusConceptDAO.getTopTermThesaurusConceptCount(any(Thesaurus.class)))
+                .thenReturn((long) list.size());
+
+        Assert.assertEquals("Not null list expected", 1,
+                thesaurusConceptDAO.getTopTermThesaurusConceptCount(any(Thesaurus.class)));
+    }
+
+    @Test
+    public final void testGetTopTermThesaurusConcepts() throws BusinessException {
+        List<ThesaurusConcept> list = new ArrayList<ThesaurusConcept>();
+        ThesaurusConcept co1 = new ThesaurusConcept();
+        co1.setIdentifier("co1");
+        list.add(co1);
+        when(thesaurusConceptDAO.getTopTermThesaurusConcept(any(Thesaurus.class))).thenReturn(list);
+
+        Assert.assertNotNull("Not null list expected",
+                thesaurusConceptDAO.getTopTermThesaurusConcept(any(Thesaurus.class)));
+    }
 }

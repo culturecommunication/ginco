@@ -34,24 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.cxf.jaxrs.ext.MessageContext;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
@@ -65,6 +47,15 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
@@ -74,9 +65,6 @@ import fr.mcc.ginco.services.IThesaurusTypeService;
 @Path("/thesaurusservice")
 @Produces({ MediaType.APPLICATION_JSON })
 public class ThesaurusRestService {
-	@Context
-	private MessageContext context;
-
 	@Inject
 	@Named("thesaurusTypeService")
 	private IThesaurusTypeService thesaurusTypeService;
