@@ -25,7 +25,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var conceptTabs = Ext.ComponentQuery.query('topTabs conceptPanel');
 		var tabExists = false;
 		Ext.Array.each(conceptTabs,function(element, index, array) {
-			if (element.conceptId!=null && element.conceptId == aRecord.data.id) {
+            if (element.conceptId!=null && element.title == ('Concept : ' + aRecord.data.title)) {
 				tabExists = element;
 			}
 		});
