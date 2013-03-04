@@ -137,7 +137,15 @@ public class ThesaurusNoteRestService {
 			@QueryParam("termId") String termId) throws BusinessException {
 		
 		logger.info("Getting Notes for a concept or a term with following parameters : " + "conceptId " +conceptId + " and termId " + termId);
-		List<Note> notes = noteService.getConceptOrTermNoteList(conceptId, termId);
+		
+		List<Note> notes = new ArrayList<Note>(); 
+		if (conceptId != null) {
+			notes = noteService.getConceptNoteList(conceptId);
+		} else if (termId != null) {
+			notes = noteService.getTermNoteList(termId);
+		} else {
+			throw new BusinessException("You need to specify an id for the concept or the term", "conceptid-or-termid-needed");
+		}
 		ExtJsonFormLoadData<List<ThesaurusNoteView>> result = new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(notes));
 		result.setTotal((long)notes.size());
 		return result;

@@ -70,25 +70,6 @@ public class NoteServiceImpl implements INoteService {
 	public List<Note> getTermNoteList(String termId) {
 		return noteDAO.findTermNotes(termId);
 	}
-
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.INoteService#getConceptOrTermNoteList(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public List<Note> getConceptOrTermNoteList(String conceptId, String termId) throws BusinessException {
-		List<Note> notes = new ArrayList<Note>();
-		if (conceptId != null) {
-			//Getting notes for a concept
-			notes = getConceptNoteList(conceptId);
-		} else if (termId != null) {
-			//Getting notes for a term
-			notes = getTermNoteList(termId);
-		} else {
-			//Throw exception : you need to specify an id for the concept or the term
-			throw new BusinessException("You need to specify an id for the concept or the term", "conceptid-or-termid-needed");
-		}
-		return notes;
-	}
 	
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#getNoteById(java.lang.String)
