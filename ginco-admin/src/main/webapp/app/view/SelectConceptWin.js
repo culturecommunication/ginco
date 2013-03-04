@@ -22,6 +22,7 @@ Ext.define(
         titleAlign : 'center',
         modal : true,
         conceptReducedStore: null,
+
         initComponent : function() {
             var me = this;
 
@@ -32,6 +33,7 @@ Ext.define(
                 searchOrphans: me.searchOrphans
             };
             me.conceptReducedStore.load();
+            me.addEvents('selectBtn');
 
             Ext
                 .applyIf(
@@ -59,8 +61,17 @@ Ext.define(
                                 xtype : 'button',
                                 text : me.xSelect,
                                 formBind : true,
-                                itemId : 'selectConceptAsParent',
-                                iconCls : 'icon-save'
+                                itemId : 'selectButton',
+                                iconCls : 'icon-save',
+                                handler : function(theButton) {
+                                    var thePanel = theButton.up('gridpanel');
+                                    var record = thePanel.getSelectionModel().getSelection();
+
+                                    if(record.length == 1) {
+                                        me.fireEvent('selectBtn', record);
+                                        me.close();
+                                    }
+                                }
                             }]
                         } ]
                     }]

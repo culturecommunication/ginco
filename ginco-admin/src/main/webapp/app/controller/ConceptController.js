@@ -160,16 +160,27 @@ Ext.define('GincoApp.controller.ConceptController', {
         var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : thePanel.thesaurusData,
             conceptId : thePanel.conceptId,
-            showTree : false
+            showTree : false,
+            listeners: {
+                selectBtn: {
+                    fn: this.selectConceptAsParent
+                }
+            }
         });
         win.show();
     },
+
     addAssociativeRelationship : function(theButton) {
         var thePanel = theButton.up('conceptPanel');
         var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : thePanel.thesaurusData,
             conceptId : thePanel.conceptId,
-            showTree : false
+            showTree : false,
+            listeners: {
+                selectBtn: {
+                    fn: this.selectAssociativeConcept
+                }
+            }
         });
         win.show();
     },
@@ -178,10 +189,14 @@ Ext.define('GincoApp.controller.ConceptController', {
 
     /**
      * User clicks on button "Select as parent"
-     * @param theButton
+     * @param selectedRow
      */
-    selectConceptAsParentBtn : function(theButton) {
+    selectConceptAsParent : function(selectedRow) {
+        console.log('into function selectConceptAsParent ' + selectedRow[0].data.identifier);
+    },
 
+    selectAssociativeConcept : function(selectedRow) {
+       console.log('into function selectAssociativeConcept ' + selectedRow[0].data.identifier);
     },
 
     //*********** End SelectConceptWin.js
@@ -290,9 +305,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'form #saveTermFromConcept' : {
 				click : this.saveTermFromConceptBtn
 			},
-            'form #selectConceptAsParent' : {
-                click : this.selectConceptAsParentBtn
-            },
 			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
 			},
