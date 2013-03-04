@@ -119,7 +119,16 @@ CREATE INDEX fki_note_thesaurus_term
   
 ALTER TABLE note ADD COLUMN created timestamp without time zone DEFAULT now() NOT NULL;
 ALTER TABLE note ADD COLUMN modified timestamp without time zone DEFAULT now() NOT NULL;
- CREATE TABLE associative_relationship
+
+CREATE TABLE associative_relationship_role
+(
+  code character varying(255) NOT NULL,
+  label character varying(255),
+  defaultrole boolean,
+  CONSTRAINT associative_relationship_role_pkey PRIMARY KEY (code)
+);
+
+CREATE TABLE associative_relationship
 (
   conceptid1 character varying(255) NOT NULL,
   conceptid2 character varying(255) NOT NULL,
@@ -136,13 +145,6 @@ ALTER TABLE note ADD COLUMN modified timestamp without time zone DEFAULT now() N
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-CREATE TABLE associative_relationship_role
-(
-  code character varying(255) NOT NULL,
-  label character varying(255),
-  defaultrole boolean,
-  CONSTRAINT associative_relationship_role_pkey PRIMARY KEY (code)
-);
 CREATE INDEX fki_associative_relationship_concept1
   ON associative_relationship
   USING btree
