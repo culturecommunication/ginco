@@ -36,8 +36,6 @@ package fr.mcc.ginco.tests.daos;
 
 import java.util.List;
 
-import junitx.framework.ListAssert;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -114,7 +112,67 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
         List<ThesaurusConcept> thesaurusConcepts = thesaurusConceptDAO.getAssociatedConcepts(concept1);
         Assert.assertEquals(2, thesaurusConcepts.size());      
     }
-	
+
+    @Test
+    public void testGetTopTermByThesaurus() throws BusinessException {
+        String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier(thesaurusId);
+
+        List<ThesaurusConcept> list = thesaurusConceptDAO.getTopTermThesaurusConcept(th);
+        Assert.assertEquals(list.size(),1);
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list.get(0).getIdentifier());
+    }
+
+    @Test
+    public void testGetChildrenByConcept() throws BusinessException {
+        String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier(thesaurusId);
+
+        List<ThesaurusConcept> list = thesaurusConceptDAO.getChildrenConcepts("http://www.culturecommunication.gouv.fr/co2");
+        Assert.assertEquals(list.size(),2);
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2_1", list.get(0).getIdentifier());
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2_2", list.get(1).getIdentifier());
+    }
+
+    @Test
+    public void testGetRootByThesaurusId() throws BusinessException {
+        String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier(thesaurusId);
+
+        List<ThesaurusConcept> list = thesaurusConceptDAO.getRootConcepts(th.getIdentifier(), false);
+        Assert.assertEquals(1, list.size());
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list.get(0).getIdentifier());
+
+        List<ThesaurusConcept> list_with_orphans = thesaurusConceptDAO.getRootConcepts(th.getIdentifier(), null);
+        Assert.assertEquals(3, list_with_orphans.size());
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co1", list_with_orphans.get(0).getIdentifier());
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list_with_orphans.get(1).getIdentifier());
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co3", list_with_orphans.get(2).getIdentifier());
+
+        List<ThesaurusConcept> list_only_orphans = thesaurusConceptDAO.getRootConcepts(th.getIdentifier(), true);
+        Assert.assertEquals(2, list_only_orphans.size());
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co1", list_only_orphans.get(0).getIdentifier());
+        Assert.assertEquals("http://www.culturecommunication.gouv.fr/co3", list_only_orphans.get(1).getIdentifier());
+    }
+
+    @Test
+    public void testGetAllConceptsByThesaurusId() throws BusinessException {
+        String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+        Thesaurus th = new Thesaurus();
+        th.setIdentifier(thesaurusId);
+
+        List<ThesaurusConcept> list = thesaurusConceptDAO.getAllConceptsByThesaurusId(null,thesaurusId,null);
+        Assert.assertEquals(5, list.size());
+
+        List<ThesaurusConcept> list_exclude = thesaurusConceptDAO.getAllConceptsByThesaurusId("http://www.culturecommunication.gouv.fr/co1",thesaurusId,null);
+        Assert.assertEquals(4, list_exclude.size());
+
+        List<ThesaurusConcept> list_exclude_top_term = thesaurusConceptDAO.getAllConceptsByThesaurusId("http://www.culturecommunication.gouv.fr/co1",thesaurusId,false);
+        Assert.assertEquals(1, list_exclude_top_term.size());
+    }
 
 	@Override
 	public String getXmlDataFileInit() {
