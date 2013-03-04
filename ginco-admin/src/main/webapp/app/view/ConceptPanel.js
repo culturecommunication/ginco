@@ -35,7 +35,6 @@ Ext
 					xRoleColumnLabel : 'Role',
 					xPreferedColumnLabel : 'Prefered',
 					xConceptPanelTitle : 'New Concept',
-<<<<<<< HEAD
 					xTermListGridTitle : 'Terms list',
 					xSave : 'Save',
 					xDelete : 'Delete',
@@ -48,22 +47,7 @@ Ext
 					xAddParent: 'Add parent Concept',
 					xNotesTab : 'Notes of this concept',
 					xActions: 'Actions',
-=======
-					xTermListGridTitle : 'Terms list', 
-					xSave: 'Save',
-					xDelete: 'Delete',
-					xAddTerm: 'Add a term',
-					xPreferedTerm: 'Prefered Term',
-					xNonPreferedTerm: 'Non Prefered Term',
-					xCreateTerm: 'Create Term',
-					xExistingTerm: 'Select Existing Term',
-                    xDetach: 'Detach from Concept',
-                    xAddParent: 'Add parent Concept',
-                    xNotesTab: 'Notes of this concept',
-                    xActions: 'Actions',
                     xAddRelationship: 'Add associative relationship',
-
->>>>>>> 98c0098... [V3US25] AssociativeRelationship + Associative Relationship Role
 
 					initComponent : function() {
 						var me = this;
