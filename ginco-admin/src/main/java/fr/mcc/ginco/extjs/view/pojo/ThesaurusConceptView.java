@@ -34,12 +34,11 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-import java.util.List;
-
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
+import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -54,6 +53,8 @@ public class ThesaurusConceptView implements Serializable {
 	private Boolean topconcept;
 	private String thesaurusId;
 	private List<ThesaurusTermView> terms;
+    private List<String> parentConceptsIdList;
+    private List<String> rootConceptsIdList;
 	
 	public ThesaurusConceptView() {}	
 
@@ -104,4 +105,20 @@ public class ThesaurusConceptView implements Serializable {
 	public void setTopconcept(Boolean topconcept) {
 		this.topconcept = topconcept;
 	}
+
+    public List<String> getParentConceptsIdList() {
+        return parentConceptsIdList;
+    }
+
+    public void setParentConceptsIdList(List<String> parentConceptsIdList) {
+        this.parentConceptsIdList = parentConceptsIdList;
+    }
+
+    public List<String> getRootConceptsIdList() {
+        return rootConceptsIdList;
+    }
+
+    public void setRootConceptsIdList(List<String> rootConceptsIdList) {
+        this.rootConceptsIdList = rootConceptsIdList;
+    }
 }

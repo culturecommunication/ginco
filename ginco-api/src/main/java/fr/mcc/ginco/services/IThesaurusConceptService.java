@@ -51,11 +51,18 @@ import java.util.List;
  */
 public interface IThesaurusConceptService {
 	/**
-	 * Get list of all ThesaurusFormat.
+	 * Get list of all ThesaurusConcept.
 	 * 
 	 * @return
 	 */
 	List<ThesaurusConcept> getThesaurusConceptList();
+
+    /**
+     * Get list of ThesaurusConcept by list of id.
+     *
+     * @return
+     */
+    List<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException;
 
 	/**
 	 * Get single ThesaurusFormat by its id.
@@ -155,7 +162,12 @@ public interface IThesaurusConceptService {
      */
     boolean hasChildren(String conceptId);
 
-    
+    /**
+     * Calculates the root concepts for given concept.
+     * @param concept
+     * @return
+     */
+    List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept);
     
 	/**
 	 * *Saves the associative relationship between two concepts, affecting a role to the relation

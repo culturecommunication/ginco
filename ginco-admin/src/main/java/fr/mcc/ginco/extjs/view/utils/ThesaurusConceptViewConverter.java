@@ -45,13 +45,16 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Small class responsible for converting real
@@ -93,13 +96,23 @@ public class ThesaurusConceptViewConverter {
 		view.setModified(DateUtil.toString(concept.getModified()));
 		view.setTopconcept(concept.getTopConcept());
 		view.setThesaurusId(concept.getThesaurus().getIdentifier());
-		List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
+		view.setParentConceptsIdList(getIdsFromConceptList(concept.getParentConcepts()));
+        view.setRootConceptsIdList(getIdsFromConceptList(concept.getRootConcepts()));
+        List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			terms.add(new ThesaurusTermView(thesaurusTerm));
 		}
 		view.setTerms(terms);
 		return view;
 	}
+
+    private List<String> getIdsFromConceptList(Set<ThesaurusConcept> list) {
+        List<String> result = new ArrayList<String>();
+        for(ThesaurusConcept concept : list) {
+            result.add(concept.getIdentifier());
+        }
+        return result;
+    }
 
 	/**
 	 * @param source
@@ -129,13 +142,24 @@ public class ThesaurusConceptViewConverter {
 			throw new BusinessException(
 					"ThesaurusId is mandatory to save a concept", "mandatory-thesaurus");
 		} else {
-			Thesaurus thesaurus = new Thesaurus();
-			thesaurus = thesaurusService.getThesaurusById(source
+			Thesaurus thesaurus = thesaurusService.getThesaurusById(source
 					.getThesaurusId());
 			thesaurusConcept.setThesaurus(thesaurus);
 		}
 		thesaurusConcept.setModified(DateUtil.nowDate());
 		thesaurusConcept.setTopConcept(source.getTopconcept());
+
+        List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept.getParentConcepts());
+        if(!ListUtils.subtract(oldParentIds, source.getParentConceptsIdList()).isEmpty()) {
+            Set<ThesaurusConcept> parents =
+                    new HashSet<ThesaurusConcept>(
+                        thesaurusConceptService.getThesaurusConceptList(source.getParentConceptsIdList()));
+
+            thesaurusConcept.setParentConcepts(parents);
+
+
+        }
+
 		return thesaurusConcept;
 	}
 
