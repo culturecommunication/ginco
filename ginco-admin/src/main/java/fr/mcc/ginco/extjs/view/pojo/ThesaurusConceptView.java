@@ -54,6 +54,8 @@ public class ThesaurusConceptView implements Serializable {
 	private Boolean topconcept;
 	private String thesaurusId;
 	private List<ThesaurusTermView> terms;
+    private List<String> parentConceptsIdList;
+    private List<String> rootConceptsIdList;
 	private List<String> associatedConcepts;
 
 	
@@ -114,4 +116,20 @@ public class ThesaurusConceptView implements Serializable {
 	public void setAssociatedConcepts(List<String> associatedConcepts) {
 		this.associatedConcepts = associatedConcepts;
 	}	
+
+    public List<String> getParentConceptsIdList() {
+        return parentConceptsIdList;
+    }
+
+    public void setParentConceptsIdList(List<String> parentConceptsIdList) {
+        this.parentConceptsIdList = parentConceptsIdList;
+    }
+
+    public List<String> getRootConceptsIdList() {
+        return rootConceptsIdList;
+    }
+
+    public void setRootConceptsIdList(List<String> rootConceptsIdList) {
+        this.rootConceptsIdList = rootConceptsIdList;
+    }
 }

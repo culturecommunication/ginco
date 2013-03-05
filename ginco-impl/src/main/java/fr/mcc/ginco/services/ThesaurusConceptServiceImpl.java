@@ -34,22 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
@@ -57,6 +42,14 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.*;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -98,13 +91,27 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return thesaurusConceptDAO.findAll();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang
-	 * .String)
-	 */
+    @Override
+    public List<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException{
+        List<ThesaurusConcept> result = new ArrayList<ThesaurusConcept>();
+        for(String id : list) {
+            ThesaurusConcept concept = thesaurusConceptDAO.getById(id);
+            if(concept == null) {
+                throw new BusinessException("The concept " + id
+                        + " does not exist!",
+                        "concept-does-not-exist");
+            }
+        }
+        return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang
+     * .String)
+     */
 	@Override
 	public ThesaurusConcept getThesaurusConceptById(String id) {
 		return thesaurusConceptDAO.getById(id);
@@ -160,6 +167,53 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
     @Override
     public boolean hasChildren(String conceptId) {
         return (thesaurusConceptDAO.getChildrenConcepts(conceptId).size() > 0);
+    }
+
+    @Override
+    public List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept) {
+        path.clear();
+        roots.clear();
+        path.put(concept.getIdentifier(), 0);
+        getRoot(concept, 0);
+        return new ArrayList<ThesaurusConcept>(roots);
+    }
+
+    HashMap<String, Integer> path = new HashMap<String, Integer>();
+    Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
+
+    private void getRoot(ThesaurusConcept concept, Integer iteration) {
+        iteration++;
+        Set<ThesaurusConcept> directParents = concept.getParentConcepts();
+        if(directParents.isEmpty()) {
+            roots.add(concept);
+            return;
+        }
+        boolean flag = false;
+        Set<ThesaurusConcept> stack = new HashSet<ThesaurusConcept>();
+        for(ThesaurusConcept directParent : directParents) {
+            if(path.containsKey(directParent.getIdentifier())) {
+                continue;
+            } else {
+                path.put(directParent.getIdentifier(),iteration);
+                stack.add(directParent);
+                flag = true;
+            }
+        }
+
+        if(!flag) {
+            roots.add(concept);
+        }
+
+        if(!stack.isEmpty()) {
+            for(ThesaurusConcept toVisit : stack) {
+                getRoot(toVisit, iteration);
+            }
+            stack.clear();
+        }
+
+//        if(path.keySet().contains(getChildrenByConceptId(concept.getIdentifier()))) {
+//            roots.add(concept);
+//        }
     }
 
     @Override
