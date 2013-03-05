@@ -176,11 +176,60 @@ public class ThesaurusNoteRestService {
 		
 		List<Note> resultNotes = new ArrayList<Note>() ;
 		for (Note note : notes) {
-			resultNotes.add(noteService.createNote(note));
+			resultNotes.add(noteService.createOrUpdateNote(note));
 		}
 
 		//Returns all the created notes converted
 		return new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(resultNotes));
 		
 	}
+	
+	/**
+	 * Public method used to create new notes
+	 * @throws BusinessException 
+	 */
+	@POST
+	@Path("/updateNotes")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusNoteView>> updateNotes(List<ThesaurusNoteView> noteViews) throws BusinessException {
+		
+		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
+		List<Note> resultNotes = new ArrayList<Note>() ;
+		
+		for (Note note : notes) {
+			if (note != null) {
+				resultNotes.add(noteService.createOrUpdateNote(note));
+			} else
+			{
+				throw new BusinessException("Failed to update the note", "note-update-failed-null-object");
+			}
+		}
+		
+		return new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(resultNotes));
+	}
+	
+	/**
+	 * Public method used to create new notes
+	 * @throws BusinessException 
+	 */
+	@POST
+	@Path("/destroyNotes")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews) throws BusinessException {
+		
+		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
+		List<Note> resultNotes = new ArrayList<Note>() ;
+		
+		for (Note note : notes) {
+			if (note != null) {
+				resultNotes.add(noteService.deleteNote(note));
+			} else
+			{
+				throw new BusinessException("Failed to delete the note", "note-delete-failed-null-object");
+			}
+		}
+		
+		return new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(resultNotes));
+	}
+	
 }

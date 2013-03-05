@@ -134,6 +134,7 @@ Ext
 														},
 														{
 															xtype : 'gridpanel',
+															itemId : 'concepttermgrid',
 															title : me.xTermListGridTitle,
 															store : me.conceptTermStore,
 

@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,7 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.dao.INoteDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional
 @Service("noteService")
@@ -83,8 +81,16 @@ public class NoteServiceImpl implements INoteService {
 	 * @see fr.mcc.ginco.services.INoteService#createNote(fr.mcc.ginco.beans.Note)
 	 */
 	@Override
-	public Note createNote(Note note) {
+	public Note createOrUpdateNote(Note note) {
 		return noteDAO.update(note);
+	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteService#deleteNote(fr.mcc.ginco.beans.Note)
+	 */
+	@Override
+	public Note deleteNote(Note note) {
+		return noteDAO.delete(note);
 	}
 
 }

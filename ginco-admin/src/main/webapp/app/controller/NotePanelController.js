@@ -2,6 +2,11 @@ Ext.define('GincoApp.controller.NotePanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
 	
+	xSucessLabel : 'Success!',
+	xSucessSavedMsg : 'Note saved successfully',
+	xProblemLabel : 'Error !',
+	xProblemSaveMsg : 'Unable to save this note!',
+	
 	onRenderGrid : function(theGrid) {
 		if (theGrid.up('conceptPanel') != null) {
 			var theConceptId = theGrid.up('conceptPanel').conceptId;
@@ -15,25 +20,10 @@ Ext.define('GincoApp.controller.NotePanelController', {
 
 	newNoteBtn : function(theButton){
 		var theGrid = theButton.up('gridpanel');
-		var model = Ext.create('GincoApp.model.ThesaurusNoteModel');
-		
-		var win = null;
-		if (theButton.up('conceptPanel') != null) {
-			//we are creating a note for a concept
-			win = Ext.create('GincoApp.view.CreateNoteWin', {
-				storeNoteTypes : Ext.create('GincoApp.store.ConceptNoteTypeStore'),
-				thesaurusData : theButton.up('conceptPanel').thesaurusData
-					});
-		} else {
-			//we are creating a note for a term
-			win = Ext.create('GincoApp.view.CreateNoteWin', {
-				storeNoteTypes : Ext.create('GincoApp.store.TermNoteTypeStore'),
-				thesaurusData : theButton.up('termPanel').thesaurusData
-					});
-		}
-		win.store = theGrid.getStore();
-		model.data.language=win.thesaurusData.languages[0];
+		var win = this.createNoteWindow(theGrid);
 		var theForm = win.down('form');
+		var model = Ext.create('GincoApp.model.ThesaurusNoteModel');
+		model.data.language=win.thesaurusData.languages[0];
 		theForm.loadRecord(model);
 		win.show();
 	},
@@ -45,9 +35,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		theStore.getProxy().setExtraParam('thesaurusId', thePanel.thesaurusData.id);
 		theStore.load({
 			callback: function (theStore, aOperation){
-				var record = theForm.getRecord();
-				record.data.language=thePanel.thesaurusData.languages[0];
-				theForm.loadRecord(record);
+				theForm.loadRecord(theForm.getRecord());
 			}
 		});
 	},
@@ -57,7 +45,9 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		var theWin = theButton.up('createNoteWin');
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
-		theWin.store.add(updatedModel);
+		if (theWin.store.findRecord('identifier', updatedModel.data.identifier) == null ){
+			theWin.store.add(updatedModel);
+		}
 		theWin.close();
 	},
 	
@@ -67,17 +57,58 @@ Ext.define('GincoApp.controller.NotePanelController', {
         theStore.remove(rec);
 	},
 	
-	saveNoteBtn : function(theButton) {
-		var theGrid = theButton.up('panel').down('gridpanel');
-		theGrid.getStore().sync();
+	createNoteWindow : function (theGrid) {
+		var win = null;
+		if (theGrid.up('conceptPanel') != null) {
+			//we are editing a note for a concept
+			win = Ext.create('GincoApp.view.CreateNoteWin', {
+				storeNoteTypes : Ext.create('GincoApp.store.ConceptNoteTypeStore'),
+				thesaurusData : theGrid.up('conceptPanel').thesaurusData
+					});
+		} else {
+			//we are editing a note for a term
+			win = Ext.create('GincoApp.view.CreateNoteWin', {
+				storeNoteTypes : Ext.create('GincoApp.store.TermNoteTypeStore'),
+				thesaurusData : theGrid.up('termPanel').thesaurusData
+					});
+		}
 		
-		//TODO: to implement : saving message and exception messages
+		//TODO verify usage of this store
+		win.store = theGrid.getStore();
+		return win;
+	},
+
+	onNoteDblClick : function(theGrid, record, item, index, e, eOpts ) {
+		var win = this.createNoteWindow(theGrid);
+		var theForm = win.down('form');
+		theForm.loadRecord(record);
+		win.show();
+    },
+	
+	saveNoteBtn : function(theButton) {
+		var me=this;
+		var theGrid = theButton.up('panel').down('gridpanel');
+		var thePanel = theButton.up('panel');
+		thePanel.getEl().mask("chargement");
+		theGrid.getStore().sync({
+			success : function(model, operation) {
+				//console.log(operation.getResultSet());
+				thePanel.getEl().unmask();
+				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
+			},
+			failure : function(model, operation) {
+				//TODO: to implement : exception messages display
+				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
+				thePanel.getEl().unmask();
+			}
+		});
 	},
 
 	init : function() {
 		this.control({
-			'notePanel gridpanel' : {
- 				render : this.onRenderGrid
+			'notePanel #notegrid' : {
+ 				render : this.onRenderGrid,
+ 				itemdblclick : this.onNoteDblClick
  			},
 			'notePanel #saveNote' : {
  				click : this.saveNoteBtn
