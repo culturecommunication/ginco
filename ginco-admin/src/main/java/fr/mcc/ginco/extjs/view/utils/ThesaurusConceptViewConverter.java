@@ -83,6 +83,7 @@ public class ThesaurusConceptViewConverter {
 			view.setIdentifier(concept.getIdentifier());
 			view.setLabel(thesaurusConceptService.getConceptLabel(concept
 					.getIdentifier()));
+			result.add(view);
 		}
 
 		return result;

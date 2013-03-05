@@ -133,3 +133,41 @@ Ext.define('Thesaurus.form.HtmlEditor', {
         }
     }
 });
+
+
+Thesaurus.ext.tabs = function(){	
+	return {
+        openConceptTab : function(aModel, aThesaurusId, aConceptId){
+        	
+        	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+    		var conceptTabs = Ext.ComponentQuery.query('topTabs conceptPanel');
+    		var tabExists = false;
+    		Ext.Array.each(conceptTabs,function(element, index, array) {
+                if (element.conceptId!=null 
+                		&& aConceptId.indexOf(element.conceptId, aConceptId.length - element.conceptId.length) !== -1) {
+    				tabExists = element;
+    			}
+    		});
+    		if (!tabExists) {
+
+                aModel.load(aThesaurusId, {
+                    success : function(aModel) {
+
+                        var conceptPanel = Ext.create('GincoApp.view.ConceptPanel', {
+                            thesaurusData : aModel,
+                            conceptId : aConceptId
+                        });
+
+                        var tab = topTabs.add(conceptPanel);
+                        topTabs.setActiveTab(tab);
+                        tab.show();
+                    }
+                });
+
+
+    		} else {
+    			topTabs.setActiveTab(tabExists);
+    		}
+        }
+	};
+}();
