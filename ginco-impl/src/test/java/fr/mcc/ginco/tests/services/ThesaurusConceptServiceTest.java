@@ -148,11 +148,11 @@ public class ThesaurusConceptServiceTest extends BaseTest {
     }
     //      root1   root3    root2
     //      /   \   /    \   /    \
-    //  leaf2_1 leaf2_2  leaf2_3 leaf2_4
+    //  leaf2_1=leaf2_2  leaf2_3 leaf2_4
     //     \     /       /   \    /    \
     //   !!leaf1_1!!----    leaf1_2   leaf1_3
     @Test
-    public final void testGetRoots() throws BusinessException {
+    public final void testGetRootsWithCycling() throws BusinessException {
         ThesaurusConcept leaf1_1 = new ThesaurusConcept();
         leaf1_1.setIdentifier("leaf1_1");
         ThesaurusConcept leaf1_2 = new ThesaurusConcept();
@@ -176,25 +176,27 @@ public class ThesaurusConceptServiceTest extends BaseTest {
         final ThesaurusConcept root3 = new ThesaurusConcept();
         root3.setIdentifier("root3");
 
-        leaf2_1.getParentConcepts().add(root1);
-        leaf2_2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>()
-        {{
+        leaf2_1.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(root1);
+            add(leaf2_2);
+        }});
+        leaf2_2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
                 add(root1);
                 add(root3);
+                add(leaf2_1);
         }});
         leaf2_3.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
-            add(root2);
-            add(root3);
+                add(root2);
+                add(root3);
         }});
         leaf2_4.getParentConcepts().add(root2);
 
         leaf1_1.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
-            add(leaf2_1);
-            add(leaf2_2);
-            add(leaf2_3);
+                add(leaf2_1);
+                add(leaf2_2);
+                add(leaf2_3);
         }});
-        leaf1_2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>()
-        {{
+        leaf1_2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
                 add(leaf2_3);
                 add(leaf2_4);
         }});
@@ -208,5 +210,65 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 
         List<ThesaurusConcept> roots_leaf1_2 = thesaurusConceptService.getRootConcepts(leaf1_2);
         Assert.assertEquals(2, roots_leaf1_2.size());
+    }
+
+    //      node1
+    //      /\   |
+    //      |   \/
+    //  node2<--node3
+    //
+    @Test
+    public final void testGetRootsWithNoEvidentRoot() throws BusinessException {
+        final ThesaurusConcept node1 = new ThesaurusConcept();
+        node1.setIdentifier("node1");
+        final ThesaurusConcept node2 = new ThesaurusConcept();
+        node2.setIdentifier("node2");
+
+        node1.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(node2);
+        }});
+        node2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(node1);
+        }});
+
+        List<ThesaurusConcept> roots_leaf1_1 = thesaurusConceptService.getRootConcepts(node1);
+        Assert.assertEquals(1, roots_leaf1_1.size());
+        Assert.assertEquals(node2.getIdentifier(), roots_leaf1_1.get(0).getIdentifier());
+
+        final ThesaurusConcept node3 = new ThesaurusConcept();
+        node3.setIdentifier("node3");
+        final ThesaurusConcept node4 = new ThesaurusConcept();
+        node4.setIdentifier("node4");
+        final ThesaurusConcept node5 = new ThesaurusConcept();
+        node5.setIdentifier("node5");
+        final ThesaurusConcept node6 = new ThesaurusConcept();
+        node6.setIdentifier("node6");
+        final ThesaurusConcept node7 = new ThesaurusConcept();
+        node7.setIdentifier("node7");
+
+        node2.getParentConcepts().clear();
+        node2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(node3);
+            add(node1);
+        }});
+        node3.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(node4);
+        }});
+        node4.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(node5);
+        }});
+        node5.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(node6);
+        }});
+        node6.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(node7);
+        }});
+        node7.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
+            add(node1);
+        }});
+
+        List<ThesaurusConcept> roots_node1 = thesaurusConceptService.getRootConcepts(node1);
+        Assert.assertEquals(1, roots_node1.size());
+        Assert.assertEquals(node7.getIdentifier(), roots_node1.get(0).getIdentifier());
     }
 }

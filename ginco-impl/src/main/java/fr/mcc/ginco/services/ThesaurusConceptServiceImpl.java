@@ -173,27 +173,47 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
     public List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept) {
         path.clear();
         roots.clear();
+        path.put(concept.getIdentifier(), 0);
         getRoot(concept, 0);
-        return  new ArrayList<ThesaurusConcept>(roots);
+        return new ArrayList<ThesaurusConcept>(roots);
     }
 
     HashMap<String, Integer> path = new HashMap<String, Integer>();
     Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
 
     private void getRoot(ThesaurusConcept concept, Integer iteration) {
+        iteration++;
         Set<ThesaurusConcept> directParents = concept.getParentConcepts();
         if(directParents.isEmpty()) {
             roots.add(concept);
             return;
         }
+        boolean flag = false;
+        Set<ThesaurusConcept> stack = new HashSet<ThesaurusConcept>();
         for(ThesaurusConcept directParent : directParents) {
             if(path.containsKey(directParent.getIdentifier())) {
-                return;
+                continue;
             } else {
-                path.put(directParent.getIdentifier(),++iteration);
-                getRoot(directParent,++iteration);
+                path.put(directParent.getIdentifier(),iteration);
+                stack.add(directParent);
+                flag = true;
             }
         }
+
+        if(!flag) {
+            roots.add(concept);
+        }
+
+        if(!stack.isEmpty()) {
+            for(ThesaurusConcept toVisit : stack) {
+                getRoot(toVisit, iteration);
+            }
+            stack.clear();
+        }
+
+//        if(path.keySet().contains(getChildrenByConceptId(concept.getIdentifier()))) {
+//            roots.add(concept);
+//        }
     }
 
     @Override
