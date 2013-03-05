@@ -72,8 +72,6 @@ Ext.define('GincoApp.controller.NotePanelController', {
 				thesaurusData : theGrid.up('termPanel').thesaurusData
 					});
 		}
-		
-		//TODO verify usage of this store
 		win.store = theGrid.getStore();
 		return win;
 	},
@@ -92,7 +90,6 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		thePanel.getEl().mask("chargement");
 		theGrid.getStore().sync({
 			success : function(model, operation) {
-				//console.log(operation.getResultSet());
 				thePanel.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
 			},

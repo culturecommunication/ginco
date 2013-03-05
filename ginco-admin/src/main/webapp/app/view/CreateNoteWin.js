@@ -13,14 +13,14 @@ Ext
 			        },
 					
 					xSave: 'Save',
-					xCreateTermWinTitle : 'New Note',
+					xCreateNoteWinTitle : 'New Note',
 					xLexicalValueLabel : 'Lexical value',
 				    xSourceLabel : 'Source',
 				    xLanguageLabel : 'Language',
 				    xTypeLabel : 'Type',
 				    
 					width : 500,
-					title : 'Création de nouvelle note',
+					title : this.xCreateNoteWinTitle,
 					titleAlign : 'center',
 					modal : true,
 					store : null,
