@@ -322,7 +322,7 @@ Ext.define('GincoApp.controller.ConceptController', {
             'conceptPanel #gridPanelTerms' : {
                 itemdblclick : this.onTermDblClick
             },
-			'selectTermWin #gridPanelTerms' : {
+			'selectTermWin gridpanel' : {
  				render : this.onGridRender,
  				itemdblclick : this.onSelectTermDblClick
  			},
