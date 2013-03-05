@@ -1,4 +1,4 @@
-Ext.define('GincoApp.locale.fr.view.CreateTermWin',
+Ext.define('GincoApp.locale.fr.view.CreateNoteWin',
     {
 		xLexicalValueLabel : 'Valeur lexicale',
 		xLanguageLabel : 'Langue',
