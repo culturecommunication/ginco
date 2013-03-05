@@ -23,11 +23,11 @@ Ext.define('GincoApp.model.ConceptModel', {
             type: 'string'
         }
     ],
-    hasMany: [
-              'Terms',
-              {model: 'GincoApp.model.ThesaurusTermModel', name: 'terms'}
-    ],
-    idProperty : 'identifier',
+    associations: [
+                   {type: 'hasMany', model: 'GincoApp.model.ThesaurusTermModel',    name: 'terms'},
+                   {type: 'hasMany', model: 'GincoApp.model.SimpleConceptModel',    name: 'associatedConcepts'}
+   ],
+   idProperty : 'identifier',
     
     proxy : {
 		api : {

@@ -56,7 +56,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			if (!Ext.isEmpty(thePanel.initPreferedTermBeforeLoad)){
 				if (!Ext.isEmpty(thePanel.initPreferedTermBeforeLoad.data.identifier)) {
 					//adding a term as prefered term (creation of a concept from a sandboxed term)
-					var theGrid = thePanel.down('gridpanel');
+					var theGrid = thePanel.down('#gridPanelTerms');
 					var theStore= theGrid.getStore();
 					thePanel.initPreferedTermBeforeLoad.data.prefered = true;
 					theStore.add(thePanel.initPreferedTermBeforeLoad);
@@ -94,7 +94,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var win = Ext.create('GincoApp.view.CreateTermWin');
 		win.thesaurusData = thePanel.thesaurusData;
 		var theForm = win.down('form');
-		var theGrid = theButton.up('gridpanel');
+		var theGrid = theButton.up('#gridPanelTerms');
 		win.store = theGrid.getStore();
 		var model = Ext.create('GincoApp.model.ThesaurusTermModel');
 		model.data.prefered = prefered;
@@ -108,7 +108,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	selectTermFromConceptBtn : function(theButton, prefered){
 		var thePanel = theButton.up('conceptPanel');
 		var win = Ext.create('GincoApp.view.SelectTermWin');
-		var theGrid = theButton.up('gridpanel');
+		var theGrid = theButton.up('#gridPanelTerms');
 		win.conceptGrid = theGrid;
 		win.store = theGrid.getStore();
 		win.thesaurusData = thePanel.thesaurusData;
@@ -134,7 +134,7 @@ Ext.define('GincoApp.controller.ConceptController', {
     },
 
     onDetachClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
-        var theGrid = gridview.up('gridpanel');
+        var theGrid = gridview.up('#gridPanelTerms');
         var theStore = theGrid.getStore();
         theStore.remove(rec);
     },
@@ -168,6 +168,7 @@ Ext.define('GincoApp.controller.ConceptController', {
             }
         });
         win.show();
+        //win.on('conceptselected', this.selectConceptAsParent);
     },
 
     addAssociativeRelationship : function(theButton) {
@@ -197,6 +198,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 
     selectAssociativeConcept : function(selectedRow) {
        console.log('into function selectAssociativeConcept ' + selectedRow[0].data.identifier);
+
     },
 
     //*********** End SelectConceptWin.js
@@ -219,25 +221,34 @@ Ext.define('GincoApp.controller.ConceptController', {
 	loadData : function(aForm, aModel) {
 		var conceptPanel = aForm.up('conceptPanel');
 		conceptPanel.conceptId = aModel.data.identifier;
-	
+		
 		aForm.loadRecord(aModel);
 		var terms = aModel.terms().getRange();
 		Ext.Array.each(terms, function(term) {
 			if (term.data.prefered == true) {
-				conceptTitle = term.data.lexicalValue;
+					conceptTitle = term.data.lexicalValue;
 			}
 		});
+		
 
 		conceptPanel.setTitle("Concept : "+conceptTitle);
 		
-		var theGrid = aForm.down('gridpanel');
+		var theGrid = aForm.down('#gridPanelTerms');
 		var theGridStore = theGrid.getStore();
 		theGridStore.removeAll();
 		theGridStore.add(terms);
+		
+		var associatedConceptsGrid  = aForm.down('#gridPanelAssociatedConcepts');
+		var associatedConceptsGridStore = associatedConceptsGrid.getStore();
+		associatedConceptsGridStore.getProxy().extraParams = {
+			conceptIds: aModel.raw.associatedConcepts
+        };
+		associatedConceptsGridStore.load();
+		
 		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
 	},
-
+	
 	saveTermFromConceptBtn : function(theButton){
 		var theForm = theButton.up('form');
 		var theWin = theButton.up('createTermWin');
@@ -250,7 +261,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	saveConcept : function(theButton){
 		var me = this;
 		var theForm = theButton.up('form');
-		var theGrid = theForm.down('gridpanel');
+		var theGrid = theForm.down('#gridPanelTerms');
 		theForm.getForm().updateRecord();
 		var theStore = theGrid.getStore();
 		var termsData = theStore.getRange();
@@ -276,7 +287,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		});
 	},
 	
-    init:function(){
+    init:function(){    	  	 
          this.control({
         	'conceptPanel form' : {
  				afterrender : this.onConceptFormRender
@@ -319,5 +330,6 @@ Ext.define('GincoApp.controller.ConceptController', {
                 click : this.onDetachClick
             }
          });
+
     }
 });

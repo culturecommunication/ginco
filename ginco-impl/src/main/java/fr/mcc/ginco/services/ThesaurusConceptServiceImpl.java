@@ -203,6 +203,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return associativeRelationshipDAO.makePersistent(relationship);
 	}
 	
+	@Override
+	public List<ThesaurusConcept> getAssociatedConcepts(String conceptId){		
+		ThesaurusConcept concept = thesaurusConceptDAO.getById(conceptId);
+		return thesaurusConceptDAO.getAssociatedConcepts(concept);
+	}
+	
 	private void updateConceptTerms(ThesaurusConcept concept,
 			List<ThesaurusTerm> terms) {
 		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
