@@ -21,7 +21,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		return false;
 	},
 	openConceptTab: function (aRecord) {
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);
+		/*var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		var conceptTabs = Ext.ComponentQuery.query('topTabs conceptPanel');
 		var tabExists = false;
 		Ext.Array.each(conceptTabs,function(element, index, array) {
@@ -49,7 +50,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 
 		} else {
 			topTabs.setActiveTab(tabExists);
-		}
+		}*/
 		
 	},
 

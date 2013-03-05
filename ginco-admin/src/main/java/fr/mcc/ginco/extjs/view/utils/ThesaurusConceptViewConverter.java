@@ -34,6 +34,19 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.commons.collections.ListUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -45,21 +58,10 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
-import org.apache.commons.collections.ListUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
- * Small class responsible for converting real
- * {@link ThesaurusConcept} object into its view
- * {@link ThesaurusConceptReducedView}.
+ * Small class responsible for converting real {@link ThesaurusConcept} object
+ * into its view {@link ThesaurusConceptReducedView}.
  */
 @Component("thesaurusConceptViewConverter")
 public class ThesaurusConceptViewConverter {
@@ -74,16 +76,18 @@ public class ThesaurusConceptViewConverter {
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-    public List<ThesaurusConceptReducedView> convert(List<ThesaurusConcept> conceptList) throws BusinessException{
+	public List<ThesaurusConceptReducedView> convert(
+			List<ThesaurusConcept> conceptList) throws BusinessException {
 
-        List<ThesaurusConceptReducedView> result = new ArrayList<ThesaurusConceptReducedView>();
+		List<ThesaurusConceptReducedView> result = new ArrayList<ThesaurusConceptReducedView>();
 
-        for(ThesaurusConcept concept : conceptList) {
-            ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
-            view.setIdentifier(concept.getIdentifier());
-            view.setLabel(thesaurusConceptService.getConceptLabel(concept.getIdentifier()));
-            result.add(view);
-        }
+		for (ThesaurusConcept concept : conceptList) {
+			ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
+			view.setIdentifier(concept.getIdentifier());
+			view.setLabel(thesaurusConceptService.getConceptLabel(concept
+					.getIdentifier()));
+			result.add(view);
+		}
 
         return result;
     }
@@ -155,7 +159,8 @@ public class ThesaurusConceptViewConverter {
 
 		if ("".equals(source.getThesaurusId())) {
 			throw new BusinessException(
-					"ThesaurusId is mandatory to save a concept", "mandatory-thesaurus");
+					"ThesaurusId is mandatory to save a concept",
+					"mandatory-thesaurus");
 		} else {
 			Thesaurus thesaurus = new Thesaurus();
 			thesaurus = thesaurusService.getThesaurusById(source

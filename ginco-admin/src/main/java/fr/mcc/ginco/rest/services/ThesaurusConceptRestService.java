@@ -113,9 +113,13 @@ public class ThesaurusConceptRestService {
             resultId = conceptId.substring(
                     conceptId.indexOf(ChildrenGenerator.PARENT_SEPARATOR)
                             + ChildrenGenerator.PARENT_SEPARATOR.length());
+        } else {
+        	resultId = conceptId;
         }
 
         List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+        logger.debug("Trying to load concept with id = " + resultId);
+        
 		terms = thesaurusTermService.getTermsByConceptId(resultId);
 		return thesaurusConceptViewConverter.convert(
 				thesaurusConceptService.getThesaurusConceptById(resultId),
