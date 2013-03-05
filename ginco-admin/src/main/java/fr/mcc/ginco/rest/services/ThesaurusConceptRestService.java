@@ -34,11 +34,14 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
@@ -194,6 +197,19 @@ public class ThesaurusConceptRestService {
         return thesaurusConceptViewConverter
                 .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId,
                         searchOrphanParam));
+    }
+    
+    @GET
+    @Path("/getSimpleConcepts")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public  ExtJsonFormLoadData<List<ThesaurusConceptReducedView> > getSimpleConcepts(@QueryParam("conceptIds") List<String> associatedConcepts)
+            throws BusinessException {     
+    	List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
+    	for (String conceptId: associatedConcepts) {
+    		ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+    		reducedConcepts.add(thesaurusConceptViewConverter.convert(concept));
+    	}
+    	 return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(reducedConcepts); 
     }
 
 }

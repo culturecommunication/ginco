@@ -88,6 +88,14 @@ public class ThesaurusConceptViewConverter {
         return result;
     }
 
+    public ThesaurusConceptReducedView convert(ThesaurusConcept concept) throws BusinessException {
+        ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
+        view.setIdentifier(concept.getIdentifier());
+        view.setLabel(thesaurusConceptService.getConceptLabel(concept
+                .getIdentifier()));
+        return view;
+    }
+
 	public ThesaurusConceptView convert(ThesaurusConcept concept,
 			List<ThesaurusTerm> thesaurusTerms) {
 		ThesaurusConceptView view = new ThesaurusConceptView();
@@ -103,6 +111,13 @@ public class ThesaurusConceptViewConverter {
 			terms.add(new ThesaurusTermView(thesaurusTerm));
 		}
 		view.setTerms(terms);
+		
+		List<String> associatedConcepts = new ArrayList<String>();
+		for (ThesaurusConcept conceptAssociated : thesaurusConceptService.getAssociatedConcepts(concept.getIdentifier())) {
+			associatedConcepts.add(conceptAssociated.getIdentifier());
+			logger.info("Found associated concept : " + conceptAssociated.getIdentifier());
+		}	
+		view.setAssociatedConcepts(associatedConcepts);
 		return view;
 	}
 
@@ -142,7 +157,8 @@ public class ThesaurusConceptViewConverter {
 			throw new BusinessException(
 					"ThesaurusId is mandatory to save a concept", "mandatory-thesaurus");
 		} else {
-			Thesaurus thesaurus = thesaurusService.getThesaurusById(source
+			Thesaurus thesaurus = new Thesaurus();
+			thesaurus = thesaurusService.getThesaurusById(source
 					.getThesaurusId());
 			thesaurusConcept.setThesaurus(thesaurus);
 		}

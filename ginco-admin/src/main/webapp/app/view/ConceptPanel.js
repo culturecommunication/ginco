@@ -48,11 +48,15 @@ Ext
 					xNotesTab : 'Notes of this concept',
 					xActions: 'Actions',
                     xAddRelationship: 'Add associative relationship',
+                    xAssociatedConceptsListGridTitle: 'Associated terms',
 
 					initComponent : function() {
 						var me = this;
 						me.conceptTermStore = Ext
 								.create('GincoApp.store.ThesaurusTermStore');
+						
+						me.associatedConceptStore = Ext
+								.create('GincoApp.store.AssociatedConceptStore');
 
 						Ext
 								.applyIf(
@@ -102,14 +106,7 @@ Ext
                                                         itemId : 'addParent',
                                                         cls : 'addParent',
                                                         iconCls : 'icon-add-parent'
-                                                    } , {
-                                                        xtype : 'button',
-                                                        text : me.xAddRelationship,
-                                                        disabled : false,
-                                                        itemId : 'addAssociativeRelationship',
-                                                        cls : 'addAssociativeRelationship',
-                                                        iconCls : 'icon-add-associative-relationship'
-                                                    } ]
+                                                    }]
 												} ],
 												items : [
 														{
@@ -136,6 +133,7 @@ Ext
 															xtype : 'gridpanel',
 															title : me.xTermListGridTitle,
 															store : me.conceptTermStore,
+															id    : 'gridPanelTerms',
 
 															dockedItems : [ {
 																xtype : 'toolbar',
@@ -217,9 +215,41 @@ Ext
                                                                              icon: 'images/detach.png',
                                                                              tooltip: me.xDetach,
                                                                              handler: function(view, rowIndex, colIndex, item, e, record, row) {
+                                                                            	 
                                                                              }
                                                                         }]
                                                                     }
+                                                            ]
+														},
+														{
+															xtype : 'gridpanel',
+															title : me.xAssociatedConceptsListGridTitle,
+															store : me.associatedConceptStore,
+															id    : 'gridPanelAssociatedConcepts',
+
+															dockedItems : [ {
+																xtype : 'toolbar',
+																dock : 'top',
+																items : [ {																	
+				                                                       xtype : 'button',
+				                                                       text : me.xAddRelationship,
+				                                                       disabled : false,
+				                                                       itemId : 'addAssociativeRelationship',
+				                                                       cls : 'addAssociativeRelationship',
+				                                                       iconCls : 'icon-add-associative-relationship'																	
+																} ]
+															} ],
+
+															columns : [
+																	{
+																		dataIndex : 'identifier',
+																		text : me.xIdentifierLabel
+																	},
+																	{
+																		dataIndex : 'label',
+																		text : me.xLexicalValueLabel,
+																		flex : 1
+																	}															
                                                             ]
 														} ]
 											},{

@@ -46,13 +46,9 @@ import java.io.Serializable;
 public class ThesaurusConceptReducedView implements Serializable {
     private String identifier;
     private String label;
+    private String lang;
 
-    public ThesaurusConceptReducedView() {}
-
-    public ThesaurusConceptReducedView(String identifier, String label) {
-        this.identifier = identifier;
-        this.label = label;
-    }
+    public ThesaurusConceptReducedView() {}   
 
     public String getIdentifier() {
         return identifier;
@@ -69,4 +65,12 @@ public class ThesaurusConceptReducedView implements Serializable {
     public void setLabel(String label) {
         this.label = label;
     }
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}    
 }

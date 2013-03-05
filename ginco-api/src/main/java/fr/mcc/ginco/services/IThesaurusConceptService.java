@@ -170,11 +170,20 @@ public interface IThesaurusConceptService {
     List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept);
     
 	/**
-	 * *Saves the associative relationship between two concepts, affecting a role to the relation
+	 * Saves the associative relationship between two concepts, affecting a role to the relation
 	 * @param concept1
 	 * @param concept2
 	 * @param role
 	 * @return
 	 */
 	AssociativeRelationship addAssociativeRelationship(ThesaurusConcept concept1, ThesaurusConcept concept2, AssociativeRelationshipRole role);
+	
+	
+	/**
+	 * Returns the list of associated concepts
+	 * @param concept
+	 * @return
+	 */
+	List<ThesaurusConcept> getAssociatedConcepts(String conceptId);
+
 }
