@@ -319,10 +319,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
 			},
-            'conceptPanel gridpanel' : {
+            'conceptPanel #gridPanelTerms' : {
                 itemdblclick : this.onTermDblClick
             },
-			'selectTermWin gridpanel' : {
+			'selectTermWin #gridPanelTerms' : {
  				render : this.onGridRender,
  				itemdblclick : this.onSelectTermDblClick
  			},
