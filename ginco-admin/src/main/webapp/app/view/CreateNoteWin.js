@@ -8,7 +8,8 @@ Ext
 					
 					config: {
 						storeNoteTypes : null,
-						thesaurusData : null
+						thesaurusData : null,
+						noteId : null
 			        },
 					
 					xSave: 'Save',

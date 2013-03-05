@@ -131,9 +131,9 @@ Ext
 														},
 														{
 															xtype : 'gridpanel',
+															itemId : 'gridPanelTerms',
 															title : me.xTermListGridTitle,
 															store : me.conceptTermStore,
-															id    : 'gridPanelTerms',
 
 															dockedItems : [ {
 																xtype : 'toolbar',

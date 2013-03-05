@@ -67,9 +67,16 @@ public interface INoteService {
 	
 	
 	/**
-	 * Create a new note
+	 * Create or update a new note
 	 * @param note
-	 * @return the created note
+	 * @return the created or updated note
 	 */
-	Note createNote(Note note);
+	Note createOrUpdateNote(Note note);
+
+	/**
+	 * Delete a note
+	 * @param note
+	 * @return the delete note
+	 */
+	Note deleteNote(Note note);
 }

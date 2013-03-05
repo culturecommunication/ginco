@@ -56,6 +56,7 @@ Ext.define('GincoApp.view.NotePanel', {
                     ],
                     items: [{
 							xtype : 'gridpanel',
+							itemId : 'notegrid',
 							title : me.xNoteConceptListGridTitle,
 							store : me.noteConceptStore,
 

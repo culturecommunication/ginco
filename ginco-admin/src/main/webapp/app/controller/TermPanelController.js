@@ -156,7 +156,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		tab.show();
 		return aNewPanel;
 	},
-
+	
 	init : function() {
 		this.control({
 			'termPanel form' : {
