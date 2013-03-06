@@ -130,7 +130,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 
     onTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
         var thePanel = theGrid.up('conceptPanel');
-        this.createPanel('GincoApp.view.TermPanel', thePanel.thesaurusData, record.data.identifier);
+		Thesaurus.ext.tabs.openTermTab(record.data.identifier, thePanel.thesaurusData);			
+
     },
     
     onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
