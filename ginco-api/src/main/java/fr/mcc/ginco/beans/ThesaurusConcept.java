@@ -34,13 +34,13 @@
  */
 package fr.mcc.ginco.beans;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 public class ThesaurusConcept implements Serializable, IAuditableBean {
@@ -138,7 +138,6 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 			Set<AssociativeRelationship> associativeRelationshipRight) {
 		this.associativeRelationshipRight = associativeRelationshipRight;
 	}
-	
 	@Override
 	public String getThesaurusId() {		
 		return thesaurus.getIdentifier();
@@ -149,4 +148,8 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	public void setConceptArrays(Set<ThesaurusArray> conceptArrays) {
 		this.conceptArrays = conceptArrays;
 	}
+    @Override
+    public boolean equals(Object o) {
+        return ((ThesaurusConcept)o).getIdentifier() == this.getIdentifier();
+    }
 }

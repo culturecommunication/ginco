@@ -34,18 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.collections.ListUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -59,6 +47,16 @@ import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.collections.ListUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Small class responsible for converting real {@link ThesaurusConcept} object
@@ -181,15 +179,17 @@ public class ThesaurusConceptViewConverter {
         List<String> removedParents = ListUtils.subtract(oldParentIds, source.getParentConcepts());
 
         if(!addedParents.isEmpty() || !removedParents.isEmpty()) {
-            Set<ThesaurusConcept> newParents =
-                      thesaurusConceptService.getThesaurusConceptList(
-                                source.getParentConcepts());
+            Set<ThesaurusConcept> addedParentsSet =
+                      thesaurusConceptService.getThesaurusConceptList(addedParents);
 
-            thesaurusConcept.setParentConcepts(newParents);
-            thesaurusConcept.setTopConcept(false);
             if(!removedParents.isEmpty()) {
                 thesaurusConceptService.removeParents(thesaurusConcept, removedParents);
             }
+
+            if(!addedParents.isEmpty()) {
+                thesaurusConcept.getParentConcepts().addAll(addedParentsSet);
+            }
+
             thesaurusConcept.setRootConcepts(
                     new HashSet<ThesaurusConcept>(
                             thesaurusConceptService.getRootConcepts(thesaurusConcept)));

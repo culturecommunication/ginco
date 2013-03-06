@@ -34,20 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -59,6 +45,14 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.*;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -199,11 +193,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
         boolean isDefaultTopConcept = concept.getThesaurus().isDefaultTopConcept();
 
-        if(parents.size()==1) {
+        if(concept.getParentConcepts().size()==1) {
             concept.getParentConcepts().clear();
             concept.setTopConcept(isDefaultTopConcept);
         } else {
-            concept.getParentConcepts().removeAll(parentsToRemove);
+            for(ThesaurusConcept parent : parents) {
+                concept.getParentConcepts().remove(parent);
+            }
         }
     }
 
