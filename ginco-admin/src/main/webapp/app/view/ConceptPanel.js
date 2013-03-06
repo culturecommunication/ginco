@@ -239,15 +239,8 @@ Ext
                                                                         itemId : 'addParent',
                                                                         cls : 'addParent',
                                                                         iconCls : 'icon-add-parent'
-                                                                    },
-                                                                    {
-                                                                        xtype : 'button',
-                                                                        text : me.xRemoveParent,
-                                                                        disabled : true,
-                                                                        itemId : 'removeParent',
-                                                                        cls : 'removeParent',
-                                                                        iconCls : 'icon-remove-parent'
-                                                                    } ]
+                                                                    }
+                                                                ]
                                                             } ],
 
                                                             columns : [
@@ -259,7 +252,19 @@ Ext
                                                                     dataIndex : 'label',
                                                                     text : me.xLexicalValueLabel,
                                                                     flex : 1
-                                                                }
+                                                                }, 
+                                                                {
+                                                                    xtype:'actioncolumn',
+                                                                    itemId: 'parentConceptActionColumn',
+                                                                    header: me.xActions,
+                                                                    items: [{
+                                                                         icon: 'images/detach.png',
+                                                                         tooltip: me.xRemoveParent,
+                                                                         handler: function(view, rowIndex, colIndex, item, e, record, row) {
+                                                                        	 
+                                                                         }
+                                                                    }]
+                                                                }		
                                                             ]
                                                         },
                                                         {

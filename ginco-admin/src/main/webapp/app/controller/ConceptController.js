@@ -156,6 +156,12 @@ Ext.define('GincoApp.controller.ConceptController', {
         var theStore = theGrid.getStore();
         theStore.remove(rec);
     },
+    
+    onRemoveParentClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
+        var theGrid = gridview.up('#gridPanelParentConcepts');
+        var theStore = theGrid.getStore();
+        theStore.remove(rec);
+    },
 
     onSelectTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
 		var theWin = theGrid.up('selectTermWin');
@@ -172,12 +178,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			theWin.close();
 		}
 	},
-
-    onParentConceptClick : function(theGrid, record, item, index, e, eOpts) {
-        var thePanel = theGrid.up('conceptPanel');
-        var removeParentBtn = thePanel.down('button[cls=removeParent]');
-        removeParentBtn.setDisabled(record == null);
-    },
+    
 
     addParent : function(theButton) {
         var thePanel = theButton.up('conceptPanel');
@@ -206,18 +207,7 @@ Ext.define('GincoApp.controller.ConceptController', {
         } else {
             theButton.setDisabled(true);
         }
-    },
-
-    removeParent : function(theButton) {
-        var theForm = theButton.up('form');
-        var theGrid = theForm.down('#gridPanelParentConcepts');
-
-        var record = theGrid.getSelectionModel().getSelection();
-
-        var theStore = theGrid.getStore();
-        theStore.remove(record[0]);
-        theButton.setDisabled(true);
-    },
+    },    
 
     addAssociativeRelationship : function(theButton) {
         var thePanel = theButton.up('conceptPanel');
@@ -392,9 +382,6 @@ Ext.define('GincoApp.controller.ConceptController', {
  			'conceptPanel #saveConcept' : {
  				click : this.saveConcept
  			},
-            'conceptPanel #gridPanelParentConcepts' : {
-                itemclick : this.onParentConceptClick
-            },
             'conceptPanel  button[cls=addParent]' : {
                 click : this.addParent
             },
@@ -444,6 +431,9 @@ Ext.define('GincoApp.controller.ConceptController', {
             },
             'conceptPanel #gridPanelAssociatedConcepts #associatedConceptActionColumn' : {
                 click : this.onRemoveAssociationClick
+            },
+            'conceptPanel #gridPanelParentConcepts #parentConceptActionColumn' : {
+                click : this.onRemoveParentClick
             }
          });
 
