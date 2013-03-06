@@ -319,14 +319,22 @@ Ext.define('GincoApp.controller.ConceptController', {
         var parentIds = Ext.Array.map(parentData, function(parent){
             return parent.data.identifier;
         });
+
+        var rootGrid = theForm.down('#gridPanelRootConcepts');
+        var rootGridStore = rootGrid.getStore();
+        var rootData = rootGridStore.getRange();
+        var rootIds = Ext.Array.map(rootData, function(root){
+            return root.data.identifier;
+        });
+
         var thePanel = theForm.up('conceptPanel');
 
     	theForm.getEl().mask(me.xLoading);
 		var updatedModel = theForm.getForm().getRecord();
 		updatedModel.terms().removeAll();
         updatedModel.terms().add(termsData);
-        updatedModel.terms().add(termsData);
         updatedModel.data.parentConcepts = parentIds;
+        updatedModel.data.rootConcepts = rootIds;
 		updatedModel.save({
 			success : function(record, operation) {
 				var resultRecord = operation.getResultSet().records[0];
