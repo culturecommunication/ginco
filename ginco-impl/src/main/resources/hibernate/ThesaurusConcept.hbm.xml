@@ -32,7 +32,12 @@
 		<set name="associativeRelationshipRight" cascade="all-delete-orphan">
              <key column="conceptid2" not-null="true" />
             <one-to-many entity-name="fr.mcc.ginco.beans.AssociativeRelationship"  />
-        </set>        
+        </set>
+        
+        <set name="conceptArrays" table="thesaurus_array_concept">
+			<key column="conceptid" not-null="true" />
+			<many-to-many class="fr.mcc.ginco.beans.ThesaurusArray" column="thesaurusarrayid" />
+		</set>
     
     </class>
 </hibernate-mapping>

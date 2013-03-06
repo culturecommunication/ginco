@@ -32,47 +32,21 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.services;
 
-import java.io.Serializable;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import fr.mcc.ginco.dao.INodeLabelDAO;
 
-@SuppressWarnings("serial")
-public class NoteType  implements Serializable{
+@Transactional
+@Service("nodeLabelService")
+public class NodeLabelServiceImpl implements INodeLabelService {
+	
+	@Inject
+	@Named("nodeLabelDAO")
+	private INodeLabelDAO nodeLabelDAO;
 
-    private String code;
-    private String label;
-    private boolean isTerm;
-    private boolean isConcept;
-    
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public boolean isIsTerm() {
-		return isTerm;
-	}
-
-	public void setIsTerm(boolean isTerm) {
-		this.isTerm = isTerm;
-	}
-
-	public boolean isIsConcept() {
-		return isConcept;
-	}
-
-	public void setIsConcept(boolean isConcept) {
-		this.isConcept = isConcept;
-	}
+	
 }

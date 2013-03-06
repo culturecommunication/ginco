@@ -160,3 +160,79 @@ CREATE INDEX fki_associative_relationship_role
   USING btree
   (role);
 
+CREATE TABLE thesaurus_array
+(
+  identifier text NOT NULL,
+  ordered boolean DEFAULT false NOT NULL,
+  notation text,
+  thesaurusid text NOT NULL,
+  superordinateconceptid text,
+  CONSTRAINT pk_thesaurus_array_identifier PRIMARY KEY (identifier),
+  CONSTRAINT fk_thesaurus_array_thesaurus_concept FOREIGN KEY (superordinateconceptid)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_thesaurus_array_thesaurus FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE INDEX fki_thesaurus_array_thesaurus_concept
+  ON thesaurus_array
+  USING btree
+  (superordinateconceptid);
+
+CREATE INDEX fki_thesaurus_array_thesaurus
+  ON thesaurus_array
+  USING btree
+  (thesaurusid);
+
+CREATE TABLE node_label
+(
+  id integer NOT NULL,
+  lexicalvalue text NOT NULL,
+  modified  timestamp without time zone DEFAULT now() NOT NULL,
+  created  timestamp without time zone DEFAULT now() NOT NULL,
+  lang text,
+  thesaurusarrayid text NOT NULL,
+  CONSTRAINT pk_note_label_id PRIMARY KEY (id),
+  CONSTRAINT fk_node_label_thesaurus_array FOREIGN KEY (thesaurusarrayid)
+      REFERENCES thesaurus_array (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE
+);
+
+CREATE SEQUENCE node_label_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE node_label_id_seq OWNED BY node_label.id;
+
+CREATE INDEX fki_node_label_thesaurus_array
+  ON node_label
+  USING btree
+  (thesaurusarrayid);
+
+CREATE TABLE thesaurus_array_concept
+(
+  thesaurusarrayid text NOT NULL,
+  conceptid text NOT NULL,
+  CONSTRAINT pk_thesaurus_array_concept PRIMARY KEY (thesaurusarrayid, conceptid),
+  CONSTRAINT fk_thesaurus_array_concept_thesaurus_array FOREIGN KEY (thesaurusarrayid)
+      REFERENCES thesaurus_array (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_thesaurus_array_concept_thesaurus_concept FOREIGN KEY (conceptid)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE INDEX fki_thesaurus_array_concept_thesaurus_array
+  ON thesaurus_array_concept
+  USING btree
+  (thesaurusarrayid);
+  
+CREATE INDEX fki_thesaurus_array_concept_thesaurus_concept
+  ON thesaurus_array_concept
+  USING btree
+  (conceptid);

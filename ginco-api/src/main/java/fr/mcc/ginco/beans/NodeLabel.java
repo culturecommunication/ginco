@@ -35,44 +35,53 @@
 package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @SuppressWarnings("serial")
-public class NoteType  implements Serializable{
+public class NodeLabel  implements Serializable{
 
-    private String code;
-    private String label;
-    private boolean isTerm;
-    private boolean isConcept;
+    private String identifier;
+    private String lexicalValue;
+    private Date modified;
+    private Date created;
+    private Language language;
+    private ThesaurusArray thesaurusArray;
     
-	public String getCode() {
-		return code;
+	public String getIdentifier() {
+		return identifier;
 	}
-
-	public void setCode(String code) {
-		this.code = code;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
-
-	public String getLabel() {
-		return label;
+	
+	public String getLexicalValue() {
+		return lexicalValue;
 	}
-
-	public void setLabel(String label) {
-		this.label = label;
+	public void setLexicalValue(String lexicalValue) {
+		this.lexicalValue = lexicalValue;
 	}
-
-	public boolean isIsTerm() {
-		return isTerm;
+	public Date isModified() {
+		return modified;
 	}
-
-	public void setIsTerm(boolean isTerm) {
-		this.isTerm = isTerm;
+	public void setModified(Date modified) {
+		this.modified = modified;
 	}
-
-	public boolean isIsConcept() {
-		return isConcept;
+	public Date isCreated() {
+		return created;
 	}
-
-	public void setIsConcept(boolean isConcept) {
-		this.isConcept = isConcept;
+	public void setCreated(Date created) {
+		this.created = created;
 	}
+	public Language getLanguage() {
+		return language;
+	}
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+	public ThesaurusArray getThesaurusArray() {
+		return thesaurusArray;
+	}
+	public void setThesaurusArray(ThesaurusArray thesaurusArray) {
+		this.thesaurusArray = thesaurusArray;
+	}    
 }

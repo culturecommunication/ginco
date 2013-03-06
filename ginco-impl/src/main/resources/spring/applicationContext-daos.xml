@@ -35,6 +35,8 @@
                 <value>hibernate/GincoRevModifiedEntityType.hbm.xml</value>
                 <value>hibernate/AssociativeRelationship.hbm.xml</value>
                 <value>hibernate/AssociativeRelationshipRole.hbm.xml</value>      
+                <value>hibernate/NodeLabel.hbm.xml</value>
+                <value>hibernate/ThesaurusArray.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
