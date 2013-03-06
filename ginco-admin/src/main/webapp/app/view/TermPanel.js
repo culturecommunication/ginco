@@ -15,10 +15,7 @@ Ext.define('GincoApp.view.TermPanel', {
     alias: 'widget.termPanel',
     localized: true,
     closable: true,
-    layout: {
-    	type: 'vbox',
-    	align: 'stretch'
-    },
+    
     /*Fields with auto generated values*/
     xIdentifierLabel : 'Identifier',
     xCreatedDateLabel : 'Creation date',
@@ -34,7 +31,6 @@ Ext.define('GincoApp.view.TermPanel', {
    
     initComponent: function() {
         var me = this;
-
         
         Ext.applyIf(me, {
         	title: me.xTermPanelTitle,
@@ -49,7 +45,6 @@ Ext.define('GincoApp.view.TermPanel', {
                     pollForChanges : true,
                     trackResetOnLoad : true,
                     defaults: {
-                        anchor: '70%',
                         afterLabelTextTpl: new Ext.XTemplate('<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>', { disableFormats: true })
                     },
                     dockedItems: [
@@ -104,7 +99,8 @@ Ext.define('GincoApp.view.TermPanel', {
                             xtype: 'textfield',
                             name:'lexicalValue',
                             fieldLabel: me.xLexicalValueLabel,
-                            allowBlank: false
+                            allowBlank: false,
+                        	anchor: '70%'
                         },
                         {
                         	xtype : 'htmleditor',
@@ -116,7 +112,8 @@ Ext.define('GincoApp.view.TermPanel', {
 							enableFontSize : false,
 							enableFormat : false,
 							enableLists : false,
-							enableSourceEdit : false
+							enableSourceEdit : false,
+                        	anchor: '70%'
                         },
                         {
                         	xtype: 'hiddenfield',
@@ -147,7 +144,9 @@ Ext.define('GincoApp.view.TermPanel', {
                         	displayField : 'refname',
                         	valueField : 'id',
                         	forceSelection : true,
-                        	store :  Ext.create('GincoApp.store.TermLanguageStore')
+                        	store :  Ext.create('GincoApp.store.TermLanguageStore'),
+                        	anchor: '70%',
+                        	margin : '5 0 5 0'
                         }
                     ]
                 },{

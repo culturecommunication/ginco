@@ -176,7 +176,11 @@ public class ThesaurusNoteRestService {
 		
 		List<Note> resultNotes = new ArrayList<Note>() ;
 		for (Note note : notes) {
-			resultNotes.add(noteService.createOrUpdateNote(note));
+			if (!note.getLexicalValue().isEmpty() && note.getLanguage() != null && note.getNoteType() != null) {
+				resultNotes.add(noteService.createOrUpdateNote(note));
+			} else {
+				throw new BusinessException("Failed to update the note : fields required not filled in", "note-update-failed-empty-fields");
+			}
 		}
 
 		//Returns all the created notes converted
@@ -197,11 +201,11 @@ public class ThesaurusNoteRestService {
 		List<Note> resultNotes = new ArrayList<Note>() ;
 		
 		for (Note note : notes) {
-			if (note != null) {
+			if (note.getLexicalValue() != null && note.getLanguage() != null && note.getNoteType() != null) {
 				resultNotes.add(noteService.createOrUpdateNote(note));
 			} else
 			{
-				throw new BusinessException("Failed to update the note", "note-update-failed-null-object");
+				throw new BusinessException("Failed to update the note : fields required not filled in", "note-update-failed-empty-fields");
 			}
 		}
 		
@@ -221,12 +225,7 @@ public class ThesaurusNoteRestService {
 		List<Note> resultNotes = new ArrayList<Note>() ;
 		
 		for (Note note : notes) {
-			if (note != null) {
 				resultNotes.add(noteService.deleteNote(note));
-			} else
-			{
-				throw new BusinessException("Failed to delete the note", "note-delete-failed-null-object");
-			}
 		}
 		
 		return new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(resultNotes));

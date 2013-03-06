@@ -21,37 +21,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		return false;
 	},
 	openConceptTab: function (aRecord) {
-		Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);
-		/*var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var conceptTabs = Ext.ComponentQuery.query('topTabs conceptPanel');
-		var tabExists = false;
-		Ext.Array.each(conceptTabs,function(element, index, array) {
-            if (element.conceptId!=null && element.title == ('Concept : ' + aRecord.data.title)) {
-				tabExists = element;
-			}
-		});
-		if (!tabExists) {
-            var model = this.getThesaurusModelModel();
-
-            model.load(aRecord.data.thesaurusId, {
-                success : function(model) {
-
-                    var conceptPanel = Ext.create('GincoApp.view.ConceptPanel', {
-                        thesaurusData : model,
-                        conceptId : aRecord.data.id
-                    });
-
-                    var tab = topTabs.add(conceptPanel);
-                    topTabs.setActiveTab(tab);
-                    tab.show();
-                }
-            });
-
-
-		} else {
-			topTabs.setActiveTab(tabExists);
-		}*/
-		
+		Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);	
 	},
 
     openSandBoxTab : function(aRecord) {
