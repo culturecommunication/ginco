@@ -321,3 +321,17 @@ ALTER TABLE ONLY top_relationship_aud
 
 ALTER TABLE ONLY top_relationship_aud
     ADD CONSTRAINT fkb18c9db3d0d1bcb5 FOREIGN KEY (rev) REFERENCES revinfo(rev);
+    
+CREATE TABLE associative_relationship_aud
+(
+  concept1 character varying(255) NOT NULL,
+  concept2 character varying(255) NOT NULL,
+  rev integer NOT NULL,
+  revtype smallint,
+  "role" character varying(255)
+); 
+ALTER TABLE ONLY associative_relationship_aud
+    ADD CONSTRAINT associative_relationship_aud_pkey PRIMARY KEY (rev, concept1, concept2);
+    
+ALTER TABLE ONLY associative_relationship_aud
+    ADD CONSTRAINT fka0197937d0d1bcb5 FOREIGN KEY (rev) REFERENCES revinfo(rev);
