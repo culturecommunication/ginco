@@ -150,6 +150,12 @@ Ext.define('GincoApp.controller.ConceptController', {
         var theStore = theGrid.getStore();
         theStore.remove(rec);
     },
+    
+    onRemoveAssociationClick: function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
+        var theGrid = gridview.up('#gridPanelAssociatedConcepts');
+        var theStore = theGrid.getStore();
+        theStore.remove(rec);
+    },
 
     onSelectTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
 		var theWin = theGrid.up('selectTermWin');
@@ -357,6 +363,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var updatedModel = theForm.getForm().getRecord();
 		updatedModel.terms().removeAll();
         updatedModel.terms().add(termsData);
+        
         updatedModel.data.parentConcepts = parentIds;
         updatedModel.data.rootConcepts = rootIds;
         updatedModel.data.associatedConcepts = associatedIds;
@@ -434,6 +441,9 @@ Ext.define('GincoApp.controller.ConceptController', {
             },
             'conceptPanel #gridPanelAssociatedConcepts' : {
                 itemdblclick : this.onConceptDblClick
+            },
+            'conceptPanel #gridPanelAssociatedConcepts #associatedConceptActionColumn' : {
+                click : this.onRemoveAssociationClick
             }
          });
 

@@ -195,21 +195,38 @@ public class ThesaurusConceptViewConverter {
                             thesaurusConceptService.getRootConcepts(thesaurusConcept)));
         }
         List<String> associatedConceptsIds = source.getAssociatedConcepts();
+        thesaurusConcept = manageAssociativeRelationship(thesaurusConcept,associatedConceptsIds);		
+		return thesaurusConcept;
+	}
+	
+	private ThesaurusConcept manageAssociativeRelationship(ThesaurusConcept concept, List<String> associatedConceptsIds) throws BusinessException{
 		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
 		
+		if (concept.getAssociativeRelationshipLeft() == null) {
+			concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
+		}
+		concept.getAssociativeRelationshipLeft().clear();
+
+		if (concept.getAssociativeRelationshipRight() == null) {
+			concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());
+		}
+		concept.getAssociativeRelationshipRight().clear();
+
 		for (String associatedConceptsId: associatedConceptsIds) {
+			logger.debug("Settings associated concept " + associatedConceptsId);
 			AssociativeRelationship relationship = new AssociativeRelationship();
 			AssociativeRelationship.Id relationshipId= new AssociativeRelationship.Id();
-			relationshipId.setConcept1(thesaurusConcept.getIdentifier());
+			relationshipId.setConcept1(concept.getIdentifier());
 			relationshipId.setConcept2(associatedConceptsId);
 			relationship.setIdentifier(relationshipId);
-			relationship.setConceptLeft(thesaurusConceptService.getThesaurusConceptById(thesaurusConcept.getIdentifier()));
+			relationship.setConceptLeft(thesaurusConceptService.getThesaurusConceptById(concept.getIdentifier()));
 			relationship.setConceptRight(thesaurusConceptService.getThesaurusConceptById(associatedConceptsId));
 			relationship.setRelationshipRole(associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole());
 			relations.add(relationship);
 		}
-		thesaurusConcept.setAssociativeRelationshipLeft(relations);
-		return thesaurusConcept;
+		concept.getAssociativeRelationshipLeft().addAll(relations);
+		
+		return concept;
 	}
 
 }

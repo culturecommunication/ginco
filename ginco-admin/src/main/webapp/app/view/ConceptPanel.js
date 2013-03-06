@@ -52,6 +52,7 @@ Ext
                     xRootConcepts: 'Root Concepts',
                     xParentConcepts: 'Parent Concepts',
                     xRemoveParent: 'Remove connection to parent Concept',
+                    xAssociationRemove: 'Remove association',
 
 					initComponent : function() {
 						var me = this;
@@ -307,7 +308,18 @@ Ext
 																		dataIndex : 'label',
 																		text : me.xLexicalValueLabel,
 																		flex : 1
-																	}															
+																	}, {
+                                                                        xtype:'actioncolumn',
+                                                                        itemId: 'associatedConceptActionColumn',
+                                                                        header: me.xActions,
+                                                                        items: [{
+                                                                             icon: 'images/detach.png',
+                                                                             tooltip: me.xAssociationRemove,
+                                                                             handler: function(view, rowIndex, colIndex, item, e, record, row) {
+                                                                            	 
+                                                                             }
+                                                                        }]
+                                                                    }															
                                                             ]
 														}]
 											},{

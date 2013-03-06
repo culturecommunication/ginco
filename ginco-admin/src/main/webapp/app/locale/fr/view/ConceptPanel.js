@@ -25,5 +25,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
     xAddRelationship: 'Ajouter une relation associative',
     xRootConcepts: 'Concepts de tête',
     xParentConcepts: 'Concepts Parents (TG)',
-    xRemoveParent: 'Supprimer la connection vers Concept Generique'
+    xRemoveParent: 'Supprimer la connection vers Concept Generique',
+    xAssociationRemove: 'Supprimer l\'association'
 });
