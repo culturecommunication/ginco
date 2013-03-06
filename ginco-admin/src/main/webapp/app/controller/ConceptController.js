@@ -204,13 +204,17 @@ Ext.define('GincoApp.controller.ConceptController', {
 
     addAssociativeRelationship : function(theButton) {
         var thePanel = theButton.up('conceptPanel');
+        var theForm = theButton.up('form');
+        var me = this;
         var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : thePanel.thesaurusData,
             conceptId : thePanel.conceptId,
             showTree : false,
             listeners: {
                 selectBtn: {
-                    fn: this.selectAssociativeConcept
+                    fn: function(selectedRow) {
+                        me.selectAssociativeConcept(selectedRow, theForm);
+                    }
                 }
             }
         });
@@ -229,8 +233,10 @@ Ext.define('GincoApp.controller.ConceptController', {
         theStore.add(selectedRow[0]);
     },
 
-    selectAssociativeConcept : function(selectedRow) {
-       console.log('into function selectAssociativeConcept ' + selectedRow[0].data.identifier);
+    selectAssociativeConcept : function(selectedRow, theForm) {
+    	 var theGrid = theForm.down('#gridPanelAssociatedConcepts');
+         var theStore = theGrid.getStore();
+         theStore.add(selectedRow[0]);
 
     },
 
@@ -326,7 +332,14 @@ Ext.define('GincoApp.controller.ConceptController', {
         var rootIds = Ext.Array.map(rootData, function(root){
             return root.data.identifier;
         });
-
+        
+        var associatedGrid = theForm.down('#gridPanelAssociatedConcepts');
+        var associatedGridStore = associatedGrid.getStore();
+        var associatedData = associatedGridStore.getRange();
+        var associatedIds = Ext.Array.map(associatedData, function(associatedConcept){
+            return associatedConcept.data.identifier;
+        });
+        
         var thePanel = theForm.up('conceptPanel');
 
     	theForm.getEl().mask(me.xLoading);
@@ -335,6 +348,8 @@ Ext.define('GincoApp.controller.ConceptController', {
         updatedModel.terms().add(termsData);
         updatedModel.data.parentConcepts = parentIds;
         updatedModel.data.rootConcepts = rootIds;
+        updatedModel.data.associatedConcepts = associatedIds;
+        
 		updatedModel.save({
 			success : function(record, operation) {
 				var resultRecord = operation.getResultSet().records[0];

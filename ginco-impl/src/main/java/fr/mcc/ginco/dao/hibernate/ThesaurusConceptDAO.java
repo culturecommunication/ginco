@@ -154,12 +154,12 @@ public class ThesaurusConceptDAO extends
     public List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept) {
     
         DetachedCriteria d1 = DetachedCriteria.forClass(AssociativeRelationship.class, "ar1");
-		d1.setProjection(Projections.projectionList().add(Projections.property("ar1.concept1")));
-		d1.add(Restrictions.eq("concept2", concept));
+		d1.setProjection(Projections.projectionList().add(Projections.property("ar1.identifier.concept2")));
+		d1.add(Restrictions.eq("identifier.concept1", concept.getIdentifier()));
 		
 		DetachedCriteria d2 = DetachedCriteria.forClass(AssociativeRelationship.class, "ar2");
-		d2.setProjection(Projections.projectionList().add(Projections.property("ar2.concept2")));
-		d2.add(Restrictions.eq("concept1", concept));
+		d2.setProjection(Projections.projectionList().add(Projections.property("ar2.identifier.concept1")));
+		d2.add(Restrictions.eq("identifier.concept2", concept.getIdentifier()));
 			
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
 		.add(Restrictions.or(

@@ -147,8 +147,8 @@
          </row>
     </table>
 	<table name="associative_relationship">
-        <column>conceptid1</column>
-        <column>conceptid2</column>
+        <column>concept1</column>
+        <column>concept2</column>
         <column>role</column>
         <row>
             <value>http://www.culturecommunication.gouv.fr/co1</value>

@@ -222,37 +222,6 @@ Ext
                                                                     }
                                                             ]
 														},
-														{
-															xtype : 'gridpanel',
-															title : me.xAssociatedConceptsListGridTitle,
-															store : me.associatedConceptStore,
-															id    : 'gridPanelAssociatedConcepts',
-
-															dockedItems : [ {
-																xtype : 'toolbar',
-																dock : 'top',
-																items : [ {																	
-				                                                       xtype : 'button',
-				                                                       text : me.xAddRelationship,
-				                                                       disabled : false,
-				                                                       itemId : 'addAssociativeRelationship',
-				                                                       cls : 'addAssociativeRelationship',
-				                                                       iconCls : 'icon-add-associative-relationship'																	
-																} ]
-															} ],
-
-															columns : [
-																	{
-																		dataIndex : 'identifier',
-																		text : me.xIdentifierLabel
-																	},
-																	{
-																		dataIndex : 'label',
-																		text : me.xLexicalValueLabel,
-																		flex : 1
-																	}															
-                                                            ]
-														},
                                                         {
                                                             xtype : 'gridpanel',
                                                             title : me.xParentConcepts,
@@ -309,7 +278,38 @@ Ext
                                                                     flex : 1
                                                                 }
                                                             ]
-                                                        }]
+                                                        },
+														{
+															xtype : 'gridpanel',
+															title : me.xAssociatedConceptsListGridTitle,
+															store : me.associatedConceptStore,
+															id    : 'gridPanelAssociatedConcepts',
+
+															dockedItems : [ {
+																xtype : 'toolbar',
+																dock : 'top',
+																items : [ {																	
+				                                                       xtype : 'button',
+				                                                       text : me.xAddRelationship,
+				                                                       disabled : false,
+				                                                       itemId : 'addAssociativeRelationship',
+				                                                       cls : 'addAssociativeRelationship',
+				                                                       iconCls : 'icon-add-associative-relationship'																	
+																} ]
+															} ],
+
+															columns : [
+																	{
+																		dataIndex : 'identifier',
+																		text : me.xIdentifierLabel
+																	},
+																	{
+																		dataIndex : 'label',
+																		text : me.xLexicalValueLabel,
+																		flex : 1
+																	}															
+                                                            ]
+														}]
 											},{
 										        title: me.xNotesTab,
 										        xtype: 'noteConceptPanel',

@@ -126,10 +126,10 @@ CREATE TABLE top_relationship
 
 CREATE TABLE associative_relationship
 (
-  conceptid1 text NOT NULL,
-  conceptid2 text NOT NULL,
+  concept1 text NOT NULL,
+  concept2 text NOT NULL,
   role text,
-  CONSTRAINT pk_associative_relationship PRIMARY KEY (conceptid1, conceptid2)
+  CONSTRAINT pk_associative_relationship PRIMARY KEY (concept1, concept2)
 ); 
 
 CREATE TABLE associative_relationship_role
@@ -173,9 +173,9 @@ ALTER TABLE associative_relationship
       REFERENCES associative_relationship_role (code);
    
 ALTER TABLE associative_relationship
-      ADD FOREIGN KEY (conceptid1)      
+      ADD FOREIGN KEY (concept1)      
       REFERENCES thesaurus_concept (identifier);
       
 ALTER TABLE associative_relationship
-      ADD FOREIGN KEY (conceptid2)
+      ADD FOREIGN KEY (concept2)
       REFERENCES thesaurus_concept (identifier);

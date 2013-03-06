@@ -34,7 +34,24 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
@@ -42,14 +59,6 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.*;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -76,7 +85,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	
 	@Inject
 	@Named("associativeRelationshipDAO")
-	private IGenericDAO<AssociativeRelationship, Class<?>> associativeRelationshipDAO;
+	private IGenericDAO<AssociativeRelationship, AssociativeRelationship.Id> associativeRelationshipDAO;
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
@@ -266,15 +275,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		updateConceptTerms(concept, terms);
 		return concept;
 
-	}
-	
-	@Override
-	public AssociativeRelationship addAssociativeRelationship(ThesaurusConcept concept1, ThesaurusConcept concept2, AssociativeRelationshipRole role){
-		AssociativeRelationship relationship = new AssociativeRelationship();
-		relationship.setConcept1(concept1.getIdentifier());
-		relationship.setConcept2(concept2.getIdentifier());
-		relationship.setRelationshipRole(role);
-		return associativeRelationshipDAO.makePersistent(relationship);
 	}
 	
 	@Override

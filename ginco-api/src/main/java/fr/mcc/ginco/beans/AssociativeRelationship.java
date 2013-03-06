@@ -36,26 +36,86 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
+@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 public class AssociativeRelationship implements Serializable {
+	
+	public static class Id implements Serializable {
+		private String concept1;
+		private String concept2;
+    
+        public Id() {}
 
-	private String concept1;
-	private String concept2;
+     
+        public String getConcept1() {
+			return concept1;
+		}
+
+
+		public void setConcept1(String concept1) {
+			this.concept1 = concept1;
+		}
+
+
+		public String getConcept2() {
+			return concept2;
+		}
+
+
+		public void setConcept2(String concept2) {
+			this.concept2 = concept2;
+		}
+
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((concept1 == null) ? 0 : concept1.hashCode());
+			result = prime * result
+					+ ((concept2 == null) ? 0 : concept2.hashCode());
+			return result;
+		}
+
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Id other = (Id) obj;
+			if (concept1 == null) {
+				if (other.concept1 != null)
+					return false;
+			} else if (!concept1.equals(other.concept1))
+				return false;
+			if (concept2 == null) {
+				if (other.concept2 != null)
+					return false;
+			} else if (!concept2.equals(other.concept2))
+				return false;
+			return true;
+		}
+		
+    }
+
+	private Id identifier;
 	private AssociativeRelationshipRole relationshipRole;
-
-	public String getConcept1() {
-		return concept1;
+	private ThesaurusConcept conceptLeft;
+	private ThesaurusConcept conceptRight;
+	
+	public Id getIdentifier() {
+		return identifier;
 	}
 
-	public void setConcept1(String concept1) {
-		this.concept1 = concept1;
-	}
-
-	public String getConcept2() {
-		return concept2;
-	}
-
-	public void setConcept2(String concept2) {
-		this.concept2 = concept2;
+	public void setIdentifier(Id identifier) {
+		this.identifier = identifier;
 	}
 
 	public AssociativeRelationshipRole getRelationshipRole() {
@@ -65,5 +125,22 @@ public class AssociativeRelationship implements Serializable {
 	public void setRelationshipRole(AssociativeRelationshipRole relationshipRole) {
 		this.relationshipRole = relationshipRole;
 	}
+
+	public ThesaurusConcept getConceptLeft() {
+		return conceptLeft;
+	}
+
+	public void setConceptLeft(ThesaurusConcept conceptLeft) {
+		this.conceptLeft = conceptLeft;
+	}
+
+	public ThesaurusConcept getConceptRight() {
+		return conceptRight;
+	}
+
+	public void setConceptRight(ThesaurusConcept conceptRight) {
+		this.conceptRight = conceptRight;
+	}
 	
+
 }

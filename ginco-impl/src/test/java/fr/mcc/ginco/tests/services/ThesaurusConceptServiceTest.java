@@ -106,21 +106,7 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 
 		thesaurusConceptService
 				.getOrphanThesaurusConcepts("any-thesaurus-id");
-	}
-
-	@Test
-	public final void testAddAssociativeRelationship() {
-		ThesaurusConcept concept1 = new ThesaurusConcept();
-		concept1.setIdentifier("id-concept-1");
-		ThesaurusConcept concept2 = new ThesaurusConcept();
-		concept2.setIdentifier("id-concept-2");
-		AssociativeRelationshipRole role = new AssociativeRelationshipRole();
-
-		AssociativeRelationship association1 = new AssociativeRelationship();
-		when(associativeRelationshipDAO.makePersistent(any(AssociativeRelationship.class))).thenReturn(association1);
-		AssociativeRelationship sh1 = thesaurusConceptService.addAssociativeRelationship(concept1, concept2, role);
-		Assert.assertNotNull(sh1);
-	}
+	}	
 
     @Test
     public final void testGetTopTermThesaurusConceptsCount() throws BusinessException {

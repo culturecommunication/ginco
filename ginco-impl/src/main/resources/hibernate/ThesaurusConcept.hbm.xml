@@ -22,17 +22,16 @@
 		<set name="rootConcepts" table="top_relationship">
 			<key column="childconceptid" />
 			<many-to-many column="rootconceptid" class="fr.mcc.ginco.beans.ThesaurusConcept" />
-		</set>
+		</set>		
 		
-		<set name="associativeRelationshipLeft" cascade="all-delete-orphan" >
-            <key column="conceptid1" not-null="true"/>
+		<set name="associativeRelationshipLeft" inverse="true" cascade="save-update" >
+            <key column="concept1" not-null="true"/>
             <one-to-many class="fr.mcc.ginco.beans.AssociativeRelationship" />
         </set>
-		
-		<set name="associativeRelationshipRight" cascade="all-delete-orphan">
-             <key column="conceptid2" not-null="true" />
-            <one-to-many entity-name="fr.mcc.ginco.beans.AssociativeRelationship"  />
-        </set>        
+		<set name="associativeRelationshipRight" inverse="true" cascade="save-update" >
+            <key column="concept2" not-null="true"/>
+            <one-to-many class="fr.mcc.ginco.beans.AssociativeRelationship"/>
+        </set>  
     
     </class>
 </hibernate-mapping>

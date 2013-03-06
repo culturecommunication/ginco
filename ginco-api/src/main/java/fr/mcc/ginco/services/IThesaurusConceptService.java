@@ -175,16 +175,8 @@ public interface IThesaurusConceptService {
      * @param concept
      * @param parentsToRemove list of ids.
      */
-    void removeParents(ThesaurusConcept concept, List<String> parentsToRemove) throws BusinessException;
-    
-	/**
-	 * Saves the associative relationship between two concepts, affecting a role to the relation
-	 * @param concept1
-	 * @param concept2
-	 * @param role
-	 * @return
-	 */
-	AssociativeRelationship addAssociativeRelationship(ThesaurusConcept concept1, ThesaurusConcept concept2, AssociativeRelationshipRole role);
+    void removeParents(ThesaurusConcept concept, List<String> parentsToRemove) throws BusinessException;  
+	
 	
 	
 	/**
