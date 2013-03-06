@@ -13,3 +13,7 @@ INSERT INTO note_type(
 INSERT INTO note_type(
             code, label, isterm, isconcept)
     VALUES ('editorialNote','Note éditoriale', true, false);
+    
+INSERT INTO associative_relationship_role(
+            code, label, defaultrole)
+    VALUES ('TA', 'Terme associé', true);

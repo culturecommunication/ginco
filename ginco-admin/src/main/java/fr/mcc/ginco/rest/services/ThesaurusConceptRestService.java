@@ -194,7 +194,9 @@ public class ThesaurusConceptRestService {
             searchOrphanParam = null;
         } else if (searchOrphans.isEmpty()) {
             searchOrphanParam = null;
-        } else searchOrphanParam = Boolean.parseBoolean(searchOrphans);
+        } else {
+            searchOrphanParam = Boolean.parseBoolean(searchOrphans);
+        }
 
         return thesaurusConceptViewConverter
                 .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId,

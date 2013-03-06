@@ -1,10 +1,11 @@
 Ext.define('GincoApp.controller.ConceptController', {
 	extend:'Ext.app.Controller',
 	
-	stores : [ 'MainTreeStore' ],
-	models : [ 'ConceptModel','ThesaurusModel' ],
+	stores : [ 'MainTreeStore','SimpleConceptStore' ],
+	models : [ 'ConceptModel','ThesaurusModel','SimpleConceptModel' ],
 	
 	localized : true,
+    _myAppGlobal : this,
 	
 	xLoading : 'Loading',
 	xDeleteMsgLabel : 'Are you sure to delete this concept?',
@@ -168,13 +169,17 @@ Ext.define('GincoApp.controller.ConceptController', {
 
     addParent : function(theButton) {
         var thePanel = theButton.up('conceptPanel');
+        var theForm = theButton.up('form');
+        var me = this;
         var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : thePanel.thesaurusData,
             conceptId : thePanel.conceptId,
             showTree : false,
             listeners: {
                 selectBtn: {
-                    fn: this.selectConceptAsParent
+                    fn: function(selectedRow) {
+                            me.selectConceptAsParent(selectedRow, theForm);
+                        }
                 }
             }
         });
@@ -203,8 +208,10 @@ Ext.define('GincoApp.controller.ConceptController', {
      * User clicks on button "Select as parent"
      * @param selectedRow
      */
-    selectConceptAsParent : function(selectedRow) {
-        console.log('into function selectConceptAsParent ' + selectedRow[0].data.identifier);
+    selectConceptAsParent : function(selectedRow, theForm) {
+        var theGrid = theForm.down('#gridPanelParentConcepts');
+        var theStore = theGrid.getStore();
+        theStore.add(selectedRow[0]);
     },
 
     selectAssociativeConcept : function(selectedRow) {
@@ -243,7 +250,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 
 		conceptPanel.setTitle("Concept : "+conceptTitle);
-		
+
 		var theGrid = aForm.down('#gridPanelTerms');
 		var theGridStore = theGrid.getStore();
 		theGridStore.removeAll();
@@ -255,6 +262,20 @@ Ext.define('GincoApp.controller.ConceptController', {
 			conceptIds: aModel.raw.associatedConcepts
         };
 		associatedConceptsGridStore.load();
+
+        var rootConceptsGrid  = aForm.down('#gridPanelRootConcepts');
+        var rootConceptsGridStore = rootConceptsGrid.getStore();
+        rootConceptsGridStore.getProxy().extraParams = {
+            conceptIds: aModel.raw.rootConcepts
+        };
+        rootConceptsGridStore.load();
+
+        var parentConceptsGrid  = aForm.down('#gridPanelParentConcepts');
+        var parentConceptsGridStore = parentConceptsGrid.getStore();
+        parentConceptsGridStore.getProxy().extraParams = {
+            conceptIds: aModel.raw.parentConcepts
+        };
+        parentConceptsGridStore.load();
 		
 		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
@@ -276,12 +297,21 @@ Ext.define('GincoApp.controller.ConceptController', {
 		theForm.getForm().updateRecord();
 		var theStore = theGrid.getStore();
 		var termsData = theStore.getRange();
+
+        var parentGrid = theForm.down('#gridPanelParentConcepts');
+        var parentGridStore = parentGrid.getStore();
+        var parentData = parentGridStore.getRange();
+        var parentIds = Ext.Array.map(parentData, function(parent){
+            return parent.data.identifier;
+        });
         var thePanel = theForm.up('conceptPanel');
 
-		theForm.getEl().mask(me.xLoading);
+    	theForm.getEl().mask(me.xLoading);
 		var updatedModel = theForm.getForm().getRecord();
 		updatedModel.terms().removeAll();
         updatedModel.terms().add(termsData);
+        updatedModel.terms().add(termsData);
+        updatedModel.data.parentConcepts = parentIds;
 		updatedModel.save({
 			success : function(record, operation) {
 				var resultRecord = operation.getResultSet().records[0];

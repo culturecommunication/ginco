@@ -49,6 +49,8 @@ Ext
 					xActions: 'Actions',
                     xAddRelationship: 'Add associative relationship',
                     xAssociatedConceptsListGridTitle: 'Associated terms',
+                    xRootConcepts: 'Root Concepts',
+                    xParentConcepts: 'Parent Concepts',
 
 					initComponent : function() {
 						var me = this;
@@ -56,7 +58,11 @@ Ext
 								.create('GincoApp.store.ThesaurusTermStore');
 						
 						me.associatedConceptStore = Ext
-								.create('GincoApp.store.AssociatedConceptStore');
+								.create('GincoApp.store.SimpleConceptStore');
+                        me.rootConceptStore = Ext
+                            .create('GincoApp.store.SimpleConceptStore');
+                        me.parentConceptStore = Ext
+                            .create('GincoApp.store.SimpleConceptStore');
 
 						Ext
 								.applyIf(
@@ -99,14 +105,7 @@ Ext
 														itemId : 'delete',
 														cls : 'delete',
 														iconCls : 'icon-delete'
-													}, {
-                                                        xtype : 'button',
-                                                        text : me.xAddParent,
-                                                        disabled : false,
-                                                        itemId : 'addParent',
-                                                        cls : 'addParent',
-                                                        iconCls : 'icon-add-parent'
-                                                    }]
+													} ]
 												} ],
 												items : [
 														{
@@ -252,7 +251,56 @@ Ext
 																		flex : 1
 																	}															
                                                             ]
-														} ]
+														},
+                                                        {
+                                                            xtype : 'gridpanel',
+                                                            title : me.xParentConcepts,
+                                                            store : me.parentConceptStore,
+                                                            id    : 'gridPanelParentConcepts',
+
+                                                            dockedItems : [ {
+                                                                xtype : 'toolbar',
+                                                                dock : 'top',
+                                                                items : [ {
+                                                                        xtype : 'button',
+                                                                        text : me.xAddParent,
+                                                                        disabled : false,
+                                                                        itemId : 'addParent',
+                                                                        cls : 'addParent',
+                                                                        iconCls : 'icon-add-parent'
+                                                                    } ]
+                                                            } ],
+
+                                                            columns : [
+                                                                {
+                                                                    dataIndex : 'identifier',
+                                                                    text : me.xIdentifierLabel
+                                                                },
+                                                                {
+                                                                    dataIndex : 'label',
+                                                                    text : me.xLexicalValueLabel,
+                                                                    flex : 1
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            xtype : 'gridpanel',
+                                                            title : me.xRootConcepts,
+                                                            store : me.rootConceptStore,
+                                                            id    : 'gridPanelRootConcepts',
+
+                                                            columns : [
+                                                                {
+                                                                    dataIndex : 'identifier',
+                                                                    text : me.xIdentifierLabel
+                                                                },
+                                                                {
+                                                                    dataIndex : 'label',
+                                                                    text : me.xLexicalValueLabel,
+                                                                    flex : 1
+                                                                }
+                                                            ]
+                                                        }]
 											},{
 										        title: me.xNotesTab,
 										        xtype: 'noteConceptPanel',

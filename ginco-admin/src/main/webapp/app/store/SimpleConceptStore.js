@@ -2,7 +2,7 @@
  * ReducedConcept Store
  * This file contains all ReducedConcept displayed in popup lists
  */
-Ext.define('GincoApp.store.AssociatedConceptStore', {
+Ext.define('GincoApp.store.SimpleConceptStore', {
     extend: 'Ext.data.Store',
 
     constructor: function(cfg) {
