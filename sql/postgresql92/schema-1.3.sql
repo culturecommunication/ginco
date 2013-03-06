@@ -160,3 +160,8 @@ CREATE INDEX fki_associative_relationship_role
   USING btree
   (role);
 
+ALTER TABLE  associative_relationship 
+    RENAME conceptId1 TO concept1;
+    
+ALTER TABLE  associative_relationship 
+    RENAME conceptId2 TO concept2;
