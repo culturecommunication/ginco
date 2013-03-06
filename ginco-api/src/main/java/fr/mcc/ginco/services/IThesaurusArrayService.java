@@ -32,47 +32,17 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.services;
 
-import java.io.Serializable;
+import fr.mcc.ginco.beans.ThesaurusArray;
 
-@SuppressWarnings("serial")
-public class NoteType  implements Serializable{
+/**
+ * Service used to work with {@link ThesaurusArray} objects, contains basic
+ * methods exposed to client part.
+ *
+ * @see fr.mcc.ginco.beans
+ */
+public interface IThesaurusArrayService {
 
-    private String code;
-    private String label;
-    private boolean isTerm;
-    private boolean isConcept;
-    
-	public String getCode() {
-		return code;
-	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public boolean isIsTerm() {
-		return isTerm;
-	}
-
-	public void setIsTerm(boolean isTerm) {
-		this.isTerm = isTerm;
-	}
-
-	public boolean isIsConcept() {
-		return isConcept;
-	}
-
-	public void setIsConcept(boolean isConcept) {
-		this.isConcept = isConcept;
-	}
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="NodeLabel" table="node_label">
+		<cache usage="read-write" />
+		<id name="identifier" column="id">
+			<generator class="sequence">
+				<param name="sequence">node_label_id_seq</param>
+			</generator>
+		</id>
+		<property name="lexicalValue" column="lexicalvalue" />
+		<property name="modified" />
+		<property name="created" />
+		
+		<many-to-one name="language" column="lang" lazy="false" />
+		<many-to-one name="thesaurusArray" column="thesaurusarrayid" lazy="false" />
+		
+	</class>
+</hibernate-mapping>

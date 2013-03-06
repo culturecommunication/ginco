@@ -25,54 +25,33 @@
  * therefore means that it is reserved for developers and experienced
  * professionals having in-depth computer knowledge. Users are therefore
  * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systemsand/or
+ * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and, more generally, to use and operate it in the
  * same conditions as regards security.
  * <p/>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.services;
 
-import java.io.Serializable;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@SuppressWarnings("serial")
-public class NoteType  implements Serializable{
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-    private String code;
-    private String label;
-    private boolean isTerm;
-    private boolean isConcept;
-    
-	public String getCode() {
-		return code;
-	}
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+/**
+ * Implementation of the thesaurus array service contains methods relatives to the
+ * ThesaurusArray object
+ */
+@Transactional
+@Service("thesaurusArrayService")
+public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 
-	public String getLabel() {
-		return label;
-	}
+	@Inject
+	@Named("thesaurusArrayDAO")
+	private IThesaurusArrayDAO thesaurusArrayDAO;
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public boolean isIsTerm() {
-		return isTerm;
-	}
-
-	public void setIsTerm(boolean isTerm) {
-		this.isTerm = isTerm;
-	}
-
-	public boolean isIsConcept() {
-		return isConcept;
-	}
-
-	public void setIsConcept(boolean isConcept) {
-		this.isConcept = isConcept;
-	}
 }

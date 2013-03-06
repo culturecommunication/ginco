@@ -32,47 +32,19 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.dao.hibernate;
 
-import java.io.Serializable;
+import org.springframework.stereotype.Repository;
 
-@SuppressWarnings("serial")
-public class NoteType  implements Serializable{
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.dao.INodeLabelDAO;
 
-    private String code;
-    private String label;
-    private boolean isTerm;
-    private boolean isConcept;
-    
-	public String getCode() {
-		return code;
+@Repository("nodeLabelDAO")
+public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, String>
+		implements INodeLabelDAO {
+
+	public NodeLabelDAO() {
+		super(NodeLabel.class);
 	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public boolean isIsTerm() {
-		return isTerm;
-	}
-
-	public void setIsTerm(boolean isTerm) {
-		this.isTerm = isTerm;
-	}
-
-	public boolean isIsConcept() {
-		return isConcept;
-	}
-
-	public void setIsConcept(boolean isConcept) {
-		this.isConcept = isConcept;
-	}
 }

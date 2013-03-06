@@ -45,6 +45,7 @@ Ext
 					xNewMenu_TermLabel : "Term",
 					xNewMenu_ConceptLabel: "Concept",
 					xNewMenu_GroupLabel : "Group of Concepts",
+					xNewMenu_ConceptArrayLabel : "Array of concepts",
 
 					initComponent : function() {
 						var me = this;
@@ -92,6 +93,12 @@ Ext
 																		text : me.xNewMenu_ConceptLabel,
 																		itemId : 'newConceptBtn',
 																		cmdTxt : 'Ctrl+3'
+																	},
+																	{
+																		xtype : 'keymenuitem',
+																		text : me.xNewMenu_ConceptArrayLabel,
+																		itemId : 'newConceptArrayBtn',
+																		cmdTxt : 'Ctrl+4'
 																	}]
 																}
 															},

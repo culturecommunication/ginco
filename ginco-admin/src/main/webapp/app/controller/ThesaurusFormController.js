@@ -33,12 +33,17 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	},
 	onNewTermBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusPanel');
-		var termPanel = this.createPanel('GincoApp.view.TermPanel',thePanel.thesaurusData );
+		this.createPanel('GincoApp.view.TermPanel',thePanel.thesaurusData );
 	},
 	
 	onNewConceptBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusPanel');
-		var conceptPanel = this.createPanel('GincoApp.view.ConceptPanel',thePanel.thesaurusData );
+		this.createPanel('GincoApp.view.ConceptPanel',thePanel.thesaurusData );
+	},
+	
+	onNewConceptArrayBtnClick : function(theButton) {
+		var thePanel = theButton.up('thesaurusPanel');
+		this.createPanel('GincoApp.view.ConceptArrayPanel',thePanel.thesaurusData);
 	},
 	
 	createPanel : function(aType, thesaurusData)
@@ -88,8 +93,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			},
 			"thesaurusPanel #newConceptBtn" : {
 				click : this.onNewConceptBtnClick
+			},
+			"thesaurusPanel #newConceptArrayBtn" : {
+				click : this.onNewConceptArrayBtnClick
 			}
-
 		});
 	}
 });

@@ -35,44 +35,52 @@
 package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @SuppressWarnings("serial")
-public class NoteType  implements Serializable{
-
-    private String code;
-    private String label;
-    private boolean isTerm;
-    private boolean isConcept;
-    
-	public String getCode() {
-		return code;
+public class ThesaurusArray implements Serializable {
+	
+	private String identifier;
+	private Boolean ordered;
+	private String notation;
+	private Thesaurus thesaurus;
+	private ThesaurusConcept superOrdinateConcept;
+	private Set<ThesaurusConcept> concepts;
+	
+	public String getIdentifier() {
+		return identifier;
 	}
-
-	public void setCode(String code) {
-		this.code = code;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
-
-	public String getLabel() {
-		return label;
+	public Boolean getOrdered() {
+		return ordered;
 	}
-
-	public void setLabel(String label) {
-		this.label = label;
+	public void setOrdered(Boolean ordered) {
+		this.ordered = ordered;
 	}
-
-	public boolean isIsTerm() {
-		return isTerm;
+	public String getNotation() {
+		return notation;
 	}
-
-	public void setIsTerm(boolean isTerm) {
-		this.isTerm = isTerm;
+	public void setNotation(String notation) {
+		this.notation = notation;
 	}
-
-	public boolean isIsConcept() {
-		return isConcept;
+	public Thesaurus getThesaurus() {
+		return thesaurus;
 	}
-
-	public void setIsConcept(boolean isConcept) {
-		this.isConcept = isConcept;
+	public void setThesaurus(Thesaurus thesaurus) {
+		this.thesaurus = thesaurus;
+	}
+	public ThesaurusConcept getSuperOrdinateConcept() {
+		return superOrdinateConcept;
+	}
+	public void setSuperOrdinateConcept(ThesaurusConcept superOrdinateConcept) {
+		this.superOrdinateConcept = superOrdinateConcept;
+	}
+	public Set<ThesaurusConcept> getConcepts() {
+		return concepts;
+	}
+	public void setConcepts(Set<ThesaurusConcept> concepts) {
+		this.concepts = concepts;
 	}
 }
