@@ -115,9 +115,10 @@ Ext.define('Thesaurus.form.HtmlEditor', {
         value = value.replace(/<p align=center>/gi,"");
         value = value.replace(/<.p>/gi,"");
         value = value.replace(/<br>/gi,"");
-        value = value.trim();
-        if(value != '')
+        value = Ext.String.trim(value);
+        if(value != '') {
             return false;
+        }
         return true;
     },
     isValid:function(){
