@@ -200,6 +200,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 
         var theStore = theGrid.getStore();
         theStore.remove(record[0]);
+        theButton.setDisabled(true);
     },
 
     addAssociativeRelationship : function(theButton) {
