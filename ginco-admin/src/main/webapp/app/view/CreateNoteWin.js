@@ -11,7 +11,7 @@ Ext
 						thesaurusData : null,
 						noteId : null
 			        },
-					
+			        
 					xSave: 'Save',
 					xCreateNoteWinTitle : 'New Note',
 					xLexicalValueLabel : 'Lexical value',
@@ -20,14 +20,15 @@ Ext
 				    xTypeLabel : 'Type',
 				    
 					width : 500,
-					title : this.xCreateNoteWinTitle,
+					title : 'Nouvelle note',
 					titleAlign : 'center',
 					modal : true,
 					store : null,
 					
 					initComponent : function() {
 						var me = this;
-
+						me.addEvents('saveNoteButton');
+						
 						Ext
 								.applyIf(
 										me,
@@ -44,8 +45,12 @@ Ext
 																xtype : 'button',
 																text : me.xSave,
 																formBind : true,
-																itemId : 'saveNote',
-																iconCls : 'icon-save'
+																itemId : 'saveNotePopup',
+																iconCls : 'icon-save',
+																handler: function(theButton){
+																	me.fireEvent('saveNoteButton', theButton);
+																	me.close();
+																}
 															}]
 														} ],
 														defaults : {

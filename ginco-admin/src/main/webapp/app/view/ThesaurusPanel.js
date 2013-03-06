@@ -133,7 +133,6 @@ Ext
 														},
 														{
 															xtype : 'container',
-															title : 'test container',
 															layout : 'column',
 															defaults : {
 																margin : '0 50 5 0',

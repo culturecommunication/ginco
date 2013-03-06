@@ -210,6 +210,7 @@ Ext
 																	},
                                                                     {
                                                                         xtype:'actioncolumn',
+                                                                        itemId: 'conceptActionColumn',
                                                                         header: me.xActions,
                                                                         items: [{
                                                                              icon: 'images/detach.png',
