@@ -132,6 +132,11 @@ Ext.define('GincoApp.controller.ConceptController', {
         var thePanel = theGrid.up('conceptPanel');
         this.createPanel('GincoApp.view.TermPanel', thePanel.thesaurusData, record.data.identifier);
     },
+    
+    onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
+		var thePanel = theGrid.up('conceptPanel');
+    	Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
+    },
 
     onDetachClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
         var theGrid = gridview.up('#gridPanelTerms');
@@ -326,8 +331,11 @@ Ext.define('GincoApp.controller.ConceptController', {
  				render : this.onGridRender,
  				itemdblclick : this.onSelectTermDblClick
  			},
- 			'conceptPanel gridpanel actioncolumn' : {
+ 			'conceptPanel gridpanel #conceptActionColumn' : {
                 click : this.onDetachClick
+            },
+            'conceptPanel #gridPanelAssociatedConcepts' : {
+                itemdblclick : this.onConceptDblClick
             }
          });
 

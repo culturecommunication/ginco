@@ -49,7 +49,8 @@ Ext.define('GincoApp.view.NotePanel', {
                                     text: 'Enregistrer',
                                     cls: 'save',
                                     iconCls : 'icon-save',
-                                    itemId : 'saveNote'
+                                    itemId : 'saveNote',
+                                    disabled : true
                                 }
                             ]
                         }
@@ -101,19 +102,10 @@ Ext.define('GincoApp.view.NotePanel', {
 									},
 									{
 										xtype : 'actioncolumn',
-										itemId : 'noteDelete',
+										itemId : 'noteActionColumn',
 										items : [ {
 											icon : 'images/detach.png',
-											tooltip : me.xDetach,
-											handler : function(
-													view,
-													rowIndex,
-													colIndex,
-													item,
-													e,
-													record,
-													row) {
-											}
+											tooltip : me.xDetach
 										} ]
 									}
                             ]
