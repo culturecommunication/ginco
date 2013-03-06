@@ -24,7 +24,7 @@ Ext.define('GincoApp.view.NotePanel', {
     xTypeLabel : 'Type',
 
     /*Fields prompting values*/
-    xNoteConceptListGridTitle : 'List of the concept notes',
+    xNoteConceptListGridTitle : 'List of notes',
     xLanguageLabel : 'Language',
     xAddNote: 'Add a note',
     xDetach: 'Delete a note',

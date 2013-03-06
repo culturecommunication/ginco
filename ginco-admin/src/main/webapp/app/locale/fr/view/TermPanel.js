@@ -9,5 +9,6 @@ Ext.define('GincoApp.locale.fr.view.TermPanel', {
 	xLexicalValueLabel : 'Valeur lexicale',
 	xDateLabel : 'Dernière modification',
 	xLanguagesLabel : 'Langue',
-	xTermPanelTitle : 'Nouveau Terme'
+	xTermPanelTitle : 'Nouveau Terme',
+	xNotesTab : 'Notes du terme'
 });
