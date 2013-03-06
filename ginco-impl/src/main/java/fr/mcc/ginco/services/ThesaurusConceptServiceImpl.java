@@ -92,14 +92,18 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
     @Override
-    public List<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException{
-        List<ThesaurusConcept> result = new ArrayList<ThesaurusConcept>();
+    public Set<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException{
+        Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
         for(String id : list) {
             ThesaurusConcept concept = thesaurusConceptDAO.getById(id);
             if(concept == null) {
                 throw new BusinessException("The concept " + id
                         + " does not exist!",
                         "concept-does-not-exist");
+            } else {
+                if(!result.contains(concept)) {
+                    result.add(concept);
+                }
             }
         }
         return result;

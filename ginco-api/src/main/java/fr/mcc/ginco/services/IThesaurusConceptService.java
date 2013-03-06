@@ -41,6 +41,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service used to work with {@link ThesaurusConcept} objects, contains basic
@@ -62,7 +63,7 @@ public interface IThesaurusConceptService {
      *
      * @return
      */
-    List<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException;
+    Set<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException;
 
 	/**
 	 * Get single ThesaurusFormat by its id.

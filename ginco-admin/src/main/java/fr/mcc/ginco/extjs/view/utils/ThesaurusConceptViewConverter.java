@@ -168,11 +168,10 @@ public class ThesaurusConceptViewConverter {
 		thesaurusConcept.setTopConcept(source.getTopconcept());
 
         List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept.getParentConcepts());
-        if(!ListUtils.subtract(oldParentIds, source.getParentConcepts()).isEmpty()) {
+        if(!ListUtils.subtract(source.getParentConcepts(), oldParentIds).isEmpty()) {
             Set<ThesaurusConcept> parents =
-                    new HashSet<ThesaurusConcept>(
-                        thesaurusConceptService.getThesaurusConceptList(
-                                source.getParentConcepts()));
+                      thesaurusConceptService.getThesaurusConceptList(
+                                source.getParentConcepts());
 
             thesaurusConcept.setParentConcepts(parents);
             thesaurusConcept.setRootConcepts(

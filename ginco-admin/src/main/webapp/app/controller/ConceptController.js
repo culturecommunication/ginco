@@ -306,14 +306,11 @@ Ext.define('GincoApp.controller.ConceptController', {
         });
         var thePanel = theForm.up('conceptPanel');
 
-        debugger;
-
-		theForm.getEl().mask(me.xLoading);
+    	theForm.getEl().mask(me.xLoading);
 		var updatedModel = theForm.getForm().getRecord();
 		updatedModel.terms().removeAll();
         updatedModel.terms().add(termsData);
         updatedModel.terms().add(termsData);
-        updatedModel.data.parentConcepts = null;
         updatedModel.data.parentConcepts = parentIds;
 		updatedModel.save({
 			success : function(record, operation) {
