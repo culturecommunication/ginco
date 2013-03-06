@@ -192,6 +192,16 @@ Ext.define('GincoApp.controller.ConceptController', {
         win.show();
     },
 
+    checkParent : function(theGrid, record, item, index, e, eOpts, parentStore) {
+        var thePanel = theGrid.up('gridpanel');
+        var theButton = thePanel.down('#selectButton');
+        if(parentStore.findRecord('identifier',record.data.identifier) == null) {
+            theButton.setDisabled(false);
+        } else {
+            theButton.setDisabled(true);
+        }
+    },
+
     removeParent : function(theButton) {
         var theForm = theButton.up('form');
         var theGrid = theForm.down('#gridPanelParentConcepts');
@@ -405,6 +415,13 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
 			},
+            'selectConceptWin gridpanel' : {
+                itemclick : function(theGrid, record, item, index, e, eOpts) {
+                    var parentGrid = Ext.ComponentQuery.query('conceptPanel #gridPanelParentConcepts');
+                    var parentStore = parentGrid[0].getStore();
+                    this.checkParent(theGrid, record, item, index, e, eOpts, parentStore);
+                }
+            },
             'conceptPanel #gridPanelTerms' : {
                 itemdblclick : this.onTermDblClick
             },
