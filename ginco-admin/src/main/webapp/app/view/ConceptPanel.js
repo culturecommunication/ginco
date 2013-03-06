@@ -51,6 +51,7 @@ Ext
                     xAssociatedConceptsListGridTitle: 'Associated terms',
                     xRootConcepts: 'Root Concepts',
                     xParentConcepts: 'Parent Concepts',
+                    xRemoveParent: 'Remove connection to parent Concept',
 
 					initComponent : function() {
 						var me = this;
@@ -268,6 +269,14 @@ Ext
                                                                         itemId : 'addParent',
                                                                         cls : 'addParent',
                                                                         iconCls : 'icon-add-parent'
+                                                                    },
+                                                                    {
+                                                                        xtype : 'button',
+                                                                        text : me.xRemoveParent,
+                                                                        disabled : true,
+                                                                        itemId : 'removeParent',
+                                                                        cls : 'removeParent',
+                                                                        iconCls : 'icon-remove-parent'
                                                                     } ]
                                                             } ],
 

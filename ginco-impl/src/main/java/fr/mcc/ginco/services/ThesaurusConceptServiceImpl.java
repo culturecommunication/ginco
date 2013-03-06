@@ -183,6 +183,21 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
         return new ArrayList<ThesaurusConcept>(roots);
     }
 
+    @Override
+    public void removeParents(ThesaurusConcept concept, List<String> parentsToRemove)
+        throws BusinessException {
+        Set<ThesaurusConcept> parents = getThesaurusConceptList(parentsToRemove);
+
+        boolean isDefaultTopConcept = concept.getThesaurus().isDefaultTopConcept();
+
+        if(parents.size()==1) {
+            concept.getParentConcepts().clear();
+            concept.setTopConcept(isDefaultTopConcept);
+        } else {
+            concept.getParentConcepts().removeAll(parentsToRemove);
+        }
+    }
+
     private ThesaurusConcept start;
     private HashMap<String, Integer> path = new HashMap<String, Integer>();
     private Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
@@ -191,7 +206,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
         iteration++;
         Set<ThesaurusConcept> directParents = concept.getParentConcepts();
         if(directParents.isEmpty()) {
-            roots.add(concept);
+            if(iteration!=1) {
+                roots.add(concept);
+            }
             return;
         }
         boolean flag = false;

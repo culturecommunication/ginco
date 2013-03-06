@@ -84,3 +84,7 @@
 .icon-add-associative-relationship {
     background-image: url(../images/add-parent.png) !important;
 }
+
+.icon-remove-parent {
+    background-image: url(../images/remove-parent.png) !important;
+}

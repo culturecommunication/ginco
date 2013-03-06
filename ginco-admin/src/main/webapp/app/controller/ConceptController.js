@@ -167,6 +167,12 @@ Ext.define('GincoApp.controller.ConceptController', {
 		}
 	},
 
+    onParentConceptClick : function(theGrid, record, item, index, e, eOpts) {
+        var thePanel = theGrid.up('conceptPanel');
+        var removeParentBtn = thePanel.down('button[cls=removeParent]');
+        removeParentBtn.setDisabled(record == null);
+    },
+
     addParent : function(theButton) {
         var thePanel = theButton.up('conceptPanel');
         var theForm = theButton.up('form');
@@ -184,7 +190,16 @@ Ext.define('GincoApp.controller.ConceptController', {
             }
         });
         win.show();
-        //win.on('conceptselected', this.selectConceptAsParent);
+    },
+
+    removeParent : function(theButton) {
+        var theForm = theButton.up('form');
+        var theGrid = theForm.down('#gridPanelParentConcepts');
+
+        var record = theGrid.getSelectionModel().getSelection();
+
+        var theStore = theGrid.getStore();
+        theStore.remove(record[0]);
     },
 
     addAssociativeRelationship : function(theButton) {
@@ -336,8 +351,14 @@ Ext.define('GincoApp.controller.ConceptController', {
  			'conceptPanel #saveConcept' : {
  				click : this.saveConcept
  			},
+            'conceptPanel #gridPanelParentConcepts' : {
+                itemclick : this.onParentConceptClick
+            },
             'conceptPanel  button[cls=addParent]' : {
                 click : this.addParent
+            },
+            'conceptPanel  button[cls=removeParent]' : {
+                click : this.removeParent
             },
             'conceptPanel  button[cls=addAssociativeRelationship]' : {
                 click : this.addAssociativeRelationship
