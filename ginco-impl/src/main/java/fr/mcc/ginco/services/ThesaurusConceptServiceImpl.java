@@ -174,12 +174,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
         path.clear();
         roots.clear();
         path.put(concept.getIdentifier(), 0);
+        start = concept;
         getRoot(concept, 0);
         return new ArrayList<ThesaurusConcept>(roots);
     }
 
-    HashMap<String, Integer> path = new HashMap<String, Integer>();
-    Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
+    private ThesaurusConcept start;
+    private HashMap<String, Integer> path = new HashMap<String, Integer>();
+    private Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
 
     private void getRoot(ThesaurusConcept concept, Integer iteration) {
         iteration++;
@@ -200,7 +202,8 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
             }
         }
 
-        if(!flag) {
+        //HACK to deal with cyclic dependencies. Should be reThink in some time...
+        if(!flag && directParents.size() == 1 && directParents.contains(start)) {
             roots.add(concept);
         }
 
@@ -210,10 +213,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
             }
             stack.clear();
         }
-
-//        if(path.keySet().contains(getChildrenByConceptId(concept.getIdentifier()))) {
-//            roots.add(concept);
-//        }
     }
 
     @Override

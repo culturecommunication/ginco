@@ -146,18 +146,19 @@ public class ThesaurusConceptServiceTest extends BaseTest {
         Assert.assertNotNull("Not null list expected",
                 thesaurusConceptDAO.getTopTermThesaurusConcept(any(Thesaurus.class)));
     }
-    //      root1   root3    root2
-    //      /   \   /    \   /    \
-    //  leaf2_1=leaf2_2  leaf2_3 leaf2_4
-    //     \     /       /   \    /    \
-    //   !!leaf1_1!!----    leaf1_2   leaf1_3
+    //------------------------------------------
+    //|     root1   root3    root2             |
+    //|     /   \   /    \   /    \            |
+    //--leaf2_1=leaf2_2  leaf2_3 leaf2_4       |
+    //     \     /       /   \    /    \       |
+    //   !!leaf1_1!!----    leaf1_2   leaf1_3<-|
     @Test
     public final void testGetRootsWithCycling() throws BusinessException {
         ThesaurusConcept leaf1_1 = new ThesaurusConcept();
         leaf1_1.setIdentifier("leaf1_1");
         ThesaurusConcept leaf1_2 = new ThesaurusConcept();
         leaf1_2.setIdentifier("leaf1_2");
-        ThesaurusConcept leaf1_3 = new ThesaurusConcept();
+        final ThesaurusConcept leaf1_3 = new ThesaurusConcept();
         leaf1_3.setIdentifier("leaf1_3");
 
         final ThesaurusConcept leaf2_1 = new ThesaurusConcept();
@@ -179,6 +180,7 @@ public class ThesaurusConceptServiceTest extends BaseTest {
         leaf2_1.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
             add(root1);
             add(leaf2_2);
+            add(leaf1_3);
         }});
         leaf2_2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {{
                 add(root1);
@@ -203,6 +205,9 @@ public class ThesaurusConceptServiceTest extends BaseTest {
         leaf1_3.getParentConcepts().add(leaf2_4);
 
         List<ThesaurusConcept> roots_leaf1_1 = thesaurusConceptService.getRootConcepts(leaf1_1);
+        for(ThesaurusConcept root : roots_leaf1_1) {
+            logger.error(root.getIdentifier());
+        }
         Assert.assertEquals(3, roots_leaf1_1.size());
 
         List<ThesaurusConcept> roots_leaf1_3 = thesaurusConceptService.getRootConcepts(leaf1_3);

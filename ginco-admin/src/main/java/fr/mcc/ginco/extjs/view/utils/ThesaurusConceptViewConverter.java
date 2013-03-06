@@ -34,19 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.collections.ListUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -58,6 +45,16 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.collections.ListUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Small class responsible for converting real {@link ThesaurusConcept} object
@@ -108,8 +105,8 @@ public class ThesaurusConceptViewConverter {
 		view.setModified(DateUtil.toString(concept.getModified()));
 		view.setTopconcept(concept.getTopConcept());
 		view.setThesaurusId(concept.getThesaurus().getIdentifier());
-		view.setParentConceptsIdList(getIdsFromConceptList(concept.getParentConcepts()));
-        view.setRootConceptsIdList(getIdsFromConceptList(concept.getRootConcepts()));
+		view.setParentConcepts(getIdsFromConceptList(concept.getParentConcepts()));
+        view.setRootConcepts(getIdsFromConceptList(concept.getRootConcepts()));
         List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			terms.add(new ThesaurusTermView(thesaurusTerm));
@@ -171,11 +168,11 @@ public class ThesaurusConceptViewConverter {
 		thesaurusConcept.setTopConcept(source.getTopconcept());
 
         List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept.getParentConcepts());
-        if(!ListUtils.subtract(oldParentIds, source.getParentConceptsIdList()).isEmpty()) {
+        if(!ListUtils.subtract(oldParentIds, source.getParentConcepts()).isEmpty()) {
             Set<ThesaurusConcept> parents =
                     new HashSet<ThesaurusConcept>(
                         thesaurusConceptService.getThesaurusConceptList(
-                                source.getParentConceptsIdList()));
+                                source.getParentConcepts()));
 
             thesaurusConcept.setParentConcepts(parents);
             thesaurusConcept.setRootConcepts(

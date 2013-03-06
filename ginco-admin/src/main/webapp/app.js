@@ -29,7 +29,9 @@ Ext.application({
     models: [
         'MainTreeModel',
         'ThesaurusModel',
-        'ThesaurusTermModel'
+        'ThesaurusTermModel',
+        'ConceptModel',
+        'SimpleConceptModel'
     ],
     stores: [
         'MainTreeStore',
@@ -42,7 +44,8 @@ Ext.application({
         'ConceptReducedStore',
         'ConceptNoteTypeStore',
         'TermNoteTypeStore',
-        'NoteLanguageStore'
+        'NoteLanguageStore',
+        'SimpleConceptStore'
     ],
     views: [
         'GincoViewPort',

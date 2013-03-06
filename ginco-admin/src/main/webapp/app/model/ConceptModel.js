@@ -21,11 +21,16 @@ Ext.define('GincoApp.model.ConceptModel', {
         {
             name: 'thesaurusId',
             type: 'string'
+        },
+        {
+            name : 'parentConcepts',
+            type : 'array_of_string'
         }
     ],
     associations: [
-                   {type: 'hasMany', model: 'GincoApp.model.ThesaurusTermModel',    name: 'terms'},
-                   {type: 'hasMany', model: 'GincoApp.model.SimpleConceptModel',    name: 'associatedConcepts'}
+                    {type: 'hasMany', model: 'GincoApp.model.ThesaurusTermModel',    name: 'terms'},
+                    {type: 'hasMany', model: 'GincoApp.model.SimpleConceptModel',    name: 'associatedConcepts'},
+                    {type: 'hasMany', model: 'GincoApp.model.SimpleConceptModel',    name: 'rootConcepts'}
    ],
    idProperty : 'identifier',
     
