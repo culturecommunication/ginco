@@ -171,7 +171,7 @@ public class ThesaurusConceptViewConverter {
 			thesaurusConcept.setThesaurus(thesaurus);
 		}
 		thesaurusConcept.setModified(DateUtil.nowDate());
-		thesaurusConcept.setTopConcept(source.getTopconcept());
+        thesaurusConcept.setTopConcept(source.getTopconcept());
 
         List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept.getParentConcepts());
 
@@ -193,9 +193,16 @@ public class ThesaurusConceptViewConverter {
             thesaurusConcept.setRootConcepts(
                     new HashSet<ThesaurusConcept>(
                             thesaurusConceptService.getRootConcepts(thesaurusConcept)));
+
+
         }
         List<String> associatedConceptsIds = source.getAssociatedConcepts();
-        thesaurusConcept = manageAssociativeRelationship(thesaurusConcept,associatedConceptsIds);		
+        thesaurusConcept = manageAssociativeRelationship(thesaurusConcept,associatedConceptsIds);
+
+        if(!thesaurusConcept.getParentConcepts().isEmpty()) {
+            thesaurusConcept.setTopConcept(false);
+        }
+
 		return thesaurusConcept;
 	}
 	

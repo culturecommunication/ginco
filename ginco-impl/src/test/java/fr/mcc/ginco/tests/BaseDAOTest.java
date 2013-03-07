@@ -76,7 +76,7 @@ public abstract class BaseDAOTest extends BaseTest {
 		}
 	}
 
-	@After
+	/*@After
 	public void handleCleanOperation() throws Exception {
 		// init db
 		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
@@ -89,7 +89,7 @@ public abstract class BaseDAOTest extends BaseTest {
 		} finally {
 			connection.close();
 		}
-	}
+	}*/
 
 	public IDataSet getDataset(String datasetPath) throws DataSetException {
 		InputStream is = BaseDAOTest.class.getResourceAsStream(datasetPath);
