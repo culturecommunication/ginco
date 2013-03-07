@@ -34,15 +34,32 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import org.springframework.stereotype.Repository;
-
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("thesaurusArrayDAO")
 public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, String> implements IThesaurusArrayDAO  {
 
 	public ThesaurusArrayDAO() {
 		super(ThesaurusArray.class);
-	}	
+	}
+
+    @Override
+    public List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String thesaurusId) {
+        Criteria criteria = getCurrentSession().createCriteria(
+                ThesaurusArray.class, "ta");
+
+        selectThesaurus(criteria, thesaurusId);
+
+        return criteria.list();
+    }
+
+    private void selectThesaurus(Criteria criteria, String thesaurusId) {
+        criteria.add(Restrictions.eq("ta.thesaurus.identifier", (String) thesaurusId));
+    }
 }

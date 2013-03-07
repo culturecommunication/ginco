@@ -32,29 +32,8 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
+package fr.mcc.ginco.extjs.view.pojo;
 
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.dao.INodeLabelDAO;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
+public class ThesaurusArrayView {
 
-@Repository("nodeLabelDAO")
-public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, String>
-		implements INodeLabelDAO {
-
-	public NodeLabelDAO() {
-		super(NodeLabel.class);
-	}
-
-    @Override
-    public NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId, String languageId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                NodeLabel.class);
-        criteria.add(Restrictions.eq("thesaurusArray.identifier", (String) thesaurusArrayId));
-        criteria.add(Restrictions.eq("language.id", (String) languageId));
-
-        return (NodeLabel) criteria.uniqueResult();
-    }
 }

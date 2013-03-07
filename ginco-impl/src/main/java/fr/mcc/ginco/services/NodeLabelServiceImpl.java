@@ -34,11 +34,13 @@
  */
 package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.dao.INodeLabelDAO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import fr.mcc.ginco.dao.INodeLabelDAO;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @Transactional
 @Service("nodeLabelService")
@@ -48,5 +50,9 @@ public class NodeLabelServiceImpl implements INodeLabelService {
 	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
 
-	
+
+    @Override
+    public NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId, String languageId) {
+        return nodeLabelDAO.getByThesaurusArrayAndLanguage(thesaurusArrayId, languageId);
+    }
 }

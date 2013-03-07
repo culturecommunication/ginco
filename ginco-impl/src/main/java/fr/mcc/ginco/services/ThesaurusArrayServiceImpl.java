@@ -34,13 +34,14 @@
  */
 package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * Implementation of the thesaurus array service contains methods relatives to the
@@ -54,4 +55,13 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
+    @Override
+    public ThesaurusArray getThesaurusArrayById(String id) {
+        return thesaurusArrayDAO.getById(id);
+    }
+
+    @Override
+    public List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId) {
+        return thesaurusArrayDAO.getThesaurusArrayListByThesaurusId(thesaurusId);
+    }
 }

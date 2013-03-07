@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <table name="thesaurus">
+        <column>identifier</column>
+        <column>contributor</column>
+        <column>coverage</column>
+        <column>date</column>
+        <column>description</column>
+        <column>publisher</column>
+        <column>relation</column>
+        <column>rights</column>
+        <column>source</column>
+        <column>subject</column>
+        <column>title</column>
+        <column>created</column>
+        <column>defaulttopconcept</column>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value>test</value>
+            <value>test</value>
+            <value>2013-02-06 15:29:59.66325</value>
+            <value>test</value>
+            <value>test</value>
+            <value>test</value>
+            <value>test</value>
+            <value>test</value>
+            <value>test</value>
+            <value>test</value>
+            <value>2013-02-06 15:29:59.66325</value>
+            <value>false</value>
+        </row>
+    </table>
+    <table name="thesaurus_concept">
+		<column>identifier</column>
+		<column>created</column>
+		<column>modified</column>
+		<column>status</column>
+		<column>notation</column>
+		<column>topconcept</column>
+        <column>thesaurusid</column>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>test</value>
+			<value>test</value>
+			<value>false</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/co2</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>2013-02-04 15:29:59.66325</value>
+			<value>test</value>
+			<value>test</value>
+			<value>true</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+		</row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co2_1</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>test</value>
+            <value>test</value>
+            <value>false</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+        </row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co2_2</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>test</value>
+            <value>test</value>
+            <value>false</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+        </row>
+		<row>
+            <value>http://www.culturecommunication.gouv.fr/co3</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>test</value>
+            <value>test</value>
+            <value>false</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+        </row>
+	</table>
+
+    <table name="thesaurus_array">
+
+    </table>
+</dataset>
+  

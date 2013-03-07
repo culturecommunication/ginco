@@ -36,6 +36,8 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.ThesaurusArray;
 
+import java.util.List;
+
 /**
  * Service used to work with {@link ThesaurusArray} objects, contains basic
  * methods exposed to client part.
@@ -43,6 +45,17 @@ import fr.mcc.ginco.beans.ThesaurusArray;
  * @see fr.mcc.ginco.beans
  */
 public interface IThesaurusArrayService {
+    /**
+     * Get single ThesaurusArray object by its id.
+     * @param id
+     * @return
+     */
+    ThesaurusArray getThesaurusArrayById(String id);
 
-
+    /**
+     * Get list of ThesaurusArray by corresponding Thesaurus.
+     * @param thesaurusId
+     * @return
+     */
+    List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId);
 }

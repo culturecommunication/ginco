@@ -43,5 +43,5 @@ import fr.mcc.ginco.beans.NodeLabel;
  * @see fr.mcc.ginco.beans.NodeLabel
  */
 public interface INodeLabelService {
-    
+    NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId, String languageId);
 }

@@ -36,10 +36,16 @@ package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.ThesaurusArray;
 
+import java.util.List;
+
 /**
  * Data Access Object for thesaurus array
  */
 public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> {
-	
-	
+    /**
+     * Get all thesaurusArrays from thesaurus with given id.
+     * @param thesaurusId
+     * @return
+     */
+    List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String thesaurusId);
 }
