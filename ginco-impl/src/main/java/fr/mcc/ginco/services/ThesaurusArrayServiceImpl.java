@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,5 +64,10 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
     @Override
     public List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId) {
         return thesaurusArrayDAO.getThesaurusArrayListByThesaurusId(thesaurusId);
+    }
+
+    @Override
+    public ThesaurusArray updateThesaurusConcept(ThesaurusArray object, ThesaurusConcept parentConcept, List<ThesaurusConcept> terms) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
