@@ -147,7 +147,7 @@ public class ThesaurusNoteRestService {
 			total = noteService.getConceptNoteCount(conceptId);
 		} else if (termId != null) {
 			notes = noteService.getTermNotePaginatedList(termId, startIndex, limit);
-			total = noteService.getTermNoteCount(conceptId);
+			total = noteService.getTermNoteCount(termId);
 		} else {
 			throw new BusinessException("You need to specify an id for the concept or the term", "conceptid-or-termid-needed");
 		}
