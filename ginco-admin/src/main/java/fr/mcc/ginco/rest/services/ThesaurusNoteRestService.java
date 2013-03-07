@@ -134,20 +134,25 @@ public class ThesaurusNoteRestService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> getNotes(
 			@QueryParam("conceptId") String conceptId,
-			@QueryParam("termId") String termId) throws BusinessException {
+			@QueryParam("termId") String termId,
+			@QueryParam("start") Integer startIndex,
+		     @QueryParam("limit") Integer limit) throws BusinessException {
 		
-		logger.info("Getting Notes for a concept or a term with following parameters : " + "conceptId " +conceptId + " and termId " + termId);
+		logger.info("Getting Notes for a concept or a term with following parameters : " + "conceptId " +conceptId + " and termId " + termId + " and startIndex " + startIndex + " with a limit of " + limit);
 		
-		List<Note> notes = new ArrayList<Note>(); 
+		List<Note> notes = new ArrayList<Note>();
+		Long total;
 		if (conceptId != null) {
-			notes = noteService.getConceptNoteList(conceptId);
+			notes = noteService.getConceptNotePaginatedList(conceptId, startIndex, limit);
+			total = noteService.getConceptNoteCount(conceptId);
 		} else if (termId != null) {
-			notes = noteService.getTermNoteList(termId);
+			notes = noteService.getTermNotePaginatedList(termId, startIndex, limit);
+			total = noteService.getTermNoteCount(conceptId);
 		} else {
 			throw new BusinessException("You need to specify an id for the concept or the term", "conceptid-or-termid-needed");
 		}
 		ExtJsonFormLoadData<List<ThesaurusNoteView>> result = new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(notes));
-		result.setTotal((long)notes.size());
+		result.setTotal(total);
 		return result;
 	}
 	

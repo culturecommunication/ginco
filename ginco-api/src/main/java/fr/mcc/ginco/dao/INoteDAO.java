@@ -40,13 +40,25 @@ import fr.mcc.ginco.beans.Note;
 
 public interface INoteDAO extends IGenericDAO<Note, String> {
 	/**
-	 * @return List<Note> List of notes available for a concept
+	 * @return List<Note> List of paginated notes for a concept
 	 */
-	List<Note> findConceptNotes(String conceptId);
+	List<Note> findConceptPaginatedNotes(String conceptId, Integer startIndex, Integer limit);
 	
 	/**
-	 * @return List<Note> List of notes available for a term
+	 * @return List<Note> List of paginated notes for a term
 	 */
-	List<Note> findTermNotes(String termId);
+	List<Note> findTermPaginatedNotes(String termId, Integer startIndex, Integer limit);
+
+	/**
+	 * Count the number of notes for a concept 
+	 * @return
+	 */
+	Long getConceptNoteCount(String conceptId);
+	
+	/**
+	 * Count the number of notes for a term 
+	 * @return
+	 */
+	Long getTermNoteCount(String termId);
 
 }

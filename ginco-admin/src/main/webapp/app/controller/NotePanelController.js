@@ -79,7 +79,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 				thesaurusData : theGrid.up('termPanel').thesaurusData,
 				listeners: {
 					saveNoteButton: function (theButton){
-						fn: me.afterSavingNewNote(theGrid, theButton);
+						me.afterSavingNewNote(theGrid, theButton);
 					}
 				}
 					});

@@ -47,16 +47,16 @@ import fr.mcc.ginco.beans.Note;
 public interface INoteService {
 	
 	/**
-     * Get list of all notes available for a concept.
+     * Get list of paginated notes available for a concept.
      * @return
      */
-    List<Note> getConceptNoteList(String conceptId);
+    List<Note> getConceptNotePaginatedList(String conceptId, Integer startIndex, Integer limit);
     
 	/**
-     * Get list of all notes available for a term.
+     * Get list of paginated notes available for a term.
      * @return
      */
-    List<Note> getTermNoteList(String termId);
+    List<Note> getTermNotePaginatedList(String termId, Integer startIndex, Integer limit);
 
 	/**
 	 * Get a note by id
@@ -79,4 +79,18 @@ public interface INoteService {
 	 * @return the delete note
 	 */
 	Note deleteNote(Note note);
+
+	/**
+	 * Count the number of notes for a concept
+	 * @param conceptId
+	 * @return
+	 */
+	Long getConceptNoteCount(String conceptId);
+	
+	/**
+	 * Count the number of notes for a term
+	 * @param conceptId
+	 * @return
+	 */
+	Long getTermNoteCount(String termId);
 }
