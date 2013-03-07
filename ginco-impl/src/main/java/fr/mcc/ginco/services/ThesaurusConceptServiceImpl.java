@@ -279,6 +279,16 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return thesaurusConceptDAO.getAssociatedConcepts(concept);
 	}
 	
+	@Override
+	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object) throws BusinessException {
+		List<ThesaurusTerm> terms = thesaurusTermDAO.findTermsByConceptId(object.getIdentifier());
+		for (ThesaurusTerm term:terms) {
+			term.setConcept(null);
+			thesaurusTermDAO.update(term);
+		}
+        return thesaurusConceptDAO.delete(object);        
+    }
+	
 	private void updateConceptTerms(ThesaurusConcept concept,
 			List<ThesaurusTerm> terms) {
 		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();

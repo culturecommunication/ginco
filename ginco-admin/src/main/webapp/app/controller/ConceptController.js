@@ -18,6 +18,11 @@ Ext.define('GincoApp.controller.ConceptController', {
 	xProblemDeleteMsg : 'Unable to delete this concept!',
 	xErrorDoubleRecord : 'This record has already been selected!',
 	xProblemLoadMsg : 'Unable to load the concept',
+	xDeleteNotAvailableMsgTitle: 'Concept deletion not available',
+	xDeleteNotAvailableParentMsgLabel: 'Please remove the parents relationships',
+	xDeleteNotAvailableAssociationMsgLabel: 'Please remove the associative relationships',
+	xDeleteNotAvailableParentAssociationMsgLabel: 'Please remove the parent and associative relationships',
+	
 	
 	onConceptFormRender : function(theForm){
         var me = this;
@@ -26,6 +31,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var conceptId = thePanel.conceptId;
 		var model = this.getConceptModelModel();
 		var addAssociationBtn = thePanel.down('#addAssociativeRelationship');
+		var deleteConceptBtn = thePanel.down('#deleteConcept');
 		if (conceptId!='')
 		{
 			theForm.getEl().mask("Chargement");
@@ -49,6 +55,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 				}
 			});
 			addAssociationBtn.setDisabled(false);
+			deleteConceptBtn.setDisabled(false);
 		} else {
 			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 			model = Ext.create('GincoApp.model.ConceptModel');
@@ -321,6 +328,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var addAssociationBtn = aForm.down('#addAssociativeRelationship');
 		addAssociationBtn.setDisabled(false);
 		
+		var deleteConceptBtn = aForm.down('#deleteConcept');
+		deleteConceptBtn.setDisabled(false);
 	},
 	
 	saveTermFromConceptBtn : function(theButton){
@@ -330,6 +339,72 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var updatedModel = theForm.getForm().getRecord();
 		theWin.store.add(updatedModel);
 		theWin.close();
+	},
+	
+	deleteConcept: function(theButton){
+		var me = this;
+		var theForm = theButton.up('form');
+		var globalTabs = theForm.up('topTabs');
+		var thePanel = theForm.up('conceptPanel');
+		var updatedModel = theForm.getForm().getRecord();
+        var parentGrid = theForm.down('#gridPanelParentConcepts');
+        var parentGridStore = parentGrid.getStore();
+        var parentData = parentGridStore.getRange();
+        
+        var associatedGrid = theForm.down('#gridPanelAssociatedConcepts');
+        var associatedGridStore = associatedGrid.getStore();
+        var associatedData = associatedGridStore.getRange();
+        if (associatedData.length>0 || parentData.length>0) {
+        	if (parentData.length>0 && associatedData.length>0) {
+	 			this.unableTodeletePopup(me.xDeleteNotAvailableMsgTitle, me.xDeleteNotAvailableParentAssociationMsgLabel);
+        	}
+        	else if (parentData.length>0) {
+	 			this.unableTodeletePopup(me.xDeleteNotAvailableMsgTitle, me.xDeleteNotAvailableParentMsgLabel);
+	 		}
+        	else if (associatedData.length>0) {
+	 			this.unableTodeletePopup(me.xDeleteNotAvailableMsgTitle, me.xDeleteNotAvailableAssociationMsgLabel);
+	 		}
+        } else {
+        	Ext.MessageBox.show({
+    			title : me.xDeleteMsgTitle,
+    			msg : me.xDeleteMsgLabel,
+    			buttons : Ext.MessageBox.YESNOCANCEL,
+    			fn : function(buttonId) {
+    				switch (buttonId) {
+    				case 'no':
+    					break; // manually removes tab from tab panel
+    				case 'yes':
+    					updatedModel.destroy({
+    						success : function(record, operation) {
+    							Thesaurus.ext.utils.msg(me.xSucessLabel,
+    									me.xSucessRemovedMsg);
+    							me.application.fireEvent('conceptdeleted',thePanel.thesaurusData);
+    							globalTabs.remove(thePanel);
+    						},
+    						failure : function(record, operation) {
+    							Thesaurus.ext.utils.msg(me.xProblemLabel,
+    									operation.error);
+    						}
+    					});
+    					break;
+    				case 'cancel':
+    					break; // leave blank if no action required on
+    				// cancel
+    				}
+    			},
+    			scope : this
+    		});
+        }
+       
+	},	
+	
+	unableTodeletePopup: function(theTitle, theLabel) {
+		Ext.MessageBox.show({
+			title : theTitle,
+			msg : theLabel,
+			buttons : Ext.MessageBox.OK,
+			scope : this
+		});
 	},
 	
 	saveConcept : function(theButton){
@@ -397,6 +472,9 @@ Ext.define('GincoApp.controller.ConceptController', {
  			'conceptPanel #saveConcept' : {
  				click : this.saveConcept
  			},
+ 			'conceptPanel #deleteConcept' : {
+ 				click : this.deleteConcept
+ 			}, 			
             'conceptPanel  button[cls=addParent]' : {
                 click : this.addParent
             },

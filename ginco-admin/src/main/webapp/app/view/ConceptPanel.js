@@ -108,7 +108,7 @@ Ext
 														xtype : 'button',
 														text : me.xDelete,
 														disabled : true,
-														itemId : 'delete',
+														itemId : 'deleteConcept',
 														cls : 'delete',
 														iconCls : 'icon-delete'
 													} ]
