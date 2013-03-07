@@ -52,6 +52,11 @@ public class NodeLabelServiceImpl implements INodeLabelService {
 
 
     @Override
+    public NodeLabel getById(String id) {
+        return nodeLabelDAO.getById(id);
+    }
+
+    @Override
     public NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId, String languageId) {
         return nodeLabelDAO.getByThesaurusArrayAndLanguage(thesaurusArrayId, languageId);
     }

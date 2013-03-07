@@ -34,18 +34,48 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
+import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @Component("thesaurusArrayViewConverter")
 public class ThesaurusArrayViewConverter {
-    public ThesaurusArrayView convert(ThesaurusArray thesaurusArray, NodeLabel label) {
+
+    @Inject
+    @Named("thesaurusArrayService")
+    private IThesaurusArrayService thesaurusArrayService;
+
+    @Inject
+    @Named("thesaurusConceptService")
+    private IThesaurusConceptService thesaurusConceptService;
+
+    public ThesaurusArrayView convert(ThesaurusArray thesaurusArray) {
         return null;
     }
 
-    public ThesaurusArray convert(ThesaurusArrayView thesaurusArrayView) {
-        return null;
+    public ThesaurusArray convert(ThesaurusArrayView source) {
+        ThesaurusArray hibernateRes;
+        if(StringUtils.isEmpty(source.getIdentifier())) {
+            hibernateRes = new ThesaurusArray();
+        } else {
+            hibernateRes = thesaurusArrayService.getThesaurusArrayById(source.getIdentifier());
+        }
+
+        hibernateRes.setNotation(source.getNotation());
+        hibernateRes.setOrdered(source.getOrdered());
+
+        if(source.getSuperOrdinateConcept() != null) {
+            hibernateRes.setSuperOrdinateConcept(
+                    thesaurusConceptService.getThesaurusConceptById(
+                            source.getSuperOrdinateConcept().getIdentifier()));
+        }
+
+        return hibernateRes;
     }
 }

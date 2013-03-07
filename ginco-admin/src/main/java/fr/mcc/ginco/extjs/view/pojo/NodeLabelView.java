@@ -40,6 +40,7 @@ public class NodeLabelView {
     private String modified;
     private String created;
     private String language;
+    private String thesaurusArrayId;
 
     public String getIdentifier() {
         return identifier;
@@ -79,5 +80,13 @@ public class NodeLabelView {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public String getThesaurusArrayId() {
+        return thesaurusArrayId;
+    }
+
+    public void setThesaurusArrayId(String thesaurusArrayId) {
+        this.thesaurusArrayId = thesaurusArrayId;
     }
 }

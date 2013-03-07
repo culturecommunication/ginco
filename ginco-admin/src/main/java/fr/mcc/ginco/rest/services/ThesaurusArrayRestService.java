@@ -41,7 +41,6 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import org.apache.cxf.jaxrs.ext.Nullable;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -90,14 +89,8 @@ public class ThesaurusArrayRestService {
     @GET
     @Path("/getArray")
     @Produces({ MediaType.APPLICATION_JSON })
-    public ThesaurusArrayView getThesaurusArrayById(@QueryParam("id") String thesaurusArrayId, @Nullable @QueryParam("lang") String language) throws BusinessException {
-
-        if(language == null || language.isEmpty()) {
-           language = "fra";
-        }
-
+    public ThesaurusArrayView getThesaurusArrayById(@QueryParam("id") String thesaurusArrayId) throws BusinessException {
         return thesaurusArrayViewConverter.convert(
-                        thesaurusArrayService.getThesaurusArrayById(thesaurusArrayId),
-                        nodeLabelService.getByThesaurusArrayAndLanguage(thesaurusArrayId, language));
+                        thesaurusArrayService.getThesaurusArrayById(thesaurusArrayId));
     }
 }
