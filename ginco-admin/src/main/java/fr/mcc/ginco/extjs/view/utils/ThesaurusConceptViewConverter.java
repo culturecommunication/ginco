@@ -219,7 +219,7 @@ public class ThesaurusConceptViewConverter {
 			relationshipId.setConcept1(concept.getIdentifier());
 			relationshipId.setConcept2(associatedConceptsId);
 			relationship.setIdentifier(relationshipId);
-			relationship.setConceptLeft(thesaurusConceptService.getThesaurusConceptById(concept.getIdentifier()));
+			relationship.setConceptLeft(concept);
 			relationship.setConceptRight(thesaurusConceptService.getThesaurusConceptById(associatedConceptsId));
 			relationship.setRelationshipRole(associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole());
 			relations.add(relationship);
