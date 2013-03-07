@@ -61,6 +61,7 @@ Ext.define(
                                 xtype : 'button',
                                 text : me.xSelect,
                                 formBind : true,
+                                disabled : true,
                                 itemId : 'selectButton',
                                 iconCls : 'icon-save',
                                 handler : function(theButton) {
