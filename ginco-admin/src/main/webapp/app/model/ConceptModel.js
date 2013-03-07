@@ -45,7 +45,7 @@ Ext.define('GincoApp.model.ConceptModel', {
 			create : 'services/ui/thesaurusconceptservice/updateConcept',
 			update : 'services/ui/thesaurusconceptservice/updateConcept',
 			read :   'services/ui/thesaurusconceptservice/getConcept',
-			destroy: 'services/ui/thesaurusconceptservice/destroyTerm'
+			destroy: 'services/ui/thesaurusconceptservice/destroyConcept'
 		},
 		type : 'ajax',
 		reader : {

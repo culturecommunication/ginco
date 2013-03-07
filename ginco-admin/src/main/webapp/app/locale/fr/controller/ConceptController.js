@@ -9,5 +9,9 @@ Ext.define('GincoApp.locale.fr.controller.ConceptController',
 			xProblemLabel : 'Erreur !',
 			xProblemSaveMsg : 'Impossible de sauvegarder le concept !',
 			xProblemDeleteMsg : 'Impossible de supprimer le concept !',
-			xErrorDoubleRecord : 'Ce terme a déjà été sélectionné !'
+			xErrorDoubleRecord : 'Ce terme a déjà été sélectionné !',
+			xDeleteNotAvailableMsgTitle: 'La suppression de ce concept n\'est pas disponible',
+			xDeleteNotAvailableParentMsgLabel: 'Le concept a des concepts parents. Vous devez supprimer ces relations avant de supprimer le concept.',
+			xDeleteNotAvailableAssociationMsgLabel: 'Le concept a des relations associatives avec d\'autres concepts. Vous devez les supprimer avant de supprimer le concept.',
+			xDeleteNotAvailableParentAssociationMsgLabel : 'Le concept a des concepts parents et des relations associatives avec d\'autres concepts. Vous devez les supprimer avant de supprimer le concept.'
 		});

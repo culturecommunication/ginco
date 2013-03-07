@@ -99,15 +99,13 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException {
         return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
     }
-
-    public ThesaurusTerm createThesaurusTerm(ThesaurusTerm object) {
-        return thesaurusTermDAO.update(object);
-    }
-
+    
+    @Override
     public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) {
         return thesaurusTermDAO.update(object);
     }
 
+    @Override
     public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException {
         if (object.getConcept() == null ) {
             return thesaurusTermDAO.delete(object);

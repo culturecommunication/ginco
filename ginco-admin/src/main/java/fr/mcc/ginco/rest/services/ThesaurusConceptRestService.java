@@ -40,6 +40,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
@@ -226,4 +227,25 @@ public class ThesaurusConceptRestService {
         }
         return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(reducedConcepts);
     }
+    
+    /**
+	 * Public method used to delete
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} -
+     * thesaurus term JSON object send by extjs
+     *
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} deleted object
+	 *         in JSON format or {@code null} if not found
+	 * @throws BusinessException 
+	 */
+	@POST
+	@Path("/destroyConcept")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) throws BusinessException {
+		ThesaurusConcept object = thesaurusConceptViewConverter.convert(thesaurusViewJAXBElement);
+	
+		if (object != null) {
+			thesaurusConceptService.destroyThesaurusConcept(object);
+		}
+	}
+    
 }
