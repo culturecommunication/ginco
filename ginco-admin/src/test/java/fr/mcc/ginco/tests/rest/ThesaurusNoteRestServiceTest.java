@@ -134,9 +134,9 @@ public class ThesaurusNoteRestServiceTest {
 		noteViews.add(fakeThesaurusNoteView1);
 		noteViews.add(fakeThesaurusNoteView2);
 		
-		Mockito.when(noteService.getConceptNoteList(Mockito.anyString())).thenReturn(notes);
+		Mockito.when(noteService.getConceptNotePaginatedList(Mockito.anyString(),Mockito.anyInt(),Mockito.anyInt())).thenReturn(notes);
 		Mockito.when(thesaurusNoteViewConverter.convert(notes)).thenReturn(noteViews);
-		ExtJsonFormLoadData<List<ThesaurusNoteView>> actualResponse = thesaurusNoteRestService.getNotes("", "");
+		ExtJsonFormLoadData<List<ThesaurusNoteView>> actualResponse = thesaurusNoteRestService.getNotes("", "", 0, 10);
 		Assert.assertEquals(noteViews.size(), actualResponse.getData().size());
 		Assert.assertEquals(noteViews.get(0).getIdentifier(), actualResponse.getData().get(0).getIdentifier());
 	}
