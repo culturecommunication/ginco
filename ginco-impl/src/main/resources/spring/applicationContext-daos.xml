@@ -48,8 +48,9 @@
                 <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
                 <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
                 <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop> 
-                <prop key="org.hibernate.envers.revision_listener">fr.mcc.ginco.audit.GincoRevListener</prop>   
-                <prop key="org.hibernate.envers.revision_on_collection_change">false</prop>
+                <prop key="org.hibernate.envers.revision_listener">fr.mcc.ginco.audit.GincoRevListener</prop>  
+                <!-- Reset to tru due to this : https://hibernate.onjira.com/browse/HHH-6542?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel -->
+                <prop key="org.hibernate.envers.revision_on_collection_change">true</prop>
             </props>
         </property>
 	</bean>
