@@ -53,6 +53,7 @@ Ext
                     xParentConcepts: 'Parent Concepts',
                     xRemoveParent: 'Remove connection to parent Concept',
                     xAssociationRemove: 'Remove association',
+                    xChildrenConcepts: 'Children Concepts',
 
 					initComponent : function() {
 						var me = this;
@@ -65,6 +66,9 @@ Ext
                             .create('GincoApp.store.SimpleConceptStore');
                         me.parentConceptStore = Ext
                             .create('GincoApp.store.SimpleConceptStore');
+                        me.childrenConceptStore = Ext
+                            .create('GincoApp.store.SimpleConceptStore');
+                        me.childrenConceptStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
 
 						Ext
 								.applyIf(
@@ -265,6 +269,24 @@ Ext
                                                                          }
                                                                     }]
                                                                 }		
+                                                            ]
+                                                        },
+                                                        {
+                                                            xtype : 'gridpanel',
+                                                            title : me.xChildrenConcepts,
+                                                            store : me.childrenConceptStore,
+                                                            id    : 'gridPanelChildrenConcepts',
+
+                                                            columns : [
+                                                                {
+                                                                    dataIndex : 'identifier',
+                                                                    text : me.xIdentifierLabel
+                                                                },
+                                                                {
+                                                                    dataIndex : 'label',
+                                                                    text : me.xLexicalValueLabel,
+                                                                    flex : 1
+                                                                }
                                                             ]
                                                         },
                                                         {

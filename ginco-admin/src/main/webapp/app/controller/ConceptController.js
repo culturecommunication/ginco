@@ -304,6 +304,13 @@ Ext.define('GincoApp.controller.ConceptController', {
             conceptIds: aModel.raw.parentConcepts
         };
         parentConceptsGridStore.load();
+
+        var childrenConceptsGrid  = aForm.down('#gridPanelChildrenConcepts');
+        var childrenConceptsGridStore = childrenConceptsGrid.getStore();
+        childrenConceptsGridStore.getProxy().extraParams = {
+            conceptId: aModel.data.identifier
+        };
+        childrenConceptsGridStore.load();
 		
 		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
