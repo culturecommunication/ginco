@@ -25,6 +25,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 		var conceptId = thePanel.conceptId;
 		var model = this.getConceptModelModel();
+		var addAssociationBtn = thePanel.down('#addAssociativeRelationship');
 		if (conceptId!='')
 		{
 			theForm.getEl().mask("Chargement");
@@ -47,6 +48,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 					globalTabs.remove(thePanel);
 				}
 			});
+			addAssociationBtn.setDisabled(false);
 		} else {
 			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 			model = Ext.create('GincoApp.model.ConceptModel');
@@ -64,6 +66,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 				}
 			}
 			theForm.loadRecord(model);
+			addAssociationBtn.setDisabled(true);
 		}
 	},
 	
@@ -314,6 +317,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
+		
+		var addAssociationBtn = aForm.down('#addAssociativeRelationship');
+		addAssociationBtn.setDisabled(false);
+		
 	},
 	
 	saveTermFromConceptBtn : function(theButton){
@@ -370,15 +377,16 @@ Ext.define('GincoApp.controller.ConceptController', {
 				var resultRecord = operation.getResultSet().records[0];
 				me.loadData(theForm, resultRecord);
 				theForm.getEl().unmask();
-				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
-				
+				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);				
 				me.application.fireEvent('conceptupdated', thePanel.thesaurusData);
+				
 			},
 			failure : function(record, operation) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
 				theForm.getEl().unmask();
 			}
 		});
+		
 	},
 	
     init:function(){    	  	 
