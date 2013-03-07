@@ -31,6 +31,10 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		win.show();
 	},
 	
+	addConceptToArray : function(theButton){
+		
+	},
+	
 	selectConceptAsParent : function(selectedRow, theForm){
 		console.log(selectedRow);
 		//TODO: don't update the value of the field but the model loaded by onConceptArrayFormRender
@@ -47,6 +51,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
  			},
             'conceptArrayPanel  #selectParentConcept' : {
                 click : this.selectParentConcept
+            },
+            'conceptArrayPanel  #addConceptToArray' : {
+                click : this.addConceptToArray
             }
          });
 
