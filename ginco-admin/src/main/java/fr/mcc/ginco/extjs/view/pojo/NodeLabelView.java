@@ -34,15 +34,12 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.util.List;
-
-public class ThesaurusArrayView {
+public class NodeLabelView {
     private String identifier;
-    private Boolean ordered;
-    private String notation;
-    private ThesaurusConceptReducedView superOrdinateConcept;
-    private List<ThesaurusConceptReducedView> concepts;
-    private List<NodeLabelView> nodeLabelViewList;
+    private String lexicalValue;
+    private String modified;
+    private String created;
+    private String language;
 
     public String getIdentifier() {
         return identifier;
@@ -52,43 +49,35 @@ public class ThesaurusArrayView {
         this.identifier = identifier;
     }
 
-    public Boolean getOrdered() {
-        return ordered;
+    public String getLexicalValue() {
+        return lexicalValue;
     }
 
-    public void setOrdered(Boolean ordered) {
-        this.ordered = ordered;
+    public void setLexicalValue(String lexicalValue) {
+        this.lexicalValue = lexicalValue;
     }
 
-    public String getNotation() {
-        return notation;
+    public String getModified() {
+        return modified;
     }
 
-    public void setNotation(String notation) {
-        this.notation = notation;
+    public void setModified(String modified) {
+        this.modified = modified;
     }
 
-    public ThesaurusConceptReducedView getSuperOrdinateConcept() {
-        return superOrdinateConcept;
+    public String getCreated() {
+        return created;
     }
 
-    public void setSuperOrdinateConcept(ThesaurusConceptReducedView superOrdinateConcept) {
-        this.superOrdinateConcept = superOrdinateConcept;
+    public void setCreated(String created) {
+        this.created = created;
     }
 
-    public List<ThesaurusConceptReducedView> getConcepts() {
-        return concepts;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setConcepts(List<ThesaurusConceptReducedView> concepts) {
-        this.concepts = concepts;
-    }
-
-    public List<NodeLabelView> getNodeLabelViewList() {
-        return nodeLabelViewList;
-    }
-
-    public void setNodeLabelViewList(List<NodeLabelView> nodeLabelViewList) {
-        this.nodeLabelViewList = nodeLabelViewList;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }
