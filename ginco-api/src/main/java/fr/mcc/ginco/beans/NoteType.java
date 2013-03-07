@@ -44,10 +44,6 @@ public class NoteType  implements Serializable{
     private boolean isTerm;
     private boolean isConcept;
     
-    public String getId() {
-    	return code;
-    }
-    
 	public String getCode() {
 		return code;
 	}

@@ -16,13 +16,13 @@ Ext.define('GincoApp.store.ConceptNoteTypeStore', {
                 url: 'services/ui/thesaurusnoteservice/getConceptNoteTypes',
                 reader: {
                     type: 'json',
-                    idProperty: 'id',
+                    idProperty: 'code',
                     root: 'data'
                 }
             },
             fields: [
                 {
-                    name: 'id',
+                    name: 'code',
                     type: 'string'
                 },
                 {

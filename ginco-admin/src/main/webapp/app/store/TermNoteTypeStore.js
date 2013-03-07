@@ -16,13 +16,13 @@ Ext.define('GincoApp.store.TermNoteTypeStore', {
                 url: 'services/ui/thesaurusnoteservice/getTermNoteTypes',
                 reader: {
                     type: 'json',
-                    idProperty: 'id',
+                    idProperty: 'code',
                     root: 'data'
                 }
             },
             fields: [
                 {
-                    name: 'id',
+                    name: 'code',
                     type: 'string'
                 },
                 {

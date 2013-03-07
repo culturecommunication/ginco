@@ -110,7 +110,7 @@ Ext
 										                        	fieldLabel: me.xTypeLabel,
 										                        	editable : false,
 										                        	displayField : 'label',
-										                        	valueField : 'id',
+										                        	valueField : 'code',
 										                        	forceSelection : true,
 										                        	store :  me.storeNoteTypes,
 										                        	allowBlank : false

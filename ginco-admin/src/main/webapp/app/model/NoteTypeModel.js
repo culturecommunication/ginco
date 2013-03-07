@@ -3,7 +3,7 @@ Ext.define('GincoApp.model.NoteTypeModel', {
 
     fields: [
              	{
-                    name: 'id',
+                    name: 'code',
                     type: 'string'
                 },
                 {
@@ -19,7 +19,7 @@ Ext.define('GincoApp.model.NoteTypeModel', {
                     type: 'boolean'
                 }
     ],
-    idProperty : 'id',
+    idProperty : 'code',
     
     proxy : {
 		api : {
