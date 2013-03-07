@@ -36,6 +36,8 @@ package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -54,15 +56,47 @@ public class NoteDAO extends GenericHibernateDAO<Note, String>
 	 * @see fr.mcc.ginco.dao.INoteDAO#findConceptNotes(java.lang.String)
 	 */
 	@Override
-	public List<Note> findConceptNotes(String conceptId) {
-		return getCurrentSession().createCriteria(Note.class).add(Restrictions.eq("concept.identifier",conceptId)).list();
+	public List<Note> findConceptPaginatedNotes(String conceptId, Integer startIndex, Integer limit) {
+		return getCurrentSession().createCriteria(Note.class)
+				.setMaxResults(limit)
+				.add(Restrictions.eq("concept.identifier",conceptId))
+				.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"))
+				.list();
 	}
 
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.INoteDAO#findTermNotes(java.lang.String)
 	 */
 	@Override
-	public List<Note> findTermNotes(String termId) {
-		return getCurrentSession().createCriteria(Note.class).add(Restrictions.eq("term.identifier",termId)).list();
+	public List<Note> findTermPaginatedNotes(String termId, Integer startIndex, Integer limit) {
+		return getCurrentSession().createCriteria(Note.class)
+				.setMaxResults(limit)
+				.add(Restrictions.eq("term.identifier",termId))
+				.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"))
+				.list();
 		}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.INoteDAO#getConceptNoteCount(java.lang.String)
+	 */
+	@Override
+	public Long getConceptNoteCount(String conceptId) {
+		return (Long) getCurrentSession()
+				.createCriteria(Note.class)
+				.add(Restrictions.eq("concept.identifier",conceptId))
+				.setProjection(Projections.rowCount())
+				.list().get(0);
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.INoteDAO#getTermNoteCount(java.lang.String)
+	 */
+	@Override
+	public Long getTermNoteCount(String termId) {
+		return (Long) getCurrentSession()
+				.createCriteria(Note.class)
+				.add(Restrictions.eq("term.identifier",termId))
+				.setProjection(Projections.rowCount())
+				.list().get(0);
+	}
 }

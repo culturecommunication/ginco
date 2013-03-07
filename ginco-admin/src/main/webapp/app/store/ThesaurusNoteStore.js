@@ -14,6 +14,7 @@ Ext.define('GincoApp.store.ThesaurusNoteStore', {
         me.callParent([Ext.apply({
             //TODO : keep autoload false ?
         	autoLoad: false,
+        	pageSize: 10,
             alias: 'store.notestore',
             model : 'GincoApp.model.ThesaurusNoteModel',
             proxy: {

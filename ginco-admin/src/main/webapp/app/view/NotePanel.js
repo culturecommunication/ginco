@@ -68,47 +68,34 @@ Ext.define('GincoApp.view.NotePanel', {
 									xtype : 'button',
 									itemId : 'newNoteBtn',
 									text : me.xAddNote
-								} ]
+								},{
+	            			        xtype: 'pagingtoolbar',
+	            			        store :  me.noteConceptStore,
+	            			        pageSize: 10,
+	            			        displayInfo: true
+	            			    } ]
 							} ],
-
+							
 							columns : [
-									{
-										dataIndex : 'identifier',
-										text : me.xIdentifierLabel,
-										hidden: true
-									},
-									{
-										dataIndex : 'lexicalValue',
-										text : me.xLexicalValueLabel,
-										flex : 1
-									},
-									{
-										dataIndex : 'language',
-										text : me.xLanguageLabel
-									},
-									{
-										dataIndex : 'type',
-										text : me.xTypeLabel
-									},
-									{
-										dataIndex : 'created',
-										//hidden: true,
-										text : me.xCreatedDateLabel
-									},
-									{
-										dataIndex : 'modified',
-										//hidden: true,
-										text : me.xModifiedDateLabel
-									},
-									{
-										xtype : 'actioncolumn',
-										itemId : 'noteActionColumn',
+									{ dataIndex : 'identifier', text : me.xIdentifierLabel, hidden: true },
+									{ dataIndex : 'lexicalValue', text : me.xLexicalValueLabel, flex : 1},
+									{ dataIndex : 'language', text : me.xLanguageLabel },
+									{ dataIndex : 'type', text : me.xTypeLabel },
+									{ dataIndex : 'created', /*hidden: true,*/ text : me.xCreatedDateLabel },
+									{ dataIndex : 'modified', /*hidden: true,*/ text : me.xModifiedDateLabel },
+									{ xtype : 'actioncolumn', itemId : 'noteActionColumn',
 										items : [ {
 											icon : 'images/detach.png',
 											tooltip : me.xDetach
 										} ]
 									}
-                            ]
+                            ]/*,
+            				dockedItems: [{
+            			        xtype: 'pagingtoolbar',
+            			        store :  me.noteConceptStore,
+            			        dock: 'bottom',
+            			        displayInfo: true
+            			    }]*/
 						}
                     ]
                 }

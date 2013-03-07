@@ -57,16 +57,16 @@ public class NoteServiceImpl implements INoteService {
 	 * @see fr.mcc.ginco.services.INoteService#getConceptNoteList(java.lang.String)
 	 */
 	@Override
-	public List<Note> getConceptNoteList(String conceptId) {
-		return noteDAO.findConceptNotes(conceptId);
+	public List<Note> getConceptNotePaginatedList(String conceptId, Integer startIndex, Integer limit) {
+		return noteDAO.findConceptPaginatedNotes(conceptId, startIndex, limit);
 	}
 
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#getTermNoteList(java.lang.String)
 	 */
 	@Override
-	public List<Note> getTermNoteList(String termId) {
-		return noteDAO.findTermNotes(termId);
+	public List<Note> getTermNotePaginatedList(String termId, Integer startIndex, Integer limit) {
+		return noteDAO.findTermPaginatedNotes(termId, startIndex, limit);
 	}
 	
 	/* (non-Javadoc)
@@ -91,6 +91,22 @@ public class NoteServiceImpl implements INoteService {
 	@Override
 	public Note deleteNote(Note note) {
 		return noteDAO.delete(note);
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteService#getConceptNoteCount(java.lang.String)
+	 */
+	@Override
+	public Long getConceptNoteCount(String conceptId) {
+		return noteDAO.getConceptNoteCount(conceptId);
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteService#getTermNoteCount(java.lang.String)
+	 */
+	@Override
+	public Long getTermNoteCount(String termId) {
+		return noteDAO.getTermNoteCount(termId);
 	}
 
 }
