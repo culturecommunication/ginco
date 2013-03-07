@@ -5,11 +5,19 @@ Ext.define(
         alias: 'widget.selectConceptWin',
         localized: true,
 
+        requires: [
+            'Ext.grid.PagingScroller'
+        ],
+
         config: {
             thesaurusData : null,
             conceptId : null,
             searchOrphans : null,
             showTree : false
+        },
+
+        viewConfig : {
+            style : { overflow: 'auto', overflowX: 'hidden' }
         },
 
         /*Fields prompting values*/
@@ -32,6 +40,7 @@ Ext.define(
                 thesaurusId: me.thesaurusData.id,
                 searchOrphans: me.searchOrphans
             };
+
             me.conceptReducedStore.load();
             me.addEvents('selectBtn');
 
@@ -42,19 +51,15 @@ Ext.define(
                     items : [ {
                         xtype : 'gridpanel',
                         title : me.xSelectTermWinTitle,
-                        autoScroll:true,
-                        flex:1,
+                        autoScroll : true,
+                        height : 300,
+                        flex : 1,
                         store : me.conceptReducedStore,
                         columns : [
                             {dataIndex : 'identifier', text : me.xIdentifierColumnLabel},
                             {dataIndex : 'label', text : me.xLexicalValueColumnLabel, flex: 1}
                         ],
-                        dockedItems: [{
-                            xtype: 'pagingtoolbar',
-                            store :  me.conceptReducedStore,
-                            dock: 'bottom',
-                            displayInfo: true
-                        }, {
+                        dockedItems: [ {
                             xtype : 'toolbar',
                             dock : 'top',
                             items : [ {
