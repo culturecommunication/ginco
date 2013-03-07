@@ -46,10 +46,15 @@ import fr.mcc.ginco.utils.DateUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
+@Component("nodeLabelViewConverter")
 public class NodeLabelViewConverter {
 
     @Value("${ginco.default.language}")
@@ -125,5 +130,25 @@ public class NodeLabelViewConverter {
         }
 
         return hibernateRes;
+    }
+
+    public NodeLabelView convert(NodeLabel source) {
+        NodeLabelView nodeLabelView = new NodeLabelView();
+        nodeLabelView.setIdentifier(source.getIdentifier());
+        nodeLabelView.setCreated(DateUtil.toString(source.getCreated()));
+        nodeLabelView.setModified(DateUtil.toString(source.getModified()));
+        nodeLabelView.setLanguage(source.getLanguage().getId());
+        nodeLabelView.setThesaurusArrayId(source.getThesaurusArray().getIdentifier());
+
+        return nodeLabelView;
+    }
+
+    public List<NodeLabelView> convert(Set<NodeLabel> source) {
+        List<NodeLabelView> result = new ArrayList<NodeLabelView>();
+        for(NodeLabel nodeLabel : source) {
+            result.add(convert(nodeLabel));
+        }
+
+        return result;
     }
 }

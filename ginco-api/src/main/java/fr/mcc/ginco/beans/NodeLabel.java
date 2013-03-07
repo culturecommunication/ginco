@@ -60,13 +60,13 @@ public class NodeLabel  implements Serializable{
 	public void setLexicalValue(String lexicalValue) {
 		this.lexicalValue = lexicalValue;
 	}
-	public Date isModified() {
+	public Date getModified() {
 		return modified;
 	}
 	public void setModified(Date modified) {
 		this.modified = modified;
 	}
-	public Date isCreated() {
+	public Date getCreated() {
 		return created;
 	}
 	public void setCreated(Date created) {
