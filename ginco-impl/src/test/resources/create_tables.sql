@@ -13,10 +13,15 @@ DROP TABLE IF EXISTS hierarchical_relationship;
 DROP TABLE IF EXISTS top_relationship;
 DROP TABLE IF EXISTS associative_relationship;
 DROP TABLE IF EXISTS associative_relationship_role;
+DROP TABLE IF EXISTS thesaurus_array;
+DROP TABLE IF EXISTS node_label;
+DROP TABLE IF EXISTS thesaurus_array_concept;
 
 DROP SEQUENCE IF EXISTS log_journal_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
+DROP SEQUENCE IF EXISTS node_label_id_seq;
+
 
 CREATE TABLE thesaurus
 (
@@ -179,3 +184,53 @@ ALTER TABLE associative_relationship
 ALTER TABLE associative_relationship
       ADD FOREIGN KEY (concept2)
       REFERENCES thesaurus_concept (identifier);
+      
+      
+CREATE TABLE thesaurus_array
+(
+  identifier text NOT NULL,
+  ordered boolean DEFAULT false NOT NULL,
+  notation text,
+  thesaurusid text NOT NULL,
+  superordinateconceptid text,
+  CONSTRAINT pk_thesaurus_array_identifier PRIMARY KEY (identifier)
+);
+
+ALTER TABLE thesaurus_array
+      ADD FOREIGN KEY (superordinateconceptid)
+      REFERENCES thesaurus_concept (identifier);
+ALTER TABLE thesaurus_array
+      ADD FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier); 
+
+CREATE TABLE node_label
+(
+  id integer NOT NULL,
+  lexicalvalue text NOT NULL,
+  modified text NOT NULL,
+  created text NOT NULL,
+  lang text,
+  thesaurusarrayid text NOT NULL,
+  CONSTRAINT pk_note_label_id PRIMARY KEY (id)
+);
+
+ALTER TABLE node_label
+      ADD FOREIGN KEY (thesaurusarrayid)
+      REFERENCES thesaurus_array (identifier);
+    
+CREATE SEQUENCE node_label_id_seq START WITH 1  INCREMENT BY 1;
+
+CREATE TABLE thesaurus_array_concept
+(
+  thesaurusarrayid text NOT NULL,
+  conceptid text NOT NULL,
+  CONSTRAINT pk_thesaurus_array_concept PRIMARY KEY (thesaurusarrayid, conceptid) 
+);
+
+ALTER TABLE thesaurus_array_concept
+      ADD FOREIGN KEY (thesaurusarrayid)
+      REFERENCES thesaurus_array (identifier); 
+      
+ALTER TABLE thesaurus_array_concept
+      ADD FOREIGN KEY (conceptid)
+      REFERENCES thesaurus_concept (identifier); 
