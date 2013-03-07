@@ -54,7 +54,7 @@ public class NoteServiceImpl implements INoteService {
 	private INoteDAO noteDAO;
 
 	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.INoteService#getConceptNoteList(java.lang.String)
+	 * @see fr.mcc.ginco.services.INoteService#getConceptNotePaginatedList(java.lang.String)
 	 */
 	@Override
 	public List<Note> getConceptNotePaginatedList(String conceptId, Integer startIndex, Integer limit) {
@@ -62,7 +62,7 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.INoteService#getTermNoteList(java.lang.String)
+	 * @see fr.mcc.ginco.services.INoteService#getTermNotePaginatedList(java.lang.String)
 	 */
 	@Override
 	public List<Note> getTermNotePaginatedList(String termId, Integer startIndex, Integer limit) {

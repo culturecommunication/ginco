@@ -8,5 +8,6 @@ Ext.define('GincoApp.locale.fr.controller.TermPanelController',
 			xSucessRemovedMsg : 'Le terme a été supprimé avec succès',
 			xProblemLabel : 'Erreur !',
 			xProblemSaveMsg : 'Impossible de sauvegarder le terme !',
-			xProblemDeleteMsg : 'Impossible de supprimer le terme !'
+			xProblemDeleteMsg : 'Impossible de supprimer le terme !',
+			xProblemLoadMsg : 'Impossible de charger le terme !'
 		});
