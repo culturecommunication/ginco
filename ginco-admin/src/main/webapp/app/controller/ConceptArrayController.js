@@ -89,13 +89,21 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		
 	},
 	
+	getActivePanel : function() {
+    	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+    	return topTabs.getActiveTab();
+    }, 
+    
 	selectParentConcept : function(theButton){
-		var thePanel = theButton.up('conceptArrayPanel');
-		var theForm = theButton.up('form');
 		var me = this;
+		var theForm = theButton.up('form');
+	    var thePanel = me.getActivePanel();
+	    var theGrid = thePanel.down('#gridPanelConceptArray');
+	    var theStore = theGrid.getStore();
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
 	            thesaurusData : thePanel.thesaurusData,
 	            showTree : false,
+	            checkstore: theStore,
 	            listeners: {
 	                selectBtn: {
 	                    fn: function(selectedRow) {
