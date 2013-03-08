@@ -132,7 +132,7 @@ Ext
 															items : [
 																{
 																	xtype : 'textfield',
-																	name : 'superOrdinateConceptTitle',
+																	name : 'superOrdinateConcept.id',
 																	fieldLabel : me.xParentConceptLabel,
 																	allowBlank : false
 																},

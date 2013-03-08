@@ -1,6 +1,7 @@
 Ext.define('GincoApp.controller.ConceptArrayController', {
 	extend:'Ext.app.Controller',
-	
+
+    stores : [ 'ConceptReducedStore' ],
 	models : [ 'ConceptArrayModel', 'ThesaurusConceptReducedModel' ],
 
 	//localized : true,
@@ -11,6 +12,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	
 	loadConceptArrayPanel : function(theForm){
         var me = this;
+
+        debugger;
+
         var model = this.getConceptArrayModelModel();
         
         var conceptArray = theForm.up('conceptArrayPanel').conceptArray;
@@ -19,7 +23,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			//load existing concept array
         	model.load(conceptArray, {
 				success : function(model) {
-					me.loadData(theForm, model);
+					debugger;
+                    me.loadData(theForm, model);
 					theForm.getEl().unmask();
 				},
 				failure : function(model) {
@@ -40,7 +45,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var me = this;
 		
 		aForm.loadRecord(aModel);
-		
+
 		//We get all the concepts included in this concept array
 		var associatedConcepts = aModel.concepts().getRange();
 		
@@ -138,7 +143,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
                     var theButton = thePanel.down('#selectButton');
                     theButton.setDisabled(false);
             	}
-            },
+            }
          });
 
     }
