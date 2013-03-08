@@ -8,7 +8,6 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	xProblemLoadMsg : 'Unable to load thesaurus tree',
 
 	onNodeDblClick : function(tree, aRecord, item, index, e, eOpts) {
-		console.log(aRecord.data.type);
 		if (aRecord.data.type == "THESAURUS") {
 			this.openThesaurusTab(aRecord);
 		}
