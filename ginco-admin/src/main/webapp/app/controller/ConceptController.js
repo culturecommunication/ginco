@@ -501,14 +501,14 @@ Ext.define('GincoApp.controller.ConceptController', {
 			},
 			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
-			},
+			},/*
             'selectConceptWin gridpanel' : {
                 itemclick : function(theGrid, record, item, index, e, eOpts) {
                     var parentGrid = Ext.ComponentQuery.query('conceptPanel #gridPanelParentConcepts');
                     var parentStore = parentGrid[0].getStore();
                     this.checkParent(theGrid, record, item, index, e, eOpts, parentStore);
                 }
-            },
+            },*/
             'conceptPanel #gridPanelTerms' : {
                 itemdblclick : this.onTermDblClick
             },

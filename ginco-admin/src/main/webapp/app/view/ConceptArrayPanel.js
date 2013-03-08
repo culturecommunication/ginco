@@ -11,6 +11,8 @@ Ext
 					extend : 'Ext.panel.Panel',
 					thesaurusData : '',
 					alias : 'widget.conceptArrayPanel',
+					
+					conceptArrayId : null,
 
 					localized : true,
 					closable : true,
@@ -32,9 +34,13 @@ Ext
 					xAddConceptToArray : 'Add a concept',
 					xParentConceptLabel : 'Parent Concept',
 					xSelectParentConcept : 'Select a parent concept',
+
 					
 					initComponent : function() {
 						var me = this;
+						me.conceptArrayStore = Ext
+                        .create('GincoApp.store.SimpleConceptStore');
+						me.conceptArrayStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
 
 						Ext
 								.applyIf(
@@ -137,7 +143,7 @@ Ext
 															xtype : 'gridpanel',
 															itemId : 'gridPanelConceptArray',
 															title : me.xConceptArrayGridTitle,
-															//store : me.ConceptArrayStore,
+															store : me.conceptArrayStore,
 
 															dockedItems : [ {
 																xtype : 'toolbar',

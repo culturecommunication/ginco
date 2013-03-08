@@ -195,12 +195,12 @@ Ext
 																		text : me.xIdentifierLabel
 																	},
 																	{
-																		dataIndex : 'lexicalValue',
+																		dataIndex : 'label',
 																		text : me.xLexicalValueLabel,
 																		flex : 1
 																	},
 																	{
-																		dataIndex : 'language',
+																		dataIndex : 'lang',
 																		text : me.xLanguagesLabel
 																	},
 																	{

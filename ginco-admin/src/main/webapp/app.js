@@ -31,7 +31,8 @@ Ext.application({
         'ThesaurusModel',
         'ThesaurusTermModel',
         'ConceptModel',
-        'SimpleConceptModel'
+        'SimpleConceptModel',
+        'ConceptArrayModel'
     ],
     stores: [
         'MainTreeStore',
