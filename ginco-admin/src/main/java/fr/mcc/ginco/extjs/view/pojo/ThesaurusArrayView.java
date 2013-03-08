@@ -42,7 +42,11 @@ public class ThesaurusArrayView {
     private String notation;
     private ThesaurusConceptReducedView superOrdinateConcept;
     private List<ThesaurusConceptReducedView> concepts;
-    private List<NodeLabelView> nodeLabelViewList;
+
+    private String label;
+    private String language;
+
+    //private List<NodeLabelView> nodeLabelViewList - To be continue...;
 
     public String getIdentifier() {
         return identifier;
@@ -84,11 +88,19 @@ public class ThesaurusArrayView {
         this.concepts = concepts;
     }
 
-    public List<NodeLabelView> getNodeLabelViewList() {
-        return nodeLabelViewList;
+    public String getLabel() {
+        return label;
     }
 
-    public void setNodeLabelViewList(List<NodeLabelView> nodeLabelViewList) {
-        this.nodeLabelViewList = nodeLabelViewList;
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

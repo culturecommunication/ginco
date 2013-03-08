@@ -199,10 +199,12 @@ Ext.define('GincoApp.controller.ConceptController', {
         var me = this;
         var thePanel = me.getActivePanel();
         var theGrid = thePanel.down('#gridPanelParentConcepts');
+        var theStore = theGrid.getStore();
         var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : thePanel.thesaurusData,
             conceptId : thePanel.conceptId,
             showTree : false,
+            checkstore: theStore,
             listeners: {
                 selectBtn: {
                     fn: function(selectedRow) {
@@ -217,26 +219,18 @@ Ext.define('GincoApp.controller.ConceptController', {
     getActivePanel : function() {
     	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
     	return topTabs.getActiveTab();
-    },
-
-    checkParent : function(theGrid, record, item, index, e, eOpts, parentStore) {
-        var thePanel = theGrid.up('gridpanel');
-        var theButton = thePanel.down('#selectButton');
-        if(parentStore.findRecord('identifier',record.data.identifier) == null) {
-            theButton.setDisabled(false);
-        } else {
-            theButton.setDisabled(true);
-        }
-    },    
+    }, 
 
     addAssociativeRelationship : function(theButton) {
         var me = this;
         var thePanel = me.getActivePanel();
         var theGrid = thePanel.down('#gridPanelAssociatedConcepts');
+        var theStore = theGrid.getStore();
         var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : thePanel.thesaurusData,
             conceptId : thePanel.conceptId,
             showTree : false,
+            checkstore: theStore,
             listeners: {
                 selectBtn: {
                     fn: function(selectedRow) {
@@ -511,14 +505,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			},
 			'createTermWin #languageCombo' : {
 				render : this.loadLanguages
-			},/*
-            'selectConceptWin gridpanel' : {
-                itemclick : function(theGrid, record, item, index, e, eOpts) {
-                    var parentGrid = Ext.ComponentQuery.query('conceptPanel #gridPanelParentConcepts');
-                    var parentStore = parentGrid[0].getStore();
-                    this.checkParent(theGrid, record, item, index, e, eOpts, parentStore);
-                }
-            },*/
+			},            
             'conceptPanel #gridPanelTerms' : {
                 itemdblclick : this.onTermDblClick
             },
