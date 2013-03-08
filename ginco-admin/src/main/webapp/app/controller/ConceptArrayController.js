@@ -1,9 +1,13 @@
 Ext.define('GincoApp.controller.ConceptArrayController', {
 	extend:'Ext.app.Controller',
 	
-	models : [ 'ConceptArrayModel', 'ThesaurusConceptReducedModel', 'NodeLabelModel' ],
+	models : [ 'ConceptArrayModel', 'ThesaurusConceptReducedModel' ],
 
 	//localized : true,
+	
+	xProblemLabel : 'Error!',
+	xProblemLoadMsg : 'Unable to load data',
+	xErrorDoubleRecord: 'Record already present',
 	
 	loadConceptArrayPanel : function(theForm){
         var me = this;
@@ -19,8 +23,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 					theForm.getEl().unmask();
 				},
 				failure : function(model) {
-					Thesaurus.ext.utils.msg("erreur",
-							"erreur");
+					Thesaurus.ext.utils.msg(me.xProblemLabel,
+							xProblemLoadMsg);
 					var globalTabs = theForm.up('topTabs');
 					globalTabs.remove(thePanel);
 				}
@@ -34,27 +38,17 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	
 	loadData : function(aForm, aModel) {
 		var me = this;
-		var conceptArrayPanel = me.getActivePanel();
 		
 		aForm.loadRecord(aModel);
 		
 		//We get all the concepts included in this concept array
 		var associatedConcepts = aModel.concepts().getRange();
 		
-		//We get all the node labels for this concept array, containing the title, created & modified dates...
-		var associatedNodeLabel = aModel.nodeLabelViewList().getRange();
-		var currentNodeLabel = associatedNodeLabel[0];
-		
 		var theGrid = aForm.down('#gridPanelConceptArray');
 		var theGridStore = theGrid.getStore();
 		theGridStore.removeAll();
 		theGridStore.add(associatedConcepts);
 	},
-	
-	getActivePanel : function() {
-    	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-    	return topTabs.getActiveTab();
-    },
 	
 	saveConceptArray : function(theButton){
 		var me = this;
@@ -66,7 +60,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var me = this;
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
 	            thesaurusData : thePanel.thesaurusData,
-	            //conceptId : thePanel.conceptId,
 	            showTree : false,
 	            listeners: {
 	                selectBtn: {
@@ -87,12 +80,14 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : theConceptArrayPanel.thesaurusData,
-            //TODO : filter on parent concept id by setting conceptId parameter in the win
+            //TODO remove after test :
+            conceptId : 'http://culturecommunication.gouv.fr/ark:/12345/62f9c6fe-4346-4183-af09-44bfacfd17d1',
+            getChildren : true,
             showTree : false,
             listeners: {
                 selectBtn: {
                     fn: function(selectedRow) {
-                            me.addConceptToArray(selectedRow, me.theConceptArrayForm);
+                            me.addConceptToArray(selectedRow, theConceptArrayForm);
                         }
                 }
             }
@@ -103,7 +98,14 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	addConceptToArray : function(selectedRow, theConceptArrayForm){
 		var theConceptArrayGrid = theConceptArrayForm.down('#gridPanelConceptArray');
 		var theConceptArrayGridStore = theConceptArrayGrid.getStore();
-		theConceptArrayGridStore.add(selectedRow[0]);
+		
+		//Test if already present in the grid
+		if (theConceptArrayGridStore.findRecord('identifier', selectedRow[0].data.identifier) !== null ){
+			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
+		} else {
+			theConceptArrayGridStore.add(selectedRow[0]);
+		}
+		
 	},
 	
 	selectConceptAsParent : function(selectedRow, theForm){

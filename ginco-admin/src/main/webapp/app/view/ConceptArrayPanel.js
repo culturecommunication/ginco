@@ -90,7 +90,7 @@ Ext
 															fieldLabel : me.xIdentifierLabel
 														},
 														{
-															xtype : 'displayfield',
+															xtype : 'checkbox',
 															name : 'ordered',
 															fieldLabel : me.xOrdererLabel
 														},
