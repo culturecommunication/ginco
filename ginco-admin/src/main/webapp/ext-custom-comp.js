@@ -206,6 +206,7 @@ Thesaurus.ext.tabs = function(){
     		if (!tabExists) {
     			var arrayPanel = Ext.create('GincoApp.view.ConceptArrayPanel');
     			arrayPanel.thesaurusData = aThesaurusData;
+    			console.log(aArrayId);
     			arrayPanel.conceptArray = aArrayId;
     			var tab = topTabs.add(arrayPanel);
     			topTabs.setActiveTab(tab);

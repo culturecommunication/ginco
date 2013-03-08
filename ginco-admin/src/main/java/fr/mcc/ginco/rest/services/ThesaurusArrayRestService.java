@@ -38,6 +38,8 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
+import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
+import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.services.ILanguagesService;
@@ -54,60 +56,64 @@ import javax.ws.rs.core.MediaType;
 @Service
 @Path("/thesaurusarrayservice")
 public class ThesaurusArrayRestService {
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-    @Inject
-    @Named("thesaurusArrayService")
-    private IThesaurusArrayService thesaurusArrayService;
+	@Inject
+	@Named("thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;
 
-    @Inject
-    @Named("nodeLabelService")
-    private INodeLabelService nodeLabelService;
+	@Inject
+	@Named("nodeLabelService")
+	private INodeLabelService nodeLabelService;
 
-    @Inject
-    @Named("nodeLabelViewConverter")
-    private NodeLabelViewConverter nodeLabelViewConverter;
+	@Inject
+	@Named("nodeLabelViewConverter")
+	private NodeLabelViewConverter nodeLabelViewConverter;
 
-    @Inject
-    @Named("thesaurusArrayViewConverter")
-    private ThesaurusArrayViewConverter thesaurusArrayViewConverter;
+	@Inject
+	@Named("thesaurusArrayViewConverter")
+	private ThesaurusArrayViewConverter thesaurusArrayViewConverter;
 
-    @Inject
-    @Named("languagesService")
-    private ILanguagesService languagesService;
+	@Inject
+	@Named("languagesService")
+	private ILanguagesService languagesService;
 
-    /**
-     * Public method used to get
-     * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} object by
-     * providing its id.
-     *
-     * @param thesaurusArrayId
-     *            {@link String} identifier to try with
-     *
-     * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} object
-     *         in JSON format or {@code null} if not found
-     * @throws BusinessException
-     */
-    @GET
-    @Path("/getArray")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public ThesaurusArrayView getThesaurusArrayById(@QueryParam("id") String thesaurusArrayId) throws BusinessException {
-        return thesaurusArrayViewConverter.convert(
-                        thesaurusArrayService.getThesaurusArrayById(thesaurusArrayId));
-    }
+	/**
+	 * Public method used to get
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} object by
+	 * providing its id.
+	 * 
+	 * @param thesaurusArrayId
+	 *            {@link String} identifier to try with
+	 * 
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} object in
+	 *         JSON format or {@code null} if not found
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getArray")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ThesaurusArrayView getThesaurusArrayById(
+			@QueryParam("id") String thesaurusArrayId) throws BusinessException {		
+		return thesaurusArrayViewConverter.convert(thesaurusArrayService
+				.getThesaurusArrayById(thesaurusArrayId));
+	}
 
-    @POST
-    @Path("/updateArray")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    public ThesaurusArrayView updateThesaurusArray(ThesaurusArrayView thesaurusConceptViewJAXBElement)
-            throws BusinessException {
+	@POST
+	@Path("/updateArray")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ThesaurusArrayView updateThesaurusArray(
+			ThesaurusArrayView thesaurusConceptViewJAXBElement)
+			throws BusinessException {
 
-        ThesaurusArray convertedArray = thesaurusArrayViewConverter.convert(thesaurusConceptViewJAXBElement);
-        NodeLabel nodeLabel = nodeLabelViewConverter.convert(thesaurusConceptViewJAXBElement);
+		ThesaurusArray convertedArray = thesaurusArrayViewConverter
+				.convert(thesaurusConceptViewJAXBElement);
+		NodeLabel nodeLabel = nodeLabelViewConverter
+				.convert(thesaurusConceptViewJAXBElement);
 
-        thesaurusArrayService.updateThesaurusConcept(convertedArray, nodeLabel);
-        return thesaurusArrayViewConverter.convert(convertedArray);
-    }
+		thesaurusArrayService.updateThesaurusConcept(convertedArray, nodeLabel);
+		return thesaurusArrayViewConverter.convert(convertedArray);
+	}
 }

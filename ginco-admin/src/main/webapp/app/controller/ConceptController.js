@@ -522,6 +522,15 @@ Ext.define('GincoApp.controller.ConceptController', {
             'conceptPanel #gridPanelAssociatedConcepts' : {
                 itemdblclick : this.onConceptDblClick
             },
+            'conceptPanel #gridPanelParentConcepts' : {
+            	itemdblclick : this.onConceptDblClick
+            },
+            'conceptPanel #gridPanelChildrenConcepts' : {
+            	itemdblclick : this.onConceptDblClick
+            },
+            'conceptPanel #gridPanelRootConcepts' : {
+            	itemdblclick : this.onConceptDblClick
+            },
             'conceptPanel #gridPanelAssociatedConcepts #associatedConceptActionColumn' : {
                 click : this.onRemoveAssociationClick
             },

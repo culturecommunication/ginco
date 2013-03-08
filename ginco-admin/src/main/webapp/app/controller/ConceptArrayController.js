@@ -13,8 +13,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	loadConceptArrayPanel : function(theForm){
         var me = this;
 
-        debugger;
-
         var model = this.getConceptArrayModelModel();
         var conceptArray = theForm.up('conceptArrayPanel').conceptArray;
         
@@ -22,7 +20,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			
     		model.load(conceptArray, {
 				success : function(model) {
-					debugger;
                     me.loadData(theForm, model);
 					theForm.getEl().unmask();
 				},
@@ -171,14 +168,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             },
             'conceptArrayPanel  #addConceptToArray' : {
                 click : this.selectConceptToArray
-            },
-            'selectConceptWin gridpanel' : {
-            	itemclick : function(theGrid) {
-            		var thePanel = theGrid.up('gridpanel');
-                    var theButton = thePanel.down('#selectButton');
-                    theButton.setDisabled(false);
-            	}
-            }
+            }            
          });
 
     }
