@@ -112,10 +112,11 @@ public class ThesaurusArrayViewConverter {
         thesaurusArrayView.setConcepts(
                     thesaurusConceptViewConverter.convert(new ArrayList<ThesaurusConcept>(source.getConcepts())));
 
-        final NodeLabel label = nodeLabelService.getByThesaurusArrayAndLanguage(source.getIdentifier(), language);
+        NodeLabel label = nodeLabelService.getByThesaurusArrayAndLanguage(source.getIdentifier(), language);
 
         thesaurusArrayView.setLabel(label.getLexicalValue());
         thesaurusArrayView.setLanguage(label.getLanguage().getId());
+        thesaurusArrayView.setThesaurusId(source.getThesaurus().getThesaurusId());
 
         return thesaurusArrayView;
     }
