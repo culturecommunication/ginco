@@ -86,9 +86,6 @@ public class ThesaurusArrayViewConverter {
             hibernateRes = thesaurusArrayService.getThesaurusArrayById(source.getIdentifier());
         }
 
-        hibernateRes.setNotation(source.getNotation());
-        hibernateRes.setOrdered(source.getOrdered());
-
         if(source.getSuperOrdinateConcept() != null) {
             hibernateRes.setSuperOrdinateConcept(
                     thesaurusConceptService.getThesaurusConceptById(
@@ -114,8 +111,6 @@ public class ThesaurusArrayViewConverter {
         ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
 
         thesaurusArrayView.setIdentifier(source.getIdentifier());
-        thesaurusArrayView.setNotation(source.getNotation());
-        thesaurusArrayView.setOrdered(source.getOrdered());
 
         if(source.getSuperOrdinateConcept() != null) {
             thesaurusArrayView.setSuperOrdinateConcept(

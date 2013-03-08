@@ -38,8 +38,6 @@ import java.util.List;
 
 public class ThesaurusArrayView {
     private String identifier;
-    private Boolean ordered;
-    private String notation;
     private ThesaurusConceptReducedView superOrdinateConcept;
     private List<ThesaurusConceptReducedView> concepts;
 
@@ -57,22 +55,6 @@ public class ThesaurusArrayView {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
-    }
-
-    public Boolean getOrdered() {
-        return ordered;
-    }
-
-    public void setOrdered(Boolean ordered) {
-        this.ordered = ordered;
-    }
-
-    public String getNotation() {
-        return notation;
-    }
-
-    public void setNotation(String notation) {
-        this.notation = notation;
     }
 
     public ThesaurusConceptReducedView getSuperOrdinateConcept() {
