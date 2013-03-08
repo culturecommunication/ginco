@@ -38,7 +38,7 @@ import java.util.List;
 
 public class ThesaurusArrayView {
     private String identifier;
-    private ThesaurusConceptReducedView superOrdinateConcept;
+    private List<ThesaurusConceptReducedView> superOrdinateConcept;
     private List<ThesaurusConceptReducedView> concepts;
 
     private String label;
@@ -57,11 +57,11 @@ public class ThesaurusArrayView {
         this.identifier = identifier;
     }
 
-    public ThesaurusConceptReducedView getSuperOrdinateConcept() {
+    public List<ThesaurusConceptReducedView> getSuperOrdinateConcept() {
         return superOrdinateConcept;
     }
 
-    public void setSuperOrdinateConcept(ThesaurusConceptReducedView superOrdinateConcept) {
+    public void setSuperOrdinateConcept(List<ThesaurusConceptReducedView> superOrdinateConcept) {
         this.superOrdinateConcept = superOrdinateConcept;
     }
 

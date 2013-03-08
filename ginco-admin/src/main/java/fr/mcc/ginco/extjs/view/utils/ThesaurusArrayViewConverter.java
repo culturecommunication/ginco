@@ -86,10 +86,15 @@ public class ThesaurusArrayViewConverter {
             hibernateRes = thesaurusArrayService.getThesaurusArrayById(source.getIdentifier());
         }
 
-        if(source.getSuperOrdinateConcept() != null) {
+        if(source.getSuperOrdinateConcept() == null || source.getSuperOrdinateConcept().get(0) == null) {
+            throw new BusinessException("ThesaurusArray must have superordirnated concept!",
+                                            "array-should-have-superordirnated-concept");
+        }
+
+        if(!StringUtils.isEmpty(source.getSuperOrdinateConcept().get(0).getIdentifier())) {
             hibernateRes.setSuperOrdinateConcept(
                     thesaurusConceptService.getThesaurusConceptById(
-                            source.getSuperOrdinateConcept().getIdentifier()));
+                            source.getSuperOrdinateConcept().get(0).getIdentifier()));
         }
 
         hibernateRes.getConcepts().clear();
@@ -107,14 +112,14 @@ public class ThesaurusArrayViewConverter {
         return hibernateRes;
     }
 
-    public ThesaurusArrayView convert(ThesaurusArray source) throws BusinessException {
+    public ThesaurusArrayView convert(final ThesaurusArray source) throws BusinessException {
         ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
 
         thesaurusArrayView.setIdentifier(source.getIdentifier());
 
         if(source.getSuperOrdinateConcept() != null) {
-            thesaurusArrayView.setSuperOrdinateConcept(
-                    thesaurusConceptViewConverter.convert(source.getSuperOrdinateConcept()));
+            thesaurusArrayView.setSuperOrdinateConcept(new ArrayList<ThesaurusConceptReducedView>() {{
+                    add(thesaurusConceptViewConverter.convert(source.getSuperOrdinateConcept()));}});
         }
 
         thesaurusArrayView.setConcepts(
