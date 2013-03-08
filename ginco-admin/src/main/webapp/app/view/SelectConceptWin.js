@@ -13,7 +13,8 @@ Ext.define(
             thesaurusData : null,
             conceptId : null,
             searchOrphans : null,
-            showTree : false
+            showTree : false,
+            checkstore: null
         },
 
         viewConfig : {
@@ -79,7 +80,25 @@ Ext.define(
                                     }
                                 }
                             }]
-                        } ]
+                        } ],
+                        listeners: {
+                        	itemclick : function (view, record, item, index, e) {                        		
+                        		var me = this;
+            					var theButton = me.down('#selectButton');
+            					var win = me.up('selectConceptWin');
+            					var checkAgainstStore = win.checkstore;
+            					if (checkAgainstStore) {
+            						if (checkAgainstStore.findRecord('identifier',record.data.identifier) == null) {
+            							theButton.setDisabled(false);
+            						} else {
+            							theButton.setDisabled(true);
+            						}
+                        		} else {
+            						theButton.setDisabled(false);
+            					}
+                            }
+                         }                        
+
                     }]
                 });
 
