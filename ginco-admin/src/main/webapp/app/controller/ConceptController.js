@@ -113,6 +113,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		model.data.thesaurusId = thePanel.thesaurusData.id;
 		model.data.identifier = "";
 		model.data.language=thePanel.thesaurusData.languages[0];
+		model.data.conceptId = thePanel.conceptId;
 		theForm.loadRecord(model);
 		win.show();
 	},
@@ -179,13 +180,15 @@ Ext.define('GincoApp.controller.ConceptController', {
     },
 
     onSelectTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
+    	var me = this;
 		var theWin = theGrid.up('selectTermWin');
 		if (theWin.prefered == true) {
 			record.data.prefered = true;
 		} else {
 			record.data.prefered = false;
 		}
-		
+        var thePanel = me.getActivePanel();
+		record.data.conceptId=thePanel.conceptId;
 		if (theWin.store.findRecord('identifier', record.data.identifier) !== null ){
 			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
 		} else {

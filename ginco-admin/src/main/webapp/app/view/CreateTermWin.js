@@ -91,11 +91,7 @@ Ext
 										                        {
 										                        	xtype: 'hiddenfield',
 										                        	name:'status'
-										                        },
-										                        {
-										                        	xtype: 'hiddenfield',
-										                        	name:'role'
-										                        },
+										                        },										                        
 										                        {
 										                        	xtype: 'hiddenfield',
 										                        	name:'conceptId'

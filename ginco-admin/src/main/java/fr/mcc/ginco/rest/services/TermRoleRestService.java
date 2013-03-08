@@ -32,54 +32,55 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.rest.services;
 
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusTermRoleService;
 
-@Transactional
-@Service("thesaurusTermRoleService")
-public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
-
-    @Inject
-    @Named("thesaurusTermRoleDAO")
-    private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
+/**
+ * Thesaurus Term Role REST service for all operations on Thesaurus Term Roles
+ * 
+ */
+@Service
+@Path("/termroleservice")
+@Produces({MediaType.APPLICATION_JSON})
+public class TermRoleRestService {	
+	
+	@Inject
+	@Named("thesaurusTermRoleService")
+	private IThesaurusTermRoleService termRoleService;	   
     
-    
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.IThesaurusTermRoleService#getDefaultThesaurusTermRole()
-     */
-    @Override
-    public ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException {
-        return thesaurusTermRoleDAO.getDefaultThesaurusTermRole();
-    }
+	@Log
+	private Logger logger;
 
-
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.IThesaurusTermRoleService#getAllThesaurusTermRole()
+	/**
+	 * Public method used to get list of all existing term roles in
+	 * database.
+	 * 
+	 * @return list of ThesaurusTermRole, if not found - {@code null}
 	 */
-	@Override
-	public List<ThesaurusTermRole> getAllThesaurusTermRole() {
-		return thesaurusTermRoleDAO.findAll();	
+	@GET
+	@Path("/getRoles")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<ThesaurusTermRole> > getAllRoles(){
+		List<ThesaurusTermRole> allRoles = termRoleService.getAllThesaurusTermRole();		
+		ExtJsonFormLoadData<List<ThesaurusTermRole>> roles = new ExtJsonFormLoadData<List<ThesaurusTermRole> > (allRoles);
+		return roles;
 	}
-
-
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.IThesaurusTermRoleService#getTermRole(java.lang.String)
-	 */
-	@Override
-	public ThesaurusTermRole getTermRole(String code) {
-		return thesaurusTermRoleDAO.getById(code);
-	}
+	
 }

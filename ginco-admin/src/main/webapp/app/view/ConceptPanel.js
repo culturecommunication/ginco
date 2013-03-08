@@ -7,6 +7,9 @@
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
 Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteConceptPanel' ]);
 
+var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+    clicksToEdit: 1
+});
 Ext
 		.define(
 				'GincoApp.view.ConceptPanel',
@@ -54,6 +57,7 @@ Ext
                     xRemoveParent: 'Remove connection to parent Concept',
                     xAssociationRemove: 'Remove association',
                     xChildrenConcepts: 'Children Concepts',
+                    xRoleColumnLabel: 'Role',
 
 					initComponent : function() {
 						var me = this;
@@ -69,6 +73,9 @@ Ext
                         me.childrenConceptStore = Ext
                             .create('GincoApp.store.SimpleConceptStore');
                         me.childrenConceptStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
+                        
+                        me.termRoleStore = Ext
+                        	.create('GincoApp.store.TermRoleStore');
 
 						Ext
 								.applyIf(
@@ -139,7 +146,7 @@ Ext
 															itemId : 'gridPanelTerms',
 															title : me.xTermListGridTitle,
 															store : me.conceptTermStore,
-
+															plugins: [cellEditing],
 															dockedItems : [ {
 																xtype : 'toolbar',
 																dock : 'top',
@@ -195,12 +202,12 @@ Ext
 																		text : me.xIdentifierLabel
 																	},
 																	{
-																		dataIndex : 'label',
+																		dataIndex : 'lexicalValue',
 																		text : me.xLexicalValueLabel,
 																		flex : 1
 																	},
 																	{
-																		dataIndex : 'lang',
+																		dataIndex : 'language',
 																		text : me.xLanguagesLabel
 																	},
 																	{
@@ -210,9 +217,25 @@ Ext
                                                                         stopSelection: false
 																	},
 																	{
+																		dataIndex : 'role',
+                                                                        header : me.xRoleColumnLabel,
+                                                                        stopSelection: false,                                                                       
+                                                                        editor: new Ext.form.field.ComboBox({
+                                                                            typeAhead: true,
+                                                                            triggerAction: 'all',
+                                                                            selectOnTab: true,
+                                                                            store: me.termRoleStore,
+                                                                            lazyRender: true,
+                                                                            listClass: 'x-combo-list-small',
+                                                                            displayField : 'label',
+        										                        	valueField : 'code'
+                                                                        })
+																	},
+																	{
 																		dataIndex : 'created',
 																		text : me.xCreatedDateLabel
 																	},
+																	
                                                                     {
                                                                         xtype:'actioncolumn',
                                                                         itemId: 'conceptActionColumn',

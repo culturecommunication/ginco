@@ -41,6 +41,10 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
         {
             name: 'language',
             type: 'string'
+        },
+        {
+            name: 'role',
+            type: 'string'
         }
     ],
     idProperty : 'identifier',
