@@ -89,13 +89,6 @@ public class ThesaurusArrayViewConverter {
         hibernateRes.setNotation(source.getNotation());
         hibernateRes.setOrdered(source.getOrdered());
 
-        NodeLabel label;
-        if(StringUtils.isEmpty(source.getNodeLabelId())) {
-            label = new NodeLabel();
-        } else {
-            label = nodeLabelService.getById(source.getNodeLabelId());
-        }
-
         if(source.getSuperOrdinateConcept() != null) {
             hibernateRes.setSuperOrdinateConcept(
                     thesaurusConceptService.getThesaurusConceptById(

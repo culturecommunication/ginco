@@ -34,8 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 
 import java.util.List;
 
@@ -63,6 +63,5 @@ public interface IThesaurusArrayService {
     /**
      * Update a single Thesaurus Concept Object
      */
-    ThesaurusArray updateThesaurusConcept(ThesaurusArray object, ThesaurusConcept parentConcept,
-                                            List<ThesaurusConcept> terms);
+    ThesaurusArray updateThesaurusConcept(ThesaurusArray thesaurusArray, NodeLabel label);
 }

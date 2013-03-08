@@ -38,6 +38,7 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.NodeLabelView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.INodeLabelService;
@@ -150,5 +151,20 @@ public class NodeLabelViewConverter {
         }
 
         return result;
+    }
+
+    public NodeLabel convert(ThesaurusArrayView thesaurusConceptViewJAXBElement) {
+        NodeLabel label;
+        if(StringUtils.isEmpty(thesaurusConceptViewJAXBElement.getNodeLabelId())) {
+            label = new NodeLabel();
+            label.setCreated(DateUtil.nowDate());
+        } else {
+            label = nodeLabelService.getById(thesaurusConceptViewJAXBElement.getNodeLabelId());
+        }
+        label.setLexicalValue(thesaurusConceptViewJAXBElement.getLabel());
+        label.setLanguage(languagesService.getLanguageById(thesaurusConceptViewJAXBElement.getLanguage()));
+        label.setModified(DateUtil.nowDate());
+
+        return label;
     }
 }

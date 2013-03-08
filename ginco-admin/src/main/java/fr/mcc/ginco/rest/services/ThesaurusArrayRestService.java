@@ -34,9 +34,11 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
+import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.INodeLabelService;
@@ -63,6 +65,10 @@ public class ThesaurusArrayRestService {
     @Inject
     @Named("nodeLabelService")
     private INodeLabelService nodeLabelService;
+
+    @Inject
+    @Named("nodeLabelViewConverter")
+    private NodeLabelViewConverter nodeLabelViewConverter;
 
     @Inject
     @Named("thesaurusArrayViewConverter")
@@ -97,8 +103,11 @@ public class ThesaurusArrayRestService {
     @Consumes({ MediaType.APPLICATION_JSON })
     public ThesaurusArrayView updateThesaurusArray(ThesaurusArrayView thesaurusConceptViewJAXBElement)
             throws BusinessException {
-        ThesaurusArray convertedArray = thesaurusArrayViewConverter.convert(thesaurusConceptViewJAXBElement);
 
+        ThesaurusArray convertedArray = thesaurusArrayViewConverter.convert(thesaurusConceptViewJAXBElement);
+        NodeLabel nodeLabel = nodeLabelViewConverter.convert(thesaurusConceptViewJAXBElement);
+
+        thesaurusArrayService.updateThesaurusConcept(convertedArray, nodeLabel);
         return thesaurusArrayViewConverter.convert(convertedArray);
     }
 }

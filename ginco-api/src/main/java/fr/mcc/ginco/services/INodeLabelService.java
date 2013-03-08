@@ -46,4 +46,6 @@ public interface INodeLabelService {
     NodeLabel getById(String id);
 
     NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId, String languageId);
+
+    NodeLabel updateOrCreate(NodeLabel nodeLabel);
 }
