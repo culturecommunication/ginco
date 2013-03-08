@@ -37,6 +37,10 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Beans represents <b>note</b> table and contains textual notes,
+ * added to {@link ThesaurusConcept} or {@link ThesaurusTerm}
+ */
 @SuppressWarnings("serial")
 public class Note implements Serializable {
 

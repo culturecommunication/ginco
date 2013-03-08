@@ -34,11 +34,14 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import java.io.Serializable;
+
+/**
+ * Bean represents relation between two {@link ThesaurusConcept}
+ */
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 public class AssociativeRelationship implements Serializable {
 	

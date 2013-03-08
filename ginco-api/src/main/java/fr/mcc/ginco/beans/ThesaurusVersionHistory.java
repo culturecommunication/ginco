@@ -37,6 +37,10 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Bean represents <b>thesaurus_version_history</b> table, is used for
+ * saving different version of {@link Thesaurus}
+ */
 public class ThesaurusVersionHistory implements Serializable {
 	private String identifier;
     private Date date;

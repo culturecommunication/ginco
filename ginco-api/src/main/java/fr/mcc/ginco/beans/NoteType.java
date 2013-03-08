@@ -36,6 +36,10 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
+/**
+ * Bean represents type of the {@link Note}, also providing some info
+ * on object connected to.
+ */
 @SuppressWarnings("serial")
 public class NoteType  implements Serializable{
 

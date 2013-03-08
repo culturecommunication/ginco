@@ -42,6 +42,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Bean represents <b>thesaurus_concept</b> table, is container
+ * for {@link ThesaurusTerm}.
+ */
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 public class ThesaurusConcept implements Serializable, IAuditableBean {
     private String identifier;

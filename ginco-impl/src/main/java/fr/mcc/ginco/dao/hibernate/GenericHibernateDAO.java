@@ -34,19 +34,22 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.dao.IGenericDAO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 
-import fr.mcc.ginco.dao.IGenericDAO;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.List;
 
+/**
+ * Implementation of {@link IGenericDAO}; basic class for DAO-related work.
+ * @param <T> type of object.
+ * @param <ID> primary key.
+ */
 public class GenericHibernateDAO<T, ID extends Serializable> implements IGenericDAO<T, ID> {
 
 	private final Class<T> persistentClass;

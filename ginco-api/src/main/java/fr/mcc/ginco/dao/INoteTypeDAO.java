@@ -34,9 +34,13 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
 import fr.mcc.ginco.beans.NoteType;
 
+import java.util.List;
+
+/**
+ * Data Access Object for note_type
+ */
 public interface INoteTypeDAO extends IGenericDAO<NoteType, String> {
 	/**
 	 * @return List<NoteType> List of note types available for concepts

@@ -34,10 +34,10 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 /**
  * Data Access Object for thesaurus_term
@@ -75,7 +75,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @return List of ThesaurusTerm
 	 * @throws BusinessException 
 	 */
-	List<ThesaurusTerm> findTermsByConceptId(String idConcept) throws BusinessException;
+	List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException;
 
 
 }

@@ -34,12 +34,16 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * Bean represents <b>thesaurus_term</b> table, contains some lexical
+ * value that could be used in different cases.
+ */
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 @SuppressWarnings("serial")
 public class ThesaurusTerm implements Serializable, IAuditableBean {
