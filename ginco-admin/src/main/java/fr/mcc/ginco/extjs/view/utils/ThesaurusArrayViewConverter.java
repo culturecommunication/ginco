@@ -39,6 +39,7 @@ import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -77,7 +78,7 @@ public class ThesaurusArrayViewConverter {
     private NodeLabelViewConverter nodeLabelViewConverter;
 
 
-    public ThesaurusArray convert(ThesaurusArrayView source) {
+    public ThesaurusArray convert(ThesaurusArrayView source) throws BusinessException {
         ThesaurusArray hibernateRes;
         if(StringUtils.isEmpty(source.getIdentifier())) {
             hibernateRes = new ThesaurusArray();
@@ -88,11 +89,30 @@ public class ThesaurusArrayViewConverter {
         hibernateRes.setNotation(source.getNotation());
         hibernateRes.setOrdered(source.getOrdered());
 
+        NodeLabel label;
+        if(StringUtils.isEmpty(source.getNodeLabelId())) {
+            label = new NodeLabel();
+        } else {
+            label = nodeLabelService.getById(source.getNodeLabelId());
+        }
+
         if(source.getSuperOrdinateConcept() != null) {
             hibernateRes.setSuperOrdinateConcept(
                     thesaurusConceptService.getThesaurusConceptById(
                             source.getSuperOrdinateConcept().getIdentifier()));
         }
+
+        hibernateRes.getConcepts().clear();
+
+        for(ThesaurusConceptReducedView conceptReducedView : source.getConcepts()) {
+            ThesaurusConcept concept =
+                    thesaurusConceptService.getThesaurusConceptById(conceptReducedView.getIdentifier());
+            if(concept == null) {
+                throw new BusinessException("Concept doest not exist","concept-does-not-exist");
+            }
+            hibernateRes.getConcepts().add(concept);
+        }
+
 
         return hibernateRes;
     }
@@ -116,6 +136,8 @@ public class ThesaurusArrayViewConverter {
 
         thesaurusArrayView.setLabel(label.getLexicalValue());
         thesaurusArrayView.setLanguage(label.getLanguage().getId());
+        thesaurusArrayView.setNodeLabelId(label.getIdentifier());
+
         thesaurusArrayView.setThesaurusId(source.getThesaurus().getThesaurusId());
 
         return thesaurusArrayView;

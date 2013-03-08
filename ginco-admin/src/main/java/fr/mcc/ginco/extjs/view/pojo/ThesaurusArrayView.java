@@ -45,6 +45,8 @@ public class ThesaurusArrayView {
 
     private String label;
     private String language;
+    private String nodeLabelId;
+
     private String thesaurusId;
 
     //private List<NodeLabelView> nodeLabelViewList - To be continue...;
@@ -111,5 +113,13 @@ public class ThesaurusArrayView {
 
     public void setThesaurusId(String thesaurusId) {
         this.thesaurusId = thesaurusId;
+    }
+
+    public String getNodeLabelId() {
+        return nodeLabelId;
+    }
+
+    public void setNodeLabelId(String nodeLabelId) {
+        this.nodeLabelId = nodeLabelId;
     }
 }
