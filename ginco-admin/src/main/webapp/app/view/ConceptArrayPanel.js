@@ -120,9 +120,10 @@ Ext
 															items : [
 																{
 																	xtype : 'textfield',
-																	name : 'superOrdinateConcept.id',
+																	name : 'superOrdinateConcept_label',
 																	fieldLabel : me.xParentConceptLabel,
-																	allowBlank : false
+																	allowBlank : false,
+																	readOnly:true
 																},
 																{
 																	xtype : 'button',

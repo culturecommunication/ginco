@@ -16,12 +16,11 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         debugger;
 
         var model = this.getConceptArrayModelModel();
-        
         var conceptArray = theForm.up('conceptArrayPanel').conceptArray;
         
         if (conceptArray != null) {
-			//load existing concept array
-        	model.load(conceptArray, {
+			
+    		model.load(conceptArray, {
 				success : function(model) {
 					debugger;
                     me.loadData(theForm, model);
@@ -49,6 +48,10 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		//We get all the concepts included in this concept array
 		var associatedConcepts = aModel.concepts().getRange();
 		
+		//We set in the model the field of superordinate with associated data (hasone)
+		var superOrdinateConceptLabel = aModel.superOrdinateConceptStore.data.items[0].data.label;
+		aForm.down('textfield[name="superOrdinateConcept_label"]').setValue(superOrdinateConceptLabel);
+		
 		var theGrid = aForm.down('#gridPanelConceptArray');
 		var theGridStore = theGrid.getStore();
 		theGridStore.removeAll();
@@ -57,6 +60,35 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	
 	saveConceptArray : function(theButton){
 		var me = this;
+		var theForm = theButton.up('form');
+		var theGrid = theForm.down('#gridPanelConceptArray');
+		var theStore = theGrid.getStore();
+		var addedConceptsToArray = theStore.getRange();
+		theForm.getEl().mask(me.xLoading);
+		
+		//We update the model with the form fields
+		theForm.getForm().updateRecord();
+		
+		//We update the model with the concepts added to the grid
+		var updatedModel = theForm.getForm().getRecord();
+		updatedModel.concepts().removeAll();
+		updatedModel.concepts().add(addedConceptsToArray);
+		
+		updatedModel.save({
+			success : function(record, operation) {
+				var resultRecord = operation.getResultSet().records[0];
+				me.loadData(theForm, resultRecord);
+				theForm.getEl().unmask();
+				Thesaurus.ext.utils.msg("ok", "ok");				
+				//me.application.fireEvent('conceptupdated', thePanel.thesaurusData);
+				
+			},
+			failure : function(record, operation) {
+				Thesaurus.ext.utils.msg("erreur", "erreur"+" "+operation.error);
+				theForm.getEl().unmask();
+			}
+		});
+		
 	},
 	
 	selectParentConcept : function(theButton){
@@ -114,14 +146,16 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	},
 	
 	selectConceptAsParent : function(selectedRow, theForm){
-		console.log(selectedRow);
+		var model = theForm.getRecord();
 		
-		//TODO: don't update the value of the field but the model loaded by onConceptArrayFormRender
-		//theForm.down('textfield[name="parentConcept"]').setValue("test");
-		//var record = theForm.getRecord();
-		//console.log(selectedRow);
-		//record.data.superOrdinateConceptId=selectedRow;
-		//theForm.loadRecord(record);
+		//We get label and id of parent concept from selected row and add to the model + display the label in the field superOrdinateConcept_label
+		//model.data.superOrdinateConcept_label = selectedRow[0].data.label;
+		//aModel.superOrdinateConceptStore.data.items[0].data.label;
+		model.superOrdinateConceptStore.data.items[0].data.identifier = selectedRow[0].data.identifier;
+		model.superOrdinateConceptStore.data.items[0].data.label = selectedRow[0].data.label;
+		theForm.down('textfield[name="superOrdinateConcept_label"]').setValue(selectedRow[0].data.label);
+		
+		//TODO : flush the grid with alert before
 	},
 	
     init:function(){    	  	 

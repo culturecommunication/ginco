@@ -70,7 +70,7 @@ Ext.data.writer.Json.override({
 	                        record.setDirty();
 	                    }   
 	                }, me);
-	            }   
+	            }
 	        }   
 	        return data;
 	    }   
