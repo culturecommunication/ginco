@@ -30,8 +30,6 @@ Ext
 					xIdentifierLabel : 'Identifier',
 					//xCreatedDateLabel : 'Creation date',
 					//xModifiedDateLabel : 'Modification date',
-					xOrdererLabel: 'Ordered',
-					xNotationLabel: 'Notation',
 					xLabelLabel : 'Title',
 					xLexicalValueLabel : 'Lexical Value',
 					xLanguageLabel : 'Language',
@@ -88,16 +86,6 @@ Ext
 															xtype : 'displayfield',
 															name : 'identifier',
 															fieldLabel : me.xIdentifierLabel
-														},
-														{
-															xtype : 'checkbox',
-															name : 'ordered',
-															fieldLabel : me.xOrdererLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'notation',
-															fieldLabel : me.xNotationLabel
 														},
 														{
 															xtype : 'textfield',

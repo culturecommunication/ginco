@@ -7,14 +7,6 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
             type: 'string'
         },
         {
-            name: 'ordered',
-            type: 'boolean'
-        },
-        {
-            name: 'notation',
-            type: 'string'
-        },
-        {
             name: 'label',
             type: 'string'
         },

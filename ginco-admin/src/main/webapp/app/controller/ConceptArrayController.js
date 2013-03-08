@@ -110,6 +110,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	
 	selectConceptAsParent : function(selectedRow, theForm){
 		console.log(selectedRow);
+		
 		//TODO: don't update the value of the field but the model loaded by onConceptArrayFormRender
 		//theForm.down('textfield[name="parentConcept"]').setValue("test");
 		//var record = theForm.getRecord();
