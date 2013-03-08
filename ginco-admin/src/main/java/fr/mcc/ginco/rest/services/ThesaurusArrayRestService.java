@@ -38,8 +38,6 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
-import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
-import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.services.ILanguagesService;
@@ -113,7 +111,7 @@ public class ThesaurusArrayRestService {
 		NodeLabel nodeLabel = nodeLabelViewConverter
 				.convert(thesaurusConceptViewJAXBElement);
 
-		thesaurusArrayService.updateThesaurusConcept(convertedArray, nodeLabel);
-		return thesaurusArrayViewConverter.convert(convertedArray);
+		ThesaurusArray updated = thesaurusArrayService.updateThesaurusConcept(convertedArray, nodeLabel);
+		return thesaurusArrayViewConverter.convert(updated);
 	}
 }
