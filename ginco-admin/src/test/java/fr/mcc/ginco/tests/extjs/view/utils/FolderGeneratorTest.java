@@ -38,6 +38,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import org.junit.Assert;
@@ -47,9 +48,14 @@ import org.mockito.*;
 
 import java.util.List;
 
+import javax.inject.Named;
+
 public class FolderGeneratorTest {
 	@Mock(name = "thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+
+	@Mock(name = "thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;	
 
 	@InjectMocks
 	private FolderGenerator folderGenerator = new FolderGenerator();
@@ -73,7 +79,7 @@ public class FolderGeneratorTest {
 		List<IThesaurusListNode> nodes = folderGenerator
 				.generateFolders("fake");
 
-		Assert.assertEquals("Invalid number of nodes", 4, nodes.size());
+		Assert.assertEquals("Invalid number of nodes", 5, nodes.size());
 
 		// tests of the top concept node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(0)

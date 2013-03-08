@@ -38,5 +38,5 @@ package fr.mcc.ginco.extjs.view.enums;
  * Enum intended to be used for mark type of node.
  */
 public enum ThesaurusListNodeType {
-    THESAURUS, FOLDER, CONCEPT
+    THESAURUS, FOLDER, CONCEPT, ARRAYS
 }
