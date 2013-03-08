@@ -11,8 +11,8 @@ Ext
 					extend : 'Ext.panel.Panel',
 					thesaurusData : '',
 					
-					//TODO : remove after test
-					conceptArray : null,
+					//TODO : remove value 1 after test
+					conceptArray : '1',
 					associatedConceptStore : null,
 					alias : 'widget.conceptArrayPanel',
 
@@ -30,7 +30,9 @@ Ext
 					xIdentifierLabel : 'Identifier',
 					//xCreatedDateLabel : 'Creation date',
 					//xModifiedDateLabel : 'Modification date',
-					xTitleLabel : 'Title',
+					xOrdererLabel: 'Ordered',
+					xNotationLabel: 'Notation',
+					xLabelLabel : 'Title',
 					xLexicalValueLabel : 'Lexical Value',
 					xLanguageLabel : 'Language',
 					xConceptArrayGridTitle : 'Concepts',
@@ -89,18 +91,18 @@ Ext
 														},
 														{
 															xtype : 'displayfield',
-															name : 'created',
-															fieldLabel : me.xCreatedDateLabel
+															name : 'ordered',
+															fieldLabel : me.xOrdererLabel
 														},
 														{
 															xtype : 'displayfield',
-															name : 'modified',
-															fieldLabel : me.xModifiedDateLabel
+															name : 'notation',
+															fieldLabel : me.xNotationLabel
 														},
 														{
 															xtype : 'textfield',
-															name : 'title',
-															fieldLabel : me.xTitleLabel,
+															name : 'label',
+															fieldLabel : me.xLabelLabel,
 															allowBlank : false
 														},
 														{
@@ -118,7 +120,7 @@ Ext
 															forceSelection : true,
 															multiSelect : false,
 															allowBlank : false,
-															//store : ''
+															store : 'ThesaurusLanguageStore'
 														},
 														{
 															xtype : 'container',
