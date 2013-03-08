@@ -9,7 +9,7 @@ Ext.define('GincoApp.locale.fr.view.ConceptArrayPanel', {
 	xSave : 'Enregistrer',
 	xIdentifierLabel : 'Identifiant',
 	xOrdererLabel : 'Trié',
-	xNotationLabel : 'Date de modification',
+	xNotationLabel : 'Notation',
 	xLabelLabel : 'Titre',
 	xLanguageLabel : 'Langue',
 	xConceptArrayGridTitle : 'Concepts',
