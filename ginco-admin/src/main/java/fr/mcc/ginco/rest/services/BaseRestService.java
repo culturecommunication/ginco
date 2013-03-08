@@ -34,17 +34,8 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
-import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
-import fr.mcc.ginco.services.IThesaurusService;
-import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -53,8 +44,20 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
+import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
+import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
+import fr.mcc.ginco.services.IThesaurusService;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -78,6 +81,10 @@ public class BaseRestService {
 	@Inject
 	@Named("topTermGenerator")
 	private TopTermGenerator topTermGenerator;
+	
+	@Inject
+	@Named("arraysGenerator")
+	private ArraysGenerator thesaurusArrayGenerator;
 
     @Inject
     @Named("childrenGenerator")
@@ -108,7 +115,12 @@ public class BaseRestService {
             String conceptTopTermId = getIdFromParam(nodeParam,
                     ChildrenGenerator.ID_PREFIX);
             result = childrenGenerator.getChildrenByConceptId(conceptTopTermId);
-        } else {
+        } else if (nodeParam.startsWith(ArraysGenerator.ID_PREFIX)) {
+        	String vocId = getIdFromParam(nodeParam,
+        			FolderGenerator.ARRAYS_PREFIX);
+            result = thesaurusArrayGenerator.generateArrays(vocId);
+        } 
+		else {
 			result = new ArrayList<IThesaurusListNode>();
 			for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
 				IThesaurusListNode node = new ThesaurusListBasicNode();
