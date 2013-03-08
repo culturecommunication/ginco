@@ -2,6 +2,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
 	
+	xLoading : 'Loading',
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Note saved successfully',
 	xProblemLabel : 'Error !',
@@ -105,7 +106,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		var me=this;
 		var theGrid = theButton.up('panel').down('gridpanel');
 		var thePanel = theButton.up('panel');
-		thePanel.getEl().mask("chargement");
+		thePanel.getEl().mask(me.xLoading);
 		theGrid.getStore().sync({
 			success : function(model, operation) {
 				thePanel.getEl().unmask();
