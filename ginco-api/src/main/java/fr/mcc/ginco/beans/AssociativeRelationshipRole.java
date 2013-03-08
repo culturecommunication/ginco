@@ -36,6 +36,10 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
+/**
+ * Bean represents associative_relationship_role table and describes
+ * the role for association between two {@link ThesaurusConcept}
+ */
 public class AssociativeRelationshipRole implements Serializable {
 
     private String code;

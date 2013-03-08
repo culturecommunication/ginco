@@ -36,6 +36,10 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
+/**
+ * Bean represents <b>thesaurus_organization</b> table, contains information
+ * about author of modification.
+ */
 @SuppressWarnings("serial")
 public class ThesaurusOrganization implements Serializable {
 	private Integer identifier;

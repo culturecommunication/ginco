@@ -168,6 +168,17 @@ public class ThesaurusConceptDAO extends
 
         return criteria.list();
     }
+    
+    @Override
+    public List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept) {    	
+    	Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConcept.class, "tc");
+		 criteria.createCriteria("tc.rootConcepts", "rc")
+           .add(Restrictions.eq("rc.identifier",
+        		   concept.getIdentifier()));	   
+		 return criteria.list();    
+      
+    }
 
     /**
      * Selects TopTerm concepts by ThesaurusId without excluding.
@@ -245,4 +256,5 @@ public class ThesaurusConceptDAO extends
         selectNoParents(criteria);
 		return criteria;
 	}
+	
 }

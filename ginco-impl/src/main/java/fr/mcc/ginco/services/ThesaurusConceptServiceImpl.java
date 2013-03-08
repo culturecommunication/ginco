@@ -34,6 +34,21 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -45,14 +60,6 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.*;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -287,6 +294,19 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			term.setConcept(null);
 			thesaurusTermDAO.update(term);
 		}
+		
+		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(object.getIdentifier());
+		for (ThesaurusConcept childConcept:childrenConcepts) {
+			childConcept.getParentConcepts().remove(object);
+			thesaurusConceptDAO.update(childConcept);
+		}		
+		
+		List<ThesaurusConcept> rootChildrenConcepts =thesaurusConceptDAO.getAllRootChildren(object);
+		for (ThesaurusConcept rootChild:rootChildrenConcepts) {
+			rootChild.getRootConcepts().remove(object);
+			thesaurusConceptDAO.update(rootChild);
+		}
+		
         return thesaurusConceptDAO.delete(object);        
     }
 	
@@ -312,6 +332,25 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		}
 		return thesaurus;
+	}
+	
+	@Async
+	public void calculateChildrenRoot(String parentId) {
+		logger.info("root concept calculation launched for parent concept id = " + parentId);
+		calculateChildrenRoots(parentId, parentId);   
+    	logger.info("root concept calculation ended for parent concept id = " + parentId);
+	}
+	
+	private void calculateChildrenRoots(String parentId, String originalParentId) {
+		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(parentId);
+    	for (ThesaurusConcept concept:childrenConcepts) {
+    		if (concept.getIdentifier() != originalParentId) {
+    			logger.info("calculating root concept for chiled with concept Id : " + concept.getIdentifier());
+        		List<ThesaurusConcept> thisChildRoots = getRootConcepts(concept);
+        		concept.setRootConcepts( new HashSet<ThesaurusConcept>(thisChildRoots));
+        		calculateChildrenRoots(concept.getIdentifier(), originalParentId);
+    		}
+    	}
 	}
 
 }

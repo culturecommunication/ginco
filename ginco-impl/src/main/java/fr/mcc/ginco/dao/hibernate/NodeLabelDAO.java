@@ -40,6 +40,9 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Implementation of {@link INodeLabelDAO}; basic class for DAO-related work.
+ */
 @Repository("nodeLabelDAO")
 public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, Integer>
 		implements INodeLabelDAO {

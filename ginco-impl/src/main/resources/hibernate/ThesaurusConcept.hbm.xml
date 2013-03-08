@@ -20,7 +20,7 @@
 		</set>
 		
 		<set name="rootConcepts" table="top_relationship">
-			<key column="childconceptid" />
+			<key column="childconceptid"/>
 			<many-to-many column="rootconceptid" class="fr.mcc.ginco.beans.ThesaurusConcept" />
 		</set>		
 		

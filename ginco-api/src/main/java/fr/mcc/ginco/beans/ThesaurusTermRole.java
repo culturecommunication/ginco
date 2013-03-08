@@ -36,6 +36,10 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
+/**
+ * Bean represents <b>thesaurus_term_role</b> table, describing
+ * role between two concepts.
+ */
 public class ThesaurusTermRole implements Serializable {
 
     private String code;

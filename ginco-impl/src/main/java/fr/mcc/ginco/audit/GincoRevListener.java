@@ -34,21 +34,21 @@
  */
 package fr.mcc.ginco.audit;
 
-import java.io.Serializable;
-
-import javax.servlet.http.HttpServletRequest;
-
+import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
 import org.hibernate.envers.EntityTrackingRevisionListener;
 import org.hibernate.envers.RevisionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import fr.mcc.ginco.beans.GincoRevEntity;
-import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 
+/**
+ * Takes control on audit.
+ */
 public class GincoRevListener implements EntityTrackingRevisionListener {
 
 	private Logger logger = LoggerFactory.getLogger(GincoRevListener.class);

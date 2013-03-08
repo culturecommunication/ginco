@@ -37,8 +37,11 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
-@SuppressWarnings("serial")
-public class NodeLabel  implements Serializable{
+/**
+ * Bean represents node_label table to add label to {@link ThesaurusArray}
+ * in different languages.
+ */
+public class NodeLabel implements Serializable{
 
     private Integer identifier;
     private String lexicalValue;

@@ -34,13 +34,16 @@
  */
 package fr.mcc.ginco.beans;
 
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionEntity;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.envers.DefaultRevisionEntity;
-import org.hibernate.envers.RevisionEntity;
-
+/**
+ * Bean represents revision of other beans
+ */
 @RevisionEntity
 public class GincoRevEntity extends DefaultRevisionEntity implements Serializable {
 	private String username;

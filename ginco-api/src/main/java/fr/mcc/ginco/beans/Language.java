@@ -34,12 +34,16 @@
  */
 package fr.mcc.ginco.beans;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
+/**
+ * Beans represents languages_iso639 table, which contains different languages
+ * to be used in other beans.
+ */
 @SuppressWarnings("serial")
 public class Language implements Serializable {	
 
