@@ -3,13 +3,13 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	
 	models : [ 'ConceptArrayModel', 'ThesaurusConceptReducedModel', 'NodeLabelModel' ],
 
-	localized : true,
+	//localized : true,
 	
 	loadConceptArrayPanel : function(theForm){
         var me = this;
         var model = this.getConceptArrayModelModel();
         
-         var conceptArray = theForm.up('conceptArrayPanel').conceptArray;
+        var conceptArray = theForm.up('conceptArrayPanel').conceptArray;
         
         if (conceptArray != null) {
 			//load existing concept array

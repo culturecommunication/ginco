@@ -10,9 +10,11 @@ Ext
 				{
 					extend : 'Ext.panel.Panel',
 					thesaurusData : '',
-					alias : 'widget.conceptArrayPanel',
 					
-					conceptArrayId : null,
+					//TODO : remove after test
+					conceptArray : null,
+					associatedConceptStore : null,
+					alias : 'widget.conceptArrayPanel',
 
 					localized : true,
 					closable : true,
@@ -26,21 +28,23 @@ Ext
 					xConceptArrayFormTitle : 'Concept array',
 					xSave : 'Save',
 					xIdentifierLabel : 'Identifier',
-					xCreatedDateLabel : 'Creation date',
-					xModifiedDateLabel : 'Modification date',
+					//xCreatedDateLabel : 'Creation date',
+					//xModifiedDateLabel : 'Modification date',
 					xTitleLabel : 'Title',
+					xLexicalValueLabel : 'Lexical Value',
 					xLanguageLabel : 'Language',
 					xConceptArrayGridTitle : 'Concepts',
 					xAddConceptToArray : 'Add a concept',
 					xParentConceptLabel : 'Parent Concept',
 					xSelectParentConcept : 'Select a parent concept',
-
 					
 					initComponent : function() {
 						var me = this;
-						me.conceptArrayStore = Ext
+						
+						//This store is used to get only the children concepts of the superordinateconcept
+						me.conceptChildrenArrayStore = Ext
                         .create('GincoApp.store.SimpleConceptStore');
-						me.conceptArrayStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
+						me.conceptChildrenArrayStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
 
 						Ext
 								.applyIf(
@@ -143,7 +147,7 @@ Ext
 															xtype : 'gridpanel',
 															itemId : 'gridPanelConceptArray',
 															title : me.xConceptArrayGridTitle,
-															store : me.conceptArrayStore,
+															store : me.associatedConceptStore,
 
 															dockedItems : [ {
 																xtype : 'toolbar',
@@ -166,6 +170,11 @@ Ext
 																	{
 																		dataIndex : 'label',
 																		text : me.xLexicalValueLabel,
+																		flex : 1
+																	},
+																	{
+																		dataIndex : 'lang',
+																		text : me.xLanguageLabel,
 																		flex : 1
 																	}															
                                                             ]
