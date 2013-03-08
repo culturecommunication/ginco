@@ -92,7 +92,7 @@ public class ArraysGenerator {
 			arrayNode.setTitle(label.getLexicalValue());
 			
 			arrayNode
-                    .setId(ID_PREFIX + array.getIdentifier());
+                    .setId(array.getIdentifier());
 			arrayNode.setType(ThesaurusListNodeType.ARRAYS);
 			arrayNode.setExpanded(false);
 			arrayNode.setThesaurusId(array.getThesaurus().getIdentifier());

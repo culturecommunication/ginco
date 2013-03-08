@@ -13,8 +13,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	loadConceptArrayPanel : function(theForm){
         var me = this;
 
-        debugger;
-
         var model = this.getConceptArrayModelModel();
         
         var conceptArray = theForm.up('conceptArrayPanel').conceptArray;
@@ -23,7 +21,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			//load existing concept array
         	model.load(conceptArray, {
 				success : function(model) {
-					debugger;
                     me.loadData(theForm, model);
 					theForm.getEl().unmask();
 				},
