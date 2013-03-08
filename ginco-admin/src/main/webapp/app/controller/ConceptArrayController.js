@@ -45,7 +45,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		//We get all the concepts included in this concept array
 		var associatedConcepts = aModel.concepts().getRange();
 		
-		//We set in the model the field of superordinate with associated data (hasone)
+		//We set in the model the field of superordinate with associated data (hasone)+
+		console.log(aModel);
 		var superOrdinateConceptLabel = aModel.superOrdinateConceptStore.data.items[0].data.label;
 		aForm.down('textfield[name="superOrdinateConcept_label"]').setValue(superOrdinateConceptLabel);
 		
@@ -153,6 +154,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		theForm.down('textfield[name="superOrdinateConcept_label"]').setValue(selectedRow[0].data.label);
 		
 		//TODO : flush the grid with alert before
+		var theGrid = theForm.down('#gridPanelConceptArray');
+		var theGridStore = theGrid.getStore();
+		theGridStore.removeAll();
 	},
 	
     init:function(){    	  	 

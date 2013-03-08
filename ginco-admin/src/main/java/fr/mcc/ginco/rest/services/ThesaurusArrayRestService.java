@@ -37,6 +37,7 @@ package fr.mcc.ginco.rest.services;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
@@ -53,6 +54,7 @@ import javax.ws.rs.core.MediaType;
 
 @Service
 @Path("/thesaurusarrayservice")
+@Produces({ MediaType.APPLICATION_JSON })
 public class ThesaurusArrayRestService {
 	@Inject
 	@Named("thesaurusConceptService")
@@ -102,7 +104,7 @@ public class ThesaurusArrayRestService {
 	@POST
 	@Path("/updateArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public ThesaurusArrayView updateThesaurusArray(
+	public ExtJsonFormLoadData<ThesaurusArrayView> updateThesaurusArray(
 			ThesaurusArrayView thesaurusConceptViewJAXBElement)
 			throws BusinessException {
 
@@ -112,6 +114,6 @@ public class ThesaurusArrayRestService {
 				.convert(thesaurusConceptViewJAXBElement);
 
 		ThesaurusArray updated = thesaurusArrayService.updateThesaurusConcept(convertedArray, nodeLabel);
-		return thesaurusArrayViewConverter.convert(updated);
+		return new ExtJsonFormLoadData<ThesaurusArrayView>(thesaurusArrayViewConverter.convert(updated));
 	}
 }

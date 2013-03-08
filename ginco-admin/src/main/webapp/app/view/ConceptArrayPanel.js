@@ -162,12 +162,7 @@ Ext
 																		dataIndex : 'label',
 																		text : me.xLexicalValueLabel,
 																		flex : 1
-																	},
-																	{
-																		dataIndex : 'lang',
-																		text : me.xLanguageLabel,
-																		flex : 1
-																	}															
+																	}														
                                                             ]
 														}]
 											} ]
