@@ -12,6 +12,7 @@ Ext.define(
         config: {
             thesaurusData : null,
             conceptId : null,
+            getChildren : false,
             searchOrphans : null,
             showTree : false,
             checkstore: null
@@ -36,12 +37,19 @@ Ext.define(
             var me = this;
 
             me.conceptReducedStore = Ext.create('GincoApp.store.ConceptReducedStore');
-            me.conceptReducedStore.getProxy().extraParams = {
-                id: me.conceptId,
-                thesaurusId: me.thesaurusData.id,
-                searchOrphans: me.searchOrphans
-            };
-
+            
+            if (!me.getChildren) {
+                me.conceptReducedStore.getProxy().extraParams = {
+	                id: me.conceptId,
+	                thesaurusId: me.thesaurusData.id,
+	                searchOrphans: me.searchOrphans
+	            };
+            } else {
+            	me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
+            	me.conceptReducedStore.getProxy().extraParams = {
+	                conceptId: me.conceptId
+	            };
+            	}
             me.conceptReducedStore.load();
             me.addEvents('selectBtn');
 

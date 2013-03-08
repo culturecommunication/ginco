@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -47,10 +49,26 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public interface IThesaurusTermRoleService {
 
     /**
-     * Gets the deault term roles
+     * Gets the default term roles
      * @return
      * @throws BusinessException
      */
     ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException;
+    
+    /**
+     * Gets all term roles
+     * @return
+     * @throws BusinessException
+     */
+    List<ThesaurusTermRole> getAllThesaurusTermRole();    
+    
+    /**
+     * Gets a term role by Id
+     * @param code
+     * @return
+     * @throws BusinessException
+     */
+    ThesaurusTermRole getTermRole(String code);
+
 
 }

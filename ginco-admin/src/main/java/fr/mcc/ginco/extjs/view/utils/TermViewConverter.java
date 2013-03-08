@@ -34,22 +34,29 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.*;
-import fr.mcc.ginco.utils.DateUtil;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.ThesaurusTermRole;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IThesaurusTermRoleService;
+import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Small class responsible for converting real
@@ -134,8 +141,15 @@ public class TermViewConverter {
 				if (concept != null) {
 					hibernateRes.setConcept(concept);
 					if (!source.getPrefered()) {
-						hibernateRes.setRole(thesaurusTermRoleService
+						if (StringUtils.isNotBlank(source.getRole())) {
+							ThesaurusTermRole role = thesaurusTermRoleService.getTermRole(source.getRole());
+							hibernateRes.setRole(role);
+						} else {
+							hibernateRes.setRole(thesaurusTermRoleService
 								.getDefaultThesaurusTermRole());
+						}
+					} else {
+						hibernateRes.setRole(null);
 					}
 				}
 			}

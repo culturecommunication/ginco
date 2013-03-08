@@ -46,7 +46,8 @@ Ext.application({
         'ConceptNoteTypeStore',
         'TermNoteTypeStore',
         'NoteLanguageStore',
-        'SimpleConceptStore'
+        'SimpleConceptStore',
+        'TermRoleStore'
     ],
     views: [
         'GincoViewPort',

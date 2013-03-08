@@ -28,8 +28,8 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
         }
     ],
     associations: [
-                   {type: 'hasMany', model: 'GincoApp.model.ThesaurusConceptReducedModel',    name: 'concepts'},
-                   {type: 'hasMany', model: 'GincoApp.model.NodeLabelModel',    name: 'nodeLabelViewList'}
+                   {type: 'hasOne', model: 'GincoApp.model.ThesaurusConceptReducedModel',    name: 'superOrdinateConcept'},
+                   {type: 'hasMany', model: 'GincoApp.model.ThesaurusConceptReducedModel',    name: 'concepts'}
   ],
     
     idProperty : 'identifier',
