@@ -49,8 +49,6 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component("thesaurusArrayViewConverter")
 public class ThesaurusArrayViewConverter {
@@ -115,8 +113,9 @@ public class ThesaurusArrayViewConverter {
                     thesaurusConceptViewConverter.convert(new ArrayList<ThesaurusConcept>(source.getConcepts())));
 
         final NodeLabel label = nodeLabelService.getByThesaurusArrayAndLanguage(source.getIdentifier(), language);
-        Set<NodeLabel> list = new HashSet<NodeLabel>(){{add(label);}};
-        thesaurusArrayView.setNodeLabelViewList(nodeLabelViewConverter.convert(list));
+
+        thesaurusArrayView.setLabel(label.getLexicalValue());
+        thesaurusArrayView.setLanguage(label.getLanguage().getId());
 
         return thesaurusArrayView;
     }
