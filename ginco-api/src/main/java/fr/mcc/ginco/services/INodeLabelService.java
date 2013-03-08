@@ -37,15 +37,32 @@ package fr.mcc.ginco.services;
 import fr.mcc.ginco.beans.NodeLabel;
 
 /**
- * Service used to work with {@link NodeLabel} objects, contains basic
- * methods exposed to client part.
- *
+ * Service used to work with {@link NodeLabel} objects, contains basic methods
+ * exposed to client part.
+ * 
  * @see fr.mcc.ginco.beans.NodeLabel
  */
 public interface INodeLabelService {
-    NodeLabel getById(String id);
+	NodeLabel getById(String id);
 
-    NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId, String languageId);
+	/**
+	 * Gets a node label by thesaurus array id and language
+	 * 
+	 * @param thesaurusArrayId
+	 * @param languageId
+	 * @return
+	 */
+	NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId,
+			String languageId);
 
-    NodeLabel updateOrCreate(NodeLabel nodeLabel);
+	NodeLabel updateOrCreate(NodeLabel nodeLabel);
+
+	/**
+	 * Gets a node label by thesaurus array id
+	 * 
+	 * @param thesaurusArrayId
+	 * @return
+	 */
+	NodeLabel getByThesaurusArray(String thesaurusArrayId);
+
 }

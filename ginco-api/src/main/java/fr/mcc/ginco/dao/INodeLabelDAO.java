@@ -37,11 +37,22 @@ package fr.mcc.ginco.dao;
 import fr.mcc.ginco.beans.NodeLabel;
 
 public interface INodeLabelDAO extends IGenericDAO<NodeLabel, String> {
-    /**
-     * Get single object by thesaurus array id and language.
-     * @param thesaurusArrayId
-     * @param languageId
-     * @return
-     */
-    NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId, String languageId);
+	/**
+	 * Get single object by thesaurus array id and language.
+	 * 
+	 * @param thesaurusArrayId
+	 * @param languageId
+	 * @return
+	 */
+	NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId,
+			String languageId);
+
+	/**
+	 * Get single object by thesaurus array id
+	 * 
+	 * @param thesaurusArrayId
+	 * @return
+	 */
+	NodeLabel getByThesaurusArray(String thesaurusArrayId);
+
 }

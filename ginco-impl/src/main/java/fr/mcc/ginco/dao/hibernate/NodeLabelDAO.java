@@ -57,4 +57,13 @@ public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, String>
 
         return (NodeLabel) criteria.uniqueResult();
     }
+    
+    @Override
+    public NodeLabel getByThesaurusArray(String thesaurusArrayId) {
+        Criteria criteria = getCurrentSession().createCriteria(
+                NodeLabel.class);
+        criteria.add(Restrictions.eq("thesaurusArray.identifier", (String) thesaurusArrayId));
+
+        return (NodeLabel) criteria.uniqueResult();
+    }
 }

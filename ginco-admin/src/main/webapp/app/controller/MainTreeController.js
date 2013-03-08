@@ -8,12 +8,16 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	xProblemLoadMsg : 'Unable to load thesaurus tree',
 
 	onNodeDblClick : function(tree, aRecord, item, index, e, eOpts) {
+		console.log(aRecord.data.type);
 		if (aRecord.data.type == "THESAURUS") {
 			this.openThesaurusTab(aRecord);
 		}
 		if (aRecord.data.type == "CONCEPT") {
 			this.openConceptTab(aRecord);
-		}
+		}	
+		if (aRecord.data.type == "ARRAYS") {
+			this.openTabArray(aRecord);
+		}	
 		if (aRecord.data.type == "FOLDER"
 				&& aRecord.data.id.indexOf("SANDBOX") === 0) {
 			this.openSandBoxTab(aRecord.parentNode);
@@ -22,6 +26,9 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	openConceptTab: function (aRecord) {
 		Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);	
+	},
+	openTabArray: function (aRecord) {
+		Thesaurus.ext.tabs.openArrayTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);
 	},
 
     openSandBoxTab : function(aRecord) {

@@ -34,20 +34,24 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class used to generate categorization folder nodes
@@ -60,10 +64,16 @@ public class FolderGenerator {
 			.toString() + "_";
 	public static final String CONCEPTS_PREFIX = ClassificationFolderType.CONCEPTS
 			.toString() + "_";	
+	public static final String ARRAYS_PREFIX = ClassificationFolderType.ARRAYS
+			.toString() + "_";
 	
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
+	@Named("thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;
 
 	@Log
 	private Logger logger;
@@ -127,6 +137,21 @@ public class FolderGenerator {
 		groups.setExpanded(false);
 		groups.setChildren(new ArrayList<IThesaurusListNode>());
 		list.add(groups);
+		
+		
+		IThesaurusListNode arrays = new ThesaurusListBasicNode();
+		arrays.setTitle("Tableaux");
+		arrays.setId(ClassificationFolderType.ARRAYS.toString() + "_"
+				+ parentId);
+		arrays.setType(ThesaurusListNodeType.FOLDER);
+		arrays.setExpanded(false);		
+		List<ThesaurusArray> realArrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(parentId);
+		if (realArrays!= null && realArrays.size() >0) {
+			arrays.setChildren(null);
+		} else {
+			arrays.setChildren(new ArrayList<IThesaurusListNode>());
+		}
+		list.add(arrays);
 
 		return list;
 	}

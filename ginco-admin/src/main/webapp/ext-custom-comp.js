@@ -171,26 +171,48 @@ Thesaurus.ext.tabs = function(){
     		}
         },
         openTermTab : function(aTermId, aThesaurusData) {
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var termTabs = Ext.ComponentQuery.query('topTabs termPanel');
-		var tabExists = false;
-		Ext.Array.each(termTabs, function(element, index, array) {
-			if (element.termId != null
+        	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+        	var termTabs = Ext.ComponentQuery.query('topTabs termPanel');
+        	var tabExists = false;
+        	Ext.Array.each(termTabs, function(element, index, array) {
+        		if (element.termId != null
 					&& element.termId == aTermId) {
-				tabExists = element;
-			}
-		});
+        			tabExists = element;
+        		}
+        	});
 
-		if (!tabExists) {
-			var TermPanel = Ext.create('GincoApp.view.TermPanel');
-			TermPanel.thesaurusData = aThesaurusData;
-			TermPanel.termId = aTermId;
-			var tab = topTabs.add(TermPanel);
-			topTabs.setActiveTab(tab);
-			tab.show();
-		} else {
-			topTabs.setActiveTab(tabExists);
-		}
-	}
+        	if (!tabExists) {
+        		var TermPanel = Ext.create('GincoApp.view.TermPanel');
+        		TermPanel.thesaurusData = aThesaurusData;
+        		TermPanel.termId = aTermId;
+        		var tab = topTabs.add(TermPanel);
+        		topTabs.setActiveTab(tab);
+        		tab.show();
+        	} else {
+        		topTabs.setActiveTab(tabExists);
+        	}
+        },
+        openArrayTab : function(aArrayId, aThesaurusData) {
+    		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+    		var arrayTabsTabs = Ext.ComponentQuery.query('topTabs arrayPanel');
+    		var tabExists = false;
+    		Ext.Array.each(arrayTabsTabs, function(element, index, array) {
+    			if (element.conceptArray != null
+    					&& element.conceptArray == aArrayId) {
+    				tabExists = element;
+    			}
+    		});
+
+    		if (!tabExists) {
+    			var arrayPanel = Ext.create('GincoApp.view.ConceptArrayPanel');
+    			arrayPanel.thesaurusData = aThesaurusData;
+    			arrayPanel.conceptArray = aArrayId;
+    			var tab = topTabs.add(arrayPanel);
+    			topTabs.setActiveTab(tab);
+    			tab.show();
+    		} else {
+    			topTabs.setActiveTab(tabExists);
+    		}
+    	}
 	};
 }();
