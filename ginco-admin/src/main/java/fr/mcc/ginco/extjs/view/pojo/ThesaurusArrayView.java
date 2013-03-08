@@ -43,7 +43,7 @@ public class ThesaurusArrayView {
 
     private String label;
     private String language;
-    private String nodeLabelId;
+    private Integer nodeLabelId;
 
     private String thesaurusId;
 
@@ -97,11 +97,11 @@ public class ThesaurusArrayView {
         this.thesaurusId = thesaurusId;
     }
 
-    public String getNodeLabelId() {
+    public Integer getNodeLabelId() {
         return nodeLabelId;
     }
 
-    public void setNodeLabelId(String nodeLabelId) {
+    public void setNodeLabelId(Integer nodeLabelId) {
         this.nodeLabelId = nodeLabelId;
     }
 }

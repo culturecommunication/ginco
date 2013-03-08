@@ -40,17 +40,17 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class NodeLabel  implements Serializable{
 
-    private String identifier;
+    private Integer identifier;
     private String lexicalValue;
     private Date modified;
     private Date created;
     private Language language;
     private ThesaurusArray thesaurusArray;
     
-	public String getIdentifier() {
+	public Integer getIdentifier() {
 		return identifier;
 	}
-	public void setIdentifier(String identifier) {
+	public void setIdentifier(Integer identifier) {
 		this.identifier = identifier;
 	}
 	

@@ -12,7 +12,7 @@ Ext
 					thesaurusData : '',
 					
 					//TODO : remove value 1 after test
-					conceptArray : '1',
+					conceptArray : 1,
 					associatedConceptStore : null,
 					alias : 'widget.conceptArrayPanel',
 

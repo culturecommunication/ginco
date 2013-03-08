@@ -15,6 +15,10 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
             type: 'string'
         },
         {
+            name: 'nodeLabelId',
+            type: 'integer'
+        },
+        {
             name: 'thesaurusId',
             type: 'string'
         }

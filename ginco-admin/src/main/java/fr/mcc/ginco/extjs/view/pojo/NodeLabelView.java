@@ -35,18 +35,18 @@
 package fr.mcc.ginco.extjs.view.pojo;
 
 public class NodeLabelView {
-    private String identifier;
+    private Integer identifier;
     private String lexicalValue;
     private String modified;
     private String created;
     private String language;
     private String thesaurusArrayId;
 
-    public String getIdentifier() {
+    public Integer getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
+    public void setIdentifier(Integer identifier) {
         this.identifier = identifier;
     }
 

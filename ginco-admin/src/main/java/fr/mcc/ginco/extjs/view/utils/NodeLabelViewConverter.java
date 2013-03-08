@@ -84,7 +84,7 @@ public class NodeLabelViewConverter {
         return hibernateRes;
     }
 
-    private NodeLabel getExistingNodeLabel(String id)
+    private NodeLabel getExistingNodeLabel(Integer id)
             throws BusinessException {
 
         NodeLabel hibernateRes = nodeLabelService
@@ -102,7 +102,7 @@ public class NodeLabelViewConverter {
     public NodeLabel convert(NodeLabelView source, boolean fromArray) throws BusinessException{
         NodeLabel hibernateRes;
 
-        if (StringUtils.isEmpty(source.getIdentifier())) {
+        if ("".equals(source.getIdentifier())) {
             hibernateRes = getNewNodeLabel();
         } else {
             hibernateRes = getExistingNodeLabel(source.getIdentifier());
@@ -155,7 +155,7 @@ public class NodeLabelViewConverter {
 
     public NodeLabel convert(ThesaurusArrayView thesaurusConceptViewJAXBElement) {
         NodeLabel label;
-        if(StringUtils.isEmpty(thesaurusConceptViewJAXBElement.getNodeLabelId())) {
+        if("".equals(thesaurusConceptViewJAXBElement.getNodeLabelId())) {
             label = new NodeLabel();
             label.setCreated(DateUtil.nowDate());
         } else {

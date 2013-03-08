@@ -41,7 +41,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 @Repository("nodeLabelDAO")
-public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, String>
+public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, Integer>
 		implements INodeLabelDAO {
 
 	public NodeLabelDAO() {

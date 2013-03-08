@@ -52,7 +52,7 @@ public class NodeLabelServiceImpl implements INodeLabelService {
 
 
     @Override
-    public NodeLabel getById(String id) {
+    public NodeLabel getById(Integer id) {
         return nodeLabelDAO.getById(id);
     }
 
