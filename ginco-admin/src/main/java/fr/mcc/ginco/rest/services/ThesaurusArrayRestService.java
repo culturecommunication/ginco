@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
@@ -41,15 +42,11 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import org.apache.cxf.jaxrs.ext.Nullable;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Service
@@ -90,14 +87,18 @@ public class ThesaurusArrayRestService {
     @GET
     @Path("/getArray")
     @Produces({ MediaType.APPLICATION_JSON })
-    public ThesaurusArrayView getThesaurusArrayById(@QueryParam("id") String thesaurusArrayId, @Nullable @QueryParam("lang") String language) throws BusinessException {
-
-        if(language == null || language.isEmpty()) {
-           language = "fra";
-        }
-
+    public ThesaurusArrayView getThesaurusArrayById(@QueryParam("id") String thesaurusArrayId) throws BusinessException {
         return thesaurusArrayViewConverter.convert(
-                        thesaurusArrayService.getThesaurusArrayById(thesaurusArrayId),
-                        nodeLabelService.getByThesaurusArrayAndLanguage(thesaurusArrayId, language));
+                        thesaurusArrayService.getThesaurusArrayById(thesaurusArrayId));
+    }
+
+    @POST
+    @Path("/updateArray")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    public ThesaurusArrayView updateThesaurusArray(ThesaurusArrayView thesaurusConceptViewJAXBElement)
+            throws BusinessException {
+        ThesaurusArray convertedArray = thesaurusArrayViewConverter.convert(thesaurusConceptViewJAXBElement);
+
+        return thesaurusArrayViewConverter.convert(convertedArray);
     }
 }

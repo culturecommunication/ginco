@@ -36,16 +36,88 @@ package fr.mcc.ginco.extjs.view.utils;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
+import fr.mcc.ginco.services.INodeLabelService;
+import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import org.codehaus.plexus.util.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component("thesaurusArrayViewConverter")
 public class ThesaurusArrayViewConverter {
-    public ThesaurusArrayView convert(ThesaurusArray thesaurusArray, NodeLabel label) {
-        return null;
+
+    @Value("${ginco.default.language}")
+    private String language;
+
+    @Inject
+    @Named("thesaurusArrayService")
+    private IThesaurusArrayService thesaurusArrayService;
+
+    @Inject
+    @Named("thesaurusConceptService")
+    private IThesaurusConceptService thesaurusConceptService;
+
+    @Inject
+    @Named("thesaurusConceptViewConverter")
+    private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+
+    @Inject
+    @Named("nodeLabelService")
+    private INodeLabelService nodeLabelService;
+
+    @Inject
+    @Named("nodeLabelViewConverter")
+    private NodeLabelViewConverter nodeLabelViewConverter;
+
+
+    public ThesaurusArray convert(ThesaurusArrayView source) {
+        ThesaurusArray hibernateRes;
+        if(StringUtils.isEmpty(source.getIdentifier())) {
+            hibernateRes = new ThesaurusArray();
+        } else {
+            hibernateRes = thesaurusArrayService.getThesaurusArrayById(source.getIdentifier());
+        }
+
+        hibernateRes.setNotation(source.getNotation());
+        hibernateRes.setOrdered(source.getOrdered());
+
+        if(source.getSuperOrdinateConcept() != null) {
+            hibernateRes.setSuperOrdinateConcept(
+                    thesaurusConceptService.getThesaurusConceptById(
+                            source.getSuperOrdinateConcept().getIdentifier()));
+        }
+
+        return hibernateRes;
     }
 
-    public ThesaurusArray convert(ThesaurusArrayView thesaurusArrayView) {
-        return null;
+    public ThesaurusArrayView convert(ThesaurusArray source) throws BusinessException {
+        ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
+
+        thesaurusArrayView.setIdentifier(source.getIdentifier());
+        thesaurusArrayView.setNotation(source.getNotation());
+        thesaurusArrayView.setOrdered(source.getOrdered());
+
+        if(source.getSuperOrdinateConcept() != null) {
+            thesaurusArrayView.setSuperOrdinateConcept(
+                    thesaurusConceptViewConverter.convert(source.getSuperOrdinateConcept()));
+        }
+
+        thesaurusArrayView.setConcepts(
+                    thesaurusConceptViewConverter.convert(new ArrayList<ThesaurusConcept>(source.getConcepts())));
+
+        final NodeLabel label = nodeLabelService.getByThesaurusArrayAndLanguage(source.getIdentifier(), language);
+        Set<NodeLabel> list = new HashSet<NodeLabel>(){{add(label);}};
+        thesaurusArrayView.setNodeLabelViewList(nodeLabelViewConverter.convert(list));
+
+        return thesaurusArrayView;
     }
 }

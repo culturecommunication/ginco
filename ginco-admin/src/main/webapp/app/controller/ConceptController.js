@@ -101,7 +101,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 	},
 	
 	newTermFromConceptBtn : function(theButton, prefered) {
-		var thePanel = theButton.up('conceptPanel');
+		var me= this;
+		var thePanel =me.getActivePanel();
 		var win = Ext.create('GincoApp.view.CreateTermWin');
 		win.thesaurusData = thePanel.thesaurusData;
 		var theForm = win.down('form');
@@ -117,7 +118,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 	},
 	
 	selectTermFromConceptBtn : function(theButton, prefered){
-		var thePanel = theButton.up('conceptPanel');
+		var me= this;
+		var thePanel = me.getActivePanel();
 		var win = Ext.create('GincoApp.view.SelectTermWin');
 		var theGrid = theButton.up('#gridPanelTerms');
 		win.conceptGrid = theGrid;
@@ -140,18 +142,21 @@ Ext.define('GincoApp.controller.ConceptController', {
     },
 
     onTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
-        var thePanel = theGrid.up('conceptPanel');
+    	var me = this;
+        var thePanel = me.getActivePanel();
 		Thesaurus.ext.tabs.openTermTab(record.data.identifier, thePanel.thesaurusData);			
 
     },
     
     onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
-		var thePanel = theGrid.up('conceptPanel');
-    	Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
+    	var me = this;
+        var thePanel = me.getActivePanel();
+        Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
     },
     
     onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
-		var thePanel = theGrid.up('conceptPanel');
+    	var me = this;
+        var thePanel = me.getActivePanel();
     	Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
     },
 
@@ -191,9 +196,9 @@ Ext.define('GincoApp.controller.ConceptController', {
     
 
     addParent : function(theButton) {
-        var thePanel = theButton.up('conceptPanel');
-        var theForm = theButton.up('form');
         var me = this;
+        var thePanel = me.getActivePanel();
+        var theGrid = thePanel.down('#gridPanelParentConcepts');
         var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : thePanel.thesaurusData,
             conceptId : thePanel.conceptId,
@@ -201,12 +206,17 @@ Ext.define('GincoApp.controller.ConceptController', {
             listeners: {
                 selectBtn: {
                     fn: function(selectedRow) {
-                            me.selectConceptAsParent(selectedRow, theForm);
+                            me.selectConceptAsParent(selectedRow, theGrid);
                         }
                 }
             }
         });
         win.show();
+    },
+    
+    getActivePanel : function() {
+    	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+    	return topTabs.getActiveTab();
     },
 
     checkParent : function(theGrid, record, item, index, e, eOpts, parentStore) {
@@ -220,9 +230,9 @@ Ext.define('GincoApp.controller.ConceptController', {
     },    
 
     addAssociativeRelationship : function(theButton) {
-        var thePanel = theButton.up('conceptPanel');
-        var theForm = theButton.up('form');
         var me = this;
+        var thePanel = me.getActivePanel();
+        var theGrid = thePanel.down('#gridPanelAssociatedConcepts');
         var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : thePanel.thesaurusData,
             conceptId : thePanel.conceptId,
@@ -230,7 +240,7 @@ Ext.define('GincoApp.controller.ConceptController', {
             listeners: {
                 selectBtn: {
                     fn: function(selectedRow) {
-                        me.selectAssociativeConcept(selectedRow, theForm);
+                        me.selectAssociativeConcept(selectedRow, theGrid);
                     }
                 }
             }
@@ -244,14 +254,12 @@ Ext.define('GincoApp.controller.ConceptController', {
      * User clicks on button "Select as parent"
      * @param selectedRow
      */
-    selectConceptAsParent : function(selectedRow, theForm) {
-        var theGrid = theForm.down('#gridPanelParentConcepts');
+    selectConceptAsParent : function(selectedRow, theGrid) {
         var theStore = theGrid.getStore();
         theStore.add(selectedRow[0]);
     },
 
-    selectAssociativeConcept : function(selectedRow, theForm) {
-    	 var theGrid = theForm.down('#gridPanelAssociatedConcepts');
+    selectAssociativeConcept : function(selectedRow, theGrid) {
          var theStore = theGrid.getStore();
          theStore.add(selectedRow[0]);
 
@@ -275,7 +283,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 	},
 	
 	loadData : function(aForm, aModel) {
-		var conceptPanel = aForm.up('conceptPanel');
+		var me = this;
+        var conceptPanel = me.getActivePanel();
 		conceptPanel.conceptId = aModel.data.identifier;
 		
 		aForm.loadRecord(aModel);
@@ -345,7 +354,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var me = this;
 		var theForm = theButton.up('form');
 		var globalTabs = theForm.up('topTabs');
-		var thePanel = theForm.up('conceptPanel');
+		var thePanel = me.getActivePanel();
+		
 		var updatedModel = theForm.getForm().getRecord();
         var parentGrid = theForm.down('#gridPanelParentConcepts');
         var parentGridStore = parentGrid.getStore();
@@ -436,7 +446,7 @@ Ext.define('GincoApp.controller.ConceptController', {
             return associatedConcept.data.identifier;
         });
         
-        var thePanel = theForm.up('conceptPanel');
+        var thePanel = 	me.getActivePanel();
 
     	theForm.getEl().mask(me.xLoading);
 		var updatedModel = theForm.getForm().getRecord();
@@ -464,8 +474,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 	},
 	
-    init:function(){    	  	 
-         this.control({
+    init:function(){    	
+        this.control({
         	'conceptPanel form' : {
  				afterrender : this.onConceptFormRender
  			},
