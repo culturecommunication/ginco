@@ -193,7 +193,9 @@ public class ThesaurusConceptViewConverter {
             thesaurusConcept.setRootConcepts(
                     new HashSet<ThesaurusConcept>(
                             thesaurusConceptService.getRootConcepts(thesaurusConcept)));
-
+            
+            //launching an Async method to calculate new root concept for this concept children
+            thesaurusConceptService.calculateChildrenRoot(thesaurusConcept.getIdentifier());
 
         }
         List<String> associatedConceptsIds = source.getAssociatedConcepts();

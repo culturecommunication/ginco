@@ -34,9 +34,16 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class ThesaurusArrayView {
+/**
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusArray} bean, but fully serializable
+ */
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class ThesaurusArrayView implements Serializable {
     private String identifier;
     private List<ThesaurusConceptReducedView> superOrdinateConcept;
     private List<ThesaurusConceptReducedView> concepts;

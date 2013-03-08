@@ -34,13 +34,16 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.dao.INoteTypeDAO;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+/**
+ * Implementation of {@link INoteTypeDAO}; basic class for DAO-related work.
+ */
 @Repository("noteTypeDAO")
 public class NoteTypeDAO extends GenericHibernateDAO<NoteType, String>
 		implements INoteTypeDAO {

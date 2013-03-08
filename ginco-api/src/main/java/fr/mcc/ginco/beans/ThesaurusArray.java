@@ -37,6 +37,10 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Set;
 
+/**
+ * Beans represents <b>thesaurus_array</b> table and is a sub-container
+ * for {@link ThesaurusConcept}.
+ */
 @SuppressWarnings("serial")
 public class ThesaurusArray implements Serializable {
 	

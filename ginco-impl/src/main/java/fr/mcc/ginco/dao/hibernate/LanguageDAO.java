@@ -34,15 +34,17 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.dao.ILanguageDAO;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.dao.ILanguageDAO;
+import java.util.List;
 
+/**
+ * Implementation of {@link ILanguageDAO}; basic class for DAO-related work.
+ */
 @Repository("languagesDAO")
 public class LanguageDAO extends GenericHibernateDAO<Language, String> implements ILanguageDAO {
 	

@@ -30,6 +30,28 @@
             <value>false</value>
         </row>
     </table>
+
+    <table name="languages_iso639">
+        <column>id</column>
+        <column>part2b</column>
+        <column>part2t</column>
+        <column>part1</column>
+        <column>scope</column>
+        <column>type</column>
+        <column>ref_name</column>
+        <column>toplanguage</column>
+        <column>comment</column>
+        <row>
+            <value>fra</value>
+            <value></value>
+            <value></value>
+            <value></value>
+            <value>I</value>
+            <value>L</value>
+            <value>Francaise</value>
+            <value>false</value>
+        </row>
+    </table>
     <table name="thesaurus_concept">
 		<column>identifier</column>
 		<column>created</column>
@@ -86,7 +108,48 @@
 	</table>
 
     <table name="thesaurus_array">
+        <column>identifier</column>
+        <column>ordered</column>
+        <column>notation</column>
+        <column>thesaurusid</column>
+        <column>superordinateconceptid</column>
+        <row>
+            <value>1</value>
+            <value>false</value>
+            <value>notation</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+        </row>
+    </table>
 
+    <table name="node_label">
+        <column>id</column>
+        <column>lexicalvalue</column>
+        <column>modified</column>
+        <column>created</column>
+        <column>lang</column>
+        <column>thesaurusarrayid</column>
+        <row>
+            <value>1</value>
+            <value>test</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>fra</value>
+            <value>1</value>
+        </row>
+    </table>
+
+    <table name="thesaurus_array_concept">
+        <column>thesaurusarrayid</column>
+        <column>conceptid</column>
+        <row>
+            <value>1</value>
+            <value>http://www.culturecommunication.gouv.fr/co2_1</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>http://www.culturecommunication.gouv.fr/co2_2</value>
+        </row>
     </table>
 </dataset>
   

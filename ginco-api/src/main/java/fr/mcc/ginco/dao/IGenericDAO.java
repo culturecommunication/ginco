@@ -61,8 +61,16 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @return An object of type T matching with the given id
 	 */
 	T getById(ID id);
-	
-	T loadById(ID id);
+
+
+    /**
+     * Load an object of type T by id. The same as {@link IGenericDAO#getById(java.io.Serializable)}
+     * but uses {@link org.hibernate.Session#load(Class, java.io.Serializable)} method.
+     *
+     * @param id
+     * @return An object of type T matching with the given id
+     */
+    T loadById(ID id);
 
 
 	/**

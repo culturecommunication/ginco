@@ -34,20 +34,20 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
- * @author frsto
- *
+ * Bean represents <b>thesaurus</b> table, main container containing
+ * all other beans.
  */
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 @SuppressWarnings("serial")

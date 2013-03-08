@@ -191,5 +191,12 @@ public interface IThesaurusConceptService {
 	 */
 	ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object) throws BusinessException;
 
+	
+	/**
+	 * Asynchronous method to recalculate root for all the node childrens
+	 * @param parentId
+	 */
+	void calculateChildrenRoot(String parentId);
+
 
 }

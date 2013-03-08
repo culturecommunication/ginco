@@ -34,13 +34,18 @@
  */
 package fr.mcc.ginco.ark;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
+import java.io.Serializable;
+import java.util.UUID;
+
+/**
+ * Custom generator of primary keys for Hibernate,
+ * should be changed in later revisions to generate real
+ * ARK-based ids.
+ */
 public class CustomGenerator implements IdentifierGenerator {
 
     private String nma = "http://culturecommunication.gouv.fr";

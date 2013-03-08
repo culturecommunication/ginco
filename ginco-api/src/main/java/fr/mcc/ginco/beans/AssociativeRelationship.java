@@ -34,11 +34,14 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import java.io.Serializable;
+
+/**
+ * Bean represents relation between two {@link ThesaurusConcept}
+ */
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 public class AssociativeRelationship implements Serializable {
 	
@@ -83,23 +86,30 @@ public class AssociativeRelationship implements Serializable {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (this == obj)
+			if (this == obj) {
 				return true;
-			if (obj == null)
+            }
+			if (obj == null) {
 				return false;
-			if (getClass() != obj.getClass())
+            }
+			if (getClass() != obj.getClass()) {
 				return false;
+            }
 			Id other = (Id) obj;
 			if (concept1 == null) {
-				if (other.concept1 != null)
+				if (other.concept1 != null) {
 					return false;
-			} else if (!concept1.equals(other.concept1))
+                }
+			} else if (!concept1.equals(other.concept1)) {
 				return false;
+            }
 			if (concept2 == null) {
-				if (other.concept2 != null)
+				if (other.concept2 != null) {
 					return false;
-			} else if (!concept2.equals(other.concept2))
+                }
+			} else if (!concept2.equals(other.concept2)) {
 				return false;
+            }
 			return true;
 		}
 		

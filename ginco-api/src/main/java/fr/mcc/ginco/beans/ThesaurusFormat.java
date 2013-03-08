@@ -34,12 +34,16 @@
  */
 package fr.mcc.ginco.beans;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
+/**
+ * Bean represents <b>thesaurus_format</b> table,contains type
+ * of {@link Thesaurus}
+ */
 @SuppressWarnings("serial")
 public class ThesaurusFormat implements Serializable {
 	private Integer identifier;

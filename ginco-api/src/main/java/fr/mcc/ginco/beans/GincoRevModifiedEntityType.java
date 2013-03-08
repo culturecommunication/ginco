@@ -36,6 +36,9 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
+/**
+ *
+ */
 public class GincoRevModifiedEntityType implements Serializable {
 	private Integer id;
 

@@ -34,10 +34,13 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Note;
 
+import java.util.List;
+
+/**
+ * Data Access Object for note
+ */
 public interface INoteDAO extends IGenericDAO<Note, String> {
 	/**
 	 * @return List<Note> List of paginated notes for a concept

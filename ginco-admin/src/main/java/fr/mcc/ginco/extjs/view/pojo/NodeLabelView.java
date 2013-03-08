@@ -34,7 +34,15 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-public class NodeLabelView {
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.io.Serializable;
+
+/**
+ * View class corresponding to {@link fr.mcc.ginco.beans.NodeLabel} bean, but fully serializable
+ */
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class NodeLabelView implements Serializable {
     private String identifier;
     private String lexicalValue;
     private String modified;
