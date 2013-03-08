@@ -10,9 +10,8 @@ Ext
 				{
 					extend : 'Ext.panel.Panel',
 					thesaurusData : '',
-					
-					//TODO : remove value 1 after test
-					conceptArray : 1,
+
+					conceptArray : null,
 					associatedConceptStore : null,
 					alias : 'widget.conceptArrayPanel',
 
