@@ -136,14 +136,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             },
             'conceptArrayPanel  #addConceptToArray' : {
                 click : this.selectConceptToArray
-            },
-            'selectConceptWin gridpanel' : {
-            	itemclick : function(theGrid) {
-            		var thePanel = theGrid.up('gridpanel');
-                    var theButton = thePanel.down('#selectButton');
-                    theButton.setDisabled(false);
-            	}
-            }
+            }            
          });
 
     }
