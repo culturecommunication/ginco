@@ -114,5 +114,13 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @return
      */
     List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept);
+    
+    /**
+     * Returns all children (recursive) from the given root
+     * @param concept
+     * @return
+     */
+    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept);    	
+
 
 }
