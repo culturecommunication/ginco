@@ -44,11 +44,9 @@ public interface INodeLabelDAO extends IGenericDAO<NodeLabel, Integer> {
 	 * Get single object by thesaurus array id and language.
 	 * 
 	 * @param thesaurusArrayId
-	 * @param languageId
 	 * @return
 	 */
-	NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId,
-			String languageId);
+	NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId);
 
 	/**
 	 * Get single object by thesaurus array id

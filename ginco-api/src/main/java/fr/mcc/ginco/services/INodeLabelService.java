@@ -49,11 +49,9 @@ public interface INodeLabelService {
 	 * Gets a node label by thesaurus array id and language
 	 * 
 	 * @param thesaurusArrayId
-	 * @param languageId
 	 * @return
 	 */
-	NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId,
-			String languageId);
+	NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId);
 
 	NodeLabel updateOrCreate(NodeLabel nodeLabel);
 

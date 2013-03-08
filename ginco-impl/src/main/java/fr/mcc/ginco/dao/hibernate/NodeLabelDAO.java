@@ -52,13 +52,13 @@ public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, Integer>
 	}
 
     @Override
-    public NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId, String languageId) {
+    public NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId) {
         Criteria criteria = getCurrentSession().createCriteria(
                 NodeLabel.class);
         criteria.add(Restrictions.eq("thesaurusArray.identifier", (String) thesaurusArrayId));
-        criteria.add(Restrictions.eq("language.id", (String) languageId));
+        //criteria.add(Restrictions.eq("language.id", (String) languageId));
 
-        return (NodeLabel) criteria.uniqueResult();
+        return (NodeLabel) criteria.list().get(0);
     }
     
     @Override
