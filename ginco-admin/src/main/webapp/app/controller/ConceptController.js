@@ -379,7 +379,7 @@ Ext.define('GincoApp.controller.ConceptController', {
     			fn : function(buttonId) {
     				switch (buttonId) {
     				case 'no':
-    					break; // manually removes tab from tab panel
+    					break;
     				case 'yes':
     					updatedModel.destroy({
     						success : function(record, operation) {
@@ -393,10 +393,7 @@ Ext.define('GincoApp.controller.ConceptController', {
     									operation.error);
     						}
     					});
-    					break;
-    				case 'cancel':
-    					break; // leave blank if no action required on
-    				// cancel
+    					break;    				
     				}
     			},
     			scope : this

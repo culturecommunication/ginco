@@ -2,87 +2,95 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	extend:'Ext.app.Controller',
 
     stores : [ 'ConceptReducedStore' ],
-	models : [ 'ConceptArrayModel', 'ThesaurusConceptReducedModel' ],
+	models : [ 'ConceptArrayModel', 'ThesaurusConceptReducedModel', 'ThesaurusModel'],
 
-	//localized : true,
+	localized : true,
 	
 	xProblemLabel : 'Error!',
 	xProblemLoadMsg : 'Unable to load data',
 	xErrorDoubleRecord: 'Record already present',
+	xSucessLabel : 'Success!',
+	xSucessSavedMsg : 'Array saved successfully',
+	xProblemSaveMsg : 'Unable to save this array!',
+	xChangingParentWarningMsgTitle : 'Warning',
+	xChangingParentWarningMsgLabel : 'Changing the parent concept will erase the children, please confirm',
+	
 	
 	loadConceptArrayPanel : function(theForm){
         var me = this;
-
+		var thePanel = theForm.up('conceptArrayPanel');
         var model = this.getConceptArrayModelModel();
-        var conceptArray = theForm.up('conceptArrayPanel').conceptArray;
-        
-        if (conceptArray != null) {
-			
-    		model.load(conceptArray, {
+        var conceptArrayId = thePanel.conceptArrayId;
+        if (conceptArrayId != '') {    		
+    		theForm.getEl().mask("Chargement");
+
+			var thesaurusId= thePanel.thesaurusData.data.id;
+			var thesaurusModel= this.getThesaurusModelModel();
+			thesaurusModel.load(thesaurusId, {
 				success : function(model) {
-                    me.loadData(theForm, model);
+					thePanel.thesaurusData = model.data;
+				}
+			});
+			model.load(conceptArrayId, {
+				success : function(model) {
+					me.loadData(theForm, model);
 					theForm.getEl().unmask();
 				},
 				failure : function(model) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
-							xProblemLoadMsg);
+							me.xProblemLoadMsg);
 					var globalTabs = theForm.up('topTabs');
 					globalTabs.remove(thePanel);
 				}
-			});
+			});			
+    		
 		} else {
+			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 			model = Ext.create('GincoApp.model.ConceptArrayModel');
-			//TODO : is it really needed ? -> model.id = -1;
-			theForm.loadRecord(model);
+			model.data.thesaurusId = thePanel.thesaurusData.id;
+			model.data.identifier = "";
+			theForm.loadRecord(model);			
 		}
 	},
 	
 	loadData : function(aForm, aModel) {
-		var me = this;
-		
+		var me = this;		
 		aForm.loadRecord(aModel);
-
 		//We get all the concepts included in this concept array
-		var associatedConcepts = aModel.concepts().getRange();
-		
-		//We set in the model the field of superordinate with associated data (hasone)+
-		console.log(aModel);
-		var superOrdinateConceptLabel = aModel.superOrdinateConceptStore.data.items[0].data.label;
-		aForm.down('textfield[name="superOrdinateConcept_label"]').setValue(superOrdinateConceptLabel);
-		
-		var theGrid = aForm.down('#gridPanelConceptArray');
-		var theGridStore = theGrid.getStore();
-		theGridStore.removeAll();
-		theGridStore.add(associatedConcepts);
+		var conceptsGrid  = aForm.down('#gridPanelConceptArray');
+        var conceptsGridStore = conceptsGrid.getStore();
+        conceptsGridStore.getProxy().extraParams = {
+            conceptIds: aModel.raw.concepts
+        };
+        conceptsGridStore.load();		
 	},
 	
 	saveConceptArray : function(theButton){
 		var me = this;
-		var theForm = theButton.up('form');
+		var theForm = theButton.up('#conceptArrayForm');
 		var theGrid = theForm.down('#gridPanelConceptArray');
-		var theStore = theGrid.getStore();
-		var addedConceptsToArray = theStore.getRange();
 		theForm.getEl().mask(me.xLoading);
 		
-		//We update the model with the form fields
 		theForm.getForm().updateRecord();
-		
-		//We update the model with the concepts added to the grid
 		var updatedModel = theForm.getForm().getRecord();
-		updatedModel.concepts().removeAll();
-		updatedModel.concepts().add(addedConceptsToArray);
+		//We update the model with the concepts added to the grid
+        var conceptsGridStore = theGrid.getStore();
+        var conceptData = conceptsGridStore.getRange();
+        var conceptIds = Ext.Array.map(conceptData, function(concept){
+            return concept.data.identifier;
+        });
+        updatedModel.data.concepts = conceptIds;
 		
 		updatedModel.save({
 			success : function(record, operation) {
 				var resultRecord = operation.getResultSet().records[0];
 				me.loadData(theForm, resultRecord);
 				theForm.getEl().unmask();
-				Thesaurus.ext.utils.msg("ok", "ok");				
-				//me.application.fireEvent('conceptupdated', thePanel.thesaurusData);
+				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
 				
 			},
 			failure : function(record, operation) {
-				Thesaurus.ext.utils.msg("erreur", "erreur"+" "+operation.error);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
 				theForm.getEl().unmask();
 			}
 		});
@@ -98,21 +106,36 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var me = this;
 		var theForm = theButton.up('form');
 	    var thePanel = me.getActivePanel();
-	    var theGrid = thePanel.down('#gridPanelConceptArray');
-	    var theStore = theGrid.getStore();
-		var win = Ext.create('GincoApp.view.SelectConceptWin', {
-	            thesaurusData : thePanel.thesaurusData,
-	            showTree : false,
-	            checkstore: theStore,
-	            listeners: {
-	                selectBtn: {
-	                    fn: function(selectedRow) {
-	                            me.selectConceptAsParent(selectedRow, theForm);
-	                        }
-	                }
-	            }
-	        });
-		win.show();
+	    
+	 	Ext.MessageBox.show({
+			title : me.xChangingParentWarningMsgTitle,
+			msg : me.xChangingParentWarningMsgLabel,
+			buttons : Ext.MessageBox.YESNO,
+			fn : function(buttonId) {
+				switch (buttonId) {
+				case 'no':
+					break; // manually removes tab from tab panel
+					case 'yes':
+						var win = Ext.create('GincoApp.view.SelectConceptWin', {
+							thesaurusData : thePanel.thesaurusData,
+							showTree : false,
+							listeners: {
+								selectBtn: {
+			                    fn: function(selectedRow) {
+			                            me.selectConceptAsParent(selectedRow, theForm);
+			                        }
+			                }
+			            }
+			        });
+						win.show();
+					case 'cancel':
+					break; // leave blank if no action required on
+				// cancel
+				}
+			},
+			scope : this
+		});
+		
 	},
 	
 	selectConceptToArray : function(theButton){
@@ -120,13 +143,15 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var me = this;
 		var theConceptArrayPanel = theButton.up('conceptArrayPanel');
 		var theConceptArrayForm = theButton.up('form');
-		
+		var theGrid = theConceptArrayPanel.down('#gridPanelConceptArray');
+		var theStore = theGrid.getStore();
+		    
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : theConceptArrayPanel.thesaurusData,
-            //TODO remove after test :
-            conceptId : 'http://culturecommunication.gouv.fr/ark:/12345/62f9c6fe-4346-4183-af09-44bfacfd17d1',
+            conceptId : theConceptArrayForm.down('textfield[name="superOrdinateId"]').value,
             getChildren : true,
             showTree : false,
+            checkstore: theStore,
             listeners: {
                 selectBtn: {
                     fn: function(selectedRow) {
@@ -152,20 +177,29 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	},
 	
 	selectConceptAsParent : function(selectedRow, theForm){
-		var model = theForm.getRecord();
-		
-		//We get label and id of parent concept from selected row and add to the model + display the label in the field superOrdinateConcept_label
-		//model.data.superOrdinateConcept_label = selectedRow[0].data.label;
-		//aModel.superOrdinateConceptStore.data.items[0].data.label;
-		model.superOrdinateConceptStore.data.items[0].data.identifier = selectedRow[0].data.identifier;
-		model.superOrdinateConceptStore.data.items[0].data.label = selectedRow[0].data.label;
-		theForm.down('textfield[name="superOrdinateConcept_label"]').setValue(selectedRow[0].data.label);
-		
-		//TODO : flush the grid with alert before
-		var theGrid = theForm.down('#gridPanelConceptArray');
-		var theGridStore = theGrid.getStore();
-		theGridStore.removeAll();
+		var me = this;		
+		var oldSuperOrdinate = theForm.down('textfield[name="superOrdinateId"]').getValue();
+
+		theForm.down('textfield[name="superOrdinateLabel"]').setValue(selectedRow[0].data.label);
+		theForm.down('textfield[name="superOrdinateId"]').setValue(selectedRow[0].data.identifier);
+
+		if (selectedRow[0].data.identifier != oldSuperOrdinate) {
+			var theGrid = theForm.down('#gridPanelConceptArray');
+			var theGridStore = theGrid.getStore();
+			theGridStore.removeAll();
+		}
 	},
+	
+	onRemoveConceptClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
+	        var theGrid = gridview.up('#gridPanelConceptArray');
+	        var theStore = theGrid.getStore();
+	        theStore.remove(rec);
+	},
+	 onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
+	    	var me = this;
+	        var thePanel = me.getActivePanel();
+	        Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
+	    },
 	
     init:function(){    	  	 
          this.control({
@@ -180,7 +214,13 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             },
             'conceptArrayPanel  #addConceptToArray' : {
                 click : this.selectConceptToArray
-            }            
+            },
+            'conceptArrayPanel #gridPanelConceptArray #associatedConceptActionColumn' : {
+                click : this.onRemoveConceptClick
+            },
+            'conceptArrayPanel #gridPanelConceptArray' : {
+            	itemdblclick : this.onConceptDblClick
+            },
          });
 
     }

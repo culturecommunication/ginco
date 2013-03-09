@@ -155,7 +155,7 @@ public class NodeLabelViewConverter {
 
     public NodeLabel convert(ThesaurusArrayView thesaurusConceptViewJAXBElement) {
         NodeLabel label;
-        if("".equals(thesaurusConceptViewJAXBElement.getNodeLabelId())) {
+        if(thesaurusConceptViewJAXBElement.getNodeLabelId() == null || thesaurusConceptViewJAXBElement.getNodeLabelId() ==0) {
             label = new NodeLabel();
             label.setCreated(DateUtil.nowDate());
         } else {

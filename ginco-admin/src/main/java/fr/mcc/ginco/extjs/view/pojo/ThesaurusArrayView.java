@@ -34,10 +34,10 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import java.io.Serializable;
 import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusArray} bean, but fully serializable
@@ -45,8 +45,10 @@ import java.util.List;
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusArrayView implements Serializable {
     private String identifier;
-    private List<ThesaurusConceptReducedView> superOrdinateConcept;
-    private List<ThesaurusConceptReducedView> concepts;
+    private String superOrdinateId;
+    private String superOrdinateConceptLabel;
+
+    private List<String> concepts;
 
     private String label;
     private String language;
@@ -64,23 +66,41 @@ public class ThesaurusArrayView implements Serializable {
         this.identifier = identifier;
     }
 
-    public List<ThesaurusConceptReducedView> getSuperOrdinateConcept() {
-        return superOrdinateConcept;
-    }
+   
 
-    public void setSuperOrdinateConcept(List<ThesaurusConceptReducedView> superOrdinateConcept) {
-        this.superOrdinateConcept = superOrdinateConcept;
-    }
+    public String getSuperOrdinateId() {
+		return superOrdinateId;
+	}
 
-    public List<ThesaurusConceptReducedView> getConcepts() {
-        return concepts;
-    }
+	public void setSuperOrdinateId(String superOrdinateConceptId) {
+		this.superOrdinateId = superOrdinateConceptId;
+	}
 
-    public void setConcepts(List<ThesaurusConceptReducedView> concepts) {
-        this.concepts = concepts;
-    }
+	public String getSuperOrdinateLabel() {
+		return superOrdinateConceptLabel;
+	}
 
-    public String getLabel() {
+	public void setSuperOrdinateLabel(String superOrdinateConceptLabel) {
+		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
+	}	
+
+    public String getSuperOrdinateConceptLabel() {
+		return superOrdinateConceptLabel;
+	}
+
+	public void setSuperOrdinateConceptLabel(String superOrdinateConceptLabel) {
+		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
+	}
+
+	public List<String> getConcepts() {
+		return concepts;
+	}
+
+	public void setConcepts(List<String> concepts) {
+		this.concepts = concepts;
+	}
+
+	public String getLabel() {
         return label;
     }
 

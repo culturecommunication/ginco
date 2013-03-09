@@ -34,105 +34,145 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
-import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.IThesaurusArrayService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
+import fr.mcc.ginco.services.INodeLabelService;
+import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
 
 @Component("thesaurusArrayViewConverter")
 public class ThesaurusArrayViewConverter {
 
-    @Value("${ginco.default.language}")
-    private String language;
+	@Value("${ginco.default.language}")
+	private String language;
 
-    @Inject
-    @Named("thesaurusArrayService")
-    private IThesaurusArrayService thesaurusArrayService;
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
+	
+	@Inject
+	@Named("thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;
 
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-    @Inject
-    @Named("thesaurusConceptViewConverter")
-    private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+	@Inject
+	@Named("thesaurusConceptViewConverter")
+	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
 
-    @Inject
-    @Named("nodeLabelService")
-    private INodeLabelService nodeLabelService;
+	@Inject
+	@Named("nodeLabelService")
+	private INodeLabelService nodeLabelService;
 
-    @Inject
-    @Named("nodeLabelViewConverter")
-    private NodeLabelViewConverter nodeLabelViewConverter;
+	@Inject
+	@Named("nodeLabelViewConverter")
+	private NodeLabelViewConverter nodeLabelViewConverter;
 
+	public ThesaurusArray convert(ThesaurusArrayView source)
+			throws BusinessException {
+		ThesaurusArray hibernateRes;
+		if (StringUtils.isEmpty(source.getIdentifier())) {
+			hibernateRes = new ThesaurusArray();
+		} else {
+			hibernateRes = thesaurusArrayService.getThesaurusArrayById(source
+					.getIdentifier());
+		}
+		if ("".equals(source.getThesaurusId())) {
+			throw new BusinessException(
+					"ThesaurusId is mandatory to save a concept",
+					"mandatory-thesaurus");
+		} else {
+			Thesaurus thesaurus = new Thesaurus();
+			thesaurus = thesaurusService.getThesaurusById(source
+					.getThesaurusId());
+			hibernateRes.setThesaurus(thesaurus);
+		}
+		
+		if (StringUtils.isEmpty(source.getSuperOrdinateId())) {
+			throw new BusinessException(
+					"ThesaurusArray must have superordirnated concept!",
+					"array-should-have-superordirnated-concept");
+		}
 
-    public ThesaurusArray convert(ThesaurusArrayView source) throws BusinessException {
-        ThesaurusArray hibernateRes;
-        if(StringUtils.isEmpty(source.getIdentifier())) {
-            hibernateRes = new ThesaurusArray();
-        } else {
-            hibernateRes = thesaurusArrayService.getThesaurusArrayById(source.getIdentifier());
-        }
+		if (StringUtils.isNotEmpty(source.getSuperOrdinateId())) {
+			hibernateRes
+					.setSuperOrdinateConcept(thesaurusConceptService
+							.getThesaurusConceptById(source
+									.getSuperOrdinateId()));
+		}
 
-        if(source.getSuperOrdinateConcept() == null || source.getSuperOrdinateConcept().get(0) == null) {
-            throw new BusinessException("ThesaurusArray must have superordirnated concept!",
-                                            "array-should-have-superordirnated-concept");
-        }
+		if (hibernateRes.getConcepts() == null) {
+			hibernateRes.setConcepts(new HashSet<ThesaurusConcept>());
+		}
+		hibernateRes.getConcepts().clear();
 
-        if(!StringUtils.isEmpty(source.getSuperOrdinateConcept().get(0).getIdentifier())) {
-            hibernateRes.setSuperOrdinateConcept(
-                    thesaurusConceptService.getThesaurusConceptById(
-                            source.getSuperOrdinateConcept().get(0).getIdentifier()));
-        }
+		for (String conceptId : source
+				.getConcepts()) {
+			ThesaurusConcept concept = thesaurusConceptService
+					.getThesaurusConceptById(conceptId);
+			if (concept == null) {
+				throw new BusinessException("Concept doest not exist",
+						"concept-does-not-exist");
+			}
+			hibernateRes.getConcepts().add(concept);
+		}
+		
+		hibernateRes.setOrdered(false);
 
-        hibernateRes.getConcepts().clear();
+		return hibernateRes;
+	}
 
-        for(ThesaurusConceptReducedView conceptReducedView : source.getConcepts()) {
-            ThesaurusConcept concept =
-                    thesaurusConceptService.getThesaurusConceptById(conceptReducedView.getIdentifier());
-            if(concept == null) {
-                throw new BusinessException("Concept doest not exist","concept-does-not-exist");
-            }
-            hibernateRes.getConcepts().add(concept);
-        }
+	public ThesaurusArrayView convert(final ThesaurusArray source)
+			throws BusinessException {
+		ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
 
+		thesaurusArrayView.setIdentifier(source.getIdentifier());
 
-        return hibernateRes;
-    }
+		if (source.getSuperOrdinateConcept() != null) {
+			thesaurusArrayView.setSuperOrdinateId(source
+					.getSuperOrdinateConcept().getIdentifier());
+			thesaurusArrayView
+					.setSuperOrdinateLabel(thesaurusConceptService
+							.getConceptLabel(source.getSuperOrdinateConcept()
+									.getIdentifier()));
 
-    public ThesaurusArrayView convert(final ThesaurusArray source) throws BusinessException {
-        ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
+		}
 
-        thesaurusArrayView.setIdentifier(source.getIdentifier());
+		List<String> conceptsIds = new ArrayList<String>();
+		for (ThesaurusConcept concept: source.getConcepts()) {
+			conceptsIds.add(concept.getIdentifier());
+		}
+		thesaurusArrayView
+				.setConcepts(conceptsIds);
 
-        if(source.getSuperOrdinateConcept() != null) {
-            thesaurusArrayView.setSuperOrdinateConcept(new ArrayList<ThesaurusConceptReducedView>() {{
-                    add(thesaurusConceptViewConverter.convert(source.getSuperOrdinateConcept()));}});
-        }
+		NodeLabel label = nodeLabelService
+				.getByThesaurusArrayAndLanguage(source.getIdentifier());
 
-        thesaurusArrayView.setConcepts(
-                    thesaurusConceptViewConverter.convert(new ArrayList<ThesaurusConcept>(source.getConcepts())));
+		thesaurusArrayView.setLabel(label.getLexicalValue());
+		thesaurusArrayView.setLanguage(label.getLanguage().getId());
+		thesaurusArrayView.setNodeLabelId(label.getIdentifier());
 
-        NodeLabel label = nodeLabelService.getByThesaurusArrayAndLanguage(source.getIdentifier());
+		thesaurusArrayView.setThesaurusId(source.getThesaurus()
+				.getThesaurusId());
 
-        thesaurusArrayView.setLabel(label.getLexicalValue());
-        thesaurusArrayView.setLanguage(label.getLanguage().getId());
-        thesaurusArrayView.setNodeLabelId(label.getIdentifier());
-
-        thesaurusArrayView.setThesaurusId(source.getThesaurus().getThesaurusId());
-
-        return thesaurusArrayView;
-    }
+		return thesaurusArrayView;
+	}
 }

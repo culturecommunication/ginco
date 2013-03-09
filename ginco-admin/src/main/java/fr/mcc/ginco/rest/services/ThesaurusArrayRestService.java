@@ -34,39 +34,34 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.springframework.stereotype.Service;
+
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 
 @Service
 @Path("/thesaurusarrayservice")
 @Produces({ MediaType.APPLICATION_JSON })
 public class ThesaurusArrayRestService {
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;
-
-	@Inject
-	@Named("nodeLabelService")
-	private INodeLabelService nodeLabelService;
 
 	@Inject
 	@Named("nodeLabelViewConverter")
@@ -75,10 +70,6 @@ public class ThesaurusArrayRestService {
 	@Inject
 	@Named("thesaurusArrayViewConverter")
 	private ThesaurusArrayViewConverter thesaurusArrayViewConverter;
-
-	@Inject
-	@Named("languagesService")
-	private ILanguagesService languagesService;
 
 	/**
 	 * Public method used to get
@@ -96,7 +87,7 @@ public class ThesaurusArrayRestService {
 	@Path("/getArray")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusArrayView getThesaurusArrayById(
-			@QueryParam("id") String thesaurusArrayId) throws BusinessException {		
+			@QueryParam("id") String thesaurusArrayId) throws BusinessException {
 		return thesaurusArrayViewConverter.convert(thesaurusArrayService
 				.getThesaurusArrayById(thesaurusArrayId));
 	}
@@ -104,7 +95,7 @@ public class ThesaurusArrayRestService {
 	@POST
 	@Path("/updateArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<ThesaurusArrayView> updateThesaurusArray(
+	public ThesaurusArrayView updateThesaurusArray(
 			ThesaurusArrayView thesaurusConceptViewJAXBElement)
 			throws BusinessException {
 
@@ -113,7 +104,8 @@ public class ThesaurusArrayRestService {
 		NodeLabel nodeLabel = nodeLabelViewConverter
 				.convert(thesaurusConceptViewJAXBElement);
 
-		ThesaurusArray updated = thesaurusArrayService.updateThesaurusConcept(convertedArray, nodeLabel);
-		return new ExtJsonFormLoadData<ThesaurusArrayView>(thesaurusArrayViewConverter.convert(updated));
+		ThesaurusArray updated = thesaurusArrayService.updateThesaurusConcept(
+				convertedArray, nodeLabel);
+		return thesaurusArrayViewConverter.convert(updated);
 	}
 }

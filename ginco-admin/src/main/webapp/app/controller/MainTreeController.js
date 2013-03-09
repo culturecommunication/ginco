@@ -27,7 +27,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);	
 	},
 	openTabArray: function (aRecord) {
-		Thesaurus.ext.tabs.openArrayTab(aRecord.data.id, aRecord.data.thesaurusId, aRecord.data.id);
+		Thesaurus.ext.tabs.openArrayTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);
 	},
 
     openSandBoxTab : function(aRecord) {

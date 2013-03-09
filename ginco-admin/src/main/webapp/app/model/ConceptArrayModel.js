@@ -16,29 +16,31 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
         },
         {
             name: 'nodeLabelId',
-            type: 'integer'
+            type: 'int'
         },
         {
             name: 'thesaurusId',
             type: 'string'
+        },
+        {
+            name: 'superOrdinateId',
+            type: 'string'
+        },
+        {
+            name: 'superOrdinateLabel',
+            type: 'string'
+        },
+        {
+            name : 'concepts',
+            type : 'array_of_string'
         }
     ],
-    associations: [
-                   {
-                       type: 'hasMany',
-                       model: 'GincoApp.model.ThesaurusConceptReducedModel',
-                       name: 'superOrdinateConcept',
-                       associationKey: 'superOrdinateConcept',
-                       instanceName: 'superOrdinateConcept'
-                   },
-                   {type: 'hasMany', model: 'GincoApp.model.ThesaurusConceptReducedModel',    name: 'concepts'}
-  ],
     
     idProperty : 'identifier',
     
     proxy : {
 		api : {
-			//create : 'services/ui/thesaurusconceptservice/updateConcept',
+			create : 'services/ui/thesaurusarrayservice/updateArray',
 			update : 'services/ui/thesaurusarrayservice/updateArray',
 			read :   'services/ui/thesaurusarrayservice/getArray'
 			//destroy: 'services/ui/thesaurusconceptservice/destroyTerm'
