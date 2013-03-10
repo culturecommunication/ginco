@@ -56,6 +56,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	loadData : function(aForm, aModel) {
 		var me = this;		
 		aForm.loadRecord(aModel);
+		var thePanel = me.getActivePanel();		
+		thePanel.setTitle("Tableau de concepts : "+aModel.data.label);
+
 		//We get all the concepts included in this concept array
 		var conceptsGrid  = aForm.down('#gridPanelConceptArray');
         var conceptsGridStore = conceptsGrid.getStore();

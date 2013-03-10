@@ -6,6 +6,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	onPanelBeforeClose : function(thePanel) {
 		var me = this;
 		var theForm = thePanel.down('form');
+		console.log(theForm);
 		var globalTabs = thePanel.up('topTabs');
 		if (theForm) {
 			if (theForm.getForm().isDirty()) {
@@ -48,6 +49,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 				beforeclose : this.onPanelBeforeClose
 			},
 			'conceptPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'conceptArrayPanel' : {
 				beforeclose : this.onPanelBeforeClose
 			}
 		});
