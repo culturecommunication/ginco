@@ -5,8 +5,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	xSaveMsgTitle : 'Save changes?',
 	onPanelBeforeClose : function(thePanel) {
 		var me = this;
-		var theForm = thePanel.down('form');
-		console.log(theForm);
+		var theForm = thePanel.down('form');		
 		var globalTabs = thePanel.up('topTabs');
 		if (theForm) {
 			if (theForm.getForm().isDirty()) {
