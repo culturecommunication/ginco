@@ -48,4 +48,12 @@ public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> 
      * @return
      */
     List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String thesaurusId);
+    
+    /**
+     * Returns all arrays this concept is the super ordinate
+     * @param conceptId
+     * @return
+     */
+    List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId);
+
 }

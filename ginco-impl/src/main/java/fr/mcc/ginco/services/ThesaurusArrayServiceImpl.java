@@ -76,5 +76,6 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
         nodeLabel.setThesaurusArray(updated);
         nodeLabelService.updateOrCreate(nodeLabel);
         return updated;
-    }
+    }    
+    
 }

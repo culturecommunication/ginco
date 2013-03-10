@@ -51,9 +51,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
@@ -83,7 +85,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Inject
 	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
-	
+
+	@Inject
+	@Named("thesaurusArrayDAO")
+	private IThesaurusArrayDAO thesaurusArrayDAO;
+
 	@Inject
 	@Named("associativeRelationshipDAO")
 	private IGenericDAO<AssociativeRelationship, AssociativeRelationship.Id> associativeRelationshipDAO;
@@ -101,31 +107,31 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return thesaurusConceptDAO.findAll();
 	}
 
-    @Override
-    public Set<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException{
-        Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
-        for(String id : list) {
-            ThesaurusConcept concept = thesaurusConceptDAO.getById(id);
-            if(concept == null) {
-                throw new BusinessException("The concept " + id
-                        + " does not exist!",
-                        "concept-does-not-exist");
-            } else {
-                if(!result.contains(concept)) {
-                    result.add(concept);
-                }
-            }
-        }
-        return result;
-    }
+	@Override
+	public Set<ThesaurusConcept> getThesaurusConceptList(List<String> list)
+			throws BusinessException {
+		Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
+		for (String id : list) {
+			ThesaurusConcept concept = thesaurusConceptDAO.getById(id);
+			if (concept == null) {
+				throw new BusinessException("The concept " + id
+						+ " does not exist!", "concept-does-not-exist");
+			} else {
+				if (!result.contains(concept)) {
+					result.add(concept);
+				}
+			}
+		}
+		return result;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang
-     * .String)
-     */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang
+	 * .String)
+	 */
 	@Override
 	public ThesaurusConcept getThesaurusConceptById(String id) {
 		return thesaurusConceptDAO.getById(id);
@@ -166,90 +172,92 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return thesaurusConceptDAO.getTopTermThesaurusConceptCount(thesaurus);
 	}
 
-    @Override
-    public List<ThesaurusConcept> getChildrenByConceptId(String conceptId) {
-        return thesaurusConceptDAO.getChildrenConcepts(conceptId);
-    }
+	@Override
+	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId) {
+		return thesaurusConceptDAO.getChildrenConcepts(conceptId);
+	}
 
-    @Override
-    public List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId,
-                                                           String thesaurusId,
-                                                           Boolean searchOrphans) {
-        return thesaurusConceptDAO.getAllConceptsByThesaurusId(excludeConceptId, thesaurusId, searchOrphans);
-    }
+	@Override
+	public List<ThesaurusConcept> getConceptsByThesaurusId(
+			String excludeConceptId, String thesaurusId, Boolean searchOrphans) {
+		return thesaurusConceptDAO.getAllConceptsByThesaurusId(
+				excludeConceptId, thesaurusId, searchOrphans);
+	}
 
-    @Override
-    public boolean hasChildren(String conceptId) {
-        return (thesaurusConceptDAO.getChildrenConcepts(conceptId).size() > 0);
-    }
+	@Override
+	public boolean hasChildren(String conceptId) {
+		return (thesaurusConceptDAO.getChildrenConcepts(conceptId).size() > 0);
+	}
 
-    @Override
-    public List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept) {
-        ThesaurusConcept start;
-        HashMap<String, Integer> path = new HashMap<String, Integer>();
-        Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
-        path.clear();
-        roots.clear();
-        path.put(concept.getIdentifier(), 0);
-        start = concept;
-        getRoot(concept, 0, start, path, roots);
-        return new ArrayList<ThesaurusConcept>(roots);
-    }
+	@Override
+	public List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept) {
+		ThesaurusConcept start;
+		HashMap<String, Integer> path = new HashMap<String, Integer>();
+		Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
+		path.clear();
+		roots.clear();
+		path.put(concept.getIdentifier(), 0);
+		start = concept;
+		getRoot(concept, 0, start, path, roots);
+		return new ArrayList<ThesaurusConcept>(roots);
+	}
 
-    @Override
-    public void removeParents(ThesaurusConcept concept, List<String> parentsToRemove)
-        throws BusinessException {
-        Set<ThesaurusConcept> parents = getThesaurusConceptList(parentsToRemove);
+	@Override
+	public void removeParents(ThesaurusConcept concept,
+			List<String> parentsToRemove) throws BusinessException {
+		Set<ThesaurusConcept> parents = getThesaurusConceptList(parentsToRemove);
 
-        boolean isDefaultTopConcept = concept.getThesaurus().isDefaultTopConcept();
+		boolean isDefaultTopConcept = concept.getThesaurus()
+				.isDefaultTopConcept();
 
-        if(concept.getParentConcepts().size()==1) {
-            concept.getParentConcepts().clear();
-            concept.setTopConcept(isDefaultTopConcept);
-        } else {
-            for(ThesaurusConcept parent : parents) {
-                concept.getParentConcepts().remove(parent);
-            }
-        }
-    }
+		if (concept.getParentConcepts().size() == 1) {
+			concept.getParentConcepts().clear();
+			concept.setTopConcept(isDefaultTopConcept);
+		} else {
+			for (ThesaurusConcept parent : parents) {
+				concept.getParentConcepts().remove(parent);
+			}
+		}
+	}
 
-    private void getRoot(ThesaurusConcept concept, Integer iteration,
-                         ThesaurusConcept start, HashMap<String,
-                        Integer> path, Set<ThesaurusConcept> roots) {
-        iteration++;
-        Set<ThesaurusConcept> directParents = concept.getParentConcepts();
-        if(directParents.isEmpty()) {
-            if(iteration!=1) {
-                roots.add(concept);
-            }
-            return;
-        }
-        boolean flag = false;
-        Set<ThesaurusConcept> stack = new HashSet<ThesaurusConcept>();
-        for(ThesaurusConcept directParent : directParents) {
-            if(path.containsKey(directParent.getIdentifier())) {
-                continue;
-            } else {
-                path.put(directParent.getIdentifier(),iteration);
-                stack.add(directParent);
-                flag = true;
-            }
-        }
+	private void getRoot(ThesaurusConcept concept, Integer iteration,
+			ThesaurusConcept start, HashMap<String, Integer> path,
+			Set<ThesaurusConcept> roots) {
+		iteration++;
+		Set<ThesaurusConcept> directParents = concept.getParentConcepts();
+		if (directParents.isEmpty()) {
+			if (iteration != 1) {
+				roots.add(concept);
+			}
+			return;
+		}
+		boolean flag = false;
+		Set<ThesaurusConcept> stack = new HashSet<ThesaurusConcept>();
+		for (ThesaurusConcept directParent : directParents) {
+			if (path.containsKey(directParent.getIdentifier())) {
+				continue;
+			} else {
+				path.put(directParent.getIdentifier(), iteration);
+				stack.add(directParent);
+				flag = true;
+			}
+		}
 
-        //HACK to deal with cyclic dependencies. Should be reThink in some time...
-        if(!flag && directParents.size() == 1 && directParents.contains(start)) {
-            roots.add(concept);
-        }
+		// HACK to deal with cyclic dependencies. Should be reThink in some
+		// time...
+		if (!flag && directParents.size() == 1 && directParents.contains(start)) {
+			roots.add(concept);
+		}
 
-        if(!stack.isEmpty()) {
-            for(ThesaurusConcept toVisit : stack) {
-                getRoot(toVisit, iteration, start, path, roots);
-            }
-            stack.clear();
-        }
-    }
+		if (!stack.isEmpty()) {
+			for (ThesaurusConcept toVisit : stack) {
+				getRoot(toVisit, iteration, start, path, roots);
+			}
+			stack.clear();
+		}
+	}
 
-    @Override
+	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException {
 
@@ -269,8 +277,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public String getConceptLabel(String conceptId) throws BusinessException {
 		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
 		return LabelUtil.getConceptLabel(term, defaultLang);
-	}	
-	
+	}
 
 	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
@@ -280,36 +287,46 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return concept;
 
 	}
-	
+
 	@Override
-	public List<ThesaurusConcept> getAssociatedConcepts(String conceptId){		
+	public List<ThesaurusConcept> getAssociatedConcepts(String conceptId) {
 		ThesaurusConcept concept = thesaurusConceptDAO.getById(conceptId);
 		return thesaurusConceptDAO.getAssociatedConcepts(concept);
 	}
-	
+
 	@Override
-	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object) throws BusinessException {
-		List<ThesaurusTerm> terms = thesaurusTermDAO.findTermsByConceptId(object.getIdentifier());
-		for (ThesaurusTerm term:terms) {
+	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object)
+			throws BusinessException {
+		List<ThesaurusTerm> terms = thesaurusTermDAO
+				.findTermsByConceptId(object.getIdentifier());
+		for (ThesaurusTerm term : terms) {
 			term.setConcept(null);
 			thesaurusTermDAO.update(term);
 		}
-		
-		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(object.getIdentifier());
-		for (ThesaurusConcept childConcept:childrenConcepts) {
+
+		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(object
+				.getIdentifier());
+		for (ThesaurusConcept childConcept : childrenConcepts) {
 			childConcept.getParentConcepts().remove(object);
 			thesaurusConceptDAO.update(childConcept);
-		}		
-		
-		List<ThesaurusConcept> rootChildrenConcepts =thesaurusConceptDAO.getAllRootChildren(object);
-		for (ThesaurusConcept rootChild:rootChildrenConcepts) {
+		}
+
+		List<ThesaurusConcept> rootChildrenConcepts = thesaurusConceptDAO
+				.getAllRootChildren(object);
+		for (ThesaurusConcept rootChild : rootChildrenConcepts) {
 			rootChild.getRootConcepts().remove(object);
 			thesaurusConceptDAO.update(rootChild);
 		}
-		
-        return thesaurusConceptDAO.delete(object);        
-    }
-	
+
+		List<ThesaurusArray> arrays = thesaurusArrayDAO
+				.getConceptSuperOrdinateArrays(object.getIdentifier());
+		for (ThesaurusArray array : arrays) {
+			thesaurusArrayDAO.delete(array);
+		}
+
+		return thesaurusConceptDAO.delete(object);
+	}
+
 	private void updateConceptTerms(ThesaurusConcept concept,
 			List<ThesaurusTerm> terms) {
 		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
@@ -333,24 +350,29 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		}
 		return thesaurus;
 	}
-	
+
 	@Async
 	public void calculateChildrenRoot(String parentId) {
-		logger.info("root concept calculation launched for parent concept id = " + parentId);
-		calculateChildrenRoots(parentId, parentId);   
-    	logger.info("root concept calculation ended for parent concept id = " + parentId);
+		logger.info("root concept calculation launched for parent concept id = "
+				+ parentId);
+		calculateChildrenRoots(parentId, parentId);
+		logger.info("root concept calculation ended for parent concept id = "
+				+ parentId);
 	}
-	
+
 	private void calculateChildrenRoots(String parentId, String originalParentId) {
 		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(parentId);
-    	for (ThesaurusConcept concept:childrenConcepts) {
-    		if (concept.getIdentifier() != originalParentId) {
-    			logger.info("calculating root concept for chiled with concept Id : " + concept.getIdentifier());
-        		List<ThesaurusConcept> thisChildRoots = getRootConcepts(concept);
-        		concept.setRootConcepts( new HashSet<ThesaurusConcept>(thisChildRoots));
-        		calculateChildrenRoots(concept.getIdentifier(), originalParentId);
-    		}
-    	}
+		for (ThesaurusConcept concept : childrenConcepts) {
+			if (concept.getIdentifier() != originalParentId) {
+				logger.info("calculating root concept for chiled with concept Id : "
+						+ concept.getIdentifier());
+				List<ThesaurusConcept> thisChildRoots = getRootConcepts(concept);
+				concept.setRootConcepts(new HashSet<ThesaurusConcept>(
+						thisChildRoots));
+				calculateChildrenRoots(concept.getIdentifier(),
+						originalParentId);
+			}
+		}
 	}
 
 }
