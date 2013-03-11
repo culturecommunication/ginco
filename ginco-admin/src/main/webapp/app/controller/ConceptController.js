@@ -154,12 +154,6 @@ Ext.define('GincoApp.controller.ConceptController', {
         var thePanel = me.getActivePanel();
         Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
     },
-    
-    onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
-    	var me = this;
-        var thePanel = me.getActivePanel();
-    	Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
-    },
 
     onDetachClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
         var theGrid = gridview.up('#gridPanelTerms');

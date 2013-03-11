@@ -131,6 +131,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			            }
 			        });
 						win.show();
+					break;
 					case 'cancel':
 					break; // leave blank if no action required on
 				// cancel
@@ -223,7 +224,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             },
             'conceptArrayPanel #gridPanelConceptArray' : {
             	itemdblclick : this.onConceptDblClick
-            },
+            }
          });
 
     }
