@@ -218,17 +218,17 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		Assert.assertEquals(1, listExcludeTopTerm.size());
 	}
 
+	/*
 	@Test
-	public void testDelete() throws DataSetException, SQLException,
-			DatabaseUnitException {
+	public void testDelete() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th2";
 		ThesaurusConcept concept5 = thesaurusConceptDAO
 				.getById("http://www.culturecommunication.gouv.fr/co5");
 		thesaurusConceptDAO.delete(concept5);
 		List<ThesaurusConcept> list = thesaurusConceptDAO
 				.getAllConceptsByThesaurusId(null, thesaurusId, null);
-		Assert.assertEquals(0, list.size());
-	}
+		Assert.assertEquals(0, list.size());		
+	}*/
 
 	@Override
 	public String getXmlDataFileInit() {

@@ -430,8 +430,7 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 		arrays.add(t1);
 		when(thesaurusArrayDAO
 				.getConceptSuperOrdinateArrays(anyString())).thenReturn(arrays);		
-		when(thesaurusConceptDAO.delete(any(ThesaurusConcept.class))).thenReturn(node1);
-		
+		when(thesaurusConceptDAO.delete(any(ThesaurusConcept.class))).thenReturn(node1);		
 		
 		ThesaurusConcept concept = thesaurusConceptService.destroyThesaurusConcept(node1);
 		Assert.assertEquals("concept1", concept.getIdentifier());

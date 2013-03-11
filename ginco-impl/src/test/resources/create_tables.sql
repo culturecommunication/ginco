@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS thesaurus_type;
 DROP TABLE IF EXISTS thesaurus_format;
 DROP TABLE IF EXISTS languages_iso639;
 DROP TABLE IF EXISTS thesaurus_organization;
-DROP TABLE IF EXISTS log_journal;
 DROP TABLE IF EXISTS thesaurus_term;
 DROP TABLE IF EXISTS thesaurus_term_role;
 DROP TABLE IF EXISTS thesaurus_concept;
@@ -17,7 +16,6 @@ DROP TABLE IF EXISTS thesaurus_array;
 DROP TABLE IF EXISTS node_label;
 DROP TABLE IF EXISTS thesaurus_array_concept;
 
-DROP SEQUENCE IF EXISTS log_journal_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
 DROP SEQUENCE IF EXISTS node_label_id_seq;
@@ -72,16 +70,6 @@ CREATE TABLE thesaurus_organization (
 );
 CREATE SEQUENCE thesaurus_creator_identifier_seq START WITH 1  INCREMENT BY 1;
 
-
-CREATE TABLE log_journal (
-    identifier integer NOT NULL,
-    action text NOT NULL,
-    author text NOT NULL,
-    date text,
-    entityid text NOT NULL,
-    entitytype text NOT NULL
-);
-CREATE SEQUENCE log_journal_identifier_seq START WITH 1  INCREMENT BY 1;
 
 CREATE TABLE thesaurus_concept
 (

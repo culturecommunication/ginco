@@ -100,12 +100,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
         th.setTitle("title");     
         Thesaurus updatedThesaurus = thesaurusDAO.makePersistent(th);
-        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);
-        
-        //Test the log_journal addition
-     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
-     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
-     	//Assert.assertEquals(1, databaseTableSize);
+        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);   
         
     }
     
@@ -138,10 +133,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         th.setCreator(null);
         Thesaurus updatedThesaurus = thesaurusDAO.update(th);
        // Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
-        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);
-        //Test the log_journal addition
-     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
-     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
+        Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);     	
      	//Assert.assertEquals(1, databaseTableSize);
         
     }
@@ -156,12 +148,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         Thesaurus updatedThesaurus = thesaurusDAO.update(th);
 
         Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);
-        Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());
-        //Test the log_journal addition
-     	IDataSet databaseDataSet = getDataset(getXmlDataFileInit());
-     	int databaseTableSize = databaseDataSet.getTable("log_journal").getRowCount();
-     	//Assert.assertEquals(1, databaseTableSize);
-        
+        Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());     
     }   
 	@Override
 	public String  getXmlDataFileInit() {
