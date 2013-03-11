@@ -120,6 +120,13 @@
             <value>http://www.culturecommunication.gouv.fr/th1</value>
             <value>http://www.culturecommunication.gouv.fr/co1</value>
         </row>
+         <row>
+            <value>2</value>
+            <value>false</value>
+            <value>notation</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+        </row>
     </table>
 
     <table name="node_label">
@@ -137,6 +144,14 @@
             <value>fra</value>
             <value>1</value>
         </row>
+         <row>
+            <value>2</value>
+            <value>test2</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>fra</value>
+            <value>2</value>
+        </row>
     </table>
 
     <table name="thesaurus_array_concept">
@@ -149,7 +164,7 @@
         <row>
             <value>1</value>
             <value>http://www.culturecommunication.gouv.fr/co2_2</value>
-        </row>
+        </row>        
     </table>
 </dataset>
   
