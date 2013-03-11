@@ -69,11 +69,7 @@ import fr.mcc.ginco.services.INoteTypeService;
 @Service
 @Path("/thesaurusnoteservice")
 @Produces({ MediaType.APPLICATION_JSON })
-public class ThesaurusNoteRestService {
-	
-	@Context 
-	private MessageContext context;
-	
+public class ThesaurusNoteRestService {	
 	@Inject
 	@Named("noteTypeService")
 	private INoteTypeService noteTypeService;

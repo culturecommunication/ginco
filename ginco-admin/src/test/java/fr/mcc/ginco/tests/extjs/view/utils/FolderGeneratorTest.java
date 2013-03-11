@@ -34,6 +34,17 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
@@ -41,14 +52,6 @@ import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.*;
-
-import java.util.List;
-
-import javax.inject.Named;
 
 public class FolderGeneratorTest {
 	@Mock(name = "thesaurusConceptService")

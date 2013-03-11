@@ -42,7 +42,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.codehaus.plexus.util.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.NodeLabel;
@@ -57,11 +56,7 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 
 @Component("thesaurusArrayViewConverter")
-public class ThesaurusArrayViewConverter {
-
-	@Value("${ginco.default.language}")
-	private String language;
-
+public class ThesaurusArrayViewConverter {	
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -75,16 +70,9 @@ public class ThesaurusArrayViewConverter {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
-	@Named("thesaurusConceptViewConverter")
-	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
-
-	@Inject
 	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
 
-	@Inject
-	@Named("nodeLabelViewConverter")
-	private NodeLabelViewConverter nodeLabelViewConverter;
 
 	public ThesaurusArray convert(ThesaurusArrayView source)
 			throws BusinessException {

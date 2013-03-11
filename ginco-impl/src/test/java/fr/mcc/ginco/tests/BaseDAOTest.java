@@ -49,7 +49,6 @@ import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.ext.h2.H2DataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.SessionFactory;
-import org.junit.After;
 import org.junit.Before;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 

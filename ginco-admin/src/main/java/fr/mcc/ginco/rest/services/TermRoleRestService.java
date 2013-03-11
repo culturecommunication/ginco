@@ -43,13 +43,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusTermRoleService;
 
 /**
@@ -63,10 +60,8 @@ public class TermRoleRestService {
 	
 	@Inject
 	@Named("thesaurusTermRoleService")
-	private IThesaurusTermRoleService termRoleService;	   
-    
-	@Log
-	private Logger logger;
+	private IThesaurusTermRoleService termRoleService;	 
+	
 
 	/**
 	 * Public method used to get list of all existing term roles in

@@ -49,12 +49,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
@@ -88,11 +86,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Inject
 	@Named("thesaurusArrayDAO")
-	private IThesaurusArrayDAO thesaurusArrayDAO;
-
-	@Inject
-	@Named("associativeRelationshipDAO")
-	private IGenericDAO<AssociativeRelationship, AssociativeRelationship.Id> associativeRelationshipDAO;
+	private IThesaurusArrayDAO thesaurusArrayDAO;	
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
