@@ -305,4 +305,22 @@ public class ThesaurusConceptServiceTest extends BaseTest {
         Assert.assertEquals("There should be no parents!",0, node1.getParentConcepts().size());
         Assert.assertFalse("Term now should NOT be TOP!",node1.getTopConcept());
     }
+    
+    /* Untested methods
+	getThesaurusConceptList
+	getThesaurusConceptById
+	getOrphanThesaurusConceptsCount
+	getTopTermThesaurusConcepts
+	getTopTermThesaurusConceptsCount
+	getChildrenByConceptId
+	getConceptsByThesaurusId
+	hasChildren
+	removeParents=> cas multiparents
+			getConceptPreferredTerm
+			getConceptLabel
+			updateThesaurusConcept
+			getAssociatedConcepts
+			destroyThesaurusConcept
+			updateConceptTerms
+			calculateChildrenRoot*/
 }

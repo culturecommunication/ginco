@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <table name="associative_relationship_role">
+        <column>code</column>
+        <column>label</column>
+        <column>defaultrole</column>
+        <row>
+            <value>P</value>
+            <value>Partitive</value>
+            <value>true</value>
+        </row>
+        <row>
+            <value>I</value>
+            <value>Instance</value>
+            <value>false</value>
+        </row>
+    </table>
+</dataset>
