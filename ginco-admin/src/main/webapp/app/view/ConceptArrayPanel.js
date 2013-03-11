@@ -50,7 +50,6 @@ Ext
 											title : me.xConceptArrayTabTitle,
 											items : [ {
 												xtype : 'form',
-												//TODO title with domain
 												title : me.xConceptArrayFormTitle,
 												flex : 1,
 												autoScroll : true,

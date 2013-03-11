@@ -55,7 +55,6 @@ Ext
                     xRemoveParent: 'Remove connection to parent Concept',
                     xAssociationRemove: 'Remove association',
                     xChildrenConcepts: 'Children Concepts',
-                    xRoleColumnLabel: 'Role',
 
 					initComponent : function() {
 						var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {

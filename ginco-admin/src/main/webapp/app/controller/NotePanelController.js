@@ -114,7 +114,6 @@ Ext.define('GincoApp.controller.NotePanelController', {
 				thePanel.down('button[itemId=saveNote]').setDisabled(true);
 			},
 			failure : function(model, operation) {
-				//TODO: to implement : exception messages display
 				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
 				thePanel.getEl().unmask();
 			}

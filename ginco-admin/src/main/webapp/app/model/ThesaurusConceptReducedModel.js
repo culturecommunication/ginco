@@ -15,6 +15,6 @@ Ext.define('GincoApp.model.ThesaurusConceptReducedModel', {
             type: 'string'
         }
     ],
-   idProperty : 'identifier',
+   idProperty : 'identifier'
 
 });
