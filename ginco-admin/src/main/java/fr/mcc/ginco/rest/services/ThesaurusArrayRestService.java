@@ -34,18 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.springframework.stereotype.Service;
-
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -53,7 +41,16 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
+/**
+ * Service contains methods, exposed to user to control ThesaurusArray objects.
+ */
 @Service
 @Path("/thesaurusarrayservice")
 @Produces({ MediaType.APPLICATION_JSON })
@@ -92,6 +89,12 @@ public class ThesaurusArrayRestService {
 				.getThesaurusArrayById(thesaurusArrayId));
 	}
 
+    /**
+     * Public method used to create or update a concept.
+     * @param thesaurusConceptViewJAXBElement element to create/update.
+     * @return newly created object.
+     * @throws BusinessException in case of error.
+     */
 	@POST
 	@Path("/updateArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
