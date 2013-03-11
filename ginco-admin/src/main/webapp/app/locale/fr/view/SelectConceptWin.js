@@ -1,6 +1,6 @@
 Ext.define('GincoApp.locale.fr.view.SelectConceptWin',
     {
-        xIdentifierColumnLabel : "Identifier",
-        xLexicalValueColumnLabel : "Label",
+        xIdentifierColumnLabel : "Identifiant",
+        xLexicalValueColumnLabel : "Libellé",
         xSelect : "Sélectionner"
     });
