@@ -5,6 +5,6 @@ Ext.define('GincoApp.locale.fr.view.CreateNoteWin',
 		xSourceLabel : 'Source',
 		xTypeLabel : 'Type',
 		xCreateNoteWinTitle : 'Nouvelle note',
-		xSave: 'Enregistrer'
+		xSave: 'Ajouter la note'
 		
 });
