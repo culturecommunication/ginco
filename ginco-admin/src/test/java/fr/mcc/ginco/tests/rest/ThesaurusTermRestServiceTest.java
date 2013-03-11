@@ -206,10 +206,9 @@ public class ThesaurusTermRestServiceTest{
 		Assert.assertEquals("lexicale value", actualResponse.getLexicalValue());
 	}
 	@Test(expected=BusinessException.class)
-	public void testGetThesaurusTermWithWrongId() throws BusinessException {
-		
+	public void testGetThesaurusTermWithWrongId() throws BusinessException {		
 		when(termService.getThesaurusTermById(anyString())).thenThrow(BusinessException.class);
-			ThesaurusTermView actualResponse = thesaurusTermRestService.getThesaurusTerm("fake-id");
+		thesaurusTermRestService.getThesaurusTerm("fake-id");
 	}
 	
 }

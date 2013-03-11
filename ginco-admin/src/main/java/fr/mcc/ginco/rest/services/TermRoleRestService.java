@@ -55,27 +55,25 @@ import fr.mcc.ginco.services.IThesaurusTermRoleService;
  */
 @Service
 @Path("/termroleservice")
-@Produces({MediaType.APPLICATION_JSON})
-public class TermRoleRestService {	
-	
+@Produces({ MediaType.APPLICATION_JSON })
+public class TermRoleRestService {
+
 	@Inject
 	@Named("thesaurusTermRoleService")
-	private IThesaurusTermRoleService termRoleService;	 
-	
+	private IThesaurusTermRoleService termRoleService;
 
 	/**
-	 * Public method used to get list of all existing term roles in
-	 * database.
+	 * Public method used to get list of all existing term roles in database.
 	 * 
 	 * @return list of ThesaurusTermRole, if not found - {@code null}
 	 */
 	@GET
 	@Path("/getRoles")
-	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<ThesaurusTermRole> > getAllRoles(){
-		List<ThesaurusTermRole> allRoles = termRoleService.getAllThesaurusTermRole();		
-		ExtJsonFormLoadData<List<ThesaurusTermRole>> roles = new ExtJsonFormLoadData<List<ThesaurusTermRole> > (allRoles);
-		return roles;
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusTermRole>> getAllRoles() {
+		List<ThesaurusTermRole> allRoles = termRoleService
+				.getAllThesaurusTermRole();
+		return new ExtJsonFormLoadData<List<ThesaurusTermRole>>(allRoles);
 	}
-	
+
 }

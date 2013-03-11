@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -215,7 +216,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	private void getRoot(ThesaurusConcept concept, Integer iteration,
-			ThesaurusConcept start, HashMap<String, Integer> path,
+			ThesaurusConcept start, Map<String, Integer> path,
 			Set<ThesaurusConcept> roots) {
 		iteration++;
 		Set<ThesaurusConcept> directParents = concept.getParentConcepts();
