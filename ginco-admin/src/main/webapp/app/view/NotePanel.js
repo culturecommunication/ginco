@@ -81,21 +81,15 @@ Ext.define('GincoApp.view.NotePanel', {
 									{ dataIndex : 'lexicalValue', text : me.xLexicalValueLabel, flex : 1},
 									{ dataIndex : 'language', text : me.xLanguageLabel },
 									{ dataIndex : 'type', text : me.xTypeLabel },
-									{ dataIndex : 'created', /*hidden: true,*/ text : me.xCreatedDateLabel },
-									{ dataIndex : 'modified', /*hidden: true,*/ text : me.xModifiedDateLabel },
+									{ dataIndex : 'created', text : me.xCreatedDateLabel },
+									{ dataIndex : 'modified', text : me.xModifiedDateLabel },
 									{ xtype : 'actioncolumn', itemId : 'noteActionColumn',
 										items : [ {
 											icon : 'images/detach.png',
 											tooltip : me.xDetach
 										} ]
 									}
-                            ]/*,
-            				dockedItems: [{
-            			        xtype: 'pagingtoolbar',
-            			        store :  me.noteConceptStore,
-            			        dock: 'bottom',
-            			        displayInfo: true
-            			    }]*/
+                            ]
 						}
                     ]
                 }

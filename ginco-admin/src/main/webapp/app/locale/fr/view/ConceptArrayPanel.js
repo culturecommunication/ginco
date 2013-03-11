@@ -13,5 +13,7 @@ Ext.define('GincoApp.locale.fr.view.ConceptArrayPanel', {
 	xConceptArrayGridTitle : 'Concepts',
 	xAddConceptToArray : 'Ajouter un concept',
 	xParentConceptLabel : 'Concept parent',
-	xSelectParentConcept : 'Sélectionner un concept parent'
+	xSelectParentConcept : 'Sélectionner un concept parent',
+	xLexicalValueLabel : 'Valeur lexicale',
+	xActions : 'Actions'
 });

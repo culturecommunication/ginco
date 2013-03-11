@@ -7,9 +7,7 @@
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
 Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteConceptPanel' ]);
 
-var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
-    clicksToEdit: 1
-});
+
 Ext
 		.define(
 				'GincoApp.view.ConceptPanel',
@@ -60,6 +58,9 @@ Ext
                     xRoleColumnLabel: 'Role',
 
 					initComponent : function() {
+						var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+						    clicksToEdit: 1
+						});
 						var me = this;
 						me.conceptTermStore = Ext
 								.create('GincoApp.store.ThesaurusTermStore');
@@ -254,7 +255,7 @@ Ext
                                                             xtype : 'gridpanel',
                                                             title : me.xParentConcepts,
                                                             store : me.parentConceptStore,
-                                                            id    : 'gridPanelParentConcepts',
+                                                            itemId    : 'gridPanelParentConcepts',
 
                                                             dockedItems : [ {
                                                                 xtype : 'toolbar',
@@ -298,7 +299,7 @@ Ext
                                                             xtype : 'gridpanel',
                                                             title : me.xChildrenConcepts,
                                                             store : me.childrenConceptStore,
-                                                            id    : 'gridPanelChildrenConcepts',
+                                                            itemId    : 'gridPanelChildrenConcepts',
 
                                                             columns : [
                                                                 {
@@ -316,7 +317,7 @@ Ext
                                                             xtype : 'gridpanel',
                                                             title : me.xRootConcepts,
                                                             store : me.rootConceptStore,
-                                                            id    : 'gridPanelRootConcepts',
+                                                            itemId    : 'gridPanelRootConcepts',
 
                                                             columns : [
                                                                 {
@@ -334,7 +335,7 @@ Ext
 															xtype : 'gridpanel',
 															title : me.xAssociatedConceptsListGridTitle,
 															store : me.associatedConceptStore,
-															id    : 'gridPanelAssociatedConcepts',
+															itemId    : 'gridPanelAssociatedConcepts',
 
 															dockedItems : [ {
 																xtype : 'toolbar',

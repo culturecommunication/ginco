@@ -34,6 +34,7 @@ Ext
 					xAddConceptToArray : 'Add a concept',
 					xParentConceptLabel : 'Parent Concept',
 					xSelectParentConcept : 'Select a parent concept',
+					xActions : 'Actions',
 
 					initComponent : function() {
 						var me = this;
@@ -55,7 +56,7 @@ Ext
 												autoScroll : true,
 												pollForChanges : true,
 												trackResetOnLoad : true,
-												id : 'conceptArrayForm',
+												itemId : 'conceptArrayForm',
 												defaults : {
 													anchor : '70%',
 													afterLabelTextTpl : new Ext.XTemplate(

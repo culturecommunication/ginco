@@ -12,7 +12,7 @@ Ext
 						noteId : null
 			        },
 			        
-					xSave: 'Save',
+					xSave: 'Add the note',
 					xCreateNoteWinTitle : 'New Note',
 					xLexicalValueLabel : 'Lexical value',
 				    xSourceLabel : 'Source',
@@ -36,7 +36,7 @@ Ext
 											items : [
 													{
 														xtype : 'form',
-														height : 600,
+														height : 400,
 														
 														dockedItems : [ {
 															xtype : 'toolbar',
@@ -105,6 +105,7 @@ Ext
 										                        },
 										                        {
 										                        	xtype: 'combobox',
+										                        	margin: '10 0 0 0',
 										                        	name:'type',
 										                        	itemId: 'typeCombo',
 										                        	fieldLabel: me.xTypeLabel,
