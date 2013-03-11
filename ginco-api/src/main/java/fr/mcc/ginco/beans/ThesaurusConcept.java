@@ -43,116 +43,128 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Bean represents <b>thesaurus_concept</b> table, is container
- * for {@link ThesaurusTerm}.
+ * Bean represents <b>thesaurus_concept</b> table, is container for
+ * {@link ThesaurusTerm}.
  */
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class ThesaurusConcept implements Serializable, IAuditableBean {
-    private String identifier;
-    private Date created;
-    private Date modified;
-    private String status;
-    private String notation;
-    private Boolean topConcept;
-    private Thesaurus thesaurus;
-    private Set<ThesaurusConcept> parentConcepts  = new HashSet<ThesaurusConcept>();
-    private Set<ThesaurusConcept> rootConcepts  = new HashSet<ThesaurusConcept>();
-    private Set<AssociativeRelationship> associativeRelationshipLeft; 
-    private Set<AssociativeRelationship> associativeRelationshipRight;
-    private Set<ThesaurusArray> conceptArrays;
+	private String identifier;
+	private Date created;
+	private Date modified;
+	private String status;
+	private String notation;
+	private Boolean topConcept;
+	private Thesaurus thesaurus;
+	private Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
+	private Set<ThesaurusConcept> rootConcepts = new HashSet<ThesaurusConcept>();
+	private Set<AssociativeRelationship> associativeRelationshipLeft;
+	private Set<AssociativeRelationship> associativeRelationshipRight;
+	private Set<ThesaurusArray> conceptArrays;
 
-    
-    public String getIdentifier() {
-        return identifier;
-    }
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }   
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public Date getCreated() {
-        return created;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+	public Date getCreated() {
+		return created;
+	}
 
-    public Date getModified() {
-        return modified;
-    }
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
+	public Date getModified() {
+		return modified;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public void setModified(Date modified) {
+		this.modified = modified;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public String getNotation() {
-        return notation;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public void setNotation(String notation) {
-        this.notation = notation;
-    }
+	public String getNotation() {
+		return notation;
+	}
 
-    public Boolean getTopConcept() {
-        return topConcept;
-    }
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
 
-    public void setTopConcept(Boolean topConcept) {
-        this.topConcept = topConcept;
-    }
+	public Boolean getTopConcept() {
+		return topConcept;
+	}
 
-    public Thesaurus getThesaurus() {
-        return thesaurus;
-    }
+	public void setTopConcept(Boolean topConcept) {
+		this.topConcept = topConcept;
+	}
 
-    public void setThesaurus(Thesaurus thesaurus) {
-        this.thesaurus = thesaurus;
-    }
+	public Thesaurus getThesaurus() {
+		return thesaurus;
+	}
+
+	public void setThesaurus(Thesaurus thesaurus) {
+		this.thesaurus = thesaurus;
+	}
+
 	public Set<ThesaurusConcept> getParentConcepts() {
 		return parentConcepts;
 	}
+
 	public void setParentConcepts(Set<ThesaurusConcept> parentConcepts) {
 		this.parentConcepts = parentConcepts;
 	}
+
 	public Set<ThesaurusConcept> getRootConcepts() {
 		return rootConcepts;
 	}
+
 	public void setRootConcepts(Set<ThesaurusConcept> rootConcepts) {
 		this.rootConcepts = rootConcepts;
-	}			
+	}
+
 	public Set<AssociativeRelationship> getAssociativeRelationshipLeft() {
 		return associativeRelationshipLeft;
 	}
+
 	public void setAssociativeRelationshipLeft(
 			Set<AssociativeRelationship> associativeRelationshipLeft) {
 		this.associativeRelationshipLeft = associativeRelationshipLeft;
 	}
+
 	public Set<AssociativeRelationship> getAssociativeRelationshipRight() {
 		return associativeRelationshipRight;
 	}
+
 	public void setAssociativeRelationshipRight(
 			Set<AssociativeRelationship> associativeRelationshipRight) {
 		this.associativeRelationshipRight = associativeRelationshipRight;
 	}
+
 	@Override
-	public String getThesaurusId() {		
+	public String getThesaurusId() {
 		return thesaurus.getIdentifier();
 	}
+
 	public Set<ThesaurusArray> getConceptArrays() {
 		return conceptArrays;
 	}
+
 	public void setConceptArrays(Set<ThesaurusArray> conceptArrays) {
 		this.conceptArrays = conceptArrays;
 	}
-    @Override
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -160,23 +172,27 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 				+ ((identifier == null) ? 0 : identifier.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		ThesaurusConcept other = (ThesaurusConcept) obj;
 		if (identifier == null) {
-			if (other.identifier != null)
+			if (other.identifier != null) {
 				return false;
-		} else if (!identifier.equals(other.identifier))
+			}
+		} else if (!identifier.equals(other.identifier)) {
 			return false;
+		}
 		return true;
 	}
-    
-    
-    
+
 }
