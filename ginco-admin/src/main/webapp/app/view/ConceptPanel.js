@@ -85,6 +85,7 @@ Ext
 											title : me.xConceptPanelTitle,
 											items : [ {
 												xtype : 'tabpanel',
+												flex : 1,
 												items : [
 														{
 															xtype : 'panel',

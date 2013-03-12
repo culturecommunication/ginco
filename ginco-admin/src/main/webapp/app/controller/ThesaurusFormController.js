@@ -57,7 +57,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		return aNewPanel;
 	},
 
-	saveForm : function(theButton) {
+	saveForm : function(theButton, theCallback) {
 		var me = this;
 		var theForm = theButton.up('form');
 		if (theForm.getForm().isValid()) {
@@ -71,6 +71,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 					Thesaurus.ext.utils.msg('Succès',
 							'Le thesaurus a été enregistré!');
 					me.application.fireEvent('thesaurusupdated');
+					if (theCallback) {
+						theCallback();
+					}
 				},
 				failure : function() {
 					theForm.getEl().unmask();

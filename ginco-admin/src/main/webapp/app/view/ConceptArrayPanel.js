@@ -41,7 +41,13 @@ Ext
 
 						//This store is used to get only the children concepts of the superordinateconcept
 						me.associatedConceptStore = Ext
-						.create('GincoApp.store.SimpleConceptStore');
+						.create('GincoApp.store.SimpleConceptStore', {
+							sorters: [{
+						         property: 'label',
+						         direction: 'asc'
+						     }]					
+						});
+						 
 
 						Ext
 								.applyIf(
@@ -123,7 +129,7 @@ Ext
 																		xtype : 'textfield',
 																		name : 'superOrdinateLabel',
 																		fieldLabel : me.xParentConceptLabel,
-																		allowBlank : false,
+																		allowBlank : true,
 																		readOnly : true
 																	},
 																	{
@@ -162,7 +168,8 @@ Ext
 																		dataIndex : 'label',
 																		text : me.xLexicalValueLabel,
 																		flex : 1
-																	}, {
+																	}, 
+																	{
                                                                        xtype:'actioncolumn',
                                                                        itemId: 'associatedConceptActionColumn',
                                                                        header: me.xActions,

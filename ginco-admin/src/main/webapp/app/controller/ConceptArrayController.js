@@ -68,7 +68,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         conceptsGridStore.load();		
 	},
 	
-	saveConceptArray : function(theButton){
+	saveConceptArray : function(theButton, theCallback){
 		var me = this;
 		var theForm = theButton.up('#conceptArrayForm');
 		var theGrid = theForm.down('#gridPanelConceptArray');
@@ -90,7 +90,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 				me.loadData(theForm, resultRecord);
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
-				
+				if (theCallback) {
+					theCallback();
+				}
 			},
 			failure : function(record, operation) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
@@ -153,7 +155,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : theConceptArrayPanel.thesaurusData,
             conceptId : theConceptArrayForm.down('textfield[name="superOrdinateId"]').value,
-            getChildren : true,
+            searchOrphans : false,
+            getChildren : false,
             showTree : false,
             checkstore: theStore,
             listeners: {

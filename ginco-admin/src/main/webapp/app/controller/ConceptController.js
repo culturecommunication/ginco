@@ -405,7 +405,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		});
 	},
 	
-	saveConcept : function(theButton){
+	saveConcept : function(theButton, theCallback){
 		var me = this;
 		var theForm = theButton.up('form');
 		var theGrid = theForm.down('#gridPanelTerms');
@@ -452,7 +452,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);				
 				me.application.fireEvent('conceptupdated', thePanel.thesaurusData);
-				
+				if (theCallback) {
+					theCallback();
+				}
 			},
 			failure : function(record, operation) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
