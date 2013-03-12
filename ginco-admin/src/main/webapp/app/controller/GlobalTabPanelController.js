@@ -20,7 +20,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 							break; // manually removes tab from tab panel
 						case 'yes':
 							var saveButton = theForm.down('button[cls=save]');
-							saveButton.fireEvent('click', saveButton);
+							saveButton.fireEvent('click', saveButton, function(){
+								globalTabs.remove(thePanel);
+							});
 							break;
 						case 'cancel':
 							break; // leave blank if no action required on

@@ -17,10 +17,10 @@ Ext.define('GincoApp.controller.TermPanelController', {
 	loadPanel : function(theForm) {
 		var me = this;
 		var termPanel = theForm.up('termPanel');
-		var thesaurusData = theForm.up('termPanel').thesaurusData;
+		var thesaurusData = termPanel.thesaurusData;
 		
 		var model = this.getThesaurusTermModelModel();
-		var termId = theForm.up('termPanel').termId;
+		var termId = termPanel.termId;
 		if (termId != null) {
 			theForm.getEl().mask("Chargement");
 			model.load(termId, {
@@ -32,8 +32,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
 							me.xProblemLoadMsg);
 					var globalTabs = theForm.up('topTabs');
-					var thePanel = theForm.up('termPanel');
-					globalTabs.remove(thePanel);
+					globalTabs.remove(termPanel);
 				}
 			});
 		} else {
@@ -66,7 +65,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		noteTab.setDisabled(false);
 	},
 
-	saveForm : function(theButton) {
+	saveForm : function(theButton, theCallback) {
 		var me = this;
 		var theForm = theButton.up('form');
 		var thePanel = theForm.up('termPanel');
@@ -81,6 +80,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 					Thesaurus.ext.utils
 							.msg(me.xSucessLabel, me.xSucessSavedMsg);
 					me.application.fireEvent('termupdated',thePanel.thesaurusData);
+					if (theCallback) {
+						theCallback();
+					}
 				},
 				failure : function() {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,

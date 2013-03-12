@@ -68,7 +68,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         conceptsGridStore.load();		
 	},
 	
-	saveConceptArray : function(theButton){
+	saveConceptArray : function(theButton, theCallback){
 		var me = this;
 		var theForm = theButton.up('#conceptArrayForm');
 		var theGrid = theForm.down('#gridPanelConceptArray');
@@ -90,7 +90,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 				me.loadData(theForm, resultRecord);
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
-				
+				if (theCallback) {
+					theCallback();
+				}
 			},
 			failure : function(record, operation) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
