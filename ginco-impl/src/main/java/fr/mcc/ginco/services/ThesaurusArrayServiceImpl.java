@@ -71,11 +71,17 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
     }
 
     @Override
-    public ThesaurusArray updateThesaurusConcept(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) {
+    public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) {
         ThesaurusArray updated = thesaurusArrayDAO.update(thesaurusArray);
         nodeLabel.setThesaurusArray(updated);
         nodeLabelService.updateOrCreate(nodeLabel);
         return updated;
     }    
+    
+    @Override
+    public ThesaurusArray destroyThesaurusArray(ThesaurusArray thesaurusArray) {
+    	return thesaurusArrayDAO.delete(thesaurusArray);    	
+    }
+
     
 }

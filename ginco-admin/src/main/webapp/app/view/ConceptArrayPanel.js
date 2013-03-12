@@ -24,9 +24,10 @@ Ext
 					xConceptArrayTabTitle : 'Concept array',
 					xConceptArrayFormTitle : 'Concept array',
 					xSave : 'Save',
+					xDelete : 'Delete',
 					xIdentifierLabel : 'Identifier',
-					//xCreatedDateLabel : 'Creation date',
-					//xModifiedDateLabel : 'Modification date',
+					xCreatedDateLabel : 'Creation date',
+					xModifiedDateLabel : 'Modification date',
 					xLabelLabel : 'Title',
 					xLexicalValueLabel : 'Lexical Value',
 					xLanguageLabel : 'Language',
@@ -35,6 +36,7 @@ Ext
 					xParentConceptLabel : 'Parent Concept',
 					xSelectParentConcept : 'Select a parent concept',
 					xActions : 'Actions',
+					xDelete : 'Delete',
 
 					initComponent : function() {
 						var me = this;
@@ -81,6 +83,14 @@ Ext
 														itemId : 'saveConceptArray',
 														cls : 'save',
 														iconCls : 'icon-save'
+													},
+													{
+														xtype : 'button',
+														text : me.xDelete,
+														disabled : true,
+														itemId : 'deleteConceptArray',
+														cls : 'delete',
+														iconCls : 'icon-delete'
 													} ]
 												} ],
 												items : [
@@ -88,6 +98,16 @@ Ext
 															xtype : 'displayfield',
 															name : 'identifier',
 															fieldLabel : me.xIdentifierLabel
+														},
+														{
+															xtype : 'displayfield',
+															name : 'created',
+															fieldLabel : me.xCreatedDateLabel
+														},
+														{
+															xtype : 'displayfield',
+															name : 'modified',
+															fieldLabel : me.xModificationDateLabel
 														},
 														{
 															xtype : 'textfield',

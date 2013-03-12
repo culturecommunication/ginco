@@ -89,7 +89,7 @@ public class ThesaurusArrayServiceTest extends BaseTest {
         ThesaurusArray array = thesaurusArrayService.getThesaurusArrayById("1");
         array.setNotation("test notation");
 
-        ThesaurusArray updated = thesaurusArrayService.updateThesaurusConcept(mockArray, mockLabel);
+        ThesaurusArray updated = thesaurusArrayService.updateThesaurusArray(mockArray, mockLabel);
         Assert.assertEquals(array.getNotation(),updated.getNotation());
     }
 

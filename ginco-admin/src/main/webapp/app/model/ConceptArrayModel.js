@@ -7,6 +7,14 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
             type: 'string'
         },
         {
+            name: 'created',
+            type: 'string'
+        },
+        {
+            name: 'modified',
+            type: 'string'
+        },
+        {
             name: 'label',
             type: 'string'
         },
@@ -42,8 +50,8 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
 		api : {
 			create : 'services/ui/thesaurusarrayservice/updateArray',
 			update : 'services/ui/thesaurusarrayservice/updateArray',
-			read :   'services/ui/thesaurusarrayservice/getArray'
-			//destroy: 'services/ui/thesaurusconceptservice/destroyTerm'
+			read :   'services/ui/thesaurusarrayservice/getArray',
+			destroy: 'services/ui/thesaurusarrayservice/destroyArray'
 		},
 		type : 'ajax',
 		reader : {

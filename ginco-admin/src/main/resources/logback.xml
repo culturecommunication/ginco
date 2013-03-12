@@ -22,9 +22,12 @@
     
      <logger name="fr.mcc.ginco" level="DEBUG" additivity="false">
         <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />        
     </logger>
 
     <root level="INFO" >
         <appender-ref ref="FILE" />
+       <appender-ref ref="CONSOLE" />
+        
     </root>
 </configuration>

@@ -32,47 +32,57 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.tests.rest;
 
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.ThesaurusArray;
-
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Service used to work with {@link ThesaurusArray} objects, contains basic
- * methods exposed to client part.
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusArrayService {
-    /**
-     * Get single ThesaurusArray object by its id.
-     * @param id
-     * @return
-     */
-    ThesaurusArray getThesaurusArrayById(String id);
+import junit.framework.Assert;
 
-    /**
-     * Get list of ThesaurusArray by corresponding Thesaurus.
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId);
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-    /**
-     * Update a single Thesaurus Concept Object
-     */
-    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label);    
+import fr.mcc.ginco.beans.NoteType;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
+import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
+import fr.mcc.ginco.rest.services.ThesaurusArrayRestService;
+import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.tests.LoggerTestUtil;
+
+public class ThesaurusArrayRestServiceTest {   
     
     
-    /**
-     * Delete a ThesaurusArray
-     * @param thesaurusArray
-     * @return
-     */
-    ThesaurusArray destroyThesaurusArray(ThesaurusArray thesaurusArray);
+    @Mock(name="thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;
 
-   
+    @Mock(name="nodeLabelViewConverter")
+	private NodeLabelViewConverter nodeLabelViewConverter;
 
+    @Mock(name="thesaurusArrayViewConverter")
+	private ThesaurusArrayViewConverter thesaurusArrayViewConverter;
+	
+	@InjectMocks
+	private ThesaurusArrayRestService thesaurusArrayRestService = new ThesaurusArrayRestService();
+	
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
+	
+	@Test
+	public final void testDestroy() throws BusinessException {
+		ThesaurusArray array  =new ThesaurusArray();
+		ThesaurusArrayView arrayView = new ThesaurusArrayView();		
+		Mockito.when(thesaurusArrayViewConverter.convert(Mockito.any(ThesaurusArrayView.class))).thenReturn(array);		
+		thesaurusArrayRestService.destroyArray(arrayView);
+	}	
+	
 }

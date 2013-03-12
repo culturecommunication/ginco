@@ -34,6 +34,16 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
@@ -44,14 +54,8 @@ import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
-import org.codehaus.plexus.util.StringUtils;
-import org.springframework.stereotype.Component;
+import fr.mcc.ginco.utils.DateUtil;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 @Component("thesaurusArrayViewConverter")
 public class ThesaurusArrayViewConverter {	
@@ -70,6 +74,10 @@ public class ThesaurusArrayViewConverter {
 	@Inject
 	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
+	
+	@Inject
+	@Named("nodeLabelViewConverter")
+	private NodeLabelViewConverter nodeLabelViewConverter;
 
 
 	public ThesaurusArray convert(ThesaurusArrayView source)
@@ -77,6 +85,7 @@ public class ThesaurusArrayViewConverter {
 		ThesaurusArray hibernateRes;
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusArray();
+
 		} else {
 			hibernateRes = thesaurusArrayService.getThesaurusArrayById(source
 					.getIdentifier());
@@ -121,6 +130,8 @@ public class ThesaurusArrayViewConverter {
 		}
 		
 		hibernateRes.setOrdered(false);
+		
+		
 
 		return hibernateRes;
 	}
@@ -130,7 +141,7 @@ public class ThesaurusArrayViewConverter {
 		ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
 
 		thesaurusArrayView.setIdentifier(source.getIdentifier());
-
+		
 		if (source.getSuperOrdinateConcept() != null) {
 			thesaurusArrayView.setSuperOrdinateId(source
 					.getSuperOrdinateConcept().getIdentifier());
@@ -154,7 +165,8 @@ public class ThesaurusArrayViewConverter {
 		thesaurusArrayView.setLabel(label.getLexicalValue());
 		thesaurusArrayView.setLanguage(label.getLanguage().getId());
 		thesaurusArrayView.setNodeLabelId(label.getIdentifier());
-
+		thesaurusArrayView.setCreated(DateUtil.toString(label.getCreated()));
+		thesaurusArrayView.setModified(DateUtil.toString(label.getModified()));
 		thesaurusArrayView.setThesaurusId(source.getThesaurus()
 				.getThesaurusId());
 

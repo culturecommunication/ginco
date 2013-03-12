@@ -36,8 +36,10 @@ package fr.mcc.ginco.rest.services;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.services.IThesaurusArrayService;
@@ -91,7 +93,7 @@ public class ThesaurusArrayRestService {
 
     /**
      * Public method used to create or update a concept.
-     * @param thesaurusConceptViewJAXBElement element to create/update.
+     * @param thesaurusArrayViewJAXBElement element to create/update.
      * @return newly created object.
      * @throws BusinessException in case of error.
      */
@@ -99,16 +101,39 @@ public class ThesaurusArrayRestService {
 	@Path("/updateArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusArrayView updateThesaurusArray(
-			ThesaurusArrayView thesaurusConceptViewJAXBElement)
+			ThesaurusArrayView thesaurusArrayViewJAXBElement)
+	
 			throws BusinessException {
 
-		ThesaurusArray convertedArray = thesaurusArrayViewConverter
-				.convert(thesaurusConceptViewJAXBElement);
 		NodeLabel nodeLabel = nodeLabelViewConverter
-				.convert(thesaurusConceptViewJAXBElement);
+				.convert(thesaurusArrayViewJAXBElement);
+		
+		ThesaurusArray convertedArray = thesaurusArrayViewConverter
+				.convert(thesaurusArrayViewJAXBElement);
+		
 
-		ThesaurusArray updated = thesaurusArrayService.updateThesaurusConcept(
+		ThesaurusArray updated = thesaurusArrayService.updateThesaurusArray(
 				convertedArray, nodeLabel);
 		return thesaurusArrayViewConverter.convert(updated);
 	}
+	
+	  /**
+		 * Public method used to delete
+		 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} -
+	     * thesaurus term JSON object send by extjs
+	     *
+		 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} deleted object
+		 *         in JSON format or {@code null} if not found
+		 * @throws BusinessException 
+		 */
+		@POST
+		@Path("/destroyArray")
+		@Consumes({ MediaType.APPLICATION_JSON })
+		public void destroyArray(ThesaurusArrayView thesaurusArrayViewJAXBElement) throws BusinessException {
+			ThesaurusArray object = thesaurusArrayViewConverter.convert(thesaurusArrayViewJAXBElement);
+		
+			if (object != null) {
+				thesaurusArrayService.destroyThesaurusArray(object);
+			}
+		}
 }

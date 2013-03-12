@@ -47,6 +47,8 @@ public class ThesaurusArrayView implements Serializable {
     private String identifier;
     private String superOrdinateId;
     private String superOrdinateConceptLabel;
+    private String created;
+	private String modified;
 
     private List<String> concepts;
 
@@ -131,4 +133,20 @@ public class ThesaurusArrayView implements Serializable {
     public void setNodeLabelId(Integer nodeLabelId) {
         this.nodeLabelId = nodeLabelId;
     }
+
+	public String getCreated() {
+		return created;
+	}
+
+	public void setCreated(String created) {
+		this.created = created;
+	}
+
+	public String getModified() {
+		return modified;
+	}
+
+	public void setModified(String modified) {
+		this.modified = modified;
+	}    
 }

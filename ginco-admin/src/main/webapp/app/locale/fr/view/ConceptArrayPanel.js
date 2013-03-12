@@ -15,5 +15,8 @@ Ext.define('GincoApp.locale.fr.view.ConceptArrayPanel', {
 	xParentConceptLabel : 'Concept parent',
 	xSelectParentConcept : 'Sélectionner un concept parent',
 	xLexicalValueLabel : 'Valeur lexicale',
-	xActions : 'Actions'
+	xActions : 'Actions',
+	xDelete: 'Supprimer',
+	xCreatedDateLabel : 'Date de création',
+	xModificationDateLabel : 'Date de modification'
 });

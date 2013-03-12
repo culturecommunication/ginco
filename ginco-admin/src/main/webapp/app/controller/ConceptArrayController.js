@@ -11,9 +11,12 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	xErrorDoubleRecord: 'Record already present',
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Array saved successfully',
+	xSucessRemovedMsg: 'Concept array removed successfully',
 	xProblemSaveMsg : 'Unable to save this array!',
 	xChangingParentWarningMsgTitle : 'Warning',
 	xChangingParentWarningMsgLabel : 'Changing the parent concept will erase the children, please confirm',
+	xDeleteMsgLabel : 'Are you sure you want to delete this concept array?',
+	xDeleteMsgTitle : 'Delete this concept array?',
 	
 	
 	loadConceptArrayPanel : function(theForm){
@@ -21,6 +24,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var thePanel = theForm.up('conceptArrayPanel');
         var model = this.getConceptArrayModelModel();
         var conceptArrayId = thePanel.conceptArrayId;
+		var deleteConceptArrayBtn = thePanel.down('#deleteConceptArray');
         if (conceptArrayId != '') {    		
     		theForm.getEl().mask("Chargement");
 
@@ -43,7 +47,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 					globalTabs.remove(thePanel);
 				}
 			});			
-    		
+			deleteConceptArrayBtn.setDisabled(false);
 		} else {
 			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 			model = Ext.create('GincoApp.model.ConceptArrayModel');
@@ -65,7 +69,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         conceptsGridStore.getProxy().extraParams = {
             conceptIds: aModel.raw.concepts
         };
-        conceptsGridStore.load();		
+        conceptsGridStore.load();	        
+        var deleteConceptArrayBtn = aForm.down('#deleteConceptArray');
+        deleteConceptArrayBtn.setDisabled(false);
 	},
 	
 	saveConceptArray : function(theButton, theCallback){
@@ -101,6 +107,41 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		});
 		
 	},
+	
+	deleteConceptArray: function(theButton){
+		var me = this;
+		var theForm = theButton.up('form');
+		var globalTabs = theForm.up('topTabs');
+		var thePanel = me.getActivePanel();
+		
+		var updatedModel = theForm.getForm().getRecord();      
+        
+        Ext.MessageBox.show({
+    			title : me.xDeleteMsgTitle,
+    			msg : me.xDeleteMsgLabel,
+    			buttons : Ext.MessageBox.YESNO,
+    			fn : function(buttonId) {
+    				switch (buttonId) {
+    				case 'no':
+    					break;
+    				case 'yes':
+    					updatedModel.destroy({
+    						success : function(record, operation) {
+    							Thesaurus.ext.utils.msg(me.xSucessLabel,
+    									me.xSucessRemovedMsg);
+    							globalTabs.remove(thePanel);
+    						},
+    						failure : function(record, operation) {
+    							Thesaurus.ext.utils.msg(me.xProblemLabel,
+    									operation.error);
+    						}
+    					});
+    					break;    				
+    				}
+    			},
+    			scope : this
+    		}); 
+	},	
 	
 	getActivePanel : function() {
     	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
@@ -227,7 +268,10 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             },
             'conceptArrayPanel #gridPanelConceptArray' : {
             	itemdblclick : this.onConceptDblClick
-            }
+            },
+ 			'conceptArrayPanel #deleteConceptArray' : {
+ 				click : this.deleteConceptArray
+ 			}
          });
 
     }
