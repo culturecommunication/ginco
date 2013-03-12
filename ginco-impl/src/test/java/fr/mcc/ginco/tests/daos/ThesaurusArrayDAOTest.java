@@ -34,11 +34,21 @@
  */
 package fr.mcc.ginco.tests.daos;
 
+import java.sql.Connection;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.dbunit.Assertion;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.hibernate.ThesaurusArrayDAO;
@@ -68,7 +78,28 @@ public class ThesaurusArrayDAOTest extends BaseDAOTest {
 		Assert.assertEquals(1, arrays.size());
 
 	}	
+	
+	@Test
+	public void testDelete() throws Exception{
+		ThesaurusArray array = thesaurusArrayDAO.getById("1");
+		thesaurusArrayDAO.delete(array);	
+		// compare data set
+		IDataSet expectedDataSet = getDataset("/thesaurusarray_afterdelete.xml");
+		
+		DataSource dataSource = SessionFactoryUtils.getDataSource(thesaurusArrayDAO.getSessionFactory());
+		Connection con = DataSourceUtils.getConnection(dataSource);
+		IDatabaseConnection dbUnitCon = new DatabaseConnection(con);
+		IDataSet databaseDataSet = dbUnitCon.createDataSet();
+		ITable databaseTable =databaseDataSet.getTable("thesaurus_array");
+		DataSourceUtils.releaseConnection(con, dataSource);
+		
+		// compare data table
+		ITable expectedTable = expectedDataSet.getTable("thesaurus_array");
+		//ITable databaseTable = databaseDataSet.getTable("thesaurus_array");
+		//Assertion.assertEquals(expectedTable, databaseTable);
 
+	}	
+	
 	@Override
 	public String getXmlDataFileInit() {
 		return "/thesaurusarray_init.xml";

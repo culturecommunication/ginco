@@ -60,10 +60,9 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
-import fr.mcc.ginco.tests.BaseTest;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
-public class ThesaurusConceptServiceTest extends BaseTest {
+public class ThesaurusConceptServiceTest {
 
 	@Mock(name = "thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
@@ -220,9 +219,7 @@ public class ThesaurusConceptServiceTest extends BaseTest {
 
 		List<ThesaurusConcept> roots_leaf1_1 = thesaurusConceptService
 				.getRootConcepts(leaf1_1);
-		for (ThesaurusConcept root : roots_leaf1_1) {
-			logger.error(root.getIdentifier());
-		}
+		
 		Assert.assertEquals(3, roots_leaf1_1.size());
 
 		List<ThesaurusConcept> roots_leaf1_3 = thesaurusConceptService

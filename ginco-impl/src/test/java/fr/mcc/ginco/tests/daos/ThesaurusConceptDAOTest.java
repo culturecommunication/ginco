@@ -34,14 +34,11 @@
  */
 package fr.mcc.ginco.tests.daos;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import junitx.framework.ListAssert;
 
-import org.dbunit.DatabaseUnitException;
-import org.dbunit.dataset.DataSetException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

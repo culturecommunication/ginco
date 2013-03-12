@@ -37,16 +37,12 @@ package fr.mcc.ginco.tests.daos;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.hibernate.ThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
-@TransactionConfiguration()
-@Transactional
 public class ThesaurusTermRoleDAOTest extends BaseDAOTest {
 	
     private ThesaurusTermRoleDAO thesaurusTermRoleDAO; ;     

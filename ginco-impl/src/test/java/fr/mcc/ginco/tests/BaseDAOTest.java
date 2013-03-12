@@ -36,10 +36,13 @@ package fr.mcc.ginco.tests;
 
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.sql.DataSource;
 
+import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -51,9 +54,19 @@ import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-public abstract class BaseDAOTest extends BaseTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:applicationContext.xml",
+        "classpath:spring/applicationContext-*.xml"
+})
+public abstract class BaseDAOTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 	@Inject
 	@Named("gincoSessionFactory")
@@ -62,13 +75,14 @@ public abstract class BaseDAOTest extends BaseTest {
 	@Before
 	public void handleSetUpOperation() throws Exception {
 		// init db
-
 		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
 				gincoSessionFactory).getConnection();
-		final IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
+		final IDatabaseConnection connection = new DatabaseConnection(
+				jdbcConnection);
 		DatabaseConfig config = connection.getConfig();
-		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new H2DataTypeFactory());
-		final IDataSet dataset = getDataset(getXmlDataFileInit());
+		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+				new H2DataTypeFactory());
+		IDataSet dataset = getDataset(getXmlDataFileInit());
 		try {
 			DatabaseOperation.CLEAN_INSERT.execute(connection, dataset);
 		} finally {
@@ -76,20 +90,38 @@ public abstract class BaseDAOTest extends BaseTest {
 		}
 	}
 
-	
 	@After
 	public void handleCleanOperation() throws Exception {
 		// init db
 		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
 				gincoSessionFactory).getConnection();
-		final IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-		
+		final IDatabaseConnection connection = new DatabaseConnection(
+				jdbcConnection);
 		final IDataSet data = getDataset(getXmlDataFileInit());
 		try {
 			DatabaseOperation.DELETE_ALL.execute(connection, data);
 		} finally {
 			connection.close();
 		}
+	}
+
+	final protected Connection getConnection() throws SQLException,
+			DatabaseUnitException {
+		return SessionFactoryUtils.getDataSource(gincoSessionFactory)
+				.getConnection();
+	}
+
+	final protected DataSource getDatasource() throws SQLException,
+			DatabaseUnitException {
+		return SessionFactoryUtils.getDataSource(gincoSessionFactory);
+	}
+
+	public IDataSet getDataset() throws SQLException, DatabaseUnitException {
+		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
+				gincoSessionFactory).getConnection();
+		final IDatabaseConnection connection = new DatabaseConnection(
+				jdbcConnection);
+		return connection.createDataSet();
 	}
 
 	public IDataSet getDataset(String datasetPath) throws DataSetException {
@@ -102,5 +134,13 @@ public abstract class BaseDAOTest extends BaseTest {
 	}
 
 	public abstract String getXmlDataFileInit();
+
+	public IDataSet getActualDataset() throws DatabaseUnitException, SQLException {
+		DataSource dataSource = SessionFactoryUtils
+				.getDataSource(this.gincoSessionFactory);
+		Connection con = DataSourceUtils.getConnection(dataSource);
+		IDatabaseConnection dbUnitCon = new DatabaseConnection(con);
+		return dbUnitCon.createDataSet();
+	}
 
 }

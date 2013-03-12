@@ -55,10 +55,9 @@ import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.ThesaurusArrayServiceImpl;
-import fr.mcc.ginco.tests.BaseTest;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
-public class ThesaurusArrayServiceTest extends BaseTest {
+public class ThesaurusArrayServiceTest {
 
     @Mock(name = "thesaurusArrayDAO")
     private IThesaurusArrayDAO thesaurusArrayDAO;
@@ -125,6 +124,17 @@ public class ThesaurusArrayServiceTest extends BaseTest {
         List<ThesaurusArray> actual = thesaurusArrayService.getAllThesaurusArrayByThesaurusId("th1");
 
         Assert.assertEquals(2, actual.size());
+    }
+    
+    @Test
+    public final void testDestroy() {
+        ThesaurusArray mockArray = new ThesaurusArray();
+        mockArray.setIdentifier("1");
+
+        when(thesaurusArrayDAO.delete(any(ThesaurusArray.class))).thenReturn(mockArray);
+
+        ThesaurusArray actualArray = thesaurusArrayService.destroyThesaurusArray(mockArray);
+        Assert.assertEquals(mockArray.getIdentifier(), actualArray.getIdentifier());
     }
 
 }

@@ -56,10 +56,9 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.services.ThesaurusServiceImpl;
-import fr.mcc.ginco.tests.BaseTest;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
-public class ThesaurusServiceTest extends BaseTest {
+public class ThesaurusServiceTest {
 
 	@Mock(name = "thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;

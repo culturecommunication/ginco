@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.tests.daos;
 
-import org.dbunit.dataset.IDataSet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

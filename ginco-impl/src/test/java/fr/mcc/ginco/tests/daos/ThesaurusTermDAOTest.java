@@ -39,15 +39,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.hibernate.ThesaurusTermDAO;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
-@TransactionConfiguration()
-@Transactional
 public class ThesaurusTermDAOTest extends BaseDAOTest {
 	
     private ThesaurusTermDAO thesaurusTermDAO; ;     

@@ -34,23 +34,17 @@
  */
 package fr.mcc.ginco.tests.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 
-import fr.mcc.ginco.tests.BaseTest;
 import fr.mcc.ginco.utils.GitInfo;
 
 
-public class GitInfoServiceTest extends BaseTest {
+public class GitInfoServiceTest {	
 	
-	@Inject
-	@Named("gitInfoService")
-	GitInfo gitInfo;
+	GitInfo gitInfo = new GitInfo();
 	
 	@Value("${git.commit.id}") private String commitId;
 	@Value("${git.branch}") private String gitBranch;

@@ -34,39 +34,42 @@
  */
 package fr.mcc.ginco.tests.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.services.IThesaurusFormatService;
-import fr.mcc.ginco.tests.BaseServiceTest;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.services.ThesaurusFormatServiceImpl;
 
-@TransactionConfiguration
-@Transactional
-public class ThesaurusFormatServiceTest extends BaseServiceTest {
+public class ThesaurusFormatServiceTest {	
 	
-	@Inject
-	private IThesaurusFormatService thesaurusFormatService;	
+	@Mock(name = "thesaurusFormatDAO")
+	private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
+
+	@InjectMocks
+	private ThesaurusFormatServiceImpl thesaurusFormatService;
+
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
 	
 	@Test
     public final void testGetThesaurusFormatList() {
+		List<ThesaurusFormat> formats = new ArrayList<ThesaurusFormat>();
+		ThesaurusFormat format1 = new ThesaurusFormat();
+		formats.add(format1);
+		Mockito.when(thesaurusFormatDAO.findAll()).thenReturn(formats);
         List<ThesaurusFormat> actualResponse = thesaurusFormatService.getThesaurusFormatList();
-		Assert.assertEquals("Error fetching all ThesaurusFormat", 3, actualResponse.size());
-		Assert.assertEquals("Error fetching name of second ThesaurusFormat (expecting CSV))", "CSV", actualResponse.get(1).getLabel());
+		Assert.assertEquals("Error fetching all ThesaurusFormat", 1, actualResponse.size());
 
     }
-	
-	@Override
-	public String  getXmlDataFileInit() {
-		return "/thesaurusformat_init.xml";
-		
-	}
-
 }

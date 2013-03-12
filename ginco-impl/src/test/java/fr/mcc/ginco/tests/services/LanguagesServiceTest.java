@@ -34,65 +34,74 @@
  */
 package fr.mcc.ginco.tests.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.tests.BaseServiceTest;
+import fr.mcc.ginco.dao.ILanguageDAO;
+import fr.mcc.ginco.services.LanguagesServiceImpl;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+public class LanguagesServiceTest {
 
+	@Mock(name = "languagesDAO")
+	private ILanguageDAO languagesDAO;
 
+	@InjectMocks
+	private LanguagesServiceImpl languagesService;
 
-@TransactionConfiguration
-@Transactional
-public class LanguagesServiceTest extends BaseServiceTest {
-	
-	@Inject
-	private ILanguagesService languagesService;	
-	
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
+
 	/**
-	 * Test getting languages list with 3 cases :
-	 * - The favorites languages are listed firstly
-	 * - The other languages are listed alphabetically
-	 * - With a start index + limit of items > items present in DB
+	 * Test getting languages list with 3 cases : - The favorites languages are
+	 * listed firstly - The other languages are listed alphabetically - With a
+	 * start index + limit of items > items present in DB
 	 */
-    @Test
-    public final void testGetLanguagesListList() {
-        List<Language> actualResponse = languagesService.getLanguagesList(0,50);
-		Assert.assertEquals("Error fetching all Languages", 6, actualResponse.size());
-		Assert.assertEquals("Error fetching name TopLanguage (expecting Amal))", "Amal", actualResponse.get(0).getRefname());
-		Assert.assertEquals("Error fetching sorted language (expecting Alumu-Tesu))", "Alumu-Tesu", actualResponse.get(1).getRefname());
-    }
-    
-    /**
+	@Test
+	public final void testGetLanguagesListList() {
+		Language defaultLang = new Language();
+		List<Language> langs = new ArrayList<Language>();
+		langs.add(defaultLang);
+		Mockito.when(languagesDAO.findPaginatedItems(0, 50)).thenReturn(langs);
+		List<Language> actualResponse = languagesService
+				.getLanguagesList(0, 50);
+		Assert.assertEquals("Error fetching all Languages", 1,
+				actualResponse.size());		
+	}
+
+	/**
 	 * Test getting top languages
 	 */
-    @Test
-    public final void testGetTopLanguagesList() {
-        List<Language> actualResponse = languagesService.getTopLanguagesList();
-		Assert.assertEquals("Error fetching all top languages", 1, actualResponse.size());
-		Assert.assertEquals("Error fetching name TopLanguage (expecting Amal))", "Amal", actualResponse.get(0).getRefname());
-    }
-    
-    /**
+	@Test
+	public final void testGetTopLanguagesList() {
+		Language defaultLang = new Language();
+		List<Language> langs = new ArrayList<Language>();
+		langs.add(defaultLang);
+		Mockito.when(languagesDAO.findTopLanguages()).thenReturn(langs);
+		List<Language> actualResponse = languagesService.getTopLanguagesList();
+		Assert.assertEquals("Error fetching all top languages", 1,
+				actualResponse.size());
+	}
+
+	/**
 	 * Test getting the number of languages
 	 */
-  	@Test
-      public final void testCountLanguages() {
-          Long actualResponse = languagesService.getLanguageCount();
-  		  Assert.assertEquals("Error counting Languages", 6, actualResponse.longValue());
-      }
-	
-	@Override
-	public String  getXmlDataFileInit() {
-		return "/languages_init.xml";
-		
+	@Test
+	public final void testCountLanguages() {
+		Mockito.when(languagesDAO.count()).thenReturn((long) 6);
+		Long actualResponse = languagesService.getLanguageCount();
+		Assert.assertEquals("Error counting Languages", 6,
+				actualResponse.longValue());
 	}
 
 }

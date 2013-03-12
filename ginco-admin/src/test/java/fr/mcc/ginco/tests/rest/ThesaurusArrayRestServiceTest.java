@@ -34,11 +34,6 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -46,16 +41,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusArrayRestService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusArrayRestServiceTest {   
     

@@ -34,37 +34,42 @@
  */
 package fr.mcc.ginco.tests.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.services.IThesaurusTypeService;
-import fr.mcc.ginco.tests.BaseServiceTest;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.services.ThesaurusTypeServiceImpl;
 
-@TransactionConfiguration
-@Transactional
-public class ThesaurusTypeServiceTest extends BaseServiceTest {
+public class ThesaurusTypeServiceTest {	
 	
-	@Inject
-	private IThesaurusTypeService thesaurusTypeService;	
+	@Mock(name = "thesaurusTypeDAO")
+    private IGenericDAO<ThesaurusType, Integer> thesaurusTypeDAO;
+	
+	@InjectMocks
+	private ThesaurusTypeServiceImpl thesaurusTypeService;	
+	
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
 	
 	@Test
     public final void testGetThesaurusTypeList() {
+		List<ThesaurusType> allTypes = new ArrayList<ThesaurusType>();
+		ThesaurusType type = new ThesaurusType();
+		allTypes.add(type);
+		Mockito.when(thesaurusTypeDAO.findAll()).thenReturn(allTypes);
         List<ThesaurusType> actualResponse = thesaurusTypeService.getThesaurusTypeList();
-		Assert.assertEquals("Error fetching all ThesaurusType", 3, actualResponse.size());
-    }
-	
-	@Override
-	public String  getXmlDataFileInit() {
-		return "/thesaurustype_init.xml";
-		
-	}
+		Assert.assertEquals("Error fetching all ThesaurusType", 1, actualResponse.size());
+    }	
 
 }

@@ -57,5 +57,5 @@ public class CustomGenerator implements IdentifierGenerator {
         UUID nq = UUID.randomUUID();
         arkId = nma + "/ark:/"+ naan + "/" + nq.toString();
         return arkId;
-    }
+    }    
 }

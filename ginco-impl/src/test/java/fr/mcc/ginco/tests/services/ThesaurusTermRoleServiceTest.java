@@ -41,18 +41,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ThesaurusTermRoleServiceImpl;
-import fr.mcc.ginco.tests.BaseTest;
 
-@TransactionConfiguration
-@Transactional
-public class ThesaurusTermRoleServiceTest extends BaseTest {
+
+public class ThesaurusTermRoleServiceTest {
 
 	@Mock(name = "thesaurusTermRoleDAO")
 	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;

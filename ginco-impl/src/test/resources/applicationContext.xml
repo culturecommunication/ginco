@@ -29,7 +29,7 @@
 		<property name="initialSize" value="25" />
 		<property name="removeAbandoned" value="true" />
 		<property name="removeAbandonedTimeout" value="300" />
-	</bean>
+	</bean>	
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

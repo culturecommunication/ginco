@@ -1,28 +1,24 @@
 package fr.mcc.ginco.tests.services;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.ThesaurusTermServiceImpl;
-import fr.mcc.ginco.tests.BaseTest;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.services.ThesaurusTermServiceImpl;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
-
-@TransactionConfiguration
-@Transactional
-public class ThesaurusTermServiceTest extends BaseTest {
+public class ThesaurusTermServiceTest {
 
 
 	@Mock(name = "thesaurusTermDAO")

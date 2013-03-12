@@ -34,25 +34,22 @@
  */
 package fr.mcc.ginco.tests;
 
-import fr.mcc.ginco.ark.CustomGenerator;
 import org.hibernate.id.IdentifierGenerator;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Value;
 
-public class SimpleArkProviderTest extends BaseTest {
+import fr.mcc.ginco.ark.CustomGenerator;
+
+public class SimpleArkProviderTest {
 	
     private IdentifierGenerator arkProvider = new CustomGenerator();
-	
-	private @Value("${application.ark.nma}") String nma;
-	private @Value("${application.ark.naan}") String naan;
 	
 	 /**
 	 * Since ARK is randomly generated, this method only test the static part of the ID
 	 */
 	@Test
 	 public final void getArkId(){
-        String expectedResponse= nma + "/ark:/" + naan;
+        String expectedResponse= "http://culturecommunication.gouv.fr" + "/ark:/" + "12345";
 		String actualResponse = arkProvider.generate(null, "").toString();
         Assert.assertTrue("Error while generating ARK Id !" + actualResponse + " expected " + expectedResponse, actualResponse.startsWith(expectedResponse));
 	 }
