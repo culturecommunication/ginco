@@ -36,7 +36,6 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
@@ -127,11 +126,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
     @Override
     public Thesaurus destroyThesaurus(Thesaurus object) throws BusinessException {
-        for(ThesaurusTerm term : object.getThesaurusesTerms()) {
-            thesaurusTermDAO.delete(term);
-        }
-
-        object.setThesaurusesTerms(null);
         return thesaurusDAO.delete(object);
     }
 

@@ -33,11 +33,6 @@
 			<key column="thesaurus_identifier" />
 			<many-to-many class="fr.mcc.ginco.beans.Language" column="iso639_id" />
 		</set>
-		
-		<set name="thesaurusesTerms" cascade="all" inverse="true">
-			<key column="thesaurusid" />
-			<one-to-many not-found="ignore" class="ThesaurusTerm"/>
-		</set>
 
 	</class>
 </hibernate-mapping>

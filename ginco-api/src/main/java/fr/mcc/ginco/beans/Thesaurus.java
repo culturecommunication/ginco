@@ -71,7 +71,6 @@ public class Thesaurus implements Serializable, IAuditableBean {
     
     private Set<Language> lang = new HashSet<Language>();
     private Set<ThesaurusVersionHistory> versions;
-    private Set<ThesaurusTerm> thesaurusesTerms  = new HashSet<ThesaurusTerm>();
 
     public Thesaurus() {
     }   
@@ -227,20 +226,6 @@ public class Thesaurus implements Serializable, IAuditableBean {
     public void addLang(Language lang) {
         this.lang.add(lang);
     }
-
-	/**
-	 * @return the thesaurusesTerms
-	 */
-	public Set<ThesaurusTerm> getThesaurusesTerms() {
-		return thesaurusesTerms;
-	}
-
-	/**
-	 * @param thesaurusesTerms the thesaurusesTerms to set
-	 */
-	public void setThesaurusesTerms(Set<ThesaurusTerm> thesaurusesTerms) {
-		this.thesaurusesTerms = thesaurusesTerms;
-	}
 
 	public Boolean isDefaultTopConcept() {
 		return defaultTopConcept;
