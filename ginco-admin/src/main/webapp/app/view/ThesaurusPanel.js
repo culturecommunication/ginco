@@ -99,6 +99,12 @@ Ext
 																		text : me.xNewMenu_ConceptArrayLabel,
 																		itemId : 'newConceptArrayBtn',
 																		cmdTxt : 'Ctrl+4'
+																	},
+																	{
+																		xtype : 'keymenuitem',
+																		text : me.xNewMenu_GroupLabel,
+																		itemId : 'newConceptGroupBtn',
+																		cmdTxt : 'Ctrl+5'
 																	}]
 																}
 															},

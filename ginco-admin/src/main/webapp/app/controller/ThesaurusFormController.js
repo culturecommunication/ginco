@@ -46,6 +46,11 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		this.createPanel('GincoApp.view.ConceptArrayPanel',thePanel.thesaurusData);
 	},
 	
+	onNewConceptGroupBtnClick : function(theButton) {
+		var thePanel = theButton.up('thesaurusPanel');
+		this.createPanel('GincoApp.view.ConceptGroupPanel',thePanel.thesaurusData);
+	},
+	
 	createPanel : function(aType, thesaurusData)
 	{
 		var aNewPanel = Ext.create(aType);
@@ -99,6 +104,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			},
 			"thesaurusPanel #newConceptArrayBtn" : {
 				click : this.onNewConceptArrayBtnClick
+			},
+			"thesaurusPanel #newConceptGroupBtn" : {
+				click : this.onNewConceptGroupBtnClick
 			}
 		});
 	}
