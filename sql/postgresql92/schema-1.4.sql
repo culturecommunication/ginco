@@ -12,13 +12,6 @@ CREATE TABLE concept_group_type
   CONSTRAINT pk_concept_group_type_code PRIMARY KEY (code)
 );
 
-CREATE SEQUENCE concept_group_type_code_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
 CREATE TABLE concept_group
 (
   identifier text NOT NULL,
@@ -49,12 +42,15 @@ CREATE TABLE concept_group_concepts
 CREATE TABLE concept_group_label
 (
   identifier integer NOT NULL,
-  lexicalvalue text,
+  lexicalvalue text  NOT NULL,
   created timestamp without time zone DEFAULT now() NOT NULL,
   modified timestamp without time zone DEFAULT now() NOT NULL,
   lang text NOT NULL,
   conceptgroupid text  NOT NULL,
   CONSTRAINT pk_concept_group_label_identifier PRIMARY KEY (identifier),
+  CONSTRAINT fk_concept_group_label_languages_iso639_id FOREIGN KEY (lang)
+      REFERENCES languages_iso639 (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_concept_group_label_concept_group_identifier FOREIGN KEY (conceptgroupid)
       REFERENCES concept_group (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE CASCADE
