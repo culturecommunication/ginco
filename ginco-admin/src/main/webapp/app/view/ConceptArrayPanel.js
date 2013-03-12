@@ -129,7 +129,7 @@ Ext
 																		xtype : 'textfield',
 																		name : 'superOrdinateLabel',
 																		fieldLabel : me.xParentConceptLabel,
-																		allowBlank : false,
+																		allowBlank : true,
 																		readOnly : true
 																	},
 																	{

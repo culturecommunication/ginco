@@ -34,16 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.codehaus.plexus.util.StringUtils;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
@@ -54,6 +44,14 @@ import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
+import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @Component("thesaurusArrayViewConverter")
 public class ThesaurusArrayViewConverter {	
@@ -88,17 +86,16 @@ public class ThesaurusArrayViewConverter {
 					"ThesaurusId is mandatory to save a concept",
 					"mandatory-thesaurus");
 		} else {
-			Thesaurus thesaurus = new Thesaurus();
-			thesaurus = thesaurusService.getThesaurusById(source
+			Thesaurus thesaurus = thesaurusService.getThesaurusById(source
 					.getThesaurusId());
 			hibernateRes.setThesaurus(thesaurus);
 		}
 		
-		if (StringUtils.isEmpty(source.getSuperOrdinateId())) {
+		/*if (StringUtils.isEmpty(source.getSuperOrdinateId())) {
 			throw new BusinessException(
 					"ThesaurusArray must have superordirnated concept!",
 					"array-should-have-superordirnated-concept");
-		}
+		} */
 
 		if (StringUtils.isNotEmpty(source.getSuperOrdinateId())) {
 			hibernateRes
