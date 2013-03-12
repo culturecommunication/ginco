@@ -18,5 +18,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptArrayPanel', {
 	xActions : 'Actions',
 	xDelete: 'Supprimer',
 	xCreatedDateLabel : 'Date de création',
-	xModificationDateLabel : 'Date de modification'
+	xModificationDateLabel : 'Date de modification',
+	xAssociationRemove : 'Détacher ce concept'
 });
