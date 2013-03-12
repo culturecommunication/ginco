@@ -37,6 +37,9 @@
                 <value>hibernate/AssociativeRelationshipRole.hbm.xml</value>      
                 <value>hibernate/NodeLabel.hbm.xml</value>
                 <value>hibernate/ThesaurusArray.hbm.xml</value>
+                <value>hibernate/ThesaurusConceptGroup.hbm.xml</value>
+                <value>hibernate/ThesaurusConceptGroupType.hbm.xml</value>
+                <value>hibernate/ThesaurusConceptGroupLabel.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">

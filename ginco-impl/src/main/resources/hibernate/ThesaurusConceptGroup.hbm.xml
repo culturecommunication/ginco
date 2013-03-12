@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="ThesaurusConceptGroup" table="concept_group">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+			<generator class="fr.mcc.ginco.ark.CustomGenerator" />
+		</id>
+		
+		<many-to-one name="thesaurus" column="thesaurusid" lazy="false"/>
+		<many-to-one name="conceptGroupType" column="conceptgrouptypecode" lazy="false"/>
+		
+		<set name="concepts" table="concept_group_concepts">
+			<key column="conceptgroupid" not-null="true" />
+			<many-to-many class="fr.mcc.ginco.beans.ThesaurusConcept" column="conceptid" />
+		</set>
+		
+	</class>
+</hibernate-mapping>

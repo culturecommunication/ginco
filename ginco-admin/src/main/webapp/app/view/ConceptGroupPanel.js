@@ -18,6 +18,8 @@ Ext.define('GincoApp.view.ConceptGroupPanel', {
     //Labels
     xSave : 'Save',
     xIdentifierLabel : 'Identifier',
+    xCreatedLabel : 'Created',
+    xModifiedLabel : 'Modified',
     xLabelLabel : 'Group Title',
     xTypeLabel : 'Type',
     xLanguageLabel : 'Language',
@@ -67,6 +69,16 @@ Ext.define('GincoApp.view.ConceptGroupPanel', {
 									xtype : 'displayfield',
 									name : 'identifier',
 									fieldLabel : me.xIdentifierLabel
+								},
+								{
+									xtype : 'displayfield',
+									name : 'created',
+									fieldLabel : me.xCreatedLabel
+								},
+								{
+									xtype : 'displayfield',
+									name : 'modified',
+									fieldLabel : me.xModifiedLabel
 								},
 								{
 									xtype : 'textfield',
