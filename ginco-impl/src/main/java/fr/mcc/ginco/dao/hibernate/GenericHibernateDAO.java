@@ -100,7 +100,7 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	}
 
 	@Override
-	public T update(T entity) {
+	final public T update(T entity) {
 		return makePersistent(entity);
 	}
 	
