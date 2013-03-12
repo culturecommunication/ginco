@@ -192,11 +192,17 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var theConceptArrayForm = theButton.up('form');
 		var theGrid = theConceptArrayPanel.down('#gridPanelConceptArray');
 		var theStore = theGrid.getStore();
-		    
+
+        debugger;
+
+        var searchOrphans = null;
+        if(theConceptArrayForm.down('textfield[name="superOrdinateId"]').value == "")
+            searchOrphans = false;
+
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : theConceptArrayPanel.thesaurusData,
             conceptId : theConceptArrayForm.down('textfield[name="superOrdinateId"]').value,
-            searchOrphans : false,
+            searchOrphans : searchOrphans,
             getChildren : false,
             showTree : false,
             checkstore: theStore,
