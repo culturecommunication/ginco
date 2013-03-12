@@ -102,7 +102,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		win.show();
     },
 	
-	saveNoteBtn : function(theButton) {
+	saveNoteBtn : function(theButton,theCallback) {
 		var me=this;
 		var theGrid = theButton.up('panel').down('gridpanel');
 		var thePanel = theButton.up('panel');
@@ -112,6 +112,9 @@ Ext.define('GincoApp.controller.NotePanelController', {
 				thePanel.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
 				thePanel.down('button[itemId=saveNote]').setDisabled(true);
+				if (theCallback) {
+					theCallback();
+				}
 			},
 			failure : function(model, operation) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);

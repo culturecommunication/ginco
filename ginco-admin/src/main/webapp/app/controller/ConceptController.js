@@ -186,6 +186,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		if (theWin.store.findRecord('identifier', record.data.identifier) !== null ){
 			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
 		} else {
+			record.setDirty();
 			theWin.store.add(record);
 			theWin.close();
 		}
@@ -252,7 +253,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 
     selectAssociativeConcept : function(selectedRow, theGrid) {
          var theStore = theGrid.getStore();
-         theStore.add(selectedRow[0]);
+         var selectedItem = selectedRow[0];
+         selectedItem.setDirty();
+         theStore.add(selectedItem);
 
     },
 
@@ -466,7 +469,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	
     init:function(){    	
         this.control({
-        	'conceptPanel form' : {
+        	'conceptPanel #conceptForm' : {
  				afterrender : this.onConceptFormRender
  			},
  			'conceptPanel #saveConcept' : {

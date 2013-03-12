@@ -8,7 +8,32 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		var theForm = thePanel.down('form');		
 		var globalTabs = thePanel.up('topTabs');
 		if (theForm) {
-			if (theForm.getForm().isDirty()) {
+			var dirtyForms = [];
+			var gridPanels = thePanel.query('gridpanel');
+			Ext.Array.forEach(gridPanels,function (gridPanel) {
+				var gridStore = gridPanel.getStore();
+				console.log(gridPanel);
+				console.log(gridStore.getModifiedRecords());
+				console.log(gridStore.getRemovedRecords());
+				if(gridStore.getModifiedRecords().length>0 || gridStore.getRemovedRecords().length>0 )
+				{
+					dirtyForms.push(gridPanel.up('form'));
+				}
+			});
+			
+			var theForms = thePanel.query('form');
+			Ext.Array.forEach(theForms,function (aForm) {
+				if (aForm.getForm().isDirty())
+				{
+					if (dirtyForms.indexOf(aForm)==-1)
+					{
+						dirtyForms.push(aForm);
+					}
+				}
+			}
+			);
+			
+			if (dirtyForms.length>0) {
 				Ext.MessageBox.show({
 					title : me.xSaveMsgTitle,
 					msg : me.xSaveMsgLabel,
@@ -19,10 +44,23 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 							globalTabs.remove(thePanel);
 							break; // manually removes tab from tab panel
 						case 'yes':
-							var saveButton = theForm.down('button[cls=save]');
-							saveButton.fireEvent('click', saveButton, function(){
-								globalTabs.remove(thePanel);
-							});
+							for (var i=0;i<dirtyForms.length;i++)
+							{
+								var dirtyForm = dirtyForms[i];
+								var saveButton = dirtyForm.down('button[cls=save]');
+								if (saveButton != null) {
+									if (i==dirtyForms.length-1) {
+										saveButton.fireEvent('click', saveButton, function(){
+											globalTabs.remove(thePanel);
+										});
+									} else
+									{
+										saveButton.fireEvent('click', saveButton);
+									}
+								}
+							}
+							
+							
 							break;
 						case 'cancel':
 							break; // leave blank if no action required on

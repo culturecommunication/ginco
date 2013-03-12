@@ -96,6 +96,7 @@ Ext
 															},
 															items : [ {
 																xtype : 'form',
+																itemId : 'conceptForm',
 																flex : 1,
 																autoScroll: true,
 																pollForChanges : true,

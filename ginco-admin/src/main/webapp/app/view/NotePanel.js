@@ -36,7 +36,7 @@ Ext.define('GincoApp.view.NotePanel', {
         Ext.applyIf(me, {
             items: [
                 {
-                    xtype: 'panel',
+                    xtype: 'form',
                 	flex: 1,
                 	autoScroll: true,
                     dockedItems: [
