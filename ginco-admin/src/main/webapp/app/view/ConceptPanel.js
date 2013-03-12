@@ -46,15 +46,14 @@ Ext
 					xDetach : 'Detach from Concept',
 					xAddParent : 'Add parent Concept',
 					xNotesTab : 'Notes of this concept',
-					xActions: 'Actions',
-                    xAddRelationship: 'Add associative relationship',
-                    xAssociatedConceptsListGridTitle: 'Associated terms',
-                    xRootConcepts: 'Root Concepts',
-                    xParentConcepts: 'Parent Concepts',
-                    xRemoveParent: 'Remove connection to parent Concept',
-                    xAssociationRemove: 'Remove association',
-                    xChildrenConcepts: 'Children Concepts',
-
+					xActions : 'Actions',
+					xAddRelationship : 'Add associative relationship',
+					xAssociatedConceptsListGridTitle : 'Associated terms',
+					xRootConcepts : 'Root Concepts',
+					xParentConcepts : 'Parent Concepts',
+					xRemoveParent : 'Remove connection to parent Concept',
+					xAssociationRemove : 'Remove association',
+					xChildrenConcepts : 'Children Concepts',
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
@@ -98,7 +97,7 @@ Ext
 																xtype : 'form',
 																itemId : 'conceptForm',
 																flex : 1,
-																autoScroll: true,
+																autoScroll : true,
 																pollForChanges : true,
 																trackResetOnLoad : true,
 																defaults : {
@@ -399,7 +398,7 @@ Ext
 																						} ]
 																					} ]
 																		} ]
-															} ],
+															} ]
 														},
 														{
 															title : me.xNotesTab,
