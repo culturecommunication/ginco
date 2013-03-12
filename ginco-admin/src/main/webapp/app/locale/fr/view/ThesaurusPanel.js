@@ -20,7 +20,7 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xTypeLabel : 'Type',
 	    xFormatLabel : 'Format',
 	    xLanguagesLabel : 'Langue(s)',
-	    xdefaultTopConceptLabel : 'Concepts TopTerm par défaut',
+	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
 	    xRelationLabel : 'Publication(s) associée(s)',
 	    xSourceLabel : 'Ressource(s) liée(s)',
 	    xThesaurusTitle : 'Nouveau Vocabulaire',
