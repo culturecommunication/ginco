@@ -47,6 +47,10 @@ Ext
 					xNewMenu_GroupLabel : "Group of Concepts",
 					xNewMenu_ConceptArrayLabel : "Array of concepts",
 
+                    xSave : "Save",
+                    xCreateVersion : "Create version",
+                    xDelete : "Delete",
+
 					initComponent : function() {
 						var me = this;
 
@@ -110,7 +114,7 @@ Ext
 															},
 															{
 																xtype : 'button',
-																text : 'Enregistrer',
+																text : me.xSave,
 																disabled : true,
 																formBind : true,
 																cls : 'save',
@@ -118,9 +122,16 @@ Ext
 															},
 															{
 																xtype : 'button',
-																text : 'Créer version',
+																text : me.xCreateVersion,
 																disabled : true
-															} ]
+															},
+                                                            {
+                                                                xtype : 'button',
+                                                                text : me.xDelete,
+                                                                disabled : true,
+                                                                cls : 'delete',
+                                                                iconCls : 'icon-delete'
+                                                            } ]
 												} ],
 												items : [
 														{

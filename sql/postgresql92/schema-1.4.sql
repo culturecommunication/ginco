@@ -62,3 +62,77 @@ CREATE SEQUENCE concept_group_label_identifier_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+    
+ALTER TABLE thesaurus_concept DROP CONSTRAINT fk_concept_thesaurus;
+
+ALTER TABLE thesaurus_concept
+  ADD CONSTRAINT fk_concept_thesaurus FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE thesaurus_array DROP CONSTRAINT fk_thesaurus_array_thesaurus;
+
+ALTER TABLE thesaurus_array
+  ADD CONSTRAINT fk_thesaurus_array_thesaurus FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE thesaurus_array_concept DROP CONSTRAINT fk_thesaurus_array_concept_thesaurus_concept;
+ALTER TABLE thesaurus_array_concept DROP CONSTRAINT fk_thesaurus_array_concept_thesaurus_array;
+
+ALTER TABLE thesaurus_array_concept
+  ADD CONSTRAINT fk_thesaurus_array_concept_thesaurus_array FOREIGN KEY (thesaurusarrayid)
+      REFERENCES thesaurus_array (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+
+ALTER TABLE thesaurus_array_concept
+  ADD CONSTRAINT fk_thesaurus_array_concept_thesaurus_concept FOREIGN KEY (conceptid)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE thesaurus_languages DROP CONSTRAINT fk_thesaurus_languages_thesaurus_identifier;
+ALTER TABLE thesaurus_languages DROP CONSTRAINT fk_thesaurus_languages_languages_iso639_id;
+
+ALTER TABLE thesaurus_languages
+  ADD CONSTRAINT fk_thesaurus_languages_thesaurus_identifier FOREIGN KEY (thesaurus_identifier)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE thesaurus_languages
+  ADD CONSTRAINT fk_thesaurus_languages_languages_iso639_id FOREIGN KEY (iso639_id)
+      REFERENCES languages_iso639 (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE thesaurus_term DROP CONSTRAINT fk_term_thesaurus;
+ALTER TABLE thesaurus_term DROP CONSTRAINT fk_term_thesaurus_concept;
+
+
+ALTER TABLE thesaurus_term
+  ADD CONSTRAINT fk_term_thesaurus FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE thesaurus_term
+  ADD CONSTRAINT fk_term_thesaurus_concept FOREIGN KEY (conceptid)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE associative_relationship DROP CONSTRAINT fk2b76ee66da7e7931;
+ALTER TABLE associative_relationship DROP CONSTRAINT fk2b76ee66fdebaa20;
+ALTER TABLE associative_relationship DROP CONSTRAINT fk2b76ee66fdebaa21;
+
+ALTER TABLE associative_relationship
+  ADD CONSTRAINT fk_role FOREIGN KEY (role)
+      REFERENCES associative_relationship_role (code) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+ALTER TABLE associative_relationship
+  ADD CONSTRAINT fk_concept1 FOREIGN KEY (concept1)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE associative_relationship
+  ADD CONSTRAINT fk_concept2 FOREIGN KEY (concept2)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;

@@ -15,7 +15,7 @@
 
         <many-to-one name="role" column="role" lazy="false" />
 		<many-to-one name="language" column="lang" lazy="false" />
-		<many-to-one name="thesaurus" column="thesaurusid" lazy="false"/>
+		<many-to-one name="thesaurus" column="thesaurusid" lazy="false" update="true"/>
         <many-to-one name="concept" column="conceptid" lazy="false" />
 	</class>
 </hibernate-mapping>

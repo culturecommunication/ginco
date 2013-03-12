@@ -180,5 +180,20 @@ public class ThesaurusRestService {
 		}
 		return view;
 	}
+
+    /**
+     * Public method used to delete thesaurus
+     * @throws BusinessException
+     */
+    @POST
+    @Path("/destroyVocabulary")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    public void destroyVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
+        Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
+
+        if (object != null) {
+            thesaurusService.destroyThesaurus(object);
+        }
+    }
 	
 }

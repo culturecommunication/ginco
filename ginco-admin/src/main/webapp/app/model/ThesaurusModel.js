@@ -61,7 +61,8 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 		api : {
 			create : 'services/ui/thesaurusservice/updateVocabulary',
 			read : 'services/ui/thesaurusservice/getVocabulary',
-			update : 'services/ui/thesaurusservice/updateVocabulary'
+			update : 'services/ui/thesaurusservice/updateVocabulary',
+            destroy : 'services/ui/thesaurusservice/destroyVocabulary'
 		},
 		type : 'ajax',
 		url : 'services/ui/thesaurusservice/getVocabulary',

@@ -4,6 +4,15 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	models : [ 'ThesaurusModel' ],
 	stores : [ 'MainTreeStore' ],
 
+    xDeleteMsgLabel : 'Are you sure to delete this thesaurus?',
+    xDeleteMsgTitle : 'Delete this thesaurus?',
+    xSucessLabel : 'Success!',
+    xSucessSavedMsg : 'Thesaurus saved successfully',
+    xSucessRemovedMsg : 'Thesaurus removed successfully',
+    xProblemLabel : 'Error !',
+    xProblemSaveMsg : 'Unable to save this thesaurus!',
+    xProblemDeleteMsg : 'Unable to delete this thesaurus!',
+
 	loadPanel : function(theForm) {
 		var me = this;
 		var model = this.getThesaurusModelModel();
@@ -29,6 +38,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		aForm.setTitle(aModel.data.title);
 		aForm.loadRecord(aModel);
 		thesaurusPanel.down('button[cls=newBtnMenu]').setDisabled(false);
+        thesaurusPanel.down('button[cls=delete]').setDisabled(false);
 		
 	},
 	onNewTermBtnClick : function(theButton, e, options) {
@@ -61,6 +71,47 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		tab.show();
 		return aNewPanel;
 	},
+
+    getActivePanel : function() {
+        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+        return topTabs.getActiveTab();
+    },
+
+    deleteThesaurus : function(theButton){
+        var me = this;
+        var theForm = theButton.up('form');
+        var globalTabs = theForm.up('topTabs');
+        var thePanel = me.getActivePanel();
+
+        var updatedModel = theForm.getForm().getRecord();
+            Ext.MessageBox.show({
+                title : me.xDeleteMsgTitle,
+                msg : me.xDeleteMsgLabel,
+                buttons : Ext.MessageBox.YESNOCANCEL,
+                fn : function(buttonId) {
+                    switch (buttonId) {
+                        case 'no':
+                            break;
+                        case 'yes':
+                            updatedModel.destroy({
+                                success : function(record, operation) {
+                                    Thesaurus.ext.utils.msg(me.xSucessLabel,
+                                        me.xSucessRemovedMsg);
+                                    me.application.fireEvent('thesaurusdeleted',thePanel.thesaurusData);
+                                    globalTabs.remove(thePanel);
+                                },
+                                failure : function(record, operation) {
+                                    Thesaurus.ext.utils.msg(me.xProblemLabel,
+                                        operation.error);
+                                }
+                            });
+                            break;
+                    }
+                },
+                scope : this
+            });
+
+    },
 
 	saveForm : function(theButton, theCallback) {
 		var me = this;
@@ -96,6 +147,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			'thesaurusPanel button[cls=save]' : {
 				click : this.saveForm
 			},
+            'thesaurusPanel button[cls=delete]' : {
+                click : this.deleteThesaurus
+            },
 			"thesaurusPanel #newTermBtn" : {
 				click : this.onNewTermBtnClick
 			},
