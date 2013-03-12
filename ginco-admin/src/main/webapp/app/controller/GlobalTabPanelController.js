@@ -12,9 +12,6 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			var gridPanels = thePanel.query('gridpanel');
 			Ext.Array.forEach(gridPanels,function (gridPanel) {
 				var gridStore = gridPanel.getStore();
-				console.log(gridPanel);
-				console.log(gridStore.getModifiedRecords());
-				console.log(gridStore.getRemovedRecords());
 				if(gridStore.getModifiedRecords().length>0 || gridStore.getRemovedRecords().length>0 )
 				{
 					dirtyForms.push(gridPanel.up('form'));
