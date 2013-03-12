@@ -248,7 +248,9 @@ Ext.define('GincoApp.controller.ConceptController', {
      */
     selectConceptAsParent : function(selectedRow, theGrid) {
         var theStore = theGrid.getStore();
-        theStore.add(selectedRow[0]);
+        var selectedItem = selectedRow[0];
+        selectedItem.setDirty();
+        theStore.add(selectedItem);
     },
 
     selectAssociativeConcept : function(selectedRow, theGrid) {
