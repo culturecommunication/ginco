@@ -68,7 +68,8 @@ Ext.application({
         'GlobalTabPanelController',
         'ConceptController',
         'NotePanelController',
-        'ConceptArrayController'
+        'ConceptArrayController',
+        'ConceptGroupController'
     ],
     init: function(){
     },

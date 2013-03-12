@@ -36,6 +36,7 @@ Ext
 					xParentConceptLabel : 'Parent Concept',
 					xSelectParentConcept : 'Select a parent concept',
 					xActions : 'Actions',
+					xAssociationRemove : 'Detach this concept',
 
 					initComponent : function() {
 						var me = this;
