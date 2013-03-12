@@ -82,9 +82,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 							.msg(me.xSucessLabel, me.xSucessSavedMsg);
 					me.application.fireEvent('termupdated',thePanel.thesaurusData);
 				},
-				failure : function() {
+				failure : function(record, operation) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
-							me.xProblemSaveMsg);
+							me.xProblemSaveMsg +" "+operation.error);
 					theForm.getEl().unmask();
 				}
 			});

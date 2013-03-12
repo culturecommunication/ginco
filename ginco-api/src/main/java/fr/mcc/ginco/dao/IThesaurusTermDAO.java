@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.dao;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -76,6 +77,18 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @throws BusinessException 
 	 */
 	List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException;
-
-
+	
+	/**
+	 * Returns a list of ThesaurusTerm that fit to the parameters (lexical value + language) in a thesaurus
+	 * @param lexicalValue, language and Thesaurus Id
+	 * @return List of ThesaurusTerm
+	 */
+	 List<ThesaurusTerm> findTermsByLexicalValueAndLanguage(String lexicalValue, Language lang, String thesaurusId);
+	 
+	 /**
+		 * Update a Thesaurus Term
+		 * @return The updated Thesaurus Term
+	 * @throws BusinessException 
+		 */
+	 ThesaurusTerm updateTerm(ThesaurusTerm termToUpdate) throws BusinessException;
 }

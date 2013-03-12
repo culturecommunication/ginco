@@ -103,9 +103,10 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Update a single Thesaurus Concept Object
+	 * @throws BusinessException 
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms);
+			List<ThesaurusTerm> terms) throws BusinessException;
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus

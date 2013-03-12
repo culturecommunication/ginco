@@ -35,18 +35,20 @@
 package fr.mcc.ginco.services;
 
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.log.Log;
 
 
 @Transactional
@@ -89,7 +91,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
             if (!sent.contains(old)) {
                 ThesaurusTerm term = thesaurusTermDAO.getById(old.getIdentifier());
                 term.setConcept(null);
-                thesaurusTermDAO.update(term);
+                thesaurusTermDAO.updateTerm(term);
                 logger.info("Marking Term with ID " + old.getIdentifier() + " as SandBoxed.");
             }
         }
@@ -101,8 +103,8 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     }
     
     @Override
-    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) {
-        return thesaurusTermDAO.update(object);
+    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException {
+    	return thesaurusTermDAO.updateTerm(object);
     }
 
     @Override

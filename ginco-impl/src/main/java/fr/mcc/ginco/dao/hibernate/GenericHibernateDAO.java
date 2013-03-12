@@ -35,6 +35,8 @@
 package fr.mcc.ginco.dao.hibernate;
 
 import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -98,7 +100,7 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	}
 
 	@Override
-	final public T update(T entity) {
+	public T update(T entity) {
 		return makePersistent(entity);
 	}
 	

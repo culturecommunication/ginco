@@ -276,7 +276,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms) {
+			List<ThesaurusTerm> terms) throws BusinessException {
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
 		return concept;
@@ -296,7 +296,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				.findTermsByConceptId(object.getIdentifier());
 		for (ThesaurusTerm term : terms) {
 			term.setConcept(null);
-			thesaurusTermDAO.update(term);
+			thesaurusTermDAO.updateTerm(term);
 		}
 
 		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(object
@@ -323,12 +323,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	private void updateConceptTerms(ThesaurusConcept concept,
-			List<ThesaurusTerm> terms) {
+			List<ThesaurusTerm> terms) throws BusinessException {
 		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm thesaurusTerm : terms) {
 			logger.info("Creating a new term in DB");
 			thesaurusTerm.setConcept(concept);
-			returnTerms.add(thesaurusTermDAO.update(thesaurusTerm));
+			returnTerms.add(thesaurusTermDAO.updateTerm(thesaurusTerm));
 
 		}
 	}

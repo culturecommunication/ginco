@@ -42,6 +42,8 @@ package fr.mcc.ginco.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import fr.mcc.ginco.exceptions.BusinessException;
+
 /**
  * Data Access Object - generic type.
  * @param <T> type of object.

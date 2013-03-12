@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import java.util.List;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -72,8 +73,9 @@ public interface IThesaurusTermService {
     
     /**
      * Update a single Thesaurus Term Object
+     * @throws BusinessException 
      */
-    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object);
+    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException;
     
     /**
      * Delete a single Thesaurus Term Object
@@ -96,7 +98,7 @@ public interface IThesaurusTermService {
      * @throws BusinessException 
      */
     List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;
-
+    
     /**
      * This method compares lists of terms - if previosly presented term has been deleted
      * (so it is not anymore in Concept) it will be marked as SandBoxed.
