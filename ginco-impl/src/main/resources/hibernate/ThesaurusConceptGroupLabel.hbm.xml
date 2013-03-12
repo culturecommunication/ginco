@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="ThesaurusConceptGroupLabel" table="concept_group_label">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+			<generator class="sequence">
+				<param name="sequence">concept_group_label_identifier_seq</param>
+			</generator>
+		</id>
+		<property name="lexicalValue" column="lexicalvalue" />
+		<property name="created" />
+		<property name="modified" />
+		
+		<many-to-one name="language" column="lang" lazy="false" />
+		<many-to-one name="conceptGroup" column="conceptgroupid" lazy="false" />
+		
+	</class>
+</hibernate-mapping>
