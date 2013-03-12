@@ -28,6 +28,68 @@ Ext.define('Thesaurus.ext.KeyMenuItem', {
     }
 });
 
+//Override treeView to be stateful
+Ext.define('Thesaurus.ext.tree.Panel', {
+    override: 'Ext.tree.Panel',
+    
+    getState: function() {
+        var nodes = [], state = this.callParent();
+
+    var getPath = function(node, field, separator) {
+
+        field = node.idProperty;
+        separator = separator || '|';
+
+        var path = [node.get(field)], parent = node.parentNode;
+        while (parent) {
+            path.unshift(parent.get(field));
+            parent = parent.parentNode;
+        }
+        return separator + path.join(separator);
+    };
+    this.getRootNode().eachChild(function(child) {
+
+        // function to store state of tree recursively
+
+        var storeTreeState = function(node, expandedNodes) {
+
+            if (node.isExpanded() && node.childNodes.length > 0) {
+
+                expandedNodes.push(getPath(node, 'text'));
+                node.eachChild(function(child) {
+                    storeTreeState(child, expandedNodes);
+                });
+            }
+        };
+
+        storeTreeState(child, nodes);
+
+    });
+
+    Ext.apply(state, {
+        expandedNodes: nodes
+    });
+
+    return state;
+
+},
+
+	applyState : function(state) {
+		var nodes = state.expandedNodes || [], len = nodes.length;
+		this.collapseAll();
+		for ( var i = 0; i < len; i++) {
+			if (typeof nodes[i] != 'undefined') {
+				this.expandPath(nodes[i], 'id', '|');
+			}
+		}
+		this.callParent(arguments);
+	}, 
+  
+    constructor: function (config) {
+        this.callSuper(arguments);
+    }
+});
+
 // Override treeView to add 'alt' attribute to img in the tree.
 Ext.define('Thesaurus.ext.tree.Column', {
     override: 'Ext.tree.Column',

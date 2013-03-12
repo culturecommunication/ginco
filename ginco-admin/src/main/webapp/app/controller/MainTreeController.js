@@ -77,11 +77,15 @@ Ext.define('GincoApp.controller.MainTreeController', {
 
 	},
 	onTreeRender : function(theTree) {
-		this.loadTreeView();
+		this.loadTreeView(theTree);
 
 	},
-	loadTreeView : function() {
+	loadTreeView : function(theTree) {
 		var me = this;
+		if (theTree)
+		{
+			var treeState = theTree.getState();
+		}
 		var MainTreeStore = this.getMainTreeStoreStore();
 		if (MainTreeStore.isLoading()==false) {
 			MainTreeStore.load({
@@ -92,6 +96,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 								me.xProblemLoadMsg+ " : "+ aOperation.error.statusText);
 					} else{
 						this.getRootNode().expand();
+						if (treeState)
+						{
+							theTree.applyState(treeState);
+						}
 					}
 					
 			        
@@ -99,8 +107,9 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			});
 		}
 	},
-	onRefreshBtnClick : function() {
-		this.loadTreeView();
+	onRefreshBtnClick : function(theButton) {
+		var theTreeView = theButton.up("treepanel");
+		this.loadTreeView(theTreeView);
 	},
 	onTreeLoad : function()
 	{
@@ -124,8 +133,9 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	onRefreshTreeEvent : function()
 	{
+		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
 		Ext.log({},'onRefreshTreeEvent');
-		this.loadTreeView();
+		this.loadTreeView(theTree);
 	},
 	init : function(application) {
 		 this.application.on({
