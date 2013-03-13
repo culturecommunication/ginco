@@ -39,12 +39,14 @@ Ext.define(
             me.conceptReducedStore = Ext.create('GincoApp.store.ConceptReducedStore');
             
             if (!me.getChildren) {
+            	//Searching all concepts in the thesaurus
                 me.conceptReducedStore.getProxy().extraParams = {
 	                id: me.conceptId,
 	                thesaurusId: me.thesaurusData.id,
 	                searchOrphans: me.searchOrphans
 	            };
             } else {
+            	//Searching only the children concepts of a concept which id is defined in conceptId variable
             	me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
             	me.conceptReducedStore.getProxy().extraParams = {
 	                conceptId: me.conceptId

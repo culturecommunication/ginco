@@ -57,4 +57,14 @@ public class ThesaurusConceptGroupLabelServiceImpl implements IThesaurusConceptG
 		return thesaurusConceptGroupLabelDAO.findByThesaurusConceptGroupAndLanguage(identifier);
 	}
 
+	@Override
+	public ThesaurusConceptGroupLabel getById(Integer id) {
+		return thesaurusConceptGroupLabelDAO.getById(id);
+	}
+
+	@Override
+	public ThesaurusConceptGroupLabel updateOrCreate(
+			ThesaurusConceptGroupLabel conceptGroupLabel) {
+		return thesaurusConceptGroupLabelDAO.update(conceptGroupLabel);
+	}
 }

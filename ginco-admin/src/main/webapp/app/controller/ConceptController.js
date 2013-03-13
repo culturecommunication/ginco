@@ -457,7 +457,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);				
 				me.application.fireEvent('conceptupdated', thePanel.thesaurusData);
-				if (theCallback) {
+				if (theCallback && typeof(theCallback) == "function") {
 					theCallback();
 				}
 			},

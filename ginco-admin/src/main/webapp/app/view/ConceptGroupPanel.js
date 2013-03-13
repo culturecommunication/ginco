@@ -20,6 +20,7 @@ Ext
 					conceptGroupId : '',
 
 					// Labels
+					xConceptGroupTitle : 'Concept Group',
 					xSave : 'Save',
 					xIdentifierLabel : 'Identifier',
 					xCreatedLabel : 'Created',
@@ -29,11 +30,10 @@ Ext
 					xLanguageLabel : 'Language',
 					xConceptGroupFormTitle : 'Concept group',
 					xConceptsGrid : 'Concepts',
-					xParentGroups : 'Parent groups',
-					xChildGroups : 'Child groups',
 					xActions : 'Actions',
 					xLexicalValueLabel : 'Lexical value',
 					xAssociationRemove : 'Detach this concept',
+					xAddConceptToGroupArray : 'Add a concept',
 
 					initComponent : function() {
 						var me = this;
@@ -53,7 +53,7 @@ Ext
 										me,
 										{
 
-											title : me.xLabelLabel,
+											title : me.xConceptGroupTitle,
 											items : [ {
 												xtype : 'form',
 												title : me.xConceptGroupFormTitle,
@@ -140,6 +140,20 @@ Ext
 															itemId : 'gridConceptGroupPanelConcepts',
 															title : me.xConceptsGrid,
 															store : me.associatedConceptToGroupStore,
+															
+															dockedItems : [ {
+																xtype : 'toolbar',
+																dock : 'top',
+																items : [ {
+																	xtype : 'button',
+																	text : me.xAddConceptToGroupArray,
+																	disabled : false,
+																	itemId : 'addConceptToGroupArray',
+																	cls : 'add',
+																	iconCls : 'icon-add'
+																} ]
+															} ],
+															
 															columns : [
 																	{
 																		dataIndex : 'identifier',
@@ -152,57 +166,7 @@ Ext
 																	},
 																	{
 																		xtype : 'actioncolumn',
-																		itemId : 'associatedConceptActionColumn',
-																		header : me.xActions,
-																		items : [ {
-																			icon : 'images/detach.png',
-																			tooltip : me.xAssociationRemove
-																		} ]
-																	} ]
-														},
-														{
-															xtype : 'gridpanel',
-															itemId : 'gridConceptGroupPanelParentGroups',
-															title : me.xParentGroups,
-															//store : me.parentGroupStore,
-															columns : [
-																	{
-																		dataIndex : 'identifier',
-																		text : me.xIdentifierLabel
-																	},
-																	{
-																		dataIndex : 'label',
-																		text : me.xLexicalValueLabel,
-																		flex : 1
-																	},
-																	{
-																		xtype : 'actioncolumn',
-																		itemId : 'associatedConceptActionColumn',
-																		header : me.xActions,
-																		items : [ {
-																			icon : 'images/detach.png',
-																			tooltip : me.xAssociationRemove
-																		} ]
-																	} ]
-														},
-														{
-															xtype : 'gridpanel',
-															itemId : 'gridConceptGroupPanelChildGroups',
-															title : me.xChildGroups,
-															//store : me.childGroupStore,
-															columns : [
-																	{
-																		dataIndex : 'identifier',
-																		text : me.xIdentifierLabel
-																	},
-																	{
-																		dataIndex : 'label',
-																		text : me.xLexicalValueLabel,
-																		flex : 1
-																	},
-																	{
-																		xtype : 'actioncolumn',
-																		itemId : 'associatedConceptActionColumn',
+																		itemId : 'conceptToGroupActionColumn',
 																		header : me.xActions,
 																		items : [ {
 																			icon : 'images/detach.png',

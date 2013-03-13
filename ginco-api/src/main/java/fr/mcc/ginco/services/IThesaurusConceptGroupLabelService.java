@@ -51,5 +51,19 @@ public interface IThesaurusConceptGroupLabelService {
 	 */
 	ThesaurusConceptGroupLabel getByThesaurusConceptGroupAndLanguage(
 			String identifier);
+
+	/**
+	 * Get a label of a concept group by its identifier
+	 * @param id
+	 * @return The label that fits to the id given in parameter
+	 */
+	ThesaurusConceptGroupLabel getById(Integer id);
+
+	/**
+	 * Create or update of {@link ThesaurusConceptGroupLabel}
+	 * @param conceptGroupLabel
+	 * @return The created or updated label
+	 */
+	ThesaurusConceptGroupLabel updateOrCreate(ThesaurusConceptGroupLabel conceptGroupLabel);
 	
 }

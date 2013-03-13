@@ -80,7 +80,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 					Thesaurus.ext.utils
 							.msg(me.xSucessLabel, me.xSucessSavedMsg);
 					me.application.fireEvent('termupdated',thePanel.thesaurusData);
-					if (theCallback) {
+					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}
 				},

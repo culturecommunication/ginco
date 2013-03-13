@@ -39,7 +39,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -48,10 +50,13 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
@@ -77,6 +82,11 @@ public class ThesaurusConceptGroupRestService {
 	@Inject
 	@Named("thesaurusConceptGroupViewConverter")
 	private ThesaurusConceptGroupViewConverter thesaurusConceptGroupViewConverter;
+	
+	@Inject
+	@Named("thesaurusConceptGroupLabelViewConverter")
+	private ThesaurusConceptGroupLabelViewConverter thesaurusConceptGroupLabelViewConverter;
+
 
 	
 	@Log
@@ -111,4 +121,31 @@ public class ThesaurusConceptGroupRestService {
 		return thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupService
 				.getConceptGroupById(conceptGroupId));
 	}
+	
+    /**
+     * Public method used to create or update a concept group.
+     * @param thesaurusArrayViewJAXBElement element to create/update.
+     * @return newly created object.
+     * @throws BusinessException in case of error.
+     */
+	@POST
+	@Path("/updateConceptGroup")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ThesaurusConceptGroupView updateThesaurusArray(
+			ThesaurusConceptGroupView thesaurusArrayViewJAXBElement)
+	
+			throws BusinessException {
+
+		ThesaurusConceptGroupLabel conceptGroupLabel = thesaurusConceptGroupLabelViewConverter.convert(thesaurusArrayViewJAXBElement);
+		
+		ThesaurusConceptGroup convertedConceptGroup = thesaurusConceptGroupViewConverter
+				.convert(thesaurusArrayViewJAXBElement);
+		
+
+		ThesaurusConceptGroup updated = thesaurusConceptGroupService.updateThesaurusConceptGroup(
+				convertedConceptGroup, conceptGroupLabel);
+		
+		return thesaurusConceptGroupViewConverter.convert(updated);
+	}
+	
 }

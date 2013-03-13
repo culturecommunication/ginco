@@ -89,6 +89,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			},
 			'conceptArrayPanel' : {
 				beforeclose : this.onPanelBeforeClose
+			},
+			'conceptGroupPanel' : {
+				beforeclose : this.onPanelBeforeClose
 			}
 		});
 	}

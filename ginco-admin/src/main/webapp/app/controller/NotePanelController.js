@@ -112,7 +112,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 				thePanel.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
 				thePanel.down('button[itemId=saveNote]').setDisabled(true);
-				if (theCallback) {
+				if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}
 			},
