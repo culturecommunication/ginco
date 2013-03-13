@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 
 /**
@@ -65,5 +66,13 @@ public interface IThesaurusConceptGroupLabelService {
 	 * @return The created or updated label
 	 */
 	ThesaurusConceptGroupLabel updateOrCreate(ThesaurusConceptGroupLabel conceptGroupLabel);
+	
+	/**
+	 * Gets a ThesaurusConceptGroupLabel by thesaurus group concept id
+	 * 
+	 * @param thesaurusConceptGroupId
+	 * @return
+	 */
+	ThesaurusConceptGroupLabel getByThesaurusConceptGroup(String thesaurusGroupConceptId);
 	
 }

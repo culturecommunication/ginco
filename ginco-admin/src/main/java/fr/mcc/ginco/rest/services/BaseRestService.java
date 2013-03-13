@@ -55,6 +55,7 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.extjs.view.utils.GroupsGenerator;
 import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -85,6 +86,10 @@ public class BaseRestService {
 	@Inject
 	@Named("arraysGenerator")
 	private ArraysGenerator thesaurusArrayGenerator;
+	
+	@Inject
+	@Named("groupsGenerator")
+	private GroupsGenerator thesaurusGroupGenerator;
 
     @Inject
     @Named("childrenGenerator")
@@ -119,6 +124,10 @@ public class BaseRestService {
         	String vocId = getIdFromParam(nodeParam,
         			FolderGenerator.ARRAYS_PREFIX);
             result = thesaurusArrayGenerator.generateArrays(vocId);
+        } else if (nodeParam.startsWith(GroupsGenerator.ID_PREFIX)) {
+        	String vocId = getIdFromParam(nodeParam,
+        			FolderGenerator.GROUPS_PREFIX);
+            result = thesaurusGroupGenerator.generateGroups(vocId);
         } 
 		else {
 			result = new ArrayList<IThesaurusListNode>();

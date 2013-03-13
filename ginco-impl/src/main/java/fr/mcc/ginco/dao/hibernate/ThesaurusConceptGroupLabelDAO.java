@@ -61,4 +61,13 @@ public class ThesaurusConceptGroupLabelDAO extends GenericHibernateDAO<Thesaurus
         //criteria.add(Restrictions.eq("language.id", (String) languageId));
         return (ThesaurusConceptGroupLabel) criteria.list().get(0);
 	}
+
+	@Override
+    public ThesaurusConceptGroupLabel findByThesaurusConceptGroup(String thesaurusConceptGroupId) {
+        Criteria criteria = getCurrentSession().createCriteria(
+        		ThesaurusConceptGroupLabel.class);
+        criteria.add(Restrictions.eq("conceptGroup.identifier", (String) thesaurusConceptGroupId));
+
+        return (ThesaurusConceptGroupLabel) criteria.uniqueResult();
+    }
 }

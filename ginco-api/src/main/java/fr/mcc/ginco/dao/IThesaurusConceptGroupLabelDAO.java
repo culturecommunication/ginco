@@ -49,5 +49,13 @@ public interface IThesaurusConceptGroupLabelDAO extends IGenericDAO<ThesaurusCon
 	 */
 	ThesaurusConceptGroupLabel findByThesaurusConceptGroupAndLanguage(
 			String identifier);
+
+	/**
+	 * Gets a ThesaurusConceptGroupLabel by thesaurus group concept id
+	 * 
+	 * @param thesaurusConceptGroupId
+	 * @return
+	 */
+	ThesaurusConceptGroupLabel findByThesaurusConceptGroup(String thesaurusConceptGroupId);
 	
 }

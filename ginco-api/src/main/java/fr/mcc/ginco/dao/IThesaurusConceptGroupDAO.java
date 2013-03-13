@@ -34,11 +34,22 @@
  */
 package fr.mcc.ginco.dao;
 
+import java.util.List;
+
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 
 /**
  * Data Access Object for thesaurus array
  */
 public interface IThesaurusConceptGroupDAO extends IGenericDAO<ThesaurusConceptGroup, String> {
+
+	/**
+	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}
+	 * @param parentId
+	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter
+	 */
+	List<ThesaurusConceptGroup> findThesaurusConceptGroupsByThesaurusId(
+			String thesaurusId);
     
 }

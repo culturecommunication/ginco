@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ClassificationFolderType;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
@@ -51,6 +52,7 @@ import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -66,6 +68,8 @@ public class FolderGenerator {
 			.toString() + "_";
 	public static final String ARRAYS_PREFIX = ClassificationFolderType.ARRAYS
 			.toString() + "_";
+	public static final String GROUPS_PREFIX = ClassificationFolderType.GROUPS
+			.toString() + "_";
 
 	@Inject
 	@Named("thesaurusConceptService")
@@ -74,6 +78,10 @@ public class FolderGenerator {
 	@Inject
 	@Named("thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;
+
+	@Inject
+	@Named("thesaurusConceptGroupService")
+	private IThesaurusConceptGroupService thesaurusConceptGroupService;
 
 	@Log
 	private Logger logger;
@@ -177,6 +185,15 @@ public class FolderGenerator {
 		groups.setType(ThesaurusListNodeType.FOLDER);
 		groups.setExpanded(false);
 		groups.setChildren(new ArrayList<IThesaurusListNode>());
+		
+		List<ThesaurusConceptGroup> realArrays = thesaurusConceptGroupService
+				.getAllThesaurusConceptGroupsByThesaurusId(parentId);
+		if (realArrays != null && realArrays.size() > 0) {
+			groups.setChildren(null);
+		} else {
+			groups.setChildren(new ArrayList<IThesaurusListNode>());
+		}
+		
 		return groups;
 	}
 

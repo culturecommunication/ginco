@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -70,6 +72,12 @@ public class ThesaurusConceptGroupServiceImpl implements IThesaurusConceptGroupS
 		conceptGroupLabel.setConceptGroup(updated);
 		thesaurusConceptGroupLabelService.updateOrCreate(conceptGroupLabel);
         return updated;
+	}
+
+	@Override
+	public List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(
+			String thesaurusId) {
+		return thesaurusConceptGroupDAO.findThesaurusConceptGroupsByThesaurusId(thesaurusId);
 	}
 
 }
