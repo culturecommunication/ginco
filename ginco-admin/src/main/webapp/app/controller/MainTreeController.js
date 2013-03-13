@@ -16,7 +16,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		}	
 		if (aRecord.data.type == "ARRAYS") {
 			this.openTabArray(aRecord);
-		}	
+		}
+		if (aRecord.data.type == "GROUPS") {
+			this.openTabGroup(aRecord);
+		}
 		if (aRecord.data.type == "FOLDER"
 				&& aRecord.data.id.indexOf("SANDBOX") === 0) {
 			this.openSandBoxTab(aRecord.parentNode);
@@ -28,6 +31,9 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	openTabArray: function (aRecord) {
 		Thesaurus.ext.tabs.openArrayTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);
+	},
+	openTabGroup: function (aRecord) {
+		Thesaurus.ext.tabs.openGroupTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);
 	},
 
     openSandBoxTab : function(aRecord) {

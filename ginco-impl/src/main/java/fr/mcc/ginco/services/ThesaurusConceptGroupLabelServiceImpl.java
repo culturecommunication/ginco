@@ -40,6 +40,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 
@@ -56,6 +57,12 @@ public class ThesaurusConceptGroupLabelServiceImpl implements IThesaurusConceptG
 			String identifier) {
 		return thesaurusConceptGroupLabelDAO.findByThesaurusConceptGroupAndLanguage(identifier);
 	}
+	
+    @Override
+    public ThesaurusConceptGroupLabel getByThesaurusConceptGroup(String thesaurusConceptGroupId) {
+        return thesaurusConceptGroupLabelDAO.findByThesaurusConceptGroup(thesaurusConceptGroupId);
+    }
+
 
 	@Override
 	public ThesaurusConceptGroupLabel getById(Integer id) {

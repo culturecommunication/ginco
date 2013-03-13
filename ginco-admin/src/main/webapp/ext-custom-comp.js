@@ -281,6 +281,34 @@ Thesaurus.ext.tabs = function(){
     		} else {
     			topTabs.setActiveTab(tabExists);
     		}
+    	},
+    	openGroupTab : function(aModel, aThesaurusId, aGroupId) {
+    		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+    		var groupTabsTabs = Ext.ComponentQuery.query('topTabs conceptGroupPanel');
+    		var tabExists = false;
+    		Ext.Array.each(groupTabsTabs, function(element, index, array) {
+    			if (element.conceptGroupId != null
+    					&& element.conceptGroupId == aGroupId) {
+    				tabExists = element;
+    			}
+    		});
+
+    		if (!tabExists) {    			
+    			  aModel.load(aThesaurusId, {
+                      success : function(aModel) {
+                          var groupPanel = Ext.create('GincoApp.view.ConceptGroupPanel', {
+                              thesaurusData : aModel,
+                              conceptGroupId : aGroupId
+                          });
+
+                          var tab = topTabs.add(groupPanel);
+                          topTabs.setActiveTab(tab);
+                          tab.show();
+                      }
+                  });
+    		} else {
+    			topTabs.setActiveTab(tabExists);
+    		}
     	}
 	};
 }();

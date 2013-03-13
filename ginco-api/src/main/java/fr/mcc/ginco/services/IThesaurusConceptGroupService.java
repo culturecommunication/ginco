@@ -34,6 +34,9 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 
@@ -61,5 +64,13 @@ public interface IThesaurusConceptGroupService {
 	ThesaurusConceptGroup updateThesaurusConceptGroup(
 			ThesaurusConceptGroup convertedConceptGroup,
 			ThesaurusConceptGroupLabel conceptGroupLabel);
+
+	/**
+	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}
+	 * @param parentId
+	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter
+	 */
+	List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(
+			String parentId);
 	
 }
