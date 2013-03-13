@@ -101,8 +101,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
                                         me.xSucessRemovedMsg);
                                     me.application.fireEvent('thesaurusdeleted',thePanel.thesaurusData);
                                     globalTabs.items.each(function(item){
-                                        if(item.thesaurusData.id == record.data.id)
+                                        if(item.thesaurusData.id == record.data.id) {
                                             item.close();
+                                        }
                                     });
                                     globalTabs.remove(thePanel);
                                 },
@@ -133,7 +134,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 					Thesaurus.ext.utils.msg('Succès',
 							'Le thesaurus a été enregistré!');
 					me.application.fireEvent('thesaurusupdated');
-					if (theCallback) {
+					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}
 				},

@@ -41,6 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 
 @Transactional
@@ -50,10 +51,25 @@ public class ThesaurusConceptGroupServiceImpl implements IThesaurusConceptGroupS
 	@Inject
 	@Named("thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
+	
+	 @Inject
+	    @Named("thesaurusConceptGroupLabelService")
+	    private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
+
 
 	@Override
 	public ThesaurusConceptGroup getConceptGroupById(String conceptGroupId) {
 		return thesaurusConceptGroupDAO.getById(conceptGroupId);
+	}
+
+	@Override
+	public ThesaurusConceptGroup updateThesaurusConceptGroup(
+			ThesaurusConceptGroup conceptGroup,
+			ThesaurusConceptGroupLabel conceptGroupLabel) {
+		ThesaurusConceptGroup updated = thesaurusConceptGroupDAO.update(conceptGroup);
+		conceptGroupLabel.setConceptGroup(updated);
+		thesaurusConceptGroupLabelService.updateOrCreate(conceptGroupLabel);
+        return updated;
 	}
 
 }

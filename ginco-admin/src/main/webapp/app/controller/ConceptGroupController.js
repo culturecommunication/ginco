@@ -4,10 +4,15 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
     stores : [ 'ConceptReducedStore' ],
     models : [ 'ConceptGroupModel'],
 
-    //localized : true,
+    localized : true,
 
+    xLoading : 'Loading',
+    xSucessLabel : 'Success!',
+    xSucessSavedMsg : 'Concept group saved successfully',
     xProblemLabel : 'Error !',
-    xProblemLoadMsg : 'Unable to load the concept',
+    xProblemLoadMsg : 'Unable to load the concept group',
+    xProblemSaveMsg : 'Unable to save this concept group!',
+    xErrorDoubleRecord: 'Record already present',
 	
 	loadConceptGroupPanel : function(theForm){
         var me = this;
@@ -17,7 +22,6 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
         
         
         if (conceptGroupId != '') {
-        	//TODO : implement loading of the concept group
         	theForm.getEl().mask("Chargement");
         	var conceptGroupModel = this.getConceptGroupModelModel();
         	conceptGroupModel.load(conceptGroupId, {
@@ -34,12 +38,10 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 			});
         	
         } else {
-        	//TODO : implement creating a new concept group
-//        	theConceptGroupPanel.setTitle(theConceptGroupPanel.title+' : '+theConceptGroupPanel.thesaurusData.title);
-//        	model = Ext.create('GincoApp.model.ConceptGroupModel');
-//        	model.data.thesaurusId = theConceptGroupPanel.thesaurusData.id;
-//        	theForm.loadRecord(model);
-        	
+        	theConceptGroupPanel.setTitle(theConceptGroupPanel.title+' : '+theConceptGroupPanel.thesaurusData.title);
+        	model = Ext.create('GincoApp.model.ConceptGroupModel');
+        	model.data.thesaurusId = theConceptGroupPanel.thesaurusData.id;
+        	theForm.loadRecord(model);
         }
 	},
 	
@@ -66,6 +68,77 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 	
 	saveConceptGroup : function(theButton, theCallback){
 		var me = this;
+		var theForm = theButton.up('#conceptGroupForm');
+		var conceptsGrid = theForm.down('#gridConceptGroupPanelConcepts');
+		theForm.getEl().mask(me.xLoading);
+		
+		theForm.getForm().updateRecord();
+		var updatedModel = theForm.getForm().getRecord();
+		//We update the model with the concepts added to the grid
+		var conceptsGridStore = conceptsGrid.getStore();
+		var concepts = conceptsGridStore.getRange();
+		var conceptIds = Ext.Array.map(concepts, function(concept){
+            return concept.data.identifier;
+        });
+		updatedModel.data.concepts = conceptIds;
+		
+		updatedModel.save({
+			success : function(record, operation) {
+				var resultRecord = operation.getResultSet().records[0];
+				me.loadData(theForm, resultRecord);
+				theForm.getEl().unmask();
+				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
+				if (theCallback && typeof theCallback == "function") {
+					theCallback();
+				}
+			},
+			failure : function(record, operation) {
+				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
+				theForm.getEl().unmask();
+			}
+		});
+	},
+	
+	selectConceptToGroupArray : function(theButton){
+		//This method opens a popup to add concepts to the concept group array
+		var me = this;
+		var theConceptGroupPanel = theButton.up('conceptGroupPanel');
+		var theConceptGroupForm = theButton.up('form');
+		var theConceptGroupGrid = theConceptGroupPanel.down('#gridConceptGroupPanelConcepts');
+		var theConceptGroupStore = theConceptGroupGrid.getStore();
+		
+		var win = Ext.create('GincoApp.view.SelectConceptWin', {
+			thesaurusData : theConceptGroupPanel.thesaurusData,
+			getChildren : false,
+			showTree : false,
+			checkstore: theConceptGroupStore,
+			listeners: {
+                selectBtn: {
+                    fn: function(selectedRow) {
+                            me.addConceptToGroupArray(selectedRow, theConceptGroupForm, theConceptGroupGrid);
+                        }
+                }
+            }
+		});
+		win.show();
+		
+	},
+	
+	addConceptToGroupArray : function(theSelectedRow,theConceptGroupForm, theConceptGroupGrid){
+		var theConceptGroupGridStore = theConceptGroupGrid.getStore();
+		
+		//Test if already present in the grid
+		if (theConceptGroupGridStore.findRecord('identifier', theSelectedRow[0].data.identifier) !== null ){
+			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
+		} else {
+			theConceptGroupGridStore.add(theSelectedRow[0]);
+		}
+	},
+	
+	onRemoveConceptFromGroupClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
+		var theConceptGroupGrid = gridview.up('#gridConceptGroupPanelConcepts');
+        var theConceptGroupStore = theConceptGroupGrid.getStore();
+        theConceptGroupStore.remove(rec);
 	},
 	
     init:function(){    	  	 
@@ -75,7 +148,13 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
  			},
  			'conceptGroupPanel #saveConceptGroup' : {
  				click : this.saveConceptGroup
- 			}
+ 			},
+            'conceptGroupPanel  #addConceptToGroupArray' : {
+                click : this.selectConceptToGroupArray
+            },
+            'conceptGroupPanel #gridConceptGroupPanelConcepts #conceptToGroupActionColumn' : {
+                click : this.onRemoveConceptFromGroupClick
+            }
          });
 
     }

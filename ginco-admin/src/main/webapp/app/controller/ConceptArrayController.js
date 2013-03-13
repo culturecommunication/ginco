@@ -96,7 +96,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 				me.loadData(theForm, resultRecord);
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
-				if (theCallback) {
+				if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}
 			},
@@ -192,8 +192,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var theConceptArrayForm = theButton.up('form');
 		var theGrid = theConceptArrayPanel.down('#gridPanelConceptArray');
 		var theStore = theGrid.getStore();
-
-        debugger;
 
         var searchOrphans = null;
         if(theConceptArrayForm.down('textfield[name="superOrdinateId"]').value == "")

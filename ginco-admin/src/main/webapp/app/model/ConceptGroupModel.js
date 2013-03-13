@@ -44,8 +44,8 @@ Ext.define('GincoApp.model.ConceptGroupModel', {
     
     proxy : {
 		api : {
-			//create : 'services/ui/thesaurusarrayservice/updateGroup',
-			//update : 'services/ui/thesaurusarrayservice/updateGroup',
+			create : 'services/ui/thesaurusconceptgroupservice/updateConceptGroup',
+			update : 'services/ui/thesaurusconceptgroupservice/updateConceptGroup',
 			read :   'services/ui/thesaurusconceptgroupservice/getConceptGroup'
 			//destroy: 'services/ui/thesaurusarrayservice/destroyGroup'
 		},

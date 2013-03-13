@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 
 /**
  * Service used to work with {@link ThesaurusConceptGroup} objects, contains basic
@@ -50,5 +51,15 @@ public interface IThesaurusConceptGroupService {
 	 * @return A {@link ThesaurusConceptGroup} object 
 	 */
 	ThesaurusConceptGroup getConceptGroupById(String conceptGroupId);
+
+	/**
+	 * This method updates a concept group with its associated label
+	 * @param convertedConceptGroup
+	 * @param conceptGroupLabel
+	 * @return The {@link ThesaurusConceptGroup} object updated 
+	 */
+	ThesaurusConceptGroup updateThesaurusConceptGroup(
+			ThesaurusConceptGroup convertedConceptGroup,
+			ThesaurusConceptGroupLabel conceptGroupLabel);
 	
 }
