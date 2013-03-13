@@ -45,20 +45,25 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.*;
 
 @Service("exportService")
-public class ExportService implements IExportService {
+public class ExportServiceImpl implements IExportService {
     @Inject
+    @Named("thesaurusArrayService")
     private IThesaurusArrayService thesaurusArrayService;
 
     @Inject
+    @Named("thesaurusTermService")
     private IThesaurusTermService thesaurusTermService;
 
     @Inject
+    @Named("nodeLabelService")
     private INodeLabelService nodeLabelService;
 
     @Inject
+    @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
 
     @Override
@@ -103,8 +108,10 @@ public class ExportService implements IExportService {
         return result;
     }
 
+    /**
+     * Comparator to use with two concepts - compares based on its lexicalValue.
+     */
     class ThesaurusConceptComparator implements Comparator<ThesaurusConcept> {
-
         @Override
         public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
             try {

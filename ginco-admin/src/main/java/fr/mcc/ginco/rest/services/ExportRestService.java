@@ -58,6 +58,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * REST service to get exported objects.
+ */
 @Service
 @Path("/exportservice")
 public class ExportRestService {
@@ -76,10 +79,16 @@ public class ExportRestService {
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
 
+    /**
+     * Return file in .txt format; name begins with current DateTime.
+     * @param thesaurusId
+     * @return
+     * @throws BusinessException
+     */
     @GET
-    @Path("/get")
+    @Path("/getHierarchical")
     @Produces("text/plain")
-    public Response getFile(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+    public Response getHierarchical(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
 
         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
 
@@ -111,7 +120,7 @@ public class ExportRestService {
             }
 
         } catch (IOException e) {
-            throw new BusinessException("cannot create file", "cannot create file");
+            throw new BusinessException("Cannot create temp file!", "cannot-create-file");
         }
 
         Response.ResponseBuilder response = Response.ok(temp);

@@ -40,7 +40,18 @@ import fr.mcc.ginco.exports.result.bean.FormattedLine;
 
 import java.util.List;
 
+/**
+ * Service provides function to use for export
+ * by REST services.
+ */
 public interface IExportService {
+    /**
+     * Get the list of all concepts in thesaurus, with formatting.
+     * @param base tabulation to start from.
+     * @param concept to work with.
+     * @return list with formatting.
+     * @throws BusinessException
+     */
     List<FormattedLine> getHierarchicalText(Integer base, ThesaurusConcept concept)
         throws BusinessException;
 }

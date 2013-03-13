@@ -34,10 +34,27 @@
  */
 package fr.mcc.ginco.exports.result.bean;
 
+/**
+ * Small utility class for representing single formatter line
+ * for export needs.
+ */
 public class FormattedLine {
+    /**
+     * Indicates, how much tabulations should be inserted
+     * before main content.
+     **/
     public Integer tabs;
+    /**
+     * Content of the line.
+     */
     public String text;
 
+    /**
+     * Takes all information in one time - to profit
+     * in-line creation.
+     * @param tabs
+     * @param text
+     */
     public FormattedLine(Integer tabs, String text) {
         this.tabs = tabs;
         this.text = text;
