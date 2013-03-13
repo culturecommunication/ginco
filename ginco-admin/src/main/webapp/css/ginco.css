@@ -88,3 +88,6 @@
 .icon-remove-parent {
     background-image: url(../images/remove-parent.png) !important;
 }
+.upload-icon {
+     background: url('../images/image_upload.png') no-repeat 0 0 !important;
+}

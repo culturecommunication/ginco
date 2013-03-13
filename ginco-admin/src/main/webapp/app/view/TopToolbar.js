@@ -7,7 +7,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xControlLabel : "Control",
 	xTopWelcomeLabel : "Hadoc GINCO Back-office",
 	xJournalLabel : "Journal",
-	xExportLabel : "Exports",
+	xImportLabel : "Import",
 	xAboutLabel : "About",
 	xSearchLabel : "Search",
 	xSearchFieldText : "Search a term",
@@ -69,8 +69,9 @@ Ext.define('GincoApp.view.TopToolbar', {
 					disabled : true
 				}, {
 					xtype : 'button',
-					disabled : true,
-					text : me.xExportLabel
+					disabled : false,
+					text : me.xImportLabel,
+					itemId: 'importBtn'
 				} ]
 			}, {
 				xtype : 'buttongroup',
