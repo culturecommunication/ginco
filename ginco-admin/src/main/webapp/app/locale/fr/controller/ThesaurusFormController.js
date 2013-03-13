@@ -1,4 +1,4 @@
-Ext.define('GincoApp.locale.fr.controller.ConceptArrayController', {
+Ext.define('GincoApp.locale.fr.controller.ThesaurusFormController', {
     xDeleteMsgLabel : 'Êtes-vous sûr de vouloir supprimer ce thesaurus ?',
     xDeleteMsgTitle : 'Supprimer le thesaurus ?',
     xSucessLabel : 'Succès !',
