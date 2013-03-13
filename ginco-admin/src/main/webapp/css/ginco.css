@@ -30,6 +30,9 @@
     margin-bottom: 10px;
 }
 
+ .x-tab-focus button { color: #3366ff;
+ outline:black dotted 1px !important; }
+ 
 .msg .x-box-mc {
     font-size:14px;
 }
