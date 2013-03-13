@@ -123,8 +123,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     exportHierarchical : function(theButton) {
         var me = this;
         var theForm = theButton.up('form');
-        var url = "/services/ui/exportservice/getHierarchical?thesaurusId="
-            + theForm.up('thesaurusPanel').thesaurusData.id;
+        var url = "services/ui/exportservice/getHierarchical?thesaurusId="
+            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
         window.open(url);
     },
 
