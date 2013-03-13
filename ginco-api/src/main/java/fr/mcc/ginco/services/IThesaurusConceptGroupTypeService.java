@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
 
 /**
@@ -43,5 +45,16 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
  * @see fr.mcc.ginco.beans.ThesaurusConceptGroupType
  */
 public interface IThesaurusConceptGroupTypeService {
-	
+	/**
+	 * Get the list of all types available for concept groups
+	 * @return
+	 */
+	List<ThesaurusConceptGroupType> getConceptGroupTypeList();
+
+	/**
+	 * Get a type by Id
+	 * @param Id of the type
+	 * @return The corresponding type
+	 */
+	ThesaurusConceptGroupType getTypeById(String type);
 }

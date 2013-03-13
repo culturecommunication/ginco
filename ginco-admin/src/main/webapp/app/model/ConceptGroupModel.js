@@ -19,11 +19,15 @@ Ext.define('GincoApp.model.ConceptGroupModel', {
             type: 'string'
         },
         {
-            name: 'language',
+            name: 'thesaurusId',
             type: 'string'
         },
         {
-            name: 'thesaurusId',
+            name: 'type',
+            type: 'string'
+        },
+        {
+            name: 'language',
             type: 'string'
         },
         {
@@ -38,7 +42,7 @@ Ext.define('GincoApp.model.ConceptGroupModel', {
 		api : {
 			//create : 'services/ui/thesaurusarrayservice/updateGroup',
 			//update : 'services/ui/thesaurusarrayservice/updateGroup',
-			read :   'services/ui/thesaurusarrayservice/getGroup',
+			read :   'services/ui/thesaurusconceptgroupservice/getGroup',
 			//destroy: 'services/ui/thesaurusarrayservice/destroyGroup'
 		},
 		type : 'ajax',

@@ -43,5 +43,13 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
  * @see fr.mcc.ginco.beans.ThesaurusConceptGroupLabel
  */
 public interface IThesaurusConceptGroupLabelService {
+
+	/**
+	 * Gets a {@link ThesaurusConceptGroupLabel} object, searched by its {@link ThesaurusConceptGroup} identifier and language
+	 * @param identifier, language (to implement)
+	 * @return A {@link ThesaurusConceptGroupLabel} object
+	 */
+	ThesaurusConceptGroupLabel getByThesaurusConceptGroupAndLanguage(
+			String identifier);
 	
 }
