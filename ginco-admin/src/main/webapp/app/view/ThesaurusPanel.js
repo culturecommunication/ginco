@@ -145,10 +145,11 @@ Ext
                                                                     xtype : 'menu',
                                                                     width : 200,
                                                                     items : [ {
-                                                                        xtype : 'keymenuitem',
-                                                                        text : me.xExport_Skos,
-                                                                        itemId : 'exportSkos'
-                                                                    },
+                                                                            xtype : 'keymenuitem',
+                                                                            text : me.xExport_Skos,
+                                                                            disabled : true,
+                                                                            itemId : 'exportSkos'
+                                                                        },
                                                                         {
                                                                             xtype : 'keymenuitem',
                                                                             text : me.xExport_Hierarchical,
@@ -157,6 +158,7 @@ Ext
                                                                         {
                                                                             xtype : 'keymenuitem',
                                                                             text : me.xExport_Alphabetic,
+                                                                            disabled : true,
                                                                             itemId : 'exportAlphabetical'
                                                                         } ]
                                                                 }
