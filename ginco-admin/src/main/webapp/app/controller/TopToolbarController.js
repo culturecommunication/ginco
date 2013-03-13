@@ -28,6 +28,11 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			Ext.FocusManager.disable();
 		}
 	},
+	
+	onImportBtnClick: function(theButton) {
+		Ext.create('GincoApp.view.ImportWin');
+
+	},
 
 	init : function(application) {
 		this.control({
@@ -39,6 +44,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			},			
 			"#accessibilitybtn" : {
 				click : this.onAccessibilityClick
+			},
+			"#importBtn" : {
+				click: this.onImportBtnClick
 			}
 		});
 	}

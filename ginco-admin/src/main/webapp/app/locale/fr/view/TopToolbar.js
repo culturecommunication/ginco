@@ -9,6 +9,6 @@
     xSearchFieldText: "Rechercher un terme",
     xConnectedAsLabel: "Connecté en tant que",
     xNewMenu_ThesaurusLabel: "Vocabulaire",
-    xExportLabel: "Exports",
+    xImportLabel: "Import",
     xHelpLabel: "Aide"
 });
