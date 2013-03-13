@@ -4,6 +4,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	models : [ 'ThesaurusModel' ],
 	stores : [ 'MainTreeStore' ],
 
+    localized : true,
+
     xDeleteMsgLabel : 'Are you sure to delete this thesaurus?',
     xDeleteMsgTitle : 'Delete this thesaurus?',
     xSucessLabel : 'Success!',
@@ -98,9 +100,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
                                     Thesaurus.ext.utils.msg(me.xSucessLabel,
                                         me.xSucessRemovedMsg);
                                     me.application.fireEvent('thesaurusdeleted',thePanel.thesaurusData);
-                                    debugger;
                                     globalTabs.items.each(function(item){
-                                        debugger;
                                         if(item.thesaurusData.id == record.data.id)
                                             item.close();
                                     });
