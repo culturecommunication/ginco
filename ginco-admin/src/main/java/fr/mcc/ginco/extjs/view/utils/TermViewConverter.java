@@ -125,7 +125,7 @@ public class TermViewConverter {
 			hibernateRes = getExistingThesaurusTerm(source.getIdentifier());
 		}
 
-		hibernateRes.setLexicalValue(source.getLexicalValue());
+		hibernateRes.setLexicalValue(source.getLexicalValue().trim());
 		hibernateRes.setModified(DateUtil.nowDate());
 		hibernateRes.setSource(source.getSource());
 		if (fromConcept) {
