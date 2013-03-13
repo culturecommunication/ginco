@@ -161,7 +161,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 	
 	init : function() {
 		this.control({
-			'termPanel form' : {
+			'termPanel #termForm' : {
 				afterrender : this.loadPanel
 			},
 			'termPanel #saveTerm' : {

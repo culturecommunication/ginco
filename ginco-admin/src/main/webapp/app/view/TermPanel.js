@@ -39,6 +39,7 @@ Ext.define('GincoApp.view.TermPanel', {
 				items : [ {
 					
                     xtype: 'form',
+                    itemId: 'termForm',
                     title: me.xTermPanelTitle,
                 	flex: 1,
                 	autoScroll: true,
