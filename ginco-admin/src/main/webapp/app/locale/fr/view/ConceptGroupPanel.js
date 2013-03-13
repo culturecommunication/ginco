@@ -8,7 +8,7 @@ Ext.define('GincoApp.locale.fr.view.ConceptGroupPanel', {
     xIdentifierLabel : 'Identifiant',
     xCreatedLabel : 'Date de création',
     xModifiedLabel : 'Date de modification',
-    xLabelLabel : 'Titre du groupe',
+    xLabelLabel : 'Etiquette',
     xTypeLabel : 'Type',
     xLanguageLabel : 'Langue',
     xConceptGroupFormTitle : 'Groupe de concepts',
