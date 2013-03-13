@@ -196,14 +196,17 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         debugger;
 
         var searchOrphans = null;
-        if(theConceptArrayForm.down('textfield[name="superOrdinateId"]').value == "")
+        var getChildren = true;
+        if(theConceptArrayForm.down('textfield[name="superOrdinateId"]').value == "") {
             searchOrphans = false;
+            getChildren = false;
+        }
 
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : theConceptArrayPanel.thesaurusData,
             conceptId : theConceptArrayForm.down('textfield[name="superOrdinateId"]').value,
             searchOrphans : searchOrphans,
-            getChildren : false,
+            getChildren : getChildren,
             showTree : false,
             checkstore: theStore,
             listeners: {
