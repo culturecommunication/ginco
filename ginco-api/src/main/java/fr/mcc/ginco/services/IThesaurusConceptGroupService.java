@@ -43,5 +43,12 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroup;
  * @see fr.mcc.ginco.beans.ThesaurusConceptGroup
  */
 public interface IThesaurusConceptGroupService {
+
+	/**
+	 * This method gets a {@link ThesaurusConceptGroup} by its identifier
+	 * @param conceptGroupId
+	 * @return A {@link ThesaurusConceptGroup} object 
+	 */
+	ThesaurusConceptGroup getConceptGroupById(String conceptGroupId);
 	
 }

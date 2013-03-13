@@ -34,12 +34,15 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupTypeDAO;
 
 @Transactional
@@ -49,5 +52,15 @@ public class ThesaurusConceptGroupTypeServiceImpl implements IThesaurusConceptGr
 	@Inject
 	@Named("thesaurusConceptGroupTypeDAO")
 	private IThesaurusConceptGroupTypeDAO thesaurusConceptGroupTypeDAO;
+	
+	@Override
+	public List<ThesaurusConceptGroupType> getConceptGroupTypeList() {
+		return thesaurusConceptGroupTypeDAO.findAll();
+	}
+
+	@Override
+	public ThesaurusConceptGroupType getTypeById(String type) {
+		return thesaurusConceptGroupTypeDAO.getById(type);
+	}
 
 }

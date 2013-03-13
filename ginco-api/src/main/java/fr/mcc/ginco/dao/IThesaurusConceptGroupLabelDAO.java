@@ -34,11 +34,20 @@
  */
 package fr.mcc.ginco.dao;
 
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 
 /**
  * Data Access Object for concept_group_type
  */
 public interface IThesaurusConceptGroupLabelDAO extends IGenericDAO<ThesaurusConceptGroupLabel, Integer> {
+
+	/**
+	 * Find a {@link ThesaurusConceptGroupLabel} by the id of the {@link ThesaurusConceptGroup} and its language
+	 * @param identifier, language (to implement)
+	 * @return A {@link ThesaurusConceptGroupLabel} object
+	 */
+	ThesaurusConceptGroupLabel findByThesaurusConceptGroupAndLanguage(
+			String identifier);
 	
 }

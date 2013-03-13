@@ -34,14 +34,15 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.dao.INoteTypeDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 
 /**
- * Implementation of {@link INoteTypeDAO}; basic class for DAO-related work.
+ * Implementation of {@link IThesaurusConceptGroupLabelDAO}; basic class for DAO-related work.
  */
 @Repository("thesaurusConceptGroupLabelDAO")
 public class ThesaurusConceptGroupLabelDAO extends GenericHibernateDAO<ThesaurusConceptGroupLabel, Integer>
@@ -49,5 +50,15 @@ public class ThesaurusConceptGroupLabelDAO extends GenericHibernateDAO<Thesaurus
 
 	public ThesaurusConceptGroupLabelDAO() {
 		super(ThesaurusConceptGroupLabel.class);
+	}
+
+	@Override
+	public ThesaurusConceptGroupLabel findByThesaurusConceptGroupAndLanguage(
+			String identifier) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConceptGroupLabel.class);
+        criteria.add(Restrictions.eq("conceptGroup.identifier", (String) identifier));
+        //criteria.add(Restrictions.eq("language.id", (String) languageId));
+        return (ThesaurusConceptGroupLabel) criteria.list().get(0);
 	}
 }

@@ -115,16 +115,13 @@ Ext
 															xtype : 'combobox',
 															name : 'type',
 															fieldLabel : me.xTypeLabel,
-															// displayField :
-															// 'refname',
-															// valueField :
-															// 'id',
+															displayField : 'label',
+															valueField : 'code',
 															editable : false,
 															forceSelection : true,
 															multiSelect : false,
-															allowBlank : false
-														// store :
-														// 'ThesaurusGroupTypeStore'
+															allowBlank : false,
+														    store : 'ConceptGroupTypeStore'
 														},
 														{
 															xtype : 'combobox',
