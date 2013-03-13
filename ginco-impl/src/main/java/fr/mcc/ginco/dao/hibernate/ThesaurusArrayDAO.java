@@ -71,4 +71,6 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
 	        return criteria.list();
 
 	}
+
+
 }

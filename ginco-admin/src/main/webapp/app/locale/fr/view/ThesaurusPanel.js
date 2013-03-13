@@ -29,6 +29,9 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xNewMenu_ConceptLabel: 'Concept',
 	    xNewMenu_GroupLabel: 'Groupe de concepts',
 	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
+        xExport_Skos : "Export SKOS",
+        xExport_Hierarchical : "Export texte hiérarchique",
+        xExport_Alphabetic : "Export texte alphabétique",
 
         xSave : "Enregistrer",
         xCreateVersion : "Créer version",

@@ -83,5 +83,10 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
     	return thesaurusArrayDAO.delete(thesaurusArray);    	
     }
 
-    
+    @Override
+    public List<ThesaurusArray> getSubOrdinatedArrays(String thesaurusConceptId) {
+        return thesaurusArrayDAO.getConceptSuperOrdinateArrays(thesaurusConceptId);
+    }
+
+
 }

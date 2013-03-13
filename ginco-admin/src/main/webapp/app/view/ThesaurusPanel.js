@@ -46,6 +46,9 @@ Ext
 					xNewMenu_ConceptLabel: "Concept",
 					xNewMenu_GroupLabel : "Group of Concepts",
 					xNewMenu_ConceptArrayLabel : "Array of concepts",
+                    xExport_Skos : "Export SKOS",
+                    xExport_Hierarchical : "Export text hierarchical",
+                    xExport_Alphabetic : "Export text alphabetical",
 
                     xSave : "Save",
                     xCreateVersion : "Create version",
@@ -131,6 +134,32 @@ Ext
                                                                 disabled : true,
                                                                 cls : 'delete',
                                                                 iconCls : 'icon-delete'
+                                                            },
+                                                            {
+                                                                xtype : 'button',
+                                                                disabled : true,
+                                                                cls : 'exportsBtnMenu',
+                                                                text : 'Exports',
+                                                                iconCls : 'exports-icon',
+                                                                menu : {
+                                                                    xtype : 'menu',
+                                                                    width : 200,
+                                                                    items : [ {
+                                                                        xtype : 'keymenuitem',
+                                                                        text : me.xExport_Skos,
+                                                                        itemId : 'exportSkos'
+                                                                    },
+                                                                        {
+                                                                            xtype : 'keymenuitem',
+                                                                            text : me.xExport_Hierarchical,
+                                                                            itemId : 'exportHierarchical'
+                                                                        },
+                                                                        {
+                                                                            xtype : 'keymenuitem',
+                                                                            text : me.xExport_Alphabetic,
+                                                                            itemId : 'exportAlphabetical'
+                                                                        } ]
+                                                                }
                                                             } ]
 												} ],
 												items : [

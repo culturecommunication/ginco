@@ -41,7 +41,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		aForm.loadRecord(aModel);
 		thesaurusPanel.down('button[cls=newBtnMenu]').setDisabled(false);
         thesaurusPanel.down('button[cls=delete]').setDisabled(false);
-		
+        thesaurusPanel.down('button[cls=exportsBtnMenu]').setDisabled(false);
 	},
 	onNewTermBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusPanel');
@@ -120,6 +120,14 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
     },
 
+    exportHierarchical : function(theButton) {
+        var me = this;
+        var theForm = theButton.up('form');
+        var url = "/services/ui/exportservice/get?thesaurusId="
+            + theForm.up('thesaurusPanel').thesaurusData.id;
+        window.open(url);
+    },
+
 	saveForm : function(theButton, theCallback) {
 		var me = this;
 		var theForm = theButton.up('form');
@@ -160,6 +168,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			"thesaurusPanel #newTermBtn" : {
 				click : this.onNewTermBtnClick
 			},
+            "thesaurusPanel #exportHierarchical" : {
+                click : this.exportHierarchical
+            },
 			"thesaurusPanel #newConceptBtn" : {
 				click : this.onNewConceptBtnClick
 			},

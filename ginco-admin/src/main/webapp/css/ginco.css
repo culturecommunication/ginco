@@ -94,3 +94,7 @@
 .upload-icon {
      background: url('../images/image_upload.png') no-repeat 0 0 !important;
 }
+
+.exports-icon {
+    background: url('../images/exports.png') no-repeat 0 0 !important;
+}

@@ -32,50 +32,14 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.exports.result.bean;
 
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.ThesaurusArray;
+public class FormattedLine {
+    public Integer tabs;
+    public String text;
 
-import java.util.List;
-
-/**
- * Service used to work with {@link ThesaurusArray} objects, contains basic
- * methods exposed to client part.
- *
- * @see fr.mcc.ginco.beans
- */
-public interface IThesaurusArrayService {
-    /**
-     * Get single ThesaurusArray object by its id.
-     * @param id
-     * @return
-     */
-    ThesaurusArray getThesaurusArrayById(String id);
-
-    /**
-     * Get list of ThesaurusArray by corresponding Thesaurus.
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId);
-
-    /**
-     * Update a single Thesaurus Concept Object
-     */
-    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label);    
-    
-    
-    /**
-     * Delete a ThesaurusArray
-     * @param thesaurusArray
-     * @return
-     */
-    ThesaurusArray destroyThesaurusArray(ThesaurusArray thesaurusArray);
-
-    /**
-     * Return list of all arrays which has given concept as SuperOrdinatedConcept.
-     * @return
-     */
-    List<ThesaurusArray> getSubOrdinatedArrays(String thesaurusConceptId);
+    public FormattedLine(Integer tabs, String text) {
+        this.tabs = tabs;
+        this.text = text;
+    }
 }

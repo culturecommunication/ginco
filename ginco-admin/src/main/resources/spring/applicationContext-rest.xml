@@ -35,7 +35,8 @@
 			<bean class="fr.mcc.ginco.rest.services.ThesaurusNoteRestService" />
             <bean class="fr.mcc.ginco.rest.services.ThesaurusArrayRestService" />
             <bean class="fr.mcc.ginco.rest.services.TermRoleRestService" />
-            <bean class="fr.mcc.ginco.rest.services.ThesaurusConceptGroupRestService" />       
+            <bean class="fr.mcc.ginco.rest.services.ThesaurusConceptGroupRestService" />
+            <bean class="fr.mcc.ginco.rest.services.ExportRestService" />
             <bean class="fr.mcc.ginco.rest.services.ImportRestService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
