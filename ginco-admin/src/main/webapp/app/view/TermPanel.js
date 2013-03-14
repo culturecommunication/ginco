@@ -28,6 +28,7 @@ Ext.define('GincoApp.view.TermPanel', {
     xSourceLabel : 'Source',
     xTermPanelTitle : 'New Term',
     xNotesTab : 'Notes of this term',
+    xStatusLabel : 'Status',
    
     initComponent: function() {
         var me = this;
@@ -122,10 +123,6 @@ Ext.define('GincoApp.view.TermPanel', {
                         },
                         {
                         	xtype: 'hiddenfield',
-                        	name:'status'
-                        },
-                        {
-                        	xtype: 'hiddenfield',
                         	name:'role'
                         },
                         {
@@ -146,6 +143,21 @@ Ext.define('GincoApp.view.TermPanel', {
                         	valueField : 'id',
                         	forceSelection : true,
                         	store :  Ext.create('GincoApp.store.TermLanguageStore'),
+                        	anchor: '70%',
+                        	margin : '5 0 5 0'
+                        },
+                        {
+                        	xtype: 'combobox',
+                        	name:'status',
+                        	itemId: 'statusCombo',
+                        	fieldLabel: me.xStatusLabel,
+                        	editable : false,
+                        	multiSelect : false,
+                        	readOnly : true,
+                        	displayField : 'statusLabel',
+                        	valueField : 'status',
+                        	forceSelection : true,
+                        	store :  Ext.create('GincoApp.store.TermStatusStore'),
                         	anchor: '70%',
                         	margin : '5 0 5 0'
                         }
