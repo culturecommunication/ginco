@@ -35,7 +35,6 @@
 package fr.mcc.ginco.rest.services;
 
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.IExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
@@ -55,7 +54,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,16 +100,13 @@ public class ExportRestService {
             out.write("Édition hiérarchique du vocabulaire de ");
             out.write(targetThesaurus.getTitle());
             out.newLine();
+            out.newLine();
+            out.flush();
 
-            List<FormattedLine> result = new ArrayList<FormattedLine>();
-
-            List<ThesaurusConcept> listTT = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurusId);
-            for(ThesaurusConcept conceptTT : listTT) {
-                result.addAll(exportService.getHierarchicalText(0, conceptTT));
-            }
+            List<FormattedLine> result = exportService.getHierarchicalText(targetThesaurus);
 
             for(FormattedLine results : result) {
-                for(int i=0;i<=results.tabs;i++) {
+                for(int i=0;i<results.tabs;i++) {
                     out.write(TABULATION_DELIMITER);
                 }
                 out.write(results.text);

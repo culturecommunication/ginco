@@ -42,6 +42,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Implementation of {@link IThesaurusArrayDAO}
+ */
 @Repository("thesaurusArrayDAO")
 public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, String> implements IThesaurusArrayDAO  {
 
@@ -65,12 +68,19 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
 
 	@Override
 	public List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId) {
-		   Criteria criteria = getCurrentSession().createCriteria(
-	                ThesaurusArray.class, "ta");
-	        criteria.add(Restrictions.eq("ta.superOrdinateConcept.identifier", conceptId));
-	        return criteria.list();
-
+		Criteria criteria = getCurrentSession().createCriteria(
+	         ThesaurusArray.class, "ta");
+	    criteria.add(Restrictions.eq("ta.superOrdinateConcept.identifier", conceptId));
+	    return criteria.list();
 	}
+
+    @Override
+    public List<ThesaurusArray> getArraysWithoutSuperordinatedConcept(String thesaurusId) {
+        Criteria criteria = getCurrentSession().createCriteria(ThesaurusArray.class, "ta");
+        criteria.add(Restrictions.isNull("ta.superOrdinateConcept"));
+        selectThesaurus(criteria, thesaurusId);
+        return criteria.list();
+    }
 
 
 }

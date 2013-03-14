@@ -34,7 +34,7 @@
  */
 package fr.mcc.ginco.exports;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 
@@ -47,11 +47,10 @@ import java.util.List;
 public interface IExportService {
     /**
      * Get the list of all concepts in thesaurus, with formatting.
-     * @param base tabulation to start from.
-     * @param concept to work with.
+     * @param thesaurus
      * @return list with formatting.
      * @throws BusinessException
      */
-    List<FormattedLine> getHierarchicalText(Integer base, ThesaurusConcept concept)
+    List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)
         throws BusinessException;
 }

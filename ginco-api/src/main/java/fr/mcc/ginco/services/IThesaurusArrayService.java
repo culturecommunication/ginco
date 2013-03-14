@@ -74,8 +74,15 @@ public interface IThesaurusArrayService {
     ThesaurusArray destroyThesaurusArray(ThesaurusArray thesaurusArray);
 
     /**
-     * Return list of all arrays which has given concept as SuperOrdinatedConcept.
+     * Return list of all arrays who have given concept as SuperOrdinatedConcept.
      * @return
      */
     List<ThesaurusArray> getSubOrdinatedArrays(String thesaurusConceptId);
+
+    /**
+     * Return list of all arrays who have not SuperOrdinatedConcept.
+     * @param thesaurusId
+     * @return
+     */
+    List<ThesaurusArray> getArraysWithoutParentConcept(String thesaurusId);
 }

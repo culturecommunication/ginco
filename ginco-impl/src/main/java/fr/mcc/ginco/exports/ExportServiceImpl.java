@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.exports;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -66,8 +67,7 @@ public class ExportServiceImpl implements IExportService {
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
 
-    @Override
-    public List<FormattedLine> getHierarchicalText(Integer base, ThesaurusConcept concept) throws BusinessException {
+    private List<FormattedLine> getHierarchicalText(Integer base, ThesaurusConcept concept) throws BusinessException {
         List<FormattedLine> result = new ArrayList<FormattedLine>();
 
         Set<String> thesaurusArrayConcepts = new HashSet<String>();
@@ -94,15 +94,48 @@ public class ExportServiceImpl implements IExportService {
         }
 
         for(ThesaurusArray subOrdArray : subOrdArrays) {
-            result.add(new FormattedLine(base + 1,
-                    "<" + nodeLabelService.getByThesaurusArray(subOrdArray.getIdentifier()).getLexicalValue() + ">"));
-            List<ThesaurusConcept> conceptsInArray =
-                    new ArrayList<ThesaurusConcept>(subOrdArray.getConcepts());
-            Collections.sort(conceptsInArray, new ThesaurusConceptComparator());
+            addThesaurusArray(result, subOrdArray, base);
+        }
 
-            for(ThesaurusConcept conceptInArray : conceptsInArray) {
-                result.addAll(getHierarchicalText(base + 1, conceptInArray));
+        return result;
+    }
+
+    private void addThesaurusArray(List<FormattedLine> result, ThesaurusArray subOrdArray, Integer base) throws BusinessException {
+        result.add(new FormattedLine(base + 1,
+                "<" + nodeLabelService.getByThesaurusArray(subOrdArray.getIdentifier()).getLexicalValue() + ">"));
+        List<ThesaurusConcept> conceptsInArray =
+                new ArrayList<ThesaurusConcept>(subOrdArray.getConcepts());
+        Collections.sort(conceptsInArray, new ThesaurusConceptComparator());
+
+        for(ThesaurusConcept conceptInArray : conceptsInArray) {
+            result.addAll(getHierarchicalText(base + 1, conceptInArray));
+        }
+    }
+
+    @Override
+    public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus) throws BusinessException {
+        List<ThesaurusConcept> listTT =
+                thesaurusConceptService.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
+
+        List<ThesaurusArray> orphanArrays =
+                thesaurusArrayService.getArraysWithoutParentConcept(thesaurus.getIdentifier());
+
+        Set<ThesaurusConcept> exclude = new HashSet<ThesaurusConcept>();
+
+        for(ThesaurusArray array : orphanArrays) {
+            exclude.addAll(array.getConcepts());
+        }
+
+        List<FormattedLine> result = new ArrayList<FormattedLine>();
+
+        for(ThesaurusConcept conceptTT : listTT) {
+            if(!exclude.contains(conceptTT)) {
+                result.addAll(getHierarchicalText(0, conceptTT));
             }
+        }
+
+        for(ThesaurusArray array : orphanArrays) {
+            addThesaurusArray(result, array, -1);
         }
 
         return result;

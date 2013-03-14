@@ -88,5 +88,10 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
         return thesaurusArrayDAO.getConceptSuperOrdinateArrays(thesaurusConceptId);
     }
 
+    @Override
+    public List<ThesaurusArray> getArraysWithoutParentConcept(String thesaurusId) {
+        return thesaurusArrayDAO.getArraysWithoutSuperordinatedConcept(thesaurusId);
+    }
+
 
 }
