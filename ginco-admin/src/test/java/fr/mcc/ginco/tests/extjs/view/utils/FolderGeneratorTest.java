@@ -50,6 +50,7 @@ import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -62,6 +63,9 @@ public class FolderGeneratorTest {
 
 	@InjectMocks
 	private FolderGenerator folderGenerator = new FolderGenerator();
+	
+	@Mock(name = "thesaurusConceptGroupService")
+	private IThesaurusConceptGroupService thesaurusConceptGroupService;	
 
 	@Before
 	public final void setUp() {
