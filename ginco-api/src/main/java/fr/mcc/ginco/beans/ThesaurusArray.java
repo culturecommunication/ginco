@@ -35,6 +35,7 @@
 package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -49,7 +50,7 @@ public class ThesaurusArray implements Serializable {
 	private String notation;
 	private Thesaurus thesaurus;
 	private ThesaurusConcept superOrdinateConcept;
-	private Set<ThesaurusConcept> concepts;
+	private Set<ThesaurusConcept> concepts = new HashSet<ThesaurusConcept>();
 	
 	public String getIdentifier() {
 		return identifier;
