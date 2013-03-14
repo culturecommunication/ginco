@@ -167,7 +167,7 @@ public class ThesaurusConceptRestService {
 					"to-many-preferred-terms-for-concept");
 		}
 
-		if (StringUtils.isNotEmpty(convertedConcept.getIdentifier())) {
+		if (StringUtils.isNotEmpty(thesaurusConceptViewJAXBElement.getIdentifier())) {
 				List<ThesaurusTerm> origin = thesaurusTermService
 						.getTermsByConceptId(convertedConcept.getIdentifier());
 				thesaurusTermService.markTermsAsSandboxed(terms, origin);

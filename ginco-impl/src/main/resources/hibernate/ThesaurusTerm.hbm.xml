@@ -4,7 +4,7 @@
 	<class name="ThesaurusTerm" table="thesaurus_term">
 		<cache usage="read-write" />
 		<id name="identifier" column="identifier">
-			<generator class="fr.mcc.ginco.ark.CustomGenerator" />
+			<generator class="assigned" />
 		</id>
 		<property name="lexicalValue" column="lexicalvalue" not-null="true" />
 		<property name="created"  type="timestamp" not-null="true" />

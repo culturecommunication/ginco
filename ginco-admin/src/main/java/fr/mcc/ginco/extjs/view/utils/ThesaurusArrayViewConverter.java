@@ -44,6 +44,7 @@ import javax.inject.Named;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
@@ -79,12 +80,16 @@ public class ThesaurusArrayViewConverter {
 	@Named("nodeLabelViewConverter")
 	private NodeLabelViewConverter nodeLabelViewConverter;
 
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService generatorService;	
 
 	public ThesaurusArray convert(ThesaurusArrayView source)
 			throws BusinessException {
 		ThesaurusArray hibernateRes;
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusArray();
+			hibernateRes.setIdentifier(generatorService.generate());
 
 		} else {
 			hibernateRes = thesaurusArrayService.getThesaurusArrayById(source

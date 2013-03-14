@@ -43,7 +43,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.skos.SKOSAnnotation;
 import org.semanticweb.skos.SKOSConcept;
 import org.semanticweb.skos.SKOSConceptScheme;
 import org.semanticweb.skos.SKOSCreationException;
@@ -69,38 +69,41 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
+	@Inject
+	@Named("skosThesaurusBuilder")
+	private ThesaurusBuilder thesaurusBuilder;
+
 	@Override
 	public Thesaurus importSKOSFile(String fileContent, String fileName,
 			File tempDir) throws BusinessException {
 		// Store in temp repo
 		URI fileURI = writeTempFile(fileContent, fileName, tempDir);
-
+		Thesaurus thesaurus = null;
 		// First create a new SKOSManager
 		try {
 			SKOSManager manager = new SKOSManager();
-			OWLOntologyManager owlManager  = manager.getOWLManger();
-			//owlManager.
 			SKOSDataset dataset = manager.loadDataset(fileURI);
+
 			Set<SKOSConceptScheme> allSchemes = dataset.getSKOSConceptSchemes();
 			for (SKOSConceptScheme scheme : allSchemes) {
 				logger.debug("Vocabulary: " + scheme.getURI());
-				
+				Set<SKOSAnnotation> annotations = scheme
+						.getSKOSAnnotations(dataset);
+				thesaurus = thesaurusBuilder.buildThesaurus(scheme.getURI()
+						.toString(), annotations);
+				thesaurusDAO.update(thesaurus);				
 			}
-			
-			 for (SKOSConcept concept : dataset.getSKOSConcepts()) {
-				 logger.debug("Concept: " + concept.getURI());
-			 }
-			
+
+			for (SKOSConcept concept : dataset.getSKOSConcepts()) {
+				logger.debug("Concept: " + concept.getURI());
+			}
+
 		} catch (SKOSCreationException e) {
 			logger.error("Error creating SKOS elements", e);
 		} finally {
 			deleteTempFile(fileName);
 		}
-		
-		
-
-		// Temp
-		return thesaurusDAO.findAll().get(0);
+		return thesaurus;
 	}
 
 	private void deleteTempFile(String initialFileName) {
@@ -124,7 +127,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		} catch (IOException e) {
 			throw new BusinessException(
 					"Error storing temporarty file for import " + prefix,
-					"unable-to-write-temporary-file");
+					"import-unable-to-write-temporary-file");
 		}
 		return file.toURI();
 	}
@@ -135,5 +138,4 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		return prefix.concat(".tmp");
 
 	}
-
 }

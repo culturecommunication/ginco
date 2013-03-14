@@ -40,11 +40,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusTermRole;
@@ -85,6 +86,10 @@ public class TermViewConverter {
 	@Inject
 	@Named("thesaurusTermRoleService")
 	private IThesaurusTermRoleService thesaurusTermRoleService;
+	
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService generatorService;	
 
 	@Log
 	private Logger logger;
@@ -95,6 +100,7 @@ public class TermViewConverter {
 	private ThesaurusTerm getNewThesaurusTerm() {
 		ThesaurusTerm hibernateRes = new ThesaurusTerm();
 		hibernateRes.setCreated(DateUtil.nowDate());
+		hibernateRes.setIdentifier(generatorService.generate());
 		logger.info("Creating a new term");
 
 		return hibernateRes;

@@ -34,15 +34,14 @@
  */
 package fr.mcc.ginco.tests;
 
-import org.hibernate.id.IdentifierGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
-import fr.mcc.ginco.ark.CustomGenerator;
+import fr.mcc.ginco.ark.CustomGeneratorService;
 
-public class SimpleArkProviderTest {
+public class CustomGeneratorServiceTest {
 	
-    private IdentifierGenerator arkProvider = new CustomGenerator();
+    private CustomGeneratorService arkProvider = new CustomGeneratorService();
 	
 	 /**
 	 * Since ARK is randomly generated, this method only test the static part of the ID
@@ -50,7 +49,7 @@ public class SimpleArkProviderTest {
 	@Test
 	 public final void getArkId(){
         String expectedResponse= "http://culturecommunication.gouv.fr" + "/ark:/" + "12345";
-		String actualResponse = arkProvider.generate(null, "").toString();
+		String actualResponse = arkProvider.generate();
         Assert.assertTrue("Error while generating ARK Id !" + actualResponse + " expected " + expectedResponse, actualResponse.startsWith(expectedResponse));
 	 }
 }

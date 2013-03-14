@@ -4,7 +4,7 @@
 	<class name="Note" table="note">
 		<cache usage="read-write" />
 		<id name="identifier" column="identifier">
-            <generator class="fr.mcc.ginco.ark.CustomGenerator" />
+            <generator class="assigned" />
         </id>
 		<property name="lexicalValue" column="lexicalvalue" />
 		<property name="source" />

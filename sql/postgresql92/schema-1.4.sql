@@ -136,3 +136,7 @@ ALTER TABLE associative_relationship
   ADD CONSTRAINT fk_concept2 FOREIGN KEY (concept2)
       REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+ALTER TABLE languages_iso639 ALTER id TYPE character(5);
+ALTER TABLE thesaurus_languages ALTER iso639_id TYPE character(5);
+

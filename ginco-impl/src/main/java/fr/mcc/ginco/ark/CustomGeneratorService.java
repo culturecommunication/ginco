@@ -32,49 +32,31 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.ark;
 
-import java.util.List;
+import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 
 /**
- *
+ * Custom generator of primary keys for Hibernate,
+ * should be changed in later revisions to generate real
+ * ARK-based ids.
  */
-@Transactional
-@Service("thesaurusTypeService")
-public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
-	    
-	@Inject
-	@Named("thesaurusTypeDAO")
-    private IThesaurusTypeDAO thesaurusTypeDAO;
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.IThesaurusTypeService#getThesaurusTypeList()
-	 */
-	@Override
-	public List<ThesaurusType> getThesaurusTypeList() {
-		return thesaurusTypeDAO.findAll();
-	}
+@Service("generatorService")
+public class CustomGeneratorService implements IIDGeneratorService {
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.IThesaurusTypeService#getThesaurusTypeById()
-	 */
+	@Value("${application.ark.nma}")
+    private String nma = "http://culturecommunication.gouv.fr";
+	@Value("${application.ark.naan}")
+    private String naan = "12345";
+
     @Override
-    public ThesaurusType getThesaurusTypeById(Integer id) {
-        return thesaurusTypeDAO.getById(id);
-    }
-
-    public IGenericDAO<ThesaurusType, Integer> getThesaurusTypeDAO() {
-		return thesaurusTypeDAO;
-	}
-
+    public String generate() {    	
+        String arkId;
+        UUID nq = UUID.randomUUID();
+        arkId = nma + "/ark:/"+ naan + "/" + nq.toString();
+        return arkId;
+    }    
 }
