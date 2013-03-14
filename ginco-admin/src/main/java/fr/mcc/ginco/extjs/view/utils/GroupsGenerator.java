@@ -87,20 +87,20 @@ public class GroupsGenerator {
 
 		List<IThesaurusListNode> newGroups = new ArrayList<IThesaurusListNode>();
 		for (ThesaurusConceptGroup group : groups) {
-			ThesaurusListBasicNode groupeNode = new ThesaurusListBasicNode();
+			ThesaurusListBasicNode groupNode = new ThesaurusListBasicNode();
 			ThesaurusConceptGroupLabel label = thesaurusConceptGroupLabelService.getByThesaurusConceptGroup(group.getIdentifier());
-			groupeNode.setTitle(label.getLexicalValue());
+			groupNode.setTitle(label.getLexicalValue());
 			
-			groupeNode.setId(group.getIdentifier());
-			groupeNode.setType(ThesaurusListNodeType.GROUPS);
-			groupeNode.setExpanded(false);
-			groupeNode.setThesaurusId(group.getThesaurus().getIdentifier());
+			groupNode.setId(group.getIdentifier());
+			groupNode.setType(ThesaurusListNodeType.GROUPS);
+			groupNode.setExpanded(false);
+			groupNode.setThesaurusId(group.getThesaurus().getIdentifier());
 
-			groupeNode.setChildren(new ArrayList<IThesaurusListNode>());
-			groupeNode.setLeaf(true);
+			groupNode.setChildren(new ArrayList<IThesaurusListNode>());
+			groupNode.setLeaf(true);
             
 
-			newGroups.add(groupeNode);
+			newGroups.add(groupNode);
 		}
 		return newGroups;
 	}

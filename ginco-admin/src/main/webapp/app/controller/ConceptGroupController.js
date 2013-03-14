@@ -108,7 +108,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		var theConceptGroupStore = theConceptGroupGrid.getStore();
 		
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
-			thesaurusData : theConceptGroupPanel.thesaurusData,
+			thesaurusData : theConceptGroupPanel.thesaurusData.data,
 			getChildren : false,
 			showTree : false,
 			checkstore: theConceptGroupStore,
