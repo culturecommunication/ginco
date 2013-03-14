@@ -4,7 +4,7 @@
 	<class name="ThesaurusArray" table="thesaurus_array">
 		<cache usage="read-write" />
 		<id name="identifier" column="identifier">
-            <generator class="fr.mcc.ginco.ark.CustomGenerator" />
+            <generator class="assigned" />
         </id>
 		<property name="ordered" />
 		<property name="notation" />

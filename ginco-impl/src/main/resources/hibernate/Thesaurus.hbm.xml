@@ -4,7 +4,7 @@
 	<class name="Thesaurus" table="thesaurus">
 		<cache usage="read-write" />
 		<id name="identifier" column="identifier">
-			<generator class="fr.mcc.ginco.ark.CustomGenerator" />
+			<generator class="assigned" />
 		</id>
 		<property name="contributor" />
 		<property name="coverage" />

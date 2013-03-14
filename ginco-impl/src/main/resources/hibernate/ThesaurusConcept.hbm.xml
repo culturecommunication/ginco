@@ -4,7 +4,7 @@
     <class name="ThesaurusConcept" table="thesaurus_concept">
         <cache usage="read-write" />
         <id name="identifier" column="identifier">
-            <generator class="fr.mcc.ginco.ark.CustomGenerator" />
+            <generator class="assigned" />
         </id>
         <property name="created"  type="timestamp" not-null="true" />
         <property name="modified" type="timestamp" not-null="true" />

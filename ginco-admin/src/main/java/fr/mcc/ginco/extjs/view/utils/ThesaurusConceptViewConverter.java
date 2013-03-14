@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -78,6 +79,10 @@ public class ThesaurusConceptViewConverter {
 	@Inject
 	@Named("associativeRelationshipRoleService")
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
+	
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService generatorService;
 
 	public List<ThesaurusConceptReducedView> convert(
 			List<ThesaurusConcept> conceptList) throws BusinessException {
@@ -152,6 +157,7 @@ public class ThesaurusConceptViewConverter {
 		// create a new one
 		if ("".equals(source.getIdentifier())) {
 			thesaurusConcept = new ThesaurusConcept();
+			thesaurusConcept.setIdentifier(generatorService.generate());
 			thesaurusConcept.setCreated(DateUtil.nowDate());
 			logger.info("Creating a new concept");
 		} else {

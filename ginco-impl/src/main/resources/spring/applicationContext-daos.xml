@@ -75,10 +75,6 @@
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusOrganization" />
 	</bean>
 
-	<bean id="thesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
-		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusType" />
-	</bean>
-
 	<bean id="thesaurusVersionHistoryDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusVersionHistory" />
 	</bean>

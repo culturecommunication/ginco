@@ -46,13 +46,13 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.services.ThesaurusTypeServiceImpl;
 
 public class ThesaurusTypeServiceTest {	
 	
 	@Mock(name = "thesaurusTypeDAO")
-    private IGenericDAO<ThesaurusType, Integer> thesaurusTypeDAO;
+    private IThesaurusTypeDAO thesaurusTypeDAO;
 	
 	@InjectMocks
 	private ThesaurusTypeServiceImpl thesaurusTypeService;	

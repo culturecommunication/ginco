@@ -44,6 +44,7 @@ import javax.inject.Named;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
@@ -81,6 +82,10 @@ public class ThesaurusConceptGroupViewConverter {
 	@Inject
 	@Named("thesaurusConceptGroupLabelService")
 	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
+	
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService generatorService;	
 
 	public ThesaurusConceptGroup convert(ThesaurusConceptGroupView source)
 			throws BusinessException {
@@ -88,6 +93,7 @@ public class ThesaurusConceptGroupViewConverter {
 		
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusConceptGroup();
+			hibernateRes.setIdentifier(generatorService.generate());
 
 		} else {
 			hibernateRes = thesaurusConceptGroupService.getConceptGroupById(source.getIdentifier());

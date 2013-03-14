@@ -32,30 +32,32 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.ark;
+package fr.mcc.ginco.dao.hibernate;
 
-import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.id.IdentifierGenerator;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
-import java.util.UUID;
+import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.dao.INodeLabelDAO;
+import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 
 /**
- * Custom generator of primary keys for Hibernate,
- * should be changed in later revisions to generate real
- * ARK-based ids.
+ * Implementation of {@link INodeLabelDAO}; basic class for DAO-related work.
  */
-public class CustomGenerator implements IdentifierGenerator {
+@Repository("thesaurusTypeDAO")
+public class ThesaurusTypeDAO extends GenericHibernateDAO<ThesaurusType, Integer>
+		implements IThesaurusTypeDAO {
 
-    private String nma = "http://culturecommunication.gouv.fr";
-    private String naan = "12345";
+	public ThesaurusTypeDAO() {
+		super(ThesaurusType.class);
+	}
 
-    @Override
-    public Serializable generate(SessionImplementor session, Object object) throws HibernateException {
-        String arkId;
-        UUID nq = UUID.randomUUID();
-        arkId = nma + "/ark:/"+ naan + "/" + nq.toString();
-        return arkId;
-    }    
+	@Override
+	public ThesaurusType getByLabel(String label) {
+		 Criteria criteria = getCurrentSession().createCriteria(
+	                ThesaurusType.class);
+	       criteria.add(Restrictions.eq("label", label));
+		return (ThesaurusType)criteria.list().get(0);
+	}
 }

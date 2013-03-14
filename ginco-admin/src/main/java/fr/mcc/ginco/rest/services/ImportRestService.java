@@ -87,36 +87,11 @@ public class ImportRestService {
 	public ExtJsonFormLoadData<ThesaurusView> uploadFile(MultipartBody body, @Context HttpServletRequest request) throws BusinessException {
 		Attachment file = body.getAttachment("import-file-path");
 		String content  = file.getObject(String.class);
-		String fileName = file.getDataHandler().getName();
-		
+		String fileName = file.getDataHandler().getName();		
 		File tempdir = (File)servletContext.getAttribute("javax.servlet.context.tempdir");  
 		
-		Thesaurus importedThesaurus = skosImportService.importSKOSFile(content, fileName, tempdir);
-	
-		logger.debug("File received");
-		logger.debug(fileName);
-		logger.debug("EOF");
-		/*
-		for (Attachment attr : attachments) {
-			DataHandler handler = attr.getDataHandler();
-			try {
-				InputStream stream = handler.getInputStream();	
-
-				logger.debug("Imported file");
-				int i;
-				StringBuilder b = new StringBuilder();
-                while( (i=stream.read()) != -1 ) {
-                    b.append((char)i);
-                }
-				
-				logger.debug(b.toString());
-				
-				stream.close();
-			
-			} catch (Exception e) {
-				logger.error("Error reading file for import", e);
-			}
-		}*/
+		Thesaurus importedThesaurus = skosImportService.importSKOSFile(content, fileName, tempdir);		
+		
 		return new ExtJsonFormLoadData<ThesaurusView>(thesaurusViewConverter.convert(importedThesaurus));
 
 	}	
