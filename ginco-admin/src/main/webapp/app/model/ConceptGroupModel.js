@@ -46,8 +46,8 @@ Ext.define('GincoApp.model.ConceptGroupModel', {
 		api : {
 			create : 'services/ui/thesaurusconceptgroupservice/updateConceptGroup',
 			update : 'services/ui/thesaurusconceptgroupservice/updateConceptGroup',
-			read :   'services/ui/thesaurusconceptgroupservice/getConceptGroup'
-			//destroy: 'services/ui/thesaurusarrayservice/destroyGroup'
+			read :   'services/ui/thesaurusconceptgroupservice/getConceptGroup',
+			destroy: 'services/ui/thesaurusconceptgroupservice/destroyConceptGroup'
 		},
 		type : 'ajax',
 		reader : {

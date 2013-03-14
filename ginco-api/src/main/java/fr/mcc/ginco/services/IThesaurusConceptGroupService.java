@@ -72,5 +72,12 @@ public interface IThesaurusConceptGroupService {
 	 */
 	List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(
 			String parentId);
+
+	/**
+	 * Destroy a ThesaurusConceptGroup
+	 * @param The {@link ThesaurusConceptGroup} to delete
+	 * @return The deleted {@link ThesaurusConceptGroup}
+	 */
+	ThesaurusConceptGroup destroyThesaurusConceptGroup(ThesaurusConceptGroup object);
 	
 }

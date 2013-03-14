@@ -269,7 +269,7 @@ Thesaurus.ext.tabs = function(){
     			  aModel.load(aThesaurusId, {
                       success : function(aModel) {
                           var arrayPanel = Ext.create('GincoApp.view.ConceptArrayPanel', {
-                              thesaurusData : aModel,
+                              thesaurusData : aModel.data,
                               conceptArrayId : aArrayId
                           });
 
@@ -297,7 +297,7 @@ Thesaurus.ext.tabs = function(){
     			  aModel.load(aThesaurusId, {
                       success : function(aModel) {
                           var groupPanel = Ext.create('GincoApp.view.ConceptGroupPanel', {
-                              thesaurusData : aModel,
+                              thesaurusData : aModel.data,
                               conceptGroupId : aGroupId
                           });
 

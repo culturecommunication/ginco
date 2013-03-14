@@ -13,13 +13,14 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
     xProblemLoadMsg : 'Unable to load the concept group',
     xProblemSaveMsg : 'Unable to save this concept group!',
     xErrorDoubleRecord: 'Record already present',
+    xDeleteMsgLabel : 'Are you sure you want to delete this concept group?',
+	xDeleteMsgTitle : 'Delete this concept group?',
 	
 	loadConceptGroupPanel : function(theForm){
         var me = this;
         var theConceptGroupPanel = theForm.up('conceptGroupPanel');
         var model = this.getConceptGroupModelModel();
         var conceptGroupId = theConceptGroupPanel.conceptGroupId;
-        
         
         if (conceptGroupId != '') {
         	theForm.getEl().mask("Chargement");
@@ -49,7 +50,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		var me = this;
 		aForm.loadRecord(aModel);
 		var theConceptGroupPanel = me.getActivePanel();		
-		theConceptGroupPanel.setTitle("Tableau de groupes : "+aModel.data.label);
+		theConceptGroupPanel.setTitle("Groupe : "+aModel.data.label);
 		
 		//We get all the concepts included in this concept group
 		var conceptsGrid  = aForm.down('#gridConceptGroupPanelConcepts');
@@ -58,6 +59,9 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
             conceptIds: aModel.raw.concepts
         };
 		conceptsGridStore.load();
+		
+		var deleteConceptGroupBtn = aForm.down('#deleteConceptGroupBtn');
+		deleteConceptGroupBtn.setDisabled(false);
 
 	},
 	
@@ -88,6 +92,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 				me.loadData(theForm, resultRecord);
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
+				me.application.fireEvent('conceptgroupupdated');
 				if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}
@@ -99,6 +104,42 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		});
 	},
 	
+	deleteConceptGroup : function(theButton){
+		var me = this;
+		var theConceptGroupForm = theButton.up('form');
+		var globalTabs = theConceptGroupForm.up('topTabs');
+		var theConceptGroupPanel = me.getActivePanel();
+		
+		var updatedModel = theConceptGroupForm.getForm().getRecord();      
+        
+        Ext.MessageBox.show({
+    			title : me.xDeleteMsgTitle,
+    			msg : me.xDeleteMsgLabel,
+    			buttons : Ext.MessageBox.YESNO,
+    			fn : function(buttonId) {
+    				switch (buttonId) {
+    				case 'no':
+    					break;
+    				case 'yes':
+    					updatedModel.destroy({
+    						success : function(record, operation) {
+    							Thesaurus.ext.utils.msg(me.xSucessLabel,
+    									me.xSucessRemovedMsg);
+    							me.application.fireEvent('conceptgroupdeleted');
+    							globalTabs.remove(theConceptGroupPanel);
+    						},
+    						failure : function(record, operation) {
+    							Thesaurus.ext.utils.msg(me.xProblemLabel,
+    									operation.error);
+    						}
+    					});
+    					break;    				
+    				}
+    			},
+    			scope : this
+    		}); 
+	},	
+	
 	selectConceptToGroupArray : function(theButton){
 		//This method opens a popup to add concepts to the concept group array
 		var me = this;
@@ -108,7 +149,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		var theConceptGroupStore = theConceptGroupGrid.getStore();
 		
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
-			thesaurusData : theConceptGroupPanel.thesaurusData.data,
+			thesaurusData : theConceptGroupPanel.thesaurusData,
 			getChildren : false,
 			showTree : false,
 			checkstore: theConceptGroupStore,
@@ -148,6 +189,9 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
  			},
  			'conceptGroupPanel #saveConceptGroup' : {
  				click : this.saveConceptGroup
+ 			},
+ 			'conceptGroupPanel #deleteConceptGroupBtn' : {
+ 				click : this.deleteConceptGroup
  			},
             'conceptGroupPanel  #addConceptToGroupArray' : {
                 click : this.selectConceptToGroupArray

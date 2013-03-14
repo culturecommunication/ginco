@@ -80,4 +80,10 @@ public class ThesaurusConceptGroupServiceImpl implements IThesaurusConceptGroupS
 		return thesaurusConceptGroupDAO.findThesaurusConceptGroupsByThesaurusId(thesaurusId);
 	}
 
+	@Override
+	public ThesaurusConceptGroup destroyThesaurusConceptGroup(
+			ThesaurusConceptGroup object) {
+		return thesaurusConceptGroupDAO.delete(object);
+	}
+
 }

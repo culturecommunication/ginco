@@ -27,14 +27,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var deleteConceptArrayBtn = thePanel.down('#deleteConceptArray');
         if (conceptArrayId != '') {    		
     		theForm.getEl().mask("Chargement");
-
-			var thesaurusId= thePanel.thesaurusData.data.id;
-			var thesaurusModel= this.getThesaurusModelModel();
-			thesaurusModel.load(thesaurusId, {
-				success : function(model) {
-					thePanel.thesaurusData = model.data;
-				}
-			});
 			model.load(conceptArrayId, {
 				success : function(model) {
 					me.loadData(theForm, model);
@@ -96,6 +88,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 				me.loadData(theForm, resultRecord);
 				theForm.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
+				me.application.fireEvent('conceptarrayupdated');
 				if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}
@@ -129,6 +122,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
     						success : function(record, operation) {
     							Thesaurus.ext.utils.msg(me.xSucessLabel,
     									me.xSucessRemovedMsg);
+    							me.application.fireEvent('conceptarraydeleted');
     							globalTabs.remove(thePanel);
     						},
     						failure : function(record, operation) {
