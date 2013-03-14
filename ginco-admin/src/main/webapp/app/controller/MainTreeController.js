@@ -149,6 +149,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			 	conceptupdated: this.onRefreshTreeEvent,
 			 	conceptdeleted: this.onRefreshTreeEvent,
                 thesaurusdeleted: this.onRefreshTreeEvent,
+                conceptgroupupdated: this.onRefreshTreeEvent,
+                conceptgroupdeleted: this.onRefreshTreeEvent,
+                conceptarrayupdated: this.onRefreshTreeEvent,
+                conceptarraydeleted: this.onRefreshTreeEvent,
 		        scope: this
 		 });
 		this.control({

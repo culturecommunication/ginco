@@ -22,6 +22,7 @@ Ext
 					// Labels
 					xConceptGroupTitle : 'Concept Group',
 					xSave : 'Save',
+					xDelete : 'Delete',
 					xIdentifierLabel : 'Identifier',
 					xCreatedLabel : 'Created',
 					xModifiedLabel : 'Modified',
@@ -82,7 +83,15 @@ Ext
 														itemId : 'saveConceptGroup',
 														cls : 'save',
 														iconCls : 'icon-save'
-													} ]
+													},
+                                                    {
+                                                        xtype : 'button',
+                                                        text : me.xDelete,
+                                                        disabled : true,
+                                                        cls : 'delete',
+                                                        itemId : 'deleteConceptGroupBtn',
+                                                        iconCls : 'icon-delete'
+                                                    } ]
 												} ],
 												items : [
 														{

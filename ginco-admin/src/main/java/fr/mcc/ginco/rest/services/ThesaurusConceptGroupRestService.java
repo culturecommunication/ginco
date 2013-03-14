@@ -124,7 +124,7 @@ public class ThesaurusConceptGroupRestService {
 	
     /**
      * Public method used to create or update a concept group.
-     * @param thesaurusArrayViewJAXBElement element to create/update.
+     * @param thesaurusConceptGroupViewJAXBElement element to create/update.
      * @return newly created object.
      * @throws BusinessException in case of error.
      */
@@ -132,20 +132,35 @@ public class ThesaurusConceptGroupRestService {
 	@Path("/updateConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusConceptGroupView updateThesaurusArray(
-			ThesaurusConceptGroupView thesaurusArrayViewJAXBElement)
+			ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement)
 	
 			throws BusinessException {
 
-		ThesaurusConceptGroupLabel conceptGroupLabel = thesaurusConceptGroupLabelViewConverter.convert(thesaurusArrayViewJAXBElement);
+		ThesaurusConceptGroupLabel conceptGroupLabel = thesaurusConceptGroupLabelViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
 		
 		ThesaurusConceptGroup convertedConceptGroup = thesaurusConceptGroupViewConverter
-				.convert(thesaurusArrayViewJAXBElement);
+				.convert(thesaurusConceptGroupViewJAXBElement);
 		
 
 		ThesaurusConceptGroup updated = thesaurusConceptGroupService.updateThesaurusConceptGroup(
 				convertedConceptGroup, conceptGroupLabel);
 		
 		return thesaurusConceptGroupViewConverter.convert(updated);
+	}
+	
+	/**
+     * Public method used to delete a concept group.
+     * @param thesaurusConceptGroupViewJAXBElement element to delete
+     * @throws BusinessException in case of error.
+     */
+	@POST
+	@Path("/destroyConceptGroup")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public void destroyArray(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) throws BusinessException {
+		ThesaurusConceptGroup object = thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
+		if (object != null) {
+			thesaurusConceptGroupService.destroyThesaurusConceptGroup(object);
+		}
 	}
 	
 }
