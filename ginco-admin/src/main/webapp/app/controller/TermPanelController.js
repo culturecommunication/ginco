@@ -26,6 +26,10 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			model.load(termId, {
 				success : function(model) {
 					me.loadData(theForm, model);
+					//TODO : still to implement (disable combobox for all, excepted fot terms in sandbox
+					//if(Ext.isEmpty(model.data.conceptId)) {
+					//theForm.down("#statusCombo").setConfig({readOnly : false});
+					//}
 					theForm.getEl().unmask();
 				},
 				failure : function(model) {
