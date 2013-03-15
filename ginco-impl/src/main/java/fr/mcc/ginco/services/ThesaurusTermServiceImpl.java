@@ -102,6 +102,12 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
     }
     
+	@Override
+	public Long getSandboxedValidatedTermsCount(String idThesaurus)
+			throws BusinessException {
+		return thesaurusTermDAO.countSandboxedValidatedTerms(idThesaurus);
+	}
+    
     @Override
     public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException {
     	return thesaurusTermDAO.updateTerm(object);
@@ -126,4 +132,10 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         }
         return preferedTerms;
     }
+
+	@Override
+	public List<ThesaurusTerm> getPaginatedThesaurusSandoxedValidatedTermsList(
+			Integer startIndex, Integer limit, String idThesaurus) {
+		return thesaurusTermDAO.findPaginatedSandboxedValidatedItems(startIndex, limit, idThesaurus);
+	}
 }

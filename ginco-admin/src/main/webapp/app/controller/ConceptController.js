@@ -121,7 +121,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 	selectTermFromConceptBtn : function(theButton, prefered){
 		var me= this;
 		var thePanel = me.getActivePanel();
-		var win = Ext.create('GincoApp.view.SelectTermWin');
+		var win = Ext.create('GincoApp.view.SelectTermWin', {
+			onlyValidatedTerms : true
+		});
 		var theGrid = theButton.up('#gridPanelTerms');
 		win.conceptGrid = theGrid;
 		win.store = theGrid.getStore();

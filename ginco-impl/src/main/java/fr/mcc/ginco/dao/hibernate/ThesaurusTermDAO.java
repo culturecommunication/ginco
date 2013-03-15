@@ -36,6 +36,7 @@ package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -44,6 +45,7 @@ import org.springframework.stereotype.Repository;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
@@ -67,23 +69,37 @@ public class ThesaurusTermDAO extends
 	@Override
 	public List<ThesaurusTerm> findPaginatedSandboxedItems(Integer start, Integer limit,
 			String idThesaurus) {
-		return getCurrentSession().createCriteria(ThesaurusTerm.class)
-				.setMaxResults(limit)
-				.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
-				.add(Restrictions.isNull("concept"))
-				.setFirstResult(start).addOrder(Order.asc("lexicalValue"))
-				.list();
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		getSandboxedTerms(criteria, start, limit, idThesaurus);
+		return criteria.list();
+	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findPaginatedSandboxedValidatedItems(java.lang.Integer, java.lang.Integer, java.lang.String)
+	 */
+	@Override
+	public List<ThesaurusTerm> findPaginatedSandboxedValidatedItems(
+			Integer startIndex, Integer limit, String idThesaurus) {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		getSandboxedTerms(criteria, startIndex, limit, idThesaurus);
+		criteria.add(Restrictions.eq("status", TermStatusEnum.VALIDATED.getStatus()));
+		return criteria.list();
 	}
 
 	@Override
 	public Long countSandboxedTerms(String idThesaurus) throws BusinessException {
-		return (Long) getCurrentSession()
-				.createCriteria(ThesaurusTerm.class)
-				.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
-				.add(Restrictions.isNull("concept"))
-				.setProjection(Projections.rowCount())
-				.list().get(0);
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		countAllSandboxedTerms(criteria, idThesaurus);
+		return (Long) criteria.list().get(0);
 	}
+	
+	@Override
+	public Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		countAllSandboxedTerms(criteria, idThesaurus);
+		criteria.add(Restrictions.eq("status", TermStatusEnum.VALIDATED.getStatus()));
+		return (Long) criteria.list().get(0);
+	}	
 	
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
@@ -144,5 +160,32 @@ public class ThesaurusTermDAO extends
 		getCurrentSession().saveOrUpdate(termToUpdate);
 		return termToUpdate;
 	}
+	
+
+	/**
+	 * This method constructs a criteria to get sandboxed terms
+	 * @param criteria
+	 * @param startIndex
+	 * @param limit
+	 * @param idThesaurus
+	 */
+	private void getSandboxedTerms(Criteria criteria, Integer startIndex, Integer limit, String idThesaurus) {
+		criteria.setMaxResults(limit)
+		.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+		.add(Restrictions.isNull("concept"))
+		.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"));
+    }
+	
+	/**
+	 * This method constructs a criteria to count sandboxed terms
+	 * @param criteria
+	 * @param idThesaurus
+	 */
+	private void countAllSandboxedTerms(Criteria criteria, String idThesaurus) {
+		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+		.add(Restrictions.isNull("concept"))
+		.setProjection(Projections.rowCount());
+	}
+	
 	
 }

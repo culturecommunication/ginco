@@ -108,7 +108,7 @@ public class ThesaurusTermRestServiceTest{
 		Mockito.when(termService.getSandboxedTermsCount(Mockito.anyString())).thenReturn((long)fakeTerms.size());
 		
 		//Getting thesauruses from rest webservice method and testing
-		ExtJsonFormLoadData<List<ThesaurusTermView>> actualResponse = thesaurusTermRestService.getSandboxedThesaurusTerms(1, 2, "1");
+		ExtJsonFormLoadData<List<ThesaurusTermView>> actualResponse = thesaurusTermRestService.getSandboxedThesaurusTerms(1, 2, "1", false);
 		
 		//Assert
 		Assert.assertEquals(new Long(2), actualResponse.getTotal());
