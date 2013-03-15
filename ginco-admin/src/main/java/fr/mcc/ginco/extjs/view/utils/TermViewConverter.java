@@ -128,20 +128,8 @@ public class TermViewConverter {
 
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = getNewThesaurusTerm();
-			
-			if (fromConcept) {
-				//Case of a new term created from a concept
-				//Must have a validated status set by default
-				source.setStatus(TermStatusEnum.VALIDATED.getStatus());
-			}
 		} else {
 			hibernateRes = getExistingThesaurusTerm(source.getIdentifier());
-			
-			if (fromConcept == true && source.getStatus() != TermStatusEnum.VALIDATED.getStatus()) {
-				//Case of a new term selected from a concept
-				//Must have already a validated status => deny the operation if not
-				throw new BusinessException("A selected term must have a validated status", "term-selected-must-have-validated-status");
-			}
 		}
 
 		hibernateRes.setLexicalValue(source.getLexicalValue().trim());
