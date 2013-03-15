@@ -58,13 +58,17 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		termPanel.termId = aModel.data.identifier;
 		
 		if (Ext.isEmpty(aModel.data.conceptId)){
-			createConceptBtn.setDisabled(false);
 			aForm.down("#statusCombo").setReadOnly(false);
+			if (aModel.data.status == 1) {
+				//The term isn't attached to any concept and its status is validated
+				createConceptBtn.setDisabled(false);
+			}
 		}
 		
 		if (Ext.isEmpty(aModel.data.conceptId)){
 			deleteBtn.setDisabled(false);
 		}
+		
 		var noteTab= aForm.up('tabpanel').down('noteTermPanel');
 		noteTab.setDisabled(false);
 	},
