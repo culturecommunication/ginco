@@ -119,10 +119,10 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
     @Override
     public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException {
-        if (object.getConcept() == null ) {
+        if (object.getConcept() == null && object.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
             return thesaurusTermDAO.delete(object);
         } else {
-            throw new BusinessException("It's not possible to delete a term still attached to a concept", "delete-attached-term");
+            throw new BusinessException("It's not possible to delete a term attached to a concept or with a status different from rejected", "delete-attached-term");
         }
     }
 
