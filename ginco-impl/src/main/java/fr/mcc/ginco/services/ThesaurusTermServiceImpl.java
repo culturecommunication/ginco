@@ -47,6 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
@@ -110,6 +111,9 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     
     @Override
     public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException {
+    	if (object.getStatus() != TermStatusEnum.VALIDATED.getStatus() && object.getConcept() != null){
+    		throw new BusinessException("The term is associated to a concept. The status must be set to validated", "term-selected-must-have-validated-status");
+    	}
     	return thesaurusTermDAO.updateTerm(object);
     }
 
