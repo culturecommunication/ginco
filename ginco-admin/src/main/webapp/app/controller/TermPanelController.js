@@ -26,10 +26,6 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			model.load(termId, {
 				success : function(model) {
 					me.loadData(theForm, model);
-					//TODO : still to implement (disable combobox for all, excepted fot terms in sandbox
-					//if(Ext.isEmpty(model.data.conceptId)) {
-					//theForm.down("#statusCombo").setConfig({readOnly : false});
-					//}
 					theForm.getEl().unmask();
 				},
 				failure : function(model) {
@@ -44,6 +40,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			model.data.thesaurusId = theForm.up('termPanel').thesaurusData.id;
 			model.data.identifier = "";
 			model.data.language=thesaurusData.languages[0];
+			//0 is the status to set by default for a new term, meaning "candidate"
+			//TODO : data not display first load -> to fix
+			//model.data.status=0;
 			
 			theForm.loadRecord(model);
 		}
@@ -60,6 +59,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		
 		if (Ext.isEmpty(aModel.data.conceptId)){
 			createConceptBtn.setDisabled(false);
+			aForm.down("#statusCombo").setReadOnly(false);
 		}
 		
 		if (Ext.isEmpty(aModel.data.conceptId)){

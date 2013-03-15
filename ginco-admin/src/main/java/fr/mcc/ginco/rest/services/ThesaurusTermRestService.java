@@ -34,7 +34,24 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.NoteType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -44,17 +61,6 @@ import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.EncodedControl;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Thesaurus Term REST service for all operations on Thesauruses Terms
@@ -173,18 +179,34 @@ public class ThesaurusTermRestService {
 	@Path("/getAllTermStatus")
 	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<TermStatusView>> getAllTermStatus() throws BusinessException {
-		ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
-        String availableStatusIds[] = res.getString("term-status").split(",");
-        
-        List<TermStatusView> listOfStatus = new ArrayList<TermStatusView>();
-        
-        for (String id : availableStatusIds) {
-        	TermStatusView termStatusView = new TermStatusView();
-        	termStatusView.setStatus(Integer.valueOf(id));
-        	termStatusView.setStatusLabel(res.getString("status["+ id +"]"));
-        	listOfStatus.add(termStatusView);
+
+		List<TermStatusView> listOfStatus = new ArrayList<TermStatusView>();
+		try {
+			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
+			String availableStatusIds[] = res.getString("term-status").split(",");
+			
+			if ("".equals(availableStatusIds[0])) {
+				//Ids of status are not set correctly
+				throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");
+			}
+			
+	        for (String id : availableStatusIds) {
+	        	TermStatusView termStatusView = new TermStatusView();
+	        	termStatusView.setStatus(Integer.valueOf(id));
+	        	
+	        	String label = res.getString("status["+ id +"]");
+	        	if (label.isEmpty()) {
+	        		//Labels of status are not set correctly
+	        		throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");
+				} else {
+					termStatusView.setStatusLabel(label);
+				}
+	        	listOfStatus.add(termStatusView);
+			}
+		} catch (MissingResourceException e) {
+			throw new BusinessException("Error with property file - check values of term status", "check-values-of-term-status");
 		}
-        ExtJsonFormLoadData<List<TermStatusView>> result = new ExtJsonFormLoadData<List<TermStatusView>>(listOfStatus);
+		ExtJsonFormLoadData<List<TermStatusView>> result = new ExtJsonFormLoadData<List<TermStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());
 		return result;
 	}
