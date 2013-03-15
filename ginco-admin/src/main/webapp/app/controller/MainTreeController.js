@@ -84,7 +84,6 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	onTreeRender : function(theTree) {
 		this.loadTreeView(theTree);
-
 	},
 	loadTreeView : function(theTree) {
 		var me = this;
@@ -108,10 +107,15 @@ Ext.define('GincoApp.controller.MainTreeController', {
 						}
 					}
 					
-			        
+					theTree.getView().focus();
+					theTree.getView().getEl().set({tabindex:0});
+					try {
+						theTree.getSelectionModel().select(0);
+					} catch(e) {} 
 			    }
 			});
 		}
+		
 	},
 	onRefreshBtnClick : function(theButton) {
 		var theTreeView = theButton.up("treepanel");
@@ -122,10 +126,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		
 		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
 		
-		theTree.getView().focus();
-		try {
-			theTree.getSelectionModel().select(0);
-		} catch(e) {}
+		
 		
 		var me = this;
 		this.nav = new Ext.util.KeyNav({
@@ -159,7 +160,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			"#mainTreeView" : {
 				beforeitemdblclick : this.onNodeDblClick,
 				render : this.onTreeRender,
-				load : this.onTreeLoad
+				load : this.onTreeLoad,
+				
 			},
 			'#mainTreeView tool[type="refresh"]' : {
 				click : this.onRefreshBtnClick

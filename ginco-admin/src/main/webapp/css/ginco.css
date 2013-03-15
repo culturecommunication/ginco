@@ -30,8 +30,14 @@
     margin-bottom: 10px;
 }
 
- .x-tab-focus button { color: #3366ff;
+ .x-webkit .x-tab-focus button,.x-tab-focus button  { color: #3366ff;
  outline:black dotted 1px !important; }
+
+.x-grid-view-focus:focus { 
+	color: #15498b;
+}
+
+
  
 .msg .x-box-mc {
     font-size:14px;
