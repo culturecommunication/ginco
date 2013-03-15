@@ -44,51 +44,94 @@ import java.util.List;
  * Data Access Object for thesaurus_term
  */
 public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
-	
-	
-	 /**
-     *  Returns a list of Thesaurus Terms filtered by thesaurusId with prefered Thesaurus Terms first, and
-	 *         the other elements sorted alphabetically with a starting index
-	 *         and a limit of items to be returned
-	 * @param start Beginning index
-	 * @param limit Number of items
-	 * @return List<ThesaurusTerm> Paginated list of Thesaurus Terms for a specified Thesaurus
-	 */
-	List<ThesaurusTerm> findPaginatedSandboxedItems(Integer start, Integer limit, String idThesaurus);
-    
+
 	/**
-     * Get number of Thesaurus Sandboxed Terms
-     * @param idThesaurus of a Thesaurus
-     * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
-     */
+	 * Returns a list of Thesaurus Terms filtered by thesaurusId 
+	 * sorted alphabetically on the lexical value with
+	 * a starting index and a limit of items to be returned
+	 * 
+	 * @param start
+	 *            Beginning index
+	 * @param limit
+	 *            Number of items
+	 * @return List<ThesaurusTerm> Paginated list of Thesaurus Terms for a
+	 *         specified Thesaurus
+	 */
+	List<ThesaurusTerm> findPaginatedSandboxedItems(Integer start,
+			Integer limit, String idThesaurus);
+
+	/**
+	 * Get number of Thesaurus Sandboxed Terms
+	 * 
+	 * @param idThesaurus
+	 *            of a Thesaurus
+	 * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
+	 */
 	Long countSandboxedTerms(String idThesaurus) throws BusinessException;
 	
 	/**
+	 * Get number of Thesaurus Sandboxed Validated Terms
+	 * 
+	 * @param idThesaurus
+	 *            of a Thesaurus
+	 * @return number of Thesaurus Sandboxed Validated Terms for a given Thesaurus
+	 */
+	Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException;
+
+	/**
 	 * Returns the preferred ThesaurusTerm of a concept
+	 * 
 	 * @param conceptId
 	 * @return
 	 */
-	ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException;
-	
+	ThesaurusTerm getConceptPreferredTerm(String conceptId)
+			throws BusinessException;
+
 	/**
-	 * Returns a list of ThesaurusTerm that belong to the same concept (id given in parameter)
+	 * Returns a list of ThesaurusTerm that belong to the same concept (id given
+	 * in parameter)
+	 * 
 	 * @param conceptId
 	 * @return List of ThesaurusTerm
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
-	List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException;
-	
+	List<ThesaurusTerm> findTermsByConceptId(String conceptId)
+			throws BusinessException;
+
 	/**
-	 * Returns a list of ThesaurusTerm that fit to the parameters (lexical value + language) in a thesaurus
-	 * @param lexicalValue, language and Thesaurus Id
+	 * Returns a list of ThesaurusTerm that fit to the parameters (lexical value
+	 * + language) in a thesaurus
+	 * 
+	 * @param lexicalValue
+	 *            , language and Thesaurus Id
 	 * @return List of ThesaurusTerm
 	 */
-	 List<ThesaurusTerm> findTermsByLexicalValueAndLanguage(String lexicalValue, Language lang, String thesaurusId);
-	 
-	 /**
-		 * Update a Thesaurus Term
-		 * @return The updated Thesaurus Term
-	 * @throws BusinessException 
-		 */
-	 ThesaurusTerm updateTerm(ThesaurusTerm termToUpdate) throws BusinessException;
+	List<ThesaurusTerm> findTermsByLexicalValueAndLanguage(String lexicalValue,
+			Language lang, String thesaurusId);
+
+	/**
+	 * Update a Thesaurus Term
+	 * 
+	 * @return The updated Thesaurus Term
+	 * @throws BusinessException
+	 */
+	ThesaurusTerm updateTerm(ThesaurusTerm termToUpdate)
+			throws BusinessException;
+
+	/**
+	 * Returns a list of Thesaurus Terms filtered by thesaurusId 
+	 * sorted alphabetically on the lexical value with
+	 * a starting index and a limit of items to be returned, and
+	 * with a status validated
+	 * 
+	 * @param start
+	 *            Beginning index
+	 * @param limit
+	 *            Number of items
+	 * @return List<ThesaurusTerm> Paginated list of Thesaurus Terms for a
+	 *         specified Thesaurus
+	 */
+	List<ThesaurusTerm> findPaginatedSandboxedValidatedItems(
+			Integer startIndex, Integer limit, String idThesaurus);
+
 }

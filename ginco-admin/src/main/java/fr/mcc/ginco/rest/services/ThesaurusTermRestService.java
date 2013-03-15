@@ -94,10 +94,23 @@ public class ThesaurusTermRestService {
 	public ExtJsonFormLoadData<List<ThesaurusTermView> > getSandboxedThesaurusTerms
     (@QueryParam("start") Integer startIndex,
      @QueryParam("limit") Integer limit,
-     @QueryParam("idThesaurus") String idThesaurus) throws BusinessException{
-		logger.info("Getting Thesaurus Sandboxed Terms with following parameters : " + "index start " +startIndex + " and limit of " + limit);
-		List<ThesaurusTerm> thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(startIndex, limit, idThesaurus);
-		Long total = thesaurusTermService.getSandboxedTermsCount(idThesaurus);
+     @QueryParam("idThesaurus") String idThesaurus,
+     @QueryParam("onlyValidatedTerms") Boolean onlyValidatedTerms) throws BusinessException{
+		logger.info("Getting Thesaurus Sandboxed Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit + "and a onlyValidatedTerms parameter set to " + onlyValidatedTerms);
+		List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
+		if (onlyValidatedTerms){
+			thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedValidatedTermsList(startIndex, limit, idThesaurus);	
+		} else {
+			thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(startIndex, limit, idThesaurus);
+		}
+		
+		Long total = null;
+		if (onlyValidatedTerms){
+			total = thesaurusTermService.getSandboxedValidatedTermsCount(idThesaurus);
+		} else {
+			total = thesaurusTermService.getSandboxedTermsCount(idThesaurus);
+		}
+		
 		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			results.add(new ThesaurusTermView(thesaurusTerm));

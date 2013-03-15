@@ -9,7 +9,7 @@ Ext.define('GincoApp.store.TermStatusStore', {
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
-            autoLoad: true,
+            autoLoad: false,
             storeId: 'TermStatusStore',
             proxy: {
                 type: 'ajax',

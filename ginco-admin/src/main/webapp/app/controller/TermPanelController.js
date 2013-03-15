@@ -42,8 +42,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			model.data.language=thesaurusData.languages[0];
 			//0 is the status to set by default for a new term, meaning "candidate"
 			//TODO : data not display first load -> to fix
-			//model.data.status=0;
-			
+			model.data.status=0;
+			theForm.down("#statusCombo").setReadOnly(false);
 			theForm.loadRecord(model);
 		}
 	},
@@ -143,6 +143,12 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		theStore.load();
 	},
 	
+	loadStatus : function(theCombo) {
+		var thePanel = theCombo.up('termPanel');
+		var theStore = theCombo.getStore();
+		theStore.load();
+	},
+	
 	loadCreateConceptFromTerm : function(theButton) {
 		var thePanel = theButton.up('termPanel');
 		var theForm = theButton.up('form');
@@ -176,6 +182,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			},
 			'termPanel #languageCombo' : {
 				render : this.loadLanguages
+			},
+			'termPanel #statusCombo' : {
+				render : this.loadStatus
 			},
 			'termPanel #createconcept' : {
 				click : this.loadCreateConceptFromTerm

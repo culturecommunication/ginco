@@ -9,6 +9,9 @@ Ext
 					thesaurusData : null,
 					store : null,
 					prefered: null,
+					config: {
+						onlyValidatedTerms : false
+					},
 
 				    /*Fields prompting values*/
 					xIdentifierColumnLabel : "Identifier",
@@ -31,7 +34,8 @@ Ext
 						
 						me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
 						me.termStore.pageSize=20;
-
+						me.termStore.getProxy().extraParams = {onlyValidatedTerms: me.onlyValidatedTerms};
+						
 						Ext
 								.applyIf(
 										me,

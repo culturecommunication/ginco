@@ -68,7 +68,14 @@ public interface IThesaurusTermService {
      * @param idThesaurus of a Thesaurus
      * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
      */
-    Long getSandboxedTermsCount(String idThesaurus) throws BusinessException;	
+    Long getSandboxedTermsCount(String idThesaurus) throws BusinessException;
+    
+    /**
+     * Get number of Thesaurus Sandboxed Validated Terms
+     * @param idThesaurus of a Thesaurus
+     * @return number of Thesaurus Validated Sandboxed Terms for a given Thesaurus
+     */
+    Long getSandboxedValidatedTermsCount(String idThesaurus) throws BusinessException;
    
     
     /**
@@ -106,4 +113,12 @@ public interface IThesaurusTermService {
      * @param origin old list of Terms
      */
     void markTermsAsSandboxed(List<ThesaurusTerm> sent, List<ThesaurusTerm> origin) throws BusinessException;
+
+    /**
+     * Get list of paginated Thesaurus Validated Terms.
+     * @return List of Thesaurus Terms with status validated (the number given in argument), from the start index
+     */
+    List<ThesaurusTerm> getPaginatedThesaurusSandoxedValidatedTermsList(
+			Integer startIndex, Integer limit, String idThesaurus);
+
 }

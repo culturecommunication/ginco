@@ -25,6 +25,9 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 	initComponent : function() {
 		var me = this;
 		me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
+		
+		//We always list all the sandboxed terms, so we set onlyValidatedTerms to false
+		me.termStore.getProxy().extraParams = {onlyValidatedTerms: false};
 		Ext.applyIf(me, {
 			title : me.xSandBoxPanelTitle,
 			items : [ {
