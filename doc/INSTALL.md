@@ -60,10 +60,14 @@ You should configure PostGreSQL for automatic startup on boot
 
 * Create the GINCO database
 
-> su - postgres
-> createdb -E UTF8 ginco
-> psql
-> CREATE ROLE ginco WITH SUPERUSER LOGIN PASSWORD '<your pg password here>';
+```bash
+su - postgres
+createdb -E UTF8 ginco
+psql
+```
+```sql
+CREATE ROLE ginco WITH SUPERUSER LOGIN PASSWORD '<your pg password here>';
+```
 
 ### Configuring Tomcat ###
 
