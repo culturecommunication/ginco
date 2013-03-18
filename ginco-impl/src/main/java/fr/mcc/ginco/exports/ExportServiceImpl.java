@@ -34,10 +34,7 @@
  */
 package fr.mcc.ginco.exports;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.services.*;
@@ -307,6 +304,23 @@ public class ExportServiceImpl implements IExportService {
         addList.add(new AddAssertion(vocab, conceptAssertion));
         addList.add(new AddAssertion(vocab, inScheme));
         addList.add(new AddAssertion(vocab, prefLabelInsertion));
+
+        List<Note> notes = noteService.getConceptNotePaginatedList(concept.getIdentifier(), 0, 0);
+        for(Note note : notes) {
+            if("historyNote".equals(note.getNoteType().getCode())) {
+                SKOSDataRelationAssertion noteAssertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
+                        factory.getSKOSDataProperty(factory.getSKOSHistoryNoteDataProperty().getURI()),
+                        note.getLexicalValue(),
+                        note.getLanguage().getId());
+                addList.add(new AddAssertion(vocab, noteAssertion));
+            } else if("scopeNote".equals(note.getNoteType().getCode())) {
+                SKOSDataRelationAssertion noteAssertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
+                        factory.getSKOSDataProperty(factory.getSKOSScopeNoteDataProperty().getURI()),
+                        note.getLexicalValue(),
+                        note.getLanguage().getId());
+                addList.add(new AddAssertion(vocab, noteAssertion));
+            }
+        }
 
         if(parent != null) {
             SKOSObjectRelationAssertion childConnection = factory.getSKOSObjectRelationAssertion(conceptSKOS, factory.getSKOSBroaderProperty(), parent);
