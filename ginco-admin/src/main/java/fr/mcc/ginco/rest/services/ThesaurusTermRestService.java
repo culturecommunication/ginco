@@ -55,7 +55,7 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.TermStatusView;
+import fr.mcc.ginco.extjs.view.pojo.ConceptAndTermStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.log.Log;
@@ -191,23 +191,23 @@ public class ThesaurusTermRestService {
 	@GET
 	@Path("/getAllTermStatus")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<TermStatusView>> getAllTermStatus() throws BusinessException {
+	public ExtJsonFormLoadData<List<ConceptAndTermStatusView>> getAllTermStatus() throws BusinessException {
 
-		List<TermStatusView> listOfStatus = new ArrayList<TermStatusView>();
+		List<ConceptAndTermStatusView> listOfStatus = new ArrayList<ConceptAndTermStatusView>();
 		try {
 			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
 			String availableStatusIds[] = res.getString("term-status").split(",");
 			
 			if ("".equals(availableStatusIds[0])) {
-				//Ids of status are not set correctly
+				//Ids of status for terms are not set correctly
 				throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");
 			}
 			
 	        for (String id : availableStatusIds) {
-	        	TermStatusView termStatusView = new TermStatusView();
+	        	ConceptAndTermStatusView termStatusView = new ConceptAndTermStatusView();
 	        	termStatusView.setStatus(Integer.valueOf(id));
 	        	
-	        	String label = res.getString("status["+ id +"]");
+	        	String label = res.getString("term-status["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly
 	        		throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");
@@ -219,7 +219,7 @@ public class ThesaurusTermRestService {
 		} catch (MissingResourceException e) {
 			throw new BusinessException("Error with property file - check values of term status", "check-values-of-term-status");
 		}
-		ExtJsonFormLoadData<List<TermStatusView>> result = new ExtJsonFormLoadData<List<TermStatusView>>(listOfStatus);
+		ExtJsonFormLoadData<List<ConceptAndTermStatusView>> result = new ExtJsonFormLoadData<List<ConceptAndTermStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());
 		return result;
 	}

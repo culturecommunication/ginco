@@ -47,7 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.enums.TermStatusEnum;
+import fr.mcc.ginco.enums.ConceptAndTermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
@@ -111,7 +111,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     
     @Override
     public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException {
-    	if (object.getStatus() != TermStatusEnum.VALIDATED.getStatus() && object.getConcept() != null){
+    	if (object.getStatus() != ConceptAndTermStatusEnum.VALIDATED.getStatus() && object.getConcept() != null){
     		throw new BusinessException("The term is associated to a concept. The status must be set to validated", "term-selected-must-have-validated-status");
     	}
     	return thesaurusTermDAO.updateTerm(object);
@@ -119,7 +119,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
     @Override
     public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException {
-        if (object.getConcept() == null && object.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
+        if (object.getConcept() == null && object.getStatus()==ConceptAndTermStatusEnum.REJECTED.getStatus()) {
             return thesaurusTermDAO.delete(object);
         } else {
             throw new BusinessException("It's not possible to delete a term attached to a concept or with a status different from rejected", "delete-attached-term");

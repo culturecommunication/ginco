@@ -39,10 +39,10 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import java.io.Serializable;
 
 /**
- * View class corresponding to {@link fr.mcc.ginco.beans.NodeLabel} bean, but fully serializable
+ * Class corresponding to the view of a status for a term or a concept
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class TermStatusView implements Serializable {
+public class ConceptAndTermStatusView implements Serializable {
     private Integer status;
     private String statusLabel;
     
@@ -58,6 +58,4 @@ public class TermStatusView implements Serializable {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-    
-    
-    }
+}

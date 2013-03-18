@@ -153,7 +153,6 @@ Ext.define('GincoApp.view.TermPanel', {
                         	fieldLabel: me.xStatusLabel,
                         	editable : false,
                         	multiSelect : false,
-                        	queryMode : 'local',
                         	readOnly : true,
                         	displayField : 'statusLabel',
                         	valueField : 'status',

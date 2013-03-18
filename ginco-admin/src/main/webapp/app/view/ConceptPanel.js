@@ -158,7 +158,6 @@ Ext
 												                        	fieldLabel: me.xConceptStatusLabel,
 												                        	editable : false,
 												                        	multiSelect : false,
-												                        	queryMode : 'local',
 												                        	displayField : 'statusLabel',
 												                        	valueField : 'status',
 												                        	forceSelection : true,
