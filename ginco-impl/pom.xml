@@ -74,9 +74,9 @@
 			<artifactId>spring-orm</artifactId>
 		</dependency>
 		<dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-        </dependency>        
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -134,16 +134,21 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-         </dependency>
-        <dependency>
-            <groupId>uk.ac.manchester.cs.skos</groupId>
-            <artifactId>skosapi</artifactId>
-        </dependency> 
-        <dependency>
-            <groupId>uk.ac.manchester.cs.owl</groupId>
-            <artifactId>owlapi</artifactId>
-        </dependency>             	
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>uk.ac.manchester.cs.skos</groupId>
+			<artifactId>skosapi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>uk.ac.manchester.cs.owl</groupId>
+			<artifactId>owlapi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>apache-jena-libs</artifactId>
+			<type>pom</type>
+		</dependency>
 	</dependencies>
 </project>

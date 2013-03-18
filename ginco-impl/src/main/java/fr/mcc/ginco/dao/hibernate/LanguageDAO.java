@@ -34,13 +34,14 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.dao.ILanguageDAO;
+import java.util.List;
+
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.dao.ILanguageDAO;
 
 /**
  * Implementation of {@link ILanguageDAO}; basic class for DAO-related work.
@@ -68,4 +69,14 @@ public class LanguageDAO extends GenericHibernateDAO<Language, String> implement
 	public List<Language> findTopLanguages() {
 		return getCurrentSession().createCriteria(Language.class).add(Restrictions.eq("toplanguage",true)).list();
 	}
+	
+	/**	 * 
+	 * @return List of top Languages
+	 */
+	@Override
+	public List<Language> getByPart1(String part1) {
+		return getCurrentSession().createCriteria(Language.class).add(Restrictions.eq("part1",part1)).list();
+	}
+	
+	
 }

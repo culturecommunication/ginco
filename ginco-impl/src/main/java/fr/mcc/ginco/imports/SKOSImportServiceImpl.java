@@ -37,24 +37,33 @@ package fr.mcc.ginco.imports;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.semanticweb.skos.SKOSAnnotation;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSCreationException;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skosapibinding.SKOSManager;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.util.FileManager;
+
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
@@ -70,40 +79,106 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
+
+	@Inject
+	@Named("thesaurusTermDAO")
+	private IThesaurusTermDAO thesaurusTermDAO;
+
+	@Inject
 	@Named("skosThesaurusBuilder")
 	private ThesaurusBuilder thesaurusBuilder;
+
+	@Inject
+	@Named("skosConceptBuilder")
+	private ConceptBuilder conceptBuilder;
+
+	@Inject
+	@Named("skosTermBuilder")
+	private TermBuilder termBuilder;
 
 	@Override
 	public Thesaurus importSKOSFile(String fileContent, String fileName,
 			File tempDir) throws BusinessException {
-		// Store in temp repo
 		URI fileURI = writeTempFile(fileContent, fileName, tempDir);
 		Thesaurus thesaurus = null;
-		// First create a new SKOSManager
 		try {
-			SKOSManager manager = new SKOSManager();
-			SKOSDataset dataset = manager.loadDataset(fileURI);
+			Model model = ModelFactory.createDefaultModel();
+			InputStream in = FileManager.get().open(fileURI.toString());
+			model.read(in, null);
 
-			Set<SKOSConceptScheme> allSchemes = dataset.getSKOSConceptSchemes();
-			for (SKOSConceptScheme scheme : allSchemes) {
-				logger.debug("Vocabulary: " + scheme.getURI());
-				Set<SKOSAnnotation> annotations = scheme
-						.getSKOSAnnotations(dataset);
-				thesaurus = thesaurusBuilder.buildThesaurus(scheme.getURI()
-						.toString(), annotations);
-				thesaurusDAO.update(thesaurus);				
+			Resource thesaurusSKOS = getSKOSThesaurus(model);
+			if (thesaurusSKOS == null) {
+				logger.error("no thesaurus found");
+			} else {
+				thesaurus = thesaurusBuilder.buildThesaurus(thesaurusSKOS,
+						model);
+				thesaurusDAO.update(thesaurus);
 			}
 
-			for (SKOSConcept concept : dataset.getSKOSConcepts()) {
-				logger.debug("Concept: " + concept.getURI());
+			List<Resource> skosConcepts = getSKOSConcepts(model);
+			for (Resource skosConcept : skosConcepts) {
+				ThesaurusConcept concept = conceptBuilder.buildConcept(
+						skosConcept, model, thesaurus);
+				thesaurusConceptDAO.update(concept);
+				List<ThesaurusTerm> terms = termBuilder.buildTerms(skosConcept,
+						model, thesaurus, concept);
+				for (ThesaurusTerm term : terms) {
+					thesaurusTermDAO.update(term);
+				}
+
 			}
 
-		} catch (SKOSCreationException e) {
-			logger.error("Error creating SKOS elements", e);
 		} finally {
 			deleteTempFile(fileName);
 		}
 		return thesaurus;
+	}
+
+	private Resource getSKOSThesaurus(Model model) {
+		SimpleSelector schemeSelector = new SimpleSelector(null, null,
+				(RDFNode) null) {
+			public boolean selects(Statement s) {
+				if (s.getObject().isResource()) {
+					return s.getObject().asResource()
+							.equals(SKOS.CONCEPTSCHEME);
+				} else {
+					return false;
+				}
+			}
+		};
+
+		StmtIterator iter = model.listStatements(schemeSelector);
+
+		Resource thesaurusSKOS = null;
+		if (iter.hasNext()) {
+			Statement s = iter.next();
+			thesaurusSKOS = s.getSubject().asResource();
+		}
+		return thesaurusSKOS;
+	}
+
+	private List<Resource> getSKOSConcepts(Model model) {
+		SimpleSelector schemeSelector = new SimpleSelector(null, null,
+				(RDFNode) null) {
+			public boolean selects(Statement s) {
+				if (s.getObject().isResource()) {
+					return s.getObject().asResource().equals(SKOS.CONCEPT);
+				} else {
+					return false;
+				}
+			}
+		};
+
+		StmtIterator iter = model.listStatements(schemeSelector);
+
+		List<Resource> conceptsSKOS = new ArrayList<Resource>();
+		while (iter.hasNext()) {
+			Statement s = iter.next();
+			conceptsSKOS.add(s.getSubject().asResource());
+		}
+		return conceptsSKOS;
 	}
 
 	private void deleteTempFile(String initialFileName) {

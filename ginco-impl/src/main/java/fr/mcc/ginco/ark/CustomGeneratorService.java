@@ -48,9 +48,9 @@ import org.springframework.stereotype.Service;
 public class CustomGeneratorService implements IIDGeneratorService {
 
 	@Value("${application.ark.nma}")
-    private String nma = "http://culturecommunication.gouv.fr";
+    private String nma;
 	@Value("${application.ark.naan}")
-    private String naan = "12345";
+    private String naan;
 
     @Override
     public String generate() {    	

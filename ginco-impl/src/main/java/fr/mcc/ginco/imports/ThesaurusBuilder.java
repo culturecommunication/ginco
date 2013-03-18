@@ -44,17 +44,25 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
-import org.semanticweb.skos.SKOSAnnotation;
-import org.semanticweb.skos.SKOSLiteral;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
@@ -62,7 +70,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
 @Service("skosThesaurusBuilder")
-public class ThesaurusBuilder {
+public class ThesaurusBuilder extends AbstractBuilder{
 
 	@Log
 	private Logger logger;
@@ -79,44 +87,6 @@ public class ThesaurusBuilder {
 	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
-	@Value("${import.dublin.core.namespace}title")
-	private String DC_TITLE_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}contributor")
-	private String DC_CONTRIBUTOR_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}coverage")
-	private String DC_COVERAGE_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}description")
-	private String DC_DESCRIPTION_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}publisher")
-	private String DC_PUBLISHER_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}rights")
-	private String DC_RIGHTS_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}subject")
-	private String DC_SUBJECT_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}type")
-	private String DC_TYPE_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}relation")
-	private String DC_RELATION_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}source")
-	private String DC_SOURCE_ELEMENT;
-
-	@Value("${import.dublin.coreterms.namespace}created")
-	private String DC_CREATED_ELEMENT;
-
-	@Value("${import.dublin.coreterms.namespace}modified")
-	private String DC_MODIFIED_ELEMENT;
-
-	@Value("${import.dublin.core.namespace}language")
-	private String DC_LANGUAGE_ELEMENT;
 
 	@Value("${import.default.top.concept}")
 	private boolean defaultTopConcept;
@@ -131,103 +101,87 @@ public class ThesaurusBuilder {
 		super();
 	}
 
-	public Thesaurus buildThesaurus(String URI, Set<SKOSAnnotation> annotations)
+	public Thesaurus buildThesaurus(Resource skosThesaurus, Model model)
 			throws BusinessException {
 		Thesaurus thesaurus = new Thesaurus();
-		thesaurus.setIdentifier(URI);
+		thesaurus.setIdentifier(skosThesaurus.getURI());
+		thesaurus.setTitle(getSimpleStringInfo(skosThesaurus, DC.title));
+		thesaurus.setSubject(getMultipleLineStringInfo(skosThesaurus,
+				DC.subject));
+		thesaurus.setContributor(getMultipleLineStringInfo(skosThesaurus,
+				DC.contributor));
+		thesaurus.setCoverage(getMultipleLineStringInfo(skosThesaurus,
+				DC.coverage));
+		thesaurus.setDescription(getMultipleLineStringInfo(skosThesaurus,
+				DC.description));
+		thesaurus
+				.setPublisher(getSimpleStringInfo(skosThesaurus, DC.publisher));
+		thesaurus
+				.setRights(getMultipleLineStringInfo(skosThesaurus, DC.rights));
+		thesaurus.setType(thesaurusTypeDAO.getByLabel(getSimpleStringInfo(
+				skosThesaurus, DC.type)));
+		thesaurus.setRelation(getMultipleLineStringInfo(skosThesaurus,
+				DC.relation));
+		thesaurus.setSource(getSimpleStringInfo(skosThesaurus, DC.source));
+		thesaurus.setCreated(getSkosDate(getSimpleStringInfo(skosThesaurus,
+				DCTerms.created)));
+		thesaurus.setDate(getSkosDate(getSimpleStringInfo(skosThesaurus,
+				DCTerms.modified)));
 
-		String tempTitle = "";
-		String tempSubject = "";
-		String tempContributor = "";
-		String tempCoverage = "";
-		String tempDescription = "";
-		String tempPublisher = "";
-		String tempRights = "";
-		String tempRelation = "";
-		String tempSource = "";
-		Date createdDate = new Date();
-		Date modifiedDate = new Date();
-		ThesaurusType type = null;
-		Set<Language> langs = new HashSet<Language>();
-
-		for (SKOSAnnotation annotation : annotations) {
-			SKOSLiteral literal = annotation.getAnnotationValueAsConstant();
-			if (DC_TITLE_ELEMENT.equals(annotation.getURI().toString())) {
-				tempTitle += literal.getAsSKOSUntypedLiteral().getLiteral();
-			}
-			if (DC_SUBJECT_ELEMENT.equals(annotation.getURI().toString())) {
-				tempSubject = getMultilineThesaurusInfo(tempSubject, literal);
-			}
-			if (DC_CONTRIBUTOR_ELEMENT.equals(annotation.getURI().toString())) {
-				tempContributor = getMultilineThesaurusInfo(tempContributor,
-						literal);
-			}
-			if (DC_COVERAGE_ELEMENT.equals(annotation.getURI().toString())) {
-				tempCoverage = getMultilineThesaurusInfo(tempCoverage, literal);
-			}
-			if (DC_DESCRIPTION_ELEMENT.equals(annotation.getURI().toString())) {
-				tempDescription = getMultilineThesaurusInfo(tempDescription,
-						literal);
-			}
-			if (DC_PUBLISHER_ELEMENT.equals(annotation.getURI().toString())) {
-				tempPublisher += literal.getAsSKOSUntypedLiteral().getLiteral();
-			}
-			if (DC_RIGHTS_ELEMENT.equals(annotation.getURI().toString())) {
-				tempRights = getMultilineThesaurusInfo(tempRights, literal);
-
-			}
-			if (DC_TYPE_ELEMENT.equals(annotation.getURI().toString())) {
-				type = thesaurusTypeDAO.getByLabel(literal
-						.getAsSKOSUntypedLiteral().getLiteral());
-			}
-			if (DC_RELATION_ELEMENT.equals(annotation.getURI().toString())) {
-				tempRelation = getMultilineThesaurusInfo(tempRelation, literal);
-			}
-			if (DC_SOURCE_ELEMENT.equals(annotation.getURI().toString())) {
-				tempSource += literal.getAsSKOSUntypedLiteral().getLiteral();
-			}
-			if (DC_MODIFIED_ELEMENT.equals(annotation.getURI().toString())) {
-				logger.debug("Modified date string = "
-						+ literal.getAsSKOSUntypedLiteral().getLiteral());
-				modifiedDate = getSkosDate(literal.getAsSKOSUntypedLiteral()
-						.getLiteral());
-			}
-			if (DC_CREATED_ELEMENT.equals(annotation.getURI().toString())) {
-				logger.debug("Created date string = "
-						+ literal.getAsSKOSUntypedLiteral().getLiteral());
-				createdDate = getSkosDate(literal.getAsSKOSUntypedLiteral()
-						.getLiteral());
-
-			}
-			if (DC_LANGUAGE_ELEMENT.equals(annotation.getURI().toString())) {
-				Language lang = languagesDAO.getById(literal
-						.getAsSKOSUntypedLiteral().getLiteral());
-				langs.add(lang);
-			}
-		}
-		thesaurus.setTitle(tempTitle);
-		thesaurus.setSubject(tempSubject);
-		thesaurus.setContributor(tempContributor);
-		thesaurus.setCoverage(tempCoverage);
-		thesaurus.setDescription(tempDescription);
-		thesaurus.setPublisher(tempPublisher);
-		thesaurus.setRights(tempRights);
-		thesaurus.setType(type);
-		thesaurus.setRelation(tempRelation);
-		thesaurus.setSource(tempSource);
-		thesaurus.setCreated(createdDate);
-		thesaurus.setDate(modifiedDate);
-		thesaurus.setLang(langs);
+		thesaurus.setLang(getLanguages(skosThesaurus));
 
 		ThesaurusFormat format = thesaurusFormatDAO
 				.getById(defaultThesaurusFormat);
 		thesaurus.setFormat(format);
 
 		thesaurus.setDefaultTopConcept(defaultTopConcept);
-		/*
-		 * thesaurus.setCreator(creator);
-		 */
+
+		thesaurus.setCreator(getCreator(skosThesaurus, model));
+
 		return thesaurus;
+	}
+
+	private ThesaurusOrganization getCreator(Resource skosThesaurus, Model model) {
+		Statement stmt = skosThesaurus.getProperty(DC.creator);
+		RDFNode node = stmt.getObject();
+		Resource cretaorResource = node.asResource();
+		SimpleSelector organizationSelector = new SimpleSelector(
+				cretaorResource, null, (RDFNode) null) {
+			public boolean selects(Statement s) {
+				if (s.getObject().isResource()) {
+					Resource res = s.getObject().asResource();
+					return res.equals(FOAF.Organization);
+				} else {
+					return false;
+				}
+			}
+		};
+
+		StmtIterator iter = model.listStatements(organizationSelector);
+		while (iter.hasNext()) {
+			Statement orgStms = iter.next();
+			Resource organizationRes = orgStms.getSubject().asResource();
+			Statement foafName = organizationRes.getProperty(FOAF.name);
+			Statement foafHomepage = organizationRes.getProperty(FOAF.homepage);
+			ThesaurusOrganization org = new ThesaurusOrganization();
+			org.setHomepage(foafHomepage.getString());
+			org.setName(foafName.getString());
+			return org;
+		}
+
+		return null;
+	}
+
+	private Set<Language> getLanguages(Resource skosThesaurus) {
+		Set<Language> langs = new HashSet<Language>();
+		StmtIterator stmtIterator = skosThesaurus.listProperties(DC.language);
+		while (stmtIterator.hasNext()) {
+			Statement stmt = stmtIterator.next();
+			Language lang = languagesDAO.getById(stmt.getString());
+			langs.add(lang);
+		}
+
+		return langs;
 	}
 
 	private Date getSkosDate(String skosDate) throws BusinessException {
@@ -241,14 +195,5 @@ public class ThesaurusBuilder {
 		}
 		throw new BusinessException("InvalidDateFormat for input string "
 				+ skosDate, "import-invalid-date-format");
-	}
-
-	private String getMultilineThesaurusInfo(String data, SKOSLiteral literal) {
-		String newData = data;
-		if (StringUtils.isNotEmpty(newData)) {
-			newData += "\n";
-		}
-		newData += literal.getAsSKOSUntypedLiteral().getLiteral();
-		return newData;
-	}
+	}	
 }

@@ -32,34 +32,43 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.imports;
 
-import fr.mcc.ginco.beans.Language;
-
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data Access Object for languages_iso639
- */
-public interface ILanguageDAO extends IGenericDAO<Language, String> {
-	/**
-	 * @param start Beginning index
-	 * @param limit Number of items
-	 * @return List<Language> List of languages available for Thesauruses
-	 */
-	List<Language> findPaginatedItems(Integer start, Integer limit);
-	
-	/**
-	 * @return List<Language> List of top languages
-	 */
-	List<Language> findTopLanguages();
-	
-	/**
-	 * Gets a list of languages by "part1" field
-	 * @param part1
-	 * @return
-	 */
-	List<Language> getByPart1(String part1);
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
+public abstract class AbstractBuilder {
+	protected String getSimpleStringInfo(Resource skosResource, Property prop) {
+		Statement stmt = skosResource.getProperty(prop);
+		return stmt.getString();
+	}
+	
+	protected List<String> getSeveralSimpleStringInfo(Resource skosResource, Property prop) {
+		StmtIterator stmtIterator = skosResource.listProperties(prop);
+		List<String> values = new ArrayList<String>();
+		while(stmtIterator.hasNext()) {
+			Statement stmt = stmtIterator.next();
+			values.add(stmt.getString());
+		}
+		return values;
+	}
 
+	protected String getMultipleLineStringInfo(Resource skosResource,
+			Property prop) {
+		String lines = "";
+		StmtIterator stmtIterator = skosResource.listProperties(prop);
+		while (stmtIterator.hasNext()) {
+			Statement stmt = stmtIterator.next();
+			lines += stmt.getString();
+			if (stmtIterator.hasNext()) {
+				lines += "\n";
+			}
+		}
+		return lines;
+	}
 }

@@ -140,3 +140,9 @@ ALTER TABLE associative_relationship
 ALTER TABLE languages_iso639 ALTER id TYPE character(5);
 ALTER TABLE thesaurus_languages ALTER iso639_id TYPE character(5);
 
+-- Index: idx_childconceptid
+CREATE INDEX idx_languages_iso639_part1
+  ON languages_iso639
+  USING btree
+  (part1);
+
