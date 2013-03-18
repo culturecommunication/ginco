@@ -38,6 +38,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -53,4 +54,10 @@ public interface IExportService {
      */
     List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)
         throws BusinessException;
+
+    /**
+     * Get
+     * @param thesaurus
+     */
+    File getSKOSExport(Thesaurus thesaurus) throws BusinessException;
 }
