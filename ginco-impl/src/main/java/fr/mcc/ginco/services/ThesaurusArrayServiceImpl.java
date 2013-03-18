@@ -37,6 +37,8 @@ package fr.mcc.ginco.services;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,7 +73,7 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
     }
 
     @Override
-    public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) {
+    public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) throws BusinessException {
         ThesaurusArray updated = thesaurusArrayDAO.update(thesaurusArray);
         nodeLabel.setThesaurusArray(updated);
         nodeLabelService.updateOrCreate(nodeLabel);

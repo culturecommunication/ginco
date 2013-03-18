@@ -42,7 +42,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.ConceptAndTermStatusEnum;
@@ -135,32 +134,32 @@ public class ThesaurusTermDAO extends
 		return list;
 	}
 	
-	public List<ThesaurusTerm> findTermsByLexicalValueAndLanguage(String lexicalValue, Language lang, String thesaurusId) {
-		List<ThesaurusTerm> list = getCurrentSession()
+	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {
+		return (Long) getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("lexicalValue", lexicalValue))
-                .add(Restrictions.eq("language.id", lang.getId()))
-                .add(Restrictions.eq("thesaurus.identifier", thesaurusId))
-                .list();
-		return list;
+                .add(Restrictions.eq("lexicalValue", term.getLexicalValue()))
+                .add(Restrictions.eq("language.id", term.getLanguage().getId()))
+                .add(Restrictions.eq("thesaurus.identifier", term.getThesaurus().getIdentifier()))
+                .add(Restrictions.ne("identifier", term.getIdentifier()))
+                .setProjection(Projections.rowCount())
+                .list().get(0);
 	}
 	
 	@Override
-	public ThesaurusTerm updateTerm(ThesaurusTerm termToUpdate) throws BusinessException {
-		
-		if (termToUpdate.getIdentifier() == null) {
-			//Verifying if there is no a similar term (lexicalValue + lang)
-			List <ThesaurusTerm> existingTerm = findTermsByLexicalValueAndLanguage(termToUpdate.getLexicalValue(), termToUpdate.getLanguage(), termToUpdate.getThesaurusId());
-			if (existingTerm.size() > 0) {
-    			throw new BusinessException("Already existing term", "already-existing-term");
-    		}
+	public ThesaurusTerm update(ThesaurusTerm termToUpdate)
+			throws BusinessException {
+
+		// Verifying if there is no a similar term (lexicalValue + lang)
+		Long numberOfExistingTerms = countSimilarTermsByLexicalValueAndLanguage(termToUpdate);
+		if (numberOfExistingTerms > 0) {
+				throw new BusinessException("Already existing term",
+					"already-existing-term");
 		}
-		
-		//Update an existing term
+
+		// Update an existing term
 		getCurrentSession().saveOrUpdate(termToUpdate);
 		return termToUpdate;
 	}
-	
 
 	/**
 	 * This method constructs a criteria to get sandboxed terms

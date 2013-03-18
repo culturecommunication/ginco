@@ -65,9 +65,10 @@ public interface IThesaurusService {
 
     /**
      * Update a single ThesaurusObject
+     * @throws BusinessException 
      */
 
-    Thesaurus updateThesaurus(Thesaurus object);  
+    Thesaurus updateThesaurus(Thesaurus object) throws BusinessException;  
     
     
     /**

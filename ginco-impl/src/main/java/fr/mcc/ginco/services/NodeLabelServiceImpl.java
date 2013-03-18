@@ -36,6 +36,8 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.dao.INodeLabelDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,7 +69,7 @@ public class NodeLabelServiceImpl implements INodeLabelService {
     }
 
     @Override
-    public NodeLabel updateOrCreate(NodeLabel nodeLabel) {
+    public NodeLabel updateOrCreate(NodeLabel nodeLabel) throws BusinessException {
         return nodeLabelDAO.update(nodeLabel);
     }
 }
