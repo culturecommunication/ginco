@@ -59,7 +59,7 @@ import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.enums.ConceptAndTermStatusEnum;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
@@ -330,7 +330,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		for (ThesaurusTerm thesaurusTerm : terms) {
 			
 			//We always set validated status to the terms that are joined to a concept
-			thesaurusTerm.setStatus(ConceptAndTermStatusEnum.VALIDATED.getStatus());				
+			thesaurusTerm.setStatus(TermStatusEnum.VALIDATED.getStatus());				
 			thesaurusTerm.setConcept(concept);
 			returnTerms.add(thesaurusTermDAO.update(thesaurusTerm));
 

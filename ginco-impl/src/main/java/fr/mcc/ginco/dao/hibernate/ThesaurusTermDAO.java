@@ -44,7 +44,7 @@ import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.enums.ConceptAndTermStatusEnum;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
@@ -81,7 +81,7 @@ public class ThesaurusTermDAO extends
 			Integer startIndex, Integer limit, String idThesaurus) {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		getSandboxedTerms(criteria, startIndex, limit, idThesaurus);
-		criteria.add(Restrictions.eq("status", ConceptAndTermStatusEnum.VALIDATED.getStatus()));
+		criteria.add(Restrictions.eq("status", TermStatusEnum.VALIDATED.getStatus()));
 		return criteria.list();
 	}
 
@@ -96,7 +96,7 @@ public class ThesaurusTermDAO extends
 	public Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		countAllSandboxedTerms(criteria, idThesaurus);
-		criteria.add(Restrictions.eq("status", ConceptAndTermStatusEnum.VALIDATED.getStatus()));
+		criteria.add(Restrictions.eq("status", TermStatusEnum.VALIDATED.getStatus()));
 		return (Long) criteria.list().get(0);
 	}	
 	
