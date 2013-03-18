@@ -154,3 +154,6 @@ ALTER TABLE associative_relationship
 ALTER TABLE languages_iso639 ALTER id TYPE character(5);
 ALTER TABLE thesaurus_languages ALTER iso639_id TYPE character(5);
 
+--Adding status to thesaurus_concept
+ALTER TABLE thesaurus_concept DROP COLUMN status;
+ALTER TABLE thesaurus_concept ADD COLUMN status integer;

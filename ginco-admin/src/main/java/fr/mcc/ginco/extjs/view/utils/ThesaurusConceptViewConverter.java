@@ -116,6 +116,10 @@ public class ThesaurusConceptViewConverter {
 		view.setModified(DateUtil.toString(concept.getModified()));
 		view.setTopconcept(concept.getTopConcept());
 		view.setThesaurusId(concept.getThesaurus().getIdentifier());
+		
+		//TODO : set status
+		view.setStatus(concept.getStatus());
+		
 		view.setParentConcepts(getIdsFromConceptList(concept.getParentConcepts()));
         view.setRootConcepts(getIdsFromConceptList(concept.getRootConcepts()));
         List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();

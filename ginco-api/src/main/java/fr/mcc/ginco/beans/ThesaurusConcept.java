@@ -51,7 +51,7 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	private String identifier;
 	private Date created;
 	private Date modified;
-	private String status;
+	private Integer status;
 	private String notation;
 	private Boolean topConcept;
 	private Thesaurus thesaurus;
@@ -85,11 +85,11 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 		this.modified = modified;
 	}
 
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 

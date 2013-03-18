@@ -52,6 +52,7 @@ public class ThesaurusConceptView implements Serializable {
 	private String modified;
 	private Boolean topconcept;
 	private String thesaurusId;
+	private Integer status;
 	private List<ThesaurusTermView> terms;
     private List<String> parentConcepts;
     private List<String> rootConcepts;
@@ -131,4 +132,12 @@ public class ThesaurusConceptView implements Serializable {
     public void setRootConcepts(List<String> rootConcepts) {
         this.rootConcepts = rootConcepts;
     }
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 }
