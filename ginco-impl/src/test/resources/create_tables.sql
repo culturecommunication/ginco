@@ -76,7 +76,7 @@ CREATE TABLE thesaurus_concept
   identifier text NOT NULL,
   created text NOT NULL,
   modified text NOT NULL,
-  status text,
+  status integer,
   notation text,
   topconcept boolean,
   thesaurusid text

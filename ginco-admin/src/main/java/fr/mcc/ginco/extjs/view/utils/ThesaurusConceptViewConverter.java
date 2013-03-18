@@ -116,6 +116,8 @@ public class ThesaurusConceptViewConverter {
 		view.setModified(DateUtil.toString(concept.getModified()));
 		view.setTopconcept(concept.getTopConcept());
 		view.setThesaurusId(concept.getThesaurus().getIdentifier());
+		view.setStatus(concept.getStatus());
+		
 		view.setParentConcepts(getIdsFromConceptList(concept.getParentConcepts()));
         view.setRootConcepts(getIdsFromConceptList(concept.getRootConcepts()));
         List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
@@ -178,6 +180,10 @@ public class ThesaurusConceptViewConverter {
 		}
 		thesaurusConcept.setModified(DateUtil.nowDate());
         thesaurusConcept.setTopConcept(source.getTopconcept());
+        
+        if (source.getStatus() != null) {
+        	thesaurusConcept.setStatus(source.getStatus());
+        }
 
         List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept.getParentConcepts());
 

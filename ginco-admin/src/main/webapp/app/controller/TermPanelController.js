@@ -41,7 +41,6 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			model.data.identifier = "";
 			model.data.language=thesaurusData.languages[0];
 			//0 is the status to set by default for a new term, meaning "candidate"
-			//TODO : data not display first load -> to fix
 			model.data.status=0;
 			theForm.down("#statusCombo").setReadOnly(false);
 			theForm.loadRecord(model);

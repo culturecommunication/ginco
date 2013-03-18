@@ -54,6 +54,7 @@ Ext
 					xRemoveParent : 'Remove connection to parent Concept',
 					xAssociationRemove : 'Remove association',
 					xChildrenConcepts : 'Children Concepts',
+					xConceptStatusLabel : 'Concept status',
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
@@ -150,6 +151,20 @@ Ext
 																			name : 'topconcept',
 																			fieldLabel : me.xTopTermConceptLabel
 																		},
+												                        {
+												                        	xtype: 'combobox',
+												                        	name:'status',
+												                        	itemId: 'conceptStatusCombo',
+												                        	fieldLabel: me.xConceptStatusLabel,
+												                        	editable : false,
+												                        	multiSelect : false,
+												                        	displayField : 'statusLabel',
+												                        	valueField : 'status',
+												                        	forceSelection : true,
+												                        	store :  Ext.create('GincoApp.store.ConceptStatusStore'),
+												                        	anchor: '70%',
+												                        	margin : '5 0 5 0'
+												                        },
 																		{
 																			xtype : 'gridpanel',
 																			itemId : 'gridPanelTerms',

@@ -49,7 +49,8 @@ Ext.application({
         'SimpleConceptStore',
         'TermRoleStore',
         'ConceptGroupTypeStore',
-        'TermStatusStore'
+        'TermStatusStore',
+        'ConceptStatusStore'
     ],
     views: [
         'GincoViewPort',

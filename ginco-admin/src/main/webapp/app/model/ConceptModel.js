@@ -23,6 +23,10 @@ Ext.define('GincoApp.model.ConceptModel', {
             type: 'string'
         },
         {
+            name: 'status',
+            type: 'integer'
+        },
+        {
             name : 'parentConcepts',
             type : 'array_of_string'
         },

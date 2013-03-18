@@ -36,6 +36,8 @@ package fr.mcc.ginco.rest.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -56,6 +58,7 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.ConceptAndTermStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
@@ -64,6 +67,7 @@ import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.EncodedControl;
 
 
 /**
@@ -253,5 +257,45 @@ public class ThesaurusConceptRestService {
 			thesaurusConceptService.destroyThesaurusConcept(object);
 		}
 	}
-    
+	
+	/**
+	 * Public method to get all status for concept (id + label)
+	 * The types are read from a properties file
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getAllConceptStatus")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<ConceptAndTermStatusView>> getAllConceptStatus() throws BusinessException {
+		List<ConceptAndTermStatusView> listOfStatus = new ArrayList<ConceptAndTermStatusView>();
+		
+		try {
+			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
+			String availableStatusIds[] = res.getString("concept-status").split(",");
+			
+			if ("".equals(availableStatusIds[0])) {
+				//Ids of status for concepts are not set correctly
+				throw new BusinessException("Error with property file - check values of identifier concept status", "check-values-of-concept-status");
+			}
+			
+	        for (String id : availableStatusIds) {
+	        	ConceptAndTermStatusView conceptStatusView = new ConceptAndTermStatusView();
+	        	conceptStatusView.setStatus(Integer.valueOf(id));
+	        	
+	        	String label = res.getString("concept-status["+ id +"]");
+	        	if (label.isEmpty()) {
+	        		//Labels of status are not set correctly
+	        		throw new BusinessException("Error with property file - check values of identifier concept status", "check-values-of-concept-status");
+				} else {
+					conceptStatusView.setStatusLabel(label);
+				}
+	        	listOfStatus.add(conceptStatusView);
+			}
+		} catch (MissingResourceException e) {
+			throw new BusinessException("Error with property file - check values of concept status", "check-values-of-concept-status");
+		}
+		ExtJsonFormLoadData<List<ConceptAndTermStatusView>> result = new ExtJsonFormLoadData<List<ConceptAndTermStatusView>>(listOfStatus);
+        result.setTotal((long) listOfStatus.size());
+		return result;
+	}
 }

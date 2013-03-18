@@ -160,7 +160,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			"#mainTreeView" : {
 				beforeitemdblclick : this.onNodeDblClick,
 				render : this.onTreeRender,
-				load : this.onTreeLoad,
+				load : this.onTreeLoad
 				
 			},
 			'#mainTreeView tool[type="refresh"]' : {

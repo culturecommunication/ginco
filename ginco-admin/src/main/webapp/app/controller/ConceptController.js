@@ -63,6 +63,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 			model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
 			model.data.identifier = "";
 			
+			//0 is the status to set by default for a new concept, meaning "candidate"
+			model.data.status=0;
+			
 			if (!Ext.isEmpty(thePanel.initPreferedTermBeforeLoad)){
 				if (!Ext.isEmpty(thePanel.initPreferedTermBeforeLoad.data.identifier)) {
 					//adding a term as prefered term (creation of a concept from a sandboxed term)
@@ -280,6 +283,12 @@ Ext.define('GincoApp.controller.ConceptController', {
 		});
 	},
 	
+	loadConceptStatus : function(theCombo) {
+		var thePanel = theCombo.up('conceptPanel');
+		var theStore = theCombo.getStore();
+		theStore.load();
+	},
+	
 	loadData : function(aForm, aModel) {
 		var me = this;
         var conceptPanel = me.getActivePanel();
@@ -476,6 +485,9 @@ Ext.define('GincoApp.controller.ConceptController', {
         	'conceptPanel #conceptForm' : {
  				afterrender : this.onConceptFormRender
  			},
+			'conceptPanel #conceptStatusCombo' : {
+				render : this.loadConceptStatus
+			},
  			'conceptPanel #saveConcept' : {
  				click : this.saveConcept
  			},
