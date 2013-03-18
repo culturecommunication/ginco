@@ -14,7 +14,7 @@
 		<org.springframework.version>3.2.0.RELEASE</org.springframework.version>
 		<org.springsecurity.version>3.1.3.RELEASE</org.springsecurity.version>
 		<org.apache.cxf.version>2.7.2</org.apache.cxf.version>
-        <org.commons.collections.version>3.2.1</org.commons.collections.version>
+		<org.commons.collections.version>3.2.1</org.commons.collections.version>
 		<org.hibernate.version>4.1.10.Final</org.hibernate.version>
 		<org.codehaus.jackson.version>1.9.11</org.codehaus.jackson.version>
 		<junit.version>4.8.2</junit.version>
@@ -41,9 +41,10 @@
 		<ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
 		<servlet.api.version>2.5</servlet.api.version>
 		<apache.commons.lang.version>3.1</apache.commons.lang.version>
+		<apache.jena.version>2.10.0</apache.jena.version>
 		<skosapi.version>3.0.0</skosapi.version>
 		<owlapi.version>3.2.4</owlapi.version>
-		
+
 		<!-- remote configuration -->
 		<scp.user>root</scp.user>
 		<scp.password>hadoc</scp.password>
@@ -193,12 +194,12 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-            <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>${org.commons.collections.version}</version>
-            </dependency>
-            <dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>${org.commons.collections.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
 				<version>${org.springframework.version}</version>
@@ -361,11 +362,11 @@
 				<artifactId>spring-security-core</artifactId>
 				<version>${org.springsecurity.version}</version>
 				<exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-expression</artifactId>
-                    </exclusion>
-                </exclusions>			
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-expression</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
@@ -378,22 +379,28 @@
 				<version>${org.springsecurity.version}</version>
 				<scope>runtime</scope>
 				<exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-expression</artifactId>
-                    </exclusion>
-                </exclusions>
-			</dependency>	
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-expression</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 			<dependency>
-                <groupId>uk.ac.manchester.cs.skos</groupId>
-                <artifactId>skosapi</artifactId>
-                <version>${skosapi.version}</version>
-            </dependency>	
-            <dependency>
-                <groupId>uk.ac.manchester.cs.owl</groupId>
-                <artifactId>owlapi</artifactId>
-                <version>${owlapi.version}</version>
-            </dependency>   	
+				<groupId>uk.ac.manchester.cs.skos</groupId>
+				<artifactId>skosapi</artifactId>
+				<version>${skosapi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>uk.ac.manchester.cs.owl</groupId>
+				<artifactId>owlapi</artifactId>
+				<version>${owlapi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>apache-jena-libs</artifactId>				
+				<version>${apache.jena.version}</version>
+				<type>pom</type>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>

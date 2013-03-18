@@ -34,22 +34,36 @@
  */
 package fr.mcc.ginco.tests;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import fr.mcc.ginco.ark.CustomGeneratorService;
+import fr.mcc.ginco.ark.IIDGeneratorService;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:applicationContext.xml",
+        "classpath:spring/applicationContext-*.xml"
+})
 public class CustomGeneratorServiceTest {
 	
-    private CustomGeneratorService arkProvider = new CustomGeneratorService();
-	
+	@Inject
+	@Named("generatorService")
+    private IIDGeneratorService arkProvider;    
+  
+
 	 /**
 	 * Since ARK is randomly generated, this method only test the static part of the ID
 	 */
 	@Test
-	 public final void getArkId(){
+	public final void getArkId(){
         String expectedResponse= "http://culturecommunication.gouv.fr" + "/ark:/" + "12345";
 		String actualResponse = arkProvider.generate();
         Assert.assertTrue("Error while generating ARK Id !" + actualResponse + " expected " + expectedResponse, actualResponse.startsWith(expectedResponse));
-	 }
+	}
 }

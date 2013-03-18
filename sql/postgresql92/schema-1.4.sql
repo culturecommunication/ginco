@@ -157,3 +157,8 @@ ALTER TABLE thesaurus_languages ALTER iso639_id TYPE character(5);
 --Adding status to thesaurus_concept
 ALTER TABLE thesaurus_concept DROP COLUMN status;
 ALTER TABLE thesaurus_concept ADD COLUMN status integer;
+-- Index: idx_childconceptid
+CREATE INDEX idx_languages_iso639_part1
+  ON languages_iso639
+  USING btree
+  (part1);
