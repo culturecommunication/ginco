@@ -44,6 +44,13 @@ ALTER TABLE concept_group_concepts DROP CONSTRAINT fk_concept_group_concepts_con
 ALTER TABLE concept_group_concepts
   ADD CONSTRAINT fk_concept_group_concepts_concept_group_identifier FOREIGN KEY (conceptgroupid)
       REFERENCES concept_group (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+ALTER TABLE concept_group_concepts DROP CONSTRAINT fk_concept_group_concepts_thesaurus_concept_identifier;
+
+ALTER TABLE concept_group_concepts
+  ADD CONSTRAINT fk_concept_group_concepts_thesaurus_concept_identifier FOREIGN KEY (conceptid)
+      REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE CASCADE; 
 
 CREATE TABLE concept_group_label
