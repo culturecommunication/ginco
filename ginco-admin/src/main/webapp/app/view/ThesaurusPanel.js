@@ -148,11 +148,12 @@ Ext
                                                                             xtype : 'keymenuitem',
                                                                             text : me.xExport_Skos,
                                                                             disabled : true,
-                                                                            itemId : 'exportSkos'
+                                                                            itemId : 'exportSKOS'
                                                                         },
                                                                         {
                                                                             xtype : 'keymenuitem',
                                                                             text : me.xExport_Hierarchical,
+                                                                            disabled : true,
                                                                             itemId : 'exportHierarchical'
                                                                         },
                                                                         {
