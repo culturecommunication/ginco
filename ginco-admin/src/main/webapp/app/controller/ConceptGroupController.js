@@ -42,6 +42,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
         	theConceptGroupPanel.setTitle(theConceptGroupPanel.title+' : '+theConceptGroupPanel.thesaurusData.title);
         	model = Ext.create('GincoApp.model.ConceptGroupModel');
         	model.data.thesaurusId = theConceptGroupPanel.thesaurusData.id;
+        	model.data.language=theConceptGroupPanel.thesaurusData.languages[0];
         	theForm.loadRecord(model);
         }
 	},
@@ -63,6 +64,14 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		var deleteConceptGroupBtn = aForm.down('#deleteConceptGroupBtn');
 		deleteConceptGroupBtn.setDisabled(false);
 
+	},
+	
+	loadLanguages : function(theCombo) {
+		var theConceptGroupPanel = theCombo.up('conceptGroupPanel');
+		var theConceptGroupStore = theCombo.getStore();
+		theConceptGroupStore.getProxy().setExtraParam('thesaurusId',
+				theConceptGroupPanel.thesaurusData.id);
+		theConceptGroupStore.load();
 	},
 	
 	getActivePanel : function() {
@@ -198,7 +207,10 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
             },
             'conceptGroupPanel #gridConceptGroupPanelConcepts #conceptToGroupActionColumn' : {
                 click : this.onRemoveConceptFromGroupClick
-            }
+            },
+			'conceptGroupPanel #conceptGroupLanguages' : {
+				render : this.loadLanguages
+			}
          });
 
     }

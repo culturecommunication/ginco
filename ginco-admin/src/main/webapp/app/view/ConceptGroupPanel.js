@@ -135,6 +135,7 @@ Ext
 														{
 															xtype : 'combobox',
 															name : 'language',
+															itemId : 'conceptGroupLanguages',
 															fieldLabel : me.xLanguageLabel,
 															editable : false,
 															displayField : 'refname',
@@ -142,7 +143,7 @@ Ext
 															forceSelection : true,
 															multiSelect : false,
 															allowBlank : false,
-															store : 'ThesaurusLanguageStore'
+															store : Ext.create('GincoApp.store.ThesaurusLanguageStore')
 														},
 														{
 															xtype : 'gridpanel',

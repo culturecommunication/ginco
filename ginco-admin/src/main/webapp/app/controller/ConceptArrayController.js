@@ -44,6 +44,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 			model = Ext.create('GincoApp.model.ConceptArrayModel');
 			model.data.thesaurusId = thePanel.thesaurusData.id;
+			model.data.language=thePanel.thesaurusData.languages[0];
 			model.data.identifier = "";
 			theForm.loadRecord(model);			
 		}
@@ -64,6 +65,14 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         conceptsGridStore.load();	        
         var deleteConceptArrayBtn = aForm.down('#deleteConceptArray');
         deleteConceptArrayBtn.setDisabled(false);
+	},
+	
+	loadLanguages : function(theCombo) {
+		var theConceptArrayPanel = theCombo.up('conceptArrayPanel');
+		var theConceptArrayStore = theCombo.getStore();
+		theConceptArrayStore.getProxy().setExtraParam('thesaurusId',
+				theConceptArrayPanel.thesaurusData.id);
+		theConceptArrayStore.load();
 	},
 	
 	saveConceptArray : function(theButton, theCallback){
@@ -273,7 +282,10 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             },
  			'conceptArrayPanel #deleteConceptArray' : {
  				click : this.deleteConceptArray
- 			}
+ 			},
+			'conceptArrayPanel #conceptArrayLanguages' : {
+				render : this.loadLanguages
+			}
          });
 
     }
