@@ -52,6 +52,7 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.ThesaurusArrayServiceImpl;
@@ -75,7 +76,7 @@ public class ThesaurusArrayServiceTest {
 	}
 
     @Test
-    public final void testUpdateArray() {
+    public final void testUpdateArray() throws BusinessException {
         ThesaurusArray mockArray = new ThesaurusArray();
         NodeLabel mockLabel = new NodeLabel();
         mockLabel.setIdentifier(1);

@@ -55,6 +55,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ThesaurusServiceImpl;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -82,7 +83,7 @@ public class ThesaurusServiceTest {
 	}
 
 	@Test
-	public final void testCreateThesaurus() {
+	public final void testCreateThesaurus() throws BusinessException {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);
@@ -92,7 +93,7 @@ public class ThesaurusServiceTest {
 	}
 
 	@Test
-	public final void testUpdateThesaurus() {
+	public final void testUpdateThesaurus() throws BusinessException {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);

@@ -99,7 +99,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 * , fr.mcc.ginco.beans.users.IUser)
 	 */
 	@Override
-	public Thesaurus updateThesaurus(Thesaurus object) {
+	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
 		return thesaurusDAO.update(object);
 	}	
 

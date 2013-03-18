@@ -46,6 +46,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 
@@ -113,7 +114,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
     }
     
     @Test
-    public final void testCreateNewThesaurusWithEmptyCreator() {
+    public final void testCreateNewThesaurusWithEmptyCreator() throws BusinessException {
         Thesaurus newThesaurus = new Thesaurus();
         newThesaurus.setTitle("test");
         newThesaurus.setCreator(null);
@@ -123,7 +124,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
     }   
     
     @Test
-    public final void testCreateNewThesaurusWithCreator() {
+    public final void testCreateNewThesaurusWithCreator() throws BusinessException {
         Thesaurus newThesaurus = new Thesaurus();
         ThesaurusOrganization thOrg = new ThesaurusOrganization();
         thOrg.setName("Un auteur");
