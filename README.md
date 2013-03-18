@@ -19,4 +19,4 @@ GINCO features
 Installation
 ------------
 
-Read doc/INSTALL
+Read [doc/INSTALL.md] (doc/INSTALL.md)
