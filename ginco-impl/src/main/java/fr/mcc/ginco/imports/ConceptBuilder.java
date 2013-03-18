@@ -34,6 +34,11 @@
  */
 package fr.mcc.ginco.imports;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -42,61 +47,99 @@ import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 @Service("skosConceptBuilder")
-public class ConceptBuilder extends AbstractBuilder{
+public class ConceptBuilder extends AbstractBuilder {
 
 	@Log
-	private Logger logger;	
-	
+	private Logger logger;
+
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+
+	@Inject
+	@Named("associativeRelationshipRoleService")
+	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
+
+	public static Map<String, ThesaurusConcept> builtConcepts = new HashMap<String, ThesaurusConcept>();
 
 	public ConceptBuilder() {
 		super();
 	}
 
-	public ThesaurusConcept buildConcept(Resource skosConcept, Model model, Thesaurus thesaurus) throws BusinessException {
+	public ThesaurusConcept buildConcept(Resource skosConcept, Model model,
+			Thesaurus thesaurus) throws BusinessException {
 		ThesaurusConcept concept = new ThesaurusConcept();
 		concept.setIdentifier(skosConcept.getURI());
 		concept.setThesaurus(thesaurus);
 		concept.setTopConcept(thesaurus.isDefaultTopConcept());
 		concept.setCreated(thesaurus.getCreated());
-		concept.setModified(thesaurus.getDate());	
-	
-
-		//Statement stmtRelated = skosConcept.getProperty(SKOS.RELATED);
-		//concept.setAssociativeRelationshipLeft(associativeRelationshipLeft);
-		// concept.setAssociativeRelationshipRight(associativeRelationshipRight);
-		// concept.setConceptArrays(conceptArrays);
-
-		/*StmtIterator stmtParentItr = skosConcept.listProperties(SKOS.BROADER);
-		Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
-		while(stmtParentItr.hasNext()) {
-			Statement stmt = stmtParentItr.next();
-			Resource parentConceptRes = stmt.getObject().asResource();
-			ThesaurusConcept parentConcept  = buildConcept(parentConceptRes, model, thesaurus);
-			parentConcepts.add(parentConcept);
-		}
-		concept.setParentConcepts(parentConcepts);
-		concept.setRootConcepts(new HashSet<ThesaurusConcept>(thesaurusConceptService.getRootConcepts(concept)));
-		*/
-		//TODO
-		//concept.setNotation("");
+		concept.setModified(thesaurus.getDate());
+		// TODO
+		// concept.setNotation("");
 		// concept.setStatus(status);
-		
-		
-	
-
+		builtConcepts.put(skosConcept.getURI(), concept);
 		return concept;
 	}
 
+	public ThesaurusConcept buildConceptAssociations(Resource skosConcept,
+			Model model, Thesaurus thesaurus) throws BusinessException {
+		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
+		StmtIterator stmtParentItr = skosConcept.listProperties(SKOS.BROADER);
+		Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
+		while (stmtParentItr.hasNext()) {
+			Statement stmt = stmtParentItr.next();
+			Resource parentConceptRes = stmt.getObject().asResource();
+			String relatedURI = parentConceptRes.getURI();
+			ThesaurusConcept parentConcept = builtConcepts.get(relatedURI);
+			parentConcepts.add(parentConcept);
+		}
+		concept.setParentConcepts(parentConcepts);
+
+		StmtIterator stmtRelatedtItr = skosConcept.listProperties(SKOS.RELATED);
+		Set<AssociativeRelationship> relationshipsLeft = new HashSet<AssociativeRelationship>();
+
+		while (stmtRelatedtItr.hasNext()) {
+			Statement stmt = stmtRelatedtItr.next();
+			Resource relatedConceptRes = stmt.getObject().asResource();
+			ThesaurusConcept relatedConcept = builtConcepts
+					.get(relatedConceptRes.getURI());
+			AssociativeRelationship relationshipLeft = new AssociativeRelationship();
+			AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
+			relationshipId.setConcept1(concept.getIdentifier());
+			relationshipId.setConcept2(relatedConcept.getIdentifier());
+			relationshipLeft.setIdentifier(relationshipId);
+			relationshipLeft.setConceptLeft(concept);
+			relationshipLeft.setConceptRight(relatedConcept);
+			relationshipLeft
+					.setRelationshipRole(associativeRelationshipRoleService
+							.getDefaultAssociativeRelationshipRoleRole());
+			relationshipsLeft.add(relationshipLeft);
+
+		}
+
+		concept.setAssociativeRelationshipLeft(relationshipsLeft);
+
+		return concept;
+	}
 	
+	public ThesaurusConcept buildConceptRoot(Resource skosConcept,
+			Model model, Thesaurus thesaurus) throws BusinessException {
+		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
+		concept.setRootConcepts(new	HashSet<ThesaurusConcept>(thesaurusConceptService.getRootConcepts(concept)));
+		return concept;
+
+	}
+
 }
