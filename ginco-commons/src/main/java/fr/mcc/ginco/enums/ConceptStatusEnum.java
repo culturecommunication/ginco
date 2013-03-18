@@ -35,20 +35,19 @@
 package fr.mcc.ginco.enums;
 
 /**
- * This enum intended to list different available status for terms.
+ * This enum intended to list different available status for concepts.
  * The translation of these items is externalized in a property file 
  */
-public enum ConceptAndTermStatusEnum {
+public enum ConceptStatusEnum {
     CANDIDATE(0), VALIDATED(1), REJECTED(2), DEPRECATED(3), PROHIBITED(4);
     
     private int status;
     
-    private ConceptAndTermStatusEnum(int status) {
+    private ConceptStatusEnum(int status) {
     	this.status = status;
     }
     
     public int getStatus() {
     	return status;
     }
-    
 }

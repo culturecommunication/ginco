@@ -32,47 +32,22 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.enums;
 
-/*
- * Concept Note Type Store 
- * This file contains all note types displayed in dropdown lists
+/**
+ * This enum intended to list different available status for terms.
+ * The translation of these items is externalized in a property file 
  */
-Ext.define('GincoApp.store.ConceptNoteTypeStore', {
-    extend: 'Ext.data.Store',
-
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: true,
-            storeId: 'JsonVirtualConceptNoteTypeStore',
-            proxy: {
-                type: 'ajax',
-                url: 'services/ui/thesaurusnoteservice/getConceptNoteTypes',
-                reader: {
-                    type: 'json',
-                    idProperty: 'code',
-                    root: 'data'
-                }
-            },
-            fields: [
-                {
-                    name: 'code',
-                    type: 'string'
-                },
-                {
-                    name: 'label',
-                    type: 'string'
-                },
-                {
-                    name: 'isTerm',
-                    type: 'boolean'
-                },
-                {
-                    name: 'isConcept',
-                    type: 'boolean'
-                }
-            ]
-        }, cfg)]);
+public enum TermStatusEnum {
+    CANDIDATE(0), VALIDATED(1), REJECTED(2);
+    
+    private int status;
+    
+    private TermStatusEnum(int status) {
+    	this.status = status;
     }
-});
+    
+    public int getStatus() {
+    	return status;
+    }
+}

@@ -1,117 +1,179 @@
-Ext.define(
-    'GincoApp.view.SelectConceptWin',
-    {
-        extend : 'Ext.window.Window',
-        alias: 'widget.selectConceptWin',
-        localized: true,
+/**
+ * Copyright or © or Copr. Ministère Français chargé de la Culture
+ * et de la Communication (2013)
+ * <p/>
+ * contact.gincoculture_at_gouv.fr
+ * <p/>
+ * This software is a computer program whose purpose is to provide a thesaurus
+ * management solution.
+ * <p/>
+ * This software is governed by the CeCILL license under French law and
+ * abiding by the rules of distribution of free software. You can use,
+ * modify and/ or redistribute the software under the terms of the CeCILL
+ * license as circulated by CEA, CNRS and INRIA at the following URL
+ * "http://www.cecill.info".
+ * <p/>
+ * As a counterpart to the access to the source code and rights to copy,
+ * modify and redistribute granted by the license, users are provided only
+ * with a limited warranty and the software's author, the holder of the
+ * economic rights, and the successive licensors have only limited liability.
+ * <p/>
+ * In this respect, the user's attention is drawn to the risks associated
+ * with loading, using, modifying and/or developing or reproducing the
+ * software by the user in light of its specific status of free software,
+ * that may mean that it is complicated to manipulate, and that also
+ * therefore means that it is reserved for developers and experienced
+ * professionals having in-depth computer knowledge. Users are therefore
+ * encouraged to load and test the software's suitability as regards their
+ * requirements in conditions enabling the security of their systemsand/or
+ * data to be ensured and, more generally, to use and operate it in the
+ * same conditions as regards security.
+ * <p/>
+ * The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL license and that you accept its terms.
+ */
 
-        requires: [
-            'Ext.grid.PagingScroller'
-        ],
+Ext
+		.define(
+				'GincoApp.view.SelectConceptWin',
+				{
+					extend : 'Ext.window.Window',
+					alias : 'widget.selectConceptWin',
+					localized : true,
 
-        config: {
-            thesaurusData : null,
-            conceptId : null,
-            getChildren : false,
-            searchOrphans : null,
-            showTree : false,
-            checkstore: null
-        },
+					requires : [ 'Ext.grid.PagingScroller' ],
 
-        viewConfig : {
-            style : { overflow: 'auto', overflowX: 'hidden' }
-        },
+					config : {
+						thesaurusData : null,
+						conceptId : null,
+						getChildren : false,
+						searchOrphans : null,
+						showTree : false,
+						checkstore : null
+					},
 
-        /*Fields prompting values*/
-        xIdentifierColumnLabel : "Identifier",
-        xLexicalValueColumnLabel : "Label",
-        xSelect : "Select",
+					viewConfig : {
+						style : {
+							overflow : 'auto',
+							overflowX : 'hidden'
+						}
+					},
 
-        width : 500,
-        title : 'Sélectionner un concept',
-        titleAlign : 'center',
-        modal : true,
-        conceptReducedStore: null,
+					/* Fields prompting values */
+					xIdentifierColumnLabel : "Identifier",
+					xLexicalValueColumnLabel : "Label",
+					xSelect : "Select",
 
-        initComponent : function() {
-            var me = this;
+					width : 500,
+					title : 'Sélectionner un concept',
+					titleAlign : 'center',
+					modal : true,
+					conceptReducedStore : null,
 
-            me.conceptReducedStore = Ext.create('GincoApp.store.ConceptReducedStore');
-            
-            if (!me.getChildren) {
-            	//Searching all concepts in the thesaurus
-                me.conceptReducedStore.getProxy().extraParams = {
-	                id: me.conceptId,
-	                thesaurusId: me.thesaurusData.id,
-	                searchOrphans: me.searchOrphans
-	            };
-            } else {
-            	//Searching only the children concepts of a concept which id is defined in conceptId variable
-            	me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
-            	me.conceptReducedStore.getProxy().extraParams = {
-	                conceptId: me.conceptId
-	            };
-            	}
-            me.conceptReducedStore.load();
-            me.addEvents('selectBtn');
+					initComponent : function() {
+						var me = this;
 
-            Ext
-                .applyIf(
-                me,
-                {
-                    items : [ {
-                        xtype : 'gridpanel',
-                        title : me.xSelectTermWinTitle,
-                        autoScroll : true,
-                        height : 300,
-                        flex : 1,
-                        store : me.conceptReducedStore,
-                        columns : [
-                            {dataIndex : 'identifier', text : me.xIdentifierColumnLabel},
-                            {dataIndex : 'label', text : me.xLexicalValueColumnLabel, flex: 1}
-                        ],
-                        dockedItems: [ {
-                            xtype : 'toolbar',
-                            dock : 'top',
-                            items : [ {
-                                xtype : 'button',
-                                text : me.xSelect,
-                                formBind : true,
-                                disabled : true,
-                                itemId : 'selectButton',
-                                iconCls : 'icon-save',
-                                handler : function(theButton) {
-                                    var thePanel = theButton.up('gridpanel');
-                                    var record = thePanel.getSelectionModel().getSelection();
+						me.conceptReducedStore = Ext
+								.create('GincoApp.store.ConceptReducedStore');
 
-                                    if(record.length == 1) {
-                                        me.fireEvent('selectBtn', record);
-                                        me.close();
-                                    }
-                                }
-                            }]
-                        } ],
-                        listeners: {
-                        	itemclick : function (view, record, item, index, e) {                        		
-                        		var me = this;
-            					var theButton = me.down('#selectButton');
-            					var win = me.up('selectConceptWin');
-            					var checkAgainstStore = win.checkstore;
-            					if (checkAgainstStore) {
-            						if (checkAgainstStore.findRecord('identifier',record.data.identifier) == null) {
-            							theButton.setDisabled(false);
-            						} else {
-            							theButton.setDisabled(true);
-            						}
-                        		} else {
-            						theButton.setDisabled(false);
-            					}
-                            }
-                         }                        
+						if (!me.getChildren) {
+							// Searching all concepts in the thesaurus
+							me.conceptReducedStore.getProxy().extraParams = {
+								id : me.conceptId,
+								thesaurusId : me.thesaurusData.id,
+								searchOrphans : me.searchOrphans
+							};
+						} else {
+							// Searching only the children concepts of a concept
+							// which id is defined in conceptId variable
+							me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
+							me.conceptReducedStore.getProxy().extraParams = {
+								conceptId : me.conceptId
+							};
+						}
+						me.conceptReducedStore.load();
+						me.addEvents('selectBtn');
 
-                    }]
-                });
+						Ext
+								.applyIf(
+										me,
+										{
+											items : [ {
+												xtype : 'gridpanel',
+												title : me.xSelectTermWinTitle,
+												autoScroll : true,
+												height : 300,
+												flex : 1,
+												store : me.conceptReducedStore,
+												columns : [
+														{
+															dataIndex : 'identifier',
+															text : me.xIdentifierColumnLabel
+														},
+														{
+															dataIndex : 'label',
+															text : me.xLexicalValueColumnLabel,
+															flex : 1
+														} ],
+												dockedItems : [ {
+													xtype : 'toolbar',
+													dock : 'top',
+													items : [ {
+														xtype : 'button',
+														text : me.xSelect,
+														formBind : true,
+														disabled : true,
+														itemId : 'selectButton',
+														iconCls : 'icon-save',
+														handler : function(
+																theButton) {
+															var thePanel = theButton
+																	.up('gridpanel');
+															var record = thePanel
+																	.getSelectionModel()
+																	.getSelection();
 
-            me.callParent(arguments);
-        }
-    });
+															if (record.length == 1) {
+																me
+																		.fireEvent(
+																				'selectBtn',
+																				record);
+																me.close();
+															}
+														}
+													} ]
+												} ],
+												listeners : {
+													itemclick : function(view,
+															record, item,
+															index, e) {
+														var me = this;
+														var theButton = me
+																.down('#selectButton');
+														var win = me
+																.up('selectConceptWin');
+														var checkAgainstStore = win.checkstore;
+														if (checkAgainstStore) {
+															if (checkAgainstStore
+																	.findRecord(
+																			'identifier',
+																			record.data.identifier) == null) {
+																theButton
+																		.setDisabled(false);
+															} else {
+																theButton
+																		.setDisabled(true);
+															}
+														} else {
+															theButton
+																	.setDisabled(false);
+														}
+													}
+												}
+
+											} ]
+										});
+
+						me.callParent(arguments);
+					}
+				});

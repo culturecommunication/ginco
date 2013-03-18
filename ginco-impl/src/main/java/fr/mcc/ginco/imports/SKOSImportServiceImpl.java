@@ -96,7 +96,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	@Inject
 	@Named("skosTermBuilder")
-	private TermBuilder termBuilder;
+	private TermBuilder termBuilder;	
 
 	@Override
 	public Thesaurus importSKOSFile(String fileContent, String fileName,
@@ -119,6 +119,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 			List<Resource> skosConcepts = getSKOSConcepts(model);
 			for (Resource skosConcept : skosConcepts) {
+				//Minimal concept informations
 				ThesaurusConcept concept = conceptBuilder.buildConcept(
 						skosConcept, model, thesaurus);
 				thesaurusConceptDAO.update(concept);
@@ -127,8 +128,18 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 				for (ThesaurusTerm term : terms) {
 					thesaurusTermDAO.update(term);
 				}
-
 			}
+			for (Resource skosConcept : skosConcepts) {
+				//Parent/child and associations
+				ThesaurusConcept concept = conceptBuilder.buildConceptAssociations(skosConcept, model, thesaurus);
+				thesaurusConceptDAO.update(concept);				
+			}
+			
+			for (Resource skosConcept : skosConcepts) {
+				//Root calculation
+				ThesaurusConcept concept = conceptBuilder.buildConceptRoot(skosConcept, model, thesaurus);
+				thesaurusConceptDAO.update(concept);				
+			}			
 
 		} finally {
 			deleteTempFile(fileName);
