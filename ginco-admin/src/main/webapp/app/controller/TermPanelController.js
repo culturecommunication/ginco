@@ -60,11 +60,14 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			aForm.down("#statusCombo").setReadOnly(false);
 			if (aModel.data.status == 1) {
 				//The term isn't attached to any concept and its status is validated
+				//We can create a concept from it
 				createConceptBtn.setDisabled(false);
 			}
 		}
 		
-		if (Ext.isEmpty(aModel.data.conceptId)){
+		if (Ext.isEmpty(aModel.data.conceptId) && aModel.data.status == 2){
+			//The term isn't attached to any concept and its status is rejected
+			//We can delete it
 			deleteBtn.setDisabled(false);
 		}
 		
