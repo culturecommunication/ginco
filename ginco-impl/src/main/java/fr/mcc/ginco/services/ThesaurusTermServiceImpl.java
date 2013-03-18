@@ -92,7 +92,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
             if (!sent.contains(old)) {
                 ThesaurusTerm term = thesaurusTermDAO.getById(old.getIdentifier());
                 term.setConcept(null);
-                thesaurusTermDAO.updateTerm(term);
+                thesaurusTermDAO.update(term);
                 logger.info("Marking Term with ID " + old.getIdentifier() + " as SandBoxed.");
             }
         }
@@ -114,7 +114,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	if (object.getStatus() != ConceptAndTermStatusEnum.VALIDATED.getStatus() && object.getConcept() != null){
     		throw new BusinessException("The term is associated to a concept. The status must be set to validated", "term-selected-must-have-validated-status");
     	}
-    	return thesaurusTermDAO.updateTerm(object);
+    	return thesaurusTermDAO.update(object);
     }
 
     @Override

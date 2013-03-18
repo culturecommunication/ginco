@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 import java.util.List;
 
@@ -62,8 +63,9 @@ public interface IThesaurusArrayService {
 
     /**
      * Update a single Thesaurus Concept Object
+     * @throws BusinessException 
      */
-    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label);    
+    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label) throws BusinessException;    
     
     
     /**

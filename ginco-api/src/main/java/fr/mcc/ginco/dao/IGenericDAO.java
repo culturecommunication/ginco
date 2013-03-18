@@ -96,7 +96,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @param entity
 	 * @return Object
 	 */
-	T update(T entity);
+	T update(T entity) throws BusinessException;
 	
 	/**
 	 * Delete an object of type T

@@ -44,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.dao.INoteDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional
 @Service("noteService")
@@ -81,7 +82,7 @@ public class NoteServiceImpl implements INoteService {
 	 * @see fr.mcc.ginco.services.INoteService#createNote(fr.mcc.ginco.beans.Note)
 	 */
 	@Override
-	public Note createOrUpdateNote(Note note) {
+	public Note createOrUpdateNote(Note note) throws BusinessException {
 		return noteDAO.update(note);
 	}
 	

@@ -298,7 +298,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				.findTermsByConceptId(object.getIdentifier());
 		for (ThesaurusTerm term : terms) {
 			term.setConcept(null);
-			thesaurusTermDAO.updateTerm(term);
+			thesaurusTermDAO.update(term);
 		}
 
 		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(object
@@ -332,7 +332,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			//We always set validated status to the terms that are joined to a concept
 			thesaurusTerm.setStatus(ConceptAndTermStatusEnum.VALIDATED.getStatus());				
 			thesaurusTerm.setConcept(concept);
-			returnTerms.add(thesaurusTermDAO.updateTerm(thesaurusTerm));
+			returnTerms.add(thesaurusTermDAO.update(thesaurusTerm));
 
 		}
 	}

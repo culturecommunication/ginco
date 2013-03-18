@@ -99,24 +99,13 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 			throws BusinessException;
 
 	/**
-	 * Returns a list of ThesaurusTerm that fit to the parameters (lexical value
-	 * + language) in a thesaurus
+	 * Returns a number of similar Thesaurus Terms that fit to the parameter's lexical value
+	 * and language 
 	 * 
-	 * @param lexicalValue
-	 *            , language and Thesaurus Id
-	 * @return List of ThesaurusTerm
+	 * @param ThesaurusTerm
+	 * @return Number of similar terms (based on lexical value + language comparison)
 	 */
-	List<ThesaurusTerm> findTermsByLexicalValueAndLanguage(String lexicalValue,
-			Language lang, String thesaurusId);
-
-	/**
-	 * Update a Thesaurus Term
-	 * 
-	 * @return The updated Thesaurus Term
-	 * @throws BusinessException
-	 */
-	ThesaurusTerm updateTerm(ThesaurusTerm termToUpdate)
-			throws BusinessException;
+	Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) ;
 
 	/**
 	 * Returns a list of Thesaurus Terms filtered by thesaurusId 

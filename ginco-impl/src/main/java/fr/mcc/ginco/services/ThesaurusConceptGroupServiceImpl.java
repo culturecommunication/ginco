@@ -45,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional
 @Service("thesaurusConceptGroupService")
@@ -67,7 +68,7 @@ public class ThesaurusConceptGroupServiceImpl implements IThesaurusConceptGroupS
 	@Override
 	public ThesaurusConceptGroup updateThesaurusConceptGroup(
 			ThesaurusConceptGroup conceptGroup,
-			ThesaurusConceptGroupLabel conceptGroupLabel) {
+			ThesaurusConceptGroupLabel conceptGroupLabel) throws BusinessException {
 		ThesaurusConceptGroup updated = thesaurusConceptGroupDAO.update(conceptGroup);
 		conceptGroupLabel.setConceptGroup(updated);
 		thesaurusConceptGroupLabelService.updateOrCreate(conceptGroupLabel);
