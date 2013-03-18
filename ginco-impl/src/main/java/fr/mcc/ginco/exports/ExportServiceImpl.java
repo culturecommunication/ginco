@@ -223,26 +223,29 @@ public class ExportServiceImpl implements IExportService {
 
             man.save(vocab, SKOSFormatExt.RDFXML, temp.toURI());
 
-            FileInputStream fis = new FileInputStream(temp);
+            if(thesaurus.getCreator() != null) {
+                FileInputStream fis = new FileInputStream(temp);
 
-            String content = IOUtils.toString(fis);
-            fis.close();
-            String org = "\n\t\t<foaf:organization>\n" +
-                    "\t\t\t<foaf:name>NAME</foaf:name>\n" +
-                    "\t\t\t<foaf:homepage>URL</foaf:homepage>\n" +
-                    "\t\t</foaf:organization>";
-            org = org.replaceAll("NAME", thesaurus.getCreator().getName());
-            org = org.replaceAll("URL", thesaurus.getCreator().getHomepage());
+                String content = IOUtils.toString(fis);
+                fis.close();
+                String org = "\n\t\t<foaf:organization>\n" +
+                        "\t\t\t<foaf:name>NAME</foaf:name>\n" +
+                        "\t\t\t<foaf:homepage>URL</foaf:homepage>\n" +
+                        "\t\t</foaf:organization>";
 
-            content = content.replaceAll("_X_CREATOR_", org);
+                org = org.replaceAll("NAME", thesaurus.getCreator().getName());
+                org = org.replaceAll("URL", thesaurus.getCreator().getHomepage());
 
-            BufferedOutputStream bos;
-            FileOutputStream fos = new FileOutputStream(temp);
+                content = content.replaceAll("_X_CREATOR_", org);
 
-            bos = new BufferedOutputStream(fos);
-            bos.write(content.getBytes());
-            bos.flush();
-            fos.close();
+                BufferedOutputStream bos;
+                FileOutputStream fos = new FileOutputStream(temp);
+
+                bos = new BufferedOutputStream(fos);
+                bos.write(content.getBytes());
+                bos.flush();
+                fos.close();
+            }
 
             return temp;
 
