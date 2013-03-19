@@ -49,7 +49,8 @@ Ext
 						getChildren : false,
 						searchOrphans : null,
 						showTree : false,
-						checkstore : null
+						checkstore : null,
+						onlyValidatedConcepts : false
 					},
 
 					viewConfig : {
@@ -73,15 +74,15 @@ Ext
 					initComponent : function() {
 						var me = this;
 
-						me.conceptReducedStore = Ext
-								.create('GincoApp.store.ConceptReducedStore');
+						me.conceptReducedStore = Ext.create('GincoApp.store.ConceptReducedStore');
 
 						if (!me.getChildren) {
 							// Searching all concepts in the thesaurus
 							me.conceptReducedStore.getProxy().extraParams = {
 								id : me.conceptId,
 								thesaurusId : me.thesaurusData.id,
-								searchOrphans : me.searchOrphans
+								searchOrphans : me.searchOrphans,
+								onlyValidatedConcepts: me.onlyValidatedConcepts
 							};
 						} else {
 							// Searching only the children concepts of a concept
@@ -100,7 +101,6 @@ Ext
 										{
 											items : [ {
 												xtype : 'gridpanel',
-												title : me.xSelectTermWinTitle,
 												autoScroll : true,
 												height : 300,
 												flex : 1,

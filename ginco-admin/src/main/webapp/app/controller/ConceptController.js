@@ -65,8 +65,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 		var conceptId = thePanel.conceptId;
 		var model = this.getConceptModelModel();
-		var addAssociationBtn = thePanel.down('#addAssociativeRelationship');
-		var deleteConceptBtn = thePanel.down('#deleteConcept');
 		if (conceptId!='')
 		{
 			theForm.getEl().mask("Chargement");
@@ -89,8 +87,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 					globalTabs.remove(thePanel);
 				}
 			});
-			addAssociationBtn.setDisabled(false);
-			deleteConceptBtn.setDisabled(false);
 		} else {
 			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
 			model = Ext.create('GincoApp.model.ConceptModel');
@@ -111,7 +107,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 				}
 			}
 			theForm.loadRecord(model);
-			addAssociationBtn.setDisabled(true);
 		}
 	},
 	
@@ -243,6 +238,7 @@ Ext.define('GincoApp.controller.ConceptController', {
             conceptId : thePanel.conceptId,
             showTree : false,
             checkstore: theStore,
+            onlyValidatedConcepts: true,
             listeners: {
                 selectBtn: {
                     fn: function(selectedRow) {
@@ -269,6 +265,7 @@ Ext.define('GincoApp.controller.ConceptController', {
             conceptId : thePanel.conceptId,
             showTree : false,
             checkstore: theStore,
+            onlyValidatedConcepts : true,
             listeners: {
                 selectBtn: {
                     fn: function(selectedRow) {
@@ -377,10 +374,15 @@ Ext.define('GincoApp.controller.ConceptController', {
 		noteTab.setDisabled(false);
 		
 		var addAssociationBtn = aForm.down('#addAssociativeRelationship');
-		addAssociationBtn.setDisabled(false);
+		if (aModel.data.status == 1) {
+			//We enable the button for creating associations only if the concept's status is validated
+			addAssociationBtn.setDisabled(false);
+		}
+		
 		
 		var deleteConceptBtn = aForm.down('#deleteConcept');
 		deleteConceptBtn.setDisabled(false);
+		
 	},
 	
 	saveTermFromConceptBtn : function(theButton){

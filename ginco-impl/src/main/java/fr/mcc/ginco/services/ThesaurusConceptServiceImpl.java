@@ -50,7 +50,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -177,9 +176,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getConceptsByThesaurusId(
-			String excludeConceptId, String thesaurusId, Boolean searchOrphans) {
+			String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts) {
 		return thesaurusConceptDAO.getAllConceptsByThesaurusId(
-				excludeConceptId, thesaurusId, searchOrphans);
+				excludeConceptId, thesaurusId, searchOrphans, onlyValidatedConcepts);
 	}
 
 	@Override

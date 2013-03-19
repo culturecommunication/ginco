@@ -402,7 +402,7 @@ Ext
 																				items : [ {
 																					xtype : 'button',
 																					text : me.xAddRelationship,
-																					disabled : false,
+																					disabled : true,
 																					itemId : 'addAssociativeRelationship',
 																					cls : 'addAssociativeRelationship',
 																					iconCls : 'icon-add-associative-relationship'
