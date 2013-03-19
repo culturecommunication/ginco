@@ -42,12 +42,11 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("languagesService")
 public class LanguagesServiceImpl implements ILanguagesService {
 	

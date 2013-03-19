@@ -39,7 +39,7 @@ package fr.mcc.ginco.exceptions;
  * This exception  is thrown when a business exception is encountered
  *
  */
-public class BusinessException extends Exception {
+public class BusinessException extends RuntimeException {
 
 	private String userMessageKey;
 

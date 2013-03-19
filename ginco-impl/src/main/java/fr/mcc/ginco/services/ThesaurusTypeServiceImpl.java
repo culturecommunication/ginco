@@ -43,13 +43,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  *
  */
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusTypeService")
 public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 	    
@@ -71,10 +71,6 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
     @Override
     public ThesaurusType getThesaurusTypeById(Integer id) {
         return thesaurusTypeDAO.getById(id);
-    }
-
-    public IGenericDAO<ThesaurusType, Integer> getThesaurusTypeDAO() {
-		return thesaurusTypeDAO;
-	}
+    }   
 
 }

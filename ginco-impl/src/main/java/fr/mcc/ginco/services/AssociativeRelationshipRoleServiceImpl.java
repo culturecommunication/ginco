@@ -44,7 +44,7 @@ import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional
+@Transactional(readOnly=true,rollbackFor = BusinessException.class)
 @Service("associativeRelationshipRoleService")
 public class AssociativeRelationshipRoleServiceImpl implements IAssociativeRelationshipRoleService {
 

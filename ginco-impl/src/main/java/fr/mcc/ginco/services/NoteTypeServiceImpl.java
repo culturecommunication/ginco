@@ -44,8 +44,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.dao.INoteTypeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("noteTypeService")
 public class NoteTypeServiceImpl implements INoteTypeService {
 	
@@ -72,6 +73,7 @@ public class NoteTypeServiceImpl implements INoteTypeService {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteTypeService#getNoteTypeById(java.lang.String)
 	 */
+	@Override
 	public NoteType getNoteTypeById(String typeId){
 		return noteTypeDAO.getById(typeId);
 	}

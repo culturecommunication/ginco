@@ -47,8 +47,7 @@ import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusTermRoleService;
-
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusTermRoleService")
 public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
 

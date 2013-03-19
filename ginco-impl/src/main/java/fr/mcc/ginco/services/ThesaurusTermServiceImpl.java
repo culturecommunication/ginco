@@ -51,8 +51,7 @@ import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
-
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusTermService")
 public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
@@ -80,7 +79,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     }
 
 
-    @Override
+	@Override
     public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
         return thesaurusTermDAO.findTermsByConceptId(idConcept);
     }
@@ -98,7 +97,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         }
     }
 
-    @Override
+	@Override
     public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException {
         return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
     }
@@ -109,6 +108,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 		return thesaurusTermDAO.countSandboxedValidatedTerms(idThesaurus);
 	}
     
+	@Transactional(readOnly=false)
     @Override
     public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException {
     	if (object.getStatus() != TermStatusEnum.VALIDATED.getStatus() && object.getConcept() != null){
@@ -117,6 +117,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	return thesaurusTermDAO.update(object);
     }
 
+	@Transactional(readOnly=false)
     @Override
     public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException {
         if (object.getConcept() == null && object.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
@@ -126,7 +127,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         }
     }
 
-    @Override
+	@Override
     public List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
         List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
         for (ThesaurusTerm thesaurusTerm : listOfTerms) {

@@ -44,8 +44,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupTypeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusConceptGroupTypeService")
 public class ThesaurusConceptGroupTypeServiceImpl implements IThesaurusConceptGroupTypeService {
 	

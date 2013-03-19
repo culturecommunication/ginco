@@ -50,7 +50,7 @@ import java.util.List;
  * Implementation of the thesaurus array service contains methods relatives to the
  * ThesaurusArray object
  */
-@Transactional
+@Transactional(readOnly=true,rollbackFor = BusinessException.class)
 @Service("thesaurusArrayService")
 public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 
@@ -67,11 +67,13 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
         return thesaurusArrayDAO.getById(id);
     }
 
+	@Transactional(readOnly=true)
     @Override
     public List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId) {
         return thesaurusArrayDAO.getThesaurusArrayListByThesaurusId(thesaurusId);
     }
 
+	@Transactional(readOnly=false)
     @Override
     public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) throws BusinessException {
         ThesaurusArray updated = thesaurusArrayDAO.update(thesaurusArray);
@@ -80,6 +82,7 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
         return updated;
     }    
     
+	@Transactional(readOnly=false)
     @Override
     public ThesaurusArray destroyThesaurusArray(ThesaurusArray thesaurusArray) {
     	return thesaurusArrayDAO.delete(thesaurusArray);    	
@@ -89,11 +92,10 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
     public List<ThesaurusArray> getSubOrdinatedArrays(String thesaurusConceptId) {
         return thesaurusArrayDAO.getConceptSuperOrdinateArrays(thesaurusConceptId);
     }
-
+	
     @Override
     public List<ThesaurusArray> getArraysWithoutParentConcept(String thesaurusId) {
         return thesaurusArrayDAO.getArraysWithoutSuperordinatedConcept(thesaurusId);
     }
-
 
 }

@@ -45,12 +45,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 
 /**
  *
  */
-@Transactional
+@Transactional(readOnly=true,rollbackFor = BusinessException.class)
 @Service("thesaurusFormatService")
 public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
 	

@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("nodeLabelService")
 public class NodeLabelServiceImpl implements INodeLabelService {
 	
@@ -57,17 +57,18 @@ public class NodeLabelServiceImpl implements INodeLabelService {
     public NodeLabel getById(Integer id) {
         return nodeLabelDAO.getById(id);
     }
-
+	
     @Override
     public NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId) {
         return nodeLabelDAO.getByThesaurusArrayAndLanguage(thesaurusArrayId);
     }
-    
+
     @Override
     public NodeLabel getByThesaurusArray(String thesaurusArrayId) {
         return nodeLabelDAO.getByThesaurusArray(thesaurusArrayId);
     }
 
+	@Transactional(readOnly=false)
     @Override
     public NodeLabel updateOrCreate(NodeLabel nodeLabel) throws BusinessException {
         return nodeLabelDAO.update(nodeLabel);

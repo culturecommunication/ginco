@@ -43,6 +43,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.utils.LanguageComparator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -56,7 +57,7 @@ import java.util.Set;
  * Implementation of the thesaurus service Contains methods relatives to the
  * Thesaurus object
  */
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusService")
 public class ThesaurusServiceImpl implements IThesaurusService {
 
@@ -76,7 +77,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 * 
 	 * @see fr.mcc.ginco.IThesaurusService#getThesaurusById(java.lang.String)
 	 */
-	@Override
+    @Override
 	public Thesaurus getThesaurusById(String id) {
 		return thesaurusDAO.getById(id);
 	}
@@ -98,6 +99,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 * fr.mcc.ginco.IThesaurusService#updateThesaurus(fr.mcc.ginco.beans.Thesaurus
 	 * , fr.mcc.ginco.beans.users.IUser)
 	 */
+	@Transactional(readOnly=false)
 	@Override
 	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
 		return thesaurusDAO.update(object);
@@ -124,6 +126,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 		return orderedLangs;
 	}
 
+	@Transactional(readOnly=false)
     @Override
     public Thesaurus destroyThesaurus(Thesaurus object) throws BusinessException {
         return thesaurusDAO.delete(object);

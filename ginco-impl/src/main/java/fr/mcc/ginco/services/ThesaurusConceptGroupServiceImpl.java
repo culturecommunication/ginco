@@ -47,40 +47,45 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusConceptGroupService")
-public class ThesaurusConceptGroupServiceImpl implements IThesaurusConceptGroupService {
-	
+public class ThesaurusConceptGroupServiceImpl implements
+		IThesaurusConceptGroupService {
+
 	@Inject
 	@Named("thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
-	
-	 @Inject
-	    @Named("thesaurusConceptGroupLabelService")
-	    private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
 
+	@Inject
+	@Named("thesaurusConceptGroupLabelService")
+	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
 
 	@Override
 	public ThesaurusConceptGroup getConceptGroupById(String conceptGroupId) {
 		return thesaurusConceptGroupDAO.getById(conceptGroupId);
 	}
 
+	@Transactional(readOnly=false)
 	@Override
 	public ThesaurusConceptGroup updateThesaurusConceptGroup(
 			ThesaurusConceptGroup conceptGroup,
-			ThesaurusConceptGroupLabel conceptGroupLabel) throws BusinessException {
-		ThesaurusConceptGroup updated = thesaurusConceptGroupDAO.update(conceptGroup);
+			ThesaurusConceptGroupLabel conceptGroupLabel)
+			throws BusinessException {
+		ThesaurusConceptGroup updated = thesaurusConceptGroupDAO
+				.update(conceptGroup);
 		conceptGroupLabel.setConceptGroup(updated);
 		thesaurusConceptGroupLabelService.updateOrCreate(conceptGroupLabel);
-        return updated;
+		return updated;
 	}
 
 	@Override
 	public List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(
 			String thesaurusId) {
-		return thesaurusConceptGroupDAO.findThesaurusConceptGroupsByThesaurusId(thesaurusId);
+		return thesaurusConceptGroupDAO
+				.findThesaurusConceptGroupsByThesaurusId(thesaurusId);
 	}
 
+	@Transactional(readOnly=false)
 	@Override
 	public ThesaurusConceptGroup destroyThesaurusConceptGroup(
 			ThesaurusConceptGroup object) {

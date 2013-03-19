@@ -46,7 +46,7 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("noteService")
 public class NoteServiceImpl implements INoteService {
 	
@@ -65,6 +65,7 @@ public class NoteServiceImpl implements INoteService {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#getTermNotePaginatedList(java.lang.String)
 	 */
+	@Transactional(readOnly=true)
 	@Override
 	public List<Note> getTermNotePaginatedList(String termId, Integer startIndex, Integer limit) {
 		return noteDAO.findTermPaginatedNotes(termId, startIndex, limit);
@@ -73,6 +74,7 @@ public class NoteServiceImpl implements INoteService {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#getNoteById(java.lang.String)
 	 */
+	@Transactional(readOnly=true)
 	@Override
 	public Note getNoteById(String id) {
 		return noteDAO.getById(id);
@@ -81,6 +83,7 @@ public class NoteServiceImpl implements INoteService {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#createNote(fr.mcc.ginco.beans.Note)
 	 */
+	@Transactional(readOnly=false)
 	@Override
 	public Note createOrUpdateNote(Note note) throws BusinessException {
 		return noteDAO.update(note);
@@ -89,6 +92,7 @@ public class NoteServiceImpl implements INoteService {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#deleteNote(fr.mcc.ginco.beans.Note)
 	 */
+	@Transactional(readOnly=false)
 	@Override
 	public Note deleteNote(Note note) {
 		return noteDAO.delete(note);
