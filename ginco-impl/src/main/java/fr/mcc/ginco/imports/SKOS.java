@@ -39,4 +39,8 @@ public class SKOS {
 	public static final Property NARROWER = m.createProperty(uri + "narrower");
 	public static final Property RELATED = m.createProperty(uri + "related");
 
+    public static final Resource COLLECTION = m.createResource(uri
+            + "Collection");
+    public static final Property MEMBER = m.createProperty(uri + "member");
+    public static final Property IN_SCHEME = m.createProperty(uri + "inScheme");
 }
