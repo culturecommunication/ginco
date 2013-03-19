@@ -50,6 +50,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -279,13 +280,45 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
 			List<ThesaurusTerm> terms) throws BusinessException {
+
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
-			if (!object.getAssociativeRelationshipLeft().isEmpty() || !object.getAssociativeRelationshipRight().isEmpty() || !object.getParentConcepts().isEmpty() || hasChildren(object.getIdentifier())) {
-				throw new BusinessException("A concept must not have a status candidate when it still have relations",
+			// We can set status = candidate only if concept has not relation
+			// (both hierarchical or associative)
+			if (!object.getAssociativeRelationshipLeft().isEmpty()
+					|| !object.getAssociativeRelationshipRight().isEmpty()
+					|| !object.getParentConcepts().isEmpty()
+					|| hasChildren(object.getIdentifier())) {
+				throw new BusinessException(
+						"A concept must not have a status candidate when it still have relations",
 						"concept-status-candidate-relation");
 			}
-			
 		}
+
+		if (object.getStatus() == ConceptStatusEnum.VALIDATED.getStatus()) {
+			// Test if parent concepts are validated
+			Set<ThesaurusConcept> parents = object.getParentConcepts();
+			for (ThesaurusConcept parent : parents) {
+				if (parent.getStatus() != ConceptStatusEnum.VALIDATED
+						.getStatus()) {
+					throw new BusinessException(
+							"A concept cannot have a parent which status is not validated",
+							"concept-parent-not-validated");
+				}
+			}
+
+			// Test if this concept is associated to validated concepts only
+			List<ThesaurusConcept> associatedConcepts = getAssociatedConcepts(object
+					.getIdentifier());
+			for (ThesaurusConcept associatedConcept : associatedConcepts) {
+				if (associatedConcept.getStatus() != ConceptStatusEnum.VALIDATED
+						.getStatus()) {
+					throw new BusinessException(
+							"A concept must associate a validated concept",
+							"concept-associate-validated-concept");
+				}
+			}
+		}
+
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
 		return concept;
