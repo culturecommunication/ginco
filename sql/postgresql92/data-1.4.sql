@@ -10,3 +10,9 @@ INSERT INTO languages_iso639(
             '');            
             
 UPDATE thesaurus_type SET label='Thésaurus' WHERE label='Thesaurus';
+
+UPDATE thesaurus_term SET lang='fr-FR'  WHERE lang='fra';
+UPDATE thesaurus_languages SET iso639_id='fr-FR'  WHERE iso639_id='fra';
+UPDATE node_label SET lang='fr-FR'  WHERE lang='fra';
+UPDATE note SET lang='fr-FR'  WHERE lang='fra';
+DELETE FROM languages_iso639 WHERE id='fra';

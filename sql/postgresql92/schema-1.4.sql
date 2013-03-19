@@ -167,3 +167,15 @@ CREATE INDEX idx_languages_iso639_part1
 -- Constraint to define unique term = lexicalvalue + thesaurusid + lang
 ALTER TABLE thesaurus_term
   ADD CONSTRAINT chk_term_uniq UNIQUE(lexicalvalue, thesaurusid, lang);
+  
+ALTER TABLE thesaurus_term ALTER lang TYPE character(5);
+ALTER TABLE node_label ALTER lang TYPE character(5);
+
+ALTER TABLE node_label
+ ADD CONSTRAINT fk_node_label_languages_iso639 FOREIGN KEY (lang)
+      REFERENCES languages_iso639 (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+      
+ALTER TABLE concept_group_label ALTER lang TYPE character(5);
+
+ALTER TABLE note ALTER lang TYPE character(5);
