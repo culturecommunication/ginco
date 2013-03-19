@@ -39,25 +39,23 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.dao.hibernate.NodeLabelDAO;
 import org.dbunit.Assertion;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.dao.hibernate.NodeLabelDAO;
 import fr.mcc.ginco.dao.hibernate.ThesaurusArrayDAO;
 import fr.mcc.ginco.tests.BaseDAOTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 public class ThesaurusArrayDAOTest extends BaseDAOTest {
 
@@ -88,12 +86,11 @@ public class ThesaurusArrayDAOTest extends BaseDAOTest {
 
         ThesaurusArray array = thesaurusArrayDAO.getById("1");
 
-        NodeLabel nodeLabel = nodeLabelDAO.getByThesaurusArray("1");
-        nodeLabelDAO.delete(nodeLabel);
 		thesaurusArrayDAO.delete(array);
-
 		DataSource dataSource = SessionFactoryUtils.getDataSource(thesaurusArrayDAO.getSessionFactory());
-		Connection con = DataSourceUtils.getConnection(dataSource);
+		Connection con = DataSourceUtils.getConnection(dataSource);		
+		getSessionFactory().getCurrentSession().flush();
+		
 		IDatabaseConnection dbUnitCon = new DatabaseConnection(con);
 		IDataSet databaseDataSet = dbUnitCon.createDataSet();
 
@@ -104,6 +101,9 @@ public class ThesaurusArrayDAOTest extends BaseDAOTest {
 		Assertion.assertEquals(expectedTable, databaseTable);
 
 	}
+	
+
+
 
 
     @Test
