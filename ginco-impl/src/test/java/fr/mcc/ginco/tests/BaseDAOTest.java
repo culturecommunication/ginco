@@ -97,6 +97,7 @@ public abstract class BaseDAOTest extends AbstractTransactionalJUnit4SpringConte
 	}
 
 
+	@After
 	public void handleCleanOperation() throws Exception {
 		// init db
 		Connection jdbcConnection = SessionFactoryUtils.getDataSource(

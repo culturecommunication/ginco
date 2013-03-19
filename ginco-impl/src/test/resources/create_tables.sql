@@ -177,11 +177,13 @@ ALTER TABLE associative_relationship
    
 ALTER TABLE associative_relationship
       ADD FOREIGN KEY (concept1)      
-      REFERENCES thesaurus_concept (identifier);
+      REFERENCES thesaurus_concept (identifier)
+      ON UPDATE NO ACTION ON DELETE CASCADE;
       
 ALTER TABLE associative_relationship
       ADD FOREIGN KEY (concept2)
-      REFERENCES thesaurus_concept (identifier);
+      REFERENCES thesaurus_concept (identifier)
+      ON UPDATE NO ACTION ON DELETE CASCADE;
       
       
 CREATE TABLE thesaurus_array
