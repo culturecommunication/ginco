@@ -51,6 +51,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
@@ -333,7 +334,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object)
 			throws BusinessException {
-		/*
 		List<ThesaurusTerm> terms = thesaurusTermDAO
 				.findTermsByConceptId(object.getIdentifier());
 		for (ThesaurusTerm term : terms) {
@@ -359,7 +359,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				.getConceptSuperOrdinateArrays(object.getIdentifier());
 		for (ThesaurusArray array : arrays) {
 			thesaurusArrayDAO.delete(array);
-		}*/
+		}
 
 		return thesaurusConceptDAO.delete(object);
 	}

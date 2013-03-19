@@ -37,6 +37,7 @@ package fr.mcc.ginco.services;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 import org.springframework.stereotype.Service;
@@ -76,6 +77,16 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 	@Transactional(readOnly=false)
     @Override
     public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) throws BusinessException {
+
+		if (thesaurusArray.getSuperOrdinateConcept() != null) {
+			if (thesaurusArray.getSuperOrdinateConcept().getStatus() == ConceptStatusEnum.CANDIDATE
+					.getStatus()) {
+				throw new BusinessException(
+						"A candidate concept can't be a parent for a concept array",
+						"candidate-not-parent-of-concept-array");
+			}
+		}
+
         ThesaurusArray updated = thesaurusArrayDAO.update(thesaurusArray);
         nodeLabel.setThesaurusArray(updated);
         nodeLabelService.updateOrCreate(nodeLabel);

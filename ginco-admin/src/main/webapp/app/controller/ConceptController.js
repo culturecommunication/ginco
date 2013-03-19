@@ -373,16 +373,19 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
 		
-		var addAssociationBtn = aForm.down('#addAssociativeRelationship');
 		if (aModel.data.status == 1) {
 			//We enable the button for creating associations only if the concept's status is validated
+			var addAssociationBtn = aForm.down('#addAssociativeRelationship');
 			addAssociationBtn.setDisabled(false);
 		}
 		
-		
 		var deleteConceptBtn = aForm.down('#deleteConcept');
-		deleteConceptBtn.setDisabled(false);
-		
+		if (aModel.data.status == 0){
+			//The concept has status = candidate, so we can delete it
+			deleteConceptBtn.setDisabled(false);
+		} else {
+			deleteConceptBtn.setDisabled(true);
+		}
 	},
 	
 	saveTermFromConceptBtn : function(theButton){
