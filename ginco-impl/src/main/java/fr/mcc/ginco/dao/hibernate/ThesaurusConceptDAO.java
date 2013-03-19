@@ -226,6 +226,7 @@ public class ThesaurusConceptDAO extends
     }
     
     private void onlyValidatedConcepts(Criteria criteria, Boolean onlyValidatedConcepts) {
+    	
         if(onlyValidatedConcepts == true) {
             criteria.add(Restrictions.eq("status", ConceptStatusEnum.VALIDATED.getStatus()));
         }
