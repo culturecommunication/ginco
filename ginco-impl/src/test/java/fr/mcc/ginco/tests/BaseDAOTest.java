@@ -58,14 +58,19 @@ import org.junit.runner.RunWith;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
+import org.springframework.test.context.transaction.BeforeTransaction;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:applicationContext.xml",
         "classpath:spring/applicationContext-*.xml"
 })
+@TransactionConfiguration(defaultRollback=false)
 public abstract class BaseDAOTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 	@Inject
@@ -74,6 +79,7 @@ public abstract class BaseDAOTest extends AbstractTransactionalJUnit4SpringConte
 
 	@Before
 	public void handleSetUpOperation() throws Exception {
+
 		// init db
 		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
 				gincoSessionFactory).getConnection();
@@ -90,7 +96,7 @@ public abstract class BaseDAOTest extends AbstractTransactionalJUnit4SpringConte
 		}
 	}
 
-	@After
+
 	public void handleCleanOperation() throws Exception {
 		// init db
 		Connection jdbcConnection = SessionFactoryUtils.getDataSource(

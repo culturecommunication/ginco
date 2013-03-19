@@ -39,11 +39,14 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.dao.hibernate.NodeLabelDAO;
 import org.dbunit.Assertion;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,15 +56,20 @@ import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.hibernate.ThesaurusArrayDAO;
 import fr.mcc.ginco.tests.BaseDAOTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 public class ThesaurusArrayDAOTest extends BaseDAOTest {
 
 	private ThesaurusArrayDAO thesaurusArrayDAO = new ThesaurusArrayDAO();
+    private NodeLabelDAO nodeLabelDAO = new NodeLabelDAO();
+
 
 	@Before
 	public void handleSetUpOperation() throws Exception {
 		super.handleSetUpOperation();
 		thesaurusArrayDAO.setSessionFactory(getSessionFactory());
+        nodeLabelDAO.setSessionFactory(getSessionFactory());
 	}
 	
 	@Test
@@ -71,36 +79,49 @@ public class ThesaurusArrayDAOTest extends BaseDAOTest {
 		Assert.assertEquals(2, arrays.size());
 	}
 	
-	@Test
-	public void testGetConceptSuperOrdinateArrays(){
-		List<ThesaurusArray> arrays = thesaurusArrayDAO
-				.getConceptSuperOrdinateArrays("http://www.culturecommunication.gouv.fr/co1");
-		Assert.assertEquals(1, arrays.size());
 
-	}	
 	
 	@Test
-	public void testDelete() throws Exception{
-		ThesaurusArray array = thesaurusArrayDAO.getById("1");
-		thesaurusArrayDAO.delete(array);	
-		// compare data set
-		IDataSet expectedDataSet = getDataset("/thesaurusarray_afterdelete.xml");
-		
+    public void testDelete() throws Exception{
+        // compare data set
+        IDataSet expectedDataSet = getDataset("/thesaurusarray_afterdelete.xml");
+
+        ThesaurusArray array = thesaurusArrayDAO.getById("1");
+
+        NodeLabel nodeLabel = nodeLabelDAO.getByThesaurusArray("1");
+        nodeLabelDAO.delete(nodeLabel);
+		thesaurusArrayDAO.delete(array);
+
 		DataSource dataSource = SessionFactoryUtils.getDataSource(thesaurusArrayDAO.getSessionFactory());
 		Connection con = DataSourceUtils.getConnection(dataSource);
 		IDatabaseConnection dbUnitCon = new DatabaseConnection(con);
 		IDataSet databaseDataSet = dbUnitCon.createDataSet();
-		ITable databaseTable =databaseDataSet.getTable("thesaurus_array");
-		DataSourceUtils.releaseConnection(con, dataSource);
-		
+
 		// compare data table
 		ITable expectedTable = expectedDataSet.getTable("thesaurus_array");
-		//ITable databaseTable = databaseDataSet.getTable("thesaurus_array");
-		//Assertion.assertEquals(expectedTable, databaseTable);
+        ITable databaseTable = databaseDataSet.getTable("thesaurus_array");
 
-	}	
-	
-	@Override
+		Assertion.assertEquals(expectedTable, databaseTable);
+
+	}
+
+
+    @Test
+    public void testGetConceptSuperOrdinateArrays(){
+        List<ThesaurusArray> arrays = thesaurusArrayDAO
+                .getConceptSuperOrdinateArrays("http://www.culturecommunication.gouv.fr/co1");
+        Assert.assertEquals(1, arrays.size());
+
+    }
+    @Test
+    public void testGet(){
+        ThesaurusArray array = thesaurusArrayDAO.getById("1");
+
+        Assert.assertNotNull(array);
+
+    }
+
+    @Override
 	public String getXmlDataFileInit() {
 		return "/thesaurusarray_init.xml";
 	}
