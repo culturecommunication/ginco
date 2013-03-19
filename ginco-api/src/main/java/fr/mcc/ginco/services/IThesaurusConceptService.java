@@ -151,9 +151,10 @@ public interface IThesaurusConceptService {
      * @param thesaurusId id of thesaurus.
      * @param searchOrphans indicates if concepts with topConcept==false should be
      *                      included in result. Could be null if doesn't matters.
+     * @param onlyValidatedConcepts indicates if returned concepts will be filtered on status = VALIDATED.
      * @return list of objects.
      */
-    List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans);
+    List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
 
     /**
      * Indicates whether concept has children.

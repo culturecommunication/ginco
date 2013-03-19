@@ -47,6 +47,7 @@ import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
@@ -139,13 +140,14 @@ public class ThesaurusConceptDAO extends
     }
 
     @Override
-    public List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans) {
+    public List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts) {
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusConcept.class, "tc");
 
         selectThesaurus(criteria, thesaurusId);
         selectOrphans(criteria, searchOrphans);
         excludeConcept(criteria, excludeConceptId);
+        onlyValidatedConcepts(criteria, onlyValidatedConcepts);
 
         return criteria.list();
     }
@@ -220,6 +222,12 @@ public class ThesaurusConceptDAO extends
         if(excludeId != null && !excludeId.isEmpty()) {
             criteria.add(Restrictions.not
                     (Restrictions.eq("tc.identifier", excludeId)));
+        }
+    }
+    
+    private void onlyValidatedConcepts(Criteria criteria, Boolean onlyValidatedConcepts) {
+        if(onlyValidatedConcepts == true) {
+            criteria.add(Restrictions.eq("status", ConceptStatusEnum.VALIDATED.getStatus()));
         }
     }
 

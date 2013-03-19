@@ -199,20 +199,26 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 
 		List<ThesaurusConcept> list = thesaurusConceptDAO
-				.getAllConceptsByThesaurusId(null, thesaurusId, null);
+				.getAllConceptsByThesaurusId(null, thesaurusId, null, null);
 		Assert.assertEquals(5, list.size());
 
 		List<ThesaurusConcept> listExclude = thesaurusConceptDAO
 				.getAllConceptsByThesaurusId(
 						"http://www.culturecommunication.gouv.fr/co1",
-						thesaurusId, null);
+						thesaurusId, null, null);
 		Assert.assertEquals(4, listExclude.size());
 
 		List<ThesaurusConcept> listExcludeTopTerm = thesaurusConceptDAO
 				.getAllConceptsByThesaurusId(
 						"http://www.culturecommunication.gouv.fr/co1",
-						thesaurusId, false);
+						thesaurusId, false, null);
 		Assert.assertEquals(1, listExcludeTopTerm.size());
+		
+		List<ThesaurusConcept> listOnlyValidated = thesaurusConceptDAO
+				.getAllConceptsByThesaurusId(
+						"http://www.culturecommunication.gouv.fr/co5",
+						thesaurusId, false, true);
+		Assert.assertEquals(1, listOnlyValidated.size());
 	}
 
 	/*

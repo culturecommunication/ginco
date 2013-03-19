@@ -194,7 +194,8 @@ public class ThesaurusConceptRestService {
     public List<ThesaurusConceptReducedView> getConceptsByThesaurusId(
             @QueryParam("id") String conceptId,
             @QueryParam("thesaurusId") String thesaurusId,
-            @QueryParam("searchOrphans") @Nullable String searchOrphans)
+            @QueryParam("searchOrphans") @Nullable String searchOrphans,
+            @QueryParam("onlyValidatedConcepts") @Nullable Boolean onlyValidatedConcepts)
             throws BusinessException {
 
         Boolean searchOrphanParam;
@@ -206,10 +207,15 @@ public class ThesaurusConceptRestService {
         } else {
             searchOrphanParam = Boolean.parseBoolean(searchOrphans);
         }
+        
+        if (onlyValidatedConcepts == null) {
+        	//By default, if the value is not set, we return all concepts
+        	onlyValidatedConcepts = false;
+        }
 
         return thesaurusConceptViewConverter
                 .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId,
-                        searchOrphanParam));
+                        searchOrphanParam, onlyValidatedConcepts));
     }
     
     @GET
