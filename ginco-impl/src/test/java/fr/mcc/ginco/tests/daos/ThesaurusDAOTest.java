@@ -107,7 +107,8 @@ public class ThesaurusDAOTest extends BaseDAOTest {
     public final void testUpdateThesaurus() throws Exception{
         Thesaurus th = new Thesaurus();
         th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
-        th.setTitle("title");     
+        th.setTitle("title"); 
+        th.setDefaultTopConcept(false);
         Thesaurus updatedThesaurus = thesaurusDAO.makePersistent(th);
         Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);   
         
@@ -119,6 +120,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         newThesaurus.setTitle("test");
         newThesaurus.setCreator(null);
         newThesaurus.setIdentifier(generatorService.generate());
+        newThesaurus.setDefaultTopConcept(false);
         Thesaurus updatedThesaurus = thesaurusDAO.update(newThesaurus);
         Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);
     }   
@@ -131,6 +133,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         newThesaurus.setTitle("test");
         newThesaurus.setCreator(thOrg);  
         newThesaurus.setIdentifier(generatorService.generate());
+        newThesaurus.setDefaultTopConcept(false);
         Thesaurus updatedThesaurus = thesaurusDAO.update(newThesaurus);
         Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());
     }   
@@ -142,6 +145,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
         th.setTitle("title");
         th.setCreator(null);
+        th.setDefaultTopConcept(false);
         Thesaurus updatedThesaurus = thesaurusDAO.update(th);
        // Assert.assertEquals("Error while getting Thesaurus List!", expectedThesaurusListSize, actualThesaurusListSize);
         Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);     	
@@ -153,6 +157,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         Thesaurus th = new Thesaurus();
         th.setIdentifier("http://www.culturecommunication.gouv.fr/thesaurus2");
         th.setTitle("title");
+        th.setDefaultTopConcept(false);
         ThesaurusOrganization thOrg = new ThesaurusOrganization();
         thOrg.setName("Un auteur");
         th.setCreator(thOrg);

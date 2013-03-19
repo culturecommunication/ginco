@@ -15,10 +15,15 @@ DROP TABLE IF EXISTS associative_relationship_role;
 DROP TABLE IF EXISTS thesaurus_array;
 DROP TABLE IF EXISTS node_label;
 DROP TABLE IF EXISTS thesaurus_array_concept;
+DROP TABLE IF EXISTS revinfo;
+DROP TABLE IF EXISTS revinfoentitytypes;
+DROP TABLE IF EXISTS thesaurus_aud;
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
 DROP SEQUENCE IF EXISTS node_label_id_seq;
+DROP SEQUENCE IF EXISTS revinfo_identifier_seq;
+DROP SEQUENCE IF EXISTS revinfoentitytypes_identifier_seq;
 
 
 CREATE TABLE thesaurus
@@ -147,19 +152,23 @@ ALTER TABLE thesaurus_concept
     
 ALTER TABLE hierarchical_relationship
    ADD FOREIGN KEY (childconceptid)
-   REFERENCES thesaurus_concept (identifier);
+   REFERENCES thesaurus_concept (identifier)
+    ON UPDATE NO ACTION ON DELETE CASCADE;
    
 ALTER TABLE hierarchical_relationship
    ADD FOREIGN KEY (parentconceptid)
-   REFERENCES thesaurus_concept (identifier);
+   REFERENCES thesaurus_concept (identifier)
+   ON UPDATE NO ACTION ON DELETE CASCADE;;
 
 ALTER TABLE top_relationship
    ADD FOREIGN KEY (childconceptid)
-   REFERENCES thesaurus_concept (identifier);
+   REFERENCES thesaurus_concept (identifier)
+   ON UPDATE NO ACTION ON DELETE CASCADE;
       
 ALTER TABLE top_relationship
    ADD FOREIGN KEY (rootconceptid)
-   REFERENCES thesaurus_concept (identifier);
+   REFERENCES thesaurus_concept (identifier)
+   ON UPDATE NO ACTION ON DELETE CASCADE;
    
 ALTER TABLE associative_relationship
       ADD FOREIGN KEY (role)
@@ -187,9 +196,11 @@ CREATE TABLE thesaurus_array
 ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (superordinateconceptid)
       REFERENCES thesaurus_concept (identifier);
+      
 ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (thesaurusid)
-      REFERENCES thesaurus (identifier); 
+      REFERENCES thesaurus (identifier)
+      ON UPDATE NO ACTION ON DELETE CASCADE;
 
 CREATE TABLE node_label
 (
@@ -204,7 +215,8 @@ CREATE TABLE node_label
 
 ALTER TABLE node_label
       ADD FOREIGN KEY (thesaurusarrayid)
-      REFERENCES thesaurus_array (identifier);
+      REFERENCES thesaurus_array (identifier)
+        ON UPDATE NO ACTION ON DELETE CASCADE;
     
 CREATE SEQUENCE node_label_id_seq START WITH 1  INCREMENT BY 1;
 
@@ -222,3 +234,40 @@ ALTER TABLE thesaurus_array_concept
 ALTER TABLE thesaurus_array_concept
       ADD FOREIGN KEY (conceptid)
       REFERENCES thesaurus_concept (identifier); 
+      
+CREATE SEQUENCE revinfo_identifier_seq  START WITH 1  INCREMENT BY 1 ;
+CREATE SEQUENCE revinfoentitytypes_identifier_seq START WITH 1  INCREMENT BY 1 ; 
+
+
+CREATE TABLE revinfo (
+    rev integer NOT NULL,
+    revtstmp bigint,
+    username character varying(255)
+);
+
+CREATE TABLE revinfoentitytypes (
+    id integer NOT NULL,
+    entityclassname character varying(255),
+    revision integer
+);
+
+CREATE TABLE thesaurus_aud (
+    identifier character varying(255) NOT NULL,
+    rev integer NOT NULL,
+    revtype smallint,
+    contributor character varying(255),
+    coverage character varying(255),
+    date text,
+    description character varying(255),
+    publisher character varying(255),
+    relation character varying(255),
+    rights character varying(255),
+    source character varying(255),
+    subject character varying(255),
+    title character varying(255),
+    created text,
+    defaulttopconcept boolean,
+    format integer,
+    type integer,
+    creator integer
+);
