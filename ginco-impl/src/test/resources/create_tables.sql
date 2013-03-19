@@ -148,7 +148,8 @@ ALTER TABLE thesaurus_term
 
 ALTER TABLE thesaurus_concept
     ADD FOREIGN KEY (thesaurusid)
-    REFERENCES thesaurus (identifier);
+    REFERENCES thesaurus (identifier)
+    ON UPDATE NO ACTION ON DELETE CASCADE;
     
 ALTER TABLE hierarchical_relationship
    ADD FOREIGN KEY (childconceptid)
@@ -195,7 +196,9 @@ CREATE TABLE thesaurus_array
 
 ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (superordinateconceptid)
-      REFERENCES thesaurus_concept (identifier);
+      REFERENCES thesaurus_concept (identifier)
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
       
 ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (thesaurusid)
@@ -216,7 +219,7 @@ CREATE TABLE node_label
 ALTER TABLE node_label
       ADD FOREIGN KEY (thesaurusarrayid)
       REFERENCES thesaurus_array (identifier)
-        ON UPDATE NO ACTION ON DELETE CASCADE;
+      ON UPDATE NO ACTION ON DELETE CASCADE;
     
 CREATE SEQUENCE node_label_id_seq START WITH 1  INCREMENT BY 1;
 
@@ -229,11 +232,13 @@ CREATE TABLE thesaurus_array_concept
 
 ALTER TABLE thesaurus_array_concept
       ADD FOREIGN KEY (thesaurusarrayid)
-      REFERENCES thesaurus_array (identifier); 
+      REFERENCES thesaurus_array (identifier)
+       ON UPDATE NO ACTION ON DELETE CASCADE; 
       
 ALTER TABLE thesaurus_array_concept
       ADD FOREIGN KEY (conceptid)
-      REFERENCES thesaurus_concept (identifier); 
+      REFERENCES thesaurus_concept (identifier)
+      ON UPDATE NO ACTION ON DELETE CASCADE; 
       
 CREATE SEQUENCE revinfo_identifier_seq  START WITH 1  INCREMENT BY 1 ;
 CREATE SEQUENCE revinfoentitytypes_identifier_seq START WITH 1  INCREMENT BY 1 ; 
