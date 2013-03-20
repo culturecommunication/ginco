@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -58,6 +60,10 @@ public class ThesaurusTypeDAO extends GenericHibernateDAO<ThesaurusType, Integer
 		 Criteria criteria = getCurrentSession().createCriteria(
 	                ThesaurusType.class);
 	       criteria.add(Restrictions.eq("label", label));
-		return (ThesaurusType)criteria.list().get(0);
+	    List<ThesaurusType>  foundTypes = criteria.list();
+	    if (foundTypes.size()>0) {
+	    	return foundTypes.get(0);
+	    }
+	    return null;
 	}
 }

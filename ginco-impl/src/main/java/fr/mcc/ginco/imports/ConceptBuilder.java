@@ -71,8 +71,8 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	@Inject
 	@Named("associativeRelationshipRoleService")
-	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;	
-	
+	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
+
 	public static Map<String, ThesaurusConcept> builtConcepts = new HashMap<String, ThesaurusConcept>();
 
 	public ConceptBuilder() {
@@ -89,9 +89,9 @@ public class ConceptBuilder extends AbstractBuilder {
 		concept.setModified(thesaurus.getDate());
 		concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
 		builtConcepts.put(skosConcept.getURI(), concept);
-		
-		//Notes
-		
+
+		// Notes
+
 		return concept;
 	}
 
@@ -117,29 +117,43 @@ public class ConceptBuilder extends AbstractBuilder {
 			Resource relatedConceptRes = stmt.getObject().asResource();
 			ThesaurusConcept relatedConcept = builtConcepts
 					.get(relatedConceptRes.getURI());
-			AssociativeRelationship relationshipLeft = new AssociativeRelationship();
-			AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
-			relationshipId.setConcept1(concept.getIdentifier());
-			relationshipId.setConcept2(relatedConcept.getIdentifier());
-			relationshipLeft.setIdentifier(relationshipId);
-			relationshipLeft.setConceptLeft(concept);
-			relationshipLeft.setConceptRight(relatedConcept);
-			relationshipLeft
-					.setRelationshipRole(associativeRelationshipRoleService
-							.getDefaultAssociativeRelationshipRoleRole());
-			relationshipsLeft.add(relationshipLeft);
+		
+			boolean alreadyAssociatedLeft = false ;
+			if (relatedConcept.getAssociativeRelationshipLeft() != null) {
+				Set<AssociativeRelationship> alreadyExistingAssociations = relatedConcept.getAssociativeRelationshipLeft();
+				for(AssociativeRelationship relation:alreadyExistingAssociations) {
+					if (relation.getConceptLeft().equals(concept) || relation.getConceptRight().equals(concept)) {
+						alreadyAssociatedLeft = true;
+					}
+				}
+			}
+
+			if (!alreadyAssociatedLeft) {
+				AssociativeRelationship relationshipLeft = new AssociativeRelationship();
+				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
+				relationshipId.setConcept1(concept.getIdentifier());
+				relationshipId.setConcept2(relatedConcept.getIdentifier());
+				relationshipLeft.setIdentifier(relationshipId);
+				relationshipLeft.setConceptLeft(concept);
+				relationshipLeft.setConceptRight(relatedConcept);
+				relationshipLeft
+						.setRelationshipRole(associativeRelationshipRoleService
+								.getDefaultAssociativeRelationshipRoleRole());
+				relationshipsLeft.add(relationshipLeft);
+
+			}
 
 		}
-
 		concept.setAssociativeRelationshipLeft(relationshipsLeft);
 
 		return concept;
 	}
-	
-	public ThesaurusConcept buildConceptRoot(Resource skosConcept,
-			Model model, Thesaurus thesaurus) throws BusinessException {
+
+	public ThesaurusConcept buildConceptRoot(Resource skosConcept, Model model,
+			Thesaurus thesaurus) throws BusinessException {
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
-		concept.setRootConcepts(new	HashSet<ThesaurusConcept>(thesaurusConceptService.getRootConcepts(concept)));
+		concept.setRootConcepts(new HashSet<ThesaurusConcept>(
+				thesaurusConceptService.getRootConcepts(concept)));
 		return concept;
 
 	}
