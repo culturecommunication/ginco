@@ -306,17 +306,22 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				}
 			}
 
-			// Test if this concept is associated to validated concepts only
-			/*List<ThesaurusConcept> associatedConcepts = getAssociatedConcepts(object
-					.getIdentifier());
-			for (ThesaurusConcept associatedConcept : associatedConcepts) {
-				if (associatedConcept.getStatus() != ConceptStatusEnum.VALIDATED
-						.getStatus()) {
-					throw new BusinessException(
-							"A concept must associate a validated concept",
-							"concept-associate-validated-concept");
+			// Test if the concept is associated to validated concepts only
+			List<ThesaurusConcept> associatedConcepts = new ArrayList<ThesaurusConcept>();
+			if (object.getIdentifier() != null) {
+				associatedConcepts = getAssociatedConcepts(object.getIdentifier());
+			}
+
+			if (!associatedConcepts.isEmpty()) {
+				for (ThesaurusConcept associatedConcept : associatedConcepts) {
+					if (associatedConcept.getStatus() != ConceptStatusEnum.VALIDATED
+							.getStatus()) {
+						throw new BusinessException(
+								"A concept must associate a validated concept",
+								"concept-associate-validated-concept");
+					}
 				}
-			}*/
+			}
 		}
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
@@ -326,8 +331,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getAssociatedConcepts(String conceptId) {
+		List<ThesaurusConcept> result = new ArrayList<ThesaurusConcept>();
 		ThesaurusConcept concept = thesaurusConceptDAO.getById(conceptId);
-		return thesaurusConceptDAO.getAssociatedConcepts(concept);
+		if (concept != null) {
+			//If the concept exists, we return its associated concept, else we return an empty list
+			result = thesaurusConceptDAO.getAssociatedConcepts(concept);
+		}
+		return result;
 	}
 
 	@Transactional(readOnly=false)
