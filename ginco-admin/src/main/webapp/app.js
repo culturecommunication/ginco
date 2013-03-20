@@ -106,7 +106,8 @@ Ext.application({
         'ConceptController',
         'NotePanelController',
         'ConceptArrayController',
-        'ConceptGroupController'
+        'ConceptGroupController',
+        'ImportController'
     ],
     init: function(){
     },

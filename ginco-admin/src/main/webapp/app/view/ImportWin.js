@@ -29,6 +29,7 @@ Ext
 				'GincoApp.view.ImportWin',
 				{
 					extend : 'Ext.window.Window',
+					alias : 'widget.importWindow',
 
 					autoShow : true,
 					height : 250,
@@ -43,10 +44,7 @@ Ext
 					xTitleLabel : '<h1>Import SKOS</h1>',
 					xSaveBtn : 'Importer',
 					xCancelLabel : 'Annuler',
-					xWaitingLabel : 'Import en cours',
-					xSucessLabelTitle : 'Succès',
-					xSucessLabel : 'Le thésaurus a été importé avec succès : ',
-
+					
 					initComponent : function() {
 						var me = this;
 
@@ -61,6 +59,7 @@ Ext
 													},
 													{
 														xtype : 'form',
+														itemId: 'importForm',
 														items : [ {
 															xtype : 'filefield',
 															itemId : 'importFormFile',
@@ -77,45 +76,11 @@ Ext
 														buttons : [
 																{
 																	text : me.xSaveBtn,
-																	handler : function() {
-																		var form = this
-																				.up(
-																						'form')
-																				.getForm();
-																		if (form
-																				.isValid()) {
-																			form
-																					.submit({
-																						url : 'services/ui/importservice/import',
-																						waitMsg : me.xWaitingLabel,
-																						success : function(
-																								fp,
-																								o) {																							
-																							Ext.Msg
-																									.show({
-																										title : me.xSucessLabelTitle,
-																										msg : me.xSucessLabel
-																												+ o.result.data.title,
-																										minWidth : 200,
-																										modal : true,
-																										icon : Ext.Msg.INFO,
-																										buttons : Ext.Msg.OK
-																									});
-																						}
-																					});
-																		}
-																	}
+																	itemId : 'importSaveBtn'																	
 																},
 																{
 																	text : me.xCancelLabel,
-																	handler : function() {
-																		this
-																				.up(
-																						'form')
-																				.getForm()
-																				.reset();
-																		me.close();
-																	}
+																	itemId : 'importCancelBtn'
 																} ]
 													} ]
 										});
