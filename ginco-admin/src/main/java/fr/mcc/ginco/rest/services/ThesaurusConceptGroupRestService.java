@@ -100,7 +100,7 @@ public class ThesaurusConceptGroupRestService {
 	@GET
 	@Path("/getConceptGroupTypes")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<ThesaurusConceptGroupType>> getConceptNoteTypes() {
+	public ExtJsonFormLoadData<List<ThesaurusConceptGroupType>> getConceptGroupTypes() {
 		List<ThesaurusConceptGroupType> conceptGroupTypes = new ArrayList<ThesaurusConceptGroupType>();
 		conceptGroupTypes = thesaurusConceptGroupTypeService.getConceptGroupTypeList();
 		ExtJsonFormLoadData<List<ThesaurusConceptGroupType>> types = new ExtJsonFormLoadData<List<ThesaurusConceptGroupType>>(conceptGroupTypes);
@@ -131,7 +131,7 @@ public class ThesaurusConceptGroupRestService {
 	@POST
 	@Path("/updateConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public ThesaurusConceptGroupView updateThesaurusArray(
+	public ThesaurusConceptGroupView updateThesaurusConceptGroup(
 			ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement)
 	
 			throws BusinessException {
@@ -141,7 +141,6 @@ public class ThesaurusConceptGroupRestService {
 		ThesaurusConceptGroup convertedConceptGroup = thesaurusConceptGroupViewConverter
 				.convert(thesaurusConceptGroupViewJAXBElement);
 		
-
 		ThesaurusConceptGroup updated = thesaurusConceptGroupService.updateThesaurusConceptGroup(
 				convertedConceptGroup, conceptGroupLabel);
 		
@@ -156,7 +155,7 @@ public class ThesaurusConceptGroupRestService {
 	@POST
 	@Path("/destroyConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public void destroyArray(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) throws BusinessException {
+	public void destroyConceptGroup(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) throws BusinessException {
 		ThesaurusConceptGroup object = thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
 		if (object != null) {
 			thesaurusConceptGroupService.destroyThesaurusConceptGroup(object);
