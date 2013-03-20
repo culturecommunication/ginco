@@ -90,11 +90,7 @@ Ext
 																						waitMsg : me.xWaitingLabel,
 																						success : function(
 																								fp,
-																								o) {
-																							console
-																									.log(fp);
-																							console
-																									.log(o);
+																								o) {																							
 																							Ext.Msg
 																									.show({
 																										title : me.xSucessLabelTitle,
@@ -118,6 +114,7 @@ Ext
 																						'form')
 																				.getForm()
 																				.reset();
+																		me.close();
 																	}
 																} ]
 													} ]
