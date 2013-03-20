@@ -204,6 +204,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 							thesaurusData : thePanel.thesaurusData,
                             searchOrphans : false,
 							showTree : false,
+							onlyValidatedConcepts : true,
 							listeners: {
 								selectBtn: {
 			                    fn: function(selectedRow) {

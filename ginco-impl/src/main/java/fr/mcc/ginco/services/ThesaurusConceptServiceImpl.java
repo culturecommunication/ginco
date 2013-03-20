@@ -307,7 +307,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 
 			// Test if this concept is associated to validated concepts only
-			List<ThesaurusConcept> associatedConcepts = getAssociatedConcepts(object
+			/*List<ThesaurusConcept> associatedConcepts = getAssociatedConcepts(object
 					.getIdentifier());
 			for (ThesaurusConcept associatedConcept : associatedConcepts) {
 				if (associatedConcept.getStatus() != ConceptStatusEnum.VALIDATED
@@ -316,7 +316,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 							"A concept must associate a validated concept",
 							"concept-associate-validated-concept");
 				}
-			}
+			}*/
 		}
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
