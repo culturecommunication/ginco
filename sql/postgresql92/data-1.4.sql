@@ -16,3 +16,7 @@ UPDATE thesaurus_languages SET iso639_id='fr-FR'  WHERE iso639_id='fra';
 UPDATE node_label SET lang='fr-FR'  WHERE lang='fra';
 UPDATE note SET lang='fr-FR'  WHERE lang='fra';
 DELETE FROM languages_iso639 WHERE id='fra';
+
+INSERT INTO note_type(
+            code, label, isterm, isconcept)
+    VALUES ('example', 'Exemple', false, true);

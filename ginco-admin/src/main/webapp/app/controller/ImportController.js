@@ -66,7 +66,10 @@ Ext.define('GincoApp.controller.ImportController', {
 										buttons : Ext.Msg.OK
 									});
 							me.application.fireEvent('thesaurusupdated');						
-						}
+						},
+						failure: function(form, action) {
+	                        Ext.Msg.alert('Erreur', action.result.message);
+	                    }
 					});
 		}	
 		

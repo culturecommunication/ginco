@@ -58,9 +58,11 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
@@ -87,6 +89,10 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@Inject
+	@Named("noteDAO")
+	private INoteDAO noteDAO;
+
+	@Inject
 	@Named("skosThesaurusBuilder")
 	private ThesaurusBuilder thesaurusBuilder;
 
@@ -95,8 +101,12 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private ConceptBuilder conceptBuilder;
 
 	@Inject
+	@Named("skosConceptNoteBuilder")
+	private ConceptNoteBuilder conceptNoteBuilder;
+
+	@Inject
 	@Named("skosTermBuilder")
-	private TermBuilder termBuilder;	
+	private TermBuilder termBuilder;
 
 	@Override
 	public Thesaurus importSKOSFile(String fileContent, String fileName,
@@ -112,6 +122,9 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			if (thesaurusSKOS == null) {
 				logger.error("no thesaurus found");
 			} else {
+				if (thesaurusDAO.getById(thesaurusSKOS.getURI()) != null) {
+					throw new BusinessException("Trying to import an existing thesaurus " + thesaurusSKOS.getURI(), "import-already-existing-thesaurus");
+				}
 				thesaurus = thesaurusBuilder.buildThesaurus(thesaurusSKOS,
 						model);
 				thesaurusDAO.update(thesaurus);
@@ -119,7 +132,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 			List<Resource> skosConcepts = getSKOSConcepts(model);
 			for (Resource skosConcept : skosConcepts) {
-				//Minimal concept informations
+				// Minimal concept informations
 				ThesaurusConcept concept = conceptBuilder.buildConcept(
 						skosConcept, model, thesaurus);
 				thesaurusConceptDAO.update(concept);
@@ -128,18 +141,25 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 				for (ThesaurusTerm term : terms) {
 					thesaurusTermDAO.update(term);
 				}
+				List<Note> conceptNotes = conceptNoteBuilder.buildConceptNotes(
+						skosConcept, concept, thesaurus);
+				for (Note conceptNote : conceptNotes) {
+					noteDAO.update(conceptNote);
+				}
 			}
 			for (Resource skosConcept : skosConcepts) {
-				//Parent/child and associations
-				ThesaurusConcept concept = conceptBuilder.buildConceptAssociations(skosConcept, model, thesaurus);
-				thesaurusConceptDAO.update(concept);				
+				// Parent/child and associations
+				ThesaurusConcept concept = conceptBuilder
+						.buildConceptAssociations(skosConcept, model, thesaurus);
+				thesaurusConceptDAO.update(concept);
 			}
-			
+
 			for (Resource skosConcept : skosConcepts) {
-				//Root calculation
-				ThesaurusConcept concept = conceptBuilder.buildConceptRoot(skosConcept, model, thesaurus);
-				thesaurusConceptDAO.update(concept);				
-			}			
+				// Root calculation
+				ThesaurusConcept concept = conceptBuilder.buildConceptRoot(
+						skosConcept, model, thesaurus);
+				thesaurusConceptDAO.update(concept);
+			}
 
 		} finally {
 			deleteTempFile(fileName);
@@ -213,7 +233,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		} catch (IOException e) {
 			throw new BusinessException(
 					"Error storing temporarty file for import " + prefix,
-					"import-unable-to-write-temporary-file");
+					"import-unable-to-write-temporary-file", e);
 		}
 		return file.toURI();
 	}

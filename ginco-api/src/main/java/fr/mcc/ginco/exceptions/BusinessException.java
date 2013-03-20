@@ -53,6 +53,17 @@ public class BusinessException extends RuntimeException {
 		super(logMessage);
 		this.userMessageKey =userMessageKey;
 	}	
+	
+	/**
+	 * Creates a new Business Exception
+	 * @param logMessage message to log
+	 * @param userMessageKey key of the message to display
+	 */
+	public BusinessException(String logMessage, String userMessageKey, Throwable cause) {
+		super(logMessage, cause);
+		this.userMessageKey =userMessageKey;
+	}	
+
 
 	public String getUserMessageKey() {
 		return userMessageKey;
