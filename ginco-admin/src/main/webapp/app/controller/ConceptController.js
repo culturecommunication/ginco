@@ -372,7 +372,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
-		
+
 		if (aModel.data.status == 1) {
 			//We enable the button for creating associations only if the concept's status is validated
 			var addAssociationBtn = aForm.down('#addAssociativeRelationship');

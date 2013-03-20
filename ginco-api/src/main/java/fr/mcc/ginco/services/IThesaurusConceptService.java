@@ -182,7 +182,7 @@ public interface IThesaurusConceptService {
 	/**
 	 * Returns the list of associated concepts
 	 * @param concept
-	 * @return
+	 * @return A list with associated concepts, empty if not elements
 	 */
 	List<ThesaurusConcept> getAssociatedConcepts(String conceptId);
 	
