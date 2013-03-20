@@ -372,12 +372,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 		var noteTab= aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
-
-		if (aModel.data.status == 1) {
-			//We enable the button for creating associations only if the concept's status is validated
-			var addAssociationBtn = aForm.down('#addAssociativeRelationship');
-			addAssociationBtn.setDisabled(false);
-		}
 		
 		var deleteConceptBtn = aForm.down('#deleteConcept');
 		if (aModel.data.status == 0){
@@ -385,6 +379,30 @@ Ext.define('GincoApp.controller.ConceptController', {
 			deleteConceptBtn.setDisabled(false);
 		} else {
 			deleteConceptBtn.setDisabled(true);
+		}
+		
+		var addAssociationBtn = aForm.down('#addAssociativeRelationship');
+		var addparent = aForm.down('#addParent');
+		if (aModel.data.status == 1) {
+			addAssociationBtn.setDisabled(false);
+			addparent.setDisabled(false);
+		}
+		
+	},
+	
+	checkValidatedSelected : function(theCombobox, theRecord, eOpts) {
+		theForm = theCombobox.up('#conceptForm');
+		var addAssociationBtn = theForm.down('#addAssociativeRelationship');
+		var addparent = aForm.down('#addParent');
+		
+		if (theRecord[0].data.status == 1) {
+			// We enable the button for creating associations only if the concept's status is validated (both hierachical and associative)
+			addAssociationBtn.setDisabled(false);
+			addparent.setDisabled(false);
+			
+		} else {
+			addAssociationBtn.setDisabled(true);
+			addparent.setDisabled(true);
 		}
 	},
 	
@@ -526,7 +544,8 @@ Ext.define('GincoApp.controller.ConceptController', {
  				afterrender : this.onConceptFormRender
  			},
 			'conceptPanel #conceptStatusCombo' : {
-				render : this.loadConceptStatus
+				render : this.loadConceptStatus,
+				select : this.checkValidatedSelected
 			},
  			'conceptPanel #saveConcept' : {
  				click : this.saveConcept
