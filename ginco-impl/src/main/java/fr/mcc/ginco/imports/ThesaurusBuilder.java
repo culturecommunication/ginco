@@ -49,7 +49,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
@@ -63,6 +62,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
@@ -118,6 +118,13 @@ public class ThesaurusBuilder extends AbstractBuilder{
 				.setPublisher(getSimpleStringInfo(skosThesaurus, DC.publisher));
 		thesaurus
 				.setRights(getMultipleLineStringInfo(skosThesaurus, DC.rights));
+		ThesaurusType thesaurusType = thesaurusTypeDAO.getByLabel(getSimpleStringInfo(
+				skosThesaurus, DC.type));
+		if (thesaurusType == null) {
+			throw new BusinessException("Unknown thesaurus type " + getSimpleStringInfo(
+					skosThesaurus, DC.type) ,"import-unknown-thesaurus-type");
+
+		}
 		thesaurus.setType(thesaurusTypeDAO.getByLabel(getSimpleStringInfo(
 				skosThesaurus, DC.type)));
 		thesaurus.setRelation(getMultipleLineStringInfo(skosThesaurus,
@@ -132,6 +139,9 @@ public class ThesaurusBuilder extends AbstractBuilder{
 
 		ThesaurusFormat format = thesaurusFormatDAO
 				.getById(defaultThesaurusFormat);
+		if (format == null) {
+			throw new BusinessException("Configuration problem : the default import format " + defaultThesaurusFormat + "is unknown","import-unknown-default-format");
+		}
 		thesaurus.setFormat(format);
 
 		thesaurus.setDefaultTopConcept(defaultTopConcept);
@@ -178,6 +188,9 @@ public class ThesaurusBuilder extends AbstractBuilder{
 		while (stmtIterator.hasNext()) {
 			Statement stmt = stmtIterator.next();
 			Language lang = languagesDAO.getById(stmt.getString());
+			if (lang==null) {
+				throw new BusinessException("Specified thesaurus lanaguge is unknown :  " + stmt.getString(),"import-unknown-thesaurus-lang");
+	}
 			langs.add(lang);
 		}
 

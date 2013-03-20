@@ -34,47 +34,33 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
+import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
-import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
-@Service("skosTermBuilder")
-public class TermBuilder extends AbstractBuilder {
+@Service("skosNodeLabelBuilder")
+public class NodeLabelBuilder extends AbstractBuilder {
 
 	@Log
 	private Logger logger;
-
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;
-
-	@Inject
-	@Named("thesaurusTermRoleDAO")
-	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
 
 	@Inject
 	@Named("languagesDAO")
@@ -83,67 +69,40 @@ public class TermBuilder extends AbstractBuilder {
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
-	public TermBuilder() {
+	public NodeLabelBuilder() {
 		super();
 	}
 
-	private ThesaurusTerm buildTerm(Statement stmt, Model model,
-			Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred)
-			throws BusinessException {
-		ThesaurusTerm term = new ThesaurusTerm();
-		term.setConcept(concept);
-		term.setCreated(thesaurus.getCreated());
-		term.setIdentifier(generatorService.generate());
-		term.setLexicalValue(stmt.getString());
-		term.setModified(thesaurus.getDate());
-		term.setPrefered(preferred);
-		term.setRole(thesaurusTermRoleDAO.getDefaultThesaurusTermRole());
-		term.setStatus(TermStatusEnum.VALIDATED.getStatus());
-		term.setThesaurus(thesaurus);
+	public NodeLabel buildNodeLabel(Statement stmt, Model model,
+			Thesaurus thesaurus, ThesaurusArray array) throws BusinessException {
+
+		NodeLabel nodeLabel = new NodeLabel();
+		nodeLabel.setCreated(thesaurus.getCreated());
+
+		nodeLabel.setModified(thesaurus.getDate());
 
 		RDFNode prefLabel = stmt.getObject();
 		String lang = prefLabel.asLiteral().getLanguage();
 		if (StringUtils.isEmpty(lang)) {
 			Language defaultLangL = languagesDAO.getById(defaultLang);
-			term.setLanguage(defaultLangL);
+			nodeLabel.setLanguage(defaultLangL);
 		} else {
 			List<Language> langs = languagesDAO.getByPart1(lang);
 			if (langs.size() > 0) {
-				term.setLanguage(langs.get(0));
+				nodeLabel.setLanguage(langs.get(0));
 			} else {
-				throw new BusinessException("Term " + stmt.getString()
+				throw new BusinessException("Node label " + stmt.getString()
 						+ " is missing it's language",
 						"import-term-with-no-lang");
 			}
 		}
-		return term;
-	}
 
-	public List<ThesaurusTerm> buildTerms(Resource skosConcept, Model model,
-			Thesaurus thesaurus, ThesaurusConcept concept)
-			throws BusinessException {
-		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+		nodeLabel.setLexicalValue(stmt.getString());
 
-		// Preferred term
-		Statement stmtPreferred = skosConcept.getProperty(SKOS.PREF_LABEL);
-		terms.add(buildTerm(stmtPreferred, model, thesaurus, concept, true));
+		nodeLabel.setThesaurusArray(array);
 
-		// Alt terms
-		StmtIterator stmtAltItr = skosConcept.listProperties(SKOS.ALT_LABEL);
-		while (stmtAltItr.hasNext()) {
-			Statement stmtAlt = stmtAltItr.next();
-			terms.add(buildTerm(stmtAlt, model, thesaurus, concept, false));
+		return nodeLabel;
 
-		}
-		// Hidden terms
-		StmtIterator stmtHiddenItr = skosConcept
-				.listProperties(SKOS.HIDDEN_LABEL);
-		while (stmtHiddenItr.hasNext()) {
-			Statement stmtHidden = stmtHiddenItr.next();
-			terms.add(buildTerm(stmtHidden, model, thesaurus, concept, false));
-		}
-
-		return terms;
 	}
 
 }
