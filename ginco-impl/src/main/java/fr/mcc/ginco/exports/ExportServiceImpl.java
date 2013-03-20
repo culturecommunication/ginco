@@ -157,8 +157,8 @@ public class ExportServiceImpl implements IExportService {
 
         final String baseURI = thesaurus.getIdentifier();
 
-        SKOSManager man = null;
-        SKOSDataset vocab = null;
+        SKOSManager man;
+        SKOSDataset vocab;
         SKOSConceptScheme scheme;
         SKOSDataFactory factory;
 
@@ -264,6 +264,8 @@ public class ExportServiceImpl implements IExportService {
     private String addCollections(Thesaurus thesaurus) {
         List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurus.getIdentifier());
 
+        if(arrays.size() != 0) {
+
         Model model = ModelFactory.createDefaultModel();
 
         for(ThesaurusArray array : arrays) {
@@ -290,8 +292,10 @@ public class ExportServiceImpl implements IExportService {
         String result = sw.toString();
         int start = result.lastIndexOf("core#\">") + "core#\">".length() + 2;
         int end = result.lastIndexOf("</rdf:RDF>");
-
         return result.substring(start, end);
+        }
+
+        return "";
     }
 
     private void addLines(String[] lines, DublinCoreVocabulary type, SKOSConceptScheme conceptScheme,  List<SKOSChange> addList, SKOSConceptScheme scheme,
