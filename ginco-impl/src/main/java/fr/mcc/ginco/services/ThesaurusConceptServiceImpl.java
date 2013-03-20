@@ -50,6 +50,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -307,19 +308,31 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 
 			// Test if the concept is associated to validated concepts only
-			List<ThesaurusConcept> associatedConcepts = new ArrayList<ThesaurusConcept>();
-			if (object.getIdentifier() != null) {
-				associatedConcepts = getAssociatedConcepts(object.getIdentifier());
-			}
-
-			if (!associatedConcepts.isEmpty()) {
-				for (ThesaurusConcept associatedConcept : associatedConcepts) {
-					if (associatedConcept.getStatus() != ConceptStatusEnum.VALIDATED
-							.getStatus()) {
+			Set<AssociativeRelationship> associatedLeft = object.getAssociativeRelationshipLeft() ;	
+			Set<AssociativeRelationship> associatedRight = object.getAssociativeRelationshipRight() ;
+			
+			Set<AssociativeRelationship> associations = new HashSet<AssociativeRelationship>();
+			associations.addAll(associatedLeft);
+			associations.addAll(associatedRight);
+			
+			for (AssociativeRelationship association : associations) {
+				ThesaurusConcept conceptLeft = thesaurusConceptDAO.getById(association.getConceptLeft().getIdentifier());
+				ThesaurusConcept conceptRight = thesaurusConceptDAO.getById(association.getConceptRight().getIdentifier());
+				
+				if (conceptLeft != null) {
+					if (conceptLeft.getStatus() != ConceptStatusEnum.VALIDATED.getStatus()) {
 						throw new BusinessException(
 								"A concept must associate a validated concept",
 								"concept-associate-validated-concept");
-					}
+					}	
+				}
+				
+				if (conceptRight != null) {
+					if (conceptRight.getStatus() != ConceptStatusEnum.VALIDATED.getStatus()) {
+						throw new BusinessException(
+								"A concept must associate a validated concept",
+								"concept-associate-validated-concept");
+					}	
 				}
 			}
 		}

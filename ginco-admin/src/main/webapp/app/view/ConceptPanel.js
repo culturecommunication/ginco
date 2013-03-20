@@ -319,7 +319,7 @@ Ext
 																				items : [ {
 																					xtype : 'button',
 																					text : me.xAddParent,
-																					disabled : false,
+																					disabled : true,
 																					itemId : 'addParent',
 																					cls : 'addParent',
 																					iconCls : 'icon-add-parent'
