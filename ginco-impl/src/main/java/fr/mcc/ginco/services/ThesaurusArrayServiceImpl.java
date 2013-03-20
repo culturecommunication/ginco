@@ -79,11 +79,11 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
     public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) throws BusinessException {
 
 		if (thesaurusArray.getSuperOrdinateConcept() != null) {
-			if (thesaurusArray.getSuperOrdinateConcept().getStatus() == ConceptStatusEnum.CANDIDATE
+			if (thesaurusArray.getSuperOrdinateConcept().getStatus() != ConceptStatusEnum.VALIDATED
 					.getStatus()) {
 				throw new BusinessException(
-						"A candidate concept can't be a parent for a concept array",
-						"candidate-not-parent-of-concept-array");
+						"Only a validated concept can be a parent for a concept array",
+						"only-validated-concept-parent-of-concept-array");
 			}
 		}
 
