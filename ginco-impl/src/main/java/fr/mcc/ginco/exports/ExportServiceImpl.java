@@ -34,9 +34,13 @@
  */
 package fr.mcc.ginco.exports;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
 import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.*;
 import fr.mcc.ginco.utils.DateUtil;
 import org.apache.cxf.helpers.IOUtils;
@@ -153,8 +157,8 @@ public class ExportServiceImpl implements IExportService {
 
         final String baseURI = thesaurus.getIdentifier();
 
-        SKOSManager man = null;
-        SKOSDataset vocab = null;
+        SKOSManager man;
+        SKOSDataset vocab;
         SKOSConceptScheme scheme;
         SKOSDataFactory factory;
 
@@ -177,11 +181,11 @@ public class ExportServiceImpl implements IExportService {
         List<SKOSChange> addList = new ArrayList<SKOSChange>();
         addList.add(new AddAssertion(vocab, schemaAssertion));
 
-        SKOSAnnotation createdAnno = factory.getSKOSAnnotation(URI.create("http://purl.org/dct/created"), DateUtil.toString(thesaurus.getCreated()));
+        SKOSAnnotation createdAnno = factory.getSKOSAnnotation(URI.create("http://purl.org/dct#created"), DateUtil.toString(thesaurus.getCreated()));
         SKOSAnnotationAssertion createdAssertion = factory.getSKOSAnnotationAssertion(scheme, createdAnno);
         addList.add(new AddAssertion(vocab, createdAssertion));
 
-        SKOSAnnotation modifiedAnno = factory.getSKOSAnnotation(URI.create("http://purl.org/dct/modified"), DateUtil.toString(thesaurus.getDate()));
+        SKOSAnnotation modifiedAnno = factory.getSKOSAnnotation(URI.create("http://purl.org/dct#modified"), DateUtil.toString(thesaurus.getDate()));
         SKOSAnnotationAssertion modifiedAssertion = factory.getSKOSAnnotationAssertion(scheme, modifiedAnno);
         addList.add(new AddAssertion(vocab, modifiedAssertion));
 
@@ -195,6 +199,7 @@ public class ExportServiceImpl implements IExportService {
         addLine(thesaurus.getDescription(), DublinCoreVocabulary.DESCRIPTION, scheme, addList, scheme, factory, vocab);
         addLine(thesaurus.getRelation(), DublinCoreVocabulary.RELATION, scheme, addList, scheme, factory, vocab);
         addLine(thesaurus.getSource(), DublinCoreVocabulary.SOURCE, scheme, addList, scheme, factory, vocab);
+        addLine(thesaurus.getPublisher(), DublinCoreVocabulary.PUBLISHER, scheme, addList, scheme, factory, vocab);
 
         if(thesaurus.getType() != null) {
             addLine(thesaurus.getType().getLabel(), DublinCoreVocabulary.TYPE, scheme, addList, scheme, factory, vocab);
@@ -211,9 +216,8 @@ public class ExportServiceImpl implements IExportService {
 
         try {
 
+            String collections = addCollections(thesaurus);
             man.applyChanges(addList);
-
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
 
             File temp = File.createTempFile("skosExport"+DateUtil.nowDate().getTime(), ".rdf");
             temp.deleteOnExit();
@@ -234,6 +238,7 @@ public class ExportServiceImpl implements IExportService {
                 org = org.replaceAll("URL", thesaurus.getCreator().getHomepage());
 
                 content = content.replaceAll("_X_CREATOR_", org);
+                content = content.replaceAll("</rdf:RDF>", collections+"</rdf:RDF>");
 
                 BufferedOutputStream bos;
                 FileOutputStream fos = new FileOutputStream(temp);
@@ -256,8 +261,45 @@ public class ExportServiceImpl implements IExportService {
         }
     }
 
+    private String addCollections(Thesaurus thesaurus) {
+        List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurus.getIdentifier());
+
+        if(arrays.size() != 0) {
+
+        Model model = ModelFactory.createDefaultModel();
+
+        for(ThesaurusArray array : arrays) {
+            NodeLabel label = nodeLabelService.getByThesaurusArray(array.getIdentifier());
+
+            Resource collectionRes = model.createResource(array.getIdentifier(), SKOS.COLLECTION);
+
+            Resource inScheme = model.createResource(thesaurus.getIdentifier());
+            model.add(collectionRes, SKOS.IN_SCHEME, inScheme);
+
+            collectionRes.addProperty(SKOS.PREF_LABEL, label.getLexicalValue(), label.getLanguage().getId());
+
+            for(ThesaurusConcept concept : array.getConcepts()) {
+                Resource y = model.createResource(concept.getIdentifier());
+                model.add(collectionRes, SKOS.MEMBER, y);
+                model.add(collectionRes, SKOS.MEMBER, y);
+            }
+        }
+
+        model.setNsPrefix("skos", SKOS.getURI());
+
+        StringWriter sw = new StringWriter();
+        model.write(sw, "RDF/XML-ABBREV");
+        String result = sw.toString();
+        int start = result.lastIndexOf("core#\">") + "core#\">".length() + 2;
+        int end = result.lastIndexOf("</rdf:RDF>");
+        return result.substring(start, end);
+        }
+
+        return "";
+    }
+
     private void addLines(String[] lines, DublinCoreVocabulary type, SKOSConceptScheme conceptScheme,  List<SKOSChange> addList, SKOSConceptScheme scheme,
-            SKOSDataFactory factory, SKOSDataset vocab) {
+                          SKOSDataFactory factory, SKOSDataset vocab) {
         for(String line : lines) {
             addLine(line, type, conceptScheme, addList, scheme, factory, vocab);
         }
