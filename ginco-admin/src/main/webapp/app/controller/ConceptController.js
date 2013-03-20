@@ -393,7 +393,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	checkValidatedSelected : function(theCombobox, theRecord, eOpts) {
 		theForm = theCombobox.up('#conceptForm');
 		var addAssociationBtn = theForm.down('#addAssociativeRelationship');
-		var addparent = aForm.down('#addParent');
+		var addparent = theForm.down('#addParent');
 		
 		if (theRecord[0].data.status == 1) {
 			// We enable the button for creating associations only if the concept's status is validated (both hierachical and associative)
