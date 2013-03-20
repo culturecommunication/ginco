@@ -179,3 +179,6 @@ ALTER TABLE node_label
 ALTER TABLE concept_group_label ALTER lang TYPE character(5);
 
 ALTER TABLE note ALTER lang TYPE character(5);
+
+ALTER TABLE thesaurus_concept ALTER COLUMN status SET DEFAULT 0;
+ALTER TABLE thesaurus_term ALTER COLUMN status SET DEFAULT 0;
