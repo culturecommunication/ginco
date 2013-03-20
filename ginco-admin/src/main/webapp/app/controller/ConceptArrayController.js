@@ -293,7 +293,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	 onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
 	    	var me = this;
 	        var thePanel = me.getActivePanel();
-	        Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
+	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+			topTabs.fireEvent('openconcepttab',topTabs,this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
 	    },
 	
     init:function(){    	  	 

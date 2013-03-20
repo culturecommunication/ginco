@@ -180,14 +180,17 @@ Ext.define('GincoApp.controller.ConceptController', {
     onTermDblClick : function(theGrid, record, item, index, e, eOpts ) {
     	var me = this;
         var thePanel = me.getActivePanel();
-		Thesaurus.ext.tabs.openTermTab(record.data.identifier, thePanel.thesaurusData);			
+        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+        topTabs.fireEvent('opentermtab',topTabs,record.data.identifier, thePanel.thesaurusData);				
+		//Thesaurus.ext.tabs.openTermTab(record.data.identifier, thePanel.thesaurusData);			
 
     },
     
     onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
     	var me = this;
         var thePanel = me.getActivePanel();
-        Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
+        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
     },
 
     onDetachClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {

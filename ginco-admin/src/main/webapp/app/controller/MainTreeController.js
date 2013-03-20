@@ -62,53 +62,25 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		return false;
 	},
 	openConceptTab: function (aRecord) {
-		Thesaurus.ext.tabs.openConceptTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);	
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.fireEvent('openconcepttab',topTabs, aRecord.data.thesaurusId, aRecord.data.id);
 	},
 	openTabArray: function (aRecord) {
-		Thesaurus.ext.tabs.openArrayTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.fireEvent('openarraytab',topTabs, aRecord.data.thesaurusId, aRecord.data.id);
 	},
 	openTabGroup: function (aRecord) {
-		Thesaurus.ext.tabs.openGroupTab(this.getThesaurusModelModel(), aRecord.data.thesaurusId, aRecord.data.id);
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.fireEvent('opengrouptab',topTabs, aRecord.data.thesaurusId, aRecord.data.id);
 	},
 
     openSandBoxTab : function(aRecord) {
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var sandBoxTabs = Ext.ComponentQuery.query('topTabs sandboxPanel');
-		var tabExists = false;
-		Ext.Array.each(sandBoxTabs,function(element, index, array) {
-			if (element.thesaurusData!=null && element.thesaurusData.id == aRecord.data.id) {
-				tabExists = element;
-			}
-		});
-		if (!tabExists) {
-			var sandBoxPanel = Ext.create('GincoApp.view.SandBoxPanel');
-			sandBoxPanel.thesaurusData = aRecord.data;
-			var tab = topTabs.add(sandBoxPanel);
-			topTabs.setActiveTab(tab);
-			tab.show();
-		} else {
-			topTabs.setActiveTab(tabExists);
-		}
+    	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.fireEvent('opensandboxtab',topTabs,aRecord.data.id);
 	},
 	openThesaurusTab : function(aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var thesaurusTabs = Ext.ComponentQuery.query('topTabs thesaurusPanel');
-		var tabExists = false;
-		Ext.Array.each(thesaurusTabs,function(element, index, array) {
-			if (element.thesaurusData!=null && element.thesaurusData.id == aRecord.data.id) {
-				tabExists = element;
-			}
-		});
-
-		if (!tabExists) {
-			var ThesaurusPanel = Ext.create('GincoApp.view.ThesaurusPanel');
-			ThesaurusPanel.thesaurusData = aRecord.data;
-			var tab = topTabs.add(ThesaurusPanel);
-			topTabs.setActiveTab(tab);
-			tab.show();
-		} else {
-			topTabs.setActiveTab(tabExists);
-		}
+		topTabs.fireEvent('openthesaurustab',topTabs,aRecord.data.id);
 	},
 	onEnterKey : function(theTree) {
 		var node = theTree.getSelectionModel().getSelection();
@@ -121,10 +93,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		this.loadTreeView(theTree);
 	},
 	loadTreeView : function(theTree) {
-		var me = this;
+		var treeState,me = this;
 		if (theTree)
 		{
-			var treeState = theTree.getState();
+			treeState = theTree.getState();
 		}
 		var MainTreeStore = this.getMainTreeStoreStore();
 		if (MainTreeStore.isLoading()==false) {
@@ -156,13 +128,9 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var theTreeView = theButton.up("treepanel");
 		this.loadTreeView(theTreeView);
 	},
-	onTreeLoad : function()
+	onTreeLoad : function(theTree)
 	{
-		
 		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
-		
-		
-		
 		var me = this;
 		this.nav = new Ext.util.KeyNav({
 			target : theTree.getEl(),
@@ -180,6 +148,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		this.loadTreeView(theTree);
 	},
 	init : function(application) {
+		// Handling treeview refresh requests
 		 this.application.on({
 			 	thesaurusupdated: this.onRefreshTreeEvent,
 			 	conceptupdated: this.onRefreshTreeEvent,

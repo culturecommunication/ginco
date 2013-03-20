@@ -52,18 +52,12 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
 	loadPanel : function(theForm) {
 		var me = this;
-		var model = this.getThesaurusModelModel();
+		var model = Ext.create('GincoApp.model.ThesaurusModel');
 		var thesaurusData = theForm.up('thesaurusPanel').thesaurusData;
 		if (thesaurusData != null) {
-			theForm.getEl().mask("Chargement");
-			model.load(thesaurusData.id, {
-				success : function(model) {
-					me.loadData(theForm, model);
-					theForm.getEl().unmask();
-				}
-			});
+			model.set(thesaurusData);
+			me.loadData(theForm, model);
 		} else {
-			model = Ext.create('GincoApp.model.ThesaurusModel');
 			model.id = -1;
 			theForm.loadRecord(model);
 		}
