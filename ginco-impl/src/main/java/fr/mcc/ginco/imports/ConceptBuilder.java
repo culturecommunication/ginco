@@ -53,6 +53,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
@@ -70,8 +71,8 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	@Inject
 	@Named("associativeRelationshipRoleService")
-	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
-
+	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;	
+	
 	public static Map<String, ThesaurusConcept> builtConcepts = new HashMap<String, ThesaurusConcept>();
 
 	public ConceptBuilder() {
@@ -86,10 +87,11 @@ public class ConceptBuilder extends AbstractBuilder {
 		concept.setTopConcept(thesaurus.isDefaultTopConcept());
 		concept.setCreated(thesaurus.getCreated());
 		concept.setModified(thesaurus.getDate());
-		// TODO
-		// concept.setNotation("");
-		// concept.setStatus(status);
+		concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
 		builtConcepts.put(skosConcept.getURI(), concept);
+		
+		//Notes
+		
 		return concept;
 	}
 
@@ -141,5 +143,4 @@ public class ConceptBuilder extends AbstractBuilder {
 		return concept;
 
 	}
-
 }

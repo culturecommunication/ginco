@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -53,28 +52,27 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
-import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.INoteTypeService;
 
-@Service("skosTermBuilder")
-public class TermBuilder extends AbstractBuilder {
+@Service("skosConceptNoteBuilder")
+public class ConceptNoteBuilder extends AbstractBuilder {
 
 	@Log
 	private Logger logger;
+	@Inject
+	@Named("noteTypeService")
+	private INoteTypeService noteTypeService;
 
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
-
-	@Inject
-	@Named("thesaurusTermRoleDAO")
-	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
 
 	@Inject
 	@Named("languagesDAO")
@@ -83,68 +81,57 @@ public class TermBuilder extends AbstractBuilder {
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
-	public TermBuilder() {
+	public ConceptNoteBuilder() {
 		super();
 	}
 
-	private ThesaurusTerm buildTerm(Statement stmt, Model model,
-			Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred)
+	public List<Note> buildConceptNotes(Resource skosConcept,
+			ThesaurusConcept concept, Thesaurus thesaurus)
 			throws BusinessException {
-		ThesaurusTerm term = new ThesaurusTerm();
-		term.setConcept(concept);
-		term.setCreated(thesaurus.getCreated());
-		term.setIdentifier(generatorService.generate());
-		term.setLexicalValue(stmt.getString());
-		term.setModified(thesaurus.getDate());
-		term.setPrefered(preferred);
-		term.setRole(thesaurusTermRoleDAO.getDefaultThesaurusTermRole());
-		term.setSource("");
-		term.setStatus(TermStatusEnum.VALIDATED.getStatus());
-		term.setThesaurus(thesaurus);
+		List<Note> allConceptNotes = new ArrayList<Note>();
+		List<NoteType> conceptNoteTypes = noteTypeService
+				.getConceptNoteTypeList();
+		for (NoteType noteType : conceptNoteTypes) {
+			String skosNoteType = noteType.getCode();
+			if (SKOS.SKOS_NOTES.keySet().contains(skosNoteType)) {
+				StmtIterator stmtNotesItr = skosConcept
+						.listProperties(SKOS.SKOS_NOTES.get(skosNoteType));
+				while (stmtNotesItr.hasNext()) {
+					Statement stmt = stmtNotesItr.next();
 
-		RDFNode prefLabel = stmt.getObject();
-		String lang = prefLabel.asLiteral().getLanguage();
-		if (StringUtils.isEmpty(lang)) {
-			Language defaultLangL = languagesDAO.getById(defaultLang);
-			term.setLanguage(defaultLangL);
-		} else {
-			List<Language> langs = languagesDAO.getByPart1(lang);
-			if (langs.size() > 0) {
-				term.setLanguage(langs.get(0));
-			} else {
-				throw new BusinessException("Term " + stmt.getString()
-						+ " is missing it's language",
-						"import-term-with-no-lang");
+					Note newNote = new Note();
+					newNote.setCreated(thesaurus.getCreated());
+					newNote.setIdentifier(generatorService.generate());
+					newNote.setLexicalValue(stmt.getString());
+
+					RDFNode prefLabel = stmt.getObject();
+					String lang = prefLabel.asLiteral().getLanguage();
+					if (StringUtils.isEmpty(lang)) {
+						Language defaultLangL = languagesDAO
+								.getById(defaultLang);
+						newNote.setLanguage(defaultLangL);
+					} else {
+						List<Language> langs = languagesDAO.getByPart1(lang);
+						if (langs.size() > 0) {
+							newNote.setLanguage(langs.get(0));
+						} else {
+							throw new BusinessException("Note "
+									+ stmt.getString()
+									+ " is missing it's language",
+									"import-note-with-no-lang");
+						}
+					}
+
+					newNote.setModified(thesaurus.getDate());
+					newNote.setNoteType(noteType);
+					newNote.setConcept(concept);
+					allConceptNotes.add(newNote);
+				}
 			}
 		}
-		return term;
-	}
 
-	public List<ThesaurusTerm> buildTerms(Resource skosConcept, Model model,
-			Thesaurus thesaurus, ThesaurusConcept concept)
-			throws BusinessException {
-		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+		return allConceptNotes;
 
-		// Preferred term
-		Statement stmtPreferred = skosConcept.getProperty(SKOS.PREF_LABEL);
-		terms.add(buildTerm(stmtPreferred, model, thesaurus, concept, true));
-
-		// Alt terms
-		StmtIterator stmtAltItr = skosConcept.listProperties(SKOS.ALT_LABEL);
-		while (stmtAltItr.hasNext()) {
-			Statement stmtAlt = stmtAltItr.next();
-			terms.add(buildTerm(stmtAlt, model, thesaurus, concept, false));
-
-		}
-		// Hidden terms
-		StmtIterator stmtHiddenItr = skosConcept
-				.listProperties(SKOS.HIDDEN_LABEL);
-		while (stmtHiddenItr.hasNext()) {
-			Statement stmtHidden = stmtHiddenItr.next();
-			terms.add(buildTerm(stmtHidden, model, thesaurus, concept, false));
-		}
-
-		return terms;
 	}
 
 }

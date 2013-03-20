@@ -1,5 +1,7 @@
 package fr.mcc.ginco.imports;
 
+import java.util.HashMap;
+
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -43,4 +45,22 @@ public class SKOS {
             + "Collection");
     public static final Property MEMBER = m.createProperty(uri + "member");
     public static final Property IN_SCHEME = m.createProperty(uri + "inScheme");
+    
+	public static final Property SCOPE_NOTE = m.createProperty(uri + "scopeNote");
+	public static final Property CHANGE_NOTE = m.createProperty(uri + "changeNote");
+	public static final Property DEFINITION = m.createProperty(uri + "definition");
+	public static final Property EDITORIAL_NOTE = m.createProperty(uri + "editorialNote");
+	public static final Property EXAMPLE = m.createProperty(uri + "example");
+	public static final Property HISTORY_NOTE = m.createProperty(uri + "historyNote");
+	
+	public static final HashMap<String, Property> SKOS_NOTES = new HashMap<String, Property>() {{
+		put(SCOPE_NOTE.getLocalName(), SCOPE_NOTE);
+		put(CHANGE_NOTE.getLocalName(),CHANGE_NOTE);
+		put(DEFINITION.getLocalName(),DEFINITION);
+		put(EDITORIAL_NOTE.getLocalName(),EDITORIAL_NOTE);
+		put(EXAMPLE.getLocalName(),EXAMPLE);
+		put(HISTORY_NOTE.getLocalName(),HISTORY_NOTE);
+	}};
+
+    
 }
