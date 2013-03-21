@@ -106,7 +106,7 @@ public interface IThesaurusConceptService {
 	 * @throws BusinessException 
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms) throws BusinessException;
+			List<ThesaurusTerm> terms, List<String> associatedConceptIds) throws BusinessException;
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
@@ -175,16 +175,9 @@ public interface IThesaurusConceptService {
      * @param concept
      * @param parentsToRemove list of ids.
      */
-    void removeParents(ThesaurusConcept concept, List<String> parentsToRemove) throws BusinessException;  
+    void removeParents(ThesaurusConcept concept, List<String> parentsToRemove) throws BusinessException;  	
 	
 	
-	
-	/**
-	 * Returns the list of associated concepts
-	 * @param concept
-	 * @return A list with associated concepts, empty if not elements
-	 */
-	List<ThesaurusConcept> getAssociatedConcepts(String conceptId);
 	
 	/**
 	 * Delete a ThesaurusConcept object

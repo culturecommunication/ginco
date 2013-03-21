@@ -112,14 +112,15 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 				expectedThesaurusTitle);
 	}
 
-	@Test
+	//TODO move to associative relationships test
+	/*@Test
 	public void testGetAssociatedConcepts() {
 		ThesaurusConcept concept1 = thesaurusConceptDAO
 				.getById("http://www.culturecommunication.gouv.fr/co1");
 		List<ThesaurusConcept> thesaurusConcepts = thesaurusConceptDAO
 				.getAssociatedConcepts(concept1);
 		Assert.assertEquals(2, thesaurusConcepts.size());
-	}
+	}*/
 
 	@Test
 	public void testGetTopTermByThesaurus() throws BusinessException {

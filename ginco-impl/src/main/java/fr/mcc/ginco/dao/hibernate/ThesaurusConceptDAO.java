@@ -116,7 +116,7 @@ public class ThesaurusConceptDAO extends
         return getConcepts(conceptId, null, null);
     }
 
-    public List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId, Boolean searchOrphans) {
+    private List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId, Boolean searchOrphans) {
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusConcept.class, "tc");
 
@@ -150,26 +150,8 @@ public class ThesaurusConceptDAO extends
         onlyValidatedConcepts(criteria, onlyValidatedConcepts);
 
         return criteria.list();
-    }
-    
-    @Override
-    public List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept) {
-    
-        DetachedCriteria d1 = DetachedCriteria.forClass(AssociativeRelationship.class, "ar1");
-		d1.setProjection(Projections.projectionList().add(Projections.property("ar1.identifier.concept2")));
-		d1.add(Restrictions.eq("identifier.concept1", concept.getIdentifier()));
-		
-		DetachedCriteria d2 = DetachedCriteria.forClass(AssociativeRelationship.class, "ar2");
-		d2.setProjection(Projections.projectionList().add(Projections.property("ar2.identifier.concept1")));
-		d2.add(Restrictions.eq("identifier.concept2", concept.getIdentifier()));
-			
-		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
-		.add(Restrictions.or(
-				Subqueries.propertyIn("tc.identifier", d1),
-				Subqueries.propertyIn("tc.identifier", d2)));		
-
-        return criteria.list();
-    }
+    }    
+   
     
     @Override
     public List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept) {    	

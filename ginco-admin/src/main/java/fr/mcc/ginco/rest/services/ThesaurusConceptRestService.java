@@ -182,7 +182,7 @@ public class ThesaurusConceptRestService {
 		logger.info("Saving concept in DB");
 
 		ThesaurusConcept returnConcept = thesaurusConceptService
-				.updateThesaurusConcept(convertedConcept, terms);
+				.updateThesaurusConcept(convertedConcept, terms, thesaurusConceptViewJAXBElement.getAssociatedConcepts());
 
 		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);

@@ -50,6 +50,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
@@ -100,7 +101,8 @@ public class ThesaurusConceptRestServiceTest {
 		ThesaurusTerm fakeTerm2 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm2");
 		fakeTerm1.setPrefered(true);
 		fakeTerm2.setPrefered(false);
-		
+		fakeTerm1.setStatus(TermStatusEnum.VALIDATED.getStatus());
+		fakeTerm2.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		ThesaurusTermView fakeTermView1 = new ThesaurusTermView(fakeTerm1);
 		ThesaurusTermView fakeTermView2 = new ThesaurusTermView(fakeTerm2);
 		
@@ -123,13 +125,14 @@ public class ThesaurusConceptRestServiceTest {
 		fakeConceptView.setTopconcept(false);
 		fakeConceptView.setThesaurusId("1");
 		fakeConceptView.setTerms(termViews);
+		List<String> associatedConcepts = new ArrayList<String>();
 		
 		Mockito.when(thesaurusConceptViewConverter.convert(fakeConceptView)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(termViewConverter.convertTermViewsInTerms(termViews, true)).thenReturn(terms);
 		
 		Mockito.when(thesaurusTermService.getPreferedTerms(terms)).thenReturn(preferedTerms);
-		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms)).thenReturn(fakeThesaurusConcept);
-		Mockito.when(thesaurusConceptViewConverter.convert(fakeThesaurusConcept, terms)).thenReturn(fakeConceptView);
+		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts)).thenReturn(fakeThesaurusConcept);
+		Mockito.when(thesaurusConceptViewConverter.convert(Mockito.any(ThesaurusConcept.class), Mockito.anyListOf(ThesaurusTerm.class))).thenReturn(fakeConceptView);
 		
 		ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);
 		Assert.assertEquals(fakeConceptView.getTerms().get(0).getIdentifier(), actualResponse.getTerms().get(0).getIdentifier());
