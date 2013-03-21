@@ -142,7 +142,7 @@ public class ExportServiceImpl implements IExportService {
     private String getConceptTitleLanguage(ThesaurusConcept concept) {
         return thesaurusTermService.getPreferedTerms(
                 thesaurusTermService.getTermsByConceptId(concept.getIdentifier()))
-                .get(0).getLanguage().getId();
+                .get(0).getLanguage().getPart1();
     }
 
 
@@ -263,6 +263,12 @@ public class ExportServiceImpl implements IExportService {
         addLines(thesaurus.getCoverage().split("\\r?\\n"), DublinCoreVocabulary.COVERAGE, scheme, addList, scheme, factory, vocab);
         addLines(thesaurus.getSubject().split("\\r?\\n"), DublinCoreVocabulary.SUBJECT, scheme, addList, scheme, factory, vocab);
 
+        List<String> languages = new ArrayList<String>();
+        for(Language lang : thesaurus.getLang()) {
+            languages.add(lang.getId());
+        }
+
+        addLines(languages.toArray(), DublinCoreVocabulary.LANGUAGE, scheme, addList, scheme, factory, vocab);
 
         for(ThesaurusConcept conceptTT : tt) {
             exportSKOS(conceptTT, null, addList, scheme, factory, vocab);
@@ -278,11 +284,18 @@ public class ExportServiceImpl implements IExportService {
 
             man.save(vocab, SKOSFormatExt.RDFXML, temp.toURI());
 
-            if(thesaurus.getCreator() != null) {
-                FileInputStream fis = new FileInputStream(temp);
+            FileInputStream fis = new FileInputStream(temp);
 
-                String content = IOUtils.toString(fis);
-                fis.close();
+            String content = IOUtils.toString(fis);
+            fis.close();
+
+            String foaf = "xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"";
+            String dc = "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"";
+            content = content.replaceAll(dc, dc + "\n" + foaf);
+            content = content.replaceAll("</rdf:RDF>", collections+"</rdf:RDF>");
+
+            if(thesaurus.getCreator() != null) {
+
                 String org = "\n\t\t<foaf:organization>\n" +
                         "\t\t\t<foaf:name>NAME</foaf:name>\n" +
                         "\t\t\t<foaf:homepage>URL</foaf:homepage>\n" +
@@ -292,16 +305,15 @@ public class ExportServiceImpl implements IExportService {
                 org = org.replaceAll("URL", thesaurus.getCreator().getHomepage());
 
                 content = content.replaceAll("_X_CREATOR_", org);
-                content = content.replaceAll("</rdf:RDF>", collections+"</rdf:RDF>");
-
-                BufferedOutputStream bos;
-                FileOutputStream fos = new FileOutputStream(temp);
-
-                bos = new BufferedOutputStream(fos);
-                bos.write(content.getBytes());
-                bos.flush();
-                fos.close();
             }
+
+            BufferedOutputStream bos;
+            FileOutputStream fos = new FileOutputStream(temp);
+
+            bos = new BufferedOutputStream(fos);
+            bos.write(content.getBytes());
+            bos.flush();
+            fos.close();
 
             return temp;
 
@@ -395,10 +407,10 @@ public class ExportServiceImpl implements IExportService {
         return "";
     }
 
-    private void addLines(String[] lines, DublinCoreVocabulary type, SKOSConceptScheme conceptScheme,  List<SKOSChange> addList, SKOSConceptScheme scheme,
+    private void addLines(Object[] lines, DublinCoreVocabulary type, SKOSConceptScheme conceptScheme,  List<SKOSChange> addList, SKOSConceptScheme scheme,
                           SKOSDataFactory factory, SKOSDataset vocab) {
-        for(String line : lines) {
-            addLine(line, type, conceptScheme, addList, scheme, factory, vocab);
+        for(Object line : lines) {
+            addLine((String)line, type, conceptScheme, addList, scheme, factory, vocab);
         }
     }
 
