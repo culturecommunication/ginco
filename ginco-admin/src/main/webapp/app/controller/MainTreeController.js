@@ -63,7 +63,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	openConceptTab: function (aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		topTabs.fireEvent('openconcepttab',topTabs, aRecord.data.thesaurusId, aRecord.data.id);
+		var conceptId = aRecord.data.id.substring(aRecord.data.id.indexOf('*')+1);
+		topTabs.fireEvent('openconcepttab',topTabs, aRecord.data.thesaurusId, conceptId);
 	},
 	openTabArray: function (aRecord) {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];

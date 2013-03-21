@@ -40,7 +40,7 @@ Ext
 		.define(
 				'GincoApp.view.ConceptGroupPanel',
 				{
-					extend : 'Ext.panel.Panel',
+					extend : 'GincoApp.view.ThesaurusEntityPanel',
 					alias : 'widget.conceptGroupPanel',
 
 					localized : true,
@@ -49,9 +49,6 @@ Ext
 						type : 'vbox',
 						align : 'stretch'
 					},
-
-					thesaurusData : '',
-					conceptGroupId : '',
 
 					// Labels
 					xConceptGroupTitle : 'Concept Group',

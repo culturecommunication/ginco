@@ -36,10 +36,7 @@ Ext
 		.define(
 				'GincoApp.view.ConceptPanel',
 				{
-					extend : 'Ext.panel.Panel',
-
-					thesaurusData : '',
-					conceptId : '',
+					extend : 'GincoApp.view.ThesaurusEntityPanel',
 					initPreferedTermBeforeLoad : '',
 
 					alias : 'widget.conceptPanel',

@@ -58,7 +58,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         var me = this;
 		var thePanel = theForm.up('conceptArrayPanel');
         var model = this.getConceptArrayModelModel();
-        var conceptArrayId = thePanel.conceptArrayId;
+        var conceptArrayId = thePanel.gincoId;
 		var deleteConceptArrayBtn = thePanel.down('#deleteConceptArray');
         if (conceptArrayId != '') {    		
     		theForm.getEl().mask("Chargement");

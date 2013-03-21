@@ -55,7 +55,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
         var me = this;
         var theConceptGroupPanel = theForm.up('conceptGroupPanel');
         var model = this.getConceptGroupModelModel();
-        var conceptGroupId = theConceptGroupPanel.conceptGroupId;
+        var conceptGroupId = theConceptGroupPanel.gincoId;
         
         if (conceptGroupId != '') {
         	theForm.getEl().mask("Chargement");

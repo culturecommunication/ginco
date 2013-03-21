@@ -42,9 +42,7 @@ Ext
 		.define(
 				'GincoApp.view.ConceptArrayPanel',
 				{
-					extend : 'Ext.panel.Panel',
-					thesaurusData : '',
-					conceptArrayId : '',
+					extend : 'GincoApp.view.ThesaurusEntityPanel',
 					alias : 'widget.conceptArrayPanel',
 
 					localized : true,
