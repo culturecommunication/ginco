@@ -49,5 +49,5 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public interface IAssociativeRelationshipService {   
 
 	
-	List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept) throws BusinessException;
+	List<String> getAssociatedConceptsId(ThesaurusConcept concept) throws BusinessException;
 }

@@ -24,12 +24,12 @@
 			<many-to-many column="rootconceptid" class="fr.mcc.ginco.beans.ThesaurusConcept" />
 		</set>		
 		
-		<set name="associativeRelationshipLeft" inverse="true" cascade="all-delete-orphan" >
+		<set name="associativeRelationshipLeft" inverse="true" >
             <key column="concept1" not-null="true"/>
             <one-to-many class="fr.mcc.ginco.beans.AssociativeRelationship" />
         </set>
 
-		<set name="associativeRelationshipRight" inverse="true" cascade="all-delete-orphan" >
+		<set name="associativeRelationshipRight" inverse="true">
             <key column="concept2" not-null="true"/>
             <one-to-many class="fr.mcc.ginco.beans.AssociativeRelationship"/>
         </set>  

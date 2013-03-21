@@ -68,7 +68,7 @@ public class AssociativeRelationshipDAO extends
 	}    
     
     @Override
-    public List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept) {
+    public List<String> getAssociatedConcepts(ThesaurusConcept concept) {
     
         DetachedCriteria d1 = DetachedCriteria.forClass(AssociativeRelationship.class, "ar1");
 		d1.setProjection(Projections.projectionList().add(Projections.property("ar1.identifier.concept2")));
@@ -81,7 +81,8 @@ public class AssociativeRelationshipDAO extends
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
 		.add(Restrictions.or(
 				Subqueries.propertyIn("tc.identifier", d1),
-				Subqueries.propertyIn("tc.identifier", d2)));		
+				Subqueries.propertyIn("tc.identifier", d2)))
+				.setProjection(Projections.property("tc.identifier"));		
 
         return criteria.list();
     }   

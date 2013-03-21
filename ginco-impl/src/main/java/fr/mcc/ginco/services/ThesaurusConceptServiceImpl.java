@@ -323,25 +323,32 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 
 		}
-		object = manageAssociativeRelationship(object, associatedConceptIds);
+		object = saveAssociativeRelationship(object, associatedConceptIds);
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
 		return concept;
 	}
 
-	private ThesaurusConcept manageAssociativeRelationship(
+	private ThesaurusConcept saveAssociativeRelationship(
 			ThesaurusConcept concept, List<String> associatedConceptIds)
 			throws BusinessException {
 		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
-
 		if (concept.getAssociativeRelationshipLeft() == null) {
 			concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
+		} else {
+			for (AssociativeRelationship associativeRelationship: concept.getAssociativeRelationshipLeft()) {
+				associativeRelationshipDAO.delete(associativeRelationship);
+			}
 		}
 		concept.getAssociativeRelationshipLeft().clear();
 
 		if (concept.getAssociativeRelationshipRight() == null) {
 			concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());
+		}else {
+			for (AssociativeRelationship associativeRelationship: concept.getAssociativeRelationshipRight()) {
+				associativeRelationshipDAO.delete(associativeRelationship);
+			}
 		}
 		concept.getAssociativeRelationshipRight().clear();
 
@@ -354,9 +361,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 						"A concept must associate a validated concept",
 						"concept-associate-validated-concept");
 			}
-			List<ThesaurusConcept> alreadyAssociatedConcepts = associativeRelationshipDAO
+			List<String> alreadyAssociatedConcepts = associativeRelationshipDAO
 					.getAssociatedConcepts(linkedThesaurusConcept);
-			if (!alreadyAssociatedConcepts.contains(concept)) {
+			if (!alreadyAssociatedConcepts.contains(concept.getIdentifier())) {
 				AssociativeRelationship relationship = new AssociativeRelationship();
 				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
 				relationshipId.setConcept1(concept.getIdentifier());
@@ -368,6 +375,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				relationship
 						.setRelationshipRole(associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole()	);
 				relations.add(relationship);
+				associativeRelationshipDAO.update(relationship);
 			}
 		}
 		concept.getAssociativeRelationshipLeft().addAll(relations);

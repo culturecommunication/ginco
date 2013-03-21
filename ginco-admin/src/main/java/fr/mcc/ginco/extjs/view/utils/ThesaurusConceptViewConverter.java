@@ -130,11 +130,11 @@ public class ThesaurusConceptViewConverter {
 		view.setTerms(terms);
 
 		List<String> associatedConcepts = new ArrayList<String>();
-		for (ThesaurusConcept conceptAssociated : associativeRelationshipService
-				.getAssociatedConcepts(concept)) {
-			associatedConcepts.add(conceptAssociated.getIdentifier());
+		for (String conceptAssociated : associativeRelationshipService
+				.getAssociatedConceptsId(concept)) {
+			associatedConcepts.add(conceptAssociated);
 			logger.info("Found associated concept : "
-					+ conceptAssociated.getIdentifier());
+					+ conceptAssociated);
 		}
 		view.setAssociatedConcepts(associatedConcepts);
 		return view;

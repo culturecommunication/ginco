@@ -50,6 +50,6 @@ public interface IAssociativeRelationshipDAO extends IGenericDAO<AssociativeRela
      * @param concept
      * @return
      */
-    List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept);  
+    List<String> getAssociatedConcepts(ThesaurusConcept concept);  
 
 }
