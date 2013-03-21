@@ -304,6 +304,9 @@ public class ExportServiceImpl implements IExportService {
                 org = org.replaceAll("NAME", thesaurus.getCreator().getName());
                 org = org.replaceAll("URL", thesaurus.getCreator().getHomepage());
 
+                String creator = "<dc:creator rdf:datatype=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral\">";
+
+                content = content.replaceAll(creator, "<dc:creator>");
                 content = content.replaceAll("_X_CREATOR_", org);
             }
 
