@@ -34,8 +34,19 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.commons.collections.ListUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -44,20 +55,10 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
+import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
-import org.apache.commons.collections.ListUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Small class responsible for converting real {@link ThesaurusConcept} object
@@ -77,9 +78,9 @@ public class ThesaurusConceptViewConverter {
 	private IThesaurusConceptService thesaurusConceptService;
 	
 	@Inject
-	@Named("associativeRelationshipRoleService")
-	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
-	
+	@Named("associativeRelationshipService")
+	private IAssociativeRelationshipService associativeRelationshipService;	
+
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
@@ -97,16 +98,17 @@ public class ThesaurusConceptViewConverter {
 			result.add(view);
 		}
 
-        return result;
-    }
+		return result;
+	}
 
-    public ThesaurusConceptReducedView convert(ThesaurusConcept concept) throws BusinessException {
-        ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
-        view.setIdentifier(concept.getIdentifier());
-        view.setLabel(thesaurusConceptService.getConceptLabel(concept
-                .getIdentifier()));
-        return view;
-    }
+	public ThesaurusConceptReducedView convert(ThesaurusConcept concept)
+			throws BusinessException {
+		ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
+		view.setIdentifier(concept.getIdentifier());
+		view.setLabel(thesaurusConceptService.getConceptLabel(concept
+				.getIdentifier()));
+		return view;
+	}
 
 	public ThesaurusConceptView convert(ThesaurusConcept concept,
 			List<ThesaurusTerm> thesaurusTerms) {
@@ -117,31 +119,34 @@ public class ThesaurusConceptViewConverter {
 		view.setTopconcept(concept.getTopConcept());
 		view.setThesaurusId(concept.getThesaurus().getIdentifier());
 		view.setStatus(concept.getStatus());
-		
-		view.setParentConcepts(getIdsFromConceptList(concept.getParentConcepts()));
-        view.setRootConcepts(getIdsFromConceptList(concept.getRootConcepts()));
-        List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
+
+		view.setParentConcepts(getIdsFromConceptList(concept
+				.getParentConcepts()));
+		view.setRootConcepts(getIdsFromConceptList(concept.getRootConcepts()));
+		List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			terms.add(new ThesaurusTermView(thesaurusTerm));
 		}
 		view.setTerms(terms);
-		
+
 		List<String> associatedConcepts = new ArrayList<String>();
-		for (ThesaurusConcept conceptAssociated : thesaurusConceptService.getAssociatedConcepts(concept.getIdentifier())) {
+		for (ThesaurusConcept conceptAssociated : associativeRelationshipService
+				.getAssociatedConcepts(concept)) {
 			associatedConcepts.add(conceptAssociated.getIdentifier());
-			logger.info("Found associated concept : " + conceptAssociated.getIdentifier());
-		}	
+			logger.info("Found associated concept : "
+					+ conceptAssociated.getIdentifier());
+		}
 		view.setAssociatedConcepts(associatedConcepts);
 		return view;
 	}
 
-    private List<String> getIdsFromConceptList(Set<ThesaurusConcept> list) {
-        List<String> result = new ArrayList<String>();
-        for(ThesaurusConcept concept : list) {
-            result.add(concept.getIdentifier());
-        }
-        return result;
-    }
+	private List<String> getIdsFromConceptList(Set<ThesaurusConcept> list) {
+		List<String> result = new ArrayList<String>();
+		for (ThesaurusConcept concept : list) {
+			result.add(concept.getIdentifier());
+		}
+		return result;
+	}
 
 	/**
 	 * @param source
@@ -179,75 +184,48 @@ public class ThesaurusConceptViewConverter {
 			thesaurusConcept.setThesaurus(thesaurus);
 		}
 		thesaurusConcept.setModified(DateUtil.nowDate());
-        thesaurusConcept.setTopConcept(source.getTopconcept());
-        
-        if (source.getStatus() != null) {
-        	thesaurusConcept.setStatus(source.getStatus());
-        }
+		thesaurusConcept.setTopConcept(source.getTopconcept());
 
-        List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept.getParentConcepts());
+		if (source.getStatus() != null) {
+			thesaurusConcept.setStatus(source.getStatus());
+		}
 
-        List<String> addedParents = ListUtils.subtract(source.getParentConcepts(), oldParentIds);
-        List<String> removedParents = ListUtils.subtract(oldParentIds, source.getParentConcepts());
+		List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept
+				.getParentConcepts());
 
-        if(!addedParents.isEmpty() || !removedParents.isEmpty()) {
-            Set<ThesaurusConcept> addedParentsSet =
-                      thesaurusConceptService.getThesaurusConceptList(addedParents);
+		List<String> addedParents = ListUtils.subtract(
+				source.getParentConcepts(), oldParentIds);
+		List<String> removedParents = ListUtils.subtract(oldParentIds,
+				source.getParentConcepts());
 
-            if(!removedParents.isEmpty()) {
-                thesaurusConceptService.removeParents(thesaurusConcept, removedParents);
-            }
+		if (!addedParents.isEmpty() || !removedParents.isEmpty()) {
+			Set<ThesaurusConcept> addedParentsSet = thesaurusConceptService
+					.getThesaurusConceptList(addedParents);
 
-            if(!addedParents.isEmpty()) {
-                thesaurusConcept.getParentConcepts().addAll(addedParentsSet);
-            }
+			if (!removedParents.isEmpty()) {
+				thesaurusConceptService.removeParents(thesaurusConcept,
+						removedParents);
+			}
 
-            thesaurusConcept.setRootConcepts(
-                    new HashSet<ThesaurusConcept>(
-                            thesaurusConceptService.getRootConcepts(thesaurusConcept)));
-            
-            //launching an Async method to calculate new root concept for this concept children
-            thesaurusConceptService.calculateChildrenRoot(thesaurusConcept.getIdentifier());
+			if (!addedParents.isEmpty()) {
+				thesaurusConcept.getParentConcepts().addAll(addedParentsSet);
+			}
 
-        }
-        List<String> associatedConceptsIds = source.getAssociatedConcepts();
-        thesaurusConcept = manageAssociativeRelationship(thesaurusConcept,associatedConceptsIds);
+			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(
+					thesaurusConceptService.getRootConcepts(thesaurusConcept)));
 
-        if(!thesaurusConcept.getParentConcepts().isEmpty()) {
-            thesaurusConcept.setTopConcept(false);
-        }
+			// launching an Async method to calculate new root concept for this
+			// concept children
+			thesaurusConceptService.calculateChildrenRoot(thesaurusConcept
+					.getIdentifier());
+
+		}	
+
+		if (!thesaurusConcept.getParentConcepts().isEmpty()) {
+			thesaurusConcept.setTopConcept(false);
+		}
 
 		return thesaurusConcept;
-	}
-	
-	private ThesaurusConcept manageAssociativeRelationship(ThesaurusConcept concept, List<String> associatedConceptsIds) throws BusinessException{
-		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
-		
-		if (concept.getAssociativeRelationshipLeft() == null) {
-			concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
-		}
-		concept.getAssociativeRelationshipLeft().clear();
-
-		if (concept.getAssociativeRelationshipRight() == null) {
-			concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());
-		}
-		concept.getAssociativeRelationshipRight().clear();
-
-		for (String associatedConceptsId: associatedConceptsIds) {
-			logger.debug("Settings associated concept " + associatedConceptsId);
-			AssociativeRelationship relationship = new AssociativeRelationship();
-			AssociativeRelationship.Id relationshipId= new AssociativeRelationship.Id();
-			relationshipId.setConcept1(concept.getIdentifier());
-			relationshipId.setConcept2(associatedConceptsId);
-			relationship.setIdentifier(relationshipId);
-			relationship.setConceptLeft(concept);
-			relationship.setConceptRight(thesaurusConceptService.getThesaurusConceptById(associatedConceptsId));
-			relationship.setRelationshipRole(associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole());
-			relations.add(relationship);
-		}
-		concept.getAssociativeRelationshipLeft().addAll(relations);
-		
-		return concept;
 	}
 
 }

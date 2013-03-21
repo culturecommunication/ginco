@@ -105,15 +105,8 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param searchOrphans could be null if doesn't matter.
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
-
-    
-    /**
-     * Gets the list of asssociated concepts
-     * @param concept
-     * @return
-     */
-    List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept);
+    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);   
+   
     
     /**
      * Returns all children (recursive) from the given root

@@ -182,3 +182,7 @@ ALTER TABLE note ALTER lang TYPE character(5);
 
 ALTER TABLE thesaurus_concept ALTER COLUMN status SET DEFAULT 0;
 ALTER TABLE thesaurus_term ALTER COLUMN status SET DEFAULT 0;
+
+ALTER TABLE associative_relationship ALTER concept1 TYPE text;
+ALTER TABLE associative_relationship ALTER concept2 TYPE text;
+ALTER TABLE associative_relationship ALTER "role" TYPE text;

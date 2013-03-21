@@ -37,11 +37,14 @@ package fr.mcc.ginco.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -134,7 +137,8 @@ public class ThesaurusTermDAO extends
 		return list;
 	}
 	
-	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {
+	@Override
+	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {		 
 		return (Long) getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq("lexicalValue", term.getLexicalValue()))

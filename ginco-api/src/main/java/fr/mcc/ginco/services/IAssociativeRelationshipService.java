@@ -32,46 +32,22 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.BusinessException;
 
-public abstract class AbstractBuilder {
-	protected String getSimpleStringInfo(Resource skosResource, Property prop) {
-		Statement stmt = skosResource.getProperty(prop);
-		if (stmt!= null) {
-		return stmt.getString();
-		}
-		return null;
-	}
+/**
+ * Service used to work with {@link AssociativeRelationshipRole} objects, contains basic
+ * methods exposed to client part.
+ *
+ * @see fr.mcc.ginco.beans
+ */
+public interface IAssociativeRelationshipService {   
+
 	
-	protected List<String> getSeveralSimpleStringInfo(Resource skosResource, Property prop) {
-		StmtIterator stmtIterator = skosResource.listProperties(prop);
-		List<String> values = new ArrayList<String>();
-		while(stmtIterator.hasNext()) {
-			Statement stmt = stmtIterator.next();
-			values.add(stmt.getString());
-		}
-		return values;
-	}
-
-	protected String getMultipleLineStringInfo(Resource skosResource,
-			Property prop) {
-		String lines = "";
-		StmtIterator stmtIterator = skosResource.listProperties(prop);
-		while (stmtIterator.hasNext()) {
-			Statement stmt = stmtIterator.next();
-			lines += stmt.getString();
-			if (stmtIterator.hasNext()) {
-				lines += "\n";
-			}
-		}
-		return lines;
-	}
+	List<ThesaurusConcept> getAssociatedConcepts(ThesaurusConcept concept) throws BusinessException;
 }

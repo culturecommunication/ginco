@@ -44,6 +44,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -105,7 +106,11 @@ public class ThesaurusBuilder extends AbstractBuilder{
 			throws BusinessException {
 		Thesaurus thesaurus = new Thesaurus();
 		thesaurus.setIdentifier(skosThesaurus.getURI());
-		thesaurus.setTitle(getSimpleStringInfo(skosThesaurus, DC.title));
+		String title = getSimpleStringInfo(skosThesaurus, DC.title);
+		if (StringUtils.isEmpty(title)) {
+			throw new BusinessException("Missing title for imported thesaurus ","import-missing-title-thesaurus");
+		}
+		thesaurus.setTitle(title);
 		thesaurus.setSubject(getMultipleLineStringInfo(skosThesaurus,
 				DC.subject));
 		thesaurus.setContributor(getMultipleLineStringInfo(skosThesaurus,

@@ -55,6 +55,8 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
@@ -69,7 +71,7 @@ import fr.mcc.ginco.utils.LabelUtil;
  * Implementation of the thesaurus concept service. Contains methods relatives
  * to the ThesaurusConcept object
  */
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusConceptService")
 public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
@@ -90,10 +92,19 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Inject
 	@Named("thesaurusArrayDAO")
-	private IThesaurusArrayDAO thesaurusArrayDAO;	
+	private IThesaurusArrayDAO thesaurusArrayDAO;
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
+
+	@Inject
+	@Named("associativeRelationshipDAO")
+	private IAssociativeRelationshipDAO associativeRelationshipDAO;
+	
+	@Inject
+	@Named("associativeRelationshipRoleDAO")
+	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
+
 
 	/*
 	 * (non-Javadoc)
@@ -177,9 +188,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getConceptsByThesaurusId(
-			String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts) {
+			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts) {
 		return thesaurusConceptDAO.getAllConceptsByThesaurusId(
-				excludeConceptId, thesaurusId, searchOrphans, onlyValidatedConcepts);
+				excludeConceptId, thesaurusId, searchOrphans,
+				onlyValidatedConcepts);
 	}
 
 	@Override
@@ -277,16 +290,17 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return LabelUtil.getConceptLabel(term, defaultLang);
 	}
 
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms) throws BusinessException {
+			List<ThesaurusTerm> terms, List<String> associatedConceptIds)
+			throws BusinessException {
 
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
 			// We can set status = candidate only if concept has not relation
 			// (both hierarchical or associative)
-			if (!object.getAssociativeRelationshipLeft().isEmpty()
-					|| !object.getAssociativeRelationshipRight().isEmpty()
+			if (!associatedConceptIds.isEmpty()
+					// || !object.getAssociativeRelationshipRight().isEmpty()
 					|| !object.getParentConcepts().isEmpty()
 					|| hasChildren(object.getIdentifier())) {
 				throw new BusinessException(
@@ -307,53 +321,61 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				}
 			}
 
-			// Test if the concept is associated to validated concepts only
-			Set<AssociativeRelationship> associatedLeft = object.getAssociativeRelationshipLeft() ;	
-			Set<AssociativeRelationship> associatedRight = object.getAssociativeRelationshipRight() ;
-			
-			Set<AssociativeRelationship> associations = new HashSet<AssociativeRelationship>();
-			associations.addAll(associatedLeft);
-			associations.addAll(associatedRight);
-			
-			for (AssociativeRelationship association : associations) {
-				ThesaurusConcept conceptLeft = thesaurusConceptDAO.getById(association.getConceptLeft().getIdentifier());
-				ThesaurusConcept conceptRight = thesaurusConceptDAO.getById(association.getConceptRight().getIdentifier());
-				
-				if (conceptLeft != null) {
-					if (conceptLeft.getStatus() != ConceptStatusEnum.VALIDATED.getStatus()) {
-						throw new BusinessException(
-								"A concept must associate a validated concept",
-								"concept-associate-validated-concept");
-					}	
-				}
-				
-				if (conceptRight != null) {
-					if (conceptRight.getStatus() != ConceptStatusEnum.VALIDATED.getStatus()) {
-						throw new BusinessException(
-								"A concept must associate a validated concept",
-								"concept-associate-validated-concept");
-					}	
-				}
-			}
+
 		}
+		object = manageAssociativeRelationship(object, associatedConceptIds);
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
 		return concept;
 	}
 
-	@Override
-	public List<ThesaurusConcept> getAssociatedConcepts(String conceptId) {
-		List<ThesaurusConcept> result = new ArrayList<ThesaurusConcept>();
-		ThesaurusConcept concept = thesaurusConceptDAO.getById(conceptId);
-		if (concept != null) {
-			//If the concept exists, we return its associated concept, else we return an empty list
-			result = thesaurusConceptDAO.getAssociatedConcepts(concept);
+	private ThesaurusConcept manageAssociativeRelationship(
+			ThesaurusConcept concept, List<String> associatedConceptIds)
+			throws BusinessException {
+		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
+
+		if (concept.getAssociativeRelationshipLeft() == null) {
+			concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
 		}
-		return result;
+		concept.getAssociativeRelationshipLeft().clear();
+
+		if (concept.getAssociativeRelationshipRight() == null) {
+			concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());
+		}
+		concept.getAssociativeRelationshipRight().clear();
+
+		for (String associatedConceptsId : associatedConceptIds) {
+			logger.debug("Settings associated concept " + associatedConceptsId);
+			ThesaurusConcept linkedThesaurusConcept = getThesaurusConceptById(associatedConceptsId);
+			if (linkedThesaurusConcept.getStatus() != ConceptStatusEnum.VALIDATED
+					.getStatus()) {
+				throw new BusinessException(
+						"A concept must associate a validated concept",
+						"concept-associate-validated-concept");
+			}
+			List<ThesaurusConcept> alreadyAssociatedConcepts = associativeRelationshipDAO
+					.getAssociatedConcepts(linkedThesaurusConcept);
+			if (!alreadyAssociatedConcepts.contains(concept)) {
+				AssociativeRelationship relationship = new AssociativeRelationship();
+				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
+				relationshipId.setConcept1(concept.getIdentifier());
+				relationshipId.setConcept2(associatedConceptsId);
+				relationship.setIdentifier(relationshipId);
+				relationship.setConceptLeft(concept);
+				relationship.setConceptRight(thesaurusConceptDAO
+						.getById(associatedConceptsId));
+				relationship
+						.setRelationshipRole(associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole()	);
+				relations.add(relationship);
+			}
+		}
+		concept.getAssociativeRelationshipLeft().addAll(relations);
+
+		return concept;
 	}
 
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object)
 			throws BusinessException {
@@ -391,9 +413,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			List<ThesaurusTerm> terms) throws BusinessException {
 		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm thesaurusTerm : terms) {
-			
-			//We always set validated status to the terms that are joined to a concept
-			thesaurusTerm.setStatus(TermStatusEnum.VALIDATED.getStatus());				
+
+			// We always set validated status to the terms that are joined to a
+			// concept
+			thesaurusTerm.setStatus(TermStatusEnum.VALIDATED.getStatus());
 			thesaurusTerm.setConcept(concept);
 			returnTerms.add(thesaurusTermDAO.update(thesaurusTerm));
 
