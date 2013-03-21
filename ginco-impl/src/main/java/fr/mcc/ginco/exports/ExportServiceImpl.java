@@ -437,6 +437,15 @@ public class ExportServiceImpl implements IExportService {
                 prefLabel,
                 prefLabelLang);
 
+        for(ThesaurusConcept related : thesaurusConceptService.getThesaurusConceptList(associativeRelationshipService.getAssociatedConceptsId(concept))) {
+            SKOSConcept relConcept = factory.getSKOSConcept(URI.create(related.getIdentifier()));
+
+            SKOSObjectRelationAssertion relAssertion =
+                    factory.getSKOSObjectRelationAssertion(conceptSKOS, factory.getSKOSRelatedProperty(), relConcept);
+
+            addList.add(new AddAssertion(vocab, relAssertion));
+        }
+
         for(ThesaurusTerm altLabel : thesaurusTermService.getTermsByConceptId(concept.getIdentifier())) {
             if(altLabel.getLexicalValue().equals(prefLabel)) continue;
 
