@@ -188,7 +188,7 @@ public class ExportServiceImpl implements IExportService {
 
         for(ThesaurusTerm term : thesaurusTermService.getTermsByConceptId(concept.getIdentifier())) {
             if(!term.getPrefered()) {
-                result.add(new FormattedLine(base, "EP: "+ LabelUtil.getConceptLabel(term, defaultLang)));
+                result.add(new FormattedLine(base, "EP: "+ LabelUtil.getLocalizedLabel(term.getLexicalValue(), term.getLanguage(), defaultLang)));
             }
         }
 
@@ -198,10 +198,10 @@ public class ExportServiceImpl implements IExportService {
 
         for(ThesaurusTerm term : thesaurusTermService.getTermsByConceptId(concept.getIdentifier())) {
             if(!term.getPrefered()) {
-                result.add(new FormattedLine(base-1, LabelUtil.getConceptLabel(term, defaultLang)));
+                result.add(new FormattedLine(base-1, LabelUtil.getLocalizedLabel(term.getLexicalValue(), term.getLanguage(), defaultLang)));
                 result.add(new FormattedLine(base, term.getRole().getCode()
                         + ": "
-                        + LabelUtil.getConceptLabel(term, defaultLang)));
+                        + LabelUtil.getLocalizedLabel(term.getLexicalValue(), term.getLanguage(), defaultLang)));
             }
         }
     }

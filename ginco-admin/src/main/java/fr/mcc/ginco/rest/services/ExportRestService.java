@@ -38,7 +38,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.IExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
 import org.springframework.stereotype.Service;
 
@@ -71,26 +71,6 @@ public class ExportRestService {
     @Inject
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
-
-    @Inject
-    @Named("thesaurusArrayService")
-    private IThesaurusArrayService thesaurusArrayService;
-
-    @Inject
-    @Named("thesaurusTermService")
-    private IThesaurusTermService thesaurusTermService;
-
-    @Inject
-    @Named("nodeLabelService")
-    private INodeLabelService nodeLabelService;
-
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-
-    @Inject
-    @Named("noteService")
-    private INoteService noteService;
 
     /**
      * Return file in .txt format; name begins with current DateTime.
@@ -193,10 +173,10 @@ public class ExportRestService {
             List<FormattedLine> result = exportService.getAlphabeticalText(targetThesaurus);
 
             for(FormattedLine results : result) {
-                for(int i=0;i<results.tabs;i++) {
+                for(int i=0;i<results.getTabs();i++) {
                     out.write(TABULATION_DELIMITER);
                 }
-                out.write(results.text);
+                out.write(results.getText());
                 out.newLine();
                 out.flush();
             }
