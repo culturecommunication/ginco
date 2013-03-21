@@ -35,6 +35,7 @@
 package fr.mcc.ginco.extjs.view.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -107,6 +108,7 @@ public class ArraysGenerator {
 
 			newArrays.add(arrayNode);
 		}
+		Collections.sort(newArrays);
 		return newArrays;
 	}
 

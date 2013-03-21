@@ -83,23 +83,16 @@ public class TopTermGeneratorTest {
         co2.setThesaurus(mockThesaurus);
         concepts.add(co1);
         concepts.add(co2);
-        Language lang = new Language();
-        lang.setId("fra");
-
-        ThesaurusTerm preft1 = new ThesaurusTerm();
-        preft1.setLexicalValue("First preferred term");
-        preft1.setLanguage(lang);
-        ThesaurusTerm preft2 = new ThesaurusTerm();
-        preft2.setLexicalValue("Second preferred term");
-        preft2.setLanguage(lang);
 
         Mockito.when(thesaurusConceptService
                 .getTopTermThesaurusConcepts(Mockito.anyString())).thenReturn(concepts);
-        Mockito.when(thesaurusConceptService.getConceptPreferredTerm("co1")).thenReturn(preft1);
-        Mockito.when(thesaurusConceptService.getConceptPreferredTerm("co2")).thenReturn(preft2);
-
+        Mockito.when(thesaurusConceptService.getConceptLabel("co1")).thenReturn("zzzz");
+        Mockito.when(thesaurusConceptService.getConceptLabel("co2")).thenReturn("aaaa");
         List<IThesaurusListNode> nodes = topTermGenerator.generateTopTerm("anystring");
+        
         Assert.assertEquals(2, nodes.size());
+        //Test alphabetical order
+        Assert.assertEquals("CONCEPT_*co2", nodes.get(0).getId());
     }
 	
 }

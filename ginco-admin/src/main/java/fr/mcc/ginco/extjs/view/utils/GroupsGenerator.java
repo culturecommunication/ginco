@@ -35,6 +35,7 @@
 package fr.mcc.ginco.extjs.view.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -100,11 +101,11 @@ public class GroupsGenerator {
 			groupNode.setThesaurusId(group.getThesaurus().getIdentifier());
 
 			groupNode.setChildren(new ArrayList<IThesaurusListNode>());
-			groupNode.setLeaf(true);
-            
+			groupNode.setLeaf(true);            
 
 			newGroups.add(groupNode);
 		}
+		Collections.sort(newGroups);
 		return newGroups;
 	}
 }

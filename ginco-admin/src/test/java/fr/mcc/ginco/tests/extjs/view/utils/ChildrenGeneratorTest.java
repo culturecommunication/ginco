@@ -137,8 +137,12 @@ public class ChildrenGeneratorTest {
                 .thenReturn(children);
         Mockito.when(
                 thesaurusConceptService
-                        .getConceptLabel(Matchers.anyString()))
-                .thenReturn("concept");
+                        .getConceptLabel("co1"))
+                .thenReturn("zzzz");
+        Mockito.when(
+                thesaurusConceptService
+                        .getConceptLabel("co2"))
+                .thenReturn("aaaa");
 
         Mockito.when(
                 thesaurusConceptService
@@ -151,12 +155,12 @@ public class ChildrenGeneratorTest {
                         + "5");
 
         Assert.assertEquals("Number of children does not correspond!", 2, nodes.size());
-        Assert.assertEquals("Title does not correspond!", "concept", nodes.get(0).getTitle());
-        Assert.assertEquals("ID does not correspond!",
-                ChildrenGenerator.ID_PREFIX
-                        + "5"
-                        + ChildrenGenerator.PARENT_SEPARATOR
-                        + "co1" , nodes.get(0).getId());
+        //Test alphabetical order
+        Assert.assertEquals("CONCEPT_5*co2", nodes.get(0).getId());
+
+        
+        Assert.assertEquals("Title does not correspond!", "aaaa", nodes.get(0).getTitle());
+        Assert.assertEquals("ID does not correspond!", "CONCEPT_5*co2", nodes.get(0).getId());
         Assert.assertEquals("Type does not correspond!", ThesaurusListNodeType.CONCEPT, nodes.get(0).getType());
         Assert.assertEquals("Thesaurus was badly recuperated!", thesaurus.getIdentifier(), nodes.get(0).getThesaurusId());
         Assert.assertFalse("Node should not be leaf!", nodes.get(0).isLeaf());
