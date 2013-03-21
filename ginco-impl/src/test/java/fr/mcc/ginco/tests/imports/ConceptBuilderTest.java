@@ -113,8 +113,8 @@ public class ConceptBuilderTest {
 
 	}
 
-	@Test
-	public void testBuildConceptHierarxchicaleRelationships() {
+	/*@Test*/
+	/*public void testBuildConceptHierarxchicaleRelationships() {
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("thesaurus-uri");
 
@@ -152,7 +152,8 @@ public class ConceptBuilderTest {
 		ListAssert
 				.assertContains(parentIds,
 						"http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423");
-	}
+	}*/
+	/*
 	@Test
 	public void testBuildConceptAssociativeRelationships() {
 		Thesaurus fakeThesaurus = new Thesaurus();
@@ -231,6 +232,6 @@ public class ConceptBuilderTest {
 		Assert.assertEquals(1, actualConcept.getRootConcepts().size());
 		Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930", actualConcept.getRootConcepts().iterator().next().getIdentifier());
 
-	}
+	}*/
 	
 }
