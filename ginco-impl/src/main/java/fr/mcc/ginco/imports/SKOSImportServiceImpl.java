@@ -41,6 +41,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -59,12 +60,14 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.util.FileManager;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
@@ -76,7 +79,7 @@ import fr.mcc.ginco.log.Log;
 
 /**
  * Implementation of the SKOS thesaurus import service
- *
+ * 
  */
 @Transactional
 @Service("skosImportService")
@@ -96,6 +99,10 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Inject
 	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
+
+	@Inject
+	@Named("associativeRelationshipDAO")
+	private IAssociativeRelationshipDAO associativeRelationshipDAO;
 
 	@Inject
 	@Named("noteDAO")
@@ -133,8 +140,12 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Named("skosNodeLabelBuilder")
 	private NodeLabelBuilder nodeLabelBuilder;
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.imports.ISKOSImportService#importSKOSFile(java.lang.String, java.lang.String, java.io.File)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.imports.ISKOSImportService#importSKOSFile(java.lang.String,
+	 * java.lang.String, java.io.File)
 	 */
 	@Override
 	public Thesaurus importSKOSFile(String fileContent, String fileName,
@@ -164,16 +175,15 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			}
 
 			List<Resource> skosConcepts = getSKOSRessources(model, SKOS.CONCEPT);
-			buildConcepts(thesaurus, model, skosConcepts);
-			buildConceptsAssociations(thesaurus, model, skosConcepts);
-			buildConceptsRoot(thesaurus, model, skosConcepts);
+			buildConcepts(thesaurus, skosConcepts);
+			buildConceptsAssociations(thesaurus, skosConcepts);
+			buildConceptsRoot(thesaurus, skosConcepts);
 			buildArrays(thesaurus, model);
 
-		} catch (JenaException je) { 
-			throw new BusinessException(
-					"Error reading imported file ",
+		} catch (JenaException je) {
+			throw new BusinessException("Error reading imported file ",
 					"import-unable-to-read-file", je);
-		}finally {
+		} finally {
 			deleteTempFile(fileName);
 		}
 		return thesaurus;
@@ -204,15 +214,14 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	 * Launch the calculation of the root concepts and set it
 	 * 
 	 * @param thesaurus
-	 * @param model
 	 * @param skosConcepts
 	 */
-	private void buildConceptsRoot(Thesaurus thesaurus, Model model,
+	private void buildConceptsRoot(Thesaurus thesaurus,
 			List<Resource> skosConcepts) {
 		for (Resource skosConcept : skosConcepts) {
 			// Root calculation
 			ThesaurusConcept concept = conceptBuilder.buildConceptRoot(
-					skosConcept, model, thesaurus);
+					skosConcept, thesaurus);
 			thesaurusConceptDAO.update(concept);
 		}
 	}
@@ -221,15 +230,22 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	 * Builds the parent/child and relationship associations
 	 * 
 	 * @param thesaurus
-	 * @param model
 	 * @param skosConcepts
 	 */
-	private void buildConceptsAssociations(Thesaurus thesaurus, Model model,
+	private void buildConceptsAssociations(Thesaurus thesaurus,
 			List<Resource> skosConcepts) {
 		for (Resource skosConcept : skosConcepts) {
-			ThesaurusConcept concept = conceptBuilder.buildConceptAssociations(
-					skosConcept, model, thesaurus);
+			ThesaurusConcept concept = conceptBuilder
+					.buildConceptHierarchicalRelationships(skosConcept,
+							thesaurus);
 			thesaurusConceptDAO.update(concept);
+
+			Set<AssociativeRelationship> associativeRelationships = conceptBuilder
+					.buildConceptAssociativerelationship(skosConcept, thesaurus);
+			for (AssociativeRelationship relation : associativeRelationships) {
+				associativeRelationshipDAO.update(relation);
+			}
+
 		}
 	}
 
@@ -237,11 +253,9 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	 * Builds the concept with minimal informations and it's terms and notes
 	 * 
 	 * @param thesaurus
-	 * @param model
 	 * @param skosConcepts
 	 */
-	private void buildConcepts(Thesaurus thesaurus, Model model,
-			List<Resource> skosConcepts) {
+	private void buildConcepts(Thesaurus thesaurus, List<Resource> skosConcepts) {
 		for (Resource skosConcept : skosConcepts) {
 			// Minimal concept informations
 			ThesaurusConcept concept = conceptBuilder.buildConcept(skosConcept,

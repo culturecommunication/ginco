@@ -106,28 +106,15 @@ public class ConceptBuilder extends AbstractBuilder {
 	}
 
 	/**
-	 * Build direct hierarchical and associative relationships between concepts
+	 * Build associative relationships between concepts
 	 * @param skosConcept
-	 * @param model
 	 * @param thesaurus
 	 * @return
 	 * @throws BusinessException
 	 */
-	public ThesaurusConcept buildConceptAssociations(Resource skosConcept,
-			Model model, Thesaurus thesaurus) throws BusinessException {
-		logger.debug("Building relationships for concept : " + skosConcept.getURI());
+	public Set<AssociativeRelationship> buildConceptAssociativerelationship(Resource skosConcept,
+			Thesaurus thesaurus) throws BusinessException {
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
-		StmtIterator stmtParentItr = skosConcept.listProperties(SKOS.BROADER);
-		Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
-		while (stmtParentItr.hasNext()) {
-			Statement stmt = stmtParentItr.next();
-			Resource parentConceptRes = stmt.getObject().asResource();
-			String relatedURI = parentConceptRes.getURI();
-			ThesaurusConcept parentConcept = builtConcepts.get(relatedURI);
-			parentConcepts.add(parentConcept);
-		}
-		concept.setParentConcepts(parentConcepts);
-
 		StmtIterator stmtRelatedtItr = skosConcept.listProperties(SKOS.RELATED);
 		Set<AssociativeRelationship> relationshipsLeft = new HashSet<AssociativeRelationship>();
 
@@ -163,20 +150,41 @@ public class ConceptBuilder extends AbstractBuilder {
 			}
 
 		}
-		concept.setAssociativeRelationshipLeft(relationshipsLeft);
-
+		return relationshipsLeft;
+	}
+	/**
+	 * Build direct hierarchical and associative relationships between concepts
+	 * @param skosConcept
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
+	public ThesaurusConcept buildConceptHierarchicalRelationships(Resource skosConcept,
+			Thesaurus thesaurus) throws BusinessException {
+		logger.debug("Building relationships for concept : " + skosConcept.getURI());
+		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
+		StmtIterator stmtParentItr = skosConcept.listProperties(SKOS.BROADER);
+		Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
+		while (stmtParentItr.hasNext()) {
+			Statement stmt = stmtParentItr.next();
+			Resource parentConceptRes = stmt.getObject().asResource();
+			String relatedURI = parentConceptRes.getURI();
+			ThesaurusConcept parentConcept = builtConcepts.get(relatedURI);
+			parentConcepts.add(parentConcept);
+		}
+		concept.setParentConcepts(parentConcepts);
+	
 		return concept;
 	}
 
 	/**
 	 * Launch the calculation and set the root concepts of the given concept
 	 * @param skosConcept
-	 * @param model
 	 * @param thesaurus
 	 * @return
 	 * @throws BusinessException
 	 */
-	public ThesaurusConcept buildConceptRoot(Resource skosConcept, Model model,
+	public ThesaurusConcept buildConceptRoot(Resource skosConcept,
 			Thesaurus thesaurus) throws BusinessException {
 		logger.debug("Building root concepts for concept : " + skosConcept.getURI());
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
