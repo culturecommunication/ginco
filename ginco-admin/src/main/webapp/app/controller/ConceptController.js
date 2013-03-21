@@ -214,8 +214,7 @@ Ext
 						theStore.remove(rec);
 					},
 
-					onSelectTermDblClick : function(theGrid, record, item,
-							index, e, eOpts) {
+					onSelectTermDblClick : function(theGrid, record) {
 						var me = this;
 						var theWin = theGrid.up('selectTermWin');
 						if (theWin.prefered == true) {
@@ -651,7 +650,7 @@ Ext
 									},
 									'selectTermWin gridpanel' : {
 										render : this.onGridRender,
-										itemdblclick : this.onSelectTermDblClick
+										selectBtn : this.onSelectTermDblClick
 									},
 									'conceptPanel gridpanel #conceptActionColumn' : {
 										click : this.onDetachClick

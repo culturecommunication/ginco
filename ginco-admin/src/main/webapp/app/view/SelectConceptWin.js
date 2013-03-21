@@ -124,7 +124,7 @@ Ext
 														formBind : true,
 														disabled : true,
 														itemId : 'selectButton',
-														iconCls : 'icon-save',
+														iconCls : 'icon-add',
 														handler : function(
 																theButton) {
 															var thePanel = theButton
@@ -136,15 +136,14 @@ Ext
 															if (record.length == 1) {
 																me
 																		.fireEvent(
-																				'selectBtn',
+																				'selectBtn',me,
 																				record);
-																me.close();
 															}
 														}
 													} ]
 												} ],
 												listeners : {
-													itemclick : function(view,
+													select : function(view,
 															record, item,
 															index, e) {
 														var me = this;

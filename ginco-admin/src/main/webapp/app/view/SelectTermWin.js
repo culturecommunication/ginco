@@ -95,7 +95,33 @@ Ext
 											        store :  me.termStore,
 											        dock: 'bottom',
 											        displayInfo: true
-											    }]
+											    },{
+													xtype : 'toolbar',
+													dock : 'top',
+													items : [ {
+														xtype : 'button',
+														text : me.xSelectTermWinTitle,
+														disabled : false,
+														itemId : 'selectButton',
+														iconCls : 'icon-add',
+														handler : function(
+																theButton) {
+															var thePanel = theButton
+																	.up('gridpanel');
+															var record = thePanel
+																	.getSelectionModel()
+																	.getSelection();
+
+															if (record.length == 1) {
+																thePanel
+																		.fireEvent(
+																				'selectBtn',thePanel,
+																				record[0]);
+																me.close();
+															}
+														}
+													} ]
+												}]
 												}]	
 										});
 

@@ -45,10 +45,10 @@ Ext.define('GincoApp.controller.NotePanelController', {
 	
 	onRenderGrid : function(theGrid) {
 		if (theGrid.up('conceptPanel') != null) {
-			var theConceptId = theGrid.up('conceptPanel').conceptId;
+			var theConceptId = theGrid.up('conceptPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
 		} else {
-			var theTermId = theGrid.up('termPanel').termId;
+			var theTermId = theGrid.up('termPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
 		}
 		theGrid.getStore().load();
