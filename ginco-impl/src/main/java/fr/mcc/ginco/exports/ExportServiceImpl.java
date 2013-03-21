@@ -392,7 +392,7 @@ public class ExportServiceImpl implements IExportService {
             Resource inScheme = model.createResource(thesaurus.getIdentifier());
             model.add(collectionRes, SKOS.IN_SCHEME, inScheme);
 
-            collectionRes.addProperty(SKOS.PREF_LABEL, label.getLexicalValue(), label.getLanguage().getId());
+            collectionRes.addProperty(SKOS.PREF_LABEL, label.getLexicalValue(), label.getLanguage().getPart1());
 
             for(ThesaurusConcept concept : array.getConcepts()) {
                 Resource y = model.createResource(concept.getIdentifier());
