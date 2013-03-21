@@ -45,7 +45,10 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 public abstract class AbstractBuilder {
 	protected String getSimpleStringInfo(Resource skosResource, Property prop) {
 		Statement stmt = skosResource.getProperty(prop);
+		if (stmt!= null) {
 		return stmt.getString();
+		}
+		return null;
 	}
 	
 	protected List<String> getSeveralSimpleStringInfo(Resource skosResource, Property prop) {
