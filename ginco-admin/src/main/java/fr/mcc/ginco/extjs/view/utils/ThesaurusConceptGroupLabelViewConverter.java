@@ -45,12 +45,10 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
-import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Component("thesaurusConceptGroupLabelViewConverter")
 public class ThesaurusConceptGroupLabelViewConverter {
-
     @Log
     private Logger logger;
 
@@ -60,34 +58,7 @@ public class ThesaurusConceptGroupLabelViewConverter {
 
     @Inject
     @Named("languagesService")
-    private ILanguagesService languagesService;
-
-    @Inject
-    @Named("thesaurusConceptGroupService")
-    private IThesaurusConceptGroupService thesaurusConceptGroupService;
-
-    /**
-     * Create a new {@link ThesaurusConceptGroupLabel}
-     * @return An empty {@link ThesaurusConceptGroupLabel} object
-     */
-    /*private ThesaurusConceptGroupLabel getNewConceptGroupLabel() {
-    	ThesaurusConceptGroupLabel hibernateRes = new ThesaurusConceptGroupLabel();
-        hibernateRes.setCreated(DateUtil.nowDate());
-        logger.info("Creating a new label");
-        return hibernateRes;
-    }*/
-
-    /**
-     * Get an existing {@link ThesaurusConceptGroupLabel}
-     * @return An existing {@link ThesaurusConceptGroupLabel} object in database
-     */
-    /*private ThesaurusConceptGroupLabel getExistingThesaurusConceptGroupLabel(Integer id)
-            throws BusinessException {
-
-    	ThesaurusConceptGroupLabel hibernateRes = thesaurusConceptGroupLabelService.getById(id);
-        logger.info("Getting an existing concept group label with id " + id);
-        return hibernateRes;
-    }*/
+    private ILanguagesService languagesService;    
 
     
     public ThesaurusConceptGroupLabel convert(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) {

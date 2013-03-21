@@ -34,7 +34,9 @@
  */
 package fr.mcc.ginco.utils;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 
 /**
  * utility class to get objects labels
@@ -44,24 +46,27 @@ public final class LabelUtil {
 
 	private static final String LANGUAGE_SEPARATOR = "@";
 
-    private LabelUtil() {
-    }
+	private LabelUtil() {
+	}
 
 	/**
-	 * Return the label of a concept based on a term
+	 * Return a standard label depending on the language value and the default
+	 * language defined
 	 * 
-	 * @param preferredTerm
+	 * @param lexical
+	 *            value
+	 * @parma language
 	 * @param defaultLang
 	 * @return the term lexical value + @ language if the language is not the
 	 *         specified default language
 	 */
-	public static final String getConceptLabel(ThesaurusTerm preferredTerm,
-			String defaultLang) {
-		String conceptLabel = preferredTerm.getLexicalValue();
-		if (!defaultLang.equals(preferredTerm.getLanguage().getId())) {
-			conceptLabel += LANGUAGE_SEPARATOR
-					+ preferredTerm.getLanguage().getId();
+	public static final String getLocalizedLabel(String lexicalValue,
+			Language language, String defaultLang) {
+		String resultLabel = lexicalValue;
+		if (!defaultLang.equals(language.getId())) {
+			resultLabel += LANGUAGE_SEPARATOR + language.getId();
 		}
-		return conceptLabel;
+		return resultLabel;
 	}
+
 }

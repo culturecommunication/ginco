@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
@@ -52,6 +53,7 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
+import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Generator in charge of building thesaurus groups list
@@ -68,6 +70,8 @@ public class GroupsGenerator {
 	@Inject
 	@Named("thesaurusConceptGroupLabelService")
 	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
+
+	@Value("${ginco.default.language}") private String defaultLanguage;
 
 	@Log
 	private Logger logger;
@@ -89,8 +93,7 @@ public class GroupsGenerator {
 		for (ThesaurusConceptGroup group : groups) {
 			ThesaurusListBasicNode groupNode = new ThesaurusListBasicNode();
 			ThesaurusConceptGroupLabel label = thesaurusConceptGroupLabelService.getByThesaurusConceptGroup(group.getIdentifier());
-			groupNode.setTitle(label.getLexicalValue());
-			
+			groupNode.setTitle(LabelUtil.getLocalizedLabel(label.getLexicalValue(), label.getLanguage(), defaultLanguage));			
 			groupNode.setId(group.getIdentifier());
 			groupNode.setType(ThesaurusListNodeType.GROUPS);
 			groupNode.setExpanded(false);

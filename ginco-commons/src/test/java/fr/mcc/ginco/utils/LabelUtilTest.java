@@ -39,30 +39,23 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 
 public class LabelUtilTest {
 	@Test
 	public void testGetConceptLabelWithDefaultLanguage() {
 		Language lang = new Language();
 		lang.setId("fra");
-		ThesaurusTerm preferredTerm = new ThesaurusTerm();
-		preferredTerm.setLexicalValue("french lexical value");
-		preferredTerm.setLanguage(lang);
 		
-		String actualLabel = LabelUtil.getConceptLabel(preferredTerm, "fra");
+		String actualLabel = LabelUtil.getLocalizedLabel("french lexical value", lang, "fra");
 		Assert.assertEquals("french lexical value", actualLabel);
 	}
 	
 	@Test
 	public void testGetConceptLabelWithNoDefaultLanguage() {
 		Language lang = new Language();
-		lang.setId("rus");
-		ThesaurusTerm preferredTerm = new ThesaurusTerm();
-		preferredTerm.setLexicalValue("russian lexical value");
-		preferredTerm.setLanguage(lang);
+		lang.setId("rus");		
 		
-		String actualLabel = LabelUtil.getConceptLabel(preferredTerm, "fra");
+		String actualLabel = LabelUtil.getLocalizedLabel("russian lexical value", lang, "fra");
 		Assert.assertEquals("russian lexical value@rus", actualLabel);
 	}
 }
