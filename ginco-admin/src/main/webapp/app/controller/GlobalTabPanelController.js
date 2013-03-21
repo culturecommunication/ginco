@@ -58,7 +58,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			Ext.Array.forEach(theForms,function (aForm) {
 				if (aForm.getForm().isDirty())
 				{
-					if (dirtyForms.indexOf(aForm)==-1)
+					if (Ext.Array.indexOf(dirtyForms, aForm)==-1)
 					{
 						dirtyForms.push(aForm);
 					}
@@ -136,7 +136,6 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		Ext.History.on('change', function(aToken) {
             var parts, length;
             if (aToken) {
-            	console.log("History change "+aToken );
                 parts = aToken.split(tokenDelimiter);
                 length = parts.length;
                 // setActiveTab in all nested tabs
@@ -146,7 +145,6 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
         });
 		token = window.location.hash.substr(1);
 		if (token!="") {
-			console.log("Load hash "+token );
 			parts = token.split(tokenDelimiter);
             length = parts.length;
 		}
@@ -323,8 +321,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	init : function(application) {
 		this.control({
 			'thesaurusPanel' : {
-				beforeclose : this.onPanelBeforeClose,
-				
+				beforeclose : this.onPanelBeforeClose
 			},
 			'termPanel' : {
 				beforeclose : this.onPanelBeforeClose
