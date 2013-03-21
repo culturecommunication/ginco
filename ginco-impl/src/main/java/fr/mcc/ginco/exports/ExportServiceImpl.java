@@ -291,8 +291,13 @@ public class ExportServiceImpl implements IExportService {
 
             String foaf = "xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"";
             String dc = "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"";
-            content = content.replaceAll(dc, dc + "\n" + foaf);
-            content = content.replaceAll("</rdf:RDF>", collections+"</rdf:RDF>");
+
+            String dct_old = "xmlns:dct=\"http://purl.org/dct#\"";
+            String dct = "xmlns:dct=\"http://purl.org/dc/terms/\"";
+
+            content = content.replaceAll(dc, dc + "\n" + foaf)
+                    .replaceAll(dct_old, dct)
+                    .replaceAll("</rdf:RDF>", collections+"</rdf:RDF>");
 
             if(thesaurus.getCreator() != null) {
 
@@ -301,13 +306,12 @@ public class ExportServiceImpl implements IExportService {
                         "\t\t\t<foaf:homepage>URL</foaf:homepage>\n" +
                         "\t\t</foaf:organization>";
 
-                org = org.replaceAll("NAME", thesaurus.getCreator().getName());
-                org = org.replaceAll("URL", thesaurus.getCreator().getHomepage());
+                org = org.replaceAll("NAME", thesaurus.getCreator().getName())
+                        .replaceAll("URL", thesaurus.getCreator().getHomepage());
 
                 String creator = "<dc:creator rdf:datatype=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral\">";
 
-                content = content.replaceAll(creator, "<dc:creator>");
-                content = content.replaceAll("_X_CREATOR_", org);
+                content = content.replaceAll(creator, "<dc:creator>").replaceAll("_X_CREATOR_", org);
             }
 
             BufferedOutputStream bos;
