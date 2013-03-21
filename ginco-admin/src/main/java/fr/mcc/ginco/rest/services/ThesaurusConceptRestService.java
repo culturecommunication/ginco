@@ -298,7 +298,7 @@ public class ThesaurusConceptRestService {
 	        	listOfStatus.add(conceptStatusView);
 			}
 		} catch (MissingResourceException e) {
-			throw new BusinessException("Error with property file - check values of concept status", "check-values-of-concept-status");
+			throw new BusinessException("Error with property file - check values of concept status", "check-values-of-concept-status", e);
 		}
 		ExtJsonFormLoadData<List<ConceptAndTermStatusView>> result = new ExtJsonFormLoadData<List<ConceptAndTermStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());

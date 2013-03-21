@@ -167,7 +167,7 @@ public class ExportServiceImpl implements IExportService {
             man = new SKOSManager();
             vocab = man.createSKOSDataset(URI.create(baseURI));
         } catch (SKOSCreationException e) {
-            throw new BusinessException("Error creating dataset from URI.","error-in-skos-objects");
+            throw new BusinessException("Error creating dataset from URI.","error-in-skos-objects", e);
         }
 
         List<ThesaurusConcept> tt = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
@@ -252,12 +252,12 @@ public class ExportServiceImpl implements IExportService {
             return temp;
 
         } catch (SKOSChangeException e) {
-            throw new BusinessException("Error saving data into dataset.","error-in-skos-objects");
+            throw new BusinessException("Error saving data into dataset.","error-in-skos-objects", e);
         } catch (SKOSStorageException e) {
-            throw new BusinessException("Error saving dataset to temp file.","error-in-skos-objects");
+            throw new BusinessException("Error saving dataset to temp file.","error-in-skos-objects", e);
         } catch (IOException e) {
             throw new BusinessException("Error storing temporarty file for export SKOS",
-                    "export-unable-to-write-temporary-file");
+                    "export-unable-to-write-temporary-file", e);
         }
     }
 

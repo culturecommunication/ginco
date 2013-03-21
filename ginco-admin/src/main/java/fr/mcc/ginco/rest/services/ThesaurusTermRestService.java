@@ -217,7 +217,7 @@ public class ThesaurusTermRestService {
 	        	listOfStatus.add(termStatusView);
 			}
 		} catch (MissingResourceException e) {
-			throw new BusinessException("Error with property file - check values of term status", "check-values-of-term-status");
+			throw new BusinessException("Error with property file - check values of term status", "check-values-of-term-status", e);
 		}
 		ExtJsonFormLoadData<List<ConceptAndTermStatusView>> result = new ExtJsonFormLoadData<List<ConceptAndTermStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());

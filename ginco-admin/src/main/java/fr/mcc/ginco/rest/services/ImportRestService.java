@@ -52,7 +52,6 @@ import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
@@ -60,7 +59,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.ISKOSImportService;
-import fr.mcc.ginco.log.Log;
 
 /**
  * Base REST service intended to be used for SKOS Import the @Produces({
@@ -80,10 +78,7 @@ public class ImportRestService {
 
 	@Inject
 	@Named("thesaurusViewConverter")
-	private ThesaurusViewConverter thesaurusViewConverter;
-
-	@Log
-	private Logger logger;
+	private ThesaurusViewConverter thesaurusViewConverter;	
 
 	/**
 	 * This method is called to import a SKOS thesaurus the @Produces({

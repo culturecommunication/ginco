@@ -37,20 +37,16 @@ package fr.mcc.ginco.extjs.view.utils;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Component("thesaurusConceptGroupLabelViewConverter")
-public class ThesaurusConceptGroupLabelViewConverter {
-    @Log
-    private Logger logger;
+public class ThesaurusConceptGroupLabelViewConverter {   
 
     @Inject
     @Named("thesaurusConceptGroupLabelService")

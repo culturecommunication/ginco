@@ -34,24 +34,24 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
-import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.utils.LanguageComparator;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
+import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.utils.LanguageComparator;
 
 /**
  * Implementation of the thesaurus service Contains methods relatives to the
@@ -66,11 +66,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Inject
 	@Named("thesaurusDAO")
-	private IThesaurusDAO thesaurusDAO;
-
-    @Inject
-    @Named("thesaurusTermDAO")
-    private IThesaurusTermDAO thesaurusTermDAO;
+	private IThesaurusDAO thesaurusDAO;   
 
 	/*
 	 * (non-Javadoc)

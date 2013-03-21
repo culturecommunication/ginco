@@ -34,13 +34,11 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.IExportService;
-import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.*;
-import fr.mcc.ginco.utils.DateUtil;
-import org.springframework.stereotype.Service;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -49,11 +47,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.IExportService;
+import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * REST service to get exported objects.
@@ -72,25 +74,6 @@ public class ExportRestService {
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
 
-    @Inject
-    @Named("thesaurusArrayService")
-    private IThesaurusArrayService thesaurusArrayService;
-
-    @Inject
-    @Named("thesaurusTermService")
-    private IThesaurusTermService thesaurusTermService;
-
-    @Inject
-    @Named("nodeLabelService")
-    private INodeLabelService nodeLabelService;
-
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-
-    @Inject
-    @Named("noteService")
-    private INoteService noteService;
 
     /**
      * Return file in .txt format; name begins with current DateTime.
@@ -130,7 +113,7 @@ public class ExportRestService {
             }
 
         } catch (IOException e) {
-            throw new BusinessException("Cannot create temp file!", "cannot-create-file");
+            throw new BusinessException("Cannot create temp file!", "cannot-create-file", e);
         }
 
         Response.ResponseBuilder response = Response.ok(temp);
