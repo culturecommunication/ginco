@@ -43,11 +43,11 @@ public class FormattedLine {
      * Indicates, how much tabulations should be inserted
      * before main content.
      **/
-    public Integer tabs;
+    private Integer tabs;
     /**
      * Content of the line.
      */
-    public String text;
+    private String text;
 
     /**
      * Takes all information in one time - to profit
@@ -59,4 +59,20 @@ public class FormattedLine {
         this.tabs = tabs;
         this.text = text;
     }
+
+	public Integer getTabs() {
+		return tabs;
+	}
+
+	public void setTabs(Integer tabs) {
+		this.tabs = tabs;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}    
 }

@@ -104,10 +104,10 @@ public class ExportRestService {
             List<FormattedLine> result = exportService.getHierarchicalText(targetThesaurus);
 
             for(FormattedLine results : result) {
-                for(int i=0;i<results.tabs;i++) {
+                for(int i=0;i<results.getTabs();i++) {
                     out.write(TABULATION_DELIMITER);
                 }
-                out.write(results.text);
+                out.write(results.getText());
                 out.newLine();
                 out.flush();
             }

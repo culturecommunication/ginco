@@ -208,14 +208,15 @@ public class ThesaurusConceptRestService {
             searchOrphanParam = Boolean.parseBoolean(searchOrphans);
         }
         
+        boolean onlyValidated = onlyValidatedConcepts;
         if (onlyValidatedConcepts == null) {
         	//By default, if the value is not set, we return all concepts
-        	onlyValidatedConcepts = false;
+        	onlyValidated = false;
         }
 
         return thesaurusConceptViewConverter
                 .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId,
-                        searchOrphanParam, onlyValidatedConcepts));
+                        searchOrphanParam, onlyValidated));
     }
     
     @GET
