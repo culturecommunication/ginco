@@ -34,14 +34,14 @@
  */
 package fr.mcc.ginco.extjs.view.node;
 
-import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
-
 import java.util.List;
+
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 
 /**
  * Interface for generic node in list of nodes.
  */
-public interface IThesaurusListNode {	
+public interface IThesaurusListNode extends Comparable<IThesaurusListNode>{	
 	
     /**
      * @return true if the node should be expanded by default.

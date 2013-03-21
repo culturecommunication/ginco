@@ -59,6 +59,10 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
+/**
+ * Builder in charge of building ThesaurusConcept
+ *
+ */
 @Service("skosConceptBuilder")
 public class ConceptBuilder extends AbstractBuilder {
 
@@ -79,8 +83,17 @@ public class ConceptBuilder extends AbstractBuilder {
 		super();
 	}
 
+	/**
+	 * Sets the basic attributes of a concept
+	 * @param skosConcept
+	 * @param model
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
 	public ThesaurusConcept buildConcept(Resource skosConcept, Model model,
 			Thesaurus thesaurus) throws BusinessException {
+		logger.debug("Building concept with uri : " + skosConcept.getURI());
 		ThesaurusConcept concept = new ThesaurusConcept();
 		concept.setIdentifier(skosConcept.getURI());
 		concept.setThesaurus(thesaurus);
@@ -90,13 +103,20 @@ public class ConceptBuilder extends AbstractBuilder {
 		concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
 		builtConcepts.put(skosConcept.getURI(), concept);
 
-		// Notes
-
 		return concept;
 	}
 
+	/**
+	 * Build direct hierarchical and associative relationships between concepts
+	 * @param skosConcept
+	 * @param model
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
 	public ThesaurusConcept buildConceptAssociations(Resource skosConcept,
 			Model model, Thesaurus thesaurus) throws BusinessException {
+		logger.debug("Building relationships for concept : " + skosConcept.getURI());
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		StmtIterator stmtParentItr = skosConcept.listProperties(SKOS.BROADER);
 		Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
@@ -149,8 +169,17 @@ public class ConceptBuilder extends AbstractBuilder {
 		return concept;
 	}
 
+	/**
+	 * Launch the calculation and set the root concepts of the given concept
+	 * @param skosConcept
+	 * @param model
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
 	public ThesaurusConcept buildConceptRoot(Resource skosConcept, Model model,
 			Thesaurus thesaurus) throws BusinessException {
+		logger.debug("Building root concepts for concept : " + skosConcept.getURI());
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		concept.setRootConcepts(new HashSet<ThesaurusConcept>(
 				thesaurusConceptService.getRootConcepts(concept)));

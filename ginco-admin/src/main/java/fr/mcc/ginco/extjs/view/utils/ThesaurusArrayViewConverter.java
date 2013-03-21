@@ -75,10 +75,6 @@ public class ThesaurusArrayViewConverter {
 	@Inject
 	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
-	
-	@Inject
-	@Named("nodeLabelViewConverter")
-	private NodeLabelViewConverter nodeLabelViewConverter;
 
 	@Inject
 	@Named("generatorService")
@@ -103,13 +99,7 @@ public class ThesaurusArrayViewConverter {
 			Thesaurus thesaurus = thesaurusService.getThesaurusById(source
 					.getThesaurusId());
 			hibernateRes.setThesaurus(thesaurus);
-		}
-		
-		/*if (StringUtils.isEmpty(source.getSuperOrdinateId())) {
-			throw new BusinessException(
-					"ThesaurusArray must have superordirnated concept!",
-					"array-should-have-superordirnated-concept");
-		} */
+		}	
 
 		if (StringUtils.isNotEmpty(source.getSuperOrdinateId())) {
 			hibernateRes

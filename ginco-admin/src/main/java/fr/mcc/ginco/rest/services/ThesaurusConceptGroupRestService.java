@@ -47,7 +47,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
@@ -58,7 +57,6 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupViewConverter;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
 
@@ -87,10 +85,6 @@ public class ThesaurusConceptGroupRestService {
 	@Named("thesaurusConceptGroupLabelViewConverter")
 	private ThesaurusConceptGroupLabelViewConverter thesaurusConceptGroupLabelViewConverter;
 
-
-	
-	@Log
-	private Logger logger;
 	
 	/**
 	 * Public method used to get the list of all concept groups types in the database.

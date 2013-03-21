@@ -39,6 +39,12 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	models : [ 'ThesaurusModel' ],
 	xSaveMsgLabel : 'Do you want to save changes?',
 	xSaveMsgTitle : 'Save changes?',
+	tabs : {
+		conceptPanel : 'GincoApp.view.ConceptPanel',
+		termPanel : 'GincoApp.view.TermPanel',
+		conceptGroupPanel: 'GincoApp.view.ConceptGroupPanel',
+		conceptArrayPanel: 'GincoApp.view.ConceptArrayPanel'
+	},
 	onPanelBeforeClose : function(thePanel) {
 		var me = this;
 		var theForm = thePanel.down('form');		
@@ -116,10 +122,14 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		// History handling
 		var tabs = [],
         oldToken, newToken;
-		var tokenDelimiter = ':';
+		var tokenDelimiter = ';';
 		if (tab.thesaurusData && tab.thesaurusData.id) {
 			tabs.push(tab.id);
 			tabs.push(tab.getXType());
+			if (tab.gincoId && tab.gincoId!='')
+			{
+				tabs.push(encodeURIComponent(tab.gincoId));
+			}
 			tabs.push(encodeURIComponent(tab.thesaurusData.id));
 		    newToken = tabs.reverse().join(tokenDelimiter);
 		    
@@ -132,7 +142,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	},
 	onTabsAfterRender : function (tabPanel)
 	{
-		var token, parts,length, tokenDelimiter = ':';
+		var token, parts,length, tokenDelimiter = ';';
 		Ext.History.on('change', function(aToken) {
             var parts, length;
             if (aToken) {
@@ -143,63 +153,52 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
                 
             }
         });
+		// Handle reopen tabs at first load
 		token = window.location.hash.substr(1);
 		if (token!="") {
 			parts = token.split(tokenDelimiter);
             length = parts.length;
+            if (length==4) {
+            	var xType= parts[2];
+            	var thesaurusId= parts[0];
+            	var gincoID= parts[1];
+            	if (this.tabs[xType])
+            	{
+            		var tabClass=this.tabs[xType];
+            		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+            		this.openGenericTab(topTabs, thesaurusId, gincoID, xType, tabClass);
+            	}
+            }
+            if (length==3 && parts[length-2]=="thesaurusPanel")
+            {
+            	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+            	this.openThesaurusTab(topTabs, parts[0]);
+            }
+            if (length==3 && parts[length-2]=="sandboxPanel")
+            {
+            	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+            	this.openSandboxTab(topTabs, parts[0]);
+            }
 		}
 	},
 	openConceptTab : function(tabPanel, aThesaurusId, aConceptId)
 	{
-		var conceptTabs = Ext.ComponentQuery.query('topTabs conceptPanel');
-		var tabExists = false;
-		Ext.Array
-				.each(
-						conceptTabs,
-						function(element, index, array) {
-							if (element.conceptId != null
-									&& aConceptId
-											.indexOf(
-													element.conceptId,
-													aConceptId.length
-															- element.conceptId.length) !== -1) {
-								tabExists = element;
-							}
-						});
-		if (!tabExists) {
-			var model = this.getThesaurusModelModel();
-			model.load(aThesaurusId, {
-				success : function(aModel) {
-
-					var conceptPanel = Ext.create(
-							'GincoApp.view.ConceptPanel', {
-								thesaurusData : aModel,
-								conceptId : aConceptId
-							});
-
-					var tab = tabPanel.add(conceptPanel);
-					tabPanel.setActiveTab(tab);
-					tab.show();
-				}
-			});
-
-		} else {
-			tabPanel.setActiveTab(tabExists);
-		}
+		this.openGenericTab(tabPanel, aThesaurusId, aConceptId, "conceptPanel","GincoApp.view.ConceptPanel");
 	},
 	openTermTab : function (tabPanel, aTermId, aThesaurusData)
 	{
 		var termTabs = Ext.ComponentQuery.query('topTabs termPanel');
 		var tabExists = false;
 		Ext.Array.each(termTabs, function(element, index, array) {
-			if (element.termId != null && element.termId == aTermId) {
+			if (element.gincoId != null && element.gincoId == aTermId) {
 				tabExists = element;
 			}
 		});
 		if (!tabExists) {
-			var TermPanel = Ext.create('GincoApp.view.TermPanel');
-			TermPanel.thesaurusData = aThesaurusData;
-			TermPanel.termId = aTermId;
+			var TermPanel = Ext.create('GincoApp.view.TermPanel', {
+				thesaurusData : aThesaurusData,
+				gincoId : aTermId
+			});
 			var tab = tabPanel.add(TermPanel);
 			tabPanel.setActiveTab(tab);
 			tab.show();
@@ -209,58 +208,35 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	},
 	openArrayTab : function (tabPanel, aThesaurusId, aArrayId)
 	{
-		var arrayTabsTabs = Ext.ComponentQuery
-				.query('topTabs conceptArrayPanel');
-		var tabExists = false;
-		Ext.Array.each(arrayTabsTabs, function(element, index, array) {
-			if (element.conceptArrayId != null
-					&& element.conceptArrayId == aArrayId) {
-				tabExists = element;
-			}
-		});
-
-		if (!tabExists) {
-			var model = this.getThesaurusModelModel();
-			model.load(aThesaurusId, {
-				success : function(aModel) {
-					var arrayPanel = Ext.create(
-							'GincoApp.view.ConceptArrayPanel', {
-								thesaurusData : aModel.data,
-								conceptArrayId : aArrayId
-							});
-
-					var tab = tabPanel.add(arrayPanel);
-					tabPanel.setActiveTab(tab);
-					tab.show();
-				}
-			});
-		} else {
-			tabPanel.setActiveTab(tabExists);
-		}
+		this.openGenericTab(tabPanel, aThesaurusId, aArrayId, "conceptArrayPanel","GincoApp.view.ConceptArrayPanel");
 	},
 	openGroupTab: function(tabPanel, aThesaurusId, aGroupId)
 	{
-		var groupTabsTabs = Ext.ComponentQuery
-				.query('topTabs conceptGroupPanel');
+		this.openGenericTab(tabPanel, aThesaurusId, aGroupId, "conceptGroupPanel","GincoApp.view.ConceptGroupPanel");
+	},
+	openGenericTab : function (tabPanel, aThesaurusId, aGincoId, aXtype, aClass)
+	{
+		var existingTabs = Ext.ComponentQuery
+		.query('topTabs '+aXtype);
 		var tabExists = false;
-		Ext.Array.each(groupTabsTabs, function(element, index, array) {
-			if (element.conceptGroupId != null
-					&& element.conceptGroupId == aGroupId) {
+		Ext.Array.each(existingTabs, function(element, index, array) {
+			if (element.gincoId != null
+					&& element.gincoId == aGincoId) {
 				tabExists = element;
 			}
 		});
-
+		
 		if (!tabExists) {
 			var model = this.getThesaurusModelModel();
 			model.load(aThesaurusId, {
 				success : function(aModel) {
-					var groupPanel = Ext.create(
-							'GincoApp.view.ConceptGroupPanel', {
+					var newPanel = Ext.create(
+							aClass, {
 								thesaurusData : aModel.data,
-								conceptGroupId : aGroupId
+								gincoId : aGincoId
 							});
-
-					var tab = tabPanel.add(groupPanel);
+		
+					var tab = tabPanel.add(newPanel);
 					tabPanel.setActiveTab(tab);
 					tab.show();
 				}

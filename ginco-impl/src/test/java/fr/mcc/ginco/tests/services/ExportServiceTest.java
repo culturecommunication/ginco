@@ -239,28 +239,28 @@ public class ExportServiceTest {
 
         Assert.assertEquals("Result should contain 8 records !", 8, results.size());
 
-        Assert.assertEquals("First line should start by co1 with no tabulation", (long)0, (long)results.get(0).tabs);
-        Assert.assertEquals("First line should start by co1 with no tabulation", "co1", results.get(0).text);
+        Assert.assertEquals("First line should start by co1 with no tabulation", (long)0, (long)results.get(0).getTabs());
+        Assert.assertEquals("First line should start by co1 with no tabulation", "co1", results.get(0).getText());
 
-        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(1).tabs);
-        Assert.assertEquals("Line does not correspond to needed format", "<ar1>", results.get(1).text);
+        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(1).getTabs());
+        Assert.assertEquals("Line does not correspond to needed format", "<ar1>", results.get(1).getText());
 
-        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(2).tabs);
-        Assert.assertEquals("Line does not correspond to needed format", "co1_1", results.get(2).text);
+        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(2).getTabs());
+        Assert.assertEquals("Line does not correspond to needed format", "co1_1", results.get(2).getText());
 
-        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(3).tabs);
-        Assert.assertEquals("Line does not correspond to needed format", "co3", results.get(3).text);
+        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(3).getTabs());
+        Assert.assertEquals("Line does not correspond to needed format", "co3", results.get(3).getText());
 
-        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(4).tabs);
-        Assert.assertEquals("Line does not correspond to needed format", "co3_1", results.get(4).text);
+        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(4).getTabs());
+        Assert.assertEquals("Line does not correspond to needed format", "co3_1", results.get(4).getText());
 
-        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(5).tabs);
-        Assert.assertEquals("Line does not correspond to needed format", "<ar2>", results.get(5).text);
+        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(5).getTabs());
+        Assert.assertEquals("Line does not correspond to needed format", "<ar2>", results.get(5).getText());
 
-        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(6).tabs);
-        Assert.assertEquals("Line does not correspond to needed format", "co2", results.get(6).text);
+        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(6).getTabs());
+        Assert.assertEquals("Line does not correspond to needed format", "co2", results.get(6).getText());
 
-        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(7).tabs);
-        Assert.assertEquals("Line does not correspond to needed format", "co2_1", results.get(7).text);
+        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(7).getTabs());
+        Assert.assertEquals("Line does not correspond to needed format", "co2_1", results.get(7).getText());
     }
 }

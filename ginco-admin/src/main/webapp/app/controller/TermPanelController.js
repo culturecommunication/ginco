@@ -55,8 +55,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var thesaurusData = termPanel.thesaurusData;
 		
 		var model = this.getThesaurusTermModelModel();
-		var termId = termPanel.termId;
-		if (termId != null) {
+		var termId = termPanel.gincoId;
+		if (termId != '') {
 			theForm.getEl().mask("Chargement");
 			model.load(termId, {
 				success : function(model) {
@@ -89,7 +89,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		termPanel.setTitle("Terme : "+aModel.data.lexicalValue);
 		aForm.setTitle(aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
-		termPanel.termId = aModel.data.identifier;
+		termPanel.gincoId = aModel.data.identifier;
 		
 		if (Ext.isEmpty(aModel.data.conceptId)){
 			aForm.down("#statusCombo").setReadOnly(false);
@@ -194,7 +194,6 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var thePanel = theButton.up('termPanel');
 		var theForm = theButton.up('form');
 		var theTermModel = theForm.getForm().getRecord();
-		var termId = theButton.up('termPanel').termId;
 		var conceptPanel = this.createPanel('GincoApp.view.ConceptPanel', thePanel.thesaurusData, theTermModel);
 	},
 	

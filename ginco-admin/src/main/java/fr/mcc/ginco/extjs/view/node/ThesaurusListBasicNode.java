@@ -38,6 +38,8 @@ import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 
 import java.util.List;
 
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * Class with general behaviour to be shared with every implementation.
  */
@@ -214,5 +216,13 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
     public void setThesaurusId(String thesaurusId) {
         this.thesaurusId = thesaurusId;
     }
+
+	@Override
+	public int compareTo(IThesaurusListNode o) {
+		if (StringUtils.isNotEmpty(title)) {
+			return title.compareToIgnoreCase(o.getTitle());
+		} 
+		return -1;
+	}
 
 }

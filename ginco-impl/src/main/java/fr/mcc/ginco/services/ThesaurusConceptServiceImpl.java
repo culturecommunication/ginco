@@ -287,7 +287,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public String getConceptLabel(String conceptId) throws BusinessException {
 		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
-		return LabelUtil.getConceptLabel(term, defaultLang);
+		return LabelUtil.getLocalizedLabel(term.getLexicalValue(), term.getLanguage(), defaultLang);
 	}
 
 	@Transactional(readOnly = false)

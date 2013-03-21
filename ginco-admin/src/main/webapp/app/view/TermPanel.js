@@ -45,11 +45,7 @@ Ext
 		.define(
 				'GincoApp.view.TermPanel',
 				{
-					extend : 'Ext.panel.Panel',
-
-					termId : null,
-					thesaurusData : '',
-
+					extend : 'GincoApp.view.ThesaurusEntityPanel',
 					alias : 'widget.termPanel',
 					localized : true,
 					closable : true,

@@ -208,14 +208,15 @@ public class ThesaurusConceptRestService {
             searchOrphanParam = Boolean.parseBoolean(searchOrphans);
         }
         
+        boolean onlyValidated = onlyValidatedConcepts;
         if (onlyValidatedConcepts == null) {
         	//By default, if the value is not set, we return all concepts
-        	onlyValidatedConcepts = false;
+        	onlyValidated = false;
         }
 
         return thesaurusConceptViewConverter
                 .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId,
-                        searchOrphanParam, onlyValidatedConcepts));
+                        searchOrphanParam, onlyValidated));
     }
     
     @GET
@@ -298,7 +299,7 @@ public class ThesaurusConceptRestService {
 	        	listOfStatus.add(conceptStatusView);
 			}
 		} catch (MissingResourceException e) {
-			throw new BusinessException("Error with property file - check values of concept status", "check-values-of-concept-status");
+			throw new BusinessException("Error with property file - check values of concept status", "check-values-of-concept-status", e);
 		}
 		ExtJsonFormLoadData<List<ConceptAndTermStatusView>> result = new ExtJsonFormLoadData<List<ConceptAndTermStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());

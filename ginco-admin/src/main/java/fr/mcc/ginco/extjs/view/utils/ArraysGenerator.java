@@ -35,12 +35,14 @@
 package fr.mcc.ginco.extjs.view.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.NodeLabel;
@@ -52,6 +54,7 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Generator in charge of building thesaurus arrays list
@@ -72,6 +75,8 @@ public class ArraysGenerator {
 	@Log
 	private Logger logger;
 
+	@Value("${ginco.default.language}") private String defaultLanguage;
+
 	/**
 	 * Creates a list of orphan concepts for a given thesaurus
 	 * 
@@ -89,7 +94,7 @@ public class ArraysGenerator {
 		for (ThesaurusArray array : arrays) {
 			ThesaurusListBasicNode arrayNode = new ThesaurusListBasicNode();
 			NodeLabel label = nodeLabelService.getByThesaurusArray(array.getIdentifier());
-			arrayNode.setTitle(label.getLexicalValue());
+			arrayNode.setTitle(LabelUtil.getLocalizedLabel(label.getLexicalValue(), label.getLanguage(), defaultLanguage));
 			
 			arrayNode
                     .setId(array.getIdentifier());
@@ -103,6 +108,7 @@ public class ArraysGenerator {
 
 			newArrays.add(arrayNode);
 		}
+		Collections.sort(newArrays);
 		return newArrays;
 	}
 

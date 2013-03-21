@@ -74,6 +74,10 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
+/**
+ * Implementation of the SKOS thesaurus import service
+ *
+ */
 @Transactional
 @Service("skosImportService")
 public class SKOSImportServiceImpl implements ISKOSImportService {
@@ -129,6 +133,9 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Named("skosNodeLabelBuilder")
 	private NodeLabelBuilder nodeLabelBuilder;
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.imports.ISKOSImportService#importSKOSFile(java.lang.String, java.lang.String, java.io.File)
+	 */
 	@Override
 	public Thesaurus importSKOSFile(String fileContent, String fileName,
 			File tempDir) throws BusinessException {
@@ -173,7 +180,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	}
 
 	/**
-	 * Builds the thesaurus arraysfrom the model
+	 * Builds the thesaurus arrays from the model
 	 * 
 	 * @param thesaurus
 	 * @param model
@@ -243,7 +250,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 			// Concept terms
 			List<ThesaurusTerm> terms = termBuilder.buildTerms(skosConcept,
-					model, thesaurus, concept);
+					thesaurus, concept);
 			for (ThesaurusTerm term : terms) {
 				thesaurusTermDAO.update(term);
 			}

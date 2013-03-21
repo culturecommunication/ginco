@@ -47,6 +47,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,6 +100,7 @@ public class TopTermGenerator {
 
 			topConcepts.add(topTermNode);
 		}
+		Collections.sort(topConcepts);
 		return topConcepts;
 	}
 }

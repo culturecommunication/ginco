@@ -42,7 +42,17 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
+/**
+ * Abstract builder used to share useful methods
+ *  
+ */
 public abstract class AbstractBuilder {
+	/**
+	 * Returns the value of the given property for the given resource
+	 * @param skosResource
+	 * @param prop
+	 * @return
+	 */
 	protected String getSimpleStringInfo(Resource skosResource, Property prop) {
 		Statement stmt = skosResource.getProperty(prop);
 		if (stmt!= null) {
@@ -51,6 +61,12 @@ public abstract class AbstractBuilder {
 		return null;
 	}
 	
+	/**
+	 * Returns the list of the given property values in the given resource
+	 * @param skosResource
+	 * @param prop
+	 * @return
+	 */
 	protected List<String> getSeveralSimpleStringInfo(Resource skosResource, Property prop) {
 		StmtIterator stmtIterator = skosResource.listProperties(prop);
 		List<String> values = new ArrayList<String>();
@@ -61,6 +77,12 @@ public abstract class AbstractBuilder {
 		return values;
 	}
 
+	/**
+	 * Returns the concatenation of the given property values in the given resource, separated by line breaks
+	 * @param skosResource
+	 * @param prop
+	 * @return
+	 */
 	protected String getMultipleLineStringInfo(Resource skosResource,
 			Property prop) {
 		String lines = "";

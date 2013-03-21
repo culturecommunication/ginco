@@ -56,6 +56,10 @@ import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
+/**
+ * Builder in charge of building the thesaurus arrays node labels
+ *
+ */
 @Service("skosNodeLabelBuilder")
 public class NodeLabelBuilder extends AbstractBuilder {
 
@@ -73,9 +77,18 @@ public class NodeLabelBuilder extends AbstractBuilder {
 		super();
 	}
 
+	/**
+	 * Builds a NodeLabel object for the given array
+	 * @param stmt
+	 * @param model
+	 * @param thesaurus
+	 * @param array
+	 * @return
+	 * @throws BusinessException
+	 */
 	public NodeLabel buildNodeLabel(Statement stmt, Model model,
 			Thesaurus thesaurus, ThesaurusArray array) throws BusinessException {
-
+		logger.debug("Building node label for thesaurus array " + array.getIdentifier());
 		NodeLabel nodeLabel = new NodeLabel();
 		nodeLabel.setCreated(thesaurus.getCreated());
 

@@ -70,6 +70,10 @@ import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
+/**
+ * Builder in charge of building a thesaurus
+ *
+ */
 @Service("skosThesaurusBuilder")
 public class ThesaurusBuilder extends AbstractBuilder{
 
@@ -102,6 +106,13 @@ public class ThesaurusBuilder extends AbstractBuilder{
 		super();
 	}
 
+	/**
+	 * Builds a Thesaurus object from the given resource and model
+	 * @param skosThesaurus
+	 * @param model
+	 * @return
+	 * @throws BusinessException
+	 */
 	public Thesaurus buildThesaurus(Resource skosThesaurus, Model model)
 			throws BusinessException {
 		Thesaurus thesaurus = new Thesaurus();
@@ -156,6 +167,12 @@ public class ThesaurusBuilder extends AbstractBuilder{
 		return thesaurus;
 	}
 
+	/**
+	 * Gets the thesaurus creator from the FOAF elements
+	 * @param skosThesaurus
+	 * @param model
+	 * @return
+	 */
 	private ThesaurusOrganization getCreator(Resource skosThesaurus, Model model) {
 		Statement stmt = skosThesaurus.getProperty(DC.creator);
 		RDFNode node = stmt.getObject();
@@ -187,7 +204,13 @@ public class ThesaurusBuilder extends AbstractBuilder{
 		return null;
 	}
 
-	private Set<Language> getLanguages(Resource skosThesaurus) {
+	/**
+	 * Gets the list of defined languages for the given thesaurus
+	 * @param skosThesaurus
+	 * @return
+	 * @throws BusinessException if the one of the language is unknown
+	 */	
+	private Set<Language> getLanguages(Resource skosThesaurus) throws BusinessException {
 		Set<Language> langs = new HashSet<Language>();
 		StmtIterator stmtIterator = skosThesaurus.listProperties(DC.language);
 		while (stmtIterator.hasNext()) {
@@ -202,6 +225,12 @@ public class ThesaurusBuilder extends AbstractBuilder{
 		return langs;
 	}
 
+	/**
+	 * Parse the given date
+	 * @param skosDate
+	 * @return
+	 * @throws BusinessException
+	 */
 	private Date getSkosDate(String skosDate) throws BusinessException {
 		for (String skosDefaultDateFormat : skosDefaultDateFormats) {
 			SimpleDateFormat sdf = new SimpleDateFormat(skosDefaultDateFormat);

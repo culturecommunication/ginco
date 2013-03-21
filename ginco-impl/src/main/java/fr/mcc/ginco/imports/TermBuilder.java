@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -62,6 +61,10 @@ import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 
+/**
+ * Builder in charge of building ThesaurusTerm
+ *
+ */
 @Service("skosTermBuilder")
 public class TermBuilder extends AbstractBuilder {
 
@@ -87,9 +90,10 @@ public class TermBuilder extends AbstractBuilder {
 		super();
 	}
 
-	private ThesaurusTerm buildTerm(Statement stmt, Model model,
+	private ThesaurusTerm buildTerm(Statement stmt,
 			Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred)
 			throws BusinessException {
+		logger.debug("building term " + stmt.getString());
 		ThesaurusTerm term = new ThesaurusTerm();
 		term.setConcept(concept);
 		term.setCreated(thesaurus.getCreated());
@@ -119,20 +123,31 @@ public class TermBuilder extends AbstractBuilder {
 		return term;
 	}
 
-	public List<ThesaurusTerm> buildTerms(Resource skosConcept, Model model,
+	/**
+	 * Builds the list of ThesaurusTerm for a given SKOS resource concept
+	 * @param skosConcept
+	 * @param thesaurus
+	 * @param concept
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<ThesaurusTerm> buildTerms(Resource skosConcept,
 			Thesaurus thesaurus, ThesaurusConcept concept)
 			throws BusinessException {
+		
+		logger.debug("building terms for concept " + concept.getIdentifier());
+
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 
 		// Preferred term
 		Statement stmtPreferred = skosConcept.getProperty(SKOS.PREF_LABEL);
-		terms.add(buildTerm(stmtPreferred, model, thesaurus, concept, true));
+		terms.add(buildTerm(stmtPreferred,  thesaurus, concept, true));
 
 		// Alt terms
 		StmtIterator stmtAltItr = skosConcept.listProperties(SKOS.ALT_LABEL);
 		while (stmtAltItr.hasNext()) {
 			Statement stmtAlt = stmtAltItr.next();
-			terms.add(buildTerm(stmtAlt, model, thesaurus, concept, false));
+			terms.add(buildTerm(stmtAlt,  thesaurus, concept, false));
 
 		}
 		// Hidden terms
@@ -140,7 +155,7 @@ public class TermBuilder extends AbstractBuilder {
 				.listProperties(SKOS.HIDDEN_LABEL);
 		while (stmtHiddenItr.hasNext()) {
 			Statement stmtHidden = stmtHiddenItr.next();
-			terms.add(buildTerm(stmtHidden, model, thesaurus, concept, false));
+			terms.add(buildTerm(stmtHidden,  thesaurus, concept, false));
 		}
 
 		return terms;
