@@ -452,7 +452,7 @@ public class ExportServiceImpl implements IExportService {
             SKOSDataRelationAssertion altLabelInsertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
                     factory.getSKOSDataProperty(factory.getSKOSAltLabelProperty().getURI()),
                     altLabel.getLexicalValue(),
-                    altLabel.getLanguage().getId());
+                    altLabel.getLanguage().getPart1());
 
             addList.add(new AddAssertion(vocab, altLabelInsertion));
         }
@@ -467,13 +467,13 @@ public class ExportServiceImpl implements IExportService {
                 SKOSDataRelationAssertion noteAssertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
                         factory.getSKOSDataProperty(factory.getSKOSHistoryNoteDataProperty().getURI()),
                         note.getLexicalValue(),
-                        note.getLanguage().getId());
+                        note.getLanguage().getPart1());
                 addList.add(new AddAssertion(vocab, noteAssertion));
             } else if("scopeNote".equals(note.getNoteType().getCode())) {
                 SKOSDataRelationAssertion noteAssertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
                         factory.getSKOSDataProperty(factory.getSKOSScopeNoteDataProperty().getURI()),
                         note.getLexicalValue(),
-                        note.getLanguage().getId());
+                        note.getLanguage().getPart1());
                 addList.add(new AddAssertion(vocab, noteAssertion));
             }
         }
