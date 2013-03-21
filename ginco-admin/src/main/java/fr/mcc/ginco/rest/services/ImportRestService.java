@@ -63,40 +63,61 @@ import fr.mcc.ginco.imports.ISKOSImportService;
 import fr.mcc.ginco.log.Log;
 
 /**
- * Base REST service intended to be used for SKOS Import
+ * Base REST service intended to be used for SKOS Import the @Produces({
+ * MediaType.TEXT_HTML}) is no mistake : this rest service is used by an ajax
+ * call and IE cannot display result if JSOn is returned
  */
 @Service
 @Path("/importservice")
-@Produces({ MediaType.TEXT_HTML})
+@Produces({ MediaType.TEXT_HTML })
 public class ImportRestService {
 	@Context
 	private javax.servlet.ServletContext servletContext;
-	
+
 	@Inject
 	@Named("skosImportService")
 	private ISKOSImportService skosImportService;
-	
+
 	@Inject
 	@Named("thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
-	
+
 	@Log
 	private Logger logger;
-	
+
+	/**
+	 * This method is called to import a SKOS thesaurus the @Produces({
+	 * MediaType.TEXT_HTML}) is no mistake : this rest service is used by an
+	 * ajax call and IE cannot display result if JSOn is returned
+	 * 
+	 * @param body
+	 * @param request
+	 * @return The imported thesaurus in JSOn string representig a
+	 *         ExtJsonFormLoadData
+	 * @throws BusinessException
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	@POST
 	@Path("/import")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
-	public String uploadFile(MultipartBody body, @Context HttpServletRequest request) throws BusinessException, JsonGenerationException, JsonMappingException, IOException {
+	public String uploadFile(MultipartBody body,
+			@Context HttpServletRequest request) throws BusinessException,
+			JsonGenerationException, JsonMappingException, IOException {
 		Attachment file = body.getAttachment("import-file-path");
-		String content  = file.getObject(String.class);
-		String fileName = file.getDataHandler().getName();		
-		File tempdir = (File)servletContext.getAttribute("javax.servlet.context.tempdir");  
-		
-		Thesaurus importedThesaurus = skosImportService.importSKOSFile(content, fileName, tempdir);
+		String content = file.getObject(String.class);
+		String fileName = file.getDataHandler().getName();
+		File tempdir = (File) servletContext
+				.getAttribute("javax.servlet.context.tempdir");
+
+		Thesaurus importedThesaurus = skosImportService.importSKOSFile(content,
+				fileName, tempdir);
 		ObjectMapper mapper = new ObjectMapper();
-		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(thesaurusViewConverter.convert(importedThesaurus)));
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+				thesaurusViewConverter.convert(importedThesaurus)));
 		return serialized;
 
-	}	
+	}
 }
