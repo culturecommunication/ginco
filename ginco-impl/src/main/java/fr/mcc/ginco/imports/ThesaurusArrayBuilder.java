@@ -54,17 +54,16 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.IThesaurusConceptService;
 
+/**
+ * builder in charge of building thesaurus arrays
+ * 
+ */
 @Service("skosArrayBuilder")
 public class ThesaurusArrayBuilder extends AbstractBuilder {
-	
+
 	@Log
 	private Logger logger;
-	
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusConceptDAO")
@@ -74,9 +73,17 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 		super();
 	}
 
+	/**
+	 * Builds a ThesaurusArray from the given resource
+	 * 
+	 * @param skosCollection
+	 * @param model
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
 	public ThesaurusArray buildArray(Resource skosCollection, Model model,
-			Thesaurus thesaurus)
-			throws BusinessException {
+			Thesaurus thesaurus) throws BusinessException {
 
 		ThesaurusArray array = new ThesaurusArray();
 		array.setIdentifier(skosCollection.getURI());
@@ -102,8 +109,17 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 		return array;
 	}
 
+	/**
+	 * Calculates the common parent of a list of ThesaurusConcept
+	 * 
+	 * @param membersConcepts
+	 * @return
+	 * @throws BusinessException
+	 *             if more than one parent is found, or if no parent is found
+	 *             and the concepts are not root concepts
+	 */
 	private ThesaurusConcept getSuperOrdinate(
-			Set<ThesaurusConcept> membersConcepts) {
+			Set<ThesaurusConcept> membersConcepts) throws BusinessException {
 		Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
 		boolean allRoot = true;
 		for (ThesaurusConcept thesaurusConcept : membersConcepts) {

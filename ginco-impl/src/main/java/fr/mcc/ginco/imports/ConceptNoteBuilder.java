@@ -61,6 +61,10 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.INoteTypeService;
 
+/**
+ * 	Builder in charge of buidlding concept notes
+ *  
+ */
 @Service("skosConceptNoteBuilder")
 public class ConceptNoteBuilder extends AbstractBuilder {
 
@@ -85,9 +89,18 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 		super();
 	}
 
+	/**
+	 * Returns the list of notes for the given concept
+	 * @param skosConcept
+	 * @param concept
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
 	public List<Note> buildConceptNotes(Resource skosConcept,
 			ThesaurusConcept concept, Thesaurus thesaurus)
 			throws BusinessException {
+		logger.debug("Building notes for concept " +skosConcept.getURI());
 		List<Note> allConceptNotes = new ArrayList<Note>();
 		List<NoteType> conceptNoteTypes = noteTypeService
 				.getConceptNoteTypeList();
