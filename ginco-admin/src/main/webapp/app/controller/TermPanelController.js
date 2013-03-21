@@ -86,7 +86,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var termPanel = aForm.up('termPanel');
 		var deleteBtn = aForm.down('#delete');
 		var createConceptBtn = aForm.down('#createconcept');
-		termPanel.setTitle(aModel.data.lexicalValue);
+		termPanel.setTitle("Terme : "+aModel.data.lexicalValue);
 		aForm.setTitle(aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
 		termPanel.termId = aModel.data.identifier;

@@ -327,6 +327,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	loadData : function(aForm, aModel) {
 		var me = this;
         var conceptPanel = me.getActivePanel();
+        var infosConceptPanel = aForm.up('panel'); 
 		conceptPanel.conceptId = aModel.data.identifier;
 		
 		aForm.loadRecord(aModel);
@@ -339,7 +340,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		
 
 		conceptPanel.setTitle("Concept : "+conceptTitle);
-
+		infosConceptPanel.setTitle(conceptTitle);
 		var theGrid = aForm.down('#gridPanelTerms');
 		var theGridStore = theGrid.getStore();
 		theGridStore.removeAll();
