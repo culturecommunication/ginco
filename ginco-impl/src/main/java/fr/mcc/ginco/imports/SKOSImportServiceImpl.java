@@ -56,6 +56,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.util.FileManager;
 
 import fr.mcc.ginco.beans.NodeLabel;
@@ -161,7 +162,11 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			buildConceptsRoot(thesaurus, model, skosConcepts);
 			buildArrays(thesaurus, model);
 
-		} finally {
+		} catch (JenaException je) { 
+			throw new BusinessException(
+					"Error reading imported file ",
+					"import-unable-to-read-file", je);
+		}finally {
 			deleteTempFile(fileName);
 		}
 		return thesaurus;
