@@ -86,12 +86,11 @@ public class ConceptBuilder extends AbstractBuilder {
 	/**
 	 * Sets the basic attributes of a concept
 	 * @param skosConcept
-	 * @param model
 	 * @param thesaurus
 	 * @return
 	 * @throws BusinessException
 	 */
-	public ThesaurusConcept buildConcept(Resource skosConcept, Model model,
+	public ThesaurusConcept buildConcept(Resource skosConcept,
 			Thesaurus thesaurus) throws BusinessException {
 		logger.debug("Building concept with uri : " + skosConcept.getURI());
 		ThesaurusConcept concept = new ThesaurusConcept();

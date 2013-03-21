@@ -245,7 +245,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		for (Resource skosConcept : skosConcepts) {
 			// Minimal concept informations
 			ThesaurusConcept concept = conceptBuilder.buildConcept(skosConcept,
-					model, thesaurus);
+					thesaurus);
 			thesaurusConceptDAO.update(concept);
 
 			// Concept terms
