@@ -117,7 +117,6 @@ Ext
 																		.fireEvent(
 																				'selectBtn',thePanel,
 																				record[0]);
-																me.close();
 															}
 														}
 													} ]

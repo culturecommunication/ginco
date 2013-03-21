@@ -136,8 +136,9 @@ Ext
 															if (record.length == 1) {
 																me
 																		.fireEvent(
-																				'selectBtn',me,
+																				'selectBtn',
 																				record);
+																me.close(); 
 															}
 														}
 													} ]
