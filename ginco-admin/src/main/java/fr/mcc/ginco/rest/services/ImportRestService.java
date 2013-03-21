@@ -35,6 +35,7 @@
 package fr.mcc.ginco.rest.services;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -45,17 +46,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.ISKOSImportService;
 import fr.mcc.ginco.log.Log;
@@ -65,7 +67,7 @@ import fr.mcc.ginco.log.Log;
  */
 @Service
 @Path("/importservice")
-@Produces({ MediaType.APPLICATION_JSON })
+@Produces({ MediaType.TEXT_HTML})
 public class ImportRestService {
 	@Context
 	private javax.servlet.ServletContext servletContext;
@@ -84,15 +86,17 @@ public class ImportRestService {
 	@POST
 	@Path("/import")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public ExtJsonFormLoadData<ThesaurusView> uploadFile(MultipartBody body, @Context HttpServletRequest request) throws BusinessException {
+	@Produces(MediaType.TEXT_HTML)
+	public String uploadFile(MultipartBody body, @Context HttpServletRequest request) throws BusinessException, JsonGenerationException, JsonMappingException, IOException {
 		Attachment file = body.getAttachment("import-file-path");
 		String content  = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();		
 		File tempdir = (File)servletContext.getAttribute("javax.servlet.context.tempdir");  
 		
-		Thesaurus importedThesaurus = skosImportService.importSKOSFile(content, fileName, tempdir);		
-		
-		return new ExtJsonFormLoadData<ThesaurusView>(thesaurusViewConverter.convert(importedThesaurus));
+		Thesaurus importedThesaurus = skosImportService.importSKOSFile(content, fileName, tempdir);
+		ObjectMapper mapper = new ObjectMapper();
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(thesaurusViewConverter.convert(importedThesaurus)));
+		return serialized;
 
 	}	
 }

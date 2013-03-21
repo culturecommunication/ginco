@@ -41,6 +41,7 @@ Ext.define('GincoApp.controller.ImportController', {
 	xWaitingLabel : 'Import en cours',
 	xSucessLabelTitle : 'Succès',
 	xSucessLabel : 'Le thésaurus a été importé avec succès : ',
+	xFailureLabelTitle: 'Erreur',
 
 	
 	importSaveClick : function(theButton){
@@ -68,11 +69,16 @@ Ext.define('GincoApp.controller.ImportController', {
 							me.application.fireEvent('thesaurusupdated');						
 						},
 						failure: function(form, action) {
-	                        Ext.Msg.alert('Erreur', action.result.message);
+							Ext.MessageBox.show({
+								title : me.xFailureLabelTitle,
+								msg : action.result.message,
+								buttons : Ext.MessageBox.OK,
+								scope : this
+							});
 	                    }
 					});
 		}	
-		
+	
 	},
 	
 	importCancelClick: function(theButton){
