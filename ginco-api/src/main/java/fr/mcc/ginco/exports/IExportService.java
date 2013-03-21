@@ -56,8 +56,17 @@ public interface IExportService {
         throws BusinessException;
 
     /**
-     * Get
+     * Get RDF-based export for given thesaurus.
      * @param thesaurus
      */
     File getSKOSExport(Thesaurus thesaurus) throws BusinessException;
+
+    /**
+     * Get the list of all concepts in thesaurus, with formatting.
+     * @param thesaurus
+     * @return list with formatting.
+     * @throws BusinessException
+     */
+    List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus)
+            throws BusinessException;;
 }

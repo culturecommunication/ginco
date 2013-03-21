@@ -38,7 +38,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.IExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
 import org.springframework.stereotype.Service;
 
@@ -71,26 +71,6 @@ public class ExportRestService {
     @Inject
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
-
-    @Inject
-    @Named("thesaurusArrayService")
-    private IThesaurusArrayService thesaurusArrayService;
-
-    @Inject
-    @Named("thesaurusTermService")
-    private IThesaurusTermService thesaurusTermService;
-
-    @Inject
-    @Named("nodeLabelService")
-    private INodeLabelService nodeLabelService;
-
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-
-    @Inject
-    @Named("noteService")
-    private INoteService noteService;
 
     /**
      * Return file in .txt format; name begins with current DateTime.
@@ -163,5 +143,60 @@ public class ExportRestService {
                         + "\"");
         return response.build();
     }
+
+    /**
+     * Return file in .txt format; name begins with current DateTime.
+     * @param thesaurusId
+     * @return
+     * @throws BusinessException
+     */
+    @GET
+    @Path("/getAlphabetical")
+    @Produces("text/plain")
+    public Response getAlphabetical(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+
+        Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+
+        File temp;
+        BufferedWriter out;
+        try {
+            temp = File.createTempFile("pattern", ".suffix");
+            temp.deleteOnExit();
+            out = new BufferedWriter(new FileWriter(temp));
+
+            out.write("Édition alphabétique du vocabulaire de ");
+            out.write(targetThesaurus.getTitle());
+            out.newLine();
+            out.newLine();
+            out.flush();
+
+            List<FormattedLine> result = exportService.getAlphabeticalText(targetThesaurus);
+
+            for(FormattedLine results : result) {
+                for(int i=0;i<results.tabs;i++) {
+                    out.write(TABULATION_DELIMITER);
+                }
+                out.write(results.text);
+                out.newLine();
+                out.flush();
+            }
+
+        } catch (IOException e) {
+            throw new BusinessException("Cannot create temp file!", "cannot-create-file");
+        }
+
+        Response.ResponseBuilder response = Response.ok(temp);
+        response.header("Content-Disposition",
+                "attachment; filename=\""
+                        + targetThesaurus.getTitle()
+                        + " "
+                        + DateUtil.toString(DateUtil.nowDate())
+                        + ".txt"
+                        + "\"");
+
+        return response.build();
+    }
+
+
 }
 

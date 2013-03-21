@@ -83,6 +83,9 @@ public class ExportServiceTest {
         th1.setTitle("Test thesaurus");
         th1.setIdentifier("th1");
 
+        Language language = new Language();
+        language.setId("fra");
+
         final ThesaurusConcept co1 = new ThesaurusConcept();
         co1.setIdentifier("co1");
         co1.setThesaurus(th1);
@@ -110,31 +113,37 @@ public class ExportServiceTest {
         tr1.setConcept(co1);
         tr1.setIdentifier("tr1");
         tr1.setPrefered(true);
+        tr1.setLanguage(language);
         final ThesaurusTerm tr1_1 = new ThesaurusTerm();
         tr1_1.setLexicalValue("co1_1");
         tr1_1.setConcept(co1_1);
         tr1_1.setIdentifier("tr1_1");
         tr1_1.setPrefered(true);
+        tr1_1.setLanguage(language);
         final ThesaurusTerm tr2 = new ThesaurusTerm();
         tr2.setLexicalValue("co2");
         tr2.setConcept(co2);
         tr2.setIdentifier("tr2");
         tr2.setPrefered(true);
+        tr2.setLanguage(language);
         final ThesaurusTerm tr2_1 = new ThesaurusTerm();
         tr2_1.setLexicalValue("co2_1");
         tr2_1.setConcept(co2_1);
         tr2_1.setIdentifier("tr2_1");
         tr2_1.setPrefered(true);
+        tr2_1.setLanguage(language);
         final ThesaurusTerm tr3 = new ThesaurusTerm();
         tr3.setLexicalValue("co3");
         tr3.setConcept(co3);
         tr3.setIdentifier("tr3");
         tr3.setPrefered(true);
+        tr3.setLanguage(language);
         final ThesaurusTerm tr3_1 = new ThesaurusTerm();
         tr3_1.setLexicalValue("co3_1");
         tr3_1.setConcept(co3_1);
         tr3_1.setIdentifier("tr3_1");
         tr3_1.setPrefered(true);
+        tr3_1.setLanguage(language);
 
         final ThesaurusArray ar1 = new ThesaurusArray();
         ar1.setThesaurus(th1);
@@ -171,31 +180,37 @@ public class ExportServiceTest {
             add(tr1);
         }};
         Mockito.when(thesaurusTermService.getTermsByConceptId(co1.getIdentifier())).thenReturn(list_tr1);
+        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co1.getIdentifier())).thenReturn(tr1);
 
         List<ThesaurusTerm> list_tr1_1 = new ArrayList<ThesaurusTerm>(){{
             add(tr1_1);
         }};
         Mockito.when(thesaurusTermService.getTermsByConceptId(co1_1.getIdentifier())).thenReturn(list_tr1_1);
+        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co1_1.getIdentifier())).thenReturn(tr1_1);
 
         List<ThesaurusTerm> list_tr2 = new ArrayList<ThesaurusTerm>(){{
             add(tr2);
         }};
         Mockito.when(thesaurusTermService.getTermsByConceptId(co2.getIdentifier())).thenReturn(list_tr2);
+        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co2.getIdentifier())).thenReturn(tr2);
 
         List<ThesaurusTerm> list_tr2_1 = new ArrayList<ThesaurusTerm>(){{
             add(tr2_1);
         }};
         Mockito.when(thesaurusTermService.getTermsByConceptId(co2_1.getIdentifier())).thenReturn(list_tr2_1);
+        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co2_1.getIdentifier())).thenReturn(tr2_1);
 
         List<ThesaurusTerm> list_tr3 = new ArrayList<ThesaurusTerm>(){{
             add(tr3);
         }};
         Mockito.when(thesaurusTermService.getTermsByConceptId(co3.getIdentifier())).thenReturn(list_tr3);
+        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co3.getIdentifier())).thenReturn(tr3);
 
         List<ThesaurusTerm> list_tr3_1 = new ArrayList<ThesaurusTerm>(){{
             add(tr3_1);
         }};
         Mockito.when(thesaurusTermService.getTermsByConceptId(co3_1.getIdentifier())).thenReturn(list_tr3_1);
+        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co3_1.getIdentifier())).thenReturn(tr3_1);
 
         Mockito.when(thesaurusConceptService.getChildrenByConceptId(co1.getIdentifier())).thenReturn(new ArrayList<ThesaurusConcept>(){{
             add(co1_1);

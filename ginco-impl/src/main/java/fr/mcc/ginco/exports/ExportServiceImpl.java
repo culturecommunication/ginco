@@ -43,11 +43,13 @@ import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.*;
 import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LabelUtil;
 import org.apache.cxf.helpers.IOUtils;
 import org.semanticweb.owlapi.vocab.DublinCoreVocabulary;
 import org.semanticweb.skos.*;
 import org.semanticweb.skosapibinding.SKOSFormatExt;
 import org.semanticweb.skosapibinding.SKOSManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -78,50 +80,12 @@ public class ExportServiceImpl implements IExportService {
     @Named("noteService")
     private INoteService noteService;
 
-    private List<FormattedLine> getHierarchicalText(Integer base, ThesaurusConcept concept) throws BusinessException {
-        List<FormattedLine> result = new ArrayList<FormattedLine>();
+    @Inject
+    @Named("associativeRelationshipService")
+    private IAssociativeRelationshipService associativeRelationshipService;
 
-        Set<String> thesaurusArrayConcepts = new HashSet<String>();
-
-        result.add(new FormattedLine(base, thesaurusTermService.getPreferedTerms(
-                thesaurusTermService.getTermsByConceptId(concept.getIdentifier()))
-                .get(0).getLexicalValue()));
-
-        List<ThesaurusArray> subOrdArrays = thesaurusArrayService.getSubOrdinatedArrays(concept.getIdentifier());
-
-        for(ThesaurusArray subOrdArray : subOrdArrays) {
-            for(ThesaurusConcept conceptInArray : subOrdArray.getConcepts()) {
-                thesaurusArrayConcepts.add(conceptInArray.getIdentifier());
-            }
-        }
-
-        List<ThesaurusConcept> children = new ArrayList<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(concept.getIdentifier()));
-        Collections.sort(children, new ThesaurusConceptComparator());
-
-        for(ThesaurusConcept child : children) {
-            if (!thesaurusArrayConcepts.contains(child.getIdentifier())) {
-                result.addAll(getHierarchicalText(base + 1, child));
-            }
-        }
-
-        for(ThesaurusArray subOrdArray : subOrdArrays) {
-            addThesaurusArray(result, subOrdArray, base);
-        }
-
-        return result;
-    }
-
-    private void addThesaurusArray(List<FormattedLine> result, ThesaurusArray subOrdArray, Integer base) throws BusinessException {
-        result.add(new FormattedLine(base + 1,
-                "<" + nodeLabelService.getByThesaurusArray(subOrdArray.getIdentifier()).getLexicalValue() + ">"));
-        List<ThesaurusConcept> conceptsInArray =
-                new ArrayList<ThesaurusConcept>(subOrdArray.getConcepts());
-        Collections.sort(conceptsInArray, new ThesaurusConceptComparator());
-
-        for(ThesaurusConcept conceptInArray : conceptsInArray) {
-            result.addAll(getHierarchicalText(base + 1, conceptInArray));
-        }
-    }
+    @Value("${ginco.default.language}")
+    private String defaultLang;
 
     @Override
     public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus) throws BusinessException {
@@ -150,6 +114,96 @@ public class ExportServiceImpl implements IExportService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus) throws BusinessException {
+        List<FormattedLine> result = new ArrayList<FormattedLine>();
+
+        List<ThesaurusConcept> concepts =
+                thesaurusConceptService.getConceptsByThesaurusId(null,thesaurus.getThesaurusId(),null, Boolean.TRUE);
+
+        Collections.sort(concepts, new ThesaurusConceptComparator());
+
+        for(ThesaurusConcept concept : concepts) {
+            addConceptTitle(0, result, concept);
+            addConceptInfo(1, result, concept);
+        }
+
+        return result;
+    }
+
+    private String getConceptTitle(ThesaurusConcept concept) {
+        return thesaurusTermService.getPreferedTerms(
+                thesaurusTermService.getTermsByConceptId(concept.getIdentifier()))
+                .get(0).getLexicalValue();
+    }
+
+    private String getConceptTitleLanguage(ThesaurusConcept concept) {
+        return thesaurusTermService.getPreferedTerms(
+                thesaurusTermService.getTermsByConceptId(concept.getIdentifier()))
+                .get(0).getLanguage().getId();
+    }
+
+
+    private void addConceptTitle(Integer base, List<FormattedLine> result, ThesaurusConcept concept) {
+        result.add(new FormattedLine(base, getConceptTitleWithLanguage(concept)));
+    }
+
+    private String getConceptTitleWithLanguage(ThesaurusConcept concept) {
+        return thesaurusConceptService.getConceptPreferredTerm(concept.getIdentifier()).getLexicalValue();
+    }
+
+    /**
+     * For alphabetic export.
+     *
+     * banquette
+     * NA: Siège à plusieurs places, peu profond, garni, comportant éventuellement soit un dossier, soit des
+     * accotoirs, soit les deux.
+     * EP: banquette à accotoirs
+     * banquette à dossier
+     * TG: siège
+     * banquette à accotoirs
+     * EM: banquette
+     * banquette à dossier
+     * EM: banquette
+     */
+    private void addConceptInfo(Integer base, List<FormattedLine> result, ThesaurusConcept concept) {
+        List<Note> notes = noteService.getConceptNotePaginatedList(concept.getIdentifier(), 0, 0);
+
+        for(Note note : notes) {
+            if("scopeNote".equals(note.getNoteType().getCode())) {
+                result.add(new FormattedLine(base,"NA: "+note.getLexicalValue()));
+            }
+        }
+
+        for(ThesaurusConcept parent : concept.getParentConcepts()) {
+            result.add(new FormattedLine(base, "TG: "+getConceptTitleWithLanguage(parent)));
+        }
+
+        for(ThesaurusConcept ta : thesaurusConceptService.getThesaurusConceptList(associativeRelationshipService.getAssociatedConceptsId(concept))) {
+            result.add(new FormattedLine(base, "TA :"+getConceptTitleLanguage(ta)));
+        }
+
+
+        for(ThesaurusTerm term : thesaurusTermService.getTermsByConceptId(concept.getIdentifier())) {
+            if(!term.getPrefered()) {
+                result.add(new FormattedLine(base, "EP: "+ LabelUtil.getConceptLabel(term, defaultLang)));
+            }
+        }
+
+        for(ThesaurusConcept child : thesaurusConceptService.getChildrenByConceptId(concept.getIdentifier())) {
+            result.add(new FormattedLine(base, "NT: "+getConceptTitleLanguage(child)));
+        }
+
+        for(ThesaurusTerm term : thesaurusTermService.getTermsByConceptId(concept.getIdentifier())) {
+            if(!term.getPrefered()) {
+                result.add(new FormattedLine(base-1, LabelUtil.getConceptLabel(term, defaultLang)));
+                result.add(new FormattedLine(base, term.getRole().getCode()
+                        + ": "
+                        + LabelUtil.getConceptLabel(term, defaultLang)));
+            }
+        }
     }
 
     @Override
@@ -261,6 +315,49 @@ public class ExportServiceImpl implements IExportService {
         }
     }
 
+    private List<FormattedLine> getHierarchicalText(Integer base, ThesaurusConcept concept) throws BusinessException {
+        List<FormattedLine> result = new ArrayList<FormattedLine>();
+
+        Set<String> thesaurusArrayConcepts = new HashSet<String>();
+
+        addConceptTitle(base, result, concept);
+
+        List<ThesaurusArray> subOrdArrays = thesaurusArrayService.getSubOrdinatedArrays(concept.getIdentifier());
+
+        for(ThesaurusArray subOrdArray : subOrdArrays) {
+            for(ThesaurusConcept conceptInArray : subOrdArray.getConcepts()) {
+                thesaurusArrayConcepts.add(conceptInArray.getIdentifier());
+            }
+        }
+
+        List<ThesaurusConcept> children = new ArrayList<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(concept.getIdentifier()));
+        Collections.sort(children, new ThesaurusConceptComparator());
+
+        for(ThesaurusConcept child : children) {
+            if (!thesaurusArrayConcepts.contains(child.getIdentifier())) {
+                result.addAll(getHierarchicalText(base + 1, child));
+            }
+        }
+
+        for(ThesaurusArray subOrdArray : subOrdArrays) {
+            addThesaurusArray(result, subOrdArray, base);
+        }
+
+        return result;
+    }
+
+    private void addThesaurusArray(List<FormattedLine> result, ThesaurusArray subOrdArray, Integer base) throws BusinessException {
+        result.add(new FormattedLine(base + 1,
+                "<" + nodeLabelService.getByThesaurusArray(subOrdArray.getIdentifier()).getLexicalValue() + ">"));
+        List<ThesaurusConcept> conceptsInArray =
+                new ArrayList<ThesaurusConcept>(subOrdArray.getConcepts());
+        Collections.sort(conceptsInArray, new ThesaurusConceptComparator());
+
+        for(ThesaurusConcept conceptInArray : conceptsInArray) {
+            result.addAll(getHierarchicalText(base + 1, conceptInArray));
+        }
+    }
+
     private String addCollections(Thesaurus thesaurus) {
         List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurus.getIdentifier());
 
@@ -314,13 +411,9 @@ public class ExportServiceImpl implements IExportService {
 
     private void exportSKOS(ThesaurusConcept concept, SKOSConcept parent, List<SKOSChange> addList, SKOSConceptScheme scheme,
                             SKOSDataFactory factory, SKOSDataset vocab) throws BusinessException {
-        String prefLabel = thesaurusTermService.getPreferedTerms(
-                thesaurusTermService.getTermsByConceptId(concept.getIdentifier()))
-                .get(0).getLexicalValue();
+        String prefLabel = getConceptTitle(concept);
 
-        String prefLabelLang = thesaurusTermService.getPreferedTerms(
-                thesaurusTermService.getTermsByConceptId(concept.getIdentifier()))
-                .get(0).getLanguage().getId();
+        String prefLabelLang = getConceptTitleLanguage(concept);
 
         SKOSConcept conceptSKOS = factory.getSKOSConcept(URI.create(concept.getIdentifier()));
         SKOSEntityAssertion conceptAssertion = factory.getSKOSEntityAssertion(conceptSKOS);
