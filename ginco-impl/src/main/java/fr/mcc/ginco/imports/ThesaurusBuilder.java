@@ -72,10 +72,10 @@ import fr.mcc.ginco.log.Log;
 
 /**
  * Builder in charge of building a thesaurus
- *
+ * 
  */
 @Service("skosThesaurusBuilder")
-public class ThesaurusBuilder extends AbstractBuilder{
+public class ThesaurusBuilder extends AbstractBuilder {
 
 	@Log
 	private Logger logger;
@@ -92,7 +92,6 @@ public class ThesaurusBuilder extends AbstractBuilder{
 	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
-
 	@Value("${import.default.top.concept}")
 	private boolean defaultTopConcept;
 
@@ -108,6 +107,7 @@ public class ThesaurusBuilder extends AbstractBuilder{
 
 	/**
 	 * Builds a Thesaurus object from the given resource and model
+	 * 
 	 * @param skosThesaurus
 	 * @param model
 	 * @return
@@ -119,7 +119,9 @@ public class ThesaurusBuilder extends AbstractBuilder{
 		thesaurus.setIdentifier(skosThesaurus.getURI());
 		String title = getSimpleStringInfo(skosThesaurus, DC.title);
 		if (StringUtils.isEmpty(title)) {
-			throw new BusinessException("Missing title for imported thesaurus ","import-missing-title-thesaurus");
+			throw new BusinessException(
+					"Missing title for imported thesaurus ",
+					"import-missing-title-thesaurus");
 		}
 		thesaurus.setTitle(title);
 		thesaurus.setSubject(getMultipleLineStringInfo(skosThesaurus,
@@ -134,11 +136,12 @@ public class ThesaurusBuilder extends AbstractBuilder{
 				.setPublisher(getSimpleStringInfo(skosThesaurus, DC.publisher));
 		thesaurus
 				.setRights(getMultipleLineStringInfo(skosThesaurus, DC.rights));
-		ThesaurusType thesaurusType = thesaurusTypeDAO.getByLabel(getSimpleStringInfo(
-				skosThesaurus, DC.type));
+		ThesaurusType thesaurusType = thesaurusTypeDAO
+				.getByLabel(getSimpleStringInfo(skosThesaurus, DC.type));
 		if (thesaurusType == null) {
-			throw new BusinessException("Unknown thesaurus type " + getSimpleStringInfo(
-					skosThesaurus, DC.type) ,"import-unknown-thesaurus-type");
+			throw new BusinessException("Unknown thesaurus type "
+					+ getSimpleStringInfo(skosThesaurus, DC.type),
+					"import-unknown-thesaurus-type");
 
 		}
 		thesaurus.setType(thesaurusTypeDAO.getByLabel(getSimpleStringInfo(
@@ -156,7 +159,10 @@ public class ThesaurusBuilder extends AbstractBuilder{
 		ThesaurusFormat format = thesaurusFormatDAO
 				.getById(defaultThesaurusFormat);
 		if (format == null) {
-			throw new BusinessException("Configuration problem : the default import format " + defaultThesaurusFormat + "is unknown","import-unknown-default-format");
+			throw new BusinessException(
+					"Configuration problem : the default import format "
+							+ defaultThesaurusFormat + "is unknown",
+					"import-unknown-default-format");
 		}
 		thesaurus.setFormat(format);
 
@@ -169,36 +175,40 @@ public class ThesaurusBuilder extends AbstractBuilder{
 
 	/**
 	 * Gets the thesaurus creator from the FOAF elements
+	 * 
 	 * @param skosThesaurus
 	 * @param model
 	 * @return
 	 */
 	private ThesaurusOrganization getCreator(Resource skosThesaurus, Model model) {
 		Statement stmt = skosThesaurus.getProperty(DC.creator);
-		RDFNode node = stmt.getObject();
-		Resource cretaorResource = node.asResource();
-		SimpleSelector organizationSelector = new SimpleSelector(
-				cretaorResource, null, (RDFNode) null) {
-			public boolean selects(Statement s) {
-				if (s.getObject().isResource()) {
-					Resource res = s.getObject().asResource();
-					return res.equals(FOAF.Organization);
-				} else {
-					return false;
+		if (stmt != null) {
+			RDFNode node = stmt.getObject();
+			Resource cretaorResource = node.asResource();
+			SimpleSelector organizationSelector = new SimpleSelector(
+					cretaorResource, null, (RDFNode) null) {
+				public boolean selects(Statement s) {
+					if (s.getObject().isResource()) {
+						Resource res = s.getObject().asResource();
+						return res.equals(FOAF.Organization);
+					} else {
+						return false;
+					}
 				}
-			}
-		};
+			};
 
-		StmtIterator iter = model.listStatements(organizationSelector);
-		while (iter.hasNext()) {
-			Statement orgStms = iter.next();
-			Resource organizationRes = orgStms.getSubject().asResource();
-			Statement foafName = organizationRes.getProperty(FOAF.name);
-			Statement foafHomepage = organizationRes.getProperty(FOAF.homepage);
-			ThesaurusOrganization org = new ThesaurusOrganization();
-			org.setHomepage(foafHomepage.getString());
-			org.setName(foafName.getString());
-			return org;
+			StmtIterator iter = model.listStatements(organizationSelector);
+			while (iter.hasNext()) {
+				Statement orgStms = iter.next();
+				Resource organizationRes = orgStms.getSubject().asResource();
+				Statement foafName = organizationRes.getProperty(FOAF.name);
+				Statement foafHomepage = organizationRes
+						.getProperty(FOAF.homepage);
+				ThesaurusOrganization org = new ThesaurusOrganization();
+				org.setHomepage(foafHomepage.getString());
+				org.setName(foafName.getString());
+				return org;
+			}
 		}
 
 		return null;
@@ -206,19 +216,25 @@ public class ThesaurusBuilder extends AbstractBuilder{
 
 	/**
 	 * Gets the list of defined languages for the given thesaurus
+	 * 
 	 * @param skosThesaurus
 	 * @return
-	 * @throws BusinessException if the one of the language is unknown
-	 */	
-	private Set<Language> getLanguages(Resource skosThesaurus) throws BusinessException {
+	 * @throws BusinessException
+	 *             if the one of the language is unknown
+	 */
+	private Set<Language> getLanguages(Resource skosThesaurus)
+			throws BusinessException {
 		Set<Language> langs = new HashSet<Language>();
 		StmtIterator stmtIterator = skosThesaurus.listProperties(DC.language);
 		while (stmtIterator.hasNext()) {
 			Statement stmt = stmtIterator.next();
 			Language lang = languagesDAO.getById(stmt.getString());
-			if (lang==null) {
-				throw new BusinessException("Specified thesaurus lanaguge is unknown :  " + stmt.getString(),"import-unknown-thesaurus-lang");
-	}
+			if (lang == null) {
+				throw new BusinessException(
+						"Specified thesaurus lanaguge is unknown :  "
+								+ stmt.getString(),
+						"import-unknown-thesaurus-lang");
+			}
 			langs.add(lang);
 		}
 
@@ -227,6 +243,7 @@ public class ThesaurusBuilder extends AbstractBuilder{
 
 	/**
 	 * Parse the given date
+	 * 
 	 * @param skosDate
 	 * @return
 	 * @throws BusinessException
@@ -242,5 +259,5 @@ public class ThesaurusBuilder extends AbstractBuilder{
 		}
 		throw new BusinessException("InvalidDateFormat for input string "
 				+ skosDate, "import-invalid-date-format");
-	}	
+	}
 }
