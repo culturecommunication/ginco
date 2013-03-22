@@ -161,7 +161,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		if (format == null) {
 			throw new BusinessException(
 					"Configuration problem : the default import format "
-							+ defaultThesaurusFormat + "is unknown",
+							+ defaultThesaurusFormat + " is unknown",
 					"import-unknown-default-format");
 		}
 		thesaurus.setFormat(format);
@@ -231,7 +231,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 			Language lang = languagesDAO.getById(stmt.getString());
 			if (lang == null) {
 				throw new BusinessException(
-						"Specified thesaurus lanaguge is unknown :  "
+						"Specified thesaurus language is unknown :  "
 								+ stmt.getString(),
 						"import-unknown-thesaurus-lang");
 			}
