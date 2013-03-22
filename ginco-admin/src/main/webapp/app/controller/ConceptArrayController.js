@@ -266,6 +266,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		if (theConceptArrayGridStore.findRecord('identifier', selectedRow[0].data.identifier) !== null ){
 			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
 		} else {
+			selectedRow[0].setDirty();
 			theConceptArrayGridStore.add(selectedRow[0]);
 		}
 		

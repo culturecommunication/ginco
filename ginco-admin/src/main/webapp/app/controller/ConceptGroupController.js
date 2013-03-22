@@ -216,6 +216,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		if (theConceptGroupGridStore.findRecord('identifier', theSelectedRow[0].data.identifier) !== null ){
 			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
 		} else {
+			theSelectedRow[0].setDirty();
 			theConceptGroupGridStore.add(theSelectedRow[0]);
 		}
 	},
