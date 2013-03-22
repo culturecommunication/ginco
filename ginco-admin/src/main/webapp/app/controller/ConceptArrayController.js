@@ -296,7 +296,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	    	var me = this;
 	        var thePanel = me.getActivePanel();
 	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-			topTabs.fireEvent('openconcepttab',topTabs,this.getThesaurusModelModel(), thePanel.thesaurusData.id ,record.data.identifier);
+			topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
 	    },
 	
     init:function(){    	  	 

@@ -228,6 +228,13 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
         theConceptGroupStore.remove(rec);
 	},
 	
+	onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
+	    	var me = this;
+	        var thePanel = theGrid.up('conceptGroupPanel');
+	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+			topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
+	    },
+	
     init:function(){    	  	 
          this.control({
         	'conceptGroupPanel form' : {
@@ -241,6 +248,9 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
  			},
             'conceptGroupPanel  #addConceptToGroupArray' : {
                 click : this.selectConceptToGroupArray
+            },
+            'conceptGroupPanel #gridConceptGroupPanelConcepts' : {
+            	itemdblclick : this.onConceptDblClick
             },
             'conceptGroupPanel #gridConceptGroupPanelConcepts #conceptToGroupActionColumn' : {
                 click : this.onRemoveConceptFromGroupClick
