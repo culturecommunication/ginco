@@ -87,6 +87,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		aForm.loadRecord(aModel);
 		var theConceptGroupPanel = me.getActivePanel();		
 		theConceptGroupPanel.setTitle("Groupe : "+aModel.data.label);
+		theConceptGroupPanel.gincoId = aModel.data.identifier;
 		
 		//We get all the concepts included in this concept group
 		var conceptsGrid  = aForm.down('#gridConceptGroupPanelConcepts');
