@@ -32,82 +32,66 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.utils;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.ConceptHierarchyUtil;
 
 /**
- * builder in charge of building thesaurus arrays
+ * utility class to get objects labels
  * 
  */
-@Service("skosArrayBuilder")
-public class ThesaurusArrayBuilder extends AbstractBuilder {
-
-	@Log
-	private Logger logger;
-
-	@Inject
-	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
-
-	public ThesaurusArrayBuilder() {
-		super();
+public final class ConceptHierarchyUtil {
+	
+	
+	private ConceptHierarchyUtil() {
 	}
 
 	/**
-	 * Builds a ThesaurusArray from the given resource
+	 * Calculates the common parent of a list of ThesaurusConcept
 	 * 
-	 * @param skosCollection
-	 * @param model
-	 * @param thesaurus
+	 * @param membersConcepts
 	 * @return
 	 * @throws BusinessException
+	 *             if more than one parent is found, or if no parent is found
+	 *             and the concepts are not root concepts
 	 */
-	public ThesaurusArray buildArray(Resource skosCollection, Model model,
-			Thesaurus thesaurus) throws BusinessException {
-
-		ThesaurusArray array = new ThesaurusArray();
-		array.setIdentifier(skosCollection.getURI());
-		array.setThesaurus(thesaurus);
-
-		StmtIterator stmtMembersItr = skosCollection
-				.listProperties(SKOS.MEMBER);
-		Set<ThesaurusConcept> membersConcepts = new HashSet<ThesaurusConcept>();
-		while (stmtMembersItr.hasNext()) {
-			Statement stmt = stmtMembersItr.next();
-			Resource memberConceptRes = stmt.getObject().asResource();
-			String relatedURI = memberConceptRes.getURI();
-			ThesaurusConcept memberConcept = thesaurusConceptDAO
-					.getById(relatedURI);
-			membersConcepts.add(memberConcept);
+	public static final ThesaurusConcept getSuperOrdinate(
+			Set<ThesaurusConcept> membersConcepts) throws BusinessException {
+		
+		Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
+		boolean allRoot = true;
+		for (ThesaurusConcept thesaurusConcept : membersConcepts) {
+			if (!thesaurusConcept.getParentConcepts().isEmpty()) {
+				allRoot = false;
+				Set<ThesaurusConcept> parentConcepts = thesaurusConcept
+						.getParentConcepts();
+				if (result.isEmpty()) {
+					result.addAll(parentConcepts);
+				} else {
+					result.retainAll(parentConcepts);
+				}
+			}
 		}
-		array.setConcepts(membersConcepts);
+		if (result.isEmpty() && !allRoot) {
+			throw new BusinessException(
+					"Unable to find thesaurus array concepts common parent",
+					"import-no-superordinate");
+		} else if (result.isEmpty() && allRoot) {
+			return null;
+		} else if (result.size() > 1) {
+			throw new BusinessException(
+					"Unable to get thesaurus array concepts common parent",
+					"import-too-many-superordinate");
+		}
 
-		array.setSuperOrdinateConcept(ConceptHierarchyUtil.getSuperOrdinate(membersConcepts));
-
-		array.setOrdered(false);
-
-		return array;
+		return result.iterator().next();
 	}
 
 }
