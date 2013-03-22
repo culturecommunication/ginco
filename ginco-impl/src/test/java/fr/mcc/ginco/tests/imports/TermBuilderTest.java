@@ -96,7 +96,7 @@ public class TermBuilderTest {
 
 		Model model = ModelFactory.createDefaultModel();
 		InputStream is = TermBuilderTest.class
-				.getResourceAsStream("concept_associations.rdf");
+				.getResourceAsStream("/concept_associations.rdf");
 		model.read(is, null);
 
 		Resource skosConcept = model
