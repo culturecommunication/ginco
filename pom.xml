@@ -483,9 +483,9 @@
 		</site>
 	</distributionManagement>
 	<modules>
-		<module>ginco-impl</module>
 		<module>ginco-api</module>
 		<module>ginco-commons</module>
+		<module>ginco-impl</module>
 		<module>ginco-admin</module>
 		<module>ginco-webservices</module>
 	</modules>
