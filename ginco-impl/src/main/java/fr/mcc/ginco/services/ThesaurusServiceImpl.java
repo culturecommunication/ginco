@@ -34,24 +34,23 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.utils.LanguageComparator;
+import org.hibernate.HibernateException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of the thesaurus service Contains methods relatives to the
@@ -125,7 +124,11 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	@Transactional(readOnly=false)
     @Override
     public Thesaurus destroyThesaurus(Thesaurus object) throws BusinessException {
-        return thesaurusDAO.delete(object);
+        try {
+            return thesaurusDAO.delete(object);
+        } catch (HibernateException ex) {
+            throw new BusinessException("Error deleting thesaurus!","error-deleting-thesaurus",ex);
+        }
     }
 
 }
