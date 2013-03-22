@@ -97,6 +97,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 				//The term isn't attached to any concept and its status is validated
 				//We can create a concept from it
 				createConceptBtn.setDisabled(false);
+			} else {
+				createConceptBtn.setDisabled(true);
 			}
 		}
 		
