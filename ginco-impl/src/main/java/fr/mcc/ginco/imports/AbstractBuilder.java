@@ -53,37 +53,23 @@ public abstract class AbstractBuilder {
 	 * @param prop
 	 * @return
 	 */
-	protected String getSimpleStringInfo(Resource skosResource, Property prop) {
+	public final String getSimpleStringInfo(Resource skosResource, Property prop) {
 		Statement stmt = skosResource.getProperty(prop);
 		if (stmt!= null) {
-		return stmt.getString();
+			String toReturn = stmt.getString();
+			if (toReturn != null) {
+				return toReturn.trim();
+			}
 		}
 		return null;
 	}
-	
-	/**
-	 * Returns the list of the given property values in the given resource
-	 * @param skosResource
-	 * @param prop
-	 * @return
-	 */
-	protected List<String> getSeveralSimpleStringInfo(Resource skosResource, Property prop) {
-		StmtIterator stmtIterator = skosResource.listProperties(prop);
-		List<String> values = new ArrayList<String>();
-		while(stmtIterator.hasNext()) {
-			Statement stmt = stmtIterator.next();
-			values.add(stmt.getString());
-		}
-		return values;
-	}
-
 	/**
 	 * Returns the concatenation of the given property values in the given resource, separated by line breaks
 	 * @param skosResource
 	 * @param prop
 	 * @return
 	 */
-	protected String getMultipleLineStringInfo(Resource skosResource,
+	public final String getMultipleLineStringInfo(Resource skosResource,
 			Property prop) {
 		String lines = "";
 		StmtIterator stmtIterator = skosResource.listProperties(prop);
