@@ -184,7 +184,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			throw new BusinessException("Error reading imported file ",
 					"import-unable-to-read-file", je);
 		} finally {
-			deleteTempFile(fileName);
+			deleteTempFile(fileURI);
 		}
 		return thesaurus;
 	}
@@ -336,9 +336,8 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		return skosRessources;
 	}
 
-	private void deleteTempFile(String initialFileName) {
-		String name = getTempFileName(initialFileName);
-		File f = new File(name);
+	private void deleteTempFile(URI fileURI) {
+		File f = new File(fileURI);
 		f.delete();
 	}
 
