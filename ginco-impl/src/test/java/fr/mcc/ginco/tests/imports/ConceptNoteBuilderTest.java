@@ -38,6 +38,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import junitx.framework.ListAssert;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,82 +49,100 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.dao.IThesaurusTypeDAO;
-import fr.mcc.ginco.imports.ThesaurusBuilder;
+import fr.mcc.ginco.imports.ConceptNoteBuilder;
+import fr.mcc.ginco.services.INoteTypeService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
+import fr.mcc.ginco.utils.DateUtil;
 
-public class ThesaurusBuilderTest {	
+public class ConceptNoteBuilderTest {
 
-	
-	@Mock(name = "thesaurusFormatDAO")
-	private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
+	@Inject
+	@Mock(name = "noteTypeService")
+	private INoteTypeService noteTypeService;
 
-	@Mock(name = "thesaurusTypeDAO")
-	private IThesaurusTypeDAO thesaurusTypeDAO;
-	
+	@Inject
+	@Mock(name = "generatorService")
+	private IIDGeneratorService generatorService;
+
+	@Inject
 	@Mock(name = "languagesDAO")
 	private ILanguageDAO languagesDAO;
-	
+
 	@InjectMocks
-	private ThesaurusBuilder thesaurusBuilder;
+	private ConceptNoteBuilder conceptNoteBuilder;
 
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		List<String> langFormats = new ArrayList<String>();
-		langFormats.add("yyyy");		
-		ReflectionTestUtils.setField(thesaurusBuilder, "skosDefaultDateFormats", langFormats);
-		ReflectionTestUtils.setField(thesaurusBuilder, "defaultThesaurusFormat", 3);	
-		LoggerTestUtil.initLogger(thesaurusBuilder);
+		LoggerTestUtil.initLogger(conceptNoteBuilder);
 	}
 
 	@Test
-	public void testBuildTerms() {
-		ThesaurusType fakeType = new ThesaurusType();
+	public void testBuildConceptNotes() {
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("thesaurus-uri");
+		fakeThesaurus
+				.setCreated(DateUtil.dateFromString("2013-02-01 01:05:03"));
+		fakeThesaurus.setDate(DateUtil.dateFromString("2013-05-02 02:10:13"));
+
+		fakeThesaurus.setDefaultTopConcept(false);
+
+		List<NoteType> conceptNoteTypes = new ArrayList<NoteType>() ;
+		NoteType type1 = new NoteType();
+		type1.setCode("example");
+		conceptNoteTypes.add(type1);
 		
-		Mockito.when(thesaurusTypeDAO
-		.getByLabel("Thésaurus")).thenReturn(fakeType);
+		NoteType type2 = new NoteType();
+		type2.setCode("historyNote");
+		conceptNoteTypes.add(type2);
+
+		NoteType type3 = new NoteType();
+		type3.setCode("scopeNote");
+		conceptNoteTypes.add(type3);
+
+		Mockito.when(noteTypeService
+				.getConceptNoteTypeList()).thenReturn(conceptNoteTypes);
 		
 		Language french = new Language();
 		french.setId("fr-FR");
-		Mockito.when(languagesDAO.getById("fr-FR")).thenReturn(french);
-		
-		ThesaurusFormat format = new ThesaurusFormat();
-		format.setLabel("SKOS");
-		Mockito.when(thesaurusFormatDAO	.getById(3)).thenReturn(format);
+		List<Language> allLangs = new ArrayList<Language>();
+		allLangs.add(french);
+		Mockito.when(languagesDAO.getByPart1("fr")).thenReturn(allLangs);
+
 		
 		Model model = ModelFactory.createDefaultModel();
-		InputStream is = ThesaurusBuilderTest.class
-				.getResourceAsStream("/imports/concept_associations.rdf");
+		InputStream is = ConceptBuilderTest.class
+				.getResourceAsStream("/imports/concept_notes.rdf");
 		model.read(is, null);
 
-		Resource skosThesaurus = model
-				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");
+		Resource skosConcept = model
+				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931");
+		ThesaurusConcept concept = new ThesaurusConcept();
+
+		List<Note> actualConceptNotes = conceptNoteBuilder.buildConceptNotes(
+				skosConcept, concept, fakeThesaurus);
 		
-		Thesaurus actualThesaurus = thesaurusBuilder.buildThesaurus(skosThesaurus, model);	
-		Assert.assertEquals("Thésaurus des objets mobiliers", actualThesaurus.getTitle());
-		Assert.assertEquals(true, actualThesaurus.getSubject().contains("instruments de musique"));
-		Assert.assertEquals(true, actualThesaurus.getContributor().contains("Renaud"));
-		Assert.assertEquals(true, actualThesaurus.getCoverage().contains("de l'Antiquité à nos jours"));
-		Assert.assertEquals("Vocabulaire de la désignation des oeuvres mobilières", actualThesaurus.getDescription());
-		Assert.assertEquals("Ministère de la culture et de la communication", actualThesaurus.getPublisher());
-		Assert.assertEquals("CC-BY-SA", actualThesaurus.getRights());
-		Assert.assertEquals(fakeType, actualThesaurus.getType());	
-		
+		Assert.assertEquals(3, actualConceptNotes.size());
+		List<String>  noteValues = new ArrayList<String>();
+		for(Note actualNote:actualConceptNotes) {
+			noteValues.add(actualNote.getLexicalValue());
+		}
+		ListAssert.assertContains(noteValues, "Meuble de repos servant à s'asseoir. Les sièges se répartissent en différentes catégories selon le nombre de personnes pouvant s'asseoir et les parties du corps soutenues ; ils peuvent être de matériaux divers, bois, métal, osier, paille, etc.");
+		ListAssert.assertContains(noteValues, "Historique du concept");
+		ListAssert.assertContains(noteValues, "Un exemple");
+
 	}
 
-	
 }

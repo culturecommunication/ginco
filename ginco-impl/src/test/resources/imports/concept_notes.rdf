@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+	<skos:ConceptScheme xmlns:ns0="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69">
+		<dc:title>Thésaurus des objets mobiliers</dc:title>
+		<dc:creator>
+			<foaf:organization>
+				<foaf:name>Inventaire général du patrimoine culturel</foaf:name>
+				<foaf:homepage>http://www.inventaire.culture.gouv.fr</foaf:homepage>
+			</foaf:organization>
+		</dc:creator>
+		<dc:contributor>Hélène Verdier (dir.)</dc:contributor>
+		<dc:contributor>Aline Magnien (réd.)</dc:contributor>
+		<dc:contributor>Renaud Benoit-Cattin (coll.)</dc:contributor>
+		<dc:coverage>France</dc:coverage>
+		<dc:coverage>de l'Antiquité à nos jours</dc:coverage>
+		<dc:description>Vocabulaire de la désignation des oeuvres mobilières</dc:description>
+		<dc:publisher>Ministère de la culture et de la communication</dc:publisher>
+		<dc:rights>CC-BY-SA</dc:rights>
+		<dc:subject>objets et mobiliers civils et religieux</dc:subject>
+		<dc:subject>meubles civils domestiques</dc:subject>
+		<dc:subject>objets, meubles et vêtements religieux </dc:subject>
+		<dc:subject>instruments de musique</dc:subject>
+		<dc:subject>instruments scientifiques</dc:subject>
+		<dc:subject>machines de production et moteurs</dc:subject>
+		<dc:type>Thésaurus</dc:type>
+		<dc:relation>Collection "Principes d'analyse scientifique"</dc:relation>
+		<dc:source>Thésaurus des objects mobiliers du culte catholique</dc:source>
+		<dct:created>2001</dct:created>
+		<dct:modified>2012-06-25</dct:modified>
+		<dc:language>fr-FR</dc:language>
+		<!--Liste des concepts de tete ; exemple : meuble domestique-->
+		<skos:hasTopConcept rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930"/>
+		<skos:hasTopConcept rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2746"/>
+		<skos:hasTopConcept rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-285"/>
+	</skos:ConceptScheme>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">meuble domestique</skos:prefLabel>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423"/>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">siège</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">sièges</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1935"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1937"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1939"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1942"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1944"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1946"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1949"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1952"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1954"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1956"/>
+		<skos:scopeNote xml:lang="fr">Meuble de repos servant à s'asseoir. Les sièges se répartissent en différentes catégories selon le nombre de personnes pouvant s'asseoir et les parties du corps soutenues ; ils peuvent être de matériaux divers, bois, métal, osier, paille, etc.</skos:scopeNote>
+		<skos:changeNote>note de mise à jour ; a priori, ne doit pas être affichée</skos:changeNote>
+		<skos:definition>Définition du concept</skos:definition>
+		<skos:editorialNote>Note éditoriale ; a priori, ne doit pas être affichée</skos:editorialNote>
+		<skos:example>Un exemple</skos:example>
+		<skos:historyNote>Historique du concept</skos:historyNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">escabeau</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+escabeaux</skos:hiddenLabel>
+		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428"/>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Siège d'une place sans dossier dont le dessus est en bois plein. Il est monté sur pieds ou sur panneaux verticaux et affecte des formes diverses.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1935">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">pouf</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+poufs</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Tabouret rembourré, sans accotoirs et sans pieds visibles.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1937">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">selle</skos:prefLabel>
+		<skos:altLabel xml:lang="fr">
+selle à traire</skos:altLabel>
+		<skos:hiddenLabel xml:lang="fr">
+selles</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Siège en bois, d'une place et souvent assez bas, que l'on fiche en terre. La selle peut être monopode, bipode ou polypode et servir particulièrement pour la traite.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1939">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">tabouret</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+tabourets</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Siège d'une place, sans dossier, garni ou non, de formes diverses. Le tabouret peut être d'encoignure, et comporte alors un angle droit.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1942">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">chaise</skos:prefLabel>
+		<skos:altLabel xml:lang="fr">
+chaise pour l'habit</skos:altLabel>
+		<skos:hiddenLabel xml:lang="fr">
+chaises</skos:hiddenLabel>
+		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-411"/>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Tout siège d'une place, à dossier, sans accotoirs. La chaise pour l'habit est une variante dont le dossier se rattache directement aux pieds pour laisser le passage à l'habit.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1944">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">fumeuse</skos:prefLabel>
+		<skos:altLabel xml:lang="fr">
+fumeuse à pupitre</skos:altLabel>
+		<skos:altLabel xml:lang="fr">
+fumeuse à dossier</skos:altLabel>
+		<skos:hiddenLabel xml:lang="fr">
+fumeuses</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Siège sur lequel on s'assoit à cheval pour fumer, à fond un peu plus bas que celui de la voyeuse assise qu'il remplace au XIXe siècle. La fumeuse comporte parfois une boîte sous l'accoudoir, comme la ponteuse, où se place, le cas échéant, le matériel de fumeur.
+La fumeuse à dossier ou la fumeuse à pupitre sont des variantes.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1946">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">voyeuse</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+voyeuses</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Meuble en forme de chaise, dont le "dossier" comportant un accoudoir ou un enroulement supérieur garni, permet à l'usager, assis face au "dossier", d'observer le jeu. La voyeuse assise, la voyeuse à genoux, et la ponteuse constituent des variantes de la voyeuse.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1949">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">fauteuil</skos:prefLabel>
+		<skos:altLabel xml:lang="fr">
+fauteuil sans accotoirs</skos:altLabel>
+		<skos:hiddenLabel xml:lang="fr">
+fauteuils</skos:hiddenLabel>
+		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-413"/>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Siège d'une place à dossier et accotoirs. Le fauteuil sans accotoirs comporte des supports d'accotoirs</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1952">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">banc</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+bancs</skos:hiddenLabel>
+		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-409"/>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Siège à plusieurs places, à fond en bois.Il comporte ou non un dossier, des accotoirs et des éléments annexes.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1954">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">banquette</skos:prefLabel>
+		<skos:altLabel xml:lang="fr">
+banquette à accotoirs</skos:altLabel>
+		<skos:altLabel xml:lang="fr">
+banquette à dossier</skos:altLabel>
+		<skos:hiddenLabel xml:lang="fr">
+banquettes</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:scopeNote xml:lang="fr">Siège à plusieurs places, peu profond, garni, comportant éventuellement soit un dossier, soit des accotoirs, soit les deux.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1956">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">canapé</skos:prefLabel>
+		<skos:altLabel xml:lang="fr">
+sofa</skos:altLabel>
+		<skos:hiddenLabel xml:lang="fr">
+canapés</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1957"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1959"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1961"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1963"/>
+		<skos:scopeNote xml:lang="fr">Siège à plusieurs places, garni, comportant un dossier et des accotoirs.Les places peuvent être marquées par le dossier ou par des accotoirs intermédiaires.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1957">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">boudeuse</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+boudeuses</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1956"/>
+		<skos:scopeNote xml:lang="fr">Siège à deux places adossées ayant leur dossier commun.Il peut comporter un accoudoir.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1959">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">canapé en borne</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+canapés en borne</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1956"/>
+		<skos:scopeNote xml:lang="fr">Canapé de plan centré (circulaire, elliptique, en trèfle, carré, pentagonal, octogonal ou autre) dont le dossier est cylindrique, conique, en dôme, ou constitué de divers dossiers adossés.Les places peuvent être alors individualisées.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1961">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">confident</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+confidents</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1956"/>
+		<skos:scopeNote xml:lang="fr">Siège à deux places juxtaposées en sens inverse, les dossiers dessinant généralement un S.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1963">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">indiscret</skos:prefLabel>
+		<skos:hiddenLabel xml:lang="fr">
+indiscrets</skos:hiddenLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1956"/>
+		<skos:scopeNote xml:lang="fr">Siège à trois places adossées, les dossiers en continuité formant une sorte d'hélice.</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">escabeau à marches</skos:prefLabel>
+		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933"/>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423"/>
+		<skos:scopeNote xml:lang="fr">Meuble constitué d'un ensemble de marches ...</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">meuble d'élévation</skos:prefLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428"/>
+		<skos:scopeNote xml:lang="fr">bla bla bla...</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2746">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">objet civil domestique</skos:prefLabel>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-6094"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2851"/>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-285">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">mobilier monumental</skos:prefLabel>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-409"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-411"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-413"/>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-6094">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">coupe</skos:prefLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2746"/>
+		<skos:scopeNote xml:lang="fr">bla bla bla...</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2851">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">beurrier</skos:prefLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2746"/>
+		<skos:narrower rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2852"/>
+		<skos:scopeNote xml:lang="fr">bla bla bla...</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2852">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">beurrier-conservateur</skos:prefLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2851"/>
+		<skos:scopeNote xml:lang="fr">bla bla bla...</skos:scopeNote>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-409">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">banc de jardin</skos:prefLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-285"/>
+		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1952"/>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-411">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">chaise de jardin</skos:prefLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-285"/>
+		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1942"/>
+	</skos:Concept>
+	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-413">
+		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
+		<skos:prefLabel xml:lang="fr">fauteuil de jardin</skos:prefLabel>
+		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-285"/>
+		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1949"/>
+	</skos:Concept>
+</rdf:RDF>

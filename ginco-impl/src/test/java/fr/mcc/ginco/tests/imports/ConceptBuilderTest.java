@@ -120,7 +120,7 @@ public class ConceptBuilderTest {
 
 		Model model = ModelFactory.createDefaultModel();
 		InputStream is = ConceptBuilderTest.class
-				.getResourceAsStream("/concept_associations.rdf");
+				.getResourceAsStream("/imports/concept_associations.rdf");
 		model.read(is, null);
 
 		Resource skosConcept = model
@@ -161,7 +161,7 @@ public class ConceptBuilderTest {
 
 		Model model = ModelFactory.createDefaultModel();
 		InputStream is = ConceptBuilderTest.class
-				.getResourceAsStream("/concept_associations.rdf");
+				.getResourceAsStream("/imports/concept_associations.rdf");
 		model.read(is, null);
 
 		Resource skosConcept = model
@@ -206,7 +206,7 @@ public class ConceptBuilderTest {
 
 		Model model = ModelFactory.createDefaultModel();
 		InputStream is = ConceptBuilderTest.class
-				.getResourceAsStream("/concept_associations.rdf");
+				.getResourceAsStream("/imports/concept_associations.rdf");
 		model.read(is, null);
 
 		Resource skosConcept = model
