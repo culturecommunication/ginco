@@ -301,10 +301,10 @@ public class ExportServiceImpl implements IExportService {
 
             if(thesaurus.getCreator() != null) {
 
-                String org = "\n\t\t<foaf:organization>\n" +
+                String org = "\n\t\t<foaf:Organization>\n" +
                         "\t\t\t<foaf:name>NAME</foaf:name>\n" +
                         "\t\t\t<foaf:homepage>URL</foaf:homepage>\n" +
-                        "\t\t</foaf:organization>";
+                        "\t\t</foaf:Organization>";
 
                 org = org.replaceAll("NAME", thesaurus.getCreator().getName())
                         .replaceAll("URL", thesaurus.getCreator().getHomepage());
