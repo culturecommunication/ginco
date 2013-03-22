@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import org.hibernate.Criteria;
@@ -57,8 +59,11 @@ public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, Integer>
                 NodeLabel.class);
         criteria.add(Restrictions.eq("thesaurusArray.identifier", (String) thesaurusArrayId));
         //criteria.add(Restrictions.eq("language.id", (String) languageId));
-
-        return (NodeLabel) criteria.list().get(0);
+        List<NodeLabel>foundNodeLabels = criteria.list();
+        if (foundNodeLabels.size()>0) {
+        	return (NodeLabel) criteria.list().get(0);
+        }
+        return null;
     }
     
     @Override
