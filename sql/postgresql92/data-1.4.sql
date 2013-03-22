@@ -21,3 +21,6 @@ DELETE FROM languages_iso639 WHERE id='fra';
 INSERT INTO note_type(
             code, label, isterm, isconcept)
     VALUES ('example', 'Exemple', false, true);
+    
+UPDATE thesaurus_concept SET status=1;
+UPDATE thesaurus_term SET status=1;
