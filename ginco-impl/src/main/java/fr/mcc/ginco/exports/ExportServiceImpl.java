@@ -34,66 +34,29 @@
  */
 package fr.mcc.ginco.exports;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.imports.SKOS;
+import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LabelUtil;
 import org.apache.cxf.helpers.IOUtils;
 import org.semanticweb.owlapi.vocab.DublinCoreVocabulary;
-import org.semanticweb.skos.AddAssertion;
-import org.semanticweb.skos.SKOSAnnotation;
-import org.semanticweb.skos.SKOSAnnotationAssertion;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSChangeException;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSCreationException;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataRelationAssertion;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skos.SKOSEntityAssertion;
-import org.semanticweb.skos.SKOSObjectRelationAssertion;
-import org.semanticweb.skos.SKOSStorageException;
+import org.semanticweb.skos.*;
 import org.semanticweb.skosapibinding.SKOSFormatExt;
 import org.semanticweb.skosapibinding.SKOSManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.imports.SKOS;
-import fr.mcc.ginco.services.IAssociativeRelationshipService;
-import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.INoteService;
-import fr.mcc.ginco.services.IThesaurusArrayService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.LabelUtil;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.*;
+import java.net.URI;
+import java.util.*;
 
 @Service("exportService")
 public class ExportServiceImpl implements IExportService {
@@ -112,6 +75,10 @@ public class ExportServiceImpl implements IExportService {
     @Inject
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
+
+    @Inject
+    @Named("thesaurusTermRoleService")
+    private IThesaurusTermRoleService thesaurusTermRoleService;
 
     @Inject
     @Named("noteService")
@@ -219,7 +186,7 @@ public class ExportServiceImpl implements IExportService {
         }
 
         for(ThesaurusConcept ta : thesaurusConceptService.getThesaurusConceptList(associativeRelationshipService.getAssociatedConceptsId(concept))) {
-            result.add(new FormattedLine(base, "TA :"+getConceptTitleLanguage(ta)));
+            result.add(new FormattedLine(base, "TA: "+getConceptTitleWithLanguage(ta)));
         }
 
 
@@ -236,9 +203,15 @@ public class ExportServiceImpl implements IExportService {
         for(ThesaurusTerm term : thesaurusTermService.getTermsByConceptId(concept.getIdentifier())) {
             if(!term.getPrefered()) {
                 result.add(new FormattedLine(base-1, LabelUtil.getLocalizedLabel(term.getLexicalValue(), term.getLanguage(), defaultLang)));
-                result.add(new FormattedLine(base, term.getRole().getCode()
-                        + ": "
-                        + LabelUtil.getLocalizedLabel(term.getLexicalValue(), term.getLanguage(), defaultLang)));
+                if(term.getRole() == null) {
+                    result.add(new FormattedLine(base, thesaurusTermRoleService.getDefaultThesaurusTermRole().getCode()
+                            + ": "
+                            + LabelUtil.getLocalizedLabel(term.getLexicalValue(), term.getLanguage(), defaultLang)));
+                } else {
+                    result.add(new FormattedLine(base, term.getRole().getCode()
+                            + ": "
+                            + LabelUtil.getLocalizedLabel(term.getLexicalValue(), term.getLanguage(), defaultLang)));
+                }
             }
         }
     }
