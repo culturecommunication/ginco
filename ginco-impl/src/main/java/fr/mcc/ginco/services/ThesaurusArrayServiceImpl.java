@@ -95,7 +95,7 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 			}
 		}
 		
-		if (thesaurusArray.getConcepts() != null){
+		if (thesaurusArray.getConcepts() != null && thesaurusArray.getSuperOrdinateConcept() != null){
 			//We get all arrays matching our superordinate, excluding our concept from the list
 			List<ThesaurusArray> arrayWithSameSuperOrdinate = thesaurusArrayDAO.getConceptSuperOrdinateArrays(thesaurusArray.getSuperOrdinateConcept().getIdentifier(), thesaurusArray.getIdentifier());
 			Set<ThesaurusConcept> allChildren = thesaurusArray.getConcepts();
