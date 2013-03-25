@@ -63,5 +63,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
     xAssociationRemove: 'Supprimer l\'association',
     xChildrenConcepts: 'Concepts Enfants (TS)',
     xRoleColumnLabel: 'Rôle',
-    xConceptStatusLabel : 'Statut du concept'
+    xConceptStatusLabel : 'Statut du concept',
+    xHiddenTermColumnLabel : 'Terme caché'
 });

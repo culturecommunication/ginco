@@ -62,6 +62,10 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
             type: 'boolean'
         },
         {
+            name: 'hidden',
+            type: 'boolean'
+        },
+        {
             name: 'status',
             type: 'int'
         },

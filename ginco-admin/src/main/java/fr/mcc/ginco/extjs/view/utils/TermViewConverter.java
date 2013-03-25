@@ -49,7 +49,6 @@ import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
@@ -61,9 +60,8 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.DateUtil;
 
 /**
- * Small class responsible for converting real
- * {@link ThesaurusTerm} object into its view
- * {@link ThesaurusViewConverter}.
+ * Small class responsible for converting real {@link ThesaurusTerm} object into
+ * its view {@link ThesaurusViewConverter}.
  */
 @Component("termViewConverter")
 public class TermViewConverter {
@@ -87,10 +85,10 @@ public class TermViewConverter {
 	@Inject
 	@Named("thesaurusTermRoleService")
 	private IThesaurusTermRoleService thesaurusTermRoleService;
-	
+
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	private IIDGeneratorService generatorService;
 
 	@Log
 	private Logger logger;
@@ -115,13 +113,15 @@ public class TermViewConverter {
 		return hibernateRes;
 	}
 
-    /**
-     * Main method used to do conversion.
-     * @param source source to work with
-     * @param fromConcept
-     * @return converted item.
-     * @throws BusinessException
-     */
+	/**
+	 * Main method used to do conversion.
+	 * 
+	 * @param source
+	 *            source to work with
+	 * @param fromConcept
+	 * @return converted item.
+	 * @throws BusinessException
+	 */
 	public ThesaurusTerm convert(ThesaurusTermView source, boolean fromConcept)
 			throws BusinessException {
 		ThesaurusTerm hibernateRes;
@@ -136,32 +136,32 @@ public class TermViewConverter {
 		hibernateRes.setModified(DateUtil.nowDate());
 		hibernateRes.setSource(source.getSource());
 		hibernateRes.setStatus(source.getStatus());
-		
+
 		if (fromConcept) {
 			hibernateRes.setPrefered(source.getPrefered());
-		}
-		
-		if (fromConcept) {
-			
+			hibernateRes.setHidden(source.getHidden());
+
 			if (StringUtils.isNotEmpty(source.getConceptId())) {
-				
+
 				ThesaurusConcept concept = thesaurusConceptService
 						.getThesaurusConceptById(source.getConceptId());
 				if (concept != null) {
 					hibernateRes.setConcept(concept);
 					if (!source.getPrefered()) {
 						if (StringUtils.isNotBlank(source.getRole())) {
-							ThesaurusTermRole role = thesaurusTermRoleService.getTermRole(source.getRole());
+							ThesaurusTermRole role = thesaurusTermRoleService
+									.getTermRole(source.getRole());
 							hibernateRes.setRole(role);
 						} else {
 							hibernateRes.setRole(thesaurusTermRoleService
-								.getDefaultThesaurusTermRole());
+									.getDefaultThesaurusTermRole());
 						}
 					} else {
 						hibernateRes.setRole(null);
 					}
 				}
 			}
+
 		}
 
 		hibernateRes.setThesaurus(thesaurusService.getThesaurusById(source
@@ -180,17 +180,19 @@ public class TermViewConverter {
 	}
 
 	/**
-     * This method extracts a list of ThesaurusTerm from a
-     *  ThesaurusConceptView given in argument
-     *
-	 * @param termViews array of view.
-     * @param fromConcept
-	 *
+	 * This method extracts a list of ThesaurusTerm from a ThesaurusConceptView
+	 * given in argument
+	 * 
+	 * @param termViews
+	 *            array of view.
+	 * @param fromConcept
+	 * 
 	 * @return {@code List<ThesaurusTerm>}
 	 * @throws BusinessException
 	 */
 	public List<ThesaurusTerm> convertTermViewsInTerms(
-			List<ThesaurusTermView> termViews, boolean fromConcept) throws BusinessException {
+			List<ThesaurusTermView> termViews, boolean fromConcept)
+			throws BusinessException {
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 
 		for (ThesaurusTermView thesaurusTermView : termViews) {

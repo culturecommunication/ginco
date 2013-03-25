@@ -159,6 +159,16 @@ public class ThesaurusTermDAO extends
 				throw new BusinessException("Already existing term",
 					"already-existing-term");
 		}
+		
+		if (termToUpdate.getHidden() == null) {
+			//By default, hidden is false if not set
+			termToUpdate.setHidden(false);
+		} else if(termToUpdate.getHidden() == true) {
+			if (termToUpdate.getPrefered() == true) {
+				throw new BusinessException("Only non prefered terms can be hidden",
+						"only-non-prefered-term-can-be-hidden");
+			}
+		}
 
 		// Update an existing term
 		getCurrentSession().saveOrUpdate(termToUpdate);

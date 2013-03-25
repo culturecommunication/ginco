@@ -105,7 +105,8 @@ CREATE TABLE thesaurus_term
   role text,
   conceptid text,
   thesaurusid text NOT NULL,
-  lang character varying(3) NOT NULL
+  lang character varying(3) NOT NULL,
+  hidden boolean DEFAULT false NOT NULL
 );
 
 CREATE TABLE hierarchical_relationship

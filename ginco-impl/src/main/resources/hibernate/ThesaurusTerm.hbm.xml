@@ -11,6 +11,7 @@
 		<property name="modified" type="timestamp" not-null="true" />
 		<property name="source" />
 		<property name="prefered" />
+		<property name="hidden" />
 		<property name="status" />
 
         <many-to-one name="role" column="role" lazy="false" />

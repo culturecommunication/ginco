@@ -56,6 +56,7 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
     private String source;
     
     private Boolean prefered;
+    private Boolean hidden;
     private Integer status;
     private ThesaurusTermRole role;
     private ThesaurusConcept concept;
@@ -152,6 +153,14 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
 	@Override
 	public String getThesaurusId() {		
 		return thesaurus.getIdentifier();
+	}
+
+	public Boolean getHidden() {
+		return hidden;
+	}
+
+	public void setHidden(Boolean hidden) {
+		this.hidden = hidden;
 	}   
 
 }

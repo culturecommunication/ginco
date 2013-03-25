@@ -77,6 +77,7 @@ Ext
 					xAssociationRemove : 'Remove association',
 					xChildrenConcepts : 'Children Concepts',
 					xConceptStatusLabel : 'Concept status',
+					xHiddenTermColumnLabel : 'Hidden term',
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
@@ -261,6 +262,12 @@ Ext
 																						xtype : 'checkcolumn',
 																						dataIndex : 'prefered',
 																						header : me.xPreferedColumnLabel,
+																						stopSelection : false
+																					},
+																					{
+																						xtype : 'checkcolumn',
+																						dataIndex : 'hidden',
+																						header : me.xHiddenTermColumnLabel,
 																						stopSelection : false
 																					},
 																					{
