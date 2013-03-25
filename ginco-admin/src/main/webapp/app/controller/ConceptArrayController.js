@@ -236,6 +236,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 
         var searchOrphans = null;
         var getChildren = true;
+        var getArrayConcepts = true;
+        //TODO : remove for test
+        var arrayId = theConceptArrayPanel.gincoId ;
         if(theConceptArrayForm.down('textfield[name="superOrdinateId"]').value == "") {
             searchOrphans = false;
             getChildren = false;
@@ -247,6 +250,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             searchOrphans : searchOrphans,
             getChildren : getChildren,
             showTree : false,
+            getArrayConcepts : getArrayConcepts,
+			arrayId : arrayId,
             checkstore: theStore,
             listeners: {
                 selectBtn: {

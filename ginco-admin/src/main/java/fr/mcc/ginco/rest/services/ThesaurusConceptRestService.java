@@ -245,6 +245,20 @@ public class ThesaurusConceptRestService {
         return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(reducedConcepts);
     }
     
+    @GET
+    @Path("/getAvailableConceptsOfArray")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public  ExtJsonFormLoadData<List<ThesaurusConceptReducedView> > getAvailableConceptsOfArray(
+    		@QueryParam("arrayId") String arrayId)
+            throws BusinessException {
+        List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
+        List<ThesaurusConcept> children = thesaurusConceptService.getAvailableConceptsOfArray(arrayId);
+        for (ThesaurusConcept child : children) {
+            reducedConcepts.add(thesaurusConceptViewConverter.convert(child));
+        }
+        return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(reducedConcepts);
+    }
+    
     /**
 	 * Public method used to delete
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} -

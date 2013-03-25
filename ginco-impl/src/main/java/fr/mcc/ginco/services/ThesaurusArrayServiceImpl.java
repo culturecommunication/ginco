@@ -36,7 +36,9 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -46,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of the thesaurus array service contains methods relatives to the
@@ -58,6 +61,11 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 	@Inject
 	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
+	
+	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
+
 
     @Inject
     @Named("nodeLabelService")
@@ -84,6 +92,22 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 				throw new BusinessException(
 						"Only a validated concept can be a parent for a concept array",
 						"only-validated-concept-parent-of-concept-array");
+			}
+		}
+		
+		if (thesaurusArray.getConcepts() != null){
+			//We get all arrays matching our superordinate, excluding our concept from the list
+			List<ThesaurusArray> arrayWithSameSuperOrdinate = thesaurusArrayDAO.getConceptSuperOrdinateArrays(thesaurusArray.getSuperOrdinateConcept().getIdentifier(), thesaurusArray.getIdentifier());
+			Set<ThesaurusConcept> allChildren = thesaurusArray.getConcepts();
+
+			for (ThesaurusArray currentArray : arrayWithSameSuperOrdinate) {
+				Set<ThesaurusConcept> conceptOfEachArray = currentArray.getConcepts();
+				for (ThesaurusConcept thesaurusConcept : conceptOfEachArray) {
+					if (allChildren.contains(thesaurusConcept)) {
+						//Another array with same superordinate contains a concept we have included in our array
+						throw new BusinessException("A concept included in this array is already included in a similar array (same parent concept)", "array-concept-included-twice"); 
+					}
+				}
 			}
 		}
 

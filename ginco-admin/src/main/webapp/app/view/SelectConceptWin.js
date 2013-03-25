@@ -47,6 +47,8 @@ Ext
 						thesaurusData : null,
 						conceptId : null,
 						getChildren : false,
+						getArrayConcepts : false,
+						arrayId : null,
 						searchOrphans : null,
 						showTree : false,
 						checkstore : null,
@@ -83,6 +85,13 @@ Ext
 								thesaurusId : me.thesaurusData.id,
 								searchOrphans : me.searchOrphans,
 								onlyValidatedConcepts: me.onlyValidatedConcepts
+							};
+						} else if(me.getArrayConcepts) {
+							// Searching only the children concepts of a concept
+							// which id is defined in conceptId variable
+							me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getAvailableConceptsOfArray';
+							me.conceptReducedStore.getProxy().extraParams = {
+								arrayId : me.arrayId
 							};
 						} else {
 							// Searching only the children concepts of a concept

@@ -193,5 +193,12 @@ public interface IThesaurusConceptService {
 	 */
 	void calculateChildrenRoot(String parentId);
 
+	/**Get all concepts eligible for an array
+	 * @param arrayId
+	 * @param conceptId
+	 * @return List of concepts
+	 */
+	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId);
+
 
 }

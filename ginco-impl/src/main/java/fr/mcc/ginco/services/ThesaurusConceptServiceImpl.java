@@ -468,4 +468,20 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		}
 	}
 
+	@Override
+	public List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId) {
+		ThesaurusArray currentArray = thesaurusArrayDAO.getById(arrayId);
+		
+		//We get all arrays matching our superordinate, excluding our concept from the list
+		List<ThesaurusArray> arrayWithSameSuperOrdinate = thesaurusArrayDAO.getConceptSuperOrdinateArrays(currentArray.getSuperOrdinateConcept().getIdentifier(), currentArray.getIdentifier());
+		List<ThesaurusConcept> allChildren = thesaurusConceptDAO.getChildrenConcepts(currentArray.getSuperOrdinateConcept().getIdentifier());
+
+		for (ThesaurusArray thesaurusArray : arrayWithSameSuperOrdinate) {
+			Set<ThesaurusConcept> conceptOfEachArray = thesaurusArray.getConcepts();
+			for (ThesaurusConcept thesaurusConcept : conceptOfEachArray) {
+				allChildren.remove(thesaurusConcept);
+			}
+		}
+		return allChildren;
+	}
 }
