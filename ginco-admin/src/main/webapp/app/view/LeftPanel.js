@@ -1,5 +1,5 @@
 /**
- * Copyright or © or Copr. Ministère Français chargé de la Culture
+ 	* Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
  * <p/>
  * contact.gincoculture_at_gouv.fr
@@ -38,6 +38,8 @@ Ext.define('GincoApp.view.LeftPanel', {
 	alias : 'widget.leftPanel',
 	xThesaurusLabel : "Thesaurus Explorer",
 	xRefreshBtnTooltip : "Refresh explorer",
+	xSelectBtnLabel : "Display",
+	xSelectBtnToolTip : "Display the selected element",
 	localized : true,
 	frame : false,
 	width : 250,
@@ -68,6 +70,18 @@ Ext.define('GincoApp.view.LeftPanel', {
 				rootVisible : false,
 				useArrows : true,
 				flex : 1,
+				dockedItems: [{
+			        xtype: 'toolbar',
+			        dock: 'top',
+			        items: [{
+			            text: me.xSelectBtnLabel,
+			            disabled: true,
+			            itemId : 'selectBtn',
+			            iconCls:'icon-display',
+			            tooltip : me.xSelectBtnToolTip,
+			            tooltipType: 'title'
+			        }]
+			    }],
 				viewConfig : {
 					loadMask : true
 				},

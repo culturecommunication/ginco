@@ -139,6 +139,7 @@ public class BaseRestService {
 				node.setType(ThesaurusListNodeType.THESAURUS);
 				node.setChildren(folderGenerator.generateFolders(thesaurus
 						.getIdentifier()));
+				node.setDisplayable(true);
 				result.add(node);
 			}
 		}

@@ -71,6 +71,11 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
     private boolean leaf;
     
     /**
+     * if the node is displayable.
+     */
+    private boolean displayable;
+    
+    /**
      * Css class of the node
      */
     private String iconcls;
@@ -223,6 +228,16 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 			return title.compareToIgnoreCase(o.getTitle());
 		} 
 		return -1;
+	}
+
+	@Override
+	public boolean isDisplayable() {
+		return this.displayable;
+	}
+
+	@Override
+	public void setDisplayable(boolean displayable) {
+		this.displayable = displayable;
 	}
 
 }

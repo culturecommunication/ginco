@@ -279,6 +279,24 @@ Ext.define('Thesaurus.ext.utils', {
  */
 Ext.define('Thesaurus.form.HtmlEditor', {
 	override : 'Ext.form.field.HtmlEditor',
+	getLabelCellAttrs: function() {
+        var me = this,
+            labelAlign = me.labelAlign,
+            result = '';
+
+        if (labelAlign !== 'top') {
+            result = 'valign="top" halign="' + labelAlign+ '"';
+        }
+        return result + ' class="' + Ext.baseCSSPrefix + 'field-label-cell"';
+    },
+    getLabelCellStyle: function() {
+        var me = this,
+            hideLabelCell = me.hideLabel || (!me.fieldLabel && me.hideEmptyLabel);
+
+        var style =  hideLabelCell ? 'display:none;' : '';
+        style = style+ ' width:' + (me.labelWidth + me.labelPad) + 'px;';
+        return style;
+    },
 	validate : function() {
 		var me = this, isValid = me.isValid();
 		if (isValid !== me.wasValid) {
@@ -312,5 +330,75 @@ Ext.define('Thesaurus.form.HtmlEditor', {
 		} else {
 			return true;
 		}
+	},
+	 getSubTplData: function() {
+		 var data;
+		 data = this.callParent();
+		 this.getInsertionRenderData(data, this.subTplInsertions);
+		 return data;
+	    }
+});
+
+/*
+ * Remove width attr from table on fields form
+ */
+Ext.define("Thesaurus.form.field.Base", {
+	override : 'Ext.form.field.Base',
+	getLabelCellAttrs: function() {
+        var me = this,
+            labelAlign = me.labelAlign,
+            result = '';
+
+        if (labelAlign !== 'top') {
+            result = 'valign="top" halign="' + labelAlign+ '"';
+        }
+        return result + ' class="' + Ext.baseCSSPrefix + 'field-label-cell"';
+    },
+    getLabelCellStyle: function() {
+        var me = this,
+            hideLabelCell = me.hideLabel || (!me.fieldLabel && me.hideEmptyLabel);
+
+        var style =  hideLabelCell ? 'display:none;' : '';
+        style = style+ ' width:' + (me.labelWidth + me.labelPad) + 'px;';
+        return style;
+    }
+});
+
+/*
+ * Implement aria-hidden property
+ */
+Ext.define("Thesaurus.dom.Element", {
+	override : 'Ext.dom.Element',
+	setVisible : function(visible, animate) {
+		var me = this;
+		me.callParent(arguments);
+		me.set({
+        	'aria-hidden' : !visible
+        });
+        
+		return me;
 	}
 });
+
+/*
+ * Remove border attr from tables
+ */
+Ext.view.TableChunker.metaTableTpl = [
+                                                  '{%if (this.openTableWrap)out.push(this.openTableWrap())%}',
+                                                  '<table class="' + Ext.baseCSSPrefix + 'grid-table ' + Ext.baseCSSPrefix + 'grid-table-resizer" cellspacing="0" cellpadding="0" {[this.embedFullWidth(values)]}>',
+                                                      '<tbody>',
+                                                      '<tr class="' + Ext.baseCSSPrefix + 'grid-header-row">',
+                                                      '<tpl for="columns">',
+                                                          '<th class="' + Ext.baseCSSPrefix + 'grid-col-resizer-{id}" style="width: {width}px; height: 0px;"></th>',
+                                                      '</tpl>',
+                                                      '</tr>',
+                                                      '{[this.openRows()]}',
+                                                          '{row}',
+                                                          '<tpl for="features">',
+                                                              '{[this.embedFeature(values, parent, xindex, xcount)]}',
+                                                          '</tpl>',
+                                                      '{[this.closeRows()]}',
+                                                      '</tbody>',
+                                                  '</table>',
+                                                  '{%if (this.closeTableWrap)out.push(this.closeTableWrap())%}'
+                                              ];

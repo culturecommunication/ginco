@@ -334,7 +334,9 @@ Ext
 															enableFontSize : false,
 															enableFormat : false,
 															enableLists : false,
-															enableSourceEdit : false
+															enableSourceEdit : false,
+															iframeAttrTpl : 'title="'+me.xRelationLabel+'"',
+															inputAttrTpl : 'title="'+me.xRelationLabel+'"'
 														},
 														{
 															xtype : 'htmleditor',
@@ -346,7 +348,9 @@ Ext
 															enableFontSize : false,
 															enableFormat : false,
 															enableLists : false,
-															enableSourceEdit : false
+															enableSourceEdit : false,
+															iframeAttrTpl : 'title="'+me.xSourceLabel+'"',
+															inputAttrTpl : 'title="'+me.xSourceLabel+'"'
 														} ]
 											} ]
 										});

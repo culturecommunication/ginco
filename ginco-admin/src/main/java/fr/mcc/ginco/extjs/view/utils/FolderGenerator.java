@@ -121,6 +121,7 @@ public class FolderGenerator {
 		concepts.setId(CONCEPTS_PREFIX + parentId);
 		concepts.setType(ThesaurusListNodeType.FOLDER);
 		concepts.setExpanded(false);
+		concepts.setDisplayable(false);
 		long nbTopConcepts = thesaurusConceptService
 				.getTopTermThesaurusConceptsCount(parentId);
 		if (nbTopConcepts > 0) {
@@ -139,6 +140,7 @@ public class FolderGenerator {
 		sandbox.setType(ThesaurusListNodeType.FOLDER);
 		sandbox.setIconCls("sandbox");
 		sandbox.setExpanded(false);
+		sandbox.setDisplayable(true);
 		sandbox.setChildren(new ArrayList<IThesaurusListNode>());
 		return sandbox;
 	}
@@ -150,6 +152,7 @@ public class FolderGenerator {
 				+ parentId);
 		arrays.setType(ThesaurusListNodeType.FOLDER);
 		arrays.setExpanded(false);
+		arrays.setDisplayable(false);
 		List<ThesaurusArray> realArrays = thesaurusArrayService
 				.getAllThesaurusArrayByThesaurusId(parentId);
 		if (realArrays != null && realArrays.size() > 0) {
@@ -167,6 +170,7 @@ public class FolderGenerator {
 		orphans.setId(ORPHANS_PREFIX + parentId);
 		orphans.setType(ThesaurusListNodeType.FOLDER);
 		orphans.setExpanded(false);
+		orphans.setDisplayable(false);
 		long nbOrphans = thesaurusConceptService
 				.getOrphanThesaurusConceptsCount(parentId);
 		if (nbOrphans > 0) {
@@ -185,6 +189,7 @@ public class FolderGenerator {
 		groups.setType(ThesaurusListNodeType.FOLDER);
 		groups.setExpanded(false);
 		groups.setChildren(new ArrayList<IThesaurusListNode>());
+		groups.setDisplayable(false);
 		
 		List<ThesaurusConceptGroup> realArrays = thesaurusConceptGroupService
 				.getAllThesaurusConceptGroupsByThesaurusId(parentId);

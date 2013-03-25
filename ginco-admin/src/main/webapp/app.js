@@ -120,6 +120,7 @@ Ext.application({
                 duration: 1000,
                 remove:true
             });
+            
             // Fade out the icon and message
             splashscreen.next().fadeOut({
                 duration: 1000,

@@ -91,6 +91,7 @@ public class OrphansGenerator {
 			orphanNode.setType(ThesaurusListNodeType.CONCEPT);
 			orphanNode.setExpanded(false);
             orphanNode.setThesaurusId(orphan.getThesaurusId());
+            orphanNode.setDisplayable(true);
 
             if(!thesaurusConceptService.hasChildren(orphan.getIdentifier())) {
                 orphanNode.setChildren(new ArrayList<IThesaurusListNode>());

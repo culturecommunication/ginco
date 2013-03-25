@@ -50,6 +50,11 @@ Ext.define('GincoApp.model.MainTreeModel', {
             type: 'string'
         },
         {
+    		name : 'displayable',
+    		type : 'boolean',
+    		defaultValue : 'false'
+    	},
+        {
             name: 'id',
             type: 'string'
         }

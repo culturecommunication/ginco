@@ -101,7 +101,8 @@ public class GroupsGenerator {
 			groupNode.setThesaurusId(group.getThesaurus().getIdentifier());
 
 			groupNode.setChildren(new ArrayList<IThesaurusListNode>());
-			groupNode.setLeaf(true);            
+			groupNode.setLeaf(true);  
+			groupNode.setDisplayable(true);
 
 			newGroups.add(groupNode);
 		}

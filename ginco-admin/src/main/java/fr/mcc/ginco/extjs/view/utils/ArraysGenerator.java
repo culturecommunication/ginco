@@ -104,7 +104,7 @@ public class ArraysGenerator {
 
 			arrayNode.setChildren(new ArrayList<IThesaurusListNode>());
 			arrayNode.setLeaf(true);
-            
+            arrayNode.setDisplayable(true);
 
 			newArrays.add(arrayNode);
 		}

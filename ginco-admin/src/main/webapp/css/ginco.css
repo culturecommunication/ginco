@@ -83,6 +83,10 @@
     background-image: url(../images/delete.png) !important;
 }
 
+.icon-display {
+    background-image: url(../images/magnifier.png) !important;
+}
+
 .icon-add {
     background-image: url(../images/add.png) !important;
 }

@@ -89,7 +89,7 @@ public class TopTermGenerator {
                             + topTerm.getIdentifier());
 			topTermNode.setType(ThesaurusListNodeType.CONCEPT);
             topTermNode.setThesaurusId(topTerm.getThesaurusId());
-
+            topTermNode.setDisplayable(true);
             if(!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
                 topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
                 topTermNode.setLeaf(true);

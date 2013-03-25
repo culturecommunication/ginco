@@ -131,4 +131,15 @@ public interface IThesaurusListNode extends Comparable<IThesaurusListNode>{
      * @param thesaurusId
      */
     void setThesaurusId(String thesaurusId);
+    
+    /**
+     * @return true if the current node is displayable
+     */
+    boolean isDisplayable();
+
+	/**
+	 * Sets whether the current node is displayable
+	 * @param displayable
+	 */
+	void setDisplayable(boolean displayable);
 }

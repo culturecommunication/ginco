@@ -148,8 +148,22 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		Ext.log({},'onRefreshTreeEvent');
 		this.loadTreeView(theTree);
 	},
+	onItemSelect : function(theTree, theRecord)
+	{
+		theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
+		var selectBtn = theTree.down("#selectBtn");
+		selectBtn.setDisabled(!theRecord.get("displayable"));
+	}, 
+	onSelectBtnClick : function()
+	{
+		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
+		var node = theTree.getSelectionModel().getSelection();
+		if (node.length > 0) {
+			this.onNodeDblClick(theTree, node[0]);
+		}
+	},
 	init : function(application) {
-		// Handling treeview refresh requests
+		// Handling application treeview refresh requests
 		 this.application.on({
 			 	thesaurusupdated: this.onRefreshTreeEvent,
 			 	conceptupdated: this.onRefreshTreeEvent,
@@ -165,8 +179,11 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			"#mainTreeView" : {
 				beforeitemdblclick : this.onNodeDblClick,
 				render : this.onTreeRender,
-				load : this.onTreeLoad
-				
+				load : this.onTreeLoad,
+				select : this.onItemSelect
+			},
+			"#mainTreeView #selectBtn" : {
+				click : this.onSelectBtnClick
 			},
 			'#mainTreeView tool[type="refresh"]' : {
 				click : this.onRefreshBtnClick
