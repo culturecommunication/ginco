@@ -154,7 +154,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
             }
         });
 		// Handle reopen tabs at first load
-		token = window.location.hash.substr(1);
+		token = decodeURIComponent(Ext.util.History.getHash());
 		if (token!="") {
 			parts = token.split(tokenDelimiter);
             length = parts.length;
