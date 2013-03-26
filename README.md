@@ -13,6 +13,20 @@ GINCO is released under the terms of the CeCiLL v2 license.
 
 GINCO features
 --------------
+The main features already developed allow : 
+- the design and the management of multiple lists of authorities, taxonomies, thesauruses ;
+- the management of terms: status, language, unique identifier of type URI, notes of different types associated with the terms, assigment of terms to concepts, equivalence relationships between terms;
+- the management of concepts: status, unique identifier of type URI, notes of different types associated with concepts, hierarchical ans associative relationships between concepts ;
+- the management of thesaurus arrays (virtual relays, facets) and their exploitation in hierarchical editions ;
+- the management of groups of concepts (microthesaurus, theme, domain);
+- the alphabetical and hierarchical editions ;
+- the import and export of thesaurus in SKOS / RDF format ;
+- the consultation through web services.
+The first version of the software is under development according to the SCRUM agile methodology. The "backlog" presents the prioritized list of developed or planned features. It is made available to the community, which can provide us with suggestions and proposals.
+The developments envisages in version 2 of the application focus on :
+- collaborative features ;
+- alignments between vocabularies and to external ressources ;
+- the implementation of a reference terminology, in order to provide users with unified access to all vocabularies (terminologies server) 
 
 Installation
 ------------
