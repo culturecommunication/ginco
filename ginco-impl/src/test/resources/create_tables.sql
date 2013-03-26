@@ -3,6 +3,7 @@
 DROP TABLE IF EXISTS thesaurus;
 DROP TABLE IF EXISTS thesaurus_type;
 DROP TABLE IF EXISTS thesaurus_format;
+DROP TABLE IF EXISTS thesaurus_version_history;
 DROP TABLE IF EXISTS languages_iso639;
 DROP TABLE IF EXISTS thesaurus_organization;
 DROP TABLE IF EXISTS thesaurus_term;
@@ -55,6 +56,22 @@ CREATE TABLE thesaurus_format (
     identifier integer NOT NULL,
     label text NOT NULL
 );
+
+CREATE TABLE thesaurus_version_history
+(
+  identifier text NOT NULL,
+  date text,
+  versionnote text,
+  thesaurus_identifier text NOT NULL,
+  thisversion boolean NOT NULL DEFAULT false,
+  status text NOT NULL,
+  CONSTRAINT pk_thesaurus_version_history PRIMARY KEY (identifier)
+);
+
+ALTER TABLE thesaurus_version_history
+    ADD FOREIGN KEY (thesaurus_identifier)
+    REFERENCES thesaurus (identifier)
+    ON UPDATE NO ACTION ON DELETE CASCADE;
 
 CREATE TABLE languages_iso639 (
     id character(3) NOT NULL,
