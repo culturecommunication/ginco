@@ -38,6 +38,8 @@
  * Thesaurus Creation Form
  * 
  */
+
+Ext.require([ 'GincoApp.view.ThesaurusVersionPanel' ]);
 Ext
 		.define(
 				'GincoApp.view.ThesaurusPanel',
@@ -88,6 +90,7 @@ Ext
                     xSave : "Save",
                     xCreateVersion : "Create version",
                     xDelete : "Delete",
+                    xVersionsTab : 'Versions',
 
 					initComponent : function() {
 						var me = this;
@@ -97,6 +100,9 @@ Ext
 										me,
 										{
 											title : me.xThesaurusTitle,
+											
+											items : [ {
+												xtype : 'tabpanel',
 											items : [ {
 												xtype : 'form',
 												title : me.xThesaurusTitle,
@@ -352,7 +358,13 @@ Ext
 															iframeAttrTpl : 'title="'+me.xSourceLabel+'"',
 															inputAttrTpl : 'title="'+me.xSourceLabel+'"'
 														} ]
-											} ]
+											},
+											{
+												title : me.xVersionsTab,
+												xtype : 'thesaurusVersionPanel',
+												closable : false
+											}]
+											}]
 										});
 
 						me.callParent(arguments);

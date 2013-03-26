@@ -34,42 +34,15 @@
  */
 
 /*
- * File: app/locale/fr/view/ThesaurusPanel.js
- * Thesaurus Translated Items
+ * File: app/locale/fr/view/NotePanel.js
+ * Note Translated Items
  * 
  */
-Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
-	    xIdentifierLabel : 'Identifiant',
-	    xCreatedDateLabel : 'Date de création',
-	    xDateLabel : 'Dernière modification',
-	    xTitleLabel : 'Titre',
-	    xServiceLabel : 'Auteur',
-	    xUrlLabel : 'URL',
-	    xContributorLabel : 'Contributeur',
-	    xPublisherLabel : 'Editeur',
-	    xPublisherValue : 'Ministère chargé de la culture',
-	    xRightsLabel : 'Droits',
-	    xDescriptionLabel : 'Description',
-	    xCoverageLabel : 'Couverture',
-	    xSubjectLabel : 'Sujet',
-	    xTypeLabel : 'Type',
-	    xFormatLabel : 'Format',
-	    xLanguagesLabel : 'Langue(s)',
-	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
-	    xRelationLabel : 'Publication(s) associée(s)',
-	    xSourceLabel : 'Ressource(s) liée(s)',
-	    xThesaurusTitle : 'Nouveau Vocabulaire',
-	    xNewLabel : 'Nouveau',
-	    xNewMenu_TermLabel : 'Terme',
-	    xNewMenu_ConceptLabel: 'Concept',
-	    xNewMenu_GroupLabel: 'Groupe de concepts',
-	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
-        xExport_Skos : "Export SKOS",
-        xExport_Hierarchical : "Export texte hiérarchique",
-        xExport_Alphabetic : "Export texte alphabétique",
-
-        xSave : "Enregistrer",
-        xCreateVersion : "Créer version",
-        xDelete : "Supprimer",
-        xVersionsTab : 'Versions'
+Ext.define('GincoApp.locale.fr.view.ThesaurusVersionPanel', {
+	xVersionListGridTitle : 'Versions du thesaurus',
+	xIdentifierLabel : 'Identifiant',
+	xVersionDate : 'Date de version',
+	xVersionNote : 'Note de version',
+	xVersionStatus : 'Statut',
+	xThisVersion : 'Version courante'
 });
