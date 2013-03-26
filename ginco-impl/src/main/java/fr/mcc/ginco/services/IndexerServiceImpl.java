@@ -69,7 +69,7 @@ public class IndexerServiceImpl implements IIndexerService {
     private IThesaurusTermService thesaurusTermService;
 
     @Value("${solr.url}")
-    private static String url;
+    private String url;
 
     @Override
     public void addConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException {
