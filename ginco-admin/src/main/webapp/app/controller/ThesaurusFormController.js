@@ -74,6 +74,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         thesaurusPanel.down('#exportHierarchical').setDisabled(false);
         thesaurusPanel.down('#exportSKOS').setDisabled(false);
         thesaurusPanel.down('#exportAlphabetical').setDisabled(false);
+        thesaurusPanel.down('#versionTab').setDisabled(false);
 	},
 	onNewTermBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusPanel');

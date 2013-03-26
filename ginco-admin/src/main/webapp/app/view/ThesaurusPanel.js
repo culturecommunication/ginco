@@ -357,8 +357,10 @@ Ext
 											},
 											{
 												title : me.xVersionsTab,
+												itemId : 'versionTab',
 												xtype : 'thesaurusVersionPanel',
-												closable : false
+												closable : false,
+												disabled :  true
 											}]
 											}]
 										});
