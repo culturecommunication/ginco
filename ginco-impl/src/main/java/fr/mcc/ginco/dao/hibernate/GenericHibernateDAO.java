@@ -37,6 +37,7 @@ package fr.mcc.ginco.dao.hibernate;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
+import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -111,7 +112,8 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	}
 	
 	final public Session getCurrentSession() {
-		Session session = sessionFactory.getCurrentSession();		
+		Session session = sessionFactory.getCurrentSession();	
+		//TODO : to test : session.setFlushMode(FlushMode.MANUAL);
 		return session;
 	}
 

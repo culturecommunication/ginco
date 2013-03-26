@@ -44,8 +44,8 @@ import java.util.Date;
 public class ThesaurusVersionHistory implements Serializable {
 	private String identifier;
     private Date date;
-    private  String versionNote;
-    private Boolean currentVersion;
+    private String versionNote;
+    private String status;
     private Boolean thisVersion;
     private Thesaurus thesaurusIdentifier;
 
@@ -54,62 +54,63 @@ public class ThesaurusVersionHistory implements Serializable {
 	}
 
 	public ThesaurusVersionHistory(String identifier, Date date,
-			String versionVote, Boolean currentVersion, Boolean thisVersion,
+			String versionVote, String status, Boolean thisVersion,
 			Thesaurus thesaurusIdentifier) {
 		super();
 		this.identifier = identifier;
 		this.date = date;
 		this.versionNote = versionVote;
-		this.currentVersion = currentVersion;
+		this.status = status;
 		this.thisVersion = thisVersion;
 		this.thesaurusIdentifier = thesaurusIdentifier;
 	}
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public String getVersionNote() {
-        return versionNote;
-    }
+	public String getVersionNote() {
+		return versionNote;
+	}
 
-    public void setVersionNote(String versionNote) {
-        this.versionNote = versionNote;
-    }
+	public void setVersionNote(String versionNote) {
+		this.versionNote = versionNote;
+	}
 
-    public Boolean getCurrentVersion() {
-        return currentVersion;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setCurrentVersion(Boolean currentVersion) {
-        this.currentVersion = currentVersion;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public Boolean getThisVersion() {
-        return thisVersion;
-    }
+	public Boolean getThisVersion() {
+		return thisVersion;
+	}
 
-    public void setThisVersion(Boolean thisVersion) {
-        this.thisVersion = thisVersion;
-    }
+	public void setThisVersion(Boolean thisVersion) {
+		this.thisVersion = thisVersion;
+	}
 
-    public Thesaurus getThesaurusIdentifier() {
-        return thesaurusIdentifier;
-    }
+	public Thesaurus getThesaurusIdentifier() {
+		return thesaurusIdentifier;
+	}
 
-    public void setThesaurusIdentifier(Thesaurus thesaurusIdentifier) {
-        this.thesaurusIdentifier = thesaurusIdentifier;
-    }	
+	public void setThesaurusIdentifier(Thesaurus thesaurusIdentifier) {
+		this.thesaurusIdentifier = thesaurusIdentifier;
+	}
+
 }
