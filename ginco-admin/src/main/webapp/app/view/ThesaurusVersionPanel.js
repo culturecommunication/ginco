@@ -28,10 +28,11 @@
  * File: app/view/ThesaurusVersionPanel.js Thesaurus Versions Display/Creation/Edition
  * 
  */
+Ext.Loader.setPath('Ext.ux', 'extjs/ux');
+Ext.require([ 'Ext.ux.CheckColumn' ]);
+
 Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 	extend : 'Ext.panel.Panel',
-
-	thesaurusData : '',
 
 	alias : 'widget.thesaurusVersionPanel',
 	localized : true,
@@ -89,6 +90,7 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 						dataIndex : 'status',
 						text : me.xVersionStatus
 					}, {
+						xtype : 'checkcolumn',
 						dataIndex : 'thisVersion',
 						text : me.xThisVersion
 					}]

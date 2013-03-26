@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 
 /**
@@ -43,4 +45,10 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
  * @see fr.mcc.ginco.beans.ThesaurusVersionHistory
  */
 public interface IThesaurusVersionHistoryService {
+	
+	/**
+	 * @param String thesaurusId
+	 * @return A list of {@ThesaurusVersionHistory}
+	 */
+	public List<ThesaurusVersionHistory> getVersionsByThesaurusId(String thesaurusId);
 }

@@ -34,10 +34,19 @@
  */
 package fr.mcc.ginco.dao;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 
 /**
  * Data Access Object for thesaurus_version_history
  */
 public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersionHistory, String> {
+	
+	/**
+	 * This methods gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
+	 * @param String thesaurusId
+	 * @return A list of {@ThesaurusVersionHistory}
+	 */
+	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
 }
