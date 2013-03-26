@@ -23,7 +23,7 @@ The main features already developed allow :
 - the import and export of thesaurus in SKOS / RDF format ;
 - the consultation through web services.
 
-The first version of the software is under development according to the SCRUM agile methodology. The "backlog" presents the prioritized list of developed or planned features. It is made available to the community, which can provide us with suggestions and proposals.
+The first version of the software is under development according to the SCRUM agile methodology. The "[backlog] (backlog/HADOC VOC_MCC-HADOC-GINCO_backlog.ods)" presents the prioritized list of developed or planned features. It is made available to the community, which can provide us with suggestions and proposals.
 
 The developments envisages in version 2 of the application focus on :
 - collaborative features ;
