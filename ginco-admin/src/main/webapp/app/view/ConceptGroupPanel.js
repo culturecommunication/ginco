@@ -95,14 +95,9 @@ Ext
 												trackResetOnLoad : true,
 												itemId : 'conceptGroupForm',
 												defaults : {
-													anchor : '70%',
-													afterLabelTextTpl : new Ext.XTemplate(
-															'<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>',
-															{
-																disableFormats : true
-															})
+													anchor : '70%'
 												},
-
+												bbar : Ext.create('GincoApp.view.BottomFormToolbar'),
 												dockedItems : [ {
 													xtype : 'toolbar',
 													dock : 'top',
