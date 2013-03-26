@@ -34,29 +34,10 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.cxf.jaxrs.ext.Nullable;
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ConceptAndTermStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
@@ -65,9 +46,23 @@ import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.EncodedControl;
+import org.apache.cxf.jaxrs.ext.Nullable;
+import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 
 /**
@@ -94,6 +89,10 @@ public class ThesaurusConceptRestService {
 	@Inject
 	@Named("thesaurusConceptViewConverter")
 	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+
+    @Inject
+    @Named("indexerService")
+    private IIndexerService indexerService;
 
 	@Log
 	private Logger logger;
@@ -145,7 +144,7 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public ThesaurusConceptView updateConcept(
 			ThesaurusConceptView thesaurusConceptViewJAXBElement)
-			throws BusinessException {
+			throws BusinessException, TechnicalException {
 
 		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter
 				.convert(thesaurusConceptViewJAXBElement);
@@ -183,6 +182,8 @@ public class ThesaurusConceptRestService {
 
 		ThesaurusConcept returnConcept = thesaurusConceptService
 				.updateThesaurusConcept(convertedConcept, terms, thesaurusConceptViewJAXBElement.getAssociatedConcepts());
+
+        indexerService.addConcept(returnConcept);
 
 		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);

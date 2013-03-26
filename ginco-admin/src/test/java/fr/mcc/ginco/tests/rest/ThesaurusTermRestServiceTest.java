@@ -35,23 +35,6 @@
 
 package fr.mcc.ginco.tests.rest;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -60,10 +43,25 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusTermRestService;
+import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
+import junit.framework.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 public class ThesaurusTermRestServiceTest{
 	
@@ -78,7 +76,10 @@ public class ThesaurusTermRestServiceTest{
 	
     @Mock(name="termViewConverter")
     private TermViewConverter termViewConverter;
-	
+
+    @Mock(name="indexerService")
+    private IIndexerService indexerService;
+
 	@InjectMocks
 	private ThesaurusTermRestService thesaurusTermRestService = new ThesaurusTermRestService();
 	
@@ -201,8 +202,8 @@ public class ThesaurusTermRestServiceTest{
 	@Test
 	public void testGetThesaurusTerm() throws BusinessException {
 		ThesaurusTerm term =getFakeThesaurusTermWithNonMandatoryEmptyFields("fake-id");
-		when(termService.getThesaurusTermById(anyString())).thenReturn(term);	
-		ThesaurusTermView actualResponse = thesaurusTermRestService.getThesaurusTerm("fake-id");
+		when(termService.getThesaurusTermById(anyString())).thenReturn(term);
+        ThesaurusTermView actualResponse = thesaurusTermRestService.getThesaurusTerm("fake-id");
 		Assert.assertEquals("lexicale value", actualResponse.getLexicalValue());
 	}
 	@Test(expected=BusinessException.class)

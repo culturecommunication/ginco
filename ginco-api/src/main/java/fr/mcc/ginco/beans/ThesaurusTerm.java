@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.beans;
 
+import org.apache.solr.client.solrj.beans.Field;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
@@ -54,7 +55,7 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
     private Date created;
     private Date modified;
     private String source;
-    
+
     private Boolean prefered;
     private Boolean hidden;
     private Integer status;
@@ -67,6 +68,7 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
         return identifier;
     }
 
+    @Field
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
@@ -75,6 +77,7 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
         return lexicalValue;
     }
 
+    @Field
     public void setLexicalValue(String lexicalValue) {
         this.lexicalValue = lexicalValue;
     }

@@ -34,18 +34,6 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -57,11 +45,22 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusConceptRestService;
+import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
+import junit.framework.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThesaurusConceptRestServiceTest {
 	
@@ -77,7 +76,10 @@ public class ThesaurusConceptRestServiceTest {
 	
 	@Mock(name="termViewConverter")
     private TermViewConverter termViewConverter;
-    
+
+    @Mock(name="indexerService")
+    private IIndexerService indexerService;
+
 	@Mock(name="thesaurusConceptViewConverter")
     private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
 	
