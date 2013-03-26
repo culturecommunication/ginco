@@ -91,6 +91,7 @@ public class IndexerServiceImpl implements IIndexerService {
                 .getLexicalValue();
 
         doc.addField("lexicalValue", prefLabel);
+        doc.addField("type", ThesaurusConcept.class.getSimpleName());
 
         try {
             solrCore.add(doc);
@@ -133,6 +134,7 @@ public class IndexerServiceImpl implements IIndexerService {
             doc.addField("thesaurusId", term.getThesaurusId());
             doc.addField("identifier", term.getIdentifier());
             doc.addField("lexicalValue", term.getLexicalValue());
+            doc.addField("type", ThesaurusTerm.class.getSimpleName());
             terms.add(doc);
         }
 
@@ -162,6 +164,7 @@ public class IndexerServiceImpl implements IIndexerService {
         doc.addField("thesaurusId", thesaurusTerm.getThesaurusId());
         doc.addField("identifier", thesaurusTerm.getIdentifier());
         doc.addField("lexicalValue", thesaurusTerm.getLexicalValue());
+        doc.addField("type", ThesaurusTerm.class.getSimpleName());
 
         try {
             solrCore.add(doc);

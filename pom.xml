@@ -52,8 +52,10 @@
 		<scp.password>hadoc</scp.password>
 		<scp.host>hadoc.lxc</scp.host>
 		<scp.folder.tomcat>/etc/tomcat6/</scp.folder.tomcat>
-		<folder.conf>${basedir}/conf/local</folder.conf>
+		<scp.folder.solr>/etc/solr/conf</scp.folder.solr>
+        <folder.conf>${basedir}/conf/local</folder.conf>
 		<deploy.plugin.skip>true</deploy.plugin.skip>
+        <solr.folder.conf>${basedir}/solr-conf</solr.folder.conf>
 	</properties>
 
 	<profiles>
@@ -73,7 +75,7 @@
 				<scp.host>hadoc-int.eqx.intranet</scp.host>
 				<scp.folder.tomcat.conf>${scp.folder.tomcat}/shared/classes</scp.folder.tomcat.conf>
 				<folder.conf>${basedir}/conf/integration</folder.conf>
-				<deploy.plugin.skip>false</deploy.plugin.skip>
+                <deploy.plugin.skip>false</deploy.plugin.skip>
 			</properties>
 		</profile>
 		<profile>
