@@ -34,42 +34,40 @@
  */
 
 /*
- * File: app/locale/fr/view/ThesaurusPanel.js
- * Thesaurus Translated Items
- * 
+ * Thesaurus Note Store 
+ * This file contains Thesaurus notes
  */
-Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
-	    xIdentifierLabel : 'Identifiant',
-	    xCreatedDateLabel : 'Date de création',
-	    xDateLabel : 'Dernière modification',
-	    xTitleLabel : 'Titre',
-	    xServiceLabel : 'Auteur',
-	    xUrlLabel : 'URL',
-	    xContributorLabel : 'Contributeur',
-	    xPublisherLabel : 'Editeur',
-	    xPublisherValue : 'Ministère chargé de la culture',
-	    xRightsLabel : 'Droits',
-	    xDescriptionLabel : 'Description',
-	    xCoverageLabel : 'Couverture',
-	    xSubjectLabel : 'Sujet',
-	    xTypeLabel : 'Type',
-	    xFormatLabel : 'Format',
-	    xLanguagesLabel : 'Langue(s)',
-	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
-	    xRelationLabel : 'Publication(s) associée(s)',
-	    xSourceLabel : 'Ressource(s) liée(s)',
-	    xThesaurusTitle : 'Nouveau Vocabulaire',
-	    xNewLabel : 'Nouveau',
-	    xNewMenu_TermLabel : 'Terme',
-	    xNewMenu_ConceptLabel: 'Concept',
-	    xNewMenu_GroupLabel: 'Groupe de concepts',
-	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
-        xExport_Skos : "Export SKOS",
-        xExport_Hierarchical : "Export texte hiérarchique",
-        xExport_Alphabetic : "Export texte alphabétique",
+Ext.define('GincoApp.store.ThesaurusVersionStore', {
+	extend : 'Ext.data.Store',
+	requires : [ 'GincoApp.model.ThesaurusVersionModel' ],
 
-        xSave : "Enregistrer",
-        xCreateVersion : "Créer version",
-        xDelete : "Supprimer",
-        xVersionsTab : 'Versions'
+	constructor : function(cfg) {
+		var me = this;
+		cfg = cfg || {};
+		me.callParent([ Ext.apply({
+			// TODO : keep autoload false ?
+			autoLoad : false,
+			alias : 'store.thesaurusVersionStore',
+			model : 'GincoApp.model.ThesaurusVersionModel',
+			proxy : {
+				type : 'ajax',
+				api : {
+					read : 'services/ui/thesaurusversionservice/getVersions'
+					//update : 'services/ui/thesaurusversionservice/updateVersion',
+					//create : 'services/ui/thesaurusversionservice/createVersion',
+					//destroy : 'services/ui/thesaurusversionservice/destroyVersion'
+				},
+				writer : {
+					type : 'json',
+					// A single version must be sent in an array
+					allowSingle : false
+				},
+				reader : {
+					type : 'json',
+					root : 'data',
+					idProperty : 'identifier'
+				}
+			}
+		}, cfg) ]);
+	}
 });
