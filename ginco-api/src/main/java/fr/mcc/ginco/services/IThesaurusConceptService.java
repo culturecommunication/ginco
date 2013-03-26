@@ -34,12 +34,12 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-import java.util.Set;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Service used to work with {@link ThesaurusConcept} objects, contains basic
@@ -200,5 +200,9 @@ public interface IThesaurusConceptService {
 	 */
 	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId);
 
-
+    /**
+     * For indexing purposes.
+     * @return list of all existing concepts.
+     */
+    List<ThesaurusConcept> getAllConcepts();
 }

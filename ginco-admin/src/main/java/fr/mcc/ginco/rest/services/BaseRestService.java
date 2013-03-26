@@ -34,8 +34,16 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.utils.*;
+import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.services.IThesaurusService;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,21 +52,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
-import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import fr.mcc.ginco.extjs.view.utils.GroupsGenerator;
-import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
-import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
-import fr.mcc.ginco.services.IThesaurusService;
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -94,6 +90,20 @@ public class BaseRestService {
     @Inject
     @Named("childrenGenerator")
     private ChildrenGenerator childrenGenerator;
+
+    @Inject
+    @Named("indexerService")
+    private IIndexerService indexerService;
+
+    @GET
+    @Path("/reindex")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response forceIndexation() throws BusinessException, TechnicalException {
+        indexerService.forceIndexing();
+        return Response.status(Response.Status.OK)
+                .entity("{success:true, message: 'Indexing started!'}")
+                .build();
+    }
 
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in

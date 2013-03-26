@@ -35,21 +35,19 @@
 package fr.mcc.ginco.services;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusTermService")
@@ -138,7 +136,12 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         return preferedTerms;
     }
 
-	@Override
+    @Override
+    public List<ThesaurusTerm> getAllTerms() {
+        return thesaurusTermDAO.findAll();
+    }
+
+    @Override
 	public List<ThesaurusTerm> getPaginatedThesaurusSandoxedValidatedTermsList(
 			Integer startIndex, Integer limit, String idThesaurus) {
 		return thesaurusTermDAO.findPaginatedSandboxedValidatedItems(startIndex, limit, idThesaurus);

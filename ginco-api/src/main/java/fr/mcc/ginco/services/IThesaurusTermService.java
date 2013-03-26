@@ -34,11 +34,10 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 /**
  * Service used to work with {@link ThesaurusTerm} objects, contains basic
@@ -121,4 +120,9 @@ public interface IThesaurusTermService {
     List<ThesaurusTerm> getPaginatedThesaurusSandoxedValidatedTermsList(
 			Integer startIndex, Integer limit, String idThesaurus);
 
+    /**
+     * For indexing purposes.
+      * @return list of all existing terms.
+     */
+    List<ThesaurusTerm> getAllTerms();
 }

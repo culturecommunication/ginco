@@ -43,12 +43,15 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("indexerService")
@@ -61,7 +64,12 @@ public class IndexerServiceImpl implements IIndexerService {
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
 
-    private static String url = "http://localhost:8983/solr/thesaurus/";
+    @Inject
+    @Named("thesaurusTermService")
+    private IThesaurusTermService thesaurusTermService;
+
+    @Value("${solr.url}")
+    private static String url;
 
     @Override
     public void addConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException {
@@ -96,6 +104,46 @@ public class IndexerServiceImpl implements IIndexerService {
     @Override
     public void forceIndexing() {
 
+        HttpSolrServer solrCore;
+
+        try {
+            solrCore = new HttpSolrServer(url);
+        } catch (RuntimeException ex) {
+            logger.warn("Solr seems to be not launched!");
+            return;
+        }
+
+        List<SolrInputDocument> concepts = new ArrayList<SolrInputDocument>();
+        for(ThesaurusConcept concept : thesaurusConceptService.getAllConcepts()) {
+
+            SolrInputDocument doc = new SolrInputDocument();
+            doc.addField("thesaurusId", concept.getThesaurusId());
+            doc.addField("identifier", concept.getIdentifier());
+
+            String prefLabel = thesaurusConceptService.getConceptPreferredTerm(concept.getIdentifier())
+                    .getLexicalValue();
+
+            doc.addField("lexicalValue", prefLabel);
+            concepts.add(doc);
+        }
+
+        List<SolrInputDocument> terms = new ArrayList<SolrInputDocument>();
+        for(ThesaurusTerm term : thesaurusTermService.getAllTerms()) {
+            SolrInputDocument doc = new SolrInputDocument();
+            doc.addField("thesaurusId", term.getThesaurusId());
+            doc.addField("identifier", term.getIdentifier());
+            doc.addField("lexicalValue", term.getLexicalValue());
+            terms.add(doc);
+        }
+
+        try {
+            solrCore.add(terms);
+            solrCore.add(concepts);
+        } catch (SolrServerException e) {
+            throw new TechnicalException("Error during adding to SOLR!", e);
+        } catch (IOException e) {
+            throw new TechnicalException("IO error!", e);
+        }
     }
 
     @Override
