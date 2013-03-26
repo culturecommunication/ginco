@@ -84,7 +84,8 @@ Ext.application({
         'TermRoleStore',
         'ConceptGroupTypeStore',
         'TermStatusStore',
-        'ConceptStatusStore'
+        'ConceptStatusStore',
+        'ThesaurusVersionStore'
     ],
     views: [
         'GincoViewPort',
@@ -107,7 +108,8 @@ Ext.application({
         'NotePanelController',
         'ConceptArrayController',
         'ConceptGroupController',
-        'ImportController'
+        'ImportController',
+        'ThesaurusVersionPanelController'
     ],
     init: function(){
     },

@@ -32,42 +32,8 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
-import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
-
-/**
- * Implementation of the data access object to the thesaurus_version_history database table
- *
- */
-@Repository("thesaurusVersionHistoryDAO")
-public class ThesaurusVersionHistoryDAO extends
-		GenericHibernateDAO<ThesaurusVersionHistory, String> implements IThesaurusVersionHistoryDAO {
-	public ThesaurusVersionHistoryDAO(Class<ThesaurusVersionHistory> clazz) {
-		super(clazz);
-	}
-
-	public ThesaurusVersionHistoryDAO() {
-		super(ThesaurusVersionHistory.class);
-	}
-
-	@Override
-	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(
-			String thesaurusId) {
-		Criteria criteria = getCurrentSession().createCriteria(
-				ThesaurusVersionHistory.class, "tv");
-		selectThesaurus(criteria, thesaurusId);
-		return criteria.list();
-	}
-	
-	private void selectThesaurus(Criteria criteria, String thesaurusId) {
-        criteria.add(Restrictions.eq("tv.thesauruses.identifier", (String)thesaurusId));
-    }
-}
+Ext.define('GincoApp.locale.fr.controller.ThesaurusVersionPanelController',
+{
+			
+});
