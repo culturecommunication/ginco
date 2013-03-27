@@ -134,7 +134,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 				emptyText : me.xSearchFieldText,
 				hideTrigger : false,
 				repeatTriggerClick : false,
-				disabled : true
+				disabled : false
 			}, {
 				xtype : 'label',
 				text : me.xConnectedAsLabel

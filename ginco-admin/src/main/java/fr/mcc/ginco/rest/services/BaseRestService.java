@@ -105,6 +105,16 @@ public class BaseRestService {
                 .build();
     }
 
+    @GET
+    @Path("/search")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response search(@QueryParam("request") String request) throws Exception {
+        return Response.status(Response.Status.OK)
+                .entity("{success:true, message: '"+indexerService.search(request)+"'}")
+                .build();
+
+    }
+
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in
 	 * database.

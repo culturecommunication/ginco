@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -41,7 +42,10 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.log.Log;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.ModifiableSolrParams;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -67,6 +71,10 @@ public class IndexerServiceImpl implements IIndexerService {
     @Named("thesaurusTermService")
     private IThesaurusTermService thesaurusTermService;
 
+    @Inject
+    @Named("noteService")
+    private INoteService noteService;
+
     @Value("${solr.url}")
     private String url;
 
@@ -88,6 +96,34 @@ public class IndexerServiceImpl implements IIndexerService {
         } catch (IOException e) {
             throw new TechnicalException("IO error during executing query for removing Term from index!", e);
         }
+    }
+
+    @Override
+    public String search(String request) throws SolrServerException {
+
+        HttpSolrServer solrCore;
+
+        try {
+            solrCore = new HttpSolrServer(url);
+        } catch (RuntimeException ex) {
+            logger.warn("Solr seems to be not launched!");
+            return null;
+        }
+
+        ModifiableSolrParams params = new ModifiableSolrParams();
+        params.set("q", "text:test");
+        params.set("start", "0");
+
+        QueryResponse response = solrCore.query(params);
+        SolrDocumentList results = response.getResults();
+
+        String result = "";
+
+        for (int i = 0; i < results.size(); ++i) {
+            result = result.concat(results.get(i).getFieldValue("identifier").toString()).concat("\r\n");
+        }
+
+        return result;
     }
 
     @Override
@@ -145,6 +181,17 @@ public class IndexerServiceImpl implements IIndexerService {
                 continue;
             }
             doc.addField("lexicalValue", prefLabel);
+
+            List<String> notes = new ArrayList<String>();
+
+            for(Note note : noteService.getConceptNotePaginatedList(concept.getIdentifier(), 0, 0)) {
+                notes.add(note.getLexicalValue());
+            }
+
+            if(!notes.isEmpty()) {
+                doc.addField("notes", notes);
+            }
+
             concepts.add(doc);
         }
 
@@ -211,6 +258,17 @@ public class IndexerServiceImpl implements IIndexerService {
             doc.addField("identifier", term.getIdentifier());
             doc.addField("lexicalValue", term.getLexicalValue());
             doc.addField("type", ThesaurusTerm.class.getSimpleName());
+
+            List<String> notes = new ArrayList<String>();
+
+            for(Note note : noteService.getTermNotePaginatedList(term.getIdentifier(), 0, 0)) {
+                notes.add(note.getLexicalValue());
+            }
+
+            if(!notes.isEmpty()) {
+                doc.addField("notes", notes);
+            }
+
             terms.add(doc);
         }
 

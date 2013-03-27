@@ -37,6 +37,7 @@ package fr.mcc.ginco.services;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
+import org.apache.solr.client.solrj.SolrServerException;
 
 public interface IIndexerService {
 
@@ -77,4 +78,6 @@ public interface IIndexerService {
      * @throws TechnicalException
      */
     void removeConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
+
+    String search(String request) throws SolrServerException;
 }
