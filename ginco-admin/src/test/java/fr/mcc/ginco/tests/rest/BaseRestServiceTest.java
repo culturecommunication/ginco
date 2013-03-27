@@ -45,6 +45,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -55,26 +58,27 @@ import fr.mcc.ginco.services.IThesaurusService;
 
 public class BaseRestServiceTest {
 
-    @Mock(name = "thesaurusService")
-    private IThesaurusService thesaurusService;
+	@Mock(name = "thesaurusService")
+	private IThesaurusService thesaurusService;
 
-    @Mock(name = "folderGenerator")
-    private FolderGenerator folderGenerator;
+	@Mock(name = "folderGenerator")
+	private FolderGenerator folderGenerator;
 
-    @InjectMocks
-    private BaseRestService baseRestService = new BaseRestService();
+	@InjectMocks
+	private BaseRestService baseRestService = new BaseRestService();
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
+
 	/**
 	 * Test the getVocabularies method with empty values for non mandatory
 	 * fields in Thesauruses objects
 	 */
 	@Test
-	public final void testGetVocabularies()  throws BusinessException {
-        //Generating mocked Thesauruses in a single list "allThesaurus"
+	public final void testGetVocabularies() throws BusinessException {
+		// Generating mocked Thesauruses in a single list "allThesaurus"
 		Thesaurus mockedThesaurus1 = new Thesaurus();
 		Thesaurus mockedThesaurus2 = new Thesaurus();
 		Thesaurus mockedThesaurus3 = new Thesaurus();
@@ -82,18 +86,19 @@ public class BaseRestServiceTest {
 		allThesaurus.add(mockedThesaurus1);
 		allThesaurus.add(mockedThesaurus2);
 		allThesaurus.add(mockedThesaurus3);
-        initServicesForGetVocabulariesTest(allThesaurus);
+		initServicesForGetVocabulariesTest(allThesaurus);
 
-		//Getting thesauruses from rest webservice method and testing
-        List<IThesaurusListNode> listThesauruses = baseRestService.getTreeContent("");
+		// Getting thesauruses from rest webservice method and testing
+		List<IThesaurusListNode> listThesauruses = baseRestService
+				.getTreeContent("");
 		Assert.assertEquals(3, listThesauruses.size());
 	}
-	
-	private IThesaurusService initServicesForGetVocabulariesTest (
-			List<Thesaurus> mockedThesauruses)  throws BusinessException {
+
+	private IThesaurusService initServicesForGetVocabulariesTest(
+			List<Thesaurus> mockedThesauruses) throws BusinessException {
 		for (int i = 0; i < mockedThesauruses.size(); i++) {
 			Mockito.when(
-                    thesaurusService.getThesaurusById(mockedThesauruses.get(i)
+					thesaurusService.getThesaurusById(mockedThesauruses.get(i)
 							.getIdentifier())).thenReturn(
 					mockedThesauruses.get(i));
 		}
@@ -101,9 +106,20 @@ public class BaseRestServiceTest {
 		Mockito.when(thesaurusService.getThesaurusList()).thenReturn(
 				mockedThesauruses);
 
-        Mockito.when(folderGenerator.generateFolders(Mockito.anyString())).thenReturn(null);
+		Mockito.when(folderGenerator.generateFolders(Mockito.anyString()))
+				.thenReturn(null);
 
 		return thesaurusService;
 	}
-	
+
+	@Test
+	public final void testGetUsername() throws BusinessException {
+		Authentication auth = new TestingAuthenticationToken("username",
+				"password");
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+		String userName = baseRestService.getUserName();
+		Assert.assertEquals("username", userName);
+	}
+
 }
