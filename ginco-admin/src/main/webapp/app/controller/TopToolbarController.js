@@ -68,6 +68,18 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		Ext.create('GincoApp.view.ImportWin');
 
 	},
+	
+	loadToolbar: function(theToolbar) {
+		var me = this;
+		var userNameLabel = theToolbar.down("#username");	
+		Ext.Ajax.request({
+			scope : this,
+			url: 'services/ui/baseservice/getUsername',			
+			callback : function(options, success, response){ 
+					userNameLabel.setText(response.responseText);
+			}
+		});		
+	},
 
 	init : function(application) {
 		this.control({
@@ -82,7 +94,10 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			},
 			"#importBtn" : {
 				click: this.onImportBtnClick
-			}
+			},		
+			"topToolBar" : {
+				afterrender : this.loadToolbar
+			},
 		});
 	}
 

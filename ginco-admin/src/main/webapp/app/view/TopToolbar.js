@@ -138,6 +138,10 @@ Ext.define('GincoApp.view.TopToolbar', {
 			}, {
 				xtype : 'label',
 				text : me.xConnectedAsLabel
+			},
+			{
+				xtype : 'label',
+				itemId : 'username' 
 			} ]
 		});
 

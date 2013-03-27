@@ -43,6 +43,12 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.utils.*;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusService;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -53,6 +59,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,4 +177,23 @@ public class BaseRestService {
 	private String getIdFromParam(String param, String prefix) {
 		return param.substring(param.indexOf(prefix) + prefix.length());
 	}
+	
+	/**
+	 * Public method used to get the name of the user currently connected
+	 * 
+	 * @return 
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
+	 */
+	@GET
+	@Path("/getUsername")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String getUserName() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		return auth.getName();
+	}
+
+	
 }
