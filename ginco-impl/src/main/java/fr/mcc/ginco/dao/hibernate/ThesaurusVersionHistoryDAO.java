@@ -68,6 +68,6 @@ public class ThesaurusVersionHistoryDAO extends
 	}
 	
 	private void selectThesaurus(Criteria criteria, String thesaurusId) {
-        criteria.add(Restrictions.eq("tv.thesauruses.identifier", (String)thesaurusId));
+        criteria.add(Restrictions.eq("tv.thesaurus.identifier", (String)thesaurusId));
     }
 }

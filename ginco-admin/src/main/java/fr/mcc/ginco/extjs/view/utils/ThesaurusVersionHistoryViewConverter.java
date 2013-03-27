@@ -81,8 +81,8 @@ public class ThesaurusVersionHistoryViewConverter {
 		convertedItem.setVersionNote(source.getVersionNote());
 		convertedItem.setStatus(source.getStatus());
 		convertedItem.setThisVersion(source.getThisVersion());
-		if (source.getThesauruses() != null) {
-			convertedItem.setThesaurusId(source.getThesauruses().getIdentifier());			
+		if (source.getThesaurus() != null) {
+			convertedItem.setThesaurusId(source.getThesaurus().getIdentifier());			
 		}
 		return convertedItem;
 	}

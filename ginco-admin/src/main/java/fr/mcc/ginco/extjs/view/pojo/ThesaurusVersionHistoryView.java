@@ -52,7 +52,7 @@ public class ThesaurusVersionHistoryView implements Serializable {
 	private String identifier;
     private String date;
     private String versionNote;
-    private String status;
+    private Integer status;
     private Boolean thisVersion;
     private String thesaurusId;
 
@@ -84,12 +84,12 @@ public class ThesaurusVersionHistoryView implements Serializable {
 	}
 
 
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
 
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 

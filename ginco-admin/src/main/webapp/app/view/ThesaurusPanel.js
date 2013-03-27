@@ -78,6 +78,7 @@ Ext
 					xRelationLabel : 'Relation',
 					xSourceLabel : 'Source',
 					xThesaurusTitle : 'New Thesaurus',
+					xThesaurusTabTitle : 'Thesaurus',
 					xNewLabel : 'New',
 					xNewMenu_TermLabel : "Term",
 					xNewMenu_ConceptLabel: "Concept",
@@ -105,7 +106,7 @@ Ext
 												xtype : 'tabpanel',
 											items : [ {
 												xtype : 'form',
-												title : me.xThesaurusTitle,
+												title : me.xThesaurusTabTitle,
 												flex : 1,
 												autoScroll : true,
 												pollForChanges : true,

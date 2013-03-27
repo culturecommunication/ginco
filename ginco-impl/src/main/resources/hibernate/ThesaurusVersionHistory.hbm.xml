@@ -11,7 +11,7 @@
 		<property name="status" />
 		<property name="thisVersion" column="thisversion" />
 
-		<many-to-one name="thesauruses" column="thesaurus_identifier" lazy="false" />
+		<many-to-one name="thesaurus" column="thesaurus_identifier" lazy="false" />
 
 	</class>
 </hibernate-mapping>

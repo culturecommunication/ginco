@@ -51,4 +51,5 @@ public interface IThesaurusVersionHistoryService {
 	 * @return A list of {@ThesaurusVersionHistory}
 	 */
 	public List<ThesaurusVersionHistory> getVersionsByThesaurusId(String thesaurusId);
+	
 }

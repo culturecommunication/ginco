@@ -50,8 +50,15 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 	xThisVersion : 'This version',
 
 	initComponent : function() {
+		
+		var cellEditing = Ext.create(
+				'Ext.grid.plugin.CellEditing', {
+					clicksToEdit : 1
+				});
+		
 		var me = this;
 		me.thesaurusVersionStore =  Ext.create('GincoApp.store.ThesaurusVersionStore');
+		me.thesaurusVersionStatusStore =  Ext.create('GincoApp.store.ThesaurusVersionStatusStore');
 
 		Ext.applyIf(me, {
 			items : [ {
@@ -72,6 +79,7 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 				} ],
 				items : [ {
 					xtype : 'gridpanel',
+					plugins : [ cellEditing ],
 					itemId : 'versionGrid',
 					title : me.xVersionListGridTitle,
 					store : me.thesaurusVersionStore,
@@ -88,7 +96,18 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 						text : me.xVersionNote
 					}, {
 						dataIndex : 'status',
-						text : me.xVersionStatus
+						text : me.xVersionStatus,
+						editor : new Ext.form.field.ComboBox(
+								{
+									typeAhead : true,
+									triggerAction : 'all',
+									selectOnTab : true,
+									store : me.thesaurusVersionStatusStore,
+									lazyRender : true,
+									listClass : 'x-combo-list-small',
+									displayField : 'statusLabel',
+									valueField : 'status'
+								})
 					}, {
 						xtype : 'checkcolumn',
 						dataIndex : 'thisVersion',

@@ -36,6 +36,8 @@ package fr.mcc.ginco.rest.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -51,10 +53,12 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusVersionHistoryView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusVersionHistoryViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
+import fr.mcc.ginco.utils.EncodedControl;
 
 /**
  * Thesaurus Version REST service for all operation on thesauruses versions
@@ -91,6 +95,47 @@ public class ThesaurusVersionRestService {
 		thesaurusVersions = thesaurusVersionHistoryService.getVersionsByThesaurusId(thesaurusId);
 		ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> result = new ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>>(thesaurusVersionHistoryViewConverter.convertList(thesaurusVersions));
 		result.setTotal((long)thesaurusVersions.size());
+		return result;
+	}
+	
+	/**
+	 * Public method to get all status for concept (id + label)
+	 * The types are read from a properties file
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getAllVersionStatus")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<GenericStatusView>> getAllVersionStatus() throws BusinessException {
+		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
+		
+		try {
+			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
+			String availableStatusIds[] = res.getString("version-status").split(",");
+			
+			if ("".equals(availableStatusIds[0])) {
+				//Ids of status for concepts are not set correctly
+				throw new BusinessException("Error with property file - check values of identifier version status", "check-values-of-version-status");
+			}
+			
+	        for (String id : availableStatusIds) {
+	        	GenericStatusView versionStatusView = new GenericStatusView();
+	        	versionStatusView.setStatus(Integer.valueOf(id));
+	        	
+	        	String label = res.getString("version-status["+ id +"]");
+	        	if (label.isEmpty()) {
+	        		//Labels of status are not set correctly
+	        		throw new BusinessException("Error with property file - check values of identifier version status", "check-values-of-version-status");
+				} else {
+					versionStatusView.setStatusLabel(label);
+				}
+	        	listOfStatus.add(versionStatusView);
+			}
+		} catch (MissingResourceException e) {
+			throw new BusinessException("Error with property file - check values of version status", "check-values-of-version-status", e);
+		}
+		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
+        result.setTotal((long) listOfStatus.size());
 		return result;
 	}
 }

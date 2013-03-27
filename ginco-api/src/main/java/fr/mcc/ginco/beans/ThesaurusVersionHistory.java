@@ -45,16 +45,16 @@ public class ThesaurusVersionHistory implements Serializable {
 	private String identifier;
     private Date date;
     private String versionNote;
-    private String status;
+    private Integer status;
     private Boolean thisVersion;
-    private Thesaurus thesauruses;
+    private Thesaurus thesaurus;
 
     public ThesaurusVersionHistory() {
 		super();
 	}
 
 	public ThesaurusVersionHistory(String identifier, Date date,
-			String versionVote, String status, Boolean thisVersion,
+			String versionVote, Integer status, Boolean thisVersion,
 			Thesaurus thesaurusIdentifier) {
 		super();
 		this.identifier = identifier;
@@ -62,7 +62,7 @@ public class ThesaurusVersionHistory implements Serializable {
 		this.versionNote = versionVote;
 		this.status = status;
 		this.thisVersion = thisVersion;
-		this.thesauruses = thesaurusIdentifier;
+		this.thesaurus = thesaurusIdentifier;
 	}
 
 	public String getIdentifier() {
@@ -89,11 +89,11 @@ public class ThesaurusVersionHistory implements Serializable {
 		this.versionNote = versionNote;
 	}
 
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
@@ -105,12 +105,11 @@ public class ThesaurusVersionHistory implements Serializable {
 		this.thisVersion = thisVersion;
 	}
 
-	public Thesaurus getThesauruses() {
-		return thesauruses;
+	public Thesaurus getThesaurus() {
+		return thesaurus;
 	}
 
-	public void setThesauruses(Thesaurus thesaurus) {
-		this.thesauruses = thesaurus;
+	public void setThesaurus(Thesaurus thesaurus) {
+		this.thesaurus = thesaurus;
 	}
-
 }
