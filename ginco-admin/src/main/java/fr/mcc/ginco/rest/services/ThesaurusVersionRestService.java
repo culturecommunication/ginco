@@ -41,7 +41,9 @@ import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -138,4 +140,23 @@ public class ThesaurusVersionRestService {
         result.setTotal((long) listOfStatus.size());
 		return result;
 	}
+	
+	/**
+	 * Public method used to create new thesaurus versions
+	 * @throws BusinessException 
+	 */
+	@POST
+	@Path("/updateVersions")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> updateVersions(List<ThesaurusVersionHistoryView> versionViews) throws BusinessException {
+	
+		List<ThesaurusVersionHistory> versions = thesaurusVersionHistoryViewConverter.convertViewList(versionViews);
+		List<ThesaurusVersionHistory> resultVersions = new ArrayList<ThesaurusVersionHistory>() ;
+		
+		for (ThesaurusVersionHistory thesaurusVersionHistory : versions) {
+			resultVersions.add(thesaurusVersionHistoryService.createOrUpdateVersion(thesaurusVersionHistory));
+		}
+		return new ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>>(thesaurusVersionHistoryViewConverter.convertList(resultVersions));		
+	}
+
 }

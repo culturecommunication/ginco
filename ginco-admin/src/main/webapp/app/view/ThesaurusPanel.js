@@ -163,6 +163,7 @@ Ext
 																disabled : true,
 																formBind : true,
 																cls : 'save',
+																itemId : 'saveThesaurus',
 																iconCls : 'icon-save'
 															},
 															{
@@ -175,6 +176,7 @@ Ext
                                                                 text : me.xDelete,
                                                                 disabled : true,
                                                                 cls : 'delete',
+                                                                itemId : '#deleteThesaurus',
                                                                 iconCls : 'icon-delete'
                                                             },
                                                             {

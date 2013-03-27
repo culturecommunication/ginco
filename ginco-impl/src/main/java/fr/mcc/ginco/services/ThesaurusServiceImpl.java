@@ -116,7 +116,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
 		
 		 Thesaurus result = thesaurusDAO.update(object);
-		 // TODO : solve transient exception due to setting the thesaurus for the new version whereas it's not already saved
 		 if (object.getVersions() == null || object.getVersions().isEmpty()) {
 			Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
 			ThesaurusVersionHistory defaultVersion = new ThesaurusVersionHistory();

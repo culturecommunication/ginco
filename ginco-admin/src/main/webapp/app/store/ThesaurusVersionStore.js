@@ -52,8 +52,8 @@ Ext.define('GincoApp.store.ThesaurusVersionStore', {
 			proxy : {
 				type : 'ajax',
 				api : {
-					read : 'services/ui/thesaurusversionservice/getVersions'
-					//update : 'services/ui/thesaurusversionservice/updateVersion',
+					read : 'services/ui/thesaurusversionservice/getVersions',
+					update : 'services/ui/thesaurusversionservice/updateVersions',
 					//create : 'services/ui/thesaurusversionservice/createVersion',
 					//destroy : 'services/ui/thesaurusversionservice/destroyVersion'
 				},

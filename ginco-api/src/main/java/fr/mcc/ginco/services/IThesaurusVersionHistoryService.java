@@ -37,6 +37,7 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusVersionHistory} objects, contains basic
@@ -51,5 +52,20 @@ public interface IThesaurusVersionHistoryService {
 	 * @return A list of {@ThesaurusVersionHistory}
 	 */
 	public List<ThesaurusVersionHistory> getVersionsByThesaurusId(String thesaurusId);
+	
+	/**
+     * Get a single ThesaurusVersionHistory by its id
+     *
+     * @param id to search
+     * @return {@code null} if not found
+     */
+	ThesaurusVersionHistory getThesaurusVersionHistoryById(String id) throws BusinessException;
+	
+	/**
+	 * Create or update a new ThesaurusVersionHistory
+	 * @param {@ThesaurusVersionHistory}
+	 * @return The created or updated {@ThesaurusVersionHistory} object
+	 */
+	ThesaurusVersionHistory createOrUpdateVersion(ThesaurusVersionHistory version);
 	
 }

@@ -46,10 +46,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
-import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.DateUtil;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusVersionHistoryService")
@@ -66,5 +64,16 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
 	public List<ThesaurusVersionHistory> getVersionsByThesaurusId(
 			String thesaurusId) {
 		return thesaurusVersionHistoryDAO.findVersionsByThesaurusId(thesaurusId);
+	}
+
+	@Override
+	public ThesaurusVersionHistory getThesaurusVersionHistoryById(String id) {
+		return thesaurusVersionHistoryDAO.getById(id);
+	}
+
+	@Override
+	@Transactional(readOnly=false)
+	public ThesaurusVersionHistory createOrUpdateVersion(ThesaurusVersionHistory version) {
+		return thesaurusVersionHistoryDAO.update(version);
 	}
 }

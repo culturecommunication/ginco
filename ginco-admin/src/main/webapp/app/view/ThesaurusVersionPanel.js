@@ -51,10 +51,10 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 
 	initComponent : function() {
 		
-		var cellEditing = Ext.create(
-				'Ext.grid.plugin.CellEditing', {
-					clicksToEdit : 1
-				});
+		var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+	        clicksToMoveEditor: 1,
+	        autoCancel: false
+	    });
 		
 		var me = this;
 		me.thesaurusVersionStore =  Ext.create('GincoApp.store.ThesaurusVersionStore');
@@ -73,13 +73,15 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 						text : 'Enregistrer',
 						cls : 'save',
 						iconCls : 'icon-save',
-						itemId : 'saveNote',
+						itemId : 'saveThesaurusVersion',
 						disabled : true
 					} ]
 				} ],
 				items : [ {
 					xtype : 'gridpanel',
-					plugins : [ cellEditing ],
+			        height: 400,
+					plugins : [ rowEditing ],
+					
 					itemId : 'versionGrid',
 					title : me.xVersionListGridTitle,
 					store : me.thesaurusVersionStore,
@@ -90,10 +92,14 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 					}, {
 						dataIndex : 'date',
 						text : me.xVersionDate,
-						flex : 1
+						//flex : 1,
 					}, {
 						dataIndex : 'versionNote',
-						text : me.xVersionNote
+						text : me.xVersionNote,
+						width: '600px',
+						editor: {
+							//no xtype because default is texfield
+						}
 					}, {
 						dataIndex : 'status',
 						text : me.xVersionStatus,
@@ -108,10 +114,13 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 									displayField : 'statusLabel',
 									valueField : 'status'
 								})
-					}, {
-						xtype : 'checkcolumn',
-						dataIndex : 'thisVersion',
-						text : me.xThisVersion
+					},{
+			            xtype: 'checkcolumn',
+			            dataIndex: 'thisVersion',
+			            text : me.xThisVersion,
+			            editor: {
+			                xtype: 'checkbox'
+			            }
 					}]
 				} ]
 			} ]

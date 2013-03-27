@@ -207,10 +207,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			'thesaurusPanel form' : {
 				afterrender : this.loadPanel
 			},
-			'thesaurusPanel button[cls=save]' : {
+			'thesaurusPanel #saveThesaurus' : {
 				click : this.saveForm
 			},
-            'thesaurusPanel button[cls=delete]' : {
+            'thesaurusPanel #deleteThesaurus' : {
                 click : this.deleteThesaurus
             },
 			"thesaurusPanel #newTermBtn" : {
