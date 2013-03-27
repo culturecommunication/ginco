@@ -40,6 +40,7 @@ import fr.mcc.ginco.exports.IExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.EncodedControl;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -54,6 +55,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * REST service to get exported objects.
@@ -85,35 +87,9 @@ public class ExportRestService {
 
         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
 
-        File temp;
-        BufferedWriter out;
-        try {
-            temp = File.createTempFile("pattern", ".suffix");
-            temp.deleteOnExit();
-            out = new BufferedWriter(new FileWriter(temp));
+        File result = writeExportFile(targetThesaurus, false);
 
-            out.write("Édition hiérarchique du vocabulaire de ");
-            out.write(targetThesaurus.getTitle());
-            out.newLine();
-            out.newLine();
-            out.flush();
-
-            List<FormattedLine> result = exportService.getHierarchicalText(targetThesaurus);
-
-            for(FormattedLine results : result) {
-                for(int i=0;i<results.getTabs();i++) {
-                    out.write(TABULATION_DELIMITER);
-                }
-                out.write(results.getText());
-                out.newLine();
-                out.flush();
-            }
-
-        } catch (IOException e) {
-            throw new BusinessException("Cannot create temp file!", "cannot-create-file", e);
-        }
-
-        Response.ResponseBuilder response = Response.ok(temp);
+        Response.ResponseBuilder response = Response.ok(result);
         response.header("Content-Disposition",
                 "attachment; filename=\""
                         + targetThesaurus.getTitle()
@@ -154,8 +130,25 @@ public class ExportRestService {
     @Path("/getAlphabetical")
     @Produces("text/plain")
     public Response getAlphabetical(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
-
         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+
+        File result = writeExportFile(targetThesaurus, true);
+
+        Response.ResponseBuilder response = Response.ok(result);
+        response.header("Content-Disposition",
+                "attachment; filename=\""
+                        + targetThesaurus.getTitle()
+                        + " "
+                        + DateUtil.toString(DateUtil.nowDate())
+                        + ".txt"
+                        + "\"");
+
+        return response.build();
+    }
+
+    private File writeExportFile(Thesaurus targetThesaurus, boolean alphabetical) throws BusinessException{
+
+        ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
 
         File temp;
         BufferedWriter out;
@@ -164,13 +157,22 @@ public class ExportRestService {
             temp.deleteOnExit();
             out = new BufferedWriter(new FileWriter(temp));
 
-            out.write("Édition alphabétique du vocabulaire de ");
+            if(alphabetical) {
+                out.write(res.getString("export-alphabetical").concat(" "));
+            } else {
+                out.write(res.getString("export-hierarchical").concat(" "));
+            }
             out.write(targetThesaurus.getTitle());
             out.newLine();
             out.newLine();
             out.flush();
 
-            List<FormattedLine> result = exportService.getAlphabeticalText(targetThesaurus);
+            List<FormattedLine> result;
+            if(alphabetical) {
+                result = exportService.getAlphabeticalText(targetThesaurus);
+            } else {
+                result = exportService.getHierarchicalText(targetThesaurus);
+            }
 
             for(FormattedLine results : result) {
                 for(int i=0;i<results.getTabs();i++) {
@@ -185,18 +187,7 @@ public class ExportRestService {
             throw new BusinessException("Cannot create temp file!", "cannot-create-file");
         }
 
-        Response.ResponseBuilder response = Response.ok(temp);
-        response.header("Content-Disposition",
-                "attachment; filename=\""
-                        + targetThesaurus.getTitle()
-                        + " "
-                        + DateUtil.toString(DateUtil.nowDate())
-                        + ".txt"
-                        + "\"");
-
-        return response.build();
+        return temp;
     }
-
-
 }
 

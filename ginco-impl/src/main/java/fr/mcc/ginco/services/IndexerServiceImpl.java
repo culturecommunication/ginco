@@ -61,7 +61,7 @@ import java.util.List;
 public class IndexerServiceImpl implements IIndexerService {
 
     @Log
-    Logger logger;
+    private Logger logger;
 
     @Inject
     @Named("thesaurusConceptService")
