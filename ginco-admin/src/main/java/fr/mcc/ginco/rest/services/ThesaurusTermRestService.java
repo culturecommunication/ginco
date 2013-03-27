@@ -180,6 +180,7 @@ public class ThesaurusTermRestService {
 	
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
+            indexerService.removeTerm(result);
 			return new ThesaurusTermView(result);
 		}
 		return null;
