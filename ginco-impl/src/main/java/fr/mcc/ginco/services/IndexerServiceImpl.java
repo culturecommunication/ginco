@@ -45,7 +45,6 @@ import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -53,7 +52,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("indexerService")
 public class IndexerServiceImpl implements IIndexerService {
 
