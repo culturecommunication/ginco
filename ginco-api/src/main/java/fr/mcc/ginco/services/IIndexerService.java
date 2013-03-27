@@ -40,7 +40,10 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 
 public interface IIndexerService {
 
-    void forceIndexing();
+    /**
+     * Deletes all data from SOLR and reindex everything.
+     */
+    void forceIndexing() throws TechnicalException;
 
     /**
      * Takes an ThesaurusTerm and adds it to index.
@@ -60,4 +63,18 @@ public interface IIndexerService {
      * @throws TechnicalException
      */
     void addConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
+
+    /**
+     * Remove Term from search index.
+     * @param thesaurusTerm
+     * @throws TechnicalException
+     */
+    void removeTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
+
+    /**
+     * Remove Concept from search index.
+     * @param thesaurusConcept
+     * @throws TechnicalException
+     */
+    void removeConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
 }
