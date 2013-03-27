@@ -13,6 +13,7 @@
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
     
 	<bean id="thesaurusSOAPService" class="fr.mcc.ginco.soap.SOAPThesaurusServiceImpl" />
+	<bean id="thesaurusTermSOAPService" class="fr.mcc.ginco.soap.SOAPThesaurusTermServiceImpl" />
 
 	<!--pluging slf4j on CXF -->
 	<bean id="loggerPrereqs"
@@ -48,9 +49,13 @@
 			<ref bean="loggingInInterceptor" />
 		</cxf:inFaultInterceptors>
 	</cxf:bus>
+	
 	<jaxws:endpoint id="ThesaurusService" implementor="#thesaurusSOAPService"
 		address="/thesaurus" depends-on="loggerPrereqs">
-
+	</jaxws:endpoint>
+	
+	<jaxws:endpoint id="ThesaurusTermService" implementor="#thesaurusTermSOAPService"
+		address="/thesaurusTerm" depends-on="loggerPrereqs">
 	</jaxws:endpoint>
 
 </beans>
