@@ -116,7 +116,11 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
 		
 		 Thesaurus result = thesaurusDAO.update(object);
-		 if (object.getVersions() == null || object.getVersions().isEmpty()) {
+		 
+		 //We get the versions of the thesaurus we are creating/updating
+		 //If no version, we initialize one with status PROJECT
+		 List<ThesaurusVersionHistory> versionsOfCurrentThesaurus = thesaurusVersionHistoryDAO.findVersionsByThesaurusId(result.getIdentifier());
+		 if (versionsOfCurrentThesaurus == null || versionsOfCurrentThesaurus.isEmpty()) {
 			Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
 			ThesaurusVersionHistory defaultVersion = new ThesaurusVersionHistory();
 			defaultVersion.setIdentifier(generatorService.generate());
@@ -125,7 +129,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 			defaultVersion.setThisVersion(true);
 			defaultVersion.setStatus(ThesaurusVersionStatusEnum.PROJECT.getStatus());
 			versions.add(defaultVersion);
-			//result.setVersions(versions);
 			thesaurusVersionHistoryDAO.update(defaultVersion);
 		}
 		return result;

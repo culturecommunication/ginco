@@ -53,7 +53,8 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 		
 		var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
 	        clicksToMoveEditor: 1,
-	        autoCancel: false
+	        autoCancel: false,
+	        pluginId: 'rowEditing'
 	    });
 		
 		var me = this;
@@ -116,6 +117,7 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 								})
 					},{
 			            xtype: 'checkcolumn',
+			            singleSelect : true,
 			            dataIndex: 'thisVersion',
 			            text : me.xThisVersion,
 			            editor: {

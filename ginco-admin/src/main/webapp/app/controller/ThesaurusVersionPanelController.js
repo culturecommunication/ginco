@@ -65,12 +65,14 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 				thePanel.getEl().unmask();
 				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
 				thePanel.down('button[itemId=saveThesaurusVersion]').setDisabled(true);
+				theGrid.getStore().load();
 				if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}
 			},
 			failure : function(model, operation) {
-				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
+				console.log(operation);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg, operation.error);
 				thePanel.getEl().unmask();
 			}
 		});
