@@ -111,7 +111,7 @@ public class IndexerServiceImpl implements IIndexerService {
         }
 
         ModifiableSolrParams params = new ModifiableSolrParams();
-        params.set("q", "text:test");
+        params.set("q", "text:"+request);
         params.set("start", "0");
 
         QueryResponse response = solrCore.query(params);
