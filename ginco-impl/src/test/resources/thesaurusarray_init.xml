@@ -127,6 +127,27 @@
             <value>http://www.culturecommunication.gouv.fr/th1</value>
             <value>http://www.culturecommunication.gouv.fr/co2</value>
         </row>
+        <row>
+            <value>3</value>
+            <value>false</value>
+            <value>notation</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <null/>
+        </row>
+        <row>
+            <value>4</value>
+            <value>false</value>
+            <value>notation</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <null/>
+        </row>
+         <row>
+            <value>5</value>
+            <value>false</value>
+            <value>notation</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+        </row>
     </table>
 
     <table name="node_label">
@@ -164,6 +185,10 @@
         <row>
             <value>1</value>
             <value>http://www.culturecommunication.gouv.fr/co2_2</value>
+        </row>    
+        <row>
+            <value>5</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
         </row>        
     </table>
 </dataset>

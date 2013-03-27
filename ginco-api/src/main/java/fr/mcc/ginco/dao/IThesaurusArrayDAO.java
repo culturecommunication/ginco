@@ -64,10 +64,11 @@ public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> 
     List<ThesaurusArray> getArraysWithoutSuperordinatedConcept(String thesaurusId);
     
     /**
-     * Returns all arrays matching this concept as super ordinate, excepted the excludeConcept which id is given in parameter.
+     * Returns all arrays matching this concept as super ordinate, excepted the array which id is given in parameter.
      * @param String conceptId
+     * @param String excludeArrayId
      * @return List of ThesaurusArrays
      */
 	List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId,
-			String excludeConceptId);
+			String excludeArrayId);
 }

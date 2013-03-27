@@ -34,26 +34,16 @@
  */
 package fr.mcc.ginco.tests.daos;
 
-import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
+import junitx.framework.ListAssert;
 
-import org.dbunit.Assertion;
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.dao.hibernate.NodeLabelDAO;
 import fr.mcc.ginco.dao.hibernate.ThesaurusArrayDAO;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
@@ -61,66 +51,106 @@ public class ThesaurusArrayDAOTest extends BaseDAOTest {
 
 	private ThesaurusArrayDAO thesaurusArrayDAO = new ThesaurusArrayDAO();
 
-
 	@Before
 	public void handleSetUpOperation() throws Exception {
 		super.handleSetUpOperation();
 		thesaurusArrayDAO.setSessionFactory(getSessionFactory());
 	}
-	
+
 	@Test
 	public void testGetThesaurusArrayListByThesaurusId() {
 		List<ThesaurusArray> arrays = thesaurusArrayDAO
 				.getThesaurusArrayListByThesaurusId("http://www.culturecommunication.gouv.fr/th1");
+		Assert.assertEquals(5, arrays.size());
+	}
+
+	/*
+	 * //TODO : Hibernate issue - fix test
+	 * 
+	 * @Test public void testDelete() throws Exception{ // compare data set
+	 * IDataSet expectedDataSet = getDataset("/thesaurusarray_afterdelete.xml");
+	 * 
+	 * ThesaurusArray array = thesaurusArrayDAO.getById("1");
+	 * 
+	 * thesaurusArrayDAO.delete(array); DataSource dataSource =
+	 * SessionFactoryUtils.getDataSource(thesaurusArrayDAO.getSessionFactory());
+	 * Connection con = DataSourceUtils.getConnection(dataSource);
+	 * //getSessionFactory().getCurrentSession().flush();
+	 * 
+	 * IDatabaseConnection dbUnitCon = new DatabaseConnection(con); IDataSet
+	 * databaseDataSet = dbUnitCon.createDataSet();
+	 * 
+	 * // compare data table ITable expectedTable =
+	 * expectedDataSet.getTable("thesaurus_array"); ITable databaseTable =
+	 * databaseDataSet.getTable("thesaurus_array");
+	 * 
+	 * Assertion.assertEquals(expectedTable, databaseTable);
+	 * 
+	 * }
+	 */
+
+	@Test
+	public void testGetConceptSuperOrdinateArrays() {
+		List<ThesaurusArray> arrays = thesaurusArrayDAO
+				.getConceptSuperOrdinateArrays("http://www.culturecommunication.gouv.fr/co1");
 		Assert.assertEquals(2, arrays.size());
+
+	}
+
+	@Test
+	public void testGet() {
+		ThesaurusArray array = thesaurusArrayDAO.getById("1");
+
+		Assert.assertNotNull(array);
+
+	}
+
+	@Test
+	public void testGetArraysWithoutSuperordinatedConcept() {
+		List<ThesaurusArray> orphanArrays = thesaurusArrayDAO
+				.getArraysWithoutSuperordinatedConcept("http://www.culturecommunication.gouv.fr/th1");
+		Assert.assertEquals(2, orphanArrays.size());
+		List<String> arrayIds = new ArrayList<String>();
+		for (ThesaurusArray orphanArray : orphanArrays) {
+			arrayIds.add(orphanArray.getIdentifier());
+		}
+		ListAssert.assertContains(arrayIds, "3");
+		ListAssert.assertContains(arrayIds, "4");
+
+	}
+
+	@Test
+	public void testGetConceptSuperOrdinateArraysWithExclude() {
+		List<ThesaurusArray> arrays = thesaurusArrayDAO
+				.getConceptSuperOrdinateArrays("http://www.culturecommunication.gouv.fr/co1", "5");
+		Assert.assertEquals(1, arrays.size());
+
 	}
 	
+	/*
+	 * @Override
+	 * 
+	 * 
+	 * public List<ThesaurusArray> getConceptSuperOrdinateArrays(String
+	 * conceptId, String excludeConcept) {
+	 * 
+	 * Criteria criteria = getCriteriaByThesaurusAndTopConcept(conceptId);
+	 * 
+	 * criteria.add(Restrictions.ne("ta.identifier", excludeConcept)); 79 0
+	 * 
+	 * return criteria.list(); 80
+	 * 
+	 * 
+	 * } 81
+	 * 
+	 * 
+	 * 
+	 * (non-Javadoc)
+	 * 
+	 * @see fr.mcc.ginco.tests.BaseDAOTest#getXmlDataFileInit()
+	 */
 
-	
-	/*//TODO : Hibernate issue - fix test 
-	 * @Test
-    public void testDelete() throws Exception{
-        // compare data set
-        IDataSet expectedDataSet = getDataset("/thesaurusarray_afterdelete.xml");
-
-        ThesaurusArray array = thesaurusArrayDAO.getById("1");
-
-		thesaurusArrayDAO.delete(array);
-		DataSource dataSource = SessionFactoryUtils.getDataSource(thesaurusArrayDAO.getSessionFactory());
-		Connection con = DataSourceUtils.getConnection(dataSource);		
-		//getSessionFactory().getCurrentSession().flush();
-		
-		IDatabaseConnection dbUnitCon = new DatabaseConnection(con);
-		IDataSet databaseDataSet = dbUnitCon.createDataSet();
-
-		// compare data table
-		ITable expectedTable = expectedDataSet.getTable("thesaurus_array");
-        ITable databaseTable = databaseDataSet.getTable("thesaurus_array");
-
-		Assertion.assertEquals(expectedTable, databaseTable);
-
-	}*/
-	
-
-
-
-
-    @Test
-    public void testGetConceptSuperOrdinateArrays(){
-        List<ThesaurusArray> arrays = thesaurusArrayDAO
-                .getConceptSuperOrdinateArrays("http://www.culturecommunication.gouv.fr/co1");
-        Assert.assertEquals(1, arrays.size());
-
-    }
-    @Test
-    public void testGet(){
-        ThesaurusArray array = thesaurusArrayDAO.getById("1");
-
-        Assert.assertNotNull(array);
-
-    }
-
-    @Override
+	@Override
 	public String getXmlDataFileInit() {
 		return "/thesaurusarray_init.xml";
 	}

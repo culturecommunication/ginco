@@ -73,9 +73,9 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
 	}
 	
 	@Override
-	public List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId, String excludeConcept) {
+	public List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId, String excludeArrayId) {
 		Criteria criteria = getCriteriaByThesaurusAndTopConcept(conceptId);
-	    criteria.add(Restrictions.ne("ta.identifier", excludeConcept));
+	    criteria.add(Restrictions.ne("ta.identifier", excludeArrayId));
 	    return criteria.list();
 	}
 	
