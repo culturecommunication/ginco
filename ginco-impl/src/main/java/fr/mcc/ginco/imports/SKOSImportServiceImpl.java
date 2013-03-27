@@ -360,11 +360,4 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		}
 		return file.toURI();
 	}
-
-	private String getTempFileName(String initialFileName) {
-		String prefix = initialFileName.substring(0,
-				initialFileName.lastIndexOf("."));
-		return prefix.concat(".tmp");
-
-	}
 }
