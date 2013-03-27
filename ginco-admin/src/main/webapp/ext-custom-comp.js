@@ -361,7 +361,12 @@ Ext.define("Thesaurus.form.field.Base", {
         var style =  hideLabelCell ? 'display:none;' : '';
         style = style+ ' width:' + (me.labelWidth + me.labelPad) + 'px;';
         return style;
-    }
+    },
+    afterLabelTextTpl : new Ext.XTemplate(
+			'<tpl if="allowBlank === false"><span class="mandatory-field"><abbr title="obligatoire">*</abbr></span></tpl>',
+			{
+				disableFormats : true
+			})
 });
 
 /*

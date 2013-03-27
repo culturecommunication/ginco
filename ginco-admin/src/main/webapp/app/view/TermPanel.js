@@ -49,6 +49,10 @@ Ext
 					alias : 'widget.termPanel',
 					localized : true,
 					closable : true,
+					layout : {
+						type : 'vbox',
+						align : 'stretch'
+					},
 
 					/* Fields with auto generated values */
 					xIdentifierLabel : 'Identifier',
@@ -74,6 +78,7 @@ Ext
 											title : me.xTermPanelTitle,
 											items : [ {
 												xtype : 'tabpanel',
+												flex:1,
 												items : [
 														{
 
@@ -85,12 +90,8 @@ Ext
 															pollForChanges : true,
 															trackResetOnLoad : true,
 															defaults : {
-																afterLabelTextTpl : new Ext.XTemplate(
-																		'<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>',
-																		{
-																			disableFormats : true
-																		})
 															},
+															bbar : Ext.create('GincoApp.view.BottomFormToolbar'),
 															dockedItems : [ {
 																xtype : 'toolbar',
 																dock : 'top',

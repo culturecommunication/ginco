@@ -125,12 +125,8 @@ Ext
 																pollForChanges : true,
 																trackResetOnLoad : true,
 																defaults : {
-																	afterLabelTextTpl : new Ext.XTemplate(
-																			'<tpl if="allowBlank === false"><span style="color:red;">*</span></tpl>',
-																			{
-																				disableFormats : true
-																			})
 																},
+																bbar : Ext.create('GincoApp.view.BottomFormToolbar'),
 																dockedItems : [ {
 																	xtype : 'toolbar',
 																	dock : 'top',
