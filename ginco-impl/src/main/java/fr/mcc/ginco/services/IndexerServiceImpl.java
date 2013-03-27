@@ -121,8 +121,15 @@ public class IndexerServiceImpl implements IIndexerService {
             doc.addField("thesaurusId", concept.getThesaurusId());
             doc.addField("identifier", concept.getIdentifier());
 
-            String prefLabel = thesaurusConceptService.getConceptPreferredTerm(concept.getIdentifier())
+            String prefLabel;
+
+            try {
+                prefLabel = thesaurusConceptService.getConceptPreferredTerm(concept.getIdentifier())
                     .getLexicalValue();
+            } catch (BusinessException ex) {
+                logger.warn(ex.getMessage());
+                continue;
+            }
 
             doc.addField("lexicalValue", prefLabel);
             concepts.add(doc);
