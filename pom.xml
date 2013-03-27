@@ -394,6 +394,11 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-ldap</artifactId>
+                <version>${org.springsecurity.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>uk.ac.manchester.cs.skos</groupId>
 				<artifactId>skosapi</artifactId>
@@ -505,11 +510,11 @@
 			<type>maven-plugin</type>
 		</dependency>
 	</dependencies>
-	<repositories>
+	<repositories>	
 	   <repository>
             <id>smile-github-repository</id>
             <name>Smile Github repository</name>
             <url>http://smile-sa.github.com/maven-repository/releases-addon</url>
-        </repository>
+        </repository> 
   </repositories>
 </project>

@@ -34,17 +34,21 @@
  */
 package fr.mcc.ginco.audit;
 
-import fr.mcc.ginco.beans.GincoRevEntity;
-import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
+import java.io.Serializable;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.hibernate.envers.EntityTrackingRevisionListener;
 import org.hibernate.envers.RevisionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
+import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
 
 /**
  * Takes control on audit.
@@ -68,15 +72,11 @@ public class GincoRevListener implements EntityTrackingRevisionListener {
 		GincoRevEntity gincoRevEntity = (GincoRevEntity) revisionEntity;
 		if (RequestContextHolder.getRequestAttributes() == null) {
 			logger.error("The RequestContext is empty!!!!!");
-		} else {
-			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-					.getRequestAttributes()).getRequest();
-
-			/*
-			 * Authentication authentication =
-			 * SecurityContextHolder.getContext().getAuthentication();
-			 */
-			gincoRevEntity.setUsername(request.getRemoteAddr());
+		} else {			
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			String name = auth.getName(); 
+			gincoRevEntity.setUsername(name);
 		}
 	}
 }

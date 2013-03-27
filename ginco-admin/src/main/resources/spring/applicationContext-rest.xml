@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://cxf.apache.org/jaxrs
@@ -9,7 +10,9 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd
        http://cxf.apache.org/core 
-       http://cxf.apache.org/schemas/core.xsd">
+       http://cxf.apache.org/schemas/core.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
     <!--pluging slf4j on CXF-->
 	<bean id="loggerPrereqs"
@@ -49,4 +52,6 @@
 			<cxf:logging />
 		</jaxrs:features>
 	</jaxrs:server>
+	
+	
 </beans>
