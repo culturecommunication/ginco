@@ -61,10 +61,7 @@ import fr.mcc.ginco.utils.ConceptHierarchyUtil;
  * 
  */
 @Service("skosArrayBuilder")
-public class ThesaurusArrayBuilder extends AbstractBuilder {
-
-	@Log
-	private Logger logger;
+public class ThesaurusArrayBuilder extends AbstractBuilder {	
 
 	@Inject
 	@Named("thesaurusConceptDAO")
