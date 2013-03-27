@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS thesaurus_array_concept;
 DROP TABLE IF EXISTS revinfo;
 DROP TABLE IF EXISTS revinfoentitytypes;
 DROP TABLE IF EXISTS thesaurus_aud;
+DROP TABLE IF EXISTS note_type;
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
@@ -296,3 +297,12 @@ CREATE TABLE thesaurus_aud (
     type integer,
     creator integer
 );
+
+CREATE TABLE note_type
+(
+  code text NOT NULL,
+  label text NOT NULL,
+  isterm boolean NOT NULL,
+  isconcept boolean NOT NULL,
+  CONSTRAINT pk_note_type PRIMARY KEY (code)
+ ); 

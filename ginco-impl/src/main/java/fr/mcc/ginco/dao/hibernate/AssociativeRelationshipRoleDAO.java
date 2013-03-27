@@ -45,13 +45,11 @@ import fr.mcc.ginco.exceptions.BusinessException;
 
 @Repository("associativeRelationshipRoleDAO")
 public class AssociativeRelationshipRoleDAO extends GenericHibernateDAO<AssociativeRelationshipRole, String> implements IAssociativeRelationshipRoleDAO  {
-
-	public AssociativeRelationshipRoleDAO(Class<AssociativeRelationshipRole> clazz) {
-		super(clazz);
-	}
+	
 	public AssociativeRelationshipRoleDAO() {
 		super(AssociativeRelationshipRole.class);
 	}
+	
 	@Override
 	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRole()
 			throws BusinessException {

@@ -44,11 +44,8 @@ import org.hibernate.criterion.Subqueries;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
-import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -58,10 +55,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class AssociativeRelationshipDAO extends
 		GenericHibernateDAO<AssociativeRelationship, String> implements
 		IAssociativeRelationshipDAO {
-
-	public AssociativeRelationshipDAO(Class<AssociativeRelationship> clazz) {
-		super(clazz);
-	}
+	
 
 	public AssociativeRelationshipDAO() {
 		super(AssociativeRelationship.class);

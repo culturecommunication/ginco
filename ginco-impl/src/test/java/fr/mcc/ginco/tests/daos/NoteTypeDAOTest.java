@@ -25,24 +25,49 @@
  * therefore means that it is reserved for developers and experienced
  * professionals having in-depth computer knowledge. Users are therefore
  * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systems and/or
+ * requirements in conditions enabling the security of their systemsand/or
  * data to be ensured and, more generally, to use and operate it in the
  * same conditions as regards security.
  * <p/>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
+package fr.mcc.ginco.tests.daos;
 
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.IThesaurusDAO;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-@Repository("thesaurusDAO")
-public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> implements IThesaurusDAO  {
+import fr.mcc.ginco.beans.NoteType;
+import fr.mcc.ginco.dao.hibernate.NoteTypeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.tests.BaseDAOTest;
 
-	public ThesaurusDAO() {
-		super(Thesaurus.class);
-	}	
+public class NoteTypeDAOTest extends BaseDAOTest {
+	
+    private NoteTypeDAO noteTypeDAO = new NoteTypeDAO() ; 
+    
+    @Before
+	public void handleSetUpOperation() throws Exception {
+		super.handleSetUpOperation();
+		noteTypeDAO.setSessionFactory(getSessionFactory());
+	}
+    @Test
+    public final void testFindConceptNoteTypes() throws BusinessException {
+    	List<NoteType> conceptNoteTypes =  noteTypeDAO.findConceptNoteTypes();
+		Assert.assertEquals(4, conceptNoteTypes.size());
+    }
+    
+    @Test
+    public final void testFindTermNoteTypes() throws BusinessException {
+    	List<NoteType> termtNoteTypes =  noteTypeDAO.findTermNoteTypes();
+		Assert.assertEquals(3, termtNoteTypes.size());
+    }
+    
+	@Override
+	public String  getXmlDataFileInit() {
+		return "/notetype_init.xml";		
+	}
 }

@@ -37,14 +37,11 @@ package fr.mcc.ginco.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -57,10 +54,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 @Repository("thesaurusTermDAO")
 public class ThesaurusTermDAO extends
 		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
-	public ThesaurusTermDAO(Class<ThesaurusTerm> clazz) {
-		super(clazz);
-	}
-
+	
 	public ThesaurusTermDAO() {
 		super(ThesaurusTerm.class);
 	}

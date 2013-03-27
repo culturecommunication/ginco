@@ -49,10 +49,7 @@ import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
  */
 @Repository("thesaurusVersionHistoryDAO")
 public class ThesaurusVersionHistoryDAO extends
-		GenericHibernateDAO<ThesaurusVersionHistory, String> implements IThesaurusVersionHistoryDAO {
-	public ThesaurusVersionHistoryDAO(Class<ThesaurusVersionHistory> clazz) {
-		super(clazz);
-	}
+		GenericHibernateDAO<ThesaurusVersionHistory, String> implements IThesaurusVersionHistoryDAO {	
 
 	public ThesaurusVersionHistoryDAO() {
 		super(ThesaurusVersionHistory.class);

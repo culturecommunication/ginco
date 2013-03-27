@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<table name="note_type">
+		<column>code</column>
+		<column>label</column>
+		<column>isterm</column>
+		<column>isconcept</column>
+		<row>
+			<value>scopeNote</value>
+			<value>Note d'application</value>
+			<value>false</value>
+			<value>true</value>
+		</row>
+		<row>
+			<value>historyNote</value>
+			<value>Note historique</value>
+			<value>true</value>
+			<value>true</value>
+		</row>
+		<row>
+			<value>definition</value>
+			<value>Définition</value>
+			<value>true</value>
+			<value>false</value>
+		</row>
+		<row>
+			<value>editorialNote</value>
+			<value>Note éditoriale</value>
+			<value>true</value>
+			<value>false</value>
+		</row>
+		<row>
+			<value>example</value>
+			<value>Exemple</value>
+			<value>false</value>
+			<value>true</value>
+		</row>
+		<row>
+            <value>example2</value>
+            <value>Exemple2</value>
+            <value>false</value>
+            <value>true</value>
+        </row>
+	</table>
+</dataset>

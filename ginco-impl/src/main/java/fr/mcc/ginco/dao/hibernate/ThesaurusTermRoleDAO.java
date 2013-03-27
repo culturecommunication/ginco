@@ -46,9 +46,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 @Repository("thesaurusTermRoleDAO")
 public class ThesaurusTermRoleDAO extends GenericHibernateDAO<ThesaurusTermRole, String> implements IThesaurusTermRoleDAO  {
 
-	public ThesaurusTermRoleDAO(Class<ThesaurusTermRole> clazz) {
-		super(clazz);
-	}
 	public ThesaurusTermRoleDAO() {
 		super(ThesaurusTermRole.class);
 	}	
