@@ -34,22 +34,9 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.extjs.view.utils.*;
-import fr.mcc.ginco.services.IIndexerService;
-import fr.mcc.ginco.services.IThesaurusService;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -60,9 +47,27 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
+import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.extjs.view.utils.GroupsGenerator;
+import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
+import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
+import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.services.IThesaurusService;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -116,10 +121,14 @@ public class BaseRestService {
     @GET
     @Path("/search")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response search(@QueryParam("request") String request) throws Exception {
-        return Response.status(Response.Status.OK)
-                .entity("{success:true, message: '"+indexerService.search(request)+"'}")
-                .build();
+    public Response search(@QueryParam("request") String request) {
+        try {
+			return Response.status(Response.Status.OK)
+			        .entity("{success:true, message: '"+indexerService.search(request)+"'}")
+			        .build();
+		} catch (SolrServerException e) {
+			throw new TechnicalException("Search exception" , e) ;
+		}
 
     }
 
