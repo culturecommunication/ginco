@@ -48,6 +48,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -234,8 +235,14 @@ public class IndexerServiceImpl implements IIndexerService {
     }
 
     @Override
+    @Async
     public void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException {
-        addTerms(Arrays.asList(thesaurusTerm), null);
+    	try {
+    		addTerms(Arrays.asList(thesaurusTerm), null);
+    	} catch (TechnicalException ex)
+    	{
+    		logger.error(ex.getMessage(),ex.getCause().getMessage());
+    	}
     }
 
     private void addTerms(List<ThesaurusTerm> thesaurusTerms, HttpSolrServer server) {
