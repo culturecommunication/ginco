@@ -30,12 +30,7 @@ Ext
 				{
 					extend : 'Ext.window.Window',
 					alias : 'widget.createVersionWin',
-					//localized : true,
-
-					config : {
-						//storeVersionStatus : null
-						//thesaurusData : null
-					},
+					localized : true,
 
 					xSave : 'Add the version',
 					xCreateVersionWinTitle : 'New version',
@@ -100,7 +95,8 @@ Ext
 															xtype : 'textfield',
 															name : 'versionNote',
 															fieldLabel : me.xVersionNoteLabel,
-															margin : '10 0 10 0'
+															margin : '10 0 10 0',
+															allowBlank : false
 														},
 														{
 															xtype : 'combobox',
@@ -117,7 +113,6 @@ Ext
 														},
 														{
 															xtype : 'checkbox',
-															//margin : '10 0 0 0',
 															name : 'thisVersion',
 															fieldLabel : me.xCurrentVersionLabel
 														},

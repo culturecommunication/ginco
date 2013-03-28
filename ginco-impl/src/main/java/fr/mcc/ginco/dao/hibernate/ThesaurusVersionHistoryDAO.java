@@ -37,6 +37,7 @@ package fr.mcc.ginco.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -62,6 +63,7 @@ public class ThesaurusVersionHistoryDAO extends
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusVersionHistory.class, "tv");
 		selectThesaurus(criteria, thesaurusId);
+		descOrderBy(criteria, "date");
 		return criteria.list();
 	}
 	
@@ -100,6 +102,10 @@ public class ThesaurusVersionHistoryDAO extends
 	
 	private void isThisVersion(Criteria criteria, Boolean isThisVersion) {
         criteria.add(Restrictions.eq("tv.thisVersion", isThisVersion));
+    }
+	
+	private void descOrderBy(Criteria criteria, String sortColumn) {
+        criteria.addOrder(Order.desc(sortColumn));
     }
 
 }
