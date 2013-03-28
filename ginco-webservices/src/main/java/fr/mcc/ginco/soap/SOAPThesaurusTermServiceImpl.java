@@ -53,6 +53,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 	
 	@Override
 	public String getConceptIdByTermId(String termId) {
-		return null;
+		String conceptId = thesaurusTermService.getConceptIdByTermId(termId);
+		return conceptId;
 	}
 }

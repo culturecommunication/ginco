@@ -146,4 +146,10 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 			Integer startIndex, Integer limit, String idThesaurus) {
 		return thesaurusTermDAO.findPaginatedSandboxedValidatedItems(startIndex, limit, idThesaurus);
 	}
+    
+    @Override
+    public String getConceptIdByTermId(String termId){
+    	ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(termId);
+    	return thesaurusTerm.getConcept().getIdentifier();
+    }
 }

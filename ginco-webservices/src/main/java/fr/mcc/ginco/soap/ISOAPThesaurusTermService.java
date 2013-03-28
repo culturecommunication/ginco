@@ -41,13 +41,9 @@ import javax.jws.WebService;
 public interface ISOAPThesaurusTermService {
 	
 	/**
-	 * 
 	 * This service returns the identifier of a concept by the identifier of a term
-	 * 
 	 * @param the identifier of a term
-	 * 
 	 * @return the identifier of a concept
-	 *
 	 */
 	String getConceptIdByTermId(String termId);
 }

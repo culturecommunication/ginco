@@ -41,7 +41,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -192,7 +193,6 @@ public class ThesaurusTermDAO extends
 		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
 		.add(Restrictions.isNull("concept"))
 		.setProjection(Projections.rowCount());
-	}
-	
+	}	
 	
 }

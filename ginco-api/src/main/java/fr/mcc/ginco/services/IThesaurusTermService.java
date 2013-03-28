@@ -125,4 +125,12 @@ public interface IThesaurusTermService {
       * @return list of all existing terms.
      */
     List<ThesaurusTerm> getAllTerms();
+    
+	/**
+	 * This method returns the identifier of a concept by the identifier of a term
+	 * @param the identifier of a term
+	 * @return the identifier of a concept
+	 */
+    String getConceptIdByTermId(String termId);
+    
 }
