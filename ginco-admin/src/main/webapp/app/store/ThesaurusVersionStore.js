@@ -54,7 +54,7 @@ Ext.define('GincoApp.store.ThesaurusVersionStore', {
 				api : {
 					read : 'services/ui/thesaurusversionservice/getVersions',
 					update : 'services/ui/thesaurusversionservice/updateVersions',
-					//create : 'services/ui/thesaurusversionservice/createVersion',
+					create : 'services/ui/thesaurusversionservice/updateVersions'
 					//destroy : 'services/ui/thesaurusversionservice/destroyVersion'
 				},
 				writer : {

@@ -51,7 +51,7 @@ Ext.define('GincoApp.model.ThesaurusVersionModel', {
         },
         {
             name: 'status',
-            type: 'string'
+            type: 'integer'
         },
         {
             name: 'thisVersion',

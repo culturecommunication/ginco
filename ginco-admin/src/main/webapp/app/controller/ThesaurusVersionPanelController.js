@@ -71,7 +71,6 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 				}
 			},
 			failure : function(model, operation) {
-				console.log(operation);
 				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg, operation.error);
 				thePanel.getEl().unmask();
 			}
@@ -85,11 +84,28 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 	createThesaurusVersion : function(theButton) {
 			var me = this;
 			var thePanel = theButton.up('form');
-			var win = Ext.create('GincoApp.view.CreateVersionWin');
-			//win.thesaurusData = thePanel.thesaurusData;
 			var theGrid = theButton.up('form').down('#versionGrid');
-			win.store = theGrid.getStore();
+			win = Ext.create('GincoApp.view.CreateVersionWin', {
+				listeners: {
+					saveVersionButton: function (theButton){
+						me.afterSavingNewVersion(theGrid, theButton);
+					}
+				}
+			});
+			var theForm = win.down('form');
+			var model = Ext.create('GincoApp.model.ThesaurusVersionModel');
+			theForm.loadRecord(model);
 			win.show();
+	},
+	
+	afterSavingNewVersion : function(theGrid, theButton) {
+		var theWin = theButton.up('createVersionWin');
+		var theForm = theButton.up('form');
+		theForm.getForm().updateRecord();
+		var updatedModel = theForm.getForm().getRecord();
+		updatedModel.data.thesaurusId = theGrid.up('thesaurusPanel').thesaurusData.id ;
+		theGrid.getStore().add(updatedModel);
+		theGrid.up('form').down('button[itemId=saveThesaurusVersion]').setDisabled(false);
 	},
 
 	init : function() {

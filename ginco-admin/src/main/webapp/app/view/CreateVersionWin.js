@@ -88,6 +88,16 @@ Ext
 												items : [
 														{
 															xtype : 'textfield',
+															name : 'identifier',
+															hidden : true
+														},
+														{
+															xtype : 'textfield',
+															name : 'date',
+															hidden : true
+														},
+														{
+															xtype : 'textfield',
 															name : 'versionNote',
 															fieldLabel : me.xVersionNoteLabel,
 															margin : '10 0 10 0'
@@ -110,8 +120,12 @@ Ext
 															//margin : '10 0 0 0',
 															name : 'thisVersion',
 															fieldLabel : me.xCurrentVersionLabel
+														},
+														{
+															xtype : 'textfield',
+															name : 'thesaurusId',
+															hidden : true
 														}
-
 												]
 											} ]
 										});
