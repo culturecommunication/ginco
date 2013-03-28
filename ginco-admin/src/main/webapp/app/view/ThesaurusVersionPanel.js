@@ -89,7 +89,8 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 
 					columns : [ {
 						dataIndex : 'identifier',
-						text : me.xIdentifierLabel
+						text : me.xIdentifierLabel,
+						hidden : true
 					}, {
 						dataIndex : 'date',
 						text : me.xVersionDate,
