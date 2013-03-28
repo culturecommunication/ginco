@@ -54,7 +54,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 @Repository("thesaurusConceptDAO")
 public class ThesaurusConceptDAO extends
 		GenericHibernateDAO<ThesaurusConcept, String> implements
-		IThesaurusConceptDAO {	
+		IThesaurusConceptDAO {
 
 	public ThesaurusConceptDAO() {
 		super(ThesaurusConcept.class);
@@ -70,15 +70,19 @@ public class ThesaurusConceptDAO extends
 			throws BusinessException {
 		return getListByThesaurusAndTopConcept(thesaurus, false);
 	}
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConceptCount(fr.mcc.ginco.beans.Thesaurus)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConceptCount
+	 * (fr.mcc.ginco.beans.Thesaurus)
 	 */
 	@Override
-	public long getOrphansThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException {
+	public long getOrphansThesaurusConceptCount(Thesaurus thesaurus)
+			throws BusinessException {
 		return getListByThesaurusAndTopConceptCount(thesaurus, false);
 	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -91,127 +95,137 @@ public class ThesaurusConceptDAO extends
 		return getListByThesaurusAndTopConcept(thesaurus, true);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConceptCount(fr.mcc.ginco.beans.Thesaurus)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConceptCount
+	 * (fr.mcc.ginco.beans.Thesaurus)
 	 */
 	@Override
-	public long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException {
+	public long getTopTermThesaurusConceptCount(Thesaurus thesaurus)
+			throws BusinessException {
 		return getListByThesaurusAndTopConceptCount(thesaurus, true);
 	}
 
-    @Override
-    public List<ThesaurusConcept> getRootConcepts(String thesaurusId, Boolean searchOrphans) {
-        return getConcepts(null, thesaurusId, searchOrphans);
-    }
+	@Override
+	public List<ThesaurusConcept> getRootConcepts(String thesaurusId,
+			Boolean searchOrphans) {
+		return getConcepts(null, thesaurusId, searchOrphans);
+	}
 
-    @Override
-    public List<ThesaurusConcept> getChildrenConcepts(String conceptId) {
-        return getConcepts(conceptId, null, null);
-    }
+	@Override
+	public List<ThesaurusConcept> getChildrenConcepts(String conceptId) {
+		return getConcepts(conceptId, null, null);
+	}
 
-    private List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId, Boolean searchOrphans) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                ThesaurusConcept.class, "tc");
-
-        if ((conceptId != null && !conceptId.isEmpty()) &&
-            (thesaurusId != null && !thesaurusId.isEmpty()))
-        {
-            selectRoot(criteria, thesaurusId, conceptId);
-        }
-        else if (conceptId == null || conceptId.isEmpty()) {
-            selectRoot(criteria, thesaurusId);
-        }
-        else {
-            criteria.createCriteria("tc.parentConcepts", "pc")
-                    .add(Restrictions.eq("pc.identifier",
-                            conceptId));
-        }
-
-        selectOrphans(criteria, searchOrphans);
-
-        return criteria.list();
-    }
-
-    @Override
-    public List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                ThesaurusConcept.class, "tc");
-
-        selectThesaurus(criteria, thesaurusId);
-        selectOrphans(criteria, searchOrphans);
-        excludeConcept(criteria, excludeConceptId);
-        onlyValidatedConcepts(criteria, onlyValidatedConcepts);
-
-        return criteria.list();
-    }    
-   
-    
-    @Override
-    public List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept) {    	
-    	Criteria criteria = getCurrentSession().createCriteria(
+	private List<ThesaurusConcept> getConcepts(String conceptId,
+			String thesaurusId, Boolean searchOrphans) {
+		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConcept.class, "tc");
-		 criteria.createCriteria("tc.rootConcepts", "rc")
-           .add(Restrictions.eq("rc.identifier",
-        		   concept.getIdentifier()));	   
-		 return criteria.list();    
-      
-    }
 
-    /**
-     * Selects TopTerm concepts by ThesaurusId without excluding.
-     * @param criteria
-     * @param thesaurusId
-     */
-    private void selectRoot(Criteria criteria, String thesaurusId) {
-        selectRoot(criteria, thesaurusId, null);
-    }
+		if ((conceptId != null && !conceptId.isEmpty())
+				&& (thesaurusId != null && !thesaurusId.isEmpty())) {
+			selectRoot(criteria, thesaurusId, conceptId);
+		} else if (conceptId == null || conceptId.isEmpty()) {
+			selectRoot(criteria, thesaurusId);
+		} else {
+			criteria.createCriteria("tc.parentConcepts", "pc").add(
+					Restrictions.eq("pc.identifier", conceptId));
+		}
 
-    /**
-     * Selects TopTerm concepts by ThesaurusId with excluding.
-     * @param criteria
-     * @param thesaurusId
-     * @param excludeId
-     */
-    private void selectRoot(Criteria criteria, String thesaurusId, String excludeId) {
-        excludeConcept(criteria, excludeId);
-        selectThesaurus(criteria, thesaurusId);
-        selectNoParents(criteria);
-    }
+		selectOrphans(criteria, searchOrphans);
 
-    private void selectNoParents(Criteria criteria) {
-        criteria.add(Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
-                Restrictions.isEmpty("tc.parentConcepts")));
-    }
+		return criteria.list();
+	}
 
-    private void selectThesaurus(Criteria criteria, String thesaurusId) {
-        criteria.add(Restrictions.eq("tc.thesaurus.identifier", (String)thesaurusId));
-    }
+	@Override
+	public List<ThesaurusConcept> getAllConceptsByThesaurusId(
+			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConcept.class, "tc");
 
-    private void selectOrphans(Criteria criteria, Boolean searchOrphans) {
-        if(searchOrphans != null) {
-            criteria.add(Restrictions.eq("topConcept", !searchOrphans));
-        }
-    }
+		selectThesaurus(criteria, thesaurusId);
+		selectOrphans(criteria, searchOrphans);
+		excludeConcept(criteria, excludeConceptId);
+		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
 
-    private void excludeConcept(Criteria criteria, String excludeId) {
-        if(excludeId != null && !excludeId.isEmpty()) {
-            criteria.add(Restrictions.not
-                    (Restrictions.eq("tc.identifier", excludeId)));
-        }
-    }
-    
-    private void onlyValidatedConcepts(Criteria criteria, Boolean onlyValidatedConcepts) {
-    	
-        if(onlyValidatedConcepts == true) {
-            criteria.add(Restrictions.eq("status", ConceptStatusEnum.VALIDATED.getStatus()));
-        }
-    }
+		return criteria.list();
+	}
 
-    private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
+	@Override
+	public List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConcept.class, "tc");
+		criteria.createCriteria("tc.rootConcepts", "rc").add(
+				Restrictions.eq("rc.identifier", concept.getIdentifier()));
+		return criteria.list();
+
+	}
+
+	/**
+	 * Selects TopTerm concepts by ThesaurusId without excluding.
+	 * 
+	 * @param criteria
+	 * @param thesaurusId
+	 */
+	private void selectRoot(Criteria criteria, String thesaurusId) {
+		selectRoot(criteria, thesaurusId, null);
+	}
+
+	/**
+	 * Selects TopTerm concepts by ThesaurusId with excluding.
+	 * 
+	 * @param criteria
+	 * @param thesaurusId
+	 * @param excludeId
+	 */
+	private void selectRoot(Criteria criteria, String thesaurusId,
+			String excludeId) {
+		excludeConcept(criteria, excludeId);
+		selectThesaurus(criteria, thesaurusId);
+		selectNoParents(criteria);
+	}
+
+	private void selectNoParents(Criteria criteria) {
+		criteria.add(Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
+				Restrictions.isEmpty("tc.parentConcepts")));
+	}
+
+	private void selectThesaurus(Criteria criteria, String thesaurusId) {
+		criteria.add(Restrictions.eq("tc.thesaurus.identifier",
+				(String) thesaurusId));
+	}
+
+	private void selectOrphans(Criteria criteria, Boolean searchOrphans) {
+		if (searchOrphans != null) {
+			criteria.add(Restrictions.eq("topConcept", !searchOrphans));
+		}
+	}
+
+	private void excludeConcept(Criteria criteria, String excludeId) {
+		if (excludeId != null && !excludeId.isEmpty()) {
+			criteria.add(Restrictions.not(Restrictions.eq("tc.identifier",
+					excludeId)));
+		}
+	}
+
+	private void onlyValidatedConcepts(Criteria criteria,
+			Boolean onlyValidatedConcepts) {
+
+		if (onlyValidatedConcepts) {
+			criteria.add(Restrictions.eq("status",
+					ConceptStatusEnum.VALIDATED.getStatus()));
+		}
+	}
+
+	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
 			Thesaurus thesaurus, boolean topConcept) throws BusinessException {
 
 		if (thesaurus == null) {
-			throw new BusinessException("Object thesaurus can't be null !", "empty-thesaurus");
+			throw new BusinessException("Object thesaurus can't be null !",
+					"empty-thesaurus");
 		}
 
 		return getCriteriaByThesaurusAndTopConcept(thesaurus, topConcept)
@@ -222,7 +236,8 @@ public class ThesaurusConceptDAO extends
 			boolean topConcept) throws BusinessException {
 
 		if (thesaurus == null) {
-			throw new BusinessException("Object thesaurus can't be null !", "empty-thesaurus");
+			throw new BusinessException("Object thesaurus can't be null !",
+					"empty-thesaurus");
 		}
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
 				topConcept).setProjection(Projections.rowCount());
@@ -235,10 +250,10 @@ public class ThesaurusConceptDAO extends
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConcept.class, "tc");
 		selectThesaurus(criteria, thesaurus.getIdentifier());
-        selectOrphans(criteria, !topConcept);
-        //criteria.add(Restrictions.eq("topConcept", topConcept));
-        selectNoParents(criteria);
+		selectOrphans(criteria, !topConcept);
+		// criteria.add(Restrictions.eq("topConcept", topConcept));
+		selectNoParents(criteria);
 		return criteria;
 	}
-	
+
 }
