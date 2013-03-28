@@ -39,7 +39,6 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 
 import junit.framework.Assert;
-import junitx.framework.ListAssert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -106,10 +105,10 @@ public class ExportRestServiceTest {
 		fakeThesaurus.setTitle("Thesaurus title");
 		Mockito.when( thesaurusService.getThesaurusById(Mockito.anyString())).thenReturn(fakeThesaurus);
 		
-		Response skoksResponse = exportRestService.getSKOS("http://fakethesaurusId");
+		Response skosResponse = exportRestService.getSKOS("http://fakethesaurusId");
 		
-		Assert.assertEquals(200, skoksResponse.getStatus());		
-		List<Object> contentDispositionheader = skoksResponse.getHeaders().get("Content-Disposition"); 
+		Assert.assertEquals(200, skosResponse.getStatus());		
+		List<Object> contentDispositionheader = skosResponse.getHeaders().get("Content-Disposition"); 
 		String fileSuffix = (String)contentDispositionheader.get(0);
 		Assert.assertEquals(true, fileSuffix.endsWith(".rdf\""));
 	}
