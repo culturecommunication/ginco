@@ -49,6 +49,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xConnectedAsLabel : "Connected as",
 	xNewMenu_ThesaurusLabel : "Thesaurus",
 	xHelpLabel : "Help",
+	xAccessibilityLabel : "Accessibility",
 	height : 64,
 
 	initComponent : function() {
@@ -119,7 +120,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 				}, {
 					xtype : 'button',
 					itemId : 'accessibilitybtn',
-					text : "Accessibilité",
+					text : me.xAccessibilityLabel,
 					enableToggle : true
 				} ]
 			}, {

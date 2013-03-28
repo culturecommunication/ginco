@@ -370,6 +370,65 @@ Ext.define("Thesaurus.form.field.Base", {
 });
 
 /*
+ * Remove default role=presentation
+ */
+Ext.define("Thesaurus.layout.container.Box", {
+	override : 'Ext.layout.container.Box',
+	renderTpl: [
+	            '{%var oc,l=values.$comp.layout,oh=l.overflowHandler;',
+	            'if (oh.getPrefixConfig!==Ext.emptyFn) {',
+	                'if(oc=oh.getPrefixConfig())dh.generateMarkup(oc, out)',
+	            '}%}',
+	            '<div id="{ownerId}-innerCt" class="{[l.innerCls]} {[oh.getOverflowCls()]}">',
+	                '<div id="{ownerId}-targetEl" style="position:absolute;',
+	                        // This width for the "CSS container box" of the box child items gives
+	                        // them the room they need to avoid being "crushed" (aka, "wrapped").
+	                        // On Opera, elements cannot be wider than 32767px or else they break
+	                        // the scrollWidth (it becomes == offsetWidth) and you cannot scroll
+	                        // the content.
+	                        'width:20000px;',
+	                        // On IE quirks and IE6/7 strict, a text-align:center style trickles
+	                        // down to this el at times and will cause it to move off the left edge.
+	                        // The easy fix is to just always set left:0px here. The top:0px part
+	                        // is just being paranoid. The requirement for targetEl is that its
+	                        // origin align with innerCt... this ensures that it does!
+	                        'left:0px;top:0px;',
+	                        // If we don't give the element a height, it does not always participate
+	                        // in the scrollWidth.
+	                        'height:1px">',
+	                    '{%this.renderBody(out, values)%}',
+	                '</div>',
+	            '</div>',
+	            '{%if (oh.getSuffixConfig!==Ext.emptyFn) {',
+	                'if(oc=oh.getSuffixConfig())dh.generateMarkup(oc, out)',
+	            '}%}',
+	            {
+	                disableFormats: true,
+	                definitions: 'var dh=Ext.DomHelper;'
+	            }
+	        ]
+});
+
+/*
+ * Add aria role attribute to components.
+ */
+Ext.define('Thesaurus.Component', {
+	override : 'Ext.Component',
+	initAria: function() {
+        var actionEl = this.getActionEl(),
+            role = this.ariaRole;
+        if (role) {
+            actionEl.dom.setAttribute('role', role);
+        }
+    },
+	afterRender: function() {
+		var me = this;
+		me.callParent();
+		me.initAria();
+	}
+});
+
+/*
  * Implement aria-hidden property
  */
 Ext.define("Thesaurus.dom.Element", {
