@@ -37,11 +37,8 @@ package fr.mcc.ginco.utils;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 
 /**
  * utility class to get objects labels
@@ -62,8 +59,8 @@ public final class ConceptHierarchyUtil {
 	 *             if more than one parent is found, or if no parent is found
 	 *             and the concepts are not root concepts
 	 */
-	public static final ThesaurusConcept getSuperOrdinate(
-			Set<ThesaurusConcept> membersConcepts) throws BusinessException {
+	public static ThesaurusConcept getSuperOrdinate(
+			Set<ThesaurusConcept> membersConcepts) {
 		
 		Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
 		boolean allRoot = true;
