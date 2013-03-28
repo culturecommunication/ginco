@@ -303,7 +303,7 @@ public class ThesaurusConceptRestService {
 			
 	        for (String id : availableStatusIds) {
 	        	GenericStatusView conceptStatusView = new GenericStatusView();
-	        	conceptStatusView.setStatus(Integer.valueOf(id));
+	        	conceptStatusView.setStatusCode(Integer.valueOf(id));
 	        	
 	        	String label = res.getString("concept-status["+ id +"]");
 	        	if (label.isEmpty()) {

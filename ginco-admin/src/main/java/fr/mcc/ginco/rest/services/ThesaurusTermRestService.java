@@ -208,7 +208,7 @@ public class ThesaurusTermRestService {
 			
 	        for (String id : availableStatusIds) {
 	        	GenericStatusView termStatusView = new GenericStatusView();
-	        	termStatusView.setStatus(Integer.valueOf(id));
+	        	termStatusView.setStatusCode(Integer.valueOf(id));
 	        	
 	        	String label = res.getString("term-status["+ id +"]");
 	        	if (label.isEmpty()) {

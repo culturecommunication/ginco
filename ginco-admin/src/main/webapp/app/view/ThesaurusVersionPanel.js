@@ -89,22 +89,22 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 
 					columns : [ {
 						dataIndex : 'identifier',
-						text : me.xIdentifierLabel,
-						hidden : true
+						flex : 1,
+						text : me.xIdentifierLabel
 					}, {
 						dataIndex : 'date',
-						text : me.xVersionDate,
-						//flex : 1,
+						text : me.xVersionDate
 					}, {
 						dataIndex : 'versionNote',
 						text : me.xVersionNote,
-						width: '600px',
+						flex : 1,
 						editor: {
 							//no xtype because default is texfield
 						}
 					}, {
 						dataIndex : 'status',
 						text : me.xVersionStatus,
+						stopSelection : false,
 						editor : new Ext.form.field.ComboBox(
 								{
 									typeAhead : true,
@@ -114,11 +114,11 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 									lazyRender : true,
 									listClass : 'x-combo-list-small',
 									displayField : 'statusLabel',
-									valueField : 'status'
+									valueField : 'statusCode'
 								})
 					},{
 			            xtype: 'checkcolumn',
-			            singleSelect : true,
+			            itemId : 'thisVersionCheckbox',
 			            dataIndex: 'thisVersion',
 			            text : me.xThisVersion,
 			            editor: {

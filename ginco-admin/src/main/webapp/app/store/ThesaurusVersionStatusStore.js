@@ -44,7 +44,7 @@ Ext.define('GincoApp.store.ThesaurusVersionStatusStore', {
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
-            autoLoad: false,
+            autoLoad: true,
             storeId: 'ThesaurusVersionStatusStore',
             proxy: {
                 type: 'ajax',
@@ -57,7 +57,7 @@ Ext.define('GincoApp.store.ThesaurusVersionStatusStore', {
             },
             fields: [
                 {
-                    name: 'status',
+                    name: 'statusCode',
                     type: 'int'
                 },
                 {
