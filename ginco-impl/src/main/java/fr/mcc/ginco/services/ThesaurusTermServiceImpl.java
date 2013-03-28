@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -149,9 +150,21 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
     
     @Override
-    public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId){
-    	return thesaurusTermDAO
-    			.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId)
-    			.getConcept().getIdentifier();
+    public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
+    	ThesaurusTerm thesaurusTerm = thesaurusTermDAO
+    			.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId);
+    	if (thesaurusTerm != null){
+    		ThesaurusConcept thesaurusConcept = thesaurusTerm.getConcept();
+    		if (thesaurusConcept != null){
+    			return thesaurusConcept.getIdentifier();
+    		}
+    		else{
+    			throw new BusinessException("The concept does not exist", "concept-does-not-exist");
+    		}
+    	}
+    	else{
+    		throw new BusinessException("The term does not exist", "term-does-not-exist");
+    	}
+    		
     }
 }

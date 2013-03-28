@@ -85,16 +85,29 @@ public class ThesaurusTermServiceTest {
     }
     
     @Test
-    public final void testGetConceptIdByTermId(){
-    	/*ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
+    public final void testGetConceptIdByTerm(){
+    	
+    	ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
     	ThesaurusConcept fakeThesaurusConcept = new ThesaurusConcept();
     	fakeThesaurusConcept.setIdentifier("fakeId");
     	fakeThesaurusTerm.setConcept(fakeThesaurusConcept);
-		when(thesaurusTermDAO.getById(anyString())).thenReturn(fakeThesaurusTerm);
+		when(thesaurusTermDAO.getTermByLexicalValueThesaurusIdLanguageId(anyString(), anyString(), anyString())).thenReturn(fakeThesaurusTerm);
 		
-		String conceptId = thesaurusTermService.getConceptIdByTermId("fakeTerm");
+		String conceptId = thesaurusTermService.getConceptIdByTerm("fakeLexicalValue", "fakeThesaurusId", "fakeLanguageId");
 		
-		Assert.assertEquals("fakeId", conceptId);*/
+		Assert.assertEquals("fakeId", conceptId);
     }
     
+    @Test(expected=BusinessException.class)
+    public final void testGetConceptIdByInvalidTerm(){
+    	when(thesaurusTermDAO.getTermByLexicalValueThesaurusIdLanguageId(anyString(), anyString(), anyString())).thenReturn(null);
+    	thesaurusTermService.getConceptIdByTerm("fakeLexicalValue", "fakeThesaurusId", "fakeLanguageId");
+    }
+    
+    @Test(expected=BusinessException.class)
+    public final void testGetConceptIdByTermWithInvalidConcept(){
+    	ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
+    	when(fakeThesaurusTerm.getConcept()).thenReturn(null);
+    	thesaurusTermService.getConceptIdByTerm("fakeLexicalValue", "fakeThesaurusId", "fakeLanguageId");
+    }
 }

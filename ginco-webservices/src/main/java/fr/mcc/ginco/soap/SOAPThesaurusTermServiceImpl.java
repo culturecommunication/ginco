@@ -39,6 +39,7 @@ import javax.inject.Named;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
 /**
@@ -53,7 +54,13 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 	private IThesaurusTermService thesaurusTermService;
 	
 	@Override
-	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) {
-		return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
+	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
+		if (lexicalValue != null && thesaurusId != null && languageId != null){
+			return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
+		}
+		else 
+		{
+			throw new BusinessException("One or more parameters are empty","empty-parameters");
+		}
 	}
 }

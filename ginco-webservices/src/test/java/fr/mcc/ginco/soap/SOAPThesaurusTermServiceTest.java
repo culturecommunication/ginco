@@ -44,6 +44,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
 /**
@@ -65,11 +68,14 @@ public class SOAPThesaurusTermServiceTest {
 	
 	@Test
 	public final void testGetConceptIdByTermId(){
+		when(thesaurusTermService.getConceptIdByTerm(anyString(), anyString(), anyString())).thenReturn("fakeConceptId");
 		
-		/*when(thesaurusTermService.getConceptIdByTerm(anyString())).thenReturn("fakeConceptId");
-		
-		String conceptId = thesaurusTermService.getConceptIdByTermId("fakeTerm");
-		Assert.assertEquals("fakeConceptId", conceptId);*/
-		
+		String conceptId = thesaurusTermService.getConceptIdByTerm("fakeLexicalValue", "fakeThesaurusId", "fakeLanguageId");
+		Assert.assertEquals("fakeConceptId", conceptId);		
+	}
+	
+	@Test(expected=BusinessException.class)
+	public final void testGetConceptIdByTermWithInvalidParametres(){
+		soapThesaurusTermService.getConceptIdByTerm(null, null, null);
 	}
 }
