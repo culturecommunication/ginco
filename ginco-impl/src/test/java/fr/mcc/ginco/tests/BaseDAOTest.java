@@ -55,14 +55,10 @@ import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -122,32 +118,15 @@ public abstract class BaseDAOTest extends AbstractTransactionalJUnit4SpringConte
 			DatabaseUnitException {
 		return SessionFactoryUtils.getDataSource(gincoSessionFactory);
 	}
-
-	public IDataSet getDataset() throws SQLException, DatabaseUnitException {
-		Connection jdbcConnection = SessionFactoryUtils.getDataSource(
-				gincoSessionFactory).getConnection();
-		final IDatabaseConnection connection = new DatabaseConnection(
-				jdbcConnection);
-		return connection.createDataSet();
-	}
-
-	public IDataSet getDataset(String datasetPath) throws DataSetException {
-		InputStream is = BaseDAOTest.class.getResourceAsStream(datasetPath);
+	private IDataSet getDataset(String datasetPath) throws DataSetException {
+		InputStream is = BaseDAOTest.class.getResourceAsStream("/dao" + datasetPath);
 		return new XmlDataSet(is);
 	}
 
-	public SessionFactory getSessionFactory() {
+	final public SessionFactory getSessionFactory() {
 		return this.gincoSessionFactory;
 	}
 
-	public abstract String getXmlDataFileInit();
-
-	public IDataSet getActualDataset() throws DatabaseUnitException, SQLException {
-		DataSource dataSource = SessionFactoryUtils
-				.getDataSource(this.gincoSessionFactory);
-		Connection con = DataSourceUtils.getConnection(dataSource);
-		IDatabaseConnection dbUnitCon = new DatabaseConnection(con);
-		return dbUnitCon.createDataSet();
-	}
+	public abstract String getXmlDataFileInit();	
 
 }
