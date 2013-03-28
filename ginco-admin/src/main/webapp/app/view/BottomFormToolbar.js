@@ -43,7 +43,7 @@ Ext.define('GincoApp.view.BottomFormToolbar', {
 		var me = this;
 		me.callParent(arguments);
 		var reqEl = Ext.create('Ext.toolbar.TextItem', {
-            cls: 'x-status-text ',
+            cls: 'x-status-text mandatory-field ',
             text: me.xRequiredLabel
         });
 		me.add(reqEl);

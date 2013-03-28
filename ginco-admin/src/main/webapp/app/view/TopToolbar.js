@@ -50,6 +50,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xNewMenu_ThesaurusLabel : "Thesaurus",
 	xHelpLabel : "Help",
 	xAccessibilityLabel : "Accessibility",
+	xLogoutBtnLabel : "Logout",
 	height : 64,
 
 	initComponent : function() {
@@ -136,14 +137,32 @@ Ext.define('GincoApp.view.TopToolbar', {
 				hideTrigger : false,
 				repeatTriggerClick : false,
 				disabled : false
-			}, {
-				xtype : 'label',
+			},{
+				xtype : 'tbseparator',
+				flex : 2,
+				height : 10,
+				width : 10
+			}, 
+			{
+				xtype : 'tbtext',
 				text : me.xConnectedAsLabel
 			},
 			{
-				xtype : 'label',
+				xtype : 'tbtext',
 				itemId : 'username' 
-			} ]
+			},
+			{
+				xtype : 'tbseparator',
+				flex : 2,
+				height : 10,
+				width : 10
+			}, 
+			{
+				xtype : 'button',
+				itemId : 'logoutbtn',
+				iconCls : 'logout-icon',
+				text : me.xLogoutBtnLabel
+			}]
 		});
 
 		me.callParent(arguments);

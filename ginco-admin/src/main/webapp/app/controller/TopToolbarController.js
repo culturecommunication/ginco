@@ -80,6 +80,10 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			}
 		});		
 	},
+	
+	onLogoutBtn : function () {
+		window.location.href = "logout";
+	},
 
 	init : function(application) {
 		this.control({
@@ -98,6 +102,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			"topToolBar" : {
 				afterrender : this.loadToolbar
 			},
+			'#logoutbtn' : {
+				click : this.onLogoutBtn
+			}
 		});
 	}
 

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
  * <p/>
@@ -33,19 +33,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.locale.fr.view.TopToolbar', {
-    xNewLabel: "Nouveau",
-    xAdministrationLabel: "Administration",
-    xControlLabel: "Gestion",
-    xTopWelcomeLabel: "Gestionnaire Hadoc GINCO",
-    xJournalLabel: "Journal",
-    xAboutLabel: "À propos",
-    xSearchLabel: "Recherche",
-    xSearchFieldText: "Rechercher un terme",
-    xConnectedAsLabel: "Connecté en tant que",
-    xNewMenu_ThesaurusLabel: "Vocabulaire",
-    xImportLabel: "Import",
-    xHelpLabel: "Aide",
-    xAccessibilityLabel : "Accessibilité",
-    xLogoutBtnLabel : "Déconnexion"
+Ext.define('GincoLoginApp.view.GincoLoginViewPort', {
+    extend: 'Ext.container.Viewport',
+   
+    layout: {
+        type: 'border'
+    },
+
+    initComponent: function() {
+        var me = this;
+       
+
+        Ext.applyIf(me, {
+            items: [
+            ]
+        });
+
+        me.callParent(arguments);
+        var win = Ext.create('GincoLoginApp.view.GincoLoginForm');
+        win.show();
+    }
+
 });

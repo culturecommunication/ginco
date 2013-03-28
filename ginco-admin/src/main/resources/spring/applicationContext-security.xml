@@ -11,8 +11,15 @@
 		<ldap-authentication-provider
 			user-search-base="ou=personnes" user-search-filter="uid={0}" />
 	</authentication-manager>
+	<http pattern="/login.jsp" security="none"/>
+	<http pattern="/*.js" security="none"/>
+	<http pattern="/extjs/**" security="none"/>
+	<http pattern="/css/**" security="none"/>
+	<http pattern="/app/**" security="none"/>
+	<http pattern="/images/**" security="none"/>
 	<http auto-config="true" use-expressions="true">
 		<intercept-url pattern="/**" access="isAuthenticated()" />
-		<http-basic/>
+		<form-login login-page="/login.jsp" login-processing-url="/login_security_check" authentication-failure-url="/login.jsp#failure" default-target-url="/index.jsp"/>
+		<logout logout-url="/logout"/>
 	</http>
 </beans:beans>

@@ -109,6 +109,10 @@
     background: url('../images/exports.png') no-repeat 0 0 !important;
 }
 
+.logout-icon {
+	background-image: url(../images/door_in.png) !important;
+}
+
 .mandatory-field {
-	color: red;
+	color: red !important;
 }
