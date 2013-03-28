@@ -184,7 +184,7 @@ public class ExportRestService {
             }
 
         } catch (IOException e) {
-            throw new BusinessException("Cannot create temp file!", "cannot-create-file");
+            throw new BusinessException("Cannot create temp file!", "cannot-create-file", e);
         }
 
         return temp;
