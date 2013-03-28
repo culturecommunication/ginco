@@ -35,6 +35,7 @@
 package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -122,5 +123,16 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 */
 	List<ThesaurusTerm> findPaginatedSandboxedValidatedItems(
 			Integer startIndex, Integer limit, String idThesaurus);
+	
+	/**
+	 * Returns the identifier of a concept by the term
+	 * 
+	 * @param  lexical value of the term,
+	 * @param  thesaurus identifier of the term,
+	 * @param  language of the term
+	 * 
+	 * @return identifier of a concept
+	 */
+	ThesaurusTerm getTermByLexicalValueThesaurusIdLanguage(String lexicalValue, String thesaurusId, String languageId);
 
 }

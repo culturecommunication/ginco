@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -126,11 +127,16 @@ public interface IThesaurusTermService {
      */
     List<ThesaurusTerm> getAllTerms();
     
-	/**
-	 * This method returns the identifier of a concept by the identifier of a term
-	 * @param the identifier of a term
-	 * @return the identifier of a concept
+    /**
+	 * This service returns the identifier of a concept by the term
+	 * 
+	 * @param  lexical value of the term,@param
+	 * @param  thesaurus identifier of the term,
+	 * @param  language of the term
+	 * 
+	 * @return identifier of a concept
 	 */
-    String getConceptIdByTermId(String termId);
+    
+    String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId);
     
 }

@@ -38,6 +38,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
 /**
@@ -52,8 +53,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 	private IThesaurusTermService thesaurusTermService;
 	
 	@Override
-	public String getConceptIdByTermId(String termId) {
-		String conceptId = thesaurusTermService.getConceptIdByTermId(termId);
-		return conceptId;
+	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) {
+		return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
 	}
 }

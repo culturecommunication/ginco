@@ -42,6 +42,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
@@ -169,6 +170,14 @@ public class ThesaurusTermDAO extends
 		getCurrentSession().saveOrUpdate(termToUpdate);
 		return termToUpdate;
 	}
+	
+	@Override
+	public ThesaurusTerm getTermByLexicalValueThesaurusIdLanguage(String lexicalValue, String thesaurusId, String languageId){
+		return (ThesaurusTerm) getCurrentSession().createCriteria(ThesaurusTerm.class)
+		.add(Restrictions.eq("lexicalValue", lexicalValue))
+		.add(Restrictions.eq("thesaurus.identifier", thesaurusId))
+		.add(Restrictions.eq("language.id", languageId)).uniqueResult();
+	}
 
 	/**
 	 * This method constructs a criteria to get sandboxed terms
@@ -194,5 +203,4 @@ public class ThesaurusTermDAO extends
 		.add(Restrictions.isNull("concept"))
 		.setProjection(Projections.rowCount());
 	}	
-	
 }

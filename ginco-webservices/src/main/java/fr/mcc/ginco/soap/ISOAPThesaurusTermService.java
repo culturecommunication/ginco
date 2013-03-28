@@ -36,14 +36,20 @@ package fr.mcc.ginco.soap;
 
 import javax.jws.WebService;
 
+import fr.mcc.ginco.beans.Language;
+
 
 @WebService
 public interface ISOAPThesaurusTermService {
 	
 	/**
-	 * This service returns the identifier of a concept by the identifier of a term
-	 * @param the identifier of a term
-	 * @return the identifier of a concept
+	 * This service returns the identifier of a concept by the term
+	 * 
+	 * @param  lexical value of the term,
+	 * @param  thesaurus identifier of the term,
+	 * @param  language of the term
+	 * 
+	 * @return identifier of a concept
 	 */
-	String getConceptIdByTermId(String termId);
+	String getConceptIdByTerm(String lexicalValue, String thesaurusId,  String languageId);
 }

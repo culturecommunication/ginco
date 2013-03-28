@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -82,4 +83,18 @@ public class ThesaurusTermServiceTest {
                 thesaurusTermService.getTermsByConceptId("http://www.culturecommunication.gouv.fr/co1")
                         .get(0).getLexicalValue());
     }
+    
+    @Test
+    public final void testGetConceptIdByTermId(){
+    	/*ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
+    	ThesaurusConcept fakeThesaurusConcept = new ThesaurusConcept();
+    	fakeThesaurusConcept.setIdentifier("fakeId");
+    	fakeThesaurusTerm.setConcept(fakeThesaurusConcept);
+		when(thesaurusTermDAO.getById(anyString())).thenReturn(fakeThesaurusTerm);
+		
+		String conceptId = thesaurusTermService.getConceptIdByTermId("fakeTerm");
+		
+		Assert.assertEquals("fakeId", conceptId);*/
+    }
+    
 }

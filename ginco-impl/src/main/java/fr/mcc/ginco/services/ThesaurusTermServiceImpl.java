@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -148,8 +149,9 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
     
     @Override
-    public String getConceptIdByTermId(String termId){
-    	ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(termId);
-    	return thesaurusTerm.getConcept().getIdentifier();
+    public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId){
+    	return thesaurusTermDAO
+    			.getTermByLexicalValueThesaurusIdLanguage(lexicalValue, thesaurusId, languageId)
+    			.getConcept().getIdentifier();
     }
 }
