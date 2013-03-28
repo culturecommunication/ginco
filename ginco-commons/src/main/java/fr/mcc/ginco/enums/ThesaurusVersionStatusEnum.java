@@ -32,42 +32,22 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.enums;
 
-/*
- * Thesaurus Note Store 
- * This file contains Thesaurus notes
+/**
+ * This enum intended to list different available status for thesaurus versions.
+ * The translation of these items is externalized in a property file 
  */
-Ext.define('GincoApp.store.ThesaurusVersionStore', {
-	extend : 'Ext.data.Store',
-	requires : [ 'GincoApp.model.ThesaurusVersionModel' ],
-
-	constructor : function(cfg) {
-		var me = this;
-		cfg = cfg || {};
-		me.callParent([ Ext.apply({
-			// TODO : keep autoload false ?
-			autoLoad : false,
-			alias : 'store.thesaurusVersionStore',
-			model : 'GincoApp.model.ThesaurusVersionModel',
-			proxy : {
-				type : 'ajax',
-				api : {
-					read : 'services/ui/thesaurusversionservice/getVersions',
-					update : 'services/ui/thesaurusversionservice/updateVersions',
-					//create : 'services/ui/thesaurusversionservice/createVersion',
-					//destroy : 'services/ui/thesaurusversionservice/destroyVersion'
-				},
-				writer : {
-					type : 'json',
-					// A single version must be sent in an array
-					allowSingle : false
-				},
-				reader : {
-					type : 'json',
-					root : 'data',
-					idProperty : 'identifier'
-				}
-			}
-		}, cfg) ]);
-	}
-});
+public enum ThesaurusVersionStatusEnum {
+    PROJECT(0), VALIDATED(1), PUBLISHED(2), DEPRECATED(3), PROHIBITED(4);
+    
+    private int status;
+    
+    private ThesaurusVersionStatusEnum(int status) {
+    	this.status = status;
+    }
+    
+    public int getStatus() {
+    	return status;
+    }
+}

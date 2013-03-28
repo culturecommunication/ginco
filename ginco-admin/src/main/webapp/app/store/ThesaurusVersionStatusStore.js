@@ -32,30 +32,39 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.pojo;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-import java.io.Serializable;
-
-/**
- * Class corresponding to the view of a status for a term or a concept
+/*
+ * Concept Language Store 
+ * This file contains all Concept languages displayed in dropdown lists
  */
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ConceptAndTermStatusView implements Serializable {
-    private Integer status;
-    private String statusLabel;
-    
-	public String getStatusLabel() {
-		return statusLabel;
-	}
-	public void setStatusLabel(String statusLabel) {
-		this.statusLabel = statusLabel;
-	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-}
+Ext.define('GincoApp.store.ThesaurusVersionStatusStore', {
+    extend: 'Ext.data.Store',
+
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: false,
+            storeId: 'ThesaurusVersionStatusStore',
+            proxy: {
+                type: 'ajax',
+                url: 'services/ui/thesaurusversionservice/getAllVersionStatus',
+                reader: {
+                    type: 'json',
+                    idProperty: 'status',
+                    root: 'data'
+                }
+            },
+            fields: [
+                {
+                    name: 'status',
+                    type: 'int'
+                },
+                {
+                    name: 'statusLabel',
+                    type: 'string'
+                }
+            ]
+        }, cfg)]);
+    }
+});

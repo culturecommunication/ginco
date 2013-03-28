@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -64,5 +65,31 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
 	public List<ThesaurusVersionHistory> getVersionsByThesaurusId(
 			String thesaurusId) {
 		return thesaurusVersionHistoryDAO.findVersionsByThesaurusId(thesaurusId);
+	}
+
+	@Override
+	public ThesaurusVersionHistory getThesaurusVersionHistoryById(String id) {
+		return thesaurusVersionHistoryDAO.getById(id);
+	}
+
+	@Override
+	@Transactional(readOnly=false)
+	public ThesaurusVersionHistory createOrUpdateVersion(ThesaurusVersionHistory version) {
+		if (version.getThisVersion() == true) {
+			//We set attribute thisVersion for all versions to false
+			List<ThesaurusVersionHistory> allOtherVersions = new ArrayList<ThesaurusVersionHistory>();
+			if (version.getThesaurus() != null) {
+				allOtherVersions = thesaurusVersionHistoryDAO.findAllOtherThisVersionTrueByThesaurusId(version.getThesaurus().getIdentifier(), version.getIdentifier());				
+			}
+			for (ThesaurusVersionHistory thesaurusVersionHistory : allOtherVersions) {
+				thesaurusVersionHistory.setThisVersion(false);
+			}
+		} else {
+			//We verify there is at least one version to true for the flag thisVersion (thisVersion)
+			if ( thesaurusVersionHistoryDAO.findThisVersionByThesaurusId(version.getThesaurus().getIdentifier()) == null) {
+				throw new BusinessException("A version must be set as the current version", "no-current-version");
+			}
+		}
+		return thesaurusVersionHistoryDAO.update(version);
 	}
 }

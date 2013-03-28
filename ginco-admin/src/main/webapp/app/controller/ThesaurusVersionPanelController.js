@@ -37,17 +37,56 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
 	
+	xLoading : 'Loading',
+	xSucessLabel : 'Success!',
+	xSucessSavedMsg : 'Versions saved successfully',
+	xProblemLabel : 'Error !',
+	xProblemSaveMsg : 'Unable to save the versions!',
+	
 	onRenderGrid : function(theGrid) {
 		var thesaurusId = theGrid.up('thesaurusPanel').thesaurusData.id;
 		theGrid.getStore().getProxy().setExtraParam('thesaurusId', thesaurusId);
 		theGrid.getStore().load();
 	},
+	
+	onUpdateVersionToTheGrid : function( editor, e, eOpts){
+		var theGrid = e.grid;
+		theGrid.up('form').down('button[itemId=saveThesaurusVersion]').setDisabled(false);
+	},
+	
+	saveThesaurusVersion : function(theButton,theCallback) {
+		var me=this;
+		var theGrid = theButton.up('thesaurusVersionPanel').down('gridpanel');
+		var thePanel = theButton.up('thesaurusVersionPanel');
+
+		thePanel.getEl().mask(me.xLoading);
+		theGrid.getStore().sync({
+			success : function(model, operation) {
+				thePanel.getEl().unmask();
+				Thesaurus.ext.utils.msg(me.xSucessLabel, me.xSucessSavedMsg);
+				thePanel.down('button[itemId=saveThesaurusVersion]').setDisabled(true);
+				theGrid.getStore().load();
+				if (theCallback && typeof theCallback == "function") {
+					theCallback();
+				}
+			},
+			failure : function(model, operation) {
+				console.log(operation);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg, operation.error);
+				thePanel.getEl().unmask();
+			}
+		});
+	},
 
 	init : function() {
 		this.control({
 			'thesaurusVersionPanel #versionGrid' : {
- 				render : this.onRenderGrid
- 			}
+ 				render : this.onRenderGrid,
+ 				validateedit : this.onUpdateVersionToTheGrid
+ 			},
+ 			'thesaurusVersionPanel #saveThesaurusVersion' : {
+			click : this.saveThesaurusVersion
+			}
 		});
 	}
 });

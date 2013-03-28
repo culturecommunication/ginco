@@ -40,6 +40,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 
@@ -64,7 +65,41 @@ public class ThesaurusVersionHistoryDAO extends
 		return criteria.list();
 	}
 	
+	@Override
+	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(
+			String thesaurusId, String excludedVersionId) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusVersionHistory.class, "tv");
+		selectThesaurus(criteria, thesaurusId);
+		excludeAVersion(criteria, excludedVersionId);
+		isThisVersion(criteria, true);
+		return criteria.list();
+	}
+
+	@Override
+	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusVersionHistory.class, "tv");
+		selectThesaurus(criteria, thesaurusId);
+		isThisVersion(criteria, true);
+		
+		List<ThesaurusVersionHistory>foundVersions = criteria.list();
+		if (foundVersions.size()>0) {
+			return (ThesaurusVersionHistory) criteria.list().get(0);
+		}
+		return null;
+	}
+
 	private void selectThesaurus(Criteria criteria, String thesaurusId) {
-        criteria.add(Restrictions.eq("tv.thesauruses.identifier", (String)thesaurusId));
+        criteria.add(Restrictions.eq("tv.thesaurus.identifier", (String)thesaurusId));
     }
+	
+	private void excludeAVersion(Criteria criteria, String excludedVersionId) {
+        criteria.add(Restrictions.ne("tv.identifier", (String)excludedVersionId));
+    }
+	
+	private void isThisVersion(Criteria criteria, Boolean isThisVersion) {
+        criteria.add(Restrictions.eq("tv.thisVersion", isThisVersion));
+    }
+
 }

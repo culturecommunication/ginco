@@ -50,8 +50,16 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 	xThisVersion : 'This version',
 
 	initComponent : function() {
+		
+		var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+	        clicksToMoveEditor: 1,
+	        autoCancel: false,
+	        pluginId: 'rowEditing'
+	    });
+		
 		var me = this;
 		me.thesaurusVersionStore =  Ext.create('GincoApp.store.ThesaurusVersionStore');
+		me.thesaurusVersionStatusStore =  Ext.create('GincoApp.store.ThesaurusVersionStatusStore');
 
 		Ext.applyIf(me, {
 			items : [ {
@@ -66,33 +74,56 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 						text : 'Enregistrer',
 						cls : 'save',
 						iconCls : 'icon-save',
-						itemId : 'saveNote',
+						itemId : 'saveThesaurusVersion',
 						disabled : true
 					} ]
 				} ],
 				items : [ {
 					xtype : 'gridpanel',
+			        height: 400,
+					plugins : [ rowEditing ],
+					
 					itemId : 'versionGrid',
 					title : me.xVersionListGridTitle,
 					store : me.thesaurusVersionStore,
 
 					columns : [ {
 						dataIndex : 'identifier',
-						text : me.xIdentifierLabel
+						text : me.xIdentifierLabel,
+						hidden : true
 					}, {
 						dataIndex : 'date',
 						text : me.xVersionDate,
-						flex : 1
+						//flex : 1,
 					}, {
 						dataIndex : 'versionNote',
-						text : me.xVersionNote
+						text : me.xVersionNote,
+						width: '600px',
+						editor: {
+							//no xtype because default is texfield
+						}
 					}, {
 						dataIndex : 'status',
-						text : me.xVersionStatus
-					}, {
-						xtype : 'checkcolumn',
-						dataIndex : 'thisVersion',
-						text : me.xThisVersion
+						text : me.xVersionStatus,
+						editor : new Ext.form.field.ComboBox(
+								{
+									typeAhead : true,
+									triggerAction : 'all',
+									selectOnTab : true,
+									store : me.thesaurusVersionStatusStore,
+									lazyRender : true,
+									listClass : 'x-combo-list-small',
+									displayField : 'statusLabel',
+									valueField : 'status'
+								})
+					},{
+			            xtype: 'checkcolumn',
+			            singleSelect : true,
+			            dataIndex: 'thisVersion',
+			            text : me.xThisVersion,
+			            editor: {
+			                xtype: 'checkbox'
+			            }
 					}]
 				} ]
 			} ]

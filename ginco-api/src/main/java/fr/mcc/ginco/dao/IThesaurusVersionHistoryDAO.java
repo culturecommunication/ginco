@@ -44,9 +44,24 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersionHistory, String> {
 	
 	/**
-	 * This methods gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
+	 * This method gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
 	 * @param String thesaurusId
 	 * @return A list of {@ThesaurusVersionHistory}
 	 */
 	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
+	
+	/**
+	 * This method gets all {@ThesaurusVersionHistory} with column thisVersion = true for the thesaurus which id is given in parameter, excepted one version which id is specified in parameter
+	 * @param String thesaurusId
+	 * @param String excludedVersion
+	 * @return A list of {@ThesaurusVersionHistory}
+	 */
+	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
+	
+	/**
+	 * This method get the version which have the flag thisVersion to true for the thesaurus which id is given in parameter
+	 * @param thesaurusId
+	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
+	 */
+	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
 }

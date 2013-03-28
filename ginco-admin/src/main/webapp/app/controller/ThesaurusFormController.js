@@ -66,7 +66,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		var thesaurusPanel = aForm.up('thesaurusPanel');
 		thesaurusPanel.setTitle(aModel.data.title);
 		thesaurusPanel.thesaurusData = aModel.data;
-		aForm.setTitle(aModel.data.title);
 		aForm.loadRecord(aModel);
 		thesaurusPanel.down('button[cls=newBtnMenu]').setDisabled(false);
         thesaurusPanel.down('button[cls=delete]').setDisabled(false);
@@ -208,10 +207,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			'thesaurusPanel form' : {
 				afterrender : this.loadPanel
 			},
-			'thesaurusPanel button[cls=save]' : {
+			'thesaurusPanel #saveThesaurus' : {
 				click : this.saveForm
 			},
-            'thesaurusPanel button[cls=delete]' : {
+            'thesaurusPanel #deleteThesaurus' : {
                 click : this.deleteThesaurus
             },
 			"thesaurusPanel #newTermBtn" : {

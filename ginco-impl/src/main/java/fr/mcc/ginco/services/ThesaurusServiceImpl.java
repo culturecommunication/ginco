@@ -34,23 +34,31 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
-import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.utils.LanguageComparator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
+import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
+import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LanguageComparator;
 
 /**
  * Implementation of the thesaurus service Contains methods relatives to the
@@ -65,7 +73,16 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Inject
 	@Named("thesaurusDAO")
-	private IThesaurusDAO thesaurusDAO;   
+	private IThesaurusDAO thesaurusDAO;
+	
+	@Inject
+	@Named("thesaurusVersionHistoryDAO")
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
+	
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService generatorService;
+
 
 	/*
 	 * (non-Javadoc)
@@ -97,7 +114,24 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	@Transactional(readOnly=false)
 	@Override
 	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
-		return thesaurusDAO.update(object);
+		
+		 Thesaurus result = thesaurusDAO.update(object);
+		 
+		 //We get the versions of the thesaurus we are creating/updating
+		 //If no version, we initialize one with status PROJECT
+		 List<ThesaurusVersionHistory> versionsOfCurrentThesaurus = thesaurusVersionHistoryDAO.findVersionsByThesaurusId(result.getIdentifier());
+		 if (versionsOfCurrentThesaurus == null || versionsOfCurrentThesaurus.isEmpty()) {
+			Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
+			ThesaurusVersionHistory defaultVersion = new ThesaurusVersionHistory();
+			defaultVersion.setIdentifier(generatorService.generate());
+			defaultVersion.setDate(DateUtil.nowDate());
+			defaultVersion.setThesaurus(result);
+			defaultVersion.setThisVersion(true);
+			defaultVersion.setStatus(ThesaurusVersionStatusEnum.PROJECT.getStatus());
+			versions.add(defaultVersion);
+			thesaurusVersionHistoryDAO.update(defaultVersion);
+		}
+		return result;
 	}	
 
 	/*

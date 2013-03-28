@@ -38,7 +38,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.ConceptAndTermStatusView;
+import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.log.Log;
@@ -194,9 +194,9 @@ public class ThesaurusTermRestService {
 	@GET
 	@Path("/getAllTermStatus")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<ConceptAndTermStatusView>> getAllTermStatus() throws BusinessException {
+	public ExtJsonFormLoadData<List<GenericStatusView>> getAllTermStatus() throws BusinessException {
 
-		List<ConceptAndTermStatusView> listOfStatus = new ArrayList<ConceptAndTermStatusView>();
+		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		try {
 			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
 			String availableStatusIds[] = res.getString("term-status").split(",");
@@ -207,7 +207,7 @@ public class ThesaurusTermRestService {
 			}
 			
 	        for (String id : availableStatusIds) {
-	        	ConceptAndTermStatusView termStatusView = new ConceptAndTermStatusView();
+	        	GenericStatusView termStatusView = new GenericStatusView();
 	        	termStatusView.setStatus(Integer.valueOf(id));
 	        	
 	        	String label = res.getString("term-status["+ id +"]");
@@ -222,7 +222,7 @@ public class ThesaurusTermRestService {
 		} catch (MissingResourceException e) {
 			throw new BusinessException("Error with property file - check values of term status", "check-values-of-term-status", e);
 		}
-		ExtJsonFormLoadData<List<ConceptAndTermStatusView>> result = new ExtJsonFormLoadData<List<ConceptAndTermStatusView>>(listOfStatus);
+		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());
 		return result;
 	}

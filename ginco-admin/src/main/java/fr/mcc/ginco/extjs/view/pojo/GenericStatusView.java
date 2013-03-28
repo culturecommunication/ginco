@@ -32,42 +32,30 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.extjs.view.pojo;
 
-/*
- * Thesaurus Note Store 
- * This file contains Thesaurus notes
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.io.Serializable;
+
+/**
+ * Class corresponding to the view of a status for a term, a concept or a thesaurus version
  */
-Ext.define('GincoApp.store.ThesaurusVersionStore', {
-	extend : 'Ext.data.Store',
-	requires : [ 'GincoApp.model.ThesaurusVersionModel' ],
-
-	constructor : function(cfg) {
-		var me = this;
-		cfg = cfg || {};
-		me.callParent([ Ext.apply({
-			// TODO : keep autoload false ?
-			autoLoad : false,
-			alias : 'store.thesaurusVersionStore',
-			model : 'GincoApp.model.ThesaurusVersionModel',
-			proxy : {
-				type : 'ajax',
-				api : {
-					read : 'services/ui/thesaurusversionservice/getVersions',
-					update : 'services/ui/thesaurusversionservice/updateVersions',
-					//create : 'services/ui/thesaurusversionservice/createVersion',
-					//destroy : 'services/ui/thesaurusversionservice/destroyVersion'
-				},
-				writer : {
-					type : 'json',
-					// A single version must be sent in an array
-					allowSingle : false
-				},
-				reader : {
-					type : 'json',
-					root : 'data',
-					idProperty : 'identifier'
-				}
-			}
-		}, cfg) ]);
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class GenericStatusView implements Serializable {
+    private Integer status;
+    private String statusLabel;
+    
+	public String getStatusLabel() {
+		return statusLabel;
 	}
-});
+	public void setStatusLabel(String statusLabel) {
+		this.statusLabel = statusLabel;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+}

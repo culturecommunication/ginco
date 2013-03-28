@@ -39,7 +39,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.ConceptAndTermStatusView;
+import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
@@ -289,8 +289,8 @@ public class ThesaurusConceptRestService {
 	@GET
 	@Path("/getAllConceptStatus")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<ConceptAndTermStatusView>> getAllConceptStatus() throws BusinessException {
-		List<ConceptAndTermStatusView> listOfStatus = new ArrayList<ConceptAndTermStatusView>();
+	public ExtJsonFormLoadData<List<GenericStatusView>> getAllConceptStatus() throws BusinessException {
+		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		
 		try {
 			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
@@ -302,7 +302,7 @@ public class ThesaurusConceptRestService {
 			}
 			
 	        for (String id : availableStatusIds) {
-	        	ConceptAndTermStatusView conceptStatusView = new ConceptAndTermStatusView();
+	        	GenericStatusView conceptStatusView = new GenericStatusView();
 	        	conceptStatusView.setStatus(Integer.valueOf(id));
 	        	
 	        	String label = res.getString("concept-status["+ id +"]");
@@ -317,7 +317,7 @@ public class ThesaurusConceptRestService {
 		} catch (MissingResourceException e) {
 			throw new BusinessException("Error with property file - check values of concept status", "check-values-of-concept-status", e);
 		}
-		ExtJsonFormLoadData<List<ConceptAndTermStatusView>> result = new ExtJsonFormLoadData<List<ConceptAndTermStatusView>>(listOfStatus);
+		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());
 		return result;
 	}

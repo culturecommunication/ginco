@@ -73,252 +73,256 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xExport_Skos : "Export SKOS",
 	xExport_Hierarchical : "Export text hierarchical",
 	xExport_Alphabetic : "Export text alphabetical",
-
 	xSave : "Save",
 	xCreateVersion : "Create version",
 	xDelete : "Delete",
 	xVersionsTab : 'Versions',
-
+	
 	initComponent : function() {
 		var me = this;
 
-		Ext.applyIf(me, {
-			title : me.xThesaurusTitle,
-
-			items : [ {
-				xtype : 'tabpanel',
-				flex : 1,
-				items : [ {
-					xtype : 'form',
-					title : me.xThesaurusTitle,
-					flex : 1,
-					autoScroll : true,
-					pollForChanges : true,
-					trackResetOnLoad : true,
-					defaults : {
-						anchor : '70%'
-					},
-					bbar : Ext.create('GincoApp.view.BottomFormToolbar'),
-					dockedItems : [ {
-						xtype : 'toolbar',
-						dock : 'top',
-						items : [ {
-							xtype : 'button',
-							disabled : true,
-							cls : 'newBtnMenu',
-							text : me.xNewLabel,
-							menu : {
-								xtype : 'menu',
-								width : 200,
-								items : [ {
-									xtype : 'keymenuitem',
-									text : me.xNewMenu_TermLabel,
-									itemId : 'newTermBtn',
-									cmdTxt : 'Ctrl+2'
-								}, {
-									xtype : 'keymenuitem',
-									text : me.xNewMenu_ConceptLabel,
-									itemId : 'newConceptBtn',
-									cmdTxt : 'Ctrl+3'
-								}, {
-									xtype : 'keymenuitem',
-									text : me.xNewMenu_ConceptArrayLabel,
-									itemId : 'newConceptArrayBtn',
-									cmdTxt : 'Ctrl+4'
-								}, {
-									xtype : 'keymenuitem',
-									text : me.xNewMenu_GroupLabel,
-									itemId : 'newConceptGroupBtn',
-									cmdTxt : 'Ctrl+5'
-								} ]
-							}
-						}, {
-							xtype : 'button',
-							text : me.xSave,
-							disabled : true,
-							formBind : true,
-							cls : 'save',
-							iconCls : 'icon-save'
-						}, {
-							xtype : 'button',
-							text : me.xCreateVersion,
-							disabled : true
-						}, {
-							xtype : 'button',
-							text : me.xDelete,
-							disabled : true,
-							cls : 'delete',
-							iconCls : 'icon-delete'
-						}, {
-							xtype : 'button',
-							disabled : true,
-							cls : 'exportsBtnMenu',
-							text : 'Exports',
-							iconCls : 'exports-icon',
-							menu : {
-								xtype : 'menu',
-								width : 200,
-								items : [ {
-									xtype : 'keymenuitem',
-									text : me.xExport_Skos,
-									disabled : true,
-									itemId : 'exportSKOS'
-								}, {
-									xtype : 'keymenuitem',
-									text : me.xExport_Hierarchical,
-									disabled : true,
-									itemId : 'exportHierarchical'
-								}, {
-									xtype : 'keymenuitem',
-									text : me.xExport_Alphabetic,
-									disabled : true,
-									itemId : 'exportAlphabetical'
-								} ]
-							}
-						}, ]
-					} ],
-					items : [ {
-						xtype : 'displayfield',
-						name : 'id',
-						fieldLabel : me.xIdentifierLabel
-					}, {
-						xtype : 'displayfield',
-						name : 'created',
-						fieldLabel : me.xCreatedDateLabel
-					}, {
-						xtype : 'displayfield',
-						name : 'date',
-						fieldLabel : me.xDateLabel
-					}, {
-						xtype : 'textfield',
-						name : 'title',
-						fieldLabel : me.xTitleLabel,
-						allowBlank : false
-					}, {
-						xtype : 'container',
-						layout : 'column',
-						defaults : {
-							margin : '0 50 5 0',
-							layout : 'anchor'
-						},
-						items : [ {
-							xtype : 'textfield',
-							name : 'creatorName',
-							columnWidth : 0.50,
-							fieldLabel : me.xServiceLabel
-						}, {
-							xtype : 'textfield',
-							name : 'creatorHomepage',
-							columnWidth : 0.50,
-							margin : '0 0 5 0',
-							fieldLabel : me.xUrlLabel,
-							labelWidth : 50,
-							vtype : 'url'
-						} ]
-					}, {
-						xtype : 'textareafield',
-						name : 'contributor',
-						fieldLabel : me.xContributorLabel,
-						grow : true
-					}, {
-						xtype : 'textfield',
-						name : 'publisher',
-						fieldLabel : me.xPublisherLabel,
-						value : me.xPublisherValue
-					}, {
-						xtype : 'textareafield',
-						name : 'rights',
-						fieldLabel : me.xRightsLabel,
-						allowBlank : false,
-						grow : true
-					}, {
-						xtype : 'textareafield',
-						name : 'description',
-						fieldLabel : me.xDescriptionLabel,
-						grow : true
-					}, {
-						xtype : 'textareafield',
-						name : 'coverage',
-						fieldLabel : me.xCoverageLabel,
-						grow : true
-					}, {
-						xtype : 'textareafield',
-						name : 'subject',
-						fieldLabel : me.xSubjectLabel,
-						grow : true
-					}, {
-						xtype : 'combobox',
-						name : 'type',
-						queryMode : 'local',
-						fieldLabel : me.xTypeLabel,
-						editable : false,
-						displayField : 'label',
-						valueField : 'identifier',
-						forceSelection : true,
-						multiSelect : false,
-						store : 'ThesaurusTypeStore'
-					}, {
-						xtype : 'combobox',
-						name : 'format',
-						fieldLabel : me.xFormatLabel,
-						editable : false,
-						displayField : 'label',
-						valueField : 'identifier',
-						forceSelection : true,
-						multiSelect : false,
-						store : 'ThesaurusFormatStore'
-					}, {
-						xtype : 'combobox',
-						name : 'languages',
-						fieldLabel : me.xLanguagesLabel,
-						editable : false,
-						displayField : 'refname',
-						valueField : 'id',
-						forceSelection : true,
-						multiSelect : true,
-						allowBlank : false,
-						store : 'ThesaurusLanguageStore'
-					}, {
-						xtype : 'checkbox',
-						name : 'defaultTopConcept',
-						fieldLabel : me.xdefaultTopConceptLabel,
-						displayField : 'defaultTopConcept'
-					}, {
-						xtype : 'htmleditor',
-						name : 'relation',
-						fieldLabel : me.xRelationLabel,
-						enableAlignments : false,
-						enableColors : false,
-						enableFont : false,
-						enableFontSize : false,
-						enableFormat : false,
-						enableLists : false,
-						enableSourceEdit : false,
-						iframeAttrTpl : 'title="' + me.xRelationLabel + '"',
-						inputAttrTpl : 'title="' + me.xRelationLabel + '"'
-					}, {
-						xtype : 'htmleditor',
-						name : 'source',
-						fieldLabel : me.xSourceLabel,
-						enableAlignments : false,
-						enableColors : false,
-						enableFont : false,
-						enableFontSize : false,
-						enableFormat : false,
-						enableLists : false,
-						enableSourceEdit : false,
-						iframeAttrTpl : 'title="' + me.xSourceLabel + '"',
-						inputAttrTpl : 'title="' + me.xSourceLabel + '"'
-					} ]
-				}, {
-					title : me.xVersionsTab,
-					itemId : 'versionTab',
-					xtype : 'thesaurusVersionPanel',
-					closable : false,
-					disabled :  true
-				} ]
-			} ]
-		});
+						Ext
+								.applyIf(
+										me,
+										{
+											title : me.xThesaurusTitle,
+											
+											items : [ {
+												xtype : 'tabpanel',
+											flex : 1,
+											items : [ {
+												xtype : 'form',
+												title : me.xThesaurusTabTitle,
+												flex : 1,
+												autoScroll : true,
+												pollForChanges : true,
+												trackResetOnLoad : true,
+												defaults : {
+													anchor : '70%',
+												},
+												bbar : Ext.create('GincoApp.view.BottomFormToolbar'),
+												dockedItems : [ {
+													xtype : 'toolbar',
+													dock : 'top',
+													items : [{
+													xtype : 'button',
+													disabled : true,
+													cls : 'newBtnMenu',
+													text : me.xNewLabel,
+													menu : {
+															xtype : 'menu',
+															width : 200,
+															items : [ {
+																xtype : 'keymenuitem',
+																text : me.xNewMenu_TermLabel,
+																itemId : 'newTermBtn',
+																cmdTxt : 'Ctrl+2'
+													},{
+																xtype : 'keymenuitem',
+																text : me.xNewMenu_ConceptLabel,
+																itemId : 'newConceptBtn',
+																cmdTxt : 'Ctrl+3'
+													},{
+																xtype : 'keymenuitem',
+																text : me.xNewMenu_ConceptArrayLabel,
+																itemId : 'newConceptArrayBtn',
+																cmdTxt : 'Ctrl+4'
+													},{
+																xtype : 'keymenuitem',
+																text : me.xNewMenu_GroupLabel,
+																itemId : 'newConceptGroupBtn',
+																cmdTxt : 'Ctrl+5'
+													}]
+												}
+												},{
+														xtype : 'button',
+														text : me.xSave,
+														disabled : true,
+														formBind : true,
+														cls : 'save',
+														itemId : 'saveThesaurus',
+														iconCls : 'icon-save'
+												},{
+														xtype : 'button',
+														text : me.xCreateVersion,
+														disabled : true
+												},{
+							                            xtype : 'button',
+							                            text : me.xDelete,
+							                            disabled : true,
+							                            cls : 'delete',
+							                            itemId : '#deleteThesaurus',
+							                            iconCls : 'icon-delete'
+							                    },{
+							                            xtype : 'button',
+							                            disabled : true,
+							                            cls : 'exportsBtnMenu',
+							                            text : 'Exports',
+							                            iconCls : 'exports-icon',
+							                            menu : {
+							                                 xtype : 'menu',
+							                                 width : 200,
+							                                 items : [ {
+							                                     xtype : 'keymenuitem',
+							                                     text : me.xExport_Skos,
+							                                     disabled : true,
+							                                     itemId : 'exportSKOS'
+							                    },{
+							                             xtype : 'keymenuitem',
+							                             text : me.xExport_Hierarchical,
+							                             disabled : true,
+							                             itemId : 'exportHierarchical'
+							                    },{
+							                             xtype : 'keymenuitem',
+							                             text : me.xExport_Alphabetic,
+							                             disabled : true,
+							                             itemId : 'exportAlphabetical'
+							                    }]
+							                }
+							              } ]
+									} ],
+										items : [{
+											xtype : 'displayfield',
+											name : 'id',
+											fieldLabel : me.xIdentifierLabel
+										},{
+											xtype : 'displayfield',
+											name : 'created',
+											fieldLabel : me.xCreatedDateLabel
+										},{
+											xtype : 'displayfield',
+											name : 'date',
+											fieldLabel : me.xDateLabel
+										},{
+											xtype : 'textfield',
+											name : 'title',
+											fieldLabel : me.xTitleLabel,
+											allowBlank : false
+										},{
+											xtype : 'container',
+											layout : 'column',
+											defaults : {
+												margin : '0 50 5 0',
+												layout : 'anchor'
+											},
+											items : [{
+												xtype : 'textfield',
+												name : 'creatorName',
+												columnWidth : 0.50,
+												fieldLabel : me.xServiceLabel
+											},{
+												xtype : 'textfield',
+												name : 'creatorHomepage',
+												columnWidth : 0.50,
+												margin : '0 0 5 0',
+												fieldLabel : me.xUrlLabel,
+												labelWidth : 50,
+												vtype : 'url'
+											} ]
+										},{
+												xtype : 'textareafield',
+												name : 'contributor',
+												fieldLabel : me.xContributorLabel,
+												grow : true
+										},{
+												xtype : 'textfield',
+												name : 'publisher',
+												fieldLabel : me.xPublisherLabel,
+												value : me.xPublisherValue
+										},{
+												xtype : 'textareafield',
+												name : 'rights',
+												fieldLabel : me.xRightsLabel,
+												allowBlank : false,
+												grow : true
+										},{
+												xtype : 'textareafield',
+												name : 'description',
+												fieldLabel : me.xDescriptionLabel,
+												grow : true
+										},{
+												xtype : 'textareafield',
+												name : 'coverage',
+												fieldLabel : me.xCoverageLabel,
+												grow : true
+										},{
+												xtype : 'textareafield',
+												name : 'subject',
+												fieldLabel : me.xSubjectLabel,
+												grow : true
+										},{
+												xtype : 'combobox',
+												name : 'type',
+												queryMode : 'local',
+												fieldLabel : me.xTypeLabel,
+												editable : false,
+												displayField : 'label',
+												valueField : 'identifier',
+												forceSelection : true,
+												multiSelect : false,
+												store : 'ThesaurusTypeStore'
+										},{
+												xtype : 'combobox',
+												name : 'format',
+												fieldLabel : me.xFormatLabel,
+												editable : false,
+												displayField : 'label',
+												valueField : 'identifier',
+												forceSelection : true,
+												multiSelect : false,
+												store : 'ThesaurusFormatStore'
+										},{
+												xtype : 'combobox',
+												name : 'languages',
+												fieldLabel : me.xLanguagesLabel,
+												editable : false,
+												displayField : 'refname',
+												valueField : 'id',
+												forceSelection : true,
+												multiSelect : true,
+												allowBlank : false,
+												store : 'ThesaurusLanguageStore'
+										},{
+												xtype : 'checkbox',
+												name : 'defaultTopConcept',
+												fieldLabel : me.xdefaultTopConceptLabel,
+												displayField : 'defaultTopConcept'
+										},{
+												xtype : 'htmleditor',
+												name : 'relation',
+												fieldLabel : me.xRelationLabel,
+												enableAlignments : false,
+												enableColors : false,
+												enableFont : false,
+												enableFontSize : false,
+												enableFormat : false,
+												enableLists : false,
+												enableSourceEdit : false,
+												iframeAttrTpl : 'title="'+me.xRelationLabel+'"',
+												inputAttrTpl : 'title="'+me.xRelationLabel+'"'
+										},{
+												xtype : 'htmleditor',
+												name : 'source',
+												fieldLabel : me.xSourceLabel,
+												enableAlignments : false,
+												enableColors : false,
+												enableFont : false,
+												enableFontSize : false,
+												enableFormat : false,
+												enableLists : false,
+												enableSourceEdit : false,
+												iframeAttrTpl : 'title="'+me.xSourceLabel+'"',
+												inputAttrTpl : 'title="'+me.xSourceLabel+'"'
+											} ]
+										}, {
+												title : me.xVersionsTab,
+												itemId : 'versionTab',
+												xtype : 'thesaurusVersionPanel',
+												closable : false,
+												disabled :  true
+											}]
+										}]
+									});
 
 		me.callParent(arguments);
 	}

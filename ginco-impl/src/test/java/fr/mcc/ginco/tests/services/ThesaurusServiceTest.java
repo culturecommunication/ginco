@@ -51,10 +51,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.ark.CustomGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ThesaurusServiceImpl;
 import fr.mcc.ginco.tests.LoggerTestUtil;
@@ -63,6 +65,12 @@ public class ThesaurusServiceTest {
 
 	@Mock(name = "thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
+	
+	@Mock(name = "thesaurusVersionHistoryDAO")
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
+
+	@Mock(name = "generatorService")
+	private CustomGeneratorService generatorService;
 
 	@InjectMocks
 	private ThesaurusServiceImpl thesaurusService;
@@ -87,6 +95,7 @@ public class ThesaurusServiceTest {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);
+		//when(generatorService.generate()).thenReturn(mockThesaurus.getIdentifier());
 		Thesaurus thesaurusRes = thesaurusService.updateThesaurus(
 				mockThesaurus);
 		Assert.assertNotNull("Error while creating Thesaurus", thesaurusRes);
