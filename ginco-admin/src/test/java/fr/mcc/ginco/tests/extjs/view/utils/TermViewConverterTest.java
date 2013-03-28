@@ -123,6 +123,23 @@ public class TermViewConverterTest {
 		Assert.assertEquals("fakeConcept", actualterm.getConcept().getIdentifier());
 		Assert.assertEquals("TA", actualterm.getRole().getCode());
 	}
+	
+	@Test
+	public void testConvertExistingThesaurusTermNoConcept() throws BusinessException {		
+		ThesaurusTermView view = buildThesaurusTermView("view1");		
+		
+		ThesaurusTerm termFromDB = new ThesaurusTerm();		
+		when(thesaurusTermService
+				.getThesaurusTermById(Mockito.anyString())).thenReturn(termFromDB);
+		
+		ThesaurusTerm actualterm = converter.convert(view, false);
+
+
+		Assert.assertNull(actualterm.getPrefered());
+		Assert.assertNull(actualterm.getHidden());
+		Assert.assertNull(actualterm.getConcept());
+		Assert.assertNull(actualterm.getRole());
+	}
 
 	private ThesaurusTermView buildThesaurusTermView(String id) {
 		ThesaurusTermView fakeTermView = new ThesaurusTermView();
