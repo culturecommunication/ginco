@@ -122,7 +122,7 @@ public class ThesaurusVersionRestService {
 			
 	        for (String id : availableStatusIds) {
 	        	GenericStatusView versionStatusView = new GenericStatusView();
-	        	versionStatusView.setStatusCode(Integer.valueOf(id));
+	        	versionStatusView.setStatus(Integer.valueOf(id));
 	        	
 	        	String label = res.getString("version-status["+ id +"]");
 	        	if (label.isEmpty()) {

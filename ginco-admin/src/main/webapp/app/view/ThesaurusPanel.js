@@ -74,7 +74,6 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xExport_Hierarchical : "Export text hierarchical",
 	xExport_Alphabetic : "Export text alphabetical",
 	xSave : "Save",
-	xCreateVersion : "Create version",
 	xDelete : "Delete",
 	xVersionsTab : 'Versions',
 	
@@ -143,15 +142,11 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 														itemId : 'saveThesaurus',
 														iconCls : 'icon-save'
 												},{
-														xtype : 'button',
-														text : me.xCreateVersion,
-														disabled : true
-												},{
 							                            xtype : 'button',
 							                            text : me.xDelete,
 							                            disabled : true,
 							                            cls : 'delete',
-							                            itemId : '#deleteThesaurus',
+							                            itemId : 'deleteThesaurus',
 							                            iconCls : 'icon-delete'
 							                    },{
 							                            xtype : 'button',

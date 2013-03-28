@@ -43,7 +43,7 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class GenericStatusView implements Serializable {
-    private Integer statusCode;
+    private Integer status;
     private String statusLabel;
     
 	public String getStatusLabel() {
@@ -52,10 +52,10 @@ public class GenericStatusView implements Serializable {
 	public void setStatusLabel(String statusLabel) {
 		this.statusLabel = statusLabel;
 	}
-	public Integer getStatusCode() {
-		return statusCode;
+	public Integer getStatus() {
+		return status;
 	}
-	public void setStatusCode(Integer status) {
-		this.statusCode = status;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 }

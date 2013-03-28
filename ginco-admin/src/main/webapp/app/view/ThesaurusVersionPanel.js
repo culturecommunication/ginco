@@ -48,6 +48,7 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 	xVersionNote : 'Version note',
 	xVersionStatus : 'Statut',
 	xThisVersion : 'This version',
+	xCreateThesaurusVersion : "Create version",
 
 	initComponent : function() {
 		
@@ -76,7 +77,11 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 						iconCls : 'icon-save',
 						itemId : 'saveThesaurusVersion',
 						disabled : true
-					} ]
+					},{
+						xtype : 'button',
+						itemId : 'createThesaurusVersion',
+						text : me.xCreateThesaurusVersion
+				} ]
 				} ],
 				items : [ {
 					xtype : 'gridpanel',
@@ -114,7 +119,7 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 									lazyRender : true,
 									listClass : 'x-combo-list-small',
 									displayField : 'statusLabel',
-									valueField : 'statusCode'
+									valueField : 'status'
 								})
 					},{
 			            xtype: 'checkcolumn',

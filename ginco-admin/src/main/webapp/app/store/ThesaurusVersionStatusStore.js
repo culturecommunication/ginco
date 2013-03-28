@@ -57,7 +57,7 @@ Ext.define('GincoApp.store.ThesaurusVersionStatusStore', {
             },
             fields: [
                 {
-                    name: 'statusCode',
+                    name: 'status',
                     type: 'int'
                 },
                 {

@@ -81,6 +81,16 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 	onThisVersionCheckBoxClick : function(theButton) {
 		theButton.up('form').down('button[itemId=saveThesaurusVersion]').setDisabled(false);
 	},
+	
+	createThesaurusVersion : function(theButton) {
+			var me = this;
+			var thePanel = theButton.up('form');
+			var win = Ext.create('GincoApp.view.CreateVersionWin');
+			//win.thesaurusData = thePanel.thesaurusData;
+			var theGrid = theButton.up('form').down('#versionGrid');
+			win.store = theGrid.getStore();
+			win.show();
+	},
 
 	init : function() {
 		this.control({
@@ -93,6 +103,9 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 			},
 			'thesaurusVersionPanel #thisVersionCheckbox' : {
 				click : this.onThisVersionCheckBoxClick
+			},
+			'thesaurusVersionPanel #createThesaurusVersion' : {
+				click : this.createThesaurusVersion
 			}
 		});
 	}

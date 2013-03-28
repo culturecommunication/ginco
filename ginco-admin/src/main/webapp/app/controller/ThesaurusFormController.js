@@ -204,13 +204,13 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	},
 	init : function(application) {
 		this.control({
-			'thesaurusPanel form' : {
+			"thesaurusPanel form" : {
 				afterrender : this.loadPanel
 			},
-			'thesaurusPanel #saveThesaurus' : {
+			"thesaurusPanel #saveThesaurus" : {
 				click : this.saveForm
 			},
-            'thesaurusPanel #deleteThesaurus' : {
+            "thesaurusPanel #deleteThesaurus" : {
                 click : this.deleteThesaurus
             },
 			"thesaurusPanel #newTermBtn" : {

@@ -70,7 +70,6 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
         xExport_Alphabetic : "Export texte alphabétique",
 
         xSave : "Enregistrer",
-        xCreateVersion : "Créer version",
         xDelete : "Supprimer",
         xVersionsTab : 'Versions'
 });
