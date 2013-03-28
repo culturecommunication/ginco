@@ -151,7 +151,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     @Override
     public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId){
     	return thesaurusTermDAO
-    			.getTermByLexicalValueThesaurusIdLanguage(lexicalValue, thesaurusId, languageId)
+    			.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId)
     			.getConcept().getIdentifier();
     }
 }

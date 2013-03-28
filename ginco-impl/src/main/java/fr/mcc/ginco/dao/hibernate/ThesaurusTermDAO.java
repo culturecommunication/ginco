@@ -172,7 +172,7 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
-	public ThesaurusTerm getTermByLexicalValueThesaurusIdLanguage(String lexicalValue, String thesaurusId, String languageId){
+	public ThesaurusTerm getTermByLexicalValueThesaurusIdLanguageId(String lexicalValue, String thesaurusId, String languageId){
 		return (ThesaurusTerm) getCurrentSession().createCriteria(ThesaurusTerm.class)
 		.add(Restrictions.eq("lexicalValue", lexicalValue))
 		.add(Restrictions.eq("thesaurus.identifier", thesaurusId))

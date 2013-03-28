@@ -129,10 +129,10 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * 
 	 * @param  lexical value of the term,
 	 * @param  thesaurus identifier of the term,
-	 * @param  language of the term
+	 * @param  language identifier of the term
 	 * 
 	 * @return identifier of a concept
 	 */
-	ThesaurusTerm getTermByLexicalValueThesaurusIdLanguage(String lexicalValue, String thesaurusId, String languageId);
+	ThesaurusTerm getTermByLexicalValueThesaurusIdLanguageId(String lexicalValue, String thesaurusId, String languageId);
 
 }

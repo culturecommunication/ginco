@@ -132,7 +132,7 @@ public interface IThesaurusTermService {
 	 * 
 	 * @param  lexical value of the term,@param
 	 * @param  thesaurus identifier of the term,
-	 * @param  language of the term
+	 * @param  language identifier of the term
 	 * 
 	 * @return identifier of a concept
 	 */
