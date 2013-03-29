@@ -30,6 +30,10 @@
 		<property name="removeAbandoned" value="true" />
 		<property name="removeAbandonedTimeout" value="300" />
 	</bean>	
+	
+	<bean id="solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+     	<constructor-arg index="0" value="${solr.url}" />
+	</bean>
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
