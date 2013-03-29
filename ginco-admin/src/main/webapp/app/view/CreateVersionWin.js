@@ -64,7 +64,7 @@ Ext
 														text : me.xSave,
 														formBind : true,
 														itemId : 'saveVersionPopup',
-														iconCls : 'icon-save',
+														iconCls : 'icon-add',
 														handler : function(
 																theButton) {
 															me
@@ -92,7 +92,8 @@ Ext
 															hidden : true
 														},
 														{
-															xtype : 'textfield',
+															xtype : 'textareafield',
+															grow : true,
 															name : 'versionNote',
 															fieldLabel : me.xVersionNoteLabel,
 															margin : '10 0 10 0',

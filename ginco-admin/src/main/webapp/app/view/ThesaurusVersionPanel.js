@@ -49,6 +49,12 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 	xVersionStatus : 'Statut',
 	xThisVersion : 'This version',
 	xCreateThesaurusVersion : "Create version",
+	xStatusLabels : ['Project','Validated','Published','Deprecated','Prohibited'],
+	
+	statusRenderer : function(value,record)
+	{
+		return this.ownerCt.ownerCt.xStatusLabels[value];
+	},
 
 	initComponent : function() {
 		
@@ -65,8 +71,11 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 		Ext.applyIf(me, {
 			items : [ {
 				xtype : 'form',
+				layout : {
+					type : 'vbox',
+					align : 'stretch'
+				},
 				flex : 1,
-				autoScroll : true,
 				dockedItems : [ {
 					xtype : 'toolbar',
 					dock : 'top',
@@ -84,8 +93,9 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 				} ]
 				} ],
 				items : [ {
+					flex : 1,
+					autoscroll : true,
 					xtype : 'gridpanel',
-			        height: 400,
 					plugins : [ rowEditing ],
 					
 					itemId : 'versionGrid',
@@ -94,22 +104,25 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 
 					columns : [ {
 						dataIndex : 'identifier',
-						flex : 1,
+						hidden:true,
 						text : me.xIdentifierLabel
 					}, {
 						dataIndex : 'date',
-						text : me.xVersionDate
+						text : me.xVersionDate,
+						width: 150
 					}, {
 						dataIndex : 'versionNote',
 						text : me.xVersionNote,
 						flex : 1,
 						editor: {
-							//no xtype because default is texfield
-						}
+			                xtype: 'textfield',
+			                allowBlank: false
+			            }
 					}, {
 						dataIndex : 'status',
 						text : me.xVersionStatus,
 						stopSelection : false,
+						renderer : me.statusRenderer,
 						editor : new Ext.form.field.ComboBox(
 								{
 									typeAhead : true,

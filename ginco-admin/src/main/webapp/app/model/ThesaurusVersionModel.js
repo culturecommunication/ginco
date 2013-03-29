@@ -55,7 +55,8 @@ Ext.define('GincoApp.model.ThesaurusVersionModel', {
         },
         {
             name: 'thisVersion',
-            type: 'boolean'
+            type: 'boolean',
+            defaultValue: true
         },
         {
             name: 'thesaurusId',

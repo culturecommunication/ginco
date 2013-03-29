@@ -313,5 +313,14 @@ Ext.onReady(function() {
         override: "Ext.form.RadioGroup",
         blankText: "Vous devez sélectionner au moins un élément dans ce groupe"
     });
+    
+    //GINCO Specifics
+    Ext.define("Ext.locale.fr.grid.RowEditor", {
+        override: "Ext.grid.RowEditor",
+        saveBtnText  : 'Mise à jour',
+        cancelBtnText: 'Annuler',
+        errorsText: 'Erreurs',
+        dirtyText: 'Vous devez enregistrer ou annuler vos changements',
+    });
 
 });
