@@ -42,6 +42,7 @@
             <bean class="fr.mcc.ginco.rest.services.ThesaurusVersionRestService" />
             <bean class="fr.mcc.ginco.rest.services.ExportRestService" />
             <bean class="fr.mcc.ginco.rest.services.ImportRestService" />
+            <bean class="fr.mcc.ginco.rest.services.IndexerRestService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />

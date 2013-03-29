@@ -32,55 +32,65 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.rest.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.solr.SearchResult;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.solr.client.solrj.SolrServerException;
+import org.springframework.stereotype.Service;
 
-public interface IIndexerService {
+import fr.mcc.ginco.beans.NoteType;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.solr.SearchResult;
 
-    /**
-     * Deletes all data from SOLR and reindex everything.
-     */
-    void forceIndexing() throws TechnicalException;
+/**
+ * Base REST service intended to be used for getting tree of {@link Thesaurus},
+ * and its children.
+ */
+@Service
+@Path("/indexerservice")
+public class IndexerRestService {
+   
+	@Inject
+    @Named("indexerService")
+    private IIndexerService indexerService;
 
-    /**
-     * Takes an ThesaurusTerm and adds it to index.
-     *
-     * @param thesaurusTerm Updated/created thesaurusTerm to save to index.
-     * @return The number of documents added to solr.
-     * @throws TechnicalException
-     */
-    void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
+    @GET
+    @Path("/reindex")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response forceIndexation() throws BusinessException, TechnicalException {
+        indexerService.forceIndexing();
+        return Response.status(Response.Status.OK)
+                .entity("{success:true, message: 'Indexing started!'}")
+                .build();
+    }
 
-    /**
-     * Takes an ThesaurusConcept and adds it to index with prefLabel
-     * as lexicalValue.
-     *
-     * @param thesaurusConcept Updated/created thesaurusConcept to save to index.
-     * @return The number of documents added to solr.
-     * @throws TechnicalException
-     */
-    void addConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
+    @GET
+    @Path("/search")
+    @Produces({MediaType.APPLICATION_JSON})
+    public  ExtJsonFormLoadData<List<SearchResult>> search(@QueryParam("query") String query) {
+        try {
+        	List<SearchResult> searchResults  = indexerService.search(query);
+        	ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
+        	extSearchResults.setTotal((long) searchResults.size());
+			return extSearchResults;
+		} catch (SolrServerException e) {
+			throw new TechnicalException("Search exception" , e) ;
+		}
 
-    /**
-     * Remove Term from search index.
-     * @param thesaurusTerm
-     * @throws TechnicalException
-     */
-    void removeTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
-
-    /**
-     * Remove Concept from search index.
-     * @param thesaurusConcept
-     * @throws TechnicalException
-     */
-    void removeConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
-
-    List<SearchResult> search(String request) throws SolrServerException;
+    }
 }

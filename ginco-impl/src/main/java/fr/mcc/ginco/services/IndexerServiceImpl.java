@@ -45,6 +45,7 @@ import javax.inject.Named;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -59,7 +60,13 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SolrField;
 
+/**
+ * @author hufon
+ *
+ */
 @Service("indexerService")
 public class IndexerServiceImpl implements IIndexerService {
 
@@ -91,7 +98,6 @@ public class IndexerServiceImpl implements IIndexerService {
             logger.warn("Solr seems to be not launched!");
             return;
         }
-
         try {
             solrCore.deleteById(thesaurusTerm.getIdentifier());
         } catch (SolrServerException e) {
@@ -100,46 +106,43 @@ public class IndexerServiceImpl implements IIndexerService {
             throw new TechnicalException("IO error during executing query for removing Term from index!", e);
         }
     }
-
-    @Override
-    public String search(String request) throws SolrServerException {
-
-        HttpSolrServer solrCore;
-
-        try {
-            solrCore = new HttpSolrServer(url);
-        } catch (RuntimeException ex) {
-            logger.warn("Solr seems to be not launched!");
-            return null;
-        }
-
-        ModifiableSolrParams params = new ModifiableSolrParams();
-        params.set("q", "text:"+request);
-        params.set("start", "0");
-
-        QueryResponse response = solrCore.query(params);
-        SolrDocumentList results = response.getResults();
-
-        String result = "";
-
-        for (int i = 0; i < results.size(); ++i) {
-            result = result.concat(results.get(i).getFieldValue("identifier").toString()).concat("\r\n");
-        }
-
-        return result;
+    
+    private SearchResult getSearchResult(SolrDocument doc)
+    {
+    	SearchResult result = new SearchResult();
+    	result.setIdentifier(doc.getFieldValue(SolrField.IDENTIFIER).toString());
+    	result.setLexicalValue(doc.getFieldValue(SolrField.LEXICALVALUE).toString());
+    	result.setType(doc.getFieldValue(SolrField.TYPE).toString());
+    	result.setThesaurusId(doc.getFieldValue(SolrField.THESAURUSID).toString());
+    	return result;
     }
 
     @Override
-    public void removeConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException {
-        HttpSolrServer solrCore;
+    public List<SearchResult> search(String request) throws SolrServerException {
 
-        try {
-            solrCore = new HttpSolrServer(url);
-        } catch (RuntimeException ex) {
-            logger.warn("Solr seems to be not launched!");
-            return;
+    	List<SearchResult> results = new ArrayList<SearchResult>();
+        HttpSolrServer solrCore = getSolrInstance();
+        ModifiableSolrParams params = new ModifiableSolrParams();
+        params.set("defType", "edismax");
+        params.set("qf", SolrField.LEXICALVALUE+"^1.0 "+SolrField.NOTES+"^0.5");
+        params.set("fl", "*,score");
+        params.set("sort","score desc");
+        params.set("q", request);
+        params.set("start", "0");
+
+        QueryResponse response = solrCore.query(params);
+        SolrDocumentList solrresults = response.getResults();
+
+        for (int i = 0; i < solrresults.size(); ++i) {
+        	results.add(getSearchResult(solrresults.get(i)));
         }
+        return results;
+    }
 
+    @Override
+    @Async
+    public void removeConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException {
+        HttpSolrServer solrCore = getSolrInstance();
         try {
             solrCore.deleteById(thesaurusConcept.getIdentifier());
         } catch (SolrServerException e) {
@@ -148,81 +151,63 @@ public class IndexerServiceImpl implements IIndexerService {
             throw new TechnicalException("IO error during executing query for removing Concept from index!", e);
         }
     }
+    
+    private SolrInputDocument convertConcept(ThesaurusConcept thesaurusConcept)
+    {
+    	SolrInputDocument doc = new SolrInputDocument();
+        doc.addField(SolrField.THESAURUSID, thesaurusConcept.getThesaurusId());
+        doc.addField(SolrField.IDENTIFIER, thesaurusConcept.getIdentifier());
+        doc.addField(SolrField.TYPE, ThesaurusConcept.class.getSimpleName());
+        String prefLabel;
+        try {
+            prefLabel = thesaurusConceptService.getConceptPreferredTerm(thesaurusConcept.getIdentifier())
+                    .getLexicalValue();
+        } catch (BusinessException ex) {
+            logger.warn(ex.getMessage());
+            return null;
+        }
+        doc.addField(SolrField.LEXICALVALUE, prefLabel);
+        List<Note> notes = noteService.getConceptNotePaginatedList(thesaurusConcept.getIdentifier(), 0, 0);
+        for(Note note : notes ) {
+        	doc.addField(SolrField.NOTES, note.getLexicalValue());
+        }
+        return doc;
+    }
 
     @Override
+    @Async
     public void addConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException {
         addConcepts(Arrays.asList(thesaurusConcept), null);
     }
 
     private void addConcepts(List<ThesaurusConcept> thesaurusConcepts, HttpSolrServer server) throws TechnicalException {
-
         HttpSolrServer solrCore = server;
-
         if(solrCore == null) {
-            try {
-                solrCore = new HttpSolrServer(url);
-            } catch (RuntimeException ex) {
-                logger.warn("Solr seems to be not launched!");
-                return;
-            }
+        	solrCore = getSolrInstance();
         }
-
-        List<SolrInputDocument> concepts = new ArrayList<SolrInputDocument>();
         for(ThesaurusConcept concept : thesaurusConcepts) {
-
-            SolrInputDocument doc = new SolrInputDocument();
-            doc.addField("thesaurusId", concept.getThesaurusId());
-            doc.addField("identifier", concept.getIdentifier());
-
-            String prefLabel;
-
-            try {
-                prefLabel = thesaurusConceptService.getConceptPreferredTerm(concept.getIdentifier())
-                        .getLexicalValue();
-            } catch (BusinessException ex) {
-                logger.warn(ex.getMessage());
-                continue;
-            }
-            doc.addField("lexicalValue", prefLabel);
-
-            List<String> notes = new ArrayList<String>();
-
-            for(Note note : noteService.getConceptNotePaginatedList(concept.getIdentifier(), 0, 0)) {
-                notes.add(note.getLexicalValue());
-            }
-
-            if(!notes.isEmpty()) {
-                doc.addField("notes", notes);
-            }
-
-            concepts.add(doc);
+        	SolrInputDocument doc = convertConcept(concept);
+        	if (doc!=null) {
+        		try {
+					solrCore.add(doc);
+				} catch (SolrServerException e) {
+					throw new TechnicalException("Error during adding to SOLR!", e);
+				} catch (IOException e) {
+					throw new TechnicalException("IO error!", e);
+				}
+        	}
         }
 
         try {
-            if(!concepts.isEmpty()) {
-                solrCore.add(concepts);
                 solrCore.commit();
-            }
         } catch (SolrServerException e) {
             throw new TechnicalException("Error during adding to SOLR!", e);
         } catch (IOException e) {
             throw new TechnicalException("IO error!", e);
         }
     }
-
-    @Override
-    public void forceIndexing() throws TechnicalException{
-
-        HttpSolrServer solrCore;
-
-        try {
-            solrCore = new HttpSolrServer(url);
-        } catch (RuntimeException ex) {
-            logger.warn("Solr seems to be not launched!");
-            return;
-        }
-
-
+    
+    private void removeAllIndex(HttpSolrServer solrCore) {
         try {
             solrCore.deleteByQuery("*:*");
             solrCore.commit();
@@ -231,6 +216,34 @@ public class IndexerServiceImpl implements IIndexerService {
         } catch (IOException e) {
             throw new TechnicalException("IO error during executing query for clearing SOLR index!", e);
         }
+    }
+    
+    private HttpSolrServer getSolrInstance() throws TechnicalException
+    {
+    	HttpSolrServer solrCore = null;
+        try {
+            solrCore = new HttpSolrServer(url);
+        } catch (RuntimeException ex) {
+            logger.warn("Solr seems to be not launched!");
+            throw new TechnicalException("Cannot instanciate HttpSolrServer",ex);
+            
+        }
+        return solrCore;
+    }
+
+    @Override
+    public void forceIndexing() throws TechnicalException{
+
+    	HttpSolrServer solrCore = getSolrInstance();
+        try {
+            solrCore.deleteByQuery("*:*");
+            solrCore.commit();
+        } catch (SolrServerException e) {
+            throw new TechnicalException("Error executing query for clearing SOLR index!", e);
+        } catch (IOException e) {
+            throw new TechnicalException("IO error during executing query for clearing SOLR index!", e);
+        }
+        removeAllIndex(solrCore);
 
         addConcepts(thesaurusConceptService.getAllConcepts(), solrCore);
         addTerms(thesaurusTermService.getAllTerms(), solrCore);
@@ -244,48 +257,42 @@ public class IndexerServiceImpl implements IIndexerService {
     	} catch (TechnicalException ex)
     	{
     		logger.error(ex.getMessage(),ex.getCause().getMessage());
+    		throw ex;
     	}
+    }
+    
+    /**
+     * Convert a Thesaurus Term into a SolrDocument
+     * 
+     * @param thesaurusTerm
+     * @return SolrInputDocument
+     */
+    private SolrInputDocument convertTerm(ThesaurusTerm thesaurusTerm)
+    {
+    	SolrInputDocument doc = new SolrInputDocument();
+        doc.addField(SolrField.THESAURUSID, thesaurusTerm.getThesaurusId());
+        doc.addField(SolrField.IDENTIFIER, thesaurusTerm.getIdentifier());
+        doc.addField(SolrField.LEXICALVALUE, thesaurusTerm.getLexicalValue());
+        doc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
+        List<Note> notes = noteService.getTermNotePaginatedList(thesaurusTerm.getIdentifier(), 0, 0);
+        for(Note note : notes ) {
+        	 doc.addField(SolrField.NOTES, note.getLexicalValue());
+        }
+        return doc;
     }
 
     private void addTerms(List<ThesaurusTerm> thesaurusTerms, HttpSolrServer server) {
 
         HttpSolrServer solrCore = server;
-
         if(solrCore == null) {
-            try {
-                solrCore = new HttpSolrServer(url);
-            } catch (RuntimeException ex) {
-                logger.warn("Solr seems to be not launched!");
-                return;
-            }
+        	solrCore = getSolrInstance();
         }
-
-        List<SolrInputDocument> terms = new ArrayList<SolrInputDocument>();
-        for(ThesaurusTerm term : thesaurusTerms) {
-            SolrInputDocument doc = new SolrInputDocument();
-            doc.addField("thesaurusId", term.getThesaurusId());
-            doc.addField("identifier", term.getIdentifier());
-            doc.addField("lexicalValue", term.getLexicalValue());
-            doc.addField("type", ThesaurusTerm.class.getSimpleName());
-
-            List<String> notes = new ArrayList<String>();
-
-            for(Note note : noteService.getTermNotePaginatedList(term.getIdentifier(), 0, 0)) {
-                notes.add(note.getLexicalValue());
-            }
-
-            if(!notes.isEmpty()) {
-                doc.addField("notes", notes);
-            }
-
-            terms.add(doc);
-        }
-
         try {
-            if(!terms.isEmpty()) {
-                solrCore.add(terms);
-                solrCore.commit();
-            }
+	        for(ThesaurusTerm term : thesaurusTerms) {
+	        	SolrInputDocument doc = convertTerm(term);
+	        	solrCore.add(doc);
+	        }
+            solrCore.commit();
         } catch (SolrServerException e) {
             throw new TechnicalException("Error during adding to SOLR!", e);
         } catch (IOException e) {
