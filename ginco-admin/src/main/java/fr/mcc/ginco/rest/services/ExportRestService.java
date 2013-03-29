@@ -34,14 +34,12 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.IExportService;
-import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.EncodedControl;
-import org.springframework.stereotype.Service;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,12 +48,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-import java.util.ResourceBundle;
+
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.IExportService;
+import fr.mcc.ginco.exports.ISKOSExportService;
+import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.EncodedControl;
 
 /**
  * REST service to get exported objects.
@@ -67,6 +70,12 @@ public class ExportRestService {
     @Inject
     @Named("exportService")
     private IExportService exportService;
+    
+    
+    @Inject
+    @Named("skosExportService")
+    private ISKOSExportService skosExportService;
+
 
     private static final String TABULATION_DELIMITER = "\t";
 
@@ -107,7 +116,7 @@ public class ExportRestService {
     @Produces("text/plain")
     public Response getSKOS(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
-        File results = exportService.getSKOSExport(targetThesaurus);
+        File results = skosExportService.getSKOSExport(targetThesaurus);
 
         Response.ResponseBuilder response = Response.ok(results);
         response.header("Content-Disposition",

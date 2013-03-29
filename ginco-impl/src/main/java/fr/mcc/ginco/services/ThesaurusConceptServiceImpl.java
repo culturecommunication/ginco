@@ -473,4 +473,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		}
 		return allChildren;
 	}
+    
+    @Override
+    public String getConceptTitle(ThesaurusConcept concept) {
+		return getConceptPreferredTerm(concept.getIdentifier()).getLexicalValue();
+	}
+	
+    @Override
+	public String getConceptTitleLanguage(ThesaurusConcept concept) {
+	        return getConceptPreferredTerm(concept.getIdentifier()).getLanguage().getPart1();
+	}
 }

@@ -92,7 +92,7 @@ public interface IThesaurusConceptService {
 			throws BusinessException;
 
 	/**
-	 * Gets the label of a concept
+	 * Gets the label of a concept with title@lang notation
 	 * 
 	 * @param conceptId
 	 * @return
@@ -205,4 +205,19 @@ public interface IThesaurusConceptService {
      * @return list of all existing concepts.
      */
     List<ThesaurusConcept> getAllConcepts();
+    
+    /**
+     * Return the lexical value of this concept preferred term
+     * @param concept
+     * @return
+     */
+    String getConceptTitle(ThesaurusConcept concept);
+	
+    
+    /**
+     * return the language of this concept preferred term
+     * @param concept
+     * @return
+     */
+    String getConceptTitleLanguage(ThesaurusConcept concept);
 }

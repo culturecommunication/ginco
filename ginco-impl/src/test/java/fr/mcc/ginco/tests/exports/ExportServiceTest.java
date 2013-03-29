@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.services;
+package fr.mcc.ginco.tests.exports;
 
 import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -78,7 +78,7 @@ public class ExportServiceTest {
     }
 
     @Test
-    public void testExport() throws BusinessException {
+    public void testGetHierarchicalText() throws BusinessException {
         final Thesaurus th1 = new Thesaurus();
         th1.setTitle("Test thesaurus");
         th1.setIdentifier("th1");
@@ -114,37 +114,54 @@ public class ExportServiceTest {
         tr1.setIdentifier("tr1");
         tr1.setPrefered(true);
         tr1.setLanguage(language);
+        Mockito.when(thesaurusConceptService.getConceptTitle(co1)).thenReturn("co1");
+        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co1)).thenReturn("fra");
+
         final ThesaurusTerm tr1_1 = new ThesaurusTerm();
         tr1_1.setLexicalValue("co1_1");
         tr1_1.setConcept(co1_1);
         tr1_1.setIdentifier("tr1_1");
         tr1_1.setPrefered(true);
         tr1_1.setLanguage(language);
+        Mockito.when(thesaurusConceptService.getConceptTitle(co1_1)).thenReturn("co1_1");
+        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co1_1)).thenReturn("fra");
+        
         final ThesaurusTerm tr2 = new ThesaurusTerm();
         tr2.setLexicalValue("co2");
         tr2.setConcept(co2);
         tr2.setIdentifier("tr2");
         tr2.setPrefered(true);
         tr2.setLanguage(language);
+        Mockito.when(thesaurusConceptService.getConceptTitle(co2)).thenReturn("co2");
+        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co2)).thenReturn("fra");
+        
         final ThesaurusTerm tr2_1 = new ThesaurusTerm();
         tr2_1.setLexicalValue("co2_1");
         tr2_1.setConcept(co2_1);
         tr2_1.setIdentifier("tr2_1");
         tr2_1.setPrefered(true);
         tr2_1.setLanguage(language);
+        Mockito.when(thesaurusConceptService.getConceptTitle(co2_1)).thenReturn("co2_1");
+        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co2_1)).thenReturn("fra");
+        
         final ThesaurusTerm tr3 = new ThesaurusTerm();
         tr3.setLexicalValue("co3");
         tr3.setConcept(co3);
         tr3.setIdentifier("tr3");
         tr3.setPrefered(true);
         tr3.setLanguage(language);
+        Mockito.when(thesaurusConceptService.getConceptTitle(co3)).thenReturn("co3");
+        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co3)).thenReturn("fra");
+        
         final ThesaurusTerm tr3_1 = new ThesaurusTerm();
         tr3_1.setLexicalValue("co3_1");
         tr3_1.setConcept(co3_1);
         tr3_1.setIdentifier("tr3_1");
         tr3_1.setPrefered(true);
         tr3_1.setLanguage(language);
-
+        Mockito.when(thesaurusConceptService.getConceptTitle(co3_1)).thenReturn("co3_1");
+        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co3_1)).thenReturn("fra");
+        
         final ThesaurusArray ar1 = new ThesaurusArray();
         ar1.setThesaurus(th1);
         ar1.setSuperOrdinateConcept(co1);

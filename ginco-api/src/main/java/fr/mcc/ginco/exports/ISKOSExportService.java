@@ -34,34 +34,22 @@
  */
 package fr.mcc.ginco.exports;
 
+import java.io.File;
+
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.result.bean.FormattedLine;
-
-import java.io.File;
-import java.util.List;
 
 /**
- * Service provides function to use for export
+ * Service provides function to use for SKOS export
  * by REST services.
  */
-public interface IExportService {
-    /**
-     * Get the list of all concepts in thesaurus, with formatting.
-     * @param thesaurus
-     * @return list with formatting.
-     * @throws BusinessException
-     */
-    List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)
-        throws BusinessException;
-    
+public interface ISKOSExportService {   
 
     /**
-     * Get the list of all concepts in thesaurus, with formatting.
+     * Get RDF-based export for given thesaurus.
      * @param thesaurus
-     * @return list with formatting.
-     * @throws BusinessException
      */
-    List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus)
-            throws BusinessException;;
+    File getSKOSExport(Thesaurus thesaurus) throws BusinessException;
+
+   
 }

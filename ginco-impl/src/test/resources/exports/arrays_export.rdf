@@ -1,0 +1,14 @@
+ <skos:Collection rdf:about="http://th2">
+    <skos:member rdf:resource="http://c5"/>
+    <skos:member rdf:resource="http://c4"/>
+    <skos:prefLabel xml:lang="fr">node label 2</skos:prefLabel>
+    <skos:inScheme>
+      <skos:Collection rdf:about="http://th1">
+        <skos:member rdf:resource="http://c1"/>
+        <skos:member rdf:resource="http://c3"/>
+        <skos:member rdf:resource="http://c2"/>
+        <skos:prefLabel xml:lang="fr">node label 1</skos:prefLabel>
+        <skos:inScheme rdf:resource="http://th1"/>
+      </skos:Collection>
+    </skos:inScheme>
+  </skos:Collection>

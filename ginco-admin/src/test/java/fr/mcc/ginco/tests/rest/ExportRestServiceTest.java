@@ -49,6 +49,7 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exports.IExportService;
+import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.rest.services.ExportRestService;
 import fr.mcc.ginco.services.IThesaurusService;
 
@@ -56,6 +57,9 @@ public class ExportRestServiceTest {
     
     @Mock(name="exportService")
     private IExportService exportService;   
+    
+    @Mock(name="skosExportService")
+    private ISKOSExportService skosExportService;
 
     @Mock(name="thesaurusService")
     private IThesaurusService thesaurusService;
