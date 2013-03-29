@@ -150,5 +150,6 @@ public interface IThesaurusTermService {
 	 * 
 	 * @return preferred term
 	 */
+
 	 ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
 }

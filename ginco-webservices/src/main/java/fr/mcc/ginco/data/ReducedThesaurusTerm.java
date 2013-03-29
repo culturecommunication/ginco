@@ -34,13 +34,12 @@
  */
 package fr.mcc.ginco.data;
 
-import fr.mcc.ginco.beans.Language;
-
 public class ReducedThesaurusTerm {
 	
 	private String identifier;
 	private String lexicalValue;
 	private String languageId;
+
 	
 	public String getIdentifier() {
 		return identifier;
@@ -54,6 +53,7 @@ public class ReducedThesaurusTerm {
 	public void setLexicalValue(String lexicalValue) {
 		this.lexicalValue = lexicalValue;
 	}
+	
 	public String getLanguageId() {
 		return languageId;
 	}
