@@ -168,14 +168,14 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     		
     }
     @Override
-    public String getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId){
+    public ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId){
     	ThesaurusTerm thesaurusTerm = thesaurusTermDAO.
     			getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId);
     	if (thesaurusTerm != null){
     		if (thesaurusTerm.getPrefered())
-    			return thesaurusTerm.getLexicalValue();
+    			return thesaurusTerm;
     		else{
-    			return thesaurusTermDAO.getConceptPreferredTerm(thesaurusTerm.getConcept().getIdentifier()).getLexicalValue();
+    			return thesaurusTermDAO.getConceptPreferredTerm(thesaurusTerm.getConcept().getIdentifier());
     		}
     			
     	}

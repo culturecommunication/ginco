@@ -149,7 +149,7 @@ public interface IThesaurusTermService {
 	 * @param  thesaurus identifier of the term,
 	 * @param  language identifier of the term
 	 * 
-	 * @return lexical value of preferred term
+	 * @return preferred term
 	 */
-	 String getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId);
+	 ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId);
 }

@@ -37,6 +37,7 @@ package fr.mcc.ginco.soap;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.data.ReducedThesaurusTerm;
 
 
 @WebService
@@ -63,8 +64,8 @@ public interface ISOAPThesaurusTermService {
 	 * @param  thesaurus identifier of the term,
 	 * @param  language identifier of the term
 	 * 
-	 * @return lexical value of preferred term
+	 * @return reduced preferred term
 	 */
-	String getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId);
+	ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId);
 }
 

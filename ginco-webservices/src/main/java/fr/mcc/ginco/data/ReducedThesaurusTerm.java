@@ -32,49 +32,33 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.soap;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.jws.WebService;
+package fr.mcc.ginco.data;
 
 import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.data.ReducedThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.IThesaurusTermService;
 
-/**
- * This class is the implementation of all SOAP services related to term objects
- * 
- */
-@WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusTermService")
-public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
+public class ReducedThesaurusTerm {
 	
-	@Inject
-	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
+	private String identifier;
+	private String lexicalValue;
+	private Language language;
 	
-	@Override
-	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
-		if (lexicalValue != null && thesaurusId != null && languageId != null){
-			return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
-		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
-		}
+	public String getIdentifier() {
+		return identifier;
 	}
-	
-	@Override
-	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId){
-		ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
-		ThesaurusTerm thesaurusTerm = thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
-		
-		reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
-		reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
-		reducedThesaurusTerm.setLanguage(thesaurusTerm.getLanguage());
-		
-		return reducedThesaurusTerm;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
+	public String getLexicalValue() {
+		return lexicalValue;
+	}
+	public void setLexicalValue(String lexicalValue) {
+		this.lexicalValue = lexicalValue;
+	}
+	public Language getLanguage() {
+		return language;
+	}
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+
 }
