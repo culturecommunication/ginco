@@ -52,4 +52,19 @@ public interface ISOAPThesaurusTermService {
 	 * @return identifier of a concept
 	 */
 	String getConceptIdByTerm(String lexicalValue, String thesaurusId,  String languageId);
+	
+	/**
+	 * This service returns:
+	 * lexical value if the term is preferred,
+	 * lexical value of preferred term if current term isn't preferred,
+	 * null if the term doesn't exist 
+	 * 
+	 * @param  lexical value of the term,
+	 * @param  thesaurus identifier of the term,
+	 * @param  language identifier of the term
+	 * 
+	 * @return lexical value of preferred term
+	 */
+	String getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId);
 }
+

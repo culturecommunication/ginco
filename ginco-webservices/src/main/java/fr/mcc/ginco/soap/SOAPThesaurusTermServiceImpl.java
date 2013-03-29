@@ -63,4 +63,9 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 			throw new BusinessException("One or more parameters are empty","empty-parameters");
 		}
 	}
+	
+	@Override
+	public String getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId){
+		return thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
+	}
 }
