@@ -71,12 +71,14 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 		if (lexicalValue != null && thesaurusId != null && languageId != null){
 			ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
 			ThesaurusTerm thesaurusTerm = thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
-			
-			reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
-			reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
-			reducedThesaurusTerm.setLanguage(thesaurusTerm.getLanguage());
-			
-			return reducedThesaurusTerm;
+		
+			if (thesaurusTerm !=null){
+				reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
+				reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
+				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
+				return reducedThesaurusTerm;
+			}
+			else return null;		
 		}
 		else 
 		{

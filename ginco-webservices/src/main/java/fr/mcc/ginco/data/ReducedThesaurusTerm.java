@@ -40,7 +40,7 @@ public class ReducedThesaurusTerm {
 	
 	private String identifier;
 	private String lexicalValue;
-	private Language language;
+	private String languageId;
 	
 	public String getIdentifier() {
 		return identifier;
@@ -54,11 +54,11 @@ public class ReducedThesaurusTerm {
 	public void setLexicalValue(String lexicalValue) {
 		this.lexicalValue = lexicalValue;
 	}
-	public Language getLanguage() {
-		return language;
+	public String getLanguageId() {
+		return languageId;
 	}
-	public void setLanguage(Language language) {
-		this.language = language;
+	public void setLanguageId(String languageId) {
+		this.languageId = languageId;
 	}
 
 }

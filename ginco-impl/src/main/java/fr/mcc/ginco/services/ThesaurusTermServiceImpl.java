@@ -177,7 +177,10 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     		else{
     			ThesaurusConcept thesaurusConcept = thesaurusTerm.getConcept();
     			if (thesaurusConcept != null){
-    				return thesaurusTermDAO.getConceptPreferredTerm(thesaurusConcept.getIdentifier());
+    				ThesaurusTerm preferredTerm = thesaurusTermDAO.getConceptPreferredTerm(thesaurusConcept.getIdentifier());
+    				if (preferredTerm.getLanguage().getId() == thesaurusTerm.getLanguage().getId())
+    					return preferredTerm;
+    				else return null;
     			}
     			else{
     				throw new BusinessException("The concept does not exist", "concept-does-not-exist");
