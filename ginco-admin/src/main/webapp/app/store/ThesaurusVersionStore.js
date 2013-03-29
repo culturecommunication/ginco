@@ -45,7 +45,6 @@ Ext.define('GincoApp.store.ThesaurusVersionStore', {
 		var me = this;
 		cfg = cfg || {};
 		me.callParent([ Ext.apply({
-			// TODO : keep autoload false ?
 			autoLoad : false,
 			alias : 'store.thesaurusVersionStore',
 			model : 'GincoApp.model.ThesaurusVersionModel',
@@ -55,7 +54,6 @@ Ext.define('GincoApp.store.ThesaurusVersionStore', {
 					read : 'services/ui/thesaurusversionservice/getVersions',
 					update : 'services/ui/thesaurusversionservice/updateVersions',
 					create : 'services/ui/thesaurusversionservice/updateVersions'
-					//destroy : 'services/ui/thesaurusversionservice/destroyVersion'
 				},
 				writer : {
 					type : 'json',
@@ -65,7 +63,8 @@ Ext.define('GincoApp.store.ThesaurusVersionStore', {
 				reader : {
 					type : 'json',
 					root : 'data',
-					idProperty : 'identifier'
+					idProperty : 'identifier',
+					messageProperty: 'message'
 				}
 			}
 		}, cfg) ]);

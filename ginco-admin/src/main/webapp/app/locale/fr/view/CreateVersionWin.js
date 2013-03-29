@@ -33,10 +33,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.locale.fr.controller.ThesaurusVersionPanelController',
-{
-	xLoading : 'Chargement',
-	xSucessLabel : 'Succès !',
-	xSucessSavedMsg : 'Versions sauvegardées avec succès',
-	xProblemLabel : 'Erreur !'	
+Ext.define('GincoApp.locale.fr.view.CreateVersionWin',
+    {
+		xSave : 'Ajouter la version',
+		xCreateVersionWinTitle : 'Nouvelle version',
+		xVersionNoteLabel : 'Note de version',
+		xStatusLabel : 'Statut',
+		xCurrentVersionLabel : 'Version courante'
 });

@@ -41,7 +41,6 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Versions saved successfully',
 	xProblemLabel : 'Error !',
-	xProblemSaveMsg : 'Unable to save the versions!',
 	
 	onRenderGrid : function(theGrid) {
 		var thesaurusId = theGrid.up('thesaurusPanel').thesaurusData.id;
@@ -71,7 +70,7 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 				}
 			},
 			failure : function(model, operation) {
-				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg, operation.error);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, model.exceptions[0].error);
 				thePanel.getEl().unmask();
 			}
 		});
