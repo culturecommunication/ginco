@@ -36,6 +36,7 @@ package fr.mcc.ginco.rest.services;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -48,6 +49,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBException;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -55,6 +57,7 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.IExportService;
+import fr.mcc.ginco.exports.IMCCExportService;
 import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -78,6 +81,9 @@ public class ExportRestService {
     @Named("skosExportService")
     private ISKOSExportService skosExportService;
 
+    @Inject
+    @Named("mccExportService")
+    private IMCCExportService mccExportService;
 
     private static final String TABULATION_DELIMITER = "\t";
 
@@ -200,5 +206,22 @@ public class ExportRestService {
 
         return temp;
     }
-}
+    
+    @GET
+    @Path("/getMCCThesaurusExport")
+    @Produces("text/plain")
+    public Response getMCCThesaurusExport(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException, JAXBException {
+        Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+        String result = mccExportService.getThesaurusExport(targetThesaurus);
 
+        Response.ResponseBuilder response = Response.ok(result);
+        response.header("Content-Disposition",
+                "attachment; filename=\"MCC "
+                        + targetThesaurus.getTitle()
+                        + " "
+                        + DateUtil.toString(DateUtil.nowDate())
+                        + ".xml"
+                        + "\"");
+        return response.build();
+    }
+}

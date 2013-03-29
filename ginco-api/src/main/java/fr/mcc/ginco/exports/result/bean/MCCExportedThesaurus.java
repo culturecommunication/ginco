@@ -32,45 +32,50 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.exports.result.bean;
 
-/*
- * File: app/locale/fr/view/ThesaurusPanel.js
- * Thesaurus Translated Items
- * 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusFormat;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+
+/**
+ * Small utility class for representing an exported Thesaurus
+ * With {@MCCExportServiceImpl}
  */
-Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
-	    xIdentifierLabel : 'Identifiant',
-	    xCreatedDateLabel : 'Date de création',
-	    xDateLabel : 'Dernière modification',
-	    xTitleLabel : 'Titre',
-	    xServiceLabel : 'Auteur',
-	    xUrlLabel : 'URL',
-	    xContributorLabel : 'Contributeur',
-	    xPublisherLabel : 'Editeur',
-	    xPublisherValue : 'Ministère chargé de la culture',
-	    xRightsLabel : 'Droits',
-	    xDescriptionLabel : 'Description',
-	    xCoverageLabel : 'Couverture',
-	    xSubjectLabel : 'Sujet',
-	    xTypeLabel : 'Type',
-	    xFormatLabel : 'Format',
-	    xLanguagesLabel : 'Langue(s)',
-	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
-	    xRelationLabel : 'Publication(s) associée(s)',
-	    xSourceLabel : 'Ressource(s) liée(s)',
-	    xThesaurusTitle : 'Nouveau Vocabulaire',
-	    xThesaurusTabTitle : 'Thesaurus',
-	    xNewLabel : 'Nouveau',
-	    xNewMenu_TermLabel : 'Terme',
-	    xNewMenu_ConceptLabel: 'Concept',
-	    xNewMenu_GroupLabel: 'Groupe de concepts',
-	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
-        xExport_Skos : "Export SKOS",
-        xExport_Hierarchical : "Export texte hiérarchique",
-        xExport_Alphabetic : "Export texte alphabétique",
-        xExport_Mcc : "Export XML MCC",
+@XmlRootElement
+public class MCCExportedThesaurus implements Serializable {
+    private Thesaurus thesaurus;
+    private List<ThesaurusTerm> terms;
 
-        xSave : "Enregistrer",
-        xDelete : "Supprimer",
-        xVersionsTab : 'Versions'
-});
+	public Thesaurus getThesaurus() {
+		return thesaurus;
+	}
+
+	public void setThesaurus(Thesaurus thesaurus) {
+		this.thesaurus = thesaurus;
+	}
+
+	public List<ThesaurusTerm> getTerms() {
+		return terms;
+	}
+
+	public void setTerms(List<ThesaurusTerm> terms) {
+		this.terms = terms;
+	}
+    
+    
+    
+}

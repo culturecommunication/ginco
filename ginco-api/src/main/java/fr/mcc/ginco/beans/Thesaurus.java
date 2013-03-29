@@ -34,15 +34,15 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-import org.hibernate.envers.RelationTargetAuditMode;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 
 /**

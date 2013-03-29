@@ -32,45 +32,27 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.exports;
 
-/*
- * File: app/locale/fr/view/ThesaurusPanel.js
- * Thesaurus Translated Items
- * 
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import javax.xml.bind.JAXBException;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+
+/**
+ * Service provides function to use for MCC export
+ * by REST services.
  */
-Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
-	    xIdentifierLabel : 'Identifiant',
-	    xCreatedDateLabel : 'Date de création',
-	    xDateLabel : 'Dernière modification',
-	    xTitleLabel : 'Titre',
-	    xServiceLabel : 'Auteur',
-	    xUrlLabel : 'URL',
-	    xContributorLabel : 'Contributeur',
-	    xPublisherLabel : 'Editeur',
-	    xPublisherValue : 'Ministère chargé de la culture',
-	    xRightsLabel : 'Droits',
-	    xDescriptionLabel : 'Description',
-	    xCoverageLabel : 'Couverture',
-	    xSubjectLabel : 'Sujet',
-	    xTypeLabel : 'Type',
-	    xFormatLabel : 'Format',
-	    xLanguagesLabel : 'Langue(s)',
-	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
-	    xRelationLabel : 'Publication(s) associée(s)',
-	    xSourceLabel : 'Ressource(s) liée(s)',
-	    xThesaurusTitle : 'Nouveau Vocabulaire',
-	    xThesaurusTabTitle : 'Thesaurus',
-	    xNewLabel : 'Nouveau',
-	    xNewMenu_TermLabel : 'Terme',
-	    xNewMenu_ConceptLabel: 'Concept',
-	    xNewMenu_GroupLabel: 'Groupe de concepts',
-	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
-        xExport_Skos : "Export SKOS",
-        xExport_Hierarchical : "Export texte hiérarchique",
-        xExport_Alphabetic : "Export texte alphabétique",
-        xExport_Mcc : "Export XML MCC",
+public interface IMCCExportService {   
 
-        xSave : "Enregistrer",
-        xDelete : "Supprimer",
-        xVersionsTab : 'Versions'
-});
+    /**
+     * Get MCC Thesaurus export for given thesaurus.
+     * @param thesaurus
+     * @throws FileNotFoundException 
+     * @throws JAXBException 
+     */
+    String getThesaurusExport(Thesaurus thesaurus) throws BusinessException, JAXBException;
+}

@@ -73,6 +73,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xExport_Skos : "Export SKOS",
 	xExport_Hierarchical : "Export text hierarchical",
 	xExport_Alphabetic : "Export text alphabetical",
+	xExport_Mcc : "Export MCC XML format",
 	xSave : "Save",
 	xDelete : "Delete",
 	xVersionsTab : 'Versions',
@@ -172,7 +173,12 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 							                             text : me.xExport_Alphabetic,
 							                             disabled : true,
 							                             itemId : 'exportAlphabetical'
-							                    }]
+							                    },{
+						                             xtype : 'keymenuitem',
+						                             text : me.xExport_Mcc,
+						                             disabled : true,
+						                             itemId : 'exportMcc'
+						                    }]
 							                }
 							              } ]
 									} ],

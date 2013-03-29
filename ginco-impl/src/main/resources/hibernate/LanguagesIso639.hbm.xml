@@ -15,15 +15,5 @@
 		<property name="toplanguage" not-null="true" />
 		<property name="comment" />
 		
-		<set name="thesauruses" table="thesaurus_languages" >
-			<key column="iso639_id" />
-			<many-to-many class="Thesaurus" column="thesaurus_identifier" />
-		</set>
-		
-		<set name="thesaurusesTerms">
-			<key column="identifier" />
-			<one-to-many class="ThesaurusTerm" />
-		</set>
-		
 	</class>
 </hibernate-mapping>

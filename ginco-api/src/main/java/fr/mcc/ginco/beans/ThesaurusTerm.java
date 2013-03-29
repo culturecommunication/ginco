@@ -34,18 +34,23 @@
  */
 package fr.mcc.ginco.beans;
 
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.apache.solr.client.solrj.beans.Field;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
-
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Bean represents <b>thesaurus_term</b> table, contains some lexical
  * value that could be used in different cases.
  */
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
+@XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings("serial")
 public class ThesaurusTerm implements Serializable, IAuditableBean {
 
@@ -55,12 +60,12 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
     private Date created;
     private Date modified;
     private String source;
-
     private Boolean prefered;
     private Boolean hidden;
     private Integer status;
     private ThesaurusTermRole role;
     private ThesaurusConcept concept;
+    @XmlTransient
     private Thesaurus thesaurus;
     private Language language;
 

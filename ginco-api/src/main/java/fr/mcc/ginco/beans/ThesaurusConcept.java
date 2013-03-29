@@ -42,11 +42,17 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Bean represents <b>thesaurus_concept</b> table, is container for
  * {@link ThesaurusTerm}.
  */
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusConcept implements Serializable, IAuditableBean {
 	private String identifier;
 	private Date created;
@@ -54,6 +60,8 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	private Integer status;
 	private String notation;
 	private Boolean topConcept;
+	
+	@XmlTransient
 	private Thesaurus thesaurus;
 	private Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
 	private Set<ThesaurusConcept> rootConcepts = new HashSet<ThesaurusConcept>();

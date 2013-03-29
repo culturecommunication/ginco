@@ -34,11 +34,7 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Beans represents languages_iso639 table, which contains different languages
@@ -56,9 +52,6 @@ public class Language implements Serializable {
 	private String refname;
 	private boolean toplanguage;
 	private String comment;
-
-    private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
-    private Set<ThesaurusTerm> thesaurusesTerms  = new HashSet<ThesaurusTerm>();
 
 	public String getId() {
 		return id;
@@ -108,15 +101,6 @@ public class Language implements Serializable {
 	public void setRefname(String refname) {
 		this.refname = refname;
 	}
-
-    @JsonIgnore
-    public Set<Thesaurus> getThesauruses() {
-        return thesauruses;
-    }
-
-    public void setThesauruses(Set<Thesaurus> thesauruses) {
-        this.thesauruses = thesauruses;
-    }
     
     /**
 	 * @return True if the tested language belongs to most-used languages in the application, and false if it's a language used rarely
@@ -130,12 +114,5 @@ public class Language implements Serializable {
 	 */
 	public void setToplanguage(boolean toplanguage) {
 		this.toplanguage = toplanguage;
-	}
-	
-	public Set<ThesaurusTerm> getThesaurusesTerms() {
-		return thesaurusesTerms;
-	}
-	public void setThesaurusesTerms(Set<ThesaurusTerm> thesaurusesTerms) {
-		this.thesaurusesTerms = thesaurusesTerms;
 	}	
 }

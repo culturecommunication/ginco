@@ -64,7 +64,7 @@ public interface IThesaurusConceptService {
     Set<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException;
 
 	/**
-	 * Get single ThesaurusFormat by its id.
+	 * Get single ThesaurusConcept by its id.
 	 * 
 	 * @param id
 	 *            of object
