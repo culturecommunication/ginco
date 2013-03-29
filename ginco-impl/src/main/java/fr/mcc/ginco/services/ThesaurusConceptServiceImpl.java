@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.dao.*;
+import fr.mcc.ginco.enums.ConceptHierarchicalRelationsEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -485,4 +486,20 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	        return getConceptPreferredTerm(concept.getIdentifier()).getLanguage().getPart1();
 	}
 
+    @Override
+    public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId){
+    	
+    	if (thesaurusConceptDAO.getChildrenConcepts(firstConceptId)
+    			.contains(thesaurusConceptDAO.getById(secondConceptId))){
+    		return ConceptHierarchicalRelationsEnum.PARENT.getStatus();
+    	}
+    	
+    	if (thesaurusConceptDAO.getChildrenConcepts(secondConceptId)
+    			.contains(thesaurusConceptDAO.getById(firstConceptId))){
+    		return ConceptHierarchicalRelationsEnum.CHILD.getStatus();
+    	}
+    	
+    	else   
+    		return ConceptHierarchicalRelationsEnum.NORELATIONS.getStatus();
+    }
 }

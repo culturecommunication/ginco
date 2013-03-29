@@ -35,7 +35,11 @@
 
 package fr.mcc.ginco.soap;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jws.WebService;
+
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  * This class is the implementation of all SOAP services related to concept objects
@@ -43,6 +47,15 @@ import javax.jws.WebService;
  */
 
 @WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusConceptService")
-public class SOAPThesaurusConceptServiceImpl {
+public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptService{
+	
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Override
+	public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId){
+		return thesaurusConceptService.getConceptsHierarchicalRelations(firstConceptId, secondConceptId);
+	}
 
 }

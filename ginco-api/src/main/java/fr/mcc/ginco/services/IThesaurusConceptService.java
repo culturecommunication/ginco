@@ -220,4 +220,16 @@ public interface IThesaurusConceptService {
      * @return
      */
     String getConceptTitleLanguage(ThesaurusConcept concept);
+
+    /**
+     * Get hierarchical relations between two concepts
+     * @param identifier of first concept
+     * @param identifier of second concept
+     * 
+     * @return 0 if relations between concepts don't exist
+     * @return 1 if first concept is parent of second concept
+     * @return 2 if first concept is child of second concept
+     */
+    
+    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId);
 }
