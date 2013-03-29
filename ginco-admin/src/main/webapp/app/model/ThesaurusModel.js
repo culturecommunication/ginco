@@ -103,7 +103,8 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 		url : 'services/ui/thesaurusservice/getVocabulary',
 		reader : {
 			type : 'json',
-			idProperty : 'id'
+			idProperty : 'id',
+			messageProperty: 'message'
 		},
 		writer : {
 			type : 'json',

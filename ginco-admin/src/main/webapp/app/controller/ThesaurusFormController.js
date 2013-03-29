@@ -194,10 +194,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 						theCallback();
 					}
 				},
-				failure : function() {
+				failure : function(record, operation) {
+					Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg+" "+operation.error);
 					theForm.getEl().unmask();
-					Thesaurus.ext.utils.msg('Problème',
-							"Impossible d'enregistrer le thesaurus!");
 				}
 			});
 		}

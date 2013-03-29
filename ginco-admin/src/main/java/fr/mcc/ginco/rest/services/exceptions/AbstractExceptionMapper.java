@@ -32,64 +32,33 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.rest;
+package fr.mcc.ginco.rest.services.exceptions;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
-import junit.framework.Assert;
+import javax.ws.rs.ext.ExceptionMapper;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.rest.services.exceptions.BusinessExceptionMapper;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.EncodedControl;
 
-public class BusinessExceptionMapperTest {
+public abstract class AbstractExceptionMapper<E extends Throwable> implements
+		ExceptionMapper {
+	@Log
+	private Logger log;
 
-	private BusinessExceptionMapper businessExceptionMapper = new BusinessExceptionMapper();
-
-	@Before
-	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(businessExceptionMapper);
+	protected Response toResponse(Throwable t, String messageKey) {
+		ResourceBundle res = ResourceBundle.getBundle("labels",
+				new EncodedControl("UTF-8"));
+		String msg = res.getString(messageKey);
+		log.error("Business Exception in REST services : " + t.getMessage());
+		log.debug("Business Exception in REST services : " + msg);
+		msg = StringEscapeUtils.escapeEcmaScript(msg);
+		return Response.status(Status.OK)
+				.entity("{success:false, message: '" + msg + "'}").build();
 	}
-
-	/**
-	 * Test the getVocabularies method with empty values for non mandatory
-	 * fields in Thesauruses objects
-	 */
-	@Test
-	public final void testToResponse() {
-		BusinessException be = new BusinessException("logMessage",
-				"import-unable-to-write-temporary-file");
-		Response response = businessExceptionMapper.toResponse(be);
-		Assert.assertEquals(200, response.getStatus());
-		String responseEntity = (String) response.getEntity();
-		Assert.assertEquals(
-				"{success:false, message: 'Impossible de stocker temporairement le fichier'}",
-				responseEntity);
-
-	}
-
 }

@@ -49,7 +49,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
@@ -58,7 +58,6 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusVersionHistoryView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusVersionHistoryViewConverter;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 import fr.mcc.ginco.utils.EncodedControl;
 
@@ -69,6 +68,7 @@ import fr.mcc.ginco.utils.EncodedControl;
 @Service
 @Path("/thesaurusversionservice")
 @Produces({ MediaType.APPLICATION_JSON })
+@PreAuthorize("isAuthenticated()")
 public class ThesaurusVersionRestService {	
 	
 	@Inject
@@ -77,10 +77,8 @@ public class ThesaurusVersionRestService {
 	
 	@Inject
 	@Named("thesaurusVersionHistoryViewConverter")
-    private ThesaurusVersionHistoryViewConverter thesaurusVersionHistoryViewConverter;
+    private ThesaurusVersionHistoryViewConverter thesaurusVersionHistoryViewConverter;	
 	
-	@Log
-	private Logger logger;
 	
 	/**
 	 * Public method used to get the list of all versions of a thesaurus
@@ -148,6 +146,7 @@ public class ThesaurusVersionRestService {
 	@POST
 	@Path("/updateVersions")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> updateVersions(List<ThesaurusVersionHistoryView> versionViews) throws BusinessException {
 	
 		List<ThesaurusVersionHistory> versions = thesaurusVersionHistoryViewConverter.convertViewList(versionViews);

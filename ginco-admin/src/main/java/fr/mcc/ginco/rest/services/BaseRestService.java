@@ -50,6 +50,7 @@ import javax.ws.rs.core.Response;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,7 @@ import fr.mcc.ginco.services.IThesaurusService;
  */
 @Service
 @Path("/baseservice")
+@PreAuthorize("isAuthenticated()")
 public class BaseRestService {
 	@Inject
 	@Named("thesaurusService")
@@ -111,6 +113,7 @@ public class BaseRestService {
     @GET
     @Path("/reindex")
     @Produces({MediaType.APPLICATION_JSON})
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
     public Response forceIndexation() throws BusinessException, TechnicalException {
         indexerService.forceIndexing();
         return Response.status(Response.Status.OK)

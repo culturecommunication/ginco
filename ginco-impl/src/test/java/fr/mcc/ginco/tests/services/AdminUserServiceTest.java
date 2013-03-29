@@ -32,63 +32,49 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.rest;
+package fr.mcc.ginco.tests.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import junit.framework.Assert;
-
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.AdminUser;
+import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.rest.services.exceptions.BusinessExceptionMapper;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
-import fr.mcc.ginco.utils.EncodedControl;
+import fr.mcc.ginco.services.AdminUserServiceImpl;
 
-public class BusinessExceptionMapperTest {
+public class AdminUserServiceTest {
 
-	private BusinessExceptionMapper businessExceptionMapper = new BusinessExceptionMapper();
+	@Mock(name = "adminUserDAO")
+	private IGenericDAO<AdminUser, String> adminUserDAO;
+
+	@InjectMocks
+	private AdminUserServiceImpl adminUserService = new AdminUserServiceImpl();
 
 	@Before
-	public void setUp() {
+	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(businessExceptionMapper);
 	}
 
-	/**
-	 * Test the getVocabularies method with empty values for non mandatory
-	 * fields in Thesauruses objects
-	 */
 	@Test
-	public final void testToResponse() {
-		BusinessException be = new BusinessException("logMessage",
-				"import-unable-to-write-temporary-file");
-		Response response = businessExceptionMapper.toResponse(be);
-		Assert.assertEquals(200, response.getStatus());
-		String responseEntity = (String) response.getEntity();
-		Assert.assertEquals(
-				"{success:false, message: 'Impossible de stocker temporairement le fichier'}",
-				responseEntity);
+	public final void testIsUserAdmin() throws BusinessException {
+		String userId1 = "user1.culture.gouv.fr";
+		String userId2 = "user2.culture.gouv.fr";
+		AdminUser user1 = new AdminUser();
+		user1.setUserId(userId1);
+
+		Mockito.when(adminUserDAO.getById(userId1)).thenReturn(user1);
+		Mockito.when(adminUserDAO.getById(userId2)).thenReturn(null);
+
+		boolean isUser1Admin = adminUserService.isUserAdmin(userId1);
+		Assert.assertTrue(isUser1Admin);
+
+		boolean isUser2Admin = adminUserService.isUserAdmin(userId2);
+		Assert.assertFalse(isUser2Admin);
 
 	}
 
