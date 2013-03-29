@@ -89,8 +89,8 @@ public class ThesaurusConceptRestService {
 	@Inject
 	@Named("thesaurusConceptViewConverter")
 	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
-
-    @Inject
+	
+	@Inject
     @Named("indexerService")
     private IIndexerService indexerService;
 
@@ -182,9 +182,11 @@ public class ThesaurusConceptRestService {
 
 		ThesaurusConcept returnConcept = thesaurusConceptService
 				.updateThesaurusConcept(convertedConcept, terms, thesaurusConceptViewJAXBElement.getAssociatedConcepts());
-
-        indexerService.addConcept(returnConcept);
-
+		
+		for (ThesaurusTerm term : terms) {
+			indexerService.addTerm(term);
+		}
+		indexerService.addConcept(convertedConcept);
 		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
@@ -277,7 +279,6 @@ public class ThesaurusConceptRestService {
 	
 		if (object != null) {
 			thesaurusConceptService.destroyThesaurusConcept(object);
-            indexerService.removeConcept(object);
 		}
 	}
 	

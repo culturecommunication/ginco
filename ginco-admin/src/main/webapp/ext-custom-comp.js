@@ -339,6 +339,13 @@ Ext.define('Thesaurus.form.HtmlEditor', {
 	    }
 });
 
+Ext.define("Thesaurus.form.field.Trigger", {
+	override : 'Ext.form.field.Trigger',
+	onTriggerClick: function() {
+		this.fireEvent("trigger",this);
+	}
+});
+
 /*
  * Remove width attr from table on fields form
  */

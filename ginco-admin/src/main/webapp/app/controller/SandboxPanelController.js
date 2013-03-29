@@ -63,7 +63,7 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 			},
 			openThesaurusTermTab : function(aRecord, aThesaurusData) {
 				var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-				topTabs.fireEvent('opentermtab',topTabs,aRecord.data.identifier, aThesaurusData);				
+				topTabs.fireEvent('opentermtab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
 			},
 			refreshSandBoxList : function(thesaurusData)
 			{

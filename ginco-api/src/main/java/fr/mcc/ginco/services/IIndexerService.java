@@ -40,6 +40,8 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
+
 import org.apache.solr.client.solrj.SolrServerException;
 
 public interface IIndexerService {
@@ -82,5 +84,10 @@ public interface IIndexerService {
      */
     void removeConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
 
-    List<SearchResult> search(String request) throws SolrServerException;
+    /**
+     * Search a term or a concept
+     * @param thesaurusConcept
+     * @throws TechnicalException
+     */
+    SearchResultList search(String request, int startIndex, int limit) throws SolrServerException;
 }

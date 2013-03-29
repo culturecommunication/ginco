@@ -66,7 +66,6 @@ import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.extjs.view.utils.GroupsGenerator;
 import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusService;
 
 /**

@@ -35,15 +35,14 @@
 package fr.mcc.ginco.services;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -51,6 +50,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -61,12 +61,14 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
 import fr.mcc.ginco.solr.SolrField;
 
 /**
  * @author hufon
  *
  */
+
 @Service("indexerService")
 public class IndexerServiceImpl implements IIndexerService {
 
@@ -87,19 +89,15 @@ public class IndexerServiceImpl implements IIndexerService {
 
     @Value("${solr.url}")
     private String url;
+    
+    @Inject
+    @Named("solrServer")
+    private SolrServer solrServer;
 
     @Override
     public void removeTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException {
-        HttpSolrServer solrCore;
-
         try {
-            solrCore = new HttpSolrServer(url);
-        } catch (RuntimeException ex) {
-            logger.warn("Solr seems to be not launched!");
-            return;
-        }
-        try {
-            solrCore.deleteById(thesaurusTerm.getIdentifier());
+            solrServer.deleteById(thesaurusTerm.getIdentifier());
         } catch (SolrServerException e) {
             throw new TechnicalException("Error executing query for removing Term from index!", e);
         } catch (IOException e) {
@@ -114,37 +112,40 @@ public class IndexerServiceImpl implements IIndexerService {
     	result.setLexicalValue(doc.getFieldValue(SolrField.LEXICALVALUE).toString());
     	result.setType(doc.getFieldValue(SolrField.TYPE).toString());
     	result.setThesaurusId(doc.getFieldValue(SolrField.THESAURUSID).toString());
+    	result.setThesaurusTitle(doc.getFieldValue(SolrField.THESAURUSTITLE).toString());
     	return result;
+    }
+    
+    private SearchResultList getSearchResultList (SolrDocumentList list)
+    {
+    	SearchResultList results = new SearchResultList();
+    	results.setNumFound(list.getNumFound());
+        for (int i = 0; i < list.size(); ++i) {
+        	results.add(getSearchResult(list.get(i)));
+        }
+        return results;
     }
 
     @Override
-    public List<SearchResult> search(String request) throws SolrServerException {
-
-    	List<SearchResult> results = new ArrayList<SearchResult>();
-        HttpSolrServer solrCore = getSolrInstance();
+    public SearchResultList search(String request, int startIndex, int limit) throws SolrServerException {
         ModifiableSolrParams params = new ModifiableSolrParams();
         params.set("defType", "edismax");
         params.set("qf", SolrField.LEXICALVALUE+"^1.0 "+SolrField.NOTES+"^0.5");
         params.set("fl", "*,score");
         params.set("sort","score desc");
         params.set("q", request);
-        params.set("start", "0");
-
-        QueryResponse response = solrCore.query(params);
+        params.set("start", startIndex);
+        params.set("rows", limit);
+        QueryResponse response = solrServer.query(params);
         SolrDocumentList solrresults = response.getResults();
-
-        for (int i = 0; i < solrresults.size(); ++i) {
-        	results.add(getSearchResult(solrresults.get(i)));
-        }
-        return results;
+        return getSearchResultList(solrresults);
     }
 
     @Override
     @Async
     public void removeConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException {
-        HttpSolrServer solrCore = getSolrInstance();
         try {
-            solrCore.deleteById(thesaurusConcept.getIdentifier());
+        	solrServer.deleteById(thesaurusConcept.getIdentifier());
         } catch (SolrServerException e) {
             throw new TechnicalException("Error executing query for removing Concept from index!", e);
         } catch (IOException e) {
@@ -156,6 +157,7 @@ public class IndexerServiceImpl implements IIndexerService {
     {
     	SolrInputDocument doc = new SolrInputDocument();
         doc.addField(SolrField.THESAURUSID, thesaurusConcept.getThesaurusId());
+        doc.addField(SolrField.THESAURUSTITLE, thesaurusConcept.getThesaurus().getTitle());
         doc.addField(SolrField.IDENTIFIER, thesaurusConcept.getIdentifier());
         doc.addField(SolrField.TYPE, ThesaurusConcept.class.getSimpleName());
         String prefLabel;
@@ -177,19 +179,16 @@ public class IndexerServiceImpl implements IIndexerService {
     @Override
     @Async
     public void addConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException {
-        addConcepts(Arrays.asList(thesaurusConcept), null);
+        addConcepts(Arrays.asList(thesaurusConcept));
     }
 
-    private void addConcepts(List<ThesaurusConcept> thesaurusConcepts, HttpSolrServer server) throws TechnicalException {
-        HttpSolrServer solrCore = server;
-        if(solrCore == null) {
-        	solrCore = getSolrInstance();
-        }
+    private void addConcepts(List<ThesaurusConcept> thesaurusConcepts) throws TechnicalException {
         for(ThesaurusConcept concept : thesaurusConcepts) {
         	SolrInputDocument doc = convertConcept(concept);
         	if (doc!=null) {
         		try {
-					solrCore.add(doc);
+        			logger.info("Indexing concept :"+concept.getIdentifier());
+					solrServer.add(doc);
 				} catch (SolrServerException e) {
 					throw new TechnicalException("Error during adding to SOLR!", e);
 				} catch (IOException e) {
@@ -197,9 +196,8 @@ public class IndexerServiceImpl implements IIndexerService {
 				}
         	}
         }
-
         try {
-                solrCore.commit();
+        	solrServer.commit();
         } catch (SolrServerException e) {
             throw new TechnicalException("Error during adding to SOLR!", e);
         } catch (IOException e) {
@@ -207,53 +205,38 @@ public class IndexerServiceImpl implements IIndexerService {
         }
     }
     
-    private void removeAllIndex(HttpSolrServer solrCore) {
+    private void removeAllIndex(SolrServer solrCore) {
         try {
-            solrCore.deleteByQuery("*:*");
-            solrCore.commit();
+        	solrServer.deleteByQuery("*:*");
+        	solrServer.commit();
         } catch (SolrServerException e) {
             throw new TechnicalException("Error executing query for clearing SOLR index!", e);
         } catch (IOException e) {
             throw new TechnicalException("IO error during executing query for clearing SOLR index!", e);
         }
-    }
-    
-    private HttpSolrServer getSolrInstance() throws TechnicalException
-    {
-    	HttpSolrServer solrCore = null;
-        try {
-            solrCore = new HttpSolrServer(url);
-        } catch (RuntimeException ex) {
-            logger.warn("Solr seems to be not launched!");
-            throw new TechnicalException("Cannot instanciate HttpSolrServer",ex);
-            
-        }
-        return solrCore;
     }
 
     @Override
     public void forceIndexing() throws TechnicalException{
-
-    	HttpSolrServer solrCore = getSolrInstance();
         try {
-            solrCore.deleteByQuery("*:*");
-            solrCore.commit();
+            solrServer.deleteByQuery("*:*");
+            solrServer.commit();
         } catch (SolrServerException e) {
             throw new TechnicalException("Error executing query for clearing SOLR index!", e);
         } catch (IOException e) {
             throw new TechnicalException("IO error during executing query for clearing SOLR index!", e);
         }
-        removeAllIndex(solrCore);
+        removeAllIndex(solrServer);
 
-        addConcepts(thesaurusConceptService.getAllConcepts(), solrCore);
-        addTerms(thesaurusTermService.getAllTerms(), solrCore);
+        addConcepts(thesaurusConceptService.getAllConcepts());
+        addTerms(thesaurusTermService.getAllTerms());
     }
 
     @Override
     @Async
     public void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException {
     	try {
-    		addTerms(Arrays.asList(thesaurusTerm), null);
+    		addTerms(Arrays.asList(thesaurusTerm));
     	} catch (TechnicalException ex)
     	{
     		logger.error(ex.getMessage(),ex.getCause().getMessage());
@@ -271,6 +254,7 @@ public class IndexerServiceImpl implements IIndexerService {
     {
     	SolrInputDocument doc = new SolrInputDocument();
         doc.addField(SolrField.THESAURUSID, thesaurusTerm.getThesaurusId());
+        doc.addField(SolrField.THESAURUSTITLE, thesaurusTerm.getThesaurus().getTitle());
         doc.addField(SolrField.IDENTIFIER, thesaurusTerm.getIdentifier());
         doc.addField(SolrField.LEXICALVALUE, thesaurusTerm.getLexicalValue());
         doc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
@@ -281,18 +265,14 @@ public class IndexerServiceImpl implements IIndexerService {
         return doc;
     }
 
-    private void addTerms(List<ThesaurusTerm> thesaurusTerms, HttpSolrServer server) {
-
-        HttpSolrServer solrCore = server;
-        if(solrCore == null) {
-        	solrCore = getSolrInstance();
-        }
+    private void addTerms(List<ThesaurusTerm> thesaurusTerms) {
         try {
 	        for(ThesaurusTerm term : thesaurusTerms) {
+	        	logger.info("Indexing term :"+term.getIdentifier());
 	        	SolrInputDocument doc = convertTerm(term);
-	        	solrCore.add(doc);
+	        	solrServer.add(doc);
 	        }
-            solrCore.commit();
+	        solrServer.commit();
         } catch (SolrServerException e) {
             throw new TechnicalException("Error during adding to SOLR!", e);
         } catch (IOException e) {

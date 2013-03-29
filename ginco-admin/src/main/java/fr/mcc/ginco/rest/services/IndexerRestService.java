@@ -56,6 +56,7 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -82,11 +83,13 @@ public class IndexerRestService {
     @GET
     @Path("/search")
     @Produces({MediaType.APPLICATION_JSON})
-    public  ExtJsonFormLoadData<List<SearchResult>> search(@QueryParam("query") String query) {
+    public  ExtJsonFormLoadData<List<SearchResult>> search(@QueryParam("query") String query,
+    		@QueryParam("start") Integer startIndex,
+    	    @QueryParam("limit") Integer limit) {
         try {
-        	List<SearchResult> searchResults  = indexerService.search(query);
+        	SearchResultList searchResults  = indexerService.search(query, startIndex,limit);
         	ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
-        	extSearchResults.setTotal((long) searchResults.size());
+        	extSearchResults.setTotal((long) searchResults.getNumFound());
 			return extSearchResults;
 		} catch (SolrServerException e) {
 			throw new TechnicalException("Search exception" , e) ;

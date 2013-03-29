@@ -45,9 +45,6 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	onNewThesaurusBtnClick : function(button, e, options) {
 		this.createPanel('GincoApp.view.ThesaurusPanel');
 	},
-	onNewTermBtnClick : function(button, e, options) {
-		this.createPanel('GincoApp.view.TermPanel');
-	},
 	createPanel : function(aType)
 	{
 		var aNewPanel = Ext.create(aType);
@@ -55,6 +52,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		var tab = topTabs.add(aNewPanel);
 		topTabs.setActiveTab(tab);
 		tab.show();
+		return aNewPanel;
 	},
 	onAccessibilityClick : function(theButton) {
 		if (theButton.pressed) {
@@ -84,6 +82,16 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	onLogoutBtn : function () {
 		window.location.href = "logout";
 	},
+	
+	onSearchTrigger : function(theTrigger) {
+		var searchPanel = Ext.create("GincoApp.view.SearchPanel");
+		searchPanel.query = theTrigger.getValue();
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		var tab = topTabs.add(searchPanel);
+		topTabs.setActiveTab(tab);
+		tab.show();
+		
+	},
 
 	init : function(application) {
 		this.control({
@@ -104,6 +112,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			},
 			'#logoutbtn' : {
 				click : this.onLogoutBtn
+			},
+			'#searchBtn' : {
+				trigger : this.onSearchTrigger
 			}
 		});
 	}
