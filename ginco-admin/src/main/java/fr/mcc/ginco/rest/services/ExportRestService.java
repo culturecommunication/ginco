@@ -49,6 +49,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
@@ -65,6 +66,7 @@ import fr.mcc.ginco.utils.EncodedControl;
  */
 @Service
 @Path("/exportservice")
+@PreAuthorize("isAuthenticated()")
 public class ExportRestService {
 
     @Inject

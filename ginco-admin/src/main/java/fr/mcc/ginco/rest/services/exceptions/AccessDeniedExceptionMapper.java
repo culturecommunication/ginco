@@ -32,35 +32,20 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
-
-import java.util.ResourceBundle;
+package fr.mcc.ginco.rest.services.exceptions;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.ext.ExceptionMapper;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.slf4j.Logger;
+import org.springframework.security.access.AccessDeniedException;
 
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.EncodedControl;
-
-public class BusinessExceptionMapper implements
-ExceptionMapper<BusinessException> {	 
-		@Log
-		private Logger log;
+/**
+ * Exception mapper for spring security access denied
+ *
+ */
+public class AccessDeniedExceptionMapper  extends AbstractExceptionMapper<AccessDeniedException>{
 	
-		@Override
-	    public Response toResponse(BusinessException e) {			
-			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));	
-			String msg  = res.getString(e.getUserMessageKey());				
-			log.error("Business Exception in REST services : "+e.getMessage());
-			log.debug("Business Exception in REST services : "+msg);
-			msg = StringEscapeUtils.escapeEcmaScript(msg);
-	        return Response.status(Status.OK)
-	        		.entity("{success:false, message: '"+msg+"'}")
-	        		.build();
-	    }
+	@Override
+	public Response toResponse(Throwable exception) {
+		return super.toResponse(exception, "access-denied-exception-text");
+	}
 }

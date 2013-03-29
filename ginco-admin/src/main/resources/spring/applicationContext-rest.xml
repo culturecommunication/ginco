@@ -45,8 +45,9 @@
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />
-			<bean class="fr.mcc.ginco.rest.services.BusinessExceptionMapper" />
-            <bean class="fr.mcc.ginco.rest.services.TechnicalExceptionMapper" />
+			<bean class="fr.mcc.ginco.rest.services.exceptions.BusinessExceptionMapper" />
+            <bean class="fr.mcc.ginco.rest.services.exceptions.TechnicalExceptionMapper" />
+            <bean class="fr.mcc.ginco.rest.services.exceptions.AccessDeniedExceptionMapper" />
 		</jaxrs:providers>
 		<jaxrs:features>
 			<cxf:logging />

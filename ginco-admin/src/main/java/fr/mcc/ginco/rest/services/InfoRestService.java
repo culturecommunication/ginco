@@ -41,6 +41,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
@@ -53,6 +54,7 @@ import fr.mcc.ginco.utils.GitInfo;
  */
 @Service
 @Path("/infoservice")
+@PreAuthorize("isAuthenticated()")
 public class InfoRestService {
    
     @Inject

@@ -44,6 +44,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.NodeLabel;
@@ -60,6 +61,7 @@ import fr.mcc.ginco.services.IThesaurusArrayService;
 @Service
 @Path("/thesaurusarrayservice")
 @Produces({ MediaType.APPLICATION_JSON })
+@PreAuthorize("isAuthenticated()")
 public class ThesaurusArrayRestService {
 
 	@Inject
@@ -104,6 +106,7 @@ public class ThesaurusArrayRestService {
 	@POST
 	@Path("/updateArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusArrayView updateThesaurusArray(
 			ThesaurusArrayView thesaurusArrayViewJAXBElement)
 	
@@ -133,6 +136,7 @@ public class ThesaurusArrayRestService {
 		@POST
 		@Path("/destroyArray")
 		@Consumes({ MediaType.APPLICATION_JSON })
+		@PreAuthorize("hasRole('ROLE_ADMIN')")
 		public void destroyArray(ThesaurusArrayView thesaurusArrayViewJAXBElement) throws BusinessException {
 			ThesaurusArray object = thesaurusArrayViewConverter.convert(thesaurusArrayViewJAXBElement);
 		

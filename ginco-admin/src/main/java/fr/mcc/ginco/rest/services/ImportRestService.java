@@ -52,6 +52,7 @@ import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
@@ -68,6 +69,7 @@ import fr.mcc.ginco.imports.ISKOSImportService;
 @Service
 @Path("/importservice")
 @Produces({ MediaType.TEXT_HTML })
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class ImportRestService {
 	@Context
 	private javax.servlet.ServletContext servletContext;

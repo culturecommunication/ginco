@@ -32,50 +32,28 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
-
-import java.util.List;
+package fr.mcc.ginco.services;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.services.IThesaurusTermRoleService;
+import fr.mcc.ginco.beans.AdminUser;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
-/**
- * Thesaurus Term Role REST service for all operations on Thesaurus Term Roles
- * 
- */
-@Service
-@Path("/termroleservice")
-@Produces({ MediaType.APPLICATION_JSON })
-@PreAuthorize("isAuthenticated()")
-public class TermRoleRestService {
-
+@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+@Service("adminUserService")
+public class AdminUserServiceImpl implements IAdminUserService {
 	@Inject
-	@Named("thesaurusTermRoleService")
-	private IThesaurusTermRoleService termRoleService;
-
-	/**
-	 * Public method used to get list of all existing term roles in database.
-	 * 
-	 * @return list of ThesaurusTermRole, if not found - {@code null}
-	 */
-	@GET
-	@Path("/getRoles")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<ThesaurusTermRole>> getAllRoles() {
-		List<ThesaurusTermRole> allRoles = termRoleService
-				.getAllThesaurusTermRole();
-		return new ExtJsonFormLoadData<List<ThesaurusTermRole>>(allRoles);
+	@Named("adminUserDAO")
+    private IGenericDAO<AdminUser, String> adminUserDAO;
+	
+	@Override
+	public boolean isUserAdmin(String userId) {
+		return (adminUserDAO.getById(userId)) != null;
 	}
-
+  
 }

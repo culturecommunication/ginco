@@ -20,3 +20,10 @@ ALTER TABLE thesaurus_version_history DROP COLUMN status;
 ALTER TABLE thesaurus_version_history ADD COLUMN status integer NOT NULL DEFAULT 0;
 
 --create unique index chk_uniq_thisversion on thesaurus_version_history(thesaurus_identifier, thisversion) where thisversion;
+
+-- Table: admin_user_id
+CREATE TABLE admin_user_id
+(
+  identifier text NOT NULL,
+  CONSTRAINT pk_admin_user_id PRIMARY KEY (identifier)
+);

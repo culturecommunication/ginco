@@ -48,6 +48,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Note;
@@ -67,6 +68,7 @@ import fr.mcc.ginco.services.INoteTypeService;
 @Service
 @Path("/thesaurusnoteservice")
 @Produces({ MediaType.APPLICATION_JSON })
+@PreAuthorize("isAuthenticated()")
 public class ThesaurusNoteRestService {	
 	@Inject
 	@Named("noteTypeService")
@@ -157,6 +159,7 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/createNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> createNotes(List<ThesaurusNoteView> noteViews, @QueryParam("conceptId") String conceptId, @QueryParam("termId") String termId) throws BusinessException {
 		//We set for each note if it belongs to a concept or a term
 		for (ThesaurusNoteView view : noteViews) {
@@ -194,6 +197,7 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/updateNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> updateNotes(List<ThesaurusNoteView> noteViews) throws BusinessException {
 		
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
@@ -218,6 +222,7 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/destroyNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews) throws BusinessException {
 		
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);

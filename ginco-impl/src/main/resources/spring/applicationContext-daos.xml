@@ -40,6 +40,7 @@
                 <value>hibernate/ThesaurusConceptGroup.hbm.xml</value>
                 <value>hibernate/ThesaurusConceptGroupType.hbm.xml</value>
                 <value>hibernate/ThesaurusConceptGroupLabel.hbm.xml</value>
+                <value>hibernate/AdminUser.hbm.xml</value>                
             </list>
         </property>
         <property name="hibernateProperties">
@@ -74,5 +75,9 @@
 	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusOrganization" />
 	</bean>
+	
+	<bean id="adminUserDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.AdminUser" />
+    </bean>
 
 </beans>

@@ -53,6 +53,7 @@ import fr.mcc.ginco.utils.EncodedControl;
 import org.apache.cxf.jaxrs.ext.Nullable;
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -72,6 +73,7 @@ import java.util.ResourceBundle;
 @Service
 @Path("/thesaurusconceptservice")
 @Produces({ MediaType.APPLICATION_JSON })
+@PreAuthorize("isAuthenticated()")
 public class ThesaurusConceptRestService {
 
 	@Inject
@@ -142,6 +144,7 @@ public class ThesaurusConceptRestService {
 	@POST
 	@Path("/updateConcept")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusConceptView updateConcept(
 			ThesaurusConceptView thesaurusConceptViewJAXBElement)
 			throws BusinessException, TechnicalException {
@@ -272,6 +275,7 @@ public class ThesaurusConceptRestService {
 	@POST
 	@Path("/destroyConcept")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) throws BusinessException {
 		ThesaurusConcept object = thesaurusConceptViewConverter.convert(thesaurusViewJAXBElement);
 	

@@ -47,6 +47,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
@@ -67,6 +68,7 @@ import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
 @Service
 @Path("/thesaurusconceptgroupservice")
 @Produces({ MediaType.APPLICATION_JSON })
+@PreAuthorize("isAuthenticated()")
 public class ThesaurusConceptGroupRestService {	
 	
 	@Inject
@@ -125,6 +127,7 @@ public class ThesaurusConceptGroupRestService {
 	@POST
 	@Path("/updateConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusConceptGroupView updateThesaurusConceptGroup(
 			ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement)
 	
@@ -149,6 +152,7 @@ public class ThesaurusConceptGroupRestService {
 	@POST
 	@Path("/destroyConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void destroyConceptGroup(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) throws BusinessException {
 		ThesaurusConceptGroup object = thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
 		if (object != null) {

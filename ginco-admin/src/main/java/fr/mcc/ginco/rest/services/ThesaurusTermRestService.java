@@ -46,6 +46,7 @@ import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.EncodedControl;
 import org.slf4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -64,6 +65,7 @@ import java.util.ResourceBundle;
 @Service
 @Path("/thesaurustermservice")
 @Produces({MediaType.APPLICATION_JSON})
+@PreAuthorize("isAuthenticated()")
 public class ThesaurusTermRestService {	
 	
 	@Inject
@@ -145,6 +147,7 @@ public class ThesaurusTermRestService {
 	@POST
 	@Path("/updateTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement)
             throws BusinessException, TechnicalException {
 
@@ -175,6 +178,7 @@ public class ThesaurusTermRestService {
 	@POST
 	@Path("/destroyTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
 		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement, false);
 	
