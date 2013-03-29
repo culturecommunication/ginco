@@ -168,16 +168,21 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     		
     }
     @Override
-    public ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId){
+    public ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
     	ThesaurusTerm thesaurusTerm = thesaurusTermDAO.
     			getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId);
     	if (thesaurusTerm != null){
     		if (thesaurusTerm.getPrefered())
     			return thesaurusTerm;
     		else{
-    			return thesaurusTermDAO.getConceptPreferredTerm(thesaurusTerm.getConcept().getIdentifier());
-    		}
-    			
+    			ThesaurusConcept thesaurusConcept = thesaurusTerm.getConcept();
+    			if (thesaurusConcept != null){
+    				return thesaurusTermDAO.getConceptPreferredTerm(thesaurusConcept.getIdentifier());
+    			}
+    			else{
+    				throw new BusinessException("The concept does not exist", "concept-does-not-exist");
+    			}
+    		}		
     	}
     	else return null;
     }

@@ -67,14 +67,20 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 	}
 	
 	@Override
-	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId){
-		ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
-		ThesaurusTerm thesaurusTerm = thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
-		
-		reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
-		reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
-		reducedThesaurusTerm.setLanguage(thesaurusTerm.getLanguage());
-		
-		return reducedThesaurusTerm;
+	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
+		if (lexicalValue != null && thesaurusId != null && languageId != null){
+			ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+			ThesaurusTerm thesaurusTerm = thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
+			
+			reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
+			reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
+			reducedThesaurusTerm.setLanguage(thesaurusTerm.getLanguage());
+			
+			return reducedThesaurusTerm;
+		}
+		else 
+		{
+			throw new BusinessException("One or more parameters are empty","empty-parameters");
+		}
 	}
 }
