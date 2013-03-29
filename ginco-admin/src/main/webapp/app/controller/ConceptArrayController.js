@@ -203,7 +203,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 					case 'yes':
 						var win = Ext.create('GincoApp.view.SelectConceptWin', {
 							thesaurusData : thePanel.thesaurusData,
-                            searchOrphans : false,
 							showTree : false,
 							onlyValidatedConcepts : true,
 							listeners: {
