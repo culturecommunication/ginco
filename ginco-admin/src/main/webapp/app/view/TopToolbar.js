@@ -132,9 +132,11 @@ Ext.define('GincoApp.view.TopToolbar', {
 			}, {
 				xtype : 'triggerfield',
 				width : 276,
+				triggerCls: 'x-form-search-trigger',
 				fieldLabel : me.xSearchLabel,
 				emptyText : me.xSearchFieldText,
 				hideTrigger : false,
+				itemId: 'searchBtn',
 				repeatTriggerClick : false,
 				disabled : false
 			},{

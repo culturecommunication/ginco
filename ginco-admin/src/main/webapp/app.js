@@ -110,7 +110,8 @@ Ext.application({
         'ConceptArrayController',
         'ConceptGroupController',
         'ImportController',
-        'ThesaurusVersionPanelController'
+        'ThesaurusVersionPanelController',
+        'SearchPanelController'
     ],
     init: function(){
     },

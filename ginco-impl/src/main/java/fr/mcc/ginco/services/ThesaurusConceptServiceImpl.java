@@ -88,7 +88,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Inject
 	@Named("associativeRelationshipRoleDAO")
 	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
-
+	
 
 	/*
 	 * (non-Javadoc)
@@ -311,6 +311,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
+		//indexerService.addConcept(concept);
 		return concept;
 	}
 
@@ -483,4 +484,5 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public String getConceptTitleLanguage(ThesaurusConcept concept) {
 	        return getConceptPreferredTerm(concept.getIdentifier()).getLanguage().getPart1();
 	}
+
 }

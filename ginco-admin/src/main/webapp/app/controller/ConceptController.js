@@ -176,8 +176,8 @@ Ext
 						var me = this;
 						var thePanel = me.getActivePanel();
 						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-						topTabs.fireEvent('opentermtab', topTabs,
-								record.data.identifier, thePanel.thesaurusData);
+						topTabs.fireEvent('opentermtab', topTabs, thePanel.thesaurusData.id,
+								record.data.identifier);
 						// Thesaurus.ext.tabs.openTermTab(record.data.identifier,
 						// thePanel.thesaurusData);
 

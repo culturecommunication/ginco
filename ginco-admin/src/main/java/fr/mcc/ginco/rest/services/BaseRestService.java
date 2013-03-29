@@ -67,7 +67,6 @@ import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.extjs.view.utils.GroupsGenerator;
 import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusService;
 
 /**
@@ -105,35 +104,6 @@ public class BaseRestService {
     @Inject
     @Named("childrenGenerator")
     private ChildrenGenerator childrenGenerator;
-
-    @Inject
-    @Named("indexerService")
-    private IIndexerService indexerService;
-
-    @GET
-    @Path("/reindex")
-    @Produces({MediaType.APPLICATION_JSON})
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Response forceIndexation() throws BusinessException, TechnicalException {
-        indexerService.forceIndexing();
-        return Response.status(Response.Status.OK)
-                .entity("{success:true, message: 'Indexing started!'}")
-                .build();
-    }
-
-    @GET
-    @Path("/search")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response search(@QueryParam("request") String request) {
-        try {
-			return Response.status(Response.Status.OK)
-			        .entity("{success:true, message: '"+indexerService.search(request)+"'}")
-			        .build();
-		} catch (SolrServerException e) {
-			throw new TechnicalException("Search exception" , e) ;
-		}
-
-    }
 
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in

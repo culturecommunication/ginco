@@ -24,6 +24,10 @@
           lazy-init="true">
         <property name="jndiName" value="java:comp/env/jdbc/GincoPool" />
     </bean>
+    
+    <bean id="solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+     	<constructor-arg index="0" value="${solr.url}" />
+	</bean>
      
     <bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

@@ -114,7 +114,8 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	if (object.getStatus() != TermStatusEnum.VALIDATED.getStatus() && object.getConcept() != null){
     		throw new BusinessException("The term is associated to a concept. The status must be set to validated", "term-selected-must-have-validated-status");
     	}
-    	return thesaurusTermDAO.update(object);
+    	ThesaurusTerm updatedThesaurus = thesaurusTermDAO.update(object);
+    	return updatedThesaurus;
     }
 
 	@Transactional(readOnly=false)

@@ -75,7 +75,7 @@ public class ThesaurusTermRestService {
     @Inject
     @Named("termViewConverter")
     private TermViewConverter termViewConverter;
-
+    
     @Inject
     @Named("indexerService")
     private IIndexerService indexerService;
@@ -155,8 +155,8 @@ public class ThesaurusTermRestService {
 		
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.updateThesaurusTerm(object);
-            indexerService.addTerm(result);
 			if (result != null) {
+				indexerService.addTerm(object);
 				return new ThesaurusTermView(result);
 			} else {
 				logger.error("Failed to update thesaurus term");
@@ -184,7 +184,6 @@ public class ThesaurusTermRestService {
 	
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
-            indexerService.removeTerm(result);
 			return new ThesaurusTermView(result);
 		}
 		return null;

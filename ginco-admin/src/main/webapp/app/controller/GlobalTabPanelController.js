@@ -185,7 +185,11 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	{
 		this.openGenericTab(tabPanel, aThesaurusId, aConceptId, "conceptPanel","GincoApp.view.ConceptPanel");
 	},
-	openTermTab : function (tabPanel, aTermId, aThesaurusData)
+	openTermTab : function(tabPanel, aThesaurusId, aConceptId)
+	{
+		this.openGenericTab(tabPanel, aThesaurusId, aConceptId, "termPanel","GincoApp.view.TermPanel");
+	},
+	/*openTermTab : function (tabPanel, aTermId, aThesaurusData)
 	{
 		var termTabs = Ext.ComponentQuery.query('topTabs termPanel');
 		var tabExists = false;
@@ -205,7 +209,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		} else {
 			tabPanel.setActiveTab(tabExists);
 		}
-	},
+	},*/
 	openArrayTab : function (tabPanel, aThesaurusId, aArrayId)
 	{
 		this.openGenericTab(tabPanel, aThesaurusId, aArrayId, "conceptArrayPanel","GincoApp.view.ConceptArrayPanel");
