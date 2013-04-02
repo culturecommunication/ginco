@@ -41,18 +41,15 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -281,27 +278,7 @@ public class IndexerServiceImpl implements IIndexerService {
             throw new TechnicalException("IO error!", e);
         }
     }
-    
-    private SolrDocument getDocumentById(String docId)
-    {
-    	SolrDocument doc = null;
-        SolrQuery query = new SolrQuery();
-        query.setRequestHandler("/get");
-        query.setParam("id", docId);
-        try {
-            QueryResponse resp = solrServer.query(query);
-            if (resp.getResponse().size() > 0) {
-                Object respdoc = resp.getResponse().getVal(0);
-                if (respdoc instanceof SolrDocument) {
-                    return (SolrDocument) respdoc;
-                }
-            }
-        } catch (SolrServerException e) {
-            logger.error("Didn't find any Document with Id " + docId);
-            return null;
-        }
-        return doc;
-    }
+   
 
     @Override
 	public void addNote(Note thesaurusNote) throws TechnicalException {
