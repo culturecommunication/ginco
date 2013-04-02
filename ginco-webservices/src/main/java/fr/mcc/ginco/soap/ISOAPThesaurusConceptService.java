@@ -36,6 +36,8 @@ package fr.mcc.ginco.soap;
 
 import javax.jws.WebService;
 
+import fr.mcc.ginco.exceptions.BusinessException;
+
 /**
  * This class exposes all SOAP services related to concept objects
  * 
@@ -54,5 +56,5 @@ public interface ISOAPThesaurusConceptService {
      * @return 2 if first concept is child of second concept
      */
     
-    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId);
+    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) throws BusinessException;
 }

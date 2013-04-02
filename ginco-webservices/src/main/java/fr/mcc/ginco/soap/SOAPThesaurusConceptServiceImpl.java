@@ -38,7 +38,9 @@ package fr.mcc.ginco.soap;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
+import javax.xml.ws.WebFault;
 
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -54,8 +56,15 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	private IThesaurusConceptService thesaurusConceptService;
 	
 	@Override
-	public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId){
-		return thesaurusConceptService.getConceptsHierarchicalRelations(firstConceptId, secondConceptId);
+	public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
+			throws BusinessException{
+		if (!firstConceptId.equals("") && !secondConceptId.equals("")){
+			return thesaurusConceptService.getConceptsHierarchicalRelations(firstConceptId, secondConceptId);
+		}
+		else 
+		{
+			throw new BusinessException("One or more parameters are empty","empty-parameters");
+		}
 	}
 
 }

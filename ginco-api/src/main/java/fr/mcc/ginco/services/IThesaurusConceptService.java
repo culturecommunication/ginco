@@ -231,5 +231,6 @@ public interface IThesaurusConceptService {
      * @return 2 if first concept is child of second concept
      */
     
-    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId);
+    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
+    		throws BusinessException;
 }

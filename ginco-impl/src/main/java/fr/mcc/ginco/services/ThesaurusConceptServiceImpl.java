@@ -477,6 +477,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
     
     @Override
+
     public String getConceptTitle(ThesaurusConcept concept) {
 		return getConceptPreferredTerm(concept.getIdentifier()).getLexicalValue();
 	}
@@ -487,19 +488,28 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
     @Override
-    public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId){
+    public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
+    		throws BusinessException{
+    	ThesaurusConcept firstConcept = thesaurusConceptDAO.getById(firstConceptId);
+    	ThesaurusConcept secondConcept = thesaurusConceptDAO.getById(secondConceptId);
     	
-    	if (thesaurusConceptDAO.getChildrenConcepts(firstConceptId)
-    			.contains(thesaurusConceptDAO.getById(secondConceptId))){
-    		return ConceptHierarchicalRelationsEnum.PARENT.getStatus();
+    	if (firstConcept != null && secondConcept != null){
+    		if (thesaurusConceptDAO.getChildrenConcepts(firstConceptId)
+        			.contains(secondConcept)){
+        		return ConceptHierarchicalRelationsEnum.PARENT.getStatus();
+        	}
+        	
+        	if (thesaurusConceptDAO.getChildrenConcepts(secondConceptId)
+        			.contains(firstConcept)){
+        		return ConceptHierarchicalRelationsEnum.CHILD.getStatus();
+        	}
+        	
+        	else   
+        		return ConceptHierarchicalRelationsEnum.NORELATIONS.getStatus();
+    	}
+    	else{
+    		throw new BusinessException("One or both concepts don't exist", "concepts-do-not-exist");
     	}
     	
-    	if (thesaurusConceptDAO.getChildrenConcepts(secondConceptId)
-    			.contains(thesaurusConceptDAO.getById(firstConceptId))){
-    		return ConceptHierarchicalRelationsEnum.CHILD.getStatus();
-    	}
-    	
-    	else   
-    		return ConceptHierarchicalRelationsEnum.NORELATIONS.getStatus();
     }
 }
