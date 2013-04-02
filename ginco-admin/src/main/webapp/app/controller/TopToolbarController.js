@@ -88,6 +88,12 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		tab.show();
 		
 	},
+	onSearchTriggerKey : function (theTrigger,e )
+	{
+		if (e.getKey() == e.ENTER) {
+			this.onSearchTrigger(theTrigger);
+        }
+	},
 
 	init : function(application) {
 		this.control({
@@ -110,7 +116,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 				click : this.onLogoutBtn
 			},
 			'#searchBtn' : {
-				trigger : this.onSearchTrigger
+				trigger : this.onSearchTrigger,
+				specialkey : this.onSearchTriggerKey,
+				
 			}
 		});
 	}
