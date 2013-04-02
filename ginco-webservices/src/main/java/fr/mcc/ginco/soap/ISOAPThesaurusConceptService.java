@@ -34,54 +34,27 @@
  */
 package fr.mcc.ginco.soap;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.jws.WebService;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.IThesaurusTermService;
 
 /**
- * This class is the implementation of all SOAP services related to term objects
+ * This class exposes all SOAP services related to concept objects
  * 
  */
-@WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusTermService")
-public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
+
+@WebService
+public interface ISOAPThesaurusConceptService {
 	
-	@Inject
-	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
-	
-	@Override
-	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
-		if (!lexicalValue.equals("") && !thesaurusId.equals("") && !languageId.equals("")){
-			return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
-		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
-		}
-	}
-	
-	@Override
-	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
-		if (!lexicalValue.equals("") && !thesaurusId.equals("") && !languageId.equals("")){
-			ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
-			ThesaurusTerm thesaurusTerm = thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
-		
-			if (thesaurusTerm !=null){
-				reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
-				reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
-				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
-				return reducedThesaurusTerm;
-			}
-			else return null;		
-		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
-		}
-	}
+	/**
+     * Get hierarchical relations between two concepts
+     * @param identifier of first concept
+     * @param identifier of second concept
+     * 
+     * @return 0 if relations between concepts don't exist
+     * @return 1 if first concept is parent of second concept
+     * @return 2 if first concept is child of second concept
+     */
+    
+    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) throws BusinessException;
 }

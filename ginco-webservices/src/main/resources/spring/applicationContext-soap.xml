@@ -14,7 +14,8 @@
     
 	<bean id="thesaurusSOAPService" class="fr.mcc.ginco.soap.SOAPThesaurusServiceImpl" />
 	<bean id="thesaurusTermSOAPService" class="fr.mcc.ginco.soap.SOAPThesaurusTermServiceImpl" />
-
+	<bean id="thesaurusConceptSOAPService" class="fr.mcc.ginco.soap.SOAPThesaurusConceptServiceImpl" />
+	
 	<!--pluging slf4j on CXF -->
 	<bean id="loggerPrereqs"
 		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -56,6 +57,10 @@
 	
 	<jaxws:endpoint id="ThesaurusTermService" implementor="#thesaurusTermSOAPService"
 		address="/thesaurusTerm" depends-on="loggerPrereqs">
+	</jaxws:endpoint>
+	
+	<jaxws:endpoint id="ThesaurusConceptService" implementor="#thesaurusConceptSOAPService"
+		address="/thesaurusConcept" depends-on="loggerPrereqs">
 	</jaxws:endpoint>
 
 </beans>

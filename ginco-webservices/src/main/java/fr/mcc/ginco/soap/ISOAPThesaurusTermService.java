@@ -35,8 +35,6 @@
 package fr.mcc.ginco.soap;
 
 import javax.jws.WebService;
-
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 
 

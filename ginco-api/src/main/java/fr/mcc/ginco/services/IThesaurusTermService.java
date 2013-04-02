@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -151,5 +150,6 @@ public interface IThesaurusTermService {
 	 * 
 	 * @return preferred term
 	 */
+
 	 ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
 }

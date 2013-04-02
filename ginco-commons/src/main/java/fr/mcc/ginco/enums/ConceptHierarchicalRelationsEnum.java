@@ -32,31 +32,18 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.data;
+package fr.mcc.ginco.enums;
 
-public class ReducedThesaurusTerm {
+public enum ConceptHierarchicalRelationsEnum {
+	NORELATIONS(0), PARENT(1), CHILD(2);
 	
-	private String identifier;
-	private String lexicalValue;
-	private String languageId;
+	private int status;
 	
-	public String getIdentifier() {
-		return identifier;
-	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public String getLexicalValue() {
-		return lexicalValue;
-	}
-	public void setLexicalValue(String lexicalValue) {
-		this.lexicalValue = lexicalValue;
-	}
-	public String getLanguageId() {
-		return languageId;
-	}
-	public void setLanguageId(String languageId) {
-		this.languageId = languageId;
+	private ConceptHierarchicalRelationsEnum(int status){
+		this.status = status;
 	}
 
+	public int getStatus() {
+		return status;
+	}
 }

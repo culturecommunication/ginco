@@ -32,56 +32,42 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+
 package fr.mcc.ginco.soap;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.jws.WebService;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+
 
 /**
- * This class is the implementation of all SOAP services related to term objects
+ * Unit tests class for the ThesaurusConceptService
  * 
  */
-@WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusTermService")
-public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
+public class SOAPThesaurusConceptServiceTest {
+
+	@Mock(name = "thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 	
-	@Inject
-	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
+	@InjectMocks
+	private SOAPThesaurusConceptServiceImpl soapThesaurusConceptService;
 	
-	@Override
-	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
-		if (!lexicalValue.equals("") && !thesaurusId.equals("") && !languageId.equals("")){
-			return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
-		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
-		}
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);	
 	}
 	
-	@Override
-	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
-		if (!lexicalValue.equals("") && !thesaurusId.equals("") && !languageId.equals("")){
-			ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
-			ThesaurusTerm thesaurusTerm = thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
-		
-			if (thesaurusTerm !=null){
-				reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
-				reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
-				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
-				return reducedThesaurusTerm;
-			}
-			else return null;		
-		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
-		}
+	/**
+	 * Test the getConceptsHierarchicalRelations method with empty parameters
+	 */
+	
+	@Test(expected=BusinessException.class)
+	public final void testGetConceptsHierarchicalRelationsWithEmptyParameters(){
+		soapThesaurusConceptService.getConceptsHierarchicalRelations("", "");
 	}
 }

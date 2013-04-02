@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.dao.*;
+import fr.mcc.ginco.enums.ConceptHierarchicalRelationsEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -476,6 +477,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
     
     @Override
+
     public String getConceptTitle(ThesaurusConcept concept) {
 		return getConceptPreferredTerm(concept.getIdentifier()).getLexicalValue();
 	}
@@ -485,4 +487,29 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	        return getConceptPreferredTerm(concept.getIdentifier()).getLanguage().getPart1();
 	}
 
+    @Override
+    public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
+    		throws BusinessException{
+    	ThesaurusConcept firstConcept = thesaurusConceptDAO.getById(firstConceptId);
+    	ThesaurusConcept secondConcept = thesaurusConceptDAO.getById(secondConceptId);
+    	
+    	if (firstConcept != null && secondConcept != null){
+    		if (thesaurusConceptDAO.getChildrenConcepts(firstConceptId)
+        			.contains(secondConcept)){
+        		return ConceptHierarchicalRelationsEnum.PARENT.getStatus();
+        	}
+        	
+        	if (thesaurusConceptDAO.getChildrenConcepts(secondConceptId)
+        			.contains(firstConcept)){
+        		return ConceptHierarchicalRelationsEnum.CHILD.getStatus();
+        	}
+        	
+        	else   
+        		return ConceptHierarchicalRelationsEnum.NORELATIONS.getStatus();
+    	}
+    	else{
+    		throw new BusinessException("One or both concepts don't exist", "concepts-do-not-exist");
+    	}
+    	
+    }
 }

@@ -34,8 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
