@@ -32,47 +32,40 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.rest.services;
 
-/*
- * File: app/locale/fr/view/ThesaurusPanel.js
- * Thesaurus Translated Items
- * 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.exceptions.BusinessException;
+
+/**
+ * REST service to get edit the log journal.
  */
-Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
-	    xIdentifierLabel : 'Identifiant',
-	    xCreatedDateLabel : 'Date de création',
-	    xDateLabel : 'Dernière modification',
-	    xTitleLabel : 'Titre',
-	    xServiceLabel : 'Auteur',
-	    xUrlLabel : 'URL',
-	    xContributorLabel : 'Contributeur',
-	    xPublisherLabel : 'Editeur',
-	    xPublisherValue : 'Ministère chargé de la culture',
-	    xRightsLabel : 'Droits',
-	    xDescriptionLabel : 'Description',
-	    xCoverageLabel : 'Couverture',
-	    xSubjectLabel : 'Sujet',
-	    xTypeLabel : 'Type',
-	    xFormatLabel : 'Format',
-	    xLanguagesLabel : 'Langue(s)',
-	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
-	    xRelationLabel : 'Publication(s) associée(s)',
-	    xSourceLabel : 'Ressource(s) liée(s)',
-	    xThesaurusTitle : 'Nouveau Vocabulaire',
-	    xThesaurusTabTitle : 'Thesaurus',
-	    xNewLabel : 'Nouveau',
-	    xNewMenu_TermLabel : 'Terme',
-	    xNewMenu_ConceptLabel: 'Concept',
-	    xNewMenu_GroupLabel: 'Groupe de concepts',
-	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
-        xExport_Skos : "Export SKOS",
-        xExport_Hierarchical : "Export texte hiérarchique",
-        xExport_Alphabetic : "Export texte alphabétique",
-        xExport_Mcc : "Export XML MCC",
+@Service
+@Path("/journalservice")
+@PreAuthorize("isAuthenticated()")
+public class JournalRestService {
+   
+    /**
+     * Return file in .txt format; name begins with current DateTime.
+     * @param thesaurusId
+     * @return
+     * @throws BusinessException
+     */
+    @GET
+    @Path("/exportLogJournal")
+    @Produces("text/plain")
+    public Response exportLogJournal(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+    	//TODO US25
+        Response.ResponseBuilder response = Response.ok();    
 
-        xSave : "Enregistrer",
-        xDelete : "Supprimer",
-        xVersionsTab : 'Versions',
-        xJournal: 'Journal des évolutions',
-    	xEditJournal: 'Editer au format CSV',
-});
+        return response.build();
+    }   
+}

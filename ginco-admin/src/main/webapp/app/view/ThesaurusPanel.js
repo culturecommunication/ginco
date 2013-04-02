@@ -77,6 +77,8 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xSave : "Save",
 	xDelete : "Delete",
 	xVersionsTab : 'Versions',
+	xJournal: 'Log history',
+	xEditJournal: 'Edit history',
 	
 	initComponent : function() {
 		var me = this;
@@ -163,24 +165,40 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 							                                     text : me.xExport_Skos,
 							                                     disabled : true,
 							                                     itemId : 'exportSKOS'
+							                                 },{
+							                                	 xtype : 'keymenuitem',
+							                                	 text : me.xExport_Hierarchical,
+							                                	 disabled : true,
+							                                	 itemId : 'exportHierarchical'
+							                                 },{
+							                                	 xtype : 'keymenuitem',
+							                                	 text : me.xExport_Alphabetic,
+							                                	 disabled : true,
+							                                	 itemId : 'exportAlphabetical'
+							                                 },{
+							                                	 xtype : 'keymenuitem',
+							                                	 text : me.xExport_Mcc,
+							                                	 disabled : true,
+							                                	 itemId : 'exportMcc'
+							                                 }]
+							                            }
 							                    },{
-							                             xtype : 'keymenuitem',
-							                             text : me.xExport_Hierarchical,
-							                             disabled : true,
-							                             itemId : 'exportHierarchical'
-							                    },{
-							                             xtype : 'keymenuitem',
-							                             text : me.xExport_Alphabetic,
-							                             disabled : true,
-							                             itemId : 'exportAlphabetical'
-							                    },{
-						                             xtype : 'keymenuitem',
-						                             text : me.xExport_Mcc,
-						                             disabled : true,
-						                             itemId : 'exportMcc'
-						                    }]
-							                }
-							              } ]
+						                            xtype : 'button',
+						                            disabled : true,
+						                            cls : 'journalBtnMenu',
+						                            text : me.xJournal,
+						                            iconCls : 'exports-icon',
+						                            menu : {
+						                                 xtype : 'menu',
+						                                 width : 200,
+						                                 items : [ {
+						                                     xtype : 'keymenuitem',
+						                                     text : me.xEditJournal,
+						                                     disabled : true,
+						                                     itemId : 'editJournal'
+						                                 }]
+						                            }
+						                    } ]
 									} ],
 										items : [{
 											xtype : 'displayfield',

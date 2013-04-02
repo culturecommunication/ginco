@@ -75,6 +75,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         thesaurusPanel.down('#exportAlphabetical').setDisabled(false);
         thesaurusPanel.down('#exportMcc').setDisabled(false);
         thesaurusPanel.down('#versionTab').setDisabled(false);
+        thesaurusPanel.down('button[cls=journalBtnMenu]').setDisabled(false);
+        thesaurusPanel.down('#editJournal').setDisabled(false);
+
 	},
 	onNewTermBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusPanel');
@@ -157,6 +160,14 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         var me = this;
         var theForm = theButton.up('form');
         var url = "services/ui/exportservice/getHierarchical?thesaurusId="
+            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
+        window.open(url);
+    },
+    
+    exportJournal : function(theButton) {
+        var me = this;
+        var theForm = theButton.up('form');
+        var url = "services/ui/journalservice/exportLogJournal?thesaurusId="
             + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
         window.open(url);
     },
@@ -244,7 +255,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			},
 			"thesaurusPanel #newConceptGroupBtn" : {
 				click : this.onNewConceptGroupBtnClick
-			}
+			},
+			"thesaurusPanel #editJournal" : {
+                click : this.exportJournal
+            },
 		});
 	}
 });

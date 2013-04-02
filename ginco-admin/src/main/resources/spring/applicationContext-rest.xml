@@ -43,6 +43,7 @@
             <bean class="fr.mcc.ginco.rest.services.ExportRestService" />
             <bean class="fr.mcc.ginco.rest.services.ImportRestService" />
             <bean class="fr.mcc.ginco.rest.services.IndexerRestService" />
+            <bean class="fr.mcc.ginco.rest.services.JournalRestService" />            
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />
