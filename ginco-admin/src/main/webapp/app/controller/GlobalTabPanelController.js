@@ -73,7 +73,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			);
 			
 			if (dirtyForms.length>0) {
-				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.isAdmin == false) { 
+				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
 					if (theForm.checkRoles('ADMIN')==true)
 						return true;
 				}
@@ -186,7 +186,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		}
 	},
 	onTabAdded : function ( tabPanel, component, index, eOpts) {
-		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.isAdmin == false) { 
+		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
 			component.restrictUI('ADMIN');
 		}
 	},

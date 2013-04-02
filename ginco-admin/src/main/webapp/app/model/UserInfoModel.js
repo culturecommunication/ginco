@@ -50,7 +50,7 @@ Ext.define('GincoApp.model.UserInfoModel', {
                  type : 'string'
              },
              {
-                 name: 'isAdmin',
+                 name: 'admin',
                  type : 'boolean'
              }
          ]

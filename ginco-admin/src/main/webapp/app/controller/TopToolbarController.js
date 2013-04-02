@@ -73,7 +73,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		var userNameLabel = Ext.ComponentQuery.query('#username')[0];
 		userNameLabel.setText(Thesaurus.ext.utils.userInfo.data.username);	
 		
-		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.isAdmin == false) { 
+		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
 			var topToolBar = Ext.ComponentQuery.query('topToolBar')[0];
 			topToolBar.restrictUI('ADMIN');
 		}
