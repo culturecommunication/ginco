@@ -29,7 +29,6 @@ public class SOAPThesaurusConceptServiceTest {
 	
 	/**
 	 * Test the getConceptsHierarchicalRelations method with empty parameters
-	 * fields
 	 */
 	
 	@Test(expected=BusinessException.class)

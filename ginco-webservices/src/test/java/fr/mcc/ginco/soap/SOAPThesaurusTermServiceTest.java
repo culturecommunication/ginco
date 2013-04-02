@@ -44,8 +44,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
@@ -74,8 +72,12 @@ public class SOAPThesaurusTermServiceTest {
 		Assert.assertEquals("fakeConceptId", conceptId);		
 	}
 	
+	/**
+	 * Test the getConceptIdByTerm method with empty parameters
+	 */
+	
 	@Test(expected=BusinessException.class)
-	public final void testGetConceptIdByTermWithInvalidParametres(){
+	public final void testGetConceptIdByTermWithEmptyParameters(){
 		soapThesaurusTermService.getConceptIdByTerm("", "", "");
 	}
 }
