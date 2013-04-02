@@ -59,6 +59,12 @@ Ext.Loader.setLocale({
     types: [ 'controller', 'view' ]
 });
 
+Ext.define("Thesaurus.user.info", {
+	singleton:true,
+	username: "",
+	isAdmin: false	
+});
+
 Ext.application({
     models: [
         'MainTreeModel',
@@ -86,7 +92,8 @@ Ext.application({
         'TermStatusStore',
         'ConceptStatusStore',
         'ThesaurusVersionStore',
-        'ThesaurusVersionStatusStore'
+        'ThesaurusVersionStatusStore',
+        'UserInfoStore'
     ],
     views: [
         'GincoViewPort',
@@ -113,10 +120,25 @@ Ext.application({
         'ThesaurusVersionPanelController',
         'SearchPanelController'
     ],
-    init: function(){
+    init: function(){    	
     },
     launch: function() {
-    	 Ext.History.init();
+    	/*Ext.Ajax.request({
+			scope : this,
+			url: 'services/ui/baseservice/isAdmin',			
+			callback : function(options, success, response){ 
+				Thesaurus.user.info.isAdmin = response.responseText;    					
+			}
+    	});		
+    	Ext.Ajax.request({
+			scope : this,
+			url: 'services/ui/baseservice/getUsername',			
+			callback : function(options, success, response){ 
+				Thesaurus.user.info.username = response.responseText;
+			}
+    	});		
+    	*/
+    	Ext.History.init();
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
             // Fade out the body mask

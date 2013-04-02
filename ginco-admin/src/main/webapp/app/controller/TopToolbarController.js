@@ -37,7 +37,8 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	extend : 'Ext.app.Controller',
 
 	views : [ 'TopToolbar' ],
-
+	stores: ['UserInfoStore'],
+	
 	onAproposClick : function(button, e, options) {
 		Ext.create('GincoApp.view.AProposWin');
 	},
@@ -70,13 +71,8 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	loadToolbar: function(theToolbar) {
 		var me = this;
 		var userNameLabel = theToolbar.down("#username");	
-		Ext.Ajax.request({
-			scope : this,
-			url: 'services/ui/baseservice/getUsername',			
-			callback : function(options, success, response){ 
-					userNameLabel.setText(response.responseText);
-			}
-		});		
+		var userInfoStore = me.getUserInfoStoreStore();
+		userNameLabel.setText(userInfoStore.data.items[0].data.username);		
 	},
 	
 	onLogoutBtn : function () {

@@ -432,7 +432,16 @@ Ext.define('Thesaurus.Component', {
 		var me = this;
 		me.callParent();
 		me.initAria();
-	}
+	},
+	setDisabled : function(value) {
+    	var me = this;
+    	if(value) {
+    		var userInfoStore = Ext.StoreMgr.lookup("UserInfoStore");    	
+    		if (userInfoStore.data.items[0].data.isAdmin) {
+    			me.callParent();
+    		} 
+    	}
+    }
 });
 
 /*

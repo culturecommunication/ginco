@@ -45,9 +45,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.apache.solr.client.solrj.SolrServerException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,16 +55,19 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.pojo.UserInfo;
 import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.extjs.view.utils.GroupsGenerator;
 import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
+import fr.mcc.ginco.services.IAdminUserService;
+import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusService;
 
 /**
@@ -104,6 +105,15 @@ public class BaseRestService {
     @Inject
     @Named("childrenGenerator")
     private ChildrenGenerator childrenGenerator;
+
+    @Inject
+    @Named("indexerService")
+    private IIndexerService indexerService;
+    
+    @Inject
+    @Named("adminUserService")
+    private IAdminUserService adminUserService; 
+   
 
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in
@@ -169,13 +179,15 @@ public class BaseRestService {
 	 * @throws JsonGenerationException 
 	 */
 	@GET
-	@Path("/getUsername")
+	@Path("/getUserInfo")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public String getUserName() {
+	public ExtJsonFormLoadData<UserInfo> getUserInfo() {
+		UserInfo userInfos = new UserInfo();
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
-		return auth.getName();
-	}
-
+		userInfos.setUsername(auth.getName());		
+		userInfos.setAdmin(adminUserService.isUserAdmin(auth.getName()));
+		return new ExtJsonFormLoadData<UserInfo>(userInfos);
+	}		
 	
 }

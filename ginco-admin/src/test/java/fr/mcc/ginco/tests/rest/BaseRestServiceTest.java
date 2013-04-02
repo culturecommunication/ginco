@@ -54,6 +54,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.rest.services.BaseRestService;
+import fr.mcc.ginco.services.IAdminUserService;
 import fr.mcc.ginco.services.IThesaurusService;
 
 public class BaseRestServiceTest {
@@ -64,6 +65,9 @@ public class BaseRestServiceTest {
 	@Mock(name = "folderGenerator")
 	private FolderGenerator folderGenerator;
 
+	@Mock(name = "adminUserService")
+	 private IAdminUserService adminUserService;
+	
 	@InjectMocks
 	private BaseRestService baseRestService = new BaseRestService();
 
@@ -118,7 +122,7 @@ public class BaseRestServiceTest {
 				"password");
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
-		String userName = baseRestService.getUserName();
+		String userName = baseRestService.getUserInfo().getData().getUsername();
 		Assert.assertEquals("username", userName);
 	}
 
