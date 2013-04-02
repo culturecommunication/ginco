@@ -34,19 +34,24 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.hibernate.envers.DefaultRevisionEntity;
-import org.hibernate.envers.RevisionEntity;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionEntity;
 
 /**
  * Bean represents revision of other beans
  */
 @RevisionEntity
-public class GincoRevEntity extends DefaultRevisionEntity implements Serializable {
+public class GincoRevEntity extends DefaultRevisionEntity implements
+		Serializable {
 	private String username;
+
+	private String thesaurusId;
+
+	private Set<GincoRevModifiedEntityType> modifiedEntityTypes = new HashSet<GincoRevModifiedEntityType>();
 
 	public String getUsername() {
 		return username;
@@ -56,10 +61,15 @@ public class GincoRevEntity extends DefaultRevisionEntity implements Serializabl
 		this.username = username;
 	}
 
-	
-	private Set<GincoRevModifiedEntityType> modifiedEntityTypes = new HashSet<GincoRevModifiedEntityType>();
+	public String getThesaurusId() {
+		return thesaurusId;
+	}
 
-	public void addModifiedEntityType(GincoRevModifiedEntityType revEntity) {		
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
+	}
+
+	public void addModifiedEntityType(GincoRevModifiedEntityType revEntity) {
 		modifiedEntityTypes.add(revEntity);
 	}
 

@@ -13,5 +13,6 @@
                <key column="revision"/>
                <one-to-many class="GincoRevModifiedEntityType"/>
          </set>
+         <property name="thesaurusId" column="thesaurusid" />
 	</class>
 </hibernate-mapping>

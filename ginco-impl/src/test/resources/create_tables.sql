@@ -268,7 +268,8 @@ CREATE SEQUENCE revinfoentitytypes_identifier_seq START WITH 1  INCREMENT BY 1 ;
 CREATE TABLE revinfo (
     rev integer NOT NULL,
     revtstmp bigint,
-    username character varying(255)
+    username character varying(255),
+    thesaurusid text
 );
 
 CREATE TABLE revinfoentitytypes (

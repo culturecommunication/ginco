@@ -60,7 +60,7 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	@Inject
 	@Named("gincoSessionFactory")
 	private SessionFactory sessionFactory;
-
+		
 	public GenericHibernateDAO(Class<T> clazz) {
 		this.persistentClass = clazz;
 	}

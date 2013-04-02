@@ -36,27 +36,35 @@ package fr.mcc.ginco.audit;
 
 import java.io.Serializable;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.lang3.ArrayUtils;
+import org.hibernate.SessionFactory;
 import org.hibernate.envers.EntityTrackingRevisionListener;
 import org.hibernate.envers.RevisionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
+import fr.mcc.ginco.beans.IAuditableBean;
+import fr.mcc.ginco.dao.hibernate.GenericHibernateDAO;
 
 /**
  * Takes control on audit.
  */
-public class GincoRevListener implements EntityTrackingRevisionListener {
+@Component
+public class GincoRevListener implements EntityTrackingRevisionListener, ApplicationContextAware {
 
 	private Logger logger = LoggerFactory.getLogger(GincoRevListener.class);
+	private static ApplicationContext applicationContext;
 
+	
 	@Override
 	public void entityChanged(Class entityClass, String entityName,
 			Serializable entityId, RevisionType revisionType,
@@ -64,7 +72,17 @@ public class GincoRevListener implements EntityTrackingRevisionListener {
 		GincoRevModifiedEntityType revEntity = new GincoRevModifiedEntityType();
 		revEntity.setEntityClassName(entityClass.getName());
 		revEntity.setRevision(((GincoRevEntity) revisionEntity).getId());
-		((GincoRevEntity) revisionEntity).addModifiedEntityType(revEntity);
+		((GincoRevEntity) revisionEntity).addModifiedEntityType(revEntity);		
+		if (ArrayUtils.contains(entityClass.getGenericInterfaces(), IAuditableBean.class)) {	
+			GenericHibernateDAO objectDAO = new GenericHibernateDAO(entityClass);
+			objectDAO.setSessionFactory((SessionFactory)applicationContext.getBean("gincoSessionFactory"));
+			String thesaurusId =((IAuditableBean) objectDAO.getById(entityId)).getThesaurusId();
+			((GincoRevEntity) revisionEntity).setThesaurusId(thesaurusId);
+		} else {
+			logger.warn("Trying to audit a bean not implementing IAuditableBean interface");
+		}
+		
+
 	}
 
 	@Override
@@ -78,5 +96,10 @@ public class GincoRevListener implements EntityTrackingRevisionListener {
 			String name = auth.getName(); 
 			gincoRevEntity.setUsername(name);
 		}
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 }
