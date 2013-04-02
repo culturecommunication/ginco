@@ -310,7 +310,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	onUserInfoLoaded : function()
 	{
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		this.onTabAdded(topTabs,topTabs.getActiveTab());
+		if (topTabs.getActiveTab()!=null) {
+			this.onTabAdded(topTabs,topTabs.getActiveTab());
+		}
 	},
 	init : function(application) {
 		this.application.on({

@@ -40,10 +40,10 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 	{
 		var thePanel = theGrid.up('searchPanel');
 		thePanel.setTitle(thePanel.title + ' : '
-				+ thePanel.query);
+				+ thePanel.searchQuery);
 		var theStore = theGrid.getStore();
 		theStore.getProxy().setExtraParam('query',
-				thePanel.query);
+				thePanel.searchQuery);
 		theStore.load(function(records, operation, success) {
 		    if (success==false) {
 		    	Thesaurus.ext.utils.msg("Warning",
@@ -54,6 +54,12 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 	
 	onDisplayResultBtn : function(theButton) {
 		var theGrid = theButton.up("gridpanel");
+		this.onResultDblClick(theGrid);
+		
+	},
+	
+	onResultDblClick : function (theGrid) 
+	{
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		var items = theGrid.getSelectionModel().getSelection();
 		if (items.length > 0) {
@@ -70,7 +76,8 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 	init : function(application) {
 		this.control({
 			'searchPanel gridpanel' : {
-				afterrender : this.onSearchGridLoad
+				afterrender : this.onSearchGridLoad,
+				itemdblclick : this.onResultDblClick
 			}, 
 			'#displayResultBtn' :  {
 				click : this.onDisplayResultBtn

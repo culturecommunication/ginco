@@ -35,7 +35,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 	xSearchPanelTitle : 'Search results',
 	closable : true,
 	localized : true,
-	query : '*',
+	searchQuery : '*',
 	layout : {
 		type : 'vbox',
 		align : 'stretch'

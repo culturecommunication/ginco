@@ -86,7 +86,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	
 	onSearchTrigger : function(theTrigger) {
 		var searchPanel = Ext.create("GincoApp.view.SearchPanel");
-		searchPanel.query = theTrigger.getValue();
+		searchPanel.searchQuery = theTrigger.getValue();
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		var tab = topTabs.add(searchPanel);
 		topTabs.setActiveTab(tab);
