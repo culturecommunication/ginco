@@ -56,7 +56,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 	
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
-		if (lexicalValue != null && thesaurusId != null && languageId != null){
+		if (!lexicalValue.equals("") && !thesaurusId.equals("") && !languageId.equals("")){
 			return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
 		}
 		else 
