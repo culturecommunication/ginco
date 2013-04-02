@@ -71,12 +71,15 @@ public class SKOSConceptExporter {
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
 
-	/**
-	 * Export a concept to SKOS using the skos API
-	 * 
-	 * @param thesaurus
-	 * @return
-	 */
+    /**
+     * Export a concept to SKOS using the skos API
+     * @param concept
+     * @param parent
+     * @param scheme
+     * @param factory
+     * @param vocab
+     * @return
+     */
 	public List<SKOSChange> exportConceptSKOS(ThesaurusConcept concept,
 			SKOSConcept parent, SKOSConceptScheme scheme,
 			SKOSDataFactory factory, SKOSDataset vocab) {
@@ -115,8 +118,9 @@ public class SKOSConceptExporter {
 
 		for (ThesaurusTerm altLabel : thesaurusTermService
 				.getTermsByConceptId(concept.getIdentifier())) {
-			if (altLabel.getLexicalValue().equals(prefLabel))
+			if (altLabel.getLexicalValue().equals(prefLabel)) {
 				continue;
+            }
 
             if(altLabel.getHidden()) {
                 SKOSDataRelationAssertion hiddenLabelInsertion = factory
