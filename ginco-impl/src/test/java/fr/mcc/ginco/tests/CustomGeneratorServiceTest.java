@@ -39,6 +39,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -56,13 +57,17 @@ public class CustomGeneratorServiceTest {
 	@Named("generatorService")
     private IIDGeneratorService arkProvider;
 
+    @Value("${application.ark.nma}")
+    private String nma;
+    @Value("${application.ark.naan}")
+    private String naan;
 
 	 /**
 	 * Since ARK is randomly generated, this method only test the static part of the ID
 	 */
 	@Test
 	public final void getArkId(){
-        String expectedResponse= "http://culturecommunication.gouv.fr" + "/ark:/" + "12345";
+        String expectedResponse= nma + "/ark:/" + naan;
 		String actualResponse = arkProvider.generate(Thesaurus.class);
         Assert.assertTrue("Error while generating ARK Id !" + actualResponse + " expected " + expectedResponse, actualResponse.startsWith(expectedResponse));
 	}
