@@ -34,29 +34,19 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.semanticweb.skos.AddAssertion;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataRelationAssertion;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skos.SKOSEntityAssertion;
-import org.semanticweb.skos.SKOSObjectRelationAssertion;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import org.semanticweb.skos.*;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This component is in charge of exporting concept to SKOS
@@ -128,14 +118,25 @@ public class SKOSConceptExporter {
 			if (altLabel.getLexicalValue().equals(prefLabel))
 				continue;
 
-			SKOSDataRelationAssertion altLabelInsertion = factory
-					.getSKOSDataRelationAssertion(conceptSKOS, factory
-							.getSKOSDataProperty(factory
-									.getSKOSAltLabelProperty().getURI()),
-							altLabel.getLexicalValue(), altLabel.getLanguage()
-									.getPart1());
+            if(altLabel.getHidden()) {
+                SKOSDataRelationAssertion hiddenLabelInsertion = factory
+                        .getSKOSDataRelationAssertion(conceptSKOS, factory
+                                .getSKOSDataProperty(factory
+                                        .getSKOSHiddenLabelProperty().getURI()),
+                                altLabel.getLexicalValue(), altLabel.getLanguage()
+                                .getPart1());
 
-			addList.add(new AddAssertion(vocab, altLabelInsertion));
+                addList.add(new AddAssertion(vocab, hiddenLabelInsertion));
+            } else {
+                SKOSDataRelationAssertion altLabelInsertion = factory
+                        .getSKOSDataRelationAssertion(conceptSKOS, factory
+                                .getSKOSDataProperty(factory
+                                        .getSKOSAltLabelProperty().getURI()),
+                                altLabel.getLexicalValue(), altLabel.getLanguage()
+                                .getPart1());
+
+                addList.add(new AddAssertion(vocab, altLabelInsertion));
+            }
 		}
 
 		addList.add(new AddAssertion(vocab, conceptAssertion));

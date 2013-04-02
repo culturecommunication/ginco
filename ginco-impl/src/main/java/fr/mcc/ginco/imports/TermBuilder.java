@@ -34,22 +34,10 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -60,6 +48,15 @@ import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Builder in charge of building ThesaurusTerm
@@ -91,7 +88,7 @@ public class TermBuilder extends AbstractBuilder {
 	}
 
 	private ThesaurusTerm buildTerm(Statement stmt,
-			Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred)
+			Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred, boolean hidden)
 			throws BusinessException {
 		logger.debug("building term " + stmt.getString());
 		ThesaurusTerm term = new ThesaurusTerm();
@@ -101,6 +98,7 @@ public class TermBuilder extends AbstractBuilder {
 		term.setLexicalValue(stmt.getString().trim());
 		term.setModified(thesaurus.getDate());
 		term.setPrefered(preferred);
+        term.setHidden(hidden);
 		term.setRole(thesaurusTermRoleDAO.getDefaultThesaurusTermRole());
 		term.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		term.setThesaurus(thesaurus);
@@ -141,13 +139,13 @@ public class TermBuilder extends AbstractBuilder {
 
 		// Preferred term
 		Statement stmtPreferred = skosConcept.getProperty(SKOS.PREF_LABEL);
-		terms.add(buildTerm(stmtPreferred,  thesaurus, concept, true));
+		terms.add(buildTerm(stmtPreferred,  thesaurus, concept, true, false));
 
 		// Alt terms
 		StmtIterator stmtAltItr = skosConcept.listProperties(SKOS.ALT_LABEL);
 		while (stmtAltItr.hasNext()) {
 			Statement stmtAlt = stmtAltItr.next();
-			terms.add(buildTerm(stmtAlt,  thesaurus, concept, false));
+			terms.add(buildTerm(stmtAlt,  thesaurus, concept, false, false));
 
 		}
 		// Hidden terms
@@ -155,7 +153,7 @@ public class TermBuilder extends AbstractBuilder {
 				.listProperties(SKOS.HIDDEN_LABEL);
 		while (stmtHiddenItr.hasNext()) {
 			Statement stmtHidden = stmtHiddenItr.next();
-			terms.add(buildTerm(stmtHidden,  thesaurus, concept, false));
+			terms.add(buildTerm(stmtHidden,  thesaurus, concept, false, true));
 		}
 
 		return terms;
