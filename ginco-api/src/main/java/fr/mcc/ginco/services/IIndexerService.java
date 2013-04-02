@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import java.util.List;
 
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
@@ -59,6 +60,15 @@ public interface IIndexerService {
      * @throws TechnicalException
      */
     void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
+    
+    
+    /**
+     * Takes an Note and adds it to index.
+     *
+     * @param Note Updated/created Note to save to index.
+     * @throws TechnicalException
+     */
+    void addNote(Note thesaurusNote) throws TechnicalException;
 
     /**
      * Takes an ThesaurusConcept and adds it to index with prefLabel

@@ -58,6 +58,7 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusNoteViewConverter;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.INoteTypeService;
 
@@ -81,6 +82,10 @@ public class ThesaurusNoteRestService {
     @Inject
     @Named("thesaurusNoteViewConverter")
     private ThesaurusNoteViewConverter thesaurusNoteViewConverter;
+    
+    @Inject
+    @Named("indexerService")
+    private IIndexerService indexerService;
 	
 	@Log
 	private Logger logger;
@@ -180,6 +185,7 @@ public class ThesaurusNoteRestService {
 		for (Note note : notes) {
 			if (!note.getLexicalValue().isEmpty() && note.getLanguage() != null && note.getNoteType() != null) {
 				resultNotes.add(noteService.createOrUpdateNote(note));
+				indexerService.addNote(note);
 			} else {
 				throw new BusinessException("Failed to update the note : fields required not filled in", "note-update-failed-empty-fields");
 			}
@@ -206,6 +212,7 @@ public class ThesaurusNoteRestService {
 		for (Note note : notes) {
 			if (note.getLexicalValue() != null && note.getLanguage() != null && note.getNoteType() != null) {
 				resultNotes.add(noteService.createOrUpdateNote(note));
+				indexerService.addNote(note);
 			} else
 			{
 				throw new BusinessException("Failed to update the note : fields required not filled in", "note-update-failed-empty-fields");
@@ -230,6 +237,7 @@ public class ThesaurusNoteRestService {
 		
 		for (Note note : notes) {
 				resultNotes.add(noteService.deleteNote(note));
+				indexerService.addNote(note);
 		}
 		
 		return new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(resultNotes));

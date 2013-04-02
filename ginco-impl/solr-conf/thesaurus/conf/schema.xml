@@ -7,7 +7,7 @@
                 <field name="thesaurusId" type="string" indexed="false" stored="true" multiValued="false"/>
                 <field name="thesaurusTitle" type="string" indexed="false" stored="true" multiValued="false"/>
                 <field name="type" type="string" indexed="true" stored="true" multiValued="false"/>
-                <field name="notes" type="string" indexed="true" stored="true" multiValued="true"/>
+                <field name="notes" type="text_fr" indexed="true" stored="true" multiValued="true"/>
                 <field name="_version_" type="long" indexed="true" stored="true"/>
             </fields>
 
