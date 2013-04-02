@@ -425,7 +425,6 @@ Ext.define('Thesaurus.container.Container', {
 		for (var i = 0; i < items.length; i++) {
 			var item = items[i];
 				if (item.checkRoles(arguments) == false) {
-					console.log("disabling",item);
 					item.restrict();
 				}
 		}
@@ -467,7 +466,6 @@ Ext.define('Thesaurus.Component', {
 	},
 	requiredRoles : [],
 	checkRoles : function () {
-		console.log("Checking roles",this);
 		if (this.requiredRoles.length == 0)
 			return true;
 		for (var i = 0; i < arguments.length; i++) {
