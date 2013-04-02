@@ -76,6 +76,6 @@ public class SOAPThesaurusTermServiceTest {
 	
 	@Test(expected=BusinessException.class)
 	public final void testGetConceptIdByTermWithInvalidParametres(){
-		soapThesaurusTermService.getConceptIdByTerm(null, null, null);
+		soapThesaurusTermService.getConceptIdByTerm("", "", "");
 	}
 }
