@@ -104,7 +104,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 					xtype : 'button',
 					disabled : false,
 					text : me.xImportLabel,
-					width: 80
+					width: 80,
 					requiredRoles : ['ADMIN'],
 					itemId: 'importBtn'
 				} ]
