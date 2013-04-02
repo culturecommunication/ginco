@@ -32,67 +32,63 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.tests.exports.mcc;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
+import junit.framework.Assert;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exports.mcc.MCCConceptExporter;
+import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.services.IAssociativeRelationshipService;
+import fr.mcc.ginco.services.INoteService;
 
 /**
- * Beans represents <b>thesaurus_array</b> table and is a sub-container
- * for {@link ThesaurusConcept}.
+ * This component is in charge of exporting collections to SKOS
+ *
  */
-@SuppressWarnings("serial")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class ThesaurusArray implements Serializable {
+public class MCCConceptExporterTest {
 	
-	private String identifier;
-	private Boolean ordered;
-	private String notation;
+	@Mock(name="noteService")
+	private INoteService noteService;
 	
-	@XmlTransient
-	private Thesaurus thesaurus;
-	private ThesaurusConcept superOrdinateConcept;
-	private Set<ThesaurusConcept> concepts = new HashSet<ThesaurusConcept>();
+	@Mock(name="associativeRelationshipService")
+	private IAssociativeRelationshipService associativeRelationshipService;
 	
-	public String getIdentifier() {
-		return identifier;
+	@InjectMocks
+	MCCConceptExporter mccConceptExporter;
+	
+	@Before
+	public void init() {		
+			MockitoAnnotations.initMocks(this);	
 	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public Boolean getOrdered() {
-		return ordered;
-	}
-	public void setOrdered(Boolean ordered) {
-		this.ordered = ordered;
-	}
-	public String getNotation() {
-		return notation;
-	}
-	public void setNotation(String notation) {
-		this.notation = notation;
-	}
-	public Thesaurus getThesaurus() {
-		return thesaurus;
-	}
-	public void setThesaurus(Thesaurus thesaurus) {
-		this.thesaurus = thesaurus;
-	}
-	public ThesaurusConcept getSuperOrdinateConcept() {
-		return superOrdinateConcept;
-	}
-	public void setSuperOrdinateConcept(ThesaurusConcept superOrdinateConcept) {
-		this.superOrdinateConcept = superOrdinateConcept;
-	}
-	public Set<ThesaurusConcept> getConcepts() {
-		return concepts;
-	}
-	public void setConcepts(Set<ThesaurusConcept> concepts) {
-		this.concepts = concepts;
+	
+	@Test
+	public void testGetExportHierarchicalConcepts() {
+		
+		ThesaurusConcept c1 = new ThesaurusConcept();
+		c1.setIdentifier("http://c1");
+		
+		ThesaurusConcept c2 = new ThesaurusConcept();
+		c2.setIdentifier("http://c2");
+		
+		ThesaurusConcept c3 = new ThesaurusConcept();
+		c3.setIdentifier("http://c3");
+		
+		Set<ThesaurusConcept> fakeParents = new HashSet<ThesaurusConcept>();
+		fakeParents.add(c2);
+		fakeParents.add(c3);
+		c1.setParentConcepts(fakeParents);
+		
+		JaxbList<String> result = mccConceptExporter.getExportHierarchicalConcepts(c1);
+		Assert.assertEquals(result.getList().size(), c1.getParentConcepts().size());
 	}
 }

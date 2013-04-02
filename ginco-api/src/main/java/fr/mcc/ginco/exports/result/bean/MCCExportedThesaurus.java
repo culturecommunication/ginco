@@ -35,20 +35,19 @@
 package fr.mcc.ginco.exports.result.bean;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
-import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 
 /**
@@ -56,9 +55,23 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
  * With {@MCCExportServiceImpl}
  */
 @XmlRootElement
+@XmlSeeAlso({Note.class})
 public class MCCExportedThesaurus implements Serializable {
+	
+	//Thesaurus and terms are read by Jaxb and automatically added to the XML structure
+	//But its not the case for nested elements (notes, relations, etc.), so we include them
+	//in a map that contains the id of the element (term id) and the nested elements (notes, relations, etc.)
+	//The use of a JaxbList object is due to the incapacity of Jaxb to serialize a HashMap<String, Bean> directly
+	
     private Thesaurus thesaurus;
-    private List<ThesaurusTerm> terms;
+    private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+    private List<ThesaurusArray> conceptsArrays  = new ArrayList<ThesaurusArray>();
+    private List<ThesaurusConceptGroup> conceptsGroups  = new ArrayList<ThesaurusConceptGroup>();
+    private List<ThesaurusVersionHistory> thesaurusVersions;
+    private Map<String, JaxbList<String>> hierarchicalRelationship = new Hashtable();
+    private Map<String, JaxbList<String>> associativeRelationship = new Hashtable();
+    private Map<String, JaxbList<Note>> termNotes = new Hashtable();
+    private Map<String, JaxbList<Note>> conceptNotes = new Hashtable();
 
 	public Thesaurus getThesaurus() {
 		return thesaurus;
@@ -75,7 +88,62 @@ public class MCCExportedThesaurus implements Serializable {
 	public void setTerms(List<ThesaurusTerm> terms) {
 		this.terms = terms;
 	}
-    
-    
+
+	public List<ThesaurusVersionHistory> getThesaurusVersions() {
+		return thesaurusVersions;
+	}
+
+	public void setThesaurusVersions(List<ThesaurusVersionHistory> versions) {
+		this.thesaurusVersions = versions;
+	}
+
+	public Map<String, JaxbList<String>> getHierarchicalRelationship() {
+		return hierarchicalRelationship;
+	}
+
+	public void setHierarchicalRelationship(
+			Map<String, JaxbList<String>> parentConceptRelationship) {
+		this.hierarchicalRelationship = parentConceptRelationship;
+	}
+
+	public Map<String, JaxbList<String>> getAssociativeRelationship() {
+		return associativeRelationship;
+	}
+
+	public void setAssociativeRelationship(Map<String, JaxbList<String>> associativeRelationship) {
+		this.associativeRelationship = associativeRelationship;
+	}
+
+	public Map<String, JaxbList<Note>> getTermNotes() {
+		return termNotes;
+	}
+
+	public void setTermNotes(Map<String, JaxbList<Note>> termNotes) {
+		this.termNotes = termNotes;
+	}
+
+	public Map<String, JaxbList<Note>> getConceptNotes() {
+		return conceptNotes;
+	}
+
+	public void setConceptNotes(Map<String, JaxbList<Note>> conceptNotes) {
+		this.conceptNotes = conceptNotes;
+	}
+
+	public List<ThesaurusArray> getConceptsArrays() {
+		return conceptsArrays;
+	}
+
+	public void setConceptsArrays(List<ThesaurusArray> conceptsArrays) {
+		this.conceptsArrays = conceptsArrays;
+	}
+
+	public List<ThesaurusConceptGroup> getConceptsGroups() {
+		return conceptsGroups;
+	}
+
+	public void setConceptsGroups(List<ThesaurusConceptGroup> conceptsGroups) {
+		this.conceptsGroups = conceptsGroups;
+	}
     
 }

@@ -27,3 +27,6 @@ CREATE TABLE admin_user_id
   identifier text NOT NULL,
   CONSTRAINT pk_admin_user_id PRIMARY KEY (identifier)
 );
+
+CREATE FUNCTION int_to_text(INT4) RETURNS TEXT AS 'SELECT textin(int4out($1));' LANGUAGE SQL STRICT IMMUTABLE;
+CREATE CAST (INT4 AS TEXT) WITH FUNCTION int_to_text(INT4) AS IMPLICIT;

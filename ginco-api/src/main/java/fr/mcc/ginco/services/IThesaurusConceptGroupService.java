@@ -69,11 +69,11 @@ public interface IThesaurusConceptGroupService {
 
 	/**
 	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}
-	 * @param parentId
+	 * @param thesaurusId
 	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter
 	 */
 	List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(
-			String parentId);
+			String thesaurusId);
 
 	/**
 	 * Destroy a ThesaurusConceptGroup

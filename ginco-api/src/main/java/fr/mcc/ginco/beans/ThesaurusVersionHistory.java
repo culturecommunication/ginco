@@ -37,16 +37,22 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Bean represents <b>thesaurus_version_history</b> table, is used for
  * saving different version of {@link Thesaurus}
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusVersionHistory implements Serializable {
 	private String identifier;
     private Date date;
     private String versionNote;
     private Integer status;
     private Boolean thisVersion;
+    @XmlTransient
     private Thesaurus thesaurus;
 
     public ThesaurusVersionHistory() {

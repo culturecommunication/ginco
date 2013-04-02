@@ -37,11 +37,16 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Beans represents <b>note</b> table and contains textual notes,
  * added to {@link ThesaurusConcept} or {@link ThesaurusTerm}
  */
 @SuppressWarnings("serial")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Note implements Serializable {
 
     private String identifier;
@@ -50,11 +55,12 @@ public class Note implements Serializable {
     private String source;
     private Date created;
     private Date modified;
-    
     private NoteType noteType;
-    private ThesaurusConcept concept;
-    private ThesaurusTerm term;    
     
+    @XmlTransient
+    private ThesaurusConcept concept;
+    @XmlTransient
+    private ThesaurusTerm term;
 
 	public String getIdentifier() {
 		return identifier;
