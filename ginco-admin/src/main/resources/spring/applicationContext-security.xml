@@ -23,7 +23,7 @@
 	<http pattern="/css/**" security="none" />
 	<http pattern="/app/**" security="none" />
 	<http pattern="/images/**" security="none" />
-	<http auto-config="true" use-expressions="true">
+	<http use-expressions="true">
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 		<form-login login-page="/login.jsp" login-processing-url="/login_security_check"
 			authentication-failure-url="/login.jsp#failure" default-target-url="/index.jsp" />
