@@ -233,4 +233,13 @@ public interface IThesaurusConceptService {
     
     int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
     		throws BusinessException;
+    
+    /**
+	 * Returns the list of not preferred ThesaurusTerms by a concept
+	 * 
+	 * @param conceptId
+	 * @return list of not preferred terms
+	 */
+	List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
+			throws BusinessException;
 }

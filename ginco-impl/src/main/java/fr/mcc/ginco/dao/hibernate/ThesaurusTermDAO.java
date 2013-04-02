@@ -202,7 +202,7 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
-	public List<ThesaurusTerm> getConceptNotPreferredTerm(String conceptId)
+	public List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
 			throws BusinessException{
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
