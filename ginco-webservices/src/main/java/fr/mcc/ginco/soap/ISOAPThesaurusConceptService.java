@@ -39,6 +39,7 @@ import java.util.List;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -69,6 +70,16 @@ public interface ISOAPThesaurusConceptService {
 	 * @return reduced preferred term
 	 */
 	
-	List<ReducedThesaurusTerm> getPreferredTermByConceptId(@WebParam(name="conceptId")String conceptId) throws BusinessException;
+
+	List<ReducedThesaurusTerm> getPreferredTermByConceptId(@WebParam(name="conceptId") String conceptId) throws BusinessException;
+
+	/**
+	 * Returns the list of not preferred ThesaurusTerms by a concept
+	 * 
+	 * @param identifier of a concept
+	 * @return list of not preferred terms
+	 */
+	List<ReducedThesaurusTerm> getConceptNotPreferredTerms(@WebParam(name="conceptId") String conceptId)
+			throws BusinessException;
 }
 

@@ -80,20 +80,38 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
 			thesaurusTerms.add(thesaurusConceptService.getConceptPreferredTerm(conceptId));
 			
-			for (ThesaurusTerm thesaurusTerm : thesaurusTerms){
-				ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
-				reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
-				reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
-				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
-				results.add(reducedThesaurusTerm);
-			}
-			
+			for (ThesaurusTerm thesaurusTerm : thesaurusTerms)
+				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));	
 			return results;
 		}
 		else 
 		{
 			throw new BusinessException("Concept identifier is empty","empty-parameter");
 		}
+	}
+	
+	@Override
+	public List<ReducedThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
+			throws BusinessException{
+		if (!conceptId.equals("")){
+			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
+			List<ThesaurusTerm> thesaurusTerms = thesaurusConceptService.getConceptNotPreferredTerms(conceptId);
+			for (ThesaurusTerm thesaurusTerm : thesaurusTerms)
+				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));
+			return results;
+		}
+		else 
+		{
+			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		}
+	}
+	
+	private ReducedThesaurusTerm conversionThesaurusTermInReduced(ThesaurusTerm thesaurusTerm){
+		ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+		reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
+		reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
+		reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
+		return reducedThesaurusTerm;
 	}
 
 }
