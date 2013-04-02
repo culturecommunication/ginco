@@ -44,7 +44,12 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		var theStore = theGrid.getStore();
 		theStore.getProxy().setExtraParam('query',
 				thePanel.query);
-		theStore.load();
+		theStore.load(function(records, operation, success) {
+		    if (success==false) {
+		    	Thesaurus.ext.utils.msg("Warning",
+						operation.error);
+		    }
+		});
 	},
 	
 	onDisplayResultBtn : function(theButton) {

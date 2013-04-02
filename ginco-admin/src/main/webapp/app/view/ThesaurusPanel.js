@@ -94,6 +94,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 											flex : 1,
 											items : [ {
 												xtype : 'form',
+												requiredRoles : ['ADMIN'],
 												title : me.xThesaurusTabTitle,
 												flex : 1,
 												autoScroll : true,
@@ -109,6 +110,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 													items : [{
 													xtype : 'button',
 													disabled : true,
+													requiredRoles : ['ADMIN'],
 													cls : 'newBtnMenu',
 													text : me.xNewLabel,
 													menu : {
@@ -141,12 +143,14 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 														text : me.xSave,
 														disabled : true,
 														formBind : true,
+														requiredRoles : ['ADMIN'],
 														cls : 'save',
 														itemId : 'saveThesaurus',
 														iconCls : 'icon-save'
 												},{
 							                            xtype : 'button',
 							                            text : me.xDelete,
+							                            requiredRoles : ['ADMIN'],
 							                            disabled : true,
 							                            cls : 'delete',
 							                            itemId : 'deleteThesaurus',

@@ -37,7 +37,6 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	extend : 'Ext.app.Controller',
 
 	views : [ 'TopToolbar' ],
-	stores: ['UserInfoStore'],
 	
 	onAproposClick : function(button, e, options) {
 		Ext.create('GincoApp.view.AProposWin');
@@ -67,13 +66,19 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		Ext.create('GincoApp.view.ImportWin');
 
 	},
+
 	
-	loadToolbar: function(theToolbar) {
-		var me = this;
-		var userNameLabel = theToolbar.down("#username");	
-		var userInfoStore = me.getUserInfoStoreStore();
-		userNameLabel.setText(userInfoStore.data.items[0].data.username);		
+	onUserInfoLoaded : function(theController) {
+		
+		var userNameLabel = Ext.ComponentQuery.query('#username')[0];
+		userNameLabel.setText(Thesaurus.ext.utils.userInfo.data.username);	
+		
+		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.isAdmin == false) { 
+			var topToolBar = Ext.ComponentQuery.query('topToolBar')[0];
+			topToolBar.restrictUI('ADMIN');
+		}
 	},
+	
 	
 	onLogoutBtn : function () {
 		window.location.href = "logout";
@@ -96,6 +101,10 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	},
 
 	init : function(application) {
+		this.application.on({
+			userinfoloaded: this.onUserInfoLoaded,
+	        scope: this
+	 });
 		this.control({
 			"#aproposbtn" : {
 				click : this.onAproposClick
@@ -109,16 +118,12 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			"#importBtn" : {
 				click: this.onImportBtnClick
 			},		
-			"topToolBar" : {
-				afterrender : this.loadToolbar
-			},
 			'#logoutbtn' : {
 				click : this.onLogoutBtn
 			},
 			'#searchBtn' : {
 				trigger : this.onSearchTrigger,
-				specialkey : this.onSearchTriggerKey,
-				
+				specialkey : this.onSearchTriggerKey
 			}
 		});
 	}

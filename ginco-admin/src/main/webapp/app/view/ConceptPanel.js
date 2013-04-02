@@ -119,6 +119,7 @@ Ext
 															},
 															items : [ {
 																xtype : 'form',
+																requiredRoles : ['ADMIN'],
 																itemId : 'conceptForm',
 																flex : 1,
 																autoScroll : true,
@@ -134,6 +135,7 @@ Ext
 																			{
 																				xtype : 'button',
 																				text : me.xSave,
+																				requiredRoles : ['ADMIN'],
 																				disabled : true,
 																				formBind : true,
 																				cls : 'save',
@@ -143,6 +145,7 @@ Ext
 																			{
 																				xtype : 'button',
 																				text : me.xDelete,
+																				requiredRoles : ['ADMIN'],
 																				disabled : true,
 																				itemId : 'deleteConcept',
 																				cls : 'delete',

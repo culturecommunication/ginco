@@ -69,6 +69,7 @@ Ext.define('GincoApp.view.NotePanel', {
 					items : [ {
 						xtype : 'button',
 						text : 'Enregistrer',
+						requiredRoles : ['ADMIN'],
 						cls : 'save',
 						iconCls : 'icon-save',
 						itemId : 'saveNote',
@@ -87,6 +88,7 @@ Ext.define('GincoApp.view.NotePanel', {
 						items : [ {
 							xtype : 'button',
 							itemId : 'newNoteBtn',
+							requiredRoles : ['ADMIN'],
 							text : me.xAddNote
 						}, {
 							xtype : 'pagingtoolbar',

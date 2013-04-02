@@ -73,6 +73,10 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			);
 			
 			if (dirtyForms.length>0) {
+				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.isAdmin == false) { 
+					if (theForm.checkRoles('ADMIN')==true)
+						return true;
+				}
 				Ext.MessageBox.show({
 					title : me.xSaveMsgTitle,
 					msg : me.xSaveMsgLabel,
@@ -179,6 +183,11 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
             	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
             	this.openSandboxTab(topTabs, parts[0]);
             }
+		}
+	},
+	onTabAdded : function ( tabPanel, component, index, eOpts) {
+		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.isAdmin == false) { 
+			component.restrictUI('ADMIN');
 		}
 	},
 	openConceptTab : function(tabPanel, aThesaurusId, aConceptId)
@@ -298,7 +307,16 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			topTabs.setActiveTab(tabExists);
 		}
 	},
+	onUserInfoLoaded : function()
+	{
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		this.onTabAdded(topTabs,topTabs.getActiveTab());
+	},
 	init : function(application) {
+		this.application.on({
+			userinfoloaded: this.onUserInfoLoaded,
+	        scope: this
+	 });
 		this.control({
 			'thesaurusPanel' : {
 				beforeclose : this.onPanelBeforeClose
@@ -316,6 +334,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 				beforeclose : this.onPanelBeforeClose
 			},
 			'topTabs' :  {
+				add : this.onTabAdded,
 				tabchange : this.onTabChange,
 				afterrender: this.onTabsAfterRender,
 				openconcepttab : this.openConceptTab,
