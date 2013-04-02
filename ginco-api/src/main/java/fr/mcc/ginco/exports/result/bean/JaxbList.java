@@ -32,67 +32,43 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.exports.result.bean;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Beans represents <b>thesaurus_array</b> table and is a sub-container
- * for {@link ThesaurusConcept}.
+ * This class is used to serialize object with JaxB.
+ * JaxB can't serialize a HashMap with a bean like : HashMap<String, Note> 
+ * We have to create a JaxbList object, to give it the type Note, and serialize HashMap<String, JaxbList<Note>> 
+ *
+ * @param <T>
  */
-@SuppressWarnings("serial")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class ThesaurusArray implements Serializable {
+@XmlRootElement
+public class JaxbList<T> {
+	protected List<T> list = new ArrayList<T>();
+
+	public JaxbList() {
+	}
+
+	public JaxbList(List<T> list) {
+		this.list = list;
+	}
+
+	@XmlElement(name = "Item")
+	public List<T> getList() {
+		return list;
+	}
 	
-	private String identifier;
-	private Boolean ordered;
-	private String notation;
-	
-	@XmlTransient
-	private Thesaurus thesaurus;
-	private ThesaurusConcept superOrdinateConcept;
-	private Set<ThesaurusConcept> concepts = new HashSet<ThesaurusConcept>();
-	
-	public String getIdentifier() {
-		return identifier;
-	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public Boolean getOrdered() {
-		return ordered;
-	}
-	public void setOrdered(Boolean ordered) {
-		this.ordered = ordered;
-	}
-	public String getNotation() {
-		return notation;
-	}
-	public void setNotation(String notation) {
-		this.notation = notation;
-	}
-	public Thesaurus getThesaurus() {
-		return thesaurus;
-	}
-	public void setThesaurus(Thesaurus thesaurus) {
-		this.thesaurus = thesaurus;
-	}
-	public ThesaurusConcept getSuperOrdinateConcept() {
-		return superOrdinateConcept;
-	}
-	public void setSuperOrdinateConcept(ThesaurusConcept superOrdinateConcept) {
-		this.superOrdinateConcept = superOrdinateConcept;
-	}
-	public Set<ThesaurusConcept> getConcepts() {
-		return concepts;
-	}
-	public void setConcepts(Set<ThesaurusConcept> concepts) {
-		this.concepts = concepts;
+	public boolean isEmpty() {
+		if (this.list.isEmpty()) {
+			return true;
+		} else
+		{
+			return false;
+		}
 	}
 }

@@ -32,67 +32,46 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.exports.mcc;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
+
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.services.IAssociativeRelationshipService;
+import fr.mcc.ginco.services.INoteService;
 
 /**
- * Beans represents <b>thesaurus_array</b> table and is a sub-container
- * for {@link ThesaurusConcept}.
+ * This component gives methods to export terms and its related objects (notes for example) to MCC Custom Export Format
+ * 
  */
-@SuppressWarnings("serial")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class ThesaurusArray implements Serializable {
+@Component("mccTermExporter")
+public class MCCTermExporter {
 	
-	private String identifier;
-	private Boolean ordered;
-	private String notation;
+	@Inject
+	@Named("noteService")
+	private INoteService noteService;
 	
-	@XmlTransient
-	private Thesaurus thesaurus;
-	private ThesaurusConcept superOrdinateConcept;
-	private Set<ThesaurusConcept> concepts = new HashSet<ThesaurusConcept>();
-	
-	public String getIdentifier() {
-		return identifier;
+
+	/**
+	 * This method gets all the notes of a term in a JaxbList object
+	 * @param thesaurusTerm
+	 * @return JaxbList<Note> termNotes : A JaxbList of notes
+	 */
+	public JaxbList<Note> getExportTermNotes(ThesaurusTerm thesaurusTerm) {
+		List<Note> notes = noteService.getTermNotePaginatedList(thesaurusTerm.getIdentifier(), 0, noteService.getTermNoteCount(thesaurusTerm.getIdentifier()).intValue());
+		JaxbList<Note> termNotes = new JaxbList<Note>();
+		for (Note note : notes) {
+			termNotes.getList().add(note);
+		}
+		return termNotes;
 	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public Boolean getOrdered() {
-		return ordered;
-	}
-	public void setOrdered(Boolean ordered) {
-		this.ordered = ordered;
-	}
-	public String getNotation() {
-		return notation;
-	}
-	public void setNotation(String notation) {
-		this.notation = notation;
-	}
-	public Thesaurus getThesaurus() {
-		return thesaurus;
-	}
-	public void setThesaurus(Thesaurus thesaurus) {
-		this.thesaurus = thesaurus;
-	}
-	public ThesaurusConcept getSuperOrdinateConcept() {
-		return superOrdinateConcept;
-	}
-	public void setSuperOrdinateConcept(ThesaurusConcept superOrdinateConcept) {
-		this.superOrdinateConcept = superOrdinateConcept;
-	}
-	public Set<ThesaurusConcept> getConcepts() {
-		return concepts;
-	}
-	public void setConcepts(Set<ThesaurusConcept> concepts) {
-		this.concepts = concepts;
-	}
+
 }

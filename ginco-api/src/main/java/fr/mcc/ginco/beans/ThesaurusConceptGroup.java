@@ -37,13 +37,20 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Bean represents concept_group table
  */
 @SuppressWarnings("serial")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusConceptGroup implements Serializable{
 
     private String identifier;
+    
+    @XmlTransient
     private Thesaurus thesaurus;
     private ThesaurusConceptGroupType conceptGroupType;
     private Set<ThesaurusConcept> concepts;

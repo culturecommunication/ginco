@@ -34,18 +34,17 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 /**
  * Bean represents <b>thesaurus_concept</b> table, is container for
@@ -63,10 +62,15 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	
 	@XmlTransient
 	private Thesaurus thesaurus;
+	@XmlTransient
 	private Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
+	@XmlTransient
 	private Set<ThesaurusConcept> rootConcepts = new HashSet<ThesaurusConcept>();
+	@XmlTransient
 	private Set<AssociativeRelationship> associativeRelationshipLeft;
+	@XmlTransient
 	private Set<AssociativeRelationship> associativeRelationshipRight;
+	@XmlTransient
 	private Set<ThesaurusArray> conceptArrays;
 
 	public String getIdentifier() {
