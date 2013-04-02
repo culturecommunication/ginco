@@ -199,5 +199,23 @@ public class ThesaurusTermDAO extends
 		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
 		.add(Restrictions.isNull("concept"))
 		.setProjection(Projections.rowCount());
-	}	
+	}
+	
+	@Override
+	public List<ThesaurusTerm> getConceptNotPreferredTerm(String conceptId)
+			throws BusinessException{
+		List<ThesaurusTerm> list = getCurrentSession()
+                .createCriteria(ThesaurusTerm.class)
+                .add(Restrictions.eq("concept.identifier", conceptId))
+                .add(Restrictions.eq("prefered", Boolean.FALSE))
+                .list();
+
+        if(list.size() == 0) {
+            throw new BusinessException("No term found ! " +
+                    "Please check your database !", "no-term-found");
+        }
+        else{
+        	return list;
+        }
+	}
 }

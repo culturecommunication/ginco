@@ -134,5 +134,13 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @return identifier of a concept
 	 */
 	ThesaurusTerm getTermByLexicalValueThesaurusIdLanguageId(String lexicalValue, String thesaurusId, String languageId);
-
+	
+	/**
+	 * Returns the not preferred ThesaurusTerm of a concept
+	 * 
+	 * @param conceptId
+	 * @return list of not preferred terms
+	 */
+	List<ThesaurusTerm> getConceptNotPreferredTerm(String conceptId)
+			throws BusinessException;
 }
