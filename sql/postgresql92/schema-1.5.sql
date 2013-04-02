@@ -27,3 +27,16 @@ CREATE TABLE admin_user_id
   identifier text NOT NULL,
   CONSTRAINT pk_admin_user_id PRIMARY KEY (identifier)
 );
+
+CREATE TABLE thesaurus_ark
+(
+  identifier text NOT NULL,
+  created timestamp without time zone,
+  entity text,
+  CONSTRAINT thesaurus_ark_pkey PRIMARY KEY (identifier)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE thesaurus_ark
+  OWNER TO hadocdb;

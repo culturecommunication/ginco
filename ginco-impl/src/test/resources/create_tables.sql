@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS revinfo;
 DROP TABLE IF EXISTS revinfoentitytypes;
 DROP TABLE IF EXISTS thesaurus_aud;
 DROP TABLE IF EXISTS note_type;
+DROP TABLE IF EXISTS thesaurus_ark;
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
@@ -306,4 +307,12 @@ CREATE TABLE note_type
   isterm boolean NOT NULL,
   isconcept boolean NOT NULL,
   CONSTRAINT pk_note_type PRIMARY KEY (code)
- ); 
+ );
+
+  CREATE TABLE thesaurus_ark
+  (
+    identifier text NOT NULL,
+    created text,
+    entity text NOT NULL,
+    CONSTRAINT pk_thesaurus_ark PRIMARY KEY (identifier)
+   );

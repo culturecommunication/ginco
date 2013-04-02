@@ -34,17 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -52,12 +41,17 @@ import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.services.IThesaurusTermRoleService;
-import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.*;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Small class responsible for converting real {@link ThesaurusTerm} object into
@@ -99,7 +93,7 @@ public class TermViewConverter {
 	private ThesaurusTerm getNewThesaurusTerm() {
 		ThesaurusTerm hibernateRes = new ThesaurusTerm();
 		hibernateRes.setCreated(DateUtil.nowDate());
-		hibernateRes.setIdentifier(generatorService.generate());
+		hibernateRes.setIdentifier(generatorService.generate(ThesaurusTerm.class));
 		logger.info("Creating a new term");
 
 		return hibernateRes;

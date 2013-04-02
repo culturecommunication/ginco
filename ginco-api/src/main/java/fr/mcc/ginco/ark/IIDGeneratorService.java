@@ -34,11 +34,6 @@
  */
 package fr.mcc.ginco.ark;
 
-import java.io.Serializable;
-import java.util.List;
-
-import fr.mcc.ginco.beans.Language;
-
 /**
  * Service used to generate ids
  *
@@ -50,6 +45,6 @@ public interface IIDGeneratorService {
      * Generates an ID
      * @return
      */
-    String generate();   	
+    String generate(Class entity);
 
 }

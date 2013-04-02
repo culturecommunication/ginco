@@ -34,16 +34,24 @@
  */
 package fr.mcc.ginco.ark;
 
-import java.util.UUID;
-
+import fr.mcc.ginco.beans.ThesaurusArk;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.services.IThesaurusArkService;
+import fr.mcc.ginco.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.UUID;
 
 /**
  * Custom generator of primary keys for Hibernate,
  * should be changed in later revisions to generate real
  * ARK-based ids.
  */
+@Transactional(readOnly=false, rollbackFor = TechnicalException.class)
 @Service("generatorService")
 public class CustomGeneratorService implements IIDGeneratorService {
 
@@ -52,11 +60,22 @@ public class CustomGeneratorService implements IIDGeneratorService {
 	@Value("${application.ark.naan}")
     private String naan;
 
+    @Inject
+    @Named("thesaurusArkService")
+    private IThesaurusArkService thesaurusArkService;
+
     @Override
-    public String generate() {    	
+    public String generate(Class entity) {
         String arkId;
         UUID nq = UUID.randomUUID();
         arkId = nma + "/ark:/"+ naan + "/" + nq.toString();
+
+        ThesaurusArk arkHistory = new ThesaurusArk();
+        arkHistory.setCreated(DateUtil.nowDate());
+        arkHistory.setEntity(entity.getSimpleName());
+        arkHistory.setIdentifier(arkId);
+        thesaurusArkService.createThesaurusArk(arkHistory);
+
         return arkId;
     }    
 }

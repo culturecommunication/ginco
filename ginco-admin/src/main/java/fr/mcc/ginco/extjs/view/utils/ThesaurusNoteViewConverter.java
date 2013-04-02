@@ -34,25 +34,19 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.services.INoteService;
-import fr.mcc.ginco.services.INoteTypeService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.*;
 import fr.mcc.ginco.utils.DateUtil;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component("thesaurusNoteViewConverter")
 public class ThesaurusNoteViewConverter {
@@ -148,7 +142,7 @@ public class ThesaurusNoteViewConverter {
 		if ("".equals(source.getIdentifier())) {
 			hibernateRes = new Note();
 			hibernateRes.setCreated(DateUtil.nowDate());
-			hibernateRes.setIdentifier(generatorService.generate());
+			hibernateRes.setIdentifier(generatorService.generate(Note.class));
 		} else {
 			hibernateRes = noteService.getNoteById(source.getIdentifier());
 

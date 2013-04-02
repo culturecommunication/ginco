@@ -34,30 +34,20 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
+import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.utils.DateUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusConceptGroup;
-import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
-import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
-import fr.mcc.ginco.services.IThesaurusConceptGroupService;
-import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.utils.DateUtil;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 
 @Component("thesaurusConceptGroupViewConverter")
@@ -93,7 +83,7 @@ public class ThesaurusConceptGroupViewConverter {
 		
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusConceptGroup();
-			hibernateRes.setIdentifier(generatorService.generate());
+			hibernateRes.setIdentifier(generatorService.generate(ThesaurusConceptGroup.class));
 
 		} else {
 			hibernateRes = thesaurusConceptGroupService.getConceptGroupById(source.getIdentifier());

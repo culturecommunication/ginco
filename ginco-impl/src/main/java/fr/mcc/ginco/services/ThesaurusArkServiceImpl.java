@@ -32,38 +32,30 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests;
+package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.Thesaurus;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import fr.mcc.ginco.beans.ThesaurusArk;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "classpath:applicationContext.xml",
-        "classpath:spring/applicationContext-*.xml"
-})
-public class CustomGeneratorServiceTest {
-
+/**
+ *
+ */
+@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+@Service("thesaurusArkService")
+public class ThesaurusArkServiceImpl implements IThesaurusArkService {
+	
 	@Inject
-	@Named("generatorService")
-    private IIDGeneratorService arkProvider;
+	@Named("thesaurusArkDAO")
+    private IGenericDAO<ThesaurusArk, Integer> thesaurusArkDAO;
 
-
-	 /**
-	 * Since ARK is randomly generated, this method only test the static part of the ID
-	 */
-	@Test
-	public final void getArkId(){
-        String expectedResponse= "http://culturecommunication.gouv.fr" + "/ark:/" + "12345";
-		String actualResponse = arkProvider.generate(Thesaurus.class);
-        Assert.assertTrue("Error while generating ARK Id !" + actualResponse + " expected " + expectedResponse, actualResponse.startsWith(expectedResponse));
-	}
+    @Override
+    public ThesaurusArk createThesaurusArk(ThesaurusArk thesaurusArk) {
+        return thesaurusArkDAO.update(thesaurusArk);
+    }
 }

@@ -34,18 +34,7 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusVersionHistoryView;
@@ -53,6 +42,14 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Small class responsible for converting real {@link ThesaurusVersionHistory} object into
@@ -151,7 +148,7 @@ public class ThesaurusVersionHistoryViewConverter {
 	
 	private ThesaurusVersionHistory getNewThesaurusVersionHistory() {
 		ThesaurusVersionHistory hibernateRes = new ThesaurusVersionHistory();
-		hibernateRes.setIdentifier(generatorService.generate());
+		hibernateRes.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
 		hibernateRes.setDate(DateUtil.nowDate());
 		logger.info("Creating a new ThesaurusVersionHistory");
 		return hibernateRes;

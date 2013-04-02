@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="ThesaurusArk" table="thesaurus_ark">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+            <generator class="assigned" />
+        </id>
+		<property name="created" />
+		<property name="entity" />
+		 
+	</class>
+</hibernate-mapping>

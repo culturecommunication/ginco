@@ -32,38 +32,38 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests;
+package fr.mcc.ginco.beans;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.Thesaurus;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "classpath:applicationContext.xml",
-        "classpath:spring/applicationContext-*.xml"
-})
-public class CustomGeneratorServiceTest {
-
-	@Inject
-	@Named("generatorService")
-    private IIDGeneratorService arkProvider;
+import java.io.Serializable;
+import java.util.Date;
 
 
-	 /**
-	 * Since ARK is randomly generated, this method only test the static part of the ID
-	 */
-	@Test
-	public final void getArkId(){
-        String expectedResponse= "http://culturecommunication.gouv.fr" + "/ark:/" + "12345";
-		String actualResponse = arkProvider.generate(Thesaurus.class);
-        Assert.assertTrue("Error while generating ARK Id !" + actualResponse + " expected " + expectedResponse, actualResponse.startsWith(expectedResponse));
-	}
+public class ThesaurusArk implements Serializable {
+    private String identifier;
+    private String entity;
+    private Date created;
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 }

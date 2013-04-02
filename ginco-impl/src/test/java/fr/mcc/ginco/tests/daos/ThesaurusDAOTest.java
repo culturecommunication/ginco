@@ -34,13 +34,6 @@
  */
 package fr.mcc.ginco.tests.daos;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
@@ -48,6 +41,12 @@ import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 
 public class ThesaurusDAOTest extends BaseDAOTest {
@@ -119,7 +118,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         Thesaurus newThesaurus = new Thesaurus();
         newThesaurus.setTitle("test");
         newThesaurus.setCreator(null);
-        newThesaurus.setIdentifier(generatorService.generate());
+        newThesaurus.setIdentifier(generatorService.generate(Thesaurus.class));
         newThesaurus.setDefaultTopConcept(false);
         Thesaurus updatedThesaurus = thesaurusDAO.update(newThesaurus);
         Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus != null);
@@ -132,7 +131,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         thOrg.setName("Un auteur");
         newThesaurus.setTitle("test");
         newThesaurus.setCreator(thOrg);  
-        newThesaurus.setIdentifier(generatorService.generate());
+        newThesaurus.setIdentifier(generatorService.generate(Thesaurus.class));
         newThesaurus.setDefaultTopConcept(false);
         Thesaurus updatedThesaurus = thesaurusDAO.update(newThesaurus);
         Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());

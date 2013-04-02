@@ -34,32 +34,25 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.dao.ILanguageDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.INoteTypeService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-
-import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.NoteType;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.INoteTypeService;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 	Builder in charge of buidlding concept notes
@@ -114,7 +107,7 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 
 					Note newNote = new Note();
 					newNote.setCreated(thesaurus.getCreated());
-					newNote.setIdentifier(generatorService.generate());
+					newNote.setIdentifier(generatorService.generate(Note.class));
 					newNote.setLexicalValue(stmt.getString());
 
 					RDFNode prefLabel = stmt.getObject();
