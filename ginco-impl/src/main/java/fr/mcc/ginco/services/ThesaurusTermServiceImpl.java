@@ -188,4 +188,18 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	}
     	else return null;
     }
+    
+    @Override
+	public Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
+		ThesaurusTerm thesaurusTerm = thesaurusTermDAO.
+    			getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId);
+    	if (thesaurusTerm != null){
+    		return thesaurusTerm.getPrefered();
+    	}
+    	else{
+    		throw new BusinessException("The term does not exist", "term-does-not-exist");
+    	}
+    		
+    	
+	}
 }

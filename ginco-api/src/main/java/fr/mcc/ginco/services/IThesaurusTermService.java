@@ -152,4 +152,16 @@ public interface IThesaurusTermService {
 	 */
 
 	 ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
+	 
+	 /**
+	 * This service returns true if the term is preferred, 
+	 * 					   false if the term isn't preferred
+	 * 
+	 * @param  lexical value of the term,
+	 * @param  thesaurus identifier of the term,
+	 * @param  language identifier of the term
+	 * 
+	 * @return preferred or not preferred
+	 */
+	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
 }
