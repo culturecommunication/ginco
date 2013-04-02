@@ -90,6 +90,7 @@ Ext
 											title : me.xConceptArrayTabTitle,
 											items : [ {
 												xtype : 'form',
+												requiredRoles : ['ADMIN'],
 												title : me.xConceptArrayFormTitle,
 												flex : 1,
 												autoScroll : true,
@@ -107,6 +108,7 @@ Ext
 															{
 																xtype : 'button',
 																text : me.xSave,
+																requiredRoles : ['ADMIN'],
 																disabled : true,
 																formBind : true,
 																itemId : 'saveConceptArray',
@@ -116,6 +118,7 @@ Ext
 															{
 																xtype : 'button',
 																text : me.xDelete,
+																requiredRoles : ['ADMIN'],
 																disabled : true,
 																itemId : 'deleteConceptArray',
 																cls : 'delete',
@@ -187,6 +190,7 @@ Ext
 																		xtype : 'button',
 																		text : me.xSelectParentConcept,
 																		disabled : false,
+																		requiredRoles : ['ADMIN'],
 																		itemId : 'selectParentConcept',
 																		cls : 'add',
 																		iconCls : 'icon-add'
@@ -203,6 +207,7 @@ Ext
 																dock : 'top',
 																items : [ {
 																	xtype : 'button',
+																	requiredRoles : ['ADMIN'],
 																	text : me.xAddConceptToArray,
 																	disabled : false,
 																	itemId : 'addConceptToArray',

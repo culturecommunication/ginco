@@ -33,38 +33,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-/*
- * ReducedConcept Store
- * This file contains all ReducedConcept displayed in popup lists
- */
-Ext.define('GincoApp.store.UserInfoStore', {
-    extend: 'Ext.data.Store',
-
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: true,
-            proxy: {
-                type: 'ajax',
-                url: 'services/ui/baseservice/getUserInfo',
-                reader: {
-                    type: 'json',
-                    idProperty: 'username',
-                    root: 'data'
-                }
-            },
-            fields: [
-                {
-                    name : 'username',
-                    type : 'string'
-                },
-                {
-                    name: 'isAdmin',
-                    type : 'boolean'
-                }
-            ]
-
-        }, cfg)]);
-    }
+Ext.define('GincoApp.model.UserInfoModel', {
+    extend: 'Ext.data.Model',
+    proxy: {
+        type: 'ajax',
+        url: 'services/ui/baseservice/getUserInfo',
+        reader: {
+            type: 'json',
+            idProperty: 'username',
+            root: 'data'
+        }
+    },
+    fields: [
+             {
+                 name : 'username',
+                 type : 'string'
+             },
+             {
+                 name: 'isAdmin',
+                 type : 'boolean'
+             }
+         ]
 });

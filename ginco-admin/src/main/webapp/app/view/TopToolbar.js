@@ -83,6 +83,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 				columns : 1,
 				items : [ {
 					xtype : 'button',
+					requiredRoles : ['ADMIN'],
 					disabled : false,
 					text : me.xNewLabel,
 					menu : {
@@ -108,6 +109,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 					xtype : 'button',
 					disabled : false,
 					text : me.xImportLabel,
+					requiredRoles : ['ADMIN'],
 					itemId: 'importBtn'
 				} ]
 			}, {

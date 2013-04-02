@@ -247,6 +247,7 @@ Ext.data.writer.Json.override({
 
 Ext.define('Thesaurus.ext.utils', {
 	singleton : true,
+	userInfo : null,
 	msgCt : null,
 	renderTpl: ['<div class="msg" role="alert">',
 	            	'<h3>{title}</h3>',
@@ -416,8 +417,39 @@ Ext.define("Thesaurus.layout.container.Box", {
 	        ]
 });
 
+Ext.define('Thesaurus.container.Container', {
+	override : 'Ext.container.Container',
+	restrictUI : function ()
+	{
+		var items = this.query("component");
+		for (var i = 0; i < items.length; i++) {
+			var item = items[i];
+				if (item.checkRoles(arguments) == false) {
+					console.log("disabling",item);
+					item.restrict();
+				}
+		}
+	}
+});
+
+
+Ext.define('Thesaurus.form.Panel', {
+	override: 'Ext.form.Panel',
+	  restrict : function() {
+		  this.setReadOnlyForAll(true);
+	  },
+	  setReadOnlyForAll: function(readOnly) {
+	    Ext.suspendLayouts();
+	    this.getForm().getFields().each(function(field) {
+	      field.setReadOnly(readOnly);
+	    });
+	    Ext.resumeLayouts();
+	  }
+	});
+
 /*
  * Add aria role attribute to components.
+ * Add check roles to ext components
  */
 Ext.define('Thesaurus.Component', {
 	override : 'Ext.Component',
@@ -433,15 +465,23 @@ Ext.define('Thesaurus.Component', {
 		me.callParent();
 		me.initAria();
 	},
-	setDisabled : function(value) {
-    	var me = this;
-    	if(value) {
-    		var userInfoStore = Ext.StoreMgr.lookup("UserInfoStore");    	
-    		if (userInfoStore.data.items[0].data.isAdmin) {
-    			me.callParent();
-    		} 
-    	}
-    }
+	requiredRoles : [],
+	checkRoles : function () {
+		console.log("Checking roles",this);
+		if (this.requiredRoles.length == 0)
+			return true;
+		for (var i = 0; i < arguments.length; i++) {
+		    if (Ext.Array.contains(this.requiredRoles,arguments[i]))
+		    { return true;}
+		}
+		return false;
+	},
+	restrict : function() {
+		this.setDisabled(true);
+		// Set No-OP for enable function...
+		this.enable = function () { 
+		};
+	}
 });
 
 /*
@@ -455,7 +495,6 @@ Ext.define("Thesaurus.dom.Element", {
 		me.set({
         	'aria-hidden' : !visible
         });
-        
 		return me;
 	}
 });

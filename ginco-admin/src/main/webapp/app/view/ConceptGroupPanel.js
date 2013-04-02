@@ -88,6 +88,7 @@ Ext
 											title : me.xConceptGroupTitle,
 											items : [ {
 												xtype : 'form',
+												requiredRoles : ['ADMIN'],
 												title : me.xConceptGroupFormTitle,
 												flex : 1,
 												autoScroll : true,
@@ -103,6 +104,7 @@ Ext
 													dock : 'top',
 													items : [ {
 														xtype : 'button',
+														requiredRoles : ['ADMIN'],
 														text : me.xSave,
 														disabled : true,
 														formBind : true,
@@ -112,6 +114,7 @@ Ext
 													},
                                                     {
                                                         xtype : 'button',
+                                                        requiredRoles : ['ADMIN'],
                                                         text : me.xDelete,
                                                         disabled : true,
                                                         cls : 'delete',
@@ -182,6 +185,7 @@ Ext
 																dock : 'top',
 																items : [ {
 																	xtype : 'button',
+																	requiredRoles : ['ADMIN'],
 																	text : me.xAddConceptToGroupArray,
 																	disabled : false,
 																	itemId : 'addConceptToGroupArray',
@@ -206,6 +210,7 @@ Ext
 																		header : me.xActions,
 																		items : [ {
 																			icon : 'images/detach.png',
+																			requiredRoles : ['ADMIN'],
 																			tooltip : me.xAssociationRemove
 																		} ]
 																	} ]

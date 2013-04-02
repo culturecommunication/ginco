@@ -81,11 +81,11 @@ Ext
 												flex:1,
 												items : [
 														{
-
 															xtype : 'form',
 															itemId : 'termForm',
 															title : me.xTermPanelTitle,
 															flex : 1,
+															requiredRoles : ['ADMIN'],
 															autoScroll : true,
 															pollForChanges : true,
 															trackResetOnLoad : true,
@@ -99,6 +99,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Enregistrer',
+																			requiredRoles : ['ADMIN'],
 																			disabled : true,
 																			formBind : true,
 																			cls : 'save',
@@ -108,6 +109,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Supprimer',
+																			requiredRoles : ['ADMIN'],
 																			disabled : true,
 																			itemId : 'delete',
 																			cls : 'delete',
@@ -116,6 +118,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Créer un concept depuis ce terme',
+																			requiredRoles : ['ADMIN'],
 																			disabled : true,
 																			itemId : 'createconcept',
 																			iconCls : 'icon-add'

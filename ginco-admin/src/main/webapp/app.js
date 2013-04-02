@@ -59,12 +59,6 @@ Ext.Loader.setLocale({
     types: [ 'controller', 'view' ]
 });
 
-Ext.define("Thesaurus.user.info", {
-	singleton:true,
-	username: "",
-	isAdmin: false	
-});
-
 Ext.application({
     models: [
         'MainTreeModel',
@@ -72,7 +66,8 @@ Ext.application({
         'ThesaurusTermModel',
         'ConceptModel',
         'SimpleConceptModel',
-        'ConceptArrayModel'
+        'ConceptArrayModel',
+        'UserInfoModel'
     ],
     stores: [
         'MainTreeStore',
@@ -92,8 +87,7 @@ Ext.application({
         'TermStatusStore',
         'ConceptStatusStore',
         'ThesaurusVersionStore',
-        'ThesaurusVersionStatusStore',
-        'UserInfoStore'
+        'ThesaurusVersionStatusStore'
     ],
     views: [
         'GincoViewPort',
@@ -123,6 +117,18 @@ Ext.application({
     init: function(){    	
     },
     launch: function() {
+    	var me = this;
+    	Ext.create('GincoApp.model.UserInfoModel');
+    	GincoApp.model.UserInfoModel.load('',{
+    			 success: function(record, operation) {
+    				 Thesaurus.ext.utils.userInfo=record;
+    				 me.fireEvent("userinfoloaded");
+    			 },
+    			 failure: function()
+    			 {
+    				 alert("Unable to load user profile...");
+    			 }
+    	});
     	Ext.History.init();
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
