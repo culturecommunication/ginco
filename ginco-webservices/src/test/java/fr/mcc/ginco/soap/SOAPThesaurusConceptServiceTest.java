@@ -70,4 +70,9 @@ public class SOAPThesaurusConceptServiceTest {
 	public final void testGetConceptsHierarchicalRelationsWithEmptyParameters(){
 		soapThesaurusConceptService.getConceptsHierarchicalRelations("", "");
 	}
+	
+	@Test(expected=BusinessException.class)
+	public final void testGetPreferredTermByConceptId(){
+		soapThesaurusConceptService.getPreferredTermByConceptId("");
+	}
 }

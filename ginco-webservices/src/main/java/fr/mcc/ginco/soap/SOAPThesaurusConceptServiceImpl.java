@@ -35,10 +35,15 @@
 
 package fr.mcc.ginco.soap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
@@ -63,6 +68,32 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		else 
 		{
 			throw new BusinessException("One or more parameters are empty","empty-parameters");
+		}
+	}
+	
+	@Override
+	public List<ReducedThesaurusTerm> getPreferredTermByConceptId(String conceptId)
+			throws BusinessException{
+		if (!conceptId.equals("")){
+			
+			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
+			List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
+			// 
+			thesaurusTerms.add(thesaurusConceptService.getConceptPreferredTerm(conceptId));
+			
+			for (ThesaurusTerm thesaurusTerm : thesaurusTerms){
+				ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+				reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
+				reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
+				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
+				results.add(reducedThesaurusTerm);
+			}
+			
+			return results;
+		}
+		else 
+		{
+			throw new BusinessException("Concept identifier is empty","empty-parameter");
 		}
 	}
 

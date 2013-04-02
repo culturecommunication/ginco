@@ -34,8 +34,11 @@
  */
 package fr.mcc.ginco.soap;
 
+import java.util.List;
+
 import javax.jws.WebService;
 
+import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
@@ -47,14 +50,24 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public interface ISOAPThesaurusConceptService {
 	
 	/**
-     * Get hierarchical relations between two concepts
-     * @param identifier of first concept
-     * @param identifier of second concept
-     * 
-     * @return 0 if relations between concepts don't exist
-     * @return 1 if first concept is parent of second concept
-     * @return 2 if first concept is child of second concept
-     */
-    
-    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) throws BusinessException;
+	 * Get hierarchical relations between two concepts
+	 * @param identifier of first concept
+	 * @param identifier of second concept
+	 * 
+	 * @return 0 if relations between concepts don't exist
+	 * @return 1 if first concept is parent of second concept
+	 * @return 2 if first concept is child of second concept
+	 */
+	    
+	int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) throws BusinessException;
+	
+	
+	/**
+	 * Get preferredTerm by the identifier of a concept
+	 * @param identifier of a concept
+	 * @return reduced preferred term
+	 */
+	
+	List<ReducedThesaurusTerm> getPreferredTermByConceptId(String conceptId) throws BusinessException;
 }
+
