@@ -38,7 +38,6 @@ package fr.mcc.ginco.soap;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
-import javax.xml.ws.WebFault;
 
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusConceptService;
