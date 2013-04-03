@@ -130,11 +130,17 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	public List<String> getChildrenByConceptId(String conceptId){
 		if (!conceptId.equals("")){
 			List<String> results = new ArrayList<String>();
-			List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId);
-			for (ThesaurusConcept thesaurusConcept : thesaurusConceptList){
-				results.add(thesaurusConcept.getIdentifier());
+			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+			if (thesaurusConcept != null){
+				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId);
+				for (ThesaurusConcept conceptChild : thesaurusConceptList){
+					results.add(conceptChild.getIdentifier());
+				}
+				return results;
 			}
-			return results;
+			else{
+				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
+			}
 		}
 		else 
 		{
