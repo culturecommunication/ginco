@@ -79,6 +79,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xVersionsTab : 'Versions',
 	xJournal: 'Log history',
 	xEditJournal: 'Edit history',
+    xPublish: 'Publish Thesaurus',
 	
 	initComponent : function() {
 		var me = this;
@@ -101,7 +102,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												pollForChanges : true,
 												trackResetOnLoad : true,
 												defaults : {
-													anchor : '70%',
+													anchor : '70%'
 												},
 												bbar : Ext.create('GincoApp.view.BottomFormToolbar'),
 												dockedItems : [ {
@@ -202,7 +203,15 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 						                                     itemId : 'editJournal'
 						                                 }]
 						                            }
-						                    } ]
+						                    },{
+                                                        xtype : 'button',
+                                                        text : me.xPublish,
+                                                        requiredRoles : ['ADMIN'],
+                                                        disabled : true,
+                                                        cls : 'publish',
+                                                        itemId : 'publishThesaurus',
+                                                        iconCls : 'icon-publish'
+                                                    } ]
 									} ],
 										items : [{
 											xtype : 'displayfield',

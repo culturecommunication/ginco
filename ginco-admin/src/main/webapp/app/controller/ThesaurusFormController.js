@@ -49,6 +49,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xProblemLabel : 'Error !',
     xProblemSaveMsg : 'Unable to save this thesaurus!',
     xProblemDeleteMsg : 'Unable to delete this thesaurus!',
+    xProblemPublishMsg : "Error publishing Thesaurus!",
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -76,7 +77,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         thesaurusPanel.down('#exportMcc').setDisabled(false);
         thesaurusPanel.down('#versionTab').setDisabled(false);
         thesaurusPanel.down('button[cls=journalBtnMenu]').setDisabled(false);
-        thesaurusPanel.down('#editJournal').setDisabled(false);
+        thesaurusPanel.down('#editJournal').setDisabled(false)
+        thesaurusPanel.down('#publishThesaurus').setDisabled(false);
 
 	},
 	onNewTermBtnClick : function(theButton, e, options) {
@@ -154,6 +156,25 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
                 scope : this
             });
 
+    },
+
+    publishThesaurus : function(theButton) {
+        var me = this;
+        var theForm = theButton.up('form');
+        var url = "services/ui/thesaurusservice/publishVocabulary?thesaurusId="
+            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
+
+        Ext.Ajax.request({
+            url: url,
+            method: 'GET',
+            success: function() {
+               Thesaurus.ext.utils.msg('Succès',
+                   'Le thesaurus a été publié!');
+            },
+            failure: function() {
+                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemPublishMsg);
+            }
+        });
     },
 
     exportHierarchical : function(theButton) {
@@ -259,6 +280,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			"thesaurusPanel #editJournal" : {
                 click : this.exportJournal
             },
+            "thesaurusPanel #publishThesaurus" : {
+                click : this.publishThesaurus
+            }
 		});
 	}
 });

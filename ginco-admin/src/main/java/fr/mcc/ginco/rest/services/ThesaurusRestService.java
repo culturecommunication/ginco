@@ -34,23 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
@@ -64,6 +47,16 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
@@ -205,5 +198,22 @@ public class ThesaurusRestService {
             thesaurusService.destroyThesaurus(object);
         }
     }
-	
+
+
+    /**
+     * Public method used to publish thesaurus
+     * @throws BusinessException
+     */
+    @GET
+    @Path("/publishVocabulary")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    public ExtJsonFormLoadData publishVocabulary(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+        Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
+
+        if (object != null) {
+            thesaurusService.publishThesaurus(object);
+        }
+
+        return new ExtJsonFormLoadData(object);
+    }
 }

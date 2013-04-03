@@ -37,6 +37,7 @@ package fr.mcc.ginco.services;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 import java.util.List;
 
@@ -85,4 +86,11 @@ public interface IThesaurusService {
      * @return
      */
     Thesaurus destroyThesaurus(Thesaurus object) throws BusinessException;
+
+    /**
+     * Publish a Thesaurus object
+     * @param object
+     * @return
+     */
+    void publishThesaurus(Thesaurus object) throws BusinessException, TechnicalException;
 }

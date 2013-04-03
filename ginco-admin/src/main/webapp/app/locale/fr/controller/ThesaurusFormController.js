@@ -41,5 +41,6 @@ Ext.define('GincoApp.locale.fr.controller.ThesaurusFormController', {
     xSucessRemovedMsg : 'Le thesaurus a été supprimé avec succès',
     xProblemLabel : 'Erreur !',
     xProblemSaveMsg : 'Impossible de sauvegarder le thesaurus !',
-    xProblemDeleteMsg : 'Impossible de supprimer le thesaurus !'
+    xProblemDeleteMsg : 'Impossible de supprimer le thesaurus !',
+    xProblemPublishMsg : "Impossible de publier Thesaurus!"
 });
