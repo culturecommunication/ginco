@@ -45,7 +45,7 @@ public class FullThesaurus extends ReducedThesaurus{
 
 	private String contributor;
     private String coverage;
-    private String date;
+    private String modified;
     private String description;
     private String publisher;
     private String relation;
@@ -77,12 +77,12 @@ public class FullThesaurus extends ReducedThesaurus{
 		this.coverage = coverage;
 	}
 
-	public String getDate() {
-		return date;
+	public String getModified() {
+		return modified;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setModified(String modified) {
+		this.modified = modified;
 	}
 
 	public String getDescription() {

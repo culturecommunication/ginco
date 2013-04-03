@@ -86,7 +86,7 @@ public class SOAPThesaurusServiceTest {
         gregCalendar.setTime(DateUtil.dateFromString("2013-02-15 02:02:02"));
 		Assert.assertEquals(DateUtil.toString(gregCalendar.getTime()), fullThesaurus.getCreated());
 
-		Assert.assertEquals(DateUtil.toString(gregCalendar.getTime()), fullThesaurus.getDate());
+		Assert.assertEquals(DateUtil.toString(gregCalendar.getTime()), fullThesaurus.getModified());
 		Assert.assertEquals("Fake Description", fullThesaurus.getDescription());
 		List<String> expectedLanguages = new ArrayList<String>();
 		expectedLanguages.add("fra");
