@@ -36,6 +36,7 @@ package fr.mcc.ginco.soap;
 
 import java.util.List;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
@@ -59,7 +60,7 @@ public interface ISOAPThesaurusConceptService {
 	 * @return 2 if first concept is child of second concept
 	 */
 	    
-	int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) throws BusinessException;
+	int getConceptsHierarchicalRelations(@WebParam(name="firstConceptId") String firstConceptId,@WebParam(name="secondConceptId") String secondConceptId) throws BusinessException;
 	
 	
 	/**
@@ -68,6 +69,6 @@ public interface ISOAPThesaurusConceptService {
 	 * @return reduced preferred term
 	 */
 	
-	List<ReducedThesaurusTerm> getPreferredTermByConceptId(String conceptId) throws BusinessException;
+	List<ReducedThesaurusTerm> getPreferredTermByConceptId(@WebParam(name="conceptId")String conceptId) throws BusinessException;
 }
 

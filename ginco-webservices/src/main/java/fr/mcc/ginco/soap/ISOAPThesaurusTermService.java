@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.soap;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -51,7 +52,7 @@ public interface ISOAPThesaurusTermService {
 	 * 
 	 * @return identifier of a concept
 	 */
-	String getConceptIdByTerm(String lexicalValue, String thesaurusId,  String languageId);
+	String getConceptIdByTerm(@WebParam(name="lexicalValue")String lexicalValue,@WebParam(name="thesaurusId") String thesaurusId,@WebParam(name="languageId")  String languageId);
 	
 	/**
 	 * This service returns:
@@ -65,7 +66,7 @@ public interface ISOAPThesaurusTermService {
 	 * 
 	 * @return reduced preferred term
 	 */
-	ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId);
+	ReducedThesaurusTerm getPreferredTermByTerm(@WebParam(name="lexicalValue")String lexicalValue,@WebParam(name="thesaurusId") String thesaurusId, @WebParam(name="languageId") String languageId);
 	
 	/**
 	 * This service returns true if the term is preferred, 
@@ -77,6 +78,6 @@ public interface ISOAPThesaurusTermService {
 	 * 
 	 * @return preferred or not preferred
 	 */
-	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
+	Boolean isPreferred(@WebParam(name="lexicalValue")String lexicalValue,@WebParam(name="thesaurusId") String thesaurusId,@WebParam(name="languageId")  String languageId) throws BusinessException;
 }
 

@@ -36,6 +36,7 @@ package fr.mcc.ginco.soap;
 
 import java.util.List;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.data.FullThesaurus;
@@ -65,6 +66,6 @@ public interface ISOAPThesaurusService {
 	 * 
 	 * @return full thesaurus informations
 	 */
-	FullThesaurus getThesaurusById(String id) ;
+	FullThesaurus getThesaurusById(@WebParam(name="thesaurusId") String id) ;
 
 }
