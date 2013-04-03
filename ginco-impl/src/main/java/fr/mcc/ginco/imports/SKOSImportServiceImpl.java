@@ -344,18 +344,17 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private URI writeTempFile(String fileContent, String fileName, File tempDir)
 			throws BusinessException {
 		logger.debug("Writing temporary file for import");
-		String prefix = fileName.substring(0, fileName.lastIndexOf("."));
-		logger.debug("Filename : " + prefix);
+		
 		File file;
 		try {
-			file = File.createTempFile(prefix, ".tmp", tempDir);
-
+			file = File.createTempFile("skosimport", ".tmp", tempDir);
+			logger.debug("Filename : " + file.getName());
 			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(fileContent);
 			fileWriter.close();
 		} catch (IOException e) {
 			throw new BusinessException(
-					"Error storing temporarty file for import " + prefix,
+					"Error storing temporarty file for import " + fileName,
 					"import-unable-to-write-temporary-file", e);
 		}
 		return file.toURI();
