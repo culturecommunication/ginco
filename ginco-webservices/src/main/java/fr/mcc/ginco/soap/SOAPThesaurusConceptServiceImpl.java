@@ -148,4 +148,25 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		}
 	}
 	
+	@Override
+	public List<String> getRootConcepts(String conceptId){
+		if (!conceptId.equals("")){
+			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+			if (thesaurusConcept != null){
+				List<String> results = new ArrayList<String>();
+				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getRootConcepts(thesaurusConcept);
+				for (ThesaurusConcept conceptChild : thesaurusConceptList){
+					results.add(conceptChild.getIdentifier());
+				}
+				return results;
+			}
+			else{
+				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
+			}
+		}
+		else{
+			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		}
+	}
+	
 }
