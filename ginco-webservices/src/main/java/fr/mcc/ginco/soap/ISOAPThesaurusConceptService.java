@@ -109,5 +109,12 @@ public interface ISOAPThesaurusConceptService {
      * @return list of parent concepts
      */
 	List<String> getParentConcepts(@WebParam(name="conceptId") String conceptId);
+	
+	/**
+     * Returns associative concepts for given concept
+     * @param identifier of a concept
+     * @return list of associative concepts
+     */
+	List<String> getAssociativeConcepts(@WebParam(name="conceptId") String conceptId);
 }
 

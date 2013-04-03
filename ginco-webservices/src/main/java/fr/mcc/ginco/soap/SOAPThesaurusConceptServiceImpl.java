@@ -41,13 +41,13 @@ import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -61,6 +61,10 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
+	@Named("associativeRelationshipService")
+	private IAssociativeRelationshipService associativeRelationshipService;
 	
 	@Override
 	public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
@@ -172,7 +176,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 	
 	@Override
-	public List<String> getParentConcepts(@WebParam(name="conceptId") String conceptId){
+	public List<String> getParentConcepts(String conceptId){
 		if (!conceptId.equals("")){
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null){
@@ -182,6 +186,22 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 					results.add(parentConcept.getIdentifier());
 				}
 				return results;
+			}
+			else{
+				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
+			}
+		}
+		else{
+			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		}
+	}
+	
+	@Override
+	public List<String> getAssociativeConcepts(String conceptId){
+		if (!conceptId.equals("")){
+			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+			if (thesaurusConcept != null){
+				 return associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept);
 			}
 			else{
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
