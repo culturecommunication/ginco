@@ -35,20 +35,22 @@
 package fr.mcc.ginco.services;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
+import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.DateUtil;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
-import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusVersionHistoryService")
@@ -57,6 +59,10 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
     @Inject
     @Named("thesaurusVersionHistoryDAO")
     private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
+
+    @Inject
+    @Named("generatorService")
+    private IIDGeneratorService generatorService;
 
     @Log
     private Logger logger;
@@ -72,7 +78,18 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
 		return thesaurusVersionHistoryDAO.getById(id);
 	}
 
-	@Override
+    @Override
+    public ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus) {
+        ThesaurusVersionHistory newVersion = new ThesaurusVersionHistory();
+        newVersion.setThesaurus(thesaurus);
+        newVersion.setThisVersion(true);
+        newVersion.setDate(DateUtil.nowDate());
+        newVersion.setStatus(ThesaurusVersionStatusEnum.PUBLISHED.getStatus());
+        newVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
+        return createOrUpdateVersion(newVersion);
+    }
+
+    @Override
 	@Transactional(readOnly=false)
 	public ThesaurusVersionHistory createOrUpdateVersion(ThesaurusVersionHistory version) {
 		if (version.getThisVersion() == true) {

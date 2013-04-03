@@ -34,10 +34,9 @@ CREATE TABLE thesaurus_ark
   created timestamp without time zone,
   entity text,
   CONSTRAINT thesaurus_ark_pkey PRIMARY KEY (identifier)
-)
-WITH (
-  OIDS=FALSE
 );
 
 CREATE FUNCTION int_to_text(INT4) RETURNS TEXT AS 'SELECT textin(int4out($1));' LANGUAGE SQL STRICT IMMUTABLE;
 CREATE CAST (INT4 AS TEXT) WITH FUNCTION int_to_text(INT4) AS IMPLICIT;
+
+ALTER TABLE thesaurus_version_history ADD COLUMN userid text;

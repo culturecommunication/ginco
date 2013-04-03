@@ -43,10 +43,7 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.services.IThesaurusFormatService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.services.IThesaurusTypeService;
+import fr.mcc.ginco.services.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -82,6 +79,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
+
+    @Inject
+    @Named("thesaurusVersionHistoryService")
+    private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 	
 	@Inject
 	@Named("thesaurusViewConverter")
@@ -212,6 +213,7 @@ public class ThesaurusRestService {
 
         if (object != null) {
             thesaurusService.publishThesaurus(object);
+            thesaurusVersionHistoryService.publishThesaurus(object);
         }
 
         return new ExtJsonFormLoadData(object);
