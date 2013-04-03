@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="73" href="#73">73</a>  	
 <a class="jxr_linenumber" name="74" href="#74">74</a>  	@Inject
 <a class="jxr_linenumber" name="75" href="#75">75</a>  	@Named(<span class="jxr_string">"thesaurusVersionHistoryService"</span>)
-<a class="jxr_linenumber" name="76" href="#76">76</a>  	<strong class="jxr_keyword">private</strong> IThesaurusVersionHistoryService thesaurusVersionHistoryService;
+<a class="jxr_linenumber" name="76" href="#76">76</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/services/IThesaurusVersionHistoryService.html">IThesaurusVersionHistoryService</a> thesaurusVersionHistoryService;
 <a class="jxr_linenumber" name="77" href="#77">77</a>  	
 <a class="jxr_linenumber" name="78" href="#78">78</a>  	@Inject
 <a class="jxr_linenumber" name="79" href="#79">79</a>  	@Named(<span class="jxr_string">"thesaurusVersionHistoryViewConverter"</span>)
@@ -120,12 +120,12 @@
 <a class="jxr_linenumber" name="110" href="#110">110</a> 		List&lt;GenericStatusView&gt; listOfStatus = <strong class="jxr_keyword">new</strong> ArrayList&lt;GenericStatusView&gt;();
 <a class="jxr_linenumber" name="111" href="#111">111</a> 		
 <a class="jxr_linenumber" name="112" href="#112">112</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="113" href="#113">113</a> 			ResourceBundle res = ResourceBundle.getBundle(<span class="jxr_string">"labels"</span>, <strong class="jxr_keyword">new</strong> EncodedControl(<span class="jxr_string">"UTF-8"</span>));
+<a class="jxr_linenumber" name="113" href="#113">113</a> 			ResourceBundle res = ResourceBundle.getBundle(<span class="jxr_string">"labels"</span>, <strong class="jxr_keyword">new</strong> <a href="../../../../../fr/mcc/ginco/utils/EncodedControl.html">EncodedControl</a>(<span class="jxr_string">"UTF-8"</span>));
 <a class="jxr_linenumber" name="114" href="#114">114</a> 			String availableStatusIds[] = res.getString(<span class="jxr_string">"version-status"</span>).split(<span class="jxr_string">","</span>);
 <a class="jxr_linenumber" name="115" href="#115">115</a> 			
 <a class="jxr_linenumber" name="116" href="#116">116</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">""</span>.equals(availableStatusIds[0])) {
 <a class="jxr_linenumber" name="117" href="#117">117</a> 				<em class="jxr_comment">//Ids of status for concepts are not set correctly</em>
-<a class="jxr_linenumber" name="118" href="#118">118</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BusinessException(<span class="jxr_string">"Error with property file - check values of identifier version status"</span>, <span class="jxr_string">"check-values-of-version-status"</span>);
+<a class="jxr_linenumber" name="118" href="#118">118</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a>(<span class="jxr_string">"Error with property file - check values of identifier version status"</span>, <span class="jxr_string">"check-values-of-version-status"</span>);
 <a class="jxr_linenumber" name="119" href="#119">119</a> 			}
 <a class="jxr_linenumber" name="120" href="#120">120</a> 			
 <a class="jxr_linenumber" name="121" href="#121">121</a> 	        <strong class="jxr_keyword">for</strong> (String id : availableStatusIds) {
@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="132" href="#132">132</a> 	        	listOfStatus.add(versionStatusView);
 <a class="jxr_linenumber" name="133" href="#133">133</a> 			}
 <a class="jxr_linenumber" name="134" href="#134">134</a> 		} <strong class="jxr_keyword">catch</strong> (MissingResourceException e) {
-<a class="jxr_linenumber" name="135" href="#135">135</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BusinessException(<span class="jxr_string">"Error with property file - check values of version status"</span>, <span class="jxr_string">"check-values-of-version-status"</span>, e);
+<a class="jxr_linenumber" name="135" href="#135">135</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a>(<span class="jxr_string">"Error with property file - check values of version status"</span>, <span class="jxr_string">"check-values-of-version-status"</span>, e);
 <a class="jxr_linenumber" name="136" href="#136">136</a> 		}
 <a class="jxr_linenumber" name="137" href="#137">137</a> 		ExtJsonFormLoadData&lt;List&lt;GenericStatusView&gt;&gt; result = <strong class="jxr_keyword">new</strong> ExtJsonFormLoadData&lt;List&lt;GenericStatusView&gt;&gt;(listOfStatus);
 <a class="jxr_linenumber" name="138" href="#138">138</a>         result.setTotal((<strong class="jxr_keyword">long</strong>) listOfStatus.size());

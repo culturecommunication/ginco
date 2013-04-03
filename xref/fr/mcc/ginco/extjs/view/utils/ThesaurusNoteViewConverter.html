@@ -63,27 +63,27 @@
 <a class="jxr_linenumber" name="53" href="#53">53</a>  
 <a class="jxr_linenumber" name="54" href="#54">54</a>  	@Inject
 <a class="jxr_linenumber" name="55" href="#55">55</a>  	@Named(<span class="jxr_string">"noteService"</span>)
-<a class="jxr_linenumber" name="56" href="#56">56</a>  	<strong class="jxr_keyword">private</strong> INoteService noteService;
+<a class="jxr_linenumber" name="56" href="#56">56</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/INoteService.html">INoteService</a> noteService;
 <a class="jxr_linenumber" name="57" href="#57">57</a>  
 <a class="jxr_linenumber" name="58" href="#58">58</a>  	@Inject
 <a class="jxr_linenumber" name="59" href="#59">59</a>  	@Named(<span class="jxr_string">"languagesService"</span>)
-<a class="jxr_linenumber" name="60" href="#60">60</a>  	<strong class="jxr_keyword">private</strong> ILanguagesService languagesService;
+<a class="jxr_linenumber" name="60" href="#60">60</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/ILanguagesService.html">ILanguagesService</a> languagesService;
 <a class="jxr_linenumber" name="61" href="#61">61</a>  
 <a class="jxr_linenumber" name="62" href="#62">62</a>  	@Inject
 <a class="jxr_linenumber" name="63" href="#63">63</a>  	@Named(<span class="jxr_string">"noteTypeService"</span>)
-<a class="jxr_linenumber" name="64" href="#64">64</a>  	<strong class="jxr_keyword">private</strong> INoteTypeService noteTypeService;
+<a class="jxr_linenumber" name="64" href="#64">64</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/INoteTypeService.html">INoteTypeService</a> noteTypeService;
 <a class="jxr_linenumber" name="65" href="#65">65</a>  
 <a class="jxr_linenumber" name="66" href="#66">66</a>  	@Inject
 <a class="jxr_linenumber" name="67" href="#67">67</a>  	@Named(<span class="jxr_string">"thesaurusConceptService"</span>)
-<a class="jxr_linenumber" name="68" href="#68">68</a>  	<strong class="jxr_keyword">private</strong> IThesaurusConceptService thesaurusConceptService;
+<a class="jxr_linenumber" name="68" href="#68">68</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusConceptService.html">IThesaurusConceptService</a> thesaurusConceptService;
 <a class="jxr_linenumber" name="69" href="#69">69</a>  
 <a class="jxr_linenumber" name="70" href="#70">70</a>  	@Inject
 <a class="jxr_linenumber" name="71" href="#71">71</a>  	@Named(<span class="jxr_string">"thesaurusTermService"</span>)
-<a class="jxr_linenumber" name="72" href="#72">72</a>  	<strong class="jxr_keyword">private</strong> IThesaurusTermService thesaurusTermService;
+<a class="jxr_linenumber" name="72" href="#72">72</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusTermService.html">IThesaurusTermService</a> thesaurusTermService;
 <a class="jxr_linenumber" name="73" href="#73">73</a>  
 <a class="jxr_linenumber" name="74" href="#74">74</a>  	@Inject
 <a class="jxr_linenumber" name="75" href="#75">75</a>  	@Named(<span class="jxr_string">"generatorService"</span>)
-<a class="jxr_linenumber" name="76" href="#76">76</a>  	<strong class="jxr_keyword">private</strong> IIDGeneratorService generatorService;
+<a class="jxr_linenumber" name="76" href="#76">76</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/ark/IIDGeneratorService.html">IIDGeneratorService</a> generatorService;
 <a class="jxr_linenumber" name="77" href="#77">77</a>  
 <a class="jxr_linenumber" name="78" href="#78">78</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="79" href="#79">79</a>  <em class="jxr_javadoccomment">	 * This method converts a single {@link Note} into a</em>
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="83" href="#83">83</a>  <em class="jxr_javadoccomment">	 *            (a {@link Note} object)</em>
 <a class="jxr_linenumber" name="84" href="#84">84</a>  <em class="jxr_javadoccomment">	 * @return result (a {@link ThesaurusNoteView} object)</em>
 <a class="jxr_linenumber" name="85" href="#85">85</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="86" href="#86">86</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusNoteView.html">ThesaurusNoteView</a> convert(Note source) {
+<a class="jxr_linenumber" name="86" href="#86">86</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusNoteView.html">ThesaurusNoteView</a> convert(<a href="../../../../../../fr/mcc/ginco/beans/Note.html">Note</a> source) {
 <a class="jxr_linenumber" name="87" href="#87">87</a>  		ThesaurusNoteView view = <strong class="jxr_keyword">new</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusNoteView.html">ThesaurusNoteView</a>();
 <a class="jxr_linenumber" name="88" href="#88">88</a>  		<strong class="jxr_keyword">if</strong> (source != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="89" href="#89">89</a>  			view.setIdentifier(source.getIdentifier());
@@ -147,10 +147,10 @@
 <a class="jxr_linenumber" name="137" href="#137">137</a> <em class="jxr_javadoccomment">	 * @return result (a {@link Note} object)</em>
 <a class="jxr_linenumber" name="138" href="#138">138</a> <em class="jxr_javadoccomment">	 * @throws BusinessException</em>
 <a class="jxr_linenumber" name="139" href="#139">139</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="140" href="#140">140</a> 	<strong class="jxr_keyword">public</strong> Note convert(<a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusNoteView.html">ThesaurusNoteView</a> source) <strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="140" href="#140">140</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../../../../fr/mcc/ginco/beans/Note.html">Note</a> convert(<a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusNoteView.html">ThesaurusNoteView</a> source) <strong class="jxr_keyword">throws</strong> BusinessException {
 <a class="jxr_linenumber" name="141" href="#141">141</a> 		Note hibernateRes;
 <a class="jxr_linenumber" name="142" href="#142">142</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">""</span>.equals(source.getIdentifier())) {
-<a class="jxr_linenumber" name="143" href="#143">143</a> 			hibernateRes = <strong class="jxr_keyword">new</strong> Note();
+<a class="jxr_linenumber" name="143" href="#143">143</a> 			hibernateRes = <strong class="jxr_keyword">new</strong> <a href="../../../../../../fr/mcc/ginco/beans/Note.html">Note</a>();
 <a class="jxr_linenumber" name="144" href="#144">144</a> 			hibernateRes.setCreated(DateUtil.nowDate());
 <a class="jxr_linenumber" name="145" href="#145">145</a> 			hibernateRes.setIdentifier(generatorService.generate(Note.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="146" href="#146">146</a> 		} <strong class="jxr_keyword">else</strong> {
@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="177" href="#177">177</a> 	}
 <a class="jxr_linenumber" name="178" href="#178">178</a> 
 <a class="jxr_linenumber" name="179" href="#179">179</a> 	<strong class="jxr_keyword">public</strong> List&lt;Note&gt; convertToNote(List&lt;ThesaurusNoteView&gt; source)
-<a class="jxr_linenumber" name="180" href="#180">180</a> 			<strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="180" href="#180">180</a> 			<strong class="jxr_keyword">throws</strong> <a href="../../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
 <a class="jxr_linenumber" name="181" href="#181">181</a> 		List&lt;Note&gt; views = <strong class="jxr_keyword">new</strong> ArrayList&lt;Note&gt;();
 <a class="jxr_linenumber" name="182" href="#182">182</a> 		<strong class="jxr_keyword">for</strong> (ThesaurusNoteView thesaurusNoteView : source) {
 <a class="jxr_linenumber" name="183" href="#183">183</a> 			views.add(convert(thesaurusNoteView));

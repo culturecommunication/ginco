@@ -70,15 +70,15 @@
 <a class="jxr_linenumber" name="60" href="#60">60</a>  	
 <a class="jxr_linenumber" name="61" href="#61">61</a>  	@Inject
 <a class="jxr_linenumber" name="62" href="#62">62</a>  	@Named(<span class="jxr_string">"thesaurusService"</span>)
-<a class="jxr_linenumber" name="63" href="#63">63</a>  	<strong class="jxr_keyword">private</strong> IThesaurusService thesaurusService;
+<a class="jxr_linenumber" name="63" href="#63">63</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusService.html">IThesaurusService</a> thesaurusService;
 <a class="jxr_linenumber" name="64" href="#64">64</a>  
 <a class="jxr_linenumber" name="65" href="#65">65</a>  	@Inject
 <a class="jxr_linenumber" name="66" href="#66">66</a>  	@Named(<span class="jxr_string">"thesaurusVersionHistoryService"</span>)
-<a class="jxr_linenumber" name="67" href="#67">67</a>  	<strong class="jxr_keyword">private</strong> IThesaurusVersionHistoryService thesaurusVersionHistoryService;
+<a class="jxr_linenumber" name="67" href="#67">67</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusVersionHistoryService.html">IThesaurusVersionHistoryService</a> thesaurusVersionHistoryService;
 <a class="jxr_linenumber" name="68" href="#68">68</a>  	
 <a class="jxr_linenumber" name="69" href="#69">69</a>  	@Inject
 <a class="jxr_linenumber" name="70" href="#70">70</a>  	@Named(<span class="jxr_string">"generatorService"</span>)
-<a class="jxr_linenumber" name="71" href="#71">71</a>  	<strong class="jxr_keyword">private</strong> IIDGeneratorService generatorService;
+<a class="jxr_linenumber" name="71" href="#71">71</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/ark/IIDGeneratorService.html">IIDGeneratorService</a> generatorService;
 <a class="jxr_linenumber" name="72" href="#72">72</a>  
 <a class="jxr_linenumber" name="73" href="#73">73</a>  	@Log
 <a class="jxr_linenumber" name="74" href="#74">74</a>  	<strong class="jxr_keyword">private</strong> Logger logger;
@@ -91,8 +91,8 @@
 <a class="jxr_linenumber" name="81" href="#81">81</a>  <em class="jxr_javadoccomment">	 * @return converted item.</em>
 <a class="jxr_linenumber" name="82" href="#82">82</a>  <em class="jxr_javadoccomment">	 * @throws BusinessException</em>
 <a class="jxr_linenumber" name="83" href="#83">83</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="84" href="#84">84</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusVersionHistoryView.html">ThesaurusVersionHistoryView</a> convert(ThesaurusVersionHistory source)
-<a class="jxr_linenumber" name="85" href="#85">85</a>  			<strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="84" href="#84">84</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusVersionHistoryView.html">ThesaurusVersionHistoryView</a> convert(<a href="../../../../../../fr/mcc/ginco/beans/ThesaurusVersionHistory.html">ThesaurusVersionHistory</a> source)
+<a class="jxr_linenumber" name="85" href="#85">85</a>  			<strong class="jxr_keyword">throws</strong> <a href="../../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
 <a class="jxr_linenumber" name="86" href="#86">86</a>  		ThesaurusVersionHistoryView convertedItem = <strong class="jxr_keyword">new</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusVersionHistoryView.html">ThesaurusVersionHistoryView</a>();
 <a class="jxr_linenumber" name="87" href="#87">87</a>  		convertedItem.setIdentifier(source.getIdentifier());
 <a class="jxr_linenumber" name="88" href="#88">88</a>  		<strong class="jxr_keyword">if</strong> (source.getDate() != <strong class="jxr_keyword">null</strong>) {
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="102" href="#102">102</a> <em class="jxr_javadoccomment">	 * @param thesaurusVersionHistoryView</em>
 <a class="jxr_linenumber" name="103" href="#103">103</a> <em class="jxr_javadoccomment">	 * @return</em>
 <a class="jxr_linenumber" name="104" href="#104">104</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="105" href="#105">105</a> 	<strong class="jxr_keyword">private</strong> ThesaurusVersionHistory convert(<a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusVersionHistoryView.html">ThesaurusVersionHistoryView</a> thesaurusVersionHistoryView) {
+<a class="jxr_linenumber" name="105" href="#105">105</a> 	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/beans/ThesaurusVersionHistory.html">ThesaurusVersionHistory</a> convert(<a href="../../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusVersionHistoryView.html">ThesaurusVersionHistoryView</a> thesaurusVersionHistoryView) {
 <a class="jxr_linenumber" name="106" href="#106">106</a> 		ThesaurusVersionHistory hibernateRes;
 <a class="jxr_linenumber" name="107" href="#107">107</a> 		<strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(thesaurusVersionHistoryView.getIdentifier())) {
 <a class="jxr_linenumber" name="108" href="#108">108</a> 			hibernateRes = getNewThesaurusVersionHistory();
@@ -156,16 +156,16 @@
 <a class="jxr_linenumber" name="146" href="#146">146</a> 		<strong class="jxr_keyword">return</strong> result;
 <a class="jxr_linenumber" name="147" href="#147">147</a> 	}
 <a class="jxr_linenumber" name="148" href="#148">148</a> 	
-<a class="jxr_linenumber" name="149" href="#149">149</a> 	<strong class="jxr_keyword">private</strong> ThesaurusVersionHistory getNewThesaurusVersionHistory() {
-<a class="jxr_linenumber" name="150" href="#150">150</a> 		ThesaurusVersionHistory hibernateRes = <strong class="jxr_keyword">new</strong> ThesaurusVersionHistory();
+<a class="jxr_linenumber" name="149" href="#149">149</a> 	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/beans/ThesaurusVersionHistory.html">ThesaurusVersionHistory</a> getNewThesaurusVersionHistory() {
+<a class="jxr_linenumber" name="150" href="#150">150</a> 		ThesaurusVersionHistory hibernateRes = <strong class="jxr_keyword">new</strong> <a href="../../../../../../fr/mcc/ginco/beans/ThesaurusVersionHistory.html">ThesaurusVersionHistory</a>();
 <a class="jxr_linenumber" name="151" href="#151">151</a> 		hibernateRes.setIdentifier(generatorService.generate(ThesaurusVersionHistory.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="152" href="#152">152</a> 		hibernateRes.setDate(DateUtil.nowDate());
 <a class="jxr_linenumber" name="153" href="#153">153</a> 		logger.info(<span class="jxr_string">"Creating a new ThesaurusVersionHistory"</span>);
 <a class="jxr_linenumber" name="154" href="#154">154</a> 		<strong class="jxr_keyword">return</strong> hibernateRes;
 <a class="jxr_linenumber" name="155" href="#155">155</a> 	}
 <a class="jxr_linenumber" name="156" href="#156">156</a> 	
-<a class="jxr_linenumber" name="157" href="#157">157</a> 	<strong class="jxr_keyword">private</strong> ThesaurusVersionHistory getExistingThesaurusVersionHistory(String identifier)
-<a class="jxr_linenumber" name="158" href="#158">158</a> 			<strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="157" href="#157">157</a> 	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/beans/ThesaurusVersionHistory.html">ThesaurusVersionHistory</a> getExistingThesaurusVersionHistory(String identifier)
+<a class="jxr_linenumber" name="158" href="#158">158</a> 			<strong class="jxr_keyword">throws</strong> <a href="../../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
 <a class="jxr_linenumber" name="159" href="#159">159</a> 		ThesaurusVersionHistory hibernateRes = thesaurusVersionHistoryService.getThesaurusVersionHistoryById(identifier);
 <a class="jxr_linenumber" name="160" href="#160">160</a> 		logger.info(<span class="jxr_string">"Getting an existing ThesaurusVersionHistory with identifier "</span> + identifier);
 <a class="jxr_linenumber" name="161" href="#161">161</a> 		<strong class="jxr_keyword">return</strong> hibernateRes;

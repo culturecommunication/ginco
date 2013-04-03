@@ -83,15 +83,15 @@
 <a class="jxr_linenumber" name="73" href="#73">73</a>  
 <a class="jxr_linenumber" name="74" href="#74">74</a>  	@Inject
 <a class="jxr_linenumber" name="75" href="#75">75</a>  	@Named(<span class="jxr_string">"thesaurusConceptService"</span>)
-<a class="jxr_linenumber" name="76" href="#76">76</a>  	<strong class="jxr_keyword">private</strong> IThesaurusConceptService thesaurusConceptService;
+<a class="jxr_linenumber" name="76" href="#76">76</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusConceptService.html">IThesaurusConceptService</a> thesaurusConceptService;
 <a class="jxr_linenumber" name="77" href="#77">77</a>  
 <a class="jxr_linenumber" name="78" href="#78">78</a>  	@Inject
 <a class="jxr_linenumber" name="79" href="#79">79</a>  	@Named(<span class="jxr_string">"thesaurusArrayService"</span>)
-<a class="jxr_linenumber" name="80" href="#80">80</a>  	<strong class="jxr_keyword">private</strong> IThesaurusArrayService thesaurusArrayService;
+<a class="jxr_linenumber" name="80" href="#80">80</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusArrayService.html">IThesaurusArrayService</a> thesaurusArrayService;
 <a class="jxr_linenumber" name="81" href="#81">81</a>  
 <a class="jxr_linenumber" name="82" href="#82">82</a>  	@Inject
 <a class="jxr_linenumber" name="83" href="#83">83</a>  	@Named(<span class="jxr_string">"thesaurusConceptGroupService"</span>)
-<a class="jxr_linenumber" name="84" href="#84">84</a>  	<strong class="jxr_keyword">private</strong> IThesaurusConceptGroupService thesaurusConceptGroupService;
+<a class="jxr_linenumber" name="84" href="#84">84</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusConceptGroupService.html">IThesaurusConceptGroupService</a> thesaurusConceptGroupService;
 <a class="jxr_linenumber" name="85" href="#85">85</a>  
 <a class="jxr_linenumber" name="86" href="#86">86</a>  	@Log
 <a class="jxr_linenumber" name="87" href="#87">87</a>  	<strong class="jxr_keyword">private</strong> Logger logger;
@@ -104,7 +104,7 @@
 <a class="jxr_linenumber" name="94" href="#94">94</a>  <em class="jxr_javadoccomment">	 * @return created list of folders.</em>
 <a class="jxr_linenumber" name="95" href="#95">95</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="96" href="#96">96</a>  	<strong class="jxr_keyword">public</strong> List&lt;IThesaurusListNode&gt; generateFolders(String parentId)
-<a class="jxr_linenumber" name="97" href="#97">97</a>  			<strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="97" href="#97">97</a>  			<strong class="jxr_keyword">throws</strong> <a href="../../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
 <a class="jxr_linenumber" name="98" href="#98">98</a>  		logger.debug(<span class="jxr_string">"Calling FolderGenerator.generateFolders with parameters : {"</span>);
 <a class="jxr_linenumber" name="99" href="#99">99</a>  		logger.debug(<span class="jxr_string">"	parentId : "</span> + parentId);
 <a class="jxr_linenumber" name="100" href="#100">100</a> 		logger.debug(<span class="jxr_string">"	} "</span>);
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="115" href="#115">115</a> 	}
 <a class="jxr_linenumber" name="116" href="#116">116</a> 
 <a class="jxr_linenumber" name="117" href="#117">117</a> 	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/node/IThesaurusListNode.html">IThesaurusListNode</a> getConcepts(String parentId)
-<a class="jxr_linenumber" name="118" href="#118">118</a> 			<strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="118" href="#118">118</a> 			<strong class="jxr_keyword">throws</strong> <a href="../../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
 <a class="jxr_linenumber" name="119" href="#119">119</a> 		IThesaurusListNode concepts = <strong class="jxr_keyword">new</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/node/ThesaurusListBasicNode.html">ThesaurusListBasicNode</a>();
 <a class="jxr_linenumber" name="120" href="#120">120</a> 		concepts.setTitle(<span class="jxr_string">"Arborescence des concepts"</span>);
 <a class="jxr_linenumber" name="121" href="#121">121</a> 		concepts.setId(CONCEPTS_PREFIX + parentId);
@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="164" href="#164">164</a> 	}
 <a class="jxr_linenumber" name="165" href="#165">165</a> 
 <a class="jxr_linenumber" name="166" href="#166">166</a> 	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/node/IThesaurusListNode.html">IThesaurusListNode</a> getOrphans(String parentId)
-<a class="jxr_linenumber" name="167" href="#167">167</a> 			<strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="167" href="#167">167</a> 			<strong class="jxr_keyword">throws</strong> <a href="../../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
 <a class="jxr_linenumber" name="168" href="#168">168</a> 		IThesaurusListNode orphans = <strong class="jxr_keyword">new</strong> <a href="../../../../../../fr/mcc/ginco/extjs/view/node/ThesaurusListBasicNode.html">ThesaurusListBasicNode</a>();
 <a class="jxr_linenumber" name="169" href="#169">169</a> 		orphans.setTitle(<span class="jxr_string">"Concepts orphelins"</span>);
 <a class="jxr_linenumber" name="170" href="#170">170</a> 		orphans.setId(ORPHANS_PREFIX + parentId);

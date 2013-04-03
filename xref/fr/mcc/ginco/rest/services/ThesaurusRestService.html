@@ -76,23 +76,23 @@
 <a class="jxr_linenumber" name="66" href="#66">66</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../fr/mcc/ginco/rest/services/ThesaurusRestService.html">ThesaurusRestService</a> {
 <a class="jxr_linenumber" name="67" href="#67">67</a>  	@Inject
 <a class="jxr_linenumber" name="68" href="#68">68</a>  	@Named(<span class="jxr_string">"thesaurusTypeService"</span>)
-<a class="jxr_linenumber" name="69" href="#69">69</a>  	<strong class="jxr_keyword">private</strong> IThesaurusTypeService thesaurusTypeService;
+<a class="jxr_linenumber" name="69" href="#69">69</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/services/IThesaurusTypeService.html">IThesaurusTypeService</a> thesaurusTypeService;
 <a class="jxr_linenumber" name="70" href="#70">70</a>  
 <a class="jxr_linenumber" name="71" href="#71">71</a>  	@Inject
 <a class="jxr_linenumber" name="72" href="#72">72</a>  	@Named(<span class="jxr_string">"thesaurusFormatService"</span>)
-<a class="jxr_linenumber" name="73" href="#73">73</a>  	<strong class="jxr_keyword">private</strong> IThesaurusFormatService thesaurusFormatService;
+<a class="jxr_linenumber" name="73" href="#73">73</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/services/IThesaurusFormatService.html">IThesaurusFormatService</a> thesaurusFormatService;
 <a class="jxr_linenumber" name="74" href="#74">74</a>  
 <a class="jxr_linenumber" name="75" href="#75">75</a>  	@Inject
 <a class="jxr_linenumber" name="76" href="#76">76</a>  	@Named(<span class="jxr_string">"languagesService"</span>)
-<a class="jxr_linenumber" name="77" href="#77">77</a>  	<strong class="jxr_keyword">private</strong> ILanguagesService languagesService;
+<a class="jxr_linenumber" name="77" href="#77">77</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/services/ILanguagesService.html">ILanguagesService</a> languagesService;
 <a class="jxr_linenumber" name="78" href="#78">78</a>  
 <a class="jxr_linenumber" name="79" href="#79">79</a>  	@Inject
 <a class="jxr_linenumber" name="80" href="#80">80</a>  	@Named(<span class="jxr_string">"thesaurusService"</span>)
-<a class="jxr_linenumber" name="81" href="#81">81</a>  	<strong class="jxr_keyword">private</strong> IThesaurusService thesaurusService;
+<a class="jxr_linenumber" name="81" href="#81">81</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/services/IThesaurusService.html">IThesaurusService</a> thesaurusService;
 <a class="jxr_linenumber" name="82" href="#82">82</a>  
 <a class="jxr_linenumber" name="83" href="#83">83</a>      @Inject
 <a class="jxr_linenumber" name="84" href="#84">84</a>      @Named(<span class="jxr_string">"thesaurusVersionHistoryService"</span>)
-<a class="jxr_linenumber" name="85" href="#85">85</a>      <strong class="jxr_keyword">private</strong> IThesaurusVersionHistoryService thesaurusVersionHistoryService;
+<a class="jxr_linenumber" name="85" href="#85">85</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/services/IThesaurusVersionHistoryService.html">IThesaurusVersionHistoryService</a> thesaurusVersionHistoryService;
 <a class="jxr_linenumber" name="86" href="#86">86</a>  	
 <a class="jxr_linenumber" name="87" href="#87">87</a>  	@Inject
 <a class="jxr_linenumber" name="88" href="#88">88</a>  	@Named(<span class="jxr_string">"thesaurusViewConverter"</span>)
@@ -203,7 +203,7 @@
 <a class="jxr_linenumber" name="193" href="#193">193</a>     @Path(<span class="jxr_string">"/destroyVocabulary"</span>)
 <a class="jxr_linenumber" name="194" href="#194">194</a>     @Consumes({ MediaType.APPLICATION_JSON })
 <a class="jxr_linenumber" name="195" href="#195">195</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> destroyVocabulary(<a href="../../../../../fr/mcc/ginco/extjs/view/pojo/ThesaurusView.html">ThesaurusView</a> thesaurusViewJAXBElement) <strong class="jxr_keyword">throws</strong> BusinessException {
-<a class="jxr_linenumber" name="196" href="#196">196</a>         Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
+<a class="jxr_linenumber" name="196" href="#196">196</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 <a class="jxr_linenumber" name="197" href="#197">197</a> 
 <a class="jxr_linenumber" name="198" href="#198">198</a>         <strong class="jxr_keyword">if</strong> (object != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="199" href="#199">199</a>             thesaurusService.destroyThesaurus(object);
@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="209" href="#209">209</a>     @Path(<span class="jxr_string">"/publishVocabulary"</span>)
 <a class="jxr_linenumber" name="210" href="#210">210</a>     @Consumes({ MediaType.APPLICATION_JSON })
 <a class="jxr_linenumber" name="211" href="#211">211</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../fr/mcc/ginco/extjs/view/ExtJsonFormLoadData.html">ExtJsonFormLoadData</a> publishVocabulary(@QueryParam(<span class="jxr_string">"thesaurusId"</span>) String thesaurusId) <strong class="jxr_keyword">throws</strong> BusinessException {
-<a class="jxr_linenumber" name="212" href="#212">212</a>         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
+<a class="jxr_linenumber" name="212" href="#212">212</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> object = thesaurusService.getThesaurusById(thesaurusId);
 <a class="jxr_linenumber" name="213" href="#213">213</a> 
 <a class="jxr_linenumber" name="214" href="#214">214</a>         <strong class="jxr_keyword">if</strong> (object != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="215" href="#215">215</a>             thesaurusService.publishThesaurus(object);

@@ -81,22 +81,22 @@
 <a class="jxr_linenumber" name="71" href="#71">71</a>  
 <a class="jxr_linenumber" name="72" href="#72">72</a>      @Inject
 <a class="jxr_linenumber" name="73" href="#73">73</a>      @Named(<span class="jxr_string">"exportService"</span>)
-<a class="jxr_linenumber" name="74" href="#74">74</a>      <strong class="jxr_keyword">private</strong> IExportService exportService;
+<a class="jxr_linenumber" name="74" href="#74">74</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/exports/IExportService.html">IExportService</a> exportService;
 <a class="jxr_linenumber" name="75" href="#75">75</a>      
 <a class="jxr_linenumber" name="76" href="#76">76</a>      
 <a class="jxr_linenumber" name="77" href="#77">77</a>      @Inject
 <a class="jxr_linenumber" name="78" href="#78">78</a>      @Named(<span class="jxr_string">"skosExportService"</span>)
-<a class="jxr_linenumber" name="79" href="#79">79</a>      <strong class="jxr_keyword">private</strong> ISKOSExportService skosExportService;
+<a class="jxr_linenumber" name="79" href="#79">79</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/exports/ISKOSExportService.html">ISKOSExportService</a> skosExportService;
 <a class="jxr_linenumber" name="80" href="#80">80</a>  
 <a class="jxr_linenumber" name="81" href="#81">81</a>      @Inject
 <a class="jxr_linenumber" name="82" href="#82">82</a>      @Named(<span class="jxr_string">"mccExportService"</span>)
-<a class="jxr_linenumber" name="83" href="#83">83</a>      <strong class="jxr_keyword">private</strong> IMCCExportService mccExportService;
+<a class="jxr_linenumber" name="83" href="#83">83</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/exports/IMCCExportService.html">IMCCExportService</a> mccExportService;
 <a class="jxr_linenumber" name="84" href="#84">84</a>  
 <a class="jxr_linenumber" name="85" href="#85">85</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TABULATION_DELIMITER = <span class="jxr_string">"\t"</span>;
 <a class="jxr_linenumber" name="86" href="#86">86</a>  
 <a class="jxr_linenumber" name="87" href="#87">87</a>      @Inject
 <a class="jxr_linenumber" name="88" href="#88">88</a>      @Named(<span class="jxr_string">"thesaurusService"</span>)
-<a class="jxr_linenumber" name="89" href="#89">89</a>      <strong class="jxr_keyword">private</strong> IThesaurusService thesaurusService;
+<a class="jxr_linenumber" name="89" href="#89">89</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../fr/mcc/ginco/services/IThesaurusService.html">IThesaurusService</a> thesaurusService;
 <a class="jxr_linenumber" name="90" href="#90">90</a>  
 <a class="jxr_linenumber" name="91" href="#91">91</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="92" href="#92">92</a>  <em class="jxr_javadoccomment">     * Return file in .txt format; name begins with current DateTime.</em>
@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="99" href="#99">99</a>      @Produces(<span class="jxr_string">"text/plain"</span>)
 <a class="jxr_linenumber" name="100" href="#100">100</a>     <strong class="jxr_keyword">public</strong> Response getHierarchical(@QueryParam(<span class="jxr_string">"thesaurusId"</span>) String thesaurusId) <strong class="jxr_keyword">throws</strong> BusinessException {
 <a class="jxr_linenumber" name="101" href="#101">101</a> 
-<a class="jxr_linenumber" name="102" href="#102">102</a>         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+<a class="jxr_linenumber" name="102" href="#102">102</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
 <a class="jxr_linenumber" name="103" href="#103">103</a> 
 <a class="jxr_linenumber" name="104" href="#104">104</a>         File result = writeExportFile(targetThesaurus, false);
 <a class="jxr_linenumber" name="105" href="#105">105</a> 
@@ -130,7 +130,7 @@
 <a class="jxr_linenumber" name="120" href="#120">120</a>     @Path(<span class="jxr_string">"/getSKOS"</span>)
 <a class="jxr_linenumber" name="121" href="#121">121</a>     @Produces(<span class="jxr_string">"text/plain"</span>)
 <a class="jxr_linenumber" name="122" href="#122">122</a>     <strong class="jxr_keyword">public</strong> Response getSKOS(@QueryParam(<span class="jxr_string">"thesaurusId"</span>) String thesaurusId) <strong class="jxr_keyword">throws</strong> BusinessException {
-<a class="jxr_linenumber" name="123" href="#123">123</a>         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+<a class="jxr_linenumber" name="123" href="#123">123</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
 <a class="jxr_linenumber" name="124" href="#124">124</a>         File results = skosExportService.getSKOSExport(targetThesaurus);
 <a class="jxr_linenumber" name="125" href="#125">125</a> 
 <a class="jxr_linenumber" name="126" href="#126">126</a>         Response.ResponseBuilder response = Response.ok(results);
@@ -154,7 +154,7 @@
 <a class="jxr_linenumber" name="144" href="#144">144</a>     @Path(<span class="jxr_string">"/getAlphabetical"</span>)
 <a class="jxr_linenumber" name="145" href="#145">145</a>     @Produces(<span class="jxr_string">"text/plain"</span>)
 <a class="jxr_linenumber" name="146" href="#146">146</a>     <strong class="jxr_keyword">public</strong> Response getAlphabetical(@QueryParam(<span class="jxr_string">"thesaurusId"</span>) String thesaurusId) <strong class="jxr_keyword">throws</strong> BusinessException {
-<a class="jxr_linenumber" name="147" href="#147">147</a>         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+<a class="jxr_linenumber" name="147" href="#147">147</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
 <a class="jxr_linenumber" name="148" href="#148">148</a> 
 <a class="jxr_linenumber" name="149" href="#149">149</a>         File result = writeExportFile(targetThesaurus, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="150" href="#150">150</a> 
@@ -170,9 +170,9 @@
 <a class="jxr_linenumber" name="160" href="#160">160</a>         <strong class="jxr_keyword">return</strong> response.build();
 <a class="jxr_linenumber" name="161" href="#161">161</a>     }
 <a class="jxr_linenumber" name="162" href="#162">162</a> 
-<a class="jxr_linenumber" name="163" href="#163">163</a>     <strong class="jxr_keyword">private</strong> File writeExportFile(Thesaurus targetThesaurus, <strong class="jxr_keyword">boolean</strong> alphabetical) <strong class="jxr_keyword">throws</strong> BusinessException{
+<a class="jxr_linenumber" name="163" href="#163">163</a>     <strong class="jxr_keyword">private</strong> File writeExportFile(<a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> targetThesaurus, <strong class="jxr_keyword">boolean</strong> alphabetical) <strong class="jxr_keyword">throws</strong> BusinessException{
 <a class="jxr_linenumber" name="164" href="#164">164</a> 
-<a class="jxr_linenumber" name="165" href="#165">165</a>         ResourceBundle res = ResourceBundle.getBundle(<span class="jxr_string">"labels"</span>, <strong class="jxr_keyword">new</strong> EncodedControl(<span class="jxr_string">"UTF-8"</span>));
+<a class="jxr_linenumber" name="165" href="#165">165</a>         ResourceBundle res = ResourceBundle.getBundle(<span class="jxr_string">"labels"</span>, <strong class="jxr_keyword">new</strong> <a href="../../../../../fr/mcc/ginco/utils/EncodedControl.html">EncodedControl</a>(<span class="jxr_string">"UTF-8"</span>));
 <a class="jxr_linenumber" name="166" href="#166">166</a> 
 <a class="jxr_linenumber" name="167" href="#167">167</a>         File temp;
 <a class="jxr_linenumber" name="168" href="#168">168</a>         BufferedWriter out = <strong class="jxr_keyword">null</strong>;
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="188" href="#188">188</a>                 result = exportService.getHierarchicalText(targetThesaurus);
 <a class="jxr_linenumber" name="189" href="#189">189</a>             }
 <a class="jxr_linenumber" name="190" href="#190">190</a> 
-<a class="jxr_linenumber" name="191" href="#191">191</a>             <strong class="jxr_keyword">for</strong>(FormattedLine results : result) {
+<a class="jxr_linenumber" name="191" href="#191">191</a>             <strong class="jxr_keyword">for</strong>(<a href="../../../../../fr/mcc/ginco/exports/result/bean/FormattedLine.html">FormattedLine</a> results : result) {
 <a class="jxr_linenumber" name="192" href="#192">192</a>                 <strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i=0;i&lt;results.getTabs();i++) {
 <a class="jxr_linenumber" name="193" href="#193">193</a>                     out.write(TABULATION_DELIMITER);
 <a class="jxr_linenumber" name="194" href="#194">194</a>                 }
@@ -210,7 +210,7 @@
 <a class="jxr_linenumber" name="200" href="#200">200</a>             out.close();
 <a class="jxr_linenumber" name="201" href="#201">201</a> 
 <a class="jxr_linenumber" name="202" href="#202">202</a>         } <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="203" href="#203">203</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BusinessException(<span class="jxr_string">"Cannot create temp file!"</span>, <span class="jxr_string">"cannot-create-file"</span>, e);
+<a class="jxr_linenumber" name="203" href="#203">203</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a>(<span class="jxr_string">"Cannot create temp file!"</span>, <span class="jxr_string">"cannot-create-file"</span>, e);
 <a class="jxr_linenumber" name="204" href="#204">204</a>         }
 <a class="jxr_linenumber" name="205" href="#205">205</a> 
 <a class="jxr_linenumber" name="206" href="#206">206</a>         <strong class="jxr_keyword">return</strong> temp;
@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="210" href="#210">210</a>     @Path(<span class="jxr_string">"/getMCCThesaurusExport"</span>)
 <a class="jxr_linenumber" name="211" href="#211">211</a>     @Produces(<span class="jxr_string">"text/plain"</span>)
 <a class="jxr_linenumber" name="212" href="#212">212</a>     <strong class="jxr_keyword">public</strong> Response getMCCThesaurusExport(@QueryParam(<span class="jxr_string">"thesaurusId"</span>) String thesaurusId) <strong class="jxr_keyword">throws</strong> BusinessException, JAXBException {
-<a class="jxr_linenumber" name="213" href="#213">213</a>         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+<a class="jxr_linenumber" name="213" href="#213">213</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
 <a class="jxr_linenumber" name="214" href="#214">214</a>         String result = mccExportService.getThesaurusExport(targetThesaurus);
 <a class="jxr_linenumber" name="215" href="#215">215</a> 
 <a class="jxr_linenumber" name="216" href="#216">216</a>         Response.ResponseBuilder response = Response.ok(result);

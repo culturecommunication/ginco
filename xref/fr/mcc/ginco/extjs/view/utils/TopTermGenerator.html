@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="58" href="#58">58</a>  
 <a class="jxr_linenumber" name="59" href="#59">59</a>  	@Inject
 <a class="jxr_linenumber" name="60" href="#60">60</a>  	@Named(<span class="jxr_string">"thesaurusConceptService"</span>)
-<a class="jxr_linenumber" name="61" href="#61">61</a>  	<strong class="jxr_keyword">private</strong> IThesaurusConceptService thesaurusConceptService;
+<a class="jxr_linenumber" name="61" href="#61">61</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusConceptService.html">IThesaurusConceptService</a> thesaurusConceptService;
 <a class="jxr_linenumber" name="62" href="#62">62</a>  
 <a class="jxr_linenumber" name="63" href="#63">63</a>  	@Log
 <a class="jxr_linenumber" name="64" href="#64">64</a>  	<strong class="jxr_keyword">private</strong> Logger logger;
@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="71" href="#71">71</a>  <em class="jxr_javadoccomment">	 * @return created list of leafs.</em>
 <a class="jxr_linenumber" name="72" href="#72">72</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="73" href="#73">73</a>  	<strong class="jxr_keyword">public</strong> List&lt;IThesaurusListNode&gt; generateTopTerm(String thesaurusId)
-<a class="jxr_linenumber" name="74" href="#74">74</a>  			<strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="74" href="#74">74</a>  			<strong class="jxr_keyword">throws</strong> <a href="../../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
 <a class="jxr_linenumber" name="75" href="#75">75</a>  		logger.debug(<span class="jxr_string">"Generating top term concepts list for thesaurusId : "</span>
 <a class="jxr_linenumber" name="76" href="#76">76</a>  				+ thesaurusId);
 <a class="jxr_linenumber" name="77" href="#77">77</a>  		List&lt;ThesaurusConcept&gt; topTerms = thesaurusConceptService

@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="60" href="#60">60</a>  
 <a class="jxr_linenumber" name="61" href="#61">61</a>    	@Inject
 <a class="jxr_linenumber" name="62" href="#62">62</a>  	@Named(<span class="jxr_string">"thesaurusConceptService"</span>)
-<a class="jxr_linenumber" name="63" href="#63">63</a>  	<strong class="jxr_keyword">private</strong> IThesaurusConceptService thesaurusConceptService;
+<a class="jxr_linenumber" name="63" href="#63">63</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../fr/mcc/ginco/services/IThesaurusConceptService.html">IThesaurusConceptService</a> thesaurusConceptService;
 <a class="jxr_linenumber" name="64" href="#64">64</a>  
 <a class="jxr_linenumber" name="65" href="#65">65</a>  	@Log
 <a class="jxr_linenumber" name="66" href="#66">66</a>  	<strong class="jxr_keyword">private</strong> Logger logger;
@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="73" href="#73">73</a>  <em class="jxr_javadoccomment">	 * @return created list of leafs.</em>
 <a class="jxr_linenumber" name="74" href="#74">74</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="75" href="#75">75</a>  	<strong class="jxr_keyword">public</strong> List&lt;IThesaurusListNode&gt; generateOrphans(String parentId)
-<a class="jxr_linenumber" name="76" href="#76">76</a>  			<strong class="jxr_keyword">throws</strong> BusinessException {
+<a class="jxr_linenumber" name="76" href="#76">76</a>  			<strong class="jxr_keyword">throws</strong> <a href="../../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
 <a class="jxr_linenumber" name="77" href="#77">77</a>  		logger.debug(<span class="jxr_string">"Generating orphans concepts list for vocabularyId : "</span> + parentId);
 <a class="jxr_linenumber" name="78" href="#78">78</a>  		List&lt;ThesaurusConcept&gt; orphans = thesaurusConceptService
 <a class="jxr_linenumber" name="79" href="#79">79</a>  				.getOrphanThesaurusConcepts(parentId);

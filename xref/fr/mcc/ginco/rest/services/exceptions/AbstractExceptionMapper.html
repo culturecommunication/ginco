@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="53" href="#53">53</a>  
 <a class="jxr_linenumber" name="54" href="#54">54</a>  	<strong class="jxr_keyword">protected</strong> Response toResponse(Throwable t, String messageKey) {
 <a class="jxr_linenumber" name="55" href="#55">55</a>  		ResourceBundle res = ResourceBundle.getBundle(<span class="jxr_string">"labels"</span>,
-<a class="jxr_linenumber" name="56" href="#56">56</a>  				<strong class="jxr_keyword">new</strong> EncodedControl(<span class="jxr_string">"UTF-8"</span>));
+<a class="jxr_linenumber" name="56" href="#56">56</a>  				<strong class="jxr_keyword">new</strong> <a href="../../../../../../fr/mcc/ginco/utils/EncodedControl.html">EncodedControl</a>(<span class="jxr_string">"UTF-8"</span>));
 <a class="jxr_linenumber" name="57" href="#57">57</a>  		String msg = res.getString(messageKey);
 <a class="jxr_linenumber" name="58" href="#58">58</a>  		log.error(<span class="jxr_string">"Business Exception in REST services : "</span> + t.getMessage());
 <a class="jxr_linenumber" name="59" href="#59">59</a>  		log.debug(<span class="jxr_string">"Business Exception in REST services : "</span> + msg);
