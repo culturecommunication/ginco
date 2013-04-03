@@ -32,49 +32,13 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.exports.mcc;
+package fr.mcc.ginco.imports;
 
-import java.io.IOException;
-import java.io.InputStream;
 
-import javax.xml.bind.JAXBException;
+/**
+ * Service provides function to use for MCC import
+ * by REST services.
+ */
+public interface IMCCImportService {
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.mcc.MCCExportServiceImpl;
-import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
-import fr.mcc.ginco.tests.LoggerTestUtil;
-
-public class MCCExportServiceTest {
-
-    @InjectMocks
-    private MCCExportServiceImpl mccExportService;
-    
-	@InjectMocks
-	private ThesaurusConceptServiceImpl thesaurusConceptService;
-
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-        LoggerTestUtil.initLogger(mccExportService);
-    }
-
-    //TODO : to implement
-    /*@Test
-    public void testGetThesaurusExport() throws BusinessException, JAXBException, IOException {
-        Thesaurus th1 = new Thesaurus();
-        th1.setTitle("Test thesaurus");
-        th1.setIdentifier("http://culturecommunication.gouv.fr/ark:/12345/901e6be5-1014-42b5-8aed-a7e94bc2fc45");
-        th1.setTitle("UT");
-        
-        //Mockito.when(thesaurusConceptService.getConceptsByThesaurusId(Mockito.anyString(), Mockito.anyString(), Mockito.anyBoolean(), Mockito.anyBoolean())).thenReturn(value);
-        String effectiveResult = mccExportService.getThesaurusExport(th1);
-        InputStream is = MCCExportServiceTest.class.getResourceAsStream("/exports/mcc_thesaurus_export.xml");
-        //Assert.assertEquals(IOUtils.toString(is), effectiveResult);
-    }*/
 }

@@ -47,11 +47,19 @@ Ext.define('GincoApp.controller.ImportController', {
 	importSaveClick : function(theButton){
 		var me = this;
 		var theForm = theButton.up('#importForm');
+		var theWin = theForm.up('importWindow');
+		
+		if (theWin.importType == 'skos') {
+			var importUrl = 'services/ui/importservice/import';
+		} else if (theWin.importType == 'mccxml') {
+			var importUrl = 'services/ui/importservice/importMccXml';
+		}
+		
 		if (theForm.getForm()
 				.isValid()) {
 			theForm.getForm()
 					.submit({
-						url : 'services/ui/importservice/import',
+						url : importUrl,
 						waitMsg : me.xWaitingLabel,
 						success : function(
 								fp,

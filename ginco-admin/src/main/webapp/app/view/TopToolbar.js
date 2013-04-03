@@ -41,7 +41,9 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xAdministrationLabel : "Administration",
 	xControlLabel : "Control",
 	xTopWelcomeLabel : "Hadoc GINCO Back-office",
-	xImportLabel : "Import",
+	xImports : "Imports",
+	xImportSkosLabel : "SKOS Import",
+	xImportMccXmlLabel : "MCC XML Import",
 	xAboutLabel : "About",
 	xSearchLabel : "Search",
 	xSearchFieldText : "Search a term",
@@ -100,13 +102,27 @@ Ext.define('GincoApp.view.TopToolbar', {
 				xtype : 'buttongroup',
 				title : me.xAdministrationLabel,
 				columns : 1,
-				items : [{
+				items : [ {
 					xtype : 'button',
-					disabled : false,
-					text : me.xImportLabel,
-					width: 80,
 					requiredRoles : ['ADMIN'],
-					itemId: 'importBtn'
+					disabled : false,
+					text : me.xImports,
+					menu : {
+						xtype : 'menu',
+						width : 200,
+						items : [{
+							xtype : 'keymenuitem',
+							text : me.xImportSkosLabel,
+							requiredRoles : ['ADMIN'],
+							itemId: 'importBtn'
+						},
+						{
+							xtype : 'keymenuitem',
+							text : me.xImportMccXmlLabel,
+							requiredRoles : ['ADMIN'],
+							itemId: 'importMccXmlBtn'
+						}]
+					}
 				} ]
 			}, {
 				xtype : 'buttongroup',

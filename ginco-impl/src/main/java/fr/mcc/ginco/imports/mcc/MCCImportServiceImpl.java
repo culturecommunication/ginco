@@ -32,26 +32,14 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports;
+package fr.mcc.ginco.imports.mcc;
 
-import java.io.FileNotFoundException;
-
-import javax.xml.bind.JAXBException;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.imports.IMCCImportService;
 
 /**
- * Service provides function to use for MCC export
- * by REST services.
+ * This class gives methods to import a thesaurus from a XML file (custom MCC format)
+ *
  */
-public interface IMCCExportService {   
+public class MCCImportServiceImpl implements IMCCImportService {
 
-    /**
-     * Get MCC Thesaurus export for given thesaurus.
-     * @param thesaurus
-     * @throws FileNotFoundException 
-     * @throws JAXBException 
-     */
-    String getThesaurusExport(Thesaurus thesaurus) throws BusinessException, JAXBException;
 }
