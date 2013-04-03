@@ -518,11 +518,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			throws BusinessException{
     	List<ThesaurusTerm> notPreferredTerms = thesaurusTermDAO
 				.getConceptNotPreferredTerms(conceptId);
-		if (notPreferredTerms.isEmpty()) {
-			throw new BusinessException("The concept " + conceptId
-					+ "has only preferred terms or any terms",
-					"concept-has-preferred-terms-or-any-terms");
-		}
 		return notPreferredTerms;
     }
 }

@@ -60,7 +60,7 @@ public class ThesaurusTermDAOTest extends BaseDAOTest {
 		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "Eleanor Rigby", actualResponse.get(0).getLexicalValue());
 		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "taxman", actualResponse.get(1).getLexicalValue());
 
-    }
+    }    
      
 	@Override
 	public String  getXmlDataFileInit() {

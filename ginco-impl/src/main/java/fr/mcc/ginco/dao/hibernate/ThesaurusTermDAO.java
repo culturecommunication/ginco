@@ -211,8 +211,9 @@ public class ThesaurusTermDAO extends
                 .list();
 
         if(list.size() == 0) {
-            throw new BusinessException("No term found ! " +
-                    "Please check your database !", "no-term-found");
+        	throw new BusinessException("The concept " + conceptId
+					+ " has only preferred terms or any terms",
+					"concept-has-preferred-terms-or-any-terms");
         }
         else{
         	return list;
