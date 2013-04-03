@@ -136,8 +136,14 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		thesaurus.setRelation(getMultipleLineStringInfo(skosThesaurus,
 				DC.relation));
 		thesaurus.setSource(getSimpleStringInfo(skosThesaurus, DC.source));
-		thesaurus.setCreated(getSkosDate(getSimpleStringInfo(skosThesaurus,
-				DCTerms.created)));
+		String thesaurusCreated = getSimpleStringInfo(skosThesaurus,
+				DCTerms.created);
+		if (thesaurusCreated!=null) {
+			thesaurus.setCreated(getSkosDate(thesaurusCreated));
+		} else 
+		{
+			thesaurus.setCreated(new Date());
+		}
 		thesaurus.setDate(getSkosDate(getSimpleStringInfo(skosThesaurus,
 				DCTerms.modified)));
 
