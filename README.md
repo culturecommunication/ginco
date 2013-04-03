@@ -4,7 +4,7 @@ GINCO
 What is GINCO ?
 ---------------
 
-GINCO is a free software developped by the Ministry of Culture and Communication (France) and is dedicated to the management of vocabularies. It implements the principle defined in the ISO standard 25964-1:2011 Information and documentation -- Thesauri and interoperability with other vocabularies -- Part 1 : Thesauri for information retrieval.
+GINCO is a free software developped by the Ministry of Culture and Communication (France) and is dedicated to the management of vocabularies. It implements the principles defined in the ISO standard 25964-1:2011 Information and documentation -- Thesauri and interoperability with other vocabularies -- Part 1 : Thesauri for information retrieval.
 
 License
 -------
@@ -25,7 +25,7 @@ The main features already developed allow :
 
 The first version of the software is under development according to the SCRUM agile methodology. The "[backlog] (backlog/HADOC VOC_MCC-HADOC-GINCO_backlog.ods)" presents the prioritized list of developed or planned features. It is made available to the community, which can provide us with suggestions and proposals.
 
-The developments envisages in version 2 of the application focus on :
+The developments envisaged in version 2 of the application focus on :
 - collaborative features ;
 - alignments between vocabularies and to external ressources ;
 - the implementation of a reference terminology, in order to provide users with unified access to all vocabularies (terminologies server) 
