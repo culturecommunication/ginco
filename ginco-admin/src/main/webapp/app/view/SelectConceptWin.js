@@ -78,7 +78,7 @@ Ext
 
 						me.conceptReducedStore = Ext.create('GincoApp.store.ConceptReducedStore');
 
-						if (!me.getChildren) {
+						if (!me.getChildren && !me.getArrayConcepts) {
 							// Searching all concepts in the thesaurus
 							me.conceptReducedStore.getProxy().extraParams = {
 								id : me.conceptId,

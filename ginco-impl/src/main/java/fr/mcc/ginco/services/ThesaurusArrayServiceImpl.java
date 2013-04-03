@@ -88,6 +88,11 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 						"Only a validated concept can be a parent for a concept array",
 						"only-validated-concept-parent-of-concept-array");
 			}
+		} else {
+			if (thesaurusArray.getConcepts() != null && !thesaurusArray.getConcepts().isEmpty()) {
+				//Not possible to have an array with concepts, but without superordinate
+				throw new BusinessException("A non empty concept array must have a parent concept", "array-must-have-superordinated-concept");				
+			}
 		}
 		
 		if (thesaurusArray.getConcepts() != null && thesaurusArray.getSuperOrdinateConcept() != null){

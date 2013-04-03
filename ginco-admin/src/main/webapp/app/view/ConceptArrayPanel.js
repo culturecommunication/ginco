@@ -209,7 +209,7 @@ Ext
 																	xtype : 'button',
 																	requiredRoles : ['ADMIN'],
 																	text : me.xAddConceptToArray,
-																	disabled : false,
+																	disabled : true,
 																	itemId : 'addConceptToArray',
 																	cls : 'add',
 																	iconCls : 'icon-add'
