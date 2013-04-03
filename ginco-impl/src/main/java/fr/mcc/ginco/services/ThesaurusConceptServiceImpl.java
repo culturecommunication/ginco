@@ -258,19 +258,15 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			throws BusinessException {
 
 		logger.debug("ConceptId : " + conceptId);
-		
-		if (thesaurusConceptDAO.getById(conceptId) != null){
-			ThesaurusTerm preferredTerm = thesaurusTermDAO
-					.getConceptPreferredTerm(conceptId);
-			if (preferredTerm == null) {
-				throw new BusinessException("The concept " + conceptId
-						+ "has no preferred term",
-						"concept-does-not-have-a-preferred-term");
-			}
-			return preferredTerm;
+
+		ThesaurusTerm preferredTerm = thesaurusTermDAO
+				.getConceptPreferredTerm(conceptId);
+		if (preferredTerm == null) {
+			throw new BusinessException("The concept " + conceptId
+					+ "has no preferred term",
+					"concept-does-not-have-a-preferred-term");
 		}
-		else 
-    		throw new BusinessException("Concept with identifier " + conceptId + " doesn't exist", "concept-does-not-exist");	
+		return preferredTerm;
 	}
 
 	@Override
@@ -520,14 +516,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
     @Override
     public List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
 			throws BusinessException{
-    	if (thesaurusConceptDAO.getById(conceptId) != null){
-    		List<ThesaurusTerm> notPreferredTerms = thesaurusTermDAO
-    				.getConceptNotPreferredTerms(conceptId);
-    		return notPreferredTerms;
-    	}
-    	else{
-    		throw new BusinessException("Concept with identifier " + conceptId + " doesn't exist", "concept-does-not-exist");
-    	}		
+    	List<ThesaurusTerm> notPreferredTerms = thesaurusTermDAO
+				.getConceptNotPreferredTerms(conceptId);
+		return notPreferredTerms;
     }
     
     @Override
