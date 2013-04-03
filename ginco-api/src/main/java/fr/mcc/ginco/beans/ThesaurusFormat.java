@@ -40,14 +40,20 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Bean represents <b>thesaurus_format</b> table,contains type
  * of {@link Thesaurus}
  */
 @SuppressWarnings("serial")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusFormat implements Serializable {
 	private Integer identifier;
 	private String label;
+	@XmlTransient
 	private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
 	
 	public Integer getIdentifier() {
