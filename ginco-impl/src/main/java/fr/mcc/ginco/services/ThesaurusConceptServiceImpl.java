@@ -168,7 +168,19 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId) {
-		return thesaurusConceptDAO.getChildrenConcepts(conceptId);
+		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO.getById(conceptId);
+		if (thesaurusConcept != null){
+			List<ThesaurusConcept> results = thesaurusConceptDAO.getChildrenConcepts(conceptId);
+			if (results.size() > 0){
+				return results;
+			}
+			else{
+				throw new BusinessException("Concept with identifier " + conceptId + " has no children ", "concept-has-no-children");
+			}
+		}
+    		
+    	else 
+    		throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 	}
 
 	@Override
