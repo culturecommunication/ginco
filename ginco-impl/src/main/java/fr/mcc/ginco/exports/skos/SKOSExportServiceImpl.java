@@ -144,10 +144,14 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 
 			String dct_old = "xmlns:dct=\"http://purl.org/dct#\"";
 			String dct = "xmlns:dct=\"http://purl.org/dc/terms/\"";
+			
+			String xmlhead_old = "xml version=\"1.0\"";
+			String xmlhead = "xml version=\"1.0\" encoding=\"UTF-8\"";
 
 			content = content.replaceAll(dc, dc + "\n" + foaf)
 					.replaceAll(dct_old, dct)
-					.replaceAll("</rdf:RDF>", collections + "</rdf:RDF>");
+					.replaceAll("</rdf:RDF>", collections + "</rdf:RDF>")
+					.replaceAll(xmlhead_old, xmlhead);
 
 			if (thesaurus.getCreator() != null) {
 
