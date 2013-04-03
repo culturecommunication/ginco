@@ -91,7 +91,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 	
 	@Override
-	public List<ReducedThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
+	public List<ReducedThesaurusTerm> getConceptNotPreferredTerms (String conceptId)
 			throws BusinessException{
 		if (!conceptId.equals("")){
 			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
