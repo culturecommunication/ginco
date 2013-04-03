@@ -2,6 +2,7 @@ package fr.mcc.ginco.tests.services;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
@@ -11,7 +12,12 @@ import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.SolrParams;
+import org.apache.solr.common.util.NamedList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +28,12 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IndexerServiceImpl;
+import fr.mcc.ginco.solr.SearchResultList;
 import fr.mcc.ginco.solr.SolrField;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -35,6 +44,9 @@ public class IndexerServiceTest {
 
 	@Mock(name = "noteService")
 	private INoteService noteService;
+	
+	@Mock(name = "thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 	@Mock(name = "solrServer")
 	private SolrServer solrServer;
@@ -65,11 +77,71 @@ public class IndexerServiceTest {
 		fakeThesaurusTerm.setLexicalValue("lexicalValue");
 		indexerService.addTerm(fakeThesaurusTerm);
 		verify(solrServer).add(arg.capture());
+		verify(solrServer).commit();
 		Assert.assertEquals(fakeNote.getLexicalValue(), arg.getValue()
 				.getFieldValue(SolrField.NOTES));
+		Assert.assertEquals(mockThesaurus.getIdentifier(), arg.getValue()
+				.getFieldValue(SolrField.THESAURUSID));
 		Assert.assertEquals(fakeThesaurusTerm.getIdentifier(), arg.getValue()
 				.getFieldValue(SolrField.IDENTIFIER));
 		Assert.assertEquals(fakeThesaurusTerm.getLexicalValue(), arg.getValue()
 				.getFieldValue(SolrField.LEXICALVALUE));
+	}
+	
+	@Test
+	public void testAddConcept() throws SolrServerException, IOException {
+		ThesaurusConcept fakeThesaurusConcept = new ThesaurusConcept();
+		Thesaurus mockThesaurus = new Thesaurus();
+		mockThesaurus.setIdentifier("th1");
+		fakeThesaurusConcept.setIdentifier("concept1");
+		fakeThesaurusConcept.setThesaurus(mockThesaurus);
+		ThesaurusTerm fakePreferredTerm = new ThesaurusTerm();
+		fakePreferredTerm.setLexicalValue("lexicalValue");
+		fakePreferredTerm.setThesaurus(mockThesaurus);
+		List<Note> mockListNote = new ArrayList<Note>();
+		Note fakeNote = new Note();
+		fakeNote.setLexicalValue("test");
+		mockListNote.add(fakeNote);
+		
+		when(
+				noteService.getConceptNotePaginatedList(anyString(), anyInt(),
+						anyInt())).thenReturn(mockListNote);
+		when(
+				thesaurusConceptService.getConceptPreferredTerm(fakeThesaurusConcept.getIdentifier())).thenReturn(fakePreferredTerm);
+		indexerService.addConcept(fakeThesaurusConcept);
+		ArgumentCaptor<SolrInputDocument> arg = ArgumentCaptor
+				.forClass(SolrInputDocument.class);
+		verify(solrServer).add(arg.capture());
+		verify(solrServer).commit();
+		Assert.assertEquals(fakeNote.getLexicalValue(), arg.getValue()
+				.getFieldValue(SolrField.NOTES));
+		Assert.assertEquals(mockThesaurus.getIdentifier(), arg.getValue()
+				.getFieldValue(SolrField.THESAURUSID));
+		Assert.assertEquals(fakeThesaurusConcept.getIdentifier(), arg.getValue()
+				.getFieldValue(SolrField.IDENTIFIER));
+		Assert.assertEquals(fakePreferredTerm.getLexicalValue(), arg.getValue()
+				.getFieldValue(SolrField.LEXICALVALUE));
+	}
+	
+	@Test
+	public void testSearch() throws SolrServerException, IOException {
+		QueryResponse fakeResp = new QueryResponse();
+		NamedList<Object> respContent = new NamedList<Object>();
+		SolrDocumentList fakeDocList = new SolrDocumentList();
+		SolrDocument fakeDoc = new SolrDocument();
+		fakeDoc.addField(SolrField.IDENTIFIER, "id1");
+		fakeDoc.addField(SolrField.LEXICALVALUE, "lex1");
+		fakeDoc.addField(SolrField.THESAURUSID, "th1");
+		fakeDoc.addField(SolrField.THESAURUSTITLE, "title1");
+		fakeDoc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
+		fakeDocList.add(fakeDoc);
+		fakeDocList.setNumFound(1);
+		respContent.add("response", fakeDocList);
+		fakeResp.setResponse(respContent);
+		when(
+				solrServer.query(any(SolrParams.class))).thenReturn(fakeResp);
+		SearchResultList results = indexerService.search("test", 0, 10);
+		Assert.assertEquals(results.getNumFound() , 1);
+		Assert.assertEquals(results.get(0).getLexicalValue(), fakeDoc.getFieldValue(SolrField.LEXICALVALUE));
 	}
 }

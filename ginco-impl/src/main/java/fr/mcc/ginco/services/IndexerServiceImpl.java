@@ -217,16 +217,7 @@ public class IndexerServiceImpl implements IIndexerService {
 
     @Override
     public void forceIndexing() throws TechnicalException{
-        try {
-            solrServer.deleteByQuery("*:*");
-            solrServer.commit();
-        } catch (SolrServerException e) {
-            throw new TechnicalException("Error executing query for clearing SOLR index!", e);
-        } catch (IOException e) {
-            throw new TechnicalException("IO error during executing query for clearing SOLR index!", e);
-        }
         removeAllIndex(solrServer);
-
         addConcepts(thesaurusConceptService.getAllConcepts());
         addTerms(thesaurusTermService.getAllTerms());
     }
