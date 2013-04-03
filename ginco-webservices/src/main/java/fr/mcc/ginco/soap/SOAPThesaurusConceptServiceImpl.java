@@ -37,9 +37,11 @@ package fr.mcc.ginco.soap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -169,4 +171,24 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		}
 	}
 	
+	@Override
+	public List<String> getParentConcepts(@WebParam(name="conceptId") String conceptId){
+		if (!conceptId.equals("")){
+			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+			if (thesaurusConcept != null){
+				List<String> results = new ArrayList<String>();
+				Set<ThesaurusConcept> parentConceptList = thesaurusConcept.getParentConcepts();
+				for (ThesaurusConcept parentConcept : parentConceptList){
+					results.add(parentConcept.getIdentifier());
+				}
+				return results;
+			}
+			else{
+				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
+			}
+		}
+		else{
+			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		}
+	}
 }

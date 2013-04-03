@@ -39,7 +39,6 @@ import java.util.List;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -98,10 +97,17 @@ public interface ISOAPThesaurusConceptService {
 	List<String> getChildrenByConceptId(@WebParam(name="conceptId") String conceptId);
 	
 	/**
-     * Returns the root concepts for given concept
+     * Returns root concepts for given concept
      * @param identifier of a concept
      * @return list of root concepts
      */
 	List<String> getRootConcepts(@WebParam(name="conceptId") String conceptId);
+	
+	/**
+     * Returns parent concepts for given concept
+     * @param identifier of a concept
+     * @return list of parent concepts
+     */
+	List<String> getParentConcepts(@WebParam(name="conceptId") String conceptId);
 }
 
