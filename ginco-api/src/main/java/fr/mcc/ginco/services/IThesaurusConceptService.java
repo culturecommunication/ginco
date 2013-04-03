@@ -242,4 +242,12 @@ public interface IThesaurusConceptService {
 	 */
 	List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
 			throws BusinessException;
+	
+	/**
+	 * Returns the status of a concept
+	 * 
+	 * @param conceptId
+	 * @return the status of a concept
+	 */
+	int getStatusByConceptId(String conceptId) throws BusinessException;
 }

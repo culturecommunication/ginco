@@ -520,4 +520,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				.getConceptNotPreferredTerms(conceptId);
 		return notPreferredTerms;
     }
+    
+    @Override
+    public int getStatusByConceptId(String conceptId) throws BusinessException{
+    	ThesaurusConcept thesaurusConcept = thesaurusConceptDAO.getById(conceptId);
+    	if (thesaurusConcept != null)
+    		return thesaurusConcept.getStatus();
+    	else 
+    		throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concepts-does-not-exist");
+    }
 }

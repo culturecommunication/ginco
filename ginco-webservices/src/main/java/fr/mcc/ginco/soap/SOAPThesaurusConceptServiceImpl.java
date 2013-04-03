@@ -113,5 +113,16 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
 		return reducedThesaurusTerm;
 	}
+	
+	@Override
+	public int getStatusByConceptId(String conceptId) throws BusinessException{
+		if (!conceptId.equals("")){
+			return thesaurusConceptService.getStatusByConceptId(conceptId);
+		}
+		else 
+		{
+			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		}
+	}
 
 }
