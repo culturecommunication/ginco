@@ -94,27 +94,34 @@ public interface ISOAPThesaurusConceptService {
      * @param identifier of a concept
      * @return list of objects
      */
-	List<String> getChildrenByConceptId(@WebParam(name="conceptId") String conceptId);
+	List<String> getChildrenByConceptId(@WebParam(name="conceptId") String conceptId) throws BusinessException;
 	
 	/**
      * Returns root concepts for given concept
      * @param identifier of a concept
      * @return list of root concepts
      */
-	List<String> getRootConcepts(@WebParam(name="conceptId") String conceptId);
+	List<String> getRootConcepts(@WebParam(name="conceptId") String conceptId) throws BusinessException;
 	
 	/**
      * Returns parent concepts for given concept
      * @param identifier of a concept
      * @return list of parent concepts
      */
-	List<String> getParentConcepts(@WebParam(name="conceptId") String conceptId);
+	List<String> getParentConcepts(@WebParam(name="conceptId") String conceptId) throws BusinessException;
 	
 	/**
      * Returns associative concepts for given concept
      * @param identifier of a concept
      * @return list of associative concepts
      */
-	List<String> getAssociativeConcepts(@WebParam(name="conceptId") String conceptId);
+	List<String> getAssociativeConcepts(@WebParam(name="conceptId") String conceptId) throws BusinessException;
+	
+	/**
+     * Returns top concepts for a thesaurus
+     * @param identifier of a thesaurus
+     * @return list of top concepts
+     */
+	List<String> getTopConceptsByThesaurusId(@WebParam(name="thesaurusId") String thesaurusId) throws BusinessException;
 }
 

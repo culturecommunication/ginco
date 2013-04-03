@@ -43,12 +43,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
 
 /**
  * This class is the implementation of all SOAP services related to concept objects
@@ -65,6 +67,10 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	@Inject
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
+	
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 	
 	@Override
 	public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
@@ -133,7 +139,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 	
 	@Override
-	public List<String> getChildrenByConceptId(String conceptId){
+	public List<String> getChildrenByConceptId(String conceptId) throws BusinessException{
 		if (!conceptId.equals("")){
 			List<String> results = new ArrayList<String>();
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
@@ -155,7 +161,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 	
 	@Override
-	public List<String> getRootConcepts(String conceptId){
+	public List<String> getRootConcepts(String conceptId) throws BusinessException{
 		if (!conceptId.equals("")){
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null){
@@ -176,7 +182,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 	
 	@Override
-	public List<String> getParentConcepts(String conceptId){
+	public List<String> getParentConcepts(String conceptId) throws BusinessException{
 		if (!conceptId.equals("")){
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null){
@@ -197,7 +203,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 	
 	@Override
-	public List<String> getAssociativeConcepts(String conceptId){
+	public List<String> getAssociativeConcepts(String conceptId) throws BusinessException{
 		if (!conceptId.equals("")){
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null){
@@ -209,6 +215,26 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		}
 		else{
 			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		}
+	}
+	
+	public List<String> getTopConceptsByThesaurusId(String thesaurusId) throws BusinessException{
+		if (!thesaurusId.equals("")){
+			Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
+			if (thesaurus != null){
+				List<String> results = new ArrayList<String>();
+				List<ThesaurusConcept> topConceptList = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurusId);
+				for (ThesaurusConcept topConcept : topConceptList){
+					results.add(topConcept.getIdentifier());
+				}
+				return results;
+			}
+			else{
+				throw new BusinessException("Thesaurus with identifier " + thesaurusId + " does not exist", "thesaurus-does-not-exist");
+			}
+		}
+		else{
+			throw new BusinessException("Thesaurus identifier is empty","empty-parameter");
 		}
 	}
 }
