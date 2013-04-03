@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ginco</artifactId>
+        <groupId>fr.smile.mcc.ginco</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.smile.mcc.ginco</groupId>
+    <artifactId>ginco-quality-tool-conf</artifactId>
+
+    <name>Ginco quality tool configuration</name>
+    <description>This module contains configuration files used to generate report
+    The tools used are Checkstyle, PMD</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <configuration>
+                    <message>Creating github report site ${project.name} - ${project.version}</message>
+                    <path>${project.artifactId}</path>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
