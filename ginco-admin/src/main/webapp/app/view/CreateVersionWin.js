@@ -39,6 +39,7 @@ Ext
 					xCurrentVersionLabel : 'Current version',
 
 					width : 500,
+					height : 200,
 					title : 'Nouvelle version',
 					titleAlign : 'center',
 					modal : true,
@@ -108,8 +109,7 @@ Ext
 															displayField : 'statusLabel',
 															valueField : 'status',
 															forceSelection : true,
-															store : Ext
-																	.create('GincoApp.store.ThesaurusVersionStatusStore'),
+															store : 'ThesaurusVersionStatusStore',
 															allowBlank : false
 														},
 														{

@@ -93,6 +93,7 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 			});
 			var theForm = win.down('form');
 			var model = Ext.create('GincoApp.model.ThesaurusVersionModel');
+			model.data.status = 0;
 			theForm.loadRecord(model);
 			win.show();
 	},
