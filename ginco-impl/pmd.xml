@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.5" timestamp="2013-04-03T20:46:57.541">
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/dao/hibernate/ThesaurusTermDAO.java">
+<violation beginline="139" endline="139" begincolumn="38" endcolumn="59" rule="AvoidDuplicateLiterals" ruleset="String and StringBuffer Rules" package="fr.mcc.ginco.dao.hibernate" class="ThesaurusTermDAO" method="countSimilarTermsByLexicalValueAndLanguage" externalInfoUrl="http://pmd.sourceforge.net/rules/strings.html#AvoidDuplicateLiterals" priority="3">
+The String literal &quot;thesaurus.identifier&quot; appears 4 times in this file; the first occurrence is on line 139
+</violation>
+<violation beginline="160" endline="163" begincolumn="25" endcolumn="25" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="fr.mcc.ginco.dao.hibernate" class="ThesaurusTermDAO" method="update" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="4">
+These nested if statements could be combined
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/exports/skos/SKOSExportServiceImpl.java">
+<violation beginline="90" endline="194" begincolumn="16" endcolumn="9" rule="NcssMethodCount" ruleset="Code Size Rules" package="fr.mcc.ginco.exports.skos" class="SKOSExportServiceImpl" externalInfoUrl="http://pmd.sourceforge.net/rules/codesize.html#NcssMethodCount" priority="3">
+The method getSKOSExport() has an NCSS line count of 52
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/imports/AbstractBuilder.java">
+<violation beginline="57" endline="57" begincolumn="27" endcolumn="30" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="AbstractBuilder" method="getSimpleStringInfo" variable="stmt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="77" endline="77" begincolumn="35" endcolumn="38" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="AbstractBuilder" method="getMultipleLineStringInfo" variable="stmt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/imports/ConceptBuilder.java">
+<violation beginline="122" endline="122" begincolumn="35" endcolumn="38" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ConceptBuilder" method="buildConceptAssociativerelationship" variable="stmt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="169" endline="169" begincolumn="35" endcolumn="38" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ConceptBuilder" method="buildConceptHierarchicalRelationships" variable="stmt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/imports/ConceptNoteBuilder.java">
+<violation beginline="106" endline="106" begincolumn="51" endcolumn="54" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ConceptNoteBuilder" method="buildConceptNotes" variable="stmt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/imports/SKOSImportServiceImpl.java">
+<violation beginline="206" endline="206" begincolumn="35" endcolumn="43" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="SKOSImportServiceImpl" method="buildArrays" variable="stmtLabel" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="304" endline="304" begincolumn="35" endcolumn="35" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="SKOSImportServiceImpl" method="getSKOSThesaurus" variable="s" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="333" endline="333" begincolumn="35" endcolumn="35" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="SKOSImportServiceImpl" method="getSKOSRessources" variable="s" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="347" endline="347" begincolumn="55" endcolumn="74" rule="UseIndexOfChar" ruleset="String and StringBuffer Rules" package="fr.mcc.ginco.imports" class="SKOSImportServiceImpl" method="writeTempFile" externalInfoUrl="http://pmd.sourceforge.net/rules/strings.html#UseIndexOfChar" priority="3">
+String.indexOf(char) is faster than String.indexOf(String).
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/imports/TermBuilder.java">
+<violation beginline="141" endline="141" begincolumn="27" endcolumn="39" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="TermBuilder" method="buildTerms" variable="stmtPreferred" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="147" endline="147" begincolumn="35" endcolumn="41" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="TermBuilder" method="buildTerms" variable="stmtAlt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="155" endline="155" begincolumn="35" endcolumn="44" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="TermBuilder" method="buildTerms" variable="stmtHidden" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/imports/ThesaurusArrayBuilder.java">
+<violation beginline="94" endline="94" begincolumn="35" endcolumn="38" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ThesaurusArrayBuilder" method="buildArray" variable="stmt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/imports/ThesaurusBuilder.java">
+<violation beginline="171" endline="171" begincolumn="27" endcolumn="30" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ThesaurusBuilder" method="getCreator" variable="stmt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="189" endline="189" begincolumn="43" endcolumn="49" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ThesaurusBuilder" method="getCreator" variable="orgStms" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="191" endline="191" begincolumn="43" endcolumn="50" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ThesaurusBuilder" method="getCreator" variable="foafName" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="192" endline="192" begincolumn="43" endcolumn="54" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ThesaurusBuilder" method="getCreator" variable="foafHomepage" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+<violation beginline="217" endline="217" begincolumn="35" endcolumn="38" rule="CloseResource" ruleset="Design Rules" package="fr.mcc.ginco.imports" class="ThesaurusBuilder" method="getLanguages" variable="stmt" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#CloseResource" priority="3">
+Ensure that resources like this Statement object are closed after use
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/services/IndexerServiceImpl.java">
+<violation beginline="90" endline="90" begincolumn="20" endcolumn="22" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="fr.mcc.ginco.services" class="IndexerServiceImpl" variable="url" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'url'.
+</violation>
+<violation beginline="207" endline="216" begincolumn="13" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="fr.mcc.ginco.services" class="IndexerServiceImpl" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'solrCore'.
+</violation>
+<violation beginline="276" endline="277" begincolumn="9" endcolumn="54" rule="IfStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="IndexerServiceImpl" method="addNote" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfStmtsMustUseBraces" priority="3">
+Avoid using if statements without curly braces
+</violation>
+<violation beginline="278" endline="279" begincolumn="9" endcolumn="60" rule="IfStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="IndexerServiceImpl" method="addNote" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfStmtsMustUseBraces" priority="3">
+Avoid using if statements without curly braces
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/services/ThesaurusConceptServiceImpl.java">
+<violation beginline="287" endline="294" begincolumn="25" endcolumn="25" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="fr.mcc.ginco.services" class="ThesaurusConceptServiceImpl" method="updateThesaurusConcept" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="4">
+These nested if statements could be combined
+</violation>
+<violation beginline="508" endline="508" begincolumn="25" endcolumn="88" rule="IfElseStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="ThesaurusConceptServiceImpl" method="getConceptsHierarchicalRelations" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfElseStmtsMustUseBraces" priority="3">
+Avoid using if...else statements without curly braces
+</violation>
+<violation beginline="528" endline="528" begincolumn="17" endcolumn="52" rule="IfElseStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="ThesaurusConceptServiceImpl" method="getStatusByConceptId" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfElseStmtsMustUseBraces" priority="3">
+Avoid using if...else statements without curly braces
+</violation>
+<violation beginline="530" endline="530" begincolumn="17" endcolumn="131" rule="IfElseStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="ThesaurusConceptServiceImpl" method="getStatusByConceptId" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfElseStmtsMustUseBraces" priority="3">
+Avoid using if...else statements without curly braces
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/services/ThesaurusServiceImpl.java">
+<violation beginline="177" endline="177" begincolumn="13" endcolumn="88" rule="PreserveStackTrace" ruleset="Design Rules" package="fr.mcc.ginco.services" class="ThesaurusServiceImpl" method="publishThesaurus" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#PreserveStackTrace" priority="3">
+New exception is thrown in catch block, original stack trace may be lost
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/services/ThesaurusTermServiceImpl.java">
+<violation beginline="116" endline="116" begincolumn="9" endcolumn="32" rule="UnnecessaryLocalBeforeReturn" ruleset="Design Rules" package="fr.mcc.ginco.services" class="ThesaurusTermServiceImpl" method="updateThesaurusTerm" externalInfoUrl="http://pmd.sourceforge.net/rules/design.html#UnnecessaryLocalBeforeReturn" priority="3">
+Consider simply returning the value vs storing it in local variable 'updatedThesaurus'
+</violation>
+<violation beginline="175" endline="175" begincolumn="25" endcolumn="45" rule="IfElseStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="ThesaurusTermServiceImpl" method="getPreferredTermByTerm" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfElseStmtsMustUseBraces" priority="3">
+Avoid using if...else statements without curly braces
+</violation>
+<violation beginline="181" endline="181" begincolumn="41" endcolumn="61" rule="IfElseStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="ThesaurusTermServiceImpl" method="getPreferredTermByTerm" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfElseStmtsMustUseBraces" priority="3">
+Avoid using if...else statements without curly braces
+</violation>
+<violation beginline="182" endline="182" begincolumn="38" endcolumn="49" rule="IfElseStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="ThesaurusTermServiceImpl" method="getPreferredTermByTerm" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfElseStmtsMustUseBraces" priority="3">
+Avoid using if...else statements without curly braces
+</violation>
+<violation beginline="189" endline="189" begincolumn="14" endcolumn="25" rule="IfElseStmtsMustUseBraces" ruleset="Braces Rules" package="fr.mcc.ginco.services" class="ThesaurusTermServiceImpl" method="getPreferredTermByTerm" externalInfoUrl="http://pmd.sourceforge.net/rules/braces.html#IfElseStmtsMustUseBraces" priority="3">
+Avoid using if...else statements without curly braces
+</violation>
+</file>
+<file name="/home/arlar/Hadoc/ginco/ginco-impl/src/main/java/fr/mcc/ginco/services/ThesaurusVersionHistoryServiceImpl.java">
+<violation beginline="68" endline="68" begincolumn="20" endcolumn="25" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="fr.mcc.ginco.services" class="ThesaurusVersionHistoryServiceImpl" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'logger'.
+</violation>
+</file>
+</pmd>
