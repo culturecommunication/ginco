@@ -46,7 +46,9 @@ CREATE TABLE thesaurus
   type integer,
   creator integer,
   created text,
-  defaulttopconcept boolean NOT NULL DEFAULT FALSE
+  defaulttopconcept boolean NOT NULL DEFAULT FALSE,
+  archived boolean DEFAULT FALSE
+
 );
 
 CREATE TABLE thesaurus_type (
@@ -295,6 +297,7 @@ CREATE TABLE thesaurus_aud (
     title character varying(255),
     created text,
     defaulttopconcept boolean,
+    archived boolean,
     format integer,
     type integer,
     creator integer

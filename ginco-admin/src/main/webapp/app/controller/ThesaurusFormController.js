@@ -178,6 +178,26 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         });
     },
 
+    archiveThesaurus : function(theButton) {
+        var me = this;
+        var theForm = theButton.up('form');
+        var url = "services/ui/thesaurusservice/archiveVocabulary?thesaurusId="
+            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id)
+            + "&userId=" + encodeURIComponent(Thesaurus.ext.utils.userInfo.data.username);
+
+        Ext.Ajax.request({
+            url: url,
+            method: 'GET',
+            success: function() {
+                Thesaurus.ext.utils.msg('Succès',
+                    'Le thesaurus a été publié!');
+            },
+            failure: function() {
+                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemPublishMsg);
+            }
+        });
+    },
+
     exportHierarchical : function(theButton) {
         var me = this;
         var theForm = theButton.up('form');
@@ -283,6 +303,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             },
             "thesaurusPanel #publishThesaurus" : {
                 click : this.publishThesaurus
+            },
+            "thesaurusPanel #archiveThesaurus" : {
+                click : this.archiveThesaurus
             }
 		});
 	}

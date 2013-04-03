@@ -212,7 +212,15 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                                         cls : 'publish',
                                                         itemId : 'publishThesaurus',
                                                         iconCls : 'icon-publish'
-                                                    } ]
+                                            },{
+                                                        xtype : 'button',
+                                                        text : me.xArchive,
+                                                        requiredRoles : ['ADMIN'],
+                                                        disabled : true,
+                                                        cls : 'archive',
+                                                        itemId : 'archiveThesaurus',
+                                                        iconCls : 'icon-archive'
+                                            } ]
 									} ],
 										items : [{
 											xtype : 'displayfield',

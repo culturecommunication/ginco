@@ -40,3 +40,5 @@ CREATE FUNCTION int_to_text(INT4) RETURNS TEXT AS 'SELECT textin(int4out($1));' 
 CREATE CAST (INT4 AS TEXT) WITH FUNCTION int_to_text(INT4) AS IMPLICIT;
 
 ALTER TABLE thesaurus_version_history ADD COLUMN userid text;
+
+ALTER TABLE thesaurus ADD COLUMN archived text DEFAULT FALSE;

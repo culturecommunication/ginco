@@ -220,4 +220,22 @@ public class ThesaurusRestService {
 
         return new ExtJsonFormLoadData(object);
     }
+
+    /**
+     * Public method used to archive thesaurus
+     * @throws BusinessException
+     */
+    @GET
+    @Path("/archiveVocabulary")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    public ExtJsonFormLoadData archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
+            throws BusinessException {
+        Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
+
+        if (object != null) {
+            thesaurusService.archiveThesaurus(object);
+        }
+
+        return new ExtJsonFormLoadData(object);
+    }
 }

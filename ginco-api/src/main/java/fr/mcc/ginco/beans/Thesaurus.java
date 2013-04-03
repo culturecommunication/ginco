@@ -34,15 +34,15 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -65,6 +65,7 @@ public class Thesaurus implements Serializable, IAuditableBean {
     private String title;
     private Date created;
     private Boolean defaultTopConcept;
+    private Boolean archived;
     private ThesaurusFormat format;
     private ThesaurusType type;
     private ThesaurusOrganization creator;
@@ -240,4 +241,11 @@ public class Thesaurus implements Serializable, IAuditableBean {
 		return identifier;
 	}
 
+    public Boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(Boolean archived) {
+        this.archived = archived;
+    }
 }

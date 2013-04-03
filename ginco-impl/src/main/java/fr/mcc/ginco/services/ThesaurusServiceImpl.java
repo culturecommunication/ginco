@@ -166,6 +166,12 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	}
 
     @Override
+    public Thesaurus archiveThesaurus(Thesaurus thesaurus) {
+        thesaurus.setArchived(true);
+        return thesaurusDAO.update(thesaurus);
+    }
+
+    @Override
     public void publishThesaurus(Thesaurus object) throws BusinessException {
         File export = exportService.getSKOSExport(object);
         File ready = new File(publishPath + object.getTitle() + " "

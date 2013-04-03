@@ -93,4 +93,11 @@ public interface IThesaurusService {
      * @return
      */
     void publishThesaurus(Thesaurus object) throws BusinessException, TechnicalException;
+
+    /**
+     * Archive a Thesaurus object
+     * @param thesaurus
+     * @return
+     */
+    Thesaurus archiveThesaurus(Thesaurus thesaurus);
 }
