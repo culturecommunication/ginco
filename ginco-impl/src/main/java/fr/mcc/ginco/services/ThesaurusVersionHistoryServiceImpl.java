@@ -79,12 +79,14 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
 	}
 
     @Override
-    public ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus) {
+    @Transactional(readOnly=false)
+    public ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus, String userId) {
         ThesaurusVersionHistory newVersion = new ThesaurusVersionHistory();
         newVersion.setThesaurus(thesaurus);
         newVersion.setThisVersion(true);
         newVersion.setDate(DateUtil.nowDate());
         newVersion.setStatus(ThesaurusVersionStatusEnum.PUBLISHED.getStatus());
+        newVersion.setUserId(userId);
         newVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
         return createOrUpdateVersion(newVersion);
     }

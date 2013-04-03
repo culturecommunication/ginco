@@ -162,7 +162,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         var me = this;
         var theForm = theButton.up('form');
         var url = "services/ui/thesaurusservice/publishVocabulary?thesaurusId="
-            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
+            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id)
+            + "&userId=" + encodeURIComponent(Thesaurus.ext.utils.userInfo.data.username);
 
         Ext.Ajax.request({
             url: url,

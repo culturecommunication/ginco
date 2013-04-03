@@ -208,12 +208,14 @@ public class ThesaurusRestService {
     @GET
     @Path("/publishVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
-    public ExtJsonFormLoadData publishVocabulary(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+    public ExtJsonFormLoadData publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
+                                                 @QueryParam("userId") String userId)
+            throws BusinessException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
         if (object != null) {
             thesaurusService.publishThesaurus(object);
-            thesaurusVersionHistoryService.publishThesaurus(object);
+            thesaurusVersionHistoryService.publishThesaurus(object, userId);
         }
 
         return new ExtJsonFormLoadData(object);

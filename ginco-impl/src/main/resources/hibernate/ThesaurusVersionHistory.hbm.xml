@@ -10,6 +10,7 @@
 		<property name="versionNote" column="versionnote" />
 		<property name="status" />
 		<property name="thisVersion" column="thisversion" />
+        <property name="userId" column="userid" />
 
 		<many-to-one name="thesaurus" column="thesaurus_identifier" lazy="false" />
 

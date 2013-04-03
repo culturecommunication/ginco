@@ -74,5 +74,5 @@ public interface IThesaurusVersionHistoryService {
      * @param thesaurus
      * @return
      */
-    ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus);
+    ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus, String userId);
 }

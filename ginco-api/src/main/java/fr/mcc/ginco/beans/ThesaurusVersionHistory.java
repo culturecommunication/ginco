@@ -34,12 +34,11 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Bean represents <b>thesaurus_version_history</b> table, is used for
@@ -52,6 +51,7 @@ public class ThesaurusVersionHistory implements Serializable {
     private String versionNote;
     private Integer status;
     private Boolean thisVersion;
+    private String userId;
     @XmlTransient
     private Thesaurus thesaurus;
 
@@ -118,4 +118,12 @@ public class ThesaurusVersionHistory implements Serializable {
 	public void setThesaurus(Thesaurus thesaurus) {
 		this.thesaurus = thesaurus;
 	}
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }
