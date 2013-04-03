@@ -79,7 +79,8 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xVersionsTab : 'Versions',
 	xJournal: 'Log history',
 	xEditJournal: 'Edit history',
-    xPublish: 'Publish Thesaurus',
+    xPublish: 'Publish',
+    xArchive: 'Archive',
 	
 	initComponent : function() {
 		var me = this;
