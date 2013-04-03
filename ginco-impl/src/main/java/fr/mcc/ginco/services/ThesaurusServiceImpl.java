@@ -64,6 +64,9 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
+	
+	@Value("${version-default-label}")
+	private String defaultThesaurusVersionNote;
 
 	@Inject
 	@Named("thesaurusDAO")
@@ -118,6 +121,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 			Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
 			ThesaurusVersionHistory defaultVersion = new ThesaurusVersionHistory();
 			defaultVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
+			defaultVersion.setVersionNote(defaultThesaurusVersionNote);
 			defaultVersion.setDate(DateUtil.nowDate());
 			defaultVersion.setThesaurus(result);
 			defaultVersion.setThisVersion(true);
