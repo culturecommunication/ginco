@@ -34,7 +34,9 @@
  */
 package fr.mcc.ginco.tests.exports.mcc;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -43,8 +45,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exports.mcc.MCCConceptExporter;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
@@ -90,5 +94,28 @@ public class MCCConceptExporterTest {
 		
 		JaxbList<String> result = mccConceptExporter.getExportHierarchicalConcepts(c1);
 		Assert.assertEquals(result.getList().size(), c1.getParentConcepts().size());
+	}
+	
+	@Test
+	public void testGetExportConceptNotes() {
+		ThesaurusConcept c1 = new ThesaurusConcept();
+		c1.setIdentifier("http://c1");
+		
+		Note fakeNote1 = new Note();
+		fakeNote1.setIdentifier("http://n1");
+		
+		Note fakeNote2 = new Note();
+		fakeNote2.setIdentifier("http://n2");
+		
+		List<Note> notes = new ArrayList<Note>();
+		notes.add(fakeNote1);
+		notes.add(fakeNote2);
+		Long count = (long) 2;
+		
+		Mockito.when(noteService.getConceptNoteCount(Mockito.anyString())).thenReturn((long) count);
+		Mockito.when(noteService.getConceptNotePaginatedList(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(notes);
+		
+		JaxbList<Note> resultNotes = mccConceptExporter.getExportConceptNotes(c1);
+		Assert.assertEquals(resultNotes.getList().size(), notes.size());
 	}
 }

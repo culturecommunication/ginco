@@ -137,10 +137,15 @@ public class MCCExportServiceImpl implements IMCCExportService {
 			}
 			
 			//Exporting the parent concepts
-			thesaurusToExport.getHierarchicalRelationship().put(thesaurusConcept.getIdentifier(), mccConceptExporter.getExportHierarchicalConcepts(thesaurusConcept));
-			
+			JaxbList<String> parentIds = mccConceptExporter.getExportHierarchicalConcepts(thesaurusConcept);
+			if (parentIds != null && !parentIds.isEmpty()) {
+				thesaurusToExport.getHierarchicalRelationship().put(thesaurusConcept.getIdentifier(), parentIds);
+			}
 			//Exporting relative relationship
-			thesaurusToExport.getAssociativeRelationship().put(thesaurusConcept.getIdentifier(), mccConceptExporter.getExportAssociativeRelationShip(thesaurusConcept));
+			JaxbList<String> associations = mccConceptExporter.getExportAssociativeRelationShip(thesaurusConcept);
+			if (associations != null && !associations.isEmpty()) {
+				thesaurusToExport.getAssociativeRelationship().put(thesaurusConcept.getIdentifier(), associations);
+			}
 		}
 		
 		//---Exporting the concepts arrays of the thesaurus
