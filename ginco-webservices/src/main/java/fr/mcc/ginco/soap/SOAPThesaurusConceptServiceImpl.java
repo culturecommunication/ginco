@@ -42,6 +42,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -124,5 +125,21 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			throw new BusinessException("Concept identifier is empty","empty-parameter");
 		}
 	}
-
+	
+	@Override
+	public List<String> getChildrenByConceptId(String conceptId){
+		if (!conceptId.equals("")){
+			List<String> results = new ArrayList<String>();
+			List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId);
+			for (ThesaurusConcept thesaurusConcept : thesaurusConceptList){
+				results.add(thesaurusConcept.getIdentifier());
+			}
+			return results;
+		}
+		else 
+		{
+			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		}
+	}
+	
 }
