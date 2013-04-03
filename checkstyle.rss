@@ -2,20 +2,20 @@
 
 <rss version="0.91">
   <channel>
-    <title>ginco-webservices - Checkstyle report</title>
-    <link>https://github.com/culturecommunication/ginco/ginco-webservices</link>
-    <description>ginco-webservices - Checkstyle report</description>
+    <title>ginco-admin - Checkstyle report</title>
+    <link>https://github.com/culturecommunication/ginco/ginco-admin</link>
+    <description>ginco-admin - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2013</copyright>
     <item>
-      <title>File: 9,
+      <title>File: 50,
              Errors: 0,
-             Warnings: 0,
-             Infos: 64
+             Warnings: 1,
+             Infos: 370
       </title>
-            <link>https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html</link>
+            <link>https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html</link>
       <description>
-        <p>Click <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,24 +29,10 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.soap.SOAPThesaurusTermServiceImpl.java">fr/mcc/ginco/soap/SOAPThesaurusTermServiceImpl.java</a>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.GroupsGenerator.java">fr/mcc/ginco/extjs/view/utils/GroupsGenerator.java</a>
                 </td>
                 <td>
-                  6
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.soap.ISOAPThesaurusService.java">fr/mcc/ginco/soap/ISOAPThesaurusService.java</a>
-                </td>
-                <td>
-                  0
+                  2
                 </td>
                 <td>
                   0
@@ -57,63 +43,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.soap.SOAPThesaurusServiceImpl.java">fr/mcc/ginco/soap/SOAPThesaurusServiceImpl.java</a>
-                </td>
-                <td>
-                  3
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.soap.ISOAPThesaurusConceptService.java">fr/mcc/ginco/soap/ISOAPThesaurusConceptService.java</a>
-                </td>
-                <td>
-                  5
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.soap.ISOAPThesaurusTermService.java">fr/mcc/ginco/soap/ISOAPThesaurusTermService.java</a>
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.soap.SOAPThesaurusConceptServiceImpl.java">fr/mcc/ginco/soap/SOAPThesaurusConceptServiceImpl.java</a>
-                </td>
-                <td>
-                  9
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.data.ReducedThesaurus.java">fr/mcc/ginco/data/ReducedThesaurus.java</a>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ImportRestService.java">fr/mcc/ginco/rest/services/ImportRestService.java</a>
                 </td>
                 <td>
                   4
@@ -127,7 +57,35 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.data.ReducedThesaurusTerm.java">fr/mcc/ginco/data/ReducedThesaurusTerm.java</a>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupLabelViewConverter.java">fr/mcc/ginco/extjs/view/utils/ThesaurusConceptGroupLabelViewConverter.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.exceptions.TechnicalExceptionMapper.java">fr/mcc/ginco/rest/services/exceptions/TechnicalExceptionMapper.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter.java">fr/mcc/ginco/extjs/view/utils/NodeLabelViewConverter.java</a>
                 </td>
                 <td>
                   6
@@ -141,10 +99,626 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/culturecommunication/ginco/ginco-webservices/checkstyle.html#fr.mcc.ginco.data.FullThesaurus.java">fr/mcc/ginco/data/FullThesaurus.java</a>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView.java">fr/mcc/ginco/extjs/view/pojo/ThesaurusArrayView.java</a>
                 </td>
                 <td>
-                  30
+                  22
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ExportRestService.java">fr/mcc/ginco/rest/services/ExportRestService.java</a>
+                </td>
+                <td>
+                  9
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.ThesaurusView.java">fr/mcc/ginco/extjs/view/pojo/ThesaurusView.java</a>
+                </td>
+                <td>
+                  39
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.TermViewConverter.java">fr/mcc/ginco/extjs/view/utils/TermViewConverter.java</a>
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.security.GincoUserDetailsContextMapper.java">fr/mcc/ginco/security/GincoUserDetailsContextMapper.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ThesaurusNoteViewConverter.java">fr/mcc/ginco/extjs/view/utils/ThesaurusNoteViewConverter.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.FolderGenerator.java">fr/mcc/ginco/extjs/view/utils/FolderGenerator.java</a>
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.OrphansGenerator.java">fr/mcc/ginco/extjs/view/utils/OrphansGenerator.java</a>
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ThesaurusArrayRestService.java">fr/mcc/ginco/rest/services/ThesaurusArrayRestService.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.enums.ClassificationFolderType.java">fr/mcc/ginco/extjs/view/enums/ClassificationFolderType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ThesaurusRestService.java">fr/mcc/ginco/rest/services/ThesaurusRestService.java</a>
+                </td>
+                <td>
+                  11
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.IndexerRestService.java">fr/mcc/ginco/rest/services/IndexerRestService.java</a>
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ThesaurusVersionHistoryViewConverter.java">fr/mcc/ginco/extjs/view/utils/ThesaurusVersionHistoryViewConverter.java</a>
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView.java">fr/mcc/ginco/extjs/view/pojo/ThesaurusConceptGroupView.java</a>
+                </td>
+                <td>
+                  19
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.UserInfo.java">fr/mcc/ginco/extjs/view/pojo/UserInfo.java</a>
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.BaseRestService.java">fr/mcc/ginco/rest/services/BaseRestService.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.TermRoleRestService.java">fr/mcc/ginco/rest/services/TermRoleRestService.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.JournalRestService.java">fr/mcc/ginco/rest/services/JournalRestService.java</a>
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.TopTermGenerator.java">fr/mcc/ginco/extjs/view/utils/TopTermGenerator.java</a>
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ThesaurusTermRestService.java">fr/mcc/ginco/rest/services/ThesaurusTermRestService.java</a>
+                </td>
+                <td>
+                  11
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupViewConverter.java">fr/mcc/ginco/extjs/view/utils/ThesaurusConceptGroupViewConverter.java</a>
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView.java">fr/mcc/ginco/extjs/view/pojo/ThesaurusConceptReducedView.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.exceptions.AbstractExceptionMapper.java">fr/mcc/ginco/rest/services/exceptions/AbstractExceptionMapper.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ThesaurusConceptGroupRestService.java">fr/mcc/ginco/rest/services/ThesaurusConceptGroupRestService.java</a>
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.ExtJsonFormLoadData.java">fr/mcc/ginco/extjs/view/ExtJsonFormLoadData.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView.java">fr/mcc/ginco/extjs/view/pojo/ThesaurusTermView.java</a>
+                </td>
+                <td>
+                  26
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode.java">fr/mcc/ginco/extjs/view/node/ThesaurusListBasicNode.java</a>
+                </td>
+                <td>
+                  19
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.exceptions.AccessDeniedExceptionMapper.java">fr/mcc/ginco/rest/services/exceptions/AccessDeniedExceptionMapper.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ArraysGenerator.java">fr/mcc/ginco/extjs/view/utils/ArraysGenerator.java</a>
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView.java">fr/mcc/ginco/extjs/view/pojo/ThesaurusConceptView.java</a>
+                </td>
+                <td>
+                  21
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView.java">fr/mcc/ginco/extjs/view/pojo/ThesaurusNoteView.java</a>
+                </td>
+                <td>
+                  18
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.NodeLabelView.java">fr/mcc/ginco/extjs/view/pojo/NodeLabelView.java</a>
+                </td>
+                <td>
+                  12
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter.java">fr/mcc/ginco/extjs/view/utils/ThesaurusArrayViewConverter.java</a>
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ThesaurusConceptRestService.java">fr/mcc/ginco/rest/services/ThesaurusConceptRestService.java</a>
+                </td>
+                <td>
+                  17
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter.java">fr/mcc/ginco/extjs/view/utils/ThesaurusConceptViewConverter.java</a>
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.InfoRestService.java">fr/mcc/ginco/rest/services/InfoRestService.java</a>
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ThesaurusVersionRestService.java">fr/mcc/ginco/rest/services/ThesaurusVersionRestService.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.ThesaurusNoteRestService.java">fr/mcc/ginco/rest/services/ThesaurusNoteRestService.java</a>
+                </td>
+                <td>
+                  12
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType.java">fr/mcc/ginco/extjs/view/enums/ThesaurusListNodeType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.rest.services.exceptions.BusinessExceptionMapper.java">fr/mcc/ginco/rest/services/exceptions/BusinessExceptionMapper.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.ThesaurusVersionHistoryView.java">fr/mcc/ginco/extjs/view/pojo/ThesaurusVersionHistoryView.java</a>
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter.java">fr/mcc/ginco/extjs/view/utils/ThesaurusViewConverter.java</a>
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.node.IThesaurusListNode.java">fr/mcc/ginco/extjs/view/node/IThesaurusListNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.utils.ChildrenGenerator.java">fr/mcc/ginco/extjs/view/utils/ChildrenGenerator.java</a>
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/culturecommunication/ginco/ginco-admin/checkstyle.html#fr.mcc.ginco.extjs.view.pojo.GenericStatusView.java">fr/mcc/ginco/extjs/view/pojo/GenericStatusView.java</a>
+                </td>
+                <td>
+                  4
                 </td>
                 <td>
                   0
