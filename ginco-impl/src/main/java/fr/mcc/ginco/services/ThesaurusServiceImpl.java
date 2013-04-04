@@ -165,6 +165,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 		return orderedLangs;
 	}
 
+    @Transactional(readOnly=false)
     @Override
     public Thesaurus archiveThesaurus(Thesaurus thesaurus) {
         thesaurus.setArchived(true);

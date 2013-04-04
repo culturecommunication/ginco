@@ -34,15 +34,14 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * View class corresponding to {@link Thesaurus} bean, but fully serializable;
@@ -67,6 +66,7 @@ public class ThesaurusView implements Serializable {
 	private String title;
 	private String created;
 	private Boolean defaultTopConcept;
+    private Boolean archived;
 	private Integer format;
 	private Integer type;
 	private String creatorName;
@@ -219,4 +219,12 @@ public class ThesaurusView implements Serializable {
 	public void setDefaultTopConcept(Boolean defaulttopconcept) {
 		this.defaultTopConcept = defaulttopconcept;
 	}
+
+    public Boolean getArchived() {
+        return archived;
+    }
+
+    public void setArchived(Boolean archived) {
+        this.archived = archived;
+    }
 }
