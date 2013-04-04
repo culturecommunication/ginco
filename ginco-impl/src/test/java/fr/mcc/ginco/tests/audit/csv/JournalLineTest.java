@@ -42,42 +42,16 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import fr.mcc.ginco.audit.csv.AuditCSVWriter;
 import fr.mcc.ginco.audit.csv.JournalEventsEnum;
 import fr.mcc.ginco.audit.csv.JournalLine;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 
-public class AuditCSVWriterTest {
-
-	private AuditCSVWriter auditCSVWriter = new AuditCSVWriter();
-	
-	@Before
-	public void init() {
-		LoggerTestUtil.initLogger(auditCSVWriter);
-	}
+public class JournalLineTest {
 	
 	@Test
-	public void testWriteHeader() throws IOException {
-		StringWriter sw = new StringWriter();
-		BufferedWriter out = new BufferedWriter(sw);
-		
-		auditCSVWriter.writeHeader(out);
-		out.flush();
-		out.close();
-		
-		Assert.assertEquals(true, sw.toString().startsWith("log-journal.headers.event-type,log-journal.headers.date,log-journal.headers.author,log-journal.headers.conceptId,log-journal.headers.termId,log-journal.headers.role,log-journal.headers.status,log-journal.headers.oldlexicalvalue,log-journal.headers.newlexicalvalue,log-journal.headers.oldParent,log-journal.headers.newparent"));
-		
-	}	
-	
-	
-	@Test
-	public void testWriteJournalLine() throws IOException {
-		StringWriter sw = new StringWriter();
-		BufferedWriter out = new BufferedWriter(sw);
+	public void testToString() throws IOException {
 		
 		JournalLine line = new JournalLine();
 		line.setAuthorId("unknown.author");
@@ -95,13 +69,9 @@ public class AuditCSVWriterTest {
 		line.setOldLexicalValue("Old term lexical value");
 		line.setStatus(0);
 		line.setTermId("http://faketerm");
-		line.setTermRole("TP");
-		
-		auditCSVWriter.writeJournalLine(line, out);
-		out.flush();
-		out.close();
+		line.setTermRole("TP");				
 
-		Assert.assertEquals(true, sw.toString().startsWith("log-journal.thesaurus-concept-created-event,2013-01-20 20:30:00,unknown.author,http://fakeconcept,http://faketerm,TP,concept-status[0],Old term lexical value,New term lexical Value,http://fakeconcept1,http://fakeconcept1|http://fakeconcept2"));
+		Assert.assertEquals("log-journal.thesaurus-concept-created-event,2013-01-20 20:30:00,unknown.author,http://fakeconcept,http://faketerm,TP,concept-status[0],Old term lexical value,New term lexical Value,http://fakeconcept1,http://fakeconcept1|http://fakeconcept2", line.toString());
 		
 	}
 }
