@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  * France (France) translation
  * By Thylia
  * 09-11-2007, 02:22 PM
@@ -320,7 +319,7 @@ Ext.onReady(function() {
         saveBtnText  : 'Mise à jour',
         cancelBtnText: 'Annuler',
         errorsText: 'Erreurs',
-        dirtyText: 'Vous devez enregistrer ou annuler vos changements',
+        dirtyText: 'Vous devez enregistrer ou annuler vos changements'
     });
 
 });

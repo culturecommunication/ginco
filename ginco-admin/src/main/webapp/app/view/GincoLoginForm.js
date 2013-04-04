@@ -49,7 +49,7 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 				xtype : 'form',
 				bodyPadding: '10 10 0',
 				defaults : {
-					anchor : '90%',
+					anchor : '90%'
 				},
 				url:'login_security_check', 
 				title : me.xLoginWinTitle,
@@ -58,7 +58,7 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 					itemId : 'message',
 					cls : 'mandatory-field ',
 					text : me.xLoginErrorLbl,
-					hidden : true,
+					hidden : true
 				} ],
 				items : [ {
 					xtype : 'textfield',
