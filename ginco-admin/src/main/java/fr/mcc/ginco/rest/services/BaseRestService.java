@@ -38,13 +38,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -114,6 +119,7 @@ public class BaseRestService {
     @Named("adminUserService")
     private IAdminUserService adminUserService; 
    
+   
 
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in
@@ -168,6 +174,22 @@ public class BaseRestService {
 
 	private String getIdFromParam(String param, String prefix) {
 		return param.substring(param.indexOf(prefix) + prefix.length());
+	}
+	
+	/**
+	 * Public method used to get the name of the user currently connected
+	 * 
+	 * @return 
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
+	 */
+	@GET
+	@Path("/getSession")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public long getSession(@Context HttpServletRequest request) {
+		
+		return request.getSession().getLastAccessedTime();
 	}
 	
 	/**
