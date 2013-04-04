@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
@@ -65,6 +65,7 @@ public class MCCExportedThesaurus implements Serializable {
 	//The use of a JaxbList object is due to the incapacity of Jaxb to serialize a HashMap<String, Bean> directly
 	
     private Thesaurus thesaurus;
+    private List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
     private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
     private List<NodeLabel> conceptsArrayLabels  = new ArrayList<NodeLabel>();
     private List<ThesaurusConceptGroup> conceptsGroups  = new ArrayList<ThesaurusConceptGroup>();
@@ -145,6 +146,14 @@ public class MCCExportedThesaurus implements Serializable {
 
 	public void setConceptsArrayLabels(List<NodeLabel> conceptsArrayLabels) {
 		this.conceptsArrayLabels = conceptsArrayLabels;
+	}
+
+	public List<ThesaurusConcept> getConcepts() {
+		return concepts;
+	}
+
+	public void setConcepts(List<ThesaurusConcept> concepts) {
+		this.concepts = concepts;
 	}
     
 }

@@ -113,6 +113,9 @@ public class MCCExportServiceImpl implements IMCCExportService {
 		//Exporting the thesaurus' versions
 		thesaurusToExport.setThesaurusVersions(thesaurusVersionHistoryService.getVersionsByThesaurusId(thesaurusId));
 		
+		//Exporting the thesaurus' concepts
+		thesaurusToExport.setConcepts(thesaurusConceptService.getConceptsByThesaurusId(null, thesaurusId, null, false));
+		
 		//Exporting sandboxed terms
 		List<ThesaurusTerm> sandboxedTerms = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(0, thesaurusTermService.getSandboxedTermsCount(thesaurusId).intValue(), thesaurusId);
 		for (ThesaurusTerm thesaurusTerm : sandboxedTerms) {
@@ -120,7 +123,7 @@ public class MCCExportServiceImpl implements IMCCExportService {
 		}
 		
 		//---Exporting the terms and the concepts of the thesaurus
-		List<ThesaurusConcept> concepts = thesaurusConceptService.getConceptsByThesaurusId(null, thesaurusId, true, false);
+		List<ThesaurusConcept> concepts = thesaurusConceptService.getConceptsByThesaurusId(null, thesaurusId, null, false);
 		for (ThesaurusConcept thesaurusConcept : concepts) {
 			
 			//Exporting terms of the concepts

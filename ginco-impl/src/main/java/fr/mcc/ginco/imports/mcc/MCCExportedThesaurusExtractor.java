@@ -35,21 +35,38 @@
 package fr.mcc.ginco.imports.mcc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.dao.INodeLabelDAO;
+import fr.mcc.ginco.dao.INoteDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.exports.result.bean.MCCExportedThesaurus;
+import fr.mcc.ginco.log.Log;
 
 /**
  * This class extracts data from a {@link MCCExportedThesaurus} object
@@ -61,8 +78,28 @@ import fr.mcc.ginco.exports.result.bean.MCCExportedThesaurus;
 public class MCCExportedThesaurusExtractor {
 	
 	@Inject
+	@Named("associativeRelationshipDAO")
+	private IAssociativeRelationshipDAO associativeRelationshipDAO;
+	
+	@Inject
+	@Named("associativeRelationshipRoleDAO")
+	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
+	
+	@Inject
+	@Named("nodeLabelDAO")
+	private INodeLabelDAO nodeLabelDAO;
+	
+	@Inject
+	@Named("noteDAO")
+	private INoteDAO noteDAO;
+	
+	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
+	
+	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 	@Inject
 	@Named("thesaurusTermDAO")
@@ -72,43 +109,202 @@ public class MCCExportedThesaurusExtractor {
 	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 	
-	@Inject
-	@Named("nodeLabelDAO")
-	private INodeLabelDAO nodeLabelDAO;
+	@Log
+	private Logger logger;
 	
 	public Thesaurus storeMccExportedThesaurus(MCCExportedThesaurus exportedThesaurus) {
 		Thesaurus thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
+		storeConcepts(exportedThesaurus);
 		storeTerms(exportedThesaurus);
 		//storeArraysAndLabels(exportedThesaurus);
-		//storeVersions(exportedThesaurus);
-		
+		storeVersions(exportedThesaurus);
+		storeHierarchicalRelationship(exportedThesaurus);
+		storeAssociativeRelationship(exportedThesaurus);
+		storeTermNotes(exportedThesaurus);
+		storeConceptNotes(exportedThesaurus);
 		return thesaurus;
+	}
+	
+	public List<ThesaurusConcept> storeConcepts(MCCExportedThesaurus exportedThesaurus) {
+		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
+		if (exportedThesaurus.getConcepts() != null && !exportedThesaurus.getConcepts().isEmpty()) {
+			for (ThesaurusConcept concept : exportedThesaurus.getConcepts()) {
+				concept.setThesaurus(exportedThesaurus.getThesaurus());
+				updatedConcepts.add(thesaurusConceptDAO.update(concept));
+			}			
+		}
+		return updatedConcepts;
 	}
 	
 	public List<ThesaurusTerm> storeTerms(MCCExportedThesaurus exportedThesaurus) {
 		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm term : exportedThesaurus.getTerms()) {
-			term.setThesaurus(thesaurusDAO.getById(exportedThesaurus.getThesaurus().getIdentifier()));
+			term.setThesaurus(exportedThesaurus.getThesaurus());
 			updatedTerms.add(thesaurusTermDAO.update(term));
 		}
 		return updatedTerms;
 	}
 	
-	/*public List<NodeLabel> storeArraysAndLabels(MCCExportedThesaurus exportedThesaurus) {
+	public List<NodeLabel> storeArraysAndLabels(MCCExportedThesaurus exportedThesaurus) {
 		List<NodeLabel> updatedLabelsAndArrays = new ArrayList<NodeLabel>();
 		for (NodeLabel node : exportedThesaurus.getConceptsArrayLabels()) {
-			node.getThesaurusArray().setThesaurus(thesaurusDAO.getById(exportedThesaurus.getThesaurus().getIdentifier()));
+			node.getThesaurusArray().setThesaurus(exportedThesaurus.getThesaurus());
 			updatedLabelsAndArrays.add(nodeLabelDAO.update(node));
 		}
 		return updatedLabelsAndArrays;
-	}*/
+	}
 	
 	public List<ThesaurusVersionHistory> storeVersions(MCCExportedThesaurus exportedThesaurus) {
 		List<ThesaurusVersionHistory> updatedVersion = new ArrayList<ThesaurusVersionHistory>();
 		for (ThesaurusVersionHistory version : exportedThesaurus.getThesaurusVersions()) {
+			version.setThesaurus(exportedThesaurus.getThesaurus());
 			updatedVersion.add(thesaurusVersionHistoryDAO.update(version));
 		}
 		return updatedVersion;
 	}
 	
+	public List<ThesaurusConcept> storeHierarchicalRelationship(MCCExportedThesaurus exportedThesaurus) {
+		Map<String, JaxbList<String>> relations = exportedThesaurus.getHierarchicalRelationship();
+		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
+		
+		if (relations != null && !relations.isEmpty()) {
+			Iterator<Map.Entry<String,  JaxbList<String>>> entries = relations.entrySet().iterator();
+			String childId = null;
+			List<String> parentIds = null;
+			while(entries.hasNext()){
+				Map.Entry<String,  JaxbList<String>> entry = entries.next();
+				//Getting the id of the child
+				childId = entry.getKey();
+				
+				//Getting the ids of its parents
+				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
+					parentIds = entry.getValue().getList();				
+				}
+				
+				//We get all the parent concepts of the childconcept
+				ThesaurusConcept childConcept = thesaurusConceptDAO.getById(childId);
+				Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
+				for (String id : parentIds) {
+					parentConcepts.add(thesaurusConceptDAO.getById(id));
+				}
+				childConcept.setParentConcepts(parentConcepts);
+				updatedConcepts.add(thesaurusConceptDAO.update(childConcept));
+			}
+		}
+		return updatedConcepts;
+	}
+	
+	public List<ThesaurusConcept> storeAssociativeRelationship(MCCExportedThesaurus exportedThesaurus) {
+		Map<String, JaxbList<String>> associativeRelations = exportedThesaurus.getAssociativeRelationship();
+		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
+		
+		if (associativeRelations != null && !associativeRelations.isEmpty()) {
+			Iterator<Map.Entry<String,  JaxbList<String>>> entries = associativeRelations.entrySet().iterator();
+			String conceptId = null;
+			List<String> associatedConceptIds = null;
+			
+			while(entries.hasNext()){
+				Map.Entry<String,  JaxbList<String>> entry = entries.next();
+				//Getting the id of the current concept
+				conceptId = entry.getKey();
+				
+				//Getting the ids of its associated concepts
+				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
+					associatedConceptIds = entry.getValue().getList();
+				}
+				updatedConcepts.add(thesaurusConceptDAO.update(saveAssociativeRelationship(thesaurusConceptDAO.getById(conceptId), associatedConceptIds)));
+			}
+		}
+		return updatedConcepts;
+	}
+	
+	private ThesaurusConcept saveAssociativeRelationship(
+			ThesaurusConcept concept, List<String> associatedConceptIds)
+			throws BusinessException {
+		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
+		concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
+		concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());
+		
+		for (String associatedConceptsId : associatedConceptIds) {
+			logger.debug("Settings associated concept " + associatedConceptsId);
+			ThesaurusConcept linkedThesaurusConcept = thesaurusConceptDAO.getById(associatedConceptsId);
+			if (linkedThesaurusConcept.getStatus() != ConceptStatusEnum.VALIDATED
+					.getStatus()) {
+				throw new BusinessException(
+						"A concept must associate a validated concept",
+						"concept-associate-validated-concept");
+			}
+			List<String> alreadyAssociatedConcepts = associativeRelationshipDAO
+					.getAssociatedConcepts(linkedThesaurusConcept);
+			if (!alreadyAssociatedConcepts.contains(concept.getIdentifier())) {
+				AssociativeRelationship relationship = new AssociativeRelationship();
+				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
+				relationshipId.setConcept1(concept.getIdentifier());
+				relationshipId.setConcept2(associatedConceptsId);
+				relationship.setIdentifier(relationshipId);
+				relationship.setConceptLeft(concept);
+				relationship.setConceptRight(thesaurusConceptDAO
+						.getById(associatedConceptsId));
+				relationship
+						.setRelationshipRole(associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole()	);
+				relations.add(relationship);
+				associativeRelationshipDAO.update(relationship);
+			}
+		}
+		concept.getAssociativeRelationshipLeft().addAll(relations);
+
+		return concept;
+	}
+	
+	public List<Note> storeTermNotes(MCCExportedThesaurus exportedThesaurus) {
+		Map<String, JaxbList<Note>> termNotes = exportedThesaurus.getTermNotes();
+		List<Note> result = new ArrayList<Note>();
+		if (termNotes != null && !termNotes.isEmpty()) {
+			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = termNotes.entrySet().iterator();
+			String termId = null;
+			List<Note> notes = null;
+			while(entries.hasNext()){
+				Map.Entry<String,  JaxbList<Note>> entry = entries.next();
+				//Getting the id of the term
+				termId = entry.getKey();
+				
+				//Getting the ids of the notes
+				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
+					notes = entry.getValue().getList();
+				}
+				
+				for (Note note : notes) {
+					note.setTerm(thesaurusTermDAO.getById(termId));
+					result.add(noteDAO.update(note));
+				}
+			}
+		}
+		return result;
+	}
+	
+	public List<Note> storeConceptNotes(MCCExportedThesaurus exportedThesaurus) {
+		Map<String, JaxbList<Note>> conceptNotes = exportedThesaurus.getConceptNotes();
+		List<Note> result = new ArrayList<Note>();
+		if (conceptNotes != null && !conceptNotes.isEmpty()) {
+			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = conceptNotes.entrySet().iterator();
+			String conceptId = null;
+			List<Note> notes = null;
+			while(entries.hasNext()){
+				Map.Entry<String,  JaxbList<Note>> entry = entries.next();
+				//Getting the id of the concept
+				conceptId = entry.getKey();
+				
+				//Getting the ids of the notes
+				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
+					notes = entry.getValue().getList();
+				}
+				
+				for (Note note : notes) {
+					note.setConcept(thesaurusConceptDAO.getById(conceptId));
+					result.add(noteDAO.update(note));
+				}
+			}
+		}
+		return result;
+	}
 }

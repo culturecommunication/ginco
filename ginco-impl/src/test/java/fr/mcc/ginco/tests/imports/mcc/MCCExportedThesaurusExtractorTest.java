@@ -48,8 +48,10 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exports.result.bean.MCCExportedThesaurus;
@@ -64,6 +66,10 @@ public class MCCExportedThesaurusExtractorTest {
 	
 	@Mock(name="thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
+	
+	
+	@Mock(name="thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 	@Mock(name="thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
@@ -90,6 +96,8 @@ public class MCCExportedThesaurusExtractorTest {
 		Assert.assertEquals(result.getIdentifier(), t1.getIdentifier());
 	}
 	
+	
+	
 	@Test
 	public void testStoreTerms() {
 		
@@ -114,6 +122,32 @@ public class MCCExportedThesaurusExtractorTest {
 		
 		Assert.assertEquals(resultedTerms.size(), terms.size());
 		Assert.assertEquals(resultedTerms.get(0).getIdentifier(), terms.get(0).getIdentifier());
+	}
+	
+	@Test
+	public void testStoreConcepts() {
+		
+		Thesaurus th1 = new Thesaurus();
+		th1.setIdentifier("http://th1");
+		
+		ThesaurusConcept c1 = new ThesaurusConcept();
+		c1.setIdentifier("http://c1");
+		c1.setThesaurus(th1);
+
+		List<ThesaurusConcept> resultedConcepts = new ArrayList<ThesaurusConcept>();
+		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+		concepts.add(c1);
+		
+		MCCExportedThesaurus exportedThesaurus = new MCCExportedThesaurus();
+		exportedThesaurus.setThesaurus(th1);
+		exportedThesaurus.setConcepts(concepts);
+		
+		Mockito.when(thesaurusConceptDAO.update(Mockito.any(ThesaurusConcept.class))).thenReturn(c1);
+		Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(th1);
+		resultedConcepts = mccExportedThesaurusExtractor.storeConcepts(exportedThesaurus);
+		
+		Assert.assertEquals(resultedConcepts.size(), concepts.size());
+		Assert.assertEquals(resultedConcepts.get(0).getIdentifier(), concepts.get(0).getIdentifier());
 	}
 	
 	/*@Test
