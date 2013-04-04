@@ -44,32 +44,24 @@ import org.junit.Test;
 
 import fr.mcc.ginco.audit.csv.JournalEventsEnum;
 import fr.mcc.ginco.audit.csv.JournalLine;
+import fr.mcc.ginco.audit.csv.JournalLineBuilder;
+import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.utils.DateUtil;
 
-public class JournalLineTest {
+public class JournalLineBuilderTest {
 	
 	@Test
-	public void testToString() throws IOException {
-		
-		JournalLine line = new JournalLine();
-		line.setAuthorId("unknown.author");
-		line.setConceptId("http://fakeconcept");
-		line.setEventDate(DateUtil.dateFromString("2013-01-20 20:30:00"));
-		line.setEventType(JournalEventsEnum.THESAURUSCONCEPT_CREATED);
-		Set<String> newGenericTerms = new HashSet<String>();
-		newGenericTerms.add("http://fakeconcept1");
-		newGenericTerms.add("http://fakeconcept2");
-		line.setNewGenericTerm(newGenericTerms);
-		line.setNewLexicalValue("New term lexical Value");
-		Set<String> oldGenericTerms = new HashSet<String>();
-		oldGenericTerms.add("http://fakeconcept1");
-		line.setOldGenericTerm(oldGenericTerms);
-		line.setOldLexicalValue("Old term lexical value");
-		line.setStatus(0);
-		line.setTermId("http://faketerm");
-		line.setTermRole("TP");				
+	public void testBuildLineBase() throws IOException {
+		GincoRevEntity gincoRevEntity = new GincoRevEntity();
+		gincoRevEntity.setUsername("fake.username");
+		gincoRevEntity.setTimestamp(DateUtil.dateFromString("2012-12-12 12:00:00").getTime());
 
-		Assert.assertEquals("log-journal.thesaurus-concept-created-event,2013-01-20 20:30:00,unknown.author,http://fakeconcept,http://faketerm,TP,concept-status[0],Old term lexical value,New term lexical Value,http://fakeconcept1,http://fakeconcept1|http://fakeconcept2", line.toString());
+		JournalLineBuilder builder = new JournalLineBuilder();
+		JournalLine actualBaseLine = builder.buildLineBase(JournalEventsEnum.THESAURUSTERM_CREATED, gincoRevEntity);
+		
+		Assert.assertEquals(DateUtil.dateFromString("2012-12-12 12:00:00"),actualBaseLine.getEventDate());
+		Assert.assertEquals("fake.username", actualBaseLine.getAuthorId());
+		Assert.assertEquals(JournalEventsEnum.THESAURUSTERM_CREATED, actualBaseLine.getEventType());
 		
 	}
 }
