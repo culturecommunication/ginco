@@ -117,6 +117,13 @@
 	background-image: url(../images/cross.png) !important;
 }
 
+.icon-archive {
+	background-image: url(../images/package.png) !important;
+}
+
+.icon-publish {
+	background-image: url(../images/world.png) !important;
+}
 
 .mandatory-field {
 	color: red !important;
