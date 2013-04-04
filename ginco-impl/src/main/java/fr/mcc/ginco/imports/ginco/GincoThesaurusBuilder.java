@@ -51,6 +51,7 @@ import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
@@ -58,6 +59,7 @@ import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.INoteDAO;
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
@@ -96,6 +98,10 @@ public class GincoThesaurusBuilder {
 	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
+
+	@Inject
+	@Named("thesaurusArrayDAO")
+	private IThesaurusArrayDAO thesaurusArrayDAO;
 	
 	@Inject
 	@Named("thesaurusConceptDAO")
@@ -116,7 +122,8 @@ public class GincoThesaurusBuilder {
 		Thesaurus thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
 		storeConcepts(exportedThesaurus);
 		storeTerms(exportedThesaurus);
-		//storeArraysAndLabels(exportedThesaurus);
+		//storeArrays(exportedThesaurus);
+		//storeArrayLabels(exportedThesaurus);
 		storeVersions(exportedThesaurus);
 		storeHierarchicalRelationship(exportedThesaurus);
 		storeAssociativeRelationship(exportedThesaurus);
@@ -145,15 +152,6 @@ public class GincoThesaurusBuilder {
 		return updatedTerms;
 	}
 	
-	public List<NodeLabel> storeArraysAndLabels(GincoExportedThesaurus exportedThesaurus) {
-		List<NodeLabel> updatedLabelsAndArrays = new ArrayList<NodeLabel>();
-		for (NodeLabel node : exportedThesaurus.getConceptsArrayLabels()) {
-			node.getThesaurusArray().setThesaurus(exportedThesaurus.getThesaurus());
-			updatedLabelsAndArrays.add(nodeLabelDAO.update(node));
-		}
-		return updatedLabelsAndArrays;
-	}
-	
 	public List<ThesaurusVersionHistory> storeVersions(GincoExportedThesaurus exportedThesaurus) {
 		List<ThesaurusVersionHistory> updatedVersion = new ArrayList<ThesaurusVersionHistory>();
 		for (ThesaurusVersionHistory version : exportedThesaurus.getThesaurusVersions()) {
@@ -163,12 +161,47 @@ public class GincoThesaurusBuilder {
 		return updatedVersion;
 	}
 	
+	public List<NodeLabel> storeArrayLabels(GincoExportedThesaurus exportedThesaurus) {
+		Map<String, JaxbList<NodeLabel>> labels = exportedThesaurus.getConceptArrayLabels();
+		List<NodeLabel> updatedLabels = new ArrayList<NodeLabel>();
+		
+		if (labels != null && !labels.isEmpty()) {
+			Iterator<Map.Entry<String,  JaxbList<NodeLabel>>> entries = labels.entrySet().iterator();
+			String arrayId = null;
+			List<NodeLabel> nodeLabel = null;
+			while(entries.hasNext()){
+				Map.Entry<String,  JaxbList<NodeLabel>> entry = entries.next();
+				//Getting the id of the array
+				arrayId = entry.getKey();
+				
+				//Getting the NodeLabels for this array
+				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
+					nodeLabel = entry.getValue().getList();
+				}
+				
+				for (NodeLabel label : nodeLabel) {
+					updatedLabels.add(nodeLabelDAO.update(label));
+				}
+			}
+		}
+		return updatedLabels;
+	}
+	
+	public List<ThesaurusArray> storeArrays(GincoExportedThesaurus exportedThesaurus) {
+		List<ThesaurusArray> updatedArrays = new ArrayList<ThesaurusArray>();
+		for (ThesaurusArray array : exportedThesaurus.getConceptArrays()) {
+			array.setThesaurus(exportedThesaurus.getThesaurus());
+			updatedArrays.add(thesaurusArrayDAO.update(array));
+		}
+		return updatedArrays;
+	}
+	
 	public List<ThesaurusConcept> storeHierarchicalRelationship(GincoExportedThesaurus exportedThesaurus) {
 		Map<String, JaxbList<String>> relations = exportedThesaurus.getHierarchicalRelationship();
 		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
 		
 		if (relations != null && !relations.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<String>>> entries = relations.entrySet().iterator();
+			Iterator<Map.Entry<String, JaxbList<String>>> entries = relations.entrySet().iterator();
 			String childId = null;
 			List<String> parentIds = null;
 			while(entries.hasNext()){

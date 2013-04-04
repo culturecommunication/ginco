@@ -158,13 +158,16 @@ public class GincoExportServiceImpl implements IGincoExportService {
 			}
 		}
 
-		//---Exporting the node label of all concepts (with concept nested in)
+		//---Exporting the array of all concepts
 		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurusId);
-		List<NodeLabel> labels = new ArrayList<NodeLabel>();
+		thesaurusToExport.setConceptArrays(arrays);
+		
+		//---Exporting the array labels of all concepts
+		JaxbList<NodeLabel> labels = new JaxbList<NodeLabel>();
 		for (ThesaurusArray thesaurusArray : arrays) {
-			labels.add(nodeLabelService.getByThesaurusArray(thesaurusArray.getIdentifier()));
+			labels.getList().add(nodeLabelService.getByThesaurusArray(thesaurusArray.getIdentifier()));
+			thesaurusToExport.getConceptArrayLabels().put(thesaurusArray.getIdentifier(),labels);
 		}
-		thesaurusToExport.setConceptsArrayLabels(labels);
 		
 		//---Exporting the concepts groups of the thesaurus
 		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(thesaurusId);
