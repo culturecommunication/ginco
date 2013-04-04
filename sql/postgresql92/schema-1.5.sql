@@ -41,4 +41,7 @@ CREATE CAST (INT4 AS TEXT) WITH FUNCTION int_to_text(INT4) AS IMPLICIT;
 
 ALTER TABLE thesaurus_version_history ADD COLUMN userid text;
 
-ALTER TABLE thesaurus ADD COLUMN archived text DEFAULT FALSE;
+ALTER TABLE thesaurus ADD COLUMN archived boolean DEFAULT FALSE;
+
+ALTER TABLE thesaurus DROP COLUMN archived;
+ALTER TABLE thesaurus ADD COLUMN archived boolean DEFAULT FALSE;

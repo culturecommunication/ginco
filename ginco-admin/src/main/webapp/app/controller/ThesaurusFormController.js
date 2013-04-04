@@ -204,6 +204,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
                 theButton.setDisabled(true);
                 theForm.restrict();
                 theForm.down('bottomFormToolBar').setArchived();
+
+                var url = "services/ui/exportservice/getMCCThesaurusExport?thesaurusId="
+                    + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
+                window.open(url);
             },
             failure: function() {
                 Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemArchiveMsg);
