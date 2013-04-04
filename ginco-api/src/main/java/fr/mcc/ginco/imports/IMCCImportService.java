@@ -34,11 +34,29 @@
  */
 package fr.mcc.ginco.imports;
 
+import java.io.File;
+
+import javax.xml.bind.JAXBException;
+
+import fr.mcc.ginco.beans.Thesaurus;
+
 
 /**
  * Service provides function to use for MCC import
  * by REST services.
  */
 public interface IMCCImportService {
+
+	/**
+	 * This method import a Thesaurus from a MCC custom format
+	 * 
+	 * @param content
+	 * @param fileName
+	 * @param tempDir
+	 * @return The imported Thesaurus
+	 * @throws JAXBException 
+	 */
+	Thesaurus importMccXmlThesaurusFile(String content, String fileName,
+			File tempDir) throws JAXBException;
 
 }

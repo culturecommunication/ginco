@@ -38,6 +38,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
+import fr.mcc.ginco.imports.IMCCImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
@@ -56,6 +57,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -76,6 +79,11 @@ public class ImportRestService {
 	@Inject
 	@Named("skosImportService")
 	private ISKOSImportService skosImportService;
+	
+	@Inject
+	@Named("mccImportService")
+	private IMCCImportService mccImportService;
+
 
 	@Inject
 	@Named("thesaurusViewConverter")
@@ -113,6 +121,40 @@ public class ImportRestService {
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				thesaurusViewConverter.convert(importedThesaurus)));
+		return serialized;
+
+	}
+	
+	/**
+	 * This method is called to import a MCC XML thesaurus.
+	 * The @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is used by an
+	 * ajax call and IE cannot display result if JSOn is returned
+	 * 
+	 * @param body
+	 * @param request
+	 * @return The imported thesaurus in JSOn string representing a ExtJsonFormLoadData
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
+	 * @throws JAXBException 
+	 */
+	@POST
+	@Path("/importMccXml")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.TEXT_HTML)
+	public String uploadMccXmlThesaurusFile(MultipartBody body,
+			@Context HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException, JAXBException {
+		Attachment file = body.getAttachment("import-file-path");
+		String content = file.getObject(String.class);
+		String fileName = file.getDataHandler().getName();
+		File tempDir = (File) servletContext
+				.getAttribute("javax.servlet.context.tempdir");
+		
+		Thesaurus thesaurus = mccImportService.importMccXmlThesaurusFile(content, fileName, tempDir);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+				thesaurusViewConverter.convert(thesaurus)));
 		return serialized;
 
 	}

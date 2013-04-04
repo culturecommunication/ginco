@@ -42,10 +42,8 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
 /**

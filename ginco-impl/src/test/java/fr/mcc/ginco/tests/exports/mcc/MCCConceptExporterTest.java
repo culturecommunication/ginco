@@ -56,7 +56,8 @@ import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
 /**
- * This component is in charge of exporting collections to SKOS
+ * This class tests the methods of MCCConceptExporter
+ * (export of thesaurus in MCC XML format)
  *
  */
 public class MCCConceptExporterTest {

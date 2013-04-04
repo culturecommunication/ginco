@@ -35,6 +35,7 @@
 package fr.mcc.ginco.exports.mcc;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +46,7 @@ import javax.xml.bind.Marshaller;
 
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
@@ -55,6 +57,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.IMCCExportService;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.exports.result.bean.MCCExportedThesaurus;
+import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -71,6 +74,10 @@ public class MCCExportServiceImpl implements IMCCExportService {
 	@Inject
 	@Named("thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;
+	
+	@Inject
+	@Named("nodeLabelService")
+	private INodeLabelService nodeLabelService;
 
 	@Inject
 	@Named("thesaurusConceptGroupService")
@@ -147,12 +154,14 @@ public class MCCExportServiceImpl implements IMCCExportService {
 				thesaurusToExport.getAssociativeRelationship().put(thesaurusConcept.getIdentifier(), associations);
 			}
 		}
-		
-		//---Exporting the concepts arrays of the thesaurus
+
+		//---Exporting the node label of all concepts (with concept nested in)
 		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurusId);
+		List<NodeLabel> labels = new ArrayList<NodeLabel>();
 		for (ThesaurusArray thesaurusArray : arrays) {
-			thesaurusToExport.getConceptsArrays().add(thesaurusArray);
+			labels.add(nodeLabelService.getByThesaurusArray(thesaurusArray.getIdentifier()));
 		}
+		thesaurusToExport.setConceptsArrayLabels(labels);
 		
 		//---Exporting the concepts groups of the thesaurus
 		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(thesaurusId);

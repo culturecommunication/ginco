@@ -43,6 +43,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
@@ -65,7 +66,7 @@ public class MCCExportedThesaurus implements Serializable {
 	
     private Thesaurus thesaurus;
     private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
-    private List<ThesaurusArray> conceptsArrays  = new ArrayList<ThesaurusArray>();
+    private List<NodeLabel> conceptsArrayLabels  = new ArrayList<NodeLabel>();
     private List<ThesaurusConceptGroup> conceptsGroups  = new ArrayList<ThesaurusConceptGroup>();
     private List<ThesaurusVersionHistory> thesaurusVersions;
     private Map<String, JaxbList<String>> hierarchicalRelationship = new Hashtable();
@@ -130,20 +131,20 @@ public class MCCExportedThesaurus implements Serializable {
 		this.conceptNotes = conceptNotes;
 	}
 
-	public List<ThesaurusArray> getConceptsArrays() {
-		return conceptsArrays;
-	}
-
-	public void setConceptsArrays(List<ThesaurusArray> conceptsArrays) {
-		this.conceptsArrays = conceptsArrays;
-	}
-
 	public List<ThesaurusConceptGroup> getConceptsGroups() {
 		return conceptsGroups;
 	}
 
 	public void setConceptsGroups(List<ThesaurusConceptGroup> conceptsGroups) {
 		this.conceptsGroups = conceptsGroups;
+	}
+
+	public List<NodeLabel> getConceptsArrayLabels() {
+		return conceptsArrayLabels;
+	}
+
+	public void setConceptsArrayLabels(List<NodeLabel> conceptsArrayLabels) {
+		this.conceptsArrayLabels = conceptsArrayLabels;
 	}
     
 }

@@ -34,12 +34,76 @@
  */
 package fr.mcc.ginco.imports.mcc;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.hp.hpl.jena.util.FileManager;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.mcc.MCCTermExporter;
+import fr.mcc.ginco.exports.result.bean.MCCExportedThesaurus;
 import fr.mcc.ginco.imports.IMCCImportService;
+import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to import a thesaurus from a XML file (custom MCC format)
  *
  */
+@Transactional
+@Service("mccImportService")
 public class MCCImportServiceImpl implements IMCCImportService {
+	
+	@Log
+	private Logger logger;
+	
+	@Inject
+	@Named("mccExportedThesaurusExtractor")
+	private MCCExportedThesaurusExtractor mccExportedThesaurusExtractor;
+	
+	@Override
+	public Thesaurus importMccXmlThesaurusFile(String content, String fileName, File tempDir) throws JAXBException{
+		URI fileURI = writeTempFile(content, fileName, tempDir);
+		InputStream in = FileManager.get().open(fileURI.toString());
+		
+		Thesaurus thesaurus = new Thesaurus();
+		MCCExportedThesaurus unmarshalledExportedThesaurus = new MCCExportedThesaurus();
+		JAXBContext context = JAXBContext.newInstance(MCCExportedThesaurus.class);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		unmarshalledExportedThesaurus = (MCCExportedThesaurus) unmarshaller.unmarshal(in);
+		return mccExportedThesaurusExtractor.storeMccExportedThesaurus(unmarshalledExportedThesaurus);
+	}
+	
+	private URI writeTempFile(String fileContent, String fileName, File tempDir)
+			throws BusinessException {
+		logger.debug("Writing temporary file for import");
+		String prefix = fileName.substring(0, fileName.lastIndexOf("."));
+		logger.debug("Filename : " + prefix);
+		File file;
+		try {
+			file = File.createTempFile(prefix, ".tmp", tempDir);
 
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write(fileContent);
+			fileWriter.close();
+		} catch (IOException e) {
+			throw new BusinessException(
+					"Error storing temporarty file for import " + prefix,
+					"import-unable-to-write-temporary-file", e);
+		}
+		return file.toURI();
+	}
 }
