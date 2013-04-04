@@ -43,7 +43,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xTopWelcomeLabel : "Hadoc GINCO Back-office",
 	xImports : "Imports",
 	xImportSkosLabel : "SKOS Import",
-	xImportMccXmlLabel : "MCC XML Import",
+	xImportGincoXmlLabel : "Hadoc GINCO XML Import",
 	xAboutLabel : "About",
 	xSearchLabel : "Search",
 	xSearchFieldText : "Search a term",
@@ -118,9 +118,9 @@ Ext.define('GincoApp.view.TopToolbar', {
 						},
 						{
 							xtype : 'keymenuitem',
-							text : me.xImportMccXmlLabel,
+							text : me.xImportGincoXmlLabel,
 							requiredRoles : ['ADMIN'],
-							itemId: 'importMccXmlBtn'
+							itemId: 'importGincoXmlBtn'
 						}]
 					}
 				} ]

@@ -139,7 +139,7 @@ public class ImportRestService {
 	 * @throws JAXBException 
 	 */
 	@POST
-	@Path("/importMccXml")
+	@Path("/importGincoXml")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
 	public String uploadMccXmlThesaurusFile(MultipartBody body,

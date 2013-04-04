@@ -207,7 +207,7 @@ public class ExportRestService {
     }
     
     @GET
-    @Path("/getMCCThesaurusExport")
+    @Path("/getGincoThesaurusExport")
     @Produces("text/plain")
     public Response getMCCThesaurusExport(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException, JAXBException {
         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);

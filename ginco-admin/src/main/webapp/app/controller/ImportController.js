@@ -51,8 +51,8 @@ Ext.define('GincoApp.controller.ImportController', {
 		
 		if (theWin.importType == 'skos') {
 			var importUrl = 'services/ui/importservice/import';
-		} else if (theWin.importType == 'mccxml') {
-			var importUrl = 'services/ui/importservice/importMccXml';
+		} else if (theWin.importType == 'gincoxml') {
+			var importUrl = 'services/ui/importservice/importGincoXml';
 		}
 		
 		if (theForm.getForm()

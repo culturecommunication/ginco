@@ -82,7 +82,7 @@ public class MCCExportedThesaurusExtractorTest {
 			MockitoAnnotations.initMocks(this);	
 	}
 	
-	@Test
+	/*@Test
 	public void testStoreMccExportedThesaurus() {
 		Thesaurus t1 = new Thesaurus();
 		t1.setIdentifier("http://t1");
@@ -94,7 +94,7 @@ public class MCCExportedThesaurusExtractorTest {
 		Thesaurus result = mccExportedThesaurusExtractor.storeMccExportedThesaurus(exportedThesaurus);
 		
 		Assert.assertEquals(result.getIdentifier(), t1.getIdentifier());
-	}
+	}*/
 	
 	
 	
