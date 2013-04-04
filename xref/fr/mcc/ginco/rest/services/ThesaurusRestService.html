@@ -218,17 +218,37 @@
 <a class="jxr_linenumber" name="208" href="#208">208</a>     @GET
 <a class="jxr_linenumber" name="209" href="#209">209</a>     @Path(<span class="jxr_string">"/publishVocabulary"</span>)
 <a class="jxr_linenumber" name="210" href="#210">210</a>     @Consumes({ MediaType.APPLICATION_JSON })
-<a class="jxr_linenumber" name="211" href="#211">211</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../fr/mcc/ginco/extjs/view/ExtJsonFormLoadData.html">ExtJsonFormLoadData</a> publishVocabulary(@QueryParam(<span class="jxr_string">"thesaurusId"</span>) String thesaurusId) <strong class="jxr_keyword">throws</strong> BusinessException {
-<a class="jxr_linenumber" name="212" href="#212">212</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> object = thesaurusService.getThesaurusById(thesaurusId);
-<a class="jxr_linenumber" name="213" href="#213">213</a> 
-<a class="jxr_linenumber" name="214" href="#214">214</a>         <strong class="jxr_keyword">if</strong> (object != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="215" href="#215">215</a>             thesaurusService.publishThesaurus(object);
-<a class="jxr_linenumber" name="216" href="#216">216</a>             thesaurusVersionHistoryService.publishThesaurus(object);
-<a class="jxr_linenumber" name="217" href="#217">217</a>         }
-<a class="jxr_linenumber" name="218" href="#218">218</a> 
-<a class="jxr_linenumber" name="219" href="#219">219</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../fr/mcc/ginco/extjs/view/ExtJsonFormLoadData.html">ExtJsonFormLoadData</a>(object);
-<a class="jxr_linenumber" name="220" href="#220">220</a>     }
-<a class="jxr_linenumber" name="221" href="#221">221</a> }
+<a class="jxr_linenumber" name="211" href="#211">211</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../fr/mcc/ginco/extjs/view/ExtJsonFormLoadData.html">ExtJsonFormLoadData</a> publishVocabulary(@QueryParam(<span class="jxr_string">"thesaurusId"</span>) String thesaurusId,
+<a class="jxr_linenumber" name="212" href="#212">212</a>                                                  @QueryParam(<span class="jxr_string">"userId"</span>) String userId)
+<a class="jxr_linenumber" name="213" href="#213">213</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
+<a class="jxr_linenumber" name="214" href="#214">214</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> object = thesaurusService.getThesaurusById(thesaurusId);
+<a class="jxr_linenumber" name="215" href="#215">215</a> 
+<a class="jxr_linenumber" name="216" href="#216">216</a>         <strong class="jxr_keyword">if</strong> (object != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="217" href="#217">217</a>             thesaurusService.publishThesaurus(object);
+<a class="jxr_linenumber" name="218" href="#218">218</a>             thesaurusVersionHistoryService.publishThesaurus(object, userId);
+<a class="jxr_linenumber" name="219" href="#219">219</a>         }
+<a class="jxr_linenumber" name="220" href="#220">220</a> 
+<a class="jxr_linenumber" name="221" href="#221">221</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../fr/mcc/ginco/extjs/view/ExtJsonFormLoadData.html">ExtJsonFormLoadData</a>(object);
+<a class="jxr_linenumber" name="222" href="#222">222</a>     }
+<a class="jxr_linenumber" name="223" href="#223">223</a> 
+<a class="jxr_linenumber" name="224" href="#224">224</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="225" href="#225">225</a> <em class="jxr_javadoccomment">     * Public method used to archive thesaurus</em>
+<a class="jxr_linenumber" name="226" href="#226">226</a> <em class="jxr_javadoccomment">     * @throws BusinessException</em>
+<a class="jxr_linenumber" name="227" href="#227">227</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="228" href="#228">228</a>     @GET
+<a class="jxr_linenumber" name="229" href="#229">229</a>     @Path(<span class="jxr_string">"/archiveVocabulary"</span>)
+<a class="jxr_linenumber" name="230" href="#230">230</a>     @Consumes({ MediaType.APPLICATION_JSON })
+<a class="jxr_linenumber" name="231" href="#231">231</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../fr/mcc/ginco/extjs/view/ExtJsonFormLoadData.html">ExtJsonFormLoadData</a> archiveVocabulary(@QueryParam(<span class="jxr_string">"thesaurusId"</span>) String thesaurusId)
+<a class="jxr_linenumber" name="232" href="#232">232</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../../../fr/mcc/ginco/exceptions/BusinessException.html">BusinessException</a> {
+<a class="jxr_linenumber" name="233" href="#233">233</a>         <a href="../../../../../fr/mcc/ginco/beans/Thesaurus.html">Thesaurus</a> object = thesaurusService.getThesaurusById(thesaurusId);
+<a class="jxr_linenumber" name="234" href="#234">234</a> 
+<a class="jxr_linenumber" name="235" href="#235">235</a>         <strong class="jxr_keyword">if</strong> (object != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="236" href="#236">236</a>             thesaurusService.archiveThesaurus(object);
+<a class="jxr_linenumber" name="237" href="#237">237</a>         }
+<a class="jxr_linenumber" name="238" href="#238">238</a> 
+<a class="jxr_linenumber" name="239" href="#239">239</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../fr/mcc/ginco/extjs/view/ExtJsonFormLoadData.html">ExtJsonFormLoadData</a>(object);
+<a class="jxr_linenumber" name="240" href="#240">240</a>     }
+<a class="jxr_linenumber" name="241" href="#241">241</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
