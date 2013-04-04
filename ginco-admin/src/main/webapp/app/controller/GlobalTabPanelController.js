@@ -189,6 +189,8 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
 			component.restrictUI('ADMIN');
 		}
+		var closeBtn = tabPanel.down("#closeAllTabs");
+		closeBtn.setVisible(true);
 	},
 	openConceptTab : function(tabPanel, aThesaurusId, aConceptId)
 	{
@@ -314,6 +316,19 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			this.onTabAdded(topTabs,topTabs.getActiveTab());
 		}
 	},
+	onTabRemoved: function(theTabPanel) 
+	{
+		if (theTabPanel.items.length==0)
+		{
+			var closeBtn = theTabPanel.down("#closeAllTabs");
+			closeBtn.setVisible(false);
+		}
+	},
+	onCloseAllTabs: function()
+	{
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.items.each(function(c){c.close();});
+	},
 	init : function(application) {
 		this.application.on({
 			userinfoloaded: this.onUserInfoLoaded,
@@ -335,8 +350,12 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			'conceptGroupPanel' : {
 				beforeclose : this.onPanelBeforeClose
 			},
+			'#closeAllTabs' : {
+				click : this.onCloseAllTabs
+			},
 			'topTabs' :  {
 				add : this.onTabAdded,
+				remove: this.onTabRemoved,
 				tabchange : this.onTabChange,
 				afterrender: this.onTabsAfterRender,
 				openconcepttab : this.openConceptTab,
