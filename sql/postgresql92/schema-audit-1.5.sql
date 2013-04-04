@@ -1,6 +1,17 @@
+TRUNCATE TABLE thesaurus_term_aud,
+thesaurus_aud,
+thesaurus_concept_aud,
+thesaurus_languages_aud,
+thesaurus_thesaurusterm_aud,
+thesaurus_thesaurusversionhistory_aud,
+hierarchical_relationship_aud,
+top_relationship_aud,
+associative_relationship_aud,
+revinfo,
+revinfoentitytypes;
+
 --ALTER TABLE thesaurus_term_aud DROP COLUMN hidden;
 ALTER TABLE thesaurus_term_aud ADD COLUMN hidden boolean DEFAULT false;
-
 
 ALTER TABLE thesaurus_aud ADD COLUMN archived boolean;
 ALTER TABLE revinfo ADD COLUMN thesaurusid text; 
