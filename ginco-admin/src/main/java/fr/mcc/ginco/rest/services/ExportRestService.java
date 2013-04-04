@@ -37,7 +37,7 @@ package fr.mcc.ginco.rest.services;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.IExportService;
-import fr.mcc.ginco.exports.IMCCExportService;
+import fr.mcc.ginco.exports.IGincoExportService;
 import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -79,8 +79,8 @@ public class ExportRestService {
     private ISKOSExportService skosExportService;
 
     @Inject
-    @Named("mccExportService")
-    private IMCCExportService mccExportService;
+    @Named("gincoExportService")
+    private IGincoExportService gincoExportService;
 
     private static final String TABULATION_DELIMITER = "\t";
 
@@ -209,13 +209,13 @@ public class ExportRestService {
     @GET
     @Path("/getGincoThesaurusExport")
     @Produces("text/plain")
-    public Response getMCCThesaurusExport(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException, JAXBException {
+    public Response getGincoThesaurusExport(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException, JAXBException {
         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
-        String result = mccExportService.getThesaurusExport(targetThesaurus);
+        String result = gincoExportService.getThesaurusExport(targetThesaurus);
 
         Response.ResponseBuilder response = Response.ok(result);
         response.header("Content-Disposition",
-                "attachment; filename=\"MCC "
+                "attachment; filename=\"GINCO "
                         + targetThesaurus.getTitle()
                         + " "
                         + DateUtil.toString(DateUtil.nowDate())
