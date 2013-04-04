@@ -32,44 +32,32 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.tests.audit;
 
-import java.util.List;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import junit.framework.Assert;
 
-/**
- * Data Access Object for thesaurus_version_history
- */
-public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersionHistory, String> {
+import org.junit.Test;
+
+import fr.mcc.ginco.audit.csv.AuditCSVWriter;
+
+public class AuditCSVWriterTest {
+
+	private AuditCSVWriter auditCSVWriter = new AuditCSVWriter();
 	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
-	 * @param String thesaurusId
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
-	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} with column thisVersion = true for the thesaurus which id is given in parameter, excepted one version which id is specified in parameter
-	 * @param String thesaurusId
-	 * @param String excludedVersion
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
-	
-	/**
-	 * This method get the version which have the flag thisVersion to true for the thesaurus which id is given in parameter
-	 * @param thesaurusId
-	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
-	 */
-	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
-	
-	/**
-	 * 	This method get last version with the published status for the thesaurus which id is given in parameter
-     * @param thesaurusId
-	 * @return
-	 */
-	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
-			String thesaurusId);
+	@Test
+	public void testWriteHeader() throws IOException {
+		StringWriter sw = new StringWriter();
+		BufferedWriter out = new BufferedWriter(sw);
+		
+		auditCSVWriter.writeHeader(out);
+		out.flush();
+		out.close();
+		
+		Assert.assertEquals(true, sw.toString().startsWith("log-journal.headers.event-type,log-journal.headers.date,log-journal.headers.author,log-journal.headers.conceptId,log-journal.headers.termId,log-journal.headers.role,log-journal.headers.status,log-journal.headers.oldlexicalvalue,log-journal.headers.newlexicalvalue,log-journal.headers.oldParent,log-journal.headers.newparent"));
+		
+	}	
 }

@@ -32,44 +32,42 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.tests.daos;
 
-import java.util.List;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.dao.hibernate.ThesaurusVersionHistoryDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.tests.BaseDAOTest;
 
-/**
- * Data Access Object for thesaurus_version_history
- */
-public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersionHistory, String> {
+public class ThesaurusVersionHistoryDAOTest extends BaseDAOTest {
 	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
-	 * @param String thesaurusId
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
-	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} with column thisVersion = true for the thesaurus which id is given in parameter, excepted one version which id is specified in parameter
-	 * @param String thesaurusId
-	 * @param String excludedVersion
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
-	
-	/**
-	 * This method get the version which have the flag thisVersion to true for the thesaurus which id is given in parameter
-	 * @param thesaurusId
-	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
-	 */
-	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
-	
-	/**
-	 * 	This method get last version with the published status for the thesaurus which id is given in parameter
-     * @param thesaurusId
-	 * @return
-	 */
-	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
-			String thesaurusId);
+    private ThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO; ;     
+    @Before
+	public void handleSetUpOperation() throws Exception {
+		super.handleSetUpOperation();
+		thesaurusVersionHistoryDAO = new ThesaurusVersionHistoryDAO();		
+		thesaurusVersionHistoryDAO.setSessionFactory(getSessionFactory());
+	}
+    
+    @Test
+    public final void testGetLastPublishedVersionByThesaurusId() throws BusinessException {
+    	String thesaurusId1 = "thesaurus1";
+    	ThesaurusVersionHistory versionHistory1 = thesaurusVersionHistoryDAO.getLastPublishedVersionByThesaurusId(thesaurusId1);
+    	
+		Assert.assertEquals("history2th1", versionHistory1.getIdentifier());
+		
+		
+		String thesaurusId2 = "thesaurus2";
+    	ThesaurusVersionHistory versionHistory2 = thesaurusVersionHistoryDAO.getLastPublishedVersionByThesaurusId(thesaurusId2);
+		Assert.assertNull(versionHistory2);
+    }
+     
+	@Override
+	public String  getXmlDataFileInit() {
+		return "/thesaurusversionhistory_init.xml";		
+	}
 }

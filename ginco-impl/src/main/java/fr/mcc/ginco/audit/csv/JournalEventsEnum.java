@@ -32,44 +32,57 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.audit.csv;
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.utils.LabelUtil;
 
 /**
- * Data Access Object for thesaurus_version_history
+ * Listing of all exported events history types
+ *
  */
-public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersionHistory, String> {
-	
+public enum JournalEventsEnum {
 	/**
-	 * This method gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
-	 * @param String thesaurusId
-	 * @return A list of {@ThesaurusVersionHistory}
+	 * Thesaurus object created
 	 */
-	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
-	
+	THESAURUS_CREATED("log-journal.thesaurus-created-event"),
 	/**
-	 * This method gets all {@ThesaurusVersionHistory} with column thisVersion = true for the thesaurus which id is given in parameter, excepted one version which id is specified in parameter
-	 * @param String thesaurusId
-	 * @param String excludedVersion
-	 * @return A list of {@ThesaurusVersionHistory}
+	 * ThesaurusTerm created
 	 */
-	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
-	
+	THESAURUSTERM_CREATED("log-journal.thesaurus-term-created-event"),
 	/**
-	 * This method get the version which have the flag thisVersion to true for the thesaurus which id is given in parameter
-	 * @param thesaurusId
-	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
+	 * ThesaurusConcept created
 	 */
-	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
-	
+	THESAURUSCONCEPT_CREATED("log-journal.thesaurus-concept-created-event"),
 	/**
-	 * 	This method get last version with the published status for the thesaurus which id is given in parameter
-     * @param thesaurusId
-	 * @return
+	 * Role(prefered/not prefered) of a ThesaurusTerm updated
 	 */
-	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
-			String thesaurusId);
+	THESAURUSTERM_ROLE_UPDATE("log-journal.thesaurus-term-role-updated-event"),
+	/**
+	 * Lexical value of a ThesaurusTerm updated
+	 */
+	THESAURUSTERM_LEXICAL_VALUE_UPDATE("log-journal.thesaurus-term-lexical-value-updated-event"),
+	/**
+	 * ThesaurusTerm linked to a concept
+	 */
+	THESAURUSTERM_LINKED_TO_CONCEPT("log-journal.thesaurus-term-linked-to-concept-event"),
+	/**
+	 * Update of a ThesaurusConcept parent
+	 */
+	THESAURUSCONCEPT_HIERARCHY_UPDATE("log-journal.thesaurus-concept-hierarchy-update-event"),
+	/**
+	 * Update of a ThesaurusConcept status
+	 */
+	THESAURUSCONCEPT_STATUS_UPDATE("log-journal.thesaurus-concept-status-update-event");
+
+    
+    private String labelKey;
+    
+    private JournalEventsEnum(String labelKey) {
+    	this.labelKey = labelKey;
+    }
+
+	public String toString() {
+		return LabelUtil.getResourceLabel(labelKey);
+		
+	}
 }

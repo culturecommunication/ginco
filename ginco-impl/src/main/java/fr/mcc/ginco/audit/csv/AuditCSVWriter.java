@@ -32,44 +32,49 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.audit.csv;
 
-import java.util.List;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
-/**
- * Data Access Object for thesaurus_version_history
- */
-public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersionHistory, String> {
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.LabelUtil;
+
+@Service("auditCSVWriter")
+public class AuditCSVWriter {
+
+	private static final String COMMA = ",";
 	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
-	 * @param String thesaurusId
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
+	@Log
+	private Logger logger;
 	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} with column thisVersion = true for the thesaurus which id is given in parameter, excepted one version which id is specified in parameter
-	 * @param String thesaurusId
-	 * @param String excludedVersion
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
+	public void writeJournalLine(JournalLine line, BufferedWriter out) throws IOException {
+		logger.debug(line.toString());
+		out.write(line.toString());
+		out.newLine();
+	}
 	
-	/**
-	 * This method get the version which have the flag thisVersion to true for the thesaurus which id is given in parameter
-	 * @param thesaurusId
-	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
-	 */
-	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
+	public void writeHeader(BufferedWriter out) throws IOException {
+		String header = new String();
+		header += LabelUtil.getResourceLabel("log-journal.headers.event-type") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.date") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.author") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.conceptId") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.termId") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.role") + COMMA;
+
+		header += LabelUtil.getResourceLabel("log-journal.headers.status") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.oldlexicalvalue") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.newlexicalvalue") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.oldParent") + COMMA;
+		header += LabelUtil.getResourceLabel("log-journal.headers.newparent");
+		
+		out.write(header);
+		out.newLine();		
+	}
+
 	
-	/**
-	 * 	This method get last version with the published status for the thesaurus which id is given in parameter
-     * @param thesaurusId
-	 * @return
-	 */
-	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
-			String thesaurusId);
 }

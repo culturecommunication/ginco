@@ -34,9 +34,6 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;

@@ -32,14 +32,18 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.audit;
+package fr.mcc.ginco.audit.tracking;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.SessionFactory;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.EntityTrackingRevisionListener;
 import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -50,6 +54,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import fr.mcc.ginco.audit.readers.AuditQueryBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
 import fr.mcc.ginco.beans.IAuditableBean;
@@ -59,12 +64,12 @@ import fr.mcc.ginco.dao.hibernate.GenericHibernateDAO;
  * Takes control on audit.
  */
 @Component
-public class GincoRevListener implements EntityTrackingRevisionListener, ApplicationContextAware {
+public class GincoRevListener implements EntityTrackingRevisionListener,
+		ApplicationContextAware {
 
 	private Logger logger = LoggerFactory.getLogger(GincoRevListener.class);
 	private static ApplicationContext applicationContext;
 
-	
 	@Override
 	public void entityChanged(Class entityClass, String entityName,
 			Serializable entityId, RevisionType revisionType,
@@ -72,16 +77,42 @@ public class GincoRevListener implements EntityTrackingRevisionListener, Applica
 		GincoRevModifiedEntityType revEntity = new GincoRevModifiedEntityType();
 		revEntity.setEntityClassName(entityClass.getName());
 		revEntity.setRevision(((GincoRevEntity) revisionEntity).getId());
-		((GincoRevEntity) revisionEntity).addModifiedEntityType(revEntity);		
-		if (ArrayUtils.contains(entityClass.getGenericInterfaces(), IAuditableBean.class)) {	
-			GenericHibernateDAO objectDAO = new GenericHibernateDAO(entityClass);
-			objectDAO.setSessionFactory((SessionFactory)applicationContext.getBean("gincoSessionFactory"));
-			String thesaurusId =((IAuditableBean) objectDAO.getById(entityId)).getThesaurusId();
-			((GincoRevEntity) revisionEntity).setThesaurusId(thesaurusId);
+		((GincoRevEntity) revisionEntity).addModifiedEntityType(revEntity);
+		if (ArrayUtils.contains(entityClass.getGenericInterfaces(),
+				IAuditableBean.class)) {
+			if (!revisionType.equals(RevisionType.DEL)) {
+				GenericHibernateDAO objectDAO = new GenericHibernateDAO(
+						entityClass);
+				objectDAO.setSessionFactory((SessionFactory) applicationContext
+						.getBean("gincoSessionFactory"));
+				String thesaurusId = ((IAuditableBean) objectDAO
+						.getById(entityId)).getThesaurusId();
+				((GincoRevEntity) revisionEntity).setThesaurusId(thesaurusId);
+			} else {
+				SessionFactory sessionFactory = (SessionFactory) applicationContext
+						.getBean("gincoSessionFactory");
+				AuditReader reader = AuditReaderFactory.get(sessionFactory
+						.getCurrentSession());
+
+				AuditQueryBuilder queryBuilder = new AuditQueryBuilder();
+				AuditQuery query;
+				try {
+					query = queryBuilder.getEntityAddedQuery(reader,
+							Class.forName(entityName), entityId);
+
+					Object[] createdEvent = (Object[]) query.getSingleResult();
+					if (createdEvent != null) {
+						((GincoRevEntity) revisionEntity)
+								.setThesaurusId(((GincoRevEntity) createdEvent[1])
+										.getThesaurusId());
+					}
+				} catch (ClassNotFoundException e) {
+					logger.error("Error storing audit data", e);
+				}
+			}
 		} else {
 			logger.warn("Trying to audit a bean not implementing IAuditableBean interface");
 		}
-		
 
 	}
 
@@ -90,16 +121,17 @@ public class GincoRevListener implements EntityTrackingRevisionListener, Applica
 		GincoRevEntity gincoRevEntity = (GincoRevEntity) revisionEntity;
 		if (RequestContextHolder.getRequestAttributes() == null) {
 			logger.error("The RequestContext is empty!!!!!");
-		} else {			
+		} else {
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
-			String name = auth.getName(); 
+			String name = auth.getName();
 			gincoRevEntity.setUsername(name);
 		}
 	}
 
 	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	public void setApplicationContext(ApplicationContext applicationContext)
+			throws BeansException {
 		this.applicationContext = applicationContext;
 	}
 }

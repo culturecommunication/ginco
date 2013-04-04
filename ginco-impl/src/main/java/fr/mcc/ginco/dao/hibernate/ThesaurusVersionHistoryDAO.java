@@ -41,17 +41,19 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
+import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
 
 /**
- * Implementation of the data access object to the thesaurus_version_history database table
- *
+ * Implementation of the data access object to the thesaurus_version_history
+ * database table
+ * 
  */
 @Repository("thesaurusVersionHistoryDAO")
 public class ThesaurusVersionHistoryDAO extends
-		GenericHibernateDAO<ThesaurusVersionHistory, String> implements IThesaurusVersionHistoryDAO {	
+		GenericHibernateDAO<ThesaurusVersionHistory, String> implements
+		IThesaurusVersionHistoryDAO {
 
 	public ThesaurusVersionHistoryDAO() {
 		super(ThesaurusVersionHistory.class);
@@ -66,7 +68,7 @@ public class ThesaurusVersionHistoryDAO extends
 		descOrderBy(criteria, "date");
 		return criteria.list();
 	}
-	
+
 	@Override
 	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(
 			String thesaurusId, String excludedVersionId) {
@@ -79,33 +81,53 @@ public class ThesaurusVersionHistoryDAO extends
 	}
 
 	@Override
-	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId) {
+	public ThesaurusVersionHistory findThisVersionByThesaurusId(
+			String thesaurusId) {
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusVersionHistory.class, "tv");
 		selectThesaurus(criteria, thesaurusId);
 		isThisVersion(criteria, true);
-		
-		List<ThesaurusVersionHistory>foundVersions = criteria.list();
-		if (foundVersions.size()>0) {
+
+		List<ThesaurusVersionHistory> foundVersions = criteria.list();
+		if (foundVersions.size() > 0) {
+			return (ThesaurusVersionHistory) criteria.list().get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
+			String thesaurusId) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusVersionHistory.class, "tv");
+		selectThesaurus(criteria, thesaurusId);
+		criteria.add(Restrictions.eq("tv.status",
+				ThesaurusVersionStatusEnum.PUBLISHED.getStatus()));
+		criteria.addOrder(Order.desc("tv.date"));
+
+		List<ThesaurusVersionHistory> foundVersions = criteria.list();
+		if (foundVersions.size() > 0) {
 			return (ThesaurusVersionHistory) criteria.list().get(0);
 		}
 		return null;
 	}
 
 	private void selectThesaurus(Criteria criteria, String thesaurusId) {
-        criteria.add(Restrictions.eq("tv.thesaurus.identifier", (String)thesaurusId));
-    }
-	
+		criteria.add(Restrictions.eq("tv.thesaurus.identifier",
+				(String) thesaurusId));
+	}
+
 	private void excludeAVersion(Criteria criteria, String excludedVersionId) {
-        criteria.add(Restrictions.ne("tv.identifier", (String)excludedVersionId));
-    }
-	
+		criteria.add(Restrictions.ne("tv.identifier",
+				(String) excludedVersionId));
+	}
+
 	private void isThisVersion(Criteria criteria, Boolean isThisVersion) {
-        criteria.add(Restrictions.eq("tv.thisVersion", isThisVersion));
-    }
-	
+		criteria.add(Restrictions.eq("tv.thisVersion", isThisVersion));
+	}
+
 	private void descOrderBy(Criteria criteria, String sortColumn) {
-        criteria.addOrder(Order.desc(sortColumn));
-    }
+		criteria.addOrder(Order.desc(sortColumn));
+	}
 
 }

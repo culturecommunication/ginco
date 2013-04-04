@@ -50,7 +50,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
  * Bean represents <b>thesaurus_concept</b> table, is container for
  * {@link ThesaurusTerm}.
  */
-@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag=true)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusConcept implements Serializable, IAuditableBean {
 	private String identifier;

@@ -32,44 +32,21 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.audit.csv;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.beans.GincoRevEntity;
 
-/**
- * Data Access Object for thesaurus_version_history
- */
-public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersionHistory, String> {
-	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
-	 * @param String thesaurusId
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
-	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} with column thisVersion = true for the thesaurus which id is given in parameter, excepted one version which id is specified in parameter
-	 * @param String thesaurusId
-	 * @param String excludedVersion
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
-	
-	/**
-	 * This method get the version which have the flag thisVersion to true for the thesaurus which id is given in parameter
-	 * @param thesaurusId
-	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
-	 */
-	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
-	
-	/**
-	 * 	This method get last version with the published status for the thesaurus which id is given in parameter
-     * @param thesaurusId
-	 * @return
-	 */
-	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
-			String thesaurusId);
+@Service("journalLineBuilder")
+public class JournalLineBuilder {
+	public JournalLine buildLineBase(JournalEventsEnum event,
+			GincoRevEntity gincoRevEntity) {
+		JournalLine journal = new JournalLine();
+		journal.setEventType(event);
+		journal.setEventDate(gincoRevEntity.getRevisionDate());
+		journal.setAuthorId(gincoRevEntity.getUsername());
+		return journal;
+	}
+
 }

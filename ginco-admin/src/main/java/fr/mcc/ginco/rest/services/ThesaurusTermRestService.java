@@ -45,6 +45,8 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.EncodedControl;
+import fr.mcc.ginco.utils.LabelUtil;
+
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -201,8 +203,7 @@ public class ThesaurusTermRestService {
 
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		try {
-			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
-			String availableStatusIds[] = res.getString("term-status").split(",");
+			String availableStatusIds[] = LabelUtil.getResourceLabel("term-status").split(",");
 			
 			if ("".equals(availableStatusIds[0])) {
 				//Ids of status for terms are not set correctly
@@ -213,7 +214,7 @@ public class ThesaurusTermRestService {
 	        	GenericStatusView termStatusView = new GenericStatusView();
 	        	termStatusView.setStatus(Integer.valueOf(id));
 	        	
-	        	String label = res.getString("term-status["+ id +"]");
+	        	String label = LabelUtil.getResourceLabel("term-status["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly
 	        		throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");

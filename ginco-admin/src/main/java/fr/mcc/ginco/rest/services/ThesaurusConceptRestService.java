@@ -50,6 +50,8 @@ import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.EncodedControl;
+import fr.mcc.ginco.utils.LabelUtil;
+
 import org.apache.cxf.jaxrs.ext.Nullable;
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
@@ -298,8 +300,7 @@ public class ThesaurusConceptRestService {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		
 		try {
-			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
-			String availableStatusIds[] = res.getString("concept-status").split(",");
+			String availableStatusIds[] = LabelUtil.getResourceLabel("concept-status").split(",");
 			
 			if ("".equals(availableStatusIds[0])) {
 				//Ids of status for concepts are not set correctly
@@ -310,7 +311,7 @@ public class ThesaurusConceptRestService {
 	        	GenericStatusView conceptStatusView = new GenericStatusView();
 	        	conceptStatusView.setStatus(Integer.valueOf(id));
 	        	
-	        	String label = res.getString("concept-status["+ id +"]");
+	        	String label = LabelUtil.getResourceLabel("concept-status["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly
 	        		throw new BusinessException("Error with property file - check values of identifier concept status", "check-values-of-concept-status");

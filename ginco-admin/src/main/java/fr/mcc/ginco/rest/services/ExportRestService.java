@@ -34,17 +34,12 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.IExportService;
-import fr.mcc.ginco.exports.IMCCExportService;
-import fr.mcc.ginco.exports.ISKOSExportService;
-import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.EncodedControl;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -54,12 +49,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-import java.util.ResourceBundle;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.IExportService;
+import fr.mcc.ginco.exports.IMCCExportService;
+import fr.mcc.ginco.exports.ISKOSExportService;
+import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * REST service to get exported objects.
@@ -162,8 +164,6 @@ public class ExportRestService {
 
     private File writeExportFile(Thesaurus targetThesaurus, boolean alphabetical) throws BusinessException{
 
-        ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
-
         File temp;
         BufferedWriter out = null;
         try {
@@ -172,9 +172,9 @@ public class ExportRestService {
             out = new BufferedWriter(new FileWriter(temp));
 
             if(alphabetical) {
-                out.write(res.getString("export-alphabetical").concat(" "));
+                out.write(LabelUtil.getResourceLabel("export-alphabetical").concat(" "));
             } else {
-                out.write(res.getString("export-hierarchical").concat(" "));
+                out.write(LabelUtil.getResourceLabel("export-hierarchical").concat(" "));
             }
             out.write(targetThesaurus.getTitle());
             out.newLine();

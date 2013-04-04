@@ -60,6 +60,7 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusVersionHistoryView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusVersionHistoryViewConverter;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 import fr.mcc.ginco.utils.EncodedControl;
+import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Thesaurus Version REST service for all operation on thesauruses versions
@@ -110,8 +111,7 @@ public class ThesaurusVersionRestService {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		
 		try {
-			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
-			String availableStatusIds[] = res.getString("version-status").split(",");
+			String availableStatusIds[] = LabelUtil.getResourceLabel("version-status").split(",");
 			
 			if ("".equals(availableStatusIds[0])) {
 				//Ids of status for concepts are not set correctly
@@ -122,7 +122,7 @@ public class ThesaurusVersionRestService {
 	        	GenericStatusView versionStatusView = new GenericStatusView();
 	        	versionStatusView.setStatus(Integer.valueOf(id));
 	        	
-	        	String label = res.getString("version-status["+ id +"]");
+	        	String label = LabelUtil.getResourceLabel("version-status["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly
 	        		throw new BusinessException("Error with property file - check values of identifier version status", "check-values-of-version-status");

@@ -32,44 +32,54 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.audit.readers;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-/**
- * Data Access Object for thesaurus_version_history
- */
-public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersionHistory, String> {
-	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} for the thesaurus which id is given in parameter
-	 * @param String thesaurusId
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
-	
-	/**
-	 * This method gets all {@ThesaurusVersionHistory} with column thisVersion = true for the thesaurus which id is given in parameter, excepted one version which id is specified in parameter
-	 * @param String thesaurusId
-	 * @param String excludedVersion
-	 * @return A list of {@ThesaurusVersionHistory}
-	 */
-	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
-	
-	/**
-	 * This method get the version which have the flag thisVersion to true for the thesaurus which id is given in parameter
-	 * @param thesaurusId
-	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
-	 */
-	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
-	
-	/**
-	 * 	This method get last version with the published status for the thesaurus which id is given in parameter
-     * @param thesaurusId
-	 * @return
-	 */
-	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
-			String thesaurusId);
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.query.AuditQuery;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.audit.csv.JournalEventsEnum;
+import fr.mcc.ginco.audit.csv.JournalLine;
+import fr.mcc.ginco.audit.csv.JournalLineBuilder;
+import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+
+@Service("thesaurusAuditReader")
+public class ThesaurusAuditReader {
+
+	@Inject
+	@Named("auditQueryBuilder")
+	private AuditQueryBuilder auditQueryBuilder;
+
+	@Inject
+	@Named("journalLineBuilder")
+	private JournalLineBuilder journalLineBuilder;
+
+	public List<JournalLine> getThesaurusAdded(AuditReader reader,
+			Thesaurus thesaurus, Date startDate) {
+
+		List<JournalLine> allEvents = new ArrayList<JournalLine>();
+
+		AuditQuery thesaurusQuery = auditQueryBuilder.getEntityAddedQuery(
+				reader, thesaurus, startDate, Thesaurus.class);
+		List<Object[]> allAddedThesaurusRevisions = thesaurusQuery
+				.getResultList();
+
+		for (Object[] revisionData : allAddedThesaurusRevisions) {
+			JournalLine journal = journalLineBuilder.buildLineBase(
+					JournalEventsEnum.THESAURUS_CREATED,
+					(GincoRevEntity) revisionData[1]);
+			allEvents.add(journal);
+		}
+		return allEvents;
+	}
+
 }

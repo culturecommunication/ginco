@@ -69,6 +69,7 @@ CREATE TABLE thesaurus_version_history
   thesaurus_identifier text NOT NULL,
   thisversion boolean NOT NULL DEFAULT false,
   status integer NOT NULL DEFAULT 0,
+  userid text,
   CONSTRAINT pk_thesaurus_version_history PRIMARY KEY (identifier)
 );
 

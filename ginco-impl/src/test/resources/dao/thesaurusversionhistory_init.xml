@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <table name="thesaurus">
+        <column>identifier</column>       
+        <column>title</column> 
+         <column>created</column>    
+        <row>
+            <value>thesaurus1</value>       
+            <value>Thesaurus 1</value>
+            <value>2013-01-04 15:29:59.66325</value>
+        </row>
+        <row>
+            <value>thesaurus2</value>       
+            <value>Thesaurus 2</value> 
+            <value>2012-01-04 15:29:59.66325</value>                      
+        </row>
+    </table>
+    <table name="thesaurus_version_history">
+        <column>identifier</column>       
+        <column>date</column>   
+        <column>versionnote</column>     
+        <column>thesaurus_identifier</column>     
+        <column>thisversion</column>
+        <column>status</column>    
+        <row>
+            <value>history1th1</value>       
+            <value>2013-02-04 15:29:59.66325</value>      
+            <value>note 1 Thésaurus 1 Validé</value>     
+            <value>thesaurus1</value>       
+            <value>false</value>       
+            <value>1</value>
+        </row>     
+        <row>
+            <value>history2th1</value>       
+            <value>2013-06-04 15:29:59.66325</value>      
+            <value>note 2 Thésaurus 1 publié</value>     
+            <value>thesaurus1</value>       
+            <value>false</value>       
+            <value>2</value>
+        </row>     
+        <row>
+            <value>history3th1</value>       
+            <value>2013-02-05 15:29:59.66325</value>      
+            <value>note 3 Thésaurus 1 publié</value>     
+            <value>thesaurus1</value>       
+            <value>false</value>       
+            <value>2</value>
+        </row> 
+        <row>
+            <value>history1th2</value>       
+            <value>2013-02-05 15:29:59.66325</value>      
+            <value>note 3 Thésaurus 2 project</value>     
+            <value>thesaurus2</value>       
+            <value>false</value>       
+            <value>0</value>
+        </row> 
+   
+    </table>
+</dataset>

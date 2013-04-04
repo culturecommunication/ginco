@@ -34,9 +34,13 @@
  */
 package fr.mcc.ginco.utils;
 
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 
 /**
  * utility class to get objects labels
@@ -44,6 +48,8 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
  */
 public final class LabelUtil {
 
+	private static Logger logger = LoggerFactory.getLogger(LabelUtil.class);
+	
 	private static final String LANGUAGE_SEPARATOR = "@";
 
 	private LabelUtil() {
@@ -68,5 +74,19 @@ public final class LabelUtil {
 		}
 		return resultLabel;
 	}
+	
+	public static final String getResourceLabel(String key) {
+		try{  
+			ResourceBundle res = ResourceBundle.getBundle("labels",
+				new EncodedControl("UTF-8"));
+			return res.getString(key);
+		} catch (MissingResourceException me) {
+			logger.warn("Unable to find ResourceBUndle", me);
+			return key;
+		}
+		
+
+	}
+
 
 }
