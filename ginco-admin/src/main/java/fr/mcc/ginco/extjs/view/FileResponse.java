@@ -32,63 +32,34 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
+package fr.mcc.ginco.extjs.view;
 
 import java.io.File;
-import java.io.IOException;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.FileResponse;
-import fr.mcc.ginco.services.IGincoRevService;
-import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
 
 /**
- * REST service to get edit the log journal.
+ * Class for JSON representation of a data object for extjs.
  */
-@Service
-@Path("/journalservice")
-@PreAuthorize("isAuthenticated()")
-public class JournalRestService {
+public class FileResponse {
+	private File file;
+	private String extension;
+	private String title;
 
-	@Inject
-	@Named("gincoRevService")
-	private IGincoRevService gincoRevService;
+	public FileResponse(File file, String extension, String title) {
+		this.file = file;
+		this.extension = extension;
+		this.title = title;
+	}
 
-	@Inject
-	@Named("thesaurusService")
-	private IThesaurusService thesaurusService;
+	public Response toResponse() {
+		Response.ResponseBuilder response = Response.ok(file);
+		response.header("Content-Disposition", "attachment; filename=\""
+				+ title + " " + DateUtil.toString(DateUtil.nowDate())
+				+ extension + "\"");
 
-	/**
-	 * Return file in .txt format; name begins with current DateTime.
-	 * 
-	 * @param thesaurusId
-	 * @return
-	 * @throws BusinessException
-	 * @throws IOException
-	 */
-	@GET
-	@Path("/exportLogJournal")
-	@Produces("text/plain")
-	public Response exportLogJournal(
-			@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException, IOException {
-		Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
-
-		File resFile = gincoRevService.getLogJournal(thesaurus);		
-
-		return new FileResponse(resFile,".csv", thesaurus.getTitle()).toResponse();
+		return response.build();
 	}
 }

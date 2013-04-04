@@ -59,6 +59,7 @@ import fr.mcc.ginco.exports.IExportService;
 import fr.mcc.ginco.exports.IMCCExportService;
 import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.extjs.view.FileResponse;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
@@ -105,16 +106,8 @@ public class ExportRestService {
 
         File result = writeExportFile(targetThesaurus, false);
 
-        Response.ResponseBuilder response = Response.ok(result);
-        response.header("Content-Disposition",
-                "attachment; filename=\""
-                        + targetThesaurus.getTitle()
-                        + " "
-                        + DateUtil.toString(DateUtil.nowDate())
-                        + ".txt"
-                        + "\"");
-
-        return response.build();
+        
+		return new FileResponse(result,".txt", targetThesaurus.getTitle()).toResponse();
     }
 
 
@@ -124,16 +117,8 @@ public class ExportRestService {
     public Response getSKOS(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
         File results = skosExportService.getSKOSExport(targetThesaurus);
-
-        Response.ResponseBuilder response = Response.ok(results);
-        response.header("Content-Disposition",
-                "attachment; filename=\"SKOS "
-                        + targetThesaurus.getTitle()
-                        + " "
-                        + DateUtil.toString(DateUtil.nowDate())
-                        + ".rdf"
-                        + "\"");
-        return response.build();
+       
+		return new FileResponse(results,".rdf", targetThesaurus.getTitle()).toResponse();
     }
 
     /**
@@ -148,18 +133,9 @@ public class ExportRestService {
     public Response getAlphabetical(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
         Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
 
-        File result = writeExportFile(targetThesaurus, true);
+        File result = writeExportFile(targetThesaurus, true);     
 
-        Response.ResponseBuilder response = Response.ok(result);
-        response.header("Content-Disposition",
-                "attachment; filename=\""
-                        + targetThesaurus.getTitle()
-                        + " "
-                        + DateUtil.toString(DateUtil.nowDate())
-                        + ".txt"
-                        + "\"");
-
-        return response.build();
+		return new FileResponse(result,".txt", targetThesaurus.getTitle()).toResponse();
     }
 
     private File writeExportFile(Thesaurus targetThesaurus, boolean alphabetical) throws BusinessException{
@@ -220,7 +196,8 @@ public class ExportRestService {
                         + " "
                         + DateUtil.toString(DateUtil.nowDate())
                         + ".xml"
-                        + "\"");
+                        + "\"");     
+        
         return response.build();
     }
 }
