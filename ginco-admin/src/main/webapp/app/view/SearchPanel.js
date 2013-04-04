@@ -80,12 +80,12 @@ Ext.define('GincoApp.view.SearchPanel', {
 				{
 					dataIndex : 'thesaurusTitle',
 					text : me.xThesaurusTitleColumnLabel,
-					width :200,
+					width :200
 				},
 				{
 					dataIndex : 'type',
 					text : me.xTypeValueColumnLabel,
-					width :200,
+					width :200
 				} ]
 			} ]
 		});
