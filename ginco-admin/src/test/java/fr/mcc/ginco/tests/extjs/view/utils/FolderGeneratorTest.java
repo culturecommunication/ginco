@@ -44,10 +44,14 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
@@ -60,6 +64,9 @@ public class FolderGeneratorTest {
 
 	@Mock(name = "thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;	
+	
+    @Mock(name = "thesaurusListNodeFactory")
+    private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	@InjectMocks
 	private FolderGenerator folderGenerator = new FolderGenerator();
@@ -79,6 +86,16 @@ public class FolderGeneratorTest {
 				thesaurusConceptService
 						.getOrphanThesaurusConceptsCount(Matchers.anyString()))
 				.thenReturn((long) 0);
+		
+        Mockito.when(
+        		thesaurusListNodeFactory.getListBasicNode())
+                .thenAnswer(new Answer<ThesaurusListBasicNode>() {
+                		public ThesaurusListBasicNode answer(
+							InvocationOnMock invocation) throws Throwable {
+						return new ThesaurusListBasicNode();
+					}
+                   });
+		
 		Mockito.when(
 				thesaurusConceptService
 						.getTopTermThesaurusConceptsCount(Matchers.anyString()))

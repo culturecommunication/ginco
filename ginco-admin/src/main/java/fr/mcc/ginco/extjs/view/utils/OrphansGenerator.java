@@ -49,6 +49,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
@@ -61,6 +62,10 @@ public class OrphansGenerator {
   	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+  	
+	@Inject
+	@Named("thesaurusListNodeFactory")
+	ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	@Log
 	private Logger logger;
@@ -81,7 +86,7 @@ public class OrphansGenerator {
 
 		List<IThesaurusListNode> newOrphans = new ArrayList<IThesaurusListNode>();
 		for (ThesaurusConcept orphan : orphans) {
-			ThesaurusListBasicNode orphanNode = new ThesaurusListBasicNode();
+			ThesaurusListBasicNode orphanNode = thesaurusListNodeFactory.getListBasicNode();
 			orphanNode.setTitle(thesaurusConceptService.getConceptLabel(orphan
 					.getIdentifier()));
 			orphanNode
