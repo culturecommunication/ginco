@@ -176,11 +176,18 @@ public class ThesaurusViewConverter {
 				view.setCreatorName(source.getCreator().getName());
 				view.setCreatorHomepage(source.getCreator().getHomepage());
 			}
+
 			if (source.isDefaultTopConcept() != null) {
 				view.setDefaultTopConcept(source.isDefaultTopConcept());
 			} else {
 				view.setDefaultTopConcept(false);
-				}
+			}
+
+            if (source.isArchived() != null) {
+                view.setArchived(source.isArchived());
+            } else {
+                view.setArchived(false);
+            }
 			if (source.getFormat() != null) {
 				view.setFormat(source.getFormat().getIdentifier());
 			}

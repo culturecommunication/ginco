@@ -113,6 +113,11 @@
 	background-image: url(../images/door_in.png) !important;
 }
 
+.close-icon {
+	background-image: url(../images/cross.png) !important;
+}
+
+
 .mandatory-field {
 	color: red !important;
 }

@@ -50,6 +50,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xProblemSaveMsg : 'Unable to save this thesaurus!',
     xProblemDeleteMsg : 'Unable to delete this thesaurus!',
     xProblemPublishMsg : "Error publishing Thesaurus!",
+    xProblemArchiveMsg : "Error archiving Thesaurus!",
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -77,8 +78,16 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         thesaurusPanel.down('#exportMcc').setDisabled(false);
         thesaurusPanel.down('#versionTab').setDisabled(false);
         thesaurusPanel.down('button[cls=journalBtnMenu]').setDisabled(false);
-        thesaurusPanel.down('#editJournal').setDisabled(false)
+        thesaurusPanel.down('#editJournal').setDisabled(false);
         thesaurusPanel.down('#publishThesaurus').setDisabled(false);
+
+        if(thesaurusPanel.thesaurusData.archived) {
+            aForm.restrict();
+            aForm.down('bottomFormToolBar').setArchived();
+        } else {
+            thesaurusPanel.down('#archiveThesaurus').setDisabled(false);
+        }
+
 
 	},
 	onNewTermBtnClick : function(theButton, e, options) {
@@ -182,18 +191,22 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         var me = this;
         var theForm = theButton.up('form');
         var url = "services/ui/thesaurusservice/archiveVocabulary?thesaurusId="
-            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id)
-            + "&userId=" + encodeURIComponent(Thesaurus.ext.utils.userInfo.data.username);
+            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
 
         Ext.Ajax.request({
             url: url,
             method: 'GET',
             success: function() {
                 Thesaurus.ext.utils.msg('Succès',
-                    'Le thesaurus a été publié!');
+                    'Le thesaurus a été archivé!');
+                me.application.fireEvent('thesaurusupdated');
+
+                theButton.setDisabled(true);
+                theForm.restrict();
+                theForm.down('bottomFormToolBar').setArchived();
             },
             failure: function() {
-                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemPublishMsg);
+                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemArchiveMsg);
             }
         });
     },
@@ -251,7 +264,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils.msg('Succès',
 							'Le thesaurus a été enregistré!');
-					me.application.fireEvent('thesaurusupdated');
+
 					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}
