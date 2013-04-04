@@ -184,6 +184,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             success: function() {
                Thesaurus.ext.utils.msg('Succès',
                    'Le thesaurus a été publié!');
+                me.application.fireEvent('thesaurusupdated');
             },
             failure: function() {
                 Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemPublishMsg);
