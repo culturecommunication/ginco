@@ -47,6 +47,7 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
@@ -56,8 +57,8 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
  * With {@MCCExportServiceImpl}
  */
 @XmlRootElement
-@XmlSeeAlso({Note.class})
-public class MCCExportedThesaurus implements Serializable {
+@XmlSeeAlso({Note.class, NodeLabel.class})
+public class GincoExportedThesaurus implements Serializable {
 	
 	//Thesaurus and terms are read by Jaxb and automatically added to the XML structure
 	//But its not the case for nested elements (notes, relations, etc.), so we include them
@@ -65,8 +66,10 @@ public class MCCExportedThesaurus implements Serializable {
 	//The use of a JaxbList object is due to the incapacity of Jaxb to serialize a HashMap<String, Bean> directly
 	
     private Thesaurus thesaurus;
+    private List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
     private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
-    private List<NodeLabel> conceptsArrayLabels  = new ArrayList<NodeLabel>();
+    private List<ThesaurusArray> conceptArrays  = new ArrayList<ThesaurusArray>();
+    private Map<String, JaxbList<NodeLabel>> conceptArrayLabels = new Hashtable();
     private List<ThesaurusConceptGroup> conceptsGroups  = new ArrayList<ThesaurusConceptGroup>();
     private List<ThesaurusVersionHistory> thesaurusVersions;
     private Map<String, JaxbList<String>> hierarchicalRelationship = new Hashtable();
@@ -139,12 +142,28 @@ public class MCCExportedThesaurus implements Serializable {
 		this.conceptsGroups = conceptsGroups;
 	}
 
-	public List<NodeLabel> getConceptsArrayLabels() {
-		return conceptsArrayLabels;
+	public List<ThesaurusArray> getConceptArrays() {
+		return conceptArrays;
 	}
 
-	public void setConceptsArrayLabels(List<NodeLabel> conceptsArrayLabels) {
-		this.conceptsArrayLabels = conceptsArrayLabels;
+	public void setConceptArrays(List<ThesaurusArray> conceptArrays) {
+		this.conceptArrays = conceptArrays;
+	}
+
+	public List<ThesaurusConcept> getConcepts() {
+		return concepts;
+	}
+
+	public void setConcepts(List<ThesaurusConcept> concepts) {
+		this.concepts = concepts;
+	}
+
+	public Map<String, JaxbList<NodeLabel>> getConceptArrayLabels() {
+		return conceptArrayLabels;
+	}
+
+	public void setConceptArrayLabels(Map<String, JaxbList<NodeLabel>> conceptArrayLabels) {
+		this.conceptArrayLabels = conceptArrayLabels;
 	}
     
 }

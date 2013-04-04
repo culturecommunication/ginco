@@ -42,13 +42,13 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
- * Service provides function to use for MCC export
+ * Service provides function to use for Ginco export
  * by REST services.
  */
-public interface IMCCExportService {   
+public interface IGincoExportService {   
 
     /**
-     * Get MCC Thesaurus export for given thesaurus.
+     * Get Ginco Thesaurus export for given thesaurus.
      * @param thesaurus
      * @throws FileNotFoundException 
      * @throws JAXBException 

@@ -66,8 +66,8 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>Import SKOS</h1>'});
 	},
 
-	onImportMccXmlBtnClick: function(theButton) {
-		Ext.create('GincoApp.view.ImportWin', {importType: 'mccxml', xTitleLabel: '<h1>Import XML MCC</h1>'});
+	onImportGincoXmlBtnClick: function(theButton) {
+		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoxml', xTitleLabel: '<h1>Import XML Ginco</h1>'});
 	},
 	
 	onUserInfoLoaded : function(theController) {
@@ -120,8 +120,8 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			"#importBtn" : {
 				click: this.onImportBtnClick
 			},
-			"#importMccXmlBtn" : {
-				click: this.onImportMccXmlBtnClick
+			"#importGincoXmlBtn" : {
+				click: this.onImportGincoXmlBtnClick
 			},
 			'#logoutbtn' : {
 				click : this.onLogoutBtn

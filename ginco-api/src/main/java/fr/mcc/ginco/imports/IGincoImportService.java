@@ -42,13 +42,13 @@ import fr.mcc.ginco.beans.Thesaurus;
 
 
 /**
- * Service provides function to use for MCC import
+ * Service provides function to use for Ginco import
  * by REST services.
  */
-public interface IMCCImportService {
+public interface IGincoImportService {
 
 	/**
-	 * This method import a Thesaurus from a MCC custom format
+	 * This method import a Thesaurus from a Ginco custom format
 	 * 
 	 * @param content
 	 * @param fileName
@@ -56,7 +56,7 @@ public interface IMCCImportService {
 	 * @return The imported Thesaurus
 	 * @throws JAXBException 
 	 */
-	Thesaurus importMccXmlThesaurusFile(String content, String fileName,
+	Thesaurus importGincoXmlThesaurusFile(String content, String fileName,
 			File tempDir) throws JAXBException;
 
 }

@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.imports.mcc;
+package fr.mcc.ginco.tests.imports.ginco;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,16 +48,18 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.exports.result.bean.MCCExportedThesaurus;
-import fr.mcc.ginco.imports.mcc.MCCExportedThesaurusExtractor;
+import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
+import fr.mcc.ginco.imports.ginco.GincoThesaurusBuilder;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
-public class MCCExportedThesaurusExtractorTest {
+public class GincoThesaurusBuilderTest {
 	
 	@Mock(name="thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
@@ -65,18 +67,22 @@ public class MCCExportedThesaurusExtractorTest {
 	@Mock(name="thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
 	
+	
+	@Mock(name="thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
+	
 	@Mock(name="thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
 	@InjectMocks
-	MCCExportedThesaurusExtractor mccExportedThesaurusExtractor;
+	GincoThesaurusBuilder gincoThesaurusBuilder;
 	
 	@Before
 	public void init() {		
 			MockitoAnnotations.initMocks(this);	
 	}
 	
-	@Test
+	/*@Test
 	public void testStoreMccExportedThesaurus() {
 		Thesaurus t1 = new Thesaurus();
 		t1.setIdentifier("http://t1");
@@ -88,7 +94,9 @@ public class MCCExportedThesaurusExtractorTest {
 		Thesaurus result = mccExportedThesaurusExtractor.storeMccExportedThesaurus(exportedThesaurus);
 		
 		Assert.assertEquals(result.getIdentifier(), t1.getIdentifier());
-	}
+	}*/
+	
+	
 	
 	@Test
 	public void testStoreTerms() {
@@ -104,16 +112,42 @@ public class MCCExportedThesaurusExtractorTest {
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 		terms.add(t1);
 		
-		MCCExportedThesaurus exportedThesaurus = new MCCExportedThesaurus();
+		GincoExportedThesaurus exportedThesaurus = new GincoExportedThesaurus();
 		exportedThesaurus.setThesaurus(th1);
 		exportedThesaurus.setTerms(terms);
 		
 		Mockito.when(thesaurusTermDAO.update(Mockito.any(ThesaurusTerm.class))).thenReturn(t1);
 		Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(th1);
-		resultedTerms = mccExportedThesaurusExtractor.storeTerms(exportedThesaurus);
+		resultedTerms = gincoThesaurusBuilder.storeTerms(exportedThesaurus);
 		
 		Assert.assertEquals(resultedTerms.size(), terms.size());
 		Assert.assertEquals(resultedTerms.get(0).getIdentifier(), terms.get(0).getIdentifier());
+	}
+	
+	@Test
+	public void testStoreConcepts() {
+		
+		Thesaurus th1 = new Thesaurus();
+		th1.setIdentifier("http://th1");
+		
+		ThesaurusConcept c1 = new ThesaurusConcept();
+		c1.setIdentifier("http://c1");
+		c1.setThesaurus(th1);
+
+		List<ThesaurusConcept> resultedConcepts = new ArrayList<ThesaurusConcept>();
+		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+		concepts.add(c1);
+		
+		GincoExportedThesaurus exportedThesaurus = new GincoExportedThesaurus();
+		exportedThesaurus.setThesaurus(th1);
+		exportedThesaurus.setConcepts(concepts);
+		
+		Mockito.when(thesaurusConceptDAO.update(Mockito.any(ThesaurusConcept.class))).thenReturn(c1);
+		Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(th1);
+		resultedConcepts = gincoThesaurusBuilder.storeConcepts(exportedThesaurus);
+		
+		Assert.assertEquals(resultedConcepts.size(), concepts.size());
+		Assert.assertEquals(resultedConcepts.get(0).getIdentifier(), concepts.get(0).getIdentifier());
 	}
 	
 	/*@Test

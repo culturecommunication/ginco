@@ -38,7 +38,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
-import fr.mcc.ginco.imports.IMCCImportService;
+import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
@@ -81,8 +81,8 @@ public class ImportRestService {
 	private ISKOSImportService skosImportService;
 	
 	@Inject
-	@Named("mccImportService")
-	private IMCCImportService mccImportService;
+	@Named("gincoImportService")
+	private IGincoImportService gincoImportService;
 
 
 	@Inject
@@ -126,7 +126,7 @@ public class ImportRestService {
 	}
 	
 	/**
-	 * This method is called to import a MCC XML thesaurus.
+	 * This method is called to import a Ginco XML thesaurus.
 	 * The @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is used by an
 	 * ajax call and IE cannot display result if JSOn is returned
 	 * 
@@ -139,10 +139,10 @@ public class ImportRestService {
 	 * @throws JAXBException 
 	 */
 	@POST
-	@Path("/importMccXml")
+	@Path("/importGincoXml")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
-	public String uploadMccXmlThesaurusFile(MultipartBody body,
+	public String uploadGincoXmlThesaurusFile(MultipartBody body,
 			@Context HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException, JAXBException {
 		Attachment file = body.getAttachment("import-file-path");
 		String content = file.getObject(String.class);
@@ -150,7 +150,7 @@ public class ImportRestService {
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
 		
-		Thesaurus thesaurus = mccImportService.importMccXmlThesaurusFile(content, fileName, tempDir);
+		Thesaurus thesaurus = gincoImportService.importGincoXmlThesaurusFile(content, fileName, tempDir);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(

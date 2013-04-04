@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports.mcc;
+package fr.mcc.ginco.exports.ginco;
 
 import java.util.List;
 
@@ -48,11 +48,11 @@ import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
 /**
- * This component gives methods to export concepts and its related objects (notes, associations, etc.) to MCC Custom Export Format
+ * This component gives methods to export concepts and its related objects (notes, associations, etc.) to Ginco Custom Export Format
  * 
  */
-@Component("mccConceptExporter")
-public class MCCConceptExporter {
+@Component("gincoConceptExporter")
+public class GincoConceptExporter {
 	
 	@Inject
 	@Named("noteService")

@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports.mcc;
+package fr.mcc.ginco.imports.ginco;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -54,37 +54,37 @@ import com.hp.hpl.jena.util.FileManager;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.mcc.MCCTermExporter;
-import fr.mcc.ginco.exports.result.bean.MCCExportedThesaurus;
-import fr.mcc.ginco.imports.IMCCImportService;
+import fr.mcc.ginco.exports.ginco.GincoTermExporter;
+import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
+import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.log.Log;
 
 /**
- * This class gives methods to import a thesaurus from a XML file (custom MCC format)
+ * This class gives methods to import a thesaurus from a XML file (custom Ginco format)
  *
  */
 @Transactional
-@Service("mccImportService")
-public class MCCImportServiceImpl implements IMCCImportService {
+@Service("gincoImportService")
+public class GincoImportServiceImpl implements IGincoImportService {
 	
 	@Log
 	private Logger logger;
 	
 	@Inject
-	@Named("mccExportedThesaurusExtractor")
-	private MCCExportedThesaurusExtractor mccExportedThesaurusExtractor;
+	@Named("gincoThesaurusBuilder")
+	private GincoThesaurusBuilder gincoThesaurusBuilder;
 	
 	@Override
-	public Thesaurus importMccXmlThesaurusFile(String content, String fileName, File tempDir) throws JAXBException{
+	public Thesaurus importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws JAXBException{
 		URI fileURI = writeTempFile(content, fileName, tempDir);
 		InputStream in = FileManager.get().open(fileURI.toString());
 		
 		Thesaurus thesaurus = new Thesaurus();
-		MCCExportedThesaurus unmarshalledExportedThesaurus = new MCCExportedThesaurus();
-		JAXBContext context = JAXBContext.newInstance(MCCExportedThesaurus.class);
+		GincoExportedThesaurus unmarshalledExportedThesaurus = new GincoExportedThesaurus();
+		JAXBContext context = JAXBContext.newInstance(GincoExportedThesaurus.class);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
-		unmarshalledExportedThesaurus = (MCCExportedThesaurus) unmarshaller.unmarshal(in);
-		return mccExportedThesaurusExtractor.storeMccExportedThesaurus(unmarshalledExportedThesaurus);
+		unmarshalledExportedThesaurus = (GincoExportedThesaurus) unmarshaller.unmarshal(in);
+		return gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
 	}
 	
 	private URI writeTempFile(String fileContent, String fileName, File tempDir)
@@ -101,7 +101,7 @@ public class MCCImportServiceImpl implements IMCCImportService {
 			fileWriter.close();
 		} catch (IOException e) {
 			throw new BusinessException(
-					"Error storing temporarty file for import " + prefix,
+					"Error storing temporary file for import " + prefix,
 					"import-unable-to-write-temporary-file", e);
 		}
 		return file.toURI();

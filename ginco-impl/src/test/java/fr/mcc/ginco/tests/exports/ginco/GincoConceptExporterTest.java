@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.exports.mcc;
+package fr.mcc.ginco.tests.exports.ginco;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,7 +50,7 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exports.mcc.MCCConceptExporter;
+import fr.mcc.ginco.exports.ginco.GincoConceptExporter;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
@@ -60,7 +60,7 @@ import fr.mcc.ginco.services.INoteService;
  * (export of thesaurus in MCC XML format)
  *
  */
-public class MCCConceptExporterTest {
+public class GincoConceptExporterTest {
 	
 	@Mock(name="noteService")
 	private INoteService noteService;
@@ -69,7 +69,7 @@ public class MCCConceptExporterTest {
 	private IAssociativeRelationshipService associativeRelationshipService;
 	
 	@InjectMocks
-	MCCConceptExporter mccConceptExporter;
+	GincoConceptExporter gincoConceptExporter;
 	
 	@Before
 	public void init() {		
@@ -93,7 +93,7 @@ public class MCCConceptExporterTest {
 		fakeParents.add(c3);
 		c1.setParentConcepts(fakeParents);
 		
-		JaxbList<String> result = mccConceptExporter.getExportHierarchicalConcepts(c1);
+		JaxbList<String> result = gincoConceptExporter.getExportHierarchicalConcepts(c1);
 		Assert.assertEquals(result.getList().size(), c1.getParentConcepts().size());
 	}
 	
@@ -116,7 +116,7 @@ public class MCCConceptExporterTest {
 		Mockito.when(noteService.getConceptNoteCount(Mockito.anyString())).thenReturn((long) count);
 		Mockito.when(noteService.getConceptNotePaginatedList(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(notes);
 		
-		JaxbList<Note> resultNotes = mccConceptExporter.getExportConceptNotes(c1);
+		JaxbList<Note> resultNotes = gincoConceptExporter.getExportConceptNotes(c1);
 		Assert.assertEquals(resultNotes.getList().size(), notes.size());
 	}
 }

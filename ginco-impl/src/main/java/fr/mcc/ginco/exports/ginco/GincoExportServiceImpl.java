@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports.mcc;
+package fr.mcc.ginco.exports.ginco;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -54,9 +54,9 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.IMCCExportService;
+import fr.mcc.ginco.exports.IGincoExportService;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.exports.result.bean.MCCExportedThesaurus;
+import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
@@ -64,8 +64,8 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 
-@Service("mccExportService")
-public class MCCExportServiceImpl implements IMCCExportService {
+@Service("gincoExportService")
+public class GincoExportServiceImpl implements IGincoExportService {
 	
 	@Inject
 	@Named("thesaurusConceptService")
@@ -92,19 +92,19 @@ public class MCCExportServiceImpl implements IMCCExportService {
 	private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 	
 	@Inject
-	@Named("mccConceptExporter")
-	private MCCConceptExporter mccConceptExporter;
+	@Named("gincoConceptExporter")
+	private GincoConceptExporter gincoConceptExporter;
 
 	@Inject
-	@Named("mccTermExporter")
-	private MCCTermExporter mccTermExporter;
+	@Named("gincoTermExporter")
+	private GincoTermExporter gincoTermExporter;
 
 	
 	
 	@Override
 	public String getThesaurusExport(Thesaurus thesaurus)
 			throws BusinessException, JAXBException {
-		MCCExportedThesaurus thesaurusToExport = new MCCExportedThesaurus();
+		GincoExportedThesaurus thesaurusToExport = new GincoExportedThesaurus();
 		String thesaurusId = thesaurus.getIdentifier();
 		
 		//---Exporting the thesaurus
@@ -113,6 +113,9 @@ public class MCCExportServiceImpl implements IMCCExportService {
 		//Exporting the thesaurus' versions
 		thesaurusToExport.setThesaurusVersions(thesaurusVersionHistoryService.getVersionsByThesaurusId(thesaurusId));
 		
+		//Exporting the thesaurus' concepts
+		thesaurusToExport.setConcepts(thesaurusConceptService.getConceptsByThesaurusId(null, thesaurusId, null, false));
+		
 		//Exporting sandboxed terms
 		List<ThesaurusTerm> sandboxedTerms = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(0, thesaurusTermService.getSandboxedTermsCount(thesaurusId).intValue(), thesaurusId);
 		for (ThesaurusTerm thesaurusTerm : sandboxedTerms) {
@@ -120,7 +123,7 @@ public class MCCExportServiceImpl implements IMCCExportService {
 		}
 		
 		//---Exporting the terms and the concepts of the thesaurus
-		List<ThesaurusConcept> concepts = thesaurusConceptService.getConceptsByThesaurusId(null, thesaurusId, true, false);
+		List<ThesaurusConcept> concepts = thesaurusConceptService.getConceptsByThesaurusId(null, thesaurusId, null, false);
 		for (ThesaurusConcept thesaurusConcept : concepts) {
 			
 			//Exporting terms of the concepts
@@ -131,37 +134,40 @@ public class MCCExportServiceImpl implements IMCCExportService {
 			
 			//Exporting term notes
 			for (ThesaurusTerm thesaurusTerm : terms) {
-				JaxbList<Note> termNotes = mccTermExporter.getExportTermNotes(thesaurusTerm);
+				JaxbList<Note> termNotes = gincoTermExporter.getExportTermNotes(thesaurusTerm);
 				if (termNotes != null && !termNotes.isEmpty()) {
 					thesaurusToExport.getTermNotes().put(thesaurusTerm.getIdentifier(), termNotes);					
 				}
 			}
 			
 			//Exporting concept notes
-			JaxbList<Note> conceptNotes = mccConceptExporter.getExportConceptNotes(thesaurusConcept);
+			JaxbList<Note> conceptNotes = gincoConceptExporter.getExportConceptNotes(thesaurusConcept);
 			if (conceptNotes != null && !conceptNotes.isEmpty()) {
 				thesaurusToExport.getConceptNotes().put(thesaurusConcept.getIdentifier(), conceptNotes);
 			}
 			
 			//Exporting the parent concepts
-			JaxbList<String> parentIds = mccConceptExporter.getExportHierarchicalConcepts(thesaurusConcept);
+			JaxbList<String> parentIds = gincoConceptExporter.getExportHierarchicalConcepts(thesaurusConcept);
 			if (parentIds != null && !parentIds.isEmpty()) {
 				thesaurusToExport.getHierarchicalRelationship().put(thesaurusConcept.getIdentifier(), parentIds);
 			}
 			//Exporting relative relationship
-			JaxbList<String> associations = mccConceptExporter.getExportAssociativeRelationShip(thesaurusConcept);
+			JaxbList<String> associations = gincoConceptExporter.getExportAssociativeRelationShip(thesaurusConcept);
 			if (associations != null && !associations.isEmpty()) {
 				thesaurusToExport.getAssociativeRelationship().put(thesaurusConcept.getIdentifier(), associations);
 			}
 		}
 
-		//---Exporting the node label of all concepts (with concept nested in)
+		//---Exporting the array of all concepts
 		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurusId);
-		List<NodeLabel> labels = new ArrayList<NodeLabel>();
+		thesaurusToExport.setConceptArrays(arrays);
+		
+		//---Exporting the array labels of all concepts
+		JaxbList<NodeLabel> labels = new JaxbList<NodeLabel>();
 		for (ThesaurusArray thesaurusArray : arrays) {
-			labels.add(nodeLabelService.getByThesaurusArray(thesaurusArray.getIdentifier()));
+			labels.getList().add(nodeLabelService.getByThesaurusArray(thesaurusArray.getIdentifier()));
+			thesaurusToExport.getConceptArrayLabels().put(thesaurusArray.getIdentifier(),labels);
 		}
-		thesaurusToExport.setConceptsArrayLabels(labels);
 		
 		//---Exporting the concepts groups of the thesaurus
 		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(thesaurusId);
@@ -179,12 +185,12 @@ public class MCCExportServiceImpl implements IMCCExportService {
 	 * @return
 	 * @throws JAXBException
 	 */
-	private String serializeToXmlWithJaxb(MCCExportedThesaurus thesaurusToExport)
+	private String serializeToXmlWithJaxb(GincoExportedThesaurus thesaurusToExport)
 			throws JAXBException {
 		//This method encodes a MCCExportedThesaurus in XML
 		String result = null;
 		JAXBContext context = JAXBContext
-				.newInstance(MCCExportedThesaurus.class);
+				.newInstance(GincoExportedThesaurus.class);
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
