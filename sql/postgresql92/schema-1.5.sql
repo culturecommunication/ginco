@@ -45,3 +45,6 @@ ALTER TABLE thesaurus ADD COLUMN archived boolean DEFAULT FALSE;
 
 ALTER TABLE thesaurus DROP COLUMN archived;
 ALTER TABLE thesaurus ADD COLUMN archived boolean DEFAULT FALSE;
+
+ALTER TABLE thesaurus ADD COLUMN ispolyhierarchical boolean DEFAULT FALSE;
+ALTER TABLE thesaurus_aud ADD COLUMN ispolyhierarchical boolean DEFAULT FALSE;

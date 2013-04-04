@@ -51,6 +51,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xProblemDeleteMsg : 'Unable to delete this thesaurus!',
     xProblemPublishMsg : "Error publishing Thesaurus!",
     xProblemArchiveMsg : "Error archiving Thesaurus!",
+    xWarningChangedPoly : "Attention! You are going to change polyhierarchism of thesaurus, do it on your own risk!",
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -285,6 +286,18 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			});
 		}
 	},
+
+    onPolyChange : function(theCheckBox, newValue, oldValue, eOpts) {
+        if(newValue == false) {
+            Ext.MessageBox.show({
+                title: 'Attention',
+                msg: this.xWarningChangedPoly,
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.WARNING
+            });
+        }
+    },
+
 	init : function(application) {
 		this.control({
 			"thesaurusPanel form" : {
@@ -328,6 +341,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             },
             "thesaurusPanel #archiveThesaurus" : {
                 click : this.archiveThesaurus
+            },
+            "checkbox[cls=poly]" : {
+                change : this.onPolyChange
             }
 		});
 	}

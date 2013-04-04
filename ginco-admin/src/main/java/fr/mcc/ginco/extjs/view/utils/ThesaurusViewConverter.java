@@ -115,6 +115,7 @@ public class ThesaurusViewConverter {
 		hibernateRes.setDefaultTopConcept(source.getDefaultTopConcept());
 		hibernateRes.setFormat(thesaurusFormatService
 				.getThesaurusFormatById(source.getFormat()));
+        hibernateRes.setPolyHierarchical(source.getPolyHierarchical());
 		hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source
 				.getType()));
 		ThesaurusOrganization thesaurusOrganization;
@@ -213,6 +214,7 @@ public class ThesaurusViewConverter {
             } else {
                 view.setCanBeDeleted(true);
             }
+            view.setPolyHierarchical(source.isPolyHierarchical());
 		}
 		return view;
 	}

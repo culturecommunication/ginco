@@ -72,6 +72,7 @@ public class ThesaurusView implements Serializable {
 	private Integer type;
 	private String creatorName;
 	private String creatorHomepage;
+    private Boolean polyHierarchical;
 
 	private List<String> languages = new ArrayList<String>();
 
@@ -235,5 +236,13 @@ public class ThesaurusView implements Serializable {
 
     public void setCanBeDeleted(Boolean canBeDeleted) {
         this.canBeDeleted = canBeDeleted;
+    }
+
+    public Boolean getPolyHierarchical() {
+        return polyHierarchical;
+    }
+
+    public void setPolyHierarchical(Boolean polyHierarchical) {
+        this.polyHierarchical = polyHierarchical;
     }
 }

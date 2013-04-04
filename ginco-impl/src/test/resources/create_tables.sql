@@ -47,7 +47,8 @@ CREATE TABLE thesaurus
   creator integer,
   created text,
   defaulttopconcept boolean NOT NULL DEFAULT FALSE,
-  archived boolean DEFAULT FALSE
+  archived boolean DEFAULT FALSE,
+  ispolyhierarchical boolean DEFAULT FALSE
 
 );
 
@@ -301,7 +302,8 @@ CREATE TABLE thesaurus_aud (
     archived boolean,
     format integer,
     type integer,
-    creator integer
+    creator integer,
+    ispolyhierarchical boolean
 );
 
 CREATE TABLE note_type

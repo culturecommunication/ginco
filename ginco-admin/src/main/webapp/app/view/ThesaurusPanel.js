@@ -81,6 +81,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xEditJournal: 'Edit history',
     xPublish: 'Publish',
     xArchive: 'Archive',
+    xPolyHierarchical: 'Polyhierarchical',
 	
 	initComponent : function() {
 		var me = this;
@@ -329,6 +330,12 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												fieldLabel : me.xdefaultTopConceptLabel,
 												displayField : 'defaultTopConcept'
 										},{
+                                            xtype : 'checkbox',
+                                            name : 'polyHierarchical',
+                                            fieldLabel : me.xPolyHierarchical,
+                                            displayField : 'polyHierarchical',
+                                            cls : 'poly'
+                                        },{
 												xtype : 'htmleditor',
 												name : 'relation',
 												fieldLabel : me.xRelationLabel,

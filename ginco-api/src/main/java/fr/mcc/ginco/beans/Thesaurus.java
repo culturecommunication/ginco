@@ -69,6 +69,7 @@ public class Thesaurus implements Serializable, IAuditableBean {
     private ThesaurusFormat format;
     private ThesaurusType type;
     private ThesaurusOrganization creator;
+    private Boolean polyHierarchical;
     
     private Set<Language> lang = new HashSet<Language>();
     private Set<ThesaurusVersionHistory> versions;
@@ -247,5 +248,13 @@ public class Thesaurus implements Serializable, IAuditableBean {
 
     public void setArchived(Boolean archived) {
         this.archived = archived;
+    }
+
+    public Boolean isPolyHierarchical() {
+        return polyHierarchical;
+    }
+
+    public void setPolyHierarchical(Boolean polyHierarchical) {
+        this.polyHierarchical = polyHierarchical;
     }
 }

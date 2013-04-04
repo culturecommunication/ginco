@@ -96,7 +96,10 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 	}, {
 		name : 'languages',
 		type : 'array_of_string'
-	} ],
+	}, {
+        name : 'polyHierarchical',
+        type : 'boolean'
+    } ],
 
 	proxy : {
 		api : {

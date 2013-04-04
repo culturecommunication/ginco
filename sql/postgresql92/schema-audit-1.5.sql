@@ -16,7 +16,9 @@ ALTER TABLE thesaurus_term_aud ADD COLUMN hidden boolean DEFAULT false;
 ALTER TABLE thesaurus_aud ADD COLUMN archived boolean;
 ALTER TABLE revinfo ADD COLUMN thesaurusid text; 
 
+ALTER TABLE thesaurus_aud ADD COLUMN archived boolean;
 
+ALTER TABLE thesaurus_aud ADD COLUMN ispolyhierarchical boolean;
 ALTER TABLE thesaurus_term_aud ADD COLUMN prefered_mod boolean; 
 ALTER TABLE thesaurus_term_aud ADD COLUMN lexicalvalue_mod boolean;
 ALTER TABLE thesaurus_term_aud ADD COLUMN created_mod boolean;
