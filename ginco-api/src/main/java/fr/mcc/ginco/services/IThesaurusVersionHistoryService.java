@@ -52,7 +52,7 @@ public interface IThesaurusVersionHistoryService {
 	 * @param thesaurusId
 	 * @return A list of {@ThesaurusVersionHistory}
 	 */
-	public List<ThesaurusVersionHistory> getVersionsByThesaurusId(String thesaurusId);
+	List<ThesaurusVersionHistory> getVersionsByThesaurusId(String thesaurusId);
 	
 	/**
      * Get a single ThesaurusVersionHistory by its id
@@ -75,4 +75,11 @@ public interface IThesaurusVersionHistoryService {
      * @return
      */
     ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus, String userId);
+
+    /**
+     * Indicates if al least one published version exists.
+     * @param thesaurus
+     * @return
+     */
+    Boolean hasPublishedVersion(Thesaurus thesaurus);
 }

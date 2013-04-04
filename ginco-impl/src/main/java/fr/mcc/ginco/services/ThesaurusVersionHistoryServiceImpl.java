@@ -79,6 +79,16 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
 	}
 
     @Override
+    public Boolean hasPublishedVersion(Thesaurus thesaurus) {
+        for(ThesaurusVersionHistory version : thesaurusVersionHistoryDAO.findVersionsByThesaurusId(thesaurus.getIdentifier())) {
+            if(version.getStatus() == ThesaurusVersionStatusEnum.PUBLISHED.getStatus()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     @Transactional(readOnly=false)
     public ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus, String userId) {
         ThesaurusVersionHistory newVersion = new ThesaurusVersionHistory();

@@ -70,7 +70,11 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		thesaurusPanel.thesaurusData = aModel.data;
 		aForm.loadRecord(aModel);
 		thesaurusPanel.down('button[cls=newBtnMenu]').setDisabled(false);
-        thesaurusPanel.down('button[cls=delete]').setDisabled(false);
+
+        if(thesaurusPanel.thesaurusData.canBeDeleted) {
+           thesaurusPanel.down('button[cls=delete]').setDisabled(false);
+        }
+
         thesaurusPanel.down('button[cls=exportsBtnMenu]').setDisabled(false);
         thesaurusPanel.down('#exportHierarchical').setDisabled(false);
         thesaurusPanel.down('#exportSKOS').setDisabled(false);
@@ -83,7 +87,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
         if(thesaurusPanel.thesaurusData.archived) {
             aForm.restrict();
-            aForm.down('bottomFormToolBar').setArchived();
+            thesaurusPanel.down('bottomFormToolBar').setArchived();
         } else {
             thesaurusPanel.down('#archiveThesaurus').setDisabled(false);
         }

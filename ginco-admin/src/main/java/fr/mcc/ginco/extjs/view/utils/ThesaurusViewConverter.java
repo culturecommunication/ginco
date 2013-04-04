@@ -40,10 +40,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.services.IThesaurusFormatService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.services.IThesaurusTypeService;
+import fr.mcc.ginco.services.*;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LanguageComparator;
 import org.apache.commons.lang3.StringUtils;
@@ -79,7 +76,11 @@ public class ThesaurusViewConverter {
 	
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	private IIDGeneratorService generatorService;
+
+    @Inject
+    @Named("thesaurusVersionHistoryService")
+    private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 
 	
 	@Value("${ginco.default.language}") private String defaultLanguage;
@@ -206,6 +207,12 @@ public class ThesaurusViewConverter {
 				langLabels.add(lang.getId());
 			}
 			view.setLanguages(langLabels);
+
+            if(thesaurusVersionHistoryService.hasPublishedVersion(source) && !source.isArchived()) {
+                view.setCanBeDeleted(false);
+            } else {
+                view.setCanBeDeleted(true);
+            }
 		}
 		return view;
 	}
