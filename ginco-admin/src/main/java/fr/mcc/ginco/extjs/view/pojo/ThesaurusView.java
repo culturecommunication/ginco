@@ -67,6 +67,7 @@ public class ThesaurusView implements Serializable {
 	private String created;
 	private Boolean defaultTopConcept;
     private Boolean archived;
+    private Boolean canBeDeleted;
 	private Integer format;
 	private Integer type;
 	private String creatorName;
@@ -226,5 +227,13 @@ public class ThesaurusView implements Serializable {
 
     public void setArchived(Boolean archived) {
         this.archived = archived;
+    }
+
+    public Boolean getCanBeDeleted() {
+        return canBeDeleted;
+    }
+
+    public void setCanBeDeleted(Boolean canBeDeleted) {
+        this.canBeDeleted = canBeDeleted;
     }
 }

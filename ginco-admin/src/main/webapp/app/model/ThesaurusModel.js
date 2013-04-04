@@ -88,6 +88,9 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 		name : 'creatorName',
 		type : 'string'
 	}, {
+        name : 'canBeDeleted',
+        type : 'boolean'
+    }, {
 		name : 'creatorHomepage',
 		type : 'string'
 	}, {
