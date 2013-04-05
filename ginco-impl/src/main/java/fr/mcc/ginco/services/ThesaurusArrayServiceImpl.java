@@ -104,6 +104,14 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 					}
 				}
 			}
+			
+			//We test that the select children are child of superordinate
+			for (ThesaurusConcept thesaurusConcept : allChildren) {
+				Set<ThesaurusConcept> parentsOfChild = thesaurusConcept.getParentConcepts();
+				if (!parentsOfChild.contains(thesaurusArray.getSuperOrdinateConcept())) {
+					throw new BusinessException("A concept is not a child of the selected parent concept", "concept-not-child-of-superordinate");
+				}
+			}
 		}
 
         ThesaurusArray updated = thesaurusArrayDAO.update(thesaurusArray);
