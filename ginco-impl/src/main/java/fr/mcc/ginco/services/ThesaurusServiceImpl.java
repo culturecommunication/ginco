@@ -181,7 +181,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
         try {
             FileUtils.copyFile(export, ready);
         } catch (IOException e) {
-            throw new TechnicalException("Error copying file to path : " + publishPath);
+            throw new TechnicalException("Error copying file to path : " + publishPath, e);
         }
     }
 
