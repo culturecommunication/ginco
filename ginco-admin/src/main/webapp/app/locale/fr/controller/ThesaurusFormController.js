@@ -42,5 +42,6 @@ Ext.define('GincoApp.locale.fr.controller.ThesaurusFormController', {
     xProblemLabel : 'Erreur !',
     xProblemSaveMsg : 'Impossible de sauvegarder le thesaurus !',
     xProblemDeleteMsg : 'Impossible de supprimer le thesaurus !',
-    xProblemPublishMsg : "Impossible de publier le thesaurus!"
+    xProblemPublishMsg : "Impossible de publier le thesaurus !",
+    xWarningChangedPoly : "Attention! Vous passez d'un thesaurus polyhierarchique a un thesaurus monohierarchique, veuillez vérifier les relations hierarchiques des concepts."
 });

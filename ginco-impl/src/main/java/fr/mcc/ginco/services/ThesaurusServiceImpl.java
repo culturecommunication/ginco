@@ -81,6 +81,10 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	private IThesaurusDAO thesaurusDAO;
 
     @Inject
+    @Named("thesaurusConceptService")
+    private IThesaurusConceptService thesaurusConceptService;
+
+    @Inject
     @Named("skosExportService")
     private ISKOSExportService exportService;
 	
@@ -123,7 +127,9 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	@Transactional(readOnly=false)
 	@Override
 	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
-		
+
+         thesaurusConceptService.checkPoly(object);
+
 		 Thesaurus result = thesaurusDAO.update(object);
 		 
 		 //We get the versions of the thesaurus we are creating/updating
@@ -142,7 +148,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 			thesaurusVersionHistoryDAO.update(defaultVersion);
 		}
 		return result;
-	}	
+	}
 
 	/*
 	 * (non-Javadoc)

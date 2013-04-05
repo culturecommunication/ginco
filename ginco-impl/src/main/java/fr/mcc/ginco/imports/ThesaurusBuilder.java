@@ -136,6 +136,8 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		thesaurus.setRelation(getMultipleLineStringInfo(skosThesaurus,
 				DC.relation));
 		thesaurus.setSource(getSimpleStringInfo(skosThesaurus, DC.source));
+        thesaurus.setPolyHierarchical(true);
+
 		String thesaurusCreated = getSimpleStringInfo(skosThesaurus,
 				DCTerms.created);
 		if (thesaurusCreated!=null) {

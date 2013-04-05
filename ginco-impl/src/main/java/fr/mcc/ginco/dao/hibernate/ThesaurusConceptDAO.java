@@ -34,18 +34,17 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -213,6 +212,8 @@ public class ThesaurusConceptDAO extends
 
 	private void onlyValidatedConcepts(Criteria criteria,
 			Boolean onlyValidatedConcepts) {
+
+        if(onlyValidatedConcepts == null) return;
 
 		if (onlyValidatedConcepts) {
 			criteria.add(Restrictions.eq("status",

@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -250,4 +251,11 @@ public interface IThesaurusConceptService {
 	 * @return the status of a concept
 	 */
 	int getStatusByConceptId(String conceptId) throws BusinessException;
+
+    /**
+     * Checks if no hirerachical relations violates the type of thesaurus.
+     * @param thesaurus
+     * @throws BusinessException
+     */
+    void checkPoly(Thesaurus thesaurus) throws BusinessException;
 }

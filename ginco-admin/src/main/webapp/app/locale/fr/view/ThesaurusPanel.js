@@ -76,5 +76,6 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
         xJournal: 'Journal des évolutions',
     	xEditJournal: 'Editer au format CSV',
         xPublish: 'Publier',
-        xArchive: 'Archiver'
+        xArchive: 'Archiver',
+        xPolyHierarchical: 'Polyhierarchique'
 });
