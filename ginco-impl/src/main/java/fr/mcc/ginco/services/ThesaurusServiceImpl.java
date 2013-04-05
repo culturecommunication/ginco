@@ -56,7 +56,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -184,8 +183,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Transactional(readOnly=false)
     @Override
     public Thesaurus archiveThesaurus(Thesaurus thesaurus)
-            throws JAXBException,
-            BusinessException, TechnicalException {
+            throws BusinessException, TechnicalException {
 
         String fileContent = gincoExportService.getThesaurusExport(thesaurus);
         File ready = new File(archivePath + thesaurus.getTitle().replaceAll(" ", "_") + "_"

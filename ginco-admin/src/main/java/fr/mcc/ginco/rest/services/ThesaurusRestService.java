@@ -45,7 +45,6 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.*;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,7 +54,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.JAXBException;
 import java.util.List;
 
 /**
@@ -246,11 +244,7 @@ public class ThesaurusRestService {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
         if (object != null) {
-            try {
-                thesaurusService.archiveThesaurus(object);
-            } catch (JAXBException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+           thesaurusService.archiveThesaurus(object);
         }
 
         return new ExtJsonFormLoadData(object);
