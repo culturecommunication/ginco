@@ -195,10 +195,10 @@ public interface IThesaurusConceptService {
 
 	/**Get all concepts eligible for an array
 	 * @param arrayId
-	 * @param conceptId
-	 * @return List of concepts
+	 * @param thesaurusId
+	 * @return List of concepts eligible for an array
 	 */
-	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId);
+	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId, String thesaurusId);
 
     /**
      * For indexing purposes.
