@@ -35,8 +35,7 @@
 package fr.mcc.ginco.audit.tracking;
 
 import java.io.Serializable;
-
-import javax.persistence.NoResultException;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.SessionFactory;
@@ -44,6 +43,7 @@ import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.EntityTrackingRevisionListener;
 import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.exception.AuditException;
 import org.hibernate.envers.query.AuditQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,14 +101,14 @@ public class GincoRevListener implements EntityTrackingRevisionListener,
 					query = queryBuilder.getEntityAddedQuery(reader,
 							Class.forName(entityName), entityId);
 					try {
-					Object[] createdEvent = (Object[]) query.getSingleResult();
-					if (createdEvent != null) {
+					List<Object[]> createdEvent = (List<Object[]>) query.getResultList();
+					if (createdEvent != null && createdEvent.size()>0) {
 						((GincoRevEntity) revisionEntity)
-								.setThesaurusId(((GincoRevEntity) createdEvent[1])
+								.setThesaurusId(((GincoRevEntity) createdEvent.get(0)[1])
 										.getThesaurusId());
 					}
-					} catch (NoResultException nrse) {
-						logger.warn("Unable to get the creation revision of the destriyed object", nrse);
+					} catch (AuditException ae) {
+						logger.warn("Unable to get the creation revision of the destroyed object", ae);
 					}
 				} catch (ClassNotFoundException e) {
 					logger.error("Error storing audit data", e);
