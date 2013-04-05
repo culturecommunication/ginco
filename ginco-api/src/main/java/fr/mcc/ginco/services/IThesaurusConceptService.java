@@ -90,6 +90,16 @@ public interface IThesaurusConceptService {
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException;
+	
+	/**
+	 * Gets the list of the preferred terms of a concept
+	 * 
+	 * @param conceptId
+	 * @return
+	 * @throws BusinessException
+	 */
+	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
+			throws BusinessException;
 
 	/**
 	 * Gets the label of a concept with title@lang notation

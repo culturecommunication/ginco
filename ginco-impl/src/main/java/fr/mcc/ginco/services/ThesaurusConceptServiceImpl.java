@@ -610,4 +610,19 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			throw new BusinessException("Concept with identifier " + conceptId
 					+ " does not exist", "concepts-does-not-exist");
 	}
+
+	@Override
+	public List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
+			throws BusinessException {
+		logger.debug("ConceptId : " + conceptId);
+
+		List<ThesaurusTerm> preferredTerms = thesaurusTermDAO
+				.getConceptPreferredTerms(conceptId);
+		if (preferredTerms == null || preferredTerms.size()==0) {
+			throw new BusinessException("The concept " + conceptId
+					+ "has no preferred term",
+					"concept-does-not-have-a-preferred-term");
+		}
+		return preferredTerms;
+	}
 }

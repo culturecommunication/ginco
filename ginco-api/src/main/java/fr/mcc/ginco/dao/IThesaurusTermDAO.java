@@ -80,12 +80,21 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException;
 
 	/**
-	 * Returns the preferred ThesaurusTerm of a concept
+	 * Returns the preferred ThesaurusTerm of a concept in the default application language
 	 * 
 	 * @param conceptId
 	 * @return
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId)
+			throws BusinessException;
+	
+	/**
+	 * Returns the list of preferred ThesaurusTerm of a concept
+	 * 
+	 * @param conceptId
+	 * @return
+	 */
+	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
 			throws BusinessException;
 
 	/**

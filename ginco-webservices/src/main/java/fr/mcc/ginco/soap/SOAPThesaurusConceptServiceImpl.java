@@ -43,6 +43,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 
+import org.codehaus.plexus.util.StringUtils;
+
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -87,11 +89,9 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	@Override
 	public List<ReducedThesaurusTerm> getPreferredTermByConceptId(String conceptId)
 			throws BusinessException{
-		if (!conceptId.equals("")){
-			
+		if (StringUtils.isNotEmpty(conceptId)){			
 			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
-			List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
-			thesaurusTerms.add(thesaurusConceptService.getConceptPreferredTerm(conceptId));
+			List<ThesaurusTerm> thesaurusTerms = thesaurusConceptService.getConceptPreferredTerms(conceptId);
 			
 			for (ThesaurusTerm thesaurusTerm : thesaurusTerms)
 				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));	

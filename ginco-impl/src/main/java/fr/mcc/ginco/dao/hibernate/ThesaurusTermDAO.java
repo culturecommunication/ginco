@@ -102,16 +102,7 @@ public class ThesaurusTermDAO extends
 	
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
-        List<ThesaurusTerm> list = getCurrentSession()
-                .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("concept.identifier", conceptId))
-                .add(Restrictions.eq("prefered", Boolean.TRUE))
-                .list();
-
-        if(list.size() == 0) {
-            throw new BusinessException("No preferred term found ! " +
-                    "Please check your database !", "no-preferred-term-found");
-        }
+        List<ThesaurusTerm> list = getConceptPreferredTerms(conceptId);      
         if (list.size() > 0) {
         	for (ThesaurusTerm term:list) {
         		if (term.getLanguage().getId().equals(defaultLang)) {
@@ -233,5 +224,21 @@ public class ThesaurusTermDAO extends
         else{
         	return list;
         }
+	}
+
+	@Override
+	public List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
+			throws BusinessException {
+		  List<ThesaurusTerm> list = getCurrentSession()
+	                .createCriteria(ThesaurusTerm.class)
+	                .add(Restrictions.eq("concept.identifier", conceptId))
+	                .add(Restrictions.eq("prefered", Boolean.TRUE))
+	                .list();
+
+	        if(list.size() == 0) {
+	            throw new BusinessException("No preferred term found ! " +
+	                    "Please check your database !", "no-preferred-term-found");
+	        }
+	        return list;
 	}
 }
