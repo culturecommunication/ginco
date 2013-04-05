@@ -147,23 +147,31 @@ public class GincoThesaurusBuilder {
 	 * @return The imported {@link Thesaurus}
 	 */
 	public Thesaurus storeGincoExportedThesaurus(GincoExportedThesaurus exportedThesaurus) {
-		Thesaurus thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
-		storeConcepts(exportedThesaurus);
-		storeTerms(exportedThesaurus);
-		
-		storeArrays(exportedThesaurus);
-		storeArrayLabels(exportedThesaurus);
-		
-		storeGroups(exportedThesaurus);
-		storeGroupLabels(exportedThesaurus);
-		
-		storeVersions(exportedThesaurus);
-		
-		storeHierarchicalRelationship(exportedThesaurus);
-		storeAssociativeRelationship(exportedThesaurus);
-		
-		storeTermNotes(exportedThesaurus);
-		storeConceptNotes(exportedThesaurus);
+		Thesaurus thesaurus = new Thesaurus();
+		if (exportedThesaurus.getThesaurus() != null) {
+			if (thesaurusDAO.getById(exportedThesaurus.getThesaurus().getIdentifier()) == null) {
+				thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
+			} else {
+				throw new BusinessException(
+						"Trying to import an existing thesaurus", "import-already-existing-thesaurus");
+			}
+			storeConcepts(exportedThesaurus);
+			storeTerms(exportedThesaurus);
+			
+			storeArrays(exportedThesaurus);
+			storeArrayLabels(exportedThesaurus);
+			
+			storeGroups(exportedThesaurus);
+			storeGroupLabels(exportedThesaurus);
+			
+			storeVersions(exportedThesaurus);
+			
+			storeHierarchicalRelationship(exportedThesaurus);
+			storeAssociativeRelationship(exportedThesaurus);
+			
+			storeTermNotes(exportedThesaurus);
+			storeConceptNotes(exportedThesaurus);
+		}
 		return thesaurus;
 	}
 	
