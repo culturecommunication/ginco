@@ -53,6 +53,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
 import java.util.List;
 
 /**
@@ -233,7 +234,11 @@ public class ThesaurusRestService {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
         if (object != null) {
-            thesaurusService.archiveThesaurus(object);
+            try {
+                thesaurusService.archiveThesaurus(object);
+            } catch (JAXBException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
 
         return new ExtJsonFormLoadData(object);

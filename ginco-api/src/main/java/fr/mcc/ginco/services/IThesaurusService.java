@@ -39,6 +39,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
+import javax.xml.bind.JAXBException;
 import java.util.List;
 
 /**
@@ -99,5 +100,5 @@ public interface IThesaurusService {
      * @param thesaurus
      * @return
      */
-    Thesaurus archiveThesaurus(Thesaurus thesaurus);
+    Thesaurus archiveThesaurus(Thesaurus thesaurus) throws JAXBException, BusinessException, TechnicalException;
 }

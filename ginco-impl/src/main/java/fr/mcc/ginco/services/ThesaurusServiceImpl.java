@@ -44,6 +44,7 @@ import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.exports.IGincoExportService;
 import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LanguageComparator;
@@ -55,7 +56,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.bind.JAXBException;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -76,6 +79,9 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Value("${publish.path}")
     private String publishPath;
 
+    @Value("${archive.path}")
+    private String archivePath;
+
 	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
@@ -95,6 +101,10 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
+
+    @Inject
+    @Named("gincoExportService")
+    private IGincoExportService gincoExportService;
 
 
 	/*
@@ -173,7 +183,28 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
     @Transactional(readOnly=false)
     @Override
-    public Thesaurus archiveThesaurus(Thesaurus thesaurus) {
+    public Thesaurus archiveThesaurus(Thesaurus thesaurus)
+            throws JAXBException,
+            BusinessException, TechnicalException {
+
+        String fileContent = gincoExportService.getThesaurusExport(thesaurus);
+        File ready = new File(archivePath + thesaurus.getTitle().replaceAll(" ", "_") + "_"
+                + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_")
+                + ".xml");
+        try {
+            File checkPath = new File(archivePath);
+            if(!checkPath.exists()) {
+                FileUtils.forceMkdir(checkPath);
+            }
+            FileWriter writer = new FileWriter(ready);
+            writer.write(fileContent);
+            writer.flush();
+            writer.close();
+
+        } catch (IOException e) {
+            throw new TechnicalException("Error writing file to path : " + publishPath, e);
+        }
+
         thesaurus.setArchived(true);
         return thesaurusDAO.update(thesaurus);
     }
@@ -185,6 +216,10 @@ public class ThesaurusServiceImpl implements IThesaurusService {
                 + DateUtil.toString(DateUtil.nowDate())
                 + ".rdf");
         try {
+            File checkPath = new File(publishPath);
+            if(!checkPath.exists()) {
+                FileUtils.forceMkdir(checkPath);
+            }
             FileUtils.copyFile(export, ready);
         } catch (IOException e) {
             throw new TechnicalException("Error copying file to path : " + publishPath, e);

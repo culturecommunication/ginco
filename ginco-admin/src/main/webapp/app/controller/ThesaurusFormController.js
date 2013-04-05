@@ -208,12 +208,15 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
                 me.application.fireEvent('thesaurusupdated');
 
                 theButton.setDisabled(true);
-                theForm.restrict();
-                theForm.down('bottomFormToolBar').setArchived();
 
-                var url = "services/ui/exportservice/getMCCThesaurusExport?thesaurusId="
-                    + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
-                window.open(url);
+                var thesaurusPanel = theForm.up('thesaurusPanel');
+
+                if(thesaurusPanel.thesaurusData.archived) {
+                    aForm.restrict();
+                    thesaurusPanel.down('bottomFormToolBar').setArchived();
+                } else {
+                    thesaurusPanel.down('#archiveThesaurus').setDisabled(false);
+                }
             },
             failure: function() {
                 Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemArchiveMsg);
