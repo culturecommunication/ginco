@@ -136,9 +136,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	@Transactional(readOnly=false)
 	@Override
 	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
-
-         thesaurusConceptService.checkPoly(object);
-
 		 Thesaurus result = thesaurusDAO.update(object);
 		 
 		 //We get the versions of the thesaurus we are creating/updating

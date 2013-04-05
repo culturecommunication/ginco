@@ -562,18 +562,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return notPreferredTerms;
     }
 
-    @Override
-    public void checkPoly(Thesaurus thesaurus) throws BusinessException {
-        if(thesaurus.isPolyHierarchical() == null || !thesaurus.isPolyHierarchical()) {
-            for(ThesaurusConcept concept : thesaurusConceptDAO.getAllConceptsByThesaurusId(null,thesaurus.getIdentifier(),null,null)) {
-                if(concept.getParentConcepts().size() > 1) {
-                    throw new BusinessException("Thesaurus is monohierarchical, but some concepts have multiple parents!"
-                            ,"monohierarchical-violation");
-                }
-            }
-        }
-    }
-
 	@Override
 	public int getStatusByConceptId(String conceptId) throws BusinessException {
 		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
