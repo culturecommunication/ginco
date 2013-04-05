@@ -52,6 +52,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.IGincoExportService;
@@ -59,6 +60,7 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
@@ -70,6 +72,10 @@ public class GincoExportServiceImpl implements IGincoExportService {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
+	@Named("thesaurusConceptGroupLabelService")
+	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
 
 	@Inject
 	@Named("thesaurusArrayService")
@@ -158,21 +164,28 @@ public class GincoExportServiceImpl implements IGincoExportService {
 			}
 		}
 
-		//---Exporting the array of all concepts
+		//---Exporting the arrays
 		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurusId);
 		thesaurusToExport.setConceptArrays(arrays);
 		
-		//---Exporting the array labels of all concepts
-		JaxbList<NodeLabel> labels = new JaxbList<NodeLabel>();
+		//---Exporting the labels of all arrays
+		JaxbList<NodeLabel> arrayLabels = new JaxbList<NodeLabel>();
 		for (ThesaurusArray thesaurusArray : arrays) {
-			labels.getList().add(nodeLabelService.getByThesaurusArray(thesaurusArray.getIdentifier()));
-			thesaurusToExport.getConceptArrayLabels().put(thesaurusArray.getIdentifier(),labels);
+			arrayLabels.getList().add(nodeLabelService.getByThesaurusArray(thesaurusArray.getIdentifier()));
+			thesaurusToExport.getConceptArrayLabels().put(thesaurusArray.getIdentifier(),arrayLabels);
 		}
 		
-		//---Exporting the concepts groups of the thesaurus
+		//---Exporting the concept groups
 		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(thesaurusId);
 		for (ThesaurusConceptGroup thesaurusGroup : groups) {
-			thesaurusToExport.getConceptsGroups().add(thesaurusGroup);
+			thesaurusToExport.getConceptGroups().add(thesaurusGroup);
+		}
+		
+		//---Exporting the labels of all concept groups
+		JaxbList<ThesaurusConceptGroupLabel> groupLabels = new JaxbList<ThesaurusConceptGroupLabel>();
+		for (ThesaurusConceptGroup thesaurusConceptGroup : groups) {
+			groupLabels.getList().add(thesaurusConceptGroupLabelService.getByThesaurusConceptGroup(thesaurusConceptGroup.getIdentifier()));
+			thesaurusToExport.getConceptGroupLabels().put(thesaurusConceptGroup.getIdentifier(),groupLabels);
 		}
 		
 		//We encode it in XML

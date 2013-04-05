@@ -49,6 +49,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 
@@ -57,7 +58,7 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
  * With {@MCCExportServiceImpl}
  */
 @XmlRootElement
-@XmlSeeAlso({Note.class, NodeLabel.class})
+@XmlSeeAlso({Note.class, NodeLabel.class, ThesaurusConceptGroupLabel.class})
 public class GincoExportedThesaurus implements Serializable {
 	
 	//Thesaurus and terms are read by Jaxb and automatically added to the XML structure
@@ -70,7 +71,8 @@ public class GincoExportedThesaurus implements Serializable {
     private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
     private List<ThesaurusArray> conceptArrays  = new ArrayList<ThesaurusArray>();
     private Map<String, JaxbList<NodeLabel>> conceptArrayLabels = new Hashtable();
-    private List<ThesaurusConceptGroup> conceptsGroups  = new ArrayList<ThesaurusConceptGroup>();
+    private List<ThesaurusConceptGroup> conceptGroups  = new ArrayList<ThesaurusConceptGroup>();
+    private Map<String, JaxbList<ThesaurusConceptGroupLabel>> conceptGroupLabels = new Hashtable();
     private List<ThesaurusVersionHistory> thesaurusVersions;
     private Map<String, JaxbList<String>> hierarchicalRelationship = new Hashtable();
     private Map<String, JaxbList<String>> associativeRelationship = new Hashtable();
@@ -134,14 +136,6 @@ public class GincoExportedThesaurus implements Serializable {
 		this.conceptNotes = conceptNotes;
 	}
 
-	public List<ThesaurusConceptGroup> getConceptsGroups() {
-		return conceptsGroups;
-	}
-
-	public void setConceptsGroups(List<ThesaurusConceptGroup> conceptsGroups) {
-		this.conceptsGroups = conceptsGroups;
-	}
-
 	public List<ThesaurusArray> getConceptArrays() {
 		return conceptArrays;
 	}
@@ -164,6 +158,22 @@ public class GincoExportedThesaurus implements Serializable {
 
 	public void setConceptArrayLabels(Map<String, JaxbList<NodeLabel>> conceptArrayLabels) {
 		this.conceptArrayLabels = conceptArrayLabels;
+	}
+
+	public List<ThesaurusConceptGroup> getConceptGroups() {
+		return conceptGroups;
+	}
+
+	public void setConceptGroups(List<ThesaurusConceptGroup> conceptGroups) {
+		this.conceptGroups = conceptGroups;
+	}
+
+	public Map<String, JaxbList<ThesaurusConceptGroupLabel>> getConceptGroupLabels() {
+		return conceptGroupLabels;
+	}
+
+	public void setConceptGroupLabels(Map<String, JaxbList<ThesaurusConceptGroupLabel>> conceptGroupLabels) {
+		this.conceptGroupLabels = conceptGroupLabels;
 	}
     
 }
