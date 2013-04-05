@@ -49,9 +49,11 @@ import org.mockito.MockitoAnnotations;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
@@ -70,6 +72,9 @@ public class GincoThesaurusBuilderTest {
 	
 	@Mock(name="thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
+	
+	@Mock(name="thesaurusConceptGroupDAO")
+	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 	
 	@Mock(name="thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
@@ -150,23 +155,49 @@ public class GincoThesaurusBuilderTest {
 		Assert.assertEquals(resultedConcepts.get(0).getIdentifier(), concepts.get(0).getIdentifier());
 	}
 	
-	/*@Test
+	@Test
 	public void testStoreArrays() {
 		ThesaurusArray a1 = new ThesaurusArray();
 		a1.setIdentifier("http://a1");
+		
+		ThesaurusArray a2 = new ThesaurusArray();
+		a2.setIdentifier("http://a2");
 
 		List<ThesaurusArray> resultedArrays = new ArrayList<ThesaurusArray>();
 		List<ThesaurusArray> arrays = new ArrayList<ThesaurusArray>();
 		arrays.add(a1);
+		arrays.add(a2);
 		
-		MCCExportedThesaurus exportedThesaurus = new MCCExportedThesaurus();
-		exportedThesaurus.setConceptsArrays(arrays);
+		GincoExportedThesaurus exportedThesaurus = new GincoExportedThesaurus();
+		exportedThesaurus.setConceptArrays(arrays);
 		
 		Mockito.when(thesaurusArrayDAO.update(Mockito.any(ThesaurusArray.class))).thenReturn(a1);
-		resultedArrays = mccExportedThesaurusExtractor.storeArrays(exportedThesaurus);
+		resultedArrays = gincoThesaurusBuilder.storeArrays(exportedThesaurus);
 		
 		Assert.assertEquals(resultedArrays.size(), resultedArrays.size());
 		Assert.assertEquals(resultedArrays.get(0).getIdentifier(), resultedArrays.get(0).getIdentifier());
-	}*/
+	}
+	
+	@Test
+	public void testStoreGroups() {
+		ThesaurusConceptGroup g1 = new ThesaurusConceptGroup();
+		g1.setIdentifier("http://g1");
+		
+		ThesaurusConceptGroup g2 = new ThesaurusConceptGroup();
+		g2.setIdentifier("http://g2");
 
+		List<ThesaurusConceptGroup> resultedGroups = new ArrayList<ThesaurusConceptGroup>();
+		List<ThesaurusConceptGroup> groups = new ArrayList<ThesaurusConceptGroup>();
+		groups.add(g1);
+		groups.add(g2);
+		
+		GincoExportedThesaurus exportedThesaurus = new GincoExportedThesaurus();
+		exportedThesaurus.setConceptGroups(groups);
+		
+		Mockito.when(thesaurusConceptGroupDAO.update(Mockito.any(ThesaurusConceptGroup.class))).thenReturn(g1);
+		resultedGroups = gincoThesaurusBuilder.storeGroups(exportedThesaurus);
+		
+		Assert.assertEquals(resultedGroups.size(), resultedGroups.size());
+		Assert.assertEquals(resultedGroups.get(0).getIdentifier(), resultedGroups.get(0).getIdentifier());
+	}
 }
