@@ -145,6 +145,7 @@ public class ThesaurusViewConverter {
 		}
 
 		hibernateRes.setLang(realLanguages);
+        hibernateRes.setArchived(source.getArchived());
 
 		return hibernateRes;
 	}
@@ -185,11 +186,8 @@ public class ThesaurusViewConverter {
 				view.setDefaultTopConcept(false);
 			}
 
-            if (source.isArchived() != null) {
-                view.setArchived(source.isArchived());
-            } else {
-                view.setArchived(false);
-            }
+            view.setArchived(source.isArchived());
+
 			if (source.getFormat() != null) {
 				view.setFormat(source.getFormat().getIdentifier());
 			}

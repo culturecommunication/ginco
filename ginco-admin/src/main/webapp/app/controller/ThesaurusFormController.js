@@ -74,6 +74,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
         if(thesaurusPanel.thesaurusData.canBeDeleted) {
            thesaurusPanel.down('button[cls=delete]').setDisabled(false);
+        } else {
+           thesaurusPanel.down('button[cls=delete]').setDisabled(true);
         }
 
         thesaurusPanel.down('button[cls=exportsBtnMenu]').setDisabled(false);
@@ -87,8 +89,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         thesaurusPanel.down('#publishThesaurus').setDisabled(false);
 
         if(thesaurusPanel.thesaurusData.archived) {
-            aForm.restrict();
             thesaurusPanel.down('bottomFormToolBar').setArchived();
+            thesaurusPanel.down('#archiveThesaurus').setDisabled(true);
         } else {
             thesaurusPanel.down('#archiveThesaurus').setDisabled(false);
         }
@@ -203,20 +205,11 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             url: url,
             method: 'GET',
             success: function() {
+                var record = theForm.getForm().getRecord();
+                record.set("archived",true);
+                me.loadData(theForm, record);
                 Thesaurus.ext.utils.msg('Succès',
                     'Le thesaurus a été archivé!');
-                me.application.fireEvent('thesaurusupdated');
-
-                theButton.setDisabled(true);
-
-                var thesaurusPanel = theForm.up('thesaurusPanel');
-
-                if(thesaurusPanel.thesaurusData.archived) {
-                    aForm.restrict();
-                    thesaurusPanel.down('bottomFormToolBar').setArchived();
-                } else {
-                    thesaurusPanel.down('#archiveThesaurus').setDisabled(false);
-                }
             },
             failure: function() {
                 Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemArchiveMsg);

@@ -223,7 +223,10 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                                         iconCls : 'icon-archive'
                                             } ]
 									} ],
-										items : [{
+										items : [ {
+                                            xtype : 'hiddenfield',
+                                            name : 'archived'
+                                        },{
 											xtype : 'displayfield',
 											name : 'id',
 											fieldLabel : me.xIdentifierLabel

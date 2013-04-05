@@ -42,12 +42,7 @@ CREATE CAST (INT4 AS TEXT) WITH FUNCTION int_to_text(INT4) AS IMPLICIT;
 ALTER TABLE thesaurus_version_history ADD COLUMN userid text;
 
 ALTER TABLE thesaurus ADD COLUMN archived boolean DEFAULT FALSE;
-
-ALTER TABLE thesaurus DROP COLUMN archived;
-ALTER TABLE thesaurus ADD COLUMN archived boolean DEFAULT FALSE;
-
 ALTER TABLE thesaurus ADD COLUMN ispolyhierarchical boolean DEFAULT FALSE;
-ALTER TABLE thesaurus_aud ADD COLUMN ispolyhierarchical boolean DEFAULT FALSE;
 
 ALTER TABLE languages_iso639 DROP COLUMN part2b;
 ALTER TABLE languages_iso639 DROP COLUMN part2t;

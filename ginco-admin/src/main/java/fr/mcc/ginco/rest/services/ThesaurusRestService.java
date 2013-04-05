@@ -239,14 +239,24 @@ public class ThesaurusRestService {
     @GET
     @Path("/archiveVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
-    public ExtJsonFormLoadData archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
+    public ThesaurusView archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
             throws BusinessException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
+        ThesaurusView view = null;
+
         if (object != null) {
            thesaurusService.archiveThesaurus(object);
+
+            Thesaurus result = thesaurusService.updateThesaurus(object);
+
+            if (result != null) {
+                view = thesaurusViewConverter.convert(result);
+            } else {
+                logger.error("Failed to archive thesaurus");
+            }
         }
 
-        return new ExtJsonFormLoadData(object);
+        return view;
     }
 }
