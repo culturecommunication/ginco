@@ -91,7 +91,8 @@ Ext
 							// which id is defined in conceptId variable
 							me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getAvailableConceptsOfArray';
 							me.conceptReducedStore.getProxy().extraParams = {
-								arrayId : me.arrayId
+								arrayId : me.arrayId,
+								thesaurusId : me.thesaurusData.id
 							};
 						} else {
 							// Searching only the children concepts of a concept

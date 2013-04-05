@@ -101,12 +101,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         conceptsGridStore.load();	        
         var deleteConceptArrayBtn = aForm.down('#deleteConceptArray');
         deleteConceptArrayBtn.setDisabled(false);
-        
-        var addConceptToArrayBtn = aForm.down('#addConceptToArray');
-        if(aModel.data.superOrdinateId != "") {
-        	addConceptToArrayBtn.setDisabled(false);
-        }
-        
 	},
 	
 	loadLanguages : function(theCombo) {
@@ -240,7 +234,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var theStore = theGrid.getStore();
 
         var getArrayConcepts = true;
-        //TODO : remove for test
         var arrayId = theConceptArrayPanel.gincoId ;
         
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {

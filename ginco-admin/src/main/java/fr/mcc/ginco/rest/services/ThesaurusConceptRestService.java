@@ -257,10 +257,13 @@ public class ThesaurusConceptRestService {
     @Path("/getAvailableConceptsOfArray")
     @Produces({ MediaType.APPLICATION_JSON })
     public  ExtJsonFormLoadData<List<ThesaurusConceptReducedView> > getAvailableConceptsOfArray(
-    		@QueryParam("arrayId") String arrayId)
+    		@QueryParam("arrayId") String arrayId,
+    		@QueryParam("thesaurusId") String thesaurusId
+    		)
             throws BusinessException {
+    	
         List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
-        List<ThesaurusConcept> children = thesaurusConceptService.getAvailableConceptsOfArray(arrayId);
+        List<ThesaurusConcept> children = thesaurusConceptService.getAvailableConceptsOfArray(arrayId, thesaurusId);
         for (ThesaurusConcept child : children) {
             reducedConcepts.add(thesaurusConceptViewConverter.convert(child));
         }
