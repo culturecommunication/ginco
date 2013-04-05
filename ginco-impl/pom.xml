@@ -24,10 +24,6 @@
 								trust="true">
 								<fileset dir="${folder.conf}" />
 							</scp>
-                            <scp password="${scp.password}" todir="${scp.user}@${scp.host}:${scp.folder.solr}"
-                                 trust="true">
-                                <fileset dir="${solr.folder.conf}" />
-                            </scp>
 						</target>
 					</configuration>
 					<dependencies>

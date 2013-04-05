@@ -76,7 +76,7 @@
         <scp.folder.solr>/etc/solr/conf</scp.folder.solr>
         <folder.conf>${basedir}/conf/local</folder.conf>
         <deploy.plugin.skip>true</deploy.plugin.skip>
-        <solr.folder.conf>${basedir}/solr-conf</solr.folder.conf>
+        <solr.folder.conf>${basedir}/solr</solr.folder.conf>
     </properties>
 
     <profiles>
@@ -634,6 +634,7 @@
         <module>ginco-impl</module>
         <module>ginco-admin</module>
         <module>ginco-webservices</module>
+        <module>ginco-solr-conf</module>
     </modules>
 
     <dependencies>
