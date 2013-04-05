@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class NodeLabel implements Serializable{
-
+	@XmlTransient
     private Integer identifier;
     private String lexicalValue;
     private Date modified;

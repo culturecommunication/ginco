@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusConceptGroupLabel implements Serializable{
-
+	@XmlTransient
     private Integer identifier;
     private String lexicalValue;
     private Date created;
