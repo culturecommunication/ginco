@@ -35,7 +35,6 @@
 package fr.mcc.ginco.exports.ginco;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +44,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
@@ -56,8 +56,8 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.IGincoExportService;
-import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
+import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
@@ -66,6 +66,7 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 
+@Transactional(readOnly=true)
 @Service("gincoExportService")
 public class GincoExportServiceImpl implements IGincoExportService {
 	
@@ -107,6 +108,9 @@ public class GincoExportServiceImpl implements IGincoExportService {
 
 	
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.exports.IGincoExportService#getThesaurusExport(fr.mcc.ginco.beans.Thesaurus)
+	 */
 	@Override
 	public String getThesaurusExport(Thesaurus thesaurus)
 			throws BusinessException, JAXBException {

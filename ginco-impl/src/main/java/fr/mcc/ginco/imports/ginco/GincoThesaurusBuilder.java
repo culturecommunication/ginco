@@ -73,11 +73,13 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
- * This class extracts data from a {@link GincoExportedThesaurus} object
- * and stores it in beans.
- * It returns a {@link Thesaurus} object corresponding to the imported thesaurus
+ * This class :
+ * - extracts data from a {@link GincoExportedThesaurus} object,
+ * - stores it in beans
+ * - persists beans
  *
  */
 @Component("gincoThesaurusBuilder")
@@ -120,6 +122,10 @@ public class GincoThesaurusBuilder {
 	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
 	
 	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
 	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
 	
@@ -130,22 +136,42 @@ public class GincoThesaurusBuilder {
 	@Log
 	private Logger logger;
 	
+	/**
+	 * This method stores a Ginco Thesaurus with all its objects (concepts, terms, arrays, groups etc.).
+	 * 
+	 * The order of the import is important :
+	 * - Thesaurus, concepts, terms, arrays, arrayslabels, groups, grouplabels, thesaurus versions,
+	 * hierarchical relationship, associative relationship, term notes and concepts notes
+	 * 
+	 * @param {@GincoExportedThesaurus} : the previously exported thesaurus we want to import
+	 * @return The imported {@link Thesaurus}
+	 */
 	public Thesaurus storeGincoExportedThesaurus(GincoExportedThesaurus exportedThesaurus) {
 		Thesaurus thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
 		storeConcepts(exportedThesaurus);
 		storeTerms(exportedThesaurus);
+		
 		storeArrays(exportedThesaurus);
 		storeArrayLabels(exportedThesaurus);
+		
 		storeGroups(exportedThesaurus);
 		storeGroupLabels(exportedThesaurus);
+		
 		storeVersions(exportedThesaurus);
+		
 		storeHierarchicalRelationship(exportedThesaurus);
 		storeAssociativeRelationship(exportedThesaurus);
+		
 		storeTermNotes(exportedThesaurus);
 		storeConceptNotes(exportedThesaurus);
 		return thesaurus;
 	}
 	
+	/**
+	 * This method stores all the concepts of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored concepts
+	 */
 	public List<ThesaurusConcept> storeConcepts(GincoExportedThesaurus exportedThesaurus) {
 		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
 		if (exportedThesaurus.getConcepts() != null && !exportedThesaurus.getConcepts().isEmpty()) {
@@ -157,6 +183,11 @@ public class GincoThesaurusBuilder {
 		return updatedConcepts;
 	}
 	
+	/**
+	 * This method stores all the terms of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored terms
+	 */
 	public List<ThesaurusTerm> storeTerms(GincoExportedThesaurus exportedThesaurus) {
 		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm term : exportedThesaurus.getTerms()) {
@@ -166,6 +197,11 @@ public class GincoThesaurusBuilder {
 		return updatedTerms;
 	}
 	
+	/**
+	 * This method stores all the versions of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored versions
+	 */
 	public List<ThesaurusVersionHistory> storeVersions(GincoExportedThesaurus exportedThesaurus) {
 		List<ThesaurusVersionHistory> updatedVersion = new ArrayList<ThesaurusVersionHistory>();
 		for (ThesaurusVersionHistory version : exportedThesaurus.getThesaurusVersions()) {
@@ -175,6 +211,11 @@ public class GincoThesaurusBuilder {
 		return updatedVersion;
 	}
 	
+	/**
+	 * This method stores all the array labels of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored labels
+	 */
 	public List<NodeLabel> storeArrayLabels(GincoExportedThesaurus exportedThesaurus) {
 		Map<String, JaxbList<NodeLabel>> labels = exportedThesaurus.getConceptArrayLabels();
 		List<NodeLabel> updatedLabels = new ArrayList<NodeLabel>();
@@ -204,6 +245,11 @@ public class GincoThesaurusBuilder {
 		return updatedLabels;
 	}
 	
+	/**
+	 * This method stores all the array of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored arrays
+	 */
 	public List<ThesaurusArray> storeArrays(GincoExportedThesaurus exportedThesaurus) {
 		List<ThesaurusArray> updatedArrays = new ArrayList<ThesaurusArray>();
 		for (ThesaurusArray array : exportedThesaurus.getConceptArrays()) {
@@ -213,6 +259,11 @@ public class GincoThesaurusBuilder {
 		return updatedArrays;
 	}
 	
+	/**
+	 * This method stores all the groups of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored groups
+	 */
 	public List<ThesaurusConceptGroup> storeGroups(GincoExportedThesaurus exportedThesaurus) {
 		List<ThesaurusConceptGroup> updatedGroups = new ArrayList<ThesaurusConceptGroup>();
 		for (ThesaurusConceptGroup group : exportedThesaurus.getConceptGroups()) {
@@ -222,6 +273,11 @@ public class GincoThesaurusBuilder {
 		return updatedGroups;
 	}
 	
+	/**
+	 * This method stores all the group labels of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored group labels
+	 */
 	public List<ThesaurusConceptGroupLabel> storeGroupLabels(GincoExportedThesaurus exportedThesaurus) {
 		Map<String, JaxbList<ThesaurusConceptGroupLabel>> labels = exportedThesaurus.getConceptGroupLabels();
 		List<ThesaurusConceptGroupLabel> updatedLabels = new ArrayList<ThesaurusConceptGroupLabel>();
@@ -251,6 +307,11 @@ public class GincoThesaurusBuilder {
 		return updatedLabels;
 	}
 	
+	/**
+	 * This method stores all the hierarchical relationships of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of the concepts which parents were updated
+	 */
 	public List<ThesaurusConcept> storeHierarchicalRelationship(GincoExportedThesaurus exportedThesaurus) {
 		Map<String, JaxbList<String>> relations = exportedThesaurus.getHierarchicalRelationship();
 		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
@@ -279,9 +340,22 @@ public class GincoThesaurusBuilder {
 				updatedConcepts.add(thesaurusConceptDAO.update(childConcept));
 			}
 		}
+		
+		//Processing and setting for all concepts their root concept
+		for (ThesaurusConcept thesaurusConcept : updatedConcepts) {
+			List<ThesaurusConcept> roots = thesaurusConceptService.getRootConcepts(thesaurusConcept);
+			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(roots));
+			thesaurusConceptDAO.update(thesaurusConcept);
+		}
+		
 		return updatedConcepts;
 	}
 	
+	/**
+	 * This method stores all the associative relationships of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of the concepts which associations were updated
+	 */
 	public List<ThesaurusConcept> storeAssociativeRelationship(GincoExportedThesaurus exportedThesaurus) {
 		Map<String, JaxbList<String>> associativeRelations = exportedThesaurus.getAssociativeRelationship();
 		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
@@ -306,6 +380,13 @@ public class GincoThesaurusBuilder {
 		return updatedConcepts;
 	}
 	
+	/**
+	 * Private method to save associative relationships
+	 * @param concept
+	 * @param associatedConceptIds
+	 * @return The updated {@link ThesaurusConcept}
+	 * @throws BusinessException
+	 */
 	private ThesaurusConcept saveAssociativeRelationship(
 			ThesaurusConcept concept, List<String> associatedConceptIds)
 			throws BusinessException {
@@ -344,6 +425,11 @@ public class GincoThesaurusBuilder {
 		return concept;
 	}
 	
+	/**
+	 * This method stores all the term notes of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored notes
+	 */
 	public List<Note> storeTermNotes(GincoExportedThesaurus exportedThesaurus) {
 		Map<String, JaxbList<Note>> termNotes = exportedThesaurus.getTermNotes();
 		List<Note> result = new ArrayList<Note>();
@@ -370,6 +456,11 @@ public class GincoThesaurusBuilder {
 		return result;
 	}
 	
+	/**
+	 * This method stores all the concept notes of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored notes
+	 */
 	public List<Note> storeConceptNotes(GincoExportedThesaurus exportedThesaurus) {
 		Map<String, JaxbList<Note>> conceptNotes = exportedThesaurus.getConceptNotes();
 		List<Note> result = new ArrayList<Note>();

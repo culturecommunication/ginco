@@ -54,7 +54,6 @@ import com.hp.hpl.jena.util.FileManager;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.ginco.GincoTermExporter;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.log.Log;
@@ -74,6 +73,9 @@ public class GincoImportServiceImpl implements IGincoImportService {
 	@Named("gincoThesaurusBuilder")
 	private GincoThesaurusBuilder gincoThesaurusBuilder;
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.imports.IGincoImportService#importGincoXmlThesaurusFile(java.lang.String, java.lang.String, java.io.File)
+	 */
 	@Override
 	public Thesaurus importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws JAXBException{
 		URI fileURI = writeTempFile(content, fileName, tempDir);

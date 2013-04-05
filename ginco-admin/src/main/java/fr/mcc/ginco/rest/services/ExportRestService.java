@@ -60,7 +60,6 @@ import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.extjs.view.FileResponse;
 import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
 /**
@@ -71,132 +70,161 @@ import fr.mcc.ginco.utils.LabelUtil;
 @PreAuthorize("isAuthenticated()")
 public class ExportRestService {
 
-    @Inject
-    @Named("exportService")
-    private IExportService exportService;
-    
-    
-    @Inject
-    @Named("skosExportService")
-    private ISKOSExportService skosExportService;
+	@Inject
+	@Named("exportService")
+	private IExportService exportService;
 
-    @Inject
-    @Named("gincoExportService")
-    private IGincoExportService gincoExportService;
+	@Inject
+	@Named("skosExportService")
+	private ISKOSExportService skosExportService;
 
-    private static final String TABULATION_DELIMITER = "\t";
+	@Inject
+	@Named("gincoExportService")
+	private IGincoExportService gincoExportService;
 
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
+	private static final String TABULATION_DELIMITER = "\t";
 
-    /**
-     * Return file in .txt format; name begins with current DateTime.
-     * @param thesaurusId
-     * @return
-     * @throws BusinessException
-     */
-    @GET
-    @Path("/getHierarchical")
-    @Produces("text/plain")
-    public Response getHierarchical(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
-        Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+	/**
+	 * Return file in .txt format; name begins with current DateTime.
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getHierarchical")
+	@Produces("text/plain")
+	public Response getHierarchical(
+			@QueryParam("thesaurusId") String thesaurusId)
+			throws BusinessException {
 
-        File result = writeExportFile(targetThesaurus, false);
+		Thesaurus targetThesaurus = thesaurusService
+				.getThesaurusById(thesaurusId);
 
-        
-		return new FileResponse(result,".txt", targetThesaurus.getTitle()).toResponse();
-    }
+		File result = writeExportFile(targetThesaurus, false);
 
+		return new FileResponse(result, ".txt", targetThesaurus.getTitle())
+				.toResponse();
+	}
 
-    @GET
-    @Path("/getSKOS")
-    @Produces("text/plain")
-    public Response getSKOS(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
-        Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
-        File results = skosExportService.getSKOSExport(targetThesaurus);
-       
-		return new FileResponse(results,".rdf", targetThesaurus.getTitle()).toResponse();
-    }
+	@GET
+	@Path("/getSKOS")
+	@Produces("text/plain")
+	public Response getSKOS(@QueryParam("thesaurusId") String thesaurusId)
+			throws BusinessException {
+		Thesaurus targetThesaurus = thesaurusService
+				.getThesaurusById(thesaurusId);
+		File results = skosExportService.getSKOSExport(targetThesaurus);
 
-    /**
-     * Return file in .txt format; name begins with current DateTime.
-     * @param thesaurusId
-     * @return
-     * @throws BusinessException
-     */
-    @GET
-    @Path("/getAlphabetical")
-    @Produces("text/plain")
-    public Response getAlphabetical(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
-        Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
+		return new FileResponse(results, ".rdf", targetThesaurus.getTitle())
+				.toResponse();
+	}
 
-        File result = writeExportFile(targetThesaurus, true);     
+	/**
+	 * Return file in .txt format; name begins with current DateTime.
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getAlphabetical")
+	@Produces("text/plain")
+	public Response getAlphabetical(
+			@QueryParam("thesaurusId") String thesaurusId)
+			throws BusinessException {
+		Thesaurus targetThesaurus = thesaurusService
+				.getThesaurusById(thesaurusId);
 
-		return new FileResponse(result,".txt", targetThesaurus.getTitle()).toResponse();
-    }
+		File result = writeExportFile(targetThesaurus, true);
 
-    private File writeExportFile(Thesaurus targetThesaurus, boolean alphabetical) throws BusinessException{
+		return new FileResponse(result, ".txt", targetThesaurus.getTitle())
+				.toResponse();
+	}
 
-        File temp;
-        BufferedWriter out = null;
-        try {
-            temp = File.createTempFile("pattern", ".suffix");
-            temp.deleteOnExit();
-            out = new BufferedWriter(new FileWriter(temp));
+	private File writeExportFile(Thesaurus targetThesaurus, boolean alphabetical)
+			throws BusinessException {
 
-            if(alphabetical) {
-                out.write(LabelUtil.getResourceLabel("export-alphabetical").concat(" "));
-            } else {
-                out.write(LabelUtil.getResourceLabel("export-hierarchical").concat(" "));
-            }
-            out.write(targetThesaurus.getTitle());
-            out.newLine();
-            out.newLine();
-            out.flush();
+		File temp;
+		BufferedWriter out = null;
+		try {
+			temp = File.createTempFile("pattern", ".suffix");
+			temp.deleteOnExit();
+			out = new BufferedWriter(new FileWriter(temp));
 
-            List<FormattedLine> result;
-            if(alphabetical) {
-                result = exportService.getAlphabeticalText(targetThesaurus);
-            } else {
-                result = exportService.getHierarchicalText(targetThesaurus);
-            }
+			if (alphabetical) {
+				out.write(LabelUtil.getResourceLabel("export-alphabetical")
+						.concat(" "));
+			} else {
+				out.write(LabelUtil.getResourceLabel("export-hierarchical")
+						.concat(" "));
+			}
+			out.write(targetThesaurus.getTitle());
+			out.newLine();
+			out.newLine();
+			out.flush();
 
-            for(FormattedLine results : result) {
-                for(int i=0;i<results.getTabs();i++) {
-                    out.write(TABULATION_DELIMITER);
-                }
-                out.write(results.getText());
-                out.newLine();
-                out.flush();
-            }
+			List<FormattedLine> result;
+			if (alphabetical) {
+				result = exportService.getAlphabeticalText(targetThesaurus);
+			} else {
+				result = exportService.getHierarchicalText(targetThesaurus);
+			}
 
-            out.close();
+			for (FormattedLine results : result) {
+				for (int i = 0; i < results.getTabs(); i++) {
+					out.write(TABULATION_DELIMITER);
+				}
+				out.write(results.getText());
+				out.newLine();
+				out.flush();
+			}
 
-        } catch (IOException e) {
-            throw new BusinessException("Cannot create temp file!", "cannot-create-file", e);
-        }
+			out.close();
 
-        return temp;
-    }
-    
-    @GET
-    @Path("/getGincoThesaurusExport")
-    @Produces("text/plain")
-    public Response getGincoThesaurusExport(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException, JAXBException {
-        Thesaurus targetThesaurus = thesaurusService.getThesaurusById(thesaurusId);
-        String result = gincoExportService.getThesaurusExport(targetThesaurus);
+		} catch (IOException e) {
+			throw new BusinessException("Cannot create temp file!",
+					"cannot-create-file", e);
+		}
+		return temp;
+	}
 
-        Response.ResponseBuilder response = Response.ok(result);
-        response.header("Content-Disposition",
-                "attachment; filename=\"GINCO "
-                        + targetThesaurus.getTitle()
-                        + " "
-                        + DateUtil.toString(DateUtil.nowDate())
-                        + ".xml"
-                        + "\"");     
-        
-        return response.build();
-    }
+	/**
+	 * Returns a XML file that contains exported thesaurus and all related objects, in Ginco export format
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 * @throws JAXBException
+	 */
+	@GET
+	@Path("/getGincoThesaurusExport")
+	@Produces("text/plain")
+	public Response getGincoThesaurusExport(
+			@QueryParam("thesaurusId") String thesaurusId)
+			throws BusinessException, JAXBException {
+		Thesaurus targetThesaurus = thesaurusService
+				.getThesaurusById(thesaurusId);
+		File temp;
+		BufferedWriter out = null;
+		try {
+			temp = File.createTempFile("GINCO ", ".xml");
+			temp.deleteOnExit();
+			out = new BufferedWriter(new FileWriter(temp));
+			String result = gincoExportService
+					.getThesaurusExport(targetThesaurus);
+			out.write(result);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			throw new BusinessException("Cannot create temp file!",
+					"cannot-create-file", e);
+		}
+
+		return new FileResponse(temp, ".xml", "GINCO "
+				+ targetThesaurus.getTitle()).toResponse();
+	}
 }
