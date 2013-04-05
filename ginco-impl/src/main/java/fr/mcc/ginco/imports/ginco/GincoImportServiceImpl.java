@@ -54,6 +54,7 @@ import com.hp.hpl.jena.util.FileManager;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.log.Log;
@@ -77,15 +78,18 @@ public class GincoImportServiceImpl implements IGincoImportService {
 	 * @see fr.mcc.ginco.imports.IGincoImportService#importGincoXmlThesaurusFile(java.lang.String, java.lang.String, java.io.File)
 	 */
 	@Override
-	public Thesaurus importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws JAXBException{
+	public Thesaurus importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws TechnicalException, BusinessException {
 		URI fileURI = writeTempFile(content, fileName, tempDir);
 		InputStream in = FileManager.get().open(fileURI.toString());
-		
-		Thesaurus thesaurus = new Thesaurus();
 		GincoExportedThesaurus unmarshalledExportedThesaurus = new GincoExportedThesaurus();
-		JAXBContext context = JAXBContext.newInstance(GincoExportedThesaurus.class);
-		Unmarshaller unmarshaller = context.createUnmarshaller();
-		unmarshalledExportedThesaurus = (GincoExportedThesaurus) unmarshaller.unmarshal(in);
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(GincoExportedThesaurus.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			unmarshalledExportedThesaurus = (GincoExportedThesaurus) unmarshaller.unmarshal(in);
+		} catch (JAXBException e) {
+			throw new TechnicalException("Error when trying to deserialize from XML with JAXB", e);
+		}
 		return gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
 	}
 	

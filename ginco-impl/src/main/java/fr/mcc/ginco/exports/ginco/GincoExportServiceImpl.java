@@ -43,6 +43,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,10 +55,11 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.IGincoExportService;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
@@ -69,6 +71,9 @@ import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 @Transactional(readOnly=true)
 @Service("gincoExportService")
 public class GincoExportServiceImpl implements IGincoExportService {
+	
+	@Log
+	private Logger logger;
 	
 	@Inject
 	@Named("thesaurusConceptService")
@@ -113,7 +118,7 @@ public class GincoExportServiceImpl implements IGincoExportService {
 	 */
 	@Override
 	public String getThesaurusExport(Thesaurus thesaurus)
-			throws BusinessException, JAXBException {
+			throws TechnicalException {
 		GincoExportedThesaurus thesaurusToExport = new GincoExportedThesaurus();
 		String thesaurusId = thesaurus.getIdentifier();
 		
@@ -199,20 +204,24 @@ public class GincoExportServiceImpl implements IGincoExportService {
 	/**
 	 * This method serialize in XML a Thesaurus with all its elements (terms, concepts, relationships, notes, etc.).
 	 * @param thesaurusToExport
-	 * @return
-	 * @throws JAXBException
+	 * @return String : Thesaurus serialized in XML
 	 */
-	private String serializeToXmlWithJaxb(GincoExportedThesaurus thesaurusToExport)
-			throws JAXBException {
+	private String serializeToXmlWithJaxb(GincoExportedThesaurus thesaurusToExport) throws TechnicalException {
 		//This method encodes a MCCExportedThesaurus in XML
+		logger.debug("Serializing thesaurus to XML with JAXB");
 		String result = null;
-		JAXBContext context = JAXBContext
-				.newInstance(GincoExportedThesaurus.class);
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		marshaller.marshal(thesaurusToExport, output);
-		result = output.toString();
+		JAXBContext context;
+		try {
+			context = JAXBContext
+					.newInstance(GincoExportedThesaurus.class);
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			marshaller.marshal(thesaurusToExport, output);
+			result = output.toString();
+		} catch (JAXBException e) {
+			throw new TechnicalException("Error when trying to serialize to XML with JAXB", e);
+		}
 		return result;
 	}
 }
