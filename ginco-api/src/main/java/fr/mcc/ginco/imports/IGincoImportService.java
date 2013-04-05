@@ -36,9 +36,9 @@ package fr.mcc.ginco.imports;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBException;
-
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 
 /**
@@ -54,9 +54,10 @@ public interface IGincoImportService {
 	 * @param fileName
 	 * @param tempDir
 	 * @return The imported Thesaurus
-	 * @throws JAXBException 
+	 * @throws TechnicalException
+	 * @throws BusinessException
 	 */
 	Thesaurus importGincoXmlThesaurusFile(String content, String fileName,
-			File tempDir) throws JAXBException;
+			File tempDir) throws TechnicalException, BusinessException ;
 
 }

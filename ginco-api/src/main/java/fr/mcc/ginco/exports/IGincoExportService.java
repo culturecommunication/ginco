@@ -34,12 +34,8 @@
  */
 package fr.mcc.ginco.exports;
 
-import java.io.FileNotFoundException;
-
-import javax.xml.bind.JAXBException;
-
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 /**
  * Service provides function to use for Ginco export
@@ -50,8 +46,7 @@ public interface IGincoExportService {
     /**
      * Get Ginco Thesaurus export for given thesaurus.
      * @param thesaurus
-     * @throws FileNotFoundException 
-     * @throws JAXBException 
+     * @throws TechnicalException
      */
-    String getThesaurusExport(Thesaurus thesaurus) throws BusinessException, JAXBException;
+    String getThesaurusExport(Thesaurus thesaurus) throws TechnicalException;
 }

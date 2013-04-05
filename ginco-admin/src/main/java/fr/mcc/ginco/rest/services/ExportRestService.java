@@ -47,13 +47,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBException;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.IExportService;
 import fr.mcc.ginco.exports.IGincoExportService;
 import fr.mcc.ginco.exports.ISKOSExportService;
@@ -111,6 +111,12 @@ public class ExportRestService {
 				.toResponse();
 	}
 
+	/**
+	 * Get a SKOS export of a thesaurus
+	 * @param thesaurusId
+	 * @return A RDF file that contains the thesaurus in SKOS format
+	 * @throws BusinessException
+	 */
 	@GET
 	@Path("/getSKOS")
 	@Produces("text/plain")
@@ -198,14 +204,13 @@ public class ExportRestService {
 	 * @param thesaurusId
 	 * @return
 	 * @throws BusinessException
-	 * @throws JAXBException
 	 */
 	@GET
 	@Path("/getGincoThesaurusExport")
 	@Produces("text/plain")
 	public Response getGincoThesaurusExport(
 			@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException, JAXBException {
+			throws BusinessException, TechnicalException {
 		Thesaurus targetThesaurus = thesaurusService
 				.getThesaurusById(thesaurusId);
 		File temp;
