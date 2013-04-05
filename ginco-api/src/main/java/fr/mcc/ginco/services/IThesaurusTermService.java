@@ -88,14 +88,7 @@ public interface IThesaurusTermService {
      * @throws BusinessException 
      */
     ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException;
-
     
-    /**
-     * @param listOfTerms
-     * @return
-     * This method returns all the prefered terms
-     */
-    List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms);
     
     /**
      * @param idConcept
@@ -103,15 +96,8 @@ public interface IThesaurusTermService {
      * This method returns all the terms that belong to a concept
      * @throws BusinessException 
      */
-    List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;
+    List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;   
     
-    /**
-     * This method compares lists of terms - if previosly presented term has been deleted
-     * (so it is not anymore in Concept) it will be marked as SandBoxed.
-     * @param sent new list of Terms
-     * @param origin old list of Terms
-     */
-    void markTermsAsSandboxed(List<ThesaurusTerm> sent, List<ThesaurusTerm> origin) throws BusinessException;
 
     /**
      * Get list of paginated Thesaurus Validated Terms.

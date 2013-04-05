@@ -159,28 +159,6 @@ public class ThesaurusConceptRestService {
                         .getTerms(), true);
 		logger.info("Number of converted terms : " + terms.size());
 
-		List<ThesaurusTerm> preferedTerm = thesaurusTermService
-				.getPreferedTerms(terms);
-
-		// Business rule : a concept must have at least 1 term
-		if (preferedTerm.size() == 0) {
-			throw new BusinessException("A concept must have a prefered term",
-					"missing-preferred-term-for-concept");
-		}
-
-		// Business rule : a concept mustn't have more than one prefered term
-		if (preferedTerm.size() > 1) {
-			throw new BusinessException(
-					"A concept must have at only one prefered term",
-					"to-many-preferred-terms-for-concept");
-		}
-
-		if (StringUtils.isNotEmpty(thesaurusConceptViewJAXBElement.getIdentifier())) {
-				List<ThesaurusTerm> origin = thesaurusTermService
-						.getTermsByConceptId(convertedConcept.getIdentifier());
-				thesaurusTermService.markTermsAsSandboxed(terms, origin);
-			
-		}
 
 		// We save or update the concept
 		logger.info("Saving concept in DB");

@@ -34,20 +34,21 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusTermService")
@@ -80,20 +81,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	@Override
     public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
         return thesaurusTermDAO.findTermsByConceptId(idConcept);
-    }
-
-    @Override
-    public void markTermsAsSandboxed(List<ThesaurusTerm> sent, List<ThesaurusTerm> origin) throws BusinessException {
-
-        for (ThesaurusTerm old : origin) {
-            if (!sent.contains(old)) {
-                ThesaurusTerm term = thesaurusTermDAO.getById(old.getIdentifier());
-                term.setConcept(null);
-                thesaurusTermDAO.update(term);
-                logger.info("Marking Term with ID " + old.getIdentifier() + " as SandBoxed.");
-            }
-        }
-    }
+    }  
 
 	@Override
     public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException {
@@ -124,18 +112,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         } else {
             throw new BusinessException("It's not possible to delete a term attached to a concept or with a status different from rejected", "delete-attached-term");
         }
-    }
-
-	@Override
-    public List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
-        List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
-        for (ThesaurusTerm thesaurusTerm : listOfTerms) {
-            if (thesaurusTerm.getPrefered()) {
-                preferedTerms.add(thesaurusTerm);
-            }
-        }
-        return preferedTerms;
-    }
+    }	
 
     @Override
     public List<ThesaurusTerm> getAllTerms() {

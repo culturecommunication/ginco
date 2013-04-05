@@ -132,7 +132,6 @@ public class ThesaurusConceptRestServiceTest {
 		Mockito.when(thesaurusConceptViewConverter.convert(fakeConceptView)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(termViewConverter.convertTermViewsInTerms(termViews, true)).thenReturn(terms);
 		
-		Mockito.when(thesaurusTermService.getPreferedTerms(terms)).thenReturn(preferedTerms);
 		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(thesaurusConceptViewConverter.convert(Mockito.any(ThesaurusConcept.class), Mockito.anyListOf(ThesaurusTerm.class))).thenReturn(fakeConceptView);
 		

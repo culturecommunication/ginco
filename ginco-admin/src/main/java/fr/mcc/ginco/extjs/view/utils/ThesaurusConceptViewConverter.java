@@ -34,7 +34,18 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.commons.collections.ListUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -47,16 +58,6 @@ import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
-import org.apache.commons.collections.ListUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Small class responsible for converting real {@link ThesaurusConcept} object
@@ -77,11 +78,7 @@ public class ThesaurusConceptViewConverter {
 	
 	@Inject
 	@Named("associativeRelationshipService")
-	private IAssociativeRelationshipService associativeRelationshipService;	
-
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;
+	private IAssociativeRelationshipService associativeRelationshipService;		
 
 	public List<ThesaurusConceptReducedView> convert(
 			List<ThesaurusConcept> conceptList) throws BusinessException {
@@ -162,7 +159,6 @@ public class ThesaurusConceptViewConverter {
 		// create a new one
 		if ("".equals(source.getIdentifier())) {
 			thesaurusConcept = new ThesaurusConcept();
-			thesaurusConcept.setIdentifier(generatorService.generate(ThesaurusConcept.class));
 			thesaurusConcept.setCreated(DateUtil.nowDate());
 			logger.info("Creating a new concept");
 		} else {

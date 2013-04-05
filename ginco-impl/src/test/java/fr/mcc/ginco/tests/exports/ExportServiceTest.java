@@ -239,15 +239,7 @@ public class ExportServiceTest {
 
         Mockito.when(thesaurusConceptService.getChildrenByConceptId(co3.getIdentifier())).thenReturn(new ArrayList<ThesaurusConcept>(){{
             add(co3_1);
-        }});
-
-        Mockito.when(thesaurusTermService.getPreferedTerms(list_tr1)).thenReturn(list_tr1);
-        Mockito.when(thesaurusTermService.getPreferedTerms(list_tr1_1)).thenReturn(list_tr1_1);
-        Mockito.when(thesaurusTermService.getPreferedTerms(list_tr2)).thenReturn(list_tr2);
-        Mockito.when(thesaurusTermService.getPreferedTerms(list_tr2_1)).thenReturn(list_tr2_1);
-        Mockito.when(thesaurusTermService.getPreferedTerms(list_tr3)).thenReturn(list_tr3);
-        Mockito.when(thesaurusTermService.getPreferedTerms(list_tr3_1)).thenReturn(list_tr3_1);
-
+        }});       
 
         Mockito.when(nodeLabelService.getByThesaurusArray(ar1.getIdentifier())).thenReturn(nl1);
         Mockito.when(nodeLabelService.getByThesaurusArray(ar2.getIdentifier())).thenReturn(nl2);

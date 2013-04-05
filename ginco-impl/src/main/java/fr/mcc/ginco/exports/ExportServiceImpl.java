@@ -62,6 +62,7 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermRoleService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.LabelUtil;
+import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 @Service("exportService")
 public class ExportServiceImpl implements IExportService {
@@ -278,12 +279,12 @@ public class ExportServiceImpl implements IExportService {
 		@Override
 		public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
 			try {
-				String l1 = thesaurusTermService
+				String l1 = ThesaurusTermUtils
 						.getPreferedTerms(
 								thesaurusTermService.getTermsByConceptId(o1
 										.getIdentifier())).get(0)
 						.getLexicalValue();
-				String l2 = thesaurusTermService
+				String l2 =ThesaurusTermUtils
 						.getPreferedTerms(
 								thesaurusTermService.getTermsByConceptId(o2
 										.getIdentifier())).get(0)

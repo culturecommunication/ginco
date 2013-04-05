@@ -40,6 +40,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
@@ -53,6 +54,9 @@ import fr.mcc.ginco.exceptions.BusinessException;
 @Repository("thesaurusTermDAO")
 public class ThesaurusTermDAO extends
 		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
+	
+	@Value("${ginco.default.language}")
+	private String defaultLang;
 	
 	public ThesaurusTermDAO() {
 		super(ThesaurusTerm.class);
@@ -108,11 +112,13 @@ public class ThesaurusTermDAO extends
             throw new BusinessException("No preferred term found ! " +
                     "Please check your database !", "no-preferred-term-found");
         }
-
-        if(list.size() != 1) {
-            throw new BusinessException("More than one preferred term found ! " +
-                    "Please check your database !", "too-many-preferred-terms-found");
-        }
+        if (list.size() > 0) {
+        	for (ThesaurusTerm term:list) {
+        		if (term.getLanguage().getId().equals(defaultLang)) {
+        			return term;
+        		}
+        	}
+        }       
 
         return list.get(0);
 	}
