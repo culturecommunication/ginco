@@ -40,6 +40,8 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
+import fr.mcc.ginco.services.IIndexerService;
+
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.codehaus.jackson.JsonGenerationException;
@@ -83,6 +85,10 @@ public class ImportRestService {
 	@Inject
 	@Named("gincoImportService")
 	private IGincoImportService gincoImportService;
+	
+	@Inject
+	@Named("indexerService")
+	private IIndexerService indexerService;
 
 
 	@Inject
@@ -118,6 +124,7 @@ public class ImportRestService {
 
 		Thesaurus importedThesaurus = skosImportService.importSKOSFile(content,
 				fileName, tempdir);
+		indexerService.indexThesaurus(importedThesaurus);
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				thesaurusViewConverter.convert(importedThesaurus)));
@@ -151,7 +158,7 @@ public class ImportRestService {
 				.getAttribute("javax.servlet.context.tempdir");
 		
 		Thesaurus thesaurus = gincoImportService.importGincoXmlThesaurusFile(content, fileName, tempDir);
-		
+		indexerService.indexThesaurus(thesaurus);
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				thesaurusViewConverter.convert(thesaurus)));

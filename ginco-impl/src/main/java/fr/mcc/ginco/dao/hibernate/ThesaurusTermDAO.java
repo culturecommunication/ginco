@@ -131,6 +131,15 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
+	public List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId) throws BusinessException {
+		List<ThesaurusTerm> list = getCurrentSession()
+                .createCriteria(ThesaurusTerm.class)
+                .add(Restrictions.eq("thesaurus.identifier", thesaurusId))
+                .list();
+		return list;
+	}
+	
+	@Override
 	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {		 
 		return (Long) getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)

@@ -39,11 +39,13 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.*;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -88,6 +90,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
+	
+    @Inject
+    @Named("indexerService")
+    private IIndexerService indexerService;
 
 	@Log
 	private Logger logger;
@@ -198,6 +204,12 @@ public class ThesaurusRestService {
 
         if (object != null) {
             thesaurusService.destroyThesaurus(object);
+            try {
+            indexerService.removeThesaurusIndex(object.getIdentifier());
+            } catch (TechnicalException tex)
+            {
+            	logger.error("Problem when removing thesaurus index...",tex);
+            }
         }
     }
 

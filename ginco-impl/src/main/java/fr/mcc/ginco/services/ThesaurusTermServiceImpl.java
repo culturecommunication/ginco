@@ -202,4 +202,9 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     		
     	
 	}
+
+	@Override
+	public List<ThesaurusTerm> getAllTerms(String thesaurusId) {
+		return thesaurusTermDAO.findTermsByThesaurusId(thesaurusId);
+	}
 }

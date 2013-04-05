@@ -44,8 +44,10 @@ import javax.inject.Named;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.slf4j.Logger;
@@ -54,6 +56,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -204,6 +207,21 @@ public class IndexerServiceImpl implements IIndexerService {
         }
     }
     
+    @Override
+    public void removeThesaurusIndex(String thesaurusId) throws TechnicalException {
+        try {
+        	solrServer.deleteByQuery(SolrField.THESAURUSID+":"+ClientUtils.escapeQueryChars(thesaurusId));
+        	solrServer.commit();
+        } catch (SolrServerException e) {
+            throw new TechnicalException("Error executing query for clearing SOLR index!", e);
+        } catch (IOException e) {
+            throw new TechnicalException("IO error during executing query for clearing SOLR index!", e);
+        }
+        catch (SolrException e) {
+    		throw new TechnicalException("Error executing query for clearing SOLR index!", e);
+    	}
+    }
+    
     private void removeAllIndex(SolrServer solrCore) {
         try {
         	solrServer.deleteByQuery("*:*");
@@ -212,6 +230,8 @@ public class IndexerServiceImpl implements IIndexerService {
             throw new TechnicalException("Error executing query for clearing SOLR index!", e);
         } catch (IOException e) {
             throw new TechnicalException("IO error during executing query for clearing SOLR index!", e);
+        } catch (SolrException e) {
+        	 throw new TechnicalException("Error executing query for clearing SOLR index!", e);
         }
     }
 
@@ -220,6 +240,13 @@ public class IndexerServiceImpl implements IIndexerService {
         removeAllIndex(solrServer);
         addConcepts(thesaurusConceptService.getAllConcepts());
         addTerms(thesaurusTermService.getAllTerms());
+        try {
+        	solrServer.optimize();
+        } catch (SolrServerException e) {
+            throw new TechnicalException("Error executing query for clearing SOLR index!", e);
+        } catch (IOException e) {
+            throw new TechnicalException("IO error during executing query for clearing SOLR index!", e);
+        }
     }
 
     @Override
@@ -277,5 +304,13 @@ public class IndexerServiceImpl implements IIndexerService {
     		this.addTerm(thesaurusNote.getTerm());
     	if (thesaurusNote.getConcept()!=null)
     		this.addConcept(thesaurusNote.getConcept());
+	}
+
+	@Override
+	@Async
+	public void indexThesaurus(Thesaurus thesaurus) throws TechnicalException {
+		removeThesaurusIndex(thesaurus.getIdentifier());
+		addTerms(thesaurusTermService.getAllTerms(thesaurus.getIdentifier()));
+		addConcepts(thesaurusConceptService.getConceptsByThesaurusId(null, thesaurus.getIdentifier(), true, false));
 	}
 }

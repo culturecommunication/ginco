@@ -37,6 +37,7 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
@@ -51,6 +52,17 @@ public interface IIndexerService {
      * Deletes all data from SOLR and reindex everything.
      */
     void forceIndexing() throws TechnicalException;
+    
+    /**
+     * Force a thesaurus reindexation
+     */
+    void indexThesaurus(Thesaurus thesaurus) throws TechnicalException;
+    
+    /**
+     * Remove thesaurus index data
+     */
+    void removeThesaurusIndex(String thesaurusId) throws TechnicalException;
+
 
     /**
      * Takes an ThesaurusTerm and adds it to index.

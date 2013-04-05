@@ -127,6 +127,12 @@ public interface IThesaurusTermService {
     List<ThesaurusTerm> getAllTerms();
     
     /**
+     * For indexing purposes.
+      * @return list of all existing terms.
+     */
+    List<ThesaurusTerm> getAllTerms(String thesaurusId);
+    
+    /**
 	 * This service returns the identifier of a concept by the term
 	 * 
 	 * @param  lexical value of the term,@param

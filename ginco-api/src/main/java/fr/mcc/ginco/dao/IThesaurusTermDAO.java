@@ -98,6 +98,9 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 */
 	List<ThesaurusTerm> findTermsByConceptId(String conceptId)
 			throws BusinessException;
+	
+	List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId)
+			throws BusinessException;
 
 	/**
 	 * Returns a number of similar Thesaurus Terms that fit to the parameter's lexical value

@@ -36,9 +36,17 @@ Ext.define('GincoApp.view.SearchPanel', {
 	closable : true,
 	localized : true,
 	searchQuery : '*',
+	xTypeLabels : {
+		ThesaurusTerm : 'Term',
+		ThesaurusConcept : 'Concept',
+	},
 	layout : {
 		type : 'vbox',
 		align : 'stretch'
+	},
+	typeRenderer : function(value,record)
+	{
+		return this.ownerCt.xTypeLabels[value];
 	},
 
 	initComponent : function() {
@@ -85,6 +93,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				{
 					dataIndex : 'type',
 					text : me.xTypeValueColumnLabel,
+					renderer : me.typeRenderer,
 					width :200
 				} ]
 			} ]
