@@ -80,15 +80,11 @@ ALTER TABLE thesaurus_version_history
     ON UPDATE NO ACTION ON DELETE CASCADE;
 
 CREATE TABLE languages_iso639 (
-    id character(3) NOT NULL,
-    part2b character(3),
-    part2t character(3),
+    id character(5) NOT NULL,
     part1 character(2),
-    scope character(1) NOT NULL,
-    type character(1) NOT NULL,
     ref_name character varying(150) NOT NULL,
     toplanguage boolean NOT NULL DEFAULT FALSE,
-    comment character varying(150)
+    principallanguage boolean DEFAULT FALSE
 );
 
 CREATE TABLE thesaurus_organization (

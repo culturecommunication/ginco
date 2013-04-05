@@ -6,14 +6,9 @@
 		<id name="id" column="id">
 			<generator class="native" />
 		</id>
-		<property name="part2b" />
-		<property name="part2t" />
 		<property name="part1" />
-		<property name="scope" not-null="true" />
-		<property name="type" not-null="true" />
 		<property column="ref_name" name="refname" not-null="true" />
-		<property name="toplanguage" not-null="true" />
-		<property name="comment" />
-		
+		<property name="topLanguage" column="toplanguage" not-null="true" />
+		<property name="principalLanguage" column="principallanguage" not-null="true" />		
 	</class>
 </hibernate-mapping>

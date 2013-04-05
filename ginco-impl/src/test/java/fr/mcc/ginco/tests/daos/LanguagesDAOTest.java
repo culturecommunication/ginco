@@ -32,72 +32,52 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
+package fr.mcc.ginco.tests.daos;
 
 import java.util.List;
 
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Repository;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.dao.hibernate.LanguageDAO;
+import fr.mcc.ginco.tests.BaseDAOTest;
 
-/**
- * Implementation of {@link ILanguageDAO}; basic class for DAO-related work.
- */
-@Repository("languagesDAO")
-public class LanguageDAO extends GenericHibernateDAO<Language, String>
-		implements ILanguageDAO {
+public class LanguagesDAOTest extends BaseDAOTest {
 	
-	@Log
-	private Logger logger;
+    private LanguageDAO languageDAO = new LanguageDAO() ; 
+    
+    @Before
+	public void handleSetUpOperation() throws Exception {
+		super.handleSetUpOperation();
+		languageDAO.setSessionFactory(getSessionFactory());
+	}   
+    
+    @Test
+	public void testFindPaginatedItems() {
+    	List<Language> languages = languageDAO.findPaginatedItems(0, 1);
+    	Assert.assertNotNull(languages);
+    	Assert.assertEquals( "en-US", languages.get(0).getId());
+	}
+
+
+	@Test
+	public void testFindTopLanguages() {
+    	List<Language> languages= languageDAO.findTopLanguages();
+    	Assert.assertEquals(3, languages.size());
+	}
 	
-	public LanguageDAO() {
-		super(Language.class);
-	}
 
-	/**
-	 * @return List of Language with favorites Language first, and the other
-	 *         elements sorted alphabetically with a starting index and a limit
-	 *         of items to be returned
-	 */
+	@Test
+	public void  testGetByPart1() {
+		Language lang = languageDAO.getByPart1("fr");
+    	Assert.assertEquals("fr-FR", lang.getId());
+	}
+    
+    
 	@Override
-	public List<Language> findPaginatedItems(Integer start, Integer limit) {
-		return getCurrentSession().createCriteria(Language.class)
-				.setMaxResults(limit).setFirstResult(start)
-				.addOrder(Order.desc("topLanguage"))
-				.addOrder(Order.asc("refname")).list();
+	public String  getXmlDataFileInit() {
+		return "/languages_init.xml";		
 	}
-
-	/**
-	 * @return List of top Languages
-	 */
-	@Override
-	public List<Language> findTopLanguages() {
-		return getCurrentSession().createCriteria(Language.class)
-				.add(Restrictions.eq("topLanguage", true)).list();
-	}
-
-	
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.ILanguageDAO#getByPart1(java.lang.String)
-	 */
-	@Override
-	public Language getByPart1(String part1) {
-		List<Language> languages = getCurrentSession()
-				.createCriteria(Language.class)
-				.add(Restrictions.eq("part1", part1))
-				.add(Restrictions.eq("principalLanguage", true)).list();
-		if (languages != null && languages.size() > 0) {
-			if(languages.size() > 01) {
-				logger.warn("Multiple principal languages found for the same part1 " + part1);
-			}
-			return languages.get(0);
-		}
-		return null;
-	}
-
 }

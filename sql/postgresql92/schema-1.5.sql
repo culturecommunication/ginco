@@ -48,3 +48,10 @@ ALTER TABLE thesaurus ADD COLUMN archived boolean DEFAULT FALSE;
 
 ALTER TABLE thesaurus ADD COLUMN ispolyhierarchical boolean DEFAULT FALSE;
 ALTER TABLE thesaurus_aud ADD COLUMN ispolyhierarchical boolean DEFAULT FALSE;
+
+ALTER TABLE languages_iso639 DROP COLUMN part2b;
+ALTER TABLE languages_iso639 DROP COLUMN part2t;
+ALTER TABLE languages_iso639 DROP COLUMN scope;
+ALTER TABLE languages_iso639 DROP COLUMN type;
+ALTER TABLE languages_iso639 DROP COLUMN comment;
+ALTER TABLE languages_iso639 ADD COLUMN principallanguage boolean DEFAULT FALSE;

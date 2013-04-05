@@ -55,11 +55,11 @@ public interface ILanguageDAO extends IGenericDAO<Language, String> {
 	List<Language> findTopLanguages();
 	
 	/**
-	 * Gets a list of languages by "part1" field
+	 * Gets a the language identified by it's part1 and who is principallanguages
 	 * @param part1
 	 * @return
 	 */
-	List<Language> getByPart1(String part1);
+	Language getByPart1(String part1);
 
 
 }

@@ -100,9 +100,9 @@ public class NodeLabelBuilder extends AbstractBuilder {
 			Language defaultLangL = languagesDAO.getById(defaultLang);
 			nodeLabel.setLanguage(defaultLangL);
 		} else {
-			List<Language> langs = languagesDAO.getByPart1(lang);
-			if (langs.size() > 0) {
-				nodeLabel.setLanguage(langs.get(0));
+			Language language = languagesDAO.getByPart1(lang);
+			if (language != null) {
+				nodeLabel.setLanguage(language);
 			} else {
 				throw new BusinessException("Node label " + stmt.getString()
 						+ " is missing it's language",

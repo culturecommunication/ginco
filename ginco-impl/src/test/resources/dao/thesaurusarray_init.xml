@@ -33,21 +33,12 @@
 
     <table name="languages_iso639">
         <column>id</column>
-        <column>part2b</column>
-        <column>part2t</column>
         <column>part1</column>
-        <column>scope</column>
-        <column>type</column>
         <column>ref_name</column>
         <column>toplanguage</column>
-        <column>comment</column>
         <row>
             <value>fra</value>
-            <value></value>
-            <value></value>
-            <value></value>
             <value>I</value>
-            <value>L</value>
             <value>Francaise</value>
             <value>false</value>
         </row>
