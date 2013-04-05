@@ -7,11 +7,5 @@
 			<generator class="native" />
 		</id>
 		<property name="label" not-null="true" />
-		
-		<set name="thesauruses" inverse="true">
-			<key column="identifier" />
-			<one-to-many class="Thesaurus" />
-		</set>
-
 	</class>
 </hibernate-mapping>
