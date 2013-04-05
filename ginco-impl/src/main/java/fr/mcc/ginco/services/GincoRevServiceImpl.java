@@ -62,7 +62,9 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.DateUtil;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("gincoRevService")
@@ -95,58 +97,68 @@ public class GincoRevServiceImpl implements IGincoRevService {
 	ThesaurusAuditReader thesaurusAuditReader;
 
 	@Override
-	public File getLogJournal(Thesaurus thesaurus) throws IOException {
-		File res = File.createTempFile("pattern", ".suffix");
-		res.deleteOnExit();
-		BufferedWriter out = new BufferedWriter(new FileWriter(res));
-		auditCSVWriter.writeHeader(out);
+	public File getLogJournal(Thesaurus thesaurus) {
+		File res;
+		try {
+			res = File.createTempFile("pattern", ".suffix");
 
-		ThesaurusVersionHistory lastPublishedVersion = thesaurusVersionHistoryDAO
-				.getLastPublishedVersionByThesaurusId(thesaurus.getIdentifier());
-		Date startDate = thesaurus.getCreated();
-		if (lastPublishedVersion != null) {
-			startDate = lastPublishedVersion.getDate();
+			res.deleteOnExit();
+			BufferedWriter out = new BufferedWriter(new FileWriter(res));
+			auditCSVWriter.writeHeader(out);
+
+			ThesaurusVersionHistory lastPublishedVersion = thesaurusVersionHistoryDAO
+					.getLastPublishedVersionByThesaurusId(thesaurus
+							.getIdentifier());
+			Date startDate = thesaurus.getCreated();
+			if (lastPublishedVersion != null) {
+				startDate = lastPublishedVersion.getDate();
+			}
+			logger.debug("Generating audit logs from "
+					+ DateUtil.toString(startDate) + " for thesaurus "
+					+ thesaurus.getIdentifier());
+
+			List<JournalLine> allEvents = new ArrayList<JournalLine>();
+
+			AuditReader reader = AuditReaderFactory.get(sessionFactory
+					.getCurrentSession());
+
+			allEvents.addAll(thesaurusAuditReader.getThesaurusAdded(reader,
+					thesaurus, startDate));
+
+			allEvents.addAll(termAuditReader.getTermAdded(reader, thesaurus,
+					startDate));
+
+			allEvents.addAll(termAuditReader.getTermRoleChanged(reader,
+					thesaurus, startDate));
+
+			allEvents.addAll(termAuditReader.getTermLexicalValueChanged(reader,
+					thesaurus, startDate));
+
+			allEvents.addAll(termAuditReader.getTermAttachmentChanged(reader,
+					thesaurus, startDate));
+
+			allEvents.addAll(conceptAuditReader.getConceptAdded(reader,
+					thesaurus, startDate));
+
+			allEvents.addAll(conceptAuditReader.getConceptHierarchyChanged(
+					reader, thesaurus, startDate));
+
+			allEvents.addAll(conceptAuditReader.getConceptStatusChanged(reader,
+					thesaurus, startDate));
+
+			Collections.sort(allEvents);
+
+			for (JournalLine line : allEvents) {
+				auditCSVWriter.writeJournalLine(line, out);
+			}
+
+			out.flush();
+			out.close();
+			return res;
+
+		} catch (IOException e) {
+			throw new TechnicalException("Error writing audit log file", e);
 		}
-
-		List<JournalLine> allEvents = new ArrayList<JournalLine>();
-
-		AuditReader reader = AuditReaderFactory.get(sessionFactory
-				.getCurrentSession());
-
-		allEvents.addAll(thesaurusAuditReader.getThesaurusAdded(reader,
-				thesaurus, startDate));
-
-		allEvents.addAll(termAuditReader.getTermAdded(reader, thesaurus,
-				startDate));	
-
-		allEvents.addAll(termAuditReader.getTermRoleChanged(reader, thesaurus,
-				startDate));
-
-		allEvents.addAll(termAuditReader.getTermLexicalValueChanged(reader,
-				thesaurus, startDate));
-
-		allEvents.addAll(termAuditReader.getTermAttachmentChanged(reader,
-				thesaurus, startDate));
-		
-		allEvents.addAll(conceptAuditReader.getConceptAdded(reader, thesaurus,
-				startDate));
-
-		allEvents.addAll(conceptAuditReader.getConceptHierarchyChanged(reader,
-				thesaurus, startDate));
-
-		allEvents.addAll(conceptAuditReader.getConceptStatusChanged(reader,
-				thesaurus, startDate));
-
-		Collections.sort(allEvents);
-
-		for (JournalLine line : allEvents) {
-			auditCSVWriter.writeJournalLine(line, out);
-		}
-
-		out.flush();
-		out.close();
-		return res;
-
 	}
 
 }

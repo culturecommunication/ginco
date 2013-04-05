@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.exception.AuditException;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
 
@@ -53,9 +54,10 @@ import fr.mcc.ginco.audit.csv.JournalLineBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 @Service("thesaurusConceptAuditReader")
-public class ThesaurusConceptAuditReader{
+public class ThesaurusConceptAuditReader {
 
 	@Inject
 	@Named("auditQueryBuilder")
@@ -68,17 +70,22 @@ public class ThesaurusConceptAuditReader{
 	public List<JournalLine> getConceptAdded(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
-		AuditQuery conceptQuery = auditQueryBuilder.getEntityAddedQuery(reader,
-				thesaurus, startDate, ThesaurusConcept.class);
+		try {
+			AuditQuery conceptQuery = auditQueryBuilder.getEntityAddedQuery(
+					reader, thesaurus, startDate, ThesaurusConcept.class);
 
-		List<Object[]> allConceptRevisions = conceptQuery.getResultList();
-		for (Object[] revisionData : allConceptRevisions) {
-			JournalLine journal = journalLineBuilder.buildLineBase(
-					JournalEventsEnum.THESAURUSCONCEPT_CREATED,
-					(GincoRevEntity) revisionData[1]);
-			journal.setConceptId(((ThesaurusConcept) revisionData[0])
-					.getIdentifier());
-			allEvents.add(journal);
+			List<Object[]> allConceptRevisions = conceptQuery.getResultList();
+			for (Object[] revisionData : allConceptRevisions) {
+				JournalLine journal = journalLineBuilder.buildLineBase(
+						JournalEventsEnum.THESAURUSCONCEPT_CREATED,
+						(GincoRevEntity) revisionData[1]);
+				journal.setConceptId(((ThesaurusConcept) revisionData[0])
+						.getIdentifier());
+				allEvents.add(journal);
+			}
+		} catch (AuditException ae) {
+			throw new TechnicalException(
+					"Error getting concept creation event ", ae);
 		}
 		return allEvents;
 	}
@@ -86,35 +93,43 @@ public class ThesaurusConceptAuditReader{
 	public List<JournalLine> getConceptHierarchyChanged(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
-		AuditQuery conceptHierarchyQuery = auditQueryBuilder
-				.getPropertyChangedQuery(reader, thesaurus, startDate,
-						ThesaurusConcept.class, "parentConcepts");
 
-		List<Object[]> allConceptHierarchyChanges = conceptHierarchyQuery
-				.getResultList();
-		for (Object[] revisionData : allConceptHierarchyChanges) {
-			JournalLine journal = journalLineBuilder.buildLineBase(
-					JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,
-					(GincoRevEntity) revisionData[1]);
-			ThesaurusConcept concept = (ThesaurusConcept) revisionData[0];
-			journal.setConceptId(concept.getIdentifier());
-			journal.setNewGenericTerm(getConceptIds(concept.getParentConcepts()));
+		try {
+			AuditQuery conceptHierarchyQuery = auditQueryBuilder
+					.getPropertyChangedQuery(reader, thesaurus, startDate,
+							ThesaurusConcept.class, "parentConcepts");
 
-			AuditQuery previousElementQuery = auditQueryBuilder
-					.getPreviousVersionQuery(reader, ThesaurusConcept.class,
-							concept.getIdentifier(),
-							((GincoRevEntity) revisionData[1]).getId());
-			Number previousRevision = (Number) previousElementQuery
-					.getSingleResult();
-			if (previousRevision != null) {
-				ThesaurusConcept previousConcept = reader.find(
-						ThesaurusConcept.class, concept.getIdentifier(),
-						previousRevision);
-				journal.setOldGenericTerm(getConceptIds(previousConcept
+			List<Object[]> allConceptHierarchyChanges = conceptHierarchyQuery
+					.getResultList();
+			for (Object[] revisionData : allConceptHierarchyChanges) {
+				JournalLine journal = journalLineBuilder.buildLineBase(
+						JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,
+						(GincoRevEntity) revisionData[1]);
+				ThesaurusConcept concept = (ThesaurusConcept) revisionData[0];
+				journal.setConceptId(concept.getIdentifier());
+				journal.setNewGenericTerm(getConceptIds(concept
 						.getParentConcepts()));
-			}
 
-			allEvents.add(journal);
+				AuditQuery previousElementQuery = auditQueryBuilder
+						.getPreviousVersionQuery(reader,
+								ThesaurusConcept.class,
+								concept.getIdentifier(),
+								((GincoRevEntity) revisionData[1]).getId());
+				Number previousRevision = (Number) previousElementQuery
+						.getSingleResult();
+				if (previousRevision != null) {
+					ThesaurusConcept previousConcept = reader.find(
+							ThesaurusConcept.class, concept.getIdentifier(),
+							previousRevision);
+					journal.setOldGenericTerm(getConceptIds(previousConcept
+							.getParentConcepts()));
+				}
+
+				allEvents.add(journal);
+			}
+		} catch (AuditException ae) {
+			throw new TechnicalException(
+					"Error getting concept hierarchy changed event ", ae);
 		}
 		return allEvents;
 	}
@@ -123,20 +138,25 @@ public class ThesaurusConceptAuditReader{
 			Thesaurus thesaurus, Date startDate) {
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
-		AuditQuery conceptStatusQuery = auditQueryBuilder
-				.getPropertyChangedQuery(reader, thesaurus, startDate,
-						ThesaurusConcept.class, "status");
+		try {
+			AuditQuery conceptStatusQuery = auditQueryBuilder
+					.getPropertyChangedQuery(reader, thesaurus, startDate,
+							ThesaurusConcept.class, "status");
 
-		List<Object[]> allConceptStatusChanges = conceptStatusQuery
-				.getResultList();
-		for (Object[] revisionData : allConceptStatusChanges) {
-			JournalLine journal = journalLineBuilder.buildLineBase(
-					JournalEventsEnum.THESAURUSCONCEPT_STATUS_UPDATE,
-					(GincoRevEntity) revisionData[1]);
-			ThesaurusConcept concept = (ThesaurusConcept) revisionData[0];
-			journal.setConceptId(concept.getIdentifier());
-			journal.setStatus(concept.getStatus());
-			allEvents.add(journal);
+			List<Object[]> allConceptStatusChanges = conceptStatusQuery
+					.getResultList();
+			for (Object[] revisionData : allConceptStatusChanges) {
+				JournalLine journal = journalLineBuilder.buildLineBase(
+						JournalEventsEnum.THESAURUSCONCEPT_STATUS_UPDATE,
+						(GincoRevEntity) revisionData[1]);
+				ThesaurusConcept concept = (ThesaurusConcept) revisionData[0];
+				journal.setConceptId(concept.getIdentifier());
+				journal.setStatus(concept.getStatus());
+				allEvents.add(journal);
+			}
+		} catch (AuditException ae) {
+			throw new TechnicalException(
+					"Error getting concept status changed event ", ae);
 		}
 		return allEvents;
 	}

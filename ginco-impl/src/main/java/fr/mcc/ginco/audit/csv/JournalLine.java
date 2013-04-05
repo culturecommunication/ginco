@@ -38,6 +38,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
@@ -149,37 +151,37 @@ public class JournalLine implements Comparable<JournalLine> {
 
 	public String toString() {
 		String line = new String();
-		line += eventType.toString() + COMMA;
-		line += DateUtil.toString(eventDate) + COMMA;
-		line += authorId + COMMA;
+		line += StringEscapeUtils.escapeCsv(eventType.toString()) + COMMA;
+		line += StringEscapeUtils.escapeCsv(DateUtil.toString(eventDate)) + COMMA;
+		line += StringEscapeUtils.escapeCsv(authorId) + COMMA;
 		if (conceptId != null) {
-			line += conceptId;
+			line += StringEscapeUtils.escapeCsv(conceptId);
 		}
 		line += COMMA;
 		if (termId != null) {
-			line += termId;
+			line += StringEscapeUtils.escapeCsv(termId);
 		}
 		line += COMMA;
 		if (termRole != null) {
-			line += termRole;
+			line += StringEscapeUtils.escapeCsv(termRole);
 		}
 		line += COMMA;
 		if (status != null) {			
-			line += LabelUtil.getResourceLabel("concept-status["+ status +"]");
+			line += StringEscapeUtils.escapeCsv(LabelUtil.getResourceLabel("concept-status["+ status +"]"));
 		}
 		line += COMMA;
 		if (oldLexicalValue != null) {
-			line += oldLexicalValue;
+			line += StringEscapeUtils.escapeCsv(oldLexicalValue);
 		}
 		line += COMMA;
 		if (newLexicalValue != null) {
-			line += newLexicalValue;
+			line += StringEscapeUtils.escapeCsv(newLexicalValue);
 		}
 		line += COMMA;
 		if (oldGenericTerm != null) {
 			Iterator<String> olGenericTermItr = oldGenericTerm.iterator();
 			while (olGenericTermItr.hasNext()) {
-				line += olGenericTermItr.next();
+				line += StringEscapeUtils.escapeCsv(olGenericTermItr.next());
 				if (olGenericTermItr.hasNext()) {
 					line += PIPE;
 				}
@@ -189,7 +191,7 @@ public class JournalLine implements Comparable<JournalLine> {
 		if (newGenericTerm != null) {
 			Iterator<String> newGenericTermItr = newGenericTerm.iterator();
 			while (newGenericTermItr.hasNext()) {
-				line += newGenericTermItr.next();
+				line += StringEscapeUtils.escapeCsv(newGenericTermItr.next());
 				if (newGenericTermItr.hasNext()) {
 					line += PIPE;
 				}

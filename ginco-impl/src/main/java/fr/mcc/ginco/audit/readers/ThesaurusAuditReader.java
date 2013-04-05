@@ -42,6 +42,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.exception.AuditException;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,7 @@ import fr.mcc.ginco.audit.csv.JournalLine;
 import fr.mcc.ginco.audit.csv.JournalLineBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 @Service("thesaurusAuditReader")
 public class ThesaurusAuditReader {
@@ -68,16 +69,21 @@ public class ThesaurusAuditReader {
 
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
-		AuditQuery thesaurusQuery = auditQueryBuilder.getEntityAddedQuery(
-				reader, thesaurus, startDate, Thesaurus.class);
-		List<Object[]> allAddedThesaurusRevisions = thesaurusQuery
-				.getResultList();
+		try {
+			AuditQuery thesaurusQuery = auditQueryBuilder.getEntityAddedQuery(
+					reader, thesaurus, startDate, Thesaurus.class);
+			List<Object[]> allAddedThesaurusRevisions = thesaurusQuery
+					.getResultList();
 
-		for (Object[] revisionData : allAddedThesaurusRevisions) {
-			JournalLine journal = journalLineBuilder.buildLineBase(
-					JournalEventsEnum.THESAURUS_CREATED,
-					(GincoRevEntity) revisionData[1]);
-			allEvents.add(journal);
+			for (Object[] revisionData : allAddedThesaurusRevisions) {
+				JournalLine journal = journalLineBuilder.buildLineBase(
+						JournalEventsEnum.THESAURUS_CREATED,
+						(GincoRevEntity) revisionData[1]);
+				allEvents.add(journal);
+			}
+		} catch (AuditException ae) {
+			throw new TechnicalException(
+					"Error getting thesaurus creation event", ae);
 		}
 		return allEvents;
 	}

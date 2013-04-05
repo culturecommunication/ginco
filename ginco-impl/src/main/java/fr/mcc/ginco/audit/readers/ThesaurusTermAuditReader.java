@@ -42,6 +42,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.exception.AuditException;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,7 @@ import fr.mcc.ginco.audit.csv.JournalLineBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 @Service("thesaurusTermAuditReader")
 public class ThesaurusTermAuditReader {
@@ -68,20 +70,25 @@ public class ThesaurusTermAuditReader {
 
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
-		AuditQuery termQuery = auditQueryBuilder.getEntityAddedQuery(reader,
-				thesaurus, startDate, ThesaurusTerm.class);
-		List<Object[]> allTermRevisions = termQuery.getResultList();
-		for (Object[] revisionData : allTermRevisions) {
-			JournalLine journal = journalLineBuilder.buildLineBase(
-					JournalEventsEnum.THESAURUSTERM_CREATED,
-					(GincoRevEntity) revisionData[1]);
-			ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-			journal.setTermId(term.getIdentifier());
-			journal.setNewLexicalValue(term.getLexicalValue());
-			if (term.getConcept() != null) {
-				journal.setConceptId(term.getConcept().getIdentifier());
+		try {
+			AuditQuery termQuery = auditQueryBuilder.getEntityAddedQuery(
+					reader, thesaurus, startDate, ThesaurusTerm.class);
+			List<Object[]> allTermRevisions = termQuery.getResultList();
+			for (Object[] revisionData : allTermRevisions) {
+				JournalLine journal = journalLineBuilder.buildLineBase(
+						JournalEventsEnum.THESAURUSTERM_CREATED,
+						(GincoRevEntity) revisionData[1]);
+				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
+				journal.setTermId(term.getIdentifier());
+				journal.setNewLexicalValue(term.getLexicalValue());
+				if (term.getConcept() != null) {
+					journal.setConceptId(term.getConcept().getIdentifier());
+				}
+				allEvents.add(journal);
 			}
-			allEvents.add(journal);
+		} catch (AuditException ae) {
+			throw new TechnicalException("Error getting term creationevent ",
+					ae);
 		}
 		return allEvents;
 	}
@@ -90,21 +97,28 @@ public class ThesaurusTermAuditReader {
 			Thesaurus thesaurus, Date startDate) {
 
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
-		AuditQuery termRoleChangedQuery = auditQueryBuilder
-				.getPropertyChangedQuery(reader, thesaurus, startDate,
-						ThesaurusTerm.class, "prefered");
 
-		List<Object[]> allRoleChanges = termRoleChangedQuery.getResultList();
-		for (Object[] revisionData : allRoleChanges) {
-			JournalLine journal = journalLineBuilder.buildLineBase(
-					JournalEventsEnum.THESAURUSTERM_ROLE_UPDATE,
-					(GincoRevEntity) revisionData[1]);
-			ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-			journal.setTermId(term.getIdentifier());
-			journal.setTermRole(term.getPrefered() ? "TP" : "TNP");
-			journal.setConceptId(term.getConcept().getIdentifier());
+		try {
+			AuditQuery termRoleChangedQuery = auditQueryBuilder
+					.getPropertyChangedQuery(reader, thesaurus, startDate,
+							ThesaurusTerm.class, "prefered");
 
-			allEvents.add(journal);
+			List<Object[]> allRoleChanges = termRoleChangedQuery
+					.getResultList();
+			for (Object[] revisionData : allRoleChanges) {
+				JournalLine journal = journalLineBuilder.buildLineBase(
+						JournalEventsEnum.THESAURUSTERM_ROLE_UPDATE,
+						(GincoRevEntity) revisionData[1]);
+				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
+				journal.setTermId(term.getIdentifier());
+				journal.setTermRole(term.getPrefered() ? "TP" : "TNP");
+				journal.setConceptId(term.getConcept().getIdentifier());
+
+				allEvents.add(journal);
+			}
+		} catch (AuditException ae) {
+			throw new TechnicalException(
+					"Error getting term role changed event ", ae);
 		}
 		return allEvents;
 	}
@@ -113,34 +127,40 @@ public class ThesaurusTermAuditReader {
 			Thesaurus thesaurus, Date startDate) {
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
-		AuditQuery lexicalValueChangedQuery = auditQueryBuilder
-				.getPropertyChangedQuery(reader, thesaurus, startDate,
-						ThesaurusTerm.class, "lexicalValue");
+		try {
+			AuditQuery lexicalValueChangedQuery = auditQueryBuilder
+					.getPropertyChangedQuery(reader, thesaurus, startDate,
+							ThesaurusTerm.class, "lexicalValue");
 
-		List<Object[]> allLexicalValueChanges = lexicalValueChangedQuery
-				.getResultList();
-		for (Object[] revisionData : allLexicalValueChanges) {
-			JournalLine journal = journalLineBuilder.buildLineBase(
-					JournalEventsEnum.THESAURUSTERM_LEXICAL_VALUE_UPDATE,
-					(GincoRevEntity) revisionData[1]);
-			ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-			journal.setTermId(term.getIdentifier());
-			if (term.getConcept() != null) {
-				journal.setConceptId(term.getConcept().getIdentifier());
+			List<Object[]> allLexicalValueChanges = lexicalValueChangedQuery
+					.getResultList();
+			for (Object[] revisionData : allLexicalValueChanges) {
+				JournalLine journal = journalLineBuilder.buildLineBase(
+						JournalEventsEnum.THESAURUSTERM_LEXICAL_VALUE_UPDATE,
+						(GincoRevEntity) revisionData[1]);
+				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
+				journal.setTermId(term.getIdentifier());
+				if (term.getConcept() != null) {
+					journal.setConceptId(term.getConcept().getIdentifier());
+				}
+				journal.setNewLexicalValue(term.getLexicalValue());
+				AuditQuery previousElementQuery = auditQueryBuilder
+						.getPreviousVersionQuery(reader, ThesaurusTerm.class,
+								term.getIdentifier(),
+								((GincoRevEntity) revisionData[1]).getId());
+				Number previousRevision = (Number) previousElementQuery
+						.getSingleResult();
+				if (previousRevision != null) {
+					ThesaurusTerm previousTerm = reader.find(
+							ThesaurusTerm.class, term.getIdentifier(),
+							previousRevision);
+					journal.setOldLexicalValue(previousTerm.getLexicalValue());
+				}
+				allEvents.add(journal);
 			}
-			journal.setNewLexicalValue(term.getLexicalValue());
-			AuditQuery previousElementQuery = auditQueryBuilder
-					.getPreviousVersionQuery(reader, ThesaurusTerm.class,
-							term.getIdentifier(),
-							((GincoRevEntity) revisionData[1]).getId());
-			Number previousRevision = (Number) previousElementQuery
-					.getSingleResult();
-			if (previousRevision != null) {
-				ThesaurusTerm previousTerm = reader.find(ThesaurusTerm.class,
-						term.getIdentifier(), previousRevision);
-				journal.setOldLexicalValue(previousTerm.getLexicalValue());
-			}
-			allEvents.add(journal);
+		} catch (AuditException ae) {
+			throw new TechnicalException(
+					"Error getting term lexical value changed event ", ae);
 		}
 		return allEvents;
 	}
@@ -148,21 +168,27 @@ public class ThesaurusTermAuditReader {
 	public List<JournalLine> getTermAttachmentChanged(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
-		AuditQuery termAttachedQuery = auditQueryBuilder
-				.getPropertyChangedQuery(reader, thesaurus, startDate,
-						ThesaurusTerm.class, "concept");
 
-		List<Object[]> allTermAttached = termAttachedQuery.getResultList();
-		for (Object[] revisionData : allTermAttached) {
-			JournalLine journal = journalLineBuilder.buildLineBase(
-					JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT,
-					(GincoRevEntity) revisionData[1]);
-			ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-			journal.setTermId(term.getIdentifier());
-			journal.setConceptId(term.getConcept().getIdentifier());
-			journal.setNewLexicalValue(term.getLexicalValue());
-			journal.setOldLexicalValue(term.getLexicalValue());
-			allEvents.add(journal);
+		try {
+			AuditQuery termAttachedQuery = auditQueryBuilder
+					.getPropertyChangedQuery(reader, thesaurus, startDate,
+							ThesaurusTerm.class, "concept");
+
+			List<Object[]> allTermAttached = termAttachedQuery.getResultList();
+			for (Object[] revisionData : allTermAttached) {
+				JournalLine journal = journalLineBuilder.buildLineBase(
+						JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT,
+						(GincoRevEntity) revisionData[1]);
+				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
+				journal.setTermId(term.getIdentifier());
+				journal.setConceptId(term.getConcept().getIdentifier());
+				journal.setNewLexicalValue(term.getLexicalValue());
+				journal.setOldLexicalValue(term.getLexicalValue());
+				allEvents.add(journal);
+			}
+		} catch (AuditException ae) {
+			throw new TechnicalException(
+					"Error getting term attachment changed event ", ae);
 		}
 		return allEvents;
 
