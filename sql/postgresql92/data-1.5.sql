@@ -40,3 +40,7 @@ UPDATE concept_group_label SET lang='de-DE'  WHERE lang='deu';
 UPDATE note SET lang='en-US'  WHERE lang='eng';
 UPDATE note SET lang='it-IT'  WHERE lang='ita';
 UPDATE note SET lang='de-DE'  WHERE lang='deu';
+
+DELETE FROM languages_iso639 where id='deu';
+DELETE FROM languages_iso639 where id='eng';
+DELETE FROM languages_iso639 where id='ita';
