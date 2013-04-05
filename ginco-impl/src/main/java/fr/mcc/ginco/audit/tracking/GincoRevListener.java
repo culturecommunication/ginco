@@ -35,7 +35,8 @@
 package fr.mcc.ginco.audit.tracking;
 
 import java.io.Serializable;
-import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.SessionFactory;
@@ -99,12 +100,15 @@ public class GincoRevListener implements EntityTrackingRevisionListener,
 				try {
 					query = queryBuilder.getEntityAddedQuery(reader,
 							Class.forName(entityName), entityId);
-
+					try {
 					Object[] createdEvent = (Object[]) query.getSingleResult();
 					if (createdEvent != null) {
 						((GincoRevEntity) revisionEntity)
 								.setThesaurusId(((GincoRevEntity) createdEvent[1])
 										.getThesaurusId());
+					}
+					} catch (NoResultException nrse) {
+						logger.warn("Unable to get the creation revision of the destriyed object", nrse);
 					}
 				} catch (ClassNotFoundException e) {
 					logger.error("Error storing audit data", e);
