@@ -178,8 +178,9 @@ public class GincoExportServiceImpl implements IGincoExportService {
 		thesaurusToExport.setConceptArrays(arrays);
 		
 		//---Exporting the labels of all arrays
-		JaxbList<NodeLabel> arrayLabels = new JaxbList<NodeLabel>();
 		for (ThesaurusArray thesaurusArray : arrays) {
+			JaxbList<NodeLabel> arrayLabels = new JaxbList<NodeLabel>();
+			arrayLabels.getList().clear();
 			arrayLabels.getList().add(nodeLabelService.getByThesaurusArray(thesaurusArray.getIdentifier()));
 			thesaurusToExport.getConceptArrayLabels().put(thesaurusArray.getIdentifier(),arrayLabels);
 		}
@@ -191,8 +192,9 @@ public class GincoExportServiceImpl implements IGincoExportService {
 		}
 		
 		//---Exporting the labels of all concept groups
-		JaxbList<ThesaurusConceptGroupLabel> groupLabels = new JaxbList<ThesaurusConceptGroupLabel>();
 		for (ThesaurusConceptGroup thesaurusConceptGroup : groups) {
+			JaxbList<ThesaurusConceptGroupLabel> groupLabels = new JaxbList<ThesaurusConceptGroupLabel>();
+			groupLabels.getList().clear();
 			groupLabels.getList().add(thesaurusConceptGroupLabelService.getByThesaurusConceptGroup(thesaurusConceptGroup.getIdentifier()));
 			thesaurusToExport.getConceptGroupLabels().put(thesaurusConceptGroup.getIdentifier(),groupLabels);
 		}
