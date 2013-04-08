@@ -34,35 +34,18 @@
  */
 package fr.mcc.ginco.exports;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.utils.LabelUtil;
+import fr.mcc.ginco.utils.ThesaurusTermUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.IAssociativeRelationshipService;
-import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.INoteService;
-import fr.mcc.ginco.services.IThesaurusArrayService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermRoleService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.LabelUtil;
-import fr.mcc.ginco.utils.ThesaurusTermUtils;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.*;
 
 @Service("exportService")
 public class ExportServiceImpl implements IExportService {
@@ -165,6 +148,8 @@ public class ExportServiceImpl implements IExportService {
 		List<Note> notes = noteService.getConceptNotePaginatedList(
 				concept.getIdentifier(), 0, 0);
 
+        ThesaurusTerm prefTerm = thesaurusConceptService.getConceptPreferredTerm(concept.getIdentifier());
+
 		for (Note note : notes) {
 			if ("scopeNote".equals(note.getNoteType().getCode())) {
 				result.add(new FormattedLine(base, "NA: "
@@ -195,8 +180,13 @@ public class ExportServiceImpl implements IExportService {
 
 		for (ThesaurusConcept child : thesaurusConceptService
 				.getChildrenByConceptId(concept.getIdentifier())) {
-			result.add(new FormattedLine(base, "NT: "
-					+ thesaurusConceptService.getConceptTitleLanguage(child)));
+
+            ThesaurusTerm term = thesaurusConceptService.getConceptPreferredTerm(child.getIdentifier());
+
+			result.add(new FormattedLine(base, "TS: "
+					+ LabelUtil.getLocalizedLabel(
+                    term.getLexicalValue(), term.getLanguage(),
+                    defaultLang)));
 		}
 
 		for (ThesaurusTerm term : thesaurusTermService
@@ -210,13 +200,13 @@ public class ExportServiceImpl implements IExportService {
 							.getDefaultThesaurusTermRole().getCode()
 							+ ": "
 							+ LabelUtil.getLocalizedLabel(
-									term.getLexicalValue(), term.getLanguage(),
+                                    prefTerm.getLexicalValue(), prefTerm.getLanguage(),
 									defaultLang)));
 				} else {
 					result.add(new FormattedLine(base, term.getRole().getCode()
 							+ ": "
 							+ LabelUtil.getLocalizedLabel(
-									term.getLexicalValue(), term.getLanguage(),
+                                    prefTerm.getLexicalValue(), prefTerm.getLanguage(),
 									defaultLang)));
 				}
 			}
