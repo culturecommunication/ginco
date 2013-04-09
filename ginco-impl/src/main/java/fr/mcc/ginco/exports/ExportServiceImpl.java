@@ -148,7 +148,7 @@ public class ExportServiceImpl implements IExportService {
 		List<Note> notes = noteService.getConceptNotePaginatedList(
 				concept.getIdentifier(), 0, 0);
 
-        ThesaurusTerm prefTerm = thesaurusConceptService.getConceptPreferredTerm(concept.getIdentifier());
+        List<ThesaurusTerm> prefTerms = thesaurusConceptService.getConceptPreferredTerms(concept.getIdentifier());
 
 		for (Note note : notes) {
 			if ("scopeNote".equals(note.getNoteType().getCode())) {
@@ -159,17 +159,25 @@ public class ExportServiceImpl implements IExportService {
 		}
 
 		for (ThesaurusConcept parent : concept.getParentConcepts()) {
-			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TG")
+
+            List<ThesaurusTerm> parentPrefs =
+                    thesaurusConceptService.getConceptPreferredTerms(parent.getIdentifier());
+
+            result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TG")
                     + ": "
-					+ thesaurusConceptService.getConceptTitle(parent)));
+					+ generatePrefTermsText(parentPrefs)));
 		}
 
 		for (ThesaurusConcept ta : thesaurusConceptService
 				.getThesaurusConceptList(associativeRelationshipService
 						.getAssociatedConceptsId(concept))) {
-			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TA")
+
+            List<ThesaurusTerm> taPrefs =
+                    thesaurusConceptService.getConceptPreferredTerms(ta.getIdentifier());
+
+            result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TA")
                     + ": "
-					+ thesaurusConceptService.getConceptTitle(ta)));
+					+ generatePrefTermsText(taPrefs)));
 		}
 
 		for (ThesaurusTerm term : thesaurusTermService
@@ -194,27 +202,21 @@ public class ExportServiceImpl implements IExportService {
                     defaultLang)));
 		}
 
-		for (ThesaurusTerm term : thesaurusTermService
-				.getTermsByConceptId(concept.getIdentifier())) {
-			if (!term.getPrefered()) {
-				result.add(new FormattedLine(base - 1, LabelUtil
+		for (ThesaurusTerm term :
+                thesaurusConceptService.getConceptNotPreferredTerms(concept.getIdentifier())) {
+			    result.add(new FormattedLine(base - 1, LabelUtil
 						.getLocalizedLabel(term.getLexicalValue(),
 								term.getLanguage(), defaultLang)));
 				if (term.getRole() == null) {
 					result.add(new FormattedLine(base, thesaurusTermRoleService
 							.getDefaultThesaurusTermRole().getCode()
 							+ ": "
-							+ LabelUtil.getLocalizedLabel(
-                                    prefTerm.getLexicalValue(), prefTerm.getLanguage(),
-									defaultLang)));
+							+ generatePrefTermsText(prefTerms)));
 				} else {
 					result.add(new FormattedLine(base, term.getRole().getCode()
 							+ ": "
-							+ LabelUtil.getLocalizedLabel(
-                                    prefTerm.getLexicalValue(), prefTerm.getLanguage(),
-									defaultLang)));
+							+ generatePrefTermsText(prefTerms)));
 				}
-			}
 		}
 	}
 
@@ -252,6 +254,24 @@ public class ExportServiceImpl implements IExportService {
 
 		return result;
 	}
+
+    private String generatePrefTermsText(List<ThesaurusTerm> terms) {
+
+        String result = "";
+
+        if(terms.size() == 1) {
+            result = LabelUtil.getLocalizedLabel(
+                    terms.get(0).getLexicalValue(), terms.get(0).getLanguage(),
+                    defaultLang);
+        } else {
+            for(ThesaurusTerm term : terms) {
+                result += term.getLexicalValue() + " (" + term.getLanguage().getId() + "), ";
+            }
+            result = result.substring(0, result.length()-2);
+        }
+
+        return result;
+    }
 
 	private void addThesaurusArray(List<FormattedLine> result,
 			ThesaurusArray subOrdArray, Integer base) throws BusinessException {

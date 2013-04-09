@@ -84,10 +84,6 @@ public class SKOSConceptExporter {
 			SKOSConcept parent, SKOSConceptScheme scheme,
 			SKOSDataFactory factory, SKOSDataset vocab) {
 		List<SKOSChange> addList = new ArrayList<SKOSChange>();
-		String prefLabel = thesaurusConceptService.getConceptTitle(concept);
-
-		String prefLabelLang = thesaurusConceptService
-				.getConceptTitleLanguage(concept);
 
 		SKOSConcept conceptSKOS = factory.getSKOSConcept(URI.create(concept
 				.getIdentifier()));
@@ -98,10 +94,16 @@ public class SKOSConceptExporter {
 				.getSKOSObjectRelationAssertion(conceptSKOS,
 						factory.getSKOSInSchemeProperty(), scheme);
 
-		SKOSDataRelationAssertion prefLabelInsertion = factory
-				.getSKOSDataRelationAssertion(conceptSKOS, factory
-						.getSKOSDataProperty(factory.getSKOSPrefLabelProperty()
-								.getURI()), prefLabel, prefLabelLang);
+        List<ThesaurusTerm> prefTerms = thesaurusConceptService.getConceptPreferredTerms(concept.getIdentifier());
+
+        for (ThesaurusTerm prefTerm : prefTerms) {
+            SKOSDataRelationAssertion prefLabelInsertion = factory
+                    .getSKOSDataRelationAssertion(conceptSKOS, factory
+                            .getSKOSDataProperty(factory.getSKOSPrefLabelProperty()
+                                    .getURI()), prefTerm.getLexicalValue(), prefTerm.getLanguage().getPart1());
+            addList.add(new AddAssertion(vocab, prefLabelInsertion));
+        }
+
 
 		for (ThesaurusConcept related : thesaurusConceptService
 				.getThesaurusConceptList(associativeRelationshipService
@@ -118,7 +120,7 @@ public class SKOSConceptExporter {
 
 		for (ThesaurusTerm altLabel : thesaurusTermService
 				.getTermsByConceptId(concept.getIdentifier())) {
-			if (altLabel.getLexicalValue().equals(prefLabel)) {
+			if (altLabel.getPrefered()) {
 				continue;
             }
 
@@ -145,7 +147,7 @@ public class SKOSConceptExporter {
 
 		addList.add(new AddAssertion(vocab, conceptAssertion));
 		addList.add(new AddAssertion(vocab, inScheme));
-		addList.add(new AddAssertion(vocab, prefLabelInsertion));
+
 
 		addList.addAll(skosNotesExporter.exportNotes(concept.getIdentifier(),
 				factory, conceptSKOS, vocab));
