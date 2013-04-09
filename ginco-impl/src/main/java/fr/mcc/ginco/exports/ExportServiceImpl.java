@@ -152,27 +152,31 @@ public class ExportServiceImpl implements IExportService {
 
 		for (Note note : notes) {
 			if ("scopeNote".equals(note.getNoteType().getCode())) {
-				result.add(new FormattedLine(base, "NA: "
+				result.add(new FormattedLine(base, LabelUtil.getResourceLabel("NA")
+                        + ": "
 						+ note.getLexicalValue()));
 			}
 		}
 
 		for (ThesaurusConcept parent : concept.getParentConcepts()) {
-			result.add(new FormattedLine(base, "TG: "
+			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TG")
+                    + ": "
 					+ thesaurusConceptService.getConceptTitle(parent)));
 		}
 
 		for (ThesaurusConcept ta : thesaurusConceptService
 				.getThesaurusConceptList(associativeRelationshipService
 						.getAssociatedConceptsId(concept))) {
-			result.add(new FormattedLine(base, "TA: "
+			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TA")
+                    + ": "
 					+ thesaurusConceptService.getConceptTitle(ta)));
 		}
 
 		for (ThesaurusTerm term : thesaurusTermService
 				.getTermsByConceptId(concept.getIdentifier())) {
 			if (!term.getPrefered()) {
-				result.add(new FormattedLine(base, "EP: "
+				result.add(new FormattedLine(base, LabelUtil.getResourceLabel("EP")
+                        + ": "
 						+ LabelUtil.getLocalizedLabel(term.getLexicalValue(),
 								term.getLanguage(), defaultLang)));
 			}
@@ -183,7 +187,8 @@ public class ExportServiceImpl implements IExportService {
 
             ThesaurusTerm term = thesaurusConceptService.getConceptPreferredTerm(child.getIdentifier());
 
-			result.add(new FormattedLine(base, "TS: "
+			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TS")
+                    + ": "
 					+ LabelUtil.getLocalizedLabel(
                     term.getLexicalValue(), term.getLanguage(),
                     defaultLang)));
