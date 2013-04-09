@@ -46,7 +46,7 @@ Ext.define('Thesaurus.form.field.ComboBox',
 	                  '<tpl if="placeholder"> placeholder="{placeholder}"</tpl>',
 	                  '<tpl if="size"> size="{size}"</tpl>',
 	                  '<tpl if="maxLength !== undefined"> maxlength="{maxLength}"</tpl>',
-	                  '<tpl if="readOnly"> readonly="readonly"</tpl>',
+	                  '<tpl if="readOnly"> readonly="readonly" aria-readonly="true" aria-autocomplete="none"</tpl>',
 	                  '<tpl if="disabled"> disabled="disabled"</tpl>',
 	                  '<tpl if="tabIdx"> tabIndex="{tabIdx}"</tpl>',
 	                  '<tpl if="fieldStyle"> style="{fieldStyle}"</tpl>',
@@ -55,7 +55,95 @@ Ext.define('Thesaurus.form.field.ComboBox',
 	                  compiled: true,
 	                  disableFormats: true
 	              }
-	          ]
+	          ],
+	          createPicker: function() {
+	              var me = this,
+	                  picker,
+	                  pickerCfg = Ext.apply({
+	                      xtype: 'ariaboundlist',
+	                      pickerField: me,
+	                      selModel: {
+	                          mode: me.multiSelect ? 'SIMPLE' : 'SINGLE'
+	                      },
+	                      floating: true,
+	                      hidden: true,
+	                      store: me.store,
+	                      displayField: me.displayField,
+	                      focusOnToFront: false,
+	                      pageSize: me.pageSize,
+	                      multiSelect: me.multiSelect,
+	                      tpl: me.tpl
+	                  }, me.listConfig, me.defaultListConfig);
+
+	              picker = me.picker = Ext.widget(pickerCfg);
+	              if (me.pageSize) {
+	                  picker.pagingToolbar.on('beforechange', me.onPageChange, me);
+	              }
+
+	              me.mon(picker, {
+	                  itemclick: me.onItemClick,
+	                  refresh: me.onListRefresh,
+	                  scope: me
+	              });
+
+	              me.mon(picker.getSelectionModel(), {
+	                  beforeselect: me.onBeforeSelect,
+	                  beforedeselect: me.onBeforeDeselect,
+	                  selectionchange: me.onListSelectionChange,
+	                  scope: me
+	              });
+	              Ext.get(me.id+"-inputEl").set({'aria-owns':picker.id+'-listUl'});
+	              return picker;
+	          },  
+	          onExpand : function()
+	          {
+	        	  var me = this,
+	               picker, collapseIf;
+	        	  if (me.rendered &&  me.picker) {
+	                  picker = me.getPicker();;
+	                  Ext.get(picker.id+"-listUl").set({'aria-expanded':true});
+	        	  }
+	        	  me.callParent();
+	          },
+	          onCollapse : function()
+	          {
+	        	  var me = this,
+	               picker, collapseIf;
+	        	  if (me.rendered && me.picker) {
+	                  picker = me.getPicker();
+	                  Ext.get(picker.id+"-listUl").set({'aria-expanded':false});
+	        	  }
+	        	  me.callParent();
+	          }
+	   
+});
+
+Ext.define('Thesaurus.view.BoundList', {
+	extend : 'Ext.view.BoundList',
+	alias: 'widget.ariaboundlist',
+	multiSelect : false,
+	initComponent: function() {
+        var me = this,
+            baseCls = me.baseCls,
+            itemCls = me.itemCls,
+            id = me.id;
+       
+        if (!me.tpl) {
+            // should be setting aria-posinset based on entire set of data
+            // not filtered set
+            me.tpl = new Ext.XTemplate(
+                '<ul id="'+id+'-listUl" role="listbox" aria-multiselectable="'+me.multiSelect+'"><tpl for=".">',
+                    '<li id="'+id+'-listUl-{#}" role="option" tabindex="-1" class="' + itemCls + '">' + me.getInnerTpl(me.displayField) + '</li>',
+                '</tpl></ul>'
+            );
+        }
+        me.callParent();
+	},
+	highlightItem: function ( item ){
+		var me = this;
+		me.callParent(arguments);
+		//item.focus();
+	}
 });
 
 Ext
