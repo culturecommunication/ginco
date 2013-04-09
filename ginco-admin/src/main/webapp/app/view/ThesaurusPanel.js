@@ -296,7 +296,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												fieldLabel : me.xSubjectLabel,
 												grow : true
 										},{
-												xtype : 'combobox',
+												xtype : 'ariacombo',
 												name : 'type',
 												queryMode : 'local',
 												fieldLabel : me.xTypeLabel,
@@ -307,7 +307,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												multiSelect : false,
 												store : 'ThesaurusTypeStore'
 										},{
-												xtype : 'combobox',
+												xtype : 'ariacombo',
 												name : 'format',
 												fieldLabel : me.xFormatLabel,
 												editable : false,
@@ -317,7 +317,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												multiSelect : false,
 												store : 'ThesaurusFormatStore'
 										},{
-												xtype : 'combobox',
+												xtype : 'ariacombo',
 												name : 'languages',
 												fieldLabel : me.xLanguagesLabel,
 												editable : false,

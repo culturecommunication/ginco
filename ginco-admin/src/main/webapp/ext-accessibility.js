@@ -33,6 +33,31 @@
 /*
  * Define a menu item with an accesskey
  */
+
+Ext.define('Thesaurus.form.field.ComboBox',
+{
+	extend : 'Ext.form.field.ComboBox',
+	alias : 'widget.ariacombo',
+	fieldSubTpl: [
+	              '<div class="{hiddenDataCls}" role="presentation"></div>',
+	              '<input id="{id}" type="{type}" role="combobox" {inputAttrTpl} class="{fieldCls} {typeCls} {editableCls}" autocomplete="off"',
+	                  '<tpl if="value"> value="{[Ext.util.Format.htmlEncode(values.value)]}"</tpl>',
+	                  '<tpl if="name"> name="{name}"</tpl>',
+	                  '<tpl if="placeholder"> placeholder="{placeholder}"</tpl>',
+	                  '<tpl if="size"> size="{size}"</tpl>',
+	                  '<tpl if="maxLength !== undefined"> maxlength="{maxLength}"</tpl>',
+	                  '<tpl if="readOnly"> readonly="readonly"</tpl>',
+	                  '<tpl if="disabled"> disabled="disabled"</tpl>',
+	                  '<tpl if="tabIdx"> tabIndex="{tabIdx}"</tpl>',
+	                  '<tpl if="fieldStyle"> style="{fieldStyle}"</tpl>',
+	                  '/>',
+	              {
+	                  compiled: true,
+	                  disableFormats: true
+	              }
+	          ]
+});
+
 Ext
 		.define(
 				'Thesaurus.ext.KeyMenuItem',
