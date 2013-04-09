@@ -132,6 +132,7 @@ CREATE TABLE hierarchical_relationship
 (
   childconceptid text NOT NULL,
   parentconceptid text NOT NULL,
+  role integer NOT NULL DEFAULT FALSE,
   CONSTRAINT pk_hierarchical_relationship PRIMARY KEY (childconceptid, parentconceptid)
 );
 
