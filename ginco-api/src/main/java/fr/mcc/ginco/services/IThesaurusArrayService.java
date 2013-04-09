@@ -65,9 +65,12 @@ public interface IThesaurusArrayService {
      * Update a single Thesaurus Concept Object
      * @throws BusinessException 
      */
-    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label) throws BusinessException;    
-    
-    
+    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label) throws BusinessException;
+
+    /**
+     * Update a single Thesaurus Concept Object without NodeLabel
+     */
+    ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray) throws BusinessException;
     /**
      * Delete a ThesaurusArray
      * @param thesaurusArray

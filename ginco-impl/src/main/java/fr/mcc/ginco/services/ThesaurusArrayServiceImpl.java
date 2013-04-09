@@ -34,21 +34,19 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of the thesaurus array service contains methods relatives to the
@@ -77,7 +75,12 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
         return thesaurusArrayDAO.getThesaurusArrayListByThesaurusId(thesaurusId);
     }
 
-	@Transactional(readOnly=false)
+    @Override
+    public ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray) throws BusinessException {
+        return thesaurusArrayDAO.update(thesaurusArray);
+    }
+
+    @Transactional(readOnly=false)
     @Override
     public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) throws BusinessException {
 

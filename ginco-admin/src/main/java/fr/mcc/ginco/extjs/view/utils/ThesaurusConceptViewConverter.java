@@ -34,19 +34,8 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.collections.ListUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -55,9 +44,20 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
+import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.collections.ListUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Small class responsible for converting real {@link ThesaurusConcept} object
@@ -75,6 +75,10 @@ public class ThesaurusConceptViewConverter {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+
+    @Inject
+    @Named("thesaurusArrayService")
+    private IThesaurusArrayService thesaurusArrayService;
 	
 	@Inject
 	@Named("associativeRelationshipService")
@@ -193,7 +197,13 @@ public class ThesaurusConceptViewConverter {
 				source.getParentConcepts());
 
 		if (!addedParents.isEmpty() || !removedParents.isEmpty()) {
-			Set<ThesaurusConcept> addedParentsSet = thesaurusConceptService
+
+            for(ThesaurusArray array : thesaurusConcept.getConceptArrays()) {
+                array.getConcepts().remove(thesaurusConcept);
+                thesaurusArrayService.updateOnlyThesaurusArray(array);
+            }
+
+            Set<ThesaurusConcept> addedParentsSet = thesaurusConceptService
 					.getThesaurusConceptList(addedParents);
 
 			if (!removedParents.isEmpty()) {
