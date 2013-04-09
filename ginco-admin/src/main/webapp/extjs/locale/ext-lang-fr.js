@@ -321,5 +321,14 @@ Ext.onReady(function() {
         errorsText: 'Erreurs',
         dirtyText: 'Vous devez enregistrer ou annuler vos changements'
     });
+    
+    Ext.define("Ext.locale.fr.tab.Tab", {
+        override: "Ext.tab.Tab",
+        initComponent : function () {
+        	var me = this;
+        	me.closeText = 'Fermer le panneau';
+        	me.callParent();
+        }
+    });
 
 });
