@@ -178,9 +178,6 @@ Ext
 						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 						topTabs.fireEvent('opentermtab', topTabs, thePanel.thesaurusData.id,
 								record.data.identifier);
-						// Thesaurus.ext.tabs.openTermTab(record.data.identifier,
-						// thePanel.thesaurusData);
-
 					},
 
 					onConceptDblClick : function(theGrid, record, item, index,
@@ -210,6 +207,13 @@ Ext
 					onRemoveParentClick : function(gridview, el, rowIndex,
 							colIndex, e, rec, rowEl) {
 						var theGrid = gridview.up('#gridPanelParentConcepts');
+						var theStore = theGrid.getStore();
+						theStore.remove(rec);
+					},
+					
+					onRemoveChildClick : function(gridview, el, rowIndex,
+							colIndex, e, rec, rowEl) {
+						var theGrid = gridview.up('#gridPanelChildrenConcepts');
 						var theStore = theGrid.getStore();
 						theStore.remove(rec);
 					},
@@ -545,6 +549,16 @@ Ext
 								parent) {
 							return parent.data.identifier;
 						});
+						
+						var childGrid = theForm
+								.down('#gridPanelChildrenConcepts');
+						var childGridStore = childGrid.getStore();
+						var childData = childGridStore.getRange();
+						var childIds = Ext.Array.map(childData, function(
+								child) {
+							return child.data.identifier;
+						});
+
 
 						var rootGrid = theForm.down('#gridPanelRootConcepts');
 						var rootGridStore = rootGrid.getStore();
@@ -570,6 +584,7 @@ Ext
 						updatedModel.terms().add(termsData);
 
 						updatedModel.data.parentConcepts = parentIds;
+						updatedModel.data.childConcepts = childIds;
 						updatedModel.data.rootConcepts = rootIds;
 						updatedModel.data.associatedConcepts = associatedIds;
 
@@ -672,6 +687,9 @@ Ext
 									},
 									'conceptPanel #gridPanelParentConcepts #parentConceptActionColumn' : {
 										click : this.onRemoveParentClick
+									},
+									'conceptPanel #gridPanelChildrenConcepts #childConceptActionColumn' : {
+										click : this.onRemoveChildClick
 									}
 								});
 

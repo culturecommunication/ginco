@@ -218,7 +218,34 @@ public class ThesaurusConceptViewConverter {
 		if (!thesaurusConcept.getParentConcepts().isEmpty()) {
 			thesaurusConcept.setTopConcept(false);
 		}
-
+		
+		//Processing children concepts remove
+		Set<ThesaurusConcept> children = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(thesaurusConcept.getIdentifier()));
+		List<String> oldChildrenIds = getIdsFromConceptList(children);
+		List<String> removedChildren = ListUtils.subtract(oldChildrenIds, source.getChildConcepts());
+		Set<ThesaurusConcept> parentRootConcepts = thesaurusConcept.getRootConcepts();
+		
+		if (!removedChildren.isEmpty()) {
+			List<String> parentToRemove = new ArrayList<String>();
+			parentToRemove.add(thesaurusConcept.getIdentifier());
+			for (String childId : removedChildren) {
+				ThesaurusConcept childConcept = thesaurusConceptService.getThesaurusConceptById(childId);
+				
+				//If the parent concept is the root concept, we remove it from root concept of child
+				childConcept.getRootConcepts().remove(thesaurusConcept);
+				
+				//Then if the parent concept is not the root concept, we remove for each child the root concept
+				for (ThesaurusConcept rootConcept : parentRootConcepts) {
+					if (childConcept.getRootConcepts().contains(rootConcept)) {
+						//We remove for children's root concepts all references to concepts that belongs to
+						childConcept.getRootConcepts().remove(rootConcept);
+					}
+				}
+				
+				thesaurusConceptService.removeParents(thesaurusConceptService.getThesaurusConceptById(childId), parentToRemove);
+				thesaurusConceptService.calculateChildrenRoot(childId);
+			}
+		}
 		return thesaurusConcept;
 	}
 

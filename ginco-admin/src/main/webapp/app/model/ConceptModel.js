@@ -66,6 +66,10 @@ Ext.define('GincoApp.model.ConceptModel', {
             type : 'array_of_string'
         },
         {
+            name : 'childConcepts',
+            type : 'array_of_string'
+        },
+        {
             name : 'rootConcepts',
             type : 'array_of_string'
         },

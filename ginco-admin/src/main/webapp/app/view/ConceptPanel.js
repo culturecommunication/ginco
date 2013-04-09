@@ -73,7 +73,8 @@ Ext
 					xAssociatedConceptsListGridTitle : 'Associated terms',
 					xRootConcepts : 'Root Concepts',
 					xParentConcepts : 'Parent Concepts',
-					xRemoveParent : 'Remove connection to parent Concept',
+					xRemoveParent : 'Remove connection to parent concept',
+					xRemoveChild : 'Remove connection to child concept',
 					xAssociationRemove : 'Remove association',
 					xChildrenConcepts : 'Children Concepts',
 					xConceptStatusLabel : 'Concept status',
@@ -374,6 +375,23 @@ Ext
 																						dataIndex : 'label',
 																						text : me.xLexicalValueLabel,
 																						flex : 1
+																					},
+																					{
+																						xtype : 'actioncolumn',
+																						itemId : 'childConceptActionColumn',
+																						header : me.xActions,
+																						items : [ {
+																							icon : 'images/detach.png',
+																							tooltip : me.xRemoveChild,
+																							handler : function(
+																									view,
+																									rowIndex,
+																									colIndex,
+																									item,
+																									e,
+																									record,
+																									row) {}
+																						} ]
 																					} ]
 																		},
 																		{
