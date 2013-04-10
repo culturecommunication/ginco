@@ -34,45 +34,37 @@
  */
 
 /*
- * ReducedConcept Store
- * This file contains all ReducedConcept displayed in popup lists
+ * Concept Language Store 
+ * This file contains all Concept languages displayed in dropdown lists
  */
-Ext.define('GincoApp.store.SimpleConceptStore', {
+Ext.define('GincoApp.store.HierarchicalRelationRoleStore', {
     extend: 'Ext.data.Store',
 
     constructor: function(cfg) {
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
-            autoLoad: false,
+            autoLoad: true,
+            storeId: 'HierarchicalRelationRoleStore',
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurusconceptservice/getSimpleConcepts',
+                url: 'services/ui/thesaurusconceptservice/getAllHierarchicalRelationRoles',
                 reader: {
                     type: 'json',
-                    idProperty: 'identifier',
+                    idProperty: 'role',
                     root: 'data'
                 }
             },
             fields: [
                 {
-                    name : 'identifier',
-                    type : 'string'
-                },
-                {
-                    name: 'label',
-                    type : 'string'
-                },
-                {
                     name: 'role',
                     type: 'int'
                 },
                 {
-                    name: 'lang',
-                    type : 'string'
+                    name: 'roleLabel',
+                    type: 'string'
                 }
             ]
-
         }, cfg)]);
     }
 });

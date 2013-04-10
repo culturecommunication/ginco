@@ -34,11 +34,31 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.jaxrs.ext.Nullable;
+import org.slf4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.GenericRoleView;
 import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
@@ -49,23 +69,7 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.EncodedControl;
 import fr.mcc.ginco.utils.LabelUtil;
-
-import org.apache.cxf.jaxrs.ext.Nullable;
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 
 /**
@@ -306,6 +310,46 @@ public class ThesaurusConceptRestService {
 		}
 		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());
+		return result;
+	}
+	
+	/**
+	 * Public method to get all roles for hierarchical relationships between concepts
+	 * The types are read from a properties file
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getAllHierarchicalRelationRoles")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<GenericRoleView>> getAllHierarchicalRelationRoles() throws BusinessException {
+		List<GenericRoleView> listOfRoles = new ArrayList<GenericRoleView>();
+		
+		try {
+			String availableRoleIds[] = LabelUtil.getResourceLabel("hierarchical-role").split(",");
+			
+			if ("".equals(availableRoleIds[0])) {
+				//Ids of roles for hierarchical relationships are not set correctly
+				throw new BusinessException("Error with property file - check values of identifiers for hierarchical relationships", "check-values-of-hierarchical-relationships");
+			}
+			
+	        for (String id : availableRoleIds) {
+	        	GenericRoleView roleView = new GenericRoleView();
+	        	roleView.setRole(Integer.valueOf(id));
+	        	
+	        	String label = LabelUtil.getResourceLabel("hierarchical-role["+ id +"]");
+	        	if (label.isEmpty()) {
+	        		//Labels of status are not set correctly
+	        		throw new BusinessException("Error with property file - check values of identifiers for hierarchical relationships", "check-values-of-hierarchical-relationships");
+				} else {
+					roleView.setRoleLabel(label);
+				}
+	        	listOfRoles.add(roleView);
+			}
+		} catch (MissingResourceException e) {
+			throw new BusinessException("Error with property file - check values of identifiers for hierarchical relationships", "check-values-of-hierarchical-relationships", e);
+		}
+		ExtJsonFormLoadData<List<GenericRoleView>> result = new ExtJsonFormLoadData<List<GenericRoleView>>(listOfRoles);
+        result.setTotal((long) listOfRoles.size());
 		return result;
 	}
 }

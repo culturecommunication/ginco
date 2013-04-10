@@ -85,9 +85,17 @@ Ext
 								'Ext.grid.plugin.CellEditing', {
 									clicksToEdit : 1
 								});
+						var cellHierarchicalRoleEditing = Ext.create(
+								'Ext.grid.plugin.CellEditing', {
+									clicksToEdit : 1
+								});
+						
 						var me = this;
 						me.conceptTermStore = Ext
 								.create('GincoApp.store.ThesaurusTermStore');
+						
+						me.hierarchicalRelationRoleStore = Ext
+						.create('GincoApp.store.HierarchicalRelationRoleStore');
 
 						me.associatedConceptStore = Ext
 								.create('GincoApp.store.SimpleConceptStore');
@@ -313,9 +321,10 @@ Ext
 																		},
 																		{
 																			xtype : 'gridpanel',
+																			itemId : 'gridPanelParentConcepts',
 																			title : me.xParentConcepts,
 																			store : me.parentConceptStore,
-																			itemId : 'gridPanelParentConcepts',
+																			plugins : [ cellHierarchicalRoleEditing ],
 
 																			dockedItems : [ {
 																				xtype : 'toolbar',
@@ -339,6 +348,22 @@ Ext
 																						dataIndex : 'label',
 																						text : me.xLexicalValueLabel,
 																						flex : 1
+																					},
+																					{
+																						dataIndex : 'role',
+																						header : me.xRoleColumnLabel,
+																						stopSelection : false,
+																						editor : new Ext.form.field.ComboBox(
+																								{
+																									typeAhead : true,
+																									triggerAction : 'all',
+																									selectOnTab : true,
+																									store : me.hierarchicalRelationRoleStore,
+																									lazyRender : true,
+																									listClass : 'x-combo-list-small',
+																									displayField : 'roleLabel',
+																									valueField : 'role'
+																								})
 																					},
 																					{
 																						xtype : 'actioncolumn',

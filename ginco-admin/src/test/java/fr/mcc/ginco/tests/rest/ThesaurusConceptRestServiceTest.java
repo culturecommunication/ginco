@@ -40,6 +40,9 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.GenericRoleView;
+import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
@@ -51,6 +54,7 @@ import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LabelUtil;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -138,6 +142,30 @@ public class ThesaurusConceptRestServiceTest {
 		ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);
 		Assert.assertEquals(fakeConceptView.getTerms().get(0).getIdentifier(), actualResponse.getTerms().get(0).getIdentifier());
 		Assert.assertEquals(fakeConceptView.getTerms().get(1).getIdentifier(), actualResponse.getTerms().get(1).getIdentifier());
+	}
+	
+	/**
+	 * Test to get all concept status
+	 * @throws BusinessException 
+	 */
+	@Test
+	public final void getAllConceptStatus() throws BusinessException {
+		ExtJsonFormLoadData<List<GenericStatusView>> actualResponse = thesaurusConceptRestService.getAllConceptStatus();
+		String availableStatusIds[] = LabelUtil.getResourceLabel("concept-status").split(",");
+		Long expectedTotal = (long) availableStatusIds.length;
+		Assert.assertEquals(expectedTotal, actualResponse.getTotal());
+	}
+	
+	/**
+	 * Test to get all roles of hierarchical relationships
+	 * @throws BusinessException 
+	 */
+	@Test
+	public final void getAllRoleForHierarchicalRelationShips() throws BusinessException {
+		ExtJsonFormLoadData<List<GenericRoleView>> actualResponse = thesaurusConceptRestService.getAllHierarchicalRelationRoles();
+		String availableRoleIds[] = LabelUtil.getResourceLabel("hierarchical-role").split(",");
+		Long expectedTotal = (long) availableRoleIds.length;
+		Assert.assertEquals(expectedTotal, actualResponse.getTotal());
 	}
 	
 	private ThesaurusTerm getFakeThesaurusTermWithNonMandatoryEmptyFields(String id) {

@@ -32,47 +32,32 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.extjs.view.pojo;
 
-/*
- * ReducedConcept Store
- * This file contains all ReducedConcept displayed in popup lists
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.io.Serializable;
+
+/**
+ * Class corresponding to the view of a role for a relation
  */
-Ext.define('GincoApp.store.SimpleConceptStore', {
-    extend: 'Ext.data.Store',
-
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            proxy: {
-                type: 'ajax',
-                url: 'services/ui/thesaurusconceptservice/getSimpleConcepts',
-                reader: {
-                    type: 'json',
-                    idProperty: 'identifier',
-                    root: 'data'
-                }
-            },
-            fields: [
-                {
-                    name : 'identifier',
-                    type : 'string'
-                },
-                {
-                    name: 'label',
-                    type : 'string'
-                },
-                {
-                    name: 'role',
-                    type: 'int'
-                },
-                {
-                    name: 'lang',
-                    type : 'string'
-                }
-            ]
-
-        }, cfg)]);
-    }
-});
+@SuppressWarnings("serial")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class GenericRoleView implements Serializable {
+    private Integer role;
+    private String roleLabel;
+    
+	public Integer getRole() {
+		return role;
+	}
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+	public String getRoleLabel() {
+		return roleLabel;
+	}
+	public void setRoleLabel(String roleLabel) {
+		this.roleLabel = roleLabel;
+	}
+    
+}
