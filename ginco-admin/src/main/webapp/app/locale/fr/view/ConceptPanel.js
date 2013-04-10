@@ -65,5 +65,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
     xChildrenConcepts: 'Concepts Enfants (TS)',
     xRoleColumnLabel: 'Rôle',
     xConceptStatusLabel : 'Statut du concept',
-    xHiddenTermColumnLabel : 'Terme caché'
+    xHiddenTermColumnLabel : 'Terme caché',
+    xConceptHierarchicalRoleLabels : ['TG-TS','TGG-TSG','TGI-TSI','TGP-TSP']
 });

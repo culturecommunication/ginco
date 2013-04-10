@@ -79,6 +79,12 @@ Ext
 					xChildrenConcepts : 'Children Concepts',
 					xConceptStatusLabel : 'Concept status',
 					xHiddenTermColumnLabel : 'Hidden term',
+					xConceptHierarchicalRoleLabels : ['BT-NT','BTG-NTG','BTI-NTI','BTP-NTP'],
+					
+					conceptHierarchicalRoleRenderer : function(value,record)
+					{
+						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
+					},
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
@@ -353,6 +359,7 @@ Ext
 																						dataIndex : 'role',
 																						header : me.xRoleColumnLabel,
 																						stopSelection : false,
+																						renderer : me.conceptHierarchicalRoleRenderer,
 																						editor : new Ext.form.field.ComboBox(
 																								{
 																									typeAhead : true,
