@@ -41,7 +41,7 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		var thePanel = theGrid.up('searchPanel');
 		thePanel.setTitle(thePanel.title + ' : '
 				+ thePanel.searchQuery);
-		var theStore = theGrid.getStore();
+		/*var theStore = theGrid.getStore();
 		theStore.getProxy().setExtraParam('query',
 				thePanel.searchQuery);
 		theStore.load(function(records, operation, success) {
@@ -49,7 +49,7 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		    	Thesaurus.ext.utils.msg("Warning",
 						operation.error);
 		    }
-		});
+		});*/
 	},
 	
 	onDisplayResultBtn : function(theButton) {
@@ -73,8 +73,42 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		}
 	},
 	
+	onSearchPanelLoad: function (thePanel)
+	{
+		var model = Ext.create('GincoApp.model.FilterCriteriaModel');
+		model.set('query',thePanel.up('searchPanel').searchQuery);
+		thePanel.loadRecord(model);
+		this.onFilterBtn(thePanel.down('#filterBtn'));
+	}, 
+	
+	onFilterBtn : function (theBtn)
+	{
+		var theForm = theBtn.up('#advancedSearchForm');
+		theForm.getForm().updateRecord();
+		var theQueryModel = theForm.getForm().getRecord();
+		var thePanel = theForm.up("searchPanel");
+		var theGrid = thePanel.down('gridpanel');
+		
+		var theStore = theGrid.getStore();
+		theStore.getProxy().setExtraParam('query',
+				thePanel.searchQuery);
+		theStore.getProxy().jsonData=theQueryModel.data;
+		theStore.load(function(records, operation, success) {
+		    if (success==false) {
+		    	Thesaurus.ext.utils.msg("Warning",
+						operation.error);
+		    }
+		});
+	},
+	
 	init : function(application) {
 		this.control({
+			'#advancedSearchForm' : {
+				afterrender : this.onSearchPanelLoad
+			},
+			'#advancedSearchForm #filterBtn' : {
+				click : this.onFilterBtn
+			},
 			'searchPanel gridpanel' : {
 				afterrender : this.onSearchGridLoad,
 				itemdblclick : this.onResultDblClick

@@ -88,7 +88,8 @@ Ext.application({
         'ConceptStatusStore',
         'ThesaurusVersionStore',
         'ThesaurusVersionStatusStore',
-        'SearchTypeStore'
+        'SearchTypeStore',
+        'ThesaurusStore'
     ],
     views: [
         'GincoViewPort',

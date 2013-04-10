@@ -41,6 +41,7 @@ import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
@@ -54,6 +55,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -160,6 +163,20 @@ public class ThesaurusRestService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusView getVocabularyById(@QueryParam("id") String id) {
 		return thesaurusViewConverter.convert(thesaurusService.getThesaurusById(id));
+	}
+	
+	@GET
+	@Path("/getVocabularies")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusView>> getVocabularies() {
+		List<ThesaurusView> listOfThesaurusView = new ArrayList<ThesaurusView>();
+		List<Thesaurus> thesList = thesaurusService.getThesaurusList();
+		for (Thesaurus thes : thesList) {
+			listOfThesaurusView.add(thesaurusViewConverter.convert(thes));
+		}
+		ExtJsonFormLoadData<List<ThesaurusView>> result = new ExtJsonFormLoadData<List<ThesaurusView>>(listOfThesaurusView);
+        result.setTotal((long) listOfThesaurusView.size());
+		return result;
 	}
 
 	/**

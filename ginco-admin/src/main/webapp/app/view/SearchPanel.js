@@ -64,13 +64,14 @@ Ext.define('GincoApp.view.SearchPanel', {
 			title : me.xSearchPanelTitle,
 			items : [ {
 				xtype : 'form',
+				itemId : 'advancedSearchForm',
 				dock : 'top',
 				title : me.xAdvancedSearchPnlTitle,
 				collapsible : true,
 				collapsed : true,
 				tbar : [ {
 					xtype : 'button',
-					itemId : 'displayResultBtn',
+					itemId : 'filterBtn',
 					formBind: true,
 					iconCls : 'icon-display',
 					text : me.xAdvancedSearchBtn
@@ -80,11 +81,20 @@ Ext.define('GincoApp.view.SearchPanel', {
 						margin : '10 0 10 10',
 					},
 					layout : 'column',
-					items : [ {
+					items : [
+					{
+						xtype : 'textfield',
+						name : 'query',
+						fieldLabel : 'Query',
+					},
+					{
 						xtype : 'ariacombo',
 						name : 'thesaurus',
 						editable : false,
-						fieldLabel : me.xAdvancedSearchThesaurusFilter
+						fieldLabel : me.xAdvancedSearchThesaurusFilter,
+						displayField : 'title',
+						valueField : 'id',
+						store :'ThesaurusStore'
 					}, {
 						xtype : 'ariacombo',
 						name : 'type',

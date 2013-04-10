@@ -39,7 +39,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -54,6 +56,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.FilterCriteria;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
@@ -80,14 +83,13 @@ public class IndexerRestService {
                 .build();
     }
 
-    @GET
+    @POST
     @Path("/search")
+    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({MediaType.APPLICATION_JSON})
-    public  ExtJsonFormLoadData<List<SearchResult>> search(@QueryParam("query") String query,
-    		@QueryParam("start") Integer startIndex,
-    	    @QueryParam("limit") Integer limit) {
+    public  ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
         try {
-        	SearchResultList searchResults  = indexerService.search(query, startIndex,limit);
+        	SearchResultList searchResults  = indexerService.search(filter.getQuery(), filter.getStart(),filter.getLimit());
         	ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
         	extSearchResults.setTotal((long) searchResults.getNumFound());
 			return extSearchResults;

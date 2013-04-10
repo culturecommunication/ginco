@@ -39,6 +39,19 @@
  */
 Ext.define('GincoApp.store.SearchResultStore', {
     extend: 'Ext.data.Store',
+    
+    listeners: {
+        beforeload: function(store, operation,eOpts) {
+        	if (store.proxy.jsonData==null) {
+               store.proxy.jsonData = {"start":operation.start,
+                                      "limit":operation.limit
+                                       };                        
+            } else {
+            	store.proxy.jsonData["start"] = operation.start;
+            	store.proxy.jsonData["limit"] = operation.limit;
+            }
+        }
+  },
 
     constructor: function(cfg) {
         var me = this;
@@ -52,7 +65,33 @@ Ext.define('GincoApp.store.SearchResultStore', {
                     type: 'json',
                     idProperty: 'identifier',
                     root: 'data'
-                }
+                },
+                doRequest: function(operation, callback, scope) {
+                    var writer  = this.getWriter(),
+                        request = this.buildRequest(operation);
+                        
+                    if (operation.allowWrite()) {
+                        request = writer.write(request);
+                    }
+                    
+                    Ext.apply(request, {
+                        binary        : this.binary,
+                        headers       : this.headers,
+                        timeout       : this.timeout,
+                        scope         : this,
+                        callback      : this.createRequestCallback(request, operation, callback, scope),
+                        method        : this.getMethod(request),
+                        jsonData        : this.jsonData,
+                        disableCaching: false // explicitly set it to false, ServerProxy handles caching
+                    });
+                    
+                    Ext.Ajax.request(request);
+                    
+                    return request;
+                },
+                actionMethods: {
+                    read   : 'POST'
+                },
             },
             fields: [
                 {
