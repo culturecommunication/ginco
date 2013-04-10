@@ -56,7 +56,7 @@ Ext.Loader.setLocale({
     enabled: true,
     language: 'fr',
     localizedByDefault: false,
-    types: [ 'controller', 'view' ]
+    types: [ 'controller', 'view', 'store' ]
 });
 
 Ext.application({
@@ -87,7 +87,8 @@ Ext.application({
         'TermStatusStore',
         'ConceptStatusStore',
         'ThesaurusVersionStore',
-        'ThesaurusVersionStatusStore'
+        'ThesaurusVersionStatusStore',
+        'SearchTypeStore'
     ],
     views: [
         'GincoViewPort',

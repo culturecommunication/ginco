@@ -33,6 +33,14 @@ Ext.define('GincoApp.view.SearchPanel', {
 	xTypeValueColumnLabel : 'Type',
 	xDisplayResultBtnLabel : 'Display',
 	xSearchPanelTitle : 'Search results',
+	xAdvancedSearchPnlTitle : 'Advanced search',
+	xAdvancedSearchBtn : 'Filter',
+	xAdvancedSearchThesaurusFilter : 'Thesaurus',
+	xAdvancedSearchTypeFilter : 'Type',
+	xAdvancedSearchStatusFilter : 'Status',
+	xAdvancedSearchLanguageFilter : 'Language',
+	xAdvancedSearchCreationDateFilter : 'Creation date',
+	xAdvancedSearchModificationDateFilter : 'Modification date',
 	closable : true,
 	localized : true,
 	searchQuery : '*',
@@ -44,8 +52,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 		type : 'vbox',
 		align : 'stretch'
 	},
-	typeRenderer : function(value,record)
-	{
+	typeRenderer : function(value, record) {
 		return this.ownerCt.xTypeLabels[value];
 	},
 
@@ -57,8 +64,69 @@ Ext.define('GincoApp.view.SearchPanel', {
 		Ext.applyIf(me, {
 			title : me.xSearchPanelTitle,
 			items : [ {
-				xtype : 'gridpanel',
+				xtype : 'form',
 				dock : 'top',
+				title : me.xAdvancedSearchPnlTitle,
+				collapsible : true,
+				collapsed : true,
+				tbar : [ {
+					xtype : 'button',
+					itemId : 'displayResultBtn',
+					formBind: true,
+					iconCls : 'icon-display',
+					text : me.xAdvancedSearchBtn
+				} ],
+				items : [ {
+					defaults : {
+						margin : '10 0 10 10',
+					},
+					layout : 'column',
+					items : [ {
+						xtype : 'ariacombo',
+						name : 'thesaurus',
+						editable : false,
+						fieldLabel : me.xAdvancedSearchThesaurusFilter
+					}, {
+						xtype : 'ariacombo',
+						name : 'type',
+						editable : false,
+						displayField : 'typeLabel',
+						valueField : 'type',
+						fieldLabel : me.xAdvancedSearchTypeFilter,
+						store :'SearchTypeStore'
+					}, {
+						xtype : 'ariacombo',
+						name : 'status',
+						fieldLabel : me.xAdvancedSearchStatusFilter,
+						displayField : 'statusLabel',
+						valueField : 'status',
+						editable : false,
+						store : 'ConceptStatusStore'
+					},
+					{
+						xtype : 'ariacombo',
+						name : 'language',
+						fieldLabel : me.xAdvancedSearchLanguageFilter,
+						displayField : 'refname',
+						valueField : 'id',
+						editable : false,
+						store : 'ThesaurusLanguageStore'
+					},
+					{
+						xtype : 'datefield',
+						name : 'creationdate',
+						fieldLabel : me.xAdvancedSearchCreationDateFilter
+					},
+					{
+						xtype : 'datefield',
+						name : 'modifdate',
+						fieldLabel : me.xAdvancedSearchModificationDateFilter
+					}
+					]
+				} ]
+			}, {
+				xtype : 'gridpanel',
+				dock : 'bottom',
 				title : me.xSearchPanelTitle,
 				flex : 1,
 				store : me.searchStore,
@@ -66,17 +134,17 @@ Ext.define('GincoApp.view.SearchPanel', {
 
 				},
 				tbar : [ {
-						xtype : 'button',
-						itemId : 'displayResultBtn',
-						iconCls:'icon-display',
-						text : me.xDisplayResultBtnLabel
-					}],
-				dockedItems: [{
-			        xtype: 'pagingtoolbar',
-			        store :  me.searchStore,
-			        dock: 'bottom',
-			        displayInfo: true
-			    }],
+					xtype : 'button',
+					itemId : 'displayResultBtn',
+					iconCls : 'icon-display',
+					text : me.xDisplayResultBtnLabel
+				} ],
+				dockedItems : [ {
+					xtype : 'pagingtoolbar',
+					store : me.searchStore,
+					dock : 'bottom',
+					displayInfo : true
+				} ],
 				columns : [ {
 					dataIndex : 'identifier',
 					text : me.xIdentifierColumnLabel
@@ -84,17 +152,15 @@ Ext.define('GincoApp.view.SearchPanel', {
 					dataIndex : 'lexicalValue',
 					text : me.xLexicalValueColumnLabel,
 					flex : 1
-				},
-				{
+				}, {
 					dataIndex : 'thesaurusTitle',
 					text : me.xThesaurusTitleColumnLabel,
-					width :200
-				},
-				{
+					width : 200
+				}, {
 					dataIndex : 'type',
 					text : me.xTypeValueColumnLabel,
 					renderer : me.typeRenderer,
-					width :200
+					width : 200
 				} ]
 			} ]
 		});

@@ -34,27 +34,38 @@
  */
 
 /*
- * File: app/locale/fr/view/ThesaurusPanel.js
- * Thesaurus Translated Items
- * 
+ * Concept Language Store 
+ * This file contains all Concept languages displayed in dropdown lists
  */
-Ext.define('GincoApp.locale.fr.view.SearchPanel', {
-	xIdentifierColumnLabel : 'Identifiant',
-	xLexicalValueColumnLabel : 'Valeur lexicale',
-	xThesaurusTitleColumnLabel : 'Vocabulaire',
-	xTypeValueColumnLabel : 'Type',
-	xDisplayResultBtnLabel : 'Afficher',
-	xSearchPanelTitle : 'Résultats de recherche',
-	xTypeLabels : {
-		ThesaurusTerm : 'Terme',
-		ThesaurusConcept : 'Concept',
-	},
-	xAdvancedSearchPnlTitle : 'Recherche avancée',
-	xAdvancedSearchBtn : 'Rechercher',
-	xAdvancedSearchThesaurusFilter : 'Vocabulaire',
-	xAdvancedSearchTypeFilter : 'Type',
-	xAdvancedSearchStatusFilter : 'Statut',
-	xAdvancedSearchLanguageFilter : 'Langue',
-	xAdvancedSearchCreationDateFilter : 'Date de création',
-	xAdvancedSearchModificationDateFilter : 'Date de modification',
+Ext.define('GincoApp.store.SearchTypeStore', {
+    extend: 'Ext.data.Store',
+    xConceptLabel : 'Concept',
+    xTermLabel : 'Term',
+    xNonPreferredTermLabel : 'Non preferred term',
+    xPreferredTermLabel : 'Preferred term',
+    localized : true,
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: false,
+            storeId: 'SearchTypeStore',
+            data : [
+                    {type:'concept', typeLabel:me.xConceptLabel},
+                    {type:'term', typeLabel:me.xTermLabel},
+                    {type:'nonpreferredterm', typeLabel:me.xNonPreferredTermLabel},
+                    {type:'preferredterm', typeLabel: me.xPreferredTermLabel}
+                ],
+            fields: [
+                {
+                    name: 'type',
+                    type: 'int'
+                },
+                {
+                    name: 'typeLabel',
+                    type: 'string'
+                }
+            ]
+        }, cfg)]);
+    }
 });
