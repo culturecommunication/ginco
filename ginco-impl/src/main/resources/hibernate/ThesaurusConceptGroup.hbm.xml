@@ -14,6 +14,8 @@
 			<key column="conceptgroupid" not-null="true" />
 			<many-to-many class="fr.mcc.ginco.beans.ThesaurusConcept" column="conceptid" />
 		</set>
+	
+		<many-to-one name="parent" class="ThesaurusConceptGroup" column="parentgroupid" unique="true" not-null="false"/>
 		
 	</class>
 </hibernate-mapping>

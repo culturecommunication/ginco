@@ -14,6 +14,9 @@ DROP TABLE IF EXISTS top_relationship;
 DROP TABLE IF EXISTS associative_relationship;
 DROP TABLE IF EXISTS associative_relationship_role;
 DROP TABLE IF EXISTS thesaurus_array;
+DROP TABLE IF EXISTS concept_group_label;
+DROP TABLE IF EXISTS concept_group_type;
+DROP TABLE IF EXISTS concept_group;
 DROP TABLE IF EXISTS node_label;
 DROP TABLE IF EXISTS thesaurus_array_concept;
 DROP TABLE IF EXISTS revinfo;
@@ -222,11 +225,63 @@ ALTER TABLE thesaurus_array
       REFERENCES thesaurus_concept (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
 
-      
 ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (thesaurusid)
       REFERENCES thesaurus (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
+
+CREATE TABLE concept_group_type
+(
+  code text NOT NULL,
+  label text NOT NULL,
+  CONSTRAINT pk_concept_group_type_code PRIMARY KEY (code)
+);
+
+CREATE TABLE concept_group
+(
+  identifier text NOT NULL,
+  thesaurusid text NOT NULL,
+  conceptgrouptypecode text NOT NULL,
+  parentgroupid text,
+  CONSTRAINT pk_concept_group_identifier PRIMARY KEY (identifier)
+);
+
+ALTER TABLE concept_group
+      ADD FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier)
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+ALTER TABLE concept_group
+      ADD FOREIGN KEY (conceptgrouptypecode)
+      REFERENCES concept_group_type (code)
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+      
+ALTER TABLE concept_group
+      ADD FOREIGN KEY (parentgroupid)
+      REFERENCES concept_group (identifier)
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+CREATE TABLE concept_group_label
+(
+  identifier integer NOT NULL,
+  lexicalvalue text NOT NULL,
+  created text NOT NULL,
+  modified text NOT NULL,
+  lang character(5) NOT NULL,
+  conceptgroupid text NOT NULL,
+  CONSTRAINT pk_concept_group_label_identifier PRIMARY KEY (identifier)
+);
+
+ALTER TABLE concept_group_label
+    ADD FOREIGN KEY (conceptgroupid)
+    REFERENCES concept_group (identifier)
+    ON UPDATE NO ACTION ON DELETE CASCADE;
+    
+ALTER TABLE concept_group_label
+    ADD FOREIGN KEY (lang)
+    REFERENCES languages_iso639 (id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION;
+
 
 CREATE TABLE node_label
 (
