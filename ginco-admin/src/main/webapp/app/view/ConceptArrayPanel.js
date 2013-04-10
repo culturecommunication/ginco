@@ -98,7 +98,7 @@ Ext
 												trackResetOnLoad : true,
 												itemId : 'conceptArrayForm',
 												defaults : {
-													anchor : '70%',
+													anchor : '70%'
 												},
 												bbar : Ext.create('GincoApp.view.BottomFormToolbar'),
 												dockedItems : [ {

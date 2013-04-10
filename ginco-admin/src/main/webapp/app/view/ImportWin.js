@@ -40,7 +40,7 @@ Ext
 					
 					config: {
 						importType: null,
-						xTitleLabel : '',
+						xTitleLabel : ''
 					},
 					
 					// Labels

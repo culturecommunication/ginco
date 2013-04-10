@@ -45,7 +45,6 @@ Ext.define('GincoApp.store.ThesaurusNoteStore', {
 		var me = this;
 		cfg = cfg || {};
 		me.callParent([ Ext.apply({
-			// TODO : keep autoload false ?
 			autoLoad : false,
 			pageSize : 10,
 			alias : 'store.notestore',

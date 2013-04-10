@@ -48,11 +48,11 @@ Ext.define('GincoApp.controller.ImportController', {
 		var me = this;
 		var theForm = theButton.up('#importForm');
 		var theWin = theForm.up('importWindow');
-		
+		var importUrl = null;
 		if (theWin.importType == 'skos') {
-			var importUrl = 'services/ui/importservice/import';
+			importUrl = 'services/ui/importservice/import';
 		} else if (theWin.importType == 'gincoxml') {
-			var importUrl = 'services/ui/importservice/importGincoXml';
+			importUrl = 'services/ui/importservice/importGincoXml';
 		}
 		
 		if (theForm.getForm()

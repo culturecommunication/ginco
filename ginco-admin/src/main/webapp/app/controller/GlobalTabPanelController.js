@@ -74,8 +74,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			
 			if (dirtyForms.length>0) {
 				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
-					if (theForm.checkRoles('ADMIN')==true)
-						return true;
+					if (theForm.checkRoles('ADMIN')==true) {
+						return true;						
+					}
 				}
 				Ext.MessageBox.show({
 					title : me.xSaveMsgTitle,

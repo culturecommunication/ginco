@@ -46,7 +46,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 	searchQuery : '*',
 	xTypeLabels : {
 		ThesaurusTerm : 'Term',
-		ThesaurusConcept : 'Concept',
+		ThesaurusConcept : 'Concept'
 	},
 	layout : {
 		type : 'vbox',
@@ -57,7 +57,6 @@ Ext.define('GincoApp.view.SearchPanel', {
 	},
 
 	initComponent : function() {
-		var me = this;
 		var me = this;
 		me.searchStore = Ext.create('GincoApp.store.SearchResultStore');
 
