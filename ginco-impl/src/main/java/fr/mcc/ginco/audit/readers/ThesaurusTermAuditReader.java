@@ -176,15 +176,18 @@ public class ThesaurusTermAuditReader {
 
 			List<Object[]> allTermAttached = termAttachedQuery.getResultList();
 			for (Object[] revisionData : allTermAttached) {
-				JournalLine journal = journalLineBuilder.buildLineBase(
-						JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT,
-						(GincoRevEntity) revisionData[1]);
 				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-				journal.setTermId(term.getIdentifier());
-				journal.setConceptId(term.getConcept().getIdentifier());
-				journal.setNewLexicalValue(term.getLexicalValue());
-				journal.setOldLexicalValue(term.getLexicalValue());
-				allEvents.add(journal);
+				if (term.getConcept() != null) {
+					JournalLine journal = journalLineBuilder.buildLineBase(
+							JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT,
+							(GincoRevEntity) revisionData[1]);
+					journal.setTermId(term.getIdentifier());
+					journal.setConceptId(term.getConcept().getIdentifier());
+
+					journal.setNewLexicalValue(term.getLexicalValue());
+					journal.setOldLexicalValue(term.getLexicalValue());
+					allEvents.add(journal);
+				}
 			}
 		} catch (AuditException ae) {
 			throw new TechnicalException(

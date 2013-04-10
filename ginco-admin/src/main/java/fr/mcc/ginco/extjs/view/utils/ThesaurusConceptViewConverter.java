@@ -232,7 +232,12 @@ public class ThesaurusConceptViewConverter {
 		//Processing children concepts remove
 		Set<ThesaurusConcept> children = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(thesaurusConcept.getIdentifier()));
 		List<String> oldChildrenIds = getIdsFromConceptList(children);
-		List<String> removedChildren = ListUtils.subtract(oldChildrenIds, source.getChildConcepts());
+		List<String> removedChildren = new ArrayList<String>();
+		if ( source.getChildConcepts() != null) {
+			removedChildren = ListUtils.subtract(oldChildrenIds, source.getChildConcepts());
+		} else {
+			removedChildren = oldChildrenIds;
+		}
 		Set<ThesaurusConcept> parentRootConcepts = thesaurusConcept.getRootConcepts();
 		
 		if (!removedChildren.isEmpty()) {
