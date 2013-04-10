@@ -46,5 +46,6 @@ Ext.define('GincoApp.locale.fr.view.TermPanel', {
 	xLanguagesLabel : 'Langue',
 	xTermPanelTitle : 'Nouveau Terme',
 	xNotesTab : 'Notes du terme',
-	xStatusLabel : 'Statut'
+	xStatusLabel : 'Statut',
+	xDisplayTheConceptOfTheTerm : 'Afficher le concept de ce terme'
 });

@@ -71,6 +71,10 @@
     background-image: url(../images/basket.png) !important;
 }
 
+.display-concept-panel {
+    background-image: url(../images/display-concept-panel.png) !important;
+}
+
 .icon-detach {
     background-image: url(../images/detach.png) !important;
 }

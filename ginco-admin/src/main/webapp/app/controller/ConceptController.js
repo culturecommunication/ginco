@@ -174,7 +174,7 @@ Ext
 					onTermDblClick : function(theGrid, record, item, index, e,
 							eOpts) {
 						var me = this;
-						var thePanel = me.getActivePanel();
+						var thePanel = theGrid.up('conceptPanel');
 						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 						topTabs.fireEvent('opentermtab', topTabs, thePanel.thesaurusData.id,
 								record.data.identifier);

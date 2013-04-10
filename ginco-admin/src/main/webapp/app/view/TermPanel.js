@@ -67,6 +67,7 @@ Ext
 					xTermPanelTitle : 'New Term',
 					xNotesTab : 'Notes of this term',
 					xStatusLabel : 'Status',
+					xDisplayTheConceptOfTheTerm : 'Display the concept of this term',
 
 					initComponent : function() {
 						var me = this;
@@ -122,7 +123,15 @@ Ext
 																			disabled : true,
 																			itemId : 'createconcept',
 																			iconCls : 'icon-add'
-																		} ]
+																		},
+																		{
+																			xtype : 'button',
+																			text : me.xDisplayTheConceptOfTheTerm,
+																			requiredRoles : ['ADMIN'],
+																			disabled : true,
+																			itemId : 'displayConcept',
+																			iconCls : 'display-concept-panel'
+																		}]
 															} ],
 															items : [
 																	{
