@@ -83,7 +83,8 @@ Ext.define('GincoApp.view.LeftPanel', {
 			        }]
 			    }],
 				viewConfig : {
-					loadMask : true
+					loadMask : true,
+					preserveScrollOnRefresh : true
 				},
 				tools : [ {
 					type : 'refresh',
