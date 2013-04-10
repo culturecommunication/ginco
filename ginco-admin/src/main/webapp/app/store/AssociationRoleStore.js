@@ -25,43 +25,47 @@
  * therefore means that it is reserved for developers and experienced
  * professionals having in-depth computer knowledge. Users are therefore
  * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systems and/or
+ * requirements in conditions enabling the security of their systemsand/or
  * data to be ensured and, more generally, to use and operate it in the
  * same conditions as regards security.
  * <p/>
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
+/*
+ * Term Language Store 
+ * This file contains all Term languages displayed in dropdown lists
+ */
+Ext.define('GincoApp.store.AssociationRoleStore', {
+    extend: 'Ext.data.Store',
 
-import java.util.List;
-
-@Repository("associativeRelationshipRoleDAO")
-public class AssociativeRelationshipRoleDAO extends GenericHibernateDAO<AssociativeRelationshipRole, String> implements IAssociativeRelationshipRoleDAO  {
-
-	public AssociativeRelationshipRoleDAO() {
-		super(AssociativeRelationshipRole.class);
-	}
-
-	@Override
-	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRole()
-			throws BusinessException {
-		List<AssociativeRelationshipRole> defaultRoles = getCurrentSession().createCriteria(AssociativeRelationshipRole.class)
-				.setMaxResults(1)
-				.add(Restrictions.eq("defaultRole", Boolean.TRUE))				
-				.list();
-		if (defaultRoles != null && defaultRoles.size()==1) {
-			return defaultRoles.get(0);
-		} else {
-			throw new BusinessException("No defaultRole defined", "no-default-role-defined");
-		}
-	}	
-	
-	
-}
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: true,
+            storeId: 'JsonVirtualAssociationRoleStore',
+            proxy: {
+                type: 'ajax',
+                url: 'services/ui/associationroleservice/getRoles',
+                reader: {
+                    type: 'json',
+                    idProperty: 'code',
+                    root: 'data'
+                }
+            },
+            fields: [
+                {
+                    name: 'code',
+                    type: 'string'
+                },
+                {
+                    name: 'label',
+                    type: 'string'
+                }
+                
+            ]
+        }, cfg)]);
+    }
+});

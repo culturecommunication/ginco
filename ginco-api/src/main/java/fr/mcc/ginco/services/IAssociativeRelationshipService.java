@@ -34,11 +34,11 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 /**
  * Service used to work with {@link AssociativeRelationshipRole} objects, contains basic
@@ -46,8 +46,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
  *
  * @see fr.mcc.ginco.beans
  */
-public interface IAssociativeRelationshipService {   
-
-	
-	List<String> getAssociatedConceptsId(ThesaurusConcept concept) throws BusinessException;
+public interface IAssociativeRelationshipService {
+    List<String> getAssociatedConceptsId(ThesaurusConcept concept);
+    AssociativeRelationship getAssociativeRelationshipById(String id1, String id2);
 }

@@ -76,14 +76,11 @@ Ext.define('GincoApp.model.ConceptModel', {
         {
             name : 'rootConcepts',
             type : 'array_of_string'
-        },
-        {
-            name : 'associatedConcepts',
-            type : 'array_of_string'
         }
     ],
     associations: [
-                    {type: 'hasMany', model: 'GincoApp.model.ThesaurusTermModel',    name: 'terms'}
+                    {type: 'hasMany', model: 'GincoApp.model.ThesaurusTermModel',    name: 'terms'},
+                    {type: 'hasMany', model: 'GincoApp.model.AssociationModel',    name: 'associatedConcepts'}
    ],
    idProperty : 'identifier',
     

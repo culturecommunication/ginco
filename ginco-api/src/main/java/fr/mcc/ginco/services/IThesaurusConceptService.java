@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -116,7 +117,7 @@ public interface IThesaurusConceptService {
 	 * @throws BusinessException 
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<String> associatedConceptIds) throws BusinessException;
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds) throws BusinessException;
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus

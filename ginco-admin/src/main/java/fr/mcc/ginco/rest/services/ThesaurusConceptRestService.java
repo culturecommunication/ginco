@@ -34,42 +34,35 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingResourceException;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.cxf.jaxrs.ext.Nullable;
-import org.slf4j.Logger;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.GenericRoleView;
-import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
+import fr.mcc.ginco.extjs.view.pojo.*;
+import fr.mcc.ginco.extjs.view.utils.AssociativeRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.LabelUtil;
+import org.apache.cxf.jaxrs.ext.Nullable;
+import org.slf4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
 
 
 /**
@@ -97,6 +90,14 @@ public class ThesaurusConceptRestService {
 	@Inject
 	@Named("thesaurusConceptViewConverter")
 	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+
+    @Inject
+    @Named("associativeRelationshipViewConverter")
+    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
+
+    @Inject
+    @Named("associativeRelationshipService")
+    private IAssociativeRelationshipService associativeRelationshipService;
 	
 	@Inject
     @Named("indexerService")
@@ -167,8 +168,13 @@ public class ThesaurusConceptRestService {
 		// We save or update the concept
 		logger.info("Saving concept in DB");
 
+        List<AssociativeRelationship> associations = new ArrayList<AssociativeRelationship>();
+        for(AssociativeRelationshipView view : thesaurusConceptViewJAXBElement.getAssociatedConcepts()) {
+            associations.add(associativeRelationshipViewConverter.convert(view, convertedConcept));
+        }
+
 		ThesaurusConcept returnConcept = thesaurusConceptService
-				.updateThesaurusConcept(convertedConcept, terms, thesaurusConceptViewJAXBElement.getAssociatedConcepts());
+				.updateThesaurusConcept(convertedConcept, terms, associations);
 		
 		for (ThesaurusTerm term : terms) {
 			indexerService.addTerm(term);
@@ -177,6 +183,16 @@ public class ThesaurusConceptRestService {
 		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
+
+    @GET
+    @Path("/getAssociations")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<AssociativeRelationship> getAssociativeRelationshipsByConceptId(
+            @QueryParam("conceptId")String conceptId) {
+
+        ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+        return (List<AssociativeRelationship>) concept.getAssociativeRelationshipRight();
+    }
 
     @GET
     @Path("/getConcepts")

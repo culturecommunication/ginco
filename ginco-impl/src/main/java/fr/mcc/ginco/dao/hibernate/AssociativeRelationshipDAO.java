@@ -34,8 +34,9 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -43,9 +44,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import java.util.List;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -80,5 +79,14 @@ public class AssociativeRelationshipDAO extends
 
         return criteria.list();
     }   
-	
+
+    @Override
+    public AssociativeRelationship getAssociativeRelationship(String id1, String id2) {
+        Criteria criteria = getCurrentSession().createCriteria(AssociativeRelationship.class, "ar")
+                .add(Restrictions.or(
+                 Restrictions.and(Restrictions.eq("conceptLeft.identifier", id1), Restrictions.eq("conceptRight.identifier", id2)),
+                 Restrictions.and(Restrictions.eq("conceptRight.identifier",id1),Restrictions.eq("conceptLeft.identifier",id2))));
+
+        return (AssociativeRelationship) criteria.uniqueResult();
+    }
 }

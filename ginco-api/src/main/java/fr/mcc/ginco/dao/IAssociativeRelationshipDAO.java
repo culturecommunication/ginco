@@ -34,10 +34,10 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+
+import java.util.List;
 
 /**
  * Data Access Object for thesaurus_concept
@@ -50,6 +50,8 @@ public interface IAssociativeRelationshipDAO extends IGenericDAO<AssociativeRela
      * @param concept
      * @return
      */
-    List<String> getAssociatedConcepts(ThesaurusConcept concept);  
+    List<String> getAssociatedConcepts(ThesaurusConcept concept);
 
+
+    AssociativeRelationship getAssociativeRelationship(String id1, String id2);
 }

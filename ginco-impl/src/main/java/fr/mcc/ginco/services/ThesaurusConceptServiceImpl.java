@@ -34,35 +34,9 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
-import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.dao.*;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationsEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -70,6 +44,16 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
+import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.*;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -300,7 +284,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<String> associatedConceptIds)
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConcepts)
 			throws BusinessException {
 		
 		ThesaurusTermUtils.checkTerms(terms);
@@ -327,7 +311,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
 			// We can set status = candidate only if concept has not relation
 			// (both hierarchical or associative)
-			if (!associatedConceptIds.isEmpty()
+			if (!associatedConcepts.isEmpty()
 					// || !object.getAssociativeRelationshipRight().isEmpty()
 					|| !object.getParentConcepts().isEmpty()
 					|| hasChildren(object.getIdentifier())) {
@@ -350,7 +334,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 
 		}
-		object = saveAssociativeRelationship(object, associatedConceptIds);
+		object = saveAssociativeRelationship(object, associatedConcepts);
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
@@ -359,7 +343,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	private ThesaurusConcept saveAssociativeRelationship(
-			ThesaurusConcept concept, List<String> associatedConceptIds)
+			ThesaurusConcept concept, List<AssociativeRelationship> associatedConcepts)
 			throws BusinessException {
 		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
 		if (concept.getAssociativeRelationshipLeft() == null) {
@@ -382,9 +366,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		}
 		concept.getAssociativeRelationshipRight().clear();
 
-		for (String associatedConceptsId : associatedConceptIds) {
-			logger.debug("Settings associated concept " + associatedConceptsId);
-			ThesaurusConcept linkedThesaurusConcept = getThesaurusConceptById(associatedConceptsId);
+		for (AssociativeRelationship associatedConcept : associatedConcepts) {
+			logger.debug("Settings associated concept " + associatedConcept);
+			ThesaurusConcept linkedThesaurusConcept = associatedConcept.getConceptRight();
 			if (linkedThesaurusConcept.getStatus() != ConceptStatusEnum.VALIDATED
 					.getStatus()) {
 				throw new BusinessException(
@@ -394,18 +378,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			List<String> alreadyAssociatedConcepts = associativeRelationshipDAO
 					.getAssociatedConcepts(linkedThesaurusConcept);
 			if (!alreadyAssociatedConcepts.contains(concept.getIdentifier())) {
-				AssociativeRelationship relationship = new AssociativeRelationship();
-				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
-				relationshipId.setConcept1(concept.getIdentifier());
-				relationshipId.setConcept2(associatedConceptsId);
-				relationship.setIdentifier(relationshipId);
-				relationship.setConceptLeft(concept);
-				relationship.setConceptRight(thesaurusConceptDAO
-						.getById(associatedConceptsId));
-				relationship.setRelationshipRole(associativeRelationshipRoleDAO
-						.getDefaultAssociativeRelationshipRole());
-				relations.add(relationship);
-				associativeRelationshipDAO.update(relationship);
+				associativeRelationshipDAO.update(associatedConcept);
 			}
 		}
 		concept.getAssociativeRelationshipLeft().addAll(relations);

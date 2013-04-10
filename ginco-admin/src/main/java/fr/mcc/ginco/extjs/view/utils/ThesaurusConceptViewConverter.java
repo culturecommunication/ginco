@@ -34,11 +34,9 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
@@ -79,6 +77,10 @@ public class ThesaurusConceptViewConverter {
     @Inject
     @Named("thesaurusArrayService")
     private IThesaurusArrayService thesaurusArrayService;
+
+    @Inject
+    @Named("associativeRelationshipViewConverter")
+    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
 	
 	@Inject
 	@Named("associativeRelationshipService")
@@ -129,15 +131,22 @@ public class ThesaurusConceptViewConverter {
 		}
 		view.setTerms(terms);
 
-		List<String> associatedConcepts = new ArrayList<String>();
-		for (String conceptAssociated : associativeRelationshipService
-				.getAssociatedConceptsId(concept)) {
-			associatedConcepts.add(conceptAssociated);
+		List<AssociativeRelationshipView> associatedConcepts = new ArrayList<AssociativeRelationshipView>();
+
+        List<String> ids = associativeRelationshipService.getAssociatedConceptsId(concept);
+
+        for (String conceptAssociated : ids) {
+            AssociativeRelationship associativeRelationship =
+                    associativeRelationshipService.getAssociativeRelationshipById(conceptAssociated, concept.getIdentifier());
+
+            associatedConcepts.add(associativeRelationshipViewConverter.convert(associativeRelationship));
 			logger.info("Found associated concept : "
 					+ conceptAssociated);
 		}
-		view.setAssociatedConcepts(associatedConcepts);
-		return view;
+
+        view.setAssociatedConcepts(associatedConcepts);
+
+        return view;
 	}
 
 	private List<String> getIdsFromConceptList(Set<ThesaurusConcept> list) {

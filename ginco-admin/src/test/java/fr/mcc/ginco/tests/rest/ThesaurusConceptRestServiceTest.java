@@ -34,17 +34,13 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.GenericRoleView;
-import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
+import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
+import fr.mcc.ginco.extjs.view.utils.AssociativeRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusConceptRestService;
@@ -54,7 +50,6 @@ import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.LabelUtil;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,6 +81,9 @@ public class ThesaurusConceptRestServiceTest {
 
 	@Mock(name="thesaurusConceptViewConverter")
     private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+
+    @Mock(name="associativeRelationshipViewConverter")
+    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
 	
 	@InjectMocks
 	private ThesaurusConceptRestService thesaurusConceptRestService = new ThesaurusConceptRestService();
@@ -122,7 +120,9 @@ public class ThesaurusConceptRestServiceTest {
 		List<ThesaurusTermView> termViews = new ArrayList<ThesaurusTermView>();
 		termViews.add(fakeTermView1);
 		termViews.add(fakeTermView2);
-		
+
+        List<AssociativeRelationshipView> associatedConceptsView = new ArrayList<AssociativeRelationshipView>();
+
 		ThesaurusConcept fakeThesaurusConcept = getFakeThesaurusConceptWithNonMandatoryEmptyFields("fakeConcept1");
 		ThesaurusConceptView fakeConceptView = new ThesaurusConceptView();
 		fakeConceptView.setIdentifier("");
@@ -131,41 +131,20 @@ public class ThesaurusConceptRestServiceTest {
 		fakeConceptView.setTopconcept(false);
 		fakeConceptView.setThesaurusId("1");
 		fakeConceptView.setTerms(termViews);
-		List<String> associatedConcepts = new ArrayList<String>();
+        fakeConceptView.setAssociatedConcepts(associatedConceptsView);
+
+
+        List<AssociativeRelationship> associatedConcepts = new ArrayList<AssociativeRelationship>();
 		
 		Mockito.when(thesaurusConceptViewConverter.convert(fakeConceptView)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(termViewConverter.convertTermViewsInTerms(termViews, true)).thenReturn(terms);
-		
+
 		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(thesaurusConceptViewConverter.convert(Mockito.any(ThesaurusConcept.class), Mockito.anyListOf(ThesaurusTerm.class))).thenReturn(fakeConceptView);
 		
 		ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);
 		Assert.assertEquals(fakeConceptView.getTerms().get(0).getIdentifier(), actualResponse.getTerms().get(0).getIdentifier());
 		Assert.assertEquals(fakeConceptView.getTerms().get(1).getIdentifier(), actualResponse.getTerms().get(1).getIdentifier());
-	}
-	
-	/**
-	 * Test to get all concept status
-	 * @throws BusinessException 
-	 */
-	@Test
-	public final void getAllConceptStatus() throws BusinessException {
-		ExtJsonFormLoadData<List<GenericStatusView>> actualResponse = thesaurusConceptRestService.getAllConceptStatus();
-		String availableStatusIds[] = LabelUtil.getResourceLabel("concept-status").split(",");
-		Long expectedTotal = (long) availableStatusIds.length;
-		Assert.assertEquals(expectedTotal, actualResponse.getTotal());
-	}
-	
-	/**
-	 * Test to get all roles of hierarchical relationships
-	 * @throws BusinessException 
-	 */
-	@Test
-	public final void getAllRoleForHierarchicalRelationShips() throws BusinessException {
-		ExtJsonFormLoadData<List<GenericRoleView>> actualResponse = thesaurusConceptRestService.getAllHierarchicalRelationRoles();
-		String availableRoleIds[] = LabelUtil.getResourceLabel("hierarchical-role").split(",");
-		Long expectedTotal = (long) availableRoleIds.length;
-		Assert.assertEquals(expectedTotal, actualResponse.getTotal());
 	}
 	
 	private ThesaurusTerm getFakeThesaurusTermWithNonMandatoryEmptyFields(String id) {

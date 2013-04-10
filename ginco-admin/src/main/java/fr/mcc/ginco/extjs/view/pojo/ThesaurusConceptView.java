@@ -58,7 +58,7 @@ public class ThesaurusConceptView implements Serializable {
     private List<String> parentConcepts;
     private List<String> childConcepts;
     private List<String> rootConcepts;
-	private List<String> associatedConcepts;
+	private List<AssociativeRelationshipView> associatedConcepts;
 
 	
 	public ThesaurusConceptView() {}	
@@ -111,11 +111,11 @@ public class ThesaurusConceptView implements Serializable {
 		this.topconcept = topconcept;
 	}
 
-	public List<String> getAssociatedConcepts() {
+	public List<AssociativeRelationshipView> getAssociatedConcepts() {
 		return associatedConcepts;
 	}
 
-	public void setAssociatedConcepts(List<String> associatedConcepts) {
+	public void setAssociatedConcepts(List<AssociativeRelationshipView> associatedConcepts) {
 		this.associatedConcepts = associatedConcepts;
 	}	
 

@@ -96,6 +96,10 @@ Ext
 								'Ext.grid.plugin.CellEditing', {
 									clicksToEdit : 1
 								});
+                        var cellAssociativeRoleEditing = Ext.create(
+                            'Ext.grid.plugin.CellEditing', {
+                                clicksToEdit : 1
+                            });
 						
 						var me = this;
 						me.conceptTermStore = Ext
@@ -104,8 +108,6 @@ Ext
 						me.hierarchicalRelationRoleStore = Ext
 						.create('GincoApp.store.HierarchicalRelationRoleStore');
 
-						me.associatedConceptStore = Ext
-								.create('GincoApp.store.SimpleConceptStore');
 						me.rootConceptStore = Ext
 								.create('GincoApp.store.SimpleConceptStore');
 						me.parentConceptStore = Ext
@@ -113,6 +115,11 @@ Ext
 						me.childrenConceptStore = Ext
 								.create('GincoApp.store.SimpleConceptStore');
 						me.childrenConceptStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
+
+                        me.associatedConceptStore = Ext
+                                .create('GincoApp.store.AssociationStore');
+                        me.associationRoleStore = Ext
+                                .create('GincoApp.store.AssociationRoleStore');
 
 						me.termRoleStore = Ext
 								.create('GincoApp.store.TermRoleStore');
@@ -455,6 +462,7 @@ Ext
 																			title : me.xAssociatedConceptsListGridTitle,
 																			store : me.associatedConceptStore,
 																			itemId : 'gridPanelAssociatedConcepts',
+                                                                            plugins : [ cellAssociativeRoleEditing ],
 
 																			dockedItems : [ {
 																				xtype : 'toolbar',
@@ -479,6 +487,22 @@ Ext
 																						text : me.xLexicalValueLabel,
 																						flex : 1
 																					},
+                                                                                    {
+                                                                                        dataIndex : 'roleCode',
+                                                                                        header : me.xRoleColumnLabel,
+                                                                                        stopSelection : false,
+                                                                                        editor : new Ext.form.field.ComboBox(
+                                                                                            {
+                                                                                                typeAhead : true,
+                                                                                                triggerAction : 'all',
+                                                                                                selectOnTab : true,
+                                                                                                store : me.associationRoleStore,
+                                                                                                lazyRender : true,
+                                                                                                listClass : 'x-combo-list-small',
+                                                                                                displayField : 'label',
+                                                                                                valueField : 'code'
+                                                                                            })
+                                                                                    },
 																					{
 																						xtype : 'actioncolumn',
 																						itemId : 'associatedConceptActionColumn',

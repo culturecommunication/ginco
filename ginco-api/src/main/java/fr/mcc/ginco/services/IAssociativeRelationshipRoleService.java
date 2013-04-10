@@ -37,6 +37,8 @@ package fr.mcc.ginco.services;
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.exceptions.BusinessException;
 
+import java.util.List;
+
 /**
  * Service used to work with {@link AssociativeRelationshipRole} objects, contains basic
  * methods exposed to client part.
@@ -52,4 +54,16 @@ public interface IAssociativeRelationshipRoleService {
      */
 	AssociativeRelationshipRole getDefaultAssociativeRelationshipRoleRole() throws BusinessException;
 
+    /**
+     * Returns single object by its id.
+     * @return
+     * @throws BusinessException
+     */
+    AssociativeRelationshipRole getRoleById(String id) throws BusinessException;
+
+    /**
+     * Returns list of all roles
+     * @return
+     */
+    List<AssociativeRelationshipRole> getAllAssociationTermRole();
 }

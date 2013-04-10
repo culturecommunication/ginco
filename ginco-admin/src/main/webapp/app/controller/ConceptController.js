@@ -30,9 +30,10 @@ Ext
 				{
 					extend : 'Ext.app.Controller',
 
-					stores : [ 'MainTreeStore', 'SimpleConceptStore' ],
+					stores : [ 'MainTreeStore', 'SimpleConceptStore',
+                            'AssociationStore', 'AssociationRoleStore' ],
 					models : [ 'ConceptModel', 'ThesaurusModel',
-							'SimpleConceptModel' ],
+							'SimpleConceptModel', 'AssociationModel' ],
 
 					localized : true,
 					_myAppGlobal : this,
@@ -311,7 +312,12 @@ Ext
 						var theStore = theGrid.getStore();
 						var selectedItem = selectedRow[0];
 						selectedItem.setDirty();
-						theStore.add(selectedItem);
+
+                        var assocModel = Ext.create('GincoApp.model.AssociationModel');
+                        assocModel.set('label',selectedItem.get('label'));
+                        assocModel.set('identifier',selectedItem.get('identifier'));
+
+                        theStore.add(assocModel);
 
 					},
 
@@ -359,14 +365,13 @@ Ext
 						theGridStore.removeAll();
 						theGridStore.add(terms);
 
-						var associatedConceptsGrid = aForm
-								.down('#gridPanelAssociatedConcepts');
-						var associatedConceptsGridStore = associatedConceptsGrid
-								.getStore();
-						associatedConceptsGridStore.getProxy().extraParams = {
-							conceptIds : aModel.raw.associatedConcepts
-						};
-						associatedConceptsGridStore.load();
+                        var assoc = aModel.associatedConcepts().getRange();
+                        var associatedConceptsGrid = aForm
+                            .down('#gridPanelAssociatedConcepts');
+                        var associatedConceptsGridStore = associatedConceptsGrid
+                            .getStore();
+                        associatedConceptsGridStore.removeAll();
+                        associatedConceptsGridStore.add(assoc);
 
 						var rootConceptsGrid = aForm
 								.down('#gridPanelRootConcepts');
@@ -571,10 +576,6 @@ Ext
 								.down('#gridPanelAssociatedConcepts');
 						var associatedGridStore = associatedGrid.getStore();
 						var associatedData = associatedGridStore.getRange();
-						var associatedIds = Ext.Array.map(associatedData,
-								function(associatedConcept) {
-									return associatedConcept.data.identifier;
-								});
 
 						var thePanel = me.getActivePanel();
 
@@ -582,11 +583,12 @@ Ext
 						var updatedModel = theForm.getForm().getRecord();
 						updatedModel.terms().removeAll();
 						updatedModel.terms().add(termsData);
+                        updatedModel.associatedConcepts().removeAll();
+                        updatedModel.associatedConcepts().add(associatedData);
 
 						updatedModel.data.parentConcepts = parentIds;
 						updatedModel.data.childConcepts = childIds;
 						updatedModel.data.rootConcepts = rootIds;
-						updatedModel.data.associatedConcepts = associatedIds;
 
 						updatedModel
 								.save({
