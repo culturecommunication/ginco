@@ -181,7 +181,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			buildArrays(thesaurus, model);
 
 		} catch (JenaException je) {
-			throw new BusinessException("Error reading imported file ",
+			throw new BusinessException("Error reading imported file :"+je.getMessage(),
 					"import-unable-to-read-file", je);
 		} finally {
 			deleteTempFile(fileURI);

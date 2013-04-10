@@ -44,6 +44,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.imports.AbstractBuilder;
 import fr.mcc.ginco.imports.SKOS;
@@ -100,6 +101,22 @@ public class AbstractBuilderTest {
     	Assert.assertEquals(3, allLines.length);
 		
 	}
+	
+	@Test
+    public void testExtendedDC()    
+    {   
+    	Model model = ModelFactory.createDefaultModel();
+		InputStream is = ThesaurusBuilderTest.class
+				.getResourceAsStream("/imports/abstract_builder_tests_dct.rdf");
+		model.read(is, null);
+
+		Resource skosResource = model
+				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");
+
+    	AbstractBuilder abstractBuilder = Mockito.mock(AbstractBuilder.class, Mockito.CALLS_REAL_METHODS);
+    	String simpleString = abstractBuilder.getSimpleStringInfo(skosResource, DC.language,DCTerms.language);
+    	Assert.assertEquals("fr", simpleString);    	
+    }
 	
 	
 	
