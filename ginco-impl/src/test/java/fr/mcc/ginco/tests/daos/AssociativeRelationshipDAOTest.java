@@ -34,18 +34,17 @@
  */
 package fr.mcc.ginco.tests.daos;
 
-import java.util.List;
-
-import junit.framework.Assert;
-import junitx.framework.ListAssert;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.hibernate.AssociativeRelationshipDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
+import junit.framework.Assert;
+import junitx.framework.ListAssert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
 
 public class AssociativeRelationshipDAOTest extends BaseDAOTest {
 
@@ -69,6 +68,22 @@ public class AssociativeRelationshipDAOTest extends BaseDAOTest {
 		ListAssert.assertContains(associatedConcepts, "http://www.culturecommunication.gouv.fr/co6");
 
 	}
+
+    @Test
+    public void testGetRelationshipRole()
+            throws BusinessException {
+        AssociativeRelationship associativeRelationship =
+                associativeRelationshipDAO.getAssociativeRelationship(
+                        "http://www.culturecommunication.gouv.fr/co1",
+                        "http://www.culturecommunication.gouv.fr/co2");
+        Assert.assertEquals("TA", associativeRelationship.getRelationshipRole().getCode());
+
+        AssociativeRelationship associativeRelationship2 =
+                associativeRelationshipDAO.getAssociativeRelationship(
+                        "http://www.culturecommunication.gouv.fr/co2",
+                        "http://www.culturecommunication.gouv.fr/co1");
+        Assert.assertEquals("TA", associativeRelationship2.getRelationshipRole().getCode());
+    }
 	
 	
 	@Override
