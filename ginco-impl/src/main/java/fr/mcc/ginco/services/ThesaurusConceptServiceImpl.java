@@ -251,7 +251,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		boolean flag = false;
 		Set<ThesaurusConcept> stack = new HashSet<ThesaurusConcept>();
 		for (ThesaurusConcept directParent : directParents) {
-			if (path.containsKey(directParent.getIdentifier())) {
+			if (directParent==null || path.containsKey(directParent.getIdentifier())) {
 				continue;
 			} else {
 				path.put(directParent.getIdentifier(), iteration);

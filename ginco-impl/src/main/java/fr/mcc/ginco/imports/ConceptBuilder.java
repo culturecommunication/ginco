@@ -170,7 +170,8 @@ public class ConceptBuilder extends AbstractBuilder {
 			Resource parentConceptRes = stmt.getObject().asResource();
 			String relatedURI = parentConceptRes.getURI();
 			ThesaurusConcept parentConcept = builtConcepts.get(relatedURI);
-			parentConcepts.add(parentConcept);
+			if (parentConcept!=null)
+				parentConcepts.add(parentConcept);
 		}
 		concept.setParentConcepts(parentConcepts);
 	
