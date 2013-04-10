@@ -46,6 +46,5 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusVersionPanel', {
 	xVersionStatus : 'Statut',
 	xThisVersion : 'Version courante',
 	xCreateThesaurusVersion : "Créer une version",
-	xStatusLabels : ['Projet','Validé','Publié','Déprécié','Prohibé'],
-	
+	xStatusLabels : ['Projet','Validé','Publié','Déprécié','Prohibé']
 });

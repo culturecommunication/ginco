@@ -47,6 +47,6 @@ Ext.define('GincoApp.locale.fr.view.SearchPanel', {
 	xSearchPanelTitle : 'Résultats de recherche',
 	xTypeLabels : {
 		ThesaurusTerm : 'Terme',
-		ThesaurusConcept : 'Concept',
+		ThesaurusConcept : 'Concept'
 	}
 });
