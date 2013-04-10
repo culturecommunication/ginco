@@ -118,6 +118,7 @@ public class ThesaurusConceptViewConverter {
 		view.setTopconcept(concept.getTopConcept());
 		view.setThesaurusId(concept.getThesaurus().getIdentifier());
 		view.setStatus(concept.getStatus());
+		view.setNotation(concept.getNotation());
 
 		view.setParentConcepts(getIdsFromConceptList(concept
 				.getParentConcepts()));
@@ -186,6 +187,10 @@ public class ThesaurusConceptViewConverter {
 
 		if (source.getStatus() != null) {
 			thesaurusConcept.setStatus(source.getStatus());
+		}
+		
+		if (source.getNotation() != null) {
+			thesaurusConcept.setNotation(source.getNotation());
 		}
 
 		List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept

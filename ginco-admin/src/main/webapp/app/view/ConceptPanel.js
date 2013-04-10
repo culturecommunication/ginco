@@ -80,6 +80,7 @@ Ext
 					xConceptStatusLabel : 'Concept status',
 					xHiddenTermColumnLabel : 'Hidden term',
 					xConceptHierarchicalRoleLabels : ['BT-NT','BTG-NTG','BTI-NTI','BTP-NTP'],
+					xNotationLabel : 'Notation',
 					
 					conceptHierarchicalRoleRenderer : function(value,record)
 					{
@@ -202,6 +203,12 @@ Ext
 																					.create('GincoApp.store.ConceptStatusStore'),
 																			anchor : '70%',
 																			margin : '5 0 5 0'
+																		},
+																		{
+																			xtype : 'textfield',
+																			name : 'notation',
+																			fieldLabel : me.xNotationLabel,
+																			anchor : '70%'
 																		},
 																		{
 																			xtype : 'gridpanel',

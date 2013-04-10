@@ -66,5 +66,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
     xRoleColumnLabel: 'Rôle',
     xConceptStatusLabel : 'Statut du concept',
     xHiddenTermColumnLabel : 'Terme caché',
-    xConceptHierarchicalRoleLabels : ['TG-TS','TGG-TSG','TGI-TSI','TGP-TSP']
+    xConceptHierarchicalRoleLabels : ['TG-TS','TGG-TSG','TGI-TSI','TGP-TSP'],
+    xNotationLabel : 'Notation'
 });

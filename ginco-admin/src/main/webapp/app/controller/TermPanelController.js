@@ -218,7 +218,6 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var thePanel = theButton.up('termPanel');
 		var theForm = theButton.up('form');
 		theModel = theForm.getForm().getRecord();
-		console.log(theModel);
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		topTabs.fireEvent('openconcepttab', topTabs, thePanel.thesaurusData.id,
 				theModel.data.conceptId);
