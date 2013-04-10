@@ -127,7 +127,6 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : me.xDisplayTheConceptOfTheTerm,
-																			requiredRoles : ['ADMIN'],
 																			disabled : true,
 																			itemId : 'displayConcept',
 																			iconCls : 'display-concept-panel'
