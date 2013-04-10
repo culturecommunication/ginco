@@ -58,8 +58,8 @@ public class AssociativeRelationshipDAO extends
 
 	public AssociativeRelationshipDAO() {
 		super(AssociativeRelationship.class);
-	}    
-    
+	}
+
     @Override
     public List<String> getAssociatedConcepts(ThesaurusConcept concept) {
     

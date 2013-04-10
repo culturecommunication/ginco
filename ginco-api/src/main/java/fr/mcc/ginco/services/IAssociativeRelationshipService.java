@@ -47,6 +47,18 @@ import java.util.List;
  * @see fr.mcc.ginco.beans
  */
 public interface IAssociativeRelationshipService {
+    /**
+     * Returns list of string of all associated concepts to given concept.
+     * @param concept
+     * @return
+     */
     List<String> getAssociatedConceptsId(ThesaurusConcept concept);
+
+    /**
+     * Returns the single object by its composite key (order doesn't matter).
+     * @param id1
+     * @param id2
+     * @return
+     */
     AssociativeRelationship getAssociativeRelationshipById(String id1, String id2);
 }

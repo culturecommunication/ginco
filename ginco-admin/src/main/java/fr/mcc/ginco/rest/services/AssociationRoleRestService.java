@@ -65,7 +65,7 @@ public class AssociationRoleRestService {
 	/**
 	 * Public method used to get list of all existing term roles in database.
 	 * 
-	 * @return list of ThesaurusTermRole, if not found - {@code null}
+	 * @return list of AssociativeRelationshipRole, if not found - {@code null}
 	 */
 	@GET
 	@Path("/getRoles")
