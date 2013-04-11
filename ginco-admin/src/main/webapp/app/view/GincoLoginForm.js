@@ -42,6 +42,7 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 	resizable : false,
 	plain : true,
 	border : false,
+	defaultFocus:'username',
 	initComponent : function() {
 		var me = this;
 		Ext.applyIf(me, {
@@ -64,7 +65,7 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 					xtype : 'textfield',
 					fieldLabel : me.xUserNameLbl,
 					name : 'j_username',
-					id : 'username',
+					itemId : 'username',
 					allowBlank : false
 				}, {
 					xtype : 'textfield',
