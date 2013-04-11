@@ -35,16 +35,6 @@
 
 package fr.mcc.ginco.soap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.jws.WebService;
-
-import org.codehaus.plexus.util.StringUtils;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -53,6 +43,14 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
+import org.codehaus.plexus.util.StringUtils;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.jws.WebService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class is the implementation of all SOAP services related to concept objects
@@ -105,16 +103,15 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	
 	@Override
 	public List<ReducedThesaurusTerm> getConceptNotPreferredTerms (String conceptId)
-			throws BusinessException{
-		if (!conceptId.equals("")){
+			throws BusinessException {
+		if (!conceptId.equals("")) {
 			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
 			List<ThesaurusTerm> thesaurusTerms = thesaurusConceptService.getConceptNotPreferredTerms(conceptId);
-			for (ThesaurusTerm thesaurusTerm : thesaurusTerms)
+			for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));
+            }
 			return results;
-		}
-		else 
-		{
+		} else {
 			throw new BusinessException("Concept identifier is empty","empty-parameter");
 		}
 	}
@@ -128,12 +125,10 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 	
 	@Override
-	public int getStatusByConceptId(String conceptId) throws BusinessException{
-		if (!conceptId.equals("")){
+	public int getStatusByConceptId(String conceptId) throws BusinessException {
+		if (!conceptId.equals("")) {
 			return thesaurusConceptService.getStatusByConceptId(conceptId);
-		}
-		else 
-		{
+		} else {
 			throw new BusinessException("Concept identifier is empty","empty-parameter");
 		}
 	}

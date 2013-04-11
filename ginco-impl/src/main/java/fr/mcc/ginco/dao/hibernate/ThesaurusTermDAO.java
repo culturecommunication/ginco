@@ -34,18 +34,18 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.enums.TermStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.enums.TermStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -215,15 +215,7 @@ public class ThesaurusTermDAO extends
                 .add(Restrictions.eq("concept.identifier", conceptId))
                 .add(Restrictions.eq("prefered", Boolean.FALSE))
                 .list();
-
-        if(list.size() == 0) {
-        	throw new BusinessException("The concept " + conceptId
-					+ " has only preferred terms or any terms",
-					"concept-has-preferred-terms-or-any-terms");
-        }
-        else{
-        	return list;
-        }
+      	return list;
 	}
 
 	@Override
