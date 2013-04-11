@@ -366,9 +366,15 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		}
 		concept.getAssociativeRelationshipRight().clear();
 
-		for (AssociativeRelationship associatedConcept : associatedConcepts) {
-			logger.debug("Settings associated concept " + associatedConcept);
-			ThesaurusConcept linkedThesaurusConcept = associatedConcept.getConceptRight();
+		for (AssociativeRelationship association : associatedConcepts) {
+			logger.debug("Settings associated concept " + association);
+
+            if(association.getIdentifier().getConcept1() == association.getIdentifier().getConcept2()) {
+                throw new BusinessException("It's not possible to make association to itself!",
+                        "association-to-itself-error");
+            }
+
+            ThesaurusConcept linkedThesaurusConcept = association.getConceptRight();
 			if (linkedThesaurusConcept.getStatus() != ConceptStatusEnum.VALIDATED
 					.getStatus()) {
 				throw new BusinessException(
@@ -378,7 +384,16 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			List<String> alreadyAssociatedConcepts = associativeRelationshipDAO
 					.getAssociatedConcepts(linkedThesaurusConcept);
 			if (!alreadyAssociatedConcepts.contains(concept.getIdentifier())) {
-				associativeRelationshipDAO.update(associatedConcept);
+                relations.add(association);
+                if(association.getRelationshipRole() == null) {
+                    association.setRelationshipRole(new AssociativeRelationshipRole());
+                }
+                if(association.getRelationshipRole().getCode() == null
+                        || association.getRelationshipRole().getCode() == "") {
+                   association.getRelationshipRole()
+                           .setCode(associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole().getCode());
+                }
+                associativeRelationshipDAO.update(association);
 			}
 		}
 		concept.getAssociativeRelationshipLeft().addAll(relations);
