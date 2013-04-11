@@ -45,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
@@ -57,24 +58,26 @@ public class ThesaurusConceptGroupServiceImpl implements
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 
 	@Inject
-	@Named("thesaurusConceptGroupLabelService")
-	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
+	@Named("thesaurusConceptGroupLabelDAO")
+	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
 
 	@Override
 	public ThesaurusConceptGroup getConceptGroupById(String conceptGroupId) {
 		return thesaurusConceptGroupDAO.getById(conceptGroupId);
 	}
 
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
-	public ThesaurusConceptGroup updateThesaurusConceptGroup(
-			ThesaurusConceptGroup conceptGroup,
-			ThesaurusConceptGroupLabel conceptGroupLabel)
-			throws BusinessException {
-		ThesaurusConceptGroup updated = thesaurusConceptGroupDAO
-				.update(conceptGroup);
-		conceptGroupLabel.setConceptGroup(updated);
-		thesaurusConceptGroupLabelService.updateOrCreate(conceptGroupLabel);
+	public ThesaurusConceptGroup updateThesaurusConceptGroup(ThesaurusConceptGroup conceptGroup, ThesaurusConceptGroupLabel conceptGroupLabel) throws BusinessException {
+		ThesaurusConceptGroup updated = new ThesaurusConceptGroup();
+		if (conceptGroup != null && conceptGroupLabel != null) {
+			if (conceptGroup.getParent() != null && conceptGroup.getIdentifier().equals(conceptGroup.getParent().getIdentifier())) {
+				throw new BusinessException("Error : a concept group can't be its own parent", "concept-group-not-its-own-parent");
+			}
+			updated = thesaurusConceptGroupDAO.update(conceptGroup);
+			conceptGroupLabel.setConceptGroup(updated);
+			thesaurusConceptGroupLabelDAO.update(conceptGroupLabel);			
+		}
 		return updated;
 	}
 
