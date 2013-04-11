@@ -277,10 +277,35 @@ Ext.define('Thesaurus.ext.view.View', {
  */
 Ext.define('Thesaurus.ext.tree.Column', {
 	override : 'Ext.tree.Column',
-	imgText : '<img src="{1}" class="{0}" alt="treenode" />',
+	imgText : '<img src="{1}" class="{0}" alt="" />',
 	constructor : function(config) {
 		this.callSuper(arguments);
 	}
+});
+
+/*
+ * Override treePanel to add aria role
+ */
+Ext.define('Thesaurus.Ext.tree.View', {
+	override : 'Ext.tree.View',
+	ariaRole : 'treegrid',
+	onRowSelect: function(rowIdx) {
+    	var me = this;
+        me.callParent();
+        var row = this.getNode(rowIdx);
+        if (row) {
+            Ext.fly(row).focus();
+            Ext.fly(row).set({'aria-selected':true});
+        }
+    },
+    onRowDeselect : function(rowIdx) {
+        var me = this;
+        me.callParent();
+        var row = this.getNode(rowIdx);
+        if (row) {
+            Ext.fly(row).set({'aria-selected':false});
+        }
+    },
 });
 
 
@@ -426,3 +451,7 @@ Ext.view.TableChunker.metaTableTpl = [
                                                   '</table>',
                                                   '{%if (this.closeTableWrap)out.push(this.closeTableWrap())%}'
                                               ];
+
+Ext.view.TableChunker.embedRowAttr= function() {
+    return '{rowAttr} tabindex="-1" role="row"';
+};
