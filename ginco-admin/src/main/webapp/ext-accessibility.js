@@ -112,8 +112,15 @@ Ext.define('Thesaurus.form.field.ComboBox',
 	        	  if (me.rendered && me.picker) {
 	                  picker = me.getPicker();
 	                  Ext.get(picker.id+"-listUl").set({'aria-expanded':false});
+	                  Ext.get(me.id+"-inputEl").set({'aria-activedescendant':null});
 	        	  }
 	        	  me.callParent();
+	          },
+	          focusItem : function (item)
+	          {
+	        	  var me = this;
+	        	  console.log("focusing ",item.id );
+	        	  Ext.get(me.id+"-inputEl").set({'aria-activedescendant':item.id});
 	          }
 	   
 });
@@ -142,8 +149,24 @@ Ext.define('Thesaurus.view.BoundList', {
 	highlightItem: function ( item ){
 		var me = this;
 		me.callParent(arguments);
-		//item.focus();
-	}
+		me.pickerField.focusItem(item);
+	},
+    onItemSelect: function(record) {
+    	var me = this;
+    	var node = this.getNode(record);
+        if (node) {
+            Ext.fly(node).set({'aria-selected': true} );
+        }
+		me.callParent(arguments);
+    },
+    onItemDeselect: function(record) {
+    	var me = this;
+    	var node = this.getNode(record);
+        if (node) {
+            Ext.fly(node).set({'aria-selected': false} );
+        }
+		me.callParent(arguments);
+    },
 });
 
 Ext
