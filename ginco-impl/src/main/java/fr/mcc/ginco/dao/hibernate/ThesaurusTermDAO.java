@@ -113,6 +113,22 @@ public class ThesaurusTermDAO extends
 
         return list.get(0);
 	}
+	
+	@Override
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId){       
+        List<ThesaurusTerm> list = getCurrentSession()
+                .createCriteria(ThesaurusTerm.class)
+                .add(Restrictions.eq("concept.identifier", conceptId))
+                .add(Restrictions.eq("prefered", Boolean.TRUE))
+                .add(Restrictions.eq("language.id", languageId))
+
+                .list();
+
+        if(list == null || list.size() == 0) {
+            return null;
+        }
+        return list.get(0);
+    }
 
 	@Override
 	public List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException {

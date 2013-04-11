@@ -42,7 +42,8 @@
             <bean class="fr.mcc.ginco.rest.services.IndexerRestService" />
             <bean class="fr.mcc.ginco.rest.services.JournalRestService" />
             <bean class="fr.mcc.ginco.rest.services.AssociationRoleRestService" />
-        </jaxrs:serviceBeans>
+            <bean class="fr.mcc.ginco.rest.services.RevisionsRestService" /> 
+		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />
 			<bean class="fr.mcc.ginco.rest.services.exceptions.BusinessExceptionMapper" />

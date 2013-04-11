@@ -40,20 +40,25 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.NoResultException;
 
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.exception.AuditException;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.audit.csv.JournalEventsEnum;
-import fr.mcc.ginco.audit.csv.JournalLine;
-import fr.mcc.ginco.audit.csv.JournalLineBuilder;
+import fr.mcc.ginco.audit.RevisionLine;
+import fr.mcc.ginco.audit.RevisionLineBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
+/**
+ * Queries the thesaurus term audit tables and build RevisionLines
+ *
+ */
 @Service("thesaurusTermAuditReader")
 public class ThesaurusTermAuditReader {
 
@@ -61,59 +66,94 @@ public class ThesaurusTermAuditReader {
 	@Named("auditQueryBuilder")
 	private AuditQueryBuilder auditQueryBuilder;
 
-	@Inject
-	@Named("journalLineBuilder")
-	private JournalLineBuilder journalLineBuilder;
+	private RevisionLineBuilder revisionLineBuilder;
 
-	public List<JournalLine> getTermAdded(AuditReader reader,
+	public void setRevisionLineBuilder(RevisionLineBuilder revisionLineBuilder) {
+		this.revisionLineBuilder = revisionLineBuilder;
+	}
+
+	/**
+	 * Builds the revision lines matching the events of term creation
+	 * 
+	 * @param reader
+	 * @param thesaurus the thesaurus we are searching in 
+	 * @param startDate the start date of events
+	 * @return
+	 */
+	public List<RevisionLine> getTermAdded(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
+		return getTermAdded(reader, thesaurus, startDate, null);		
+	}
+	
+	/**
+	 * Builds the revision lines matching the events of term creation in a given language
+	 * @param reader
+	 * @param thesaurus the thesaurus we are searching in 
+	 * @param startDate the start date of events
+	 * @param lang
+	 * @return
+	 */
+	public List<RevisionLine> getTermAdded(AuditReader reader,
+			Thesaurus thesaurus, Date startDate, Language lang) {
 
-		List<JournalLine> allEvents = new ArrayList<JournalLine>();
+		List<RevisionLine> allEvents = new ArrayList<RevisionLine>();
 
 		try {
 			AuditQuery termQuery = auditQueryBuilder.getEntityAddedQuery(
 					reader, thesaurus, startDate, ThesaurusTerm.class);
+			if (lang != null) {
+				auditQueryBuilder.addFilterOnLanguage(termQuery, lang);
+			}
 			List<Object[]> allTermRevisions = termQuery.getResultList();
 			for (Object[] revisionData : allTermRevisions) {
-				JournalLine journal = journalLineBuilder.buildLineBase(
-						JournalEventsEnum.THESAURUSTERM_CREATED,
-						(GincoRevEntity) revisionData[1]);
-				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-				journal.setTermId(term.getIdentifier());
-				journal.setNewLexicalValue(term.getLexicalValue());
-				if (term.getConcept() != null) {
-					journal.setConceptId(term.getConcept().getIdentifier());
-				}
-				allEvents.add(journal);
+				RevisionLine line = revisionLineBuilder
+						.buildTermAddedLine(revisionData);
+				allEvents.add(line);
 			}
 		} catch (AuditException ae) {
 			throw new TechnicalException("Error getting term creationevent ",
 					ae);
 		}
 		return allEvents;
-	}
+	}	
 
-	public List<JournalLine> getTermRoleChanged(AuditReader reader,
+	/**
+	 * Builds the revision lines matching the events of term role change
+	 * @param reader
+	 * @param thesaurus the thesaurus we are searching in 
+	 * @param startDate the start date of events
+	 * @return
+	 */
+	public List<RevisionLine> getTermRoleChanged(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
+		return getTermRoleChanged(reader, thesaurus, startDate, null);		
+	}
+	
+	/**
+	 * Builds the revision lines matching the events of term role change for terms in the given language
+	 * @param reader
+	 * @param thesaurus the thesaurus we are searching in 
+	 * @param startDate the start date of events
+	 * @param lang the language of the terms we are searching on
+	 * @return
+	 */
+	public List<RevisionLine> getTermRoleChanged(AuditReader reader,
+			Thesaurus thesaurus, Date startDate, Language lang) {
 
-		List<JournalLine> allEvents = new ArrayList<JournalLine>();
+		List<RevisionLine> allEvents = new ArrayList<RevisionLine>();
 
 		try {
 			AuditQuery termRoleChangedQuery = auditQueryBuilder
-					.getPropertyChangedQuery(reader, thesaurus, startDate,
+					.getPropertyChangedQueryOnUpdate(reader, thesaurus, startDate,
 							ThesaurusTerm.class, "prefered");
-
+			if (lang != null) {
+				auditQueryBuilder.addFilterOnLanguage(termRoleChangedQuery, lang);
+			}
 			List<Object[]> allRoleChanges = termRoleChangedQuery
 					.getResultList();
 			for (Object[] revisionData : allRoleChanges) {
-				JournalLine journal = journalLineBuilder.buildLineBase(
-						JournalEventsEnum.THESAURUSTERM_ROLE_UPDATE,
-						(GincoRevEntity) revisionData[1]);
-				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-				journal.setTermId(term.getIdentifier());
-				journal.setTermRole(term.getPrefered() ? "TP" : "TNP");
-				journal.setConceptId(term.getConcept().getIdentifier());
-
+				RevisionLine journal = revisionLineBuilder
+						.buildTermRoleChangedLine(revisionData);
 				allEvents.add(journal);
 			}
 		} catch (AuditException ae) {
@@ -123,27 +163,42 @@ public class ThesaurusTermAuditReader {
 		return allEvents;
 	}
 
-	public List<JournalLine> getTermLexicalValueChanged(AuditReader reader,
+	/**
+	 * Builds the revision lines matching the events of term lexical value change
+	 * @param reader
+	 * @param thesaurus the thesaurus we are searching in 
+	 * @param startDate the start date of events
+	 * @return =
+	 */
+	public List<RevisionLine> getTermLexicalValueChanged(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
-		List<JournalLine> allEvents = new ArrayList<JournalLine>();
+		return getTermLexicalValueChanged(reader, thesaurus, startDate, null);	
+	}
+	
+	/**
+	 * Builds the revision lines matching the events of term lexical value change for terms in the given language
+	 * @param reader
+	 * @param thesaurus the thesaurus we are searching in 
+	 * @param startDate the start date of events
+	 * @param lang the language of the terms we are searching on
+	 * @return
+	 */
+	public List<RevisionLine> getTermLexicalValueChanged(AuditReader reader,
+			Thesaurus thesaurus, Date startDate, Language lang) {
+		List<RevisionLine> allEvents = new ArrayList<RevisionLine>();
 
 		try {
 			AuditQuery lexicalValueChangedQuery = auditQueryBuilder
-					.getPropertyChangedQuery(reader, thesaurus, startDate,
+					.getPropertyChangedQueryOnUpdate(reader, thesaurus, startDate,
 							ThesaurusTerm.class, "lexicalValue");
-
+			if (lang != null) {
+				auditQueryBuilder.addFilterOnLanguage(lexicalValueChangedQuery, lang);
+			}
 			List<Object[]> allLexicalValueChanges = lexicalValueChangedQuery
 					.getResultList();
 			for (Object[] revisionData : allLexicalValueChanges) {
-				JournalLine journal = journalLineBuilder.buildLineBase(
-						JournalEventsEnum.THESAURUSTERM_LEXICAL_VALUE_UPDATE,
-						(GincoRevEntity) revisionData[1]);
 				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-				journal.setTermId(term.getIdentifier());
-				if (term.getConcept() != null) {
-					journal.setConceptId(term.getConcept().getIdentifier());
-				}
-				journal.setNewLexicalValue(term.getLexicalValue());
+				String oldLexicalValue = "";
 				AuditQuery previousElementQuery = auditQueryBuilder
 						.getPreviousVersionQuery(reader, ThesaurusTerm.class,
 								term.getIdentifier(),
@@ -154,9 +209,14 @@ public class ThesaurusTermAuditReader {
 					ThesaurusTerm previousTerm = reader.find(
 							ThesaurusTerm.class, term.getIdentifier(),
 							previousRevision);
-					journal.setOldLexicalValue(previousTerm.getLexicalValue());
+					oldLexicalValue = previousTerm.getLexicalValue();
 				}
-				allEvents.add(journal);
+
+				List<RevisionLine> lines = revisionLineBuilder
+						.buildTermLexicalValueChangedLine(revisionData,
+								oldLexicalValue);
+
+				allEvents.addAll(lines);
 			}
 		} catch (AuditException ae) {
 			throw new TechnicalException(
@@ -165,28 +225,56 @@ public class ThesaurusTermAuditReader {
 		return allEvents;
 	}
 
-	public List<JournalLine> getTermAttachmentChanged(AuditReader reader,
+
+	/**
+	 * Builds the revision lines matching the events of term attachment to concept change for terms
+	 * @param reader
+	 * @param thesaurus the thesaurus we are searching in 
+	 * @param startDate the start date of events
+	 * @return
+	 */
+	public List<RevisionLine> getTermAttachmentChanged(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
-		List<JournalLine> allEvents = new ArrayList<JournalLine>();
+		return getTermAttachmentChanged(reader, thesaurus, startDate, null);		
+	}
+	
+	/**
+	 * Builds the revision lines matching the events of term attachment to concept change for terms in the given language
+	 * @param reader
+	 * @param thesaurus the thesaurus we are searching in 
+	 * @param startDate the start date of events
+	 * @param lang the language of the terms we are searching on
+	 * @return
+	 */
+	public List<RevisionLine> getTermAttachmentChanged(AuditReader reader,
+			Thesaurus thesaurus, Date startDate, Language lang) {
+		List<RevisionLine> allEvents = new ArrayList<RevisionLine>();
 
 		try {
 			AuditQuery termAttachedQuery = auditQueryBuilder
-					.getPropertyChangedQuery(reader, thesaurus, startDate,
+					.getPropertyChangedQueryOnUpdateAndAdd(reader, thesaurus, startDate,
 							ThesaurusTerm.class, "concept");
-
-			List<Object[]> allTermAttached = termAttachedQuery.getResultList();
+			if (lang != null) {
+				auditQueryBuilder.addFilterOnLanguage(termAttachedQuery, lang);
+			}
+			List<Object[]> allTermAttached = termAttachedQuery.getResultList();	
+			
 			for (Object[] revisionData : allTermAttached) {
 				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-				if (term.getConcept() != null) {
-					JournalLine journal = journalLineBuilder.buildLineBase(
-							JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT,
-							(GincoRevEntity) revisionData[1]);
-					journal.setTermId(term.getIdentifier());
-					journal.setConceptId(term.getConcept().getIdentifier());
-
-					journal.setNewLexicalValue(term.getLexicalValue());
-					journal.setOldLexicalValue(term.getLexicalValue());
-					allEvents.add(journal);
+				if (term.getConcept() != null) {			
+					AuditQuery previousPreferedQuery = auditQueryBuilder
+							.getPreviousPreferredTermQuery(reader, ((GincoRevEntity) revisionData[1]).getId(),
+									term.getConcept().getIdentifier());
+					ThesaurusTerm previousPreferredTerm = null;
+						List<Object[]> previousRevision = previousPreferedQuery
+							.getResultList();
+						if (previousRevision.size()>0) {
+							previousPreferredTerm = (ThesaurusTerm) previousRevision.get(previousRevision.size()-1)[0];
+						}
+					
+					List<RevisionLine> journals = revisionLineBuilder
+							.buildTermAttachmentChangedLine(revisionData, previousPreferredTerm);
+					allEvents.addAll(journals);
 				}
 			}
 		} catch (AuditException ae) {
@@ -194,6 +282,5 @@ public class ThesaurusTermAuditReader {
 					"Error getting term attachment changed event ", ae);
 		}
 		return allEvents;
-
 	}
 }

@@ -96,6 +96,16 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 */
 	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
 			throws BusinessException;
+	
+	/**
+	 * Gets the preferred term of the given concept in the given language, null if none is found
+	 * @param conceptId
+	 * @param languageId
+	 * @return
+	 * @throws BusinessException
+	 */
+	ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId);     
+
 
 	/**
 	 * Returns a list of ThesaurusTerm that belong to the same concept (id given

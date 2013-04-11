@@ -273,6 +273,18 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		}
 		return preferredTerm;
 	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.IThesaurusConceptService#getConceptPreferredTerm(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId){
+		logger.debug("ConceptId : " + conceptId);
+		ThesaurusTerm preferredTerm = thesaurusTermDAO
+				.getConceptPreferredTerm(conceptId, languageId);		
+		return preferredTerm;
+	}
+
 
 	@Override
 	public String getConceptLabel(String conceptId) throws BusinessException {

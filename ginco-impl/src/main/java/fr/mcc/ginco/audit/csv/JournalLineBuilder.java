@@ -34,12 +34,29 @@
  */
 package fr.mcc.ginco.audit.csv;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.audit.RevisionLine;
+import fr.mcc.ginco.audit.RevisionLineBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 
+/**
+ * Implementation of {@link RevisionLineBuilder} for CSV export
+ *
+ */
 @Service("journalLineBuilder")
-public class JournalLineBuilder {
+public class JournalLineBuilder implements RevisionLineBuilder {
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.audit.csv.RevisionLineBuilder#buildLineBase(fr.mcc.ginco.audit.csv.JournalEventsEnum, fr.mcc.ginco.beans.GincoRevEntity)
+	 */
 	public JournalLine buildLineBase(JournalEventsEnum event,
 			GincoRevEntity gincoRevEntity) {
 		JournalLine journal = new JournalLine();
@@ -49,4 +66,103 @@ public class JournalLineBuilder {
 		return journal;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.audit.csv.RevisionLineBuilder#buildTermAddedLine(java.lang.Object[])
+	 */
+	@Override
+	public RevisionLine buildTermAddedLine(Object[] revisionData) {
+		JournalLine journalLine = buildLineBase(
+				JournalEventsEnum.THESAURUSTERM_CREATED,
+				(GincoRevEntity) revisionData[1]);
+		ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
+		journalLine.setTermId(term.getIdentifier());
+		journalLine.setNewLexicalValue(term.getLexicalValue());
+		if (term.getConcept() != null) {
+			journalLine.setConceptId(term.getConcept().getIdentifier());
+		}
+		return journalLine;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.audit.csv.RevisionLineBuilder#buildTermRoleChangedLine(java.lang.Object[])
+	 */
+	@Override
+	public RevisionLine buildTermRoleChangedLine(Object[] revisionData) {
+		JournalLine journal = buildLineBase(
+				JournalEventsEnum.THESAURUSTERM_ROLE_UPDATE,
+				(GincoRevEntity) revisionData[1]);
+		ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
+		journal.setTermId(term.getIdentifier());
+		journal.setTermRole(term.getPrefered() ? "TP" : "TNP");
+		journal.setConceptId(term.getConcept().getIdentifier());
+		return journal;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.audit.csv.RevisionLineBuilder#buildTermLexicalValueChangedLine(java.lang.Object[], java.lang.String)
+	 */
+	@Override
+	public List<RevisionLine> buildTermLexicalValueChangedLine(Object[] revisionData,
+			String oldLexicalValue) {
+		List<RevisionLine> allLines = new ArrayList<RevisionLine>();
+		JournalLine journal = buildLineBase(
+				JournalEventsEnum.THESAURUSTERM_LEXICAL_VALUE_UPDATE,
+				(GincoRevEntity) revisionData[1]);
+		ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
+		journal.setTermId(term.getIdentifier());
+		if (term.getConcept() != null) {
+			journal.setConceptId(term.getConcept().getIdentifier());
+		}
+		journal.setNewLexicalValue(term.getLexicalValue());
+		journal.setOldLexicalValue(oldLexicalValue);
+
+		allLines.add(journal);
+		return allLines;
+	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.audit.csv.RevisionLineBuilder#buildTermAttachmentChangedLine(java.lang.Object[])
+	 */
+	@Override
+	public List<RevisionLine> buildTermAttachmentChangedLine(Object[] revisionData, ThesaurusTerm preferredTerm) {
+		List<RevisionLine> allLines = new ArrayList<RevisionLine>();
+		ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
+		if (term.getConcept() != null) {
+			JournalLine journal = buildLineBase(
+					JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT,
+					(GincoRevEntity) revisionData[1]);
+			journal.setTermId(term.getIdentifier());
+			journal.setConceptId(term.getConcept().getIdentifier());
+			journal.setNewLexicalValue(term.getLexicalValue());
+			journal.setOldLexicalValue(term.getLexicalValue());
+			allLines.add(journal);
+		}
+
+		return allLines;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.audit.csv.RevisionLineBuilder#buildConceptHierarchyChanged(java.lang.Object[], java.util.Set)
+	 */
+	@Override
+	public List<RevisionLine> buildConceptHierarchyChanged(Object[] revisionData, Set<String> oldGenericConceptIds, String languageId) {
+		List<RevisionLine> allLines = new ArrayList<RevisionLine>();
+		JournalLine journal = buildLineBase(
+				JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,
+				(GincoRevEntity) revisionData[1]);
+		ThesaurusConcept concept = (ThesaurusConcept) revisionData[0];
+		journal.setConceptId(concept.getIdentifier());
+		Set<ThesaurusConcept> parentConcepts = concept
+				.getParentConcepts();
+		Set<String> parentConceptIds = new HashSet<String>();
+		for (ThesaurusConcept parentConcept:parentConcepts) {
+			parentConceptIds.add(parentConcept.getIdentifier());
+		}
+		journal.setNewGenericTerm(parentConceptIds);	
+		journal.setOldGenericTerm(oldGenericConceptIds);	
+
+		allLines.add(journal);
+		return allLines;
+	}
+	
 }

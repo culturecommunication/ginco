@@ -48,7 +48,11 @@ public enum JournalEventsEnum {
 	/**
 	 * ThesaurusTerm created
 	 */
-	THESAURUSTERM_CREATED("log-journal.thesaurus-term-created-event"),
+	THESAURUSTERM_CREATED("log-journal.thesaurus-term-created-event"),	
+	/**
+	 * ThesaurusTerm deleted
+	 */
+	THESAURUSTERM_DELETED("log-journal.thesaurus-term-deleted-event"),
 	/**
 	 * ThesaurusConcept created
 	 */

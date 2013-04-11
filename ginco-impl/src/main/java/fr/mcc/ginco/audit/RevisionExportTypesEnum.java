@@ -32,50 +32,26 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.audit.csv;
+package fr.mcc.ginco.audit;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.audit.RevisionLine;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.LabelUtil;
-
-@Service("auditCSVWriter")
-public class AuditCSVWriter {
-
-	private static final String COMMA = ",";
+/**
+ * Listing of all types of journal export
+ *
+ */
+public enum RevisionExportTypesEnum {
 	
-	@Log
-	private Logger logger;
-	
-	public void writeJournalLine(RevisionLine line, BufferedWriter out) throws IOException {
-		logger.debug(line.toString());
-		out.write(line.toString());
-		out.newLine();
-	}
-	
-	public void writeHeader(BufferedWriter out) throws IOException {
-		String header = new String();
-		header += LabelUtil.getResourceLabel("log-journal.headers.event-type") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.date") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.author") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.conceptId") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.termId") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.role") + COMMA;
-
-		header += LabelUtil.getResourceLabel("log-journal.headers.status") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.oldlexicalvalue") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.newlexicalvalue") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.oldParent") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.newparent");
-		
-		out.write(header);
-		out.newLine();		
+	CSV(1),	
+	COMMANDS(2);	
+    
+    private int type;    
+    
+    public int getType() {
+		return type;
 	}
 
+	private RevisionExportTypesEnum(int type) {
+    	this.type = type;
+    }
 	
 }

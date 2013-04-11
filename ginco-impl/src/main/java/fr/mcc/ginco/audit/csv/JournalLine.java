@@ -34,23 +34,22 @@
  */
 package fr.mcc.ginco.audit.csv;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import fr.mcc.ginco.audit.RevisionLine;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
-public class JournalLine implements Comparable<JournalLine> {
+public class JournalLine extends RevisionLine {
 
 	
 	private final static String COMMA = ",";
 	private final static String PIPE = "|";
 
 	private JournalEventsEnum eventType;
-	private Date eventDate;
 	private String authorId;
 	private String termId;
 	private String conceptId;
@@ -67,15 +66,7 @@ public class JournalLine implements Comparable<JournalLine> {
 
 	public void setEventType(JournalEventsEnum eventType) {
 		this.eventType = eventType;
-	}
-
-	public Date getEventDate() {
-		return eventDate;
-	}
-
-	public void setEventDate(Date eventDate) {
-		this.eventDate = eventDate;
-	}
+	}	
 
 	public String getAuthorId() {
 		return authorId;
@@ -152,7 +143,7 @@ public class JournalLine implements Comparable<JournalLine> {
 	public String toString() {
 		String line = new String();
 		line += StringEscapeUtils.escapeCsv(eventType.toString()) + COMMA;
-		line += StringEscapeUtils.escapeCsv(DateUtil.toString(eventDate)) + COMMA;
+		line += StringEscapeUtils.escapeCsv(DateUtil.toString(getEventDate())) + COMMA;
 		line += StringEscapeUtils.escapeCsv(authorId) + COMMA;
 		if (conceptId != null) {
 			line += StringEscapeUtils.escapeCsv(conceptId);
@@ -200,9 +191,5 @@ public class JournalLine implements Comparable<JournalLine> {
 		return line;
 	}
 
-	@Override
-	public int compareTo(JournalLine o) {
-		return eventDate.compareTo(o.getEventDate());
-	}
-
+	
 }

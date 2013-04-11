@@ -32,50 +32,41 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.audit.csv;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+package fr.mcc.ginco.audit.commands;
 
 import fr.mcc.ginco.audit.RevisionLine;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.LabelUtil;
 
-@Service("auditCSVWriter")
-public class AuditCSVWriter {
 
-	private static final String COMMA = ",";
-	
-	@Log
-	private Logger logger;
-	
-	public void writeJournalLine(RevisionLine line, BufferedWriter out) throws IOException {
-		logger.debug(line.toString());
-		out.write(line.toString());
-		out.newLine();
-	}
-	
-	public void writeHeader(BufferedWriter out) throws IOException {
-		String header = new String();
-		header += LabelUtil.getResourceLabel("log-journal.headers.event-type") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.date") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.author") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.conceptId") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.termId") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.role") + COMMA;
+public class CommandLine extends RevisionLine {
 
-		header += LabelUtil.getResourceLabel("log-journal.headers.status") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.oldlexicalvalue") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.newlexicalvalue") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.oldParent") + COMMA;
-		header += LabelUtil.getResourceLabel("log-journal.headers.newparent");
-		
-		out.write(header);
-		out.newLine();		
+	public final static String STARS = "**";
+	
+	public final static String UNPREFERRERD = "P, ";  
+	
+	public final static String REMOVED = "R, ";  
+	
+	public final static String SYNONYM = " = ";
+
+	public final static String SEPARATE = "S, ";  
+	
+	public final static String HIERARCHY = " < ";  
+	
+	public final static String HIERARCHY_REMOVED = "H, ";
+
+	public static final String COMMA = ", ";  
+
+
+	private String value;
+
+	public String getValue() {
+		return value;
 	}
 
-	
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String toString() {
+		return value;
+	}
 }

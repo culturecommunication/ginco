@@ -48,14 +48,22 @@ import org.hibernate.envers.exception.AuditException;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.audit.RevisionLine;
+import fr.mcc.ginco.audit.RevisionLineBuilder;
 import fr.mcc.ginco.audit.csv.JournalEventsEnum;
 import fr.mcc.ginco.audit.csv.JournalLine;
 import fr.mcc.ginco.audit.csv.JournalLineBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
+/**
+ * Queries the thesaurus concept audit tables and build RevisionLine or
+ * JournalLine
+ * 
+ */
 @Service("thesaurusConceptAuditReader")
 public class ThesaurusConceptAuditReader {
 
@@ -66,6 +74,12 @@ public class ThesaurusConceptAuditReader {
 	@Inject
 	@Named("journalLineBuilder")
 	private JournalLineBuilder journalLineBuilder;
+
+	private RevisionLineBuilder revisionLineBuilder;
+
+	public void setRevisionLineBuilder(RevisionLineBuilder revisionLineBuilder) {
+		this.revisionLineBuilder = revisionLineBuilder;
+	}
 
 	public List<JournalLine> getConceptAdded(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
@@ -90,25 +104,24 @@ public class ThesaurusConceptAuditReader {
 		return allEvents;
 	}
 
-	public List<JournalLine> getConceptHierarchyChanged(AuditReader reader,
+	public List<RevisionLine> getConceptHierarchyChanged(AuditReader reader,
 			Thesaurus thesaurus, Date startDate) {
-		List<JournalLine> allEvents = new ArrayList<JournalLine>();
+		return getConceptHierarchyChanged(reader,
+				thesaurus, startDate, null);
+	}
+	public List<RevisionLine> getConceptHierarchyChanged(AuditReader reader,
+			Thesaurus thesaurus, Date startDate, Language language) {
+		List<RevisionLine> allEvents = new ArrayList<RevisionLine>();
 
 		try {
 			AuditQuery conceptHierarchyQuery = auditQueryBuilder
-					.getPropertyChangedQuery(reader, thesaurus, startDate,
+					.getPropertyChangedQueryOnUpdate(reader, thesaurus, startDate,
 							ThesaurusConcept.class, "parentConcepts");
 
 			List<Object[]> allConceptHierarchyChanges = conceptHierarchyQuery
 					.getResultList();
 			for (Object[] revisionData : allConceptHierarchyChanges) {
-				JournalLine journal = journalLineBuilder.buildLineBase(
-						JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,
-						(GincoRevEntity) revisionData[1]);
 				ThesaurusConcept concept = (ThesaurusConcept) revisionData[0];
-				journal.setConceptId(concept.getIdentifier());
-				journal.setNewGenericTerm(getConceptIds(concept
-						.getParentConcepts()));
 
 				AuditQuery previousElementQuery = auditQueryBuilder
 						.getPreviousVersionQuery(reader,
@@ -117,15 +130,20 @@ public class ThesaurusConceptAuditReader {
 								((GincoRevEntity) revisionData[1]).getId());
 				Number previousRevision = (Number) previousElementQuery
 						.getSingleResult();
+				Set<String> oldGenericConceptIds = new HashSet<String>();
 				if (previousRevision != null) {
 					ThesaurusConcept previousConcept = reader.find(
 							ThesaurusConcept.class, concept.getIdentifier(),
 							previousRevision);
-					journal.setOldGenericTerm(getConceptIds(previousConcept
-							.getParentConcepts()));
+					oldGenericConceptIds = getConceptIds(previousConcept
+							.getParentConcepts());
 				}
 
-				allEvents.add(journal);
+				List<RevisionLine> journalLines = revisionLineBuilder
+						.buildConceptHierarchyChanged(revisionData,
+								oldGenericConceptIds, (language != null)?language.getId():"");
+
+				allEvents.addAll(journalLines);
 			}
 		} catch (AuditException ae) {
 			throw new TechnicalException(
@@ -140,7 +158,7 @@ public class ThesaurusConceptAuditReader {
 
 		try {
 			AuditQuery conceptStatusQuery = auditQueryBuilder
-					.getPropertyChangedQuery(reader, thesaurus, startDate,
+					.getPropertyChangedQueryOnUpdate(reader, thesaurus, startDate,
 							ThesaurusConcept.class, "status");
 
 			List<Object[]> allConceptStatusChanges = conceptStatusQuery

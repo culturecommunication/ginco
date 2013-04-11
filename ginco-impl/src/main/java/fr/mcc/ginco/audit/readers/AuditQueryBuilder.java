@@ -35,6 +35,7 @@
 package fr.mcc.ginco.audit.readers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.hibernate.envers.AuditReader;
@@ -43,7 +44,9 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
  * This service is in charge of building AuditQuery
@@ -65,13 +68,13 @@ public class AuditQueryBuilder {
 	 * @return
 	 */
 	public AuditQuery getEntityAddedQuery(AuditReader reader,
-			Thesaurus thesaurus, Date startDate, Class clazz) {
+			Thesaurus thesaurus, Date startDate, Class<?> clazz) {
 		AuditQuery auditQuery = reader.createQuery().forRevisionsOfEntity(
 				clazz, false, true);
 		filterOnDateAndThesaurusId(auditQuery, thesaurus, startDate);
 		auditQuery.add(AuditEntity.revisionType().eq(RevisionType.ADD));
 		return auditQuery;
-	}
+	}	
 
 	/**
 	 * Builds a query returning objects property updates revisions
@@ -87,14 +90,41 @@ public class AuditQueryBuilder {
 	 *            the audited property
 	 * @return
 	 */
-	public AuditQuery getPropertyChangedQuery(AuditReader reader,
-			Thesaurus thesaurus, Date startDate, Class clazz,
+	public AuditQuery getPropertyChangedQueryOnUpdate(AuditReader reader,
+			Thesaurus thesaurus, Date startDate, Class<?> clazz,
 			String propertyName) {
 		AuditQuery auditQuery = reader.createQuery().forRevisionsOfEntity(
 				clazz, false, true);
 		filterOnDateAndThesaurusId(auditQuery, thesaurus, startDate);
 		auditQuery.add(AuditEntity.property(propertyName).hasChanged());
 		auditQuery.add(AuditEntity.revisionType().eq(RevisionType.MOD));
+		return auditQuery;
+	}
+	/**
+	 * Builds a query returning objects property updates revisions
+	 * 
+	 * @param reader
+	 * @param thesaurus
+	 *            the thesaurus on which searched should be performed
+	 * @param startDate
+	 *            the start date for the search
+	 * @param clazz
+	 *            the object class
+	 * @param propertyName
+	 *            the audited property
+	 * @return
+	 */
+	public AuditQuery getPropertyChangedQueryOnUpdateAndAdd(AuditReader reader,
+			Thesaurus thesaurus, Date startDate, Class<?> clazz,
+			String propertyName) {
+		AuditQuery auditQuery = reader.createQuery().forRevisionsOfEntity(
+				clazz, false, true);
+		filterOnDateAndThesaurusId(auditQuery, thesaurus, startDate);
+		auditQuery.add(AuditEntity.property(propertyName).hasChanged());
+		auditQuery.add(AuditEntity.revisionType().in(new ArrayList<RevisionType>() {{
+			add(RevisionType.MOD);
+			add(RevisionType.ADD);			
+		}}));
 		return auditQuery;
 	}
 
@@ -106,12 +136,27 @@ public class AuditQueryBuilder {
 	 * @param currentRevision
 	 * @return
 	 */
-	public AuditQuery getPreviousVersionQuery(AuditReader reader, Class clazz,
+	public AuditQuery getPreviousVersionQuery(AuditReader reader, Class<?> clazz,
 			Serializable identifier, int currentRevision) {
 		return reader.createQuery().forRevisionsOfEntity(clazz, false, true)
 				.addProjection(AuditEntity.revisionNumber().max())
 				.add(AuditEntity.id().eq(identifier))
 				.add(AuditEntity.revisionNumber().lt(currentRevision));
+	}
+	
+	/**
+	 * @param reader
+	 * @param clazz
+	 * @param identifier
+	 * @param currentRevision
+	 * @return
+	 */
+	public AuditQuery getPreviousPreferredTermQuery(AuditReader reader, 
+			 int currentRevision, String conceptId) {
+		return reader.createQuery().forRevisionsOfEntity(ThesaurusTerm.class, false, true)
+				.add(AuditEntity.revisionNumber().lt(currentRevision))
+				.add(AuditEntity.property("prefered").eq(true))
+				.add(AuditEntity.relatedId("concept").eq(conceptId));
 	}
 
 	/**
@@ -125,7 +170,7 @@ public class AuditQueryBuilder {
 	 *            the object identifier
 	 * @return
 	 */
-	public AuditQuery getEntityAddedQuery(AuditReader reader, Class clazz,
+	public AuditQuery getEntityAddedQuery(AuditReader reader, Class<?> clazz,
 			Serializable identifier) {
 		return reader.createQuery().forRevisionsOfEntity(clazz, false, true)
 				.add(AuditEntity.id().eq(identifier))
@@ -141,4 +186,18 @@ public class AuditQueryBuilder {
 				AuditEntity.revisionProperty("timestamp").ge(
 						startDate.getTime()));
 	}
+	
+	/**
+	 * Adds a filter on the "language" property to the query
+	 * @param query the original query
+	 * @param lang the language value to filter on
+	 */
+	public void addFilterOnLanguage(AuditQuery query,
+			Language lang) {
+		query.add(
+				AuditEntity.relatedId("language").eq(
+						lang.getId()));
+	}
+	
+	
 }

@@ -261,4 +261,13 @@ public interface IThesaurusConceptService {
 	 * @return the status of a concept
 	 */
 	int getStatusByConceptId(String conceptId) throws BusinessException;
+	
+	
+	/**
+	 * Returns this concept preferred term in the given language, null if none is found
+	 * @param conceptId
+	 * @param languageId
+	 * @return
+	 */
+	ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId);
 }

@@ -34,36 +34,17 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import junit.framework.Assert;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.rest.services.exceptions.BusinessExceptionMapper;
-import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
-import fr.mcc.ginco.utils.EncodedControl;
 
 public class BusinessExceptionMapperTest {
 
