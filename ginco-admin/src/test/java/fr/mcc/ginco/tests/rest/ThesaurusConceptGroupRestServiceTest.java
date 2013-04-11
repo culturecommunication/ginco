@@ -113,6 +113,34 @@ public class ThesaurusConceptGroupRestServiceTest {
 	}
 	
 	/**
+	 * Test to get all concept groups by thesaurus id without excluded group
+	 */
+	@Test
+	public final void testGetAllConceptGroupsByThesaurusIdWithoutExcludedGroup() {
+		ThesaurusConceptGroup myGroup1 = getFakeThesaurusConceptGroup("fake1");
+		ThesaurusConceptGroup myGroup2 = getFakeThesaurusConceptGroup("fake2");
+		ThesaurusConceptGroupView myGroupView1 = getFakeThesaurusConceptGroupView("fake1");
+		ThesaurusConceptGroupView myGroupView2 = getFakeThesaurusConceptGroupView("fake2");
+		
+		List<ThesaurusConceptGroup> allGroups = new ArrayList<ThesaurusConceptGroup>();
+		allGroups.add(myGroup1);
+		allGroups.add(myGroup2);
+		
+		List<ThesaurusConceptGroupView> allGroupViews = new ArrayList<ThesaurusConceptGroupView>();
+		allGroupViews.add(myGroupView1);
+		allGroupViews.add(myGroupView2);
+		
+		Mockito.when(thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(Mockito.anyString(), Mockito.anyString())).thenReturn(allGroups);
+		Mockito.when(thesaurusConceptGroupViewConverter.convert(allGroups)).thenReturn(allGroupViews);
+		
+		ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> actualResponse = thesaurusConceptGroupRestService.getAllConceptGroupsByThesaurusId("", "fake1");
+		ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> expectedResponse = new ExtJsonFormLoadData<List<ThesaurusConceptGroupView>>(allGroupViews);
+		expectedResponse.setTotal((long) allGroups.size());
+		Assert.assertEquals(expectedResponse.getTotal(), actualResponse.getTotal());
+		Assert.assertEquals(expectedResponse.getData(), actualResponse.getData());
+	}
+	
+	/**
 	 * Test to update a concept group
 	 */
 	@Test

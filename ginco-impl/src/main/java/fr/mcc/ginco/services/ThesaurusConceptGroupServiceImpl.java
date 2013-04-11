@@ -79,10 +79,10 @@ public class ThesaurusConceptGroupServiceImpl implements
 	}
 
 	@Override
-	public List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(
+	public List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(String excludedConceptGroupId,
 			String thesaurusId) {
 		return thesaurusConceptGroupDAO
-				.findThesaurusConceptGroupsByThesaurusId(thesaurusId);
+				.findThesaurusConceptGroupsByThesaurusId(excludedConceptGroupId, thesaurusId);
 	}
 
 	@Transactional(readOnly=false)

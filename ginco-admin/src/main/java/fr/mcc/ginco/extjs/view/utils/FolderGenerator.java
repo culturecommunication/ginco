@@ -192,7 +192,7 @@ public class FolderGenerator {
 		groups.setDisplayable(false);
 		
 		List<ThesaurusConceptGroup> realArrays = thesaurusConceptGroupService
-				.getAllThesaurusConceptGroupsByThesaurusId(parentId);
+				.getAllThesaurusConceptGroupsByThesaurusId(null, parentId);
 		if (realArrays != null && realArrays.size() > 0) {
 			groups.setChildren(null);
 		} else {

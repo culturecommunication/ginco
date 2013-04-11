@@ -186,7 +186,7 @@ public class GincoExportServiceImpl implements IGincoExportService {
 		}
 		
 		//---Exporting the concept groups
-		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(thesaurusId);
+		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(null, thesaurusId);
 		for (ThesaurusConceptGroup thesaurusGroup : groups) {
 			thesaurusToExport.getConceptGroups().add(thesaurusGroup);
 		}

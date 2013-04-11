@@ -92,7 +92,7 @@ public class GroupsGenerator {
 	public List<IThesaurusListNode> generateGroups(String thesaurusId)
 			throws BusinessException {
 		logger.debug("Generating thesaurus groups list for vocabularyId : " + thesaurusId);
-		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(thesaurusId);
+		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(null, thesaurusId);
 		logger.debug(groups.size() + " groups found");
 
 		List<IThesaurusListNode> newGroups = new ArrayList<IThesaurusListNode>();

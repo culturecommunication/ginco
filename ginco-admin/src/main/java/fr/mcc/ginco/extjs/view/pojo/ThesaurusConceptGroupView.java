@@ -58,6 +58,8 @@ public class ThesaurusConceptGroupView implements Serializable {
 	private String type;
 	private String language;
 	private List<String> concepts;
+	private String parentGroupId;
+	private String parentGroupLabel;
 
 	public String getIdentifier() {
 		return identifier;
@@ -129,6 +131,22 @@ public class ThesaurusConceptGroupView implements Serializable {
 
 	public void setGroupConceptLabelId(Integer groupConceptLabelId) {
 		this.groupConceptLabelId = groupConceptLabelId;
+	}
+
+	public String getParentGroupId() {
+		return parentGroupId;
+	}
+
+	public void setParentGroupId(String parentGroupId) {
+		this.parentGroupId = parentGroupId;
+	}
+
+	public String getParentGroupLabel() {
+		return parentGroupLabel;
+	}
+
+	public void setParentGroupLabel(String parentGroupLabel) {
+		this.parentGroupLabel = parentGroupLabel;
 	}
 
 	

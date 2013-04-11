@@ -68,11 +68,11 @@ public interface IThesaurusConceptGroupService {
 			ThesaurusConceptGroupLabel conceptGroupLabel) throws BusinessException;
 
 	/**
-	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}
+	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}, excluding the group which id is given in parameter (optional, set null for no exclusion)
 	 * @param thesaurusId
 	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter
 	 */
-	List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(
+	List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(String excludedConceptGroupId,
 			String thesaurusId);
 
 	/**

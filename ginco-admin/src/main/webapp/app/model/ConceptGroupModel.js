@@ -70,6 +70,14 @@ Ext.define('GincoApp.model.ConceptGroupModel', {
             type: 'string'
         },
         {
+            name: 'parentGroupId',
+            type: 'string'
+        },
+        {
+            name: 'parentGroupLabel',
+            type: 'string'
+        },
+        {
             name : 'concepts',
             type : 'array_of_string'
         }

@@ -117,6 +117,27 @@ public class ThesaurusConceptGroupRestService {
 		return thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupService
 				.getConceptGroupById(conceptGroupId));
 	}
+
+	/**
+	 * Public method used to get all concept groups of a thesaurus without the ConceptGroup which Id is given in parameter (can be null).
+	 * 
+	 * @return a list of concept groups related to the ids of the thesaurus and excluded concept group given in parameter 
+	 */
+	@GET
+	@Path("/getAllConceptGroups")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> getAllConceptGroupsByThesaurusId(
+			@QueryParam("excludedConceptGroupId") String excludedConceptGroupId,
+			@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+		if ("".equals(excludedConceptGroupId)) {
+			excludedConceptGroupId = null;
+		}
+		List<ThesaurusConceptGroup> allGroups =  thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(excludedConceptGroupId, thesaurusId);
+		ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> groupViews = new ExtJsonFormLoadData<List<ThesaurusConceptGroupView>>(thesaurusConceptGroupViewConverter.convert(allGroups));
+		groupViews.setTotal((long)allGroups.size());
+		return groupViews;
+	}
+
 	
     /**
      * Public method used to create or update a concept group.
