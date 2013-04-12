@@ -135,7 +135,7 @@ public class IndexerServiceImpl implements IIndexerService {
 
         ModifiableSolrParams params = new ModifiableSolrParams();
         params.set(SolrParam.DEF_TYPE, SolrConstants.EDISMAX);
-        params.set(SolrParam.QUERY_FIELDS, SolrField.LEXICALVALUE+"^1.0 "+SolrField.NOTES+"^0.5");
+        params.set(SolrParam.QUERY_FIELDS, SolrField.LEXICALVALUE+"^1.0 "+SolrField.NOTES+"^0.5 "+SolrField.TEXT+"^0.1");
         params.set(SolrParam.FILTER, "*," + SolrConstants.SCORE);
         params.set(SolrParam.SORT, SolrConstants.SCORE + " " + SolrConstants.DESCENDING);
         params.set(SolrParam.QUERY, request);
