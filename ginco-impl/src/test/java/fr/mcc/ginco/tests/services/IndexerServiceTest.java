@@ -1,9 +1,6 @@
 package fr.mcc.ginco.tests.services;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IndexerServiceImpl;
@@ -66,6 +63,7 @@ public class IndexerServiceTest {
 		fakeThesaurusTerm.setLexicalValue("lexicalValue");
         fakeThesaurusTerm.setCreated(DateUtil.nowDate());
         fakeThesaurusTerm.setModified(DateUtil.nowDate());
+        fakeThesaurusTerm.setLanguage(new Language() {{setId("test");}});
         fakeThesaurusTerm.setStatus(1);
         fakeThesaurusTerm.setPrefered(true);
 		List<Note> mockListNote = new ArrayList<Note>();

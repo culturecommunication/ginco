@@ -34,10 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.log.Log;
@@ -150,6 +147,7 @@ public class IndexerServiceImpl implements IIndexerService {
                 + addAndQuery(SolrField.MODIFIED, modifiedFrom, true)
                 + addAndQuery(SolrField.THESAURUSID, thesaurus, null)
                 + addAndQuery(SolrField.STATUS, status, null)
+                + addAndQuery(SolrField.LANGUAGE, language, null)
                 + getExtTypeQuery(type));
 
         QueryResponse response = solrServer.query(params);
@@ -244,6 +242,7 @@ public class IndexerServiceImpl implements IIndexerService {
                 <field name="created" type="date" indexed="true" stored="true" multiValued="false" />
                 <field name="modified" type="date" indexed="true" stored="true" multiValued="false" />
                 <field name="type" type="string" indexed="true" stored="true" multiValued="false"/>
+                <field name="language" type="string" indexed="true" stored="true" multiValued="true"/>
                 <field name="status" type="string" indexed="true" stored="true" multiValued="false"/>
                 <field name="ext_type" type="int" indexed="true" stored="true" multiValued="false"/>
                 <field name="notes" type="text_fr" indexed="true" stored="true" multiValued="true"/>
@@ -263,6 +262,10 @@ public class IndexerServiceImpl implements IIndexerService {
         doc.addField(SolrField.CREATED, createdDate);
 
         doc.addField(SolrField.STATUS, thesaurusConcept.getStatus());
+
+        for(Language language : thesaurusConcept.getThesaurus().getLang()) {
+            doc.addField(SolrField.LANGUAGE, language.getId());
+        }
 
         String prefLabel;
         try {
@@ -377,6 +380,7 @@ public class IndexerServiceImpl implements IIndexerService {
         doc.addField(SolrField.IDENTIFIER, thesaurusTerm.getIdentifier());
         doc.addField(SolrField.LEXICALVALUE, thesaurusTerm.getLexicalValue());
         doc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
+        doc.addField(SolrField.LANGUAGE, thesaurusTerm.getLanguage().getId());
 
         doc.addField(SolrField.EXT_TYPE, (thesaurusTerm.getPrefered())?EntityType.TERM_PREF:EntityType.TERM_NON_PREF);
 

@@ -46,4 +46,5 @@ public class SolrField {
     public static final String MODIFIED = "modified";
     public static final String STATUS = "status";
     public static final String EXT_TYPE = "ext_type";
+    public static final String LANGUAGE = "language";
 }

@@ -9,6 +9,7 @@
                 <field name="created" type="date" indexed="true" stored="true" multiValued="false" />
                 <field name="modified" type="date" indexed="true" stored="true" multiValued="false" />
                 <field name="type" type="string" indexed="true" stored="true" multiValued="false"/>
+                <field name="language" type="string" indexed="true" stored="true" multiValued="true"/>
                 <field name="status" type="string" indexed="true" stored="true" multiValued="false"/>
                 <field name="ext_type" type="int" indexed="true" stored="true" multiValued="false"/>
                 <field name="notes" type="text_fr" indexed="true" stored="true" multiValued="true"/>
