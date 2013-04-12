@@ -198,6 +198,11 @@ public class IndexerServiceImpl implements IIndexerService {
 
         String result = "";
         result += "+" + field + ":";
+
+        if(value instanceof String) {
+            result += '"';
+        }
+
         if(from != null) {
             if(from) {
                 result += "[FROM " + value + " TO *]";
@@ -206,6 +211,10 @@ public class IndexerServiceImpl implements IIndexerService {
             }
         } else {
             result += value;
+        }
+
+        if(value instanceof String) {
+            result += '"';
         }
 
         result += " ";
