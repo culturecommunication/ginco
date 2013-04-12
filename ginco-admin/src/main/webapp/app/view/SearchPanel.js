@@ -128,7 +128,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 					},
 					{
 						xtype : 'datefield',
-						name : 'modifdate',
+						name : 'modificationdate',
 						fieldLabel : me.xAdvancedSearchModificationDateFilter
 					}
 					]

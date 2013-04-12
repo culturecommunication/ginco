@@ -143,11 +143,11 @@ public class IndexerServiceImpl implements IIndexerService {
         params.set(SolrParam.ROWS, limit);
 
         params.set(SolrParam.FILTER_QUERY,
-                addAndQuery(SolrField.CREATED, createdFrom, true)
-                + addAndQuery(SolrField.MODIFIED, modifiedFrom, true)
-                + addAndQuery(SolrField.THESAURUSID, thesaurus, null)
-                + addAndQuery(SolrField.STATUS, status, null)
-                + addAndQuery(SolrField.LANGUAGE, language, null)
+                addAndQuery(SolrField.CREATED, createdFrom, true, false)
+                + addAndQuery(SolrField.MODIFIED, modifiedFrom, true, false)
+                + addAndQuery(SolrField.THESAURUSID, thesaurus, null, true)
+                + addAndQuery(SolrField.STATUS, status, null, false)
+                + addAndQuery(SolrField.LANGUAGE, language, null, false)
                 + getExtTypeQuery(type));
 
         QueryResponse response = solrServer.query(params);
@@ -185,7 +185,7 @@ public class IndexerServiceImpl implements IIndexerService {
         return query;
     }
 
-    private String addAndQuery(String field, Object value, Boolean from) {
+    private String addAndQuery(String field, Object value, Boolean from, boolean string) {
         if(value == null) {
             return "";
         }
@@ -197,21 +197,21 @@ public class IndexerServiceImpl implements IIndexerService {
         String result = "";
         result += "+" + field + ":";
 
-        if(value instanceof String) {
+        if(value instanceof String && string) {
             result += '"';
         }
 
         if(from != null) {
             if(from) {
-                result += "[FROM " + value + " TO *]";
+                result += "[ " + value + "Z TO * ]";
             } else {
-                result += "[FROM * TO " + value;
+                result += "[ * TO " + value + "Z ]";
             }
         } else {
             result += value;
         }
 
-        if(value instanceof String) {
+        if(value instanceof String && string) {
             result += '"';
         }
 
