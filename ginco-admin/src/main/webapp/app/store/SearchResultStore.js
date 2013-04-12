@@ -91,7 +91,7 @@ Ext.define('GincoApp.store.SearchResultStore', {
                 },
                 actionMethods: {
                     read   : 'POST'
-                },
+                }
             },
             fields: [
                 {

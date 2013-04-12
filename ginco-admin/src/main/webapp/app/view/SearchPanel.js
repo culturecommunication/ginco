@@ -78,14 +78,14 @@ Ext.define('GincoApp.view.SearchPanel', {
 				} ],
 				items : [ {
 					defaults : {
-						margin : '10 0 10 10',
+						margin : '10 0 10 10'
 					},
 					layout : 'column',
 					items : [
 					{
 						xtype : 'textfield',
 						name : 'query',
-						fieldLabel : 'Query',
+						fieldLabel : 'Query'
 					},
 					{
 						xtype : 'ariacombo',

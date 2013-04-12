@@ -4,8 +4,8 @@ public class FilterCriteria {
 
 	private String query;
 	private String thesaurus;
-	private String type;
-	private String status;
+	private Integer type;
+	private Integer status;
 	private String creationdate;
 	private String language;
 	private String modificationdate;
@@ -24,16 +24,16 @@ public class FilterCriteria {
 	public void setCreationdate(String creationdate) {
 		this.creationdate = creationdate;
 	}
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	public String getType() {
+	public Integer getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 	public String getThesaurus() {

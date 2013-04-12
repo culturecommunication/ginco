@@ -34,13 +34,14 @@
  */
 package fr.mcc.ginco.services;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.solr.*;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -55,16 +56,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.solr.SearchResult;
-import fr.mcc.ginco.solr.SearchResultList;
-import fr.mcc.ginco.solr.SolrField;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author hufon
@@ -115,6 +112,10 @@ public class IndexerServiceImpl implements IIndexerService {
     	result.setType(doc.getFieldValue(SolrField.TYPE).toString());
     	result.setThesaurusId(doc.getFieldValue(SolrField.THESAURUSID).toString());
     	result.setThesaurusTitle(doc.getFieldValue(SolrField.THESAURUSTITLE).toString());
+        result.setCreated(doc.getFieldValue(SolrField.CREATED).toString());
+        result.setModified(doc.getFieldValue(SolrField.MODIFIED).toString());
+        result.setStatus(doc.getFieldValue(SolrField.STATUS).toString());
+        result.setTypeExt(doc.getFieldValue(SolrField.EXT_TYPE).toString());
     	return result;
     }
     
@@ -129,18 +130,86 @@ public class IndexerServiceImpl implements IIndexerService {
     }
 
     @Override
-    public SearchResultList search(String request, int startIndex, int limit) throws SolrServerException {
+    public SearchResultList search(String request, Integer type,
+                                   String thesaurus, Integer status,
+                                   String createdFrom, String modifiedFrom,
+                                   String language, int startIndex, int limit)
+            throws SolrServerException {
+
         ModifiableSolrParams params = new ModifiableSolrParams();
-        params.set("defType", "edismax");
-        params.set("qf", SolrField.LEXICALVALUE+"^1.0 "+SolrField.NOTES+"^0.5");
-        params.set("fl", "*,score");
-        params.set("sort","score desc");
-        params.set("q", request);
-        params.set("start", startIndex);
-        params.set("rows", limit);
+        params.set(SolrParam.DEF_TYPE, SolrConstants.EDISMAX);
+        params.set(SolrParam.QUERY_FIELDS, SolrField.LEXICALVALUE+"^1.0 "+SolrField.NOTES+"^0.5");
+        params.set(SolrParam.FILTER, "*," + SolrConstants.SCORE);
+        params.set(SolrParam.SORT, SolrConstants.SCORE + " " + SolrConstants.DESCENDING);
+        params.set(SolrParam.QUERY, request);
+        params.set(SolrParam.START, startIndex);
+        params.set(SolrParam.ROWS, limit);
+
+        params.set(SolrParam.FILTER_QUERY,
+                addAndQuery(SolrField.CREATED, createdFrom, true)
+                + addAndQuery(SolrField.MODIFIED, modifiedFrom, true)
+                + addAndQuery(SolrField.THESAURUSID, thesaurus, null)
+                + addAndQuery(SolrField.STATUS, status, null)
+                + getExtTypeQuery(type));
+
         QueryResponse response = solrServer.query(params);
         SolrDocumentList solrresults = response.getResults();
         return getSearchResultList(solrresults);
+    }
+
+    /**
+     * {type: 1, typeLabel:me.xConceptLabel},
+     * {type: 2, typeLabel:me.xTermLabel},
+     * {type: 3, typeLabel:me.xNonPreferredTermLabel},
+     * {type: 4, typeLabel: me.xPreferredTermLabel}
+     * @param type
+     * @return
+     */
+    private String getExtTypeQuery(Integer type) {
+        if(type == null) {
+            return "";
+        }
+        if(type == -1) {
+            return "";
+        }
+
+        String query = "";
+        if(type == 1) {
+            query += "+" + SolrField.EXT_TYPE + ":" + EntityType.CONCEPT;
+        } else if (type == 2) {
+            query += "+" + SolrField.EXT_TYPE + ":" + "(" + EntityType.TERM_PREF + " OR " + EntityType.TERM_NON_PREF + ")";
+        } else if (type == 3) {
+            query += "+" + SolrField.EXT_TYPE + ":" + EntityType.TERM_NON_PREF;
+        } else if (type == 4) {
+            query += "+" + SolrField.EXT_TYPE + ":" + EntityType.TERM_PREF;
+        }
+
+        return query;
+    }
+
+    private String addAndQuery(String field, Object value, Boolean from) {
+        if(value == null) {
+            return "";
+        }
+
+        if(value.toString().isEmpty() || value.toString().equals("-1")) {
+            return "";
+        }
+
+        String result = "";
+        result += "+" + field + ":";
+        if(from != null) {
+            if(from) {
+                result += "[FROM " + value + " TO *]";
+            } else {
+                result += "[FROM * TO " + value;
+            }
+        } else {
+            result += value;
+        }
+
+        result += " ";
+        return result;
     }
 
     @Override
@@ -157,11 +226,35 @@ public class IndexerServiceImpl implements IIndexerService {
     
     private SolrInputDocument convertConcept(ThesaurusConcept thesaurusConcept)
     {
+
+        /*                <field name="identifier" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+                <field name="lexicalValue" type="text_fr" indexed="true" stored="true"/>
+                <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+                <field name="thesaurusId" type="string" indexed="true" stored="true" multiValued="false"/>
+                <field name="thesaurusTitle" type="string" indexed="false" stored="true" multiValued="false"/>
+                <field name="created" type="date" indexed="true" stored="true" multiValued="false" />
+                <field name="modified" type="date" indexed="true" stored="true" multiValued="false" />
+                <field name="type" type="string" indexed="true" stored="true" multiValued="false"/>
+                <field name="status" type="string" indexed="true" stored="true" multiValued="false"/>
+                <field name="ext_type" type="int" indexed="true" stored="true" multiValued="false"/>
+                <field name="notes" type="text_fr" indexed="true" stored="true" multiValued="true"/>
+                <field name="_version_" type="long" indexed="true" stored="true"/>*/
+
     	SolrInputDocument doc = new SolrInputDocument();
         doc.addField(SolrField.THESAURUSID, thesaurusConcept.getThesaurusId());
         doc.addField(SolrField.THESAURUSTITLE, thesaurusConcept.getThesaurus().getTitle());
         doc.addField(SolrField.IDENTIFIER, thesaurusConcept.getIdentifier());
         doc.addField(SolrField.TYPE, ThesaurusConcept.class.getSimpleName());
+        doc.addField(SolrField.EXT_TYPE, EntityType.CONCEPT);
+
+        Timestamp modifiedDate = new Timestamp(thesaurusConcept.getModified().getTime());
+        doc.addField(SolrField.MODIFIED, modifiedDate);
+
+        Timestamp createdDate = new Timestamp(thesaurusConcept.getCreated().getTime());
+        doc.addField(SolrField.CREATED, createdDate);
+
+        doc.addField(SolrField.STATUS, thesaurusConcept.getStatus());
+
         String prefLabel;
         try {
             prefLabel = thesaurusConceptService.getConceptPreferredTerm(thesaurusConcept.getIdentifier())
@@ -275,6 +368,17 @@ public class IndexerServiceImpl implements IIndexerService {
         doc.addField(SolrField.IDENTIFIER, thesaurusTerm.getIdentifier());
         doc.addField(SolrField.LEXICALVALUE, thesaurusTerm.getLexicalValue());
         doc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
+
+        doc.addField(SolrField.EXT_TYPE, (thesaurusTerm.getPrefered())?EntityType.TERM_PREF:EntityType.TERM_NON_PREF);
+
+        Timestamp modifiedDate = new Timestamp(thesaurusTerm.getModified().getTime());
+        doc.addField(SolrField.MODIFIED, modifiedDate);
+
+        Timestamp createdDate = new Timestamp(thesaurusTerm.getCreated().getTime());
+        doc.addField(SolrField.CREATED, createdDate);
+
+        doc.addField(SolrField.STATUS, thesaurusTerm.getStatus());
+
         List<Note> notes = noteService.getTermNotePaginatedList(thesaurusTerm.getIdentifier(), 0, 0);
         for(Note note : notes ) {
         	 doc.addField(SolrField.NOTES, note.getLexicalValue());

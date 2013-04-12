@@ -42,4 +42,8 @@ public class SolrField {
 	public static final String THESAURUSTITLE = "thesaurusTitle";
 	public static final String TYPE = "type";
 	public static final String NOTES = "notes";
+    public static final String CREATED = "created";
+    public static final String MODIFIED = "modified";
+    public static final String STATUS = "status";
+    public static final String EXT_TYPE = "ext_type";
 }

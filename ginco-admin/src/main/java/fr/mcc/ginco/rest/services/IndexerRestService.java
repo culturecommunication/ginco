@@ -34,24 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.apache.solr.client.solrj.SolrServerException;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
@@ -60,6 +42,15 @@ import fr.mcc.ginco.extjs.view.pojo.FilterCriteria;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -89,7 +80,11 @@ public class IndexerRestService {
     @Produces({MediaType.APPLICATION_JSON})
     public  ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
         try {
-        	SearchResultList searchResults  = indexerService.search(filter.getQuery(), filter.getStart(),filter.getLimit());
+        	SearchResultList searchResults  = indexerService.search(filter.getQuery(), filter.getType(),
+                    filter.getThesaurus(), filter.getStatus(),
+                    filter.getCreationdate(), filter.getModificationdate(),
+                    filter.getLanguage(), filter.getStart(),filter.getLimit());
+
         	ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
         	extSearchResults.setTotal((long) searchResults.getNumFound());
 			return extSearchResults;

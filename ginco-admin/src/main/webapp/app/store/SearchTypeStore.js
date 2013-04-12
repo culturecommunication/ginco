@@ -51,10 +51,11 @@ Ext.define('GincoApp.store.SearchTypeStore', {
             autoLoad: false,
             storeId: 'SearchTypeStore',
             data : [
-                    {type:'concept', typeLabel:me.xConceptLabel},
-                    {type:'term', typeLabel:me.xTermLabel},
-                    {type:'nonpreferredterm', typeLabel:me.xNonPreferredTermLabel},
-                    {type:'preferredterm', typeLabel: me.xPreferredTermLabel}
+                    {type: -1, typeLabel:'-'},
+                    {type: 1, typeLabel:me.xConceptLabel},
+                    {type: 2, typeLabel:me.xTermLabel},
+                    {type: 3, typeLabel:me.xNonPreferredTermLabel},
+                    {type: 4, typeLabel: me.xPreferredTermLabel}
                 ],
             fields: [
                 {

@@ -32,39 +32,13 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.solr;
 
-/*
- * Concept Language Store 
- * This file contains all Concept languages displayed in dropdown lists
+/**
+ *
  */
-Ext.define('GincoApp.store.ConceptStatusStore', {
-    extend: 'Ext.data.Store',
-
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: true,
-            storeId: 'ConceptStatusStore',
-            proxy: {
-                type: 'ajax',
-                url: 'services/ui/thesaurusconceptservice/getAllConceptStatus',
-                reader: {
-                    type: 'json',
-                    idProperty: 'status',
-                    root: 'data'
-                }
-            },
-            fields: [
-                {
-                    name: 'status',
-                    type: 'int'
-                },
-                {
-                    name: 'statusLabel',
-                    type: 'string'
-                }
-            ]
-        }, cfg)]);
-    }
-});
+public class EntityType {
+    public static final int CONCEPT = 1;
+    public static final int TERM_PREF = 2;
+    public static final int TERM_NON_PREF = 3;
+}

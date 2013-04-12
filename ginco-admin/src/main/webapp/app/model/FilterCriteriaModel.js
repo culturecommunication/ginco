@@ -47,11 +47,13 @@ Ext.define('GincoApp.model.FilterCriteriaModel', {
         },
         {
             name: 'type',
-            type: 'string'
+            type: 'int',
+            defaultValue: -1
         },
         {
             name: 'status',
-            type: 'int'
+            type: 'int',
+            defaultValue: -1
         },
         {
             name: 'language',

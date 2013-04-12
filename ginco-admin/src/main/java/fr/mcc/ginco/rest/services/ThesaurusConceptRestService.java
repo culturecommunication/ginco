@@ -307,7 +307,12 @@ public class ThesaurusConceptRestService {
 				//Ids of status for concepts are not set correctly
 				throw new BusinessException("Error with property file - check values of identifier concept status", "check-values-of-concept-status");
 			}
-			
+
+            GenericStatusView firstEmpty = new GenericStatusView();
+            firstEmpty.setStatus(-1);
+            firstEmpty.setStatusLabel("-");
+            listOfStatus.add(firstEmpty);
+
 	        for (String id : availableStatusIds) {
 	        	GenericStatusView conceptStatusView = new GenericStatusView();
 	        	conceptStatusView.setStatus(Integer.valueOf(id));

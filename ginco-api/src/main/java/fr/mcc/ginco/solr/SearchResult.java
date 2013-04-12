@@ -7,6 +7,10 @@ public class SearchResult {
 	private String thesaurusTitle;
 	private String type;
 	private String lexicalValue;
+    private String typeExt;
+    private String modified;
+    private String created;
+    private String status;
 	
 	public String getIdentifier() {
 		return identifier;
@@ -48,4 +52,35 @@ public class SearchResult {
 		this.thesaurusTitle = thesaurusTitle;
 	}
 
+    public String getTypeExt() {
+        return typeExt;
+    }
+
+    public void setTypeExt(String typeExt) {
+        this.typeExt = typeExt;
+    }
+
+    public String getModified() {
+        return modified;
+    }
+
+    public void setModified(String modified) {
+        this.modified = modified;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
