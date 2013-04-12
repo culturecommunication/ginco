@@ -187,15 +187,7 @@ public interface IThesaurusConceptService {
      */
     List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept);
 
-    /**
-     * Removes parents and updates connected concepts.
-     * @param concept
-     * @param parentsToRemove list of ids.
-     */
-    void removeParents(ThesaurusConcept concept, List<String> parentsToRemove) throws BusinessException;  	
-	
-	
-	
+   	
 	/**
 	 * Delete a ThesaurusConcept object
 	 * @param object

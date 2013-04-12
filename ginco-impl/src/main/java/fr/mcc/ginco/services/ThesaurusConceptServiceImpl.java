@@ -43,6 +43,7 @@ import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
+import fr.mcc.ginco.utils.ThesaurusConceptUtils;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 import org.apache.commons.collections.ListUtils;
@@ -213,8 +214,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return new ArrayList<ThesaurusConcept>(roots);
 	}
 
-	@Override
-	public void removeParents(ThesaurusConcept concept,
+	private void removeParents(ThesaurusConcept concept,
 			List<String> parentsToRemove) throws BusinessException {
 		Set<ThesaurusConcept> parents = getThesaurusConceptList(parentsToRemove);
 
@@ -364,14 +364,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		//We update the modified relations, and we delete the relations that have been removed
 		List<String> oldParentIds = new ArrayList<String>();
 		if (!conceptToUpdate.getParentConcepts().isEmpty()) {
-			oldParentIds = getIdsFromConceptList(new ArrayList<ThesaurusConcept>(conceptToUpdate.getParentConcepts()));			
+			oldParentIds = ThesaurusConceptUtils.getIdsFromConceptList(new ArrayList<ThesaurusConcept>(conceptToUpdate.getParentConcepts()));			
 		}
 		
 		List<ThesaurusConcept> newParents = new ArrayList<ThesaurusConcept>();
 		for (ConceptHierarchicalRelationship relation : hierarchicalRelationships) {
 			newParents.add(relation.getParentConcept());
 		}
-		List<String> newParentsIds = getIdsFromConceptList(newParents);
+		List<String> newParentsIds = ThesaurusConceptUtils.getIdsFromConceptList(newParents);
 		
 		//We make a diff between new parents and old parents and vice versa, to know added/removed parent concepts
 		List<String> addedParentIds = ListUtils.subtract(newParentsIds,oldParentIds);
@@ -393,15 +393,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 			if (!addedParentIds.isEmpty()) {
 				conceptToUpdate.getParentConcepts().addAll(addedParentsSet);
+				conceptToUpdate.setTopConcept(false);
 			}
 			
 			//We remove all removed parents
-			Set<ThesaurusConcept> removedParentsSet = new HashSet<ThesaurusConcept>();
-			for (String removedParentId : removedParentIds) {
-				removedParentsSet.add(thesaurusConceptDAO.getById(removedParentId));
-			}
 			if (!removedParentIds.isEmpty()) {
-				conceptToUpdate.getParentConcepts().removeAll(removedParentsSet);
+				removeParents(conceptToUpdate, removedParentIds);
 			}
 			
 			//We calculate the rootconcepts for the concept to update
@@ -409,9 +406,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			
 			//We launch an async method to calculate new root concept for the children of the concept we update
 			calculateChildrenRoot(conceptToUpdate.getIdentifier());
-			
-			//We set topconcept flag
-			setTopConceptFlag(conceptToUpdate);
 		}
 		
 		//We process children delete
@@ -422,18 +416,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		saveRoleOfHierarchicalRelationship(hierarchicalRelationships);
 		
 		return conceptToUpdate;
-	}
-	
-	private void setTopConceptFlag(ThesaurusConcept conceptToUpdate){
-		//We always set topconcept to false if the concept has parents
-		if (!conceptToUpdate.getParentConcepts().isEmpty()) {
-			conceptToUpdate.setTopConcept(false);
-		} else {
-			//The concept must be topconcept if it has no parent and set true as default in the thesaurus
-			if (conceptToUpdate.getThesaurus().isDefaultTopConcept()) {
-				conceptToUpdate.setTopConcept(true);
-			}
-		}
 	}
 	
 	/**
@@ -480,19 +462,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			updatedHierarchicalRelationships.add(conceptHierarchicalRelationshipDAO.update(gettedRelation));
 		}
 		return updatedHierarchicalRelationships;
-	}
-	
-	/**
-	 * This method return the ids of the concept included in the list given in parameter
-	 * @param ThesaurusConcept list
-	 * @return List<String> list of concept ids
-	 */
-	private List<String> getIdsFromConceptList(List<ThesaurusConcept> list) {
-		List<String> result = new ArrayList<String>();
-		for (ThesaurusConcept concept : list) {
-			result.add(concept.getIdentifier());
-		}
-		return result;
 	}
 
 	private ThesaurusConcept saveAssociativeRelationship(

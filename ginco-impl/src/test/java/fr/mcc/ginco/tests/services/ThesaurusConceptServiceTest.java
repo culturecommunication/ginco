@@ -312,57 +312,6 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test
-	public final void testRemoveParents() throws BusinessException {
-		Thesaurus thesaurus = new Thesaurus();
-		thesaurus.setDefaultTopConcept(true);
-
-		final ThesaurusConcept node1 = new ThesaurusConcept();
-		node1.setIdentifier("node1");
-		node1.setThesaurus(thesaurus);
-		final ThesaurusConcept node2 = new ThesaurusConcept();
-		node2.setIdentifier("node2");
-		node2.setThesaurus(thesaurus);
-		final ThesaurusConcept node3 = new ThesaurusConcept();
-		node3.setIdentifier("node3");
-		node3.setThesaurus(thesaurus);
-
-		when(thesaurusConceptDAO.getById("node2")).thenReturn(node2);
-
-		node1.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {
-			{
-				add(node2);
-			}
-		});
-		node2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {
-			{
-				add(node3);
-			}
-		});
-
-		List<String> toRemove = new ArrayList<String>();
-		toRemove.add(node2.getIdentifier());
-
-		thesaurusConceptService.removeParents(node1, toRemove);
-
-		Assert.assertEquals("There should be no parents!", 0, node1
-				.getParentConcepts().size());
-		Assert.assertTrue("Term now should be TOP!", node1.getTopConcept());
-
-		node1.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {
-			{
-				add(node2);
-			}
-		});
-		thesaurus.setDefaultTopConcept(false);
-
-		thesaurusConceptService.removeParents(node1, toRemove);
-
-		Assert.assertEquals("There should be no parents!", 0, node1
-				.getParentConcepts().size());
-		Assert.assertFalse("Term now should NOT be TOP!", node1.getTopConcept());
-	}
-
-	@Test
 	public final void testGetThesaurusConceptList() {
 		final ThesaurusConcept node1 = new ThesaurusConcept();
 		final ThesaurusConcept node2 = new ThesaurusConcept();
