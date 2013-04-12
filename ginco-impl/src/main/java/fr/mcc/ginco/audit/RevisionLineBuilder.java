@@ -37,6 +37,8 @@ package fr.mcc.ginco.audit;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.envers.AuditReader;
+
 import fr.mcc.ginco.audit.csv.JournalEventsEnum;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -64,7 +66,7 @@ public interface RevisionLineBuilder {
 	 * @param revisionData
 	 * @return
 	 */
-	RevisionLine buildTermAddedLine(Object[] revisionData);
+	List<RevisionLine> buildTermAddedLine(Object[] revisionData);
 
 	/***
 	 * Builds the revision line for the event of term role change (preferred/non
@@ -106,6 +108,6 @@ public interface RevisionLineBuilder {
 	 * @return
 	 */
 	List<RevisionLine> buildConceptHierarchyChanged(Object[] revisionData,
-			Set<String> oldGenericConceptIds, String languageId);
+			Set<String> oldGenericConceptIds, String languageId, AuditReader reader);
 
 }

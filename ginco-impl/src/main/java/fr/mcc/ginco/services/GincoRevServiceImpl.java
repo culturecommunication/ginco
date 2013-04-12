@@ -121,6 +121,8 @@ public class GincoRevServiceImpl implements IGincoRevService {
 			auditCSVWriter.writeHeader(out);
 			termAuditReader.setRevisionLineBuilder(revisionLineBuilderFactory
 					.getRevisionLineBuilder(RevisionExportTypesEnum.CSV));
+			conceptAuditReader.setRevisionLineBuilder(revisionLineBuilderFactory
+					.getRevisionLineBuilder(RevisionExportTypesEnum.CSV));
 
 			ThesaurusVersionHistory lastPublishedVersion = thesaurusVersionHistoryDAO
 					.getLastPublishedVersionByThesaurusId(thesaurus

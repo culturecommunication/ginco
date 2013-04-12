@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.envers.AuditReader;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.audit.RevisionLine;
@@ -70,7 +71,9 @@ public class JournalLineBuilder implements RevisionLineBuilder {
 	 * @see fr.mcc.ginco.audit.csv.RevisionLineBuilder#buildTermAddedLine(java.lang.Object[])
 	 */
 	@Override
-	public RevisionLine buildTermAddedLine(Object[] revisionData) {
+	public List<RevisionLine> buildTermAddedLine(Object[] revisionData) {
+		List<RevisionLine> allLines = new ArrayList<RevisionLine>();
+
 		JournalLine journalLine = buildLineBase(
 				JournalEventsEnum.THESAURUSTERM_CREATED,
 				(GincoRevEntity) revisionData[1]);
@@ -80,7 +83,8 @@ public class JournalLineBuilder implements RevisionLineBuilder {
 		if (term.getConcept() != null) {
 			journalLine.setConceptId(term.getConcept().getIdentifier());
 		}
-		return journalLine;
+		allLines.add(journalLine);
+		return allLines;
 	}
 
 	/* (non-Javadoc)
@@ -145,7 +149,7 @@ public class JournalLineBuilder implements RevisionLineBuilder {
 	 * @see fr.mcc.ginco.audit.csv.RevisionLineBuilder#buildConceptHierarchyChanged(java.lang.Object[], java.util.Set)
 	 */
 	@Override
-	public List<RevisionLine> buildConceptHierarchyChanged(Object[] revisionData, Set<String> oldGenericConceptIds, String languageId) {
+	public List<RevisionLine> buildConceptHierarchyChanged(Object[] revisionData, Set<String> oldGenericConceptIds, String languageId, AuditReader reader) {
 		List<RevisionLine> allLines = new ArrayList<RevisionLine>();
 		JournalLine journal = buildLineBase(
 				JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,

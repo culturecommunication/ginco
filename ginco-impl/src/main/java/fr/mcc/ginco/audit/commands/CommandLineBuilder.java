@@ -43,11 +43,13 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hibernate.envers.AuditReader;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.audit.RevisionLine;
 import fr.mcc.ginco.audit.RevisionLineBuilder;
 import fr.mcc.ginco.audit.csv.JournalEventsEnum;
+import fr.mcc.ginco.audit.readers.AuditHelper;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -59,10 +61,12 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
  * 
  */
 @Service("commandLineBuilder")
-public class CommandLineBuilder implements RevisionLineBuilder {
+public class CommandLineBuilder implements RevisionLineBuilder {	
+	
 	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
+	@Named("auditHelper")
+	private AuditHelper auditHelper;
+
 
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.audit.RevisionLineBuilder#buildLineBase(fr.mcc.ginco.audit.csv.JournalEventsEnum, fr.mcc.ginco.beans.GincoRevEntity)
@@ -79,13 +83,23 @@ public class CommandLineBuilder implements RevisionLineBuilder {
 	 * @see fr.mcc.ginco.audit.RevisionLineBuilder#buildTermAddedLine(java.lang.Object[])
 	 */
 	@Override
-	public RevisionLine buildTermAddedLine(Object[] revisionData) {
+	public List<RevisionLine> buildTermAddedLine(Object[] revisionData) {
+		List<RevisionLine> allLines = new ArrayList<RevisionLine>();
+
 		CommandLine commandLine = buildLineBase(
 				JournalEventsEnum.THESAURUSTERM_CREATED,
 				(GincoRevEntity) revisionData[1]);
 		ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
 		commandLine.setValue(term.getLexicalValue());
-		return commandLine;
+		allLines.add(commandLine);
+		if (term.getPrefered() != null && term.getPrefered()) {
+			CommandLine commandLinepref = buildLineBase(
+					JournalEventsEnum.THESAURUSTERM_ROLE_UPDATE,
+					(GincoRevEntity) revisionData[1]);
+			commandLinepref.setValue(CommandLine.STARS + term.getLexicalValue());
+			allLines.add(commandLinepref);
+		}
+		return allLines;
 	}
 
 	/* (non-Javadoc)
@@ -114,7 +128,7 @@ public class CommandLineBuilder implements RevisionLineBuilder {
 	public List<RevisionLine> buildTermLexicalValueChangedLine(
 			Object[] revisionData, String oldLexicalValue) {
 		List<RevisionLine> allLines = new ArrayList<RevisionLine>();
-		allLines.add(buildTermAddedLine(revisionData));
+		allLines.addAll(buildTermAddedLine(revisionData));
 
 		CommandLine commandLine = buildLineBase(
 				JournalEventsEnum.THESAURUSTERM_DELETED,
@@ -156,7 +170,7 @@ public class CommandLineBuilder implements RevisionLineBuilder {
 	@Override
 	public List<RevisionLine> buildConceptHierarchyChanged(
 			Object[] revisionData, Set<String> oldGenericConceptIds,
-			String languageId) {
+			String languageId, AuditReader reader) {
 		List<RevisionLine> allLines = new ArrayList<RevisionLine>();
 
 		ThesaurusConcept concept = (ThesaurusConcept) revisionData[0];
@@ -165,18 +179,55 @@ public class CommandLineBuilder implements RevisionLineBuilder {
 		for (ThesaurusConcept parentConcept : parentConcepts) {
 			parentConceptIds.add(parentConcept.getIdentifier());
 		}
-		ThesaurusTerm currentConceptPrefTerm = thesaurusConceptService
+		
+		/*ThesaurusTerm currentConceptPrefTerm = thesaurusConceptService
 				.getConceptPreferredTerm(
 						concept.getIdentifier(),
-						languageId);
+						languageId);*/
+		ThesaurusTerm currentConceptPrefTerm = auditHelper.getPreferredTermAtRevision(
+				reader, 
+				((GincoRevEntity)revisionData[1]).getId(), concept.getIdentifier(), languageId);
+		
+		for (String oldGenericConceptId : oldGenericConceptIds) {
+			if (!parentConceptIds.contains(oldGenericConceptId)) {
+				CommandLine commandLineDeletedHierarchy = buildLineBase(
+						JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,
+						(GincoRevEntity) revisionData[1]);				
+				
+				/*ThesaurusTerm oldGenericConceptPrefTerm = thesaurusConceptService
+						.getConceptPreferredTerm(
+								oldGenericConceptId,
+								languageId);*/
+				ThesaurusTerm oldGenericConceptPrefTerm =auditHelper.getPreferredTermAtRevision(
+						reader, 
+						((GincoRevEntity)revisionData[1]).getId(), oldGenericConceptId, languageId);
+				
+				if(currentConceptPrefTerm != null && oldGenericConceptPrefTerm != null) {
+				commandLineDeletedHierarchy
+						.setValue(CommandLine.HIERARCHY_REMOVED
+								+currentConceptPrefTerm.getLexicalValue()
+								+ CommandLine.HIERARCHY
+								+ oldGenericConceptPrefTerm
+										.getLexicalValue());
+				allLines.add(commandLineDeletedHierarchy);
+				}
+
+			}
+		}
+		
 		CommandLine commandLineNewRelations = buildLineBase(
 				JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,
 				(GincoRevEntity) revisionData[1]);
 		List<String> newParentLexicalValues = new ArrayList<String>();
 		for (String parentConceptId : parentConceptIds) {
 			if (!oldGenericConceptIds.contains(parentConceptId)) {
-				ThesaurusTerm preferredTerm = thesaurusConceptService
-						.getConceptPreferredTerm(parentConceptId, languageId);
+				/*ThesaurusTerm preferredTerm = thesaurusConceptService
+						.getConceptPreferredTerm(parentConceptId, languageId);*/
+				ThesaurusTerm preferredTerm =auditHelper.getPreferredTermAtRevision(
+						reader, 
+						((GincoRevEntity)revisionData[1]).getId(), parentConceptId, languageId);
+				
+				
 				if (preferredTerm != null) {
 					newParentLexicalValues.add(preferredTerm.getLexicalValue());
 				}
@@ -195,29 +246,7 @@ public class CommandLineBuilder implements RevisionLineBuilder {
 			commandLineNewRelations.setValue(val);
 			allLines.add(commandLineNewRelations);
 		}
-		for (String oldGenericConceptId : oldGenericConceptIds) {
-			if (!parentConceptIds.contains(oldGenericConceptId)) {
-				CommandLine commandLineDeletedHierarchy = buildLineBase(
-						JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,
-						(GincoRevEntity) revisionData[1]);
-				
-				
-				ThesaurusTerm oldGenericConceptPrefTerm = thesaurusConceptService
-						.getConceptPreferredTerm(
-								oldGenericConceptId,
-								languageId);
-				if(currentConceptPrefTerm != null && oldGenericConceptPrefTerm != null) {
-				commandLineDeletedHierarchy
-						.setValue(CommandLine.HIERARCHY_REMOVED
-								+currentConceptPrefTerm.getLexicalValue()
-								+ CommandLine.HIERARCHY
-								+ oldGenericConceptPrefTerm
-										.getLexicalValue());
-				allLines.add(commandLineDeletedHierarchy);
-				}
-
-			}
-		}
+		
 
 		return allLines;
 	}

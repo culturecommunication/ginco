@@ -102,13 +102,13 @@ public class ThesaurusTermAuditReader {
 			AuditQuery termQuery = auditQueryBuilder.getEntityAddedQuery(
 					reader, thesaurus, startDate, ThesaurusTerm.class);
 			if (lang != null) {
-				auditQueryBuilder.addFilterOnLanguage(termQuery, lang);
+				auditQueryBuilder.addFilterOnLanguage(termQuery, lang.getId());
 			}
 			List<Object[]> allTermRevisions = termQuery.getResultList();
 			for (Object[] revisionData : allTermRevisions) {
-				RevisionLine line = revisionLineBuilder
+				List<RevisionLine> lines = revisionLineBuilder
 						.buildTermAddedLine(revisionData);
-				allEvents.add(line);
+				allEvents.addAll(lines);
 			}
 		} catch (AuditException ae) {
 			throw new TechnicalException("Error getting term creationevent ",
@@ -147,7 +147,7 @@ public class ThesaurusTermAuditReader {
 					.getPropertyChangedQueryOnUpdate(reader, thesaurus, startDate,
 							ThesaurusTerm.class, "prefered");
 			if (lang != null) {
-				auditQueryBuilder.addFilterOnLanguage(termRoleChangedQuery, lang);
+				auditQueryBuilder.addFilterOnLanguage(termRoleChangedQuery, lang.getId());
 			}
 			List<Object[]> allRoleChanges = termRoleChangedQuery
 					.getResultList();
@@ -192,7 +192,7 @@ public class ThesaurusTermAuditReader {
 					.getPropertyChangedQueryOnUpdate(reader, thesaurus, startDate,
 							ThesaurusTerm.class, "lexicalValue");
 			if (lang != null) {
-				auditQueryBuilder.addFilterOnLanguage(lexicalValueChangedQuery, lang);
+				auditQueryBuilder.addFilterOnLanguage(lexicalValueChangedQuery, lang.getId());
 			}
 			List<Object[]> allLexicalValueChanges = lexicalValueChangedQuery
 					.getResultList();
@@ -255,7 +255,7 @@ public class ThesaurusTermAuditReader {
 					.getPropertyChangedQueryOnUpdateAndAdd(reader, thesaurus, startDate,
 							ThesaurusTerm.class, "concept");
 			if (lang != null) {
-				auditQueryBuilder.addFilterOnLanguage(termAttachedQuery, lang);
+				auditQueryBuilder.addFilterOnLanguage(termAttachedQuery, lang.getId());
 			}
 			List<Object[]> allTermAttached = termAttachedQuery.getResultList();	
 			

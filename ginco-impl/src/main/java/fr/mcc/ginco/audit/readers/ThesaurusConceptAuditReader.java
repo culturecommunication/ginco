@@ -45,6 +45,7 @@ import javax.inject.Named;
 
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.exception.AuditException;
+import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,7 @@ import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
 /**
@@ -141,7 +143,7 @@ public class ThesaurusConceptAuditReader {
 
 				List<RevisionLine> journalLines = revisionLineBuilder
 						.buildConceptHierarchyChanged(revisionData,
-								oldGenericConceptIds, (language != null)?language.getId():"");
+								oldGenericConceptIds, (language != null)?language.getId():"", reader);
 
 				allEvents.addAll(journalLines);
 			}
@@ -185,6 +187,6 @@ public class ThesaurusConceptAuditReader {
 			conceptIds.add(concept.getIdentifier());
 		}
 		return conceptIds;
-	}
-
+	}	
+	
 }

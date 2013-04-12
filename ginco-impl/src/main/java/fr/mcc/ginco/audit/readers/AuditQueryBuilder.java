@@ -193,10 +193,10 @@ public class AuditQueryBuilder {
 	 * @param lang the language value to filter on
 	 */
 	public void addFilterOnLanguage(AuditQuery query,
-			Language lang) {
+			String languageId) {
 		query.add(
 				AuditEntity.relatedId("language").eq(
-						lang.getId()));
+						languageId));
 	}
 	
 	
