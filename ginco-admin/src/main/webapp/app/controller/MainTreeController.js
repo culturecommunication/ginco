@@ -94,9 +94,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		this.loadTreeView(theTree);
 	},
 	loadTreeView : function(theTree) {
-		var treeState,me = this;
+		var treeState,scrollPosition,me = this;
 		if (theTree)
 		{
+		    scrollPosition = theTree.getEl().down('.x-grid-view').getScroll();
 			treeState = theTree.getState();
 		}
 		var MainTreeStore = this.getMainTreeStoreStore();
@@ -111,7 +112,9 @@ Ext.define('GincoApp.controller.MainTreeController', {
 						this.getRootNode().expand();
 						if (treeState)
 						{
-							theTree.applyState(treeState);
+							theTree.applyState(treeState, function(){
+								theTree.getEl().down('.x-grid-view').scrollTo('top', scrollPosition.top, false);
+							});
 						}
 					}
 					

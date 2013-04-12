@@ -81,12 +81,17 @@ Ext.define('Thesaurus.ext.tree.Panel', {
 
 	},
 
-	applyState : function(state) {
+	applyState : function(state, callback) {
 		var nodes = state.expandedNodes || [], len = nodes.length;
 		this.collapseAll();
+		var hasBeenExpanded = 0;
 		for ( var i = 0; i < len; i++) {
 			if (typeof nodes[i] != 'undefined') {
-				this.expandPath(nodes[i], 'id', '|');
+				this.expandPath(nodes[i], 'id', '|', function() {
+					hasBeenExpanded++;
+					if (hasBeenExpanded==len && callback)
+						callback();
+				});
 			}
 		}
 		this.callParent(arguments);

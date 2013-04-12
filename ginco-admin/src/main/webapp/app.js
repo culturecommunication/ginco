@@ -47,6 +47,7 @@ Ext.onReady(function() {
 
 });
 
+Ext.enableFx=false;
 
 Ext.Loader.setConfig({
     enabled: true

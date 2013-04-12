@@ -69,6 +69,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 				displayField : 'title',
 				rootVisible : false,
 				useArrows : true,
+				animate:false,
 				flex : 1,
 				dockedItems: [{
 			        xtype: 'toolbar',
