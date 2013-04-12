@@ -218,7 +218,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
 
     exportHierarchical : function(theButton) {
-        var me = this;
         var theForm = theButton.up('form');
         var url = "services/ui/exportservice/getHierarchical?thesaurusId="
             + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
@@ -226,7 +225,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
     
     exportJournal : function(theButton) {
-        var me = this;
         var theForm = theButton.up('form');
         var url = "services/ui/journalservice/exportLogJournal?thesaurusId="
             + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
@@ -234,7 +232,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
 
     exportAlphabetical : function(theButton) {
-        var me = this;
         var theForm = theButton.up('form');
         var url = "services/ui/exportservice/getAlphabetical?thesaurusId="
             + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
@@ -242,7 +239,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
     
     exportGinco : function(theButton) {
-        var me = this;
         var theForm = theButton.up('form');
         var url = "services/ui/exportservice/getGincoThesaurusExport?thesaurusId="
             + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
@@ -250,7 +246,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
 
     exportSKOS : function(theButton) {
-        var me = this;
         var theForm = theButton.up('form');
         var url = "services/ui/exportservice/getSKOS?thesaurusId="
             + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
@@ -270,7 +265,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils.msg('Succès',
 							'Le thesaurus a été enregistré!');
-
+					me.application.fireEvent('thesaurusupdated');
 					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}
