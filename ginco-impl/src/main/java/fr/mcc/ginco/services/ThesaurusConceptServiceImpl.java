@@ -44,6 +44,8 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
+
+import org.apache.commons.collections.ListUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,6 +90,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Inject
 	@Named("associativeRelationshipDAO")
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipDAO")
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipService")
+	private IConceptHierarchicalRelationshipService conceptHierarchicalRelationshipService;
 
 	@Inject
 	@Named("associativeRelationshipRoleDAO")
@@ -284,7 +294,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConcepts)
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConcepts, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept>childrenConceptToDetach)
 			throws BusinessException {
 		
 		ThesaurusTermUtils.checkTerms(terms);
@@ -335,11 +345,154 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		}
 		object = saveAssociativeRelationship(object, associatedConcepts);
+		object = saveHierarchicalRelationship(object, hierarchicalRelationships, childrenConceptToDetach);
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
 		// indexerService.addConcept(concept);
 		return concept;
+	}
+	
+	/**
+	 * This method save the modified hierarchical relationships for the concept given in parameter 
+	 * @param conceptToUpdate
+	 * @param hierarchicalRelationships
+	 * @return
+	 */
+	private ThesaurusConcept saveHierarchicalRelationship(ThesaurusConcept conceptToUpdate, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept>childrenConceptToDetach){
+		
+		//We update the modified relations, and we delete the relations that have been removed
+		List<String> oldParentIds = new ArrayList<String>();
+		if (!conceptToUpdate.getParentConcepts().isEmpty()) {
+			oldParentIds = getIdsFromConceptList(new ArrayList<ThesaurusConcept>(conceptToUpdate.getParentConcepts()));			
+		}
+		
+		List<ThesaurusConcept> newParents = new ArrayList<ThesaurusConcept>();
+		for (ConceptHierarchicalRelationship relation : hierarchicalRelationships) {
+			newParents.add(relation.getParentConcept());
+		}
+		List<String> newParentsIds = getIdsFromConceptList(newParents);
+		
+		//We make a diff between new parents and old parents and vice versa, to know added/removed parent concepts
+		List<String> addedParentIds = ListUtils.subtract(newParentsIds,oldParentIds);
+		List<String> removedParentIds = ListUtils.subtract(oldParentIds,newParentsIds);
+		
+		if (!addedParentIds.isEmpty() || !removedParentIds.isEmpty()) {
+			//Treatment in case of modified hierarchy (both add or remove)
+			
+			//We remove this concept in all array it belongs
+			for(ThesaurusArray array : conceptToUpdate.getConceptArrays()) {
+                array.getConcepts().remove(conceptToUpdate);
+                thesaurusArrayDAO.update(array);
+            }
+			
+			//We set all added parents
+			Set<ThesaurusConcept> addedParentsSet = new HashSet<ThesaurusConcept>();
+			for (String addedParentId : addedParentIds) {
+				addedParentsSet.add(thesaurusConceptDAO.getById(addedParentId));
+			}
+			if (!addedParentIds.isEmpty()) {
+				conceptToUpdate.getParentConcepts().addAll(addedParentsSet);
+			}
+			
+			//We remove all removed parents
+			Set<ThesaurusConcept> removedParentsSet = new HashSet<ThesaurusConcept>();
+			for (String removedParentId : removedParentIds) {
+				removedParentsSet.add(thesaurusConceptDAO.getById(removedParentId));
+			}
+			if (!removedParentIds.isEmpty()) {
+				conceptToUpdate.getParentConcepts().removeAll(removedParentsSet);
+			}
+			
+			//We calculate the rootconcepts for the concept to update
+			conceptToUpdate.setRootConcepts(new HashSet<ThesaurusConcept>(getRootConcepts(conceptToUpdate)));
+			
+			//We launch an async method to calculate new root concept for the children of the concept we update
+			calculateChildrenRoot(conceptToUpdate.getIdentifier());
+			
+			//We set topconcept flag
+			setTopConceptFlag(conceptToUpdate);
+		}
+		
+		//We process children delete
+		removeChildren(conceptToUpdate, childrenConceptToDetach);
+
+		thesaurusConceptDAO.update(conceptToUpdate);
+		thesaurusConceptDAO.flush();
+		saveRoleOfHierarchicalRelationship(hierarchicalRelationships);
+		
+		return conceptToUpdate;
+	}
+	
+	private void setTopConceptFlag(ThesaurusConcept conceptToUpdate){
+		//We always set topconcept to false if the concept has parents
+		if (!conceptToUpdate.getParentConcepts().isEmpty()) {
+			conceptToUpdate.setTopConcept(false);
+		} else {
+			//The concept must be topconcept if it has no parent and set true as default in the thesaurus
+			if (conceptToUpdate.getThesaurus().isDefaultTopConcept()) {
+				conceptToUpdate.setTopConcept(true);
+			}
+		}
+	}
+	
+	/**
+	 * This method detach children concept from concept given in parameter
+	 * @param conceptToUpdate
+	 * @param childrenConceptToDetach
+	 */
+	private void removeChildren(ThesaurusConcept conceptToUpdate, List<ThesaurusConcept>childrenConceptToDetach) {
+		Set<ThesaurusConcept> parentRootConcepts = conceptToUpdate.getRootConcepts();
+		List<String> parentToRemove = new ArrayList<String>();
+		parentToRemove.add(conceptToUpdate.getIdentifier());
+		
+		for (ThesaurusConcept childConcept : childrenConceptToDetach) {
+			removeParents(childConcept, parentToRemove);
+			
+			if (conceptToUpdate.getRootConcepts().isEmpty()) {
+				//If the parent concept is the root concept, we remove it from root concept of child
+				childConcept.getRootConcepts().remove(conceptToUpdate);
+			} else {
+				//The parent concept is not the root concept, so we remove for each child its root concept
+				for (ThesaurusConcept rootConcept : parentRootConcepts) {
+					if (childConcept.getRootConcepts().contains(rootConcept)) {
+						//We remove for children's root concepts all references to concepts that belongs to
+						childConcept.getRootConcepts().remove(rootConcept);
+					}
+				}				
+			}
+			//We recalculate the rootconcepts for children of the child
+			calculateChildrenRoot(childConcept.getIdentifier());
+		}
+	}
+		
+	/**
+	 * This method saves the role of a hierarchical relationship
+	 * @param hierarchicalRelationships
+	 * @return
+	 */
+	private List<ConceptHierarchicalRelationship> saveRoleOfHierarchicalRelationship(List<ConceptHierarchicalRelationship> hierarchicalRelationships) {
+		List<ConceptHierarchicalRelationship> updatedHierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
+		
+		for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : hierarchicalRelationships) {
+			ConceptHierarchicalRelationship gettedRelation = conceptHierarchicalRelationshipDAO.getById(conceptHierarchicalRelationship.getIdentifier());
+			gettedRelation.setRole(conceptHierarchicalRelationship.getRole());
+			updatedHierarchicalRelationships.add(conceptHierarchicalRelationshipDAO.update(gettedRelation));
+		}
+		return updatedHierarchicalRelationships;
+	}
+	
+	/**
+	 * This method return the ids of the concept included in the list given in parameter
+	 * @param ThesaurusConcept list
+	 * @return List<String> list of concept ids
+	 */
+	private List<String> getIdsFromConceptList(List<ThesaurusConcept> list) {
+		List<String> result = new ArrayList<String>();
+		for (ThesaurusConcept concept : list) {
+			result.add(concept.getIdentifier());
+		}
+		return result;
 	}
 
 	private ThesaurusConcept saveAssociativeRelationship(

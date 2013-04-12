@@ -35,6 +35,7 @@
 package fr.mcc.ginco.rest.services;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -43,6 +44,7 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.*;
 import fr.mcc.ginco.extjs.view.utils.AssociativeRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
+import fr.mcc.ginco.extjs.view.utils.HierarchicalRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.log.Log;
@@ -94,6 +96,10 @@ public class ThesaurusConceptRestService {
     @Inject
     @Named("associativeRelationshipViewConverter")
     private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
+    
+    @Inject
+    @Named("hierarchicalRelationshipViewConverter")
+    private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
 
     @Inject
     @Named("associativeRelationshipService")
@@ -153,28 +159,40 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusConceptView updateConcept(
-			ThesaurusConceptView thesaurusConceptViewJAXBElement)
+			ThesaurusConceptView conceptView)
 			throws BusinessException, TechnicalException {
 
 		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter
-				.convert(thesaurusConceptViewJAXBElement);
+				.convert(conceptView);
+		
+		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
+		List<ThesaurusConcept> childrenToDetach = thesaurusConceptViewConverter
+				.convertRemovedChildren(conceptView);
 
 		List<ThesaurusTerm> terms = termViewConverter
-				.convertTermViewsInTerms(thesaurusConceptViewJAXBElement
+				.convertTermViewsInTerms(conceptView
                         .getTerms(), true);
 		logger.info("Number of converted terms : " + terms.size());
 
 
-		// We save or update the concept
-		logger.info("Saving concept in DB");
-
+		//We get associative relationships from the view
         List<AssociativeRelationship> associations = new ArrayList<AssociativeRelationship>();
-        for(AssociativeRelationshipView view : thesaurusConceptViewJAXBElement.getAssociatedConcepts()) {
+        for(AssociativeRelationshipView view : conceptView.getAssociatedConcepts()) {
             associations.add(associativeRelationshipViewConverter.convert(view, convertedConcept));
         }
+        
+        //We get hierarchical relationships (from child to parents) from the view
+        List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
+        if (conceptView.getParentConcepts() != null) {
+        	for (HierarchicalRelationshipView hierarchicalRelationView : conceptView.getParentConcepts()) {
+        		hierarchicalRelationships.add(hierarchicalRelationshipViewConverter.convertRelationFromChildToParent(hierarchicalRelationView, convertedConcept));
+        	}        	
+        }
 
+        //We save or update the concept
+        logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
-				.updateThesaurusConcept(convertedConcept, terms, associations);
+				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach);
 		
 		for (ThesaurusTerm term : terms) {
 			indexerService.addTerm(term);

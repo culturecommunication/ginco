@@ -33,19 +33,23 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-/*
- * Associations Store
- * This file contains all Associations displayed in lists
- */
-Ext.define('GincoApp.store.AssociationStore', {
-    extend: 'Ext.data.Store',
+Ext.define('GincoApp.model.HierarchicalAssociationModel', {
+    extend: 'Ext.data.Model',
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            model : 'GincoApp.model.AssociationModel'
-        }, cfg)]);
-    }
+    fields: [
+        {
+            name: 'identifier',
+            type: 'string'
+        },
+        {
+            name: 'label',
+            type: 'string'
+        },
+        {
+            name: 'role',
+            type: 'integer'
+        }
+    ],
+   idProperty : 'identifier'
+
 });

@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -110,14 +111,19 @@ public interface IThesaurusConceptService {
 	 * @throws BusinessException
 	 */
 	String getConceptLabel(String conceptId) throws BusinessException;
-	
 
 	/**
 	 * Update a single Thesaurus Concept Object
-	 * @throws BusinessException 
+	 * @param The concept to update
+	 * @param The list of the concept's terms
+	 * @param The ids of associated concepts
+	 * @param The hierarchical relations (from current concept (child) to its parents)
+	 * @param The list of children concepts we must detach (must not be still children of our concept)
+	 * @return The updated concept
+	 * @throws BusinessException
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds) throws BusinessException;
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept>childrenConceptToDetach) throws BusinessException;
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
