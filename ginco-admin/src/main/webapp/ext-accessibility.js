@@ -28,10 +28,11 @@
  * @docauthor Hubert FONGARNAND
  *
  * This files contains extends or override to implement missing accessibility functions to ExtJS
+ * WARNING this file is made for EXTJS-4.1-GPL only
  */
 
 /*
- * Define a menu item with an accesskey
+ * Implement Aria for extjs combobox
  */
 
 Ext.define('Thesaurus.form.field.ComboBox',
@@ -168,6 +169,10 @@ Ext.define('Thesaurus.view.BoundList', {
 		me.callParent(arguments);
     },
 });
+
+/*
+ * Define a menu item with an accesskey
+ */
 
 Ext
 		.define(
@@ -353,6 +358,30 @@ Ext.define("Thesaurus.form.field.Base", {
 			})
 });
 
+/*
+ * Make close button for a tab keyboard accessible
+ */
+Ext.define('Thesaurus.tab.Tab', {
+	override : 'Ext.tab.Tab',
+	onCloseBtnKey : function()
+	{
+		this.onCloseClick();
+	},
+	listeners: {
+		render : {
+			fn : function(){
+				var me = this;
+				if (me.closeEl){
+					me.keyNav = new Ext.util.KeyNav(me.closeEl, {
+			            enter: me.onCloseBtnKey,
+			            scope: me
+			        });
+				}
+				
+			}
+		}
+	}
+});
 
 /*
  * Remove default role=presentation
@@ -452,6 +481,9 @@ Ext.view.TableChunker.metaTableTpl = [
                                                   '{%if (this.closeTableWrap)out.push(this.closeTableWrap())%}'
                                               ];
 
+/*
+ * Add tabindex to role to allow focus() from javascript
+ */
 Ext.view.TableChunker.embedRowAttr= function() {
     return '{rowAttr} tabindex="-1" role="row"';
 };

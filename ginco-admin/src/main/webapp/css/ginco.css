@@ -37,6 +37,9 @@
 	color: #15498b;
 }
 
+a.x-tab-close-btn:focus  {
+ outline:black dotted 1px !important; }
+
 
  
 .msg .x-box-mc {
