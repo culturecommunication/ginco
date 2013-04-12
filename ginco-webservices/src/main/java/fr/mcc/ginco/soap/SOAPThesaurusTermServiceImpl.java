@@ -38,6 +38,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -56,7 +58,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 	
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
-		if (!lexicalValue.equals("") && !thesaurusId.equals("") && !languageId.equals("")){
+		if (StringUtils.isNotEmpty(lexicalValue) && StringUtils.isNotEmpty(thesaurusId) && StringUtils.isNotEmpty(languageId)){
 			return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
 		}
 		else 
@@ -67,7 +69,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 	
 	@Override
 	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
-		if (!lexicalValue.equals("") && !thesaurusId.equals("") && !languageId.equals("")){
+		if (StringUtils.isNotEmpty(lexicalValue) && StringUtils.isNotEmpty(thesaurusId) && StringUtils.isNotEmpty(languageId)){
 			ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
 			ThesaurusTerm thesaurusTerm = thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
 		
@@ -77,7 +79,9 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
 				return reducedThesaurusTerm;
 			}
-			else return null;		
+			else {
+				return null;		
+			}
 		}
 		else 
 		{
@@ -87,7 +91,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
 	
 	@Override
 	public Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
-		if (!lexicalValue.equals("") && !thesaurusId.equals("") && !languageId.equals("")){
+		if (StringUtils.isNotEmpty(lexicalValue) && StringUtils.isNotEmpty(thesaurusId) && StringUtils.isNotEmpty(languageId)){
 			return thesaurusTermService.isPreferred(lexicalValue, thesaurusId, languageId);
 		}
 		else 
