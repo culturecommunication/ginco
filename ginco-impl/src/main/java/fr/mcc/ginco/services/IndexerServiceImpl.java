@@ -382,7 +382,15 @@ public class IndexerServiceImpl implements IIndexerService {
         doc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
         doc.addField(SolrField.LANGUAGE, thesaurusTerm.getLanguage().getId());
 
-        doc.addField(SolrField.EXT_TYPE, (thesaurusTerm.getPrefered())?EntityType.TERM_PREF:EntityType.TERM_NON_PREF);
+        boolean preferred;
+
+        if(thesaurusTerm.getPrefered() == null) {
+            preferred = false;
+        } else {
+            preferred = thesaurusTerm.getPrefered();
+        }
+
+        doc.addField(SolrField.EXT_TYPE, (preferred)?EntityType.TERM_PREF:EntityType.TERM_NON_PREF);
 
         Timestamp modifiedDate = new Timestamp(thesaurusTerm.getModified().getTime());
         doc.addField(SolrField.MODIFIED, modifiedDate);
