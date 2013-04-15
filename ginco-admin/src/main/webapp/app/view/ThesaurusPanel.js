@@ -327,7 +327,8 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												forceSelection : true,
 												multiSelect : true,
 												allowBlank : false,
-												store : 'ThesaurusLanguageStore'
+												store : 'ThesaurusLanguageStore',
+												itemId : 'thesauruslang'
 										},{
 												xtype : 'checkbox',
 												name : 'defaultTopConcept',

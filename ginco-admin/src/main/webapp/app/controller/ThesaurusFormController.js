@@ -47,11 +47,13 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xSucessSavedMsg : 'Thesaurus saved successfully',
     xSucessRemovedMsg : 'Thesaurus removed successfully',
     xProblemLabel : 'Error !',
+    xWarningLabel : 'Warning !',
     xProblemSaveMsg : 'Unable to save this thesaurus!',
     xProblemDeleteMsg : 'Unable to delete this thesaurus!',
     xProblemPublishMsg : "Error publishing Thesaurus!",
     xProblemArchiveMsg : "Error archiving Thesaurus!",
     xWarningChangedPoly : "Attention! You are going to change polyhierarchism of thesaurus, do it on your own risk!",
+    xWarningChangedLanguages : "There may be terms in this language. Do it on your own risk!",
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -281,12 +283,33 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     onPolyChange : function(theCheckBox, newValue, oldValue, eOpts) {
         if(newValue == false) {
             Ext.MessageBox.show({
-                title: 'Attention',
+            	title: this.xWarningLabel,
                 msg: this.xWarningChangedPoly,
                 buttons: Ext.MessageBox.OK,
                 icon: Ext.MessageBox.WARNING
             });
         }
+    },
+    
+    onLangChange : function(theCombo, records) {
+    	var thePanel = theCombo.up("thesaurusPanel");
+    	var oldLanguages = thePanel.thesaurusData.languages;
+    	for (var i=0; i<oldLanguages.length; i++){
+    		var found = false;
+    		Ext.Array.forEach(records, function (item) {
+    			if (item.get("id")==oldLanguages[i]){
+    				found = true;
+    			}	
+    		});
+    		if (found == false){
+    			Ext.MessageBox.show({
+    	    		title: this.xWarningLabel,
+    	    		msg: this.xWarningChangedLanguages,
+    	    		buttons: Ext.MessageBox.OK,
+    	            icon: Ext.MessageBox.WARNING
+    			});
+    		}
+    	}
     },
 
 	init : function(application) {
@@ -335,6 +358,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             },
             "checkbox[cls=poly]" : {
                 change : this.onPolyChange
+            },
+            "thesaurusPanel #thesauruslang" : {
+            	select : this.onLangChange
             }
 		});
 	}
