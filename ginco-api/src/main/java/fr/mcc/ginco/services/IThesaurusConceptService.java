@@ -60,10 +60,10 @@ public interface IThesaurusConceptService {
 
     /**
      * Get list of ThesaurusConcept by list of id.
-     *
+     * @param ids : List of ids
      * @return
      */
-    Set<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException;
+    Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids) throws BusinessException;
 
 	/**
 	 * Get single ThesaurusConcept by its id.
@@ -179,14 +179,6 @@ public interface IThesaurusConceptService {
      * @return
      */
     boolean hasChildren(String conceptId);
-
-    /**
-     * Calculates the root concepts for given concept.
-     * @param concept
-     * @return
-     */
-    List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept);
-
    	
 	/**
 	 * Delete a ThesaurusConcept object

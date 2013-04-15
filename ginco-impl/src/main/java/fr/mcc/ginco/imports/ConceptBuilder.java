@@ -57,6 +57,7 @@ import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
+import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -72,6 +73,10 @@ public class ConceptBuilder extends AbstractBuilder {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipServiceUtil")
+	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
 	@Inject
 	@Named("associativeRelationshipRoleService")
@@ -190,7 +195,7 @@ public class ConceptBuilder extends AbstractBuilder {
 		logger.debug("Building root concepts for concept : " + skosConcept.getURI());
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		concept.setRootConcepts(new HashSet<ThesaurusConcept>(
-				thesaurusConceptService.getRootConcepts(concept)));
+				conceptHierarchicalRelationshipServiceUtil.getRootConcepts(concept)));
 		return concept;
 
 	}

@@ -59,6 +59,7 @@ import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.services.ConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -82,6 +83,9 @@ public class ThesaurusConceptServiceTest {
 
 	@InjectMocks
 	private ThesaurusConceptServiceImpl thesaurusConceptService;
+	
+	@InjectMocks
+	private ConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
 	@Before
 	public void init() {
@@ -217,16 +221,16 @@ public class ThesaurusConceptServiceTest {
 		});
 		leaf1_3.getParentConcepts().add(leaf2_4);
 
-		List<ThesaurusConcept> roots_leaf1_1 = thesaurusConceptService
+		List<ThesaurusConcept> roots_leaf1_1 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(leaf1_1);
 		
 		Assert.assertEquals(3, roots_leaf1_1.size());
 
-		List<ThesaurusConcept> roots_leaf1_3 = thesaurusConceptService
+		List<ThesaurusConcept> roots_leaf1_3 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(leaf1_3);
 		Assert.assertEquals(1, roots_leaf1_3.size());
 
-		List<ThesaurusConcept> roots_leaf1_2 = thesaurusConceptService
+		List<ThesaurusConcept> roots_leaf1_2 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(leaf1_2);
 		Assert.assertEquals(2, roots_leaf1_2.size());
 	}
@@ -254,7 +258,7 @@ public class ThesaurusConceptServiceTest {
 			}
 		});
 
-		List<ThesaurusConcept> roots_leaf1_1 = thesaurusConceptService
+		List<ThesaurusConcept> roots_leaf1_1 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(node1);
 		Assert.assertEquals(1, roots_leaf1_1.size());
 		Assert.assertEquals(node2.getIdentifier(), roots_leaf1_1.get(0)
@@ -304,7 +308,7 @@ public class ThesaurusConceptServiceTest {
 			}
 		});
 
-		List<ThesaurusConcept> roots_node1 = thesaurusConceptService
+		List<ThesaurusConcept> roots_node1 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(node1);
 		Assert.assertEquals(1, roots_node1.size());
 		Assert.assertEquals(node7.getIdentifier(), roots_node1.get(0)
