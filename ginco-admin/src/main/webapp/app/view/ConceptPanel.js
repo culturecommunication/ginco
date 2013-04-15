@@ -422,6 +422,12 @@ Ext
 																						flex : 1
 																					},
 																					{
+																						dataIndex : 'role',
+																						header : me.xRoleColumnLabel,
+																						stopSelection : false,
+																						renderer : me.conceptHierarchicalRoleRenderer
+																					},
+																					{
 																						xtype : 'actioncolumn',
 																						itemId : 'childConceptActionColumn',
 																						header : me.xActions,
