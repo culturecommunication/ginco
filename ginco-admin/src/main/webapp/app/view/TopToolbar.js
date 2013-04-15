@@ -132,11 +132,6 @@ Ext.define('GincoApp.view.TopToolbar', {
 					xtype : 'button',
 					itemId : 'aproposbtn',
 					text : me.xAboutLabel
-				}, {
-					xtype : 'button',
-					itemId : 'accessibilitybtn',
-					text : me.xAccessibilityLabel,
-					enableToggle : true
 				} ]
 			}, {
 				xtype : 'tbseparator',
