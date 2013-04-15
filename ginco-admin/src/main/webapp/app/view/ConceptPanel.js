@@ -81,6 +81,7 @@ Ext
 					xHiddenTermColumnLabel : 'Hidden term',
 					xConceptHierarchicalRoleLabels : ['BT-NT','BTG-NTG','BTI-NTI','BTP-NTP'],
 					xNotationLabel : 'Notation',
+					xExportBranch : 'Export this branch',
 					
 					conceptHierarchicalRoleRenderer : function(value,record)
 					{
@@ -172,6 +173,13 @@ Ext
 																				itemId : 'deleteConcept',
 																				cls : 'delete',
 																				iconCls : 'icon-delete'
+																			},
+																			{
+																				xtype : 'button',
+																				text : me.xExportBranch,
+																				requiredRoles : ['ADMIN'],
+																				itemId : 'exportBranch',
+																				iconCls : 'exports-icon'
 																			} ]
 																} ],
 																items : [

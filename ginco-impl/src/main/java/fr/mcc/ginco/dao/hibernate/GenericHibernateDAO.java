@@ -112,8 +112,7 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	}
 	
 	final public Session getCurrentSession() {
-		Session session = sessionFactory.getCurrentSession();	
-		//TODO : to test : session.setFlushMode(FlushMode.MANUAL);
+		Session session = sessionFactory.getCurrentSession();
 		return session;
 	}
 

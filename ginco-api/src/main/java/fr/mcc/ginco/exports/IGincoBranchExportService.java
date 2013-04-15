@@ -32,41 +32,25 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.exports;
 
-Ext.define('GincoApp.locale.fr.view.ConceptPanel',
-    {
-	xIdentifierLabel : 'Identifiant',
-	xCreatedDateLabel : 'Date de création',
-	xModificationDateLabel : 'Date de modification',
-	xTopTermConceptLabel: 'Le concept est TT',
-	xLexicalValueLabel : 'Valeur lexicale',
-	xLanguagesLabel : 'Langue',
-	xPreferedColumnLabel : 'Terme préférentiel',
-	xConceptPanelTitle : 'Nouveau concept',
-	xTermListGridTitle : 'Liste des termes <span class="mandatory-field"><abbr title="obligatoire">*</abbr></span> (au moins un terme préférentiel)',
-	xAssociatedConceptsListGridTitle : 'Concepts Associés (TA)', 
-	xSave: 'Enregistrer',
-	xDelete: 'Supprimer',
-	xAddTerm: 'Ajouter un terme',
-	xPreferedTerm: 'Terme préférentiel',
-	xNonPreferedTerm: 'Terme non préférentiel',
-	xCreateTerm: 'Créer un nouveau terme',
-	xExistingTerm: 'Sélectionner un terme existant',
-    xDetach: 'Détacher du concept',
-    xNotesTab: 'Notes du concept',
-    xAddParent: 'Ajouter un concept parent',
-    xActions: 'Actions',
-    xAddRelationship: 'Ajouter une relation associative',
-    xRootConcepts: 'Concepts de tête',
-    xParentConcepts: 'Concepts Parents (TG)',
-    xRemoveParent: 'Supprimer la relation hiérarchique avec le concept générique',
-    xRemoveChild : 'Supprimer la relation hiérarchique avec le concept spécifique',
-    xAssociationRemove: 'Supprimer l\'association',
-    xChildrenConcepts: 'Concepts Enfants (TS)',
-    xRoleColumnLabel: 'Rôle',
-    xConceptStatusLabel : 'Statut du concept',
-    xHiddenTermColumnLabel : 'Terme caché',
-    xConceptHierarchicalRoleLabels : ['TG-TS','TGG-TSG','TGI-TSI','TGP-TSP'],
-    xNotationLabel : 'Notation',
-    xExportBranch : 'Exporter cette branche',
-});
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.TechnicalException;
+
+/**
+ * This service provides functions to export concept branch in Ginco export
+ * format
+ */
+public interface IGincoBranchExportService {
+
+	/**
+	 * Get Ginco Concept branch export.
+	 * 
+	 * @param ThesaurusConcept
+	 *            concept : the concept we want to export (the given concept is
+	 *            the root of the branch)
+	 * @return Serialized branch export to XML
+	 * @throws TechnicalException
+	 */
+	String getBranchExport(ThesaurusConcept conceptBranchToExport) throws TechnicalException;
+}

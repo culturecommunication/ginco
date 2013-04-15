@@ -52,13 +52,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.IExportService;
-import fr.mcc.ginco.exports.IGincoExportService;
+import fr.mcc.ginco.exports.IGincoBranchExportService;
+import fr.mcc.ginco.exports.IGincoThesaurusExportService;
 import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.extjs.view.FileResponse;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.LabelUtil;
 
@@ -79,14 +82,23 @@ public class ExportRestService {
 	private ISKOSExportService skosExportService;
 
 	@Inject
-	@Named("gincoExportService")
-	private IGincoExportService gincoExportService;
+	@Named("gincoThesaurusExportService")
+	private IGincoThesaurusExportService gincoThesaurusExportService;
 
+	@Inject
+	@Named("gincoBranchExportService")
+	private IGincoBranchExportService gincoBranchExportService;
+	
 	private static final String TABULATION_DELIMITER = "\t";
 
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
+	
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
 
 	/**
 	 * Return file in .txt format; name begins with current DateTime.
@@ -219,7 +231,7 @@ public class ExportRestService {
 			temp = File.createTempFile("GINCO ", ".xml");
 			temp.deleteOnExit();
 			out = new BufferedWriter(new FileWriter(temp));
-			String result = gincoExportService
+			String result = gincoThesaurusExportService
 					.getThesaurusExport(targetThesaurus);
 			out.write(result);
 			out.flush();
@@ -231,5 +243,35 @@ public class ExportRestService {
 
 		return new FileResponse(temp, ".xml", "GINCO "
 				+ targetThesaurus.getTitle()).toResponse();
+	}
+	
+	/**
+	 * Returns a XML file that contains exported branch (the concept given in parameter + all its children), in Ginco export format
+	 * @param conceptId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getGincoBranchExport")
+	@Produces("text/plain")
+	public Response getGincoBranchExport(
+			@QueryParam("conceptId") String conceptId) {
+		ThesaurusConcept targetConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+		File temp;
+		BufferedWriter out = null;
+		try {
+			temp = File.createTempFile("GINCO ", ".xml");
+			temp.deleteOnExit();
+			out = new BufferedWriter(new FileWriter(temp));
+			String result = gincoBranchExportService.getBranchExport(targetConcept);
+			out.write(result);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			throw new BusinessException("Cannot create temp file!",
+					"cannot-create-file", e);
+		}
+		return new FileResponse(temp, ".xml", "GINCO "
+				+ thesaurusConceptService.getConceptTitle(targetConcept)).toResponse();
 	}
 }

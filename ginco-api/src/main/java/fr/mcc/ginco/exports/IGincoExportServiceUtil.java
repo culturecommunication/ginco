@@ -34,19 +34,32 @@
  */
 package fr.mcc.ginco.exports;
 
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
+import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 
 /**
- * Service provides function to use for Ginco export
- * by REST services.
+ * This service provides functions to use for Ginco export by REST services.
  */
-public interface IGincoExportService {   
+public interface IGincoExportServiceUtil {
 
-    /**
-     * Get Ginco Thesaurus export for given thesaurus.
-     * @param thesaurus
-     * @throws TechnicalException
-     */
-    String getThesaurusExport(Thesaurus thesaurus) throws TechnicalException;
+	/**
+	 * This method serializes to XML a thesaurus with Jaxb
+	 * 
+	 * @param thesaurusToExport : the thesaurus we want to export
+	 * @return serializedThesaurus : the thesaurus we have serialized
+	 * @throws TechnicalException
+	 */
+	String serializeThesaurusToXmlWithJaxb(
+			GincoExportedThesaurus thesaurusToExport) throws TechnicalException;
+
+	/**
+	 * This method serializes to XML a concept branch with Jaxb
+	 * 
+	 * @param branchToExport : the branch we want to export
+	 * @return serializedBranch : the concept and its children (+ notes, versions) we have serialized
+	 * @throws TechnicalException
+	 */
+	String serializeBranchToXmlWithJaxb(GincoExportedBranch branchToExport)
+			throws TechnicalException;
 }

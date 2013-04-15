@@ -44,7 +44,7 @@ import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.exports.IGincoExportService;
+import fr.mcc.ginco.exports.IGincoThesaurusExportService;
 import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LanguageComparator;
@@ -102,8 +102,8 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	private IIDGeneratorService generatorService;
 
     @Inject
-    @Named("gincoExportService")
-    private IGincoExportService gincoExportService;
+    @Named("gincoThesaurusExportService")
+    private IGincoThesaurusExportService gincoThesaurusExportService;
 
 
 	/*
@@ -182,7 +182,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     public Thesaurus archiveThesaurus(Thesaurus thesaurus)
             throws BusinessException, TechnicalException {
 
-        String fileContent = gincoExportService.getThesaurusExport(thesaurus);
+        String fileContent = gincoThesaurusExportService.getThesaurusExport(thesaurus);
         File ready = new File(archivePath + thesaurus.getTitle().replaceAll(" ", "_") + "_"
                 + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_")
                 + ".xml");

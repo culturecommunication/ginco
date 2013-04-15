@@ -56,29 +56,30 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 
 /**
  * Small utility class for representing an exported Thesaurus
- * With {@MCCExportServiceImpl}
+ * With {GincoThesaurusExportServiceImpl}
  */
+@SuppressWarnings("serial")
 @XmlRootElement
 @XmlSeeAlso({Note.class, NodeLabel.class, ThesaurusConceptGroupLabel.class, ConceptHierarchicalRelationship.class})
 public class GincoExportedThesaurus implements Serializable {
 	
-	//Thesaurus and terms are read by Jaxb and automatically added to the XML structure
+	//Thesaurus, concepts and terms are read by Jaxb and automatically added to the XML structure
 	//But its not the case for nested elements (notes, relations, etc.), so we include them
 	//in a map that contains the id of the element (term id) and the nested elements (notes, relations, etc.)
-	//The use of a JaxbList object is due to the incapacity of Jaxb to serialize a HashMap<String, Bean> directly
+	//The use of a JaxbList object is due to the inability of Jaxb to serialize a HashMap<String, Bean> directly
 	
     private Thesaurus thesaurus;
     private List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
     private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
     private List<ThesaurusArray> conceptArrays  = new ArrayList<ThesaurusArray>();
-    private Map<String, JaxbList<NodeLabel>> conceptArrayLabels = new Hashtable();
+    private Map<String, JaxbList<NodeLabel>> conceptArrayLabels = new Hashtable<String, JaxbList<NodeLabel>>();
     private List<ThesaurusConceptGroup> conceptGroups  = new ArrayList<ThesaurusConceptGroup>();
-    private Map<String, JaxbList<ThesaurusConceptGroupLabel>> conceptGroupLabels = new Hashtable();
+    private Map<String, JaxbList<ThesaurusConceptGroupLabel>> conceptGroupLabels = new Hashtable<String, JaxbList<ThesaurusConceptGroupLabel>>();
     private List<ThesaurusVersionHistory> thesaurusVersions;
-    private Map<String, JaxbList<ConceptHierarchicalRelationship>> hierarchicalRelationship = new Hashtable();
-    private Map<String, JaxbList<String>> associativeRelationship = new Hashtable();
-    private Map<String, JaxbList<Note>> termNotes = new Hashtable();
-    private Map<String, JaxbList<Note>> conceptNotes = new Hashtable();
+    private Map<String, JaxbList<ConceptHierarchicalRelationship>> hierarchicalRelationship = new Hashtable<String, JaxbList<ConceptHierarchicalRelationship>>();
+    private Map<String, JaxbList<String>> associativeRelationship = new Hashtable<String, JaxbList<String>>();
+    private Map<String, JaxbList<Note>> termNotes = new Hashtable<String, JaxbList<Note>>();
+    private Map<String, JaxbList<Note>> conceptNotes = new Hashtable<String, JaxbList<Note>>();
 
 	public Thesaurus getThesaurus() {
 		return thesaurus;
