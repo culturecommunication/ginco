@@ -40,6 +40,8 @@
 a.x-tab-close-btn:focus  {
  outline:black dotted 1px !important; }
 
+.x-form-search-trigger:focus  {
+ outline:black dotted 1px !important; }
 
  
 .msg .x-box-mc {

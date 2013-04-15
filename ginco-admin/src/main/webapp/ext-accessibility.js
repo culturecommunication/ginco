@@ -120,7 +120,6 @@ Ext.define('Thesaurus.form.field.ComboBox',
 	          focusItem : function (item)
 	          {
 	        	  var me = this;
-	        	  console.log("focusing ",item.id );
 	        	  Ext.get(me.id+"-inputEl").set({'aria-activedescendant':item.id});
 	          }
 	   
@@ -487,3 +486,57 @@ Ext.view.TableChunker.metaTableTpl = [
 Ext.view.TableChunker.embedRowAttr= function() {
     return '{rowAttr} tabindex="-1" role="row"';
 };
+
+Ext.define('Thesaurus.Ext.form.field.Trigger', {
+	override : 'Ext.form.field.Trigger',
+    getTriggerMarkup: function() {
+        var me = this,
+            i = 0,
+            hideTrigger = (me.readOnly || me.hideTrigger),
+            triggerCls,
+            triggerBaseCls = me.triggerBaseCls,
+            triggerConfigs = [];
+
+        // TODO this trigger<n>Cls API design doesn't feel clean, especially where it butts up against the
+        // single triggerCls config. Should rethink this, perhaps something more structured like a list of
+        // trigger config objects that hold cls, handler, etc.
+        // triggerCls is a synonym for trigger1Cls, so copy it.
+        if (!me.trigger1Cls) {
+            me.trigger1Cls = me.triggerCls;
+        }
+
+        // Create as many trigger elements as we have trigger<n>Cls configs, but always at least one
+        for (i = 0; (triggerCls = me['trigger' + (i + 1) + 'Cls']) || i < 1; i++) {
+            triggerConfigs.push({
+                tag: 'td',
+                valign: 'top',
+                cls: Ext.baseCSSPrefix + 'trigger-cell',
+                style: 'width:' + me.triggerWidth + (hideTrigger ? 'px;display:none' : 'px'),
+                cn: {
+                    cls: [Ext.baseCSSPrefix + 'trigger-index-' + i, triggerBaseCls, triggerCls].join(' '),
+                    role: 'button',
+                    tabindex: 0,
+                    title : 'Click here to launch search'
+                }
+            });
+        }
+        triggerConfigs[i - 1].cn.cls += ' ' + triggerBaseCls + '-last';
+
+        return Ext.DomHelper.markup(triggerConfigs);
+    },
+    listeners: {
+		render : {
+			fn : function(){
+				var me = this;
+				if (me.triggerEl){
+					me.keyNav = new Ext.util.KeyNav(me.triggerEl, {
+			            enter: me.onTriggerClick,
+			            scope: me
+			        });
+				}
+				
+			}
+		}
+	}
+});
+
