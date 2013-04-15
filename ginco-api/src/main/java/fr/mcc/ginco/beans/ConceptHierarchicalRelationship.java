@@ -34,16 +34,12 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
-
 import java.io.Serializable;
 
 /**
  * Bean represents hierarchical relation between two {@link ThesaurusConcept}
  */
 @SuppressWarnings("serial")
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 public class ConceptHierarchicalRelationship implements Serializable {
 	
 	public static class Id implements Serializable {

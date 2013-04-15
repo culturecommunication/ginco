@@ -32,20 +32,40 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.tests.utils;
 
-/*
- * Associations Store
- * This file contains all Associations displayed in lists
- */
-Ext.define('GincoApp.store.AssociationStore', {
-    extend: 'Ext.data.Store',
+import java.util.ArrayList;
+import java.util.List;
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            model : 'GincoApp.model.AssociationModel'
-        }, cfg)]);
-    }
-});
+import junitx.framework.ListAssert;
+
+import org.junit.Test;
+
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.utils.ThesaurusConceptUtils;
+
+public class ThesaurusConceptUtilsTest {
+
+	@Test
+	public void testGetIdsFromConceptList() {
+		List<String> conceptIds = ThesaurusConceptUtils
+				.getIdsFromConceptList(getFakeConceptList(3));
+		ListAssert.assertContains(conceptIds, "fake0");
+		ListAssert.assertContains(conceptIds, "fake1");
+		ListAssert.assertContains(conceptIds, "fake2");
+	}
+
+	private ThesaurusConcept getFakeConcept(String id) {
+		ThesaurusConcept concept = new ThesaurusConcept();
+		concept.setIdentifier(id);
+		return concept;
+	}
+
+	private List<ThesaurusConcept> getFakeConceptList(Integer numberOfElements) {
+		List<ThesaurusConcept> returnedListOfConcepts = new ArrayList<ThesaurusConcept>();
+		for (int i = 0; i < numberOfElements; i++) {
+			returnedListOfConcepts.add(getFakeConcept("fake" + i));
+		}
+		return returnedListOfConcepts;
+	}
+}

@@ -32,20 +32,28 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.utils;
 
-/*
- * Associations Store
- * This file contains all Associations displayed in lists
- */
-Ext.define('GincoApp.store.AssociationStore', {
-    extend: 'Ext.data.Store',
+import java.util.ArrayList;
+import java.util.List;
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            model : 'GincoApp.model.AssociationModel'
-        }, cfg)]);
-    }
-});
+import fr.mcc.ginco.beans.ThesaurusConcept;
+
+public class ThesaurusConceptUtils {
+
+	/**
+	 * This method return the ids of the concept included in the list given in
+	 * parameter
+	 * 
+	 * @param ThesaurusConcept
+	 *            list
+	 * @return List<String> list of concept ids
+	 */
+	public static List<String> getIdsFromConceptList(List<ThesaurusConcept> list) {
+		List<String> result = new ArrayList<String>();
+		for (ThesaurusConcept concept : list) {
+			result.add(concept.getIdentifier());
+		}
+		return result;
+	}
+}

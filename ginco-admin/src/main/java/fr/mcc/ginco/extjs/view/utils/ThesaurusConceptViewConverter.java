@@ -37,11 +37,13 @@ package fr.mcc.ginco.extjs.view.utils;
 import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
+import fr.mcc.ginco.extjs.view.pojo.HierarchicalRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
+import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -81,6 +83,11 @@ public class ThesaurusConceptViewConverter {
     @Inject
     @Named("associativeRelationshipViewConverter")
     private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
+    
+
+    @Inject
+    @Named("hierarchicalRelationshipViewConverter")
+    private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
 	
 	@Inject
 	@Named("associativeRelationshipService")
@@ -122,8 +129,12 @@ public class ThesaurusConceptViewConverter {
 		view.setStatus(concept.getStatus());
 		view.setNotation(concept.getNotation());
 
-		view.setParentConcepts(getIdsFromConceptList(concept
-				.getParentConcepts()));
+		List<HierarchicalRelationshipView> parentConcepts = hierarchicalRelationshipViewConverter.getParentViews(concept);
+		view.setParentConcepts(parentConcepts);
+		
+		List<HierarchicalRelationshipView> childrenConcepts = hierarchicalRelationshipViewConverter.getChildrenViews(concept);
+		view.setChildConcepts(childrenConcepts);
+		
 		view.setRootConcepts(getIdsFromConceptList(concept.getRootConcepts()));
 		List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
@@ -201,81 +212,36 @@ public class ThesaurusConceptViewConverter {
 		if (source.getNotation() != null) {
 			thesaurusConcept.setNotation(source.getNotation());
 		}
-
-		List<String> oldParentIds = getIdsFromConceptList(thesaurusConcept
-				.getParentConcepts());
-
-		List<String> addedParents = ListUtils.subtract(
-				source.getParentConcepts(), oldParentIds);
-		List<String> removedParents = ListUtils.subtract(oldParentIds,
-				source.getParentConcepts());
-
-		if (!addedParents.isEmpty() || !removedParents.isEmpty()) {
-
-            for(ThesaurusArray array : thesaurusConcept.getConceptArrays()) {
-                array.getConcepts().remove(thesaurusConcept);
-                thesaurusArrayService.updateOnlyThesaurusArray(array);
-            }
-
-            Set<ThesaurusConcept> addedParentsSet = thesaurusConceptService
-					.getThesaurusConceptList(addedParents);
-
-			if (!removedParents.isEmpty()) {
-				thesaurusConceptService.removeParents(thesaurusConcept,
-						removedParents);
-			}
-
-			if (!addedParents.isEmpty()) {
-				thesaurusConcept.getParentConcepts().addAll(addedParentsSet);
-			}
-
-			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(
-					thesaurusConceptService.getRootConcepts(thesaurusConcept)));
-
-			// launching an Async method to calculate new root concept for this
-			// concept children
-			thesaurusConceptService.calculateChildrenRoot(thesaurusConcept
-					.getIdentifier());
-
-		}	
-
-		if (!thesaurusConcept.getParentConcepts().isEmpty()) {
-			thesaurusConcept.setTopConcept(false);
-		}
-		
-		//Processing children concepts remove
-		Set<ThesaurusConcept> children = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(thesaurusConcept.getIdentifier()));
-		List<String> oldChildrenIds = getIdsFromConceptList(children);
-		List<String> removedChildren = new ArrayList<String>();
-		if ( source.getChildConcepts() != null) {
-			removedChildren = ListUtils.subtract(oldChildrenIds, source.getChildConcepts());
-		} else {
-			removedChildren = oldChildrenIds;
-		}
-		Set<ThesaurusConcept> parentRootConcepts = thesaurusConcept.getRootConcepts();
-		
-		if (!removedChildren.isEmpty()) {
-			List<String> parentToRemove = new ArrayList<String>();
-			parentToRemove.add(thesaurusConcept.getIdentifier());
-			for (String childId : removedChildren) {
-				ThesaurusConcept childConcept = thesaurusConceptService.getThesaurusConceptById(childId);
-				
-				//If the parent concept is the root concept, we remove it from root concept of child
-				childConcept.getRootConcepts().remove(thesaurusConcept);
-				
-				//Then if the parent concept is not the root concept, we remove for each child the root concept
-				for (ThesaurusConcept rootConcept : parentRootConcepts) {
-					if (childConcept.getRootConcepts().contains(rootConcept)) {
-						//We remove for children's root concepts all references to concepts that belongs to
-						childConcept.getRootConcepts().remove(rootConcept);
-					}
-				}
-				
-				thesaurusConceptService.removeParents(thesaurusConceptService.getThesaurusConceptById(childId), parentToRemove);
-				thesaurusConceptService.calculateChildrenRoot(childId);
-			}
-		}
 		return thesaurusConcept;
 	}
 
+	/**
+	 * This method generates a list of children concept we have to detach from the concept we are updating
+	 * @param conceptView
+	 */
+	public List<ThesaurusConcept> convertRemovedChildren(ThesaurusConceptView conceptView) {
+		List<ThesaurusConcept> removedChildren = new ArrayList<ThesaurusConcept>();
+		Set<ThesaurusConcept> oldChildren = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(conceptView.getIdentifier()));
+		List<String> oldChildrenIds = getIdsFromConceptList(oldChildren);
+		
+		List<String> newChildrenIds = new ArrayList<String>();
+		for (HierarchicalRelationshipView viewOfChild : conceptView.getChildConcepts()) {
+			newChildrenIds.add(viewOfChild.getIdentifier());
+		}
+		
+		List<String> removedChildrenIds = new ArrayList<String>();
+		if (conceptView.getChildConcepts() != null) {
+			removedChildrenIds = ListUtils.subtract(oldChildrenIds, newChildrenIds);
+		} else {
+			removedChildrenIds = oldChildrenIds;
+		}
+		
+		for (String removedChildId : removedChildrenIds) {
+			removedChildren.add(thesaurusConceptService.getThesaurusConceptById(removedChildId));
+		}
+		
+		return removedChildren;
+	}
+
 }
+

@@ -73,6 +73,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -124,6 +125,10 @@ public class GincoThesaurusBuilder {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipServiceUtil")
+	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 	
 	@Inject
 	@Named("thesaurusTermDAO")
@@ -347,7 +352,7 @@ public class GincoThesaurusBuilder {
 		
 		//Processing and setting for all concepts their root concept
 		for (ThesaurusConcept thesaurusConcept : updatedConcepts) {
-			List<ThesaurusConcept> roots = thesaurusConceptService.getRootConcepts(thesaurusConcept);
+			List<ThesaurusConcept> roots = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
 			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(roots));
 			thesaurusConceptDAO.update(thesaurusConcept);
 		}

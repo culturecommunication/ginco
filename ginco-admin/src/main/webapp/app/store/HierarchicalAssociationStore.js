@@ -37,7 +37,7 @@
  * Associations Store
  * This file contains all Associations displayed in lists
  */
-Ext.define('GincoApp.store.AssociationStore', {
+Ext.define('GincoApp.store.HierarchicalAssociationStore', {
     extend: 'Ext.data.Store',
 
     constructor: function(cfg) {
@@ -45,7 +45,7 @@ Ext.define('GincoApp.store.AssociationStore', {
         cfg = cfg || {};
         me.callParent([Ext.apply({
             autoLoad: false,
-            model : 'GincoApp.model.AssociationModel'
+            model : 'GincoApp.model.HierarchicalAssociationModel'
         }, cfg)]);
     }
 });

@@ -32,20 +32,43 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.services;
 
-/*
- * Associations Store
- * This file contains all Associations displayed in lists
+import java.util.List;
+
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+
+/**
+ * Service used to work with {@link ConceptHierarchicalRelationship} objects but
+ * NON TRANSACTIONAL
+ * 
+ * @see fr.mcc.ginco.beans
  */
-Ext.define('GincoApp.store.AssociationStore', {
-    extend: 'Ext.data.Store',
+public interface IConceptHierarchicalRelationshipServiceUtil {   
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            model : 'GincoApp.model.AssociationModel'
-        }, cfg)]);
-    }
-});
+	
+	/**
+	 * This method save the modified hierarchical relationships for the concept given in parameter 
+	 * @param conceptToUpdate : The concept we want to update the relationships (its parents and its children)
+	 * @param hierarchicalRelationships : The new relations between the concept and its parents
+	 * @param childrenConceptToDetach : The list of children concepts to detach from the concept
+	 * @return The updated {@link ThesaurusConcept}
+	 */
+	ThesaurusConcept saveHierarchicalRelationship(ThesaurusConcept conceptToUpdate, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept>childrenConceptToDetach);
+	
+	/**
+	 * This method calculates all the roots for the children 
+	 * @param parentId
+	 * @param originalParentId
+	 */
+	void calculateChildrenRoots(String parentId, String originalParentId);
+	
+
+    /**
+     * Calculates the root concepts for given concept.
+     * @param concept
+     * @return
+     */
+    List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept);
+}

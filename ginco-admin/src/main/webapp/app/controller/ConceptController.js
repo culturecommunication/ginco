@@ -31,9 +31,9 @@ Ext
 					extend : 'Ext.app.Controller',
 
 					stores : [ 'MainTreeStore', 'SimpleConceptStore',
-                            'AssociationStore', 'AssociationRoleStore' ],
+                            'AssociationStore', 'AssociationRoleStore', 'HierarchicalAssociationStore' ],
 					models : [ 'ConceptModel', 'ThesaurusModel',
-							'SimpleConceptModel', 'AssociationModel' ],
+							'SimpleConceptModel', 'AssociationModel', 'HierarchicalAssociationModel' ],
 
 					localized : true,
 					_myAppGlobal : this,
@@ -305,7 +305,12 @@ Ext
 						var theStore = theGrid.getStore();
 						var selectedItem = selectedRow[0];
 						selectedItem.setDirty();
-						theStore.add(selectedItem);
+						
+						var parentModel = Ext.create('GincoApp.model.HierarchicalAssociationModel');
+						parentModel.set('label',selectedItem.get('label'));
+						parentModel.set('identifier',selectedItem.get('identifier'));
+						
+						theStore.add(parentModel);
 					},
 
 					selectAssociativeConcept : function(selectedRow, theGrid) {
@@ -365,13 +370,28 @@ Ext
 						theGridStore.removeAll();
 						theGridStore.add(terms);
 
-                        var assoc = aModel.associatedConcepts().getRange();
+                        //Load associated concepts to the grid's store
+						var assoc = aModel.associatedConcepts().getRange();
                         var associatedConceptsGrid = aForm
                             .down('#gridPanelAssociatedConcepts');
                         var associatedConceptsGridStore = associatedConceptsGrid
                             .getStore();
                         associatedConceptsGridStore.removeAll();
                         associatedConceptsGridStore.add(assoc);
+                        
+                        //Load parent concepts to the grid's store
+						var parents = aModel.parentConcepts().getRange();
+                        var parentsGrid = aForm.down('#gridPanelParentConcepts');
+                        var parentConceptsGridStore = parentsGrid.getStore();
+                        parentConceptsGridStore.removeAll();
+                        parentConceptsGridStore.add(parents);
+                        
+                        //Load children concepts to the grid's store
+						var children = aModel.childConcepts().getRange();
+                        var childrenGrid = aForm.down('#gridPanelChildrenConcepts');
+                        var childrenConceptsGridStore = childrenGrid.getStore();
+                        childrenConceptsGridStore.removeAll();
+                        childrenConceptsGridStore.add(children);
 
 						var rootConceptsGrid = aForm
 								.down('#gridPanelRootConcepts');
@@ -380,24 +400,6 @@ Ext
 							conceptIds : aModel.raw.rootConcepts
 						};
 						rootConceptsGridStore.load();
-
-						var parentConceptsGrid = aForm
-								.down('#gridPanelParentConcepts');
-						var parentConceptsGridStore = parentConceptsGrid
-								.getStore();
-						parentConceptsGridStore.getProxy().extraParams = {
-							conceptIds : aModel.raw.parentConcepts
-						};
-						parentConceptsGridStore.load();
-
-						var childrenConceptsGrid = aForm
-								.down('#gridPanelChildrenConcepts');
-						var childrenConceptsGridStore = childrenConceptsGrid
-								.getStore();
-						childrenConceptsGridStore.getProxy().extraParams = {
-							conceptId : aModel.data.identifier
-						};
-						childrenConceptsGridStore.load();
 
 						var noteTab = aForm.up('tabpanel').down(
 								'noteConceptPanel');
@@ -546,23 +548,23 @@ Ext
 						var theStore = theGrid.getStore();
 						var termsData = theStore.getRange();
 
-						var parentGrid = theForm
+						/*var parentGrid = theForm
 								.down('#gridPanelParentConcepts');
 						var parentGridStore = parentGrid.getStore();
 						var parentData = parentGridStore.getRange();
 						var parentIds = Ext.Array.map(parentData, function(
 								parent) {
 							return parent.data.identifier;
-						});
+						});*/
 						
-						var childGrid = theForm
+						/*var childGrid = theForm
 								.down('#gridPanelChildrenConcepts');
 						var childGridStore = childGrid.getStore();
 						var childData = childGridStore.getRange();
 						var childIds = Ext.Array.map(childData, function(
 								child) {
 							return child.data.identifier;
-						});
+						});*/
 
 
 						var rootGrid = theForm.down('#gridPanelRootConcepts');
@@ -576,6 +578,12 @@ Ext
 								.down('#gridPanelAssociatedConcepts');
 						var associatedGridStore = associatedGrid.getStore();
 						var associatedData = associatedGridStore.getRange();
+						
+						var hierarchicalParentGrid = theForm.down('#gridPanelParentConcepts');
+						var hierarchicalParentData = hierarchicalParentGrid.getStore().getRange();
+						
+						var hierarchicalChildGrid = theForm.down('#gridPanelChildrenConcepts');
+						var hierarchicalChildData = hierarchicalChildGrid.getStore().getRange();
 
 						var thePanel = me.getActivePanel();
 
@@ -585,9 +593,11 @@ Ext
 						updatedModel.terms().add(termsData);
                         updatedModel.associatedConcepts().removeAll();
                         updatedModel.associatedConcepts().add(associatedData);
+                        updatedModel.parentConcepts().removeAll();
+                        updatedModel.parentConcepts().add(hierarchicalParentData);
+                        updatedModel.childConcepts().removeAll();
+                        updatedModel.childConcepts().add(hierarchicalChildData);
 
-						updatedModel.data.parentConcepts = parentIds;
-						updatedModel.data.childConcepts = childIds;
 						updatedModel.data.rootConcepts = rootIds;
 
 						updatedModel

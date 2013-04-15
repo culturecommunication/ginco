@@ -59,6 +59,7 @@ import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.services.ConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -82,6 +83,9 @@ public class ThesaurusConceptServiceTest {
 
 	@InjectMocks
 	private ThesaurusConceptServiceImpl thesaurusConceptService;
+	
+	@InjectMocks
+	private ConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
 	@Before
 	public void init() {
@@ -217,16 +221,16 @@ public class ThesaurusConceptServiceTest {
 		});
 		leaf1_3.getParentConcepts().add(leaf2_4);
 
-		List<ThesaurusConcept> roots_leaf1_1 = thesaurusConceptService
+		List<ThesaurusConcept> roots_leaf1_1 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(leaf1_1);
 		
 		Assert.assertEquals(3, roots_leaf1_1.size());
 
-		List<ThesaurusConcept> roots_leaf1_3 = thesaurusConceptService
+		List<ThesaurusConcept> roots_leaf1_3 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(leaf1_3);
 		Assert.assertEquals(1, roots_leaf1_3.size());
 
-		List<ThesaurusConcept> roots_leaf1_2 = thesaurusConceptService
+		List<ThesaurusConcept> roots_leaf1_2 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(leaf1_2);
 		Assert.assertEquals(2, roots_leaf1_2.size());
 	}
@@ -254,7 +258,7 @@ public class ThesaurusConceptServiceTest {
 			}
 		});
 
-		List<ThesaurusConcept> roots_leaf1_1 = thesaurusConceptService
+		List<ThesaurusConcept> roots_leaf1_1 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(node1);
 		Assert.assertEquals(1, roots_leaf1_1.size());
 		Assert.assertEquals(node2.getIdentifier(), roots_leaf1_1.get(0)
@@ -304,62 +308,11 @@ public class ThesaurusConceptServiceTest {
 			}
 		});
 
-		List<ThesaurusConcept> roots_node1 = thesaurusConceptService
+		List<ThesaurusConcept> roots_node1 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(node1);
 		Assert.assertEquals(1, roots_node1.size());
 		Assert.assertEquals(node7.getIdentifier(), roots_node1.get(0)
 				.getIdentifier());
-	}
-
-	@Test
-	public final void testRemoveParents() throws BusinessException {
-		Thesaurus thesaurus = new Thesaurus();
-		thesaurus.setDefaultTopConcept(true);
-
-		final ThesaurusConcept node1 = new ThesaurusConcept();
-		node1.setIdentifier("node1");
-		node1.setThesaurus(thesaurus);
-		final ThesaurusConcept node2 = new ThesaurusConcept();
-		node2.setIdentifier("node2");
-		node2.setThesaurus(thesaurus);
-		final ThesaurusConcept node3 = new ThesaurusConcept();
-		node3.setIdentifier("node3");
-		node3.setThesaurus(thesaurus);
-
-		when(thesaurusConceptDAO.getById("node2")).thenReturn(node2);
-
-		node1.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {
-			{
-				add(node2);
-			}
-		});
-		node2.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {
-			{
-				add(node3);
-			}
-		});
-
-		List<String> toRemove = new ArrayList<String>();
-		toRemove.add(node2.getIdentifier());
-
-		thesaurusConceptService.removeParents(node1, toRemove);
-
-		Assert.assertEquals("There should be no parents!", 0, node1
-				.getParentConcepts().size());
-		Assert.assertTrue("Term now should be TOP!", node1.getTopConcept());
-
-		node1.getParentConcepts().addAll(new ArrayList<ThesaurusConcept>() {
-			{
-				add(node2);
-			}
-		});
-		thesaurus.setDefaultTopConcept(false);
-
-		thesaurusConceptService.removeParents(node1, toRemove);
-
-		Assert.assertEquals("There should be no parents!", 0, node1
-				.getParentConcepts().size());
-		Assert.assertFalse("Term now should NOT be TOP!", node1.getTopConcept());
 	}
 
 	@Test

@@ -34,16 +34,16 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.*;
-import fr.mcc.ginco.dao.*;
-import fr.mcc.ginco.enums.ConceptHierarchicalRelationsEnum;
-import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.enums.TermStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.utils.LabelUtil;
-import fr.mcc.ginco.utils.ThesaurusTermUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,9 +51,27 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.*;
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.enums.ConceptHierarchicalRelationsEnum;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
+import fr.mcc.ginco.enums.TermStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.LabelUtil;
+import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -67,16 +85,16 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	private Logger logger;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
-
-	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
 	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
+	
+	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
 	@Named("thesaurusArrayDAO")
@@ -88,6 +106,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Inject
 	@Named("associativeRelationshipDAO")
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipServiceUtil")
+	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
 	@Inject
 	@Named("associativeRelationshipRoleDAO")
@@ -106,11 +128,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return thesaurusConceptDAO.findAll();
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.IThesaurusConceptService#getThesaurusConceptList(java.util.List)
+	 */
 	@Override
-	public Set<ThesaurusConcept> getThesaurusConceptList(List<String> list)
+	public Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids)
 			throws BusinessException {
 		Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
-		for (String id : list) {
+		for (String id : ids) {
 			ThesaurusConcept concept = thesaurusConceptDAO.getById(id);
 			if (concept == null) {
 				throw new BusinessException("The concept " + id
@@ -191,74 +216,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept) {
-		ThesaurusConcept start;
-		HashMap<String, Integer> path = new HashMap<String, Integer>();
-		Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
-		path.clear();
-		roots.clear();
-		path.put(concept.getIdentifier(), 0);
-		start = concept;
-		getRoot(concept, 0, start, path, roots);
-		return new ArrayList<ThesaurusConcept>(roots);
-	}
-
-	@Override
-	public void removeParents(ThesaurusConcept concept,
-			List<String> parentsToRemove) throws BusinessException {
-		Set<ThesaurusConcept> parents = getThesaurusConceptList(parentsToRemove);
-
-		boolean isDefaultTopConcept = concept.getThesaurus()
-				.isDefaultTopConcept();
-
-		if (concept.getParentConcepts().size() == 1) {
-			concept.getParentConcepts().clear();
-			concept.setTopConcept(isDefaultTopConcept);
-		} else {
-			for (ThesaurusConcept parent : parents) {
-				concept.getParentConcepts().remove(parent);
-			}
-		}
-	}
-
-	private void getRoot(ThesaurusConcept concept, Integer iteration,
-			ThesaurusConcept start, Map<String, Integer> path,
-			Set<ThesaurusConcept> roots) {
-		iteration++;
-		Set<ThesaurusConcept> directParents = concept.getParentConcepts();
-		if (directParents.isEmpty()) {
-			if (iteration != 1) {
-				roots.add(concept);
-			}
-			return;
-		}
-		boolean flag = false;
-		Set<ThesaurusConcept> stack = new HashSet<ThesaurusConcept>();
-		for (ThesaurusConcept directParent : directParents) {
-			if (directParent==null || path.containsKey(directParent.getIdentifier())) {
-				continue;
-			} else {
-				path.put(directParent.getIdentifier(), iteration);
-				stack.add(directParent);
-				flag = true;
-			}
-		}
-
-		// HACK to deal with cyclic dependencies. Should be reThink in some
-		// time...
-		if (!flag && directParents.size() == 1 && directParents.contains(start)) {
-			roots.add(concept);
-		}
-
-		if (!stack.isEmpty()) {
-			for (ThesaurusConcept toVisit : stack) {
-				getRoot(toVisit, iteration, start, path, roots);
-			}
-			stack.clear();
-		}
-	}
-
-	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException {
 
@@ -296,7 +253,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConcepts)
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConcepts, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept>childrenConceptToDetach)
 			throws BusinessException {
 		
 		ThesaurusTermUtils.checkTerms(terms);
@@ -347,12 +304,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		}
 		object = saveAssociativeRelationship(object, associatedConcepts);
+		object = conceptHierarchicalRelationshipServiceUtil.saveHierarchicalRelationship(object, hierarchicalRelationships, childrenConceptToDetach);
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
 		// indexerService.addConcept(concept);
 		return concept;
 	}
+		
 
 	private ThesaurusConcept saveAssociativeRelationship(
 			ThesaurusConcept concept, List<AssociativeRelationship> associatedConcepts)
@@ -478,25 +437,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public void calculateChildrenRoot(String parentId) {
 		logger.info("root concept calculation launched for parent concept id = "
 				+ parentId);
-		calculateChildrenRoots(parentId, parentId);
+		conceptHierarchicalRelationshipServiceUtil.calculateChildrenRoots(parentId, parentId);
 		logger.info("root concept calculation ended for parent concept id = "
 				+ parentId);
 	}
 
-	private void calculateChildrenRoots(String parentId, String originalParentId) {
-		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(parentId);
-		for (ThesaurusConcept concept : childrenConcepts) {
-			if (concept.getIdentifier() != originalParentId) {
-				logger.info("calculating root concept for chiled with concept Id : "
-						+ concept.getIdentifier());
-				List<ThesaurusConcept> thisChildRoots = getRootConcepts(concept);
-				concept.setRootConcepts(new HashSet<ThesaurusConcept>(
-						thisChildRoots));
-				calculateChildrenRoots(concept.getIdentifier(),
-						originalParentId);
-			}
-		}
-	}
 
 	@Override
 	public List<ThesaurusConcept> getAllConcepts() {

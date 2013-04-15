@@ -111,10 +111,9 @@ Ext
 						me.rootConceptStore = Ext
 								.create('GincoApp.store.SimpleConceptStore');
 						me.parentConceptStore = Ext
-								.create('GincoApp.store.SimpleConceptStore');
+								.create('GincoApp.store.HierarchicalAssociationStore');
 						me.childrenConceptStore = Ext
-								.create('GincoApp.store.SimpleConceptStore');
-						me.childrenConceptStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
+								.create('GincoApp.store.HierarchicalAssociationStore');
 
                         me.associatedConceptStore = Ext
                                 .create('GincoApp.store.AssociationStore');

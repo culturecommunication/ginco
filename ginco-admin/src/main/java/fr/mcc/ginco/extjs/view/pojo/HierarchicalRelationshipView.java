@@ -32,20 +32,40 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.extjs.view.pojo;
 
-/*
- * Associations Store
- * This file contains all Associations displayed in lists
+/**
+ *
  */
-Ext.define('GincoApp.store.AssociationStore', {
-    extend: 'Ext.data.Store',
+public class HierarchicalRelationshipView {
+    private String identifier;
+    private String label;
+    private Integer role;
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            model : 'GincoApp.model.AssociationModel'
-        }, cfg)]);
+    public HierarchicalRelationshipView() {}
+
+    public String getIdentifier() {
+        return identifier;
     }
-});
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+
+}

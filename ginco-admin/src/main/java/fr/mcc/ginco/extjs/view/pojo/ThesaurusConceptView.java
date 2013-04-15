@@ -44,6 +44,7 @@ import java.util.List;
 /**
  * View class corresponding to {@link ThesaurusConcept} bean, but fully serializable
  */
+@SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusConceptView implements Serializable {
 	
@@ -55,8 +56,8 @@ public class ThesaurusConceptView implements Serializable {
 	private Integer status;
 	private String notation;
 	private List<ThesaurusTermView> terms;
-    private List<String> parentConcepts;
-    private List<String> childConcepts;
+    private List<HierarchicalRelationshipView> parentConcepts;
+    private List<HierarchicalRelationshipView> childConcepts;
     private List<String> rootConcepts;
 	private List<AssociativeRelationshipView> associatedConcepts;
 
@@ -119,14 +120,6 @@ public class ThesaurusConceptView implements Serializable {
 		this.associatedConcepts = associatedConcepts;
 	}	
 
-    public List<String> getParentConcepts() {
-        return parentConcepts;
-    }
-
-    public void setParentConcepts(List<String> parentConcepts) {
-        this.parentConcepts = parentConcepts;
-    }
-
     public List<String> getRootConcepts() {
         return rootConcepts;
     }
@@ -143,19 +136,27 @@ public class ThesaurusConceptView implements Serializable {
 		this.status = status;
 	}
 
-	public List<String> getChildConcepts() {
-		return childConcepts;
-	}
-
-	public void setChildConcepts(List<String> childConcepts) {
-		this.childConcepts = childConcepts;
-	}
-
 	public String getNotation() {
 		return notation;
 	}
 
 	public void setNotation(String notation) {
 		this.notation = notation;
+	}
+
+	public List<HierarchicalRelationshipView> getParentConcepts() {
+		return parentConcepts;
+	}
+
+	public void setParentConcepts(List<HierarchicalRelationshipView> parentConcepts) {
+		this.parentConcepts = parentConcepts;
+	}
+
+	public List<HierarchicalRelationshipView> getChildConcepts() {
+		return childConcepts;
+	}
+
+	public void setChildConcepts(List<HierarchicalRelationshipView> childConcepts) {
+		this.childConcepts = childConcepts;
 	}
 }

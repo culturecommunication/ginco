@@ -58,6 +58,22 @@ public class ThesaurusConceptDAO extends
 	public ThesaurusConceptDAO() {
 		super(ThesaurusConcept.class);
 	}
+	
+	/* 
+	 * This flush is used in a particular case for saving concepts.
+	 * We first save the concept with it relationships (parent/child), we flush (with this method) to save in DB the modifications
+	 * Then, we can save the updated role on hierarchical relationships.
+	 * If the flush is not done, when can't update the role of a relation because its not already saved in DB.
+	 * 
+	 * This is a workaround to fit actual hibernate mapping and musn't not be used in other cases  
+	 * 
+	 * (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#flush()
+	 */
+	public void flush()
+	{
+		getCurrentSession().flush();
+	}
 
 	/*
 	 * (non-Javadoc)
