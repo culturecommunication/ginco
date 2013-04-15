@@ -107,11 +107,18 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 		theGrid.getStore().add(updatedModel);
 		theGrid.up('form').down('button[itemId=saveThesaurusVersion]').setDisabled(false);
 	},
+	onVersionPanelActivate: function (thePanel)
+	{
+		var theGrid = thePanel.down('#versionGrid');
+		this.onRenderGrid(theGrid)
+	},
 
 	init : function() {
 		this.control({
+			'thesaurusVersionPanel': {
+				activate: this.onVersionPanelActivate
+			},				
 			'thesaurusVersionPanel #versionGrid' : {
- 				render : this.onRenderGrid,
  				validateedit : this.onUpdateVersionToTheGrid
  			},
  			'thesaurusVersionPanel #saveThesaurusVersion' : {

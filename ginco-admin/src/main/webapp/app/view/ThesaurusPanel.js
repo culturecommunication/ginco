@@ -94,6 +94,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 											
 											items : [ {
 												xtype : 'tabpanel',
+												itemId: 'thesaurusTabPanel',
 											flex : 1,
 											items : [ {
 												xtype : 'form',
