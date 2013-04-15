@@ -59,6 +59,35 @@ Ext.define('GincoApp.view.SearchPanel', {
 	initComponent : function() {
 		var me = this;
 		me.searchStore = Ext.create('GincoApp.store.SearchResultStore');
+		me.thesaurusStore = Ext.create('GincoApp.store.ThesaurusStore',
+		{
+			listeners : {
+				load : {
+					fn : function (theStore)
+					{
+						theStore.insert(0,{
+							id : "-1",
+							title : '-'
+						});
+					}
+				}
+			}
+		});
+		
+		me.langStore = Ext.create('GincoApp.store.ThesaurusLanguageStore',
+		{
+			listeners : {
+				load : {
+					fn : function (theStore)
+					{
+						theStore.insert(0,{
+							id : "-1",
+							refname : '-'
+						});
+					}
+				}
+			}
+		});
 
 		Ext.applyIf(me, {
 			title : me.xSearchPanelTitle,
@@ -119,7 +148,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 						displayField : 'refname',
 						valueField : 'id',
 						editable : false,
-						store : 'ThesaurusLanguageStore'
+						store : me.langStore
 					},
 					{
 						xtype : 'datefield',

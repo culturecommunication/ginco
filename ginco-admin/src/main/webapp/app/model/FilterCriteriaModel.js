@@ -43,7 +43,8 @@ Ext.define('GincoApp.model.FilterCriteriaModel', {
 		},
         {
             name: 'thesaurus',
-            type: 'string'
+            type: 'string',
+            defaultValue: "-1"
         },
         {
             name: 'type',
@@ -57,7 +58,8 @@ Ext.define('GincoApp.model.FilterCriteriaModel', {
         },
         {
             name: 'language',
-            type: 'string'
+            type: 'string',
+            defaultValue: "-1"
         },
         {
             name: 'creationdate',

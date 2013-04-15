@@ -262,9 +262,9 @@ public class IndexerServiceImpl implements IIndexerService {
         doc.addField(SolrField.CREATED, createdDate);
 
         doc.addField(SolrField.STATUS, thesaurusConcept.getStatus());
-
-        for(Language language : thesaurusConcept.getThesaurus().getLang()) {
-            doc.addField(SolrField.LANGUAGE, language.getId());
+        for(ThesaurusTerm term : thesaurusConceptService.getConceptPreferredTerms(thesaurusConcept.getIdentifier()))
+        {
+        	doc.addField(SolrField.LANGUAGE, term.getLanguage().getId());
         }
 
         String prefLabel;

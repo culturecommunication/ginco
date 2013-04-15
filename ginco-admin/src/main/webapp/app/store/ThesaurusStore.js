@@ -44,7 +44,7 @@ Ext.define('GincoApp.store.ThesaurusStore', {
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
-            autoLoad: false,
+            autoLoad: true,
             storeId: 'ThesaurusStore',
             proxy: {
                 type: 'ajax',
