@@ -11,11 +11,5 @@
 		</composite-id>
 
 		<property name="role" />
-
-		<many-to-one name="childConcept" column="childconceptid"
-			insert="false" update="false" not-null="true" />
-
-		<many-to-one name="parentConcept" column="parentconceptid"
-			insert="false" update="false" not-null="true" />
 	</class>
 </hibernate-mapping>

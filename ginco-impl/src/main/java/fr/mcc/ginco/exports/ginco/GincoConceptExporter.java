@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.exports.ginco;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,8 +42,10 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
@@ -61,20 +64,29 @@ public class GincoConceptExporter {
 	@Inject
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
+	
+    @Inject
+    @Named("conceptHierarchicalRelationshipDAO")
+    private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
 	
 	
 	/**
-	 * This method gets all the parents of a concept in a JaxbList object
+	 * This method gets all the parent relationships of a concept in a JaxbList object
 	 * @param thesaurusConcept
-	 * @return JaxbList<String> parentIds : A JaxbList that contains the ids of parent concepts
+	 * @return JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship : A JaxbList that contains the hierarchical relationship objects
 	 */
-	public JaxbList<String> getExportHierarchicalConcepts(ThesaurusConcept thesaurusConcept) {
-		JaxbList<String> parentIds = new JaxbList<String>();
-		for (ThesaurusConcept thesaurusParentConcept : thesaurusConcept.getParentConcepts()) {
-			parentIds.getList().add(thesaurusParentConcept.getIdentifier());
+	public JaxbList<ConceptHierarchicalRelationship> getExportHierarchicalConcepts(ThesaurusConcept thesaurusConcept) {
+		JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship = new JaxbList<ConceptHierarchicalRelationship>();
+		for (ThesaurusConcept thesaurusParentConcept : thesaurusConcept
+				.getParentConcepts()) {
+			ConceptHierarchicalRelationship.Id relationshipId = new ConceptHierarchicalRelationship.Id();
+			relationshipId.setChildconceptid(thesaurusConcept.getIdentifier());
+			relationshipId.setParentconceptid(thesaurusParentConcept.getIdentifier());
+			parentConceptHierarchicalRelationship.getList().add(conceptHierarchicalRelationshipDAO.getById(relationshipId));
 		}
-		return parentIds;
+
+		return parentConceptHierarchicalRelationship;
 	}
 	
 	/**

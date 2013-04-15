@@ -48,6 +48,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -59,6 +60,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
@@ -89,6 +91,10 @@ public class GincoThesaurusBuilder {
 	@Inject
 	@Named("associativeRelationshipDAO")
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipDAO")
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 	
 	@Inject
 	@Named("associativeRelationshipRoleDAO")
@@ -193,6 +199,7 @@ public class GincoThesaurusBuilder {
 				updatedConcepts.add(thesaurusConceptDAO.update(concept));
 			}			
 		}
+		thesaurusConceptDAO.flush();
 		return updatedConcepts;
 	}
 	
@@ -319,45 +326,37 @@ public class GincoThesaurusBuilder {
 	/**
 	 * This method stores all the hierarchical relationships of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
 	 * @param exportedThesaurus
-	 * @return The list of the concepts which parents were updated
+	 * @return The list of the updated parent concepts
 	 */
 	public List<ThesaurusConcept> storeHierarchicalRelationship(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<String>> relations = exportedThesaurus.getHierarchicalRelationship();
-		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
-		
+		Map<String, JaxbList<ConceptHierarchicalRelationship>> relations = exportedThesaurus.getHierarchicalRelationship();
+		List<ThesaurusConcept> updatedChildrenConcepts = new ArrayList<ThesaurusConcept>();
+		String childId = null;
 		if (relations != null && !relations.isEmpty()) {
-			Iterator<Map.Entry<String, JaxbList<String>>> entries = relations.entrySet().iterator();
-			String childId = null;
-			List<String> parentIds = null;
+			Iterator<Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>>> entries = relations.entrySet().iterator();
+			List<ConceptHierarchicalRelationship> parents = null;
 			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<String>> entry = entries.next();
-				//Getting the id of the child
+				Map.Entry<String,  JaxbList<ConceptHierarchicalRelationship>> entry = entries.next();
 				childId = entry.getKey();
-				
-				//Getting the ids of its parents
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					parentIds = entry.getValue().getList();				
+					parents = entry.getValue().getList();
 				}
 				
-				//We get all the parent concepts of the childconcept
-				ThesaurusConcept childConcept = thesaurusConceptDAO.getById(childId);
-				Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
-				for (String id : parentIds) {
-					parentConcepts.add(thesaurusConceptDAO.getById(id));
+				for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : parents) {
+					conceptHierarchicalRelationshipDAO.update(conceptHierarchicalRelationship);
+					updatedChildrenConcepts.add(thesaurusConceptDAO.getById(childId));
 				}
-				childConcept.setParentConcepts(parentConcepts);
-				updatedConcepts.add(thesaurusConceptDAO.update(childConcept));
 			}
 		}
 		
-		//Processing and setting for all concepts their root concept
-		for (ThesaurusConcept thesaurusConcept : updatedConcepts) {
+		//Processing and setting for all children concepts their root concept
+		for (ThesaurusConcept thesaurusConcept : updatedChildrenConcepts) {
 			List<ThesaurusConcept> roots = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
 			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(roots));
 			thesaurusConceptDAO.update(thesaurusConcept);
 		}
 		
-		return updatedConcepts;
+		return updatedChildrenConcepts;
 	}
 	
 	/**

@@ -109,8 +109,6 @@ public class ConceptHierarchicalRelationship implements Serializable {
 
 	private Id identifier;
 	private Integer role;
-	private ThesaurusConcept childConcept;
-	private ThesaurusConcept parentConcept;
 	
 	public Id getIdentifier() {
 		return identifier;
@@ -126,21 +124,5 @@ public class ConceptHierarchicalRelationship implements Serializable {
 
 	public void setRole(Integer role) {
 		this.role = role;
-	}
-
-	public ThesaurusConcept getChildConcept() {
-		return childConcept;
-	}
-
-	public void setChildConcept(ThesaurusConcept childConcept) {
-		this.childConcept = childConcept;
-	}
-
-	public ThesaurusConcept getParentConcept() {
-		return parentConcept;
-	}
-
-	public void setParentConcept(ThesaurusConcept parentConcept) {
-		this.parentConcept = parentConcept;
 	}
 }

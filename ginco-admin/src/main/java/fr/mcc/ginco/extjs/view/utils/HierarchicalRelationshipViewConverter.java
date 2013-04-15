@@ -138,8 +138,6 @@ public class HierarchicalRelationshipViewConverter {
 	        relation.setIdentifier(id);
 		}
 		relation.setRole(hierarchicalRelationView.getRole());
-		relation.setChildConcept(convertedConcept);
-		relation.setParentConcept(thesaurusConceptService.getThesaurusConceptById(parentConceptId));
 		return relation;
 	}
 }

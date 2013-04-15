@@ -43,6 +43,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -58,7 +59,7 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
  * With {@MCCExportServiceImpl}
  */
 @XmlRootElement
-@XmlSeeAlso({Note.class, NodeLabel.class, ThesaurusConceptGroupLabel.class})
+@XmlSeeAlso({Note.class, NodeLabel.class, ThesaurusConceptGroupLabel.class, ConceptHierarchicalRelationship.class})
 public class GincoExportedThesaurus implements Serializable {
 	
 	//Thesaurus and terms are read by Jaxb and automatically added to the XML structure
@@ -74,7 +75,7 @@ public class GincoExportedThesaurus implements Serializable {
     private List<ThesaurusConceptGroup> conceptGroups  = new ArrayList<ThesaurusConceptGroup>();
     private Map<String, JaxbList<ThesaurusConceptGroupLabel>> conceptGroupLabels = new Hashtable();
     private List<ThesaurusVersionHistory> thesaurusVersions;
-    private Map<String, JaxbList<String>> hierarchicalRelationship = new Hashtable();
+    private Map<String, JaxbList<ConceptHierarchicalRelationship>> hierarchicalRelationship = new Hashtable();
     private Map<String, JaxbList<String>> associativeRelationship = new Hashtable();
     private Map<String, JaxbList<Note>> termNotes = new Hashtable();
     private Map<String, JaxbList<Note>> conceptNotes = new Hashtable();
@@ -103,12 +104,12 @@ public class GincoExportedThesaurus implements Serializable {
 		this.thesaurusVersions = versions;
 	}
 
-	public Map<String, JaxbList<String>> getHierarchicalRelationship() {
+	public Map<String, JaxbList<ConceptHierarchicalRelationship>> getHierarchicalRelationship() {
 		return hierarchicalRelationship;
 	}
 
 	public void setHierarchicalRelationship(
-			Map<String, JaxbList<String>> parentConceptRelationship) {
+			Map<String, JaxbList<ConceptHierarchicalRelationship>> parentConceptRelationship) {
 		this.hierarchicalRelationship = parentConceptRelationship;
 	}
 

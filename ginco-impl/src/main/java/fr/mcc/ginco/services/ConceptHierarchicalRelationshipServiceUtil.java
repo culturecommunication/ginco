@@ -87,23 +87,15 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 		// We update the modified relations, and we delete the relations that
 		// have been removed
-		List<ThesaurusConcept> oldParentConcepts = new ArrayList<ThesaurusConcept>();
-		if (!conceptToUpdate.getParentConcepts().isEmpty()) {
-			oldParentConcepts = new ArrayList<ThesaurusConcept>(conceptToUpdate.getParentConcepts());
-		}
-
-		List<ThesaurusConcept> newParentConcepts = new ArrayList<ThesaurusConcept>();
-		for (ConceptHierarchicalRelationship relation : hierarchicalRelationships) {
-			newParentConcepts.add(relation.getParentConcept());
-		}
-
-		// We make a diff between new parents and old parents and vice versa, to
-		// know added/removed parent concepts		
 		List<String> oldParentConceptIds = new ArrayList<String>();
+		if (!conceptToUpdate.getParentConcepts().isEmpty()) {
+			oldParentConceptIds = ThesaurusConceptUtils.getIdsFromConceptList(new ArrayList<ThesaurusConcept>(conceptToUpdate.getParentConcepts()));
+		}
+
 		List<String> newParentConceptIds = new ArrayList<String>();
-		
-		oldParentConceptIds = ThesaurusConceptUtils.getIdsFromConceptList(oldParentConcepts);
-		newParentConceptIds = ThesaurusConceptUtils.getIdsFromConceptList(newParentConcepts);
+		for (ConceptHierarchicalRelationship relation : hierarchicalRelationships) {
+			newParentConceptIds.add(relation.getIdentifier().getParentconceptid());
+		}
 		
 		List<String> addedParentConceptIds = ListUtils.subtract(newParentConceptIds, oldParentConceptIds);
 		List<String> removedParentConceptIds = ListUtils.subtract(oldParentConceptIds, newParentConceptIds);

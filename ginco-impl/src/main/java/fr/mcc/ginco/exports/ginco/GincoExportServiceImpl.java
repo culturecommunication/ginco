@@ -47,6 +47,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -162,10 +163,11 @@ public class GincoExportServiceImpl implements IGincoExportService {
 			}
 			
 			//Exporting the parent concepts
-			JaxbList<String> parentIds = gincoConceptExporter.getExportHierarchicalConcepts(thesaurusConcept);
-			if (parentIds != null && !parentIds.isEmpty()) {
-				thesaurusToExport.getHierarchicalRelationship().put(thesaurusConcept.getIdentifier(), parentIds);
+			JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship = gincoConceptExporter.getExportHierarchicalConcepts(thesaurusConcept);
+			if (parentConceptHierarchicalRelationship != null && !parentConceptHierarchicalRelationship.isEmpty()) {
+				thesaurusToExport.getHierarchicalRelationship().put(thesaurusConcept.getIdentifier(), parentConceptHierarchicalRelationship);
 			}
+
 			//Exporting relative relationship
 			JaxbList<String> associations = gincoConceptExporter.getExportAssociativeRelationShip(thesaurusConcept);
 			if (associations != null && !associations.isEmpty()) {

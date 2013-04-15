@@ -48,10 +48,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.exports.ginco.GincoConceptExporter;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.services.ConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
@@ -64,6 +67,9 @@ public class GincoConceptExporterTest {
 	
 	@Mock(name="noteService")
 	private INoteService noteService;
+	
+    @Mock(name = "conceptHierarchicalRelationshipDAO")
+    private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 	
 	@Mock(name="associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
@@ -85,16 +91,21 @@ public class GincoConceptExporterTest {
 		ThesaurusConcept c2 = new ThesaurusConcept();
 		c2.setIdentifier("http://c2");
 		
-		ThesaurusConcept c3 = new ThesaurusConcept();
-		c3.setIdentifier("http://c3");
+		Set<ThesaurusConcept> parents = new HashSet<ThesaurusConcept>();
+		parents.add(c2);
+		c1.setParentConcepts(parents);
+
+		ConceptHierarchicalRelationship relation = new ConceptHierarchicalRelationship();
+		ConceptHierarchicalRelationship.Id id = new ConceptHierarchicalRelationship.Id();
+        id.setChildconceptid(c1.getIdentifier());
+        id.setParentconceptid(c2.getIdentifier());
+        relation.setIdentifier(id);
 		
-		Set<ThesaurusConcept> fakeParents = new HashSet<ThesaurusConcept>();
-		fakeParents.add(c2);
-		fakeParents.add(c3);
-		c1.setParentConcepts(fakeParents);
+		Mockito.when(conceptHierarchicalRelationshipDAO.getById(Mockito.any(ConceptHierarchicalRelationship.Id.class))).thenReturn(relation);		
 		
-		JaxbList<String> result = gincoConceptExporter.getExportHierarchicalConcepts(c1);
+		JaxbList<ConceptHierarchicalRelationship> result = gincoConceptExporter.getExportHierarchicalConcepts(c1);
 		Assert.assertEquals(result.getList().size(), c1.getParentConcepts().size());
+		Assert.assertEquals(result.getList().get(0).getIdentifier().getParentconceptid(), c2.getIdentifier());
 	}
 	
 	@Test
