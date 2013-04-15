@@ -272,11 +272,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			object.setIdentifier(generatorService.generate(ThesaurusConcept.class));
 		}
 
-        if(!object.getThesaurus().isPolyHierarchical() && object.getParentConcepts().size() > 1) {
-            throw new BusinessException("Thesaurus is monohierarchical, but some concepts have multiple parents!"
-                    ,"monohierarchical-violation");
-        }
-
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
 			// We can set status = candidate only if concept has not relation
 			// (both hierarchical or associative)

@@ -78,7 +78,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	@Inject
 	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
-	
+
 	@Override
 	public ThesaurusConcept saveHierarchicalRelationship(
 			ThesaurusConcept conceptToUpdate,
@@ -89,27 +89,32 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		// have been removed
 		List<String> oldParentConceptIds = new ArrayList<String>();
 		if (!conceptToUpdate.getParentConcepts().isEmpty()) {
-			oldParentConceptIds = ThesaurusConceptUtils.getIdsFromConceptList(new ArrayList<ThesaurusConcept>(conceptToUpdate.getParentConcepts()));
+			oldParentConceptIds = ThesaurusConceptUtils
+					.getIdsFromConceptList(new ArrayList<ThesaurusConcept>(
+							conceptToUpdate.getParentConcepts()));
 		}
 
 		List<String> newParentConceptIds = new ArrayList<String>();
 		for (ConceptHierarchicalRelationship relation : hierarchicalRelationships) {
-			newParentConceptIds.add(relation.getIdentifier().getParentconceptid());
+			newParentConceptIds.add(relation.getIdentifier()
+					.getParentconceptid());
 		}
-		
-		List<String> addedParentConceptIds = ListUtils.subtract(newParentConceptIds, oldParentConceptIds);
-		List<String> removedParentConceptIds = ListUtils.subtract(oldParentConceptIds, newParentConceptIds);
-		
+
+		List<String> addedParentConceptIds = ListUtils.subtract(
+				newParentConceptIds, oldParentConceptIds);
+		List<String> removedParentConceptIds = ListUtils.subtract(
+				oldParentConceptIds, newParentConceptIds);
+
 		List<ThesaurusConcept> addedParentConcepts = new ArrayList<ThesaurusConcept>();
 		for (String id : addedParentConceptIds) {
 			addedParentConcepts.add(thesaurusConceptDAO.getById(id));
 		}
-		
+
 		List<ThesaurusConcept> removedParentConcepts = new ArrayList<ThesaurusConcept>();
 		for (String id : removedParentConceptIds) {
 			removedParentConcepts.add(thesaurusConceptDAO.getById(id));
 		}
-		
+
 		if (!addedParentConcepts.isEmpty() || !removedParentConcepts.isEmpty()) {
 			// Treatment in case of modified hierarchy (both add or remove)
 
@@ -118,21 +123,30 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 				array.getConcepts().remove(conceptToUpdate);
 				thesaurusArrayDAO.update(array);
 			}
+			
+			// We remove all removed parents
+			if (!removedParentConcepts.isEmpty()) {
+				removeParents(conceptToUpdate, removedParentConcepts);
+			}
 
 			// We set all added parents
 			Set<ThesaurusConcept> addedParentsSet = new HashSet<ThesaurusConcept>();
 			for (ThesaurusConcept addedParentId : addedParentConcepts) {
 				addedParentsSet.add(addedParentId);
 			}
-			if (!addedParentConcepts.isEmpty()) {
-				conceptToUpdate.getParentConcepts().addAll(addedParentsSet);
-				conceptToUpdate.setTopConcept(false);
-			}
 
-			// We remove all removed parents
-			if (!removedParentConcepts.isEmpty()) {
-				removeParents(conceptToUpdate, removedParentConcepts);
+			if (!addedParentConcepts.isEmpty()) {
+					conceptToUpdate.getParentConcepts().addAll(addedParentsSet);
+					conceptToUpdate.setTopConcept(false);
 			}
+			
+			if (!conceptToUpdate.getThesaurus().isPolyHierarchical()
+					&& conceptToUpdate.getParentConcepts().size() > 1) {
+				throw new BusinessException(
+						"Thesaurus is monohierarchical, but some concepts have multiple parents!",
+						"monohierarchical-violation");
+			}
+			
 
 			// We calculate the rootconcepts for the concept to update
 			conceptToUpdate.setRootConcepts(new HashSet<ThesaurusConcept>(
@@ -282,12 +296,8 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 	private void removeParents(ThesaurusConcept concept,
 			List<ThesaurusConcept> parents) throws BusinessException {
-		// Set<ThesaurusConcept> parents =
-		// getThesaurusConceptList(parentsToRemove);
-
 		boolean isDefaultTopConcept = concept.getThesaurus()
 				.isDefaultTopConcept();
-
 		if (concept.getParentConcepts().size() == 1) {
 			concept.getParentConcepts().clear();
 			concept.setTopConcept(isDefaultTopConcept);
