@@ -150,6 +150,12 @@ public class ExportServiceImpl implements IExportService {
 
         List<ThesaurusTerm> prefTerms = thesaurusConceptService.getConceptPreferredTerms(concept.getIdentifier());
 
+        if(concept.getNotation() != null && !concept.getNotation().isEmpty()) {
+            result.add(new FormattedLine(base, LabelUtil.getResourceLabel("CC")
+                    + ": "
+                    + concept.getNotation()));
+        }
+
 		for (Note note : notes) {
 			if ("scopeNote".equals(note.getNoteType().getCode())) {
 				result.add(new FormattedLine(base, LabelUtil.getResourceLabel("NA")
