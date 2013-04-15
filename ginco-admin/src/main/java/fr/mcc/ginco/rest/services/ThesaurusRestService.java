@@ -34,14 +34,10 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
@@ -55,7 +51,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +78,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
+
+    @Inject
+    @Named("thesaurusOrganizationService")
+    private IThesaurusOrganizationService thesaurusOrganizationService;
 
     @Inject
     @Named("thesaurusVersionHistoryService")
@@ -275,5 +274,12 @@ public class ThesaurusRestService {
         }
 
         return view;
+    }
+
+    @GET
+    @Path("/getAllAuthors")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<ThesaurusOrganization> getAllAuthors() throws BusinessException {
+        return thesaurusOrganizationService.getOrganizations();
     }
 }

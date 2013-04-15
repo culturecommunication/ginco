@@ -35,11 +35,11 @@
 package fr.mcc.ginco.extjs.view.node;
 
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
+import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.text.Collator;
 import java.util.List;
-import org.codehaus.plexus.util.StringUtils;
-import org.springframework.stereotype.Component;
 
 /**
  * Class with general behaviour to be shared with every implementation.
@@ -66,7 +66,10 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
      * Type of visual node.
      */
     private ThesaurusListNodeType nodeType;
-    
+    /**
+     * Hidden tag to filter by author.
+     */
+    private String organizationId;
     /**
      * if the node is a leaf.
      */
@@ -251,4 +254,13 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 		this.displayable = displayable;
 	}
 
+    @Override
+    public String getOrganizationId() {
+        return organizationId;
+    }
+
+    @Override
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
+    }
 }

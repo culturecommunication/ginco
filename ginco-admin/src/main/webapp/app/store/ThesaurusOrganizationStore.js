@@ -33,35 +33,39 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.model.MainTreeModel', {
-    extend: 'Ext.data.Model',
+/*
+ * Thesaurus Organization Store
+ * This file contains all organizations displayed in dropdown lists
+ */
+Ext.define('GincoApp.store.ThesaurusOrganizationStore', {
+    extend: 'Ext.data.Store',
 
-    fields: [
-        {
-            name: 'title',
-            type: 'string'
-        },
-        {
-            name: 'type',
-            type: 'string'
-        },
-        {
-            name: 'thesaurusId',
-            type: 'string'
-        },
-        {
-            name: 'organizationId',
-            type: 'string'
-        },
-        {
-    		name : 'displayable',
-    		type : 'boolean',
-    		defaultValue : 'false'
-    	},
-        {
-            name: 'id',
-            type: 'string'
-        }
-    ],
-    idProperty : 'id'
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: false,
+            storeId: 'ThesaurusOrganizationStore',
+            proxy: {
+                type: 'ajax',
+                url: 'services/ui/thesaurusservice/getAllAuthors',
+                reader: {
+                    type: 'json',
+                    idProperty: 'identifier'
+                }
+            },
+            fields: [
+                {
+                    name: 'identifier',
+                    type: 'int'
+                },{
+                    name: 'name',
+                    type: 'string'
+                },{
+                    name: 'homepage',
+                    type: 'string'
+                }
+            ]
+        }, cfg)]);
+    }
 });

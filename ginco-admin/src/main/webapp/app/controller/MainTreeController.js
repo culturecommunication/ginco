@@ -167,6 +167,15 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			this.onNodeDblClick(theTree, node[0]);
 		}
 	},
+    onAuthorFilterSelect : function(theCombo, records) {
+        var theTree = theCombo.up('treepanel');
+        var orgId = records[0].get('identifier');
+        if(orgId == -1) {
+            theTree.clearFilter();
+        } else {
+            theTree.filterBy(orgId, 'organizationId');
+        }
+    },
 	init : function(application) {
 		// Handling application treeview refresh requests
 		 this.application.on({
@@ -192,7 +201,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			},
 			'#mainTreeView tool[type="refresh"]' : {
 				click : this.onRefreshBtnClick
-			}
+			},
+            '#authorFilter' : {
+                select : this.onAuthorFilterSelect
+            }
 		});
 	}
 

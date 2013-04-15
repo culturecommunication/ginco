@@ -32,36 +32,16 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.services;
 
-Ext.define('GincoApp.model.MainTreeModel', {
-    extend: 'Ext.data.Model',
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
-    fields: [
-        {
-            name: 'title',
-            type: 'string'
-        },
-        {
-            name: 'type',
-            type: 'string'
-        },
-        {
-            name: 'thesaurusId',
-            type: 'string'
-        },
-        {
-            name: 'organizationId',
-            type: 'string'
-        },
-        {
-    		name : 'displayable',
-    		type : 'boolean',
-    		defaultValue : 'false'
-    	},
-        {
-            name: 'id',
-            type: 'string'
-        }
-    ],
-    idProperty : 'id'
-});
+import java.util.List;
+
+public interface IThesaurusOrganizationService {
+    /**
+     * Gets list of all orgizations.
+     */
+    List<ThesaurusOrganization> getOrganizations() throws TechnicalException;
+}

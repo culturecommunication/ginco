@@ -57,6 +57,21 @@ Ext.define('GincoApp.view.LeftPanel', {
 		    refreshtree: true
 		});
 
+        me.thesaurusOrganizationStore = Ext.create('GincoApp.store.ThesaurusOrganizationStore',
+        {
+            listeners : {
+                load : {
+                    fn : function (theStore)
+                    {
+                        theStore.insert(0,{
+                            identifier : "-1",
+                            name : '-'
+                        });
+                    }
+                }
+            }
+        });
+
 		Ext.applyIf(me, {
 			items : [ {
 				xtype : 'treepanel',
@@ -81,7 +96,14 @@ Ext.define('GincoApp.view.LeftPanel', {
 			            iconCls:'icon-display',
 			            tooltip : me.xSelectBtnToolTip,
 			            tooltipType: 'title'
-			        }]
+			        },{
+                        xtype : 'ariacombo',
+                        itemId : 'authorFilter',
+                        editable : false,
+                        displayField : 'name',
+                        valueField : 'identifier',
+                        store : me.thesaurusOrganizationStore
+                    } ]
 			    }],
 				viewConfig : {
 					loadMask : true,
@@ -91,9 +113,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 					type : 'refresh',
 					tooltip : this.xRefreshBtnTooltip
 				} ]
-			}
-
-			]
+			} ]
 		});
 
 		me.callParent(arguments);

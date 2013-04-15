@@ -32,36 +32,31 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.services;
 
-Ext.define('GincoApp.model.MainTreeModel', {
-    extend: 'Ext.data.Model',
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-    fields: [
-        {
-            name: 'title',
-            type: 'string'
-        },
-        {
-            name: 'type',
-            type: 'string'
-        },
-        {
-            name: 'thesaurusId',
-            type: 'string'
-        },
-        {
-            name: 'organizationId',
-            type: 'string'
-        },
-        {
-    		name : 'displayable',
-    		type : 'boolean',
-    		defaultValue : 'false'
-    	},
-        {
-            name: 'id',
-            type: 'string'
-        }
-    ],
-    idProperty : 'id'
-});
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+
+/**
+ *
+ */
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Service("thesaurusOrganizationService")
+public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationService {
+
+    @Inject
+    @Named("thesaurusOrganizationDAO")
+    private fr.mcc.ginco.dao.hibernate.GenericHibernateDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
+
+    @Override
+    public List<ThesaurusOrganization> getOrganizations() throws TechnicalException {
+        return thesaurusOrganizationDAO.findAll();
+    }
+}
