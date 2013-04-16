@@ -34,69 +34,126 @@
  */
 package fr.mcc.ginco.soap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.SolrServerException;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
 
 /**
  * This class is the implementation of all SOAP services related to term objects
  * 
  */
-@WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusTermService")
-public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService{
-	
+@WebService(endpointInterface = "fr.mcc.ginco.soap.ISOAPThesaurusTermService")
+public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
+
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
-	
+
+	@Inject
+	@Named("indexerService")
+	private IIndexerService indexerService;
+
 	@Override
-	public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
-		if (StringUtils.isNotEmpty(lexicalValue) && StringUtils.isNotEmpty(thesaurusId) && StringUtils.isNotEmpty(languageId)){
-			return thesaurusTermService.getConceptIdByTerm(lexicalValue, thesaurusId, languageId);
-		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
+	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
+			String languageId) throws BusinessException {
+		if (StringUtils.isNotEmpty(lexicalValue)
+				&& StringUtils.isNotEmpty(thesaurusId)
+				&& StringUtils.isNotEmpty(languageId)) {
+			return thesaurusTermService.getConceptIdByTerm(lexicalValue,
+					thesaurusId, languageId);
+		} else {
+			throw new BusinessException("One or more parameters are empty",
+					"empty-parameters");
 		}
 	}
-	
+
 	@Override
-	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
-		if (StringUtils.isNotEmpty(lexicalValue) && StringUtils.isNotEmpty(thesaurusId) && StringUtils.isNotEmpty(languageId)){
+	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue,
+			String thesaurusId, String languageId) throws BusinessException {
+		if (StringUtils.isNotEmpty(lexicalValue)
+				&& StringUtils.isNotEmpty(thesaurusId)
+				&& StringUtils.isNotEmpty(languageId)) {
 			ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
-			ThesaurusTerm thesaurusTerm = thesaurusTermService.getPreferredTermByTerm(lexicalValue, thesaurusId, languageId);
-		
-			if (thesaurusTerm !=null){
-				reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
-				reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
-				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
+			ThesaurusTerm thesaurusTerm = thesaurusTermService
+					.getPreferredTermByTerm(lexicalValue, thesaurusId,
+							languageId);
+
+			if (thesaurusTerm != null) {
+				reducedThesaurusTerm.setIdentifier(thesaurusTerm
+						.getIdentifier());
+				reducedThesaurusTerm.setLexicalValue(thesaurusTerm
+						.getLexicalValue());
+				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage()
+						.getId());
 				return reducedThesaurusTerm;
+			} else {
+				return null;
 			}
-			else {
-				return null;		
-			}
-		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
+		} else {
+			throw new BusinessException("One or more parameters are empty",
+					"empty-parameters");
 		}
 	}
-	
+
 	@Override
-	public Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
-		if (StringUtils.isNotEmpty(lexicalValue) && StringUtils.isNotEmpty(thesaurusId) && StringUtils.isNotEmpty(languageId)){
-			return thesaurusTermService.isPreferred(lexicalValue, thesaurusId, languageId);
+	public Boolean isPreferred(String lexicalValue, String thesaurusId,
+			String languageId) throws BusinessException {
+		if (StringUtils.isNotEmpty(lexicalValue)
+				&& StringUtils.isNotEmpty(thesaurusId)
+				&& StringUtils.isNotEmpty(languageId)) {
+			return thesaurusTermService.isPreferred(lexicalValue, thesaurusId,
+					languageId);
+		} else {
+			throw new BusinessException("One or more parameters are empty",
+					"empty-parameters");
 		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
+	}
+
+	@Override
+	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request,
+			int startIndex, int limit) throws BusinessException {
+		if (StringUtils.isNotEmpty(request) && limit != 0) {
+			try {
+				String requestFormat = request + "*";
+				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
+				SearchResultList searchResultList = indexerService.search(
+						requestFormat, 2, null, null, null, null, null,
+						startIndex, limit);
+				if (searchResultList != null) {
+					for (SearchResult searchResult : searchResultList) {
+						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+						reducedThesaurusTerm.setIdentifier(searchResult
+								.getIdentifier());
+						reducedThesaurusTerm.setLexicalValue(searchResult
+								.getLexicalValue());
+						reducedThesaurusTerm.setLanguageId(thesaurusTermService
+								.getThesaurusTermById(searchResult.getIdentifier())
+								.getLanguage().getId());
+						reducedThesaurusTermList.add(reducedThesaurusTerm);
+					}
+				}
+				return reducedThesaurusTermList;
+			} catch (SolrServerException e) {
+				throw new TechnicalException("Search exception", e);
+			}
+		} else {
+			throw new BusinessException("One or more parameters are empty",
+					"empty-parameters");
 		}
 	}
 }
