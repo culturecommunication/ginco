@@ -115,7 +115,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 					{
 						xtype : 'textfield',
 						name : 'query',
-						fieldLabel : me.xQueryFieldLbl,
+						fieldLabel : me.xQueryFieldLbl
 					},
 					{
 						xtype : 'ariacombo',
