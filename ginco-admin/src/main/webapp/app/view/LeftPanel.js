@@ -42,7 +42,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 	xSelectBtnToolTip : "Display the selected element",
 	localized : true,
 	frame : false,
-	width : 250,
+	width : 270,
 	collapsible : true,
 	header : true,
 	title : '',
@@ -96,22 +96,28 @@ Ext.define('GincoApp.view.LeftPanel', {
 			            iconCls:'icon-display',
 			            tooltip : me.xSelectBtnToolTip,
 			            tooltipType: 'title'
-			        },{
-                        xtype : 'ariacombo',
-                        itemId : 'authorFilter',
-                        editable : false,
-                        displayField : 'name',
-                        valueField : 'identifier',
-                        store : me.thesaurusOrganizationStore
-                    } ]
-			    }],
+			        }]},
+                    {
+    			        xtype: 'toolbar',
+    			        dock: 'top',
+    			        items: [{
+                            xtype : 'ariacombo',
+                            itemId : 'authorFilter',
+                            editable : false,
+                            displayField : 'name',
+                            valueField : 'identifier',
+                            store : me.thesaurusOrganizationStore
+                        }]
+                    }
+			    ],
 				viewConfig : {
 					loadMask : true,
 					preserveScrollOnRefresh : true
 				},
 				tools : [ {
 					type : 'refresh',
-					tooltip : this.xRefreshBtnTooltip
+					tooltip : this.xRefreshBtnTooltip,
+					tooltipType: 'title'
 				} ]
 			} ]
 		});

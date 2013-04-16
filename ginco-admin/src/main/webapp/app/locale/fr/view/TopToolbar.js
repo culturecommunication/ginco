@@ -49,5 +49,6 @@ Ext.define('GincoApp.locale.fr.view.TopToolbar', {
     xImportGincoXmlLabel : "Import XML Hadoc GINCO",
     xHelpLabel: "Aide",
     xAccessibilityLabel : "Accessibilité",
-    xLogoutBtnLabel : "Déconnexion"
+    xLogoutBtnLabel : "Déconnexion",
+    xSearchBtnTitle : "Lancer la recherche"
 });

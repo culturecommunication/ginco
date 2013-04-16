@@ -489,6 +489,7 @@ Ext.view.TableChunker.embedRowAttr= function() {
 
 Ext.define('Thesaurus.Ext.form.field.Trigger', {
 	override : 'Ext.form.field.Trigger',
+	triggerTitle : '',
     getTriggerMarkup: function() {
         var me = this,
             i = 0,
@@ -516,7 +517,7 @@ Ext.define('Thesaurus.Ext.form.field.Trigger', {
                     cls: [Ext.baseCSSPrefix + 'trigger-index-' + i, triggerBaseCls, triggerCls].join(' '),
                     role: 'button',
                     tabindex: 0,
-                    title : 'Click here to launch search'
+                    title : me.triggerTitle,
                 }
             });
         }
@@ -531,6 +532,7 @@ Ext.define('Thesaurus.Ext.form.field.Trigger', {
 				if (me.triggerEl){
 					me.keyNav = new Ext.util.KeyNav(me.triggerEl, {
 			            enter: me.onTriggerClick,
+			            space: me.onTriggerClick,
 			            scope: me
 			        });
 				}
@@ -539,4 +541,19 @@ Ext.define('Thesaurus.Ext.form.field.Trigger', {
 		}
 	}
 });
-
+/*
+ * Make ext panel tool keyboard accessible...
+ */
+Ext.define('Thesaurus.Ext.panel.Tool', {
+	override : 'Ext.panel.Tool',
+	 afterRender: function() {
+		 var me = this;
+		 me.callParent(arguments);
+		 me.el.dom.setAttribute("tabindex", 0);
+		 me.keyNav = new Ext.util.KeyNav(me.el, {
+	            enter: me.onClick,
+	            space: me.onClick,
+	            scope: me
+	        });
+	 }
+});

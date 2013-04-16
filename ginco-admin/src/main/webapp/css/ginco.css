@@ -43,6 +43,9 @@ a.x-tab-close-btn:focus  {
 .x-form-search-trigger:focus  {
  outline:black dotted 1px !important; }
 
+.x-tool:focus  {
+ outline:black dotted 1px !important; }
+
  
 .msg .x-box-mc {
     font-size:14px;
