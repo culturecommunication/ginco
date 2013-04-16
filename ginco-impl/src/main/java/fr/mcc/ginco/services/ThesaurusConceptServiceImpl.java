@@ -34,37 +34,9 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
-import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.dao.*;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationsEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -72,6 +44,19 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
+import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of the thesaurus concept service. Contains methods relatives
@@ -359,8 +344,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
                    association.getRelationshipRole()
                            .setCode(associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole().getCode());
                 }
-                associativeRelationshipDAO.update(association);
 			}
+
+            associativeRelationshipDAO.update(association);
 		}
 		concept.getAssociativeRelationshipLeft().addAll(relations);
 

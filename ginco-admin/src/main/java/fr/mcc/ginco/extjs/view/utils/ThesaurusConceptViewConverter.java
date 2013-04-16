@@ -34,16 +34,14 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
-import fr.mcc.ginco.extjs.view.pojo.HierarchicalRelationshipView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
+import fr.mcc.ginco.extjs.view.pojo.*;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
-import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -150,7 +148,7 @@ public class ThesaurusConceptViewConverter {
             AssociativeRelationship associativeRelationship =
                     associativeRelationshipService.getAssociativeRelationshipById(conceptAssociated, concept.getIdentifier());
 
-            associatedConcepts.add(associativeRelationshipViewConverter.convert(associativeRelationship));
+            associatedConcepts.add(associativeRelationshipViewConverter.convert(associativeRelationship, concept));
 			logger.info("Found associated concept : "
 					+ conceptAssociated);
 		}

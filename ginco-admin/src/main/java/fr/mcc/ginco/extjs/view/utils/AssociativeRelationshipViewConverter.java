@@ -39,6 +39,7 @@ import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
+import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import org.springframework.stereotype.Component;
 
@@ -56,13 +57,21 @@ public class AssociativeRelationshipViewConverter {
     private IThesaurusConceptService thesaurusConceptService;
 
     @Inject
+    @Named("associativeRelationshipService")
+    private IAssociativeRelationshipService associativeRelationshipService;
+
+    @Inject
     @Named("associativeRelationshipRoleService")
     private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
 
 
-    public AssociativeRelationshipView convert(AssociativeRelationship associativeRelationship) {
+    public AssociativeRelationshipView convert(AssociativeRelationship associativeRelationship, ThesaurusConcept concept) {
         AssociativeRelationshipView view = new AssociativeRelationshipView();
+
         String leftId = associativeRelationship.getConceptRight().getIdentifier();
+        if(leftId.equals(concept.getIdentifier())) {
+            leftId = associativeRelationship.getConceptLeft().getIdentifier();
+        }
         view.setIdentifier(leftId);
         view.setLabel(thesaurusConceptService.getConceptLabel(leftId));
         if(associativeRelationship.getRelationshipRole() == null) {
@@ -75,15 +84,23 @@ public class AssociativeRelationshipViewConverter {
 
     public AssociativeRelationship convert(AssociativeRelationshipView associativeRelationshipView,
                                            ThesaurusConcept concept) {
-        AssociativeRelationship.Id id = new AssociativeRelationship.Id();
-        id.setConcept1(concept.getIdentifier());
-        id.setConcept2(associativeRelationshipView.getIdentifier());
 
-        AssociativeRelationship associativeRelationship = new AssociativeRelationship();
-        associativeRelationship.setConceptLeft(concept);
-        associativeRelationship.setConceptRight(
-                thesaurusConceptService.getThesaurusConceptById(associativeRelationshipView.getIdentifier()));
-        associativeRelationship.setIdentifier(id);
+        AssociativeRelationship associativeRelationship =
+                associativeRelationshipService.getAssociativeRelationshipById(concept.getIdentifier(), associativeRelationshipView.getIdentifier());
+
+        if(associativeRelationship == null) {
+            associativeRelationship = new AssociativeRelationship();
+
+            AssociativeRelationship.Id id = new AssociativeRelationship.Id();
+            id.setConcept1(concept.getIdentifier());
+            id.setConcept2(associativeRelationshipView.getIdentifier());
+
+            associativeRelationship.setConceptLeft(concept);
+            associativeRelationship.setConceptRight(
+                    thesaurusConceptService.getThesaurusConceptById(associativeRelationshipView.getIdentifier()));
+            associativeRelationship.setIdentifier(id);
+        }
+
         AssociativeRelationshipRole role =
                 associativeRelationshipRoleService.getRoleById(associativeRelationshipView.getRoleCode());
         associativeRelationship.setRelationshipRole(role);
