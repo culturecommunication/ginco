@@ -57,6 +57,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -105,22 +106,26 @@ public class IndexerServiceImpl implements IIndexerService {
 		}
 	}
 
-	private SearchResult getSearchResult(SolrDocument doc) {
-		SearchResult result = new SearchResult();
-		result.setIdentifier(doc.getFieldValue(SolrField.IDENTIFIER).toString());
-		result.setLexicalValue(doc.getFieldValue(SolrField.LEXICALVALUE)
-				.toString());
-		result.setType(doc.getFieldValue(SolrField.TYPE).toString());
-		result.setThesaurusId(doc.getFieldValue(SolrField.THESAURUSID)
-				.toString());
-		result.setThesaurusTitle(doc.getFieldValue(SolrField.THESAURUSTITLE)
-				.toString());
-		result.setCreated(doc.getFieldValue(SolrField.CREATED).toString());
-		result.setModified(doc.getFieldValue(SolrField.MODIFIED).toString());
-		result.setStatus(doc.getFieldValue(SolrField.STATUS).toString());
-		result.setTypeExt(doc.getFieldValue(SolrField.EXT_TYPE).toString());
-		return result;
-	}
+	private SearchResult getSearchResult(SolrDocument doc)
+    {
+    	SearchResult result = new SearchResult();
+    	result.setIdentifier(doc.getFieldValue(SolrField.IDENTIFIER).toString());
+    	result.setLexicalValue(doc.getFieldValue(SolrField.LEXICALVALUE).toString());
+    	result.setType(doc.getFieldValue(SolrField.TYPE).toString());
+    	result.setThesaurusId(doc.getFieldValue(SolrField.THESAURUSID).toString());
+    	result.setThesaurusTitle(doc.getFieldValue(SolrField.THESAURUSTITLE).toString());
+        result.setCreated(doc.getFieldValue(SolrField.CREATED).toString());
+        result.setModified(doc.getFieldValue(SolrField.MODIFIED).toString());
+        result.setStatus(doc.getFieldValue(SolrField.STATUS).toString());
+        result.setTypeExt(doc.getFieldValue(SolrField.EXT_TYPE).toString());
+        List<String> languages = new ArrayList<String>();
+        for (Object lang : doc.getFieldValues(SolrField.LANGUAGE))
+        {
+        	languages.add(lang.toString());
+        }
+        result.setLanguages(languages);
+    	return result;
+    }
 
 	private SearchResultList getSearchResultList(SolrDocumentList list) {
 		SearchResultList results = new SearchResultList();
