@@ -35,11 +35,7 @@
 package fr.mcc.ginco.imports.ginco;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,36 +43,13 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusConceptGroup;
-import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
-import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
-import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
-import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
-import fr.mcc.ginco.dao.INodeLabelDAO;
-import fr.mcc.ginco.dao.INoteDAO;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
-import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
-import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  * This class :
@@ -87,59 +60,31 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
  */
 @Component("gincoThesaurusBuilder")
 public class GincoThesaurusBuilder {
+
+	@Inject
+	@Named("gincoArrayImporter")
+	private GincoArrayImporter gincoArrayImporter;
 	
 	@Inject
-	@Named("associativeRelationshipDAO")
-	private IAssociativeRelationshipDAO associativeRelationshipDAO;
+	@Named("gincoGroupImporter")
+	private GincoGroupImporter gincoGroupImporter;
 	
 	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
-	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+	@Named("gincoConceptImporter")
+	private GincoConceptImporter gincoConceptImporter;
 	
 	@Inject
-	@Named("associativeRelationshipRoleDAO")
-	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
+	@Named("gincoRelationshipImporter")
+	private GincoRelationshipImporter gincoRelationshipImporter;
 	
 	@Inject
-	@Named("nodeLabelDAO")
-	private INodeLabelDAO nodeLabelDAO;
-	
-	@Inject
-	@Named("noteDAO")
-	private INoteDAO noteDAO;
+	@Named("gincoTermImporter")
+	private GincoTermImporter gincoTermImporter;
 	
 	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
-	@Inject
-	@Named("thesaurusArrayDAO")
-	private IThesaurusArrayDAO thesaurusArrayDAO;
-	
-	@Inject
-	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
-	
-	@Inject
-	@Named("thesaurusConceptGroupDAO")
-	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
-	
-	@Inject
-	@Named("thesaurusConceptGroupLabelDAO")
-	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
-	
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
-	
-	@Inject
-	@Named("conceptHierarchicalRelationshipServiceUtil")
-	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
-	
-	@Inject
-	@Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;
-	
 	@Inject
 	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
@@ -166,57 +111,26 @@ public class GincoThesaurusBuilder {
 				throw new BusinessException(
 						"Trying to import an existing thesaurus", "import-already-existing-thesaurus");
 			}
-			storeConcepts(exportedThesaurus);
-			storeTerms(exportedThesaurus);
+			gincoConceptImporter.storeConcepts(exportedThesaurus);
+			gincoTermImporter.storeTerms(exportedThesaurus);
 			
-			storeArrays(exportedThesaurus);
-			storeArrayLabels(exportedThesaurus);
+			gincoArrayImporter.storeArrays(exportedThesaurus);
+			gincoArrayImporter.storeArrayLabels(exportedThesaurus);
 			
-			storeGroups(exportedThesaurus);
-			storeGroupLabels(exportedThesaurus);
+			gincoGroupImporter.storeGroups(exportedThesaurus);
+			gincoGroupImporter.storeGroupLabels(exportedThesaurus);
 			
 			storeVersions(exportedThesaurus);
 			
-			storeHierarchicalRelationship(exportedThesaurus);
-			storeAssociativeRelationship(exportedThesaurus);
+			gincoRelationshipImporter.storeHierarchicalRelationship(exportedThesaurus);
+			gincoRelationshipImporter.storeAssociativeRelationship(exportedThesaurus);
 			
-			storeTermNotes(exportedThesaurus);
-			storeConceptNotes(exportedThesaurus);
+			gincoTermImporter.storeTermNotes(exportedThesaurus);
+			gincoConceptImporter.storeConceptNotes(exportedThesaurus);
 		}
 		return thesaurus;
 	}
-	
-	/**
-	 * This method stores all the concepts of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored concepts
-	 */
-	public List<ThesaurusConcept> storeConcepts(GincoExportedThesaurus exportedThesaurus) {
-		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
-		if (exportedThesaurus.getConcepts() != null && !exportedThesaurus.getConcepts().isEmpty()) {
-			for (ThesaurusConcept concept : exportedThesaurus.getConcepts()) {
-				concept.setThesaurus(exportedThesaurus.getThesaurus());
-				updatedConcepts.add(thesaurusConceptDAO.update(concept));
-			}			
-		}
-		thesaurusConceptDAO.flush();
-		return updatedConcepts;
-	}
-	
-	/**
-	 * This method stores all the terms of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored terms
-	 */
-	public List<ThesaurusTerm> storeTerms(GincoExportedThesaurus exportedThesaurus) {
-		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusTerm term : exportedThesaurus.getTerms()) {
-			term.setThesaurus(exportedThesaurus.getThesaurus());
-			updatedTerms.add(thesaurusTermDAO.update(term));
-		}
-		return updatedTerms;
-	}
-	
+		
 	/**
 	 * This method stores all the versions of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
 	 * @param exportedThesaurus
@@ -229,269 +143,5 @@ public class GincoThesaurusBuilder {
 			updatedVersion.add(thesaurusVersionHistoryDAO.update(version));
 		}
 		return updatedVersion;
-	}
-	
-	/**
-	 * This method stores all the array labels of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored labels
-	 */
-	public List<NodeLabel> storeArrayLabels(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<NodeLabel>> labels = exportedThesaurus.getConceptArrayLabels();
-		List<NodeLabel> updatedLabels = new ArrayList<NodeLabel>();
-		
-		if (labels != null && !labels.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<NodeLabel>>> entries = labels.entrySet().iterator();
-			String arrayId = null;
-			List<NodeLabel> nodeLabel = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<NodeLabel>> entry = entries.next();
-				//Getting the id of the array
-				arrayId = entry.getKey();
-				
-				//Getting the NodeLabels for this array
-				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					nodeLabel = entry.getValue().getList();
-				}
-				
-				for (NodeLabel label : nodeLabel) {
-					label.setThesaurusArray(thesaurusArrayDAO.getById(arrayId));
-					updatedLabels.add(nodeLabelDAO.update(label));
-				}
-			}
-		}
-		return updatedLabels;
-	}
-	
-	/**
-	 * This method stores all the array of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored arrays
-	 */
-	public List<ThesaurusArray> storeArrays(GincoExportedThesaurus exportedThesaurus) {
-		List<ThesaurusArray> updatedArrays = new ArrayList<ThesaurusArray>();
-		for (ThesaurusArray array : exportedThesaurus.getConceptArrays()) {
-			array.setThesaurus(exportedThesaurus.getThesaurus());
-			updatedArrays.add(thesaurusArrayDAO.update(array));
-		}
-		return updatedArrays;
-	}
-	
-	/**
-	 * This method stores all the groups of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored groups
-	 */
-	public List<ThesaurusConceptGroup> storeGroups(GincoExportedThesaurus exportedThesaurus) {
-		List<ThesaurusConceptGroup> updatedGroups = new ArrayList<ThesaurusConceptGroup>();
-		for (ThesaurusConceptGroup group : exportedThesaurus.getConceptGroups()) {
-			group.setThesaurus(exportedThesaurus.getThesaurus());
-			updatedGroups.add(thesaurusConceptGroupDAO.update(group));
-		}
-		return updatedGroups;
-	}
-	
-	/**
-	 * This method stores all the group labels of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored group labels
-	 */
-	public List<ThesaurusConceptGroupLabel> storeGroupLabels(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<ThesaurusConceptGroupLabel>> labels = exportedThesaurus.getConceptGroupLabels();
-		List<ThesaurusConceptGroupLabel> updatedLabels = new ArrayList<ThesaurusConceptGroupLabel>();
-		
-		if (labels != null && !labels.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<ThesaurusConceptGroupLabel>>> entries = labels.entrySet().iterator();
-			String groupId = null;
-			List<ThesaurusConceptGroupLabel> groupLabels = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<ThesaurusConceptGroupLabel>> entry = entries.next();
-				//Getting the id of the group
-				groupId = entry.getKey();
-				
-				//Getting the label for this group
-				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					groupLabels = entry.getValue().getList();
-				}
-				
-				for (ThesaurusConceptGroupLabel label : groupLabels) {
-					label.setConceptGroup(thesaurusConceptGroupDAO.getById(groupId));
-					updatedLabels.add(thesaurusConceptGroupLabelDAO.update(label));
-				}
-			}
-		}
-		return updatedLabels;
-	}
-	
-	/**
-	 * This method stores all the hierarchical relationships of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of the updated parent concepts
-	 */
-	public List<ThesaurusConcept> storeHierarchicalRelationship(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<ConceptHierarchicalRelationship>> relations = exportedThesaurus.getHierarchicalRelationship();
-		List<ThesaurusConcept> updatedChildrenConcepts = new ArrayList<ThesaurusConcept>();
-		String childId = null;
-		if (relations != null && !relations.isEmpty()) {
-			Iterator<Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>>> entries = relations.entrySet().iterator();
-			List<ConceptHierarchicalRelationship> parents = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<ConceptHierarchicalRelationship>> entry = entries.next();
-				childId = entry.getKey();
-				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					parents = entry.getValue().getList();
-				}
-				
-				for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : parents) {
-					conceptHierarchicalRelationshipDAO.update(conceptHierarchicalRelationship);
-					updatedChildrenConcepts.add(thesaurusConceptDAO.getById(childId));
-				}
-			}
-		}
-		
-		//Processing and setting for all children concepts their root concept
-		for (ThesaurusConcept thesaurusConcept : updatedChildrenConcepts) {
-			List<ThesaurusConcept> roots = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
-			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(roots));
-			thesaurusConceptDAO.update(thesaurusConcept);
-		}
-		
-		return updatedChildrenConcepts;
-	}
-	
-	/**
-	 * This method stores all the associative relationships of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of the concepts which associations were updated
-	 */
-	public List<ThesaurusConcept> storeAssociativeRelationship(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<String>> associativeRelations = exportedThesaurus.getAssociativeRelationship();
-		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
-		
-		if (associativeRelations != null && !associativeRelations.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<String>>> entries = associativeRelations.entrySet().iterator();
-			String conceptId = null;
-			List<String> associatedConceptIds = null;
-			
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<String>> entry = entries.next();
-				//Getting the id of the current concept
-				conceptId = entry.getKey();
-				
-				//Getting the ids of its associated concepts
-				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					associatedConceptIds = entry.getValue().getList();
-				}
-				updatedConcepts.add(thesaurusConceptDAO.update(saveAssociativeRelationship(thesaurusConceptDAO.getById(conceptId), associatedConceptIds)));
-			}
-		}
-		return updatedConcepts;
-	}
-	
-	/**
-	 * Private method to save associative relationships
-	 * @param concept
-	 * @param associatedConceptIds
-	 * @return The updated {@link ThesaurusConcept}
-	 * @throws BusinessException
-	 */
-	private ThesaurusConcept saveAssociativeRelationship(
-			ThesaurusConcept concept, List<String> associatedConceptIds)
-			throws BusinessException {
-		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
-		concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
-		concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());
-		
-		for (String associatedConceptsId : associatedConceptIds) {
-			logger.debug("Settings associated concept " + associatedConceptsId);
-			ThesaurusConcept linkedThesaurusConcept = thesaurusConceptDAO.getById(associatedConceptsId);
-			if (linkedThesaurusConcept.getStatus() != ConceptStatusEnum.VALIDATED
-					.getStatus()) {
-				throw new BusinessException(
-						"A concept must associate a validated concept",
-						"concept-associate-validated-concept");
-			}
-			List<String> alreadyAssociatedConcepts = associativeRelationshipDAO
-					.getAssociatedConcepts(linkedThesaurusConcept);
-			if (!alreadyAssociatedConcepts.contains(concept.getIdentifier())) {
-				AssociativeRelationship relationship = new AssociativeRelationship();
-				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
-				relationshipId.setConcept1(concept.getIdentifier());
-				relationshipId.setConcept2(associatedConceptsId);
-				relationship.setIdentifier(relationshipId);
-				relationship.setConceptLeft(concept);
-				relationship.setConceptRight(thesaurusConceptDAO
-						.getById(associatedConceptsId));
-				relationship
-						.setRelationshipRole(associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole()	);
-				relations.add(relationship);
-				associativeRelationshipDAO.update(relationship);
-			}
-		}
-		concept.getAssociativeRelationshipLeft().addAll(relations);
-
-		return concept;
-	}
-	
-	/**
-	 * This method stores all the term notes of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored notes
-	 */
-	public List<Note> storeTermNotes(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<Note>> termNotes = exportedThesaurus.getTermNotes();
-		List<Note> result = new ArrayList<Note>();
-		if (termNotes != null && !termNotes.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = termNotes.entrySet().iterator();
-			String termId = null;
-			List<Note> notes = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<Note>> entry = entries.next();
-				//Getting the id of the term
-				termId = entry.getKey();
-				
-				//Getting the ids of the notes
-				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					notes = entry.getValue().getList();
-				}
-				
-				for (Note note : notes) {
-					note.setTerm(thesaurusTermDAO.getById(termId));
-					result.add(noteDAO.update(note));
-				}
-			}
-		}
-		return result;
-	}
-	
-	/**
-	 * This method stores all the concept notes of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored notes
-	 */
-	public List<Note> storeConceptNotes(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<Note>> conceptNotes = exportedThesaurus.getConceptNotes();
-		List<Note> result = new ArrayList<Note>();
-		if (conceptNotes != null && !conceptNotes.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = conceptNotes.entrySet().iterator();
-			String conceptId = null;
-			List<Note> notes = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<Note>> entry = entries.next();
-				//Getting the id of the concept
-				conceptId = entry.getKey();
-				
-				//Getting the ids of the notes
-				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					notes = entry.getValue().getList();
-				}
-				
-				for (Note note : notes) {
-					note.setConcept(thesaurusConceptDAO.getById(conceptId));
-					result.add(noteDAO.update(note));
-				}
-			}
-		}
-		return result;
 	}
 }
