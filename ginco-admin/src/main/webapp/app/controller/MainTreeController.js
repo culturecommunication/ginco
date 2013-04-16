@@ -100,6 +100,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		    scrollPosition = theTree.getEl().down('.x-grid-view').getScroll();
 			treeState = theTree.getState();
 		}
+		var theFilterCombo = theTree.down('#authorFilter');
+		theFilterCombo.getStore().load();	
 		var MainTreeStore = this.getMainTreeStoreStore();
 		if (MainTreeStore.isLoading()==false) {
 			MainTreeStore.load({
@@ -109,6 +111,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 						Thesaurus.ext.utils.msg(me.xProblemLabel,
 								me.xProblemLoadMsg+ " : "+ aOperation.error.statusText);
 					} else{
+						MainTreeStore.filter();
 						this.getRootNode().expand();
 						if (treeState)
 						{
@@ -141,7 +144,6 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var me = this;
 		this.nav = new Ext.util.KeyNav({
 			target : theTree.getEl(),
-
 			"enter" : function() {
 				me.onEnterKey(theTree);
 			},
@@ -168,12 +170,13 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		}
 	},
     onAuthorFilterSelect : function(theCombo, records) {
-        var theTree = theCombo.up('treepanel');
+        var theTreeStore = theCombo.up('treepanel').getStore();
         var orgId = records[0].get('identifier');
         if(orgId == -1) {
-            theTree.clearFilter();
+        	theTreeStore.clearFilter(true);
         } else {
-            theTree.filterBy(orgId, 'organizationId');
+        	theTreeStore.setFilter('organizationId',orgId);
+        	this.loadTreeView(theCombo.up('treepanel'));	
         }
     },
 	init : function(application) {

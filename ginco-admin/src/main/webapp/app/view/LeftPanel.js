@@ -40,6 +40,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 	xRefreshBtnTooltip : "Refresh explorer",
 	xSelectBtnLabel : "Display",
 	xSelectBtnToolTip : "Display the selected element",
+	xFilterLabel : 'Filter',
 	localized : true,
 	frame : false,
 	width : 270,
@@ -99,10 +100,12 @@ Ext.define('GincoApp.view.LeftPanel', {
 			        }]},
                     {
     			        xtype: 'toolbar',
-    			        dock: 'top',
+    			        dock: 'bottom',
     			        items: [{
+    			        	fieldLabel : me.xFilterLabel,
                             xtype : 'ariacombo',
                             itemId : 'authorFilter',
+                            labelWidth:70,
                             editable : false,
                             displayField : 'name',
                             valueField : 'identifier',

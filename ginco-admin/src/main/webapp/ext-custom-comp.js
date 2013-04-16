@@ -36,9 +36,12 @@
 
 /*
  * Override treeView to be stateful
+ * Add filter capabilies too.
  */
+
 Ext.define('Thesaurus.ext.tree.Panel', {
 	override : 'Ext.tree.Panel',
+	currentFilter : null,
 	getState : function() {
 		var nodes = [], state = this.callParent();
 
@@ -95,69 +98,7 @@ Ext.define('Thesaurus.ext.tree.Panel', {
 			}
 		}
 		this.callParent(arguments);
-	},
-
-    filterByText: function(text) {
-        this.filterBy(text, 'text');
-    },
-
-
-    /**
-     * Filter the tree on a string, hiding all nodes expect those which match and their parents.
-     * @param The term to filter on.
-     * @param The field to filter on (i.e. 'text').
-     */
-    filterBy: function(text, by) {
-
-        this.clearFilter();
-
-        var view = this.getView(),
-            me = this,
-            nodesAndParents = [];
-
-        // Find the nodes which match the search term, expand them.
-        // Then add them and their parents to nodesAndParents.
-        this.getRootNode().cascadeBy(function(tree, view){
-            var currNode = this;
-
-            if(currNode && currNode.data[by] && currNode.data[by].toString().indexOf(text) > -1) {
-                me.expandPath(currNode.getPath());
-
-                while(currNode.parentNode) {
-                    nodesAndParents.push(currNode.id);
-                    currNode.eachChild(function(n) {
-                        nodesAndParents.push(n.id);
-                    });
-                    currNode = currNode.parentNode;
-                }
-            }
-        }, null, [me, view]);
-
-
-        // Hide all of the nodes which aren't in nodesAndParents
-        this.getRootNode().cascadeBy(function(tree, view){
-            var uiNode = view.getNodeByRecord(this);
-
-            if(uiNode && !Ext.Array.contains(nodesAndParents, this.id)) {
-                Ext.get(uiNode).setDisplayed('none');
-                Ext.get(uiNode).setAttribute("aria-hidden",true);
-            }
-        }, null, [me, view]);
-    },
-
-
-    clearFilter: function() {
-        var view = this.getView();
-
-        this.getRootNode().cascadeBy(function(tree, view){
-            var uiNode = view.getNodeByRecord(this);
-
-            if(uiNode) {
-                Ext.get(uiNode).setDisplayed('table-row');
-                Ext.get(uiNode).setAttribute("aria-hidden",false);
-            }
-        }, null, [this, view]);
-    }
+	}
 });
 
 
