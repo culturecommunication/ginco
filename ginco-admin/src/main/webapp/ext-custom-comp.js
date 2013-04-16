@@ -140,6 +140,7 @@ Ext.define('Thesaurus.ext.tree.Panel', {
 
             if(uiNode && !Ext.Array.contains(nodesAndParents, this.id)) {
                 Ext.get(uiNode).setDisplayed('none');
+                Ext.get(uiNode).setAttribute("aria-hidden",true);
             }
         }, null, [me, view]);
     },
