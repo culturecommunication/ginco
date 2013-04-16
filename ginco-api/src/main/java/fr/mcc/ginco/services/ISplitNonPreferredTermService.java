@@ -32,12 +32,41 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.enums;
+package fr.mcc.ginco.services;
+
+import java.util.List;
+
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
+ * Service used to work with {@link SplitNonPreferredTerm} objects, contains basic
+ * methods exposed to client part. For example, to get a single
+ * SplitNonPreferredTerm object, use {@link #getSplitNonPreferredTermById(String)}
+ *
+ * @see fr.mcc.ginco.beans
  */
-public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
+public interface ISplitNonPreferredTermService {
+	
+	/**
+     * Get a singleSplitNonPreferredTerm by its id
+     *
+     * @param id to search
+     * @return {@code null} if not found
+     */
+	SplitNonPreferredTerm getSplitNonPreferredTermById(String id) throws BusinessException;
+	
+	 /**
+     * Update a single singleSplitNonPreferredTerm Object
+     * @throws BusinessException 
+     */
+	SplitNonPreferredTerm updateSplitNonPreferredTerm(SplitNonPreferredTerm object) throws BusinessException;
+    
+	
+	List<SplitNonPreferredTerm> getSplitNonPreferredTermList(Integer startIndex, Integer limit, String idThesaurus);
+   
+	Long getSplitNonPreferredTermCount(String idThesaurus);
+	
+	SplitNonPreferredTerm destroySplitNonPreferredTerm(SplitNonPreferredTerm splitNonPreferredTerm);
+	
 }

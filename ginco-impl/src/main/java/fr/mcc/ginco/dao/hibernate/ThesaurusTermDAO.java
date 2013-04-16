@@ -93,6 +93,17 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
+	public Long countPreferredTerms(String idThesaurus)
+			throws BusinessException {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+		.add(Restrictions.isNotNull("concept"))
+		.add(Restrictions.eq("prefered", Boolean.TRUE))
+		.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
+	
+	@Override
 	public Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		countAllSandboxedTerms(criteria, idThesaurus);
@@ -212,6 +223,18 @@ public class ThesaurusTermDAO extends
 		.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"));
     }
 	
+	@Override
+	public List<ThesaurusTerm> findPaginatedPreferredItems(Integer startIndex,
+			Integer limit, String idThesaurus) {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		criteria.setMaxResults(limit)
+		.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+		.add(Restrictions.isNotNull("concept"))
+		.add(Restrictions.eq("prefered", true))
+		.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"));
+		return criteria.list();
+	}
+	
 	/**
 	 * This method constructs a criteria to count sandboxed terms
 	 * @param criteria
@@ -249,4 +272,8 @@ public class ThesaurusTermDAO extends
 	        }
 	        return list;
 	}
+
+
+
+
 }

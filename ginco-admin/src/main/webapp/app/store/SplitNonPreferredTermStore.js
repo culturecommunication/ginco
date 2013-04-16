@@ -32,12 +32,32 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.enums;
 
-/**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
+/*
+ * Thesaurus Term Store 
+ * This file contains all Thesaurus formats displayed in dropdown lists
  */
-public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
-}
+Ext.define('GincoApp.store.SplitNonPreferredTermStore', {
+    extend: 'Ext.data.Store',
+    requires  : ['GincoApp.model.SplitNonPreferredTermModel'],
+
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: false,
+            alias: 'store.splitNonPreferredTermStore',
+            pageSize: 50,
+            model : 'GincoApp.model.SplitNonPreferredTermModel',
+            proxy: {
+                type: 'ajax',
+                url: 'services/ui/splitnonpreferredtermservice/getList',
+                reader: {
+                    type: 'json',
+                    idProperty: 'identifier',
+                    root: 'data'
+                }
+            }
+        }, cfg)]);
+    }
+});

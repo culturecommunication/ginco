@@ -62,12 +62,6 @@ Ext.Loader.setLocale({
 
 Ext.application({
     models: [
-        'MainTreeModel',
-        'ThesaurusModel',
-        'ThesaurusTermModel',
-        'ConceptModel',
-        'SimpleConceptModel',
-        'ConceptArrayModel',
         'UserInfoModel'
     ],
     stores: [
@@ -102,7 +96,7 @@ Ext.application({
     ],
     autoCreateViewport: true,
     name: 'GincoApp',
-    controllers: [
+    controllers: [        
         'TopToolbarController',
         'MainTreeController',
         'ThesaurusFormController',
@@ -115,7 +109,9 @@ Ext.application({
         'ConceptGroupController',
         'ImportController',
         'ThesaurusVersionPanelController',
-        'SearchPanelController'
+        'SearchPanelController',
+        'ComplexConceptPanelController',
+        'ComplexConceptsPanelController'
     ],
     init: function(){    	
     },

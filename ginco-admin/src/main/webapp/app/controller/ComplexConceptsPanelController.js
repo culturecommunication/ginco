@@ -32,12 +32,47 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.enums;
 
-/**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
- */
-public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
-}
+Ext.define('GincoApp.controller.ComplexConceptsPanelController',
+		{
+			extend : 'Ext.app.Controller',
+
+			models : [ 'ThesaurusModel' ],
+
+			onGridRender : function(theGrid) {
+				var thePanel = theGrid.up('complexconceptsPanel');
+				var theStore = theGrid.getStore();
+				theStore.getProxy().setExtraParam('idThesaurus',
+						thePanel.thesaurusData.id);
+				theStore.load();
+				thePanel.setTitle(thePanel.title + ' : '
+						+ thePanel.thesaurusData.title);
+				
+				var thesaurusId= thePanel.thesaurusData.id;
+				var thesaurusModel= this.getThesaurusModelModel();
+				thesaurusModel.load(thesaurusId, {
+					success : function(model) {
+						thePanel.thesaurusData = model.data;
+					}
+				});
+			},
+
+			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {
+				var thePanel = theGrid.up('complexconceptsPanel');
+				this.openThesaurusTermTab(record,thePanel.thesaurusData);
+			},
+			openThesaurusTermTab : function(aRecord, aThesaurusData) {
+				var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+				topTabs.fireEvent('opencomplexconcepttab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
+			},
+
+			init : function() {
+				this.control({
+					'complexconceptsPanel gridpanel' : {
+						render : this.onGridRender,
+						itemdblclick : this.onNodeDblClick
+					}
+				});
+
+			}
+		});

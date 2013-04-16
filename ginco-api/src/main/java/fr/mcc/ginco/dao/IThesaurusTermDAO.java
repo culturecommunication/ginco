@@ -71,6 +71,15 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	Long countSandboxedTerms(String idThesaurus) throws BusinessException;
 	
 	/**
+	 * Get number of Thesaurus Preferred Terms
+	 * 
+	 * @param idThesaurus
+	 *            of a Thesaurus
+	 * @return number of Thesaurus Preferred Terms for a given Thesaurus
+	 */
+	Long countPreferredTerms(String idThesaurus) throws BusinessException;
+	
+	/**
 	 * Get number of Thesaurus Sandboxed Validated Terms
 	 * 
 	 * @param idThesaurus
@@ -144,6 +153,22 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 *         specified Thesaurus
 	 */
 	List<ThesaurusTerm> findPaginatedSandboxedValidatedItems(
+			Integer startIndex, Integer limit, String idThesaurus);
+	
+	/**
+	 * Returns a list of Thesaurus Terms filtered by thesaurusId 
+	 * sorted alphabetically on the lexical value with
+	 * a starting index and a limit of items to be returned, and
+	 * with a status validated
+	 * 
+	 * @param start
+	 *            Beginning index
+	 * @param limit
+	 *            Number of items
+	 * @return List<ThesaurusTerm> Paginated list of Thesaurus Terms for a
+	 *         specified Thesaurus
+	 */
+	List<ThesaurusTerm> findPaginatedPreferredItems(
 			Integer startIndex, Integer limit, String idThesaurus);
 	
 	/**

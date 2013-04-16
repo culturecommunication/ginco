@@ -32,12 +32,64 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.enums;
 
-/**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
- */
-public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
-}
+Ext.define('GincoApp.model.SplitNonPreferredTermModel', {
+    extend: 'Ext.data.Model',
+
+    fields: [
+        {
+            name: 'identifier',
+            type: 'string'
+        },
+        {
+            name: 'lexicalValue',
+            type: 'string'
+        },
+        {
+            name: 'created',
+            type: 'string'
+        },
+        {
+            name: 'modified',
+            type: 'string'
+        },
+        {
+            name: 'source',
+            type: 'string'
+        },
+        {
+            name: 'status',
+            type: 'int'
+        },
+        {
+            name: 'thesaurusId',
+            type: 'string'
+        },
+        {
+            name: 'language',
+            type: 'string'
+        }
+    ],
+    associations: [
+                   {type: 'hasMany', model: 'GincoApp.model.ThesaurusTermModel',    name: 'preferredTerms'}
+    ],
+    idProperty : 'identifier',
+    
+    proxy : {
+		api : {
+			create : 'services/ui/splitnonpreferredtermservice/updateTerm',
+			update : 'services/ui/splitnonpreferredtermservice/updateTerm',
+			read :   'services/ui/splitnonpreferredtermservice/getTerm',
+			destroy: 'services/ui/splitnonpreferredtermservice/destroyTerm'
+		},
+		type : 'ajax',
+		reader : {
+			type : 'json',
+			messageProperty: 'message'
+		},
+		writer : {
+			type : 'json'
+		}
+	}
+    
+});

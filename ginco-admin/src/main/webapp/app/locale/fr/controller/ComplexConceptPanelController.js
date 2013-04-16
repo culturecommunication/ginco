@@ -32,12 +32,17 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.enums;
 
-/**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
- */
-public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
-}
+Ext.define('GincoApp.locale.fr.controller.ComplexConceptPanelController',
+		{
+			xLoading : 'Chargement',
+			xDeleteMsgLabel : 'Êtes-vous sûr de vouloir supprimer ce concept complexe?',
+			xDeleteMsgTitle : 'Supprimer le concept complexe?',
+			xSucessLabel : 'Succès !',
+			xSucessSavedMsg : 'Le concept complexe a été enregistré avec succès',
+			xSucessRemovedMsg : 'Le concept complexe a été supprimé avec succès',
+			xProblemLabel : 'Erreur !',
+			xProblemSaveMsg : 'Impossible de sauvegarder le concept complexe !',
+			xProblemDeleteMsg : 'Impossible to supprimer le concept complexe !',
+			xProblemLoadMsg : 'Impossible de charger le concept complexe',
+		});

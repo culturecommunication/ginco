@@ -44,9 +44,9 @@ Ext
 					thesaurusData : null,
 					store : null,
 					prefered: null,
-					config: {
-						onlyValidatedTerms : false
-					},
+					onlyValidatedTerms : false,
+					existingPreferredTerms : false,
+
 
 				    /*Fields prompting values*/
 					xIdentifierColumnLabel : "Identifier",
@@ -66,10 +66,13 @@ Ext
 					termStore: null,
 					initComponent : function() {
 						var me = this;
-						
-						me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
+						if (me.existingPreferredTerms == true) {
+							me.termStore = Ext.create('GincoApp.store.ThesaurusPreferredTermStore');
+						} else {
+							me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
+						}
 						me.termStore.pageSize=20;
-						me.termStore.getProxy().extraParams = {onlyValidatedTerms: me.onlyValidatedTerms};
+						me.termStore.getProxy().extraParams = {onlyValidatedTerms: me.onlyValidatedTerms, existingPreferredTerms:me.existingPreferredTerms};
 						
 						Ext
 								.applyIf(

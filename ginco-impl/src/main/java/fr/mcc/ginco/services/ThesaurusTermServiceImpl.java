@@ -125,6 +125,12 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 		return thesaurusTermDAO.findPaginatedSandboxedValidatedItems(startIndex, limit, idThesaurus);
 	}
     
+	@Override
+	public Long getPreferredTermsCount(String idThesaurus)
+			throws BusinessException {
+		return thesaurusTermDAO.countPreferredTerms(idThesaurus);
+	}
+    
     @Override
     public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
     	ThesaurusTerm thesaurusTerm = thesaurusTermDAO
@@ -184,4 +190,12 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	public List<ThesaurusTerm> getAllTerms(String thesaurusId) {
 		return thesaurusTermDAO.findTermsByThesaurusId(thesaurusId);
 	}
+
+	@Override
+	public List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(
+			Integer startIndex, Integer limit, String idThesaurus) {
+		 return thesaurusTermDAO.findPaginatedPreferredItems(startIndex, limit, idThesaurus);
+	}
+
+
 }

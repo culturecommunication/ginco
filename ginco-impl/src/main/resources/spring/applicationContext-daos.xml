@@ -40,6 +40,7 @@
                 <value>hibernate/ThesaurusConceptGroupLabel.hbm.xml</value>
                 <value>hibernate/AdminUser.hbm.xml</value>
                 <value>hibernate/ThesaurusArk.hbm.xml</value>
+                <value>hibernate/SplitNonPreferredTerm.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
