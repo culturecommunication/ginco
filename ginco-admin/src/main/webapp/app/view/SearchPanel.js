@@ -41,6 +41,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 	xAdvancedSearchLanguageFilter : 'Language',
 	xAdvancedSearchCreationDateFilter : 'Creation date',
 	xAdvancedSearchModificationDateFilter : 'Modification date',
+	xQueryFieldLbl : 'Query',
 	closable : true,
 	localized : true,
 	searchQuery : '*',
@@ -114,7 +115,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 					{
 						xtype : 'textfield',
 						name : 'query',
-						fieldLabel : 'Query'
+						fieldLabel : me.xQueryFieldLbl,
 					},
 					{
 						xtype : 'ariacombo',

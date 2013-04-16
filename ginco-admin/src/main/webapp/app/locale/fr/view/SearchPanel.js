@@ -56,5 +56,6 @@ Ext.define('GincoApp.locale.fr.view.SearchPanel', {
 	xAdvancedSearchStatusFilter : 'Statut',
 	xAdvancedSearchLanguageFilter : 'Langue',
 	xAdvancedSearchCreationDateFilter : 'Date de création',
-	xAdvancedSearchModificationDateFilter : 'Date de modification'
+	xAdvancedSearchModificationDateFilter : 'Date de modification',
+	xQueryFieldLbl : 'Recherche'
 });
