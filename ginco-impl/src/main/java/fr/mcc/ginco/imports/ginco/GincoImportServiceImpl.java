@@ -53,8 +53,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hp.hpl.jena.util.FileManager;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.log.Log;
@@ -69,6 +71,10 @@ public class GincoImportServiceImpl implements IGincoImportService {
 	
 	@Log
 	private Logger logger;
+	
+	@Inject
+	@Named("gincoConceptBranchBuilder")
+	private GincoConceptBranchBuilder gincoConceptBranchBuilder;
 	
 	@Inject
 	@Named("gincoThesaurusBuilder")
@@ -88,10 +94,30 @@ public class GincoImportServiceImpl implements IGincoImportService {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshalledExportedThesaurus = (GincoExportedThesaurus) unmarshaller.unmarshal(in);
 		} catch (JAXBException e) {
-			throw new TechnicalException("Error when trying to deserialize from XML with JAXB", e);
+			throw new TechnicalException("Error when trying to deserialize the thesaurus from XML with JAXB", e);
 		}
 		return gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
 	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.imports.IGincoImportService#importGincoXmlThesaurusFile(java.lang.String, java.lang.String, java.io.File)
+	 */
+	@Override
+	public ThesaurusConcept importGincoBranchXmlFile(String content, String fileName, File tempDir, String thesaurusId) throws TechnicalException, BusinessException {
+		URI fileURI = writeTempFile(content, fileName, tempDir);
+		InputStream in = FileManager.get().open(fileURI.toString());
+		GincoExportedBranch unmarshalledExportedThesaurus = new GincoExportedBranch();
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(GincoExportedBranch.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			unmarshalledExportedThesaurus = (GincoExportedBranch) unmarshaller.unmarshal(in);
+		} catch (JAXBException e) {
+			throw new TechnicalException("Error when trying to deserialize the concept branch from XML with JAXB", e);
+		}
+		return gincoConceptBranchBuilder.storeGincoExportedBranch(unmarshalledExportedThesaurus, thesaurusId);
+	}
+
 	
 	private URI writeTempFile(String fileContent, String fileName, File tempDir)
 			throws BusinessException {

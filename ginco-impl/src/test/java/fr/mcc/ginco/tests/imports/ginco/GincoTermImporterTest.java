@@ -89,7 +89,7 @@ public class GincoTermImporterTest {
 		
 		Mockito.when(thesaurusTermDAO.update(Mockito.any(ThesaurusTerm.class))).thenReturn(t1);
 		Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(th1);
-		resultedTerms = gincoTermImporter.storeTerms(exportedThesaurus);
+		resultedTerms = gincoTermImporter.storeTerms(exportedThesaurus.getTerms(), exportedThesaurus.getThesaurus());
 		
 		Assert.assertEquals(resultedTerms.size(), terms.size());
 		Assert.assertEquals(resultedTerms.get(0).getIdentifier(), terms.get(0).getIdentifier());

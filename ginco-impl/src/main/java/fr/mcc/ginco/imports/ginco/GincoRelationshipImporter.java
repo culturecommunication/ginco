@@ -97,12 +97,11 @@ public class GincoRelationshipImporter {
 	 * @param exportedThesaurus
 	 * @return The list of the updated parent concepts
 	 */
-	public List<ThesaurusConcept> storeHierarchicalRelationship(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<ConceptHierarchicalRelationship>> relations = exportedThesaurus.getHierarchicalRelationship();
+	public List<ThesaurusConcept> storeHierarchicalRelationship(Map<String, JaxbList<ConceptHierarchicalRelationship>> relationsToImport) {
 		List<ThesaurusConcept> updatedChildrenConcepts = new ArrayList<ThesaurusConcept>();
 		String childId = null;
-		if (relations != null && !relations.isEmpty()) {
-			Iterator<Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>>> entries = relations.entrySet().iterator();
+		if (relationsToImport != null && !relationsToImport.isEmpty()) {
+			Iterator<Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>>> entries = relationsToImport.entrySet().iterator();
 			List<ConceptHierarchicalRelationship> parents = null;
 			while(entries.hasNext()){
 				Map.Entry<String,  JaxbList<ConceptHierarchicalRelationship>> entry = entries.next();

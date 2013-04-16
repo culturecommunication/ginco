@@ -92,7 +92,7 @@ public class GincoConceptImporterTest {
 				.thenReturn(c1);
 		Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(th1);
 		resultedConcepts = gincoConceptImporter
-				.storeConcepts(exportedThesaurus);
+				.storeConcepts(exportedThesaurus.getConcepts(), exportedThesaurus.getThesaurus());
 
 		Assert.assertEquals(resultedConcepts.size(), concepts.size());
 		Assert.assertEquals(resultedConcepts.get(0).getIdentifier(), concepts

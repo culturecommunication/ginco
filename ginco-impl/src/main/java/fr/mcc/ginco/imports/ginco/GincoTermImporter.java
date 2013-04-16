@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
@@ -76,10 +77,10 @@ public class GincoTermImporter {
 	 * @param exportedThesaurus
 	 * @return The list of stored terms
 	 */
-	public List<ThesaurusTerm> storeTerms(GincoExportedThesaurus exportedThesaurus) {
+	public List<ThesaurusTerm> storeTerms(List<ThesaurusTerm> termsToImport, Thesaurus targetedThesaurus) {
 		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusTerm term : exportedThesaurus.getTerms()) {
-			term.setThesaurus(exportedThesaurus.getThesaurus());
+		for (ThesaurusTerm term : termsToImport) {
+			term.setThesaurus(targetedThesaurus);
 			updatedTerms.add(thesaurusTermDAO.update(term));
 		}
 		return updatedTerms;
@@ -90,11 +91,10 @@ public class GincoTermImporter {
 	 * @param exportedThesaurus
 	 * @return The list of stored notes
 	 */
-	public List<Note> storeTermNotes(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<Note>> termNotes = exportedThesaurus.getTermNotes();
+	public List<Note> storeTermNotes(Map<String, JaxbList<Note>> termNotesToImport) {
 		List<Note> result = new ArrayList<Note>();
-		if (termNotes != null && !termNotes.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = termNotes.entrySet().iterator();
+		if (termNotesToImport != null && !termNotesToImport.isEmpty()) {
+			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = termNotesToImport.entrySet().iterator();
 			String termId = null;
 			List<Note> notes = null;
 			while(entries.hasNext()){

@@ -37,6 +37,7 @@ package fr.mcc.ginco.imports;
 import java.io.File;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
@@ -59,5 +60,18 @@ public interface IGincoImportService {
 	 */
 	Thesaurus importGincoXmlThesaurusFile(String content, String fileName,
 			File tempDir) throws TechnicalException, BusinessException ;
+
+	/**
+	 * This method import a concept branch from a Ginco custom format
+	 * @param content
+	 * @param fileName
+	 * @param tempDir
+	 * @param thesaurusId
+	 * @return
+	 * @throws TechnicalException
+	 * @throws BusinessException
+	 */
+	ThesaurusConcept importGincoBranchXmlFile(String content, String fileName,
+			File tempDir, String thesaurusId) throws TechnicalException, BusinessException;
 
 }

@@ -44,104 +44,93 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
+import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.log.Log;
 
 /**
- * This class :
- * - extracts data from a {@link GincoExportedThesaurus} object,
- * - stores it in beans
- * - persists beans
- *
+ * This class : - extracts data from a {@link GincoExportedBranch} object, -
+ * stores it in beans - persists beans
+ * 
  */
-@Component("gincoThesaurusBuilder")
-public class GincoThesaurusBuilder {
+@Component("gincoConceptBranchBuilder")
+public class GincoConceptBranchBuilder {
 
 	@Inject
 	@Named("gincoArrayImporter")
 	private GincoArrayImporter gincoArrayImporter;
-	
+
 	@Inject
 	@Named("gincoGroupImporter")
 	private GincoGroupImporter gincoGroupImporter;
-	
+
 	@Inject
 	@Named("gincoConceptImporter")
 	private GincoConceptImporter gincoConceptImporter;
-	
+
 	@Inject
 	@Named("gincoRelationshipImporter")
 	private GincoRelationshipImporter gincoRelationshipImporter;
-	
+
 	@Inject
 	@Named("gincoTermImporter")
 	private GincoTermImporter gincoTermImporter;
-	
+
 	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
+	
+	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
 	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
-	
+
 	@Log
 	private Logger logger;
-	
+
 	/**
-	 * This method stores a Ginco Thesaurus with all its objects (concepts, terms, arrays, groups etc.).
+	 * This method stores a Ginco Concept branch with all its objects (concept
+	 * children, terms, notes) but not arrays / groups.
 	 * 
-	 * The order of the import is important :
-	 * - Thesaurus, concepts, terms, arrays, arrayslabels, groups, grouplabels, thesaurus versions,
-	 * hierarchical relationship, associative relationship, term notes and concepts notes
-	 * 
-	 * @param {@GincoExportedThesaurus} : the previously exported thesaurus we want to import
-	 * @return The imported {@link Thesaurus}
+	 * @param {@GincoExportedBranch} : the previously
+	 *        exported branch we want to import
+	 * @return The imported {@link ThesaurusConcept} root
 	 */
-	public Thesaurus storeGincoExportedThesaurus(GincoExportedThesaurus exportedThesaurus) {
-		Thesaurus thesaurus = new Thesaurus();
-		if (exportedThesaurus.getThesaurus() != null) {
-			if (thesaurusDAO.getById(exportedThesaurus.getThesaurus().getIdentifier()) == null) {
-				thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
-			} else {
-				throw new BusinessException(
-						"Trying to import an existing thesaurus", "import-already-existing-thesaurus");
-			}
-			gincoConceptImporter.storeConcepts(exportedThesaurus.getConcepts(), exportedThesaurus.getThesaurus());
-			gincoTermImporter.storeTerms(exportedThesaurus.getTerms(), exportedThesaurus.getThesaurus());
-			
-			gincoArrayImporter.storeArrays(exportedThesaurus);
-			gincoArrayImporter.storeArrayLabels(exportedThesaurus);
-			
-			gincoGroupImporter.storeGroups(exportedThesaurus);
-			gincoGroupImporter.storeGroupLabels(exportedThesaurus);
-			
-			storeVersions(exportedThesaurus);
-			
-			gincoRelationshipImporter.storeHierarchicalRelationship(exportedThesaurus.getHierarchicalRelationship());
-			gincoRelationshipImporter.storeAssociativeRelationship(exportedThesaurus);
-			
-			gincoTermImporter.storeTermNotes(exportedThesaurus.getTermNotes());
-			gincoConceptImporter.storeConceptNotes(exportedThesaurus.getConceptNotes());
-		}
-		return thesaurus;
-	}
+	public ThesaurusConcept storeGincoExportedBranch(
+			GincoExportedBranch exportedBranch, String thesaurusId) {
+		ThesaurusConcept result = new ThesaurusConcept();
+		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
 		
-	/**
-	 * This method stores all the versions of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
-	 * @return The list of stored versions
-	 */
-	public List<ThesaurusVersionHistory> storeVersions(GincoExportedThesaurus exportedThesaurus) {
-		List<ThesaurusVersionHistory> updatedVersion = new ArrayList<ThesaurusVersionHistory>();
-		for (ThesaurusVersionHistory version : exportedThesaurus.getThesaurusVersions()) {
-			version.setThesaurus(exportedThesaurus.getThesaurus());
-			updatedVersion.add(thesaurusVersionHistoryDAO.update(version));
+		if (targetedThesaurus == null) {
+			throw new BusinessException("Unknown thesaurus",
+					"unknown-thesaurus");
+		} else {
+			// We import the concept branch in specified thesaurus
+			List<ThesaurusConcept> rootConcept = new ArrayList<ThesaurusConcept>();
+			exportedBranch.getRootConcept().setTopConcept(false);
+			rootConcept.add(exportedBranch.getRootConcept());
+			
+			List<ThesaurusConcept> resultOfStore = gincoConceptImporter.storeConcepts(rootConcept,targetedThesaurus);
+			if (resultOfStore != null && !resultOfStore.isEmpty()) {
+				result = resultOfStore.get(0);
+			}
+			
+			gincoConceptImporter.storeConcepts(exportedBranch.getConcepts(),
+					targetedThesaurus);
+			gincoTermImporter.storeTerms(exportedBranch.getTerms(),
+					targetedThesaurus);
+			gincoConceptImporter.storeConceptNotes(exportedBranch
+					.getConceptNotes());
+			gincoTermImporter.storeTermNotes(exportedBranch.getTermNotes());
+			gincoRelationshipImporter.storeHierarchicalRelationship(exportedBranch.getHierarchicalRelationship());
 		}
-		return updatedVersion;
+		return result;
 	}
 }

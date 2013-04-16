@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
@@ -70,21 +71,20 @@ public class GincoConceptImporter {
 	
 	@Log
 	private Logger logger;
-	
+		
 	/**
 	 * This method stores all the concepts of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
 	 * @param exportedThesaurus
 	 * @return The list of stored concepts
 	 */
-	public List<ThesaurusConcept> storeConcepts(GincoExportedThesaurus exportedThesaurus) {
+	public List<ThesaurusConcept> storeConcepts(List<ThesaurusConcept> conceptsToImport, Thesaurus targetedThesaurus) {
 		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
-		if (exportedThesaurus.getConcepts() != null && !exportedThesaurus.getConcepts().isEmpty()) {
-			for (ThesaurusConcept concept : exportedThesaurus.getConcepts()) {
-				concept.setThesaurus(exportedThesaurus.getThesaurus());
+		if (conceptsToImport != null && !conceptsToImport.isEmpty()) {
+			for (ThesaurusConcept concept : conceptsToImport) {
+				concept.setThesaurus(targetedThesaurus);
 				updatedConcepts.add(thesaurusConceptDAO.update(concept));
 			}			
 		}
-		thesaurusConceptDAO.flush();
 		return updatedConcepts;
 	}
 	
@@ -93,11 +93,10 @@ public class GincoConceptImporter {
 	 * @param exportedThesaurus
 	 * @return The list of stored notes
 	 */
-	public List<Note> storeConceptNotes(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<Note>> conceptNotes = exportedThesaurus.getConceptNotes();
+	public List<Note> storeConceptNotes(Map<String, JaxbList<Note>> conceptNotesToImport) {
 		List<Note> result = new ArrayList<Note>();
-		if (conceptNotes != null && !conceptNotes.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = conceptNotes.entrySet().iterator();
+		if (conceptNotesToImport != null && !conceptNotesToImport.isEmpty()) {
+			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = conceptNotesToImport.entrySet().iterator();
 			String conceptId = null;
 			List<Note> notes = null;
 			while(entries.hasNext()){

@@ -35,8 +35,10 @@
 package fr.mcc.ginco.rest.services;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
@@ -59,6 +61,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -107,7 +110,11 @@ public class ImportRestService {
 
 	@Inject
 	@Named("thesaurusViewConverter")
-	private ThesaurusViewConverter thesaurusViewConverter;	
+	private ThesaurusViewConverter thesaurusViewConverter;
+	
+	@Inject
+	@Named("thesaurusConceptViewConverter")
+	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;	
 
 	/**
 	 * This method is called to import a SKOS thesaurus the @Produces({
@@ -179,5 +186,41 @@ public class ImportRestService {
 				thesaurusViewConverter.convert(thesaurus)));
 		return serialized;
 
+	}
+	
+	/**
+	 * This method is called to import a Ginco XML concept branch.
+	 * The @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is used by an
+	 * ajax call and IE cannot display result if JSOn is returned
+	 * 
+	 * @param body
+	 * @param request
+	 * @return The imported concept branch in JSOn string representing a ExtJsonFormLoadData
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException
+	 * @throws TechnicalException
+	 * @throws BusinessException
+	 */
+	@POST
+	@Path("/importGincoBranchXml")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.TEXT_HTML)
+	public String uploadGincoBranchXmlFile(MultipartBody body,
+			@QueryParam("thesaurusId") String thesaurusId,
+			@Context HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException, TechnicalException, BusinessException {
+		Attachment file = body.getAttachment("import-file-path");
+		
+		String content = file.getObject(String.class);
+		String fileName = file.getDataHandler().getName();
+		File tempDir = (File) servletContext
+				.getAttribute("javax.servlet.context.tempdir");
+		
+		ThesaurusConcept concept = gincoImportService.importGincoBranchXmlFile(content, fileName, tempDir, thesaurusId);
+		//indexerService.indexThesaurus(thesaurus);
+		ObjectMapper mapper = new ObjectMapper();
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+				thesaurusConceptViewConverter.convert(concept)));
+		return serialized;
 	}
 }
