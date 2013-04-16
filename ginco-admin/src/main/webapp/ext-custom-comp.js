@@ -154,6 +154,7 @@ Ext.define('Thesaurus.ext.tree.Panel', {
 
             if(uiNode) {
                 Ext.get(uiNode).setDisplayed('table-row');
+                Ext.get(uiNode).setAttribute("aria-hidden",false);
             }
         }, null, [this, view]);
     }
