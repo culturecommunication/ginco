@@ -54,7 +54,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
  */
 @SuppressWarnings("serial")
 @XmlRootElement
-@XmlSeeAlso({ Note.class })
+@XmlSeeAlso({ Note.class, ConceptHierarchicalRelationship.class })
 public class GincoExportedBranch implements Serializable {
 
 	// Concept and terms are read by Jaxb and automatically added to the XML

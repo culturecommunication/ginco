@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.exports.ginco;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,73 +50,86 @@ import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
 /**
- * This component gives methods to export concepts and its related objects (notes, associations, etc.) to Ginco Custom Export Format
+ * This component gives methods to export concepts and its related objects
+ * (notes, associations, etc.) to Ginco Custom Export Format
  * 
  */
 @Component("gincoConceptExporter")
 public class GincoConceptExporter {
-	
+
 	@Inject
 	@Named("noteService")
 	private INoteService noteService;
-	
+
 	@Inject
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
-	
-    @Inject
-    @Named("conceptHierarchicalRelationshipDAO")
-    private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
-	
-	
-	/**
-	 * This method gets all the parent relationships of a concept in a JaxbList object
-	 * @param thesaurusConcept
-	 * @return JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship : A JaxbList that contains the hierarchical relationship objects
-	 */
-	public JaxbList<ConceptHierarchicalRelationship> getExportHierarchicalConcepts(ThesaurusConcept thesaurusConcept) {
-		JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship = new JaxbList<ConceptHierarchicalRelationship>();
-		for (ThesaurusConcept thesaurusParentConcept : thesaurusConcept
-				.getParentConcepts()) {
-			ConceptHierarchicalRelationship.Id relationshipId = new ConceptHierarchicalRelationship.Id();
-			relationshipId.setChildconceptid(thesaurusConcept.getIdentifier());
-			relationshipId.setParentconceptid(thesaurusParentConcept.getIdentifier());
-			parentConceptHierarchicalRelationship.getList().add(conceptHierarchicalRelationshipDAO.getById(relationshipId));
-		}
+	@Inject
+	@Named("conceptHierarchicalRelationshipDAO")
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
-		return parentConceptHierarchicalRelationship;
-	}
-	
 	/**
 	 * This method gets all the notes of a concept in a JaxbList object
+	 * 
 	 * @param thesaurusConcept
 	 * @return JaxbList<Note> conceptNotes : A JaxbList of notes
 	 */
-	public JaxbList<Note> getExportConceptNotes(ThesaurusConcept thesaurusConcept) {
-		List<Note> notes = noteService.getConceptNotePaginatedList(thesaurusConcept.getIdentifier(), 0, noteService.getConceptNoteCount(thesaurusConcept.getIdentifier()).intValue());
+	public JaxbList<Note> getExportConceptNotes(
+			ThesaurusConcept thesaurusConcept) {
+		List<Note> notes = noteService.getConceptNotePaginatedList(
+				thesaurusConcept.getIdentifier(), 0, noteService
+						.getConceptNoteCount(thesaurusConcept.getIdentifier())
+						.intValue());
 		JaxbList<Note> conceptNotes = new JaxbList<Note>();
 		for (Note note : notes) {
 			conceptNotes.getList().add(note);
 		}
 		return conceptNotes;
 	}
-	
+
 	/**
-	 * This method gets all the associative relations for a concept in a JaxbList object
+	 * This method gets all the parent relationships of a concept in a JaxbList
+	 * object
+	 * 
 	 * @param thesaurusConcept
-	 * @return JaxbList<String> associatedConceptsIds : A JaxbList that contains the ids of associated concepts
+	 * @return JaxbList<ConceptHierarchicalRelationship>
+	 *         parentConceptHierarchicalRelationship : A JaxbList that contains
+	 *         the hierarchical relationship objects
 	 */
-	public JaxbList<String> getExportAssociativeRelationShip(ThesaurusConcept thesaurusConcept) {
-		List<String> associations = associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept);
+	public JaxbList<ConceptHierarchicalRelationship> getExportHierarchicalConcepts(
+			ThesaurusConcept thesaurusConcept) {
+		JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship = new JaxbList<ConceptHierarchicalRelationship>();
+		for (ThesaurusConcept thesaurusParentConcept : thesaurusConcept
+				.getParentConcepts()) {
+			ConceptHierarchicalRelationship.Id relationshipId = new ConceptHierarchicalRelationship.Id();
+			relationshipId.setChildconceptid(thesaurusConcept.getIdentifier());
+			relationshipId.setParentconceptid(thesaurusParentConcept
+					.getIdentifier());
+			parentConceptHierarchicalRelationship.getList().add(
+					conceptHierarchicalRelationshipDAO.getById(relationshipId));
+		}
+
+		return parentConceptHierarchicalRelationship;
+	}
+
+	/**
+	 * This method gets all the associative relations for a concept in a
+	 * JaxbList object
+	 * 
+	 * @param thesaurusConcept
+	 * @return JaxbList<String> associatedConceptsIds : A JaxbList that contains
+	 *         the ids of associated concepts
+	 */
+	public JaxbList<String> getExportAssociativeRelationShip(
+			ThesaurusConcept thesaurusConcept) {
+		List<String> associations = associativeRelationshipService
+				.getAssociatedConceptsId(thesaurusConcept);
 		JaxbList<String> associatedConceptsIds = new JaxbList<String>();
 		for (String associatedConceptId : associations) {
 			associatedConceptsIds.getList().add(associatedConceptId);
 		}
 		return associatedConceptsIds;
 	}
-
-
-
 
 }

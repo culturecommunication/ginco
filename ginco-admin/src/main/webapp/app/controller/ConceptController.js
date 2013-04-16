@@ -548,25 +548,6 @@ Ext
 						var theStore = theGrid.getStore();
 						var termsData = theStore.getRange();
 
-						/*var parentGrid = theForm
-								.down('#gridPanelParentConcepts');
-						var parentGridStore = parentGrid.getStore();
-						var parentData = parentGridStore.getRange();
-						var parentIds = Ext.Array.map(parentData, function(
-								parent) {
-							return parent.data.identifier;
-						});*/
-						
-						/*var childGrid = theForm
-								.down('#gridPanelChildrenConcepts');
-						var childGridStore = childGrid.getStore();
-						var childData = childGridStore.getRange();
-						var childIds = Ext.Array.map(childData, function(
-								child) {
-							return child.data.identifier;
-						});*/
-
-
 						var rootGrid = theForm.down('#gridPanelRootConcepts');
 						var rootGridStore = rootGrid.getStore();
 						var rootData = rootGridStore.getRange();
@@ -628,6 +609,13 @@ Ext
 								});
 
 					},
+					
+					exportBranch : function (theButton, theCallback) {
+						var theForm = theButton.up('form');
+				        var url = "services/ui/exportservice/getGincoBranchExport?conceptId="
+				            + encodeURIComponent(theForm.up('conceptPanel').gincoId);
+				        window.open(url);
+					},
 
 					init : function() {
 						this
@@ -644,6 +632,9 @@ Ext
 									},
 									'conceptPanel #deleteConcept' : {
 										click : this.deleteConcept
+									},
+									'conceptPanel #exportBranch' : {
+										click : this.exportBranch
 									},
 									'conceptPanel  button[cls=addParent]' : {
 										click : this.addParent
