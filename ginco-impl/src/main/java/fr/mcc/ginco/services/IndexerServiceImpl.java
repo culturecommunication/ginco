@@ -57,6 +57,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -113,6 +114,12 @@ public class IndexerServiceImpl implements IIndexerService {
         result.setModified(doc.getFieldValue(SolrField.MODIFIED).toString());
         result.setStatus(doc.getFieldValue(SolrField.STATUS).toString());
         result.setTypeExt(doc.getFieldValue(SolrField.EXT_TYPE).toString());
+        List<String> languages = new ArrayList<String>();
+        for (Object lang : doc.getFieldValues(SolrField.LANGUAGE))
+        {
+        	languages.add(lang.toString());
+        }
+        result.setLanguages(languages);
     	return result;
     }
     

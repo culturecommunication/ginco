@@ -142,6 +142,7 @@ public class IndexerServiceTest {
         fakeDoc.addField(SolrField.MODIFIED, DateUtil.nowDate());
         fakeDoc.addField(SolrField.CREATED, DateUtil.nowDate());
         fakeDoc.addField(SolrField.STATUS, 0);
+        fakeDoc.addField(SolrField.LANGUAGE, "lang1");
 		fakeDocList.add(fakeDoc);
 		fakeDocList.setNumFound(1);
 		respContent.add("response", fakeDocList);

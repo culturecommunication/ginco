@@ -1,5 +1,7 @@
 package fr.mcc.ginco.solr;
 
+import java.util.List;
+
 public class SearchResult {
 	
 	private String identifier;
@@ -11,6 +13,7 @@ public class SearchResult {
     private String modified;
     private String created;
     private String status;
+	private List<String> languages; 
 	
 	public String getIdentifier() {
 		return identifier;
@@ -83,4 +86,12 @@ public class SearchResult {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    public List<String> getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(List<String> languages) {
+		this.languages = languages;
+	}
 }
