@@ -104,6 +104,8 @@ public class FolderGenerator {
 		list.add(getConcepts(parentId));
 
 		list.add(getSandbox(parentId));
+		
+		list.add(getSplitNonPreferredTerms(parentId));
 
 		list.add(getOrphans(parentId));
 
@@ -139,6 +141,19 @@ public class FolderGenerator {
 				+ parentId);
 		sandbox.setType(ThesaurusListNodeType.FOLDER);
 		sandbox.setIconCls("sandbox");
+		sandbox.setExpanded(false);
+		sandbox.setDisplayable(true);
+		sandbox.setChildren(new ArrayList<IThesaurusListNode>());
+		return sandbox;
+	}
+	
+	private IThesaurusListNode getSplitNonPreferredTerms(String parentId) {
+		IThesaurusListNode sandbox = new ThesaurusListBasicNode();
+		sandbox.setTitle("Concepts complexes");
+		sandbox.setId(ClassificationFolderType.COMPLEXCONCEPTS.toString() + "_"
+				+ parentId);
+		sandbox.setType(ThesaurusListNodeType.FOLDER);
+		sandbox.setIconCls("complex");
 		sandbox.setExpanded(false);
 		sandbox.setDisplayable(true);
 		sandbox.setChildren(new ArrayList<IThesaurusListNode>());

@@ -61,7 +61,22 @@ public interface IThesaurusTermService {
      * @return List of Thesaurus Terms (the number given in argument), from the start index
      */
     List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex, Integer limit, String idThesaurus);
+    
+    /**
+     * Get list of paginated Thesaurus Preferred Terms.
+     * @return List of Thesaurus Terms (the number given in argument), from the start index
+     */
+    List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(Integer startIndex, Integer limit, String idThesaurus);
 
+
+    /**
+     * Get number of Thesaurus Preferred Terms
+     * @param idThesaurus of a Thesaurus
+     * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
+     */
+    Long getPreferredTermsCount(String idThesaurus) throws BusinessException;
+    
+    
     /**
      * Get number of Thesaurus Sandboxed Terms
      * @param idThesaurus of a Thesaurus

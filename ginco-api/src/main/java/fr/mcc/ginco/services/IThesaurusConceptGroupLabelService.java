@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.exceptions.BusinessException;
 

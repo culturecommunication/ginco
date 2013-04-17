@@ -32,12 +32,54 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.enums;
+package fr.mcc.ginco.dao.hibernate;
+
+import java.util.List;
+
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 /**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
+ * Implementation of the data access object to the thesaurus_term database table
+ *
  */
-public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
+@Repository("splitNonPreferredTermDAO")
+public class SplitNonPreferredTermDAO extends
+		GenericHibernateDAO<SplitNonPreferredTerm, String> implements ISplitNonPreferredTermDAO {
+	
+	@Value("${ginco.default.language}")
+	private String defaultLang;
+	
+	public SplitNonPreferredTermDAO() {
+		super(SplitNonPreferredTerm.class);
+	}
+
+	@Override
+	public List<SplitNonPreferredTerm> findItems(Integer start, Integer limit,
+			String idThesaurus) {
+		// TODO Auto-generated method stub
+		Criteria criteria =  getCurrentSession().createCriteria(SplitNonPreferredTerm.class);
+		criteria.setMaxResults(limit)
+		.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+		.setFirstResult(start).addOrder(Order.asc("lexicalValue"));
+		return criteria.list();
+	}
+
+	@Override
+	public Long countItems(String idThesaurus) {
+		Criteria criteria =  getCurrentSession().createCriteria(SplitNonPreferredTerm.class);
+		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+		.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
+
+	
 }

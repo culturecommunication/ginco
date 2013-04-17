@@ -70,6 +70,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xNewMenu_ConceptLabel : "Concept",
 	xNewMenu_GroupLabel : "Group of Concepts",
 	xNewMenu_ConceptArrayLabel : "Array of concepts",
+	xNewMenu_ComplexConceptLabel: "Complex Concept",
 	xExport_Skos : "Export SKOS",
 	xExport_Hierarchical : "Export text hierarchical",
 	xExport_Alphabetic : "Export text alphabetical",
@@ -133,14 +134,19 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 																cmdTxt : 'Ctrl+3'
 													},{
 																xtype : 'keymenuitem',
+																text : me.xNewMenu_ComplexConceptLabel,
+																itemId : 'newComplexConceptBtn',
+																cmdTxt : 'Ctrl+4'
+													},{
+																xtype : 'keymenuitem',
 																text : me.xNewMenu_ConceptArrayLabel,
 																itemId : 'newConceptArrayBtn',
-																cmdTxt : 'Ctrl+4'
+																cmdTxt : 'Ctrl+5'
 													},{
 																xtype : 'keymenuitem',
 																text : me.xNewMenu_GroupLabel,
 																itemId : 'newConceptGroupBtn',
-																cmdTxt : 'Ctrl+5'
+																cmdTxt : 'Ctrl+6'
 													}]
 												}
 												},{

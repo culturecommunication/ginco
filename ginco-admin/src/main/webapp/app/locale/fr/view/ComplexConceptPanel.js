@@ -32,12 +32,33 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.enums;
 
-/**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
+/*
+ * File: app/locale/fr/view/ThesaurusPanel.js
+ * Thesaurus Translated Items
+ * 
  */
-public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
-}
+Ext.define('GincoApp.locale.fr.view.ComplexConceptPanel', {
+	/* Fields with auto generated values */
+	xIdentifierLabel : 'Identifiant',
+	xCreatedDateLabel : 'Date de création',
+	xDateLabel : 'Dernière modification',
+
+	/* Fields prompting values */
+	xLexicalValueLabel : 'Valeur lexicale',
+	xLanguagesLabel : 'Langue',
+	xSourceLabel : 'Source',
+	xTermPanelTitle : 'Nouveau concept complexe',
+	xNotesTab : 'Notes',
+	xStatusLabel : 'Statut',
+	xPreferredTermsTableTitle : 'Termes préférentiels',
+	xIdentifierColumnLabel : "Identifiant",
+	xLexicalValueColumnLabel : "Valeur lexicale",
+	xCreatedColumnLabel: "Date de création",
+	xModifiedColumnLabel:"Dernière modification",
+	xSourceColumnLabel:"Source",
+	xStatusColumnLabel:"Statut",
+	xLangueColumnLabel:"Langue",
+	xAddPreferredTerm:"Ajouter un terme préférentiel",
+	xRemoveTerm : "Supprimer ce terme",
+});

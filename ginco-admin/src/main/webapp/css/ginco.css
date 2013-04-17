@@ -85,6 +85,8 @@ a.x-tab-close-btn:focus  {
 
 .icon-detach {
     background-image: url(../images/detach.png) !important;
+    height:16px;
+    width:16px;
 }
 
 .icon-save {

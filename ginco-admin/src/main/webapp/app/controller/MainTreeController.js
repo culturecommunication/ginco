@@ -59,6 +59,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 				&& aRecord.data.id.indexOf("SANDBOX") === 0) {
 			this.openSandBoxTab(aRecord.parentNode);
 		}
+		if (aRecord.data.type == "FOLDER"
+			&& aRecord.data.id.indexOf("COMPLEXCONCEPTS") === 0) {
+			this.openComplexConceptTab(aRecord.parentNode);
+		}
 		return false;
 	},
 	openConceptTab: function (aRecord) {
@@ -74,7 +78,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		topTabs.fireEvent('opengrouptab',topTabs, aRecord.data.thesaurusId, aRecord.data.id);
 	},
-
+	openComplexConceptTab: function (aRecord) {
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.fireEvent('opencomplexconceptstab',topTabs,aRecord.data.id);
+	},
     openSandBoxTab : function(aRecord) {
     	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		topTabs.fireEvent('opensandboxtab',topTabs,aRecord.data.id);

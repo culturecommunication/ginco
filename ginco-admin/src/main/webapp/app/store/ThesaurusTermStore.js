@@ -39,6 +39,7 @@
  */
 Ext.define('GincoApp.store.ThesaurusTermStore', {
     extend: 'Ext.data.Store',
+    requires  : ['GincoApp.model.ThesaurusTermModel'],
 
     constructor: function(cfg) {
         var me = this;

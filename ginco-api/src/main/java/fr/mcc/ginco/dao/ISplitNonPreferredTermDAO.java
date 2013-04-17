@@ -32,12 +32,19 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.enums;
+package fr.mcc.ginco.dao;
+
+import java.util.List;
+
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 
 /**
- * Small enum intended to use as classifier of folder to categorize
- * folders attached to each Thesaurus visual node.
+ * Data Access Object for thesaurus_term
  */
-public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
+public interface ISplitNonPreferredTermDAO extends IGenericDAO<SplitNonPreferredTerm, String> {
+
+	List<SplitNonPreferredTerm> findItems(Integer start,
+			Integer limit, String idThesaurus);
+	
+	Long countItems(String idThesaurus);
 }

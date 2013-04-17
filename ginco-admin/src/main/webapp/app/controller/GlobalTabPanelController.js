@@ -201,27 +201,10 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	{
 		this.openGenericTab(tabPanel, aThesaurusId, aConceptId, "termPanel","GincoApp.view.TermPanel");
 	},
-	/*openTermTab : function (tabPanel, aTermId, aThesaurusData)
+	openComplexConceptTab : function(tabPanel, aThesaurusId, aConceptId)
 	{
-		var termTabs = Ext.ComponentQuery.query('topTabs termPanel');
-		var tabExists = false;
-		Ext.Array.each(termTabs, function(element, index, array) {
-			if (element.gincoId != null && element.gincoId == aTermId) {
-				tabExists = element;
-			}
-		});
-		if (!tabExists) {
-			var TermPanel = Ext.create('GincoApp.view.TermPanel', {
-				thesaurusData : aThesaurusData,
-				gincoId : aTermId
-			});
-			var tab = tabPanel.add(TermPanel);
-			tabPanel.setActiveTab(tab);
-			tab.show();
-		} else {
-			tabPanel.setActiveTab(tabExists);
-		}
-	},*/
+		this.openGenericTab(tabPanel, aThesaurusId, aConceptId, "complexconceptPanel","GincoApp.view.ComplexConceptPanel");
+	},
 	openArrayTab : function (tabPanel, aThesaurusId, aArrayId)
 	{
 		this.openGenericTab(tabPanel, aThesaurusId, aArrayId, "conceptArrayPanel","GincoApp.view.ConceptArrayPanel");
@@ -285,6 +268,11 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			tabPanel.setActiveTab(tabExists);
 		}
 	},
+	openComplexConceptsTab : function (tabPanel, aThesaurusId)
+	{
+		this.openGenericTab(tabPanel, aThesaurusId, null, "complexConceptsPanel","GincoApp.view.ComplexConceptsPanel");
+	},
+	
 	openThesaurusTab : function (tabPanel, aThesaurusId)
 	{
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
@@ -351,6 +339,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			'conceptGroupPanel' : {
 				beforeclose : this.onPanelBeforeClose
 			},
+			'complexconceptPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
 			'#closeAllTabs' : {
 				click : this.onCloseAllTabs
 			},
@@ -364,7 +355,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 				opengrouptab : this.openGroupTab,
 				openarraytab : this.openArrayTab,
 				opensandboxtab : this.openSandboxTab,
-				openthesaurustab : this.openThesaurusTab
+				openthesaurustab : this.openThesaurusTab,
+				opencomplexconceptstab : this.openComplexConceptsTab,
+				opencomplexconcepttab: this.openComplexConceptTab
 			}
 		});
 	}

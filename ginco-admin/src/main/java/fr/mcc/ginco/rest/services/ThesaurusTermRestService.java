@@ -124,6 +124,33 @@ public class ThesaurusTermRestService {
 	}
 	
 	/**
+	 * Public method used to get list of all existing Thesaurus terms objects in
+	 * database.
+	 * 
+	 * @return list of ThesaurusTermView, if not found - {@code null}
+	 */
+	@GET
+	@Path("/getPreferredThesaurusTerms")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<ThesaurusTermView> > getPreferredThesaurusTerms
+    (@QueryParam("start") Integer startIndex,
+     @QueryParam("limit") Integer limit,
+     @QueryParam("idThesaurus") String idThesaurus) throws BusinessException{
+		logger.info("Getting Thesaurus Preferred Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit );
+		List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
+		thesaurusTerms = thesaurusTermService.getPaginatedThesaurusPreferredTermsList(startIndex, limit, idThesaurus);	
+		Long total = thesaurusTermService.getPreferredTermsCount(idThesaurus);
+		
+		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
+		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
+			results.add(new ThesaurusTermView(thesaurusTerm));
+		}
+		ExtJsonFormLoadData<List<ThesaurusTermView> > extTerms = new  ExtJsonFormLoadData<List<ThesaurusTermView> > (results);
+		extTerms.setTotal(total);
+		return extTerms;
+	}
+	
+	/**
 	 * Public method used to get the details of a single ThesaurusTerm
 	 * 
 	 * @return list of ThesaurusTermView, if not found - {@code null}
