@@ -45,6 +45,7 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
@@ -86,6 +87,10 @@ public class GincoConceptBranchBuilder {
 	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
+	
+	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Log
 	private Logger logger;
@@ -102,6 +107,12 @@ public class GincoConceptBranchBuilder {
 			GincoExportedBranch exportedBranch, String thesaurusId) {
 		ThesaurusConcept result = new ThesaurusConcept();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
+		
+		ThesaurusConcept existingConceptRoot = thesaurusConceptDAO.getById(exportedBranch.getRootConcept().getIdentifier());
+		if (existingConceptRoot.getThesaurus() != null &&  existingConceptRoot.getThesaurus().getIdentifier().equals(targetedThesaurus.getIdentifier())) {
+			throw new BusinessException("Not possible to import a branch where root concept already exists in target thesaurus",
+					"root-concept-exist-in-target-thesaurus");
+		}
 
 		if (targetedThesaurus == null) {
 			throw new BusinessException("Unknown thesaurus",

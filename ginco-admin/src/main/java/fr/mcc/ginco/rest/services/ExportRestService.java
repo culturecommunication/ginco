@@ -271,7 +271,7 @@ public class ExportRestService {
 			throw new BusinessException("Cannot create temp file!",
 					"cannot-create-file", e);
 		}
-		return new FileResponse(temp, ".xml", "GINCO "
+		return new FileResponse(temp, ".xml", "GINCO Branch "
 				+ thesaurusConceptService.getConceptTitle(targetConcept)).toResponse();
 	}
 }
