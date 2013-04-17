@@ -38,6 +38,7 @@ import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.ExportServiceImpl;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -54,6 +55,9 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 public class ExportServiceTest {
 
     @Mock(name = "thesaurusArrayService")
@@ -67,6 +71,9 @@ public class ExportServiceTest {
 
     @Mock(name = "thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
+    
+    @Mock(name = "thesaurusArrayHelper")
+	private ThesaurusArrayHelper thesaurusArrayHelper;    
 
     @InjectMocks
     private ExportServiceImpl exportService;
@@ -163,9 +170,9 @@ public class ExportServiceTest {
         Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co3_1)).thenReturn("fra");
         
         final ThesaurusArray ar1 = new ThesaurusArray();
+        ar1.setIdentifier("ar");
         ar1.setThesaurus(th1);
         ar1.setSuperOrdinateConcept(co1);
-        ar1.getConcepts().add(co1_1);
         ar1.setIdentifier("ar1");
         NodeLabel nl1 = new NodeLabel();
         nl1.setLexicalValue("ar1");
@@ -173,8 +180,7 @@ public class ExportServiceTest {
 
         final ThesaurusArray ar2 = new ThesaurusArray();
         ar2.setThesaurus(th1);
-        ar2.setIdentifier("ar2");
-        ar2.getConcepts().add(co2);
+        ar2.setIdentifier("ar2");     
         NodeLabel nl2 = new NodeLabel();
         nl2.setLexicalValue("ar2");
         nl2.setThesaurusArray(ar2);
@@ -191,6 +197,14 @@ public class ExportServiceTest {
 
         Mockito.when(thesaurusArrayService.getSubOrdinatedArrays(co1.getIdentifier())).thenReturn(new ArrayList<ThesaurusArray>(){{
             add(ar1);
+        }});
+        
+        Mockito.when(thesaurusArrayHelper.getArrayConcepts(ar1)).thenReturn(new ArrayList<ThesaurusConcept>(){{
+            add(co1_1);
+        }});
+        
+        Mockito.when(thesaurusArrayHelper.getArrayConcepts(ar2)).thenReturn(new ArrayList<ThesaurusConcept>(){{
+            add(co2);
         }});
 
         List<ThesaurusTerm> list_tr1 = new ArrayList<ThesaurusTerm>(){{
@@ -245,7 +259,7 @@ public class ExportServiceTest {
         Mockito.when(nodeLabelService.getByThesaurusArray(ar2.getIdentifier())).thenReturn(nl2);
 
         List<FormattedLine> results = exportService.getHierarchicalText(th1);
-
+       
         Assert.assertEquals("Result should contain 8 records !", 8, results.size());
 
         Assert.assertEquals("First line should start by co1 with no tabulation", (long)0, (long)results.get(0).getTabs());

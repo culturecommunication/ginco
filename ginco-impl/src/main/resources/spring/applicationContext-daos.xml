@@ -40,6 +40,7 @@
                 <value>hibernate/ThesaurusConceptGroupLabel.hbm.xml</value>
                 <value>hibernate/AdminUser.hbm.xml</value>
                 <value>hibernate/ThesaurusArk.hbm.xml</value>
+                <value>hibernate/ThesaurusArrayConcept.hbm.xml</value>                
             </list>
         </property>
         <property name="hibernateProperties">
@@ -82,6 +83,6 @@
 
     <bean id="thesaurusArkDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
         <constructor-arg value="fr.mcc.ginco.beans.ThesaurusArk" />
-    </bean>
+    </bean>  
 
 </beans>

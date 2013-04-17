@@ -32,9 +32,11 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.helpers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -42,82 +44,56 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.utils.ConceptHierarchyUtil;
 
-/**
- * builder in charge of building thesaurus arrays
- * 
- */
-@Service("skosArrayBuilder")
-public class ThesaurusArrayBuilder extends AbstractBuilder {	
-
+@Service("thesaurusArrayHelper")
+public class ThesaurusArrayHelper {
+	
+	@Inject
+	@Named("thesaurusArrayConceptDAO")
+	private IThesaurusArrayConceptDAO thesaurusArrayConceptDAO;
+	
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
-	public ThesaurusArrayBuilder() {
-		super();
-	}
 
-	/**
-	 * Builds a ThesaurusArray from the given resource
-	 * 
-	 * @param skosCollection
-	 * @param model
-	 * @param thesaurus
-	 * @return
-	 * @throws BusinessException
-	 */
-	public ThesaurusArray buildArray(Resource skosCollection, Model model,
-			Thesaurus thesaurus) throws BusinessException {
+	 public ThesaurusArray saveArrayConcepts(
+				ThesaurusArray array, List<ThesaurusArrayConcept> concepts)
+				throws BusinessException {
+	    	
+			Set<ThesaurusArrayConcept> relations = new HashSet<ThesaurusArrayConcept>();
+			if (array.getConcepts() == null) {
+				array.setConcepts(new HashSet<ThesaurusArrayConcept>());
+			} else {
+				for (ThesaurusArrayConcept concept : array.getConcepts()) {
+					thesaurusArrayConceptDAO.delete(concept);
+				}
+			}
+			array.getConcepts().clear();
 
-		ThesaurusArray array = new ThesaurusArray();
-		array.setIdentifier(skosCollection.getURI());
-		array.setThesaurus(thesaurus);
+			for (ThesaurusArrayConcept concept : concepts) {            
+				List<String> alreadyAssociatedConcepts = thesaurusArrayConceptDAO.getAssociatedConcepts(array);
+				if (!alreadyAssociatedConcepts.contains(concept.getIdentifier().getConceptId())) {
+	                relations.add(concept); 
+				}
+			}
+			array.getConcepts().addAll(relations);
 
-		StmtIterator stmtMembersItr = skosCollection
-				.listProperties(SKOS.MEMBER);
-		Set<ThesaurusConcept> membersConcepts = new HashSet<ThesaurusConcept>();
-		while (stmtMembersItr.hasNext()) {
-			Statement stmt = stmtMembersItr.next();
-			Resource memberConceptRes = stmt.getObject().asResource();
-			String relatedURI = memberConceptRes.getURI();
-			ThesaurusConcept memberConcept = thesaurusConceptDAO
-					.getById(relatedURI);
-			membersConcepts.add(memberConcept);
+			return array;
 		}
-		Set<ThesaurusArrayConcept> thesaurusArrayConcepts = new HashSet<ThesaurusArrayConcept>();
-		int i=0;
-		for (ThesaurusConcept concept : membersConcepts) {
-			ThesaurusArrayConcept arrayConcept = new ThesaurusArrayConcept();
-			ThesaurusArrayConcept.Id arrayConceptId = new ThesaurusArrayConcept.Id();
-			arrayConceptId.setConceptId(concept.getIdentifier());
-			arrayConceptId.setThesaurusArrayId(skosCollection.getURI());
-			arrayConcept.setIdentifier(arrayConceptId);
-			arrayConcept.setConcepts(concept);
-			arrayConcept.setThesaurusArray(array);
-			arrayConcept.setArrayOrder(i);			
-			i++;
-			thesaurusArrayConcepts.add(arrayConcept);
-		}
-		array.setConcepts(thesaurusArrayConcepts);
-
-		array.setSuperOrdinateConcept(ConceptHierarchyUtil.getSuperOrdinate(membersConcepts));
-
-		array.setOrdered(true);
-
-		return array;
-	}
-
+	 
+	 public List<ThesaurusConcept> getArrayConcepts(ThesaurusArray array) {
+		 List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+		 List<String> associatedConcepts = thesaurusArrayConceptDAO.getAssociatedConcepts(array);
+		 for (String associatedConcept:associatedConcepts) {
+			 concepts.add(thesaurusConceptDAO.getById(associatedConcept));
+		 }
+		 return concepts;
+	 }
 }

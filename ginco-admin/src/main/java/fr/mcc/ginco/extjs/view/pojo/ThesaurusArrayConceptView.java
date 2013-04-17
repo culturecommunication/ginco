@@ -32,67 +32,43 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.extjs.view.pojo;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
- * Beans represents <b>thesaurus_array</b> table and is a sub-container
- * for {@link ThesaurusConcept}.
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusArray} bean, but fully serializable
  */
-@SuppressWarnings("serial")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class ThesaurusArray implements Serializable {
-	
-	private String identifier;
-	private Boolean ordered;
-	private String notation;
-	
-	@XmlTransient
-	private Thesaurus thesaurus;
-	private ThesaurusConcept superOrdinateConcept;
-	private Set<ThesaurusArrayConcept> concepts = new HashSet<ThesaurusArrayConcept>();
-	
-	public String getIdentifier() {
-		return identifier;
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class ThesaurusArrayConceptView implements Serializable {
+    private String identifier;
+    private Integer order;  
+    private String label;  
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+	public Integer getOrder() {
+		return order;
 	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
+
+	public void setOrder(Integer order) {
+		this.order = order;
 	}
-	public Boolean getOrdered() {
-		return ordered;
+
+	public String getLabel() {
+		return label;
 	}
-	public void setOrdered(Boolean ordered) {
-		this.ordered = ordered;
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
-	public String getNotation() {
-		return notation;
-	}
-	public void setNotation(String notation) {
-		this.notation = notation;
-	}
-	public Thesaurus getThesaurus() {
-		return thesaurus;
-	}
-	public void setThesaurus(Thesaurus thesaurus) {
-		this.thesaurus = thesaurus;
-	}
-	public ThesaurusConcept getSuperOrdinateConcept() {
-		return superOrdinateConcept;
-	}
-	public void setSuperOrdinateConcept(ThesaurusConcept superOrdinateConcept) {
-		this.superOrdinateConcept = superOrdinateConcept;
-	}
-	public Set<ThesaurusArrayConcept> getConcepts() {
-		return concepts;
-	}
-	public void setConcepts(Set<ThesaurusArrayConcept> concepts) {
-		this.concepts = concepts;
-	}
+ 
 }

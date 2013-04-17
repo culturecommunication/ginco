@@ -69,19 +69,11 @@ Ext
 					xSelectParentConcept : 'Select a parent concept',
 					xActions : 'Actions',
 					xAssociationRemove : 'Detach this concept',
+					xOrderLabel : 'Alphabetical order',
+					xConceptOrderLabel: 'Order',
 
 					initComponent : function() {
-						var me = this;
-
-						// This store is used to get only the children concepts
-						// of the superordinateconcept
-						me.associatedConceptStore = Ext.create(
-								'GincoApp.store.SimpleConceptStore', {
-									sorters : [ {
-										property : 'label',
-										direction : 'asc'
-									} ]
-								});
+						var me = this;					
 
 						Ext
 								.applyIf(
@@ -171,6 +163,12 @@ Ext
 															name : 'superOrdinateId',
 															hidden : true
 														},
+														,
+														{
+															xtype : 'checkbox',
+															name : 'order',
+															fieldLabel : me.xOrderLabel
+														},
 														{
 															xtype : 'container',
 															layout : 'column',
@@ -200,7 +198,6 @@ Ext
 															xtype : 'gridpanel',
 															itemId : 'gridPanelConceptArray',
 															title : me.xConceptArrayGridTitle,
-															store : me.associatedConceptStore,
 
 															dockedItems : [ {
 																xtype : 'toolbar',
@@ -222,6 +219,11 @@ Ext
 																	{
 																		dataIndex : 'label',
 																		text : me.xLexicalValueLabel,
+																		flex : 1
+																	},
+																	{
+																		dataIndex : 'order',
+																		text : me.xConceptOrderLabel,
 																		flex : 1
 																	},
 																	{

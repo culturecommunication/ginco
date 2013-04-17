@@ -74,9 +74,12 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
             type: 'string'
         },
         {
-            name : 'concepts',
-            type : 'array_of_string'
+            name: 'order',
+            type: 'boolean'
         }
+    ],
+    associations: [
+                   {type: 'hasMany', model: 'GincoApp.model.ArrayConceptModel', name: 'concepts'}
     ],
     
     idProperty : 'identifier',

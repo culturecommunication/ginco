@@ -452,10 +452,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 							.getIdentifier());
 
 			for (ThesaurusArray thesaurusArray : arrayWithSameSuperOrdinate) {
-				Set<ThesaurusConcept> conceptOfEachArray = thesaurusArray
+				Set<ThesaurusArrayConcept> conceptOfEachArray = thesaurusArray
 						.getConcepts();
-				for (ThesaurusConcept thesaurusConcept : conceptOfEachArray) {
-					returnAvailableConcepts.remove(thesaurusConcept);
+				for (ThesaurusArrayConcept thesaurusConcept : conceptOfEachArray) {
+					returnAvailableConcepts.remove(thesaurusConcept.getConcepts());
 				}
 			}
 		} else {
@@ -467,10 +467,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					.getTopTermThesaurusConcept(thesaurusDAO
 							.getById(thesaurusId));
 			for (ThesaurusArray thesaurusArray : arrayWithNoSuperOrdinate) {
-				Set<ThesaurusConcept> conceptOfEachArrayWithoutSuperordinate = thesaurusArray
+				Set<ThesaurusArrayConcept> conceptOfEachArrayWithoutSuperordinate = thesaurusArray
 						.getConcepts();
-				for (ThesaurusConcept thesaurusConcept : conceptOfEachArrayWithoutSuperordinate) {
-					returnAvailableConcepts.remove(thesaurusConcept);
+				for (ThesaurusArrayConcept thesaurusConcept : conceptOfEachArrayWithoutSuperordinate) {
+					returnAvailableConcepts.remove(thesaurusConcept.getConcepts());
 				}
 			}
 

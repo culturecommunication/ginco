@@ -34,6 +34,9 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
@@ -49,9 +52,12 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 
@@ -75,6 +81,10 @@ public class ThesaurusArrayRestService {
 	@Inject
 	@Named("thesaurusArrayViewConverter")
 	private ThesaurusArrayViewConverter thesaurusArrayViewConverter;
+	
+	@Inject
+	@Named("thesaurusArrayConceptViewConverter")
+	private ThesaurusArrayConceptViewConverter thesaurusArrayConceptViewConverter;
 
 	/**
 	 * Public method used to get
@@ -116,11 +126,15 @@ public class ThesaurusArrayRestService {
 				.convert(thesaurusArrayViewJAXBElement);
 		
 		ThesaurusArray convertedArray = thesaurusArrayViewConverter
-				.convert(thesaurusArrayViewJAXBElement);
-		
+				.convert(thesaurusArrayViewJAXBElement);		
 
+		 List<ThesaurusArrayConcept> arrayConcepts = new ArrayList<ThesaurusArrayConcept>();
+	        for(ThesaurusArrayConceptView view : thesaurusArrayViewJAXBElement.getConcepts()) {
+	        	arrayConcepts.add(thesaurusArrayConceptViewConverter.convert(view, convertedArray));
+	        }
+		
 		ThesaurusArray updated = thesaurusArrayService.updateThesaurusArray(
-				convertedArray, nodeLabel);
+				convertedArray, nodeLabel, arrayConcepts);
 		return thesaurusArrayViewConverter.convert(updated);
 	}
 	

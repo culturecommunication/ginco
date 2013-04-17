@@ -32,67 +32,34 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.services;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Beans represents <b>thesaurus_array</b> table and is a sub-container
- * for {@link ThesaurusConcept}.
- */
-@SuppressWarnings("serial")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class ThesaurusArray implements Serializable {
-	
-	private String identifier;
-	private Boolean ordered;
-	private String notation;
-	
-	@XmlTransient
-	private Thesaurus thesaurus;
-	private ThesaurusConcept superOrdinateConcept;
-	private Set<ThesaurusArrayConcept> concepts = new HashSet<ThesaurusArrayConcept>();
-	
-	public String getIdentifier() {
-		return identifier;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+
+@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+@Service("thesaurusArrayConceptService")
+public class ThesaurusArrayConceptServiceImpl implements IThesaurusArrayConceptService {
+
+    @Inject
+    @Named("thesaurusArrayConceptDAO")
+    private IGenericDAO<ThesaurusArrayConcept, ThesaurusArrayConcept.Id> thesaurusArrayConceptDAO;
+
+	@Override
+	public ThesaurusArrayConcept geThesaurusArrayConcept(
+			String thesaurusArrayId, String conceptId) throws BusinessException {
+		ThesaurusArrayConcept.Id id = new ThesaurusArrayConcept.Id();
+		id.setConceptId(conceptId);
+		id.setThesaurusArrayId(thesaurusArrayId);
+		return thesaurusArrayConceptDAO.getById(id);
 	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public Boolean getOrdered() {
-		return ordered;
-	}
-	public void setOrdered(Boolean ordered) {
-		this.ordered = ordered;
-	}
-	public String getNotation() {
-		return notation;
-	}
-	public void setNotation(String notation) {
-		this.notation = notation;
-	}
-	public Thesaurus getThesaurus() {
-		return thesaurus;
-	}
-	public void setThesaurus(Thesaurus thesaurus) {
-		this.thesaurus = thesaurus;
-	}
-	public ThesaurusConcept getSuperOrdinateConcept() {
-		return superOrdinateConcept;
-	}
-	public void setSuperOrdinateConcept(ThesaurusConcept superOrdinateConcept) {
-		this.superOrdinateConcept = superOrdinateConcept;
-	}
-	public Set<ThesaurusArrayConcept> getConcepts() {
-		return concepts;
-	}
-	public void setConcepts(Set<ThesaurusArrayConcept> concepts) {
-		this.concepts = concepts;
-	}
+
+   
 }

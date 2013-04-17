@@ -34,11 +34,12 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-
-import java.util.List;
 
 /**
  * Service used to work with {@link ThesaurusArray} objects, contains basic
@@ -62,10 +63,14 @@ public interface IThesaurusArrayService {
     List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId);
 
     /**
-     * Update a single Thesaurus Concept Object
-     * @throws BusinessException 
+     * Update a single Thesaurus Concept Object    
+     * @param thesaurusArray
+     * @param label
+     * @param arrayConcepts
+     * @return
+     * @throws BusinessException
      */
-    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label) throws BusinessException;
+    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label,  List<ThesaurusArrayConcept> arrayConcepts) throws BusinessException;
 
     /**
      * Update a single Thesaurus Concept Object without NodeLabel

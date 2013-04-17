@@ -131,5 +131,6 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 				click : this.createThesaurusVersion
 			}
 		});
+		
 	}
 });
