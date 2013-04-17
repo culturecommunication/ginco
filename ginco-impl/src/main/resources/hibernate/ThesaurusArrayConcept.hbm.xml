@@ -10,12 +10,7 @@
 			<key-property name="conceptId" />
 		</composite-id>
 
-		<property name="arrayOrder" column="arrayorder" lazy="false" />
-
-		<many-to-one name="thesaurusArray" class="fr.mcc.ginco.beans.ThesaurusArray"
-			insert="false" update="false">
-			<column name="thesaurusArrayId" />
-		</many-to-one>
+		<property name="arrayOrder" column="arrayorder" lazy="false" />		
 
 		<many-to-one name="concepts" class="fr.mcc.ginco.beans.ThesaurusConcept"
 			insert="false" update="false">

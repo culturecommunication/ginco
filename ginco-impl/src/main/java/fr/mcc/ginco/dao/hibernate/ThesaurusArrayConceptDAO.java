@@ -60,9 +60,9 @@ public class ThesaurusArrayConceptDAO extends
 	}
 
     @Override
-    public List<String> getAssociatedConcepts(ThesaurusArray array) { 
+    public List<String> getAssociatedConcepts(String arrayId) { 
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusArrayConcept.class, "tac")
-		.add(Restrictions.eq("tac.identifier.thesaurusArrayId", array.getIdentifier()))
+		.add(Restrictions.eq("tac.identifier.thesaurusArrayId", arrayId))
 				.setProjection(Projections.property("tac.identifier.conceptId"));		
 
         return criteria.list();

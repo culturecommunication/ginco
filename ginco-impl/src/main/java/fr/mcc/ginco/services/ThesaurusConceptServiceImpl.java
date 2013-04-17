@@ -435,11 +435,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		ThesaurusArray currentArray = new ThesaurusArray();
 		List<ThesaurusConcept> returnAvailableConcepts = new ArrayList<ThesaurusConcept>();
 
-		if (arrayId != null && !"".equals(arrayId)) {
+		if (StringUtils.isNotEmpty(arrayId)) {
 			currentArray = thesaurusArrayDAO.getById(arrayId);
 		}
 
-		if (arrayId != null && !"".equals(arrayId)
+		if (StringUtils.isNotEmpty(arrayId)
 				&& currentArray.getSuperOrdinateConcept() != null) {
 			// We get all arrays matching our superordinate, excluding our
 			// concept from the list

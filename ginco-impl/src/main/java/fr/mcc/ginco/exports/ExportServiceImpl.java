@@ -116,7 +116,7 @@ public class ExportServiceImpl implements IExportService {
 		Set<ThesaurusConcept> exclude = new HashSet<ThesaurusConcept>();
 
 		for (ThesaurusArray array : orphanArrays) {
-			exclude.addAll(thesaurusArrayHelper.getArrayConcepts(array));
+			exclude.addAll(thesaurusArrayHelper.getArrayConcepts(array.getIdentifier()));
 		}
 
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
@@ -259,7 +259,7 @@ public class ExportServiceImpl implements IExportService {
 
 		for (ThesaurusArray subOrdArray : subOrdArrays) {
 			thesaurusArrayConcepts.addAll(thesaurusArrayHelper
-					.getArrayConcepts(subOrdArray));
+					.getArrayConcepts(subOrdArray.getIdentifier()));
 		}
 
 		List<ThesaurusConcept> children = new ArrayList<ThesaurusConcept>(
@@ -308,7 +308,7 @@ public class ExportServiceImpl implements IExportService {
 
 		if (subOrdArray.getOrdered()) {
 			List<ThesaurusConcept> conceptsInArray = thesaurusArrayHelper
-					.getArrayConcepts(subOrdArray);
+					.getArrayConcepts(subOrdArray.getIdentifier());
 			Collections.sort(conceptsInArray, new ThesaurusConceptComparator());
 			for (ThesaurusConcept conceptInArray : conceptsInArray) {
 				result.addAll(getHierarchicalText(base + 1, conceptInArray));

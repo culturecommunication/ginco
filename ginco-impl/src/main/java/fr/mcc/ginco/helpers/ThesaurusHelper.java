@@ -32,27 +32,49 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.helpers;
 
-import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusArrayConcept;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-public interface IThesaurusArrayConceptDAO extends IGenericDAO<ThesaurusArrayConcept, ThesaurusArrayConcept.Id> {
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
+import fr.mcc.ginco.utils.DateUtil;
 
-    /**
-     * Lists the concepts already associated with this array
-     * @param arrayId
-     * @return
-     */
-    List<String> getAssociatedConcepts(String arrayId);
-
-    /**
-     * Gets the list of ThesaurusArrayConcept for the givent thesaurus array
-     * @param array
-     * @return
-     */
-    List<ThesaurusArrayConcept> getThesaurusArrayConceptsByArray(ThesaurusArray array);
+/**
+ * Utilities for Thesaurus objects
+ *
+ */
+@Service("thesaurusHelper")
+public class ThesaurusHelper {
+	
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService generatorService;
+	
+	@Value("${version-default-label}")
+	private String defaultThesaurusVersionNote;
+	
+	/**
+	 * Builds the ThesaurusVersionHistory default object for a thesaurus
+	 * @param thesaurus
+	 * @return
+	 */
+	public ThesaurusVersionHistory buildDefaultVersion(Thesaurus thesaurus)  {
+		ThesaurusVersionHistory defaultVersion = new ThesaurusVersionHistory();
+		defaultVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
+		defaultVersion.setVersionNote(defaultThesaurusVersionNote);
+		defaultVersion.setDate(DateUtil.nowDate());
+		defaultVersion.setThesaurus(thesaurus);
+		defaultVersion.setThisVersion(true);
+		defaultVersion.setStatus(ThesaurusVersionStatusEnum.PROJECT.getStatus());
+		
+		return defaultVersion;
+	}
 
 }

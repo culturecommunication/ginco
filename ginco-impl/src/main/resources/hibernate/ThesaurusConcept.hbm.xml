@@ -32,18 +32,7 @@
 		<set name="associativeRelationshipRight" inverse="true">
             <key column="concept2" not-null="true"/>
             <one-to-many class="fr.mcc.ginco.beans.AssociativeRelationship"/>
-        </set>  
-        
-        <!-- 
-        <set name="conceptArrays" table="thesaurus_array_concept">
-			<key column="conceptid" not-null="true" />
-			<many-to-many class="fr.mcc.ginco.beans.ThesaurusArray" column="thesaurusarrayid" />
-		</set>
-		 -->
-		<set name="conceptArrays" cascade="all" inverse="true">
-            <key column="thesaurusarrayid" not-null="true"/>
-            <one-to-many class="fr.mcc.ginco.beans.ThesaurusArrayConcept" />
-        </set>  
+        </set>         
     
     </class>
 </hibernate-mapping>

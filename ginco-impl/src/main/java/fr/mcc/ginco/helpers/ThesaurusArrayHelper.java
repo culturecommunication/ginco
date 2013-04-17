@@ -54,7 +54,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 /**
  * This class is a helper to thesaurus array relative operations
  * 
- * @author dabel
  * 
  */
 @Service("thesaurusArrayHelper")
@@ -92,7 +91,7 @@ public class ThesaurusArrayHelper {
 
 		for (ThesaurusArrayConcept concept : concepts) {
 			List<String> alreadyAssociatedConcepts = thesaurusArrayConceptDAO
-					.getAssociatedConcepts(array);
+					.getAssociatedConcepts(array.getIdentifier());
 			if (!alreadyAssociatedConcepts.contains(concept.getIdentifier()
 					.getConceptId())) {
 				relations.add(concept);
@@ -101,18 +100,18 @@ public class ThesaurusArrayHelper {
 		array.getConcepts().addAll(relations);
 
 		return array;
-	}
-
+	}	
+	
 	/**
-	 * Return the list of ThesaurusConcept of the given array
+	 * Return the list of ThesaurusConcept of the array identified by arrayId
 	 * 
 	 * @param array
 	 * @return
 	 */
-	public List<ThesaurusConcept> getArrayConcepts(ThesaurusArray array) {
+	public List<ThesaurusConcept> getArrayConcepts(String arrayId) {
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
 		List<String> associatedConcepts = thesaurusArrayConceptDAO
-				.getAssociatedConcepts(array);
+				.getAssociatedConcepts(arrayId);
 		for (String associatedConcept : associatedConcepts) {
 			concepts.add(thesaurusConceptDAO.getById(associatedConcept));
 		}

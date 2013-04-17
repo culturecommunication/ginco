@@ -81,7 +81,6 @@ public class ThesaurusArrayConceptViewConverter {
         ThesaurusArrayConcept thesaurusArrayConcept = new ThesaurusArrayConcept();
         thesaurusArrayConcept.setIdentifier(id);
         thesaurusArrayConcept.setConcepts(thesaurusConceptService.getThesaurusConceptById(thesaurusArrayConceptView.getIdentifier()));
-        thesaurusArrayConcept.setThesaurusArray(array);
         thesaurusArrayConcept.setArrayOrder(thesaurusArrayConceptView.getOrder() != null?thesaurusArrayConceptView.getOrder() :0);       
        
         return thesaurusArrayConcept;

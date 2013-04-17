@@ -41,6 +41,7 @@ import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.helpers.ThesaurusHelper;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.ThesaurusServiceImpl;
 import fr.mcc.ginco.tests.LoggerTestUtil;
@@ -75,6 +76,9 @@ public class ThesaurusServiceTest {
     @Mock(name = "thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
 
+    @Mock(name = "thesaurushelper")
+	private ThesaurusHelper thesaurusHelper;
+    
 	@InjectMocks
 	private ThesaurusServiceImpl thesaurusService;
 

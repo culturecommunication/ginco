@@ -34,29 +34,43 @@
  */
 package fr.mcc.ginco.imports;
 
-import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.sparql.vocabulary.FOAF;
-import com.hp.hpl.jena.vocabulary.DC;
-import com.hp.hpl.jena.vocabulary.DCTerms;
-import fr.mcc.ginco.beans.*;
-import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.dao.IThesaurusTypeDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
-import org.apache.cxf.common.util.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.cxf.common.util.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusFormat;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.dao.ILanguageDAO;
+import fr.mcc.ginco.dao.IThesaurusTypeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.helpers.ThesaurusHelper;
+import fr.mcc.ginco.log.Log;
 
 /**
  * Builder in charge of building a thesaurus
@@ -75,6 +89,10 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	@Inject
 	@Named("thesaurusTypeDAO")
 	private IThesaurusTypeDAO thesaurusTypeDAO;
+	
+	@Inject
+	@Named("thesaurusHelper")
+	private ThesaurusHelper thesaurusHelper;
 
 	@Inject
 	@Named("languagesDAO")
@@ -167,11 +185,11 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 		thesaurus.setDefaultTopConcept(defaultTopConcept);
 
-		thesaurus.setCreator(getCreator(skosThesaurus, model));
-
+		thesaurus.setCreator(getCreator(skosThesaurus, model));		
+		
 		return thesaurus;
 	}
-
+	
 	/**
 	 * Gets the thesaurus creator from the FOAF elements
 	 * 

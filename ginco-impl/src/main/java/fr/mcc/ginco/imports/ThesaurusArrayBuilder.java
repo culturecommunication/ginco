@@ -106,7 +106,6 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 			arrayConceptId.setThesaurusArrayId(skosCollection.getURI());
 			arrayConcept.setIdentifier(arrayConceptId);
 			arrayConcept.setConcepts(concept);
-			arrayConcept.setThesaurusArray(array);
 			arrayConcept.setArrayOrder(i);			
 			i++;
 			thesaurusArrayConcepts.add(arrayConcept);

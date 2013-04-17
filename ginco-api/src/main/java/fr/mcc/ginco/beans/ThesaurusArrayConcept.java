@@ -34,10 +34,13 @@
  */
 package fr.mcc.ginco.beans;
 
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
-
-import java.io.Serializable;
 
 /**
  * Bean represents relation between two {@link ThesaurusConcept}
@@ -45,6 +48,7 @@ import java.io.Serializable;
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 public class ThesaurusArrayConcept implements Serializable {
 	
+	@XmlType(name = "ThesaurusArrayConceptId")
 	public static class Id implements Serializable {
 		private String thesaurusArrayId;
 		private String conceptId;
@@ -109,8 +113,8 @@ public class ThesaurusArrayConcept implements Serializable {
 
 	private Id identifier;
 	private Integer arrayOrder;
+	@XmlTransient
 	private ThesaurusConcept concepts;
-	private ThesaurusArray thesaurusArray;
 	
 	public Id getIdentifier() {
 		return identifier;
@@ -134,14 +138,6 @@ public class ThesaurusArrayConcept implements Serializable {
 
 	public void setConcepts(ThesaurusConcept concept) {
 		this.concepts = concept;
-	}
-
-	public ThesaurusArray getThesaurusArray() {
-		return thesaurusArray;
-	}
-
-	public void setThesaurusArray(ThesaurusArray thesaurusArray) {
-		this.thesaurusArray = thesaurusArray;
-	}
+	}	
 
 }
