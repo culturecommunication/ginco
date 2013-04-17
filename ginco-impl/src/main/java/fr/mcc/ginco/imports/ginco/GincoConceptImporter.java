@@ -85,6 +85,7 @@ public class GincoConceptImporter {
 				updatedConcepts.add(thesaurusConceptDAO.update(concept));
 			}			
 		}
+		thesaurusConceptDAO.flush();
 		return updatedConcepts;
 	}
 	

@@ -45,11 +45,10 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
+import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptBranchIdGenerator;
 import fr.mcc.ginco.log.Log;
 
 /**
@@ -63,6 +62,10 @@ public class GincoConceptBranchBuilder {
 	@Inject
 	@Named("gincoArrayImporter")
 	private GincoArrayImporter gincoArrayImporter;
+
+	@Inject
+	@Named("gincoConceptBranchIdGenerator")
+	private GincoConceptBranchIdGenerator gincoConceptBranchIdGenerator;
 
 	@Inject
 	@Named("gincoGroupImporter")
@@ -83,14 +86,6 @@ public class GincoConceptBranchBuilder {
 	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
-	
-	@Inject
-	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
-
-	@Inject
-	@Named("thesaurusVersionHistoryDAO")
-	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Log
 	private Logger logger;
@@ -107,21 +102,27 @@ public class GincoConceptBranchBuilder {
 			GincoExportedBranch exportedBranch, String thesaurusId) {
 		ThesaurusConcept result = new ThesaurusConcept();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
-		
+
 		if (targetedThesaurus == null) {
 			throw new BusinessException("Unknown thesaurus",
 					"unknown-thesaurus");
 		} else {
+
+			// We replace all existing ids by new generated ids
+			gincoConceptBranchIdGenerator
+					.checkIdsForExportedBranch(exportedBranch);
+
 			// We import the concept branch in specified thesaurus
 			List<ThesaurusConcept> rootConcept = new ArrayList<ThesaurusConcept>();
 			exportedBranch.getRootConcept().setTopConcept(false);
 			rootConcept.add(exportedBranch.getRootConcept());
-			
-			List<ThesaurusConcept> resultOfStore = gincoConceptImporter.storeConcepts(rootConcept,targetedThesaurus);
+
+			List<ThesaurusConcept> resultOfStore = gincoConceptImporter
+					.storeConcepts(rootConcept, targetedThesaurus);
 			if (resultOfStore != null && !resultOfStore.isEmpty()) {
 				result = resultOfStore.get(0);
 			}
-			
+
 			gincoConceptImporter.storeConcepts(exportedBranch.getConcepts(),
 					targetedThesaurus);
 			gincoTermImporter.storeTerms(exportedBranch.getTerms(),
@@ -129,7 +130,9 @@ public class GincoConceptBranchBuilder {
 			gincoConceptImporter.storeConceptNotes(exportedBranch
 					.getConceptNotes());
 			gincoTermImporter.storeTermNotes(exportedBranch.getTermNotes());
-			gincoRelationshipImporter.storeHierarchicalRelationship(exportedBranch.getHierarchicalRelationship());
+			gincoRelationshipImporter
+					.storeHierarchicalRelationship(exportedBranch
+							.getHierarchicalRelationship());
 		}
 		return result;
 	}

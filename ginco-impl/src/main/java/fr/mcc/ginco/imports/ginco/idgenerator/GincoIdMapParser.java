@@ -32,9 +32,49 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.imports.ginco.idgenerator;
 
-Ext.define('GincoApp.locale.fr.controller.ImportController', {
-	xWaitingLabel : 'Import en cours',
-	xSucessLabelTitle : 'Succès',
-	xSucessLabel : 'Element importé avec succès : '
-});
+import java.util.Iterator;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import fr.mcc.ginco.log.Log;
+
+/**
+ * This class gives methods to use the ids mapping table
+ * 
+ */
+@Component("gincoIdMapParser")
+public class GincoIdMapParser {
+	
+	
+	@Log
+	private Logger logger;
+
+	/**
+	 * This method returns the new id of an element ready for import
+	 * @param oldId
+	 * @param idMapping
+	 * @return newId : the new id of the element which old id is given in parameter
+	 */
+	public String getNewId(String oldId, Map<String, String> idMapping) {
+		String newId = oldId;
+
+		Iterator<Map.Entry<String, String>> entries = idMapping.entrySet()
+				.iterator();
+		while (entries.hasNext()) {
+			Map.Entry<String, String> entry = entries.next();
+			
+			if (oldId.equals(entry.getKey())) {
+				// Getting the new id
+				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
+					newId = entry.getValue();
+					logger.debug("Mapping for old id" + oldId + "found with new value : " + newId);
+				}
+			}
+		}
+		return newId;
+	}
+}

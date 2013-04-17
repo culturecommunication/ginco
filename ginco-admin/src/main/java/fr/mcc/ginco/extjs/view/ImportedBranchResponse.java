@@ -32,9 +32,31 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.extjs.view;
 
-Ext.define('GincoApp.locale.fr.controller.ImportController', {
-	xWaitingLabel : 'Import en cours',
-	xSucessLabelTitle : 'Succès',
-	xSucessLabel : 'Element importé avec succès : '
-});
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
+
+/**
+ * Class for JSON representation of a data object for extjs.
+ */
+public class ImportedBranchResponse {
+	private ThesaurusConceptReducedView conceptView;
+	private String title;
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public ThesaurusConceptReducedView getConceptView() {
+		return conceptView;
+	}
+
+	public void setConceptView(ThesaurusConceptReducedView conceptView) {
+		this.conceptView = conceptView;
+	}
+
+}

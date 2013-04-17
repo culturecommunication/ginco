@@ -38,10 +38,10 @@ Ext.define('GincoApp.controller.ImportController', {
 
 	localized : true,
 	
-	xWaitingLabel : 'Import en cours',
-	xSucessLabelTitle : 'Succès',
-	xSucessLabel : 'Le thésaurus a été importé avec succès : ',
-	xFailureLabelTitle: 'Erreur',
+	xWaitingLabel : 'Importing...',
+	xSucessLabelTitle : 'Success',
+	xSucessLabel : 'Element successfully imported : ',
+	xFailureLabelTitle: 'Error',
 	
 	importSaveClick : function(theButton){
 		var me = this;

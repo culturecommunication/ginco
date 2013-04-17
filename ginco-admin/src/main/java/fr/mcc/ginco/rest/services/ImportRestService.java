@@ -34,23 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
-import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
-import fr.mcc.ginco.imports.IGincoImportService;
-import fr.mcc.ginco.imports.ISKOSImportService;
-import fr.mcc.ginco.services.IIndexerService;
-
-import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 
@@ -74,12 +57,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
+import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  * Base REST service intended to be used for SKOS Import the @Produces({
@@ -92,29 +80,32 @@ import fr.mcc.ginco.imports.ISKOSImportService;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class ImportRestService {
 	@Inject
-    @Context
+	@Context
 	private javax.servlet.ServletContext servletContext;
 
 	@Inject
 	@Named("skosImportService")
 	private ISKOSImportService skosImportService;
-	
+
 	@Inject
 	@Named("gincoImportService")
 	private IGincoImportService gincoImportService;
-	
+
 	@Inject
 	@Named("indexerService")
 	private IIndexerService indexerService;
 
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
-	
+
 	@Inject
 	@Named("thesaurusConceptViewConverter")
-	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;	
+	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
 
 	/**
 	 * This method is called to import a SKOS thesaurus the @Produces({
@@ -152,17 +143,18 @@ public class ImportRestService {
 		return serialized;
 
 	}
-	
+
 	/**
-	 * This method is called to import a Ginco XML thesaurus.
-	 * The @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is used by an
-	 * ajax call and IE cannot display result if JSOn is returned
+	 * This method is called to import a Ginco XML thesaurus. The
+	 * @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is
+	 * used by an ajax call and IE cannot display result if JSOn is returned
 	 * 
 	 * @param body
 	 * @param request
-	 * @return The imported thesaurus in JSOn string representing a ExtJsonFormLoadData
-	 * @throws IOException 
-	 * @throws JsonMappingException 
+	 * @return The imported thesaurus in JSOn string representing a
+	 *         ExtJsonFormLoadData
+	 * @throws IOException
+	 * @throws JsonMappingException
 	 * @throws JsonGenerationException
 	 * @throws TechnicalException
 	 * @throws BusinessException
@@ -172,14 +164,17 @@ public class ImportRestService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
 	public String uploadGincoXmlThesaurusFile(MultipartBody body,
-			@Context HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException, TechnicalException, BusinessException {
+			@Context HttpServletRequest request)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			TechnicalException, BusinessException {
 		Attachment file = body.getAttachment("import-file-path");
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
-		
-		Thesaurus thesaurus = gincoImportService.importGincoXmlThesaurusFile(content, fileName, tempDir);
+
+		Thesaurus thesaurus = gincoImportService.importGincoXmlThesaurusFile(
+				content, fileName, tempDir);
 		indexerService.indexThesaurus(thesaurus);
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
@@ -187,17 +182,18 @@ public class ImportRestService {
 		return serialized;
 
 	}
-	
+
 	/**
-	 * This method is called to import a Ginco XML concept branch.
-	 * The @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is used by an
-	 * ajax call and IE cannot display result if JSOn is returned
+	 * This method is called to import a Ginco XML concept branch. The
+	 * @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is
+	 * used by an ajax call and IE cannot display result if JSOn is returned
 	 * 
 	 * @param body
 	 * @param request
-	 * @return The imported concept branch in JSOn string representing a ExtJsonFormLoadData
-	 * @throws IOException 
-	 * @throws JsonMappingException 
+	 * @return The imported concept branch in JSOn string representing a
+	 *         ExtJsonFormLoadData
+	 * @throws IOException
+	 * @throws JsonMappingException
 	 * @throws JsonGenerationException
 	 * @throws TechnicalException
 	 * @throws BusinessException
@@ -208,19 +204,24 @@ public class ImportRestService {
 	@Produces(MediaType.TEXT_HTML)
 	public String uploadGincoBranchXmlFile(MultipartBody body,
 			@QueryParam("thesaurusId") String thesaurusId,
-			@Context HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException, TechnicalException, BusinessException {
+			@Context HttpServletRequest request)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			TechnicalException, BusinessException {
 		Attachment file = body.getAttachment("import-file-path");
-		
+
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
-		
-		ThesaurusConcept concept = gincoImportService.importGincoBranchXmlFile(content, fileName, tempDir, thesaurusId);
-		//indexerService.indexThesaurus(thesaurus);
+
+		ThesaurusConcept concept = gincoImportService.importGincoBranchXmlFile(
+				content, fileName, tempDir, thesaurusId);
 		ObjectMapper mapper = new ObjectMapper();
+		ImportedBranchResponse response = new ImportedBranchResponse();
+		response.setTitle(thesaurusConceptService.getConceptTitle(concept));
+		response.setConceptView(thesaurusConceptViewConverter.convert(concept));
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				thesaurusConceptViewConverter.convert(concept)));
+				response));
 		return serialized;
 	}
 }
