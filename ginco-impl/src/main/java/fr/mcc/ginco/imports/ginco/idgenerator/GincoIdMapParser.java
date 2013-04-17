@@ -32,46 +32,49 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.imports.ginco.idgenerator;
 
-import java.io.File;
+import java.util.Iterator;
+import java.util.Map;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.log.Log;
 
 /**
- * Service provides function to use for Ginco import
- * by REST services.
+ * This class gives methods to use the ids mapping table
+ * 
  */
-public interface IGincoImportService {
+@Component("gincoIdMapParser")
+public class GincoIdMapParser {
+	
+	
+	@Log
+	private Logger logger;
 
 	/**
-	 * This method import a Thesaurus from a Ginco custom format
-	 * 
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @return The imported Thesaurus
-	 * @throws TechnicalException
-	 * @throws BusinessException
+	 * This method returns the new id of an element ready for import
+	 * @param oldId
+	 * @param idMapping
+	 * @return newId : the new id of the element which old id is given in parameter
 	 */
-	Thesaurus importGincoXmlThesaurusFile(String content, String fileName,
-			File tempDir) throws TechnicalException, BusinessException ;
+	public String getNewId(String oldId, Map<String, String> idMapping) {
+		String newId = oldId;
 
-	/**
-	 * This method import a concept branch from a Ginco custom format
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @param thesaurusId
-	 * @return
-	 * @throws TechnicalException
-	 * @throws BusinessException
-	 */
-	ThesaurusConcept importGincoBranchXmlFile(String content, String fileName,
-			File tempDir, String thesaurusId) throws TechnicalException, BusinessException;
-
+		Iterator<Map.Entry<String, String>> entries = idMapping.entrySet()
+				.iterator();
+		while (entries.hasNext()) {
+			Map.Entry<String, String> entry = entries.next();
+			
+			if (oldId.equals(entry.getKey())) {
+				// Getting the new id
+				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
+					newId = entry.getValue();
+					logger.debug("Mapping for old id" + oldId + "found with new value : " + newId);
+				}
+			}
+		}
+		return newId;
+	}
 }

@@ -38,11 +38,10 @@ Ext.define('GincoApp.controller.ImportController', {
 
 	localized : true,
 	
-	xWaitingLabel : 'Import en cours',
-	xSucessLabelTitle : 'Succès',
-	xSucessLabel : 'Le thésaurus a été importé avec succès : ',
-	xFailureLabelTitle: 'Erreur',
-
+	xWaitingLabel : 'Importing...',
+	xSucessLabelTitle : 'Success',
+	xSucessLabel : 'Element successfully imported : ',
+	xFailureLabelTitle: 'Error',
 	
 	importSaveClick : function(theButton){
 		var me = this;
@@ -53,6 +52,9 @@ Ext.define('GincoApp.controller.ImportController', {
 			importUrl = 'services/ui/importservice/import';
 		} else if (theWin.importType == 'gincoxml') {
 			importUrl = 'services/ui/importservice/importGincoXml';
+		} else if (theWin.importType == 'gincoBranchXml') {
+			importUrl = 'services/ui/importservice/importGincoBranchXml?thesaurusId='
+	            + encodeURIComponent(theForm.up('importWindow').thesaurusData.id);
 		}
 		
 		if (theForm.getForm()

@@ -32,46 +32,61 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.imports.ginco.idgenerator;
 
-import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
+import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.log.Log;
 
 /**
- * Service provides function to use for Ginco import
- * by REST services.
+ * This class generate new ids for notes (both concept or term notes)
+ * for importing branch in existing thesaurus
+ * 
  */
-public interface IGincoImportService {
+@Component("gincoNoteIdGenerator")
+public class GincoNoteIdGenerator {
+
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService generatorService;
+	
+	@Inject
+	@Named("gincoIdMapParser")
+	private GincoIdMapParser gincoIdMapParser;
 
 	/**
-	 * This method import a Thesaurus from a Ginco custom format
-	 * 
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @return The imported Thesaurus
-	 * @throws TechnicalException
-	 * @throws BusinessException
+	 * This method updates ids of the concept or term notes
+	 *  
+	 * @param notes : map of notes
+	 * @param idMapping : the map where we store the mapping between old and new ids
+	 * @return Map<String, JaxbList<Note>> notes : updated concept notes with new ids
 	 */
-	Thesaurus importGincoXmlThesaurusFile(String content, String fileName,
-			File tempDir) throws TechnicalException, BusinessException ;
-
-	/**
-	 * This method import a concept branch from a Ginco custom format
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @param thesaurusId
-	 * @return
-	 * @throws TechnicalException
-	 * @throws BusinessException
-	 */
-	ThesaurusConcept importGincoBranchXmlFile(String content, String fileName,
-			File tempDir, String thesaurusId) throws TechnicalException, BusinessException;
-
+	public Map<String, JaxbList<Note>> checkIdsForNotes(
+			Map<String, JaxbList<Note>> notes, Map<String, String> idMapping) {
+		Map<String, JaxbList<Note>> updatedNotes = new HashMap<String, JaxbList<Note>>();
+		Iterator<Map.Entry<String, JaxbList<Note>>> iterator = notes.entrySet().iterator();
+		
+		while (iterator.hasNext()) {
+			Map.Entry<String, JaxbList<Note>> entry = iterator.next();
+			//New id for the key
+			String newId = gincoIdMapParser.getNewId(entry.getKey(), idMapping);
+			JaxbList<Note> note = notes.get(entry.getKey());
+			
+			updatedNotes.put(newId, note);
+		}
+		notes.clear();
+		notes.putAll(updatedNotes);
+		return notes;
+	}
 }

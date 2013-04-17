@@ -32,46 +32,62 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.tests.imports.ginco;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
+import junit.framework.Assert;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-/**
- * Service provides function to use for Ginco import
- * by REST services.
- */
-public interface IGincoImportService {
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
+import fr.mcc.ginco.imports.ginco.GincoArrayImporter;
 
-	/**
-	 * This method import a Thesaurus from a Ginco custom format
-	 * 
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @return The imported Thesaurus
-	 * @throws TechnicalException
-	 * @throws BusinessException
-	 */
-	Thesaurus importGincoXmlThesaurusFile(String content, String fileName,
-			File tempDir) throws TechnicalException, BusinessException ;
+public class GincoArrayImporterTest {
 
-	/**
-	 * This method import a concept branch from a Ginco custom format
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @param thesaurusId
-	 * @return
-	 * @throws TechnicalException
-	 * @throws BusinessException
-	 */
-	ThesaurusConcept importGincoBranchXmlFile(String content, String fileName,
-			File tempDir, String thesaurusId) throws TechnicalException, BusinessException;
+	@Mock(name = "thesaurusArrayDAO")
+	private IThesaurusArrayDAO thesaurusArrayDAO;
+
+	@InjectMocks
+	GincoArrayImporter gincoArrayImporter;
+
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
+
+	@Test
+	public void testStoreArrays() {
+		ThesaurusArray a1 = new ThesaurusArray();
+		a1.setIdentifier("http://a1");
+
+		ThesaurusArray a2 = new ThesaurusArray();
+		a2.setIdentifier("http://a2");
+
+		List<ThesaurusArray> resultedArrays = new ArrayList<ThesaurusArray>();
+		List<ThesaurusArray> arrays = new ArrayList<ThesaurusArray>();
+		arrays.add(a1);
+		arrays.add(a2);
+
+		GincoExportedThesaurus exportedThesaurus = new GincoExportedThesaurus();
+		exportedThesaurus.setConceptArrays(arrays);
+
+		Mockito.when(
+				thesaurusArrayDAO.update(Mockito.any(ThesaurusArray.class)))
+				.thenReturn(a1);
+		resultedArrays = gincoArrayImporter.storeArrays(exportedThesaurus);
+
+		Assert.assertEquals(resultedArrays.size(), resultedArrays.size());
+		Assert.assertEquals(resultedArrays.get(0).getIdentifier(),
+				resultedArrays.get(0).getIdentifier());
+	}
 
 }

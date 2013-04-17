@@ -32,46 +32,31 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.extjs.view;
 
-import java.io.File;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 
 /**
- * Service provides function to use for Ginco import
- * by REST services.
+ * Class for JSON representation of a data object for extjs.
  */
-public interface IGincoImportService {
+public class ImportedBranchResponse {
+	private ThesaurusConceptReducedView conceptView;
+	private String title;
 
-	/**
-	 * This method import a Thesaurus from a Ginco custom format
-	 * 
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @return The imported Thesaurus
-	 * @throws TechnicalException
-	 * @throws BusinessException
-	 */
-	Thesaurus importGincoXmlThesaurusFile(String content, String fileName,
-			File tempDir) throws TechnicalException, BusinessException ;
+	public String getTitle() {
+		return title;
+	}
 
-	/**
-	 * This method import a concept branch from a Ginco custom format
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @param thesaurusId
-	 * @return
-	 * @throws TechnicalException
-	 * @throws BusinessException
-	 */
-	ThesaurusConcept importGincoBranchXmlFile(String content, String fileName,
-			File tempDir, String thesaurusId) throws TechnicalException, BusinessException;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public ThesaurusConceptReducedView getConceptView() {
+		return conceptView;
+	}
+
+	public void setConceptView(ThesaurusConceptReducedView conceptView) {
+		this.conceptView = conceptView;
+	}
 
 }

@@ -40,6 +40,7 @@ Ext
 					
 					config: {
 						importType: null,
+						thesaurusData: null,
 						xTitleLabel : ''
 					},
 					
@@ -76,7 +77,7 @@ Ext
 															buttonConfig : {
 																iconCls : 'upload-icon'
 															}
-														} ],
+														}],
 
 														buttons : [
 																{

@@ -32,46 +32,62 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.tests.imports.ginco;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
+import junit.framework.Assert;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-/**
- * Service provides function to use for Ginco import
- * by REST services.
- */
-public interface IGincoImportService {
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
+import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
+import fr.mcc.ginco.imports.ginco.GincoGroupImporter;
 
-	/**
-	 * This method import a Thesaurus from a Ginco custom format
-	 * 
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @return The imported Thesaurus
-	 * @throws TechnicalException
-	 * @throws BusinessException
-	 */
-	Thesaurus importGincoXmlThesaurusFile(String content, String fileName,
-			File tempDir) throws TechnicalException, BusinessException ;
+public class GincoGroupImporterTest {
 
-	/**
-	 * This method import a concept branch from a Ginco custom format
-	 * @param content
-	 * @param fileName
-	 * @param tempDir
-	 * @param thesaurusId
-	 * @return
-	 * @throws TechnicalException
-	 * @throws BusinessException
-	 */
-	ThesaurusConcept importGincoBranchXmlFile(String content, String fileName,
-			File tempDir, String thesaurusId) throws TechnicalException, BusinessException;
+	@Mock(name = "thesaurusConceptGroupDAO")
+	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
+
+	@InjectMocks
+	GincoGroupImporter gincoGroupImporter;
+
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
+
+	@Test
+	public void testStoreGroups() {
+		ThesaurusConceptGroup g1 = new ThesaurusConceptGroup();
+		g1.setIdentifier("http://g1");
+
+		ThesaurusConceptGroup g2 = new ThesaurusConceptGroup();
+		g2.setIdentifier("http://g2");
+
+		List<ThesaurusConceptGroup> resultedGroups = new ArrayList<ThesaurusConceptGroup>();
+		List<ThesaurusConceptGroup> groups = new ArrayList<ThesaurusConceptGroup>();
+		groups.add(g1);
+		groups.add(g2);
+
+		GincoExportedThesaurus exportedThesaurus = new GincoExportedThesaurus();
+		exportedThesaurus.setConceptGroups(groups);
+
+		Mockito.when(
+				thesaurusConceptGroupDAO.update(Mockito
+						.any(ThesaurusConceptGroup.class))).thenReturn(g1);
+		resultedGroups = gincoGroupImporter.storeGroups(exportedThesaurus);
+
+		Assert.assertEquals(resultedGroups.size(), resultedGroups.size());
+		Assert.assertEquals(resultedGroups.get(0).getIdentifier(),
+				resultedGroups.get(0).getIdentifier());
+	}
 
 }
