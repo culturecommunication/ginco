@@ -46,6 +46,13 @@ public interface IThesaurusArrayConceptDAO extends IGenericDAO<ThesaurusArrayCon
      * @param array
      * @return
      */
-    public List<String> getAssociatedConcepts(ThesaurusArray array);
+    List<String> getAssociatedConcepts(ThesaurusArray array);
+
+    /**
+     * Gets the list of ThesaurusArrayConcept for the givent thesaurus array
+     * @param array
+     * @return
+     */
+    List<ThesaurusArrayConcept> getThesaurusArrayConceptsByArray(ThesaurusArray array);
 
 }

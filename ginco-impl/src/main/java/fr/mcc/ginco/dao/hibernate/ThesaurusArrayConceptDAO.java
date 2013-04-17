@@ -67,5 +67,13 @@ public class ThesaurusArrayConceptDAO extends
 
         return criteria.list();
     }   
+    
+    @Override
+    public List<ThesaurusArrayConcept> getThesaurusArrayConceptsByArray(ThesaurusArray array) { 
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusArrayConcept.class, "tac")
+		.add(Restrictions.eq("tac.identifier.thesaurusArrayId", array.getIdentifier()));		
+
+        return criteria.list();
+    }   
 
 }

@@ -51,49 +51,82 @@ import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
+/**
+ * This class is a helper to thesaurus array relative operations
+ * 
+ * @author dabel
+ * 
+ */
 @Service("thesaurusArrayHelper")
 public class ThesaurusArrayHelper {
-	
+
 	@Inject
 	@Named("thesaurusArrayConceptDAO")
 	private IThesaurusArrayConceptDAO thesaurusArrayConceptDAO;
-	
+
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
+	/**
+	 * Sets concepts as the concepts of the given array, cleaning removed
+	 * concepts.
+	 * 
+	 * @param array
+	 * @param concepts
+	 * @return
+	 * @throws BusinessException
+	 */
+	public ThesaurusArray saveArrayConcepts(ThesaurusArray array,
+			List<ThesaurusArrayConcept> concepts) throws BusinessException {
 
-	 public ThesaurusArray saveArrayConcepts(
-				ThesaurusArray array, List<ThesaurusArrayConcept> concepts)
-				throws BusinessException {
-	    	
-			Set<ThesaurusArrayConcept> relations = new HashSet<ThesaurusArrayConcept>();
-			if (array.getConcepts() == null) {
-				array.setConcepts(new HashSet<ThesaurusArrayConcept>());
-			} else {
-				for (ThesaurusArrayConcept concept : array.getConcepts()) {
-					thesaurusArrayConceptDAO.delete(concept);
-				}
+		Set<ThesaurusArrayConcept> relations = new HashSet<ThesaurusArrayConcept>();
+		if (array.getConcepts() == null) {
+			array.setConcepts(new HashSet<ThesaurusArrayConcept>());
+		} else {
+			for (ThesaurusArrayConcept concept : array.getConcepts()) {
+				thesaurusArrayConceptDAO.delete(concept);
 			}
-			array.getConcepts().clear();
-
-			for (ThesaurusArrayConcept concept : concepts) {            
-				List<String> alreadyAssociatedConcepts = thesaurusArrayConceptDAO.getAssociatedConcepts(array);
-				if (!alreadyAssociatedConcepts.contains(concept.getIdentifier().getConceptId())) {
-	                relations.add(concept); 
-				}
-			}
-			array.getConcepts().addAll(relations);
-
-			return array;
 		}
-	 
-	 public List<ThesaurusConcept> getArrayConcepts(ThesaurusArray array) {
-		 List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
-		 List<String> associatedConcepts = thesaurusArrayConceptDAO.getAssociatedConcepts(array);
-		 for (String associatedConcept:associatedConcepts) {
-			 concepts.add(thesaurusConceptDAO.getById(associatedConcept));
-		 }
-		 return concepts;
-	 }
+		array.getConcepts().clear();
+
+		for (ThesaurusArrayConcept concept : concepts) {
+			List<String> alreadyAssociatedConcepts = thesaurusArrayConceptDAO
+					.getAssociatedConcepts(array);
+			if (!alreadyAssociatedConcepts.contains(concept.getIdentifier()
+					.getConceptId())) {
+				relations.add(concept);
+			}
+		}
+		array.getConcepts().addAll(relations);
+
+		return array;
+	}
+
+	/**
+	 * Return the list of ThesaurusConcept of the given array
+	 * 
+	 * @param array
+	 * @return
+	 */
+	public List<ThesaurusConcept> getArrayConcepts(ThesaurusArray array) {
+		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+		List<String> associatedConcepts = thesaurusArrayConceptDAO
+				.getAssociatedConcepts(array);
+		for (String associatedConcept : associatedConcepts) {
+			concepts.add(thesaurusConceptDAO.getById(associatedConcept));
+		}
+		return concepts;
+	}
+
+	/**
+	 * Returns the list of ThesaurusArrayConcept for the given thesaurus array
+	 * 
+	 * @param array
+	 * @return
+	 */
+	public List<ThesaurusArrayConcept> getArrayConceptRelations(
+			ThesaurusArray array) {
+		return thesaurusArrayConceptDAO.getThesaurusArrayConceptsByArray(array);
+	}
 }
