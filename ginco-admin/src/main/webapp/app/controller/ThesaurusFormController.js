@@ -89,6 +89,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         thesaurusPanel.down('button[cls=journalBtnMenu]').setDisabled(false);
         thesaurusPanel.down('#editJournal').setDisabled(false);
         thesaurusPanel.down('#publishThesaurus').setDisabled(false);
+        thesaurusPanel.down('#importSandbox').setDisabled(false);
 
         if(thesaurusPanel.thesaurusData.archived) {
             thesaurusPanel.down('bottomFormToolBar').setArchived();
@@ -311,6 +312,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     		}
     	}
     },
+    
+    importSandboxClick : function(theButton) {
+    	Ext.create('GincoApp.view.ImportWin', {importType: 'txt', xTitleLabel: '<h1>Import sandbox terms</h1>'});
+    },
 
 	init : function(application) {
 		this.control({
@@ -361,7 +366,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             },
             "thesaurusPanel #thesauruslang" : {
             	select : this.onLangChange
-            }
+            },
+            "thesaurusPanel #importSandbox" : {
+                click : this.importSandboxClick
+            },
 		});
 	}
 });

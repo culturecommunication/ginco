@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
@@ -47,14 +48,29 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.EncodedControl;
 import fr.mcc.ginco.utils.LabelUtil;
 
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -229,5 +245,19 @@ public class ThesaurusTermRestService {
 		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());
 		return result;
+	}
+	
+	@POST
+	@Path("/importSandBoxTerms")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.TEXT_HTML)
+	public String importSandBoxTerms (MultipartBody body,
+		@Context HttpServletRequest request) throws BusinessException, FileNotFoundException{	
+		Attachment file = body.getAttachment("import-file-path");
+		String fileName = file.getDataHandler().getName();
+		
+		List<ThesaurusTerm> sandBoxTerms = new ArrayList<ThesaurusTerm>();
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+		return null;
 	}
 }

@@ -53,7 +53,10 @@ Ext.define('GincoApp.controller.ImportController', {
 			importUrl = 'services/ui/importservice/import';
 		} else if (theWin.importType == 'gincoxml') {
 			importUrl = 'services/ui/importservice/importGincoXml';
+		} else if (theWin.importType == 'txt') {
+			importUrl = 'services/ui/thesaurustermservice/importSandBoxTerms';
 		}
+		
 		
 		if (theForm.getForm()
 				.isValid()) {

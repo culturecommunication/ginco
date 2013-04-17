@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 import java.util.List;
 
@@ -155,5 +156,5 @@ public interface IThesaurusTermService {
 	 * 
 	 * @return preferred or not preferred
 	 */
-	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
+	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;    
 }
