@@ -48,3 +48,10 @@ CREATE TABLE compound_equivalence
       REFERENCES split_nonpreferredterm (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
+
+ALTER TABLE concept_group DROP CONSTRAINT fk_concept_group;
+
+ALTER TABLE concept_group
+  ADD CONSTRAINT fk_concept_group FOREIGN KEY (parentgroupid)
+      REFERENCES concept_group (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE SET NULL;

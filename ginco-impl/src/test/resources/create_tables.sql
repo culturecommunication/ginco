@@ -259,7 +259,7 @@ ALTER TABLE concept_group
 ALTER TABLE concept_group
       ADD FOREIGN KEY (parentgroupid)
       REFERENCES concept_group (identifier)
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+      ON UPDATE NO ACTION ON DELETE SET NULL;
 
 CREATE TABLE concept_group_label
 (

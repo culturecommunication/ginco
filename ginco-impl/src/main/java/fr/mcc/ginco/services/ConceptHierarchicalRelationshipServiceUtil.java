@@ -119,9 +119,11 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 			// Treatment in case of modified hierarchy (both add or remove)
 
 			// We remove this concept in all array it belongs
-			for (ThesaurusArray array : conceptToUpdate.getConceptArrays()) {
-				array.getConcepts().remove(conceptToUpdate);
-				thesaurusArrayDAO.update(array);
+			if (conceptToUpdate.getConceptArrays() != null) {
+				for (ThesaurusArray array : conceptToUpdate.getConceptArrays()) {
+					array.getConcepts().remove(conceptToUpdate);
+					thesaurusArrayDAO.update(array);
+				}				
 			}
 			
 			// We remove all removed parents
