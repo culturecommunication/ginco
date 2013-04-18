@@ -124,6 +124,10 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	},
 	onTabChange : function ( tabPanel, tab, oldCard, eOpts )
 	{
+		if (tab.tab)
+		{
+			tab.tab.focus();
+		}
 		// History handling
 		var tabs = [],
         oldToken, newToken;
@@ -186,7 +190,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
             }
 		}
 	},
-	onTabAdded : function ( tabPanel, component, index, eOpts) {
+	onTabAdd : function ( tabPanel, component, index, eOpts) {
 		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
 			component.restrictUI('ADMIN');
 		}
@@ -346,7 +350,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 				click : this.onCloseAllTabs
 			},
 			'topTabs' :  {
-				add : this.onTabAdded,
+				add : this.onTabAdd,
 				remove: this.onTabRemoved,
 				tabchange : this.onTabChange,
 				afterrender: this.onTabsAfterRender,
