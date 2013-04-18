@@ -29,7 +29,8 @@
  * 
  */
 
-Ext.require([ 'GincoApp.view.ThesaurusVersionPanel' ]);
+Ext.require([ 'GincoApp.view.ThesaurusVersionPanel',
+              'GincoApp.view.CustomAttributeTypesPanel']);
 Ext.define('GincoApp.view.ThesaurusPanel', {
 	extend : 'Ext.panel.Panel',
 
@@ -83,6 +84,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xPublish: 'Publish',
     xArchive: 'Archive',
     xPolyHierarchical: 'Polyhierarchical',
+    xCustomAttributeTypes: 'Custom atrribute types',
     xImportBranch: 'Import a branch',
 	
 	initComponent : function() {
@@ -387,7 +389,15 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												xtype : 'thesaurusVersionPanel',
 												closable : false,
 												disabled :  true
-											}]
+											},
+
+                                                {
+                                                    title : me.xCustomAttributeTypes,
+                                                    itemId : 'customAttributeTypesTab',
+                                                    xtype : 'customAttributeTypesPanel',
+                                                    closable : false,
+                                                    disabled :  false
+                                                }]
 										}]
 									});
 

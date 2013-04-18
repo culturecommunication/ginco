@@ -43,6 +43,7 @@
             <bean class="fr.mcc.ginco.rest.services.JournalRestService" />
             <bean class="fr.mcc.ginco.rest.services.AssociationRoleRestService" />
             <bean class="fr.mcc.ginco.rest.services.RevisionsRestService" />
+            <bean class="fr.mcc.ginco.rest.services.CustomAttributesRestService" />
             <bean class="fr.mcc.ginco.rest.services.SplitNonPreferredTermRestService" />  
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>

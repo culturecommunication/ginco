@@ -24,12 +24,16 @@ DROP TABLE IF EXISTS revinfoentitytypes;
 DROP TABLE IF EXISTS thesaurus_aud;
 DROP TABLE IF EXISTS note_type;
 DROP TABLE IF EXISTS thesaurus_ark;
+DROP TABLE IF EXISTS custom_concept_attribute_type;
+DROP TABLE IF EXISTS custom_term_attribute_type;
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
 DROP SEQUENCE IF EXISTS node_label_id_seq;
 DROP SEQUENCE IF EXISTS revinfo_identifier_seq;
 DROP SEQUENCE IF EXISTS revinfoentitytypes_identifier_seq;
+DROP SEQUENCE IF EXISTS custom_concept_attribute_type_identifier_seq;
+DROP SEQUENCE IF EXISTS custom_term_attribute_type_identifier_seq;
 
 
 CREATE TABLE thesaurus
@@ -373,4 +377,25 @@ CREATE TABLE note_type
     created text,
     entity text NOT NULL,
     CONSTRAINT pk_thesaurus_ark PRIMARY KEY (identifier)
-   );
+  );
+
+CREATE SEQUENCE custom_concept_attribute_type_identifier_seq  START WITH 1  INCREMENT BY 1 ;
+CREATE SEQUENCE custom_term_attribute_type_identifier_seq START WITH 1  INCREMENT BY 1 ;
+
+CREATE TABLE custom_concept_attribute_type
+(
+  identifier int NOT NULL,
+  code text NOT NULL,
+  value text NOT NULL,
+  thesaurusid text NOT NULL,
+  CONSTRAINT pk_custom_concept_attribute_type PRIMARY KEY (identifier)
+);
+
+CREATE TABLE custom_term_attribute_type
+(
+  identifier int NOT NULL,
+  code text NOT NULL,
+  value text NOT NULL,
+  thesaurusid text NOT NULL,
+  CONSTRAINT pk_custom_term_attribute_type PRIMARY KEY (identifier)
+);

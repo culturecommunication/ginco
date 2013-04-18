@@ -84,7 +84,9 @@ Ext.application({
         'ThesaurusVersionStore',
         'ThesaurusVersionStatusStore',
         'SearchTypeStore',
-        'ThesaurusStore'
+        'ThesaurusStore',
+        'CustomTermAttributeTypeStore',
+        'CustomConceptAttributeTypeStore'
     ],
     views: [
         'GincoViewPort',
@@ -96,7 +98,7 @@ Ext.application({
     ],
     autoCreateViewport: true,
     name: 'GincoApp',
-    controllers: [        
+    controllers: [
         'TopToolbarController',
         'MainTreeController',
         'ThesaurusFormController',
@@ -111,7 +113,8 @@ Ext.application({
         'ThesaurusVersionPanelController',
         'SearchPanelController',
         'ComplexConceptPanelController',
-        'ComplexConceptsPanelController'
+        'ComplexConceptsPanelController',        
+        'CustomAttributeTypesController'
     ],
     init: function(){    	
     },

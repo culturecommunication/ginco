@@ -55,3 +55,61 @@ ALTER TABLE concept_group
   ADD CONSTRAINT fk_concept_group FOREIGN KEY (parentgroupid)
       REFERENCES concept_group (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE SET NULL;
+
+
+CREATE TABLE custom_concept_attribute_type
+(
+  identifier integer NOT NULL,
+  code text,
+  thesaurusid text,
+  value text,
+  CONSTRAINT pk_custom_concept_attribute_type PRIMARY KEY (identifier),
+  CONSTRAINT fk_thesaurus_id FOREIGN KEY (thesaurusid)
+  REFERENCES thesaurus (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+-- Index: fki_custom_concept
+
+-- DROP INDEX fki_custom_concept;
+
+CREATE INDEX fki_custom_concept
+ON custom_concept_attribute_type
+USING btree
+(thesaurusid COLLATE pg_catalog."default");
+
+CREATE TABLE custom_term_attribute_type
+(
+  identifier integer NOT NULL,
+  code text,
+  thesaurusid text,
+  value text,
+  CONSTRAINT pk_custom_term_attribute_type PRIMARY KEY (identifier),
+  CONSTRAINT fk_thesaurus_id FOREIGN KEY (thesaurusid)
+  REFERENCES thesaurus (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+-- Index: fki_custom_term
+
+-- DROP INDEX fki_custom_term;
+
+CREATE INDEX fki_custom_term
+ON custom_term_attribute_type
+USING btree
+(thesaurusid COLLATE pg_catalog."default");
+
+
+CREATE SEQUENCE custom_term_attribute_type_identifier_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+CREATE SEQUENCE custom_concept_attribute_type_identifier_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;

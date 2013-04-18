@@ -149,7 +149,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 				itemId: 'searchBtn',
 				repeatTriggerClick : false,
 				disabled : false,
-				triggerTitle : me.xSearchBtnTitle,
+				triggerTitle : me.xSearchBtnTitle
 			},{
 				xtype : 'tbseparator',
 				flex : 2,
