@@ -35,12 +35,17 @@
 package fr.mcc.ginco.tests.daos;
 
 import fr.mcc.ginco.tests.BaseDAOTest;
+import org.junit.Test;
 
 /**
  *
  */
 public class CustomConceptAttributeDAOTest extends BaseDAOTest {
 
+    @Test
+    public void testGetByEntity() {
+
+    }
 
     @Override
     public String getXmlDataFileInit() {
