@@ -185,6 +185,22 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId) {
 		return thesaurusConceptDAO.getChildrenConcepts(conceptId);
 	}
+	
+	@Override
+	public List<ThesaurusConcept> getRecursiveChildrenByConceptId(String conceptId, String originalParentId, List<ThesaurusConcept> allRecursiveChildren) {
+		List<ThesaurusConcept> childrenConcepts = thesaurusConceptDAO.getChildrenConcepts(conceptId);
+		
+		for (ThesaurusConcept concept : childrenConcepts) {
+			if (concept.getIdentifier() != originalParentId) {
+				if (!allRecursiveChildren.contains(concept)) {
+					allRecursiveChildren.add(concept);
+				}
+				getRecursiveChildrenByConceptId(concept.getIdentifier(), originalParentId, allRecursiveChildren);
+			}
+		}
+		return allRecursiveChildren;
+	}
+
 
 	@Override
 	public List<ThesaurusConcept> getConceptsByThesaurusId(
