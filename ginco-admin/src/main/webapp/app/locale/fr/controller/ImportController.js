@@ -36,5 +36,6 @@
 Ext.define('GincoApp.locale.fr.controller.ImportController', {
 	xWaitingLabel : 'Import en cours',
 	xSucessLabelTitle : 'Succès',
-	xSucessLabel : 'Element importé avec succès : '
+	xSucessLabel : 'Element importé avec succès : ',
+	xSucessSandboxLabel : 'Elements importés avec succès'
 });
