@@ -53,8 +53,8 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.rest.services.RevisionsRestService;
-import fr.mcc.ginco.services.IGincoRevService;
 import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.IMistralRevService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -62,9 +62,11 @@ public class RevisionsRestServiceTest {
 
 	@Mock(name = "thesaurusService")
 	private IThesaurusService thesaurusService;
+	
+	
+	@Mock(name = "mistralRevService")
+	private IMistralRevService mistralRevService;
 
-	@Mock(name = "gincoRevService")
-	private IGincoRevService gincoRevService;
 
 	@Mock(name = "languagesService")
 	private ILanguagesService languagesService;

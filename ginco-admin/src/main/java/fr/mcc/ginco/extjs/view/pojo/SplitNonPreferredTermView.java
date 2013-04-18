@@ -38,17 +38,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.extjs.view.utils.SplitNonPreferredTermViewConverter;
-import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.utils.DateUtil;
 
 /**
@@ -69,9 +64,6 @@ public class SplitNonPreferredTermView implements Serializable {
 	private String thesaurusId;
 	private String language;
 	private List<ThesaurusTermView> preferredTerms;
-	
-
-
 
     public SplitNonPreferredTermView() {}
 

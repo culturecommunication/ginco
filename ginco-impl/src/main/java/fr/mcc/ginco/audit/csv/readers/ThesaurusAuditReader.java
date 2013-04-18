@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.audit.readers;
+package fr.mcc.ginco.audit.csv.readers;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +41,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.exception.AuditException;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
@@ -49,6 +48,7 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.audit.csv.JournalEventsEnum;
 import fr.mcc.ginco.audit.csv.JournalLine;
 import fr.mcc.ginco.audit.csv.JournalLineBuilder;
+import fr.mcc.ginco.audit.utils.AuditQueryBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.TechnicalException;
@@ -64,14 +64,14 @@ public class ThesaurusAuditReader {
 	@Named("journalLineBuilder")
 	private JournalLineBuilder journalLineBuilder;
 
-	public List<JournalLine> getThesaurusAdded(AuditReader reader,
-			Thesaurus thesaurus, Date startDate) {
+	
+	public List<JournalLine> getThesaurusAdded(Thesaurus thesaurus, Date startDate) {
 
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
 		try {
 			AuditQuery thesaurusQuery = auditQueryBuilder.getEntityAddedQuery(
-					reader, thesaurus, startDate, Thesaurus.class);
+					thesaurus, startDate, Thesaurus.class);
 			List<Object[]> allAddedThesaurusRevisions = thesaurusQuery
 					.getResultList();
 

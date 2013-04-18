@@ -32,32 +32,28 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.audit.readers;
+package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.io.File;
+import java.io.IOException;
 
-import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.AuditQuery;
-import org.springframework.stereotype.Service;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
 
-import fr.mcc.ginco.beans.ThesaurusTerm;
-
-@Service("auditHelper")
-public class AuditHelper {
-	
-	@Inject
-	@Named("auditQueryBuilder")
-	private AuditQueryBuilder auditQueryBuilder;
-
-	public ThesaurusTerm getPreferredTermAtRevision(AuditReader reader, Number revisionNumber, String conceptId, String lang) {
-		AuditQuery query = reader.createQuery().forEntitiesAtRevision(ThesaurusTerm.class, revisionNumber)
-				.add(AuditEntity.relatedId("concept").eq(conceptId))
-				.add(AuditEntity.property("prefered").eq(true));
-		if (lang != null) {
-			auditQueryBuilder.addFilterOnLanguage(query, lang);
-		}
-		return (ThesaurusTerm) query.getSingleResult();
-	}
-}
+/**
+ * Service to provide command file to Mistral
+ *
+ */
+public interface IMistralRevService {
+	  
+	/**
+	 * returns the file containing commands for the MISTRAL database 
+	 * @param thesaurus the thesaurus to be exported
+	 * @param timestamp the start date of the file commands
+	 * @param language the language of the terms to be exported
+	 * @return
+	 * @throws IOException
+	 */
+	File getRevisions(Thesaurus thesaurus, long timestamp, Language language) throws IOException ;
+    
+  }

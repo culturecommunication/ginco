@@ -32,37 +32,29 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.audit;
+package fr.mcc.ginco.audit.utils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.audit.commands.CommandLineBuilder;
-import fr.mcc.ginco.audit.csv.JournalLineBuilder;
-import fr.mcc.ginco.exceptions.BusinessException;
-
-@Service("revisionLineBuilderFactory")
-public class RevisionLineBuilderFactory {
-
+/**
+ * This bean is used 
+ *
+ */
+@Service("auditReaderService")
+public class AuditReaderService {
+	
 	@Inject
-	@Named("journalLineBuilder")
-	private JournalLineBuilder journalLineBuilder;
-
-	@Inject
-	@Named("commandLineBuilder")
-	private CommandLineBuilder commandLineBuilder;
-
-	public RevisionLineBuilder getRevisionLineBuilder(
-			RevisionExportTypesEnum exportType) {
-		if (exportType.equals(RevisionExportTypesEnum.CSV)) {
-			return journalLineBuilder;
-		} else if (exportType.equals(RevisionExportTypesEnum.COMMANDS)) {
-			return commandLineBuilder;
-		} else {
-			throw new BusinessException("Unknown export type",
-					"journal-unknown-export-type");
-		}
+	@Named("gincoSessionFactory")
+	private SessionFactory sessionFactory;
+	
+	public AuditReader getAuditReader() {
+		return AuditReaderFactory.get(sessionFactory.getCurrentSession());
 	}
+
 }

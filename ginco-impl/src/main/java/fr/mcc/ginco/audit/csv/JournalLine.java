@@ -34,22 +34,20 @@
  */
 package fr.mcc.ginco.audit.csv;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import fr.mcc.ginco.audit.RevisionLine;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
-public class JournalLine extends RevisionLine {
+public class JournalLine  implements Comparable<JournalLine>{
 
-	
 	private final static String COMMA = ",";
 	private final static String PIPE = "|";
 
-	private JournalEventsEnum eventType;
 	private String authorId;
 	private String termId;
 	private String conceptId;
@@ -59,14 +57,11 @@ public class JournalLine extends RevisionLine {
 	private String newLexicalValue;
 	private Set<String> oldGenericTerm;
 	private Set<String> newGenericTerm;
+	private Date eventDate;
 
-	public JournalEventsEnum getEventType() {
-		return eventType;
-	}
+	private Integer revisionNumber;
 
-	public void setEventType(JournalEventsEnum eventType) {
-		this.eventType = eventType;
-	}	
+	private JournalEventsEnum eventType;
 
 	public String getAuthorId() {
 		return authorId;
@@ -142,8 +137,9 @@ public class JournalLine extends RevisionLine {
 
 	public String toString() {
 		String line = new String();
-		line += StringEscapeUtils.escapeCsv(eventType.toString()) + COMMA;
-		line += StringEscapeUtils.escapeCsv(DateUtil.toString(getEventDate())) + COMMA;
+		line += StringEscapeUtils.escapeCsv(getEventType().toString()) + COMMA;
+		line += StringEscapeUtils.escapeCsv(DateUtil.toString(getEventDate()))
+				+ COMMA;
 		line += StringEscapeUtils.escapeCsv(authorId) + COMMA;
 		if (conceptId != null) {
 			line += StringEscapeUtils.escapeCsv(conceptId);
@@ -157,8 +153,9 @@ public class JournalLine extends RevisionLine {
 			line += StringEscapeUtils.escapeCsv(termRole);
 		}
 		line += COMMA;
-		if (status != null) {			
-			line += StringEscapeUtils.escapeCsv(LabelUtil.getResourceLabel("concept-status["+ status +"]"));
+		if (status != null) {
+			line += StringEscapeUtils.escapeCsv(LabelUtil
+					.getResourceLabel("concept-status[" + status + "]"));
 		}
 		line += COMMA;
 		if (oldLexicalValue != null) {
@@ -191,5 +188,43 @@ public class JournalLine extends RevisionLine {
 		return line;
 	}
 
-	
+	public Date getEventDate() {
+		return eventDate;
+	}
+
+	public void setEventDate(Date eventDate) {
+		this.eventDate = eventDate;
+	}
+
+	public Integer getRevisionNumber() {
+		return revisionNumber;
+	}
+
+	public void setRevisionNumber(Integer revisionNumber) {
+		this.revisionNumber = revisionNumber;
+	}
+
+	public JournalEventsEnum getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(JournalEventsEnum eventType) {
+		this.eventType = eventType;
+	}
+
+	@Override
+	public int compareTo(JournalLine o) {
+		if (!revisionNumber.equals(o.getRevisionNumber())) {
+			return revisionNumber.compareTo(o.getRevisionNumber());
+		} else {
+			if (!eventDate.equals(o.getEventDate())) {
+				return eventDate.compareTo(o.getEventDate());
+			} else {
+				return eventType.getPriority().compareTo(
+						o.getEventType().getPriority());
+			}
+
+		}
+	}
+
 }

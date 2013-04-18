@@ -40,7 +40,6 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.audit.RevisionLine;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 
@@ -52,7 +51,7 @@ public class AuditCSVWriter {
 	@Log
 	private Logger logger;
 	
-	public void writeJournalLine(RevisionLine line, BufferedWriter out) throws IOException {
+	public void writeJournalLine(JournalLine line, BufferedWriter out) throws IOException {
 		logger.debug(line.toString());
 		out.write(line.toString());
 		out.newLine();

@@ -46,21 +46,16 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.AuditReaderFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.audit.RevisionExportTypesEnum;
-import fr.mcc.ginco.audit.RevisionLine;
-import fr.mcc.ginco.audit.RevisionLineBuilderFactory;
 import fr.mcc.ginco.audit.csv.AuditCSVWriter;
-import fr.mcc.ginco.audit.readers.ThesaurusAuditReader;
-import fr.mcc.ginco.audit.readers.ThesaurusConceptAuditReader;
-import fr.mcc.ginco.audit.readers.ThesaurusTermAuditReader;
-import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.audit.csv.JournalLine;
+import fr.mcc.ginco.audit.csv.readers.ThesaurusAuditReader;
+import fr.mcc.ginco.audit.csv.readers.ThesaurusConceptAuditReader;
+import fr.mcc.ginco.audit.csv.readers.ThesaurusTermAuditReader;
+import fr.mcc.ginco.audit.utils.AuditReaderService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
@@ -74,10 +69,6 @@ import fr.mcc.ginco.utils.DateUtil;
 public class GincoRevServiceImpl implements IGincoRevService {
 	@Log
 	private Logger logger;
-
-	@Inject
-	@Named("gincoSessionFactory")
-	private SessionFactory sessionFactory;
 
 	@Inject
 	@Named("thesaurusVersionHistoryDAO")
@@ -100,8 +91,8 @@ public class GincoRevServiceImpl implements IGincoRevService {
 	ThesaurusAuditReader thesaurusAuditReader;
 
 	@Inject
-	@Named("revisionLineBuilderFactory")
-	RevisionLineBuilderFactory revisionLineBuilderFactory;
+	@Named("auditReaderService")
+	private AuditReaderService readerService;
 
 	/*
 	 * (non-Javadoc)
@@ -119,10 +110,6 @@ public class GincoRevServiceImpl implements IGincoRevService {
 			res.deleteOnExit();
 			BufferedWriter out = new BufferedWriter(new FileWriter(res));
 			auditCSVWriter.writeHeader(out);
-			termAuditReader.setRevisionLineBuilder(revisionLineBuilderFactory
-					.getRevisionLineBuilder(RevisionExportTypesEnum.CSV));
-			conceptAuditReader.setRevisionLineBuilder(revisionLineBuilderFactory
-					.getRevisionLineBuilder(RevisionExportTypesEnum.CSV));
 
 			ThesaurusVersionHistory lastPublishedVersion = thesaurusVersionHistoryDAO
 					.getLastPublishedVersionByThesaurusId(thesaurus
@@ -135,38 +122,35 @@ public class GincoRevServiceImpl implements IGincoRevService {
 					+ DateUtil.toString(startDate) + " for thesaurus "
 					+ thesaurus.getIdentifier());
 
-			List<RevisionLine> allEvents = new ArrayList<RevisionLine>();
+			List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
-			AuditReader reader = AuditReaderFactory.get(sessionFactory
-					.getCurrentSession());
-
-			allEvents.addAll(thesaurusAuditReader.getThesaurusAdded(reader,
-					thesaurus, startDate));
-
-			allEvents.addAll(termAuditReader.getTermAdded(reader, thesaurus,
+			allEvents.addAll(thesaurusAuditReader.getThesaurusAdded(thesaurus,
 					startDate));
 
-			allEvents.addAll(termAuditReader.getTermRoleChanged(reader,
+			allEvents
+					.addAll(termAuditReader.getTermAdded(thesaurus, startDate));
+
+			allEvents.addAll(termAuditReader.getTermRoleChanged(thesaurus,
+					startDate));
+
+			allEvents.addAll(termAuditReader.getTermLexicalValueChanged(
 					thesaurus, startDate));
 
-			allEvents.addAll(termAuditReader.getTermLexicalValueChanged(reader,
+			allEvents.addAll(termAuditReader.getTermAttachmentChanged(
 					thesaurus, startDate));
 
-			allEvents.addAll(termAuditReader.getTermAttachmentChanged(reader,
-					thesaurus, startDate));
-
-			allEvents.addAll(conceptAuditReader.getConceptAdded(reader,
-					thesaurus, startDate));
+			allEvents.addAll(conceptAuditReader.getConceptAdded(thesaurus,
+					startDate));
 
 			allEvents.addAll(conceptAuditReader.getConceptHierarchyChanged(
-					reader, thesaurus, startDate));
+					thesaurus, startDate));
 
-			allEvents.addAll(conceptAuditReader.getConceptStatusChanged(reader,
+			allEvents.addAll(conceptAuditReader.getConceptStatusChanged(
 					thesaurus, startDate));
 
 			Collections.sort(allEvents);
 
-			for (RevisionLine line : allEvents) {
+			for (JournalLine line : allEvents) {
 				auditCSVWriter.writeJournalLine(line, out);
 			}
 
@@ -174,72 +158,6 @@ public class GincoRevServiceImpl implements IGincoRevService {
 			out.close();
 			return res;
 
-		} catch (IOException e) {
-			throw new TechnicalException("Error writing audit log file", e);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * fr.mcc.ginco.services.IGincoRevService#getRevisions(fr.mcc.ginco.beans
-	 * .Thesaurus, long, fr.mcc.ginco.beans.Language)
-	 */
-	@Override
-	public File getRevisions(Thesaurus thesaurus, long timestamp,
-			Language language) throws IOException {
-		File res;
-		try {
-			res = File.createTempFile("pattern", ".suffix");
-
-			res.deleteOnExit();
-			BufferedWriter out = new BufferedWriter(new FileWriter(res));
-			termAuditReader.setRevisionLineBuilder(revisionLineBuilderFactory
-					.getRevisionLineBuilder(RevisionExportTypesEnum.COMMANDS));
-			conceptAuditReader.setRevisionLineBuilder(revisionLineBuilderFactory
-					.getRevisionLineBuilder(RevisionExportTypesEnum.COMMANDS));
-
-			Date startDate = new Date(timestamp);
-			logger.debug("Generating command logs from "
-					+ DateUtil.toString(startDate) + " for thesaurus "
-					+ thesaurus.getIdentifier());
-
-			AuditReader reader = AuditReaderFactory.get(sessionFactory
-					.getCurrentSession());
-
-			List<RevisionLine> allEvents = new ArrayList<RevisionLine>();
-
-			//Insert isolated term
-			allEvents.addAll(termAuditReader.getTermAdded(reader, thesaurus,
-					startDate, language));
-			
-			//Declare a synonym as prefered
-			allEvents.addAll(termAuditReader.getTermRoleChanged(reader,
-					thesaurus, startDate, language));
-
-			//delete a term + Insert isolated term
-			allEvents.addAll(termAuditReader.getTermLexicalValueChanged(reader,
-					thesaurus, startDate, language));
-
-			//Insert synonym
-			allEvents.addAll(termAuditReader.getTermAttachmentChanged(reader,
-					thesaurus, startDate, language));	
-
-			//Declare/delete a hierarchical relationship
-			allEvents.addAll(conceptAuditReader.getConceptHierarchyChanged(
-					reader, thesaurus, startDate, language));
-
-			Collections.sort(allEvents);
-
-			for (RevisionLine line : allEvents) {
-				out.write(line.toString());
-				out.newLine();
-			}
-
-			out.flush();
-			out.close();
-			return res;
 		} catch (IOException e) {
 			throw new TechnicalException("Error writing audit log file", e);
 		}

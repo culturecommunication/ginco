@@ -55,7 +55,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import fr.mcc.ginco.audit.readers.AuditQueryBuilder;
+import fr.mcc.ginco.audit.utils.AuditQueryBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
 import fr.mcc.ginco.beans.IAuditableBean;

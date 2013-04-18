@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.io.File;
 import java.io.IOException;
 
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 
 /**
@@ -51,16 +50,5 @@ public interface IGincoRevService {
      * @return
      */
 	File getLogJournal(Thesaurus thesaurus) throws IOException ;
-	
-	  
-	/**
-	 * returns the file containing commands for the MISTRAL database 
-	 * @param thesaurus the thesaurus to be exported
-	 * @param timestamp the start date of the file commands
-	 * @param language the language of the terms to be exported
-	 * @return
-	 * @throws IOException
-	 */
-	File getRevisions(Thesaurus thesaurus, long timestamp, Language language) throws IOException ;
     
   }

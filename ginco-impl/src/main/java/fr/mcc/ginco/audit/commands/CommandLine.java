@@ -34,10 +34,9 @@
  */
 package fr.mcc.ginco.audit.commands;
 
-import fr.mcc.ginco.audit.RevisionLine;
 
 
-public class CommandLine extends RevisionLine {
+public class CommandLine {
 
 	public final static String STARS = "**";
 	

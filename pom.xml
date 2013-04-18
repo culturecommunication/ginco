@@ -442,7 +442,7 @@
                 <groupId>org.apache.solr</groupId>
                 <artifactId>solr-solrj</artifactId>
                 <version>${org.apache.solr}</version>
-            </dependency>
+            </dependency>            
         </dependencies>
     </dependencyManagement>
     <build>

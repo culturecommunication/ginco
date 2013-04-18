@@ -56,8 +56,8 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.FileResponse;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.IGincoRevService;
 import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.IMistralRevService;
 import fr.mcc.ginco.services.IThesaurusService;
 
 /**
@@ -65,12 +65,11 @@ import fr.mcc.ginco.services.IThesaurusService;
  */
 @Service
 @Path("/revisionservice")
-@PreAuthorize("isAuthenticated()")
 public class RevisionsRestService {
-
+	
 	@Inject
-	@Named("gincoRevService")
-	private IGincoRevService gincoRevService;
+	@Named("mistralRevService")
+	private IMistralRevService mistralRevService;
 
 	@Inject
 	@Named("thesaurusService")
@@ -115,12 +114,12 @@ public class RevisionsRestService {
 			lang = languagesService.getLanguageById(language);
 		}
 		if (lang == null) {
-			log.info("No language set in exportREvisions, defaulting to default language "
+			log.info("No language set in exportRevisions, defaulting to default language "
 					+ defaultLang);
 			lang = languagesService.getLanguageById(defaultLang);
 		}
 
-		File resFile = gincoRevService.getRevisions(thesaurus, timestamp, lang);
+		File resFile = mistralRevService.getRevisions(thesaurus, timestamp, lang);
 
 		return new FileResponse(resFile, ".txt", thesaurus.getTitle())
 				.toResponse();
