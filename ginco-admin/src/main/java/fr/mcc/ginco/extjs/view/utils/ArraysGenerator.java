@@ -92,7 +92,7 @@ public class ArraysGenerator {
 	public List<IThesaurusListNode> generateArrays(String thesaurusId)
 			throws BusinessException {
 		logger.debug("Generating thesaurus arrays list for vocabularyId : " + thesaurusId);
-		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurusId);
+		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(null, thesaurusId);
 		logger.debug(arrays.size() + " arrays found");
 
 		List<IThesaurusListNode> newArrays = new ArrayList<IThesaurusListNode>();

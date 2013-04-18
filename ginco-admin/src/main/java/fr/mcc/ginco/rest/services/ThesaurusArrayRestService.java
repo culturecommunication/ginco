@@ -54,6 +54,7 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
@@ -81,7 +82,7 @@ public class ThesaurusArrayRestService {
 	@Inject
 	@Named("thesaurusArrayViewConverter")
 	private ThesaurusArrayViewConverter thesaurusArrayViewConverter;
-	
+
 	@Inject
 	@Named("thesaurusArrayConceptViewConverter")
 	private ThesaurusArrayConceptViewConverter thesaurusArrayConceptViewConverter;
@@ -107,55 +108,88 @@ public class ThesaurusArrayRestService {
 				.getThesaurusArrayById(thesaurusArrayId));
 	}
 
-    /**
-     * Public method used to create or update a concept.
-     * @param thesaurusArrayViewJAXBElement element to create/update.
-     * @return newly created object.
-     * @throws BusinessException in case of error.
-     */
+	/**
+	 * Public method used to get all concept arrays of a thesaurus without the
+	 * Concept Array which Id is given in parameter (can be null).
+	 * 
+	 * @return a list of concept arrays related to the ids of the thesaurus and
+	 *         excluded concept array given in parameter
+	 */
+	@GET
+	@Path("/getAllConceptArrays")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusArrayView>> getAllConceptArraysByThesaurusId(
+			@QueryParam("excludedConceptArrayId") String excludedConceptArrayId,
+			@QueryParam("thesaurusId") String thesaurusId)
+			throws BusinessException {
+		if ("".equals(excludedConceptArrayId)) {
+			excludedConceptArrayId = null;
+		}
+		List<ThesaurusArray> allArrays = thesaurusArrayService
+				.getAllThesaurusArrayByThesaurusId(excludedConceptArrayId,
+						thesaurusId);
+		ExtJsonFormLoadData<List<ThesaurusArrayView>> arrayViews = new ExtJsonFormLoadData<List<ThesaurusArrayView>>(
+				thesaurusArrayViewConverter.convert(allArrays));
+		arrayViews.setTotal((long) allArrays.size());
+		return arrayViews;
+	}
+
+	/**
+	 * Public method used to create or update a concept.
+	 * 
+	 * @param thesaurusArrayViewJAXBElement
+	 *            element to create/update.
+	 * @return newly created object.
+	 * @throws BusinessException
+	 *             in case of error.
+	 */
 	@POST
 	@Path("/updateArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusArrayView updateThesaurusArray(
 			ThesaurusArrayView thesaurusArrayViewJAXBElement)
-	
-			throws BusinessException {
+
+	throws BusinessException {
 
 		NodeLabel nodeLabel = nodeLabelViewConverter
 				.convert(thesaurusArrayViewJAXBElement);
-		
-		ThesaurusArray convertedArray = thesaurusArrayViewConverter
-				.convert(thesaurusArrayViewJAXBElement);		
 
-		 List<ThesaurusArrayConcept> arrayConcepts = new ArrayList<ThesaurusArrayConcept>();
-	        for(ThesaurusArrayConceptView view : thesaurusArrayViewJAXBElement.getConcepts()) {
-	        	arrayConcepts.add(thesaurusArrayConceptViewConverter.convert(view, convertedArray));
-	        }
-		
+		ThesaurusArray convertedArray = thesaurusArrayViewConverter
+				.convert(thesaurusArrayViewJAXBElement);
+
+		List<ThesaurusArrayConcept> arrayConcepts = new ArrayList<ThesaurusArrayConcept>();
+		for (ThesaurusArrayConceptView view : thesaurusArrayViewJAXBElement
+				.getConcepts()) {
+			arrayConcepts.add(thesaurusArrayConceptViewConverter.convert(view,
+					convertedArray));
+		}
+
 		ThesaurusArray updated = thesaurusArrayService.updateThesaurusArray(
 				convertedArray, nodeLabel, arrayConcepts);
 		return thesaurusArrayViewConverter.convert(updated);
 	}
-	
-	  /**
-		 * Public method used to delete
-		 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} -
-	     * thesaurus term JSON object send by extjs
-	     *
-		 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} deleted object
-		 *         in JSON format or {@code null} if not found
-		 * @throws BusinessException 
-		 */
-		@POST
-		@Path("/destroyArray")
-		@Consumes({ MediaType.APPLICATION_JSON })
-		@PreAuthorize("hasRole('ROLE_ADMIN')")
-		public void destroyArray(ThesaurusArrayView thesaurusArrayViewJAXBElement) throws BusinessException {
-			ThesaurusArray object = thesaurusArrayViewConverter.convert(thesaurusArrayViewJAXBElement);
-		
-			if (object != null) {
-				thesaurusArrayService.destroyThesaurusArray(object);
-			}
+
+	/**
+	 * Public method used to delete
+	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} - thesaurus term
+	 * JSON object send by extjs
+	 * 
+	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} deleted
+	 *         object in JSON format or {@code null} if not found
+	 * @throws BusinessException
+	 */
+	@POST
+	@Path("/destroyArray")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public void destroyArray(ThesaurusArrayView thesaurusArrayViewJAXBElement)
+			throws BusinessException {
+		ThesaurusArray object = thesaurusArrayViewConverter
+				.convert(thesaurusArrayViewJAXBElement);
+
+		if (object != null) {
+			thesaurusArrayService.destroyThesaurusArray(object);
 		}
+	}
 }

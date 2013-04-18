@@ -52,7 +52,7 @@ Ext.define('GincoApp.store.ConceptGroupStore', {
                 url: 'services/ui/thesaurusconceptgroupservice/getAllConceptGroups',
                 reader: {
                     type: 'json',
-                    idProperty: 'code',
+                    idProperty: 'identifier',
                     root: 'data'
                 }
             }

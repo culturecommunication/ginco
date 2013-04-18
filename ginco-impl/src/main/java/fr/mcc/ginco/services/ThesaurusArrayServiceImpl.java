@@ -83,10 +83,9 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 	}
 
 	@Override
-	public List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(
-			String thesaurusId) {
+	public List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String excludedConceptArrayId, String thesaurusId) {
 		return thesaurusArrayDAO
-				.getThesaurusArrayListByThesaurusId(thesaurusId);
+				.getThesaurusArrayListByThesaurusId(excludedConceptArrayId,thesaurusId);
 	}
 
 	@Override

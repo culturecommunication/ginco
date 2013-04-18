@@ -169,7 +169,7 @@ public class FolderGenerator {
 		arrays.setExpanded(false);
 		arrays.setDisplayable(false);
 		List<ThesaurusArray> realArrays = thesaurusArrayService
-				.getAllThesaurusArrayByThesaurusId(parentId);
+				.getAllThesaurusArrayByThesaurusId(null, parentId);
 		if (realArrays != null && realArrays.size() > 0) {
 			arrays.setChildren(null);
 		} else {

@@ -55,3 +55,11 @@ ALTER TABLE concept_group
   ADD CONSTRAINT fk_concept_group FOREIGN KEY (parentgroupid)
       REFERENCES concept_group (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE SET NULL;
+      
+--Add parent to a array concept
+ALTER TABLE thesaurus_array ADD COLUMN parentarrayid text;
+
+ALTER TABLE thesaurus_array
+  ADD CONSTRAINT fk_concept_array FOREIGN KEY (parentarrayid)
+      REFERENCES thesaurus_array (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE SET NULL;

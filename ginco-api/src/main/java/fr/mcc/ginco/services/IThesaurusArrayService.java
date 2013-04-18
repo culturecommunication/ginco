@@ -56,11 +56,12 @@ public interface IThesaurusArrayService {
     ThesaurusArray getThesaurusArrayById(String id);
 
     /**
-     * Get list of ThesaurusArray by corresponding Thesaurus.
+     * Get list of ThesaurusArray by corresponding Thesaurus, excluding the concept array which id is given in parameter
+     * @param excludedConceptArrayId : the concept to exclude (can be null)
      * @param thesaurusId
      * @return
      */
-    List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId);
+    List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String excludedConceptArrayId, String thesaurusId);
 
     /**
      * Update a single Thesaurus Concept Object    

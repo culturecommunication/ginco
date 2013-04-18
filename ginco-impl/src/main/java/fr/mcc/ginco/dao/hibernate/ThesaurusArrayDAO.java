@@ -53,12 +53,12 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
 	}
 
     @Override
-    public List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String thesaurusId) {
+    public List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String excludedConceptArrayId, String thesaurusId) {
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusArray.class, "ta");
 
         selectThesaurus(criteria, thesaurusId);
-
+        excludeAnArrayById(criteria, excludedConceptArrayId);
         return criteria.list();
     }
 
@@ -93,6 +93,10 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
         selectThesaurus(criteria, thesaurusId);
         return criteria.list();
     }
-
-
+    
+    private void excludeAnArrayById(Criteria criteria, String excludedConceptArrayId) {
+        if (excludedConceptArrayId != null) {
+        	criteria.add(Restrictions.ne("ta.identifier", (String) excludedConceptArrayId));
+        }
+    }
 }

@@ -121,12 +121,12 @@ public class ThesaurusArrayServiceTest {
         mockArray1.setIdentifier("1");
         mockArray1.setThesaurus(mockThesaurus);
 
-        when(thesaurusArrayDAO.getThesaurusArrayListByThesaurusId(anyString())).thenReturn(new ArrayList<ThesaurusArray>(){{
+        when(thesaurusArrayDAO.getThesaurusArrayListByThesaurusId(anyString(), anyString())).thenReturn(new ArrayList<ThesaurusArray>(){{
             add(mockArray1);
             add(mockArray2);
         }});
 
-        List<ThesaurusArray> actual = thesaurusArrayService.getAllThesaurusArrayByThesaurusId("th1");
+        List<ThesaurusArray> actual = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(null, "th1");
 
         Assert.assertEquals(2, actual.size());
     }

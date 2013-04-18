@@ -59,19 +59,6 @@ public class ThesaurusArrayConceptViewConverter {
 	@Named("thesaurusArrayConceptService")
 	private IThesaurusArrayConceptService thesaurusArrayConceptService;
 
-   /* public AssociativeRelationshipView convert(Theasu associativeRelationship) {
-        AssociativeRelationshipView view = new AssociativeRelationshipView();
-        String leftId = associativeRelationship.getConceptRight().getIdentifier();
-        view.setIdentifier(leftId);
-        view.setLabel(thesaurusConceptService.getConceptLabel(leftId));
-        if(associativeRelationship.getRelationshipRole() == null) {
-            view.setRoleCode(associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole().getCode());
-        } else {
-            view.setRoleCode(associativeRelationship.getRelationshipRole().getCode());
-        }
-        return view;
-    }*/
-
     public ThesaurusArrayConcept convert(ThesaurusArrayConceptView thesaurusArrayConceptView,
                                            ThesaurusArray array) {
     	ThesaurusArrayConcept.Id id = new ThesaurusArrayConcept.Id();

@@ -198,7 +198,7 @@ public class GincoThesaurusExportServiceImpl implements
 
 		// ---Exporting the arrays
 		List<ThesaurusArray> arrays = thesaurusArrayService
-				.getAllThesaurusArrayByThesaurusId(thesaurusId);
+				.getAllThesaurusArrayByThesaurusId(null, thesaurusId);
 		thesaurusToExport.setConceptArrays(arrays);
 
 		// ---Exporting the labels of all arrays

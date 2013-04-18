@@ -232,6 +232,32 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		
 	},
 	
+	selectParentArray : function(theButton){
+		var me = this;
+		var theForm = theButton.up('form');
+	    var thePanel =theButton.up('conceptArrayPanel');
+	    
+	    var win = Ext.create('GincoApp.view.SelectArrayWin', {
+			thesaurusData : thePanel.thesaurusData,
+			excludedConceptArrayId : thePanel.gincoId,
+			currentParentId : theForm.down('textfield[name="parentArrayId"]').getValue(),
+			listeners: {
+				selectBtn: {
+                fn: function(selectedRow) {
+                        me.selectArrayAsParent(selectedRow, theForm);
+                    }
+            }
+        }
+	    });
+	    win.show();
+	},
+	
+	selectArrayAsParent : function(selectedRow, theForm){
+		theForm.down('textfield[name="parentArrayLabel"]').setValue(selectedRow[0].data.label);
+		theForm.down('textfield[name="parentArrayId"]').setValue(selectedRow[0].data.identifier);
+	},
+
+	
 	selectConceptToArray : function(theButton){
 		//This method opens a popup to add concepts to the concept array
 		var me = this;
@@ -340,6 +366,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
  			'conceptArrayPanel #saveConceptArray' : {
  				click : this.saveConceptArray
  			},
+            'conceptArrayPanel  #selectParentArray' : {
+                click : this.selectParentArray
+            },
             'conceptArrayPanel  #selectParentConcept' : {
                 click : this.selectParentConcept
             },

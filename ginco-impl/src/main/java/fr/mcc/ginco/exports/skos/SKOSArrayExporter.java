@@ -77,7 +77,7 @@ public class SKOSArrayExporter {
 	 */
 	public String exportCollections(Thesaurus thesaurus) {
 		List<ThesaurusArray> arrays = thesaurusArrayService
-				.getAllThesaurusArrayByThesaurusId(thesaurus.getIdentifier());
+				.getAllThesaurusArrayByThesaurusId(null, thesaurus.getIdentifier());
 
 		if (arrays.size() != 0) {
 
