@@ -271,11 +271,16 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		} else {
 			selectedRow[0].setDirty();
 			
-			var maxOrder =	theConceptArrayGridStore.max( "order");			
+			var maxOrder = -1;
+			if (theConceptArrayGridStore.getCount() > 0) {
+				 maxOrder =	parseInt(theConceptArrayGridStore.max( "order"))+1;
+			} else {
+				maxOrder = parseInt(maxOrder) +1;
+			}
 			var conceptModel = Ext.create('GincoApp.model.ArrayConceptModel');
 			conceptModel.set('label',selectedRow[0].get('label'));
 			conceptModel.set('identifier',selectedRow[0].get('identifier'));
-			conceptModel.set('order', parseInt(maxOrder)+1);
+			conceptModel.set('order', parseInt(maxOrder));
              
 			theConceptArrayGridStore.add(conceptModel);			
 		}		
@@ -315,22 +320,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	        var thePanel = me.getActivePanel();
 	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 			topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
-	},
+	},	
 	
-	onConceptAdded : function(store, records, index, eOpts) {
-		alert("event detected");
-		var maxOrder = 0;
-		var arrayConcepts = store.getRange();
-		Ext.Array.each(arrayConcepts, function(arrayConcept) {
-			if (arrayConcept.order > maxOrder) {
-				maxOrder = arrayConcept.order;
-			}
-		});
-		Ext.Array.each(records, function(record) {
-			maxOrder = maxOrder +1;
-			record.order=maxOrder;
-		});
-	},
 	
     init:function(){    	  	 
          this.control({
