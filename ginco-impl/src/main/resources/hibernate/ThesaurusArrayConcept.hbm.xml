@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC  "-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="ThesaurusArrayConcept" table="thesaurus_array_concept">
+		<cache usage="read-write" />
+
+		<composite-id name="identifier"
+			class="fr.mcc.ginco.beans.ThesaurusArrayConcept$Id">
+			<key-property name="thesaurusArrayId" />
+			<key-property name="conceptId" />
+		</composite-id>
+
+		<property name="arrayOrder" column="arrayorder" lazy="false" />		
+
+		<many-to-one name="concepts" class="fr.mcc.ginco.beans.ThesaurusConcept"
+			insert="false" update="false">
+			<column name="conceptId" />
+		</many-to-one>
+
+	</class>
+</hibernate-mapping>     

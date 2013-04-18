@@ -83,6 +83,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xArchive: 'Archive',
     xPolyHierarchical: 'Polyhierarchical',
     xImportSandbox: 'Import sandbox terms',
+    xImportBranch: 'Import a branch',
 	
 	initComponent : function() {
 		var me = this;
@@ -229,6 +230,14 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 		                                                requiredRoles : ['ADMIN'],
 		                                                disabled : true,
 		                                                itemId : 'importSandbox',
+		                                                iconCls : 'exports-icon'
+                                            },{
+                                                xtype : 'button',
+                                                text : me.xImportBranch,
+                                                requiredRoles : ['ADMIN'],
+                                                disabled : false,
+                                                itemId : 'importBranch',
+                                                iconCls : 'exports-icon'
                                             } ]
 									} ],
 										items : [ {

@@ -38,6 +38,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -156,5 +157,16 @@ public interface IThesaurusTermService {
 	 * 
 	 * @return preferred or not preferred
 	 */
-	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;    
+	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException; 
+	
+	/**
+	 * This method imports sandboxed terms 
+	 * @param list of term lexical values
+	 * @param thesaurus identifier
+	 * 
+	 * @return
+	 * @throws TechnicalException
+	 * @throws BusinessException
+	 */
+	List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId) throws TechnicalException, BusinessException;
 }

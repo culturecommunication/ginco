@@ -34,25 +34,30 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
-import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
+
 /**
- * Implementation of the thesaurus array service contains methods relatives to the
- * ThesaurusArray object
+ * Implementation of the thesaurus array service contains methods relatives to
+ * the ThesaurusArray object
  */
-@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusArrayService")
 public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 
@@ -60,29 +65,42 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
-    @Inject
-    @Named("nodeLabelService")
-    private INodeLabelService nodeLabelService;
+	@Inject
+	@Named("nodeLabelService")
+	private INodeLabelService nodeLabelService;
 
-    @Override
-    public ThesaurusArray getThesaurusArrayById(String id) {
-        return thesaurusArrayDAO.getById(id);
-    }
+	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
 
-	@Transactional(readOnly=true)
-    @Override
-    public List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId) {
-        return thesaurusArrayDAO.getThesaurusArrayListByThesaurusId(thesaurusId);
-    }
+	@Inject
+	@Named("thesaurusArrayHelper")
+	private ThesaurusArrayHelper thesaurusArrayHelper;
 
-    @Override
-    public ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray) throws BusinessException {
-        return thesaurusArrayDAO.update(thesaurusArray);
-    }
+	@Override
+	public ThesaurusArray getThesaurusArrayById(String id) {
+		return thesaurusArrayDAO.getById(id);
+	}
 
-    @Transactional(readOnly=false)
-    @Override
-    public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel nodeLabel) throws BusinessException {
+	@Override
+	public List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(
+			String thesaurusId) {
+		return thesaurusArrayDAO
+				.getThesaurusArrayListByThesaurusId(thesaurusId);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray)
+			throws BusinessException {
+		return thesaurusArrayDAO.update(thesaurusArray);
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray,
+			NodeLabel nodeLabel, List<ThesaurusArrayConcept> arrayConcepts)
+			throws BusinessException {
 
 		if (thesaurusArray.getSuperOrdinateConcept() != null) {
 			if (thesaurusArray.getSuperOrdinateConcept().getStatus() != ConceptStatusEnum.VALIDATED
@@ -92,51 +110,71 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 						"only-validated-concept-parent-of-concept-array");
 			}
 		}
-		
-		if (thesaurusArray.getConcepts() != null && thesaurusArray.getSuperOrdinateConcept() != null){
-			//We get all arrays matching our superordinate, excluding our concept from the list
-			List<ThesaurusArray> arrayWithSameSuperOrdinate = thesaurusArrayDAO.getConceptSuperOrdinateArrays(thesaurusArray.getSuperOrdinateConcept().getIdentifier(), thesaurusArray.getIdentifier());
-			Set<ThesaurusConcept> allChildren = thesaurusArray.getConcepts();
+
+		if (thesaurusArray.getConcepts() != null
+				&& thesaurusArray.getSuperOrdinateConcept() != null) {
+			// We get all arrays matching our superordinate, excluding our
+			// concept from the list
+			List<ThesaurusArray> arrayWithSameSuperOrdinate = thesaurusArrayDAO
+					.getConceptSuperOrdinateArrays(thesaurusArray
+							.getSuperOrdinateConcept().getIdentifier(),
+							thesaurusArray.getIdentifier());
+			Set<ThesaurusArrayConcept> allChildren = thesaurusArray
+					.getConcepts();
 
 			for (ThesaurusArray currentArray : arrayWithSameSuperOrdinate) {
-				Set<ThesaurusConcept> conceptOfEachArray = currentArray.getConcepts();
-				for (ThesaurusConcept thesaurusConcept : conceptOfEachArray) {
+				Set<ThesaurusArrayConcept> conceptOfEachArray = currentArray
+						.getConcepts();
+				for (ThesaurusArrayConcept thesaurusConcept : conceptOfEachArray) {
 					if (allChildren.contains(thesaurusConcept)) {
-						//Another array with same superordinate contains a concept we have included in our array
-						throw new BusinessException("A concept included in this array is already included in a similar array (same parent concept)", "array-concept-included-twice"); 
+						// Another array with same superordinate contains a
+						// concept we have included in our array
+						throw new BusinessException(
+								"A concept included in this array is already included in a similar array (same parent concept)",
+								"array-concept-included-twice");
 					}
 				}
 			}
-			
-			//We test that the select children are child of superordinate
-			for (ThesaurusConcept thesaurusConcept : allChildren) {
-				Set<ThesaurusConcept> parentsOfChild = thesaurusConcept.getParentConcepts();
-				if (!parentsOfChild.contains(thesaurusArray.getSuperOrdinateConcept())) {
-					throw new BusinessException("A concept is not a child of the selected parent concept", "concept-not-child-of-superordinate");
+
+			// We test that the select children are child of superordinate
+			for (ThesaurusArrayConcept thesaurusArrayConcept : allChildren) {
+				Set<ThesaurusConcept> parentsOfChild = thesaurusConceptDAO
+						.getById(
+								thesaurusArrayConcept.getIdentifier()
+										.getConceptId()).getParentConcepts();
+				if (!parentsOfChild.contains(thesaurusArray
+						.getSuperOrdinateConcept())) {
+					throw new BusinessException(
+							"A concept is not a child of the selected parent concept",
+							"concept-not-child-of-superordinate");
 				}
 			}
 		}
 
-        ThesaurusArray updated = thesaurusArrayDAO.update(thesaurusArray);
-        nodeLabel.setThesaurusArray(updated);
-        nodeLabelService.updateOrCreate(nodeLabel);
-        return updated;
-    }    
-    
-	@Transactional(readOnly=false)
-    @Override
-    public ThesaurusArray destroyThesaurusArray(ThesaurusArray thesaurusArray) {
-    	return thesaurusArrayDAO.delete(thesaurusArray);    	
-    }
+		ThesaurusArray updated = thesaurusArrayDAO.update(thesaurusArray);
 
-    @Override
-    public List<ThesaurusArray> getSubOrdinatedArrays(String thesaurusConceptId) {
-        return thesaurusArrayDAO.getConceptSuperOrdinateArrays(thesaurusConceptId);
-    }
-	
-    @Override
-    public List<ThesaurusArray> getArraysWithoutParentConcept(String thesaurusId) {
-        return thesaurusArrayDAO.getArraysWithoutSuperordinatedConcept(thesaurusId);
-    }
+		thesaurusArrayHelper.saveArrayConcepts(updated, arrayConcepts);
+		nodeLabel.setThesaurusArray(updated);
+		nodeLabelService.updateOrCreate(nodeLabel);
+		return updated;
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public ThesaurusArray destroyThesaurusArray(ThesaurusArray thesaurusArray) {
+		return thesaurusArrayDAO.delete(thesaurusArray);
+	}
+
+	@Override
+	public List<ThesaurusArray> getSubOrdinatedArrays(String thesaurusConceptId) {
+		return thesaurusArrayDAO
+				.getConceptSuperOrdinateArrays(thesaurusConceptId);
+	}
+
+	@Override
+	public List<ThesaurusArray> getArraysWithoutParentConcept(String thesaurusId) {
+		return thesaurusArrayDAO
+				.getArraysWithoutSuperordinatedConcept(thesaurusId);
+	}
 
 }

@@ -38,11 +38,11 @@ Ext.define('GincoApp.controller.ImportController', {
 
 	localized : true,
 	
-	xWaitingLabel : 'Import en cours',
-	xSucessLabelTitle : 'Succès',
-	xSucessLabel : 'Le thésaurus a été importé avec succès : ',
-	xFailureLabelTitle: 'Erreur',
-
+	xWaitingLabel : 'Importing...',
+	xSucessLabelTitle : 'Success',
+	xSucessLabel : 'Element successfully imported : ',
+	xSucessSandboxLabel : 'Elements successfully imported',
+	xFailureLabelTitle: 'Error',
 	
 	importSaveClick : function(theButton){
 		var me = this;
@@ -54,7 +54,11 @@ Ext.define('GincoApp.controller.ImportController', {
 		} else if (theWin.importType == 'gincoxml') {
 			importUrl = 'services/ui/importservice/importGincoXml';
 		} else if (theWin.importType == 'txt') {
-			importUrl = 'services/ui/thesaurustermservice/importSandBoxTerms';
+			importUrl = 'services/ui/importservice/importSandBoxTerms?thesaurusId='
+	            + encodeURIComponent(theForm.up('importWindow').thesaurusData.id);
+		} else if (theWin.importType == 'gincoBranchXml') {
+			importUrl = 'services/ui/importservice/importGincoBranchXml?thesaurusId='
+	            + encodeURIComponent(theForm.up('importWindow').thesaurusData.id);
 		}
 		
 		
@@ -66,18 +70,31 @@ Ext.define('GincoApp.controller.ImportController', {
 						waitMsg : me.xWaitingLabel,
 						success : function(
 								fp,
-								o) {																							
-							Ext.Msg
-									.show({
-										title : me.xSucessLabelTitle,
-										msg : me.xSucessLabel
-												+ o.result.data.title,
-										minWidth : 200,
-										modal : true,
-										icon : Ext.Msg.INFO,
-										buttons : Ext.Msg.OK
-									});
-							me.application.fireEvent('thesaurusupdated');						
+								o) {			
+							if(theWin.importType == 'txt'){
+								Ext.Msg
+								.show({
+									title : me.xSucessLabelTitle,
+									msg : me.xSucessSandboxLabel,
+									minWidth : 200,
+									modal : true,
+									icon : Ext.Msg.INFO,
+									buttons : Ext.Msg.OK
+								});
+							}
+							else{
+								Ext.Msg
+								.show({
+									title : me.xSucessLabelTitle,
+									msg : me.xSucessLabel
+											+ o.result.data.title,
+									minWidth : 200,
+									modal : true,
+									icon : Ext.Msg.INFO,
+									buttons : Ext.Msg.OK
+								});
+								me.application.fireEvent('thesaurusupdated');	
+							}					
 						},
 						failure: function(form, action) {
 							Ext.MessageBox.show({

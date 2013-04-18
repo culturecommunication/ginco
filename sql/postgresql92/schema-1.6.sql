@@ -8,3 +8,5 @@ ALTER TABLE concept_group
   ADD CONSTRAINT fk_concept_group FOREIGN KEY (parentgroupid)
       REFERENCES concept_group (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
+      
+ALTER TABLE thesaurus_array_concept ADD COLUMN arrayorder integer NOT NULL DEFAULT 0;

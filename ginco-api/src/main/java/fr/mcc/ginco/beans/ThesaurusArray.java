@@ -57,7 +57,7 @@ public class ThesaurusArray implements Serializable {
 	@XmlTransient
 	private Thesaurus thesaurus;
 	private ThesaurusConcept superOrdinateConcept;
-	private Set<ThesaurusConcept> concepts = new HashSet<ThesaurusConcept>();
+	private Set<ThesaurusArrayConcept> concepts = new HashSet<ThesaurusArrayConcept>();
 	
 	public String getIdentifier() {
 		return identifier;
@@ -89,10 +89,10 @@ public class ThesaurusArray implements Serializable {
 	public void setSuperOrdinateConcept(ThesaurusConcept superOrdinateConcept) {
 		this.superOrdinateConcept = superOrdinateConcept;
 	}
-	public Set<ThesaurusConcept> getConcepts() {
+	public Set<ThesaurusArrayConcept> getConcepts() {
 		return concepts;
 	}
-	public void setConcepts(Set<ThesaurusConcept> concepts) {
+	public void setConcepts(Set<ThesaurusArrayConcept> concepts) {
 		this.concepts = concepts;
 	}
 }

@@ -435,11 +435,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		ThesaurusArray currentArray = new ThesaurusArray();
 		List<ThesaurusConcept> returnAvailableConcepts = new ArrayList<ThesaurusConcept>();
 
-		if (arrayId != null && !"".equals(arrayId)) {
+		if (StringUtils.isNotEmpty(arrayId)) {
 			currentArray = thesaurusArrayDAO.getById(arrayId);
 		}
 
-		if (arrayId != null && !"".equals(arrayId)
+		if (StringUtils.isNotEmpty(arrayId)
 				&& currentArray.getSuperOrdinateConcept() != null) {
 			// We get all arrays matching our superordinate, excluding our
 			// concept from the list
@@ -452,10 +452,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 							.getIdentifier());
 
 			for (ThesaurusArray thesaurusArray : arrayWithSameSuperOrdinate) {
-				Set<ThesaurusConcept> conceptOfEachArray = thesaurusArray
+				Set<ThesaurusArrayConcept> conceptOfEachArray = thesaurusArray
 						.getConcepts();
-				for (ThesaurusConcept thesaurusConcept : conceptOfEachArray) {
-					returnAvailableConcepts.remove(thesaurusConcept);
+				for (ThesaurusArrayConcept thesaurusConcept : conceptOfEachArray) {
+					returnAvailableConcepts.remove(thesaurusConcept.getConcepts());
 				}
 			}
 		} else {
@@ -467,10 +467,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					.getTopTermThesaurusConcept(thesaurusDAO
 							.getById(thesaurusId));
 			for (ThesaurusArray thesaurusArray : arrayWithNoSuperOrdinate) {
-				Set<ThesaurusConcept> conceptOfEachArrayWithoutSuperordinate = thesaurusArray
+				Set<ThesaurusArrayConcept> conceptOfEachArrayWithoutSuperordinate = thesaurusArray
 						.getConcepts();
-				for (ThesaurusConcept thesaurusConcept : conceptOfEachArrayWithoutSuperordinate) {
-					returnAvailableConcepts.remove(thesaurusConcept);
+				for (ThesaurusArrayConcept thesaurusConcept : conceptOfEachArrayWithoutSuperordinate) {
+					returnAvailableConcepts.remove(thesaurusConcept.getConcepts());
 				}
 			}
 

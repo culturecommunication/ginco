@@ -34,15 +34,9 @@
  */
 package fr.mcc.ginco.tests.exports;
 
-import fr.mcc.ginco.beans.*;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.ExportServiceImpl;
-import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.IThesaurusArrayService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,225 +45,372 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.ExportServiceImpl;
+import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
+import fr.mcc.ginco.services.INodeLabelService;
+import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ExportServiceTest {
 
-    @Mock(name = "thesaurusArrayService")
-    private IThesaurusArrayService thesaurusArrayService;
+	@Mock(name = "thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;
 
-    @Mock(name = "thesaurusTermService")
-    private IThesaurusTermService thesaurusTermService;
+	@Mock(name = "thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
 
-    @Mock(name = "nodeLabelService")
-    private INodeLabelService nodeLabelService;
+	@Mock(name = "nodeLabelService")
+	private INodeLabelService nodeLabelService;
 
-    @Mock(name = "thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
+	@Mock(name = "thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-    @InjectMocks
-    private ExportServiceImpl exportService;
+	@Mock(name = "thesaurusArrayHelper")
+	private ThesaurusArrayHelper thesaurusArrayHelper;
 
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-        LoggerTestUtil.initLogger(exportService);
-    }
+	@InjectMocks
+	private ExportServiceImpl exportService;
 
-    @Test
-    public void testGetHierarchicalText() throws BusinessException {
-        final Thesaurus th1 = new Thesaurus();
-        th1.setTitle("Test thesaurus");
-        th1.setIdentifier("th1");
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+		LoggerTestUtil.initLogger(exportService);
+	}
 
-        Language language = new Language();
-        language.setId("fra");
+	@Test
+	public void testGetHierarchicalText() throws BusinessException {
+		final Thesaurus th1 = new Thesaurus();
+		th1.setTitle("Test thesaurus");
+		th1.setIdentifier("th1");
 
-        final ThesaurusConcept co1 = new ThesaurusConcept();
-        co1.setIdentifier("co1");
-        co1.setThesaurus(th1);
-        co1.setTopConcept(true);
-        final ThesaurusConcept co1_1 = new ThesaurusConcept();
-        co1_1.setThesaurus(th1);
-        co1_1.setIdentifier("co1_1");
-        final ThesaurusConcept co2 = new ThesaurusConcept();
-        co2.setThesaurus(th1);
-        co2.setIdentifier("co2");
-        co2.setTopConcept(true);
-        final ThesaurusConcept co2_1 = new ThesaurusConcept();
-        co2_1.setThesaurus(th1);
-        co2_1.setIdentifier("co2_1");
-        final ThesaurusConcept co3 = new ThesaurusConcept();
-        co3.setThesaurus(th1);
-        co3.setIdentifier("co3");
-        co3.setTopConcept(true);
-        final ThesaurusConcept co3_1 = new ThesaurusConcept();
-        co3_1.setThesaurus(th1);
-        co3_1.setIdentifier("co3_1");
+		Language language = new Language();
+		language.setId("fra");
 
-        final ThesaurusTerm tr1 = new ThesaurusTerm();
-        tr1.setLexicalValue("co1");
-        tr1.setConcept(co1);
-        tr1.setIdentifier("tr1");
-        tr1.setPrefered(true);
-        tr1.setLanguage(language);
-        Mockito.when(thesaurusConceptService.getConceptTitle(co1)).thenReturn("co1");
-        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co1)).thenReturn("fra");
+		final ThesaurusConcept co1 = new ThesaurusConcept();
+		co1.setIdentifier("co1");
+		co1.setThesaurus(th1);
+		co1.setTopConcept(true);
+		final ThesaurusConcept co1_1 = new ThesaurusConcept();
+		co1_1.setThesaurus(th1);
+		co1_1.setIdentifier("co1_1");
+		final ThesaurusConcept co2 = new ThesaurusConcept();
+		co2.setThesaurus(th1);
+		co2.setIdentifier("co2");
+		co2.setTopConcept(true);
+		final ThesaurusConcept co2_1 = new ThesaurusConcept();
+		co2_1.setThesaurus(th1);
+		co2_1.setIdentifier("co2_1");
+		final ThesaurusConcept co3 = new ThesaurusConcept();
+		co3.setThesaurus(th1);
+		co3.setIdentifier("co3");
+		co3.setTopConcept(true);
+		final ThesaurusConcept co3_1 = new ThesaurusConcept();
+		co3_1.setThesaurus(th1);
+		co3_1.setIdentifier("co3_1");
 
-        final ThesaurusTerm tr1_1 = new ThesaurusTerm();
-        tr1_1.setLexicalValue("co1_1");
-        tr1_1.setConcept(co1_1);
-        tr1_1.setIdentifier("tr1_1");
-        tr1_1.setPrefered(true);
-        tr1_1.setLanguage(language);
-        Mockito.when(thesaurusConceptService.getConceptTitle(co1_1)).thenReturn("co1_1");
-        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co1_1)).thenReturn("fra");
-        
-        final ThesaurusTerm tr2 = new ThesaurusTerm();
-        tr2.setLexicalValue("co2");
-        tr2.setConcept(co2);
-        tr2.setIdentifier("tr2");
-        tr2.setPrefered(true);
-        tr2.setLanguage(language);
-        Mockito.when(thesaurusConceptService.getConceptTitle(co2)).thenReturn("co2");
-        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co2)).thenReturn("fra");
-        
-        final ThesaurusTerm tr2_1 = new ThesaurusTerm();
-        tr2_1.setLexicalValue("co2_1");
-        tr2_1.setConcept(co2_1);
-        tr2_1.setIdentifier("tr2_1");
-        tr2_1.setPrefered(true);
-        tr2_1.setLanguage(language);
-        Mockito.when(thesaurusConceptService.getConceptTitle(co2_1)).thenReturn("co2_1");
-        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co2_1)).thenReturn("fra");
-        
-        final ThesaurusTerm tr3 = new ThesaurusTerm();
-        tr3.setLexicalValue("co3");
-        tr3.setConcept(co3);
-        tr3.setIdentifier("tr3");
-        tr3.setPrefered(true);
-        tr3.setLanguage(language);
-        Mockito.when(thesaurusConceptService.getConceptTitle(co3)).thenReturn("co3");
-        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co3)).thenReturn("fra");
-        
-        final ThesaurusTerm tr3_1 = new ThesaurusTerm();
-        tr3_1.setLexicalValue("co3_1");
-        tr3_1.setConcept(co3_1);
-        tr3_1.setIdentifier("tr3_1");
-        tr3_1.setPrefered(true);
-        tr3_1.setLanguage(language);
-        Mockito.when(thesaurusConceptService.getConceptTitle(co3_1)).thenReturn("co3_1");
-        Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co3_1)).thenReturn("fra");
-        
-        final ThesaurusArray ar1 = new ThesaurusArray();
-        ar1.setThesaurus(th1);
-        ar1.setSuperOrdinateConcept(co1);
-        ar1.getConcepts().add(co1_1);
-        ar1.setIdentifier("ar1");
-        NodeLabel nl1 = new NodeLabel();
-        nl1.setLexicalValue("ar1");
-        nl1.setThesaurusArray(ar1);
+		final ThesaurusTerm tr1 = new ThesaurusTerm();
+		tr1.setLexicalValue("co1");
+		tr1.setConcept(co1);
+		tr1.setIdentifier("tr1");
+		tr1.setPrefered(true);
+		tr1.setLanguage(language);
+		Mockito.when(thesaurusConceptService.getConceptTitle(co1)).thenReturn(
+				"co1");
+		Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co1))
+				.thenReturn("fra");
 
-        final ThesaurusArray ar2 = new ThesaurusArray();
-        ar2.setThesaurus(th1);
-        ar2.setIdentifier("ar2");
-        ar2.getConcepts().add(co2);
-        NodeLabel nl2 = new NodeLabel();
-        nl2.setLexicalValue("ar2");
-        nl2.setThesaurusArray(ar2);
+		final ThesaurusTerm tr1_1 = new ThesaurusTerm();
+		tr1_1.setLexicalValue("co1_1");
+		tr1_1.setConcept(co1_1);
+		tr1_1.setIdentifier("tr1_1");
+		tr1_1.setPrefered(true);
+		tr1_1.setLanguage(language);
+		Mockito.when(thesaurusConceptService.getConceptTitle(co1_1))
+				.thenReturn("co1_1");
+		Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co1_1))
+				.thenReturn("fra");
 
-        Mockito.when(thesaurusConceptService.getTopTermThesaurusConcepts(th1.getIdentifier())).thenReturn(new ArrayList<ThesaurusConcept>() {{
-            add(co1);
-            add(co2);
-            add(co3);
-        }});
+		final ThesaurusTerm tr2 = new ThesaurusTerm();
+		tr2.setLexicalValue("co2");
+		tr2.setConcept(co2);
+		tr2.setIdentifier("tr2");
+		tr2.setPrefered(true);
+		tr2.setLanguage(language);
+		Mockito.when(thesaurusConceptService.getConceptTitle(co2)).thenReturn(
+				"co2");
+		Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co2))
+				.thenReturn("fra");
 
-        Mockito.when(thesaurusArrayService.getArraysWithoutParentConcept(th1.getIdentifier())).thenReturn(new ArrayList<ThesaurusArray>(){{
-            add(ar2);
-        }});
+		final ThesaurusTerm tr2_1 = new ThesaurusTerm();
+		tr2_1.setLexicalValue("co2_1");
+		tr2_1.setConcept(co2_1);
+		tr2_1.setIdentifier("tr2_1");
+		tr2_1.setPrefered(true);
+		tr2_1.setLanguage(language);
+		Mockito.when(thesaurusConceptService.getConceptTitle(co2_1))
+				.thenReturn("co2_1");
+		Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co2_1))
+				.thenReturn("fra");
 
-        Mockito.when(thesaurusArrayService.getSubOrdinatedArrays(co1.getIdentifier())).thenReturn(new ArrayList<ThesaurusArray>(){{
-            add(ar1);
-        }});
+		final ThesaurusTerm tr3 = new ThesaurusTerm();
+		tr3.setLexicalValue("co3");
+		tr3.setConcept(co3);
+		tr3.setIdentifier("tr3");
+		tr3.setPrefered(true);
+		tr3.setLanguage(language);
+		Mockito.when(thesaurusConceptService.getConceptTitle(co3)).thenReturn(
+				"co3");
+		Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co3))
+				.thenReturn("fra");
 
-        List<ThesaurusTerm> list_tr1 = new ArrayList<ThesaurusTerm>(){{
-            add(tr1);
-        }};
-        Mockito.when(thesaurusTermService.getTermsByConceptId(co1.getIdentifier())).thenReturn(list_tr1);
-        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co1.getIdentifier())).thenReturn(tr1);
+		final ThesaurusTerm tr3_1 = new ThesaurusTerm();
+		tr3_1.setLexicalValue("co3_1");
+		tr3_1.setConcept(co3_1);
+		tr3_1.setIdentifier("tr3_1");
+		tr3_1.setPrefered(true);
+		tr3_1.setLanguage(language);
+		Mockito.when(thesaurusConceptService.getConceptTitle(co3_1))
+				.thenReturn("co3_1");
+		Mockito.when(thesaurusConceptService.getConceptTitleLanguage(co3_1))
+				.thenReturn("fra");
 
-        List<ThesaurusTerm> list_tr1_1 = new ArrayList<ThesaurusTerm>(){{
-            add(tr1_1);
-        }};
-        Mockito.when(thesaurusTermService.getTermsByConceptId(co1_1.getIdentifier())).thenReturn(list_tr1_1);
-        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co1_1.getIdentifier())).thenReturn(tr1_1);
+		final ThesaurusArray ar1 = new ThesaurusArray();
+		ar1.setThesaurus(th1);
+		ar1.setSuperOrdinateConcept(co1);
+		ar1.setIdentifier("ar1");
+		ar1.setOrdered(true);
+		NodeLabel nl1 = new NodeLabel();
+		nl1.setLexicalValue("ar1");
+		nl1.setThesaurusArray(ar1);
 
-        List<ThesaurusTerm> list_tr2 = new ArrayList<ThesaurusTerm>(){{
-            add(tr2);
-        }};
-        Mockito.when(thesaurusTermService.getTermsByConceptId(co2.getIdentifier())).thenReturn(list_tr2);
-        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co2.getIdentifier())).thenReturn(tr2);
+		final ThesaurusArray ar2 = new ThesaurusArray();
+		ar2.setThesaurus(th1);
+		ar2.setIdentifier("ar2");
+		ar2.setOrdered(false);
+		NodeLabel nl2 = new NodeLabel();
+		nl2.setLexicalValue("ar2");
+		nl2.setThesaurusArray(ar2);
 
-        List<ThesaurusTerm> list_tr2_1 = new ArrayList<ThesaurusTerm>(){{
-            add(tr2_1);
-        }};
-        Mockito.when(thesaurusTermService.getTermsByConceptId(co2_1.getIdentifier())).thenReturn(list_tr2_1);
-        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co2_1.getIdentifier())).thenReturn(tr2_1);
+		Mockito.when(
+				thesaurusConceptService.getTopTermThesaurusConcepts(th1
+						.getIdentifier())).thenReturn(
+				new ArrayList<ThesaurusConcept>() {
+					{
+						add(co1);
+						add(co2);
+						add(co3);
+					}
+				});
 
-        List<ThesaurusTerm> list_tr3 = new ArrayList<ThesaurusTerm>(){{
-            add(tr3);
-        }};
-        Mockito.when(thesaurusTermService.getTermsByConceptId(co3.getIdentifier())).thenReturn(list_tr3);
-        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co3.getIdentifier())).thenReturn(tr3);
+		Mockito.when(
+				thesaurusArrayService.getArraysWithoutParentConcept(th1
+						.getIdentifier())).thenReturn(
+				new ArrayList<ThesaurusArray>() {
+					{
+						add(ar2);
+					}
+				});
 
-        List<ThesaurusTerm> list_tr3_1 = new ArrayList<ThesaurusTerm>(){{
-            add(tr3_1);
-        }};
-        Mockito.when(thesaurusTermService.getTermsByConceptId(co3_1.getIdentifier())).thenReturn(list_tr3_1);
-        Mockito.when(thesaurusConceptService.getConceptPreferredTerm(co3_1.getIdentifier())).thenReturn(tr3_1);
+		Mockito.when(
+				thesaurusArrayService.getSubOrdinatedArrays(co1.getIdentifier()))
+				.thenReturn(new ArrayList<ThesaurusArray>() {
+					{
+						add(ar1);
+					}
+				});
 
-        Mockito.when(thesaurusConceptService.getChildrenByConceptId(co1.getIdentifier())).thenReturn(new ArrayList<ThesaurusConcept>(){{
-            add(co1_1);
-        }});
+		Mockito.when(thesaurusArrayHelper.getArrayConcepts(ar1.getIdentifier()))
+				.thenReturn(new ArrayList<ThesaurusConcept>() {
+					{
+						add(co1_1);
+					}
+				});
 
-        Mockito.when(thesaurusConceptService.getChildrenByConceptId(co2.getIdentifier())).thenReturn(new ArrayList<ThesaurusConcept>(){{
-            add(co2_1);
-        }});
+		Mockito.when(thesaurusArrayHelper.getArrayConcepts(ar2.getIdentifier()))
+				.thenReturn(new ArrayList<ThesaurusConcept>() {
+					{
+						add(co2);
+					}
+				});
 
-        Mockito.when(thesaurusConceptService.getChildrenByConceptId(co3.getIdentifier())).thenReturn(new ArrayList<ThesaurusConcept>(){{
-            add(co3_1);
-        }});       
+		ThesaurusArrayConcept.Id tac2id = new ThesaurusArrayConcept.Id();
+		tac2id.setConceptId("co2");
+		tac2id.setThesaurusArrayId("ar2");
+		ThesaurusArrayConcept tac2 = new ThesaurusArrayConcept();
+		tac2.setIdentifier(tac2id);
+		List<ThesaurusArrayConcept> tacs = new ArrayList<ThesaurusArrayConcept>();
+		tacs.add(tac2);
 
-        Mockito.when(nodeLabelService.getByThesaurusArray(ar1.getIdentifier())).thenReturn(nl1);
-        Mockito.when(nodeLabelService.getByThesaurusArray(ar2.getIdentifier())).thenReturn(nl2);
+		Mockito.when(thesaurusArrayHelper.getArrayConceptRelations(ar2))
+				.thenReturn(tacs);
 
-        List<FormattedLine> results = exportService.getHierarchicalText(th1);
+		List<ThesaurusTerm> list_tr1 = new ArrayList<ThesaurusTerm>() {
+			{
+				add(tr1);
+			}
+		};
+		Mockito.when(
+				thesaurusTermService.getTermsByConceptId(co1.getIdentifier()))
+				.thenReturn(list_tr1);
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm(co1
+						.getIdentifier())).thenReturn(tr1);
 
-        Assert.assertEquals("Result should contain 8 records !", 8, results.size());
+		List<ThesaurusTerm> list_tr1_1 = new ArrayList<ThesaurusTerm>() {
+			{
+				add(tr1_1);
+			}
+		};
+		Mockito.when(
+				thesaurusTermService.getTermsByConceptId(co1_1.getIdentifier()))
+				.thenReturn(list_tr1_1);
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm(co1_1
+						.getIdentifier())).thenReturn(tr1_1);
 
-        Assert.assertEquals("First line should start by co1 with no tabulation", (long)0, (long)results.get(0).getTabs());
-        Assert.assertEquals("First line should start by co1 with no tabulation", "co1", results.get(0).getText());
+		List<ThesaurusTerm> list_tr2 = new ArrayList<ThesaurusTerm>() {
+			{
+				add(tr2);
+			}
+		};
+		Mockito.when(
+				thesaurusTermService.getTermsByConceptId(co2.getIdentifier()))
+				.thenReturn(list_tr2);
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm(co2
+						.getIdentifier())).thenReturn(tr2);
 
-        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(1).getTabs());
-        Assert.assertEquals("Line does not correspond to needed format", "<ar1>", results.get(1).getText());
+		List<ThesaurusTerm> list_tr2_1 = new ArrayList<ThesaurusTerm>() {
+			{
+				add(tr2_1);
+			}
+		};
+		Mockito.when(
+				thesaurusTermService.getTermsByConceptId(co2_1.getIdentifier()))
+				.thenReturn(list_tr2_1);
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm(co2_1
+						.getIdentifier())).thenReturn(tr2_1);
 
-        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(2).getTabs());
-        Assert.assertEquals("Line does not correspond to needed format", "co1_1", results.get(2).getText());
+		List<ThesaurusTerm> list_tr3 = new ArrayList<ThesaurusTerm>() {
+			{
+				add(tr3);
+			}
+		};
+		Mockito.when(
+				thesaurusTermService.getTermsByConceptId(co3.getIdentifier()))
+				.thenReturn(list_tr3);
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm(co3
+						.getIdentifier())).thenReturn(tr3);
 
-        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(3).getTabs());
-        Assert.assertEquals("Line does not correspond to needed format", "co3", results.get(3).getText());
+		List<ThesaurusTerm> list_tr3_1 = new ArrayList<ThesaurusTerm>() {
+			{
+				add(tr3_1);
+			}
+		};
+		Mockito.when(
+				thesaurusTermService.getTermsByConceptId(co3_1.getIdentifier()))
+				.thenReturn(list_tr3_1);
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm(co3_1
+						.getIdentifier())).thenReturn(tr3_1);
 
-        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(4).getTabs());
-        Assert.assertEquals("Line does not correspond to needed format", "co3_1", results.get(4).getText());
+		Mockito.when(
+				thesaurusConceptService.getChildrenByConceptId(co1
+						.getIdentifier())).thenReturn(
+				new ArrayList<ThesaurusConcept>() {
+					{
+						add(co1_1);
+					}
+				});
 
-        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(5).getTabs());
-        Assert.assertEquals("Line does not correspond to needed format", "<ar2>", results.get(5).getText());
+		Mockito.when(
+				thesaurusConceptService.getChildrenByConceptId(co2
+						.getIdentifier())).thenReturn(
+				new ArrayList<ThesaurusConcept>() {
+					{
+						add(co2_1);
+					}
+				});
 
-        Assert.assertEquals("Number of tabulations is wrong!", 0, (long)results.get(6).getTabs());
-        Assert.assertEquals("Line does not correspond to needed format", "co2", results.get(6).getText());
+		Mockito.when(
+				thesaurusConceptService.getChildrenByConceptId(co3
+						.getIdentifier())).thenReturn(
+				new ArrayList<ThesaurusConcept>() {
+					{
+						add(co3_1);
+					}
+				});
 
-        Assert.assertEquals("Number of tabulations is wrong!", 1, (long)results.get(7).getTabs());
-        Assert.assertEquals("Line does not correspond to needed format", "co2_1", results.get(7).getText());
-    }
+		Mockito.when(thesaurusConceptService
+		.getThesaurusConceptById("co1")).thenReturn(co1);
+		Mockito.when(thesaurusConceptService
+				.getThesaurusConceptById("co1_1")).thenReturn(co1_1);
+		Mockito.when(thesaurusConceptService
+				.getThesaurusConceptById("co2")).thenReturn(co2);
+		
+		Mockito.when(nodeLabelService.getByThesaurusArray(ar1.getIdentifier()))
+				.thenReturn(nl1);
+		Mockito.when(nodeLabelService.getByThesaurusArray(ar2.getIdentifier()))
+				.thenReturn(nl2);
+
+		List<FormattedLine> results = exportService.getHierarchicalText(th1);
+		
+		Assert.assertEquals("Result should contain 8 records !", 8,
+				results.size());
+
+		Assert.assertEquals(
+				"First line should start by co1 with no tabulation", (long) 0,
+				(long) results.get(0).getTabs());
+		Assert.assertEquals(
+				"First line should start by co1 with no tabulation", "co1",
+				results.get(0).getText());
+
+		Assert.assertEquals("Number of tabulations is wrong!", 1,
+				(long) results.get(1).getTabs());
+		Assert.assertEquals("Line does not correspond to needed format",
+				"<ar1>", results.get(1).getText());
+
+		Assert.assertEquals("Number of tabulations is wrong!", 1,
+				(long) results.get(2).getTabs());
+		Assert.assertEquals("Line does not correspond to needed format",
+				"co1_1", results.get(2).getText());
+
+		Assert.assertEquals("Number of tabulations is wrong!", 0,
+				(long) results.get(3).getTabs());
+		Assert.assertEquals("Line does not correspond to needed format", "co3",
+				results.get(3).getText());
+
+		Assert.assertEquals("Number of tabulations is wrong!", 1,
+				(long) results.get(4).getTabs());
+		Assert.assertEquals("Line does not correspond to needed format",
+				"co3_1", results.get(4).getText());
+
+		Assert.assertEquals("Number of tabulations is wrong!", 0,
+				(long) results.get(5).getTabs());
+		Assert.assertEquals("Line does not correspond to needed format",
+				"<ar2>", results.get(5).getText());
+
+		Assert.assertEquals("Number of tabulations is wrong!", 0,
+				(long) results.get(6).getTabs());
+		Assert.assertEquals("Line does not correspond to needed format", "co2",
+				results.get(6).getText());
+
+		Assert.assertEquals("Number of tabulations is wrong!", 1,
+				(long) results.get(7).getTabs());
+		Assert.assertEquals("Line does not correspond to needed format",
+				"co2_1", results.get(7).getText());
+	}
 }

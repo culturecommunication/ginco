@@ -54,5 +54,7 @@ Ext.define('GincoApp.locale.fr.view.ConceptArrayPanel', {
 	xDelete: 'Supprimer',
 	xCreatedDateLabel : 'Date de création',
 	xModificationDateLabel : 'Date de modification',
-	xAssociationRemove : 'Détacher ce concept'
+	xAssociationRemove : 'Détacher ce concept',
+	xOrderLabel: 'Trier les concepts par ordre alphabétique',
+	xConceptOrderLabel: 'Ordre'
 });

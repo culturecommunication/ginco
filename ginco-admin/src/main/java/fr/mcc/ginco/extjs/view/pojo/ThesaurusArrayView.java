@@ -50,15 +50,15 @@ public class ThesaurusArrayView implements Serializable {
     private String created;
 	private String modified;
 
-    private List<String> concepts;
+    private List<ThesaurusArrayConceptView> concepts;
 
     private String label;
     private String language;
     private Integer nodeLabelId;
 
     private String thesaurusId;
-
-    //private List<NodeLabelView> nodeLabelViewList - To be continue...;
+    
+    private Boolean order;
 
     public String getIdentifier() {
         return identifier;
@@ -92,13 +92,13 @@ public class ThesaurusArrayView implements Serializable {
 
 	public void setSuperOrdinateConceptLabel(String superOrdinateConceptLabel) {
 		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
-	}
+	}	
 
-	public List<String> getConcepts() {
+	public List<ThesaurusArrayConceptView> getConcepts() {
 		return concepts;
 	}
 
-	public void setConcepts(List<String> concepts) {
+	public void setConcepts(List<ThesaurusArrayConceptView> concepts) {
 		this.concepts = concepts;
 	}
 
@@ -148,5 +148,14 @@ public class ThesaurusArrayView implements Serializable {
 
 	public void setModified(String modified) {
 		this.modified = modified;
-	}    
+	}
+
+	public Boolean getOrder() {
+		return order;
+	}
+
+	public void setOrder(Boolean order) {
+		this.order = order;
+	}    	
+	
 }

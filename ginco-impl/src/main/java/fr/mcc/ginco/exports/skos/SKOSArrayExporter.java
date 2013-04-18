@@ -49,6 +49,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.INodeLabelService;
@@ -97,10 +98,10 @@ public class SKOSArrayExporter {
 						.addProperty(SKOS.PREF_LABEL, label.getLexicalValue(),
 								label.getLanguage().getPart1());
 
-				for (ThesaurusConcept concept : array.getConcepts()) {
-					Resource y = model.createResource(concept.getIdentifier());
-					model.add(collectionRes, SKOS.MEMBER, y);
-					model.add(collectionRes, SKOS.MEMBER, y);
+				for (ThesaurusArrayConcept arrayConcept : array.getConcepts()) {
+						Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());
+						model.add(collectionRes, SKOS.MEMBER, y);
+						model.add(collectionRes, SKOS.MEMBER, y);					
 				}
 			}
 

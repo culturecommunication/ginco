@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -67,6 +68,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.INoteDAO;
@@ -74,7 +76,9 @@ import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.helpers.ThesaurusHelper;
 import fr.mcc.ginco.log.Log;
 
 /**
@@ -115,6 +119,14 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Inject
 	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
+	
+	@Inject
+	@Named("thesaurusVersionHistoryDAO")
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;	
+	
+	@Inject
+	@Named("thesaurusHelper")
+	private ThesaurusHelper thesaurusHelper;
 
 	@Inject
 	@Named("skosThesaurusBuilder")
@@ -170,8 +182,15 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 							"import-already-existing-thesaurus");
 				}
 				thesaurus = thesaurusBuilder.buildThesaurus(thesaurusSKOS,
-						model);
+						model);					
+				
 				thesaurusDAO.update(thesaurus);
+				
+				//Set default version history
+				ThesaurusVersionHistory defaultVersion = thesaurusHelper.buildDefaultVersion(thesaurus);
+				Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
+				versions.add(defaultVersion);
+				thesaurusVersionHistoryDAO.update(defaultVersion);
 			}
 
 			List<Resource> skosConcepts = getSKOSRessources(model, SKOS.CONCEPT);

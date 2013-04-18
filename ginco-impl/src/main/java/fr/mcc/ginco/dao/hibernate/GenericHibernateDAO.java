@@ -34,19 +34,19 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.io.Serializable;
+import java.util.List;
 
-import org.hibernate.FlushMode;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Implementation of {@link IGenericDAO}; basic class for DAO-related work.
@@ -112,8 +112,7 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	}
 	
 	final public Session getCurrentSession() {
-		Session session = sessionFactory.getCurrentSession();
-		return session;
+		return sessionFactory.getCurrentSession();	
 	}
 
 	final public SessionFactory getSessionFactory() {

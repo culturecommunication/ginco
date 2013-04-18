@@ -246,18 +246,4 @@ public class ThesaurusTermRestService {
         result.setTotal((long) listOfStatus.size());
 		return result;
 	}
-	
-	@POST
-	@Path("/importSandBoxTerms")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces(MediaType.TEXT_HTML)
-	public String importSandBoxTerms (MultipartBody body,
-		@Context HttpServletRequest request) throws BusinessException, FileNotFoundException{	
-		Attachment file = body.getAttachment("import-file-path");
-		String fileName = file.getDataHandler().getName();
-		
-		List<ThesaurusTerm> sandBoxTerms = new ArrayList<ThesaurusTerm>();
-		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		return null;
-	}
 }

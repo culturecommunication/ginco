@@ -34,23 +34,16 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
-import fr.mcc.ginco.imports.IGincoImportService;
-import fr.mcc.ginco.imports.ISKOSImportService;
-import fr.mcc.ginco.services.IIndexerService;
-
-import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -59,8 +52,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
@@ -70,13 +65,25 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.hp.hpl.jena.util.FileManager;
+
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.FileResponse;
+import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
+import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
+import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
+import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Base REST service intended to be used for SKOS Import the @Produces({
@@ -89,25 +96,36 @@ import fr.mcc.ginco.imports.ISKOSImportService;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class ImportRestService {
 	@Inject
-    @Context
+	@Context
 	private javax.servlet.ServletContext servletContext;
 
 	@Inject
 	@Named("skosImportService")
 	private ISKOSImportService skosImportService;
-	
+
 	@Inject
 	@Named("gincoImportService")
 	private IGincoImportService gincoImportService;
-	
+
 	@Inject
 	@Named("indexerService")
 	private IIndexerService indexerService;
 
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusViewConverter")
-	private ThesaurusViewConverter thesaurusViewConverter;	
+	private ThesaurusViewConverter thesaurusViewConverter;
+
+	@Inject
+	@Named("thesaurusConceptViewConverter")
+	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+	
+	@Inject
+	@Named("thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
 
 	/**
 	 * This method is called to import a SKOS thesaurus the @Produces({
@@ -145,17 +163,18 @@ public class ImportRestService {
 		return serialized;
 
 	}
-	
+
 	/**
-	 * This method is called to import a Ginco XML thesaurus.
-	 * The @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is used by an
-	 * ajax call and IE cannot display result if JSOn is returned
+	 * This method is called to import a Ginco XML thesaurus. The
+	 * @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is
+	 * used by an ajax call and IE cannot display result if JSOn is returned
 	 * 
 	 * @param body
 	 * @param request
-	 * @return The imported thesaurus in JSOn string representing a ExtJsonFormLoadData
-	 * @throws IOException 
-	 * @throws JsonMappingException 
+	 * @return The imported thesaurus in JSOn string representing a
+	 *         ExtJsonFormLoadData
+	 * @throws IOException
+	 * @throws JsonMappingException
 	 * @throws JsonGenerationException
 	 * @throws TechnicalException
 	 * @throws BusinessException
@@ -165,19 +184,85 @@ public class ImportRestService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
 	public String uploadGincoXmlThesaurusFile(MultipartBody body,
-			@Context HttpServletRequest request) throws JsonGenerationException, JsonMappingException, IOException, TechnicalException, BusinessException {
+			@Context HttpServletRequest request)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			TechnicalException, BusinessException {
 		Attachment file = body.getAttachment("import-file-path");
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
-		
-		Thesaurus thesaurus = gincoImportService.importGincoXmlThesaurusFile(content, fileName, tempDir);
+
+		Thesaurus thesaurus = gincoImportService.importGincoXmlThesaurusFile(
+				content, fileName, tempDir);
 		indexerService.indexThesaurus(thesaurus);
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				thesaurusViewConverter.convert(thesaurus)));
 		return serialized;
 
+	}
+
+	/**
+	 * This method is called to import a Ginco XML concept branch. The
+	 * @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is
+	 * used by an ajax call and IE cannot display result if JSOn is returned
+	 * 
+	 * @param body
+	 * @param request
+	 * @return The imported concept branch in JSOn string representing a
+	 *         ExtJsonFormLoadData
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
+	 * @throws TechnicalException
+	 * @throws BusinessException
+	 */
+	@POST
+	@Path("/importGincoBranchXml")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.TEXT_HTML)
+	public String uploadGincoBranchXmlFile(MultipartBody body,
+			@QueryParam("thesaurusId") String thesaurusId,
+			@Context HttpServletRequest request)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			TechnicalException, BusinessException {
+		Attachment file = body.getAttachment("import-file-path");
+
+		String content = file.getObject(String.class);
+		String fileName = file.getDataHandler().getName();
+		File tempDir = (File) servletContext
+				.getAttribute("javax.servlet.context.tempdir");
+
+		ThesaurusConcept concept = gincoImportService.importGincoBranchXmlFile(
+				content, fileName, tempDir, thesaurusId);
+		ObjectMapper mapper = new ObjectMapper();
+		ImportedBranchResponse response = new ImportedBranchResponse();
+		response.setTitle(thesaurusConceptService.getConceptTitle(concept));
+		response.setConceptView(thesaurusConceptViewConverter.convert(concept));
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+				response));
+		return serialized;
+	}
+	
+	@POST
+	@Path("/importSandBoxTerms")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response importSandBoxTerms (MultipartBody body,
+			@QueryParam("thesaurusId") String thesaurusId,
+			@Context HttpServletRequest request)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			TechnicalException, BusinessException {
+		Attachment file = body.getAttachment("import-file-path");
+		String content = file.getObject(String.class);
+		
+		String[] termsSplit = content.split("\n");
+		List<String> termLexicalValues = Arrays.asList(termsSplit);
+		
+		thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);	
+		return Response.status(Response.Status.OK)
+                .entity("{success:true}")
+                .build();
 	}
 }

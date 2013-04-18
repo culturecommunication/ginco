@@ -53,6 +53,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.ThesaurusArrayServiceImpl;
@@ -65,6 +66,9 @@ public class ThesaurusArrayServiceTest {
 
     @Mock(name = "nodeLabelService")
     private INodeLabelService nodeLabelService;
+    
+    @Mock(name = "thesaurusArrayHelper")
+    private ThesaurusArrayHelper thesaurusArrayHelper;
 
     @InjectMocks
     private IThesaurusArrayService thesaurusArrayService = new ThesaurusArrayServiceImpl();
@@ -89,7 +93,7 @@ public class ThesaurusArrayServiceTest {
         ThesaurusArray array = thesaurusArrayService.getThesaurusArrayById("1");
         array.setNotation("test notation");
 
-        ThesaurusArray updated = thesaurusArrayService.updateThesaurusArray(mockArray, mockLabel);
+        ThesaurusArray updated = thesaurusArrayService.updateThesaurusArray(mockArray, mockLabel, null);
         Assert.assertEquals(array.getNotation(),updated.getNotation());
     }
 

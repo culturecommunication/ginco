@@ -57,6 +57,7 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.ThesaurusConceptUtils;
 
 @Transactional(readOnly = true)
 @Service("gincoBranchExportService")
@@ -94,17 +95,21 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 	@Override
 	public String getBranchExport(ThesaurusConcept conceptBranchToExport)
 			throws TechnicalException {
+		String conceptId = conceptBranchToExport.getIdentifier();
 		GincoExportedBranch branchToExport = new GincoExportedBranch();
 		
-		String conceptId = conceptBranchToExport.getIdentifier();
+		List<ThesaurusConcept> childrenConcepts = new ArrayList<ThesaurusConcept>();
+		childrenConcepts.addAll(thesaurusConceptService.getChildrenByConceptId(conceptId));
+
+		List<ThesaurusConcept> allConcepts = new ArrayList<ThesaurusConcept>();
+		allConcepts.addAll(childrenConcepts);
+		allConcepts.add(conceptBranchToExport);
 		
-		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
-		concepts.add(conceptBranchToExport);
-		concepts.addAll(thesaurusConceptService.getChildrenByConceptId(conceptId));
-		branchToExport.setConcepts(concepts);
+		branchToExport.setRootConcept(conceptBranchToExport);
+		branchToExport.setConcepts(childrenConcepts);
 		
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusConcept concept : concepts) {
+		for (ThesaurusConcept concept : allConcepts) {
 			terms.addAll(thesaurusTermService.getTermsByConceptId(concept.getIdentifier()));
 		}
 		branchToExport.setTerms(terms);
@@ -118,18 +123,29 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 			}
 		}
 		
-		for (ThesaurusConcept concept : concepts) {
+		for (ThesaurusConcept concept : allConcepts) {
 			JaxbList<Note> conceptNotes = gincoConceptExporter
 					.getExportConceptNotes(concept);
 			if (conceptNotes != null && !conceptNotes.isEmpty()) {
 				branchToExport.getConceptNotes().put(
 						concept.getIdentifier(), conceptNotes);
 			}
-			
+		}
+		
+		//Exporting hierarchical relationships only for children with parents in the branch
+		List<String> conceptsIds = ThesaurusConceptUtils.getIdsFromConceptList(allConcepts);
+		for (ThesaurusConcept concept : childrenConcepts) {
 			JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship = gincoConceptExporter
 					.getExportHierarchicalConcepts(concept);
 			if (parentConceptHierarchicalRelationship != null
 					&& !parentConceptHierarchicalRelationship.isEmpty()) {
+				
+				List<ConceptHierarchicalRelationship> availableParents = parentConceptHierarchicalRelationship.getList();
+				for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : availableParents) {
+					if (!conceptsIds.contains(conceptHierarchicalRelationship.getIdentifier().getParentconceptid())) {
+						parentConceptHierarchicalRelationship.getList().remove(conceptHierarchicalRelationship);
+					}
+				}
 				branchToExport.getHierarchicalRelationship().put(
 						concept.getIdentifier(),
 						parentConceptHierarchicalRelationship);
@@ -137,5 +153,4 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 		}
 		return gincoExportServiceUtil.serializeBranchToXmlWithJaxb(branchToExport);
 	}
-
 }

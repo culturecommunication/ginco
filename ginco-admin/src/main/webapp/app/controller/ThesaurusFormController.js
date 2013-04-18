@@ -219,6 +219,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             }
         });
     },
+    
+    importBranch : function(theButton) {
+		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>Importer une branche</h1>'});
+	},
 
     exportHierarchical : function(theButton) {
         var theForm = theButton.up('form');
@@ -314,7 +318,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
     
     importSandboxClick : function(theButton) {
-    	Ext.create('GincoApp.view.ImportWin', {importType: 'txt', xTitleLabel: '<h1>Import sandbox terms</h1>'});
+    	Ext.create('GincoApp.view.ImportWin', {importType: 'txt',thesaurusData:theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>Import sandbox terms</h1>'});
     },
 
 	init : function(application) {
@@ -360,6 +364,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             },
             "thesaurusPanel #archiveThesaurus" : {
                 click : this.archiveThesaurus
+            },
+            "thesaurusPanel #importBranch" : {
+                click : this.importBranch
             },
             "checkbox[cls=poly]" : {
                 change : this.onPolyChange

@@ -40,7 +40,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -50,10 +49,10 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.ConceptHierarchyUtil;
 
 /**
@@ -98,11 +97,24 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 					.getById(relatedURI);
 			membersConcepts.add(memberConcept);
 		}
-		array.setConcepts(membersConcepts);
+		Set<ThesaurusArrayConcept> thesaurusArrayConcepts = new HashSet<ThesaurusArrayConcept>();
+		int i=0;
+		for (ThesaurusConcept concept : membersConcepts) {
+			ThesaurusArrayConcept arrayConcept = new ThesaurusArrayConcept();
+			ThesaurusArrayConcept.Id arrayConceptId = new ThesaurusArrayConcept.Id();
+			arrayConceptId.setConceptId(concept.getIdentifier());
+			arrayConceptId.setThesaurusArrayId(skosCollection.getURI());
+			arrayConcept.setIdentifier(arrayConceptId);
+			arrayConcept.setConcepts(concept);
+			arrayConcept.setArrayOrder(i);			
+			i++;
+			thesaurusArrayConcepts.add(arrayConcept);
+		}
+		array.setConcepts(thesaurusArrayConcepts);
 
 		array.setSuperOrdinateConcept(ConceptHierarchyUtil.getSuperOrdinate(membersConcepts));
 
-		array.setOrdered(false);
+		array.setOrdered(true);
 
 		return array;
 	}

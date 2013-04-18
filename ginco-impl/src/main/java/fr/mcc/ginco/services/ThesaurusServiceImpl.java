@@ -34,32 +34,37 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
-import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
-import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
-import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.exports.IGincoThesaurusExportService;
-import fr.mcc.ginco.exports.ISKOSExportService;
-import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.LanguageComparator;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.io.FileUtils;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
+import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.exports.IGincoThesaurusExportService;
+import fr.mcc.ginco.exports.ISKOSExportService;
+import fr.mcc.ginco.helpers.ThesaurusHelper;
+import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LanguageComparator;
 
 /**
  * Implementation of the thesaurus service Contains methods relatives to the
@@ -70,10 +75,7 @@ import java.util.*;
 public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Value("${ginco.default.language}")
-	private String defaultLang;
-	
-	@Value("${version-default-label}")
-	private String defaultThesaurusVersionNote;
+	private String defaultLang;	
 
     @Value("${publish.path}")
     private String publishPath;
@@ -95,12 +97,12 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	
 	@Inject
 	@Named("thesaurusVersionHistoryDAO")
-	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
-	
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;	
 
+	@Inject
+	@Named("thesaurusHelper")
+	private ThesaurusHelper	thesaurusHelper;
+	
     @Inject
     @Named("gincoThesaurusExportService")
     private IGincoThesaurusExportService gincoThesaurusExportService;
@@ -142,14 +144,8 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 		 //If no version, we initialize one with status PROJECT
 		 List<ThesaurusVersionHistory> versionsOfCurrentThesaurus = thesaurusVersionHistoryDAO.findVersionsByThesaurusId(result.getIdentifier());
 		 if (versionsOfCurrentThesaurus == null || versionsOfCurrentThesaurus.isEmpty()) {
+			ThesaurusVersionHistory defaultVersion = thesaurusHelper.buildDefaultVersion(result);		
 			Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
-			ThesaurusVersionHistory defaultVersion = new ThesaurusVersionHistory();
-			defaultVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
-			defaultVersion.setVersionNote(defaultThesaurusVersionNote);
-			defaultVersion.setDate(DateUtil.nowDate());
-			defaultVersion.setThesaurus(result);
-			defaultVersion.setThisVersion(true);
-			defaultVersion.setStatus(ThesaurusVersionStatusEnum.PROJECT.getStatus());
 			versions.add(defaultVersion);
 			thesaurusVersionHistoryDAO.update(defaultVersion);
 		}
