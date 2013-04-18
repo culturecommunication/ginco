@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<table name="thesaurus">
+		<column>identifier</column>
+		<column>contributor</column>
+		<column>coverage</column>
+		<column>date</column>
+		<column>description</column>
+		<column>format</column>
+		<column>publisher</column>
+		<column>relation</column>
+		<column>rights</column>
+		<column>source</column>
+		<column>subject</column>
+		<column>title</column>
+		<column>type</column>
+		<column>creator</column>
+		<column>created</column>
+		<column>defaulttopconcept</column>
+        <column>ispolyhierarchical</column>
+		<row>
+			<value>0</value>
+			<value>test</value>
+			<value>test</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>test</value>
+			<value>0</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>test</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>false</value>
+            <value>true</value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>test1</value>
+			<value>0</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>test1</value>
+			<value>1</value>
+			<value>0</value>
+			<value>2013-02-06 15:29:59.66325</value>
+			<value>false</value>
+            <value>true</value>
+		</row>
+	</table>
+
+    <table name="thesaurus_format">
+        <column>identifier</column>
+        <column>label</column>
+        <row>
+            <value>0</value>
+            <value>PDF 1.7</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>CSV</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>XML/SKOS</value>
+        </row>
+    </table>
+
+    <table name="thesaurus_type">
+        <column>identifier</column>
+        <column>label</column>
+        <row>
+            <value>0</value>
+            <value>thesaurus type 1</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>thesaurus type 2</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>thesaurus type 3</value>
+        </row>
+    </table>
+
+    <table name="thesaurus_organization">
+        <column>identifier</column>
+        <column>name</column>
+        <column>homepage</column>
+        <row>
+            <value>0</value>
+            <value>Smile</value>
+            <value>http://smile.fr</value>
+        </row>
+    </table>
+
+    <table name="thesaurus_concept">
+        <column>identifier</column>
+        <column>created</column>
+        <column>modified</column>
+        <column>status</column>
+        <column>notation</column>
+        <column>topconcept</column>
+        <column>thesaurusid</column>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>0</value>
+            <value>test</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>0</value>
+            <value>test</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+    </table>
+    <table name="thesaurus_term">
+        <column>identifier</column>
+        <column>lexicalvalue</column>
+        <column>created</column>
+        <column>modified</column>
+        <column>source</column>
+        <column>prefered</column>
+        <column>status</column>
+        <column>role</column>
+        <column>conceptid</column>
+        <column>thesaurusid</column>
+        <column>lang</column>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/ter1</value>
+            <value>yellow submarine</value>
+            <value>2013-02-05 15:29:59.66325</value>
+            <value>2013-02-05 15:29:59.66325</value>
+            <value>revolver</value>
+            <value>false</value>
+            <value>0</value>
+            <null />
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value>0</value>
+            <value>eng</value>
+        </row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/ter2</value>
+            <value>yellow submarine</value>
+            <value>2013-02-05 15:29:59.66325</value>
+            <value>2013-02-05 15:29:59.66325</value>
+            <value>revolver</value>
+            <value>false</value>
+            <value>0</value>
+            <null />
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>0</value>
+            <value>eng</value>
+        </row>
+    </table>
+
+    <table name="languages_iso639">
+        <column>id</column>
+        <column>part1</column>
+        <column>ref_name</column>
+        <column>toplanguage</column>
+        <column>principallanguage</column>
+        <row>
+            <value>fr-FR</value>
+            <value>fr</value>
+            <value>Français/France</value>
+            <value>true</value>
+            <value>true</value>
+        </row>
+    </table>
+
+    <table name="custom_concept_attribute_type">
+        <column>identifier</column>
+        <column>code</column>
+        <column>value</column>
+        <column>thesaurusid</column>
+        <row>
+            <value>1</value>
+            <value>test_attr 1</value>
+            <value>value 1</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>test_attr 2</value>
+            <value>value 2</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>test_attr 1</value>
+            <value>value 1</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>4</value>
+            <value>test_attr 1</value>
+            <value>value 1</value>
+            <value>0</value>
+        </row>
+    </table>
+
+    <table name="custom_concept_attribute">
+        <column>identifier</column>
+        <column>conceptid</column>
+        <column>typeid</column>
+        <column>lang</column>
+        <column>lexicalvalue</column>
+        <row>
+            <value>1</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value>1</value>
+            <value>fr-FR</value>
+            <value>test1</value>
+        </row>
+
+    </table>
+
+
+    <table name="custom_term_attribute_type">
+        <column>identifier</column>
+        <column>code</column>
+        <column>value</column>
+        <column>thesaurusid</column>
+        <row>
+            <value>1</value>
+            <value>test_attr 1</value>
+            <value>value 1</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>test_attr 2</value>
+            <value>value 2</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>test_attr 1</value>
+            <value>value 1</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>4</value>
+            <value>test_attr 1</value>
+            <value>value 1</value>
+            <value>0</value>
+        </row>
+    </table>
+
+    <table name="custom_term_attribute">
+        <column>identifier</column>
+        <column>termid</column>
+        <column>typeid</column>
+        <column>lang</column>
+        <column>lexicalvalue</column>
+        <row>
+            <value>1</value>
+            <value>http://www.culturecommunication.gouv.fr/ter1</value>
+            <value>1</value>
+            <value>fr-FR</value>
+            <value>test1</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>http://www.culturecommunication.gouv.fr/ter1</value>
+            <value>2</value>
+            <value>fr-FR</value>
+            <value>test2</value>
+        </row>
+        <row>
+            <value>4</value>
+            <value>http://www.culturecommunication.gouv.fr/ter1</value>
+            <value>3</value>
+            <value>fr-FR</value>
+            <value>test3</value>
+        </row>
+
+        <row>
+            <value>5</value>
+            <value>http://www.culturecommunication.gouv.fr/ter2</value>
+            <value>1</value>
+            <value>fr-FR</value>
+            <value>test1</value>
+        </row>
+        <row>
+            <value>6</value>
+            <value>http://www.culturecommunication.gouv.fr/ter2</value>
+            <value>2</value>
+            <value>fr-FR</value>
+            <value>test2</value>
+        </row>
+    </table>
+
+</dataset>

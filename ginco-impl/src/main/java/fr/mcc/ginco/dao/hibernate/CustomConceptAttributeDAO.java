@@ -32,41 +32,31 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.daos;
+package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.CustomConceptAttributeType;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.hibernate.CustomConceptAttributeTypeDAO;
-import fr.mcc.ginco.tests.BaseDAOTest;
-import junit.framework.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.CustomTermAttribute;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  *
  */
-public class CustomConceptAttributeTypeDAOTest extends BaseDAOTest {
-
-    private CustomConceptAttributeTypeDAO customConceptAttributeTypeDAO = new CustomConceptAttributeTypeDAO() ;
-
-    @Before
-    public void handleSetUpOperation() throws Exception {
-        super.handleSetUpOperation();
-        customConceptAttributeTypeDAO.setSessionFactory(getSessionFactory());
-    }
-
-    @Test
-    public void getByThesaurusId() {
-        Thesaurus mockThesaurus = new Thesaurus();
-        mockThesaurus.setIdentifier("0");
-        List<CustomConceptAttributeType> result = customConceptAttributeTypeDAO.getAttributesByThesaurus(mockThesaurus);
-        Assert.assertEquals(3, result.size());
+@Repository("customConceptAttributeDAO")
+public class CustomConceptAttributeDAO extends GenericHibernateDAO<CustomConceptAttribute, String> implements ICustomConceptAttributeDAO {
+    public CustomConceptAttributeDAO() {
+        super(CustomConceptAttribute.class);
     }
 
     @Override
-    public String getXmlDataFileInit() {
-        return "/custom_attributes_init.xml";
+    public List<CustomConceptAttribute> getAttributesByEntity(ThesaurusConcept entity) {
+        Criteria criteria = getCurrentSession().createCriteria(CustomTermAttribute.class)
+                .add(Restrictions.eq("conceptid", entity.getIdentifier()));
+        return criteria.list();
     }
 }

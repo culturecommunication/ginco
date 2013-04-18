@@ -44,6 +44,8 @@
                 <value>hibernate/CustomTermAttributeType.hbm.xml</value>
                 <value>hibernate/ThesaurusArrayConcept.hbm.xml</value>                
                 <value>hibernate/SplitNonPreferredTerm.hbm.xml</value>
+                <value>hibernate/CustomConceptAttribute.hbm.xml</value>
+                <value>hibernate/CustomTermAttribute.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">

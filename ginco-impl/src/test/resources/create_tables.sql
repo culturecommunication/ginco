@@ -26,6 +26,8 @@ DROP TABLE IF EXISTS note_type;
 DROP TABLE IF EXISTS thesaurus_ark;
 DROP TABLE IF EXISTS custom_concept_attribute_type;
 DROP TABLE IF EXISTS custom_term_attribute_type;
+DROP TABLE IF EXISTS custom_concept_attribute;
+DROP TABLE IF EXISTS custom_term_attribute;
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
@@ -404,4 +406,42 @@ CREATE TABLE custom_term_attribute_type
   value text NOT NULL,
   thesaurusid text NOT NULL,
   CONSTRAINT pk_custom_term_attribute_type PRIMARY KEY (identifier)
+);
+
+CREATE TABLE custom_concept_attribute
+(
+  identifier text NOT NULL,
+  conceptid text,
+  typeid int,
+  lang text,
+  lexicalvalue text,
+  CONSTRAINT pk_custom_concept_attribute PRIMARY KEY (identifier)/*,
+  CONSTRAINT fk_custom_concept_attribute_lang FOREIGN KEY (lang)
+  REFERENCES languages_iso639 (id) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_concept_attribute_conceptid FOREIGN KEY (conceptid)
+  REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_concept_attribute_typeid FOREIGN KEY (typeid)
+  REFERENCES custom_concept_attribute_type (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION        */
+);
+
+CREATE TABLE custom_term_attribute
+(
+  identifier text NOT NULL,
+  termid text,
+  typeid int,
+  lang text,
+  lexicalvalue text,
+  CONSTRAINT pk_custom_term_attribute PRIMARY KEY (identifier)/*,
+  CONSTRAINT fk_custom_term_attribute_lang FOREIGN KEY (lang)
+  REFERENCES languages_iso639 (id) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_term_attribute_termid FOREIGN KEY (termid)
+  REFERENCES thesaurus_term (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_term_attribute_typeid FOREIGN KEY (typeid)
+  REFERENCES custom_term_attribute_type (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION  */
 );

@@ -56,6 +56,7 @@ ALTER TABLE concept_group
       REFERENCES concept_group (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE SET NULL;
 
+
 CREATE TABLE custom_concept_attribute_type
 (
   identifier integer NOT NULL,
@@ -112,6 +113,98 @@ MINVALUE 1
 MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
+
+CREATE TABLE custom_term_attribute
+(
+  identifier text NOT NULL,
+  termid text NOT NULL,
+  typeid integer NOT NULL,
+  lang text NOT NULL,
+  lexicalvalue text NOT NULL,
+  CONSTRAINT pk_custom_term_attribute PRIMARY KEY (identifier),
+  CONSTRAINT fk_custom_term_attribute_lang FOREIGN KEY (lang)
+  REFERENCES languages_iso639 (id) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_term_attribute_termid FOREIGN KEY (termid)
+  REFERENCES thesaurus_term (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_term_attribute_typeid FOREIGN KEY (typeid)
+  REFERENCES custom_term_attribute_type (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+-- Index: fki_lang
+
+-- DROP INDEX fki_lang;
+
+CREATE INDEX fki_custom_term_attribute_lang
+ON custom_term_attribute
+USING btree
+(lang COLLATE pg_catalog."default");
+
+-- Index: fki_termid
+
+-- DROP INDEX fki_termid;
+
+CREATE INDEX fki_custom_term_attribute_termid
+ON custom_term_attribute
+USING btree
+(termid COLLATE pg_catalog."default");
+
+-- Index: fki_typeid
+
+-- DROP INDEX fki_typeid;
+
+CREATE INDEX fki_custom_term_attribute_typeid
+ON custom_term_attribute
+USING btree
+(typeid);
+
+CREATE TABLE custom_concept_attribute
+(
+  identifier text NOT NULL,
+  conceptid text NOT NULL,
+  typeid integer NOT NULL,
+  lang text NOT NULL,
+  lexicalvalue text NOT NULL,
+  CONSTRAINT pk_custom_concept_attribute PRIMARY KEY (identifier),
+  CONSTRAINT fk_custom_concept_attribute_lang FOREIGN KEY (lang)
+  REFERENCES languages_iso639 (id) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_concept_attribute_conceptid FOREIGN KEY (conceptid)
+  REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_concept_attribute_typeid FOREIGN KEY (typeid)
+  REFERENCES custom_concept_attribute_type (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+-- Index: fki_lang
+
+-- DROP INDEX fki_lang;
+
+CREATE INDEX fki_custom_concept_attribute_lang
+ON custom_concept_attribute
+USING btree
+(lang COLLATE pg_catalog."default");
+
+-- Index: fki_conceptid
+
+-- DROP INDEX fki_conceptid;
+
+CREATE INDEX fki_custom_concept_attribute_conceptid
+ON custom_concept_attribute
+USING btree
+(conceptid COLLATE pg_catalog."default");
+
+-- Index: fki_typeid
+
+-- DROP INDEX fki_typeid;
+
+CREATE INDEX fki_custom_concept_attribute_typeid
+ON custom_concept_attribute
+USING btree
+(typeid);CACHE 1;
 
 --Add parent to a array concept
 ALTER TABLE thesaurus_array ADD COLUMN parentarrayid text;

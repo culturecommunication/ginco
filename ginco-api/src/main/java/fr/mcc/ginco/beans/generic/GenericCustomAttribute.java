@@ -32,41 +32,61 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.daos;
+package fr.mcc.ginco.beans.generic;
 
-import fr.mcc.ginco.beans.CustomConceptAttributeType;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.hibernate.CustomConceptAttributeTypeDAO;
-import fr.mcc.ginco.tests.BaseDAOTest;
-import junit.framework.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import fr.mcc.ginco.beans.Language;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  *
  */
-public class CustomConceptAttributeTypeDAOTest extends BaseDAOTest {
+public class GenericCustomAttribute<E extends GenericCustomAttributeType,T> implements Serializable {
+    private String identifier;
+    private String lexicalValue;
 
-    private CustomConceptAttributeTypeDAO customConceptAttributeTypeDAO = new CustomConceptAttributeTypeDAO() ;
+    private E type;
+    private Language language;
 
-    @Before
-    public void handleSetUpOperation() throws Exception {
-        super.handleSetUpOperation();
-        customConceptAttributeTypeDAO.setSessionFactory(getSessionFactory());
+    private T entity;
+
+    public String getIdentifier() {
+        return identifier;
     }
 
-    @Test
-    public void getByThesaurusId() {
-        Thesaurus mockThesaurus = new Thesaurus();
-        mockThesaurus.setIdentifier("0");
-        List<CustomConceptAttributeType> result = customConceptAttributeTypeDAO.getAttributesByThesaurus(mockThesaurus);
-        Assert.assertEquals(3, result.size());
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
-    @Override
-    public String getXmlDataFileInit() {
-        return "/custom_attributes_init.xml";
+    public String getLexicalValue() {
+        return lexicalValue;
+    }
+
+    public void setLexicalValue(String lexicalValue) {
+        this.lexicalValue = lexicalValue;
+    }
+
+    public E getType() {
+        return type;
+    }
+
+    public void setType(E type) {
+        this.type = type;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public T getEntity() {
+        return entity;
+    }
+
+    public void setEntity(T entity) {
+        this.entity = entity;
     }
 }

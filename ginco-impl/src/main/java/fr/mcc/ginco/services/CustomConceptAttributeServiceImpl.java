@@ -32,41 +32,46 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.daos;
+package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.CustomConceptAttributeType;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.hibernate.CustomConceptAttributeTypeDAO;
-import fr.mcc.ginco.tests.BaseDAOTest;
-import junit.framework.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
 /**
  *
  */
-public class CustomConceptAttributeTypeDAOTest extends BaseDAOTest {
+@Transactional(readOnly = false, rollbackFor = BusinessException.class)
+@Service("customConceptAttributeService")
+public class CustomConceptAttributeServiceImpl implements ICustomConceptAttributeService {
+    @Inject
+    @Named("customConceptAttributeDAO")
+    private ICustomConceptAttributeDAO customConceptAttributeDAO;
 
-    private CustomConceptAttributeTypeDAO customConceptAttributeTypeDAO = new CustomConceptAttributeTypeDAO() ;
-
-    @Before
-    public void handleSetUpOperation() throws Exception {
-        super.handleSetUpOperation();
-        customConceptAttributeTypeDAO.setSessionFactory(getSessionFactory());
-    }
-
-    @Test
-    public void getByThesaurusId() {
-        Thesaurus mockThesaurus = new Thesaurus();
-        mockThesaurus.setIdentifier("0");
-        List<CustomConceptAttributeType> result = customConceptAttributeTypeDAO.getAttributesByThesaurus(mockThesaurus);
-        Assert.assertEquals(3, result.size());
+    @Override
+    public List<CustomConceptAttribute> getAttributesByEntity(ThesaurusConcept concept) {
+        return customConceptAttributeDAO.getAttributesByEntity(concept);
     }
 
     @Override
-    public String getXmlDataFileInit() {
-        return "/custom_attributes_init.xml";
+    public void deleteAttribute(CustomConceptAttribute attribute) {
+        customConceptAttributeDAO.delete(attribute);
+    }
+
+    @Override
+    public CustomConceptAttribute getAttributeById(String id) {
+        return customConceptAttributeDAO.getById(id);
+    }
+
+    @Override
+    public CustomConceptAttribute saveOrUpdate(CustomConceptAttribute attribute) {
+        return customConceptAttributeDAO.update(attribute);
     }
 }

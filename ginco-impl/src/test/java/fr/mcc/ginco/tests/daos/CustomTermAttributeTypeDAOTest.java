@@ -62,11 +62,11 @@ public class CustomTermAttributeTypeDAOTest extends BaseDAOTest {
         Thesaurus mockThesaurus = new Thesaurus();
         mockThesaurus.setIdentifier("0");
         List<CustomTermAttributeType> result = customTermAttributeTypeDAO.getAttributesByThesaurus(mockThesaurus);
-        Assert.assertEquals(2, result.size());
+        Assert.assertEquals(3, result.size());
     }
 
     @Override
     public String getXmlDataFileInit() {
-        return "/custom_term_init.xml";
+        return "/custom_attributes_init.xml";
     }
 }

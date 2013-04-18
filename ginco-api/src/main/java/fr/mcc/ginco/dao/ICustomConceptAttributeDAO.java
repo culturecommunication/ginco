@@ -32,41 +32,14 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.daos;
+package fr.mcc.ginco.dao;
 
-import fr.mcc.ginco.beans.CustomConceptAttributeType;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.hibernate.CustomConceptAttributeTypeDAO;
-import fr.mcc.ginco.tests.BaseDAOTest;
-import junit.framework.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.List;
+import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.generic.IGenericCustomAttribute;
 
 /**
  *
  */
-public class CustomConceptAttributeTypeDAOTest extends BaseDAOTest {
-
-    private CustomConceptAttributeTypeDAO customConceptAttributeTypeDAO = new CustomConceptAttributeTypeDAO() ;
-
-    @Before
-    public void handleSetUpOperation() throws Exception {
-        super.handleSetUpOperation();
-        customConceptAttributeTypeDAO.setSessionFactory(getSessionFactory());
-    }
-
-    @Test
-    public void getByThesaurusId() {
-        Thesaurus mockThesaurus = new Thesaurus();
-        mockThesaurus.setIdentifier("0");
-        List<CustomConceptAttributeType> result = customConceptAttributeTypeDAO.getAttributesByThesaurus(mockThesaurus);
-        Assert.assertEquals(3, result.size());
-    }
-
-    @Override
-    public String getXmlDataFileInit() {
-        return "/custom_attributes_init.xml";
-    }
+public interface ICustomConceptAttributeDAO extends IGenericCustomAttribute<ThesaurusConcept, CustomConceptAttribute> {
 }

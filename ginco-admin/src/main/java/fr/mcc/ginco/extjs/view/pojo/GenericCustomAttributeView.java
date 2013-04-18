@@ -38,40 +38,49 @@ package fr.mcc.ginco.extjs.view.pojo;
  *
  */
 public class GenericCustomAttributeView {
-    private int identifier;
-    private String code;
-    private String value;
-    private String thesaurusId;
+    private String id;
+    private int typeid;
+    private String entityid;
+    private String lang;
+    private String lexicalValue;
 
-    public int getIdentifier() {
-        return identifier;
+    public String getId() {
+        return id;
     }
 
-    public void setIdentifier(int identifier) {
-        this.identifier = identifier;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public int getTypeid() {
+        return typeid;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setTypeid(int typeid) {
+        this.typeid = typeid;
     }
 
-    public String getValue() {
-        return value;
+    public String getEntityid() {
+        return entityid;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setEntityid(String entityid) {
+        this.entityid = entityid;
     }
 
-    public String getThesaurusId() {
-        return thesaurusId;
+    public String getLang() {
+        return lang;
     }
 
-    public void setThesaurusId(String thesaurusId) {
-        this.thesaurusId = thesaurusId;
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public String getLexicalValue() {
+        return lexicalValue;
+    }
+
+    public void setLexicalValue(String lexicalValue) {
+        this.lexicalValue = lexicalValue;
     }
 }

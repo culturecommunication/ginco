@@ -40,8 +40,8 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeView;
-import fr.mcc.ginco.extjs.view.utils.CustomAtrributesConverter;
+import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeTypeView;
+import fr.mcc.ginco.extjs.view.utils.CustomAtrributeTypesConverter;
 import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -75,10 +75,10 @@ public class CustomAttributesRestService {
 
     @Inject
     @Named("customAttributesConverter")
-    private CustomAtrributesConverter customAttributesConverter;
+    private CustomAtrributeTypesConverter customAttributesConverter;
 
     /**
-     * Return list of all custom attributes for concept in given thesaurus
+     * Return list of all custom attribute types for concept in given thesaurus
      *
      * @param thesaurusId
      * @return
@@ -87,12 +87,12 @@ public class CustomAttributesRestService {
     @GET
     @Path("/getAllConceptAttributeTypes")
     @Produces(MediaType.APPLICATION_JSON)
-    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getAllConceptAttributeTypes(
+    public ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>> getAllConceptAttributeTypes(
             @QueryParam("thesaurusId") String thesaurusId)
             throws BusinessException {
         Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
 
-        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
+        return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
                 customAttributesConverter.convertList(customConceptAttributeTypeService.getAttributeTypesByThesaurus(thesaurus)));
     }
 
@@ -105,8 +105,8 @@ public class CustomAttributesRestService {
     @POST
     @Path("/updateConceptAttributeTypes")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateConceptAttributeTypes(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
-        for(GenericCustomAttributeView customConceptAttributeType : list) {
+    public void updateConceptAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
+        for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
             CustomConceptAttributeType conceptAttributeType =
                     (CustomConceptAttributeType) customAttributesConverter.convert(customConceptAttributeType, true);
 
@@ -123,8 +123,8 @@ public class CustomAttributesRestService {
     @POST
     @Path("/deleteConceptAttributeTypes")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void deleteConceptAttributeTypes(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
-        for(GenericCustomAttributeView customConceptAttributeType : list) {
+    public void deleteConceptAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
+        for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
             CustomConceptAttributeType conceptAttributeType =
                     (CustomConceptAttributeType) customAttributesConverter.convert(customConceptAttributeType, true);
 
@@ -133,7 +133,7 @@ public class CustomAttributesRestService {
     }
 
     /**
-     * Return list of all custom attributes for term in given thesaurus
+     * Return list of all custom attribute types for term in given thesaurus
      *
      * @param thesaurusId
      * @return
@@ -142,12 +142,12 @@ public class CustomAttributesRestService {
     @GET
     @Path("/getAllTermAttributeTypes")
     @Produces(MediaType.APPLICATION_JSON)
-    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getAllTermAttributeTypes(
+    public ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>> getAllTermAttributeTypes(
             @QueryParam("thesaurusId") String thesaurusId)
             throws BusinessException {
         Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
 
-        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
+        return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
                 customAttributesConverter.convertList(customTermAttributeTypeService.getAttributeTypesByThesaurus(thesaurus)));
     }
 
@@ -160,8 +160,8 @@ public class CustomAttributesRestService {
     @POST
     @Path("/updateTermAttributeTypes")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateTermAttributeTypes(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
-        for(GenericCustomAttributeView customConceptAttributeType : list) {
+    public void updateTermAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
+        for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
             CustomTermAttributeType conceptAttributeType =
                     (CustomTermAttributeType) customAttributesConverter.convert(customConceptAttributeType, false);
 
@@ -178,8 +178,8 @@ public class CustomAttributesRestService {
     @POST
     @Path("/deleteTermAttributeTypes")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void deleteTermAttributeTypes(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
-        for(GenericCustomAttributeView customConceptAttributeType : list) {
+    public void deleteTermAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
+        for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
             CustomTermAttributeType conceptAttributeType =
                     (CustomTermAttributeType) customAttributesConverter.convert(customConceptAttributeType, false);
 

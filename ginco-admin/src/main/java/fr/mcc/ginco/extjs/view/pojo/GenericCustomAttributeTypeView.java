@@ -32,41 +32,46 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.daos;
-
-import fr.mcc.ginco.beans.CustomConceptAttributeType;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.hibernate.CustomConceptAttributeTypeDAO;
-import fr.mcc.ginco.tests.BaseDAOTest;
-import junit.framework.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.List;
+package fr.mcc.ginco.extjs.view.pojo;
 
 /**
  *
  */
-public class CustomConceptAttributeTypeDAOTest extends BaseDAOTest {
+public class GenericCustomAttributeTypeView {
+    private int identifier;
+    private String code;
+    private String value;
+    private String thesaurusId;
 
-    private CustomConceptAttributeTypeDAO customConceptAttributeTypeDAO = new CustomConceptAttributeTypeDAO() ;
-
-    @Before
-    public void handleSetUpOperation() throws Exception {
-        super.handleSetUpOperation();
-        customConceptAttributeTypeDAO.setSessionFactory(getSessionFactory());
+    public int getIdentifier() {
+        return identifier;
     }
 
-    @Test
-    public void getByThesaurusId() {
-        Thesaurus mockThesaurus = new Thesaurus();
-        mockThesaurus.setIdentifier("0");
-        List<CustomConceptAttributeType> result = customConceptAttributeTypeDAO.getAttributesByThesaurus(mockThesaurus);
-        Assert.assertEquals(3, result.size());
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
     }
 
-    @Override
-    public String getXmlDataFileInit() {
-        return "/custom_attributes_init.xml";
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getThesaurusId() {
+        return thesaurusId;
+    }
+
+    public void setThesaurusId(String thesaurusId) {
+        this.thesaurusId = thesaurusId;
     }
 }

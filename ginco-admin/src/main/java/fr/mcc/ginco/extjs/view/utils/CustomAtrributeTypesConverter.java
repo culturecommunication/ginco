@@ -38,7 +38,7 @@ import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
-import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeView;
+import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeTypeView;
 import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -53,7 +53,7 @@ import java.util.List;
  *
  */
 @Component(value = "customAttributesConverter")
-public class CustomAtrributesConverter {
+public class CustomAtrributeTypesConverter {
 
     @Inject
     @Named("customConceptAttributeTypeService")
@@ -67,8 +67,8 @@ public class CustomAtrributesConverter {
     @Named("customTermAttributeTypeService")
     private ICustomTermAttributeTypeService customTermAttributeTypeService;
 
-    public GenericCustomAttributeView convert(GenericCustomAttributeType source) {
-        GenericCustomAttributeView view = new GenericCustomAttributeView();
+    public GenericCustomAttributeTypeView convert(GenericCustomAttributeType source) {
+        GenericCustomAttributeTypeView view = new GenericCustomAttributeTypeView();
         view.setCode(source.getCode());
         view.setIdentifier(source.getIdentifier());
         view.setThesaurusId(source.getThesaurus().getIdentifier());
@@ -77,8 +77,8 @@ public class CustomAtrributesConverter {
         return view;
     }
 
-    public List<GenericCustomAttributeView> convertList(List<? extends GenericCustomAttributeType> sourceList) {
-        List<GenericCustomAttributeView> list = new ArrayList<GenericCustomAttributeView>();
+    public List<GenericCustomAttributeTypeView> convertList(List<? extends GenericCustomAttributeType> sourceList) {
+        List<GenericCustomAttributeTypeView> list = new ArrayList<GenericCustomAttributeTypeView>();
         for(GenericCustomAttributeType attributeType : sourceList) {
             list.add(convert(attributeType));
         }
@@ -86,7 +86,7 @@ public class CustomAtrributesConverter {
         return list;
     }
 
-    public GenericCustomAttributeType convert(GenericCustomAttributeView view, boolean isConcept) {
+    public GenericCustomAttributeType convert(GenericCustomAttributeTypeView view, boolean isConcept) {
 
         Thesaurus thesaurus = thesaurusService.getThesaurusById(view.getThesaurusId());
 
