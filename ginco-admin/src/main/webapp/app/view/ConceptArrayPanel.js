@@ -229,6 +229,7 @@ Ext
 															xtype : 'gridpanel',
 															itemId : 'gridPanelConceptArray',
 															title : me.xConceptArrayGridTitle,
+															store : Ext.create('Ext.data.Store', {model: 'GincoApp.model.ArrayConceptModel'}),
 
 															dockedItems : [ {
 																xtype : 'toolbar',
