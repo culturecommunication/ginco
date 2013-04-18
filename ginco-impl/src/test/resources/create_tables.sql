@@ -221,6 +221,7 @@ CREATE TABLE thesaurus_array
   notation text,
   thesaurusid text NOT NULL,
   superordinateconceptid text,
+  parentarrayid text,
   CONSTRAINT pk_thesaurus_array_identifier PRIMARY KEY (identifier)
 );
 
@@ -233,6 +234,11 @@ ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (thesaurusid)
       REFERENCES thesaurus (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+ALTER TABLE thesaurus_array
+      ADD FOREIGN KEY (parentarrayid)
+      REFERENCES thesaurus_array (identifier)
+      ON UPDATE NO ACTION ON DELETE SET NULL;
 
 CREATE TABLE concept_group_type
 (
