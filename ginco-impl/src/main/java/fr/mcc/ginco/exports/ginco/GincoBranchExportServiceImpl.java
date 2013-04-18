@@ -142,7 +142,8 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 			if (parentConceptHierarchicalRelationship != null
 					&& !parentConceptHierarchicalRelationship.isEmpty()) {
 				
-				List<ConceptHierarchicalRelationship> availableParents = parentConceptHierarchicalRelationship.getList();
+				List<ConceptHierarchicalRelationship> availableParents = new ArrayList<ConceptHierarchicalRelationship>();
+				availableParents.addAll(parentConceptHierarchicalRelationship.getList());
 				for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : availableParents) {
 					if (!conceptsIds.contains(conceptHierarchicalRelationship.getIdentifier().getParentconceptid())) {
 						parentConceptHierarchicalRelationship.getList().remove(conceptHierarchicalRelationship);
