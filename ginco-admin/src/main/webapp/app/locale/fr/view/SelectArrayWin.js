@@ -32,44 +32,10 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
 
-import fr.mcc.ginco.beans.ThesaurusArray;
-
-import java.util.List;
-
-/**
- * Data Access Object for thesaurus array
- */
-public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> {
-    /**
-     * Get all thesaurusArrays from thesaurus with given id, excluding the concept array which id is given in parameter
-     * @param excludedConceptArrayId : the concept to exclude (can be null)
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String excludedConceptArrayId, String thesaurusId);
-    
-    /**
-     * Returns all arrays this concept is the super ordinate
-     * @param conceptId
-     * @return
-     */
-    List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId);
-
-    /**
-     * Return list of all arrays who have not SuperOrdinatedConcept.
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusArray> getArraysWithoutSuperordinatedConcept(String thesaurusId);
-    
-    /**
-     * Returns all arrays matching this concept as super ordinate, excepted the array which id is given in parameter.
-     * @param String conceptId
-     * @param String excludeArrayId
-     * @return List of ThesaurusArrays
-     */
-	List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId,
-			String excludeArrayId);
-}
+Ext.define('GincoApp.locale.fr.view.SelectArrayWin',
+    {
+        xIdentifierColumnLabel : "Identifiant",
+        xArrayTitleColumnLabel : "Libellé du tableau",
+        xSelect : "Sélectionner"
+    });

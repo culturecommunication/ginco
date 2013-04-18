@@ -56,7 +56,6 @@ ALTER TABLE concept_group
       REFERENCES concept_group (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE SET NULL;
 
-
 CREATE TABLE custom_concept_attribute_type
 (
   identifier integer NOT NULL,
@@ -113,3 +112,11 @@ MINVALUE 1
 MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
+
+--Add parent to a array concept
+ALTER TABLE thesaurus_array ADD COLUMN parentarrayid text;
+
+ALTER TABLE thesaurus_array
+  ADD CONSTRAINT fk_concept_array FOREIGN KEY (parentarrayid)
+      REFERENCES thesaurus_array (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE SET NULL;

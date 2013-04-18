@@ -40,37 +40,39 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
- * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusArray} bean, but fully serializable
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusArray} bean,
+ * but fully serializable
  */
+@SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusArrayView implements Serializable {
-    private String identifier;
-    private String superOrdinateId;
-    private String superOrdinateConceptLabel;
-    private String created;
+	private String identifier;
+	private String superOrdinateId;
+	private String superOrdinateConceptLabel;
+	private String created;
 	private String modified;
+	private String parentArrayId;
+	private String parentArrayLabel;
 
-    private List<ThesaurusArrayConceptView> concepts;
+	private List<ThesaurusArrayConceptView> concepts;
 
-    private String label;
-    private String language;
-    private Integer nodeLabelId;
+	private String label;
+	private String language;
+	private Integer nodeLabelId;
 
-    private String thesaurusId;
-    
-    private Boolean order;
+	private String thesaurusId;
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	private Boolean order;
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-   
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public String getSuperOrdinateId() {
+	public String getSuperOrdinateId() {
 		return superOrdinateId;
 	}
 
@@ -84,15 +86,15 @@ public class ThesaurusArrayView implements Serializable {
 
 	public void setSuperOrdinateLabel(String superOrdinateConceptLabel) {
 		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
-	}	
+	}
 
-    public String getSuperOrdinateConceptLabel() {
+	public String getSuperOrdinateConceptLabel() {
 		return superOrdinateConceptLabel;
 	}
 
 	public void setSuperOrdinateConceptLabel(String superOrdinateConceptLabel) {
 		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
-	}	
+	}
 
 	public List<ThesaurusArrayConceptView> getConcepts() {
 		return concepts;
@@ -103,36 +105,36 @@ public class ThesaurusArrayView implements Serializable {
 	}
 
 	public String getLabel() {
-        return label;
-    }
+		return label;
+	}
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
-    public String getLanguage() {
-        return language;
-    }
+	public String getLanguage() {
+		return language;
+	}
 
-    public void setLanguage(String language) {
-        this.language = language;
-    }
+	public void setLanguage(String language) {
+		this.language = language;
+	}
 
-    public String getThesaurusId() {
-        return thesaurusId;
-    }
+	public String getThesaurusId() {
+		return thesaurusId;
+	}
 
-    public void setThesaurusId(String thesaurusId) {
-        this.thesaurusId = thesaurusId;
-    }
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
+	}
 
-    public Integer getNodeLabelId() {
-        return nodeLabelId;
-    }
+	public Integer getNodeLabelId() {
+		return nodeLabelId;
+	}
 
-    public void setNodeLabelId(Integer nodeLabelId) {
-        this.nodeLabelId = nodeLabelId;
-    }
+	public void setNodeLabelId(Integer nodeLabelId) {
+		this.nodeLabelId = nodeLabelId;
+	}
 
 	public String getCreated() {
 		return created;
@@ -156,6 +158,22 @@ public class ThesaurusArrayView implements Serializable {
 
 	public void setOrder(Boolean order) {
 		this.order = order;
-	}    	
-	
+	}
+
+	public String getParentArrayId() {
+		return parentArrayId;
+	}
+
+	public void setParentArrayId(String parentArrayId) {
+		this.parentArrayId = parentArrayId;
+	}
+
+	public String getParentArrayLabel() {
+		return parentArrayLabel;
+	}
+
+	public void setParentArrayLabel(String parentArrayLabel) {
+		this.parentArrayLabel = parentArrayLabel;
+	}
+
 }

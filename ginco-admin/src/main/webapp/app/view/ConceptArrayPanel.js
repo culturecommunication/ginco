@@ -71,6 +71,8 @@ Ext
 					xAssociationRemove : 'Detach this concept',
 					xOrderLabel : 'Alphabetical order',
 					xConceptOrderLabel: 'Order',
+					xParentArrayLabel : 'Parent array',
+					xSelectParentArray : 'Select a parent array',
 
 					initComponent : function() {
 						var me = this;					
@@ -159,15 +161,44 @@ Ext
 																	.create('GincoApp.store.ThesaurusLanguageStore')
 														},
 														{
-															xtype : 'textfield',
-															name : 'superOrdinateId',
-															hidden : true
-														},
-														,
-														{
 															xtype : 'checkbox',
 															name : 'order',
 															fieldLabel : me.xOrderLabel
+														},
+														{
+															xtype : 'textfield',
+															name : 'parentArrayId',
+															hidden : true
+														},
+														{
+															xtype : 'container',
+															layout : 'column',
+															defaults : {
+																margin : '0 0 5 0',
+																layout : 'anchor'
+															},
+															items : [
+																	{
+																		xtype : 'textfield',
+																		name : 'parentArrayLabel',
+																		fieldLabel : me.xParentArrayLabel,
+																		allowBlank : true,
+																		readOnly : true
+																	},
+																	{
+																		xtype : 'button',
+																		text : me.xSelectParentArray,
+																		disabled : false,
+																		requiredRoles : ['ADMIN'],
+																		itemId : 'selectParentArray',
+																		cls : 'add',
+																		iconCls : 'icon-add'
+																	} ]
+														},
+														{
+															xtype : 'textfield',
+															name : 'superOrdinateId',
+															hidden : true
 														},
 														{
 															xtype : 'container',

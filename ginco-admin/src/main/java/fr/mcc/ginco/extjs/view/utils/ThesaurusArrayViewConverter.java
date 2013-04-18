@@ -35,7 +35,6 @@
 package fr.mcc.ginco.extjs.view.utils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,8 +48,7 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.beans.ThesaurusArrayConcept.Id;
-import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
@@ -114,39 +112,11 @@ public class ThesaurusArrayViewConverter {
 					.getThesaurusConceptById(source.getSuperOrdinateId()));
 		}
 
-		/*if (hibernateRes.getConcepts() == null) {
-			hibernateRes.setConcepts(new HashSet<ThesaurusArrayConcept>());
-		}
-		hibernateRes.getConcepts().clear();
-		for (ThesaurusArrayConceptView arrayConceptIt : source.getConcepts()) {
-			ThesaurusConcept concept = thesaurusConceptService
-					.getThesaurusConceptById(arrayConceptIt.getIdentifier());
-			if (concept == null) {
-				throw new BusinessException("Concept doest not exist",
-						"concept-does-not-exist");
-			}
-
-			ThesaurusArrayConcept arrayConcept = thesaurusArrayConceptService
-					.geThesaurusArrayConcept(hibernateRes.getIdentifier(),
-							arrayConceptIt.getIdentifier());
-			if (arrayConcept != null) {
-				arrayConcept.setOrder(arrayConceptIt.getOrder());
-			} else {
-				ThesaurusArrayConcept.Id arrayConceptId = new ThesaurusArrayConcept.Id();
-				arrayConceptId.setConceptId(arrayConceptIt.getIdentifier());
-				arrayConceptId
-						.setThesaurusArrayId(hibernateRes.getIdentifier());
-
-				arrayConcept = new ThesaurusArrayConcept();
-				arrayConcept.setIdentifier(arrayConceptId);
-				arrayConcept.setConcepts(concept);
-				arrayConcept.setThesaurusArray(hibernateRes);
-				arrayConcept.setOrder(arrayConceptIt.getOrder());
-				hibernateRes.getConcepts().add(arrayConcept);
-			}
-		}*/
-
 		hibernateRes.setOrdered(source.getOrder());
+		
+		if (source.getParentArrayId() != null) {
+			hibernateRes.setParent(thesaurusArrayService.getThesaurusArrayById(source.getParentArrayId()));
+		}
 
 		return hibernateRes;
 	}
@@ -190,28 +160,29 @@ public class ThesaurusArrayViewConverter {
 		thesaurusArrayView.setThesaurusId(source.getThesaurus()
 				.getThesaurusId());
 		thesaurusArrayView.setOrder(source.getOrdered());
+		
+		if (source.getParent() != null) {
+			//We set id and label of parent array
+			thesaurusArrayView.setParentArrayId(source.getParent().getIdentifier());
+			NodeLabel labelOfParent = nodeLabelService.getByThesaurusArray(source.getParent().getIdentifier());
+			thesaurusArrayView.setParentArrayLabel(labelOfParent.getLexicalValue());			
+		}
+		
 		return thesaurusArrayView;
 	}
 
-	/*
-	 * public Set<ThesaurusArrayConcept> convertConcepts( ThesaurusArrayView
-	 * thesaurusArrayViewJAXBElement, String arrayId) {
+	/**
+	 * This method converts a list of {@link ThesaurusArray} into a list of
+	 * {@link ThesaurusArrayView}
 	 * 
-	 * Set<ThesaurusArrayConcept> res = new HashSet<ThesaurusArrayConcept>();
-	 * int i = 0; for (ThesaurusArrayConceptView arrayConceptIt :
-	 * thesaurusArrayViewJAXBElement .getConcepts()) { ThesaurusConcept concept
-	 * = thesaurusConceptService
-	 * .getThesaurusConceptById(arrayConceptIt.getIdentifier()); if (concept ==
-	 * null) { throw new BusinessException("Concept doest not exist",
-	 * "concept-does-not-exist"); } ThesaurusArrayConcept.Id arrayConceptId =
-	 * new ThesaurusArrayConcept.Id();
-	 * arrayConceptId.setConceptId(arrayConceptIt.getIdentifier());
-	 * arrayConceptId.setThesaurusArrayId(arrayId); ThesaurusArrayConcept
-	 * arrayConcept = new ThesaurusArrayConcept();
-	 * arrayConcept.setIdentifier(arrayConceptId);
-	 * arrayConcept.setConcepts(concept); arrayConcept.setOrder(i); i++;
-	 * res.add(arrayConcept); }
-	 * 
-	 * return res; }
+	 * @param {@link ThesaurusArray} arrays
+	 * @return {@link ThesaurusArrayView} array views
 	 */
+	public List<ThesaurusArrayView> convert(List<ThesaurusArray> arrays) {
+		List<ThesaurusArrayView> returnedArrayViews = new ArrayList<ThesaurusArrayView>();
+		for (ThesaurusArray thesaurusArray : arrays) {
+			returnedArrayViews.add(convert(thesaurusArray));
+		}
+		return returnedArrayViews;
+	}
 }

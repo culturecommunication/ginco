@@ -170,7 +170,7 @@ public class SKOSArrayExporterTest {
 		nodeLabel2.setLanguage(lang);
 		Mockito.when(nodeLabelService.getByThesaurusArray("http://th2")).thenReturn(nodeLabel2);
 		
-		Mockito.when(thesaurusArrayService.getAllThesaurusArrayByThesaurusId(Mockito.anyString())).thenReturn(arrays);
+		Mockito.when(thesaurusArrayService.getAllThesaurusArrayByThesaurusId(Mockito.anyString(), Mockito.anyString())).thenReturn(arrays);
 		
 		String skosArrays  = skosArrayExporter.exportCollections(th);
 		

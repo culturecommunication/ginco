@@ -86,7 +86,8 @@ Ext.application({
         'SearchTypeStore',
         'ThesaurusStore',
         'CustomTermAttributeTypeStore',
-        'CustomConceptAttributeTypeStore'
+        'CustomConceptAttributeTypeStore',
+        'ConceptArrayStore'
     ],
     views: [
         'GincoViewPort',
