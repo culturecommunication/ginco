@@ -33,29 +33,34 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-/*
- * Concept Group Type Store 
- * This file contains all group types displayed in dropdown lists
- */
-Ext.define('GincoApp.store.ConceptArrayStore', {
+Ext.define('GincoApp.store.CustomTermAttributeStore', {
     extend: 'Ext.data.Store',
-
+    requires : ['GincoApp.model.CustomAttributeModel'],
     constructor: function(cfg) {
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
             autoLoad: false,
-            storeId: 'JsonVirtualConceptArrayStore',
-            model : 'GincoApp.model.ConceptArrayModel',
+            model : 'GincoApp.model.CustomAttributeModel',
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/thesaurusarrayservice/getAllConceptArrays',
+                api : {
+                    read : 'services/ui/customattributesservice/getAllTermAttribute',
+                    update : 'services/ui/customattributesservice/updateTermAttribute',
+                    create : 'services/ui/customattributesservice/updateTermAttribute',
+                },
                 reader: {
                     type: 'json',
-                    idProperty: 'identifier',
+                    idProperty: 'typecode',
                     root: 'data'
+                },
+                writer : {
+                    type : 'json',
+                    // A single attribute must be sent in an array
+                    allowSingle : false
                 }
             }
+
         }, cfg)]);
     }
 });

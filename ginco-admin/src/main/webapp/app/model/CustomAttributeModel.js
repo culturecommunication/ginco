@@ -33,29 +33,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-/*
- * Concept Group Type Store 
- * This file contains all group types displayed in dropdown lists
- */
-Ext.define('GincoApp.store.ConceptArrayStore', {
-    extend: 'Ext.data.Store',
+Ext.define('GincoApp.model.CustomAttributeModel', {
+    extend: 'Ext.data.Model',
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            storeId: 'JsonVirtualConceptArrayStore',
-            model : 'GincoApp.model.ConceptArrayModel',
-            proxy: {
-                type: 'ajax',
-                url: 'services/ui/thesaurusarrayservice/getAllConceptArrays',
-                reader: {
-                    type: 'json',
-                    idProperty: 'identifier',
-                    root: 'data'
-                }
-            }
-        }, cfg)]);
-    }
+    fields: [
+		{
+		    name: 'entityid',
+		    type: 'string'
+		},
+		{
+		    name: 'lang',
+		    type: 'string'
+		},
+		{
+		    name: 'typeid',
+		    type: 'string'
+		},
+		{
+		    name: 'lexicalValue',
+		    type: 'string'
+		}
+    ],
+
+    idProperty : 'typeid'
+
 });

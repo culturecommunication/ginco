@@ -306,7 +306,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	{
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		if (topTabs.getActiveTab()!=null) {
-			this.onTabAdded(topTabs,topTabs.getActiveTab());
+			this.onTabAdd(topTabs,topTabs.getActiveTab());
 		}
 	},
 	onTabRemoved: function(theTabPanel) 

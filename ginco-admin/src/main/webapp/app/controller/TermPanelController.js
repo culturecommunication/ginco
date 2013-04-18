@@ -35,8 +35,10 @@
 
 Ext.define('GincoApp.controller.TermPanelController', {
 	extend : 'Ext.app.Controller',
+	requires : ['GincoApp.store.CustomTermAttributeStore'],
 	localized : true,
 	models : [ 'ThesaurusTermModel' ],
+	stores: ['CustomTermAttributeStore'],
 
 	xLoading : 'Loading',
 	xDeleteMsgLabel : 'Do you want to delete this term?',
@@ -80,6 +82,55 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			theForm.down("#statusCombo").setReadOnly(false);
 			theForm.loadRecord(model);
 		}
+		me.initCustomAttributForm(theForm);
+	},
+	
+	initCustomAttributForm: function(theForm)
+	{
+		var termPanel = theForm.up('termPanel');
+		var customAttrTypeStore = Ext.create('GincoApp.store.CustomTermAttributeTypeStore');
+		customAttrTypeStore.getProxy().extraParams = {
+            thesaurusId: termPanel.thesaurusData.id
+        };
+		customAttrTypeStore.load({
+			scope: this,
+		    callback: function(records, operation, success) {
+		    	if (success == true) {
+		    		var customForm = theForm.down('#customAttributeForm');
+		    		for (var i=0;i<records.length;i++)
+		    		{
+		    			var record = records[i];
+		    			var field = Ext.create('Ext.form.field.Text', {
+		    				fieldLabel : record.get('value'),
+		    				name : 'customattr_'+record.get('identifier'),
+		    				anchor : '70%'
+		    			});
+		    			customForm.add(field);
+		    			field.show();
+		    		}
+		    	}
+		        console.log(records);
+		    }
+		});
+	},
+	
+	saveCustomFieldAttributes : function(theForm, termId, lang)
+	{
+		var customForm = theForm.down('#customAttributeForm');
+		var customFormValues = customForm.getValues();
+		var customAttrStore = this.getCustomTermAttributeStoreStore();
+		customAttrStore.removeAll();
+		Ext.Object.each(customFormValues, function(key, value, myself) {
+		    var data = {
+		    		'entityid' : termId,
+		    		'lang' : lang,
+		    		'typeid' : key.split('_')[1],
+		    		'lexicalValue' : value
+		    };
+		    var model = customAttrStore.add(data);
+		    model[0].setDirty(true);
+		});
+		customAttrStore.save();
 	},
 
 	loadData : function(aForm, aModel) {
@@ -125,6 +176,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			var updatedModel = theForm.getForm().getRecord();
 			updatedModel.save({
 				success : function(record, operation) {
+					me.saveCustomFieldAttributes(thePanel,record.get("identifier"),record.get("language"));
 					me.loadData(theForm, record);
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils

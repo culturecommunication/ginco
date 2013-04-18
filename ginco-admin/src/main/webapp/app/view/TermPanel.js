@@ -46,6 +46,7 @@ Ext
 				'GincoApp.view.TermPanel',
 				{
 					extend : 'GincoApp.view.ThesaurusEntityPanel',
+					requires : ['GincoApp.store.CustomTermAttributeStore'],
 					alias : 'widget.termPanel',
 					localized : true,
 					closable : true,
@@ -213,6 +214,12 @@ Ext
 																				.create('GincoApp.store.TermStatusStore'),
 																		anchor : '70%',
 																		margin : '5 0 5 0'
+																	}, {
+																		xtype : 'form',
+																		border: false,
+																		itemId : 'customAttributeForm',
+																		items : [
+																		]
 																	} ]
 														},
 														{
