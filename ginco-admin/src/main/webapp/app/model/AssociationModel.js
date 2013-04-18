@@ -44,10 +44,6 @@ Ext.define('GincoApp.model.AssociationModel', {
         {
             name: 'label',
             type: 'string'
-        },
-        {
-            name: 'order',
-            type: 'string'
         }
     ],
    idProperty : 'identifier'
