@@ -34,7 +34,7 @@ CREATE TABLE split_nonpreferredterm
 CREATE INDEX idx_split_nonpreferredterm_thesaurusid
   ON split_nonpreferredterm
   USING btree
-  (thesaurusid COLLATE pg_catalog."default");
+  (thesaurusid);
 
 CREATE TABLE compound_equivalence
 (
@@ -76,7 +76,7 @@ CREATE TABLE custom_concept_attribute_type
 CREATE INDEX fki_custom_concept
 ON custom_concept_attribute_type
 USING btree
-(thesaurusid COLLATE pg_catalog."default");
+(thesaurusid);
 
 CREATE TABLE custom_term_attribute_type
 (
@@ -97,7 +97,7 @@ CREATE TABLE custom_term_attribute_type
 CREATE INDEX fki_custom_term
 ON custom_term_attribute_type
 USING btree
-(thesaurusid COLLATE pg_catalog."default");
+(thesaurusid);
 
 
 CREATE SEQUENCE custom_term_attribute_type_identifier_seq
@@ -140,7 +140,7 @@ CREATE TABLE custom_term_attribute
 CREATE INDEX fki_custom_term_attribute_lang
 ON custom_term_attribute
 USING btree
-(lang COLLATE pg_catalog."default");
+(lang);
 
 -- Index: fki_termid
 
@@ -149,7 +149,7 @@ USING btree
 CREATE INDEX fki_custom_term_attribute_termid
 ON custom_term_attribute
 USING btree
-(termid COLLATE pg_catalog."default");
+(termid);
 
 -- Index: fki_typeid
 
@@ -186,7 +186,7 @@ CREATE TABLE custom_concept_attribute
 CREATE INDEX fki_custom_concept_attribute_lang
 ON custom_concept_attribute
 USING btree
-(lang COLLATE pg_catalog."default");
+(lang);
 
 -- Index: fki_conceptid
 
@@ -195,7 +195,7 @@ USING btree
 CREATE INDEX fki_custom_concept_attribute_conceptid
 ON custom_concept_attribute
 USING btree
-(conceptid COLLATE pg_catalog."default");
+(conceptid);
 
 -- Index: fki_typeid
 
@@ -204,7 +204,7 @@ USING btree
 CREATE INDEX fki_custom_concept_attribute_typeid
 ON custom_concept_attribute
 USING btree
-(typeid);CACHE 1;
+(typeid);
 
 --Add parent to a array concept
 ALTER TABLE thesaurus_array ADD COLUMN parentarrayid text;
