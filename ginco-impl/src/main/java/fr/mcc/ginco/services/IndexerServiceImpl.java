@@ -105,19 +105,28 @@ public class IndexerServiceImpl implements IIndexerService {
 					e);
 		}
 	}
+	
+	private String getSolrField(SolrDocument doc, String solrField)
+	{
+		if (doc.getFieldValue(solrField)!=null)
+		{
+			return doc.getFieldValue(solrField).toString();
+		} else
+			return "";
+	}
 
 	private SearchResult getSearchResult(SolrDocument doc)
     {
     	SearchResult result = new SearchResult();
-    	result.setIdentifier(doc.getFieldValue(SolrField.IDENTIFIER).toString());
-    	result.setLexicalValue(doc.getFieldValue(SolrField.LEXICALVALUE).toString());
-    	result.setType(doc.getFieldValue(SolrField.TYPE).toString());
-    	result.setThesaurusId(doc.getFieldValue(SolrField.THESAURUSID).toString());
-    	result.setThesaurusTitle(doc.getFieldValue(SolrField.THESAURUSTITLE).toString());
-        result.setCreated(doc.getFieldValue(SolrField.CREATED).toString());
-        result.setModified(doc.getFieldValue(SolrField.MODIFIED).toString());
-        result.setStatus(doc.getFieldValue(SolrField.STATUS).toString());
-        result.setTypeExt(doc.getFieldValue(SolrField.EXT_TYPE).toString());
+    	result.setIdentifier(getSolrField(doc,SolrField.IDENTIFIER));
+    	result.setLexicalValue(getSolrField(doc,SolrField.LEXICALVALUE));
+    	result.setType(getSolrField(doc,SolrField.TYPE));
+    	result.setThesaurusId(getSolrField(doc,SolrField.THESAURUSID));
+    	result.setThesaurusTitle(getSolrField(doc,SolrField.THESAURUSTITLE));
+        result.setCreated(getSolrField(doc,SolrField.CREATED));
+        result.setModified(getSolrField(doc,SolrField.MODIFIED));
+        result.setStatus(getSolrField(doc,SolrField.STATUS));
+        result.setTypeExt(getSolrField(doc,SolrField.EXT_TYPE));
         List<String> languages = new ArrayList<String>();
         for (Object lang : doc.getFieldValues(SolrField.LANGUAGE))
         {
