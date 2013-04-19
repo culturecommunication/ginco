@@ -65,6 +65,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.util.FileManager;
 
 import fr.mcc.ginco.beans.Thesaurus;
@@ -254,15 +255,21 @@ public class ImportRestService {
 			@Context HttpServletRequest request)
 			throws JsonGenerationException, JsonMappingException, IOException,
 			TechnicalException, BusinessException {
-		Attachment file = body.getAttachment("import-file-path");
-		String content = file.getObject(String.class);
-		
-		String[] termsSplit = content.split("\n");
-		List<String> termLexicalValues = Arrays.asList(termsSplit);
-		
-		thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);	
-		return Response.status(Response.Status.OK)
-                .entity("{success:true}")
-                .build();
+		try{
+			Attachment file = body.getAttachment("import-file-path");
+			String content = file.getObject(String.class);
+			
+			String[] termsSplit = content.split("\n");
+			List<String> termLexicalValues = Arrays.asList(termsSplit);
+			
+			thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);	
+			return Response.status(Response.Status.OK)
+	                .entity("{success:true}")
+	                .build();
+		}
+		catch (RuntimeException re) {
+			throw new BusinessException("Error reading imported file :"+re.getMessage(),
+					"import-unable-to-read-file", re);
+		}
 	}
 }
