@@ -217,6 +217,8 @@ Ext
 																		anchor : '70%',
 																		margin : '5 0 5 0'
 																	}, {
+																		trackResetOnLoad :true,
+																		border : false,
 																		xtype : 'customattrform',
 																		metadataStore : me.customAttrTypeStore,
 																		dataStore : me.customAttrStore,

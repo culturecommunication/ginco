@@ -7,6 +7,6 @@ Ext.define('GincoApp.locale.fr.view.CustomAttributeTypesPanel',
         xAdd : 'Ajouter',
         xSave : 'Enregistrer',
         xActions : 'Actions',
-        xConceptsTitle : "Types d'attributs personalisé (Concepts)",
-        xTermsTitle : "Types d'attributs personalisé (Termes)"
+        xConceptsTitle : "Types d'attributs personnalisé (Concepts)",
+        xTermsTitle : "Types d'attributs personnalisé (Termes)"
     });

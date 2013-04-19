@@ -342,23 +342,27 @@ Ext.define('Thesaurus.CustomAttrForm', {
             termId: entityID
         };
 		me.dataStore.load({
-			scope: this,
+			scope: me,
 			callback: function(records, operation, success) {
 			    	if (success == true) {
-			    		var arrayOfAttribute = [];
-			    		for (var i=0;i<records.length;i++)
-			    		{
-			    			var record = records[i];
-			    			var data = {
-			    					id : 'customattr_'+record.get('typeid'),
-			    					value : record.get('lexicalValue'),
-			    			}
-			    			arrayOfAttribute.push(data);
-			    		}
-			    		me.getForm().setValues(arrayOfAttribute);
+			    		me.populateForm(records);
 			    	}
 			    }
 		});
+	},
+	populateForm : function (records) {
+		var me = this;
+		var arrayOfAttribute = [];
+		for (var i=0;i<records.length;i++)
+		{
+			var record = records[i];
+			var data = {
+					id : 'customattr_'+record.get('typeid'),
+					value : record.get('lexicalValue'),
+			}
+			arrayOfAttribute.push(data);
+		}
+		me.getForm().setValues(arrayOfAttribute);
 	},
 	save : function (entityID, lang) {
 		var me = this;
@@ -375,7 +379,12 @@ Ext.define('Thesaurus.CustomAttrForm', {
 			    var model = me.dataStore.add(data);
 			    model[0].setDirty(true);
 			});
-			me.dataStore.save();
+			me.dataStore.save({
+				scope : me,
+				callback : function (records, operation, success) {
+					me.populateForm(operation.operations.update);
+				}
+			});
 		}
 		
 	}

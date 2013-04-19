@@ -216,12 +216,14 @@ public class CustomAttributesRestService {
     @POST
     @Path("/updateTermAttribute")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateTermAttribute(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
+    @Produces(MediaType.APPLICATION_JSON)
+    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> updateTermAttribute(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
         for(GenericCustomAttributeView customAttributeView : list) {
             CustomTermAttribute termAttribute =
                      customAttributeConverter.convertTermAttribute(customAttributeView);
             customTermAttributeService.saveOrUpdate(termAttribute);
         }
+        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(list);
     }
     
     /**
@@ -240,8 +242,6 @@ public class CustomAttributesRestService {
     	
     	ThesaurusTerm entity = thesaurusTermService.getThesaurusTermById(termId);
     	List<CustomTermAttribute> list= customTermAttributeService.getAttributesByEntity(entity);
-    	
-
         return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
         		customAttributeConverter.convertListTerm(list));
     }
