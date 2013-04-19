@@ -37,7 +37,6 @@ package fr.mcc.ginco.helpers;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
@@ -45,35 +44,37 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
 import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Utilities for Thesaurus objects
- *
+ * 
  */
 @Service("thesaurusHelper")
 public class ThesaurusHelper {
-	
+
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
-	
-	@Value("${version-default-label}")
-	private String defaultThesaurusVersionNote;
-	
+
 	/**
 	 * Builds the ThesaurusVersionHistory default object for a thesaurus
+	 * 
 	 * @param thesaurus
 	 * @return
 	 */
-	public ThesaurusVersionHistory buildDefaultVersion(Thesaurus thesaurus)  {
+	public ThesaurusVersionHistory buildDefaultVersion(Thesaurus thesaurus) {
 		ThesaurusVersionHistory defaultVersion = new ThesaurusVersionHistory();
-		defaultVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
-		defaultVersion.setVersionNote(defaultThesaurusVersionNote);
+		defaultVersion.setIdentifier(generatorService
+				.generate(ThesaurusVersionHistory.class));
+		defaultVersion.setVersionNote(LabelUtil
+				.getResourceLabel("version-default-label"));
 		defaultVersion.setDate(DateUtil.nowDate());
 		defaultVersion.setThesaurus(thesaurus);
 		defaultVersion.setThisVersion(true);
-		defaultVersion.setStatus(ThesaurusVersionStatusEnum.PROJECT.getStatus());
-		
+		defaultVersion
+				.setStatus(ThesaurusVersionStatusEnum.PROJECT.getStatus());
+
 		return defaultVersion;
 	}
 
