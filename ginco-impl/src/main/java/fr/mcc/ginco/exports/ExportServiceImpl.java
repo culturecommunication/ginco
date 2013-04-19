@@ -44,65 +44,63 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.result.bean.AlphabeticalExportedItem;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
-import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermRoleService;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 @Service("exportService")
 public class ExportServiceImpl implements IExportService {
 	@Inject
-	@Named("thesaurusArrayService")
-	private IThesaurusArrayService thesaurusArrayService;
+	@Named("alphabeticConceptExporter")
+	private AlphabeticConceptExporter alphabeticConceptExporter;
 
 	@Inject
-	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
+	@Named("alphabeticComplexConceptExporter")
+	private AlphabeticComplexConceptExporter alphabeticComplexConceptExporter;
 
 	@Inject
 	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
 
 	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
-
-	@Inject
-	@Named("noteService")
-	private INoteService noteService;
-
-	@Inject
-	@Named("associativeRelationshipService")
-	private IAssociativeRelationshipService associativeRelationshipService;
-
-	@Value("${ginco.default.language}")
-	private String defaultLang;
-
-	@Inject
-	@Named("thesaurusTermRoleService")
-	private IThesaurusTermRoleService thesaurusTermRoleService;
+	@Named("splitNonPreferredTermService")
+	private ISplitNonPreferredTermService splitNonPreferredTermService;
 
 	@Inject
 	@Named("thesaurusArrayHelper")
 	private ThesaurusArrayHelper thesaurusArrayHelper;
+
+	@Inject
+	@Named("thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;
+
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
+	@Inject
+	@Named("thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
+	
+	@Inject
+	@Named("thesaurusTermUtils")
+	private ThesaurusTermUtils thesaurusTermUtils;
+
 
 	@Override
 	public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)
@@ -116,7 +114,8 @@ public class ExportServiceImpl implements IExportService {
 		Set<ThesaurusConcept> exclude = new HashSet<ThesaurusConcept>();
 
 		for (ThesaurusArray array : orphanArrays) {
-			exclude.addAll(thesaurusArrayHelper.getArrayConcepts(array.getIdentifier()));
+			exclude.addAll(thesaurusArrayHelper.getArrayConcepts(array
+					.getIdentifier()));
 		}
 
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
@@ -137,113 +136,57 @@ public class ExportServiceImpl implements IExportService {
 	@Override
 	public List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus)
 			throws BusinessException {
+		String thesaurusId = thesaurus.getThesaurusId();
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
 
+		List<AlphabeticalExportedItem> itemsToExport = new ArrayList<AlphabeticalExportedItem>();
 		List<ThesaurusConcept> concepts = thesaurusConceptService
-				.getConceptsByThesaurusId(null, thesaurus.getThesaurusId(),
-						null, Boolean.TRUE);
+				.getConceptsByThesaurusId(null, thesaurusId, null, Boolean.TRUE);
 
-		Collections.sort(concepts, new ThesaurusConceptComparator());
-
-		for (ThesaurusConcept concept : concepts) {
-			addConceptTitle(0, result, concept);
-			addConceptInfo(1, result, concept);
+		for (ThesaurusConcept thesaurusConcept : concepts) {
+			AlphabeticalExportedItem item = new AlphabeticalExportedItem();
+			item.setLexicalValue(thesaurusConceptService
+					.getConceptTitle(thesaurusConcept));
+			item.setObjectToExport(thesaurusConcept);
+			itemsToExport.add(item);
 		}
 
-		return result;
-	}
-
-	private void addConceptTitle(Integer base, List<FormattedLine> result,
-			ThesaurusConcept concept) {
-		result.add(new FormattedLine(base, thesaurusConceptService
-				.getConceptTitle(concept)));
-	}
-
-	/**
-	 * For alphabetic export.
-	 * 
-	 * banquette NA: Siège à plusieurs places, peu profond, garni, comportant
-	 * éventuellement soit un dossier, soit des accotoirs, soit les deux. EP:
-	 * banquette à accotoirs banquette à dossier TG: siège banquette à accotoirs
-	 * EM: banquette banquette à dossier EM: banquette
-	 */
-	private void addConceptInfo(Integer base, List<FormattedLine> result,
-			ThesaurusConcept concept) {
-		List<Note> notes = noteService.getConceptNotePaginatedList(
-				concept.getIdentifier(), 0, 0);
-
-		List<ThesaurusTerm> prefTerms = thesaurusConceptService
-				.getConceptPreferredTerms(concept.getIdentifier());
-
-		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
-			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("CC")
-					+ ": " + concept.getNotation()));
+		List<SplitNonPreferredTerm> complexConcepts = splitNonPreferredTermService
+				.getSplitNonPreferredTermList(0, splitNonPreferredTermService
+						.getSplitNonPreferredTermCount(thesaurusId).intValue(),
+						thesaurusId);
+		for (SplitNonPreferredTerm complexConcept : complexConcepts) {
+			AlphabeticalExportedItem item = new AlphabeticalExportedItem();
+			item.setLexicalValue(complexConcept.getLexicalValue());
+			item.setObjectToExport(complexConcept);
+			itemsToExport.add(item);
 		}
 
-		for (Note note : notes) {
-			if ("scopeNote".equals(note.getNoteType().getCode())) {
-				result.add(new FormattedLine(base, LabelUtil
-						.getResourceLabel("NA") + ": " + note.getLexicalValue()));
-			}
-		}
+		Collections.sort(itemsToExport,
+				new AlphabeticalExportedItemComparator());
 
-		for (ThesaurusConcept parent : concept.getParentConcepts()) {
-
-			List<ThesaurusTerm> parentPrefs = thesaurusConceptService
-					.getConceptPreferredTerms(parent.getIdentifier());
-
-			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TG")
-					+ ": " + generatePrefTermsText(parentPrefs)));
-		}
-
-		for (ThesaurusConcept ta : thesaurusConceptService
-				.getThesaurusConceptList(associativeRelationshipService
-						.getAssociatedConceptsId(concept))) {
-
-			List<ThesaurusTerm> taPrefs = thesaurusConceptService
-					.getConceptPreferredTerms(ta.getIdentifier());
-
-			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TA")
-					+ ": " + generatePrefTermsText(taPrefs)));
-		}
-
-		for (ThesaurusTerm term : thesaurusTermService
-				.getTermsByConceptId(concept.getIdentifier())) {
-			if (!term.getPrefered()) {
-				result.add(new FormattedLine(base, LabelUtil
-						.getResourceLabel("EP")
-						+ ": "
-						+ LabelUtil.getLocalizedLabel(term.getLexicalValue(),
-								term.getLanguage(), defaultLang)));
-			}
-		}
-
-		for (ThesaurusConcept child : thesaurusConceptService
-				.getChildrenByConceptId(concept.getIdentifier())) {
-
-			ThesaurusTerm term = thesaurusConceptService
-					.getConceptPreferredTerm(child.getIdentifier());
-
-			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TS")
-					+ ": "
-					+ LabelUtil.getLocalizedLabel(term.getLexicalValue(),
-							term.getLanguage(), defaultLang)));
-		}
-
-		for (ThesaurusTerm term : thesaurusConceptService
-				.getConceptNotPreferredTerms(concept.getIdentifier())) {
-			result.add(new FormattedLine(base - 1, LabelUtil.getLocalizedLabel(
-					term.getLexicalValue(), term.getLanguage(), defaultLang)));
-			if (term.getRole() == null) {
-				result.add(new FormattedLine(base, thesaurusTermRoleService
-						.getDefaultThesaurusTermRole().getCode()
-						+ ": "
-						+ generatePrefTermsText(prefTerms)));
+		for (AlphabeticalExportedItem item : itemsToExport) {
+			if (ThesaurusConcept.class.equals(item.getObjectToExport()
+					.getClass())) {
+				alphabeticConceptExporter.addConceptTitle(0, result,
+						(ThesaurusConcept) item.getObjectToExport());
+				alphabeticConceptExporter.addConceptInfo(1, result,
+						(ThesaurusConcept) item.getObjectToExport());
+			} else if (SplitNonPreferredTerm.class.equals(item
+					.getObjectToExport().getClass())) {
+				alphabeticComplexConceptExporter.addComplexConceptTitle(0,
+						result,
+						(SplitNonPreferredTerm) item.getObjectToExport());
+				alphabeticComplexConceptExporter.addComplexConceptInfo(1,
+						result,
+						(SplitNonPreferredTerm) item.getObjectToExport());
 			} else {
-				result.add(new FormattedLine(base, term.getRole().getCode()
-						+ ": " + generatePrefTermsText(prefTerms)));
+				throw new BusinessException(
+						"non-available-type-for-alpha-export",
+						"Object type non available for alphabetical export");
 			}
 		}
+		return result;
 	}
 
 	private List<FormattedLine> getHierarchicalText(Integer base,
@@ -252,7 +195,7 @@ public class ExportServiceImpl implements IExportService {
 
 		Set<ThesaurusConcept> thesaurusArrayConcepts = new HashSet<ThesaurusConcept>();
 
-		addConceptTitle(base, result, concept);
+		alphabeticConceptExporter.addConceptTitle(base, result, concept);
 
 		List<ThesaurusArray> subOrdArrays = thesaurusArrayService
 				.getSubOrdinatedArrays(concept.getIdentifier());
@@ -275,25 +218,6 @@ public class ExportServiceImpl implements IExportService {
 
 		for (ThesaurusArray subOrdArray : subOrdArrays) {
 			addThesaurusArray(result, subOrdArray, base);
-		}
-
-		return result;
-	}
-
-	private String generatePrefTermsText(List<ThesaurusTerm> terms) {
-
-		String result = "";
-
-		if (terms.size() == 1) {
-			result = LabelUtil.getLocalizedLabel(
-					terms.get(0).getLexicalValue(), terms.get(0).getLanguage(),
-					defaultLang);
-		} else {
-			for (ThesaurusTerm term : terms) {
-				result += term.getLexicalValue() + " ("
-						+ term.getLanguage().getId() + "), ";
-			}
-			result = result.substring(0, result.length() - 2);
 		}
 
 		return result;
@@ -327,6 +251,26 @@ public class ExportServiceImpl implements IExportService {
 	}
 
 	/**
+	 * Comparator to use with two AlphabeticalExportedItem - compares based on
+	 * its lexicalValue.
+	 */
+	class AlphabeticalExportedItemComparator implements
+			Comparator<AlphabeticalExportedItem> {
+
+		@Override
+		public int compare(AlphabeticalExportedItem o1,
+				AlphabeticalExportedItem o2) {
+			try {
+				String l1 = o1.getLexicalValue();
+				String l2 = o2.getLexicalValue();
+				return l1.compareToIgnoreCase(l2);
+			} catch (BusinessException e) {
+				return 0;
+			}
+		}
+	}
+
+	/**
 	 * Comparator to use with two concepts - compares based on its lexicalValue.
 	 */
 	class ThesaurusConceptComparator implements Comparator<ThesaurusConcept> {
@@ -334,12 +278,12 @@ public class ExportServiceImpl implements IExportService {
 		@Override
 		public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
 			try {
-				String l1 = ThesaurusTermUtils
+				String l1 = thesaurusTermUtils
 						.getPreferedTerms(
 								thesaurusTermService.getTermsByConceptId(o1
 										.getIdentifier())).get(0)
 						.getLexicalValue();
-				String l2 = ThesaurusTermUtils
+				String l2 = thesaurusTermUtils
 						.getPreferedTerms(
 								thesaurusTermService.getTermsByConceptId(o2
 										.getIdentifier())).get(0)
