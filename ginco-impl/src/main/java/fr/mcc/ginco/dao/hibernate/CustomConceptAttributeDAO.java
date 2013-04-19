@@ -37,6 +37,7 @@ package fr.mcc.ginco.dao.hibernate;
 import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.CustomTermAttribute;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -59,4 +60,11 @@ public class CustomConceptAttributeDAO extends GenericHibernateDAO<CustomConcept
                 .add(Restrictions.eq("conceptid", entity.getIdentifier()));
         return criteria.list();
     }
+
+	@Override
+	public CustomConceptAttribute getAttributeByType(ThesaurusConcept entity,
+			GenericCustomAttributeType type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

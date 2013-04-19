@@ -45,7 +45,7 @@ Ext.define('GincoApp.store.CustomTermAttributeStore', {
             proxy: {
                 type: 'ajax',
                 api : {
-                    read : 'services/ui/customattributesservice/getAllTermAttribute',
+                    read : 'services/ui/customattributesservice/getTermAttribute',
                     update : 'services/ui/customattributesservice/updateTermAttribute',
                     create : 'services/ui/customattributesservice/updateTermAttribute',
                 },

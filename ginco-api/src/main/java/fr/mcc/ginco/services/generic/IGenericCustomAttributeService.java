@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services.generic;
 
 import fr.mcc.ginco.beans.generic.GenericCustomAttribute;
+import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 
 import java.util.List;
 
@@ -43,7 +44,6 @@ import java.util.List;
  */
 public interface IGenericCustomAttributeService<E, T extends GenericCustomAttribute> {
     List<T> getAttributesByEntity(E entity);
-    T getAttributeById(String id);
     T saveOrUpdate(T attribute);
     void deleteAttribute(T attribute);
 }

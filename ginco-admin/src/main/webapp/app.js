@@ -85,7 +85,6 @@ Ext.application({
         'ThesaurusVersionStatusStore',
         'SearchTypeStore',
         'ThesaurusStore',
-        'CustomTermAttributeTypeStore',
         'CustomConceptAttributeTypeStore',
         'ConceptArrayStore'
     ],
