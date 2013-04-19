@@ -35,6 +35,7 @@
 package fr.mcc.ginco.rest.services;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -144,15 +145,19 @@ public class CustomAttributesRestService {
     @POST
     @Path("/updateConceptAttributeTypes")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateConceptAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<GenericCustomAttributeTypeView> updateConceptAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
+    	List<CustomConceptAttributeType> newList = new ArrayList<CustomConceptAttributeType>();
         for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
             CustomConceptAttributeType conceptAttributeType =
                     (CustomConceptAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, true);
-
+            
             if(customConceptAttributeTypeService.isUnique(conceptAttributeType.getThesaurus(), conceptAttributeType.getCode())) {
                 customConceptAttributeTypeService.saveOrUpdate(conceptAttributeType);
+                newList.add(conceptAttributeType);
             }
         }
+        return customAttributesTypeConverter.convertList(newList);
     }
 
     /**
@@ -201,13 +206,17 @@ public class CustomAttributesRestService {
     @POST
     @Path("/updateTermAttributeTypes")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateTermAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<GenericCustomAttributeTypeView> updateTermAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
+    	List<CustomTermAttributeType> newList = new ArrayList<CustomTermAttributeType>();
         for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
             CustomTermAttributeType conceptAttributeType =
                     (CustomTermAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, false);
 
             customTermAttributeTypeService.saveOrUpdate(conceptAttributeType);
+            newList.add(conceptAttributeType);
         }
+        return customAttributesTypeConverter.convertList(newList);
     }
 
     /**

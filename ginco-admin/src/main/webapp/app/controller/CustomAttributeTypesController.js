@@ -43,7 +43,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
 
     xLoading : 'Loading',
     xSucessLabel : 'Success!',
-    xSucessSavedMsg : 'Concept group saved successfully',
+    xSucessSavedMsg : 'Attributes types saved successfully',
     xProblemLabel : 'Error !',
     xProblemLoadMsg : 'Unable to load the concept group',
     xProblemSaveMsg : 'Unable to save this concept group!',
@@ -96,27 +96,26 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         var me = this;
         var theGrid = theButton.up('#conceptAttributTypesGrid');
         var conceptsGridStore = theGrid.getStore();
-        //conceptsGridStore.sync();
-        conceptsGridStore.save();
-        /*var thesaurusData = theGrid.up('thesaurusPanel').thesaurusData;
-
-        if (thesaurusData != null) {
-            me.loadConceptData(theGrid, thesaurusData.id);
-        }   */
+        conceptsGridStore.sync({
+        	success: function() {
+        		Thesaurus.ext.utils.msg(
+						me.xSucessLabel,
+						me.xSucessSavedMsg);
+        	}
+        });
     },
 
     saveTermTypes : function(theButton) {
         var me = this;
         var theGrid = theButton.up('#termAttributTypesGrid');
         var termsGridStore = theGrid.getStore();
-        //termsGridStore.save();
-        termsGridStore.sync();
-        //асинхронный метод!!!!! добавить загрузку на success!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        /*var thesaurusData = theGrid.up('thesaurusPanel').thesaurusData;
-
-        if (thesaurusData != null) {
-            me.loadTermData(theGrid, thesaurusData.id);
-        } */
+        termsGridStore.sync({
+        	success: function() {
+        		Thesaurus.ext.utils.msg(
+						me.xSucessLabel,
+						me.xSucessSavedMsg);
+        	}
+        });
     },
 
     addTermType : function(theButton) {
@@ -127,6 +126,8 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         var thesaurusData = theButton.up('thesaurusPanel').thesaurusData;
 
         model.set('thesaurusId',thesaurusData.id);
+        model.set('value','Nouvel attribut');
+        model.set('code','code');
         termsGridStore.add(model);
     },
 
@@ -135,8 +136,9 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         var conceptsGridStore = theGrid.getStore();
         var model = Ext.create('GincoApp.model.CustomAttributeTypeModel');
         var thesaurusData = theButton.up('thesaurusPanel').thesaurusData;
-
         model.set('thesaurusId',thesaurusData.id);
+        model.set('value','Nouvel attribut');
+        model.set('code','code');
         conceptsGridStore.add(model);
     },
 
