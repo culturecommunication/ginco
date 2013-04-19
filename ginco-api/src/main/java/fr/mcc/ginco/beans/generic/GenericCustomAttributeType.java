@@ -48,6 +48,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GenericCustomAttributeType implements Serializable {
+	@XmlTransient
     private int identifier;
     private String code;
     private String value;

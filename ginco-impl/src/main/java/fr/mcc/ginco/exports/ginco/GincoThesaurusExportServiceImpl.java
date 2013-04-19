@@ -203,7 +203,7 @@ public class GincoThesaurusExportServiceImpl implements
 						parentConceptHierarchicalRelationship);
 			}
 
-			// Exporting relative relationship
+			// Exporting associative relationship
 			JaxbList<String> associations = gincoConceptExporter
 					.getExportAssociativeRelationShip(thesaurusConcept);
 			if (associations != null && !associations.isEmpty()) {

@@ -150,7 +150,8 @@ public class GincoRelationshipImporter {
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
 					associatedConceptIds = entry.getValue().getList();
 				}
-				updatedConcepts.add(thesaurusConceptDAO.update(saveAssociativeRelationship(thesaurusConceptDAO.getById(conceptId), associatedConceptIds)));
+				ThesaurusConcept updatedConcept = saveAssociativeRelationship(thesaurusConceptDAO.getById(conceptId), associatedConceptIds);
+				updatedConcepts.add(thesaurusConceptDAO.update(updatedConcept));
 			}
 		}
 		return updatedConcepts;
@@ -173,14 +174,6 @@ public class GincoRelationshipImporter {
 		for (String associatedConceptsId : associatedConceptIds) {
 			logger.debug("Settings associated concept " + associatedConceptsId);
 			ThesaurusConcept linkedThesaurusConcept = thesaurusConceptDAO.getById(associatedConceptsId);
-			if (linkedThesaurusConcept.getStatus() != ConceptStatusEnum.VALIDATED
-					.getStatus()) {
-				throw new BusinessException(
-						"A concept must associate a validated concept",
-						"concept-associate-validated-concept");
-			}
-			/*List<String> alreadyAssociatedConcepts = associativeRelationshipDAO
-					.getAssociatedConcepts(linkedThesaurusConcept);*/
 			
 			AssociativeRelationship alreadyExistingRelation = associativeRelationshipDAO.getAssociativeRelationship(concept.getIdentifier(), linkedThesaurusConcept.getIdentifier());
 			
