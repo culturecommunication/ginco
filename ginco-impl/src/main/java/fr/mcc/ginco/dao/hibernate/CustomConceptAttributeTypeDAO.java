@@ -51,6 +51,14 @@ import java.util.List;
 public class CustomConceptAttributeTypeDAO extends
         GenericHibernateDAO<CustomConceptAttributeType, Integer> implements ICustomConceptAttributeTypeDAO {
     @Override
+    public boolean isUnique(Thesaurus thesaurus, String code) {
+        Criteria criteria = getCurrentSession().createCriteria(CustomConceptAttributeType.class)
+                .add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()))
+                .add(Restrictions.eq("code", code));
+        return (criteria.list().size() == 0);
+    }
+
+    @Override
     public List<CustomConceptAttributeType> getAttributesByThesaurus(Thesaurus thesaurus) throws BusinessException {
         Criteria criteria = getCurrentSession().createCriteria(CustomConceptAttributeType.class)
                 .add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()));

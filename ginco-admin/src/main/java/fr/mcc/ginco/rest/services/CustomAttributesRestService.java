@@ -34,11 +34,7 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.CustomConceptAttributeType;
-import fr.mcc.ginco.beans.CustomTermAttribute;
-import fr.mcc.ginco.beans.CustomTermAttributeType;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -46,12 +42,7 @@ import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeTypeView;
 import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeView;
 import fr.mcc.ginco.extjs.view.utils.CustomAttributeConverter;
 import fr.mcc.ginco.extjs.view.utils.CustomAttributesTypesConverter;
-import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
-import fr.mcc.ginco.services.ICustomTermAttributeService;
-import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-
+import fr.mcc.ginco.services.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -130,7 +121,9 @@ public class CustomAttributesRestService {
             CustomConceptAttributeType conceptAttributeType =
                     (CustomConceptAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, true);
 
-            customConceptAttributeTypeService.saveOrUpdate(conceptAttributeType);
+            if(customConceptAttributeTypeService.isUnique(conceptAttributeType.getThesaurus(), conceptAttributeType.getCode())) {
+                customConceptAttributeTypeService.saveOrUpdate(conceptAttributeType);
+            }
         }
     }
 

@@ -47,7 +47,6 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
         align : 'stretch'
     },
     /* Fields with auto generated values */
-    xIdentifierLabel : 'Identifier',
     xCode : 'Code',
     xValue : 'Value',
     xDelete : 'Remove',
@@ -110,10 +109,6 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     } ],
                     columns : [
                         {
-                            dataIndex : 'identifier',
-                            text : me.xIdentifierLabel
-                        },
-                        {
                             dataIndex : 'code',
                             text : me.xCode,
                             editor: {
@@ -175,10 +170,6 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                             disabled : false
                     } ],
                     columns : [
-                        {
-                            dataIndex : 'identifier',
-                            text : me.xIdentifierLabel
-                        },
                         {
                             dataIndex : 'code',
                             text : me.xCode,

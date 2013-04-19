@@ -97,7 +97,7 @@ public class CustomAttributesTypesConverter {
                 hibernateRes.setThesaurus(thesaurus);
             }
 
-            hibernateRes.setCode(view.getCode());
+            hibernateRes.setCode(view.getCode().replace(' ','_').toLowerCase());
             hibernateRes.setValue(view.getValue());
 
             return hibernateRes;
@@ -108,7 +108,7 @@ public class CustomAttributesTypesConverter {
                 hibernateRes.setThesaurus(thesaurus);
             }
 
-            hibernateRes.setCode(view.getCode());
+            hibernateRes.setCode(view.getCode().replace(' ','_').toLowerCase());
             hibernateRes.setValue(view.getValue());
 
             return hibernateRes;

@@ -49,6 +49,15 @@ import java.util.List;
  */
 @Repository("customTermAttributeTypeDAO")
 public class CustomTermAttributeTypeDAO extends GenericHibernateDAO<CustomTermAttributeType, Integer> implements ICustomTermAttributeTypeDAO {
+
+    @Override
+    public boolean isUnique(Thesaurus thesaurus, String code) {
+        Criteria criteria = getCurrentSession().createCriteria(CustomTermAttributeType.class)
+                .add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()))
+                .add(Restrictions.eq("code", code));
+        return (criteria.list().size() == 0);
+    }
+
     @Override
     public List<CustomTermAttributeType> getAttributesByThesaurus(Thesaurus thesaurus) throws BusinessException {
         Criteria criteria = getCurrentSession().createCriteria(CustomTermAttributeType.class)

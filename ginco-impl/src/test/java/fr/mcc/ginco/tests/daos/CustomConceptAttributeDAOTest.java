@@ -34,7 +34,9 @@
  */
 package fr.mcc.ginco.tests.daos;
 
+import fr.mcc.ginco.dao.hibernate.CustomConceptAttributeDAO;
 import fr.mcc.ginco.tests.BaseDAOTest;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -42,9 +44,16 @@ import org.junit.Test;
  */
 public class CustomConceptAttributeDAOTest extends BaseDAOTest {
 
+    private CustomConceptAttributeDAO customConceptAttributeDAO = new CustomConceptAttributeDAO();
+
+    @Before
+    public void handleSetUpOperation() throws Exception {
+        super.handleSetUpOperation();
+        customConceptAttributeDAO.setSessionFactory(getSessionFactory());
+    }
+
     @Test
     public void testGetByEntity() {
-
     }
 
     @Override

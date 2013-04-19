@@ -93,17 +93,30 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
     },
 
     saveConceptTypes : function(theButton) {
+        var me = this;
         var theGrid = theButton.up('#conceptAttributTypesGrid');
         var conceptsGridStore = theGrid.getStore();
         //conceptsGridStore.sync();
         conceptsGridStore.save();
+        /*var thesaurusData = theGrid.up('thesaurusPanel').thesaurusData;
+
+        if (thesaurusData != null) {
+            me.loadConceptData(theGrid, thesaurusData.id);
+        }   */
     },
 
     saveTermTypes : function(theButton) {
+        var me = this;
         var theGrid = theButton.up('#termAttributTypesGrid');
         var termsGridStore = theGrid.getStore();
         //termsGridStore.save();
         termsGridStore.sync();
+        //асинхронный метод!!!!! добавить загрузку на success!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        /*var thesaurusData = theGrid.up('thesaurusPanel').thesaurusData;
+
+        if (thesaurusData != null) {
+            me.loadTermData(theGrid, thesaurusData.id);
+        } */
     },
 
     addTermType : function(theButton) {
