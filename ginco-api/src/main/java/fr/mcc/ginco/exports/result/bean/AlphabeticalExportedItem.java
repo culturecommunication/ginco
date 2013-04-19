@@ -32,58 +32,36 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports;
+package fr.mcc.ginco.exports.result.bean;
 
-import java.text.Collator;
-import java.util.Comparator;
-import java.util.Locale;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 /**
- * Comparator to use with two concepts - compares based on its lexicalValue.
+ * Small utility class for representing an object ready to be exported
+ * alphabetically.
+ * The type -Object- for the objectToExport is because
+ *  alphabetical export sorts alphabetically different
+ * object types ( {@link ThesaurusConcept} and {@link SplitNonPreferredTerm} )
  */
-@Service("thesaurusConceptComparator")
-public class ThesaurusConceptComparator implements Comparator<ThesaurusConcept> {
+public class AlphabeticalExportedItem {
+	private String lexicalValue;
+	private Object objectToExport;
 
-	@Inject
-	@Named("thesaurusTermService") 
-	private IThesaurusTermService thesaurusTermService;
-	
-	@Inject
-	@Named("thesaurusTermUtils") 
-	private ThesaurusTermUtils thesaurusTermUtils;
-
-	@Value("${ginco.default.language}") 
-	private String defaultLang;
-	
-	@Override
-	public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
-		try {
-			String l1 = thesaurusTermUtils
-					.getPreferedTerms(
-							thesaurusTermService.getTermsByConceptId(o1
-									.getIdentifier())).get(0)
-					.getLexicalValue();
-			String l2 = thesaurusTermUtils
-					.getPreferedTerms(
-							thesaurusTermService.getTermsByConceptId(o2
-									.getIdentifier())).get(0)
-					.getLexicalValue();
-			Collator collator = Collator
-					.getInstance(new Locale(defaultLang));
-			return collator.compare(l1, l2);
-		} catch (BusinessException e) {
-			return 0;
-		}
+	public Object getObjectToExport() {
+		return objectToExport;
 	}
+
+	public void setObjectToExport(Object objectToExport) {
+		this.objectToExport = objectToExport;
+	}
+
+	public String getLexicalValue() {
+		return lexicalValue;
+	}
+
+	public void setLexicalValue(String lexicalValue) {
+		this.lexicalValue = lexicalValue;
+	}
+
 }

@@ -51,11 +51,15 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exports.ThesaurusConceptComparator;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 public class ThesaurusConceptComparatorTest {
 
 	@Mock(name = "thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
+
+	@Mock(name = "thesaurusTermUtils")
+	private ThesaurusTermUtils thesaurusTermUtils;
 
 	@InjectMocks
 	private ThesaurusConceptComparator thesaurusConceptComparator;

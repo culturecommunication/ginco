@@ -40,7 +40,10 @@ import java.util.List;
 import junit.framework.Assert;
 import junitx.framework.ListAssert;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -48,6 +51,14 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 public class ThesaurusTermUtilsTest {
+	
+	@InjectMocks
+	ThesaurusTermUtils thesaurusTermUtils;
+	
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
 
 	@Test
 	public void testGetPreferedTerms() {
@@ -69,7 +80,7 @@ public class ThesaurusTermUtilsTest {
 		term4.setPrefered(true);
 		listOfTerms.add(term4);
 		
-		List<ThesaurusTerm> prefered  = ThesaurusTermUtils.getPreferedTerms(listOfTerms);
+		List<ThesaurusTerm> prefered  = thesaurusTermUtils.getPreferedTerms(listOfTerms);
 		
 		ListAssert.assertContains(prefered, term2);
 		ListAssert.assertContains(prefered, term4);
@@ -87,7 +98,7 @@ public class ThesaurusTermUtilsTest {
 		term2.setPrefered(false);
 		listOfTerms.add(term2);
 		
-		ThesaurusTermUtils.checkTerms(listOfTerms);
+		thesaurusTermUtils.checkTerms(listOfTerms);
 		
 	}
 	
@@ -117,7 +128,7 @@ public class ThesaurusTermUtilsTest {
 		term4.setPrefered(true);
 		listOfTerms.add(term4);
 		
-		ThesaurusTermUtils.checkTerms(listOfTerms);
+		thesaurusTermUtils.checkTerms(listOfTerms);
 
 	}
 	
@@ -147,7 +158,7 @@ public class ThesaurusTermUtilsTest {
 		term4.setPrefered(false);
 		listOfTerms.add(term4);
 		
-		boolean check = ThesaurusTermUtils.checkTerms(listOfTerms);
+		boolean check = thesaurusTermUtils.checkTerms(listOfTerms);
 		Assert.assertTrue(check);
 	}   
 }

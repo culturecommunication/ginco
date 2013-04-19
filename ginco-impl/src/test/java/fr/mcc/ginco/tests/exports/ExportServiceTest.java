@@ -56,6 +56,8 @@ import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.AlphabeticConceptExporter;
+import fr.mcc.ginco.exports.AlphabeticalExportedItemComparator;
 import fr.mcc.ginco.exports.ArrayNaturalComparator;
 import fr.mcc.ginco.exports.ExportServiceImpl;
 import fr.mcc.ginco.exports.NodeLabelComparator;
@@ -69,9 +71,12 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ExportServiceTest {
-
+	
 	@Mock(name = "thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;
+
+	@Mock(name = "alphabeticConceptExporter")
+	private AlphabeticConceptExporter alphabeticConceptExporter;
 
 	@Mock(name = "thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
@@ -93,6 +98,9 @@ public class ExportServiceTest {
 	
 	@Mock(name = "arrayNaturalComparator")
 	private ArrayNaturalComparator arrayNaturalComparator;
+	
+	@Mock(name = "alphabeticalExportedItemComparator")
+	private AlphabeticalExportedItemComparator alphabeticalExportedItemComparator;
 	
 	@InjectMocks
 	private ExportServiceImpl exportService;

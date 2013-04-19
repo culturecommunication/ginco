@@ -37,18 +37,25 @@ package fr.mcc.ginco.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
+@Component("thesaurusTermUtils")
 public class ThesaurusTermUtils {
 	
+	@Value("${ginco.default.language}")
+	private String defaultLang;
+	
     /**
-     * Returns the list of preferrefd terms from the given list
+     * Returns the list of preferred terms from the given list
      * @param listOfTerms
      * @return
      */
-    public static final List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
+    public final List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
         List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
         for (ThesaurusTerm thesaurusTerm : listOfTerms) {
             if (thesaurusTerm.getPrefered()) {
@@ -65,9 +72,8 @@ public class ThesaurusTermUtils {
      * - the list can not contains two preferred terms with the same language and the same lexical value
      * @param terms
      */
-    public static boolean checkTerms(List<ThesaurusTerm> terms) {
-		 List<ThesaurusTerm> preferedTerms = ThesaurusTermUtils
-					.getPreferedTerms(terms);
+    public boolean checkTerms(List<ThesaurusTerm> terms) {
+		 List<ThesaurusTerm> preferedTerms = getPreferedTerms(terms);
 	       
 		if (preferedTerms.size() == 0) {
 				throw new BusinessException("A concept must have a prefered term",
@@ -86,5 +92,31 @@ public class ThesaurusTermUtils {
 		}		
 		return true;
 
+	}
+    
+	/**
+	 * This method generates text for term labels (term title + lang if different to the application default language)
+	 * @param terms
+	 * @return label : String label of the term with language if needed
+	 */
+	public String generatePrefTermsText(List<ThesaurusTerm> terms) {
+
+		String result = "";
+
+		if (terms.size() == 1) {
+			result = generatePrefTermText(terms.get(0));
+		} else {
+			for (ThesaurusTerm term : terms) {
+				result += term.getLexicalValue() + " ("
+						+ term.getLanguage().getId() + "), ";
+			}
+			result = result.substring(0, result.length() - 2);
+		}
+		return result;
+	}
+	
+	public String generatePrefTermText(ThesaurusTerm term) {
+		return LabelUtil.getLocalizedLabel(term.getLexicalValue(),
+				term.getLanguage(), defaultLang);
 	}
 }

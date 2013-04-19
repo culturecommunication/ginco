@@ -34,54 +34,27 @@
  */
 package fr.mcc.ginco.exports;
 
-import java.text.Collator;
 import java.util.Comparator;
-import java.util.Locale;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.ThesaurusTermUtils;
+import fr.mcc.ginco.exports.result.bean.AlphabeticalExportedItem;
 
 /**
- * Comparator to use with two concepts - compares based on its lexicalValue.
+ * Comparator to use with two alphabetical exported items- compares based on its
+ * lexicalValue.
  */
-@Service("thesaurusConceptComparator")
-public class ThesaurusConceptComparator implements Comparator<ThesaurusConcept> {
+@Service("alphabeticalExportedItemComparator")
+public class AlphabeticalExportedItemComparator implements
+		Comparator<AlphabeticalExportedItem> {
 
-	@Inject
-	@Named("thesaurusTermService") 
-	private IThesaurusTermService thesaurusTermService;
-	
-	@Inject
-	@Named("thesaurusTermUtils") 
-	private ThesaurusTermUtils thesaurusTermUtils;
-
-	@Value("${ginco.default.language}") 
-	private String defaultLang;
-	
 	@Override
-	public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
+	public int compare(AlphabeticalExportedItem o1, AlphabeticalExportedItem o2) {
 		try {
-			String l1 = thesaurusTermUtils
-					.getPreferedTerms(
-							thesaurusTermService.getTermsByConceptId(o1
-									.getIdentifier())).get(0)
-					.getLexicalValue();
-			String l2 = thesaurusTermUtils
-					.getPreferedTerms(
-							thesaurusTermService.getTermsByConceptId(o2
-									.getIdentifier())).get(0)
-					.getLexicalValue();
-			Collator collator = Collator
-					.getInstance(new Locale(defaultLang));
-			return collator.compare(l1, l2);
+			String l1 = o1.getLexicalValue();
+			String l2 = o2.getLexicalValue();
+			return l1.compareToIgnoreCase(l2);
 		} catch (BusinessException e) {
 			return 0;
 		}

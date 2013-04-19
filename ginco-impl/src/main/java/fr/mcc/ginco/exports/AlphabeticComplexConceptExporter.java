@@ -34,56 +34,60 @@
  */
 package fr.mcc.ginco.exports;
 
-import java.text.Collator;
-import java.util.Comparator;
-import java.util.Locale;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exports.result.bean.FormattedLine;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
+import fr.mcc.ginco.services.IThesaurusTermRoleService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 /**
- * Comparator to use with two concepts - compares based on its lexicalValue.
+ * This component gives methods to export concepts alphabetically
+ * 
  */
-@Service("thesaurusConceptComparator")
-public class ThesaurusConceptComparator implements Comparator<ThesaurusConcept> {
+@Component("alphabeticComplexConceptExporter")
+public class AlphabeticComplexConceptExporter {
+
+	@Value("${ginco.default.language}")
+	private String defaultLang;
 
 	@Inject
-	@Named("thesaurusTermService") 
-	private IThesaurusTermService thesaurusTermService;
+	@Named("splitNonPreferredTermService")
+	private ISplitNonPreferredTermService splitNonPreferredTermService;
 	
+
 	@Inject
-	@Named("thesaurusTermUtils") 
+	@Named("thesaurusTermUtils")
 	private ThesaurusTermUtils thesaurusTermUtils;
 
-	@Value("${ginco.default.language}") 
-	private String defaultLang;
-	
-	@Override
-	public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
-		try {
-			String l1 = thesaurusTermUtils
-					.getPreferedTerms(
-							thesaurusTermService.getTermsByConceptId(o1
-									.getIdentifier())).get(0)
-					.getLexicalValue();
-			String l2 = thesaurusTermUtils
-					.getPreferedTerms(
-							thesaurusTermService.getTermsByConceptId(o2
-									.getIdentifier())).get(0)
-					.getLexicalValue();
-			Collator collator = Collator
-					.getInstance(new Locale(defaultLang));
-			return collator.compare(l1, l2);
-		} catch (BusinessException e) {
-			return 0;
+	@Inject
+	@Named("thesaurusTermRoleService")
+	private IThesaurusTermRoleService thesaurusTermRoleService;
+
+	@Inject
+	@Named("thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
+
+	public void addComplexConceptTitle(Integer base,
+			List<FormattedLine> result, SplitNonPreferredTerm complexConcept) {
+		result.add(new FormattedLine(base, complexConcept.getLexicalValue()));
+	}
+
+	public void addComplexConceptInfo(Integer base, List<FormattedLine> result,
+			SplitNonPreferredTerm complexConcept) {
+		for (ThesaurusTerm term : complexConcept.getPreferredTerms()) {
+			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TP")
+					+ ": " + thesaurusTermUtils.generatePrefTermText(term)));		
 		}
 	}
 }
