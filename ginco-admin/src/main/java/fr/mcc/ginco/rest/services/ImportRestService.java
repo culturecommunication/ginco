@@ -34,8 +34,16 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,6 +55,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
@@ -56,18 +65,26 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.hp.hpl.jena.shared.JenaException;
+import com.hp.hpl.jena.util.FileManager;
+
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.FileResponse;
 import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
+import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Base REST service intended to be used for SKOS Import the @Produces({
@@ -106,6 +123,10 @@ public class ImportRestService {
 	@Inject
 	@Named("thesaurusConceptViewConverter")
 	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+	
+	@Inject
+	@Named("thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
 
 	/**
 	 * This method is called to import a SKOS thesaurus the @Produces({
@@ -223,5 +244,32 @@ public class ImportRestService {
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				response));
 		return serialized;
+	}
+	
+	@POST
+	@Path("/importSandBoxTerms")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response importSandBoxTerms (MultipartBody body,
+			@QueryParam("thesaurusId") String thesaurusId,
+			@Context HttpServletRequest request)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			TechnicalException, BusinessException {
+		try{
+			Attachment file = body.getAttachment("import-file-path");
+			String content = file.getObject(String.class);
+			
+			String[] termsSplit = content.split("\n");
+			List<String> termLexicalValues = Arrays.asList(termsSplit);
+			
+			thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);	
+			return Response.status(Response.Status.OK)
+	                .entity("{success:true}")
+	                .build();
+		}
+		catch (RuntimeException re) {
+			throw new BusinessException("Error reading imported file :"+re.getMessage(),
+					"import-unable-to-read-file", re);
+		}
 	}
 }

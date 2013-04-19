@@ -85,6 +85,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xArchive: 'Archive',
     xPolyHierarchical: 'Polyhierarchical',
     xCustomAttributeTypes: 'Custom atrribute types',
+    xImportSandbox: 'Import sandbox terms',
     xImportBranch: 'Import a branch',
 	
 	initComponent : function() {
@@ -231,6 +232,13 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                                         cls : 'archive',
                                                         itemId : 'archiveThesaurus',
                                                         iconCls : 'icon-archive'
+                                            },{
+		                                            	xtype : 'button',
+		                                                text : me.xImportSandbox,
+		                                                requiredRoles : ['ADMIN'],
+		                                                disabled : true,
+		                                                itemId : 'importSandbox',
+		                                                iconCls : 'exports-icon'
                                             },{
                                                 xtype : 'button',
                                                 text : me.xImportBranch,
