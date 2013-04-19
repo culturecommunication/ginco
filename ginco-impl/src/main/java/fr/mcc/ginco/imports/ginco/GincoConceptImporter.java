@@ -46,9 +46,11 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.INoteDAO;
+import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
@@ -69,6 +71,10 @@ public class GincoConceptImporter {
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
+	@Inject
+	@Named("splitNonPreferredTermDAO")
+	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
+	
 	@Log
 	private Logger logger;
 		
@@ -88,6 +94,23 @@ public class GincoConceptImporter {
 		thesaurusConceptDAO.flush();
 		return updatedConcepts;
 	}
+	
+	/**
+	 * This method stores all the complex concepts of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * @param exportedThesaurus
+	 * @return The list of stored complex concepts
+	 */
+	public List<SplitNonPreferredTerm> storeComplexConcepts(List<SplitNonPreferredTerm> complexConceptsToImport, Thesaurus targetedThesaurus) {
+		List<SplitNonPreferredTerm> updatedComplexConcepts = new ArrayList<SplitNonPreferredTerm>();
+		if (complexConceptsToImport != null && !complexConceptsToImport.isEmpty()) {
+			for (SplitNonPreferredTerm complexConcept : complexConceptsToImport) {
+				complexConcept.setThesaurus(targetedThesaurus);
+				updatedComplexConcepts.add(splitNonPreferredTermDAO.update(complexConcept));
+			}			
+		}
+		return updatedComplexConcepts;
+	}
+
 	
 	/**
 	 * This method stores all the concept notes of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter

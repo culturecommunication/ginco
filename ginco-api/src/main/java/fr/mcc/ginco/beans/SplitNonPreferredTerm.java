@@ -54,7 +54,6 @@ import org.apache.solr.client.solrj.beans.Field;
 public class SplitNonPreferredTerm implements Serializable, IAuditableBean {
 
     private String identifier;
-
     private String lexicalValue;
     private Date created;
     private Date modified;

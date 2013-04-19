@@ -36,10 +36,6 @@ package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
-import fr.mcc.ginco.beans.SplitNonPreferredTerm;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -47,8 +43,11 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
+
 /**
- * Implementation of the data access object to the thesaurus_term database table
+ * Implementation of the data access object to the complex concepts (Non Preferred term associated with 2 Preferred Terms or more)
  *
  */
 @Repository("splitNonPreferredTermDAO")
