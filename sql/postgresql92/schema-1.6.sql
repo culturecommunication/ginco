@@ -227,3 +227,19 @@ ALTER TABLE custom_concept_attribute
   ADD CONSTRAINT fk_custom_concept_attribute_conceptid FOREIGN KEY (conceptid)
       REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+ALTER TABLE custom_term_attribute DROP CONSTRAINT fk_custom_term_attribute_typeid;
+
+ALTER TABLE custom_term_attribute
+  ADD CONSTRAINT fk_custom_term_attribute_typeid FOREIGN KEY (typeid)
+      REFERENCES custom_term_attribute_type (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+ALTER TABLE custom_concept_attribute DROP CONSTRAINT fk_custom_concept_attribute_typeid;
+
+ALTER TABLE custom_concept_attribute
+  ADD CONSTRAINT fk_custom_concept_attribute_typeid FOREIGN KEY (typeid)
+      REFERENCES custom_concept_attribute_type (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+
