@@ -35,6 +35,7 @@
 package fr.mcc.ginco.dao.generic;
 
 import fr.mcc.ginco.beans.generic.GenericCustomAttribute;
+import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 import fr.mcc.ginco.dao.IGenericDAO;
 
 import java.util.List;
@@ -44,4 +45,5 @@ import java.util.List;
  */
 public interface IGenericCustomAttribute<E,T extends GenericCustomAttribute> extends IGenericDAO<T, String> {
     List<T> getAttributesByEntity(E entity);
+    T getAttributeByType(E entity,GenericCustomAttributeType type);
 }

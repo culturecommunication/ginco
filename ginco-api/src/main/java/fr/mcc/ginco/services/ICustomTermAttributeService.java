@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.CustomTermAttribute;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.generic.IGenericCustomAttributeService;
 
@@ -42,4 +43,6 @@ import fr.mcc.ginco.services.generic.IGenericCustomAttributeService;
  *
  */
 public interface ICustomTermAttributeService extends IGenericCustomAttributeService<ThesaurusTerm,CustomTermAttribute> {
+	
+	CustomTermAttribute getAttributeByType(ThesaurusTerm entity, CustomTermAttributeType type);
 }

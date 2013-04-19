@@ -72,6 +72,8 @@ Ext
 
 					initComponent : function() {
 						var me = this;
+						me.customAttrTypeStore = Ext.create('GincoApp.store.CustomTermAttributeTypeStore');
+						me.customAttrStore = Ext.create('GincoApp.store.CustomTermAttributeStore');
 
 						Ext
 								.applyIf(
@@ -215,11 +217,10 @@ Ext
 																		anchor : '70%',
 																		margin : '5 0 5 0'
 																	}, {
-																		xtype : 'form',
-																		border: false,
+																		xtype : 'customattrform',
+																		metadataStore : me.customAttrTypeStore,
+																		dataStore : me.customAttrStore,
 																		itemId : 'customAttributeForm',
-																		items : [
-																		]
 																	} ]
 														},
 														{

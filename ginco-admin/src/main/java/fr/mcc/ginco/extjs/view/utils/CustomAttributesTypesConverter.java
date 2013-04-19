@@ -52,8 +52,8 @@ import java.util.List;
 /**
  *
  */
-@Component(value = "customAttributesConverter")
-public class CustomAtrributeTypesConverter {
+@Component(value = "customAttributesTypesConverter")
+public class CustomAttributesTypesConverter {
 
     @Inject
     @Named("customConceptAttributeTypeService")

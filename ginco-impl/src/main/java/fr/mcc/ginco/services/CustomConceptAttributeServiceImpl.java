@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
@@ -66,12 +67,14 @@ public class CustomConceptAttributeServiceImpl implements ICustomConceptAttribut
     }
 
     @Override
-    public CustomConceptAttribute getAttributeById(String id) {
-        return customConceptAttributeDAO.getById(id);
-    }
-
-    @Override
     public CustomConceptAttribute saveOrUpdate(CustomConceptAttribute attribute) {
         return customConceptAttributeDAO.update(attribute);
     }
+
+	/*@Override
+	public CustomConceptAttribute getAttributeByType(ThesaurusConcept entity,
+			GenericCustomAttributeType type) {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
 }
