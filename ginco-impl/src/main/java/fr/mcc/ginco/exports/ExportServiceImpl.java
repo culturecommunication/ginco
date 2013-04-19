@@ -36,7 +36,6 @@ package fr.mcc.ginco.exports;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +64,6 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermRoleService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.LabelUtil;
-import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 @Service("exportService")
 public class ExportServiceImpl implements IExportService {
@@ -74,11 +72,11 @@ public class ExportServiceImpl implements IExportService {
 	private IThesaurusArrayService thesaurusArrayService;
 
 	@Inject
-	@Named("thesaurusTermService")
+	@Named("thesaurusTermService") 
 	private IThesaurusTermService thesaurusTermService;
 
 	@Inject
-	@Named("nodeLabelService")
+	@Named("nodeLabelService") 
 	private INodeLabelService nodeLabelService;
 
 	@Inject
@@ -93,7 +91,7 @@ public class ExportServiceImpl implements IExportService {
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
 
-	@Value("${ginco.default.language}")
+	@Value("${ginco.default.language}") 
 	private String defaultLang;
 
 	@Inject
@@ -103,20 +101,34 @@ public class ExportServiceImpl implements IExportService {
 	@Inject
 	@Named("thesaurusArrayHelper")
 	private ThesaurusArrayHelper thesaurusArrayHelper;
+	
+	@Inject
+	@Named("thesaurusConceptComparator")
+	private ThesaurusConceptComparator thesaurusConceptComparator;
+	
+	@Inject
+	@Named("nodeLabelComparator")
+	private NodeLabelComparator nodeLabelComparator;
+	
+	@Inject
+	@Named ("arrayNaturalComparator")
+	private ArrayNaturalComparator arrayNaturalComparator;
 
 	@Override
 	public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)
 			throws BusinessException {
 		List<ThesaurusConcept> listTT = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
-		Collections.sort(listTT, new ThesaurusConceptComparator());
+		Collections.sort(listTT, thesaurusConceptComparator);
 		List<ThesaurusArray> orphanArrays = thesaurusArrayService
 				.getArraysWithoutParentConcept(thesaurus.getIdentifier());
+		Collections.sort(orphanArrays, nodeLabelComparator);
 
 		Set<ThesaurusConcept> exclude = new HashSet<ThesaurusConcept>();
 
 		for (ThesaurusArray array : orphanArrays) {
-			exclude.addAll(thesaurusArrayHelper.getArrayConcepts(array.getIdentifier()));
+			exclude.addAll(thesaurusArrayHelper.getArrayConcepts(array
+					.getIdentifier()));
 		}
 
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
@@ -143,7 +155,7 @@ public class ExportServiceImpl implements IExportService {
 				.getConceptsByThesaurusId(null, thesaurus.getThesaurusId(),
 						null, Boolean.TRUE);
 
-		Collections.sort(concepts, new ThesaurusConceptComparator());
+		Collections.sort(concepts, thesaurusConceptComparator);
 
 		for (ThesaurusConcept concept : concepts) {
 			addConceptTitle(0, result, concept);
@@ -256,6 +268,7 @@ public class ExportServiceImpl implements IExportService {
 
 		List<ThesaurusArray> subOrdArrays = thesaurusArrayService
 				.getSubOrdinatedArrays(concept.getIdentifier());
+		Collections.sort(subOrdArrays, nodeLabelComparator);
 
 		for (ThesaurusArray subOrdArray : subOrdArrays) {
 			thesaurusArrayConcepts.addAll(thesaurusArrayHelper
@@ -265,7 +278,7 @@ public class ExportServiceImpl implements IExportService {
 		List<ThesaurusConcept> children = new ArrayList<ThesaurusConcept>(
 				thesaurusConceptService.getChildrenByConceptId(concept
 						.getIdentifier()));
-		Collections.sort(children, new ThesaurusConceptComparator());
+		Collections.sort(children, thesaurusConceptComparator);
 
 		for (ThesaurusConcept child : children) {
 			if (!thesaurusArrayConcepts.contains(child)) {
@@ -309,56 +322,20 @@ public class ExportServiceImpl implements IExportService {
 		if (subOrdArray.getOrdered()) {
 			List<ThesaurusConcept> conceptsInArray = thesaurusArrayHelper
 					.getArrayConcepts(subOrdArray.getIdentifier());
-			Collections.sort(conceptsInArray, new ThesaurusConceptComparator());
+			Collections.sort(conceptsInArray, thesaurusConceptComparator);
 			for (ThesaurusConcept conceptInArray : conceptsInArray) {
 				result.addAll(getHierarchicalText(base + 1, conceptInArray));
 			}
 		} else {
 			List<ThesaurusArrayConcept> conceptsInArray = thesaurusArrayHelper
 					.getArrayConceptRelations(subOrdArray);
-			Collections.sort(conceptsInArray, new ArrayNaturalComparator());
+			Collections.sort(conceptsInArray, arrayNaturalComparator);
 			for (ThesaurusArrayConcept conceptInArray : conceptsInArray) {
 				result.addAll(getHierarchicalText(base + 1,
 						thesaurusConceptService
 								.getThesaurusConceptById(conceptInArray
 										.getIdentifier().getConceptId())));
 			}
-		}
-	}
-
-	/**
-	 * Comparator to use with two concepts - compares based on its lexicalValue.
-	 */
-	class ThesaurusConceptComparator implements Comparator<ThesaurusConcept> {
-
-		@Override
-		public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
-			try {
-				String l1 = ThesaurusTermUtils
-						.getPreferedTerms(
-								thesaurusTermService.getTermsByConceptId(o1
-										.getIdentifier())).get(0)
-						.getLexicalValue();
-				String l2 = ThesaurusTermUtils
-						.getPreferedTerms(
-								thesaurusTermService.getTermsByConceptId(o2
-										.getIdentifier())).get(0)
-						.getLexicalValue();
-				return l1.compareToIgnoreCase(l2);
-			} catch (BusinessException e) {
-				return 0;
-			}
-		}
-	}
-
-	/**
-	 * Comparator to use with two concepts - compares based on its lexicalValue.
-	 */
-	class ArrayNaturalComparator implements Comparator<ThesaurusArrayConcept> {
-
-		@Override
-		public int compare(ThesaurusArrayConcept o1, ThesaurusArrayConcept o2) {
-			return o1.getArrayOrder().compareTo(o2.getArrayOrder());
 		}
 	}
 }

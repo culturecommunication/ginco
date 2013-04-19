@@ -37,6 +37,9 @@ package fr.mcc.ginco.tests.exports;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +56,10 @@ import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.ArrayNaturalComparator;
 import fr.mcc.ginco.exports.ExportServiceImpl;
+import fr.mcc.ginco.exports.NodeLabelComparator;
+import fr.mcc.ginco.exports.ThesaurusConceptComparator;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 import fr.mcc.ginco.services.INodeLabelService;
@@ -78,7 +84,16 @@ public class ExportServiceTest {
 
 	@Mock(name = "thesaurusArrayHelper")
 	private ThesaurusArrayHelper thesaurusArrayHelper;
+	
+	@Mock(name = "thesaurusConceptComparator")
+	private ThesaurusConceptComparator thesaurusConceptComparator;
 
+	@Mock(name = "nodeLabelComparator")
+	private NodeLabelComparator nodeLabelComparator;
+	
+	@Mock(name = "arrayNaturalComparator")
+	private ArrayNaturalComparator arrayNaturalComparator;
+	
 	@InjectMocks
 	private ExportServiceImpl exportService;
 
