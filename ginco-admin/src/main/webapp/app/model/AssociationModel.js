@@ -42,6 +42,10 @@ Ext.define('GincoApp.model.AssociationModel', {
             type: 'string'
         },
         {
+            name: 'roleCode',
+            type: 'string'
+        },
+        {
             name: 'label',
             type: 'string'
         }

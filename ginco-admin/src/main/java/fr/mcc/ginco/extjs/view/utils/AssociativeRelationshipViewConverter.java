@@ -100,11 +100,14 @@ public class AssociativeRelationshipViewConverter {
                     thesaurusConceptService.getThesaurusConceptById(associativeRelationshipView.getIdentifier()));
             associativeRelationship.setIdentifier(id);
         }
-
-        AssociativeRelationshipRole role =
-                associativeRelationshipRoleService.getRoleById(associativeRelationshipView.getRoleCode());
+        
+        AssociativeRelationshipRole role = null;
+        if (associativeRelationshipView.getRoleCode() != null) {
+        	role = associativeRelationshipRoleService.getRoleById(associativeRelationshipView.getRoleCode());
+        } else {
+        	role = associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole();
+        }
         associativeRelationship.setRelationshipRole(role);
-
         return associativeRelationship;
     }
 }
