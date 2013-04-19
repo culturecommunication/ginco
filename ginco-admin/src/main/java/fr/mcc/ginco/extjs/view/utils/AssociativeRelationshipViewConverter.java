@@ -102,7 +102,7 @@ public class AssociativeRelationshipViewConverter {
         }
         
         AssociativeRelationshipRole role = null;
-        if (associativeRelationshipView.getRoleCode() != null) {
+        if (associativeRelationshipView.getRoleCode() != null && !"".equals(associativeRelationshipView.getRoleCode())) {
         	role = associativeRelationshipRoleService.getRoleById(associativeRelationshipView.getRoleCode());
         } else {
         	role = associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole();
