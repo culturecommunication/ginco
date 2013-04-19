@@ -249,8 +249,8 @@ public class ImportRestService {
 	@POST
 	@Path("/importSandBoxTerms")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces({MediaType.APPLICATION_JSON})
-	public Response importSandBoxTerms (MultipartBody body,
+	@Produces(MediaType.TEXT_HTML)
+	public String importSandBoxTerms (MultipartBody body,
 			@QueryParam("thesaurusId") String thesaurusId,
 			@Context HttpServletRequest request)
 			throws JsonGenerationException, JsonMappingException, IOException,
@@ -263,9 +263,7 @@ public class ImportRestService {
 			List<String> termLexicalValues = Arrays.asList(termsSplit);
 			
 			thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);	
-			return Response.status(Response.Status.OK)
-	                .entity("{success:true}")
-	                .build();
+			return "{ 'success':true,'msg': 'imported'}";
 		}
 		catch (RuntimeException re) {
 			throw new BusinessException("Error reading imported file :"+re.getMessage(),
