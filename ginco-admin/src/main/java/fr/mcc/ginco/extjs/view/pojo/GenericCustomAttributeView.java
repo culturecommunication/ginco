@@ -38,19 +38,10 @@ package fr.mcc.ginco.extjs.view.pojo;
  *
  */
 public class GenericCustomAttributeView {
-    private String id;
     private int typeid;
     private String entityid;
     private String lang;
     private String lexicalValue;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public int getTypeid() {
         return typeid;

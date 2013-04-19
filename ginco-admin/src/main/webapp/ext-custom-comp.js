@@ -288,3 +288,104 @@ Ext.define('Thesaurus.Component', {
 		};
 	}
 });
+
+/*
+ * Define a component to handle custom attributes on terms and concepts.
+ */
+Ext.define('Thesaurus.CustomAttrForm', {
+	extend : 'Ext.form.Panel',
+	alias: 'widget.customattrform',
+	metadataStore : null,
+	dataStore : null,
+	initComponent : function() {
+		var me = this;
+		Ext.applyIf(
+				me,
+				{
+					border: false
+				}
+		);
+		me.callParent(arguments);
+	},
+	initFields : function(thesaurusId, aCallback)
+	{
+		var me = this;
+		me.metadataStore.getProxy().extraParams = {
+            thesaurusId: thesaurusId
+        };
+		me.metadataStore.load({
+			scope: this,
+		    callback: function(records, operation, success) {
+		    	if (success == true) {
+		    		for (var i=0;i<records.length;i++)
+		    		{
+		    			var record = records[i];
+		    			var field = Ext.create('Ext.form.field.Text', {
+		    				fieldLabel : record.get('value'),
+		    				name : 'customattr_'+record.get('identifier'),
+		    				anchor : '70%'
+		    			});
+		    			me.add(field);
+		    			field.show();
+		    			
+		    		}
+		    		if (aCallback)
+	    				aCallback();
+		    	}
+		    }
+		});
+	},
+	load : function (entityID)
+	{
+		var me = this;
+		me.dataStore.getProxy().extraParams = {
+            termId: entityID
+        };
+		me.dataStore.load({
+			scope: me,
+			callback: function(records, operation, success) {
+			    	if (success == true) {
+			    		me.populateForm(records);
+			    	}
+			    }
+		});
+	},
+	populateForm : function (records) {
+		var me = this;
+		var arrayOfAttribute = [];
+		for (var i=0;i<records.length;i++)
+		{
+			var record = records[i];
+			var data = {
+					id : 'customattr_'+record.get('typeid'),
+					value : record.get('lexicalValue'),
+			}
+			arrayOfAttribute.push(data);
+		}
+		me.getForm().setValues(arrayOfAttribute);
+	},
+	save : function (entityID, lang) {
+		var me = this;
+		if (me.items.length>0) {
+			me.dataStore.removeAll();
+			var customFormValues = me.getValues();
+			Ext.Object.each(customFormValues, function(key, value, myself) {
+			    var data = {
+			    		'entityid' : entityID,
+			    		'lang' : lang,
+			    		'typeid' : key.split('_')[1],
+			    		'lexicalValue' : value
+			    };
+			    var model = me.dataStore.add(data);
+			    model[0].setDirty(true);
+			});
+			me.dataStore.save({
+				scope : me,
+				callback : function (records, operation, success) {
+					me.populateForm(operation.operations.update);
+				}
+			});
+		}
+		
+	}
+});

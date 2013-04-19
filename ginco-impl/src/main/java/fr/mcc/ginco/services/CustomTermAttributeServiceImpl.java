@@ -35,7 +35,9 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.CustomTermAttribute;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 import fr.mcc.ginco.dao.ICustomTermAttributeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
@@ -66,12 +68,13 @@ public class CustomTermAttributeServiceImpl implements ICustomTermAttributeServi
     }
 
     @Override
-    public CustomTermAttribute getAttributeById(String id) {
-        return customTermAttributeDAO.getById(id);
-    }
-
-    @Override
     public CustomTermAttribute saveOrUpdate(CustomTermAttribute attribute) {
         return customTermAttributeDAO.update(attribute);
     }
+
+	@Override
+	public CustomTermAttribute getAttributeByType(ThesaurusTerm entity,
+			CustomTermAttributeType type) {
+		return customTermAttributeDAO.getAttributeByType(entity, type);
+	}
 }

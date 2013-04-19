@@ -81,5 +81,6 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
         xPolyHierarchical: 'Polyhierarchique',
         xImportBranch: 'Importer une branche',
         xCustomAttributeTypes: "Types d'atrributes posonalisé",
-        xImportSandbox: 'Importer bac à sable'
+        xImportSandbox: 'Importer des termes',
+        xCustomAttributeTypes: "Types d'attributs personnalisé"
 });
