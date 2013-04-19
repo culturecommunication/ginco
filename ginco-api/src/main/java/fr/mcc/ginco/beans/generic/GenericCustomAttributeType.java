@@ -38,14 +38,21 @@ import fr.mcc.ginco.beans.Thesaurus;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  *
  */
+@SuppressWarnings("serial")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class GenericCustomAttributeType implements Serializable {
     private int identifier;
     private String code;
     private String value;
 
+    @XmlTransient
     private Thesaurus thesaurus;
 
     public int getIdentifier() {

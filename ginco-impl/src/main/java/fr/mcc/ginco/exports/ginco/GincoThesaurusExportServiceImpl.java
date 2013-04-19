@@ -59,6 +59,8 @@ import fr.mcc.ginco.exports.IGincoThesaurusExportService;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
+import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
@@ -79,6 +81,14 @@ public class GincoThesaurusExportServiceImpl implements
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
+	@Named("customTermAttributeTypeService")
+	private ICustomTermAttributeTypeService customTermAttributeTypeService;
+	
+	@Inject
+	@Named("customConceptAttributeTypeService")
+	private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
 
 	@Inject
 	@Named("gincoExportServiceUtil")
@@ -201,6 +211,10 @@ public class GincoThesaurusExportServiceImpl implements
 						thesaurusConcept.getIdentifier(), associations);
 			}
 		}
+		
+		//Exporting Custom Attributes Types for concepts and terms
+		thesaurusToExport.setTermAttributeTypes(customTermAttributeTypeService.getAttributeTypesByThesaurus(thesaurus));
+		thesaurusToExport.setConceptAttributeTypes(customConceptAttributeTypeService.getAttributeTypesByThesaurus(thesaurus));
 
 		// ---Exporting the arrays
 		List<ThesaurusArray> arrays = thesaurusArrayService
