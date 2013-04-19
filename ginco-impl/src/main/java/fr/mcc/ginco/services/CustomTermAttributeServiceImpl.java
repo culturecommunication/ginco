@@ -34,18 +34,19 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.CustomTermAttribute;
-import fr.mcc.ginco.beans.CustomTermAttributeType;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
-import fr.mcc.ginco.dao.ICustomTermAttributeDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import fr.mcc.ginco.beans.CustomTermAttribute;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.ICustomTermAttributeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  *

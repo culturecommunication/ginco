@@ -34,7 +34,29 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.*;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
+import fr.mcc.ginco.beans.CustomTermAttribute;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -42,15 +64,13 @@ import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeTypeView;
 import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeView;
 import fr.mcc.ginco.extjs.view.utils.CustomAttributeConverter;
 import fr.mcc.ginco.extjs.view.utils.CustomAttributesTypesConverter;
-import fr.mcc.ginco.services.*;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
+import fr.mcc.ginco.services.ICustomConceptAttributeService;
+import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
+import fr.mcc.ginco.services.ICustomTermAttributeService;
+import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IThesaurusTermService;
 
 /**
  *
@@ -67,6 +87,10 @@ public class CustomAttributesRestService {
     @Named("thesaurusService")
     private IThesaurusService thesaurusService;
     
+    @Inject
+    @Named("thesaurusConceptService")
+    private IThesaurusConceptService thesaurusConceptService;
+    
     @Inject 
     @Named("thesaurusTermService")
     private IThesaurusTermService thesaurusTermService;
@@ -78,6 +102,10 @@ public class CustomAttributesRestService {
     @Inject
     @Named("customTermAttributeService")
     private ICustomTermAttributeService customTermAttributeService;
+    
+    @Inject
+    @Named("customConceptAttributeService")
+    private ICustomConceptAttributeService customConceptAttributeService;
 
     
     @Inject
@@ -230,12 +258,51 @@ public class CustomAttributesRestService {
     @Path("/getTermAttribute")
     @Produces(MediaType.APPLICATION_JSON)
     public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getTermAttribute(
-            @QueryParam("termId") String termId)
+            @QueryParam("entityId") String entityId)
             throws BusinessException {
     	
-    	ThesaurusTerm entity = thesaurusTermService.getThesaurusTermById(termId);
+    	ThesaurusTerm entity = thesaurusTermService.getThesaurusTermById(entityId);
     	List<CustomTermAttribute> list= customTermAttributeService.getAttributesByEntity(entity);
         return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
         		customAttributeConverter.convertListTerm(list));
+    }
+    
+    /**
+     * Return list of all custom attribute for concept 
+     *
+     * @param thesaurusId
+     * @return
+     * @throws BusinessException
+     */
+    @GET
+    @Path("/getConceptAttribute")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getConceptAttribute(
+            @QueryParam("entityId") String entityId)
+            throws BusinessException {
+    	
+    	ThesaurusConcept entity = thesaurusConceptService.getThesaurusConceptById(entityId);
+    	List<CustomConceptAttribute> list= customConceptAttributeService.getAttributesByEntity(entity);
+        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
+        		customAttributeConverter.convertListConcept(list));
+    }
+    
+    /**
+     * Updates a list of term type attributes.
+     * @param list
+     * @throws BusinessException
+     * @throws TechnicalException
+     */
+    @POST
+    @Path("/updateConceptAttribute")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> updateConceptAttribute(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
+        for(GenericCustomAttributeView customAttributeView : list) {
+            CustomConceptAttribute conceptAttribute =
+                     customAttributeConverter.convertConceptAttribute(customAttributeView);
+            customConceptAttributeService.saveOrUpdate(conceptAttribute);
+        }
+        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(list);
     }
 }

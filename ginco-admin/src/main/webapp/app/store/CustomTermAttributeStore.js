@@ -47,7 +47,7 @@ Ext.define('GincoApp.store.CustomTermAttributeStore', {
                 api : {
                     read : 'services/ui/customattributesservice/getTermAttribute',
                     update : 'services/ui/customattributesservice/updateTermAttribute',
-                    create : 'services/ui/customattributesservice/updateTermAttribute',
+                    create : 'services/ui/customattributesservice/updateTermAttribute'
                 },
                 reader: {
                     type: 'json',

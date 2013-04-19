@@ -339,7 +339,7 @@ Ext.define('Thesaurus.CustomAttrForm', {
 	{
 		var me = this;
 		me.dataStore.getProxy().extraParams = {
-            termId: entityID
+            entityId: entityID
         };
 		me.dataStore.load({
 			scope: me,

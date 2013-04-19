@@ -40,18 +40,23 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hibernate.type.CustomCollectionType;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.CustomTermAttribute;
 import fr.mcc.ginco.beans.CustomTermAttributeType;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.extjs.view.pojo.GenericCustomAttributeView;
 import fr.mcc.ginco.services.ICustomConceptAttributeService;
+import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.ICustomTermAttributeService;
 import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
@@ -88,6 +93,14 @@ public class CustomAttributeConverter {
     @Inject
     @Named("customTermAttributeTypeService")
     private ICustomTermAttributeTypeService customTermAttributeTypeService;
+    
+    @Inject
+    @Named("customConceptAttributeTypeService")
+    private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
+    
+    @Inject
+    @Named("thesaurusConceptService")
+    private IThesaurusConceptService thesaurusConceptService;
 
 
     public GenericCustomAttributeView convertTermAttribute(CustomTermAttribute source) {
@@ -106,6 +119,22 @@ public class CustomAttributeConverter {
     	view.setLexicalValue(source.getLexicalValue());
     	view.setTypeid(source.getType().getIdentifier());
         return view;
+    }
+    
+    public CustomConceptAttribute convertConceptAttribute(GenericCustomAttributeView view) {
+    	ThesaurusConcept entity = thesaurusConceptService.getThesaurusConceptById(view.getEntityid());
+    	CustomConceptAttributeType type = customConceptAttributeTypeService.getAttributeTypeById(view.getTypeid());
+    	CustomConceptAttribute hibernateRes = customConceptAttributeService.getAttributeByType(entity, type);
+    	if (hibernateRes == null)
+    	{
+    		hibernateRes = new CustomConceptAttribute();
+    		hibernateRes.setIdentifier(generatorService.generate(CustomConceptAttribute.class));
+    	}
+    	hibernateRes.setEntity(entity);
+    	hibernateRes.setLanguage(languagesService.getLanguageById(view.getLang()));
+    	hibernateRes.setLexicalValue(view.getLexicalValue());
+    	hibernateRes.setType(type);
+    	return hibernateRes;
     }
     
     public CustomTermAttribute convertTermAttribute(GenericCustomAttributeView view) {
@@ -133,33 +162,14 @@ public class CustomAttributeConverter {
         }
         return list;
     }
-    /*
-    public GenericCustomAttributeType convert(GenericCustomAttributeTypeView view, boolean isConcept) {
-
-        Thesaurus thesaurus = thesaurusService.getThesaurusById(view.getThesaurusId());
-
-        if(isConcept) {
-            GenericCustomAttributeType hibernateRes = customConceptAttributeTypeService.getAttributeTypeById(view.getIdentifier());
-            if(hibernateRes == null) {
-                hibernateRes = new CustomConceptAttributeType();
-                hibernateRes.setThesaurus(thesaurus);
-            }
-
-            hibernateRes.setCode(view.getCode());
-            hibernateRes.setValue(view.getValue());
-
-            return hibernateRes;
-        } else {
-            GenericCustomAttributeType hibernateRes = customTermAttributeTypeService.getAttributeTypeById(view.getIdentifier());
-            if(hibernateRes == null) {
-                hibernateRes = new CustomTermAttributeType();
-                hibernateRes.setThesaurus(thesaurus);
-            }
-
-            hibernateRes.setCode(view.getCode());
-            hibernateRes.setValue(view.getValue());
-
-            return hibernateRes;
+    
+    
+    public List<GenericCustomAttributeView> convertListConcept(List<CustomConceptAttribute> sourceList) {
+        List<GenericCustomAttributeView> list = new ArrayList<GenericCustomAttributeView>();
+        for(CustomConceptAttribute attribute : sourceList) {
+            list.add(convertConceptAttribute(attribute));
         }
-    }*/
+        return list;
+    }
+    
 }
