@@ -123,6 +123,8 @@ Ext
 
 						me.termRoleStore = Ext
 								.create('GincoApp.store.TermRoleStore');
+						me.customAttrTypeStore = Ext.create('GincoApp.store.CustomConceptAttributeTypeStore');
+						me.customAttrStore = Ext.create('GincoApp.store.CustomConceptAttributeStore');
 
 						Ext
 								.applyIf(
@@ -224,6 +226,14 @@ Ext
 																			fieldLabel : me.xNotationLabel,
 																			anchor : '70%'
 																		},
+																		{
+																			trackResetOnLoad :true,
+																			border : false,
+																			xtype : 'customattrform',
+																			metadataStore : me.customAttrTypeStore,
+																			dataStore : me.customAttrStore,
+																			itemId : 'customAttributeForm',
+																		} ,
 																		{
 																			xtype : 'gridpanel',
 																			itemId : 'gridPanelTerms',

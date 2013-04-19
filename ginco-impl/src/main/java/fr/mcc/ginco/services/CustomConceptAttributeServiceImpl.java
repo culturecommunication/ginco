@@ -34,17 +34,19 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.CustomConceptAttribute;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
-import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  *
@@ -71,10 +73,11 @@ public class CustomConceptAttributeServiceImpl implements ICustomConceptAttribut
         return customConceptAttributeDAO.update(attribute);
     }
 
-	/*@Override
+	@Override
 	public CustomConceptAttribute getAttributeByType(ThesaurusConcept entity,
-			GenericCustomAttributeType type) {
+			CustomConceptAttributeType type) {
 		// TODO Auto-generated method stub
-		return null;
-	}*/
+		return customConceptAttributeDAO.getAttributeByType(entity, type);
+	}
+
 }

@@ -32,45 +32,35 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.CustomConceptAttribute;
-import fr.mcc.ginco.beans.CustomTermAttribute;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
-import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
+Ext.define('GincoApp.store.CustomConceptAttributeStore', {
+    extend: 'Ext.data.Store',
+    requires : ['GincoApp.model.CustomAttributeModel'],
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: false,
+            model : 'GincoApp.model.CustomAttributeModel',
+            proxy: {
+                type: 'ajax',
+                api : {
+                    read : 'services/ui/customattributesservice/getConceptAttribute',
+                    update : 'services/ui/customattributesservice/updateConceptAttribute',
+                    create : 'services/ui/customattributesservice/updateConceptAttribute'
+                },
+                reader: {
+                    type: 'json',
+                    idProperty: 'typecode',
+                    root: 'data'
+                },
+                writer : {
+                    type : 'json',
+                    // A single attribute must be sent in an array
+                    allowSingle : false
+                }
+            }
 
-import java.util.List;
-
-/**
- *
- */
-@Repository("customConceptAttributeDAO")
-public class CustomConceptAttributeDAO extends GenericHibernateDAO<CustomConceptAttribute, String> implements ICustomConceptAttributeDAO {
-    public CustomConceptAttributeDAO() {
-        super(CustomConceptAttribute.class);
+        }, cfg)]);
     }
-
-    @Override
-    public List<CustomConceptAttribute> getAttributesByEntity(ThesaurusConcept entity) {
-        Criteria criteria = getCurrentSession().createCriteria(CustomConceptAttribute.class)
-                .add(Restrictions.eq("entity.identifier", entity.getIdentifier()));
-        return criteria.list();
-    }
-
-	@Override
-	public CustomConceptAttribute getAttributeByType(ThesaurusConcept entity,
-			GenericCustomAttributeType type) {
-		Criteria criteria = getCurrentSession().createCriteria(CustomConceptAttribute.class)
-				 .add(Restrictions.eq("entity.identifier", entity.getIdentifier()))
-				 .add(Restrictions.eq("type.identifier", type.getIdentifier()));
-		List<CustomConceptAttribute> list = criteria.list();
-		if (list.size()>0)
-			return  list.get(0);
-		else 
-			return null;
-	}
-}
+});

@@ -102,6 +102,25 @@ Ext
 							}
 							theForm.loadRecord(model);
 						}
+						me.initCustomAttributForm(theForm);
+					},
+					
+					initCustomAttributForm: function(theForm)
+					{
+						var conceptPanel = theForm.up('conceptPanel');
+						var customForm = theForm.down('customattrform');
+						customForm.initFields(conceptPanel.thesaurusData.id, function() {
+							if (conceptPanel.gincoId!='')
+							{
+								customForm.load(conceptPanel.gincoId);
+							}
+						});
+					},
+					
+					saveCustomFieldAttributes : function(theForm, conceptId)
+					{
+						var customForm = theForm.down('#customAttributeForm');
+						customForm.save(conceptId,'fr-FR');
 					},
 
 					onGridRender : function(theGrid) {
@@ -586,6 +605,7 @@ Ext
 									success : function(record, operation) {
 										var resultRecord = operation
 												.getResultSet().records[0];
+										me.saveCustomFieldAttributes(theForm,resultRecord.get("identifier"));
 										me.loadData(theForm, resultRecord);
 										theForm.getEl().unmask();
 										Thesaurus.ext.utils.msg(
