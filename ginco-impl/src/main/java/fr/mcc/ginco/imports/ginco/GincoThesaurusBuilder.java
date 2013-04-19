@@ -78,6 +78,10 @@ public class GincoThesaurusBuilder {
 	private GincoRelationshipImporter gincoRelationshipImporter;
 	
 	@Inject
+	@Named("gincoCustomAttributeImporter")
+	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
+	
+	@Inject
 	@Named("gincoTermImporter")
 	private GincoTermImporter gincoTermImporter;
 	
@@ -128,6 +132,9 @@ public class GincoThesaurusBuilder {
 			
 			gincoTermImporter.storeTermNotes(exportedThesaurus.getTermNotes());
 			gincoConceptImporter.storeConceptNotes(exportedThesaurus.getConceptNotes());
+			
+			gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedThesaurus.getTermAttributeTypes(), exportedThesaurus.getThesaurus());
+			gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedThesaurus.getConceptAttributeTypes(), exportedThesaurus.getThesaurus());
 		}
 		return thesaurus;
 	}

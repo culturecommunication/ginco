@@ -56,32 +56,35 @@ import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to import groups and groups labels
- *
+ * 
  */
 @Component("gincoGroupImporter")
 public class GincoGroupImporter {
-	
+
 	@Inject
 	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupLabelDAO")
 	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
-	
+
 	@Log
 	private Logger logger;
-	
+
 	/**
-	 * This method stores all the groups of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * This method stores all the groups of the thesaurus included in the
+	 * {@link GincoExportedThesaurus} object given in parameter
+	 * 
 	 * @param exportedThesaurus
 	 * @return The list of stored groups
 	 */
-	public List<ThesaurusConceptGroup> storeGroups(GincoExportedThesaurus exportedThesaurus) {
+	public List<ThesaurusConceptGroup> storeGroups(
+			GincoExportedThesaurus exportedThesaurus) {
 		List<ThesaurusConceptGroup> updatedGroups = new ArrayList<ThesaurusConceptGroup>();
 		for (ThesaurusConceptGroup group : exportedThesaurus.getConceptGroups()) {
 			group.setThesaurus(exportedThesaurus.getThesaurus());
@@ -89,33 +92,41 @@ public class GincoGroupImporter {
 		}
 		return updatedGroups;
 	}
-	
+
 	/**
-	 * This method stores all the group labels of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * This method stores all the group labels of the thesaurus included in the
+	 * {@link GincoExportedThesaurus} object given in parameter
+	 * 
 	 * @param exportedThesaurus
 	 * @return The list of stored group labels
 	 */
-	public List<ThesaurusConceptGroupLabel> storeGroupLabels(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<ThesaurusConceptGroupLabel>> labels = exportedThesaurus.getConceptGroupLabels();
+	public List<ThesaurusConceptGroupLabel> storeGroupLabels(
+			GincoExportedThesaurus exportedThesaurus) {
+		Map<String, JaxbList<ThesaurusConceptGroupLabel>> labels = exportedThesaurus
+				.getConceptGroupLabels();
 		List<ThesaurusConceptGroupLabel> updatedLabels = new ArrayList<ThesaurusConceptGroupLabel>();
-		
+
 		if (labels != null && !labels.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<ThesaurusConceptGroupLabel>>> entries = labels.entrySet().iterator();
+			Iterator<Map.Entry<String, JaxbList<ThesaurusConceptGroupLabel>>> entries = labels
+					.entrySet().iterator();
 			String groupId = null;
 			List<ThesaurusConceptGroupLabel> groupLabels = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<ThesaurusConceptGroupLabel>> entry = entries.next();
-				//Getting the id of the group
+			while (entries.hasNext()) {
+				Map.Entry<String, JaxbList<ThesaurusConceptGroupLabel>> entry = entries
+						.next();
+				// Getting the id of the group
 				groupId = entry.getKey();
-				
-				//Getting the label for this group
+
+				// Getting the label for this group
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
 					groupLabels = entry.getValue().getList();
 				}
-				
+
 				for (ThesaurusConceptGroupLabel label : groupLabels) {
-					label.setConceptGroup(thesaurusConceptGroupDAO.getById(groupId));
-					updatedLabels.add(thesaurusConceptGroupLabelDAO.update(label));
+					label.setConceptGroup(thesaurusConceptGroupDAO
+							.getById(groupId));
+					updatedLabels.add(thesaurusConceptGroupLabelDAO
+							.update(label));
 				}
 			}
 		}

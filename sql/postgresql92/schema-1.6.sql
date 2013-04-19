@@ -242,4 +242,17 @@ ALTER TABLE custom_concept_attribute
       REFERENCES custom_concept_attribute_type (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE CASCADE;
       
+ALTER TABLE custom_term_attribute_type DROP CONSTRAINT fk_thesaurus_id;
+
+ALTER TABLE custom_term_attribute_type
+  ADD CONSTRAINT fk_thesaurus_id FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
+ALTER TABLE custom_concept_attribute_type DROP CONSTRAINT fk_thesaurus_id;
+
+ALTER TABLE custom_concept_attribute_type
+   ADD CONSTRAINT fk_thesaurus_id FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE;
 
