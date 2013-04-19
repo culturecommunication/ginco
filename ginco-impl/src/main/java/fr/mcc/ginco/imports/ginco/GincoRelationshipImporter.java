@@ -93,8 +93,8 @@ public class GincoRelationshipImporter {
 	private Logger logger;
 	
 	/**
-	 * This method stores all the hierarchical relationships of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
+	 * This method stores all the hierarchical relationships
+	 * @param relationsToImport
 	 * @return The list of the updated parent concepts
 	 */
 	public List<ThesaurusConcept> storeHierarchicalRelationship(Map<String, JaxbList<ConceptHierarchicalRelationship>> relationsToImport) {
@@ -179,9 +179,12 @@ public class GincoRelationshipImporter {
 						"A concept must associate a validated concept",
 						"concept-associate-validated-concept");
 			}
-			List<String> alreadyAssociatedConcepts = associativeRelationshipDAO
-					.getAssociatedConcepts(linkedThesaurusConcept);
-			if (!alreadyAssociatedConcepts.contains(concept.getIdentifier())) {
+			/*List<String> alreadyAssociatedConcepts = associativeRelationshipDAO
+					.getAssociatedConcepts(linkedThesaurusConcept);*/
+			
+			AssociativeRelationship alreadyExistingRelation = associativeRelationshipDAO.getAssociativeRelationship(concept.getIdentifier(), linkedThesaurusConcept.getIdentifier());
+			
+			if (alreadyExistingRelation == null) {
 				AssociativeRelationship relationship = new AssociativeRelationship();
 				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
 				relationshipId.setConcept1(concept.getIdentifier());
