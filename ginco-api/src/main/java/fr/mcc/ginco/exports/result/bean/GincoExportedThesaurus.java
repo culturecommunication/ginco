@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.exports.result.bean;
 
-import java.awt.SplashScreen;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -45,6 +44,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
@@ -73,6 +74,8 @@ public class GincoExportedThesaurus implements Serializable {
     private Thesaurus thesaurus;
     private List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
     private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+    private List<CustomTermAttributeType> termAttributeTypes = new ArrayList<CustomTermAttributeType>();
+    private List<CustomConceptAttributeType> conceptAttributeTypes = new ArrayList<CustomConceptAttributeType>();
     private List<ThesaurusArray> conceptArrays  = new ArrayList<ThesaurusArray>();
     private List<SplitNonPreferredTerm> complexConcepts = new ArrayList<SplitNonPreferredTerm>();
     private Map<String, JaxbList<NodeLabel>> conceptArrayLabels = new Hashtable<String, JaxbList<NodeLabel>>();
@@ -188,5 +191,22 @@ public class GincoExportedThesaurus implements Serializable {
 	public void setComplexConcepts(List<SplitNonPreferredTerm> complexConcepts) {
 		this.complexConcepts = complexConcepts;
 	}
+
+	public List<CustomTermAttributeType> getTermAttributeTypes() {
+		return termAttributeTypes;
+	}
+
+	public void setTermAttributeTypes(List<CustomTermAttributeType> termAttributeTypes) {
+		this.termAttributeTypes = termAttributeTypes;
+	}
+
+	public List<CustomConceptAttributeType> getConceptAttributeTypes() {
+		return conceptAttributeTypes;
+	}
+
+	public void setConceptAttributeTypes(List<CustomConceptAttributeType> conceptAttributeTypes) {
+		this.conceptAttributeTypes = conceptAttributeTypes;
+	}
+
     
 }
