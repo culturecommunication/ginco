@@ -32,11 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.imports;
-
-import java.io.InputStream;
-
-import javax.inject.Inject;
+package fr.mcc.ginco.tests.exports;
 
 import junit.framework.Assert;
 
@@ -48,61 +44,71 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-
-import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.imports.NodeLabelBuilder;
-import fr.mcc.ginco.imports.SKOS;
-import fr.mcc.ginco.tests.LoggerTestUtil;
+import fr.mcc.ginco.exports.NodeLabelComparator;
+import fr.mcc.ginco.services.INodeLabelService;
 
-public class NodeLabelBuilderTest {	
-	@Inject
-	@Mock(name = "languagesDAO")
-	private ILanguageDAO languagesDAO;
-	
+public class NodeLabelComparatorTest {
+
+	@Mock(name = "nodeLabelService")
+	private INodeLabelService nodeLabelService;
+
 	@InjectMocks
-	private NodeLabelBuilder nodeLabelBuilder;
+	private NodeLabelComparator nodeLabelComparator;
 
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		ReflectionTestUtils.setField(nodeLabelBuilder, "defaultLang", "fr-FR");	
-		LoggerTestUtil.initLogger(nodeLabelBuilder);
+		ReflectionTestUtils.setField(nodeLabelComparator, "defaultLang",
+				"fr-FR");
 	}
 
 	@Test
-	public void testBuildNodeLabel() {
-		Thesaurus fakeThesaurus = new Thesaurus();
-		fakeThesaurus.setIdentifier("thesaurus-uri");
-		
-		Language french = new Language();
-		french.setId("fr-FR");
-		Mockito.when(languagesDAO.getByPart1("fr")).thenReturn(french);
+	public void testCompareStandard() {
+		NodeLabel nodeLabel1 = new NodeLabel();
+		nodeLabel1.setLexicalValue("zeste");
 
-		
-		Model model = ModelFactory.createDefaultModel();
-		InputStream is = ConceptBuilderTest.class
-				.getResourceAsStream("/imports/concept_collections.rdf");
-		model.read(is, null);
+		NodeLabel nodeLabel3 = new NodeLabel();
+		nodeLabel3.setLexicalValue("apiculture");
 
-		Resource skosArray = model
-				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-C5");
-		Statement stmt = skosArray.getProperty(SKOS.PREF_LABEL);
-		ThesaurusArray array = new ThesaurusArray();
+		ThesaurusArray array1 = new ThesaurusArray();
+		array1.setIdentifier("array1");
 
-		NodeLabel actualNodeLabel = nodeLabelBuilder.buildNodeLabel(stmt, model, fakeThesaurus, array);
-		
-		Assert.assertEquals("récipients pour le service et la consommation des aliments", actualNodeLabel.getLexicalValue());
-		
-		
+		ThesaurusArray array3 = new ThesaurusArray();
+		array3.setIdentifier("array3");
+
+		Mockito.when(nodeLabelService.getByThesaurusArray("array1"))
+				.thenReturn(nodeLabel1);
+		Mockito.when(nodeLabelService.getByThesaurusArray("array3"))
+				.thenReturn(nodeLabel3);
+
+		int compareNoAccent = nodeLabelComparator.compare(array1, array3);
+		Assert.assertEquals(1, compareNoAccent);
 
 	}
 
+	@Test
+	public void testCompareWithAccents() {
+		NodeLabel nodeLabel1 = new NodeLabel();
+		nodeLabel1.setLexicalValue("zeste");
+
+		NodeLabel nodeLabel2 = new NodeLabel();
+		nodeLabel2.setLexicalValue("étrange");
+
+		ThesaurusArray array1 = new ThesaurusArray();
+		array1.setIdentifier("array1");
+
+		ThesaurusArray array2 = new ThesaurusArray();
+		array2.setIdentifier("array2");
+
+		Mockito.when(nodeLabelService.getByThesaurusArray("array1"))
+				.thenReturn(nodeLabel1);
+		Mockito.when(nodeLabelService.getByThesaurusArray("array2"))
+				.thenReturn(nodeLabel2);
+
+		int compareWithAccents = nodeLabelComparator.compare(array1, array2);
+		Assert.assertEquals(1, compareWithAccents);
+
+	}
 }
