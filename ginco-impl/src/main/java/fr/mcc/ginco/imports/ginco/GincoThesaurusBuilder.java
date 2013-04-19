@@ -113,6 +113,7 @@ public class GincoThesaurusBuilder {
 			}
 			gincoConceptImporter.storeConcepts(exportedThesaurus.getConcepts(), exportedThesaurus.getThesaurus());
 			gincoTermImporter.storeTerms(exportedThesaurus.getTerms(), exportedThesaurus.getThesaurus());
+			gincoConceptImporter.storeComplexConcepts(exportedThesaurus.getComplexConcepts(), exportedThesaurus.getThesaurus());
 			
 			gincoArrayImporter.storeArrays(exportedThesaurus);
 			gincoArrayImporter.storeArrayLabels(exportedThesaurus);

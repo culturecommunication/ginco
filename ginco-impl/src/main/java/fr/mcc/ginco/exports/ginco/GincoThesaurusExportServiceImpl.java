@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -59,6 +60,7 @@ import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.INodeLabelService;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
@@ -101,6 +103,10 @@ public class GincoThesaurusExportServiceImpl implements
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
+
+	@Inject
+	@Named("splitNonPreferredTermService")
+	private ISplitNonPreferredTermService splitNonPreferredTermService;
 
 	@Inject
 	@Named("thesaurusVersionHistoryService")
@@ -229,6 +235,15 @@ public class GincoThesaurusExportServiceImpl implements
 									.getIdentifier()));
 			thesaurusToExport.getConceptGroupLabels().put(
 					thesaurusConceptGroup.getIdentifier(), groupLabels);
+		}
+
+		// ---Exporting complex concepts
+		List<SplitNonPreferredTerm> complexConcepts = splitNonPreferredTermService
+				.getSplitNonPreferredTermList(0, splitNonPreferredTermService
+						.getSplitNonPreferredTermCount(thesaurusId).intValue(),
+						thesaurusId);
+		for (SplitNonPreferredTerm complexConcept : complexConcepts) {
+			thesaurusToExport.getComplexConcepts().add(complexConcept);
 		}
 
 		// We encode it in XML

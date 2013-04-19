@@ -37,6 +37,9 @@ package fr.mcc.ginco.tests.imports.ginco;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -46,8 +49,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
@@ -60,6 +65,10 @@ public class GincoConceptImporterTest {
 
 	@Mock(name = "thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
+	
+
+	@Mock(name = "splitNonPreferredTermDAO")
+	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 
 	@InjectMocks
 	GincoConceptImporter gincoConceptImporter;
@@ -90,12 +99,39 @@ public class GincoConceptImporterTest {
 		Mockito.when(
 				thesaurusConceptDAO.update(Mockito.any(ThesaurusConcept.class)))
 				.thenReturn(c1);
-		Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(th1);
 		resultedConcepts = gincoConceptImporter
 				.storeConcepts(exportedThesaurus.getConcepts(), exportedThesaurus.getThesaurus());
 
 		Assert.assertEquals(resultedConcepts.size(), concepts.size());
 		Assert.assertEquals(resultedConcepts.get(0).getIdentifier(), concepts
+				.get(0).getIdentifier());
+	}
+	
+	@Test
+	public void testStoreComplexConcepts() {
+
+		Thesaurus th1 = new Thesaurus();
+		th1.setIdentifier("http://th1");
+
+		SplitNonPreferredTerm cc1 = new SplitNonPreferredTerm();
+		cc1.setIdentifier("http://cc1");
+		cc1.setThesaurus(th1);
+
+		List<SplitNonPreferredTerm> resultedComplexConcepts = new ArrayList<SplitNonPreferredTerm>();
+		List<SplitNonPreferredTerm> complexConcepts = new ArrayList<SplitNonPreferredTerm>();
+		complexConcepts.add(cc1);
+
+		GincoExportedThesaurus exportedThesaurus = new GincoExportedThesaurus();
+		exportedThesaurus.setThesaurus(th1);
+		exportedThesaurus.setComplexConcepts(complexConcepts);
+
+		Mockito.when(
+				splitNonPreferredTermDAO.update(Mockito.any(SplitNonPreferredTerm.class)))
+				.thenReturn(cc1);
+		resultedComplexConcepts = gincoConceptImporter.storeComplexConcepts(exportedThesaurus.getComplexConcepts(), exportedThesaurus.getThesaurus());
+
+		Assert.assertEquals(resultedComplexConcepts.size(), complexConcepts.size());
+		Assert.assertEquals(resultedComplexConcepts.get(0).getIdentifier(), complexConcepts
 				.get(0).getIdentifier());
 	}
 }

@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.exports.result.bean;
 
+import java.awt.SplashScreen;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -46,6 +47,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -72,6 +74,7 @@ public class GincoExportedThesaurus implements Serializable {
     private List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
     private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
     private List<ThesaurusArray> conceptArrays  = new ArrayList<ThesaurusArray>();
+    private List<SplitNonPreferredTerm> complexConcepts = new ArrayList<SplitNonPreferredTerm>();
     private Map<String, JaxbList<NodeLabel>> conceptArrayLabels = new Hashtable<String, JaxbList<NodeLabel>>();
     private List<ThesaurusConceptGroup> conceptGroups  = new ArrayList<ThesaurusConceptGroup>();
     private Map<String, JaxbList<ThesaurusConceptGroupLabel>> conceptGroupLabels = new Hashtable<String, JaxbList<ThesaurusConceptGroupLabel>>();
@@ -176,6 +179,14 @@ public class GincoExportedThesaurus implements Serializable {
 
 	public void setConceptGroupLabels(Map<String, JaxbList<ThesaurusConceptGroupLabel>> conceptGroupLabels) {
 		this.conceptGroupLabels = conceptGroupLabels;
+	}
+
+	public List<SplitNonPreferredTerm> getComplexConcepts() {
+		return complexConcepts;
+	}
+
+	public void setComplexConcepts(List<SplitNonPreferredTerm> complexConcepts) {
+		this.complexConcepts = complexConcepts;
 	}
     
 }
