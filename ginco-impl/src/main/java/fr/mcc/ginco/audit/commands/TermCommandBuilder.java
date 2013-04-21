@@ -45,20 +45,33 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
+/**
+ * Component in charge of building CommandLine relatives to terms changes
+ * 
+ */
 @Service("termCommandBuilder")
 public class TermCommandBuilder {
-	
+
 	@Inject
 	@Named("mistralStructuresBuilder")
 	private MistralStructuresBuilder mistralStructuresBuilder;
 
+	/**
+	 * Builds the list of command lines for term changes between two revisions
+	 * 
+	 * @param previousTerms
+	 * @param currentTerms
+	 * @return
+	 */
 	public List<CommandLine> buildTermsLines(List<ThesaurusTerm> previousTerms,
 			List<ThesaurusTerm> currentTerms) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
-		Map<String, ThesaurusTerm> newLexicalvalues = mistralStructuresBuilder.getTermVersionsView(currentTerms);
-		Map<String, ThesaurusTerm> oldLexicalValues = mistralStructuresBuilder.getTermVersionsView(previousTerms);
-		
+		Map<String, ThesaurusTerm> newLexicalvalues = mistralStructuresBuilder
+				.getTermVersionsView(currentTerms);
+		Map<String, ThesaurusTerm> oldLexicalValues = mistralStructuresBuilder
+				.getTermVersionsView(previousTerms);
+
 		// Terms deletion
 		for (ThesaurusTerm oldTerm : previousTerms) {
 			if (!newLexicalvalues.containsKey(oldTerm.getLexicalValue())) {
@@ -101,6 +114,6 @@ public class TermCommandBuilder {
 		}
 
 		return termsOperations;
-	}	
-	
+	}
+
 }

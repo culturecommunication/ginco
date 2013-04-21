@@ -46,71 +46,98 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 
+/**
+ * Component in charge of building CommandLine relatives to hierarchy changes
+ * 
+ */
 @Service("hierarchyCommandBuilder")
 public class HierarchyCommandBuilder {
-	
+
 	@Inject
 	@Named("mistralStructuresBuilder")
-	private MistralStructuresBuilder mistralStructuresBuilder;	
-	
+	private MistralStructuresBuilder mistralStructuresBuilder;
+
+	/**
+	 * Builds the list of command lines for hierarchy changes between two
+	 * revisions
+	 * 
+	 * @param previousConcepts
+	 * @param currentConcepts
+	 * @param oldRevision
+	 * @param currentRevision
+	 * @param lang
+	 * @return
+	 */
 	public List<CommandLine> buildHierarchyChanges(
 			List<ThesaurusConcept> previousConcepts,
 			List<ThesaurusConcept> currentConcepts, Number oldRevision,
 			Number currentRevision, String lang) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
-		Map<String, List<String>> previousHierarchies = mistralStructuresBuilder.buildHierarchyStructure(previousConcepts, oldRevision, lang);
-		Map<String, List<String>> currentHierarchies = mistralStructuresBuilder.buildHierarchyStructure(currentConcepts, currentRevision, lang);
-		for (String previousParentConceptId:previousHierarchies.keySet()) {
+		Map<String, List<String>> previousHierarchies = mistralStructuresBuilder
+				.buildHierarchyStructure(previousConcepts, oldRevision, lang);
+		Map<String, List<String>> currentHierarchies = mistralStructuresBuilder
+				.buildHierarchyStructure(currentConcepts, currentRevision, lang);
+		for (String previousParentConceptId : previousHierarchies.keySet()) {
 			if (currentHierarchies.containsKey(previousParentConceptId)) {
-				//Concept still exists
-				if (!ListUtils.isEqualList(previousHierarchies.get(previousParentConceptId), currentHierarchies.get(previousParentConceptId))) {
-					//but hierarchy has changed
-					for(String oldChild:previousHierarchies.get(previousParentConceptId)) {
-						if(!currentHierarchies.get(previousParentConceptId).contains(oldChild)) {
-							//child removed
+				// Concept still exists
+				if (!ListUtils.isEqualList(
+						previousHierarchies.get(previousParentConceptId),
+						currentHierarchies.get(previousParentConceptId))) {
+					// but hierarchy has changed
+					for (String oldChild : previousHierarchies
+							.get(previousParentConceptId)) {
+						if (!currentHierarchies.get(previousParentConceptId)
+								.contains(oldChild)) {
+							// child removed
 							CommandLine childRemovedLine = new CommandLine();
-							childRemovedLine.setValue(CommandLine.HIERARCHY_REMOVED
-									+ oldChild + CommandLine.HIERARCHY + previousParentConceptId);
+							childRemovedLine
+									.setValue(CommandLine.HIERARCHY_REMOVED
+											+ oldChild + CommandLine.HIERARCHY
+											+ previousParentConceptId);
 							termsOperations.add(childRemovedLine);
 						}
 					}
-					for(String newChild:currentHierarchies.get(previousParentConceptId)) {
-						if(!previousHierarchies.get(previousParentConceptId).contains(newChild)) {
-							//child added
+					for (String newChild : currentHierarchies
+							.get(previousParentConceptId)) {
+						if (!previousHierarchies.get(previousParentConceptId)
+								.contains(newChild)) {
+							// child added
 							CommandLine childAddedLine = new CommandLine();
-							childAddedLine.setValue(newChild + CommandLine.HIERARCHY + previousParentConceptId);
+							childAddedLine.setValue(newChild
+									+ CommandLine.HIERARCHY
+									+ previousParentConceptId);
 							termsOperations.add(childAddedLine);
 						}
 					}
 				}
 			} else {
-				//Concept does not exist anymore, remove all old hierarchies
-				for(String oldChild:previousHierarchies.get(previousParentConceptId)) {
-						CommandLine childRemovedLine = new CommandLine();
-						childRemovedLine.setValue(CommandLine.HIERARCHY_REMOVED
-								+ oldChild + CommandLine.HIERARCHY + previousParentConceptId);
-						termsOperations.add(childRemovedLine);					
+				// Concept does not exist anymore, remove all old hierarchies
+				for (String oldChild : previousHierarchies
+						.get(previousParentConceptId)) {
+					CommandLine childRemovedLine = new CommandLine();
+					childRemovedLine.setValue(CommandLine.HIERARCHY_REMOVED
+							+ oldChild + CommandLine.HIERARCHY
+							+ previousParentConceptId);
+					termsOperations.add(childRemovedLine);
 				}
 			}
 		}
-		
-		for (String currentParentConceptId:currentHierarchies.keySet()) {
+
+		for (String currentParentConceptId : currentHierarchies.keySet()) {
 			if (!previousHierarchies.containsKey(currentParentConceptId)) {
-				//Add all new hierarchies				
-				for (String child : currentHierarchies.get(currentParentConceptId)) {
+				// Add all new hierarchies
+				for (String child : currentHierarchies
+						.get(currentParentConceptId)) {
 					CommandLine hierarchyAddedLine = new CommandLine();
-					hierarchyAddedLine.setValue(child + CommandLine.HIERARCHY + currentParentConceptId);
+					hierarchyAddedLine.setValue(child + CommandLine.HIERARCHY
+							+ currentParentConceptId);
 					termsOperations.add(hierarchyAddedLine);
-				}			
+				}
 			}
 
-		}		
+		}
 		return termsOperations;
 
 	}
-
-	
-
-	
 }

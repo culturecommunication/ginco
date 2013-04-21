@@ -36,31 +36,68 @@ package fr.mcc.ginco.audit.commands;
 
 
 
+/**
+ * Object reprensenting a Mistral command file line
+ *
+ */
 public class CommandLine {
 
+	/**
+	 * Prefix to preferred terms
+	 */
 	public final static String STARS = "**";
 	
+	
+	/**
+	 * Prefix to unprefer terms
+	 */
 	public final static String UNPREFERRERD = "P, ";  
 	
+	/**
+	 * Prefix to remove terms
+	 */
 	public final static String REMOVED = "R, ";  
 	
+	/**
+	 * Separator of synonyms
+	 */
 	public final static String SYNONYM = " = ";
 
+	/**
+	 * Prefix of a synonym to separate 
+	 */
 	public final static String SEPARATE = "S, ";  
 	
+	/**
+	 * Operator to declare a hierarchy
+	 */
 	public final static String HIERARCHY = " < ";  
 	
+	/**
+	 * Operator to remove a hierachy
+	 */
 	public final static String HIERARCHY_REMOVED = "H, ";
 
+	/**
+	 * Operator to list terms
+	 */
 	public static final String COMMA = ", ";  
 
 
 	private String value;
 
+	/**
+	 * Gets the line value to print
+	 * @return
+	 */
 	public String getValue() {
 		return value;
 	}
 
+	/**
+	 * Sets the line value
+	 * @param value
+	 */
 	public void setValue(String value) {
 		this.value = value;
 	}

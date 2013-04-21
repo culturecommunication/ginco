@@ -46,6 +46,10 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 
+/**
+ * Component in charge of building CommandLine relatives to synonyms changes
+ * 
+ */
 @Service("synonymsCommandBuilder")
 public class SynonymsCommandBuilder {
 	
@@ -54,6 +58,16 @@ public class SynonymsCommandBuilder {
 	private MistralStructuresBuilder mistralStructuresBuilder;
 
 
+	/**
+	 * Builds the list of command lines for synonyms changes between two
+	 * revisions
+	 * @param previousConcepts
+	 * @param currentConcepts
+	 * @param oldRevision
+	 * @param currentRevision
+	 * @param lang
+	 * @return
+	 */
 	public List<CommandLine> buildSynonyms(
 			List<ThesaurusConcept> previousConcepts,
 			List<ThesaurusConcept> currentConcepts, Number oldRevision,

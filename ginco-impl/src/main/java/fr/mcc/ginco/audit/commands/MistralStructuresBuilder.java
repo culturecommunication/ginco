@@ -49,13 +49,27 @@ import fr.mcc.ginco.audit.utils.AuditHelper;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
+/**
+ * Component in charge of building utility structures for CommandLine builders
+ * 
+ */
 @Service("mistralStructuresBuilder")
 public class MistralStructuresBuilder {
-	
+
 	@Inject
 	@Named("auditHelper")
 	private AuditHelper auditHelper;
-	
+
+	/**
+	 * Builds a Map of hierarchy where the key is the lexical value of the
+	 * preferred term of the parent concept and the value is the list of lexical
+	 * values of the children concept preferred terms
+	 * 
+	 * @param conceptsAtRevision
+	 * @param revision
+	 * @param lang
+	 * @return
+	 */
 	public Map<String, List<String>> buildHierarchyStructure(
 			List<ThesaurusConcept> conceptsAtRevision, Number revision,
 			String lang) {
@@ -84,7 +98,17 @@ public class MistralStructuresBuilder {
 		}
 		return hierarchies;
 	}
-	
+
+	/**
+	 * Builds a Map of synonyms where the key is the lexical value of the
+	 * preferred term of the concept and the value is the list of lexical values
+	 * of the alternatives terms
+	 * 
+	 * @param conceptsAtRevision
+	 * @param revision
+	 * @param lang
+	 * @return
+	 */
 	public Map<String, List<String>> buildSynonymsStructure(
 			List<ThesaurusConcept> conceptsAtRevision, Number revision,
 			String lang) {
@@ -110,7 +134,14 @@ public class MistralStructuresBuilder {
 		}
 		return previousSynonyms;
 	}
-	
+
+	/**
+	 * Builds a Map of terms where the key is the lexical value of the term and
+	 * the value is the ThesaurusTerm object values of the alternatives terms
+	 * 
+	 * @param currentTerms
+	 * @return
+	 */
 	public Map<String, ThesaurusTerm> getTermVersionsView(
 			List<ThesaurusTerm> currentTerms) {
 		Map<String, ThesaurusTerm> newLexicalvalues = new HashMap<String, ThesaurusTerm>();
