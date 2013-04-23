@@ -58,7 +58,6 @@ public class ThesaurusArray implements Serializable {
 
 	@XmlTransient
 	private Thesaurus thesaurus;
-	@XmlTransient
 	private ThesaurusArray parent;
 
 	public String getIdentifier() {
