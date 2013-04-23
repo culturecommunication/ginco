@@ -299,14 +299,14 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			
 			var maxOrder = -1;
 			if (theConceptArrayGridStore.getCount() > 0) {
-				 maxOrder =	parseInt(theConceptArrayGridStore.max( "order"))+1;
+				 maxOrder =	theConceptArrayGridStore.max( "order") +1;
 			} else {
-				maxOrder = parseInt(maxOrder) +1;
+				maxOrder = maxOrder +1;
 			}
 			var conceptModel = Ext.create('GincoApp.model.ArrayConceptModel');
 			conceptModel.set('label',selectedRow[0].get('label'));
 			conceptModel.set('identifier',selectedRow[0].get('identifier'));
-			conceptModel.set('order', parseInt(maxOrder));
+			conceptModel.set('order', maxOrder);
              
 			theConceptArrayGridStore.add(conceptModel);			
 		}		

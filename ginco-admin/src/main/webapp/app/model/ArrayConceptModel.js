@@ -47,7 +47,7 @@ Ext.define('GincoApp.model.ArrayConceptModel', {
         },
         {
             name: 'order',
-            type: 'string'
+            type: 'integer'
         }
     ],
    idProperty : 'identifier'
