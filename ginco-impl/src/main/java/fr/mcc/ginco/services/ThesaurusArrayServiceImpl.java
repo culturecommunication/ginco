@@ -110,7 +110,8 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 			}
 		}
 
-		if (thesaurusArray.getConcepts() != null
+		if (arrayConcepts != null
+				&& !arrayConcepts.isEmpty()
 				&& thesaurusArray.getSuperOrdinateConcept() != null) {
 			// We get all arrays matching our superordinate, excluding our
 			// concept from the list
@@ -118,14 +119,12 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 					.getConceptSuperOrdinateArrays(thesaurusArray
 							.getSuperOrdinateConcept().getIdentifier(),
 							thesaurusArray.getIdentifier());
-			Set<ThesaurusArrayConcept> allChildren = thesaurusArray
-					.getConcepts();
 
 			for (ThesaurusArray currentArray : arrayWithSameSuperOrdinate) {
 				Set<ThesaurusArrayConcept> conceptOfEachArray = currentArray
 						.getConcepts();
 				for (ThesaurusArrayConcept thesaurusConcept : conceptOfEachArray) {
-					if (allChildren.contains(thesaurusConcept)) {
+					if (arrayConcepts.contains(thesaurusConcept)) {
 						// Another array with same superordinate contains a
 						// concept we have included in our array
 						throw new BusinessException(
@@ -136,7 +135,7 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 			}
 
 			// We test that the select children are child of superordinate
-			for (ThesaurusArrayConcept thesaurusArrayConcept : allChildren) {
+			for (ThesaurusArrayConcept thesaurusArrayConcept : arrayConcepts) {
 				Set<ThesaurusConcept> parentsOfChild = thesaurusConceptDAO
 						.getById(
 								thesaurusArrayConcept.getIdentifier()

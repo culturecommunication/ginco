@@ -43,6 +43,7 @@ import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
 
 /**
@@ -74,6 +75,13 @@ public class ThesaurusArrayConceptDAO extends
 		.add(Restrictions.eq("tac.identifier.thesaurusArrayId", array.getIdentifier()));		
 
         return criteria.list();
-    }   
+    }
+    
+    @Override
+    public List<ThesaurusArrayConcept> getArraysOfConcept(ThesaurusConcept concept) {
+    	Criteria criteria = getCurrentSession().createCriteria(ThesaurusArrayConcept.class, "tac");
+    	criteria.add(Restrictions.eq("tac.identifier.conceptId", concept.getIdentifier()));
+    	return criteria.list();
+    }
 
 }

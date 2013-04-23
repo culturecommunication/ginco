@@ -68,18 +68,18 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
 
 	@Override
 	public List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId) {
-		Criteria criteria = getCriteriaByThesaurusAndTopConcept(conceptId);
+		Criteria criteria = getCriteriaBySuperOrdinate(conceptId);
 	    return criteria.list();
 	}
 	
 	@Override
 	public List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId, String excludeArrayId) {
-		Criteria criteria = getCriteriaByThesaurusAndTopConcept(conceptId);
+		Criteria criteria = getCriteriaBySuperOrdinate(conceptId);
 	    criteria.add(Restrictions.ne("ta.identifier", excludeArrayId));
 	    return criteria.list();
 	}
 	
-	private Criteria getCriteriaByThesaurusAndTopConcept(String conceptId) {
+	private Criteria getCriteriaBySuperOrdinate(String conceptId) {
 		Criteria criteria = getCurrentSession().createCriteria(
 		         ThesaurusArray.class, "ta");
 		criteria.add(Restrictions.eq("ta.superOrdinateConcept.identifier", conceptId));

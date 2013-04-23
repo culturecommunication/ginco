@@ -38,6 +38,7 @@ import java.util.List;
 
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 
 public interface IThesaurusArrayConceptDAO extends IGenericDAO<ThesaurusArrayConcept, ThesaurusArrayConcept.Id> {
 
@@ -54,5 +55,12 @@ public interface IThesaurusArrayConceptDAO extends IGenericDAO<ThesaurusArrayCon
      * @return
      */
     List<ThesaurusArrayConcept> getThesaurusArrayConceptsByArray(ThesaurusArray array);
+
+	/**
+	 * Gets the list of arrays which the concept given in parameter belongs
+	 * @param concept
+	 * @return
+	 */
+	List<ThesaurusArrayConcept> getArraysOfConcept(ThesaurusConcept concept);
 
 }

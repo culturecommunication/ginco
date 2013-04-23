@@ -51,8 +51,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
+import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -70,6 +72,10 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	@Inject
 	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
+	
+	@Inject
+	@Named("thesaurusArrayConceptDAO")
+	private IThesaurusArrayConceptDAO thesaurusArrayConceptDAO;
 
 	@Inject
 	@Named("thesaurusConceptDAO")
@@ -119,11 +125,9 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 			// Treatment in case of modified hierarchy (both add or remove)
 
 			// We remove this concept in all array it belongs
-			if (conceptToUpdate.getConceptArrays() != null) {
-				for (ThesaurusArray array : conceptToUpdate.getConceptArrays()) {
-					array.getConcepts().remove(conceptToUpdate);
-					thesaurusArrayDAO.update(array);
-				}				
+			List<ThesaurusArrayConcept> arrays = thesaurusArrayConceptDAO.getArraysOfConcept(conceptToUpdate);
+			for (ThesaurusArrayConcept thesaurusArrayConcept : arrays) {
+				thesaurusArrayConceptDAO.delete(thesaurusArrayConcept);
 			}
 			
 			// We remove all removed parents

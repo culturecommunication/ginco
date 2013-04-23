@@ -300,7 +300,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			// We can set status = candidate only if concept has not relation
 			// (both hierarchical or associative)
 			if (!associatedConcepts.isEmpty()
-					// || !object.getAssociativeRelationshipRight().isEmpty()
 					|| !object.getParentConcepts().isEmpty()
 					|| hasChildren(object.getIdentifier())) {
 				throw new BusinessException(
@@ -329,7 +328,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
-		// indexerService.addConcept(concept);
 		return concept;
 	}
 
