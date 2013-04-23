@@ -212,6 +212,7 @@ public class ThesaurusTermRestService {
 	
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
+			indexerService.removeTerm(object);
 			return new ThesaurusTermView(result);
 		}
 		return null;

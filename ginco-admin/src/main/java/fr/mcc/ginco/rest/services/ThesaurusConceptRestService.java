@@ -304,6 +304,7 @@ public class ThesaurusConceptRestService {
 	
 		if (object != null) {
 			thesaurusConceptService.destroyThesaurusConcept(object);
+			indexerService.removeConcept(object);
 		}
 	}
 	

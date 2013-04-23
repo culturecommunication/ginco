@@ -96,6 +96,7 @@ public class IndexerServiceImpl implements IIndexerService {
 			throws TechnicalException {
 		try {
 			solrServer.deleteById(thesaurusTerm.getIdentifier());
+			solrServer.commit();
 		} catch (SolrServerException e) {
 			throw new TechnicalException(
 					"Error executing query for removing Term from index!", e);
@@ -251,6 +252,7 @@ public class IndexerServiceImpl implements IIndexerService {
 			throws TechnicalException {
 		try {
 			solrServer.deleteById(thesaurusConcept.getIdentifier());
+			solrServer.commit();
 		} catch (SolrServerException e) {
 			throw new TechnicalException(
 					"Error executing query for removing Concept from index!", e);
