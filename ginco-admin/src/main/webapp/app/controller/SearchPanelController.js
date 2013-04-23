@@ -93,7 +93,7 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		theStore.getProxy().setExtraParam('query',
 				thePanel.searchQuery);
 		theStore.getProxy().jsonData=theQueryModel.data;
-		theStore.load(function(records, operation, success) {
+		theStore.loadPage(1,function(records, operation, success) {
 		    if (success==false) {
 		    	Thesaurus.ext.utils.msg("Warning",
 						operation.error);
