@@ -147,11 +147,11 @@ public interface IThesaurusListNode extends Comparable<IThesaurusListNode>{
      * Service tag to filter by organization.
      * @return
      */
-    String getOrganizationId();
+    String getOrganizationName();
 
     /**
-     * Sets organization id.
-     * @param organizationId
+     * Sets organization name.
+     * @param organizationName
      */
-    void setOrganizationId(String organizationId);
+    void setOrganizationName(String organizationName);
 }

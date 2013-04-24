@@ -154,7 +154,7 @@ public class BaseRestService {
 				node.setId(thesaurus.getIdentifier());
 				node.setType(ThesaurusListNodeType.THESAURUS);
 				if(thesaurus.getCreator() != null) {
-                    node.setOrganizationId(thesaurus.getCreator().getIdentifier().toString());
+                    node.setOrganizationName(thesaurus.getCreator().getName());
                 }
                 node.setChildren(folderGenerator.generateFolders(thesaurus
 						.getIdentifier()));

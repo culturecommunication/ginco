@@ -69,7 +69,7 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
     /**
      * Hidden tag to filter by author.
      */
-    private String organizationId;
+    private String organizationName;
     /**
      * if the node is a leaf.
      */
@@ -255,12 +255,12 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	}
 
     @Override
-    public String getOrganizationId() {
-        return organizationId;
+    public String getOrganizationName() {
+        return organizationName;
     }
 
     @Override
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 }

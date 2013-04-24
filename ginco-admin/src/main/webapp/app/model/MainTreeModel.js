@@ -50,7 +50,7 @@ Ext.define('GincoApp.model.MainTreeModel', {
             type: 'string'
         },
         {
-            name: 'organizationId',
+            name: 'organizationName',
             type: 'string'
         },
         {

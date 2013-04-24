@@ -108,7 +108,7 @@ Ext.define('GincoApp.view.LeftPanel', {
                             labelWidth:70,
                             editable : false,
                             displayField : 'name',
-                            valueField : 'identifier',
+                            valueField : 'name',
                             store : me.thesaurusOrganizationStore
                         }]
                     }

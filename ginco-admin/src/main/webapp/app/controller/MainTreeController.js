@@ -178,14 +178,14 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
     onAuthorFilterSelect : function(theCombo, records) {
         var theTreeStore = theCombo.up('treepanel').getStore();
-        var orgId = records[0].get('identifier');
-        if(orgId == -1) {
+        var orgName = records[0].get('name');
+        if(orgName == '-') {
         	theTreeStore.clearFilter(true);
         } else {
-        	theTreeStore.setFilter('organizationId',orgId);
+        	theTreeStore.setFilter('organizationName',orgName);
         	this.loadTreeView(theCombo.up('treepanel'));	
         }
-    },
+ 	},    
 	init : function(application) {
 		// Handling application treeview refresh requests
 		 this.application.on({
@@ -213,7 +213,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 				click : this.onRefreshBtnClick
 			},
             '#authorFilter' : {
-                select : this.onAuthorFilterSelect
+                select : this.onAuthorFilterSelect,
             }
 		});
 	}

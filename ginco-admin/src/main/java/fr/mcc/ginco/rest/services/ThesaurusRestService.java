@@ -282,14 +282,16 @@ public class ThesaurusRestService {
     @Produces({ MediaType.APPLICATION_JSON })
     public List<ThesaurusOrganization> getAllAuthors() throws BusinessException {
     	List<ThesaurusOrganization> allOrgs = thesaurusOrganizationService.getOrganizations();
+    	List<String> returnedAuthorNames = new ArrayList<String>();
     	List<ThesaurusOrganization> returnedOrgs = new ArrayList<ThesaurusOrganization>();
     	for (ThesaurusOrganization aOrg : allOrgs)
     	{
-    		if (!StringUtils.isEmpty(aOrg.getName()))
+    		if (!StringUtils.isEmpty(aOrg.getName()) && !returnedAuthorNames.contains(aOrg.getName()))
     		{
     			returnedOrgs.add(aOrg);
+    			returnedAuthorNames.add(aOrg.getName());
     		}
-    	}
+    	}    	
     	return returnedOrgs;
     }
 }
