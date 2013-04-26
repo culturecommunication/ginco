@@ -143,7 +143,9 @@ public class ExportServiceImpl implements IExportService {
 		}
 
 		for (ThesaurusArray array : arraysWithoutParentArray) {
-			addThesaurusArray(result, array, -1);
+			if (orphanArrays.contains(array)){
+				addThesaurusArray(result, array, -1);
+			}
 		}
 
 		return result;
@@ -272,9 +274,11 @@ public class ExportServiceImpl implements IExportService {
 		}
 		List<ThesaurusArray> childrenArray = thesaurusArrayService.getChildrenArrays(subOrdArray.getIdentifier());
 		Collections.sort(childrenArray, nodeLabelComparator);
-
+		
 		for (ThesaurusArray children : childrenArray) {
-			addThesaurusArray(result, children, base + 1);
+			if(children.getSuperOrdinateConcept() == null){
+				addThesaurusArray(result, children, base + 1);
+			}
 		}
 	}
 }
