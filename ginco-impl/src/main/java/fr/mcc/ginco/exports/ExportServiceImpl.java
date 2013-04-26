@@ -35,6 +35,7 @@
 package fr.mcc.ginco.exports;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -118,10 +119,14 @@ public class ExportServiceImpl implements IExportService {
 		List<ThesaurusConcept> listTT = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
 		Collections.sort(listTT, thesaurusConceptComparator);
+		
 		List<ThesaurusArray> orphanArrays = thesaurusArrayService
 				.getArraysWithoutParentConcept(thesaurus.getIdentifier());
 		Collections.sort(orphanArrays, nodeLabelComparator);
-
+		
+		List<ThesaurusArray> arraysWithoutParentArray = thesaurusArrayService.getArraysWithoutParentArray(thesaurus.getIdentifier());
+		Collections.sort(arraysWithoutParentArray, nodeLabelComparator);
+		
 		Set<ThesaurusConcept> exclude = new HashSet<ThesaurusConcept>();
 
 		for (ThesaurusArray array : orphanArrays) {
@@ -137,7 +142,7 @@ public class ExportServiceImpl implements IExportService {
 			}
 		}
 
-		for (ThesaurusArray array : orphanArrays) {
+		for (ThesaurusArray array : arraysWithoutParentArray) {
 			addThesaurusArray(result, array, -1);
 		}
 
@@ -264,6 +269,12 @@ public class ExportServiceImpl implements IExportService {
 								.getThesaurusConceptById(conceptInArray
 										.getIdentifier().getConceptId())));
 			}
+		}
+		List<ThesaurusArray> childrenArray = thesaurusArrayService.getChildrenArrays(subOrdArray.getIdentifier());
+		Collections.sort(childrenArray, nodeLabelComparator);
+
+		for (ThesaurusArray children : childrenArray) {
+			addThesaurusArray(result, children, base + 1);
 		}
 	}
 }

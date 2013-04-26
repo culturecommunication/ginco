@@ -96,4 +96,7 @@ public interface IThesaurusArrayService {
      * @return
      */
     List<ThesaurusArray> getArraysWithoutParentConcept(String thesaurusId);
+    
+    List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId);
+	List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId);
 }

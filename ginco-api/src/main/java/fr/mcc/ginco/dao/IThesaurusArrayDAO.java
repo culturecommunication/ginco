@@ -72,4 +72,7 @@ public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> 
      */
 	List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId,
 			String excludeArrayId);
+	
+	List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId);
+	List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId);
 }

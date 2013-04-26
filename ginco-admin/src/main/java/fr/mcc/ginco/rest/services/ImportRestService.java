@@ -34,14 +34,8 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +49,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
@@ -65,18 +58,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.shared.JenaException;
-import com.hp.hpl.jena.util.FileManager;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.FileResponse;
 import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
-import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
@@ -84,7 +71,6 @@ import fr.mcc.ginco.imports.ISKOSImportService;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Base REST service intended to be used for SKOS Import the @Produces({

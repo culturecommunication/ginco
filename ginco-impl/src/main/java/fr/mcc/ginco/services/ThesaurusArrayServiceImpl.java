@@ -174,5 +174,16 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 		return thesaurusArrayDAO
 				.getArraysWithoutSuperordinatedConcept(thesaurusId);
 	}
+	
+	@Override
+	public List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId){
+		return thesaurusArrayDAO.
+				getArraysWithoutParentArray(thesaurusId);
+	}
+	
+	@Override
+	public List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId){
+		return thesaurusArrayDAO.getChildrenArrays(thesaurusArrayId);
+	}
 
 }

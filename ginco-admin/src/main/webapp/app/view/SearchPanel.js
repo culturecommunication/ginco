@@ -190,7 +190,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				}, {
 					dataIndex : 'lexicalValue',
 					text : me.xLexicalValueColumnLabel,
-					flex : 1
+					flex : 1,
 				}, {
 					dataIndex : 'thesaurusTitle',
 					text : me.xThesaurusTitleColumnLabel,
