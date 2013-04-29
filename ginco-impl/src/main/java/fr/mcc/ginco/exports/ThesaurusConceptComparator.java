@@ -70,14 +70,14 @@ public class ThesaurusConceptComparator implements Comparator<ThesaurusConcept> 
 	public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
 		try {
 			String l1 = thesaurusTermUtils
-					.getPreferedTerms(
+					.getPreferedTermsByLang(
 							thesaurusTermService.getTermsByConceptId(o1
-									.getIdentifier())).get(0)
+									.getIdentifier()), defaultLang).get(0)
 					.getLexicalValue();
 			String l2 = thesaurusTermUtils
-					.getPreferedTerms(
+					.getPreferedTermsByLang(
 							thesaurusTermService.getTermsByConceptId(o2
-									.getIdentifier())).get(0)
+									.getIdentifier()), defaultLang).get(0)
 					.getLexicalValue();
 			Collator collator = Collator
 					.getInstance(new Locale(defaultLang));

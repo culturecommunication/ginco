@@ -47,6 +47,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exports.ThesaurusConceptComparator;
@@ -73,6 +74,10 @@ public class ThesaurusConceptComparatorTest {
 
 	@Test
 	public void testCompareStandard() {
+		
+		Language langFr = new Language();
+		langFr.setId("fr-FR");
+		
 		ThesaurusConcept concept1 = new ThesaurusConcept();
 		concept1.setIdentifier("concept1");
 
@@ -82,12 +87,15 @@ public class ThesaurusConceptComparatorTest {
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		term1.setLexicalValue("zeste");
 		term1.setPrefered(true);
+		term1.setLanguage(langFr);
 		List<ThesaurusTerm> co1terms = new ArrayList<ThesaurusTerm>();
 		co1terms.add(term1);
 
 		ThesaurusTerm term2 = new ThesaurusTerm();
 		term2.setLexicalValue("apiculture");
 		term2.setPrefered(true);
+		term2.setLanguage(langFr);
+		
 		List<ThesaurusTerm> co2terms = new ArrayList<ThesaurusTerm>();
 		co2terms.add(term2);
 
@@ -104,6 +112,10 @@ public class ThesaurusConceptComparatorTest {
 
 	@Test
 	public void testCompareWithAccents() {
+		
+		Language langFr = new Language();
+		langFr.setId("fr-FR");
+		
 		ThesaurusConcept concept1 = new ThesaurusConcept();
 		concept1.setIdentifier("concept1");
 
@@ -113,12 +125,14 @@ public class ThesaurusConceptComparatorTest {
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		term1.setLexicalValue("zeste");
 		term1.setPrefered(true);
+		term1.setLanguage(langFr);
 		List<ThesaurusTerm> co1terms = new ArrayList<ThesaurusTerm>();
 		co1terms.add(term1);
 
 		ThesaurusTerm term2 = new ThesaurusTerm();
 		term2.setLexicalValue("éléphant");
 		term2.setPrefered(true);
+		term2.setLanguage(langFr);
 		List<ThesaurusTerm> co2terms = new ArrayList<ThesaurusTerm>();
 		co2terms.add(term2);
 
@@ -130,6 +144,52 @@ public class ThesaurusConceptComparatorTest {
 		int compareWithAccents = thesaurusConceptComparator.compare(concept1,
 				concept2);
 		Assert.assertEquals(1, compareWithAccents);
+	}
+	
+	@Test
+	public void testCompareWithManyTermsPref() {
+		
+		Language langFr = new Language();
+		langFr.setId("fr-FR");
+		
+		Language langEn = new Language();
+		langEn.setId("en-US");
+		
+		ThesaurusConcept concept1 = new ThesaurusConcept();
+		concept1.setIdentifier("concept1");
+
+		ThesaurusConcept concept2 = new ThesaurusConcept();
+		concept2.setIdentifier("concept2");
+
+		ThesaurusTerm term1 = new ThesaurusTerm();
+		term1.setLexicalValue("écart");
+		term1.setPrefered(true);
+		term1.setLanguage(langFr);
+		List<ThesaurusTerm> co1terms = new ArrayList<ThesaurusTerm>();
+		co1terms.add(term1);
+
+		ThesaurusTerm term2_1 = new ThesaurusTerm();
+		term2_1.setLexicalValue("agglomération");
+		term2_1.setPrefered(true);
+		term2_1.setLanguage(langFr);
+		
+		ThesaurusTerm term2_2 = new ThesaurusTerm();
+		term2_2.setLexicalValue("settlements");
+		term2_2.setPrefered(true);
+		term2_2.setLanguage(langEn);		
+		
+		List<ThesaurusTerm> co2terms = new ArrayList<ThesaurusTerm>();
+		co2terms.add(term2_1);
+		co2terms.add(term2_2);
+
+		Mockito.when(thesaurusTermService.getTermsByConceptId("concept1"))
+				.thenReturn(co1terms);
+		Mockito.when(thesaurusTermService.getTermsByConceptId("concept2"))
+				.thenReturn(co2terms);
+
+		int compareWithManyTermsPref = thesaurusConceptComparator.compare(concept1,
+				concept2);
+		Assert.assertEquals(1, compareWithManyTermsPref);
 	}
 
 }

@@ -118,4 +118,21 @@ public class ThesaurusTermUtils {
 		return LabelUtil.getLocalizedLabel(term.getLexicalValue(),
 				term.getLanguage(), defaultLang);
 	}
+	
+    /**
+     * Returns the list of preferred terms from the given list and language id
+     * @param listOfTerms 
+     * @param language id
+     * 
+     * @return
+     */
+    public final List<ThesaurusTerm> getPreferedTermsByLang(List<ThesaurusTerm> listOfTerms, String LanguageId) {
+        List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
+        for (ThesaurusTerm thesaurusTerm : listOfTerms) {
+            if (thesaurusTerm.getPrefered() && thesaurusTerm.getLanguage().getId().equals(LanguageId)) {
+                preferedTerms.add(thesaurusTerm);
+            }
+        }
+        return preferedTerms;
+    }  
 }
