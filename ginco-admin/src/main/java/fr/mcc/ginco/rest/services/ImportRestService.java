@@ -50,6 +50,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.codehaus.jackson.JsonGenerationException;
@@ -245,7 +246,7 @@ public class ImportRestService {
 			Attachment file = body.getAttachment("import-file-path");
 			String content = file.getObject(String.class);
 			
-			String[] termsSplit = content.split("\n");
+			String[] termsSplit = content.split("\n|\r\n");
 			List<String> termLexicalValues = Arrays.asList(termsSplit);
 			
 			thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);	
