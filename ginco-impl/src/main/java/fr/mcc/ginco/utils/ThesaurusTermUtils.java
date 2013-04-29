@@ -63,8 +63,7 @@ public class ThesaurusTermUtils {
             }
         }
         return preferedTerms;
-    }
-    
+    }  
     
     /**
      * Checks 2 conditions

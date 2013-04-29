@@ -224,6 +224,7 @@ public class ExportServiceTest {
 		NodeLabel nl2 = new NodeLabel();
 		nl2.setLexicalValue("ar2");
 		nl2.setThesaurusArray(ar2);
+		ar2.setParent(ar1);
 
 		Mockito.when(
 				thesaurusConceptService.getTopTermThesaurusConcepts(th1
@@ -388,6 +389,25 @@ public class ExportServiceTest {
 				.thenReturn(nl1);
 		Mockito.when(nodeLabelService.getByThesaurusArray(ar2.getIdentifier()))
 				.thenReturn(nl2);
+		
+		Mockito.when(thesaurusArrayService.getArraysWithoutParentArray(th1.getIdentifier()))
+				.thenReturn(
+					new ArrayList<ThesaurusArray>() {
+						{
+							add(ar1);
+						}
+					}
+						);
+		Mockito.when(thesaurusArrayService.getChildrenArrays(ar1.getIdentifier()))
+				.thenReturn(
+					new ArrayList<ThesaurusArray>() {
+					{
+						add(ar2);
+					}				
+				});
+		
+		Mockito.when(thesaurusArrayService.getChildrenArrays(ar2.getIdentifier()))
+		.thenReturn(new ArrayList<ThesaurusArray>());
 
 		List<FormattedLine> results = exportService.getHierarchicalText(th1);
 		
@@ -411,29 +431,29 @@ public class ExportServiceTest {
 		Assert.assertEquals("Line does not correspond to needed format",
 				"co1_1", results.get(2).getText());
 
-		Assert.assertEquals("Number of tabulations is wrong!", 0,
+		Assert.assertEquals("Number of tabulations is wrong!", 2,
 				(long) results.get(3).getTabs());
-		Assert.assertEquals("Line does not correspond to needed format", "co3",
+		Assert.assertEquals("Line does not correspond to needed format", "<ar2>",
 				results.get(3).getText());
 
-		Assert.assertEquals("Number of tabulations is wrong!", 1,
+		Assert.assertEquals("Number of tabulations is wrong!", 2,
 				(long) results.get(4).getTabs());
 		Assert.assertEquals("Line does not correspond to needed format",
-				"co3_1", results.get(4).getText());
+				"co2", results.get(4).getText());
 
-		Assert.assertEquals("Number of tabulations is wrong!", 0,
+		Assert.assertEquals("Number of tabulations is wrong!", 3,
 				(long) results.get(5).getTabs());
 		Assert.assertEquals("Line does not correspond to needed format",
-				"<ar2>", results.get(5).getText());
+				"co2_1", results.get(5).getText());
 
 		Assert.assertEquals("Number of tabulations is wrong!", 0,
 				(long) results.get(6).getTabs());
-		Assert.assertEquals("Line does not correspond to needed format", "co2",
+		Assert.assertEquals("Line does not correspond to needed format", "co3",
 				results.get(6).getText());
 
 		Assert.assertEquals("Number of tabulations is wrong!", 1,
 				(long) results.get(7).getTabs());
 		Assert.assertEquals("Line does not correspond to needed format",
-				"co2_1", results.get(7).getText());
+				"co3_1", results.get(7).getText());
 	}
 }

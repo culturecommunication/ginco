@@ -272,6 +272,7 @@ public class ExportServiceImpl implements IExportService {
 										.getIdentifier().getConceptId())));
 			}
 		}
+		
 		List<ThesaurusArray> childrenArray = thesaurusArrayService.getChildrenArrays(subOrdArray.getIdentifier());
 		Collections.sort(childrenArray, nodeLabelComparator);
 		
