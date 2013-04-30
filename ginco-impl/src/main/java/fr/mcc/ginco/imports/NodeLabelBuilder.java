@@ -101,6 +101,10 @@ public class NodeLabelBuilder extends AbstractBuilder {
 			nodeLabel.setLanguage(defaultLangL);
 		} else {
 			Language language = languagesDAO.getByPart1(lang);
+			if (language == null){
+				language = languagesDAO.getById(lang);
+			}
+			
 			if (language != null) {
 				nodeLabel.setLanguage(language);
 			} else {

@@ -118,6 +118,10 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 						newNote.setLanguage(defaultLangL);
 					} else {
 						Language language = languagesDAO.getByPart1(lang);
+						if (language == null){
+							language = languagesDAO.getById(lang);
+						}
+						
 						if (language != null) {
 							newNote.setLanguage(language);
 						} else {
