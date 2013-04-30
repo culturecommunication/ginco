@@ -85,9 +85,12 @@ public class AlphabeticComplexConceptExporter {
 
 	public void addComplexConceptInfo(Integer base, List<FormattedLine> result,
 			SplitNonPreferredTerm complexConcept) {
+			
+		String resultString = LabelUtil.getResourceLabel("EM") + ": ";
 		for (ThesaurusTerm term : complexConcept.getPreferredTerms()) {
-			result.add(new FormattedLine(base, LabelUtil.getResourceLabel("TP")
-					+ ": " + thesaurusTermUtils.generatePrefTermText(term)));		
+			resultString += thesaurusTermUtils.generatePrefTermText(term) + " + ";	
 		}
+		resultString = resultString.substring(0, resultString.length() - 3);
+		result.add(new FormattedLine(base, resultString));
 	}
 }
