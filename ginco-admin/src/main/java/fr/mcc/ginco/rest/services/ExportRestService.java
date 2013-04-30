@@ -119,7 +119,7 @@ public class ExportRestService {
 
 		File result = writeExportFile(targetThesaurus, false);
 
-		return new FileResponse(result, ".txt", targetThesaurus.getTitle())
+		return new FileResponse(result, ".txt", "HIER " + targetThesaurus.getTitle())
 				.toResponse();
 	}
 
@@ -138,7 +138,7 @@ public class ExportRestService {
 				.getThesaurusById(thesaurusId);
 		File results = skosExportService.getSKOSExport(targetThesaurus);
 
-		return new FileResponse(results, ".rdf", targetThesaurus.getTitle())
+		return new FileResponse(results, ".rdf", "SKOS " + targetThesaurus.getTitle())
 				.toResponse();
 	}
 
@@ -160,7 +160,7 @@ public class ExportRestService {
 
 		File result = writeExportFile(targetThesaurus, true);
 
-		return new FileResponse(result, ".txt", targetThesaurus.getTitle())
+		return new FileResponse(result, ".txt", "ALPH " + targetThesaurus.getTitle())
 				.toResponse();
 	}
 
