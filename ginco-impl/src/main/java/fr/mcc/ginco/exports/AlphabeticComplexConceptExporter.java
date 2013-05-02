@@ -34,7 +34,10 @@
  */
 package fr.mcc.ginco.exports;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,7 +46,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exports.result.bean.AlphabeticalExportedItem;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
 import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusTermRoleService;
@@ -77,6 +82,10 @@ public class AlphabeticComplexConceptExporter {
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
+	
+	@Inject
+	@Named("alphabeticalExportedItemComparator")
+	private AlphabeticalExportedItemComparator alphabeticalExportedItemComparator;
 
 	public void addComplexConceptTitle(Integer base,
 			List<FormattedLine> result, SplitNonPreferredTerm complexConcept) {
@@ -85,10 +94,20 @@ public class AlphabeticComplexConceptExporter {
 
 	public void addComplexConceptInfo(Integer base, List<FormattedLine> result,
 			SplitNonPreferredTerm complexConcept) {
-			
-		String resultString = LabelUtil.getResourceLabel("EM") + ": ";
+		
+		List<AlphabeticalExportedItem> termsToExport = new ArrayList<AlphabeticalExportedItem>();
 		for (ThesaurusTerm term : complexConcept.getPreferredTerms()) {
-			resultString += thesaurusTermUtils.generatePrefTermText(term) + " + ";	
+			AlphabeticalExportedItem item = new AlphabeticalExportedItem();
+			item.setLexicalValue(term.getLexicalValue());
+			item.setObjectToExport(term);
+			termsToExport.add(item);
+		}
+		Collections.sort(termsToExport, alphabeticalExportedItemComparator);
+		
+		String resultString = LabelUtil.getResourceLabel("EM") + ": ";
+		for (AlphabeticalExportedItem item : termsToExport) {
+			resultString += thesaurusTermUtils
+					.generatePrefTermText((ThesaurusTerm) item.getObjectToExport()) + " + ";	
 		}
 		resultString = resultString.substring(0, resultString.length() - 3);
 		result.add(new FormattedLine(base, resultString));

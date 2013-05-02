@@ -34,8 +34,11 @@
  */
 package fr.mcc.ginco.exports;
 
+import java.text.Collator;
 import java.util.Comparator;
+import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -48,13 +51,18 @@ import fr.mcc.ginco.exports.result.bean.AlphabeticalExportedItem;
 @Service("alphabeticalExportedItemComparator")
 public class AlphabeticalExportedItemComparator implements
 		Comparator<AlphabeticalExportedItem> {
+	
+	@Value("${ginco.default.language}") 
+	private String defaultLang;
 
 	@Override
 	public int compare(AlphabeticalExportedItem o1, AlphabeticalExportedItem o2) {
 		try {
 			String l1 = o1.getLexicalValue();
 			String l2 = o2.getLexicalValue();
-			return l1.compareToIgnoreCase(l2);
+			Collator collator = Collator
+					.getInstance(new Locale(defaultLang));
+			return collator.compare(l1, l2);
 		} catch (BusinessException e) {
 			return 0;
 		}
