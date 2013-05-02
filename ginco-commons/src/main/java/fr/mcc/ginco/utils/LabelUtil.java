@@ -84,9 +84,5 @@ public final class LabelUtil {
 			logger.warn("Unable to find ResourceBUndle", me);
 			return key;
 		}
-		
-
 	}
-
-
 }
