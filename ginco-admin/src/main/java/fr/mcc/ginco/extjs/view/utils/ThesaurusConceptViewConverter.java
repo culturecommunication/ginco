@@ -45,13 +45,10 @@ import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -94,17 +91,6 @@ public class ThesaurusConceptViewConverter {
 	@Inject
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;	
-	
-	@Inject
-	@Named("thesaurusTermUtils") 
-	private ThesaurusTermUtils thesaurusTermUtils;
-	
-	@Inject
-	@Named("thesaurusTermService") 
-	private IThesaurusTermService thesaurusTermService;
-
-	@Value("${ginco.default.language}") 
-	private String defaultLang;
 
 	public List<ThesaurusConceptReducedView> convert(
 			List<ThesaurusConcept> conceptList) throws BusinessException {
@@ -126,11 +112,8 @@ public class ThesaurusConceptViewConverter {
 			throws BusinessException {
 		ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
 		view.setIdentifier(concept.getIdentifier());
-		view.setLabel(thesaurusTermUtils
-				.getPreferedTermsByLang(
-						thesaurusTermService.getTermsByConceptId(concept
-								.getIdentifier()), defaultLang).get(0)
-				.getLexicalValue());
+		view.setLabel(thesaurusConceptService.getConceptLabel(concept
+				.getIdentifier()));
 		return view;
 	}
 

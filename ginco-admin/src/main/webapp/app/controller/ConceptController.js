@@ -377,7 +377,8 @@ Ext
 						aForm.loadRecord(aModel);
 						var terms = aModel.terms().getRange();
 						Ext.Array.each(terms, function(term) {
-							if (term.data.prefered == true) {
+							if (term.data.prefered == true 
+									&& term.data.language == conceptPanel.thesaurusData.languages[0]) {
 								conceptTitle = term.data.lexicalValue;
 							}
 						});
