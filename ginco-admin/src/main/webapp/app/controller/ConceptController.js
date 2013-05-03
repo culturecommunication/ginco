@@ -373,18 +373,30 @@ Ext
 						var conceptPanel = me.getActivePanel();
 						var infosConceptPanel = aForm.up('panel');
 						conceptPanel.gincoId = aModel.data.identifier;
-
+						
 						aForm.loadRecord(aModel);
 						var terms = aModel.terms().getRange();
+						conceptTitle = "";
 						Ext.Array.each(terms, function(term) {
 							if (term.data.prefered == true 
 									&& term.data.language == conceptPanel.thesaurusData.languages[0]) {
 								conceptTitle = term.data.lexicalValue;
+								return false;
 							}
 						});
-
+						
+						if (conceptTitle == ""){
+							Ext.Array.each(terms, function(term) {
+								if (term.data.prefered == true) {
+									conceptTitle = term.data.lexicalValue;
+									return false;
+								}
+							});
+						}
+						
 						conceptPanel.setTitle("Concept : " + conceptTitle);
 						infosConceptPanel.setTitle(conceptTitle);
+						
 						var theGrid = aForm.down('#gridPanelTerms');
 						var theGridStore = theGrid.getStore();
 						theGridStore.removeAll();
