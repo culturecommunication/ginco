@@ -44,11 +44,15 @@ Ext.define('GincoApp.store.SearchResultStore', {
         beforeload: function(store, operation,eOpts) {
         	if (store.proxy.jsonData==null) {
                store.proxy.jsonData = {"start":operation.start,
-                                      "limit":operation.limit
+                                      "limit":operation.limit,
                                        };                        
             } else {
             	store.proxy.jsonData["start"] = operation.start;
             	store.proxy.jsonData["limit"] = operation.limit;
+            	if (operation.sorters.length>0) {
+            		store.proxy.jsonData["sortfield"] = operation.sorters[0].property;
+            		store.proxy.jsonData["sortdir"] = operation.sorters[0].direction;
+            	}
             }
         }
   },
@@ -58,6 +62,7 @@ Ext.define('GincoApp.store.SearchResultStore', {
         cfg = cfg || {};
         me.callParent([Ext.apply({
             storeId: 'JsonSearchResultStore',
+            remoteSort: true,
             proxy: {
                 type: 'ajax',
                 url: 'services/ui/indexerservice/search',

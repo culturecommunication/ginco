@@ -40,6 +40,8 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SortCriteria;
+
 import org.apache.solr.client.solrj.SolrServerException;
 
 public interface IIndexerService {
@@ -109,5 +111,5 @@ public interface IIndexerService {
     SearchResultList search(String request, Integer type,
                             String thesaurus, Integer status,
                             String createdFrom, String modifiedFrom,
-                            String language, int startIndex, int limit) throws SolrServerException;
+                            String language, SortCriteria sort, int startIndex, int limit) throws SolrServerException;
 }

@@ -42,6 +42,8 @@ import fr.mcc.ginco.extjs.view.pojo.FilterCriteria;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SortCriteria;
+
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.stereotype.Service;
 
@@ -80,10 +82,11 @@ public class IndexerRestService {
     @Produces({MediaType.APPLICATION_JSON})
     public  ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
         try {
+        	SortCriteria sort = new SortCriteria(filter.getSortfield(), filter.getSortdir());
         	SearchResultList searchResults  = indexerService.search(filter.getQuery(), filter.getType(),
                     filter.getThesaurus(), filter.getStatus(),
                     filter.getCreationdate(), filter.getModificationdate(),
-                    filter.getLanguage(), filter.getStart(),filter.getLimit());
+                    filter.getLanguage(),sort, filter.getStart(),filter.getLimit());
 
         	ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
         	extSearchResults.setTotal((long) searchResults.getNumFound());

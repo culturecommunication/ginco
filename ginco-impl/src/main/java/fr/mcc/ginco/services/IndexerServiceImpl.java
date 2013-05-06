@@ -161,7 +161,7 @@ public class IndexerServiceImpl implements IIndexerService {
 	@Override
 	public SearchResultList search(String request, Integer type,
 			String thesaurus, Integer status, String createdFrom,
-			String modifiedFrom, String language, int startIndex, int limit)
+			String modifiedFrom, String language, SortCriteria sort, int startIndex, int limit)
 			throws SolrServerException {
 
 		ModifiableSolrParams params = new ModifiableSolrParams();
@@ -169,8 +169,7 @@ public class IndexerServiceImpl implements IIndexerService {
 		params.set(SolrParam.QUERY_FIELDS, SolrField.LEXICALVALUE + "^1.0 "
 				+ SolrField.NOTES + "^0.5 " + SolrField.TEXT + "^0.1");
 		params.set(SolrParam.FILTER, "*," + SolrConstants.SCORE);
-		params.set(SolrParam.SORT, SolrConstants.SCORE + " "
-				+ SolrConstants.DESCENDING);
+		params.set(SolrParam.SORT, sort.getSolrSortString());
 		params.set(SolrParam.QUERY, request);
 		params.set(SolrParam.START, startIndex);
 		params.set(SolrParam.ROWS, limit);

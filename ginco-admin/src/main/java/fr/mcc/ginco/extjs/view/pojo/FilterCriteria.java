@@ -1,5 +1,9 @@
 package fr.mcc.ginco.extjs.view.pojo;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class FilterCriteria {
 
 	private String query;
@@ -9,6 +13,8 @@ public class FilterCriteria {
 	private String creationdate;
 	private String language;
 	private String modificationdate;
+	private String sortfield;
+	private String sortdir;
 	private int start;
 	private int limit;
 	
@@ -65,5 +71,17 @@ public class FilterCriteria {
 	}
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+	public String getSortfield() {
+		return sortfield;
+	}
+	public void setSortfield(String sortfield) {
+		this.sortfield = sortfield;
+	}
+	public String getSortdir() {
+		return sortdir;
+	}
+	public void setSortdir(String sortdir) {
+		this.sortdir = sortdir;
 	}
 }
