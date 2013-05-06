@@ -251,7 +251,11 @@ public class ImportRestService {
 			thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);	
 			return "{ 'success':true,'msg': 'imported'}";
 		}
-		catch (RuntimeException re) {
+		catch (BusinessException ex) {
+			throw ex;
+		}
+		catch (Exception re)
+		{
 			throw new BusinessException("Error reading imported file :"+re.getMessage(),
 					"import-unable-to-read-file", re);
 		}
