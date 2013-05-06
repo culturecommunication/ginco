@@ -39,6 +39,8 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.solr.*;
+import fr.mcc.ginco.utils.DateUtil;
+
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -59,6 +61,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -115,6 +118,15 @@ public class IndexerServiceImpl implements IIndexerService {
 		} else
 			return "";
 	}
+	
+	private String getSolrDateField(SolrDocument doc, String solrField)
+	{
+		if (doc.getFieldValue(solrField)!=null)
+		{
+			return DateUtil.toString((Date)doc.getFieldValue(solrField));
+		} else
+			return "";
+	}
 
 	private SearchResult getSearchResult(SolrDocument doc)
     {
@@ -124,8 +136,8 @@ public class IndexerServiceImpl implements IIndexerService {
     	result.setType(getSolrField(doc,SolrField.TYPE));
     	result.setThesaurusId(getSolrField(doc,SolrField.THESAURUSID));
     	result.setThesaurusTitle(getSolrField(doc,SolrField.THESAURUSTITLE));
-        result.setCreated(getSolrField(doc,SolrField.CREATED));
-        result.setModified(getSolrField(doc,SolrField.MODIFIED));
+        result.setCreated(getSolrDateField(doc,SolrField.CREATED));
+        result.setModified(getSolrDateField(doc,SolrField.MODIFIED));
         result.setStatus(getSolrField(doc,SolrField.STATUS));
         result.setTypeExt(getSolrField(doc,SolrField.EXT_TYPE));
         List<String> languages = new ArrayList<String>();

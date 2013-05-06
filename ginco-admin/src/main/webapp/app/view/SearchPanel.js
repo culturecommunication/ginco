@@ -186,15 +186,33 @@ Ext.define('GincoApp.view.SearchPanel', {
 				} ],
 				columns : [ {
 					dataIndex : 'identifier',
-					text : me.xIdentifierColumnLabel
+					text : me.xIdentifierColumnLabel,
+					sortable: false,
 				}, {
 					dataIndex : 'lexicalValue',
 					text : me.xLexicalValueColumnLabel,
 					flex : 1,
-				}, {
+					sortable: true
+				},
+				{
+					dataIndex : 'modified',
+					text : me.xAdvancedSearchModificationDateFilter,
+					flex : 1,
+					hidden: true,
+					sortable: true
+				},
+				{
+					dataIndex : 'created',
+					text : me.xAdvancedSearchCreationDateFilter,
+					flex : 1,
+					hidden: true,
+					sortable: true
+				},
+				{
 					dataIndex : 'thesaurusTitle',
 					text : me.xThesaurusTitleColumnLabel,
-					width : 200
+					width : 200,
+					sortable: false
 				}, {
 					dataIndex : 'type',
 					text : me.xTypeValueColumnLabel,

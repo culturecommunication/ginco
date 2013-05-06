@@ -113,6 +113,14 @@ Ext.define('GincoApp.store.SearchResultStore', {
                 {
                     name: 'thesaurusTitle',
                     type: 'string'
+                },
+                {
+                    name: 'created',
+                    type: 'string'
+                },
+                {
+                    name: 'modified',
+                    type: 'string'
                 }
                 
             ]
