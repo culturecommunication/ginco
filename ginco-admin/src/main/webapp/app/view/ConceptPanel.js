@@ -162,7 +162,6 @@ Ext
 																				text : me.xSave,
 																				requiredRoles : ['ADMIN'],
 																				disabled : true,
-																				formBind : true,
 																				cls : 'save',
 																				iconCls : 'icon-save',
 																				itemId : 'saveConcept'

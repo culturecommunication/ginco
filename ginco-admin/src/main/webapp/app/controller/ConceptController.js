@@ -649,12 +649,20 @@ Ext
 				            + encodeURIComponent(theForm.up('conceptPanel').gincoId);
 				        window.open(url);
 					},
+					enableSaveBtn : function (aItem)
+					{
+						if (aItem.up)
+							aItem.down("#saveConcept").setDisabled(false);
+						else
+							aItem.owner.down("#saveConcept").setDisabled(false);
+					},
 
 					init : function() {
 						this
 								.control({
 									'conceptPanel #conceptForm' : {
-										afterrender : this.onConceptFormRender
+										afterrender : this.onConceptFormRender,
+										dirtychange : this.enableSaveBtn
 									},
 									'conceptPanel #conceptStatusCombo' : {
 										render : this.loadConceptStatus,
