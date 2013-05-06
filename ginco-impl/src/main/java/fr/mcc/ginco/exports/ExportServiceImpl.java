@@ -235,7 +235,9 @@ public class ExportServiceImpl implements IExportService {
 		}
 
 		for (ThesaurusArray subOrdArray : subOrdArrays) {
-			addThesaurusArray(result, subOrdArray, base);
+			if (subOrdArray.getParent()==null) {
+				addThesaurusArray(result, subOrdArray, base);
+			}
 		}
 
 		return result;
@@ -253,7 +255,12 @@ public class ExportServiceImpl implements IExportService {
 				.getIdentifier());
 		result.add(new FormattedLine(base + 1, "<"
 				+ nodeLabel.getLexicalValue() + ">"));
-
+		List<ThesaurusArray> childrenArray = thesaurusArrayService.getChildrenArrays(subOrdArray.getIdentifier());
+		Collections.sort(childrenArray, nodeLabelComparator);
+		
+		for (ThesaurusArray children : childrenArray) {
+				addThesaurusArray(result, children, base + 1);
+		}
 		if (subOrdArray.getOrdered()) {
 			List<ThesaurusConcept> conceptsInArray = thesaurusArrayHelper
 					.getArrayConcepts(subOrdArray.getIdentifier());
@@ -273,13 +280,6 @@ public class ExportServiceImpl implements IExportService {
 			}
 		}
 		
-		List<ThesaurusArray> childrenArray = thesaurusArrayService.getChildrenArrays(subOrdArray.getIdentifier());
-		Collections.sort(childrenArray, nodeLabelComparator);
 		
-		for (ThesaurusArray children : childrenArray) {
-			if(children.getSuperOrdinateConcept() == null){
-				addThesaurusArray(result, children, base + 1);
-			}
-		}
 	}
 }
