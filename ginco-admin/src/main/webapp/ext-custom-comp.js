@@ -389,3 +389,12 @@ Ext.define('Thesaurus.CustomAttrForm', {
 		
 	}
 });
+
+// Backport from ExtJS 4.1.2, fix problem with resetOriginalValues of checkboxes
+Ext.apply(Ext.form.CheckboxManager,{
+	getByName: function(name, formId) {
+        return this.filterBy(function(item) {
+            return item.name == name && item.getFormId() == formId;
+        });
+    }
+});
