@@ -6,7 +6,9 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IndexerServiceImpl;
 import fr.mcc.ginco.solr.EntityType;
 import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SolrConstants;
 import fr.mcc.ginco.solr.SolrField;
+import fr.mcc.ginco.solr.SortCriteria;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 import org.apache.solr.client.solrj.SolrServer;
@@ -149,7 +151,8 @@ public class IndexerServiceTest {
 		fakeResp.setResponse(respContent);
 		when(
 				solrServer.query(any(SolrParams.class))).thenReturn(fakeResp);
-		SearchResultList results = indexerService.search("test", null, null, null, null, null, null,  0, 10);
+		SortCriteria crit = new SortCriteria(SolrField.LEXICALVALUE,SolrConstants.DESCENDING);
+		SearchResultList results = indexerService.search("test", null, null, null, null, null, null,crit, 0, 10);
 		Assert.assertEquals(results.getNumFound() , 1);
 		Assert.assertEquals(results.get(0).getLexicalValue(), fakeDoc.getFieldValue(SolrField.LEXICALVALUE));
 	}

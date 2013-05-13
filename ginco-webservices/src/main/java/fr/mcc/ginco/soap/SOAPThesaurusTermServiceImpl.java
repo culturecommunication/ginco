@@ -52,6 +52,7 @@ import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SortCriteria;
 
 /**
  * This class is the implementation of all SOAP services related to term objects
@@ -131,8 +132,9 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 			try {
 				String requestFormat = request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
+				SortCriteria crit = new SortCriteria(null, null);
 				SearchResultList searchResultList = indexerService.search(
-						requestFormat, 2, null, null, null, null, null,
+						requestFormat, 2, null, null, null, null, null, crit,
 						startIndex, limit);
 				if (searchResultList != null) {
 					for (SearchResult searchResult : searchResultList) {
