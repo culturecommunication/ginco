@@ -101,6 +101,7 @@ Ext
 								}
 							}
 							theForm.loadRecord(model);
+							this.enableSaveBtn(theForm);
 						}
 						me.initCustomAttributForm(theForm);
 					},
@@ -398,10 +399,11 @@ Ext
 						infosConceptPanel.setTitle(conceptTitle);
 						
 						var theGrid = aForm.down('#gridPanelTerms');
+						
 						var theGridStore = theGrid.getStore();
 						theGridStore.removeAll();
 						theGridStore.add(terms);
-
+						this.setupStoreListener(theGrid);
                         //Load associated concepts to the grid's store
 						var assoc = aModel.associatedConcepts().getRange();
                         var associatedConceptsGrid = aForm
@@ -410,6 +412,7 @@ Ext
                             .getStore();
                         associatedConceptsGridStore.removeAll();
                         associatedConceptsGridStore.add(assoc);
+                        this.setupStoreListener(associatedConceptsGrid);
                         
                         //Load parent concepts to the grid's store
 						var parents = aModel.parentConcepts().getRange();
@@ -417,6 +420,7 @@ Ext
                         var parentConceptsGridStore = parentsGrid.getStore();
                         parentConceptsGridStore.removeAll();
                         parentConceptsGridStore.add(parents);
+                        this.setupStoreListener(parentsGrid);
                         
                         //Load children concepts to the grid's store
 						var children = aModel.childConcepts().getRange();
@@ -424,6 +428,7 @@ Ext
                         var childrenConceptsGridStore = childrenGrid.getStore();
                         childrenConceptsGridStore.removeAll();
                         childrenConceptsGridStore.add(children);
+                        this.setupStoreListener(childrenGrid);
 
 						var rootConceptsGrid = aForm
 								.down('#gridPanelRootConcepts');
@@ -651,10 +656,26 @@ Ext
 					},
 					enableSaveBtn : function (aItem)
 					{
+						var btn = null;
 						if (aItem.up)
-							aItem.down("#saveConcept").setDisabled(false);
+							btn = aItem.down("#saveConcept");
 						else
-							aItem.owner.down("#saveConcept").setDisabled(false);
+							btn = aItem.owner.down("#saveConcept");
+						if (btn == null)
+							btn = aItem.up('form').down("#saveConcept");
+						if (btn!=null)
+							btn.setDisabled(false);
+					},
+					setupStoreListener : function (aGridPanel)
+					{
+						var store = aGridPanel.store;
+						var me = this;
+					    store.on('datachanged', function() {
+					    	me.enableSaveBtn(aGridPanel);
+					    });
+					    store.on('update', function() {
+					    	me.enableSaveBtn(aGridPanel);
+					    });
 					},
 
 					init : function() {
