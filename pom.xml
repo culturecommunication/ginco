@@ -648,7 +648,7 @@
 
     <repositories>
         <repository>
-            <id>smile-github-repository</id>
+            <id>smile-github-addon</id>
             <name>Smile Github repository</name>
             <url>http://smile-sa.github.com/maven-repository/releases-addon</url>
         </repository>
