@@ -6,7 +6,6 @@
 		<column>coverage</column>
 		<column>date</column>
 		<column>description</column>
-		<column>format</column>
 		<column>publisher</column>
 		<column>relation</column>
 		<column>rights</column>
@@ -24,7 +23,6 @@
 			<value>test</value>
 			<value>2013-02-06 15:29:59.66325</value>
 			<value>test</value>
-			<value>0</value>
 			<value>test</value>
 			<value>test</value>
 			<value>test</value>
@@ -43,7 +41,6 @@
 			<value>test1</value>
 			<value>2013-02-06 15:29:59.66325</value>
 			<value>test1</value>
-			<value>0</value>
 			<value>test1</value>
 			<value>test1</value>
 			<value>test1</value>
@@ -57,23 +54,6 @@
             <value>true</value>
 		</row>
 	</table>
-
-    <table name="thesaurus_format">
-        <column>identifier</column>
-        <column>label</column>
-        <row>
-            <value>0</value>
-            <value>PDF 1.7</value>
-        </row>
-        <row>
-            <value>1</value>
-            <value>CSV</value>
-        </row>
-        <row>
-            <value>2</value>
-            <value>XML/SKOS</value>
-        </row>
-    </table>
 
     <table name="thesaurus_type">
         <column>identifier</column>

@@ -53,7 +53,7 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xCoverageLabel : 'Couverture',
 	    xSubjectLabel : 'Sujet',
 	    xTypeLabel : 'Type',
-	    xFormatLabel : 'Format',
+	    xFormatLabel : 'Format(s)',
 	    xLanguagesLabel : 'Langue(s)',
 	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
 	    xRelationLabel : 'Publication(s) associée(s)',

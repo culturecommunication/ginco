@@ -79,8 +79,8 @@ Ext.define('GincoApp.model.ThesaurusModel', {
         name : 'archived',
         type : 'boolean'
     }, {
-		name : 'format',
-		type : 'int'
+		name : 'formats',
+		type : 'array_of_integer'
 	}, {
 		name : 'type',
 		type : 'int'

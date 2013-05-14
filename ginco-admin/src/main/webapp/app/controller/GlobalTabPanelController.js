@@ -222,6 +222,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		var existingTabs = Ext.ComponentQuery
 		.query('topTabs '+aXtype);
 		var tabExists = false;
+		
 		Ext.Array.each(existingTabs, function(element, index, array) {
 			if (element.gincoId != null
 					&& element.gincoId == aGincoId) {
@@ -238,7 +239,6 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 								thesaurusData : aModel.data,
 								gincoId : aGincoId
 							});
-		
 					var tab = tabPanel.add(newPanel);
 					tabPanel.setActiveTab(tab);
 					tab.show();

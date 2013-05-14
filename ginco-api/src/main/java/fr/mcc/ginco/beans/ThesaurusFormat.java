@@ -34,15 +34,10 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Bean represents <b>thesaurus_format</b> table,contains type
@@ -53,8 +48,6 @@ import javax.xml.bind.annotation.XmlTransient;
 public class ThesaurusFormat implements Serializable {
 	private Integer identifier;
 	private String label;
-	@XmlTransient
-	private Set<Thesaurus> thesauruses = new HashSet<Thesaurus>();
 	
 	public Integer getIdentifier() {
 		return identifier;
@@ -68,13 +61,4 @@ public class ThesaurusFormat implements Serializable {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-
-    @JsonIgnore
-    public Set<Thesaurus> getThesauruses() {
-        return thesauruses;
-    }
-
-    public void setThesauruses(Set<Thesaurus> thesauruses) {
-        this.thesauruses = thesauruses;
-    }
 }

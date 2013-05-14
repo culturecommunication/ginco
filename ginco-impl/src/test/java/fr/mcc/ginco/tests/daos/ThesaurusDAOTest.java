@@ -34,8 +34,12 @@
  */
 package fr.mcc.ginco.tests.daos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
@@ -78,14 +82,6 @@ public class ThesaurusDAOTest extends BaseDAOTest {
         String expectedThesaurusTypeTitle = "thesaurus type 2";
         String actualThesaurusTypeTitle =thesaurusDAO.getById(idThesaurus).getType().getLabel();
         Assert.assertEquals("Error while getting ThesaurusType!", expectedThesaurusTypeTitle, actualThesaurusTypeTitle);
-    }
-
-    @Test
-    public final void testGetThesaurusFormat() {
-        String idThesaurus = "0";
-        String expectedThesaurusFormatTitle = "PDF 1.7";
-        String actualThesaurusFormatTitle = thesaurusDAO.getById(idThesaurus).getFormat().getLabel();
-        Assert.assertEquals("Error while getting ThesaurusFormat!", expectedThesaurusFormatTitle, actualThesaurusFormatTitle);
     }
     
     @Test
@@ -164,7 +160,21 @@ public class ThesaurusDAOTest extends BaseDAOTest {
 
         Assert.assertTrue("Error while getting updated thesaurus", updatedThesaurus!=null);
         Assert.assertEquals("Un auteur", updatedThesaurus.getCreator().getName());     
-    }   
+    }
+    
+    @Test
+    public final void testGetThesaurusFormat() {
+        String idThesaurus = "0";
+        String expectedThesaurusFormatTitle1 = "PDF 1.7";
+        String expectedThesaurusFormatTitle2 = "CSV";
+        List<String> formatLabels = new ArrayList<String>();
+		for (ThesaurusFormat format : thesaurusDAO.getById(idThesaurus).getFormat()){
+			formatLabels.add(format.getLabel());
+		}
+        Assert.assertTrue("Error while getting format PDF 1.7", formatLabels.contains(expectedThesaurusFormatTitle1));
+        Assert.assertTrue("Error while getting format CSV", formatLabels.contains(expectedThesaurusFormatTitle2));
+    }
+    
 	@Override
 	public String  getXmlDataFileInit() {
 		return "/thesaurus_init.xml";		

@@ -3,6 +3,8 @@
 DROP TABLE IF EXISTS thesaurus;
 DROP TABLE IF EXISTS thesaurus_type;
 DROP TABLE IF EXISTS thesaurus_format;
+DROP TABLE IF EXISTS thesaurus_formats;
+DROP TABLE IF EXISTS thesaurus_formats_aud;
 DROP TABLE IF EXISTS thesaurus_version_history;
 DROP TABLE IF EXISTS languages_iso639;
 DROP TABLE IF EXISTS thesaurus_organization;
@@ -45,7 +47,6 @@ CREATE TABLE thesaurus
   coverage text,
   date text,
   description text,
-  format integer,
   publisher text,
   relation text,
   rights text,
@@ -364,7 +365,6 @@ CREATE TABLE thesaurus_aud (
     created text,
     defaulttopconcept boolean,
     archived boolean,
-    format integer,
     type integer,
     creator integer,
     ispolyhierarchical boolean
@@ -444,4 +444,20 @@ CREATE TABLE custom_term_attribute
   CONSTRAINT fk_custom_term_attribute_typeid FOREIGN KEY (typeid)
   REFERENCES custom_term_attribute_type (identifier) MATCH SIMPLE
   ON UPDATE NO ACTION ON DELETE NO ACTION  */
+);
+
+CREATE TABLE thesaurus_formats
+(
+  format_identifier integer NOT NULL,
+  thesaurus_identifier text NOT NULL,
+  CONSTRAINT pk_thesaurus_formats PRIMARY KEY (format_identifier, thesaurus_identifier),
+);
+
+CREATE TABLE thesaurus_formats_aud
+(
+  rev integer NOT NULL,
+  thesaurus_identifier text NOT NULL,
+  format_identifier integer NOT NULL,
+  revtype smallint,
+  CONSTRAINT thesaurus_formats_aud_pkey PRIMARY KEY (rev, thesaurus_identifier, format_identifier)
 );

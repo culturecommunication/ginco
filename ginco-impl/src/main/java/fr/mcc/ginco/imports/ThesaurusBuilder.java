@@ -172,7 +172,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		{
 			thesaurus.setLang(getLanguages(skosThesaurus,DCTerms.language));
 		}
-
+		
 		ThesaurusFormat format = thesaurusFormatDAO
 				.getById(defaultThesaurusFormat);
 		if (format == null) {
@@ -181,12 +181,12 @@ public class ThesaurusBuilder extends AbstractBuilder {
 							+ defaultThesaurusFormat + " is unknown",
 					"import-unknown-default-format");
 		}
-		thesaurus.setFormat(format);
+		thesaurus.addFormat(format);		
 
 		thesaurus.setDefaultTopConcept(defaultTopConcept);
 
-		thesaurus.setCreator(getCreator(skosThesaurus, model));		
-		
+		thesaurus.setCreator(getCreator(skosThesaurus, model));
+	
 		return thesaurus;
 	}
 	

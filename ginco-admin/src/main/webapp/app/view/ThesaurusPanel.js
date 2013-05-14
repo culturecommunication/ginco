@@ -60,7 +60,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xCoverageLabel : 'Coverage',
 	xSubjectLabel : 'Subject',
 	xTypeLabel : 'Type',
-	xFormatLabel : 'Format',
+	xFormatLabel : 'Formats',
 	xLanguagesLabel : 'Languages',
 	xdefaultTopConceptLabel : 'TopTerm by default',
 	xRelationLabel : 'Relation',
@@ -333,13 +333,13 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												store : 'ThesaurusTypeStore'
 										},{
 												xtype : 'ariacombo',
-												name : 'format',
+												name : 'formats',
 												fieldLabel : me.xFormatLabel,
 												editable : false,
 												displayField : 'label',
 												valueField : 'identifier',
 												forceSelection : true,
-												multiSelect : false,
+												multiSelect : true,
 												store : 'ThesaurusFormatStore'
 										},{
 												xtype : 'ariacombo',

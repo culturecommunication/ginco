@@ -68,13 +68,13 @@ public class ThesaurusView implements Serializable {
 	private Boolean defaultTopConcept;
     private Boolean archived;
     private Boolean canBeDeleted;
-	private Integer format;
 	private Integer type;
 	private String creatorName;
 	private String creatorHomepage;
     private Boolean polyHierarchical;
 
 	private List<String> languages = new ArrayList<String>();
+	private List<Integer> formats = new ArrayList<Integer>();
 
     public ThesaurusView() {}	
 
@@ -174,14 +174,6 @@ public class ThesaurusView implements Serializable {
 		this.created = created;
 	}
 
-	public Integer getFormat() {
-		return format;
-	}
-
-	public void setFormat(Integer formatId) {
-		this.format = formatId;
-	}
-
 	public Integer getType() {
 		return type;
 	}
@@ -245,4 +237,12 @@ public class ThesaurusView implements Serializable {
     public void setPolyHierarchical(Boolean polyHierarchical) {
         this.polyHierarchical = polyHierarchical;
     }
+
+	public List<Integer> getFormats() {
+		return formats;
+	}
+
+	public void setFormats(List<Integer> formats) {
+		this.formats = formats;
+	}
 }

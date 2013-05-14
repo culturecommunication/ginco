@@ -37,6 +37,7 @@ package fr.mcc.ginco.extjs.view.utils;
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
@@ -113,8 +114,6 @@ public class ThesaurusViewConverter {
 		hibernateRes.setSubject(source.getSubject());
 		hibernateRes.setTitle(source.getTitle());
 		hibernateRes.setDefaultTopConcept(source.getDefaultTopConcept());
-		hibernateRes.setFormat(thesaurusFormatService
-				.getThesaurusFormatById(source.getFormat()));
         hibernateRes.setPolyHierarchical(source.getPolyHierarchical());
 		hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source
 				.getType()));
@@ -134,6 +133,20 @@ public class ThesaurusViewConverter {
 				hibernateRes.setCreator(null);
 			}
 		}
+		
+		List<Integer> formats = source.getFormats();
+		Set<ThesaurusFormat> realFormat = new HashSet<ThesaurusFormat>();
+
+		for (Integer format : formats) {
+			ThesaurusFormat thesaurusFormat  = thesaurusFormatService
+					.getThesaurusFormatById(format);
+			if (thesaurusFormat != null) {
+				realFormat.add(thesaurusFormat);
+			}
+		}
+
+		hibernateRes.setFormat(realFormat);
+		
 		List<String> languages = source.getLanguages();
 		Set<Language> realLanguages = new HashSet<Language>();
 
@@ -187,10 +200,13 @@ public class ThesaurusViewConverter {
 			}
 
             view.setArchived(source.isArchived());
-
-			if (source.getFormat() != null) {
-				view.setFormat(source.getFormat().getIdentifier());
+            
+            ArrayList<Integer> formatList = new ArrayList<Integer>();
+			for (ThesaurusFormat format : source.getFormat()) {
+				formatList.add(format.getIdentifier());
 			}
+			view.setFormats(formatList);
+            
 			if (source.getType() != null) {
 				view.setType(source.getType().getIdentifier());
 			}

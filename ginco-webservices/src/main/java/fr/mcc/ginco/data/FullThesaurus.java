@@ -53,13 +53,13 @@ public class FullThesaurus extends ReducedThesaurus{
     private String source;
     private String subject;
     private String created;
-    private String format;
     private String type;
     private String creatorName;
     private String creatorHomepage;
 
 
     private List<String> languages = new ArrayList<String>();
+    private List<String> formats = new ArrayList<String>();
 
 	public String getContributor() {
 		return contributor;
@@ -141,14 +141,6 @@ public class FullThesaurus extends ReducedThesaurus{
 		this.created = created;
 	}
 
-	public String getFormat() {
-		return format;
-	}
-
-	public void setFormat(String format) {
-		this.format = format;
-	}
-
 	public String getType() {
 		return type;
 	}
@@ -178,5 +170,13 @@ public class FullThesaurus extends ReducedThesaurus{
 
 	public void setLanguages(List<String> languages) {
 		this.languages = languages;
+	}
+
+	public List<String> getFormats() {
+		return formats;
+	}
+
+	public void setFormats(List<String> formats) {
+		this.formats = formats;
 	} 	
 }

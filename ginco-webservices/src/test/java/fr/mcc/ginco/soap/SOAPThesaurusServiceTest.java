@@ -114,8 +114,12 @@ public class SOAPThesaurusServiceTest {
 
 		FullThesaurus fullThesaurus = thesaurusService
 				.getThesaurusById("mock1");
-
-		Assert.assertEquals("Fake Format", fullThesaurus.getFormat());
+		
+		List<String> expectedFormats = new ArrayList<String>();
+		expectedFormats.add("PDF");
+		expectedFormats.add("CSV");
+		ListAssert.assertEquals(expectedFormats, fullThesaurus.getFormats());
+		
 		Assert.assertEquals("Fake Type", fullThesaurus.getType());
 		Assert.assertEquals("Fake Creator Name", fullThesaurus.getCreatorName());
 		Assert.assertEquals("Fake Creator Homepage",
@@ -151,6 +155,20 @@ public class SOAPThesaurusServiceTest {
 		mockedLanguages.add(mockedLanguage2);
 
 		return mockedLanguages;
+	}
+	
+	private Set<ThesaurusFormat> getMockedFormats() {
+		ThesaurusFormat mockedFormat1 = Mockito.mock(ThesaurusFormat.class);
+		Mockito.when(mockedFormat1.getLabel()).thenReturn("PDF");
+
+		ThesaurusFormat mockedFormat2 = Mockito.mock(ThesaurusFormat.class);
+		Mockito.when(mockedFormat2.getLabel()).thenReturn("CSV");
+
+		Set<ThesaurusFormat> mockedFormats = new HashSet<ThesaurusFormat>();
+		mockedFormats.add(mockedFormat1);
+		mockedFormats.add(mockedFormat2);
+
+		return mockedFormats;
 	}
 
 	private IThesaurusService getMockedIThesaurusService(
@@ -205,9 +223,6 @@ public class SOAPThesaurusServiceTest {
 	private Thesaurus getMockedThesaurusWithAllFields(String id) {
 		Thesaurus mockedThesaurus = getMockedThesaurusWithNonMandatoryEmptyFields(id);
 
-		ThesaurusFormat mockedFormat = Mockito.mock(ThesaurusFormat.class);
-		Mockito.when(mockedFormat.getLabel()).thenReturn("Fake Format");
-
 		ThesaurusType mockedType = Mockito.mock(ThesaurusType.class);
 		Mockito.when(mockedType.getLabel()).thenReturn("Fake Type");
 
@@ -218,7 +233,8 @@ public class SOAPThesaurusServiceTest {
 				"Fake Creator Homepage");
 
 		// Format, type and creator might be null (not mandatory)
-		Mockito.when(mockedThesaurus.getFormat()).thenReturn(mockedFormat);
+		Set<ThesaurusFormat> mockedFormats = getMockedFormats();
+		Mockito.when(mockedThesaurus.getFormat()).thenReturn(mockedFormats);
 		Mockito.when(mockedThesaurus.getType()).thenReturn(mockedType);
 		Mockito.when(mockedThesaurus.getCreator()).thenReturn(mockedCreator);
 
