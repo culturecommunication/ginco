@@ -557,3 +557,29 @@ Ext.define('Thesaurus.Ext.panel.Tool', {
 	        });
 	 }
 });
+
+Ext.define('Thesaurus.Ext.form.field.Display', {
+	override : 'Ext.form.field.Display',
+	ariaRole : 'label'
+});
+
+/*
+ * Make MessageBox accessible
+ */
+Ext.define('Thesaurus.Ext.window.MessageBox', {
+	override : 'Ext.window.MessageBox',
+    initHeaderAria: function() {
+    	 var me = this,
+         el = me.el,
+         header = me.header;
+     
+        me.callParent();
+        if (me.msg!=null) {
+        	if (el && header) {
+                el.dom.setAttribute('aria-describedby',me.msg.inputEl.id);
+            }
+        }
+        
+            
+    },
+});
