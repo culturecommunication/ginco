@@ -35,7 +35,6 @@
 package fr.mcc.ginco.audit.utils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -192,13 +191,12 @@ public class AuditQueryBuilder {
 	 * @return
 	 */
 	public AuditQuery getEntityAtRevision(Class<?> clazz, Number revision, String thesaurusId) {
-	AuditQuery query = readerService
-			.getAuditReader()
-			.createQuery()
-			.forEntitiesAtRevision(clazz, revision)
-			.add(AuditEntity.revisionProperty("thesaurusId").eq(
-					thesaurusId));
-	return query;
+		AuditQuery query = readerService
+				.getAuditReader()
+				.createQuery()
+				.forEntitiesAtRevision(clazz, revision)
+				.add(AuditEntity.revisionProperty("thesaurusId").eq(
+						thesaurusId));
+		return query;
 	}
-
 }

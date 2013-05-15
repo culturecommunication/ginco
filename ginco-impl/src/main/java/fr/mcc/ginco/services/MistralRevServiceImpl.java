@@ -45,7 +45,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -61,6 +60,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.log.Log;
@@ -140,9 +140,16 @@ public class MistralRevServiceImpl implements IMistralRevService {
 							thesaurus.getIdentifier());
 
 			List<ThesaurusTerm> newTerms = endTermsQuery.getResultList();
+			
+			List<ThesaurusTerm> newValidatedTerms = new ArrayList<ThesaurusTerm>();
+			for (ThesaurusTerm term : newTerms){
+				if (term.getConcept() != null && term.getConcept().getStatus() == ConceptStatusEnum.VALIDATED.getStatus()){
+					newValidatedTerms.add(term);
+				}
+			}
 
 			allEvents.addAll(termCommandBuilder.buildTermsLines(oldTerms,
-					newTerms));
+					newValidatedTerms));
 
 			AuditQuery startConceptQuery = auditQueryBuilder
 					.getEntityAtRevision(ThesaurusConcept.class, startRevision,
@@ -155,14 +162,19 @@ public class MistralRevServiceImpl implements IMistralRevService {
 					.getEntityAtRevision(ThesaurusConcept.class, endRevision,
 							thesaurus.getIdentifier());
 
-			List<ThesaurusConcept> currentConcepts = currentConceptsQuery
-					.getResultList();
+			List<ThesaurusConcept> currentConcepts = currentConceptsQuery.getResultList();
+			List<ThesaurusConcept> validatedCurrentConcepts = new ArrayList<ThesaurusConcept>();
+			
+			for (ThesaurusConcept concept : currentConcepts){
+				if (concept.getStatus() == ConceptStatusEnum.VALIDATED.getStatus())
+					validatedCurrentConcepts.add(concept);
+			}
 
 			allEvents.addAll(synonymsCommandBuilder.buildSynonyms(
-					previousConcepts, currentConcepts, startRevision,
+					previousConcepts, validatedCurrentConcepts, startRevision,
 					endRevision, language.getId()));
 			allEvents.addAll(hierarchyCommandBuilder.buildHierarchyChanges(
-					previousConcepts, currentConcepts, startRevision,
+					previousConcepts, validatedCurrentConcepts, startRevision,
 					endRevision, language.getId()));
 
 			for (CommandLine line : allEvents) {

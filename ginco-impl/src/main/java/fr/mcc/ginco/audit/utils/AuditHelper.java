@@ -120,6 +120,6 @@ public class AuditHelper {
 		AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(
 				ThesaurusTerm.class, revision)
 				.add(AuditEntity.relatedId("concept").eq(conceptAtRevision.getIdentifier()));
-		 return query.getResultList();
+		return query.getResultList();
 	}
 }
