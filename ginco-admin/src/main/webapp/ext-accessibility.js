@@ -583,3 +583,56 @@ Ext.define('Thesaurus.Ext.window.MessageBox', {
             
     },
 });
+
+/*
+ * Handling focus in modal windows
+ */
+Ext.define('Thesaurus.focus.manager', {
+	singleton : true,
+	init : function () {
+		var me = this;
+		Ext.EventManager.on(Ext.getBody(), 'keydown', me.focusListener, Ext.getBody());
+	},
+	focusListener : function(e) {
+		if(typeof Ext.WindowManager.getActive() !== 'undefined' && Ext.WindowManager.getActive() !== null) {
+		    var activeWinId = Ext.WindowManager.getActive().getId ();
+		    var obj = Ext.getCmp(activeWinId);
+		    var id = typeof obj.focusEl !=='undefined' ? obj.focusEl.id : obj.id;
+		    var dom = activeWinId;
+		    var components = [];
+		    Ext.Array.each(Ext.get(dom).query('*'), function(dom) {
+		      var cmp = Ext.getCmp(dom.id);
+		      if(cmp && cmp.isVisible()) {
+		      if (cmp && cmp.btnEl && cmp.btnEl.focusable())
+		        components.push(cmp.btnEl);
+		      else if(cmp && cmp.toolEl)
+			    components.push(cmp);
+		      else if(cmp && cmp.inputEl && cmp.inputEl.focusable())
+		        components.push(cmp.inputEl);
+		      }
+		    });
+
+
+		    if (typeof obj != 'undefined' && obj.isVisible() && obj.el.id === activeWinId && (typeof e.keyCode!== 'undefined' ? e.keyCode === 9 : true) ) {
+		     var focused = document.activeElement;
+		     var goBack = e.shiftKey;
+		     if( goBack === false && components.length>0 && focused.id === components[components.length-1].id) {
+		    	 e.preventDefault();
+		         Ext.getCmp(id).focus();
+		         }
+		     else if (goBack === true && components.length>0 && ( focused.id === id || focused.id ===components[0].id)){
+		    	 e.preventDefault();
+		    	 components[components.length-1].focus();
+		     }
+		     else if(components.length==0 ) {
+		    	 console.log("focusing",id);
+		    	 e.preventDefault();
+		         Ext.getCmp(id).focus(); 
+		     }
+		    }
+		    return false;
+		}
+	}
+});
+
+

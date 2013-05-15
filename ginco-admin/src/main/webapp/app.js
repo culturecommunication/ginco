@@ -171,7 +171,9 @@ Ext.application({
         });
         // Run the fade 500 milliseconds after launch.
         task.delay(500);
-    	//Ext.FocusManager.enable();
+        Thesaurus.focus.manager.init();
+        
+        
         var map = new Ext.util.KeyMap(Ext.getBody(), [{
             key: Ext.EventObject.ONE,
             ctrl: true,

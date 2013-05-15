@@ -46,6 +46,10 @@ a.x-tab-close-btn:focus  {
 .x-tool:focus  {
  outline:black dotted 1px !important; }
 
+*:focus {
+	 outline:black dotted 1px !important;
+}
+
  
 .msg .x-box-mc {
     font-size:14px;
