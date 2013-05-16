@@ -199,4 +199,8 @@ public class AuditQueryBuilder {
 						thesaurusId));
 		return query;
 	}
+	
+	public void getFilterOnStatus(AuditQuery query, Integer status) {
+		query.add(AuditEntity.property("status").eq(status));
+	}
 }

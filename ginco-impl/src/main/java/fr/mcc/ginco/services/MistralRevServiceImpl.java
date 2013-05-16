@@ -133,27 +133,36 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			AuditQuery startTermsQuery = auditQueryBuilder.getEntityAtRevision(
 					ThesaurusTerm.class, startRevision,
 					thesaurus.getIdentifier());
+			
+			
 			List<ThesaurusTerm> oldTerms = startTermsQuery.getResultList();
+			List<ThesaurusTerm> oldTermsWithValidatedConcept = new ArrayList<ThesaurusTerm>();
+			for (ThesaurusTerm term : oldTerms){
+				if (term.getConcept() != null && term.getConcept().getStatus() == ConceptStatusEnum.VALIDATED.getStatus()){
+					oldTermsWithValidatedConcept.add(term);
+				}
+			}
 
 			AuditQuery endTermsQuery = auditQueryBuilder
 					.getEntityAtRevision(ThesaurusTerm.class, endRevision,
 							thesaurus.getIdentifier());
-
-			List<ThesaurusTerm> newTerms = endTermsQuery.getResultList();
+		
 			
-			List<ThesaurusTerm> newValidatedTerms = new ArrayList<ThesaurusTerm>();
+			List<ThesaurusTerm> newTerms = endTermsQuery.getResultList();
+			List<ThesaurusTerm> newTermsWithValidatedConcept = new ArrayList<ThesaurusTerm>();
 			for (ThesaurusTerm term : newTerms){
 				if (term.getConcept() != null && term.getConcept().getStatus() == ConceptStatusEnum.VALIDATED.getStatus()){
-					newValidatedTerms.add(term);
+					newTermsWithValidatedConcept.add(term);
 				}
 			}
 
-			allEvents.addAll(termCommandBuilder.buildTermsLines(oldTerms,
-					newValidatedTerms));
+			allEvents.addAll(termCommandBuilder.buildTermsLines(oldTermsWithValidatedConcept,
+					newTermsWithValidatedConcept));
 
 			AuditQuery startConceptQuery = auditQueryBuilder
 					.getEntityAtRevision(ThesaurusConcept.class, startRevision,
 							thesaurus.getIdentifier());
+			auditQueryBuilder.getFilterOnStatus(startConceptQuery, ConceptStatusEnum.VALIDATED.getStatus());
 
 			List<ThesaurusConcept> previousConcepts = startConceptQuery
 					.getResultList();
@@ -161,20 +170,15 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			AuditQuery currentConceptsQuery = auditQueryBuilder
 					.getEntityAtRevision(ThesaurusConcept.class, endRevision,
 							thesaurus.getIdentifier());
+			auditQueryBuilder.getFilterOnStatus(currentConceptsQuery, ConceptStatusEnum.VALIDATED.getStatus());
 
 			List<ThesaurusConcept> currentConcepts = currentConceptsQuery.getResultList();
-			List<ThesaurusConcept> validatedCurrentConcepts = new ArrayList<ThesaurusConcept>();
-			
-			for (ThesaurusConcept concept : currentConcepts){
-				if (concept.getStatus() == ConceptStatusEnum.VALIDATED.getStatus())
-					validatedCurrentConcepts.add(concept);
-			}
 
 			allEvents.addAll(synonymsCommandBuilder.buildSynonyms(
-					previousConcepts, validatedCurrentConcepts, startRevision,
+					previousConcepts, currentConcepts, startRevision,
 					endRevision, language.getId()));
 			allEvents.addAll(hierarchyCommandBuilder.buildHierarchyChanges(
-					previousConcepts, validatedCurrentConcepts, startRevision,
+					previousConcepts, currentConcepts, startRevision,
 					endRevision, language.getId()));
 
 			for (CommandLine line : allEvents) {
