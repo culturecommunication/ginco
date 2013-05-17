@@ -294,7 +294,15 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		} else {
 			object.setIdentifier(generatorService
 					.generate(ThesaurusConcept.class));
+			for (ConceptHierarchicalRelationship hierarchicalRelationship : hierarchicalRelationships){
+				hierarchicalRelationship.getIdentifier().setChildconceptid(object.getIdentifier());
+			}
 		}
+		
+		object = saveAssociativeRelationship(object, associatedConcepts);
+		object = conceptHierarchicalRelationshipServiceUtil
+				.saveHierarchicalRelationship(object,
+						hierarchicalRelationships, childrenConceptToDetach);
 
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
 			// We can set status = candidate only if concept has not relation
@@ -321,10 +329,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 
 		}
-		object = saveAssociativeRelationship(object, associatedConcepts);
-		object = conceptHierarchicalRelationshipServiceUtil
-				.saveHierarchicalRelationship(object,
-						hierarchicalRelationships, childrenConceptToDetach);
 
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
 		updateConceptTerms(concept, terms);
