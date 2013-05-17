@@ -63,14 +63,12 @@ public class TermCommandBuilder {
 	 * @param currentTerms
 	 * @return
 	 */
-	public List<CommandLine> buildTermsLines(List<ThesaurusTerm> previousTerms,
+	public List<CommandLine> buildDeletedTermsLines(List<ThesaurusTerm> previousTerms,
 			List<ThesaurusTerm> currentTerms) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
 		Map<String, ThesaurusTerm> newLexicalvalues = mistralStructuresBuilder
 				.getTermVersionsView(currentTerms);
-		Map<String, ThesaurusTerm> oldLexicalValues = mistralStructuresBuilder
-				.getTermVersionsView(previousTerms);
 
 		// Terms deletion
 		for (ThesaurusTerm oldTerm : previousTerms) {
@@ -79,25 +77,39 @@ public class TermCommandBuilder {
 				deletionLine.setValue(CommandLine.REMOVED
 						+ oldTerm.getLexicalValue());
 				termsOperations.add(deletionLine);
-			} else {
-				if (oldTerm.getPrefered() != newLexicalvalues.get(
-						oldTerm.getLexicalValue()).getPrefered()) {
-					if (!oldTerm.getPrefered()) {
-						CommandLine preferredLine = new CommandLine();
-						preferredLine.setValue(CommandLine.STARS
-								+ oldTerm.getLexicalValue());
-						termsOperations.add(preferredLine);
+			}
+		}
+		return termsOperations;
+	}
+	
+	public List<CommandLine> buildAddedTermsLines(List<ThesaurusTerm> previousTerms,
+			List<ThesaurusTerm> currentTerms) {
+		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
-					} else {
-						CommandLine unpreferredLine = new CommandLine();
-						unpreferredLine.setValue(CommandLine.UNPREFERRERD
-								+ oldTerm.getLexicalValue());
-						termsOperations.add(unpreferredLine);
-					}
+		Map<String, ThesaurusTerm> oldLexicalValues = mistralStructuresBuilder
+				.getTermVersionsView(previousTerms);
+		Map<String, ThesaurusTerm> newLexicalvalues = mistralStructuresBuilder
+				.getTermVersionsView(currentTerms);
+		
+		for (ThesaurusTerm oldTerm : previousTerms) {
+		if (newLexicalvalues.containsKey(oldTerm.getLexicalValue())) {
+			if (oldTerm.getPrefered() != newLexicalvalues.get(
+					oldTerm.getLexicalValue()).getPrefered()) {
+				if (!oldTerm.getPrefered()) {
+					CommandLine preferredLine = new CommandLine();
+					preferredLine.setValue(CommandLine.STARS
+							+ oldTerm.getLexicalValue());
+					termsOperations.add(preferredLine);
+
+				} else {
+					CommandLine unpreferredLine = new CommandLine();
+					unpreferredLine.setValue(CommandLine.UNPREFERRERD
+							+ oldTerm.getLexicalValue());
+					termsOperations.add(unpreferredLine);
 				}
 			}
 		}
-
+		}
 		// Terms addition
 		for (ThesaurusTerm currentTerm : currentTerms) {
 			if (!oldLexicalValues.containsKey(currentTerm.getLexicalValue())) {
@@ -111,6 +123,7 @@ public class TermCommandBuilder {
 				}
 				termsOperations.add(additionLine);
 			}
+			
 		}
 
 		return termsOperations;

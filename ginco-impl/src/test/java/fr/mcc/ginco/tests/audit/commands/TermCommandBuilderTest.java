@@ -86,7 +86,7 @@ public class TermCommandBuilderTest {
 				mistralStructuresBuilder.getTermVersionsView(previousTerms))
 				.thenReturn(oldLexicalValues);
 
-		List<CommandLine> allLines = termCommandBuilder.buildTermsLines(
+		List<CommandLine> allLines = termCommandBuilder.buildDeletedTermsLines(
 				previousTerms, currentTerms);
 
 		List<String> lineValues = new ArrayList<String>();
@@ -124,7 +124,7 @@ public class TermCommandBuilderTest {
 				mistralStructuresBuilder.getTermVersionsView(previousTerms))
 				.thenReturn(oldLexicalValues);
 
-		List<CommandLine> allLines = termCommandBuilder.buildTermsLines(
+		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
 				previousTerms, currentTerms);
 
 		List<String> lineValues = new ArrayList<String>();
@@ -163,7 +163,7 @@ public class TermCommandBuilderTest {
 				mistralStructuresBuilder.getTermVersionsView(previousTerms))
 				.thenReturn(oldLexicalValues);
 
-		List<CommandLine> allLines = termCommandBuilder.buildTermsLines(
+		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
 				previousTerms, currentTerms);
 
 		List<String> lineValues = new ArrayList<String>();
@@ -196,7 +196,7 @@ public class TermCommandBuilderTest {
 				mistralStructuresBuilder.getTermVersionsView(previousTerms))
 				.thenReturn(oldLexicalValues);
 
-		List<CommandLine> allLines = termCommandBuilder.buildTermsLines(
+		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
 				previousTerms, currentTerms);
 
 		List<String> lineValues = new ArrayList<String>();
@@ -229,7 +229,7 @@ public class TermCommandBuilderTest {
 				mistralStructuresBuilder.getTermVersionsView(previousTerms))
 				.thenReturn(oldLexicalValues);
 
-		List<CommandLine> allLines = termCommandBuilder.buildTermsLines(
+		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
 				previousTerms, currentTerms);
 
 		List<String> lineValues = new ArrayList<String>();

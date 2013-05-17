@@ -155,8 +155,9 @@ public class MistralRevServiceImpl implements IMistralRevService {
 					newTermsWithValidatedConcept.add(term);
 				}
 			}
+			
 
-			allEvents.addAll(termCommandBuilder.buildTermsLines(oldTermsWithValidatedConcept,
+			allEvents.addAll(termCommandBuilder.buildAddedTermsLines(oldTermsWithValidatedConcept,
 					newTermsWithValidatedConcept));
 
 			AuditQuery startConceptQuery = auditQueryBuilder
@@ -180,6 +181,9 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			allEvents.addAll(hierarchyCommandBuilder.buildHierarchyChanges(
 					previousConcepts, currentConcepts, startRevision,
 					endRevision, language.getId()));
+			
+			allEvents.addAll(termCommandBuilder.buildDeletedTermsLines(oldTermsWithValidatedConcept,
+					newTermsWithValidatedConcept));
 
 			for (CommandLine line : allEvents) {
 				out.write(line.toString());
