@@ -74,7 +74,12 @@ public class AuditHelper {
 		if (lang != null) {
 			auditQueryBuilder.addFilterOnLanguage(query, lang);
 		}
-		return (ThesaurusTerm) query.getSingleResult();
+		if (query.getResultList().isEmpty()){
+			return null;
+		}
+		else {
+			return (ThesaurusTerm) query.getSingleResult();
+		}
 	}
 	
 	/**
@@ -116,10 +121,13 @@ public class AuditHelper {
 	}	
 	
 	
-	public List<ThesaurusTerm> getConceptTermsAtRevision(ThesaurusConcept conceptAtRevision, Number revision) {
+	public List<ThesaurusTerm> getConceptTermsAtRevision(ThesaurusConcept conceptAtRevision, Number revision, String lang) {
 		AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(
 				ThesaurusTerm.class, revision)
 				.add(AuditEntity.relatedId("concept").eq(conceptAtRevision.getIdentifier()));
+		if (lang != null) {
+			auditQueryBuilder.addFilterOnLanguage(query, lang);
+		}
 		return query.getResultList();
 	}
 }

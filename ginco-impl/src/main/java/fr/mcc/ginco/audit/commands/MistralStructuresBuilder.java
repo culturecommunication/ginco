@@ -79,22 +79,25 @@ public class MistralStructuresBuilder {
 					.getPreferredTermAtRevision(revision,
 							previousConcept.getIdentifier(), lang);
 
-			List<ThesaurusConcept> children = auditHelper
-					.getConceptChildrenAtRevision(revision, previousConcept);
+			if (previousPrefTerm != null){
+				List<ThesaurusConcept> children = auditHelper
+						.getConceptChildrenAtRevision(revision, previousConcept);
 
-			List<String> childrenLexicalValues = new ArrayList<String>();
+				List<String> childrenLexicalValues = new ArrayList<String>();
 
-			for (ThesaurusConcept child : children) {
-				ThesaurusTerm childPrefTerm = auditHelper
-						.getPreferredTermAtRevision(revision,
-								child.getIdentifier(), lang);
+				for (ThesaurusConcept child : children) {
+					ThesaurusTerm childPrefTerm = auditHelper
+							.getPreferredTermAtRevision(revision,
+									child.getIdentifier(), lang);
+					if (childPrefTerm != null){
+						childrenLexicalValues.add(childPrefTerm.getLexicalValue());
+					}	
+				}
+				Collections.sort(childrenLexicalValues);
 
-				childrenLexicalValues.add(childPrefTerm.getLexicalValue());
-			}
-			Collections.sort(childrenLexicalValues);
-
-			hierarchies.put(previousPrefTerm.getLexicalValue(),
-					childrenLexicalValues);
+				hierarchies.put(previousPrefTerm.getLexicalValue(),
+						childrenLexicalValues);
+			}	
 		}
 		return hierarchies;
 	}
@@ -117,20 +120,22 @@ public class MistralStructuresBuilder {
 			ThesaurusTerm previousPrefTerm = auditHelper
 					.getPreferredTermAtRevision(revision,
 							previousConcept.getIdentifier(), lang);
-			List<String> synonymsLexicalvalues = new ArrayList<String>();
-			List<ThesaurusTerm> previousConceptTerms = auditHelper
-					.getConceptTermsAtRevision(previousConcept, revision);
-			for (ThesaurusTerm previousConceptTerm : previousConceptTerms) {
-				if (!previousConceptTerm.getLexicalValue().equals(
-						previousPrefTerm.getLexicalValue())) {
-					synonymsLexicalvalues.add(previousConceptTerm
-							.getLexicalValue());
+			if (previousPrefTerm != null){
+				List<String> synonymsLexicalvalues = new ArrayList<String>();
+				List<ThesaurusTerm> previousConceptTerms = auditHelper
+						.getConceptTermsAtRevision(previousConcept, revision, lang);
+				for (ThesaurusTerm previousConceptTerm : previousConceptTerms) {
+					if (!previousConceptTerm.getLexicalValue().equals(
+							previousPrefTerm.getLexicalValue())) {
+						synonymsLexicalvalues.add(previousConceptTerm
+								.getLexicalValue());
+					}
+					Collections.sort(synonymsLexicalvalues);
 				}
-				Collections.sort(synonymsLexicalvalues);
-			}
 
-			previousSynonyms.put(previousPrefTerm.getLexicalValue(),
-					synonymsLexicalvalues);
+				previousSynonyms.put(previousPrefTerm.getLexicalValue(),
+						synonymsLexicalvalues);
+			}
 		}
 		return previousSynonyms;
 	}
@@ -149,5 +154,24 @@ public class MistralStructuresBuilder {
 			newLexicalvalues.put(currentTerm.getLexicalValue(), currentTerm);
 		}
 		return newLexicalvalues;
+	}
+	
+	public Map<String, List<ThesaurusTerm>> getNotPreferredTermsByTerm(
+			List<ThesaurusTerm> currentTerms) {
+		Map<String, List<ThesaurusTerm>> nonPreferredTerms = new HashMap<String, List<ThesaurusTerm>>();
+		for (ThesaurusTerm currentTerm : currentTerms) {
+			if (currentTerm.getPrefered()){
+				
+				List<ThesaurusTerm> notPreferredTerms = new ArrayList<ThesaurusTerm>();				
+				for (ThesaurusTerm term : currentTerms){
+					if (term.getConcept().getIdentifier().equals(currentTerm.getConcept().getIdentifier())
+							&& !term.getPrefered()){
+						notPreferredTerms.add(term);
+					}
+				}		
+				nonPreferredTerms.put(currentTerm.getLexicalValue(), notPreferredTerms);	
+			}
+		}
+		return nonPreferredTerms;
 	}
 }

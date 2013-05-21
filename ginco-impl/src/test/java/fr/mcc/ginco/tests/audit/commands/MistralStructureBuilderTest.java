@@ -153,7 +153,7 @@ public class MistralStructureBuilderTest {
 						parentConcept.getIdentifier(), lang)).thenReturn(prefTerm);
 		
 		Mockito.when(auditHelper
-				.getConceptTermsAtRevision(parentConcept, revision)).thenReturn(allTerms);
+				.getConceptTermsAtRevision(parentConcept, revision, lang)).thenReturn(allTerms);
 		
 		Map<String, List<String>> synonyms = mistralStructuresBuilder.buildSynonymsStructure(conceptsAtRevision, revision, lang);
 		

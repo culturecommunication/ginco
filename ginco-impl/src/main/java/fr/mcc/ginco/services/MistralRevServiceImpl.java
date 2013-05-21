@@ -133,6 +133,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			AuditQuery startTermsQuery = auditQueryBuilder.getEntityAtRevision(
 					ThesaurusTerm.class, startRevision,
 					thesaurus.getIdentifier());
+			auditQueryBuilder.addFilterOnLanguage(startTermsQuery, language.getId());
 			
 			
 			List<ThesaurusTerm> oldTerms = startTermsQuery.getResultList();
@@ -146,7 +147,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			AuditQuery endTermsQuery = auditQueryBuilder
 					.getEntityAtRevision(ThesaurusTerm.class, endRevision,
 							thesaurus.getIdentifier());
-		
+			auditQueryBuilder.addFilterOnLanguage(endTermsQuery, language.getId());		
 			
 			List<ThesaurusTerm> newTerms = endTermsQuery.getResultList();
 			List<ThesaurusTerm> newTermsWithValidatedConcept = new ArrayList<ThesaurusTerm>();
@@ -159,10 +160,13 @@ public class MistralRevServiceImpl implements IMistralRevService {
 
 			allEvents.addAll(termCommandBuilder.buildAddedTermsLines(oldTermsWithValidatedConcept,
 					newTermsWithValidatedConcept));
+			allEvents.addAll(termCommandBuilder.buildChangedTermsLines(oldTermsWithValidatedConcept, 
+					newTermsWithValidatedConcept));
+			
 
 			AuditQuery startConceptQuery = auditQueryBuilder
 					.getEntityAtRevision(ThesaurusConcept.class, startRevision,
-							thesaurus.getIdentifier());
+							thesaurus.getIdentifier());	
 			auditQueryBuilder.getFilterOnStatus(startConceptQuery, ConceptStatusEnum.VALIDATED.getStatus());
 
 			List<ThesaurusConcept> previousConcepts = startConceptQuery

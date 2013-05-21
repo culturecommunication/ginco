@@ -82,50 +82,71 @@ public class TermCommandBuilder {
 		return termsOperations;
 	}
 	
+	public List<CommandLine> buildChangedTermsLines(List<ThesaurusTerm> previousTerms,
+			List<ThesaurusTerm> currentTerms){
+		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
+
+		Map<String, ThesaurusTerm> newLexicalvalues = mistralStructuresBuilder
+				.getTermVersionsView(currentTerms);
+		Map<String, List<ThesaurusTerm>> newNotPreferredTermsByTerm = mistralStructuresBuilder
+				.getNotPreferredTermsByTerm(currentTerms);
+		
+		
+		for (ThesaurusTerm oldTerm : previousTerms) {
+			if (newLexicalvalues.containsKey(oldTerm.getLexicalValue())) {
+				if (oldTerm.getPrefered() != newLexicalvalues.get(
+						oldTerm.getLexicalValue()).getPrefered()) {
+					if (!oldTerm.getPrefered()) {
+						CommandLine preferredLine = new CommandLine();
+						if (newNotPreferredTermsByTerm.get(oldTerm.getLexicalValue()).isEmpty()){
+							preferredLine.setValue(oldTerm.getLexicalValue());
+						}
+						else {
+							preferredLine.setValue(CommandLine.STARS
+									+ oldTerm.getLexicalValue());
+						}
+						termsOperations.add(preferredLine);
+
+					} else {
+						CommandLine unpreferredLine = new CommandLine();
+						unpreferredLine.setValue(CommandLine.UNPREFERRERD
+								+ oldTerm.getLexicalValue());
+						termsOperations.add(unpreferredLine);
+					}
+				}
+			}
+		}
+		return termsOperations;
+	}
+	
 	public List<CommandLine> buildAddedTermsLines(List<ThesaurusTerm> previousTerms,
 			List<ThesaurusTerm> currentTerms) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
 		Map<String, ThesaurusTerm> oldLexicalValues = mistralStructuresBuilder
 				.getTermVersionsView(previousTerms);
-		Map<String, ThesaurusTerm> newLexicalvalues = mistralStructuresBuilder
-				.getTermVersionsView(currentTerms);
-		
-		for (ThesaurusTerm oldTerm : previousTerms) {
-		if (newLexicalvalues.containsKey(oldTerm.getLexicalValue())) {
-			if (oldTerm.getPrefered() != newLexicalvalues.get(
-					oldTerm.getLexicalValue()).getPrefered()) {
-				if (!oldTerm.getPrefered()) {
-					CommandLine preferredLine = new CommandLine();
-					preferredLine.setValue(CommandLine.STARS
-							+ oldTerm.getLexicalValue());
-					termsOperations.add(preferredLine);
 
-				} else {
-					CommandLine unpreferredLine = new CommandLine();
-					unpreferredLine.setValue(CommandLine.UNPREFERRERD
-							+ oldTerm.getLexicalValue());
-					termsOperations.add(unpreferredLine);
-				}
-			}
-		}
-		}
+		Map<String, List<ThesaurusTerm>> newNotPreferredTermsByTerm = mistralStructuresBuilder
+				.getNotPreferredTermsByTerm(currentTerms);
+		
 		// Terms addition
 		for (ThesaurusTerm currentTerm : currentTerms) {
 			if (!oldLexicalValues.containsKey(currentTerm.getLexicalValue())) {
 				CommandLine additionLine = new CommandLine();
+				
 				if (currentTerm.getPrefered() != null
-						&& currentTerm.getPrefered()) {
+						&& currentTerm.getPrefered()
+						&& !newNotPreferredTermsByTerm.get(currentTerm.getLexicalValue()).isEmpty()){
+					
 					additionLine.setValue(CommandLine.STARS
 							+ currentTerm.getLexicalValue());
+
 				} else {
 					additionLine.setValue(currentTerm.getLexicalValue());
 				}
 				termsOperations.add(additionLine);
 			}
-			
 		}
-
 		return termsOperations;
 	}
 
