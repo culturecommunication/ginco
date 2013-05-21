@@ -11,7 +11,8 @@ UPDATE languages_iso639 SET principallanguage=true;
 UPDATE languages_iso639 SET ref_name='Français/France' where id='fr-FR';
 INSERT INTO languages_iso639(
             id, part1, ref_name, toplanguage, principallanguage)
-    VALUES ('en-US', 'en', 'Anglais/USA', true, true);  
+    VALUES ('en-US', 'en', 'Anglais/USA', true, true);
+  
 INSERT INTO languages_iso639(
             id, part1, ref_name, toplanguage, principallanguage)
     VALUES ('it-IT', 'it', 'Italien/Italie', true, true);
@@ -20,6 +21,9 @@ INSERT INTO languages_iso639(
             id, part1, ref_name, toplanguage, principallanguage)
     VALUES ('de-DE', 'de', 'Allemand/Allemagne', true, true);   
 
+INSERT INTO languages_iso639(
+            id, part1, ref_name, toplanguage, principallanguage)
+    VALUES ('en-UK', 'en', 'Anglais/United Kingdom', true, false);   
 
 UPDATE thesaurus_term SET lang='en-US' where lang='eng';
 UPDATE thesaurus_term SET lang='it-IT' where lang='ita';
