@@ -514,6 +514,6 @@ public class IndexerServiceImpl implements IIndexerService {
 		removeThesaurusIndex(thesaurus.getIdentifier());
 		addTerms(thesaurusTermService.getAllTerms(thesaurus.getIdentifier()));
 		addConcepts(thesaurusConceptService.getConceptsByThesaurusId(null,
-				thesaurus.getIdentifier(), true, false));
+				thesaurus.getIdentifier(), null, false));
 	}
 }
