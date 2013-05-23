@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.rest.services.exceptions;
 
+import java.text.MessageFormat;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -49,8 +51,14 @@ public abstract class AbstractExceptionMapper<E extends Throwable> implements
 	@Log
 	private Logger log;
 
-	protected Response toResponse(Throwable t, String messageKey) {
-		String msg = LabelUtil.getResourceLabel(messageKey);
+	protected Response toResponse(Throwable t, String messageKey, String toFormat) {
+		String msg = new String();
+		if (toFormat != null && !toFormat.isEmpty()){
+			msg = MessageFormat.format(LabelUtil.getResourceLabel(messageKey), toFormat);
+		}
+		else {
+			msg = LabelUtil.getResourceLabel(messageKey);
+		}
 		log.error("Business Exception in REST services : " + t.getMessage());
 		log.debug("Business Exception in REST services : " + msg);
 		msg = StringEscapeUtils.escapeEcmaScript(msg);

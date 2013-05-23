@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+
 import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
@@ -94,8 +95,10 @@ public class GincoImportServiceImpl implements IGincoImportService {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshalledExportedThesaurus = (GincoExportedThesaurus) unmarshaller.unmarshal(in);
 		} catch (JAXBException e) {
-			throw new TechnicalException("Error when trying to deserialize the thesaurus from XML with JAXB", e);
+			throw new BusinessException("Error when trying to deserialize the thesaurus from XML with JAXB :"+e.getMessage(),
+					"import-unable-to-read-file", e);
 		}
+		
 		return gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
 	}
 	
@@ -113,7 +116,8 @@ public class GincoImportServiceImpl implements IGincoImportService {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshalledExportedThesaurus = (GincoExportedBranch) unmarshaller.unmarshal(in);
 		} catch (JAXBException e) {
-			throw new TechnicalException("Error when trying to deserialize the concept branch from XML with JAXB", e);
+			throw new BusinessException("Error when trying to deserialize the concept branch from XML with JAXB :"+e.getMessage(),
+					"import-unable-to-read-file", e);
 		}
 		return gincoConceptBranchBuilder.storeGincoExportedBranch(unmarshalledExportedThesaurus, thesaurusId);
 	}

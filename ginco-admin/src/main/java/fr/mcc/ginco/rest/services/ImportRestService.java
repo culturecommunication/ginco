@@ -187,7 +187,6 @@ public class ImportRestService {
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				thesaurusViewConverter.convert(thesaurus)));
 		return serialized;
-
 	}
 
 	/**

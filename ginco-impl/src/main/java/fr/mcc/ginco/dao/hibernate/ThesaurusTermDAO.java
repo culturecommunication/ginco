@@ -38,7 +38,6 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.utils.LabelUtil;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -47,7 +46,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -186,7 +184,8 @@ public class ThesaurusTermDAO extends
 		Long numberOfExistingTerms = countSimilarTermsByLexicalValueAndLanguage(termToUpdate);
 		if (numberOfExistingTerms > 0) {
 				throw new BusinessException("Already existing term : "+termToUpdate.getLexicalValue(),
-						MessageFormat.format(LabelUtil.getResourceLabel("already-existing-term"), termToUpdate.getLexicalValue()));
+						"already-existing-term", termToUpdate.getLexicalValue());
+				
 		}
 		
 		if (termToUpdate.getHidden() == null) {
