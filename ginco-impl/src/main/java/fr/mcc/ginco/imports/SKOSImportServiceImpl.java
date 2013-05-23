@@ -253,6 +253,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	 */
 	private void buildConceptsAssociations(Thesaurus thesaurus,
 			List<Resource> skosConcepts) {
+		List<AssociativeRelationship> allRelations = new ArrayList<AssociativeRelationship>();
 		for (Resource skosConcept : skosConcepts) {
 			ThesaurusConcept concept = conceptBuilder
 					.buildConceptHierarchicalRelationships(skosConcept,
@@ -262,9 +263,19 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			Set<AssociativeRelationship> associativeRelationships = conceptBuilder
 					.buildConceptAssociativerelationship(skosConcept, thesaurus);
 			for (AssociativeRelationship relation : associativeRelationships) {
-				associativeRelationshipDAO.update(relation);
+				Boolean isRelationAdded = false;
+				for (AssociativeRelationship existedRelation : allRelations){
+						if (existedRelation.getConceptLeft().equals(relation.getConceptRight())
+								&& existedRelation.getConceptRight().equals(relation.getConceptLeft())
+								|| existedRelation.equals(relation)){
+							isRelationAdded = true;
+						}
+				}
+				if (!isRelationAdded) {
+					allRelations.add(relation);
+					associativeRelationshipDAO.update(relation);
+				}
 			}
-
 		}
 	}
 

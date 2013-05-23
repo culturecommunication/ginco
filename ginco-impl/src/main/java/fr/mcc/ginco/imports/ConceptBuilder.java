@@ -45,7 +45,6 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
@@ -126,34 +125,21 @@ public class ConceptBuilder extends AbstractBuilder {
 		while (stmtRelatedtItr.hasNext()) {
 			Statement stmt = stmtRelatedtItr.next();
 			Resource relatedConceptRes = stmt.getObject().asResource();
+			
 			ThesaurusConcept relatedConcept = builtConcepts
 					.get(relatedConceptRes.getURI());
 		
-			boolean alreadyAssociatedLeft = false ;
-			if (relatedConcept.getAssociativeRelationshipLeft() != null) {
-				Set<AssociativeRelationship> alreadyExistingAssociations = relatedConcept.getAssociativeRelationshipLeft();
-				for(AssociativeRelationship relation:alreadyExistingAssociations) {
-					if (relation.getConceptLeft().equals(concept) || relation.getConceptRight().equals(concept)) {
-						alreadyAssociatedLeft = true;
-					}
-				}
-			}
-
-			if (!alreadyAssociatedLeft) {
-				AssociativeRelationship relationshipLeft = new AssociativeRelationship();
-				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
-				relationshipId.setConcept1(concept.getIdentifier());
-				relationshipId.setConcept2(relatedConcept.getIdentifier());
-				relationshipLeft.setIdentifier(relationshipId);
-				relationshipLeft.setConceptLeft(concept);
-				relationshipLeft.setConceptRight(relatedConcept);
-				relationshipLeft
-						.setRelationshipRole(associativeRelationshipRoleService
-								.getDefaultAssociativeRelationshipRoleRole());
-				relationshipsLeft.add(relationshipLeft);
-
-			}
-
+			AssociativeRelationship relationshipLeft = new AssociativeRelationship();
+			AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
+			relationshipId.setConcept1(concept.getIdentifier());
+			relationshipId.setConcept2(relatedConcept.getIdentifier());
+			relationshipLeft.setIdentifier(relationshipId);
+			relationshipLeft.setConceptLeft(concept);
+			relationshipLeft.setConceptRight(relatedConcept);
+			relationshipLeft
+					.setRelationshipRole(associativeRelationshipRoleService
+							.getDefaultAssociativeRelationshipRoleRole());
+			relationshipsLeft.add(relationshipLeft);
 		}
 		return relationshipsLeft;
 	}
