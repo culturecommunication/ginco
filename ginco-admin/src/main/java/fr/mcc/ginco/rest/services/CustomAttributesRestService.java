@@ -152,9 +152,12 @@ public class CustomAttributesRestService {
             CustomConceptAttributeType conceptAttributeType =
                     (CustomConceptAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, true);
             
-            if(customConceptAttributeTypeService.isUnique(conceptAttributeType.getThesaurus(), conceptAttributeType.getCode())) {
+            if(customConceptAttributeTypeService.isUnique(conceptAttributeType.getThesaurus(), conceptAttributeType.getCode(), conceptAttributeType.getValue())) {
                 customConceptAttributeTypeService.saveOrUpdate(conceptAttributeType);
                 newList.add(conceptAttributeType);
+            }
+            else {
+            	throw new BusinessException ("Already existing custom attribute : "+conceptAttributeType.getValue(), "already-existing-custom-attribute"); 
             }
         }
         return customAttributesTypeConverter.convertList(newList);
@@ -210,11 +213,16 @@ public class CustomAttributesRestService {
     public List<GenericCustomAttributeTypeView> updateTermAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
     	List<CustomTermAttributeType> newList = new ArrayList<CustomTermAttributeType>();
         for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
-            CustomTermAttributeType conceptAttributeType =
+            CustomTermAttributeType termAttributeType =
                     (CustomTermAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, false);
 
-            customTermAttributeTypeService.saveOrUpdate(conceptAttributeType);
-            newList.add(conceptAttributeType);
+            if (customTermAttributeTypeService.isUnique(termAttributeType.getThesaurus(), termAttributeType.getCode(), termAttributeType.getValue())){
+            	customTermAttributeTypeService.saveOrUpdate(termAttributeType);
+                newList.add(termAttributeType);
+            }
+            else {
+            	throw new BusinessException ("Already existing custom attribute : "+termAttributeType.getValue(), "already-existing-custom-attribute"); 
+            }
         }
         return customAttributesTypeConverter.convertList(newList);
     }

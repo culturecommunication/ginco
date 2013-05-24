@@ -51,10 +51,10 @@ import java.util.List;
 public class CustomTermAttributeTypeDAO extends GenericHibernateDAO<CustomTermAttributeType, Integer> implements ICustomTermAttributeTypeDAO {
 
     @Override
-    public boolean isUnique(Thesaurus thesaurus, String code) {
+    public boolean isUnique(Thesaurus thesaurus, String code, String value) {
         Criteria criteria = getCurrentSession().createCriteria(CustomTermAttributeType.class)
-                .add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()))
-                .add(Restrictions.eq("code", code));
+        		.add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()))
+                .add(Restrictions.or(Restrictions.eq("code", code), Restrictions.eq("value", value)));
         return (criteria.list().size() == 0);
     }
 

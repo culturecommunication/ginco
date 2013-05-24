@@ -45,11 +45,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
     xSucessLabel : 'Success!',
     xSucessSavedMsg : 'Attributes types saved successfully',
     xProblemLabel : 'Error !',
-    xProblemLoadMsg : 'Unable to load the concept group',
-    xProblemSaveMsg : 'Unable to save this concept group!',
-    xErrorDoubleRecord: 'Record already present',
-    xDeleteMsgLabel : 'Are you sure you want to delete this concept group?',
-    xDeleteMsgTitle : 'Delete this concept group?',
+    xProblemSaveMsg : 'Impossible to save one or more attributes !',
 
     loadConceptData : function(theGrid, thesaurusId) {
         var me = this;
@@ -101,7 +97,12 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
-        	}
+        	},
+			failure : function(record,
+					operation) {
+				Thesaurus.ext.utils.msg(me.xProblemLabel,
+						me.xProblemSaveMsg);
+			}
         });
     },
 
@@ -114,7 +115,11 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
-        	}
+        	},
+        	failure : function() {
+				Thesaurus.ext.utils.msg(me.xProblemLabel,
+						me.xProblemSaveMsg);
+			}
         });
     },
 

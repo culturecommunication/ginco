@@ -42,5 +42,5 @@ import java.util.List;
 
 public interface IGenericCustomAttributeType<T> extends IGenericDAO<T, Integer> {
     List<T> getAttributesByThesaurus(Thesaurus thesaurus) throws BusinessException;
-    boolean isUnique(Thesaurus thesaurus, String code);
+    boolean isUnique(Thesaurus thesaurus, String code, String value);
 }

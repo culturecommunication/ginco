@@ -56,8 +56,8 @@ public class CustomTermAttributeTypeServiceImpl implements ICustomTermAttributeT
     private ICustomTermAttributeTypeDAO customTermAttributeTypeDAO;
 
     @Override
-    public boolean isUnique(Thesaurus thesaurus, String code) {
-        return customTermAttributeTypeDAO.isUnique(thesaurus, code);
+    public boolean isUnique(Thesaurus thesaurus, String code, String value) {
+        return customTermAttributeTypeDAO.isUnique(thesaurus, code, value);
     }
 
     @Override
