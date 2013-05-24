@@ -43,6 +43,6 @@ public class TechnicalExceptionMapper extends
 
 	@Override
 	public Response toResponse(Throwable exception) {
-		return super.toResponse(exception, "technical-exception-text");
+		return super.toResponse(exception, "technical-exception-text", null);
 	}
 }
