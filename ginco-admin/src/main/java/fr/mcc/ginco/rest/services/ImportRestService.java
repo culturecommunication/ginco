@@ -60,6 +60,7 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -247,7 +248,10 @@ public class ImportRestService {
 			String[] termsSplit = content.split("\n|\r\n");
 			List<String> termLexicalValues = Arrays.asList(termsSplit);
 			
-			thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);	
+			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);
+			for (ThesaurusTerm sandboxedTerm : sandboxedTerms){
+				indexerService.addTerm(sandboxedTerm);
+			}
 			return "{ 'success':true,'msg': 'imported'}";
 		}
 		catch (BusinessException ex) {
