@@ -151,13 +151,22 @@ public class CustomAttributesRestService {
         for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
             CustomConceptAttributeType conceptAttributeType =
                     (CustomConceptAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, true);
-            
-            if(customConceptAttributeTypeService.isUnique(conceptAttributeType.getThesaurus(), conceptAttributeType.getCode(), conceptAttributeType.getValue())) {
+            boolean isUniqueValue = customConceptAttributeTypeService
+            		.isUniqueValue(conceptAttributeType.getThesaurus(), conceptAttributeType.getValue());
+            boolean isUniqueCode = customConceptAttributeTypeService
+            		.isUniqueCode(conceptAttributeType.getThesaurus(), conceptAttributeType.getCode());
+            if(isUniqueValue && isUniqueCode) {
                 customConceptAttributeTypeService.saveOrUpdate(conceptAttributeType);
                 newList.add(conceptAttributeType);
             }
             else {
-            	throw new BusinessException ("Already existing custom attribute : "+conceptAttributeType.getValue(), "already-existing-custom-attribute"); 
+            	if (!isUniqueValue){
+            		throw new BusinessException ("Already existing custom attribute with value : "+conceptAttributeType.getValue(), "already-existing-custom-attribute-value", conceptAttributeType.getValue());
+            	}	
+            	else {
+            		throw new BusinessException ("Already existing custom attribute with code : "+conceptAttributeType.getCode(), "already-existing-custom-attribute-code", conceptAttributeType.getCode());
+            	}
+            		
             }
         }
         return customAttributesTypeConverter.convertList(newList);
@@ -215,13 +224,22 @@ public class CustomAttributesRestService {
         for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
             CustomTermAttributeType termAttributeType =
                     (CustomTermAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, false);
-
-            if (customTermAttributeTypeService.isUnique(termAttributeType.getThesaurus(), termAttributeType.getCode(), termAttributeType.getValue())){
-            	customTermAttributeTypeService.saveOrUpdate(termAttributeType);
+            boolean isUniqueValue = customConceptAttributeTypeService
+            		.isUniqueValue(termAttributeType.getThesaurus(), termAttributeType.getValue());
+            boolean isUniqueCode = customConceptAttributeTypeService
+            		.isUniqueCode(termAttributeType.getThesaurus(), termAttributeType.getCode());
+            if(isUniqueValue && isUniqueCode) {
+                customTermAttributeTypeService.saveOrUpdate(termAttributeType);
                 newList.add(termAttributeType);
             }
             else {
-            	throw new BusinessException ("Already existing custom attribute : "+termAttributeType.getValue(), "already-existing-custom-attribute"); 
+            	if (!isUniqueValue){
+            		throw new BusinessException ("Already existing custom attribute with value: "+termAttributeType.getValue(), "already-existing-custom-attribute-value", termAttributeType.getValue());
+            	}	
+            	else {
+            		throw new BusinessException ("Already existing custom attribute with code: "+termAttributeType.getCode(), "already-existing-custom-attribute-code", termAttributeType.getCode());
+            	}
+            		
             }
         }
         return customAttributesTypeConverter.convertList(newList);

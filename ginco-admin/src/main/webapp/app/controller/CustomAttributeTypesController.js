@@ -39,13 +39,13 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
     stores : [ 'CustomConceptAttributeTypeStore', 'CustomTermAttributeTypeStore' ],
     models : [ 'CustomAttributeTypeModel'],
 
-    localized : false,
+    localized : true,
 
     xLoading : 'Loading',
     xSucessLabel : 'Success!',
     xSucessSavedMsg : 'Attributes types saved successfully',
     xProblemLabel : 'Error !',
-    xProblemSaveMsg : 'Impossible to save one or more attributes !',
+    xProblemSaveMsg : 'Impossible to save attributes !',
 
     loadConceptData : function(theGrid, thesaurusId) {
         var me = this;
@@ -98,10 +98,10 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
         	},
-			failure : function(record,
-					operation) {
+			failure : function(batch) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel,
-						me.xProblemSaveMsg);
+						me.xProblemSaveMsg + " " + batch.operations[0].request.scope.reader.jsonData["message"]);
+				console.log(batch);
 			}
         });
     },
@@ -116,9 +116,9 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
         	},
-        	failure : function() {
+        	failure : function(batch) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel,
-						me.xProblemSaveMsg);
+						me.xProblemSaveMsg+ " " + batch.operations[0].request.scope.reader.jsonData["message"]);
 			}
         });
     },

@@ -61,8 +61,13 @@ public class CustomConceptAttributeTypeServiceImpl implements ICustomConceptAttr
     }
 
     @Override
-    public boolean isUnique(Thesaurus thesaurus, String code, String value) {
-        return customConceptAttributeTypeDAO.isUnique(thesaurus, code, value);
+    public boolean isUniqueValue(Thesaurus thesaurus, String value) {
+        return customConceptAttributeTypeDAO.isUniqueValue(thesaurus, value);
+    }
+    
+    @Override
+    public boolean isUniqueCode(Thesaurus thesaurus, String code) {
+        return customConceptAttributeTypeDAO.isUniqueValue(thesaurus, code);
     }
 
     @Override
