@@ -183,11 +183,11 @@ public class ThesaurusTermDAO extends
 		// Verifying if there is no a similar term (lexicalValue + lang)
 		Long numberOfExistingTerms = countSimilarTermsByLexicalValueAndLanguage(termToUpdate);
 		if (numberOfExistingTerms > 0) {
-				throw new BusinessException("Already existing term : "+termToUpdate.getLexicalValue(),
-						"already-existing-term", termToUpdate.getLexicalValue());
-				
+			throw new BusinessException("Already existing term : "
+					+ termToUpdate.getLexicalValue(), "already-existing-term",
+					new Object[] { termToUpdate.getLexicalValue() });
 		}
-		
+
 		if (termToUpdate.getHidden() == null) {
 			//By default, hidden is false if not set
 			termToUpdate.setHidden(false);

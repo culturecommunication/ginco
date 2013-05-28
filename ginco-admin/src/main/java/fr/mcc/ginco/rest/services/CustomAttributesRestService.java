@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,264 +79,306 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 @Path("/customattributesservice")
 @PreAuthorize("isAuthenticated()")
 public class CustomAttributesRestService {
-    @Inject
-    @Named("customConceptAttributeTypeService")
-    private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
+	@Inject
+	@Named("customConceptAttributeTypeService")
+	private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
 
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
-    
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-    
-    @Inject 
-    @Named("thesaurusTermService")
-    private IThesaurusTermService thesaurusTermService;
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
-    @Inject
-    @Named("customTermAttributeTypeService")
-    private ICustomTermAttributeTypeService customTermAttributeTypeService;
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-    @Inject
-    @Named("customTermAttributeService")
-    private ICustomTermAttributeService customTermAttributeService;
-    
-    @Inject
-    @Named("customConceptAttributeService")
-    private ICustomConceptAttributeService customConceptAttributeService;
+	@Inject
+	@Named("thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
 
-    
-    @Inject
-    @Named("customAttributesTypesConverter")
-    private CustomAttributesTypesConverter customAttributesTypeConverter;
-    
-    @Inject
-    @Named("customAttributeConverter")
-    private CustomAttributeConverter customAttributeConverter;
+	@Inject
+	@Named("customTermAttributeTypeService")
+	private ICustomTermAttributeTypeService customTermAttributeTypeService;
 
-    /**
-     * Return list of all custom attribute types for concept in given thesaurus
-     *
-     * @param thesaurusId
-     * @return
-     * @throws BusinessException
-     */
-    @GET
-    @Path("/getAllConceptAttributeTypes")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>> getAllConceptAttributeTypes(
-            @QueryParam("thesaurusId") String thesaurusId)
-            throws BusinessException {
-        Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
+	@Inject
+	@Named("customTermAttributeService")
+	private ICustomTermAttributeService customTermAttributeService;
 
-        return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
-                customAttributesTypeConverter.convertList(customConceptAttributeTypeService.getAttributeTypesByThesaurus(thesaurus)));
-    }
+	@Inject
+	@Named("customConceptAttributeService")
+	private ICustomConceptAttributeService customConceptAttributeService;
 
-    /**
-     * Updates a list of concept's type attributes.
-     * @param list
-     * @throws BusinessException
-     * @throws TechnicalException
-     */
-    @POST
-    @Path("/updateConceptAttributeTypes")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<GenericCustomAttributeTypeView> updateConceptAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
-    	List<CustomConceptAttributeType> newList = new ArrayList<CustomConceptAttributeType>();
-        for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
-            CustomConceptAttributeType conceptAttributeType =
-                    (CustomConceptAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, true);
-            boolean isUniqueValue = customConceptAttributeTypeService
-            		.isUniqueValue(conceptAttributeType.getThesaurus(), conceptAttributeType.getValue());
-            boolean isUniqueCode = customConceptAttributeTypeService
-            		.isUniqueCode(conceptAttributeType.getThesaurus(), conceptAttributeType.getCode());
-            if(isUniqueValue && isUniqueCode) {
-                customConceptAttributeTypeService.saveOrUpdate(conceptAttributeType);
-                newList.add(conceptAttributeType);
-            }
-            else {
-            	if (!isUniqueValue){
-            		throw new BusinessException ("Already existing custom attribute with value : "+conceptAttributeType.getValue(), "already-existing-custom-attribute-value", conceptAttributeType.getValue());
-            	}	
-            	else {
-            		throw new BusinessException ("Already existing custom attribute with code : "+conceptAttributeType.getCode(), "already-existing-custom-attribute-code", conceptAttributeType.getCode());
-            	}
-            		
-            }
-        }
-        return customAttributesTypeConverter.convertList(newList);
-    }
+	@Inject
+	@Named("customAttributesTypesConverter")
+	private CustomAttributesTypesConverter customAttributesTypeConverter;
 
-    /**
-     * Removes a list of concept's type attributes.
-     * @param list
-     * @throws BusinessException
-     * @throws TechnicalException
-     */
-    @POST
-    @Path("/deleteConceptAttributeTypes")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void deleteConceptAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
-        for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
-            CustomConceptAttributeType conceptAttributeType =
-                    (CustomConceptAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, true);
+	@Inject
+	@Named("customAttributeConverter")
+	private CustomAttributeConverter customAttributeConverter;
 
-            customConceptAttributeTypeService.deleteAttribute(conceptAttributeType);
-        }
-    }
+	/**
+	 * Return list of all custom attribute types for concept in given thesaurus
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getAllConceptAttributeTypes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>> getAllConceptAttributeTypes(
+			@QueryParam("thesaurusId") String thesaurusId)
+			throws BusinessException {
+		Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
 
-    /**
-     * Return list of all custom attribute types for term in given thesaurus
-     *
-     * @param thesaurusId
-     * @return
-     * @throws BusinessException
-     */
-    @GET
-    @Path("/getAllTermAttributeTypes")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>> getAllTermAttributeTypes(
-            @QueryParam("thesaurusId") String thesaurusId)
-            throws BusinessException {
-        Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
+		return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
+				customAttributesTypeConverter
+						.convertList(customConceptAttributeTypeService
+								.getAttributeTypesByThesaurus(thesaurus)));
+	}
 
-        return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
-                customAttributesTypeConverter.convertList(customTermAttributeTypeService.getAttributeTypesByThesaurus(thesaurus)));
-    }
+	/**
+	 * Updates a list of concept's type attributes.
+	 * 
+	 * @param list
+	 * @throws BusinessException
+	 * @throws TechnicalException
+	 */
+	@POST
+	@Path("/updateConceptAttributeTypes")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<GenericCustomAttributeTypeView> updateConceptAttributeTypes(
+			List<GenericCustomAttributeTypeView> list)
+			throws BusinessException, TechnicalException {
+		List<CustomConceptAttributeType> newList = new ArrayList<CustomConceptAttributeType>();
+		for (GenericCustomAttributeTypeView customConceptAttributeType : list) {
+			CustomConceptAttributeType conceptAttributeType = (CustomConceptAttributeType) customAttributesTypeConverter
+					.convert(customConceptAttributeType, true);
+			boolean isUniqueValue = customConceptAttributeTypeService
+					.isUniqueValue(conceptAttributeType.getThesaurus(),
+							conceptAttributeType.getValue());
+			boolean isUniqueCode = customConceptAttributeTypeService
+					.isUniqueCode(conceptAttributeType.getThesaurus(),
+							conceptAttributeType.getCode());
+			if (isUniqueValue && isUniqueCode) {
+				customConceptAttributeTypeService
+						.saveOrUpdate(conceptAttributeType);
+				newList.add(conceptAttributeType);
+			} else {
+				if (!isUniqueValue) {
+					throw new BusinessException(
+							"Already existing custom attribute with value : "
+									+ conceptAttributeType.getValue(),
+							"already-existing-custom-attribute-value",
+							new Object[] { conceptAttributeType.getValue() });
+				} else {
+					throw new BusinessException(
+							"Already existing custom attribute with code : "
+									+ conceptAttributeType.getCode(),
+							"already-existing-custom-attribute-code",
+							new Object[] { conceptAttributeType.getCode() });
+				}
 
-    /**
-     * Updates a list of term type attributes.
-     * @param list
-     * @throws BusinessException
-     * @throws TechnicalException
-     */
-    @POST
-    @Path("/updateTermAttributeTypes")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<GenericCustomAttributeTypeView> updateTermAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
-    	List<CustomTermAttributeType> newList = new ArrayList<CustomTermAttributeType>();
-        for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
-            CustomTermAttributeType termAttributeType =
-                    (CustomTermAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, false);
-            boolean isUniqueValue = customConceptAttributeTypeService
-            		.isUniqueValue(termAttributeType.getThesaurus(), termAttributeType.getValue());
-            boolean isUniqueCode = customConceptAttributeTypeService
-            		.isUniqueCode(termAttributeType.getThesaurus(), termAttributeType.getCode());
-            if(isUniqueValue && isUniqueCode) {
-                customTermAttributeTypeService.saveOrUpdate(termAttributeType);
-                newList.add(termAttributeType);
-            }
-            else {
-            	if (!isUniqueValue){
-            		throw new BusinessException ("Already existing custom attribute with value: "+termAttributeType.getValue(), "already-existing-custom-attribute-value", termAttributeType.getValue());
-            	}	
-            	else {
-            		throw new BusinessException ("Already existing custom attribute with code: "+termAttributeType.getCode(), "already-existing-custom-attribute-code", termAttributeType.getCode());
-            	}
-            		
-            }
-        }
-        return customAttributesTypeConverter.convertList(newList);
-    }
+			}
+		}
+		return customAttributesTypeConverter.convertList(newList);
+	}
 
-    /**
-     * Removes a list of term's type attributes.
-     * @param list
-     * @throws BusinessException
-     * @throws TechnicalException
-     */
-    @POST
-    @Path("/deleteTermAttributeTypes")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void deleteTermAttributeTypes(List<GenericCustomAttributeTypeView> list) throws BusinessException, TechnicalException {
-        for(GenericCustomAttributeTypeView customConceptAttributeType : list) {
-            CustomTermAttributeType conceptAttributeType =
-                    (CustomTermAttributeType) customAttributesTypeConverter.convert(customConceptAttributeType, false);
+	/**
+	 * Removes a list of concept's type attributes.
+	 * 
+	 * @param list
+	 * @throws BusinessException
+	 * @throws TechnicalException
+	 */
+	@POST
+	@Path("/deleteConceptAttributeTypes")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void deleteConceptAttributeTypes(
+			List<GenericCustomAttributeTypeView> list)
+			throws BusinessException, TechnicalException {
+		for (GenericCustomAttributeTypeView customConceptAttributeType : list) {
+			CustomConceptAttributeType conceptAttributeType = (CustomConceptAttributeType) customAttributesTypeConverter
+					.convert(customConceptAttributeType, true);
 
-            customTermAttributeTypeService.deleteAttribute(conceptAttributeType);
-        }
-    }
-    
-    /**
-     * Updates a list of term type attributes.
-     * @param list
-     * @throws BusinessException
-     * @throws TechnicalException
-     */
-    @POST
-    @Path("/updateTermAttribute")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> updateTermAttribute(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
-        for(GenericCustomAttributeView customAttributeView : list) {
-            CustomTermAttribute termAttribute =
-                     customAttributeConverter.convertTermAttribute(customAttributeView);
-            customTermAttributeService.saveOrUpdate(termAttribute);
-        }
-        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(list);
-    }
-    
-    /**
-     * Return list of all custom attribute for term 
-     *
-     * @param thesaurusId
-     * @return
-     * @throws BusinessException
-     */
-    @GET
-    @Path("/getTermAttribute")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getTermAttribute(
-            @QueryParam("entityId") String entityId)
-            throws BusinessException {
-    	
-    	ThesaurusTerm entity = thesaurusTermService.getThesaurusTermById(entityId);
-    	List<CustomTermAttribute> list= customTermAttributeService.getAttributesByEntity(entity);
-        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
-        		customAttributeConverter.convertListTerm(list));
-    }
-    
-    /**
-     * Return list of all custom attribute for concept 
-     *
-     * @param thesaurusId
-     * @return
-     * @throws BusinessException
-     */
-    @GET
-    @Path("/getConceptAttribute")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getConceptAttribute(
-            @QueryParam("entityId") String entityId)
-            throws BusinessException {
-    	
-    	ThesaurusConcept entity = thesaurusConceptService.getThesaurusConceptById(entityId);
-    	List<CustomConceptAttribute> list= customConceptAttributeService.getAttributesByEntity(entity);
-        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
-        		customAttributeConverter.convertListConcept(list));
-    }
-    
-    /**
-     * Updates a list of term type attributes.
-     * @param list
-     * @throws BusinessException
-     * @throws TechnicalException
-     */
-    @POST
-    @Path("/updateConceptAttribute")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public ExtJsonFormLoadData<List<GenericCustomAttributeView>> updateConceptAttribute(List<GenericCustomAttributeView> list) throws BusinessException, TechnicalException {
-        for(GenericCustomAttributeView customAttributeView : list) {
-            CustomConceptAttribute conceptAttribute =
-                     customAttributeConverter.convertConceptAttribute(customAttributeView);
-            customConceptAttributeService.saveOrUpdate(conceptAttribute);
-        }
-        return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(list);
-    }
+			customConceptAttributeTypeService
+					.deleteAttribute(conceptAttributeType);
+		}
+	}
+
+	/**
+	 * Return list of all custom attribute types for term in given thesaurus
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getAllTermAttributeTypes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>> getAllTermAttributeTypes(
+			@QueryParam("thesaurusId") String thesaurusId)
+			throws BusinessException {
+		Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
+
+		return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
+				customAttributesTypeConverter
+						.convertList(customTermAttributeTypeService
+								.getAttributeTypesByThesaurus(thesaurus)));
+	}
+
+	/**
+	 * Updates a list of term type attributes.
+	 * 
+	 * @param list
+	 * @throws BusinessException
+	 * @throws TechnicalException
+	 */
+	@POST
+	@Path("/updateTermAttributeTypes")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<GenericCustomAttributeTypeView> updateTermAttributeTypes(
+			List<GenericCustomAttributeTypeView> list)
+			throws BusinessException, TechnicalException {
+		List<CustomTermAttributeType> newList = new ArrayList<CustomTermAttributeType>();
+		for (GenericCustomAttributeTypeView customConceptAttributeType : list) {
+			CustomTermAttributeType termAttributeType = (CustomTermAttributeType) customAttributesTypeConverter
+					.convert(customConceptAttributeType, false);
+			boolean isUniqueValue = customConceptAttributeTypeService
+					.isUniqueValue(termAttributeType.getThesaurus(),
+							termAttributeType.getValue());
+			boolean isUniqueCode = customConceptAttributeTypeService
+					.isUniqueCode(termAttributeType.getThesaurus(),
+							termAttributeType.getCode());
+			if (isUniqueValue && isUniqueCode) {
+				customTermAttributeTypeService.saveOrUpdate(termAttributeType);
+				newList.add(termAttributeType);
+			} else {
+				if (!isUniqueValue) {
+					throw new BusinessException(
+							"Already existing custom attribute with value: "
+									+ termAttributeType.getValue(),
+							"already-existing-custom-attribute-value",
+							new Object[] {termAttributeType.getValue()});
+				} else {
+					throw new BusinessException(
+							"Already existing custom attribute with code: "
+									+ termAttributeType.getCode(),
+							"already-existing-custom-attribute-code",
+							new Object[] {termAttributeType.getCode()});
+				}
+
+			}
+		}
+		return customAttributesTypeConverter.convertList(newList);
+	}
+
+	/**
+	 * Removes a list of term's type attributes.
+	 * 
+	 * @param list
+	 * @throws BusinessException
+	 * @throws TechnicalException
+	 */
+	@POST
+	@Path("/deleteTermAttributeTypes")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void deleteTermAttributeTypes(
+			List<GenericCustomAttributeTypeView> list)
+			throws BusinessException, TechnicalException {
+		for (GenericCustomAttributeTypeView customConceptAttributeType : list) {
+			CustomTermAttributeType conceptAttributeType = (CustomTermAttributeType) customAttributesTypeConverter
+					.convert(customConceptAttributeType, false);
+
+			customTermAttributeTypeService
+					.deleteAttribute(conceptAttributeType);
+		}
+	}
+
+	/**
+	 * Updates a list of term type attributes.
+	 * 
+	 * @param list
+	 * @throws BusinessException
+	 * @throws TechnicalException
+	 */
+	@POST
+	@Path("/updateTermAttribute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ExtJsonFormLoadData<List<GenericCustomAttributeView>> updateTermAttribute(
+			List<GenericCustomAttributeView> list) throws BusinessException,
+			TechnicalException {
+		for (GenericCustomAttributeView customAttributeView : list) {
+			CustomTermAttribute termAttribute = customAttributeConverter
+					.convertTermAttribute(customAttributeView);
+			customTermAttributeService.saveOrUpdate(termAttribute);
+		}
+		return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(list);
+	}
+
+	/**
+	 * Return list of all custom attribute for term
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getTermAttribute")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getTermAttribute(
+			@QueryParam("entityId") String entityId) throws BusinessException {
+
+		ThesaurusTerm entity = thesaurusTermService
+				.getThesaurusTermById(entityId);
+		List<CustomTermAttribute> list = customTermAttributeService
+				.getAttributesByEntity(entity);
+		return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
+				customAttributeConverter.convertListTerm(list));
+	}
+
+	/**
+	 * Return list of all custom attribute for concept
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getConceptAttribute")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getConceptAttribute(
+			@QueryParam("entityId") String entityId) throws BusinessException {
+
+		ThesaurusConcept entity = thesaurusConceptService
+				.getThesaurusConceptById(entityId);
+		List<CustomConceptAttribute> list = customConceptAttributeService
+				.getAttributesByEntity(entity);
+		return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(
+				customAttributeConverter.convertListConcept(list));
+	}
+
+	/**
+	 * Updates a list of term type attributes.
+	 * 
+	 * @param list
+	 * @throws BusinessException
+	 * @throws TechnicalException
+	 */
+	@POST
+	@Path("/updateConceptAttribute")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ExtJsonFormLoadData<List<GenericCustomAttributeView>> updateConceptAttribute(
+			List<GenericCustomAttributeView> list) throws BusinessException,
+			TechnicalException {
+		for (GenericCustomAttributeView customAttributeView : list) {
+			CustomConceptAttribute conceptAttribute = customAttributeConverter
+					.convertConceptAttribute(customAttributeView);
+			customConceptAttributeService.saveOrUpdate(conceptAttribute);
+		}
+		return new ExtJsonFormLoadData<List<GenericCustomAttributeView>>(list);
+	}
 }

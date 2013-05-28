@@ -170,7 +170,8 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		thesaurus.setLang(getLanguages(skosThesaurus,DC.language));
 		if (thesaurus.getLang().isEmpty())
 		{
-			thesaurus.setLang(getLanguages(skosThesaurus,DCTerms.language));
+			throw new BusinessException("Missing language for imported thesaurus ",   
+					"import-missing-lang-thesaurus");
 		}
 		
 		ThesaurusFormat format = thesaurusFormatDAO

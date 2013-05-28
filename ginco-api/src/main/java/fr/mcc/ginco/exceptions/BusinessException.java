@@ -42,7 +42,7 @@ package fr.mcc.ginco.exceptions;
 public class BusinessException extends RuntimeException {
 
 	private String userMessageKey;
-	private String toFormat;
+	private Object[] toFormat;
 	
 	/**
 	 * Creates a new Business Exception
@@ -64,7 +64,7 @@ public class BusinessException extends RuntimeException {
 		this.userMessageKey =userMessageKey;
 	}
 	
-	public BusinessException(String logMessage, String userMessageKey, String toFormat) {
+	public BusinessException(String logMessage, String userMessageKey, Object[] toFormat) {
 		super(logMessage);
 		this.userMessageKey =userMessageKey;
 		this.toFormat = toFormat;
@@ -75,7 +75,7 @@ public class BusinessException extends RuntimeException {
 		return userMessageKey;
 	}
 	
-	public String getToFormat() {
+	public Object[] getToFormat() {
 		return toFormat;
 	}
 }

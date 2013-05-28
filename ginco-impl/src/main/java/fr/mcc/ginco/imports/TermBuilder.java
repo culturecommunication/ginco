@@ -106,8 +106,9 @@ public class TermBuilder extends AbstractBuilder {
 		RDFNode prefLabel = stmt.getObject();
 		String lang = prefLabel.asLiteral().getLanguage();
 		if (StringUtils.isEmpty(lang)) {
-			Language defaultLangL = languagesDAO.getById(defaultLang);
-			term.setLanguage(defaultLangL);
+			throw new BusinessException("Term " + stmt.getString()
+					+ " is missing it's language",
+					"import-term-with-no-lang", new Object[] {stmt.getString()});
 		} else {
 			Language language = languagesDAO.getByPart1(lang);
 			if (language == null){
@@ -117,9 +118,9 @@ public class TermBuilder extends AbstractBuilder {
 			if (language != null) {
 				term.setLanguage(language);			
 			} else {
-				throw new BusinessException("Term " + stmt.getString()
-						+ " is missing it's language",
-						"import-term-with-no-lang");
+				throw new BusinessException("Specified language " + lang + " is unknown : "  
+						+ stmt.getString(),
+						"import-unknown-term-lang", new Object[] {lang, stmt.getString()});
 			}
 		}
 		return term;

@@ -51,9 +51,9 @@ public abstract class AbstractExceptionMapper<E extends Throwable> implements
 	@Log
 	private Logger log;
 
-	protected Response toResponse(Throwable t, String messageKey, String toFormat) {
+	protected Response toResponse(Throwable t, String messageKey, Object[] toFormat) {
 		String msg = new String();
-		if (toFormat != null && !toFormat.isEmpty()){
+		if (toFormat != null){
 			msg = MessageFormat.format(LabelUtil.getResourceLabel(messageKey), toFormat);
 		}
 		else {
