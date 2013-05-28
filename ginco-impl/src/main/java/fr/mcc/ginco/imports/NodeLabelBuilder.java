@@ -34,8 +34,6 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -108,9 +106,9 @@ public class NodeLabelBuilder extends AbstractBuilder {
 			if (language != null) {
 				nodeLabel.setLanguage(language);
 			} else {
-				throw new BusinessException("Node label " + stmt.getString()
-						+ " is missing it's language",
-						"import-term-with-no-lang");
+				throw new BusinessException("Specified language " + lang + " is unknown : "  
+						+ stmt.getString(),
+						"import-unknown-term-lang", new Object[] {lang, stmt.getString()});
 			}
 		}
 

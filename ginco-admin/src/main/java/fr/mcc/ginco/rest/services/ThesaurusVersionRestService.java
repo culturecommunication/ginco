@@ -37,7 +37,6 @@ package fr.mcc.ginco.rest.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -59,7 +58,6 @@ import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusVersionHistoryView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusVersionHistoryViewConverter;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
-import fr.mcc.ginco.utils.EncodedControl;
 import fr.mcc.ginco.utils.LabelUtil;
 
 /**

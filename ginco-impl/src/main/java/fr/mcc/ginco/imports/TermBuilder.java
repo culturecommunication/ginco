@@ -106,15 +106,14 @@ public class TermBuilder extends AbstractBuilder {
 		RDFNode prefLabel = stmt.getObject();
 		String lang = prefLabel.asLiteral().getLanguage();
 		if (StringUtils.isEmpty(lang)) {
-			throw new BusinessException("Term " + stmt.getString()
-					+ " is missing it's language",
-					"import-term-with-no-lang", new Object[] {stmt.getString()});
+			Language defaultLangL = languagesDAO.getById(defaultLang);
+			term.setLanguage(defaultLangL);
 		} else {
 			Language language = languagesDAO.getByPart1(lang);
 			if (language == null){
 				language = languagesDAO.getById(lang);
 			}
-			
+
 			if (language != null) {
 				term.setLanguage(language);			
 			} else {

@@ -71,6 +71,7 @@ import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
 /**
@@ -114,6 +115,10 @@ public class ImportRestService {
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
+	
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
 	/**
 	 * This method is called to import a SKOS thesaurus the @Produces({
@@ -223,6 +228,7 @@ public class ImportRestService {
 
 		ThesaurusConcept concept = gincoImportService.importGincoBranchXmlFile(
 				content, fileName, tempDir, thesaurusId);
+		indexerService.indexThesaurus(thesaurusService.getThesaurusById(thesaurusId));
 		ObjectMapper mapper = new ObjectMapper();
 		ImportedBranchResponse response = new ImportedBranchResponse();
 		response.setTitle(thesaurusConceptService.getConceptTitle(concept));

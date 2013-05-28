@@ -32,46 +32,11 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
-@Service("thesaurusConceptGroupLabelService")
-public class ThesaurusConceptGroupLabelServiceImpl implements IThesaurusConceptGroupLabelService {
-	
-	@Inject
-	@Named("thesaurusConceptGroupLabelDAO")
-	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
-
-	@Override
-	public ThesaurusConceptGroupLabel getByThesaurusConceptGroupAndLanguage(
-			String identifier) {
-		return thesaurusConceptGroupLabelDAO.findByThesaurusConceptGroupAndLanguage(identifier);
-	}
-
-    @Override
-    public ThesaurusConceptGroupLabel getByThesaurusConceptGroup(String thesaurusConceptGroupId) {
-        return thesaurusConceptGroupLabelDAO.findByThesaurusConceptGroup(thesaurusConceptGroupId);
-    }
-
-	@Override
-	public ThesaurusConceptGroupLabel getById(Integer id) {
-		return thesaurusConceptGroupLabelDAO.getById(id);
-	}
-
-	@Transactional(readOnly=false)
-	@Override
-	public ThesaurusConceptGroupLabel updateOrCreate(
-			ThesaurusConceptGroupLabel conceptGroupLabel) throws BusinessException {
-		return thesaurusConceptGroupLabelDAO.update(conceptGroupLabel);
-	}	
-}
+Ext.define('GincoApp.locale.fr.controller.CustomAttributeTypesController', {
+	xLoading : 'Chargement',
+    xSucessLabel : 'Succès !',
+    xSucessSavedMsg : 'Les attributs personnalisés ont été enregistrés avec succès',
+    xProblemLabel : 'Erreur !',
+    xProblemSaveMsg : 'Impossible de sauvegarder les attributs !',
+});
