@@ -120,7 +120,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param concept
      * @return
      */
-    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept);    	
-
-
+    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept); 
+    
+    
 }

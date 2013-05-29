@@ -122,5 +122,4 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	final public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-
 }

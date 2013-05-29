@@ -40,6 +40,7 @@ import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 import org.hibernate.Criteria;
+import org.hibernate.FlushMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -165,7 +166,7 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
-	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {		 
+	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {
 		return (Long) getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq("lexicalValue", term.getLexicalValue()))
@@ -179,7 +180,7 @@ public class ThesaurusTermDAO extends
 	@Override
 	public ThesaurusTerm update(ThesaurusTerm termToUpdate)
 			throws BusinessException {
-
+		getCurrentSession().setFlushMode(FlushMode.COMMIT);
 		// Verifying if there is no a similar term (lexicalValue + lang)
 		Long numberOfExistingTerms = countSimilarTermsByLexicalValueAndLanguage(termToUpdate);
 		if (numberOfExistingTerms > 0) {
@@ -200,6 +201,7 @@ public class ThesaurusTermDAO extends
 
 		// Update an existing term
 		getCurrentSession().saveOrUpdate(termToUpdate);
+		getCurrentSession().flush();
 		return termToUpdate;
 	}
 	
@@ -274,8 +276,4 @@ public class ThesaurusTermDAO extends
 	        }
 	        return list;
 	}
-
-
-
-
 }
