@@ -46,6 +46,12 @@ Ext.define('GincoLoginApp.view.GincoLoginViewPort', {
 
         Ext.applyIf(me, {
             items: [
+			{
+			    region: 'north',
+			    html: '<h1 class="x-panel-header x-panel-header-default x-panel-header-text-default">GINCO (Gestion Informatisée de Nomenclatures Collaboratives et Ouvertes)</h1>',
+			    border: false,
+			    height: 30
+			}
             ]
         });
 

@@ -146,3 +146,8 @@ a.x-tab-close-btn:focus  {
 .mandatory-field {
 	color: red !important;
 }
+
+h1.x-panel-header {
+	height: 30px;
+	text-align: center;
+}
