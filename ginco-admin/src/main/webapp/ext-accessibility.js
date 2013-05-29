@@ -316,6 +316,24 @@ Ext.define('Thesaurus.Ext.tree.View', {
             Ext.fly(row).set({'aria-selected':false});
         }
     },
+    collectData: function(records) {
+    	var data = this.callParent(arguments),
+        rows = data.rows,
+        len = rows.length,
+        i = 0,
+        row, record;
+    	 for (; i < len; i++) {
+             row = rows[i];
+             record = records[i];
+             if (record.isExpanded()) {
+            	 row.rowAttr = 'aria-expanded="true"'; 
+             }  else {
+            	 row.rowAttr = 'aria-expanded="false"';
+             }
+            	 
+    	 }
+    	return data;
+    }
 });
 
 
@@ -507,7 +525,7 @@ Ext.view.TableChunker.metaTableTpl = [
                                                   '{%if (this.openTableWrap)out.push(this.openTableWrap())%}',
                                                   '<table class="' + Ext.baseCSSPrefix + 'grid-table ' + Ext.baseCSSPrefix + 'grid-table-resizer" cellspacing="0" cellpadding="0" {[this.embedFullWidth(values)]}>',
                                                       '<tbody>',
-                                                      '<tr class="' + Ext.baseCSSPrefix + 'grid-header-row">',
+                                                      '<tr class="' + Ext.baseCSSPrefix + 'grid-header-row" role="presentation">',
                                                       '<tpl for="columns">',
                                                           '<th class="' + Ext.baseCSSPrefix + 'grid-col-resizer-{id}" style="width: {width}px; height: 0px;"></th>',
                                                       '</tpl>',
@@ -529,6 +547,22 @@ Ext.view.TableChunker.metaTableTpl = [
 Ext.view.TableChunker.embedRowAttr= function() {
     return '{rowAttr} tabindex="-1" role="row"';
 };
+
+Ext.define('Thesaurus.Ext.tree.Column', {
+	override : 'Ext.tree.Column',
+	treeRenderer: function(value, metaData, record, rowIdx, colIdx, store, view){
+		var me = this;
+		metaData.tdAttr='role="gridcell"';
+		if (record.isExpanded())
+		{
+			metaData.tdAttr=metaData.tdAttr+' aria-expanded="true"';
+		} else 
+		{
+			metaData.tdAttr=metaData.tdAttr+' aria-expanded="false"';
+		}
+		return me.callParent(arguments);
+	}
+});
 
 Ext.define('Thesaurus.Ext.form.field.Trigger', {
 	override : 'Ext.form.field.Trigger',
@@ -668,7 +702,6 @@ Ext.define('Thesaurus.focus.manager', {
 		    	 components[components.length-1].focus();
 		     }
 		     else if(components.length==0 ) {
-		    	 console.log("focusing",id);
 		    	 e.preventDefault();
 		         Ext.getCmp(id).focus(); 
 		     }
