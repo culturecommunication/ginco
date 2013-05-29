@@ -125,6 +125,20 @@ Ext.define('Thesaurus.form.field.ComboBox',
 	   
 });
 
+Ext.define('Thesaurus.form.field.Checkbox', {
+	override : 'Ext.form.field.Checkbox',
+	ariaRole : 'checkbox',
+	setRawValue: function(value) {
+		var me = this,
+		inputEl = me.inputEl,
+        checked = me.isChecked(value, me.inputValue);
+		if (inputEl) {
+				inputEl.dom.setAttribute('aria-checked',checked);
+		}
+		return me.callParent(arguments);
+	}
+});
+
 Ext.define('Thesaurus.view.BoundList', {
 	extend : 'Ext.view.BoundList',
 	alias: 'widget.ariaboundlist',
@@ -710,5 +724,7 @@ Ext.define('Thesaurus.focus.manager', {
 		}
 	}
 });
+
+
 
 
