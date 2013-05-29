@@ -363,26 +363,63 @@ Ext.define("Thesaurus.form.field.Base", {
 			})
 });
 
+Ext.define('Thesaurus.tab.Bar', {
+	override : 'Ext.tab.Bar',
+	ariaRole : 'tablist'
+});
+
+Ext.define('Thesaurus.tab.Panel', {
+	override : 'Ext.tab.Panel',
+	ariaRole : 'tabpanel'
+});
+
 /*
  * Make close button for a tab keyboard accessible
  */
 Ext.define('Thesaurus.tab.Tab', {
 	override : 'Ext.tab.Tab',
+	initAria: function() {
+		var me = this;
+        me.callParent();
+        var el = this.getEl();
+        el.dom.setAttribute('role', "presentation");
+	},
 	onCloseBtnKey : function()
 	{
 		this.onCloseClick();
 	},
+	ariaRole : 'tab',
 	listeners: {
 		render : {
 			fn : function(){
 				var me = this;
+				var actionEl = me.getActionEl();
+				me.btnWrap.dom.setAttribute('role','presentation');
+				actionEl.dom.setAttribute('aria-selected', false);
 				if (me.closeEl){
 					me.keyNav = new Ext.util.KeyNav(me.closeEl, {
 			            enter: me.onCloseBtnKey,
 			            scope: me
 			        });
 				}
+				if (me.card) {
+					actionEl.dom.setAttribute('aria-controls', me.card.id);
+				}
 				
+			}
+		},
+		activate : {
+			fn : function(){
+				var me = this;
+				var actionEl = me.getActionEl();
+		        actionEl.dom.setAttribute('aria-selected', true);
+			}
+		},
+		deactivate : {
+			fn : function(){
+				var me = this;
+				var actionEl = me.getActionEl();
+		        actionEl.dom.setAttribute('aria-selected', false);
 			}
 		}
 	}
