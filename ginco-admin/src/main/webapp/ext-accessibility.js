@@ -293,6 +293,12 @@ Ext.define('Thesaurus.ext.tree.Column', {
 Ext.define('Thesaurus.Ext.tree.View', {
 	override : 'Ext.tree.View',
 	ariaRole : 'treegrid',
+	initAria: function() {
+		var me = this;
+        me.callParent();
+        var actionEl = this.getActionEl();
+        actionEl.dom.setAttribute('aria-readonly', true);
+	},
 	onRowSelect: function(rowIdx) {
     	var me = this;
         me.callParent();
