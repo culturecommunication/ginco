@@ -30,8 +30,6 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 	layout : 'fit',
 	alias: 'widget.loginForm',
 	width : 400,
-	//title : 'Ginco Admin',
-	html: '<h1 class="x-panel-header">Page Title</h1>',
 	height : 190,
 	localized : true,
 	xLoginWinTitle : 'Please enter your credentials',
