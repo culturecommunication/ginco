@@ -55,5 +55,13 @@ public interface IMistralRevService {
 	 * @throws IOException
 	 */
 	File getRevisions(Thesaurus thesaurus, long timestamp, Language language) throws IOException ;
-    
+	
+	/**
+	 * returns the file containing commands for the MISTRAL database of all thesauruses that have been modified
+	 * @param timestamp the start date of the file commands
+	 * @param language the language of the terms to be exported
+	 * @return
+	 * @throws IOException
+	 */
+	File getAllRevisions(long timestamp, Language language) throws IOException;
   }

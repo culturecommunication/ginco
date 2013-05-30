@@ -53,7 +53,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.FileResponse;
 import fr.mcc.ginco.services.IGincoRevService;
 import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * REST service to get edit the log journal.

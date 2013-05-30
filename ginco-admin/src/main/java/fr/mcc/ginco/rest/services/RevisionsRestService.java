@@ -48,7 +48,6 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Language;
@@ -122,6 +121,37 @@ public class RevisionsRestService {
 		File resFile = mistralRevService.getRevisions(thesaurus, timestamp, lang);
 
 		return new FileResponse(resFile, ".txt", thesaurus.getTitle())
+				.toResponse();
+	}
+	
+	/**
+	 * Return revisions command file in .txt format of all thesauruses that have been modified
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 * @throws IOException
+	 */
+	@GET
+	@Path("/exportAllRevisions")
+	@Produces("text/plain")
+	public Response exportAllRevisions(
+			@QueryParam("timestamp") long timestamp,
+			@QueryParam("lang") String language) throws BusinessException,
+			IOException {
+		Language lang = null;
+		if (StringUtils.isNotEmpty(language)) {	
+			lang = languagesService.getLanguageById(language);
+		}
+		if (lang == null) {
+			log.info("No language set in exportRevisions, defaulting to default language "
+					+ defaultLang);
+			lang = languagesService.getLanguageById(defaultLang);
+		}
+
+		File resFile = mistralRevService.getAllRevisions(timestamp, lang);
+
+		return new FileResponse(resFile, ".txt", "All revisions")
 				.toResponse();
 	}
 }
