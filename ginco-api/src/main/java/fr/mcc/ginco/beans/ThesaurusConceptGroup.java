@@ -55,6 +55,9 @@ public class ThesaurusConceptGroup implements Serializable{
     private ThesaurusConceptGroupType conceptGroupType;
     private Set<ThesaurusConcept> concepts;
     
+    @XmlTransient
+    private ThesaurusConceptGroup parent;
+    
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -78,5 +81,11 @@ public class ThesaurusConceptGroup implements Serializable{
 	}
 	public void setConcepts(Set<ThesaurusConcept> concepts) {
 		this.concepts = concepts;
+	}
+	public ThesaurusConceptGroup getParent() {
+		return parent;
+	}
+	public void setParent(ThesaurusConceptGroup parent) {
+		this.parent = parent;
 	}
 }

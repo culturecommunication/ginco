@@ -45,7 +45,6 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
@@ -57,6 +56,7 @@ import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
+import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -72,6 +72,10 @@ public class ConceptBuilder extends AbstractBuilder {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipServiceUtil")
+	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
 	@Inject
 	@Named("associativeRelationshipRoleService")
@@ -121,34 +125,21 @@ public class ConceptBuilder extends AbstractBuilder {
 		while (stmtRelatedtItr.hasNext()) {
 			Statement stmt = stmtRelatedtItr.next();
 			Resource relatedConceptRes = stmt.getObject().asResource();
+			
 			ThesaurusConcept relatedConcept = builtConcepts
 					.get(relatedConceptRes.getURI());
 		
-			boolean alreadyAssociatedLeft = false ;
-			if (relatedConcept.getAssociativeRelationshipLeft() != null) {
-				Set<AssociativeRelationship> alreadyExistingAssociations = relatedConcept.getAssociativeRelationshipLeft();
-				for(AssociativeRelationship relation:alreadyExistingAssociations) {
-					if (relation.getConceptLeft().equals(concept) || relation.getConceptRight().equals(concept)) {
-						alreadyAssociatedLeft = true;
-					}
-				}
-			}
-
-			if (!alreadyAssociatedLeft) {
-				AssociativeRelationship relationshipLeft = new AssociativeRelationship();
-				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
-				relationshipId.setConcept1(concept.getIdentifier());
-				relationshipId.setConcept2(relatedConcept.getIdentifier());
-				relationshipLeft.setIdentifier(relationshipId);
-				relationshipLeft.setConceptLeft(concept);
-				relationshipLeft.setConceptRight(relatedConcept);
-				relationshipLeft
-						.setRelationshipRole(associativeRelationshipRoleService
-								.getDefaultAssociativeRelationshipRoleRole());
-				relationshipsLeft.add(relationshipLeft);
-
-			}
-
+			AssociativeRelationship relationshipLeft = new AssociativeRelationship();
+			AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
+			relationshipId.setConcept1(concept.getIdentifier());
+			relationshipId.setConcept2(relatedConcept.getIdentifier());
+			relationshipLeft.setIdentifier(relationshipId);
+			relationshipLeft.setConceptLeft(concept);
+			relationshipLeft.setConceptRight(relatedConcept);
+			relationshipLeft
+					.setRelationshipRole(associativeRelationshipRoleService
+							.getDefaultAssociativeRelationshipRoleRole());
+			relationshipsLeft.add(relationshipLeft);
 		}
 		return relationshipsLeft;
 	}
@@ -170,7 +161,8 @@ public class ConceptBuilder extends AbstractBuilder {
 			Resource parentConceptRes = stmt.getObject().asResource();
 			String relatedURI = parentConceptRes.getURI();
 			ThesaurusConcept parentConcept = builtConcepts.get(relatedURI);
-			parentConcepts.add(parentConcept);
+			if (parentConcept!=null)
+				parentConcepts.add(parentConcept);
 		}
 		concept.setParentConcepts(parentConcepts);
 	
@@ -189,7 +181,7 @@ public class ConceptBuilder extends AbstractBuilder {
 		logger.debug("Building root concepts for concept : " + skosConcept.getURI());
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		concept.setRootConcepts(new HashSet<ThesaurusConcept>(
-				thesaurusConceptService.getRootConcepts(concept)));
+				conceptHierarchicalRelationshipServiceUtil.getRootConcepts(concept)));
 		return concept;
 
 	}

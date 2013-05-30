@@ -50,7 +50,7 @@ Ext.application({
     stores: [
     ],
     views: [
-        'GincoLoginViewPort',
+        'GincoLoginViewPort'
     ],
     name: 'GincoLoginApp',
     controllers: [

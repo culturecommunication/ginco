@@ -43,56 +43,76 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Beans represents <b>thesaurus_array</b> table and is a sub-container
- * for {@link ThesaurusConcept}.
+ * Beans represents <b>thesaurus_array</b> table and is a sub-container for
+ * {@link ThesaurusConcept}.
  */
 @SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusArray implements Serializable {
-	
+
 	private String identifier;
 	private Boolean ordered;
 	private String notation;
-	
+	private ThesaurusConcept superOrdinateConcept;
+	private Set<ThesaurusArrayConcept> concepts = new HashSet<ThesaurusArrayConcept>();
+
 	@XmlTransient
 	private Thesaurus thesaurus;
-	private ThesaurusConcept superOrdinateConcept;
-	private Set<ThesaurusConcept> concepts = new HashSet<ThesaurusConcept>();
-	
+	private ThesaurusArray parent;
+
 	public String getIdentifier() {
 		return identifier;
 	}
+
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+
 	public Boolean getOrdered() {
 		return ordered;
 	}
+
 	public void setOrdered(Boolean ordered) {
 		this.ordered = ordered;
 	}
+
 	public String getNotation() {
 		return notation;
 	}
+
 	public void setNotation(String notation) {
 		this.notation = notation;
 	}
+
 	public Thesaurus getThesaurus() {
 		return thesaurus;
 	}
+
 	public void setThesaurus(Thesaurus thesaurus) {
 		this.thesaurus = thesaurus;
 	}
+
 	public ThesaurusConcept getSuperOrdinateConcept() {
 		return superOrdinateConcept;
 	}
+
 	public void setSuperOrdinateConcept(ThesaurusConcept superOrdinateConcept) {
 		this.superOrdinateConcept = superOrdinateConcept;
 	}
-	public Set<ThesaurusConcept> getConcepts() {
+
+	public Set<ThesaurusArrayConcept> getConcepts() {
 		return concepts;
 	}
-	public void setConcepts(Set<ThesaurusConcept> concepts) {
+
+	public void setConcepts(Set<ThesaurusArrayConcept> concepts) {
 		this.concepts = concepts;
+	}
+
+	public ThesaurusArray getParent() {
+		return parent;
+	}
+
+	public void setParent(ThesaurusArray parent) {
+		this.parent = parent;
 	}
 }

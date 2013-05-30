@@ -20,7 +20,7 @@
         <appender-ref ref="FILE" />
     </logger>
 
-     <logger name="fr.mcc.ginco" level="DEBUG" additivity="false">
+     <logger name="fr.mcc.ginco" level="WARN" additivity="false">
         <appender-ref ref="FILE" />
         <appender-ref ref="CONSOLE" />        
     </logger>

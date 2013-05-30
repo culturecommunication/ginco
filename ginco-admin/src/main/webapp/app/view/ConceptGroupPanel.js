@@ -66,6 +66,8 @@ Ext
 					xLexicalValueLabel : 'Lexical value',
 					xAssociationRemove : 'Detach this concept',
 					xAddConceptToGroupArray : 'Add a concept',
+					xParentGroupLabel : 'Parent group',
+					xSelectParentGroup : 'Select a parent group',
 
 					initComponent : function() {
 						var me = this;
@@ -173,6 +175,36 @@ Ext
 															multiSelect : false,
 															allowBlank : false,
 															store : Ext.create('GincoApp.store.ThesaurusLanguageStore')
+														},
+														{
+															xtype : 'textfield',
+															name : 'parentGroupId',
+															hidden : true
+														},
+														{
+															xtype : 'container',
+															layout : 'column',
+															defaults : {
+																margin : '0 0 5 0',
+																layout : 'anchor'
+															},
+															items : [
+																	{
+																		xtype : 'textfield',
+																		name : 'parentGroupLabel',
+																		fieldLabel : me.xParentGroupLabel,
+																		allowBlank : true,
+																		readOnly : true
+																	},
+																	{
+																		xtype : 'button',
+																		text : me.xSelectParentGroup,
+																		disabled : false,
+																		requiredRoles : ['ADMIN'],
+																		itemId : 'selectParentGroup',
+																		cls : 'add',
+																		iconCls : 'icon-add'
+																	} ]
 														},
 														{
 															xtype : 'gridpanel',

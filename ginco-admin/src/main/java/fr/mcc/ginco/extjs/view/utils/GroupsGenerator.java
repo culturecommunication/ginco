@@ -51,6 +51,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
@@ -71,6 +72,10 @@ public class GroupsGenerator {
 	@Inject
 	@Named("thesaurusConceptGroupLabelService")
 	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
+	
+	@Inject
+	@Named("thesaurusListNodeFactory")
+	ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	@Value("${ginco.default.language}") private String defaultLanguage;
 
@@ -87,12 +92,12 @@ public class GroupsGenerator {
 	public List<IThesaurusListNode> generateGroups(String thesaurusId)
 			throws BusinessException {
 		logger.debug("Generating thesaurus groups list for vocabularyId : " + thesaurusId);
-		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(thesaurusId);
+		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(null, thesaurusId);
 		logger.debug(groups.size() + " groups found");
 
 		List<IThesaurusListNode> newGroups = new ArrayList<IThesaurusListNode>();
 		for (ThesaurusConceptGroup group : groups) {
-			ThesaurusListBasicNode groupNode = new ThesaurusListBasicNode();
+			ThesaurusListBasicNode groupNode = thesaurusListNodeFactory.getListBasicNode();
 			ThesaurusConceptGroupLabel label = thesaurusConceptGroupLabelService.getByThesaurusConceptGroup(group.getIdentifier());
 			groupNode.setTitle(LabelUtil.getLocalizedLabel(label.getLexicalValue(), label.getLanguage(), defaultLanguage));			
 			groupNode.setId(group.getIdentifier());

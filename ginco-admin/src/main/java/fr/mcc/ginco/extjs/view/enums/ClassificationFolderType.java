@@ -39,5 +39,5 @@ package fr.mcc.ginco.extjs.view.enums;
  * folders attached to each Thesaurus visual node.
  */
 public enum ClassificationFolderType {
-    ROOT, CONCEPTS, SANDBOX, ORPHANS, GROUPS, ARRAYS
+    ROOT, CONCEPTS, SANDBOX,COMPLEXCONCEPTS, ORPHANS, GROUPS, ARRAYS
 }

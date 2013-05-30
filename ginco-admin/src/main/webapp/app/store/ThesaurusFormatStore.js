@@ -51,7 +51,8 @@ Ext.define('GincoApp.store.ThesaurusFormatStore', {
                 url: 'services/ui/thesaurusservice/getThesaurusFormats',
                 reader: {
                     type: 'json',
-                    idProperty: 'identifier'
+                    idProperty: 'identifier',
+                    root: 'data'
                 }
             },
             fields: [

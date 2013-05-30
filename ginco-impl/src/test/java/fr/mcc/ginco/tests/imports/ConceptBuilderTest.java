@@ -36,7 +36,6 @@ package fr.mcc.ginco.tests.imports;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -61,6 +60,7 @@ import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.imports.ConceptBuilder;
 import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
+import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
@@ -69,6 +69,9 @@ public class ConceptBuilderTest {
 
 	@Mock(name = "thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Mock(name = "conceptHierarchicalRelationshipServiceUtil")
+	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
 	@Mock(name = "associativeRelationshipRoleService")
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
@@ -225,7 +228,7 @@ public class ConceptBuilderTest {
 		List<ThesaurusConcept> realRoots = new ArrayList<ThesaurusConcept>();
 		realRoots.add(rootConcept);
 		
-		Mockito.when(thesaurusConceptService.getRootConcepts(currentConcept)).thenReturn(realRoots);
+		Mockito.when(conceptHierarchicalRelationshipServiceUtil.getRootConcepts(currentConcept)).thenReturn(realRoots);
 		ThesaurusConcept actualConcept = conceptBuilder
 				.buildConceptRoot(skosConcept, fakeThesaurus);
 		

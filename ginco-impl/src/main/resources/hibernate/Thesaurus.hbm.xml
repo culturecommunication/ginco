@@ -18,9 +18,9 @@
 		<property name="title" not-null="true" />
 		<property name="created" not-null="true" type="timestamp" />
 		<property name="defaultTopConcept" column="defaulttopconcept" not-null="true" />
-        <property name="archived" />
+        <property name="archived" not-null="true" />
+        <property name="polyHierarchical" column="ispolyhierarchical" not-null="true" />
 
-		<many-to-one name="format" lazy="false" />
 		<many-to-one name="type" lazy="false" /> 
 		<many-to-one name="creator" column="creator" lazy="false" cascade="all"/>
 		
@@ -33,6 +33,11 @@
 		<set name="lang" table="thesaurus_languages">
 			<key column="thesaurus_identifier" />
 			<many-to-many class="fr.mcc.ginco.beans.Language" column="iso639_id" />
+		</set>
+		
+		<set name="format" table="thesaurus_formats">
+			<key column="thesaurus_identifier" />
+			<many-to-many class="fr.mcc.ginco.beans.ThesaurusFormat" column="format_identifier" />
 		</set>
 
 	</class>

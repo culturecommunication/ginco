@@ -35,8 +35,8 @@
 package fr.mcc.ginco.exports;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,71 +44,94 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.result.bean.AlphabeticalExportedItem;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.IAssociativeRelationshipService;
+import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermRoleService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.LabelUtil;
+import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 @Service("exportService")
 public class ExportServiceImpl implements IExportService {
 	@Inject
-	@Named("thesaurusArrayService")
-	private IThesaurusArrayService thesaurusArrayService;
+	@Named("alphabeticConceptExporter")
+	private AlphabeticConceptExporter alphabeticConceptExporter;
+	
 
 	@Inject
-	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
+	@Named("alphabeticComplexConceptExporter")
+	private AlphabeticComplexConceptExporter alphabeticComplexConceptExporter;
+	
+	@Inject
+	@Named("alphabeticalExportedItemComparator")
+	private AlphabeticalExportedItemComparator alphabeticalExportedItemComparator;
 
 	@Inject
 	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
 
 	@Inject
+	@Named("splitNonPreferredTermService")
+	private ISplitNonPreferredTermService splitNonPreferredTermService;
+
+	@Inject
+	@Named("thesaurusArrayHelper")
+	private ThesaurusArrayHelper thesaurusArrayHelper;
+
+	@Inject
+	@Named("thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;
+
+	@Inject
 	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
+	private IThesaurusConceptService thesaurusConceptService;	
 
 	@Inject
-	@Named("noteService")
-	private INoteService noteService;
+	@Named("thesaurusConceptComparator")
+	private ThesaurusConceptComparator thesaurusConceptComparator;
 
 	@Inject
-	@Named("associativeRelationshipService")
-	private IAssociativeRelationshipService associativeRelationshipService;
-
-	@Value("${ginco.default.language}")
-	private String defaultLang;
+	@Named("nodeLabelComparator")
+	private NodeLabelComparator nodeLabelComparator;
 
 	@Inject
-	@Named("thesaurusTermRoleService")
-	private IThesaurusTermRoleService thesaurusTermRoleService;
+	@Named("arrayNaturalComparator")
+	private ArrayNaturalComparator arrayNaturalComparator;
+
+	@Inject
+	@Named("thesaurusTermUtils")
+	private ThesaurusTermUtils thesaurusTermUtils;
 
 	@Override
 	public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)
 			throws BusinessException {
 		List<ThesaurusConcept> listTT = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
-		Collections.sort(listTT, new ThesaurusConceptComparator());
+		Collections.sort(listTT, thesaurusConceptComparator);
+		
 		List<ThesaurusArray> orphanArrays = thesaurusArrayService
 				.getArraysWithoutParentConcept(thesaurus.getIdentifier());
-
+		Collections.sort(orphanArrays, nodeLabelComparator);
+		
+		List<ThesaurusArray> arraysWithoutParentArray = thesaurusArrayService.getArraysWithoutParentArray(thesaurus.getIdentifier());
+		Collections.sort(arraysWithoutParentArray, nodeLabelComparator);
+		
 		Set<ThesaurusConcept> exclude = new HashSet<ThesaurusConcept>();
 
 		for (ThesaurusArray array : orphanArrays) {
-			exclude.addAll(array.getConcepts());
+			exclude.addAll(thesaurusArrayHelper.getArrayConcepts(array
+					.getIdentifier()));
 		}
 
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
@@ -119,8 +142,10 @@ public class ExportServiceImpl implements IExportService {
 			}
 		}
 
-		for (ThesaurusArray array : orphanArrays) {
-			addThesaurusArray(result, array, -1);
+		for (ThesaurusArray array : arraysWithoutParentArray) {
+			if (orphanArrays.contains(array)){
+				addThesaurusArray(result, array, -1);
+			}
 		}
 
 		return result;
@@ -129,169 +154,132 @@ public class ExportServiceImpl implements IExportService {
 	@Override
 	public List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus)
 			throws BusinessException {
+		String thesaurusId = thesaurus.getThesaurusId();
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
 
+		List<AlphabeticalExportedItem> itemsToExport = new ArrayList<AlphabeticalExportedItem>();
 		List<ThesaurusConcept> concepts = thesaurusConceptService
-				.getConceptsByThesaurusId(null, thesaurus.getThesaurusId(),
-						null, Boolean.TRUE);
+				.getConceptsByThesaurusId(null, thesaurusId, null, Boolean.TRUE);
 
-		Collections.sort(concepts, new ThesaurusConceptComparator());
-
-		for (ThesaurusConcept concept : concepts) {
-			addConceptTitle(0, result, concept);
-			addConceptInfo(1, result, concept);
+		for (ThesaurusConcept thesaurusConcept : concepts) {
+			AlphabeticalExportedItem item = new AlphabeticalExportedItem();
+			item.setLexicalValue(thesaurusConceptService
+					.getConceptTitle(thesaurusConcept));
+			item.setObjectToExport(thesaurusConcept);
+			itemsToExport.add(item);
 		}
 
+		List<SplitNonPreferredTerm> complexConcepts = splitNonPreferredTermService
+				.getSplitNonPreferredTermList(0, splitNonPreferredTermService
+						.getSplitNonPreferredTermCount(thesaurusId).intValue(),
+						thesaurusId);
+		for (SplitNonPreferredTerm complexConcept : complexConcepts) {
+			AlphabeticalExportedItem item = new AlphabeticalExportedItem();
+			item.setLexicalValue(complexConcept.getLexicalValue());
+			item.setObjectToExport(complexConcept);
+			itemsToExport.add(item);
+		}
+
+		Collections.sort(itemsToExport, alphabeticalExportedItemComparator);
+
+		for (AlphabeticalExportedItem item : itemsToExport) {
+			if (ThesaurusConcept.class.equals(item.getObjectToExport()
+					.getClass())) {
+				addConceptTitle(0, result,
+						(ThesaurusConcept) item.getObjectToExport());
+				alphabeticConceptExporter.addConceptInfo(1, result,
+						(ThesaurusConcept) item.getObjectToExport());
+			} else if (SplitNonPreferredTerm.class.equals(item
+					.getObjectToExport().getClass())) {
+				alphabeticComplexConceptExporter.addComplexConceptTitle(0,
+						result,
+						(SplitNonPreferredTerm) item.getObjectToExport());
+				alphabeticComplexConceptExporter.addComplexConceptInfo(1,
+						result,
+						(SplitNonPreferredTerm) item.getObjectToExport());
+			} else {
+				throw new BusinessException(
+						"non-available-type-for-alpha-export",
+						"Object type non available for alphabetical export");
+			}
+		}
 		return result;
-	}
-
-	private void addConceptTitle(Integer base, List<FormattedLine> result,
-			ThesaurusConcept concept) {
-		result.add(new FormattedLine(base, thesaurusConceptService
-				.getConceptTitle(concept)));
-	}
-
-	/**
-	 * For alphabetic export.
-	 * 
-	 * banquette NA: Siège à plusieurs places, peu profond, garni, comportant
-	 * éventuellement soit un dossier, soit des accotoirs, soit les deux. EP:
-	 * banquette à accotoirs banquette à dossier TG: siège banquette à accotoirs
-	 * EM: banquette banquette à dossier EM: banquette
-	 */
-	private void addConceptInfo(Integer base, List<FormattedLine> result,
-			ThesaurusConcept concept) {
-		List<Note> notes = noteService.getConceptNotePaginatedList(
-				concept.getIdentifier(), 0, 0);
-
-		for (Note note : notes) {
-			if ("scopeNote".equals(note.getNoteType().getCode())) {
-				result.add(new FormattedLine(base, "NA: "
-						+ note.getLexicalValue()));
-			}
-		}
-
-		for (ThesaurusConcept parent : concept.getParentConcepts()) {
-			result.add(new FormattedLine(base, "TG: "
-					+ thesaurusConceptService.getConceptTitle(parent)));
-		}
-
-		for (ThesaurusConcept ta : thesaurusConceptService
-				.getThesaurusConceptList(associativeRelationshipService
-						.getAssociatedConceptsId(concept))) {
-			result.add(new FormattedLine(base, "TA: "
-					+ thesaurusConceptService.getConceptTitle(ta)));
-		}
-
-		for (ThesaurusTerm term : thesaurusTermService
-				.getTermsByConceptId(concept.getIdentifier())) {
-			if (!term.getPrefered()) {
-				result.add(new FormattedLine(base, "EP: "
-						+ LabelUtil.getLocalizedLabel(term.getLexicalValue(),
-								term.getLanguage(), defaultLang)));
-			}
-		}
-
-		for (ThesaurusConcept child : thesaurusConceptService
-				.getChildrenByConceptId(concept.getIdentifier())) {
-			result.add(new FormattedLine(base, "NT: "
-					+ thesaurusConceptService.getConceptTitleLanguage(child)));
-		}
-
-		for (ThesaurusTerm term : thesaurusTermService
-				.getTermsByConceptId(concept.getIdentifier())) {
-			if (!term.getPrefered()) {
-				result.add(new FormattedLine(base - 1, LabelUtil
-						.getLocalizedLabel(term.getLexicalValue(),
-								term.getLanguage(), defaultLang)));
-				if (term.getRole() == null) {
-					result.add(new FormattedLine(base, thesaurusTermRoleService
-							.getDefaultThesaurusTermRole().getCode()
-							+ ": "
-							+ LabelUtil.getLocalizedLabel(
-									term.getLexicalValue(), term.getLanguage(),
-									defaultLang)));
-				} else {
-					result.add(new FormattedLine(base, term.getRole().getCode()
-							+ ": "
-							+ LabelUtil.getLocalizedLabel(
-									term.getLexicalValue(), term.getLanguage(),
-									defaultLang)));
-				}
-			}
-		}
 	}
 
 	private List<FormattedLine> getHierarchicalText(Integer base,
 			ThesaurusConcept concept) throws BusinessException {
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
 
-		Set<String> thesaurusArrayConcepts = new HashSet<String>();
+		Set<ThesaurusConcept> thesaurusArrayConcepts = new HashSet<ThesaurusConcept>();
 
 		addConceptTitle(base, result, concept);
 
 		List<ThesaurusArray> subOrdArrays = thesaurusArrayService
 				.getSubOrdinatedArrays(concept.getIdentifier());
+		Collections.sort(subOrdArrays, nodeLabelComparator);
 
 		for (ThesaurusArray subOrdArray : subOrdArrays) {
-			for (ThesaurusConcept conceptInArray : subOrdArray.getConcepts()) {
-				thesaurusArrayConcepts.add(conceptInArray.getIdentifier());
-			}
+			thesaurusArrayConcepts.addAll(thesaurusArrayHelper
+					.getArrayConcepts(subOrdArray.getIdentifier()));
 		}
 
 		List<ThesaurusConcept> children = new ArrayList<ThesaurusConcept>(
 				thesaurusConceptService.getChildrenByConceptId(concept
 						.getIdentifier()));
-		Collections.sort(children, new ThesaurusConceptComparator());
+		Collections.sort(children, thesaurusConceptComparator);
 
 		for (ThesaurusConcept child : children) {
-			if (!thesaurusArrayConcepts.contains(child.getIdentifier())) {
+			if (!thesaurusArrayConcepts.contains(child)) {
 				result.addAll(getHierarchicalText(base + 1, child));
 			}
 		}
 
 		for (ThesaurusArray subOrdArray : subOrdArrays) {
-			addThesaurusArray(result, subOrdArray, base);
+			if (subOrdArray.getParent()==null) {
+				addThesaurusArray(result, subOrdArray, base);
+			}
 		}
 
 		return result;
 	}
+	
+	private void addConceptTitle(Integer base, List<FormattedLine> result,
+			ThesaurusConcept concept) {
+		result.add(new FormattedLine(base, thesaurusConceptService
+				.getConceptTitle(concept)));
+	}
 
 	private void addThesaurusArray(List<FormattedLine> result,
 			ThesaurusArray subOrdArray, Integer base) throws BusinessException {
+		NodeLabel nodeLabel = nodeLabelService.getByThesaurusArray(subOrdArray
+				.getIdentifier());
 		result.add(new FormattedLine(base + 1, "<"
-				+ nodeLabelService.getByThesaurusArray(
-						subOrdArray.getIdentifier()).getLexicalValue() + ">"));
-		List<ThesaurusConcept> conceptsInArray = new ArrayList<ThesaurusConcept>(
-				subOrdArray.getConcepts());
-		Collections.sort(conceptsInArray, new ThesaurusConceptComparator());
-
-		for (ThesaurusConcept conceptInArray : conceptsInArray) {
-			result.addAll(getHierarchicalText(base + 1, conceptInArray));
+				+ nodeLabel.getLexicalValue() + ">"));
+		List<ThesaurusArray> childrenArray = thesaurusArrayService.getChildrenArrays(subOrdArray.getIdentifier());
+		Collections.sort(childrenArray, nodeLabelComparator);
+		
+		for (ThesaurusArray children : childrenArray) {
+				addThesaurusArray(result, children, base + 1);
 		}
-	}
-
-	/**
-	 * Comparator to use with two concepts - compares based on its lexicalValue.
-	 */
-	class ThesaurusConceptComparator implements Comparator<ThesaurusConcept> {
-		@Override
-		public int compare(ThesaurusConcept o1, ThesaurusConcept o2) {
-			try {
-				String l1 = thesaurusTermService
-						.getPreferedTerms(
-								thesaurusTermService.getTermsByConceptId(o1
-										.getIdentifier())).get(0)
-						.getLexicalValue();
-				String l2 = thesaurusTermService
-						.getPreferedTerms(
-								thesaurusTermService.getTermsByConceptId(o2
-										.getIdentifier())).get(0)
-						.getLexicalValue();
-				return l1.compareToIgnoreCase(l2);
-			} catch (BusinessException e) {
-				return 0;
+		if (subOrdArray.getOrdered()) {
+			List<ThesaurusConcept> conceptsInArray = thesaurusArrayHelper
+					.getArrayConcepts(subOrdArray.getIdentifier());
+			Collections.sort(conceptsInArray, thesaurusConceptComparator);
+			for (ThesaurusConcept conceptInArray : conceptsInArray) {
+				result.addAll(getHierarchicalText(base + 1, conceptInArray));
+			}
+		} else {
+			List<ThesaurusArrayConcept> conceptsInArray = thesaurusArrayHelper
+					.getArrayConceptRelations(subOrdArray);
+			Collections.sort(conceptsInArray, arrayNaturalComparator);
+			for (ThesaurusArrayConcept conceptInArray : conceptsInArray) {
+				result.addAll(getHierarchicalText(base + 1,
+						thesaurusConceptService
+								.getThesaurusConceptById(conceptInArray
+										.getIdentifier().getConceptId())));
 			}
 		}
+		
+		
 	}
 }

@@ -40,6 +40,8 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
@@ -50,6 +52,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +65,9 @@ public class TopTermGeneratorTest {
 
     @InjectMocks
     private TopTermGenerator topTermGenerator = new TopTermGenerator();
+    
+    @Mock(name = "thesaurusListNodeFactory")
+    private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
     @Before
     public final void setUp() {
@@ -71,6 +78,15 @@ public class TopTermGeneratorTest {
     @Test
     public void testGenerateTopTerms() throws BusinessException {
         List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+        
+        Mockito.when(
+        		thesaurusListNodeFactory.getListBasicNode())
+                .thenAnswer(new Answer<ThesaurusListBasicNode>() {
+                		public ThesaurusListBasicNode answer(
+							InvocationOnMock invocation) throws Throwable {
+						return new ThesaurusListBasicNode();
+					}
+                   });
 
         Thesaurus mockThesaurus = new Thesaurus();
         mockThesaurus.setIdentifier("th1");

@@ -44,6 +44,13 @@ import fr.mcc.ginco.exceptions.BusinessException;
  * Data Access Object for thesaurus_concept
  */
 public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
+	
+	/**
+	 * This method flushes the Hibernate Session.
+	 * Flush must not be used manually. 
+	 * Implemented here for a particular case (see comment in implementation).
+	 */
+	public void flush();
 
 	/**
 	 * Gets the list of ThesaurusConcept which are not top term given
@@ -113,7 +120,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param concept
      * @return
      */
-    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept);    	
-
-
+    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept); 
+    
+    
 }

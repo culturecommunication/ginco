@@ -117,26 +117,62 @@
 			<value>http://www.culturecommunication.gouv.fr/th3</value>
 			<value>eng</value>
 		</row>
+		<row>
+            <value>http://www.culturecommunication.gouv.fr/ter6</value>
+            <value>Doctor Robert</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>revolver</value>
+            <value>false</value>
+            <value>0</value>
+            <null />
+             <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value>ita</value>
+        </row>
+        <row>
+            <value>http://www.culturecommunication.gouv.fr/ter7</value>
+            <value>Good Day Sunshine</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>revolver</value>
+            <value>true</value>
+            <value>0</value>
+            <null />
+              <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value>ita</value>
+        </row>
+          <row>
+            <value>http://www.culturecommunication.gouv.fr/ter8</value>
+            <value>And Your Bird Can Sing</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+            <value>revolver</value>
+            <value>true</value>
+            <value>0</value>
+            <null />
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value>fra</value>
+        </row>
 	</table>  
 		<table name="languages_iso639">
 		<column>id</column>
-		<column>part2b</column>	
-		<column>part2t</column>		
 		<column>part1</column>		
-		<column>scope</column>		
-		<column>type</column>		
 		<column>ref_name</column>
 		<column>toplanguage</column>		
-		<column>comment</column>				
 		<row>
 			<value>eng</value>
-			<value></value>
-			<value></value>			
-			<value></value>			
 			<value>I</value>			
-			<value>L</value>
 			<value>English</value>
 			<value>false</value>
 		</row>
+		<row>
+            <value>ita</value>
+            <value>I</value>            
+            <value>Italian</value>
+            <value>false</value>
+        </row>
 	</table>
 </dataset>

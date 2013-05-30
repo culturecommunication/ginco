@@ -34,24 +34,26 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
+import fr.mcc.ginco.extjs.view.pojo.*;
+import fr.mcc.ginco.extjs.view.utils.AssociativeRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
+import fr.mcc.ginco.extjs.view.utils.HierarchicalRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.EncodedControl;
+import fr.mcc.ginco.utils.LabelUtil;
 import org.apache.cxf.jaxrs.ext.Nullable;
-import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -63,7 +65,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 
 /**
@@ -91,6 +92,18 @@ public class ThesaurusConceptRestService {
 	@Inject
 	@Named("thesaurusConceptViewConverter")
 	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+
+    @Inject
+    @Named("associativeRelationshipViewConverter")
+    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
+    
+    @Inject
+    @Named("hierarchicalRelationshipViewConverter")
+    private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
+
+    @Inject
+    @Named("associativeRelationshipService")
+    private IAssociativeRelationshipService associativeRelationshipService;
 	
 	@Inject
     @Named("indexerService")
@@ -146,45 +159,40 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusConceptView updateConcept(
-			ThesaurusConceptView thesaurusConceptViewJAXBElement)
+			ThesaurusConceptView conceptView)
 			throws BusinessException, TechnicalException {
 
 		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter
-				.convert(thesaurusConceptViewJAXBElement);
+				.convert(conceptView);
+		
+		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
+		List<ThesaurusConcept> childrenToDetach = thesaurusConceptViewConverter
+				.convertRemovedChildren(conceptView);
 
 		List<ThesaurusTerm> terms = termViewConverter
-				.convertTermViewsInTerms(thesaurusConceptViewJAXBElement
+				.convertTermViewsInTerms(conceptView
                         .getTerms(), true);
 		logger.info("Number of converted terms : " + terms.size());
 
-		List<ThesaurusTerm> preferedTerm = thesaurusTermService
-				.getPreferedTerms(terms);
 
-		// Business rule : a concept must have at least 1 term
-		if (preferedTerm.size() == 0) {
-			throw new BusinessException("A concept must have a prefered term",
-					"missing-preferred-term-for-concept");
-		}
+		//We get associative relationships from the view
+        List<AssociativeRelationship> associations = new ArrayList<AssociativeRelationship>();
+        for(AssociativeRelationshipView view : conceptView.getAssociatedConcepts()) {
+            associations.add(associativeRelationshipViewConverter.convert(view, convertedConcept));
+        }
+        
+        //We get hierarchical relationships (from child to parents) from the view
+        List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
+        if (conceptView.getParentConcepts() != null) {
+        	for (HierarchicalRelationshipView hierarchicalRelationView : conceptView.getParentConcepts()) {
+        		hierarchicalRelationships.add(hierarchicalRelationshipViewConverter.convertRelationFromChildToParent(hierarchicalRelationView, convertedConcept));
+        	}        	
+        }
 
-		// Business rule : a concept mustn't have more than one prefered term
-		if (preferedTerm.size() > 1) {
-			throw new BusinessException(
-					"A concept must have at only one prefered term",
-					"to-many-preferred-terms-for-concept");
-		}
-
-		if (StringUtils.isNotEmpty(thesaurusConceptViewJAXBElement.getIdentifier())) {
-				List<ThesaurusTerm> origin = thesaurusTermService
-						.getTermsByConceptId(convertedConcept.getIdentifier());
-				thesaurusTermService.markTermsAsSandboxed(terms, origin);
-			
-		}
-
-		// We save or update the concept
-		logger.info("Saving concept in DB");
-
+        //We save or update the concept
+        logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
-				.updateThesaurusConcept(convertedConcept, terms, thesaurusConceptViewJAXBElement.getAssociatedConcepts());
+				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach);
 		
 		for (ThesaurusTerm term : terms) {
 			indexerService.addTerm(term);
@@ -193,6 +201,16 @@ public class ThesaurusConceptRestService {
 		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
+
+    @GET
+    @Path("/getAssociations")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<AssociativeRelationship> getAssociativeRelationshipsByConceptId(
+            @QueryParam("conceptId")String conceptId) {
+
+        ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+        return (List<AssociativeRelationship>) concept.getAssociativeRelationshipRight();
+    }
 
     @GET
     @Path("/getConcepts")
@@ -255,10 +273,13 @@ public class ThesaurusConceptRestService {
     @Path("/getAvailableConceptsOfArray")
     @Produces({ MediaType.APPLICATION_JSON })
     public  ExtJsonFormLoadData<List<ThesaurusConceptReducedView> > getAvailableConceptsOfArray(
-    		@QueryParam("arrayId") String arrayId)
+    		@QueryParam("arrayId") String arrayId,
+    		@QueryParam("thesaurusId") String thesaurusId
+    		)
             throws BusinessException {
+    	
         List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
-        List<ThesaurusConcept> children = thesaurusConceptService.getAvailableConceptsOfArray(arrayId);
+        List<ThesaurusConcept> children = thesaurusConceptService.getAvailableConceptsOfArray(arrayId, thesaurusId);
         for (ThesaurusConcept child : children) {
             reducedConcepts.add(thesaurusConceptViewConverter.convert(child));
         }
@@ -283,6 +304,7 @@ public class ThesaurusConceptRestService {
 	
 		if (object != null) {
 			thesaurusConceptService.destroyThesaurusConcept(object);
+			indexerService.removeConcept(object);
 		}
 	}
 	
@@ -298,19 +320,23 @@ public class ThesaurusConceptRestService {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		
 		try {
-			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
-			String availableStatusIds[] = res.getString("concept-status").split(",");
+			String availableStatusIds[] = LabelUtil.getResourceLabel("concept-status").split(",");
 			
 			if ("".equals(availableStatusIds[0])) {
 				//Ids of status for concepts are not set correctly
 				throw new BusinessException("Error with property file - check values of identifier concept status", "check-values-of-concept-status");
 			}
-			
+
+            GenericStatusView firstEmpty = new GenericStatusView();
+            firstEmpty.setStatus(-1);
+            firstEmpty.setStatusLabel("-");
+            listOfStatus.add(firstEmpty);
+
 	        for (String id : availableStatusIds) {
 	        	GenericStatusView conceptStatusView = new GenericStatusView();
 	        	conceptStatusView.setStatus(Integer.valueOf(id));
 	        	
-	        	String label = res.getString("concept-status["+ id +"]");
+	        	String label = LabelUtil.getResourceLabel("concept-status["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly
 	        		throw new BusinessException("Error with property file - check values of identifier concept status", "check-values-of-concept-status");
@@ -324,6 +350,46 @@ public class ThesaurusConceptRestService {
 		}
 		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());
+		return result;
+	}
+	
+	/**
+	 * Public method to get all roles for hierarchical relationships between concepts
+	 * The types are read from a properties file
+	 * @throws BusinessException 
+	 */
+	@GET
+	@Path("/getAllHierarchicalRelationRoles")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<GenericRoleView>> getAllHierarchicalRelationRoles() throws BusinessException {
+		List<GenericRoleView> listOfRoles = new ArrayList<GenericRoleView>();
+		
+		try {
+			String availableRoleIds[] = LabelUtil.getResourceLabel("hierarchical-role").split(",");
+			
+			if ("".equals(availableRoleIds[0])) {
+				//Ids of roles for hierarchical relationships are not set correctly
+				throw new BusinessException("Error with property file - check values of identifiers for hierarchical relationships", "check-values-of-hierarchical-relationships");
+			}
+			
+	        for (String id : availableRoleIds) {
+	        	GenericRoleView roleView = new GenericRoleView();
+	        	roleView.setRole(Integer.valueOf(id));
+	        	
+	        	String label = LabelUtil.getResourceLabel("hierarchical-role["+ id +"]");
+	        	if (label.isEmpty()) {
+	        		//Labels of status are not set correctly
+	        		throw new BusinessException("Error with property file - check values of identifiers for hierarchical relationships", "check-values-of-hierarchical-relationships");
+				} else {
+					roleView.setRoleLabel(label);
+				}
+	        	listOfRoles.add(roleView);
+			}
+		} catch (MissingResourceException e) {
+			throw new BusinessException("Error with property file - check values of identifiers for hierarchical relationships", "check-values-of-hierarchical-relationships", e);
+		}
+		ExtJsonFormLoadData<List<GenericRoleView>> result = new ExtJsonFormLoadData<List<GenericRoleView>>(listOfRoles);
+        result.setTotal((long) listOfRoles.size());
 		return result;
 	}
 }

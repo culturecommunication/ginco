@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -58,10 +60,10 @@ public interface IThesaurusConceptService {
 
     /**
      * Get list of ThesaurusConcept by list of id.
-     *
+     * @param ids : List of ids
      * @return
      */
-    Set<ThesaurusConcept> getThesaurusConceptList(List<String> list) throws BusinessException;
+    Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids) throws BusinessException;
 
 	/**
 	 * Get single ThesaurusConcept by its id.
@@ -90,6 +92,16 @@ public interface IThesaurusConceptService {
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException;
+	
+	/**
+	 * Gets the list of the preferred terms of a concept
+	 * 
+	 * @param conceptId
+	 * @return
+	 * @throws BusinessException
+	 */
+	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
+			throws BusinessException;
 
 	/**
 	 * Gets the label of a concept with title@lang notation
@@ -99,14 +111,19 @@ public interface IThesaurusConceptService {
 	 * @throws BusinessException
 	 */
 	String getConceptLabel(String conceptId) throws BusinessException;
-	
 
 	/**
 	 * Update a single Thesaurus Concept Object
-	 * @throws BusinessException 
+	 * @param The concept to update
+	 * @param The list of the concept's terms
+	 * @param The ids of associated concepts
+	 * @param The hierarchical relations (from current concept (child) to its parents)
+	 * @param The list of children concepts we must detach (must not be still children of our concept)
+	 * @return The updated concept
+	 * @throws BusinessException
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<String> associatedConceptIds) throws BusinessException;
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept>childrenConceptToDetach) throws BusinessException;
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
@@ -162,23 +179,7 @@ public interface IThesaurusConceptService {
      * @return
      */
     boolean hasChildren(String conceptId);
-
-    /**
-     * Calculates the root concepts for given concept.
-     * @param concept
-     * @return
-     */
-    List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept);
-
-    /**
-     * Removes parents and updates connected concepts.
-     * @param concept
-     * @param parentsToRemove list of ids.
-     */
-    void removeParents(ThesaurusConcept concept, List<String> parentsToRemove) throws BusinessException;  	
-	
-	
-	
+   	
 	/**
 	 * Delete a ThesaurusConcept object
 	 * @param object
@@ -195,10 +196,10 @@ public interface IThesaurusConceptService {
 
 	/**Get all concepts eligible for an array
 	 * @param arrayId
-	 * @param conceptId
-	 * @return List of concepts
+	 * @param thesaurusId
+	 * @return List of concepts eligible for an array
 	 */
-	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId);
+	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId, String thesaurusId);
 
     /**
      * For indexing purposes.
@@ -250,4 +251,21 @@ public interface IThesaurusConceptService {
 	 * @return the status of a concept
 	 */
 	int getStatusByConceptId(String conceptId) throws BusinessException;
+	
+	
+	/**
+	 * Returns this concept preferred term in the given language, null if none is found
+	 * @param conceptId
+	 * @param languageId
+	 * @return
+	 */
+	ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId);
+
+	/**
+	 * Returns all the concepts that are under the concept which id is given in parameter (children, children of children, etc. recursively)
+	 * @param conceptId
+	 * @param originalParentId
+	 * @param allRecursiveChildren : the list we want to fill in with children get recursively
+	 */
+	List<ThesaurusConcept> getRecursiveChildrenByConceptId(String conceptId, String originalParentId, List<ThesaurusConcept> allRecursiveChildren);
 }

@@ -30,7 +30,6 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 	layout : 'fit',
 	alias: 'widget.loginForm',
 	width : 400,
-	title : 'Ginco Admin',
 	height : 190,
 	localized : true,
 	xLoginWinTitle : 'Please enter your credentials',
@@ -42,6 +41,7 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 	resizable : false,
 	plain : true,
 	border : false,
+	defaultFocus:'username',
 	initComponent : function() {
 		var me = this;
 		Ext.applyIf(me, {
@@ -49,7 +49,7 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 				xtype : 'form',
 				bodyPadding: '10 10 0',
 				defaults : {
-					anchor : '90%',
+					anchor : '90%'
 				},
 				url:'login_security_check', 
 				title : me.xLoginWinTitle,
@@ -58,13 +58,13 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 					itemId : 'message',
 					cls : 'mandatory-field ',
 					text : me.xLoginErrorLbl,
-					hidden : true,
+					hidden : true
 				} ],
 				items : [ {
 					xtype : 'textfield',
 					fieldLabel : me.xUserNameLbl,
 					name : 'j_username',
-					id : 'username',
+					itemId : 'username',
 					allowBlank : false
 				}, {
 					xtype : 'textfield',

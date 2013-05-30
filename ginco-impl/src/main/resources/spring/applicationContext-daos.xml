@@ -31,7 +31,8 @@
                 <value>hibernate/GincoRevEntity.hbm.xml</value>
                 <value>hibernate/GincoRevModifiedEntityType.hbm.xml</value>
                 <value>hibernate/AssociativeRelationship.hbm.xml</value>
-                <value>hibernate/AssociativeRelationshipRole.hbm.xml</value>      
+                <value>hibernate/AssociativeRelationshipRole.hbm.xml</value>
+                <value>hibernate/ConceptHierarchicalRelationship.hbm.xml</value>      
                 <value>hibernate/NodeLabel.hbm.xml</value>
                 <value>hibernate/ThesaurusArray.hbm.xml</value>
                 <value>hibernate/ThesaurusConceptGroup.hbm.xml</value>
@@ -39,6 +40,12 @@
                 <value>hibernate/ThesaurusConceptGroupLabel.hbm.xml</value>
                 <value>hibernate/AdminUser.hbm.xml</value>
                 <value>hibernate/ThesaurusArk.hbm.xml</value>
+                <value>hibernate/CustomConceptAttributeType.hbm.xml</value>
+                <value>hibernate/CustomTermAttributeType.hbm.xml</value>
+                <value>hibernate/ThesaurusArrayConcept.hbm.xml</value>                
+                <value>hibernate/SplitNonPreferredTerm.hbm.xml</value>
+                <value>hibernate/CustomConceptAttribute.hbm.xml</value>
+                <value>hibernate/CustomTermAttribute.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -50,9 +57,10 @@
                 <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
                 <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
                 <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop> 
-                <prop key="org.hibernate.envers.revision_listener">fr.mcc.ginco.audit.GincoRevListener</prop>  
+                <prop key="org.hibernate.envers.revision_listener">fr.mcc.ginco.audit.tracking.GincoRevListener</prop>  
                 <!-- Reset to true due to this : https://hibernate.onjira.com/browse/HHH-6542?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel -->
                 <prop key="org.hibernate.envers.revision_on_collection_change">true</prop>
+                <prop key="org.hibernate.envers.modified_flag_suffix">_mod</prop>
             </props>
         </property>
 	</bean>

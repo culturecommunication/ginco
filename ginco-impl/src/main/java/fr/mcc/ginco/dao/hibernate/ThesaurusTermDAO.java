@@ -34,17 +34,20 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
+
+import org.hibernate.Criteria;
+import org.hibernate.FlushMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -53,6 +56,9 @@ import fr.mcc.ginco.exceptions.BusinessException;
 @Repository("thesaurusTermDAO")
 public class ThesaurusTermDAO extends
 		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
+	
+	@Value("${ginco.default.language}")
+	private String defaultLang;
 	
 	public ThesaurusTermDAO() {
 		super(ThesaurusTerm.class);
@@ -89,6 +95,17 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
+	public Long countPreferredTerms(String idThesaurus)
+			throws BusinessException {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+		.add(Restrictions.isNotNull("concept"))
+		.add(Restrictions.eq("prefered", Boolean.TRUE))
+		.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
+	
+	@Override
 	public Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		countAllSandboxedTerms(criteria, idThesaurus);
@@ -98,24 +115,33 @@ public class ThesaurusTermDAO extends
 	
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
+        List<ThesaurusTerm> list = getConceptPreferredTerms(conceptId);      
+        if (list.size() > 0) {
+        	for (ThesaurusTerm term:list) {
+        		if (term.getLanguage().getId().equals(defaultLang)) {
+        			return term;
+        		}
+        	}
+        }       
+
+        return list.get(0);
+	}
+	
+	@Override
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId){       
         List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq("concept.identifier", conceptId))
                 .add(Restrictions.eq("prefered", Boolean.TRUE))
+                .add(Restrictions.eq("language.id", languageId))
+
                 .list();
 
-        if(list.size() == 0) {
-            throw new BusinessException("No preferred term found ! " +
-                    "Please check your database !", "no-preferred-term-found");
+        if(list == null || list.size() == 0) {
+            return null;
         }
-
-        if(list.size() != 1) {
-            throw new BusinessException("More than one preferred term found ! " +
-                    "Please check your database !", "too-many-preferred-terms-found");
-        }
-
         return list.get(0);
-	}
+    }
 
 	@Override
 	public List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException {
@@ -131,7 +157,16 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
-	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {		 
+	public List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId) throws BusinessException {
+		List<ThesaurusTerm> list = getCurrentSession()
+                .createCriteria(ThesaurusTerm.class)
+                .add(Restrictions.eq("thesaurus.identifier", thesaurusId))
+                .list();
+		return list;
+	}
+	
+	@Override
+	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {
 		return (Long) getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq("lexicalValue", term.getLexicalValue()))
@@ -145,14 +180,15 @@ public class ThesaurusTermDAO extends
 	@Override
 	public ThesaurusTerm update(ThesaurusTerm termToUpdate)
 			throws BusinessException {
-
+		getCurrentSession().setFlushMode(FlushMode.COMMIT);
 		// Verifying if there is no a similar term (lexicalValue + lang)
 		Long numberOfExistingTerms = countSimilarTermsByLexicalValueAndLanguage(termToUpdate);
 		if (numberOfExistingTerms > 0) {
-				throw new BusinessException("Already existing term",
-					"already-existing-term");
+			throw new BusinessException("Already existing term : "
+					+ termToUpdate.getLexicalValue(), "already-existing-term",
+					new Object[] { termToUpdate.getLexicalValue() });
 		}
-		
+
 		if (termToUpdate.getHidden() == null) {
 			//By default, hidden is false if not set
 			termToUpdate.setHidden(false);
@@ -165,6 +201,7 @@ public class ThesaurusTermDAO extends
 
 		// Update an existing term
 		getCurrentSession().saveOrUpdate(termToUpdate);
+		getCurrentSession().flush();
 		return termToUpdate;
 	}
 	
@@ -190,6 +227,18 @@ public class ThesaurusTermDAO extends
 		.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"));
     }
 	
+	@Override
+	public List<ThesaurusTerm> findPaginatedPreferredItems(Integer startIndex,
+			Integer limit, String idThesaurus) {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		criteria.setMaxResults(limit)
+		.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+		.add(Restrictions.isNotNull("concept"))
+		.add(Restrictions.eq("prefered", true))
+		.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"));
+		return criteria.list();
+	}
+	
 	/**
 	 * This method constructs a criteria to count sandboxed terms
 	 * @param criteria
@@ -209,14 +258,22 @@ public class ThesaurusTermDAO extends
                 .add(Restrictions.eq("concept.identifier", conceptId))
                 .add(Restrictions.eq("prefered", Boolean.FALSE))
                 .list();
+      	return list;
+	}
 
-        if(list.size() == 0) {
-        	throw new BusinessException("The concept " + conceptId
-					+ " has only preferred terms or any terms",
-					"concept-has-preferred-terms-or-any-terms");
-        }
-        else{
-        	return list;
-        }
+	@Override
+	public List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
+			throws BusinessException {
+		  List<ThesaurusTerm> list = getCurrentSession()
+	                .createCriteria(ThesaurusTerm.class)
+	                .add(Restrictions.eq("concept.identifier", conceptId))
+	                .add(Restrictions.eq("prefered", Boolean.TRUE))
+	                .list();
+
+	        if(list.size() == 0) {
+	            throw new BusinessException("No preferred term found ! " +
+	                    "Please check your database !", "no-preferred-term-found");
+	        }
+	        return list;
 	}
 }

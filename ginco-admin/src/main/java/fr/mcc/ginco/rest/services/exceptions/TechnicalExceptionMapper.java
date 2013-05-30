@@ -36,13 +36,13 @@ package fr.mcc.ginco.rest.services.exceptions;
 
 import javax.ws.rs.core.Response;
 
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 public class TechnicalExceptionMapper extends
-		AbstractExceptionMapper<BusinessException> {
+		AbstractExceptionMapper<TechnicalException> {
 
 	@Override
 	public Response toResponse(Throwable exception) {
-		return super.toResponse(exception, "technical-exception-text");
+		return super.toResponse(exception, "technical-exception-text", null);
 	}
 }

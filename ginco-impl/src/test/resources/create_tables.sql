@@ -3,6 +3,8 @@
 DROP TABLE IF EXISTS thesaurus;
 DROP TABLE IF EXISTS thesaurus_type;
 DROP TABLE IF EXISTS thesaurus_format;
+DROP TABLE IF EXISTS thesaurus_formats;
+DROP TABLE IF EXISTS thesaurus_formats_aud;
 DROP TABLE IF EXISTS thesaurus_version_history;
 DROP TABLE IF EXISTS languages_iso639;
 DROP TABLE IF EXISTS thesaurus_organization;
@@ -14,6 +16,9 @@ DROP TABLE IF EXISTS top_relationship;
 DROP TABLE IF EXISTS associative_relationship;
 DROP TABLE IF EXISTS associative_relationship_role;
 DROP TABLE IF EXISTS thesaurus_array;
+DROP TABLE IF EXISTS concept_group_label;
+DROP TABLE IF EXISTS concept_group_type;
+DROP TABLE IF EXISTS concept_group;
 DROP TABLE IF EXISTS node_label;
 DROP TABLE IF EXISTS thesaurus_array_concept;
 DROP TABLE IF EXISTS revinfo;
@@ -21,12 +26,18 @@ DROP TABLE IF EXISTS revinfoentitytypes;
 DROP TABLE IF EXISTS thesaurus_aud;
 DROP TABLE IF EXISTS note_type;
 DROP TABLE IF EXISTS thesaurus_ark;
+DROP TABLE IF EXISTS custom_concept_attribute_type;
+DROP TABLE IF EXISTS custom_term_attribute_type;
+DROP TABLE IF EXISTS custom_concept_attribute;
+DROP TABLE IF EXISTS custom_term_attribute;
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
 DROP SEQUENCE IF EXISTS node_label_id_seq;
 DROP SEQUENCE IF EXISTS revinfo_identifier_seq;
 DROP SEQUENCE IF EXISTS revinfoentitytypes_identifier_seq;
+DROP SEQUENCE IF EXISTS custom_concept_attribute_type_identifier_seq;
+DROP SEQUENCE IF EXISTS custom_term_attribute_type_identifier_seq;
 
 
 CREATE TABLE thesaurus
@@ -36,7 +47,6 @@ CREATE TABLE thesaurus
   coverage text,
   date text,
   description text,
-  format integer,
   publisher text,
   relation text,
   rights text,
@@ -47,7 +57,8 @@ CREATE TABLE thesaurus
   creator integer,
   created text,
   defaulttopconcept boolean NOT NULL DEFAULT FALSE,
-  archived boolean DEFAULT FALSE
+  archived boolean DEFAULT FALSE,
+  ispolyhierarchical boolean DEFAULT FALSE
 
 );
 
@@ -69,6 +80,7 @@ CREATE TABLE thesaurus_version_history
   thesaurus_identifier text NOT NULL,
   thisversion boolean NOT NULL DEFAULT false,
   status integer NOT NULL DEFAULT 0,
+  userid text,
   CONSTRAINT pk_thesaurus_version_history PRIMARY KEY (identifier)
 );
 
@@ -78,15 +90,11 @@ ALTER TABLE thesaurus_version_history
     ON UPDATE NO ACTION ON DELETE CASCADE;
 
 CREATE TABLE languages_iso639 (
-    id character(3) NOT NULL,
-    part2b character(3),
-    part2t character(3),
+    id character(5) NOT NULL,
     part1 character(2),
-    scope character(1) NOT NULL,
-    type character(1) NOT NULL,
     ref_name character varying(150) NOT NULL,
     toplanguage boolean NOT NULL DEFAULT FALSE,
-    comment character varying(150)
+    principallanguage boolean DEFAULT FALSE
 );
 
 CREATE TABLE thesaurus_organization (
@@ -134,6 +142,7 @@ CREATE TABLE hierarchical_relationship
 (
   childconceptid text NOT NULL,
   parentconceptid text NOT NULL,
+  role integer NOT NULL DEFAULT FALSE,
   CONSTRAINT pk_hierarchical_relationship PRIMARY KEY (childconceptid, parentconceptid)
 );
 
@@ -215,6 +224,7 @@ CREATE TABLE thesaurus_array
   notation text,
   thesaurusid text NOT NULL,
   superordinateconceptid text,
+  parentarrayid text,
   CONSTRAINT pk_thesaurus_array_identifier PRIMARY KEY (identifier)
 );
 
@@ -223,11 +233,68 @@ ALTER TABLE thesaurus_array
       REFERENCES thesaurus_concept (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
 
-      
 ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (thesaurusid)
       REFERENCES thesaurus (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+ALTER TABLE thesaurus_array
+      ADD FOREIGN KEY (parentarrayid)
+      REFERENCES thesaurus_array (identifier)
+      ON UPDATE NO ACTION ON DELETE SET NULL;
+
+CREATE TABLE concept_group_type
+(
+  code text NOT NULL,
+  label text NOT NULL,
+  CONSTRAINT pk_concept_group_type_code PRIMARY KEY (code)
+);
+
+CREATE TABLE concept_group
+(
+  identifier text NOT NULL,
+  thesaurusid text NOT NULL,
+  conceptgrouptypecode text NOT NULL,
+  parentgroupid text,
+  CONSTRAINT pk_concept_group_identifier PRIMARY KEY (identifier)
+);
+
+ALTER TABLE concept_group
+      ADD FOREIGN KEY (thesaurusid)
+      REFERENCES thesaurus (identifier)
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+      
+ALTER TABLE concept_group
+      ADD FOREIGN KEY (conceptgrouptypecode)
+      REFERENCES concept_group_type (code)
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+      
+ALTER TABLE concept_group
+      ADD FOREIGN KEY (parentgroupid)
+      REFERENCES concept_group (identifier)
+      ON UPDATE NO ACTION ON DELETE SET NULL;
+
+CREATE TABLE concept_group_label
+(
+  identifier integer NOT NULL,
+  lexicalvalue text NOT NULL,
+  created text NOT NULL,
+  modified text NOT NULL,
+  lang character(5) NOT NULL,
+  conceptgroupid text NOT NULL,
+  CONSTRAINT pk_concept_group_label_identifier PRIMARY KEY (identifier)
+);
+
+ALTER TABLE concept_group_label
+    ADD FOREIGN KEY (conceptgroupid)
+    REFERENCES concept_group (identifier)
+    ON UPDATE NO ACTION ON DELETE CASCADE;
+    
+ALTER TABLE concept_group_label
+    ADD FOREIGN KEY (lang)
+    REFERENCES languages_iso639 (id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION;
+
 
 CREATE TABLE node_label
 (
@@ -298,9 +365,9 @@ CREATE TABLE thesaurus_aud (
     created text,
     defaulttopconcept boolean,
     archived boolean,
-    format integer,
     type integer,
-    creator integer
+    creator integer,
+    ispolyhierarchical boolean
 );
 
 CREATE TABLE note_type
@@ -318,4 +385,79 @@ CREATE TABLE note_type
     created text,
     entity text NOT NULL,
     CONSTRAINT pk_thesaurus_ark PRIMARY KEY (identifier)
-   );
+  );
+
+CREATE SEQUENCE custom_concept_attribute_type_identifier_seq  START WITH 1  INCREMENT BY 1 ;
+CREATE SEQUENCE custom_term_attribute_type_identifier_seq START WITH 1  INCREMENT BY 1 ;
+
+CREATE TABLE custom_concept_attribute_type
+(
+  identifier int NOT NULL,
+  code text NOT NULL,
+  value text NOT NULL,
+  thesaurusid text NOT NULL,
+  CONSTRAINT pk_custom_concept_attribute_type PRIMARY KEY (identifier)
+);
+
+CREATE TABLE custom_term_attribute_type
+(
+  identifier int NOT NULL,
+  code text NOT NULL,
+  value text NOT NULL,
+  thesaurusid text NOT NULL,
+  CONSTRAINT pk_custom_term_attribute_type PRIMARY KEY (identifier)
+);
+
+CREATE TABLE custom_concept_attribute
+(
+  identifier text NOT NULL,
+  conceptid text,
+  typeid int,
+  lang text,
+  lexicalvalue text,
+  CONSTRAINT pk_custom_concept_attribute PRIMARY KEY (identifier)/*,
+  CONSTRAINT fk_custom_concept_attribute_lang FOREIGN KEY (lang)
+  REFERENCES languages_iso639 (id) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_concept_attribute_conceptid FOREIGN KEY (conceptid)
+  REFERENCES thesaurus_concept (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_concept_attribute_typeid FOREIGN KEY (typeid)
+  REFERENCES custom_concept_attribute_type (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION        */
+);
+
+CREATE TABLE custom_term_attribute
+(
+  identifier text NOT NULL,
+  termid text,
+  typeid int,
+  lang text,
+  lexicalvalue text,
+  CONSTRAINT pk_custom_term_attribute PRIMARY KEY (identifier)/*,
+  CONSTRAINT fk_custom_term_attribute_lang FOREIGN KEY (lang)
+  REFERENCES languages_iso639 (id) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_term_attribute_termid FOREIGN KEY (termid)
+  REFERENCES thesaurus_term (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_custom_term_attribute_typeid FOREIGN KEY (typeid)
+  REFERENCES custom_term_attribute_type (identifier) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE NO ACTION  */
+);
+
+CREATE TABLE thesaurus_formats
+(
+  format_identifier integer NOT NULL,
+  thesaurus_identifier text NOT NULL,
+  CONSTRAINT pk_thesaurus_formats PRIMARY KEY (format_identifier, thesaurus_identifier),
+);
+
+CREATE TABLE thesaurus_formats_aud
+(
+  rev integer NOT NULL,
+  thesaurus_identifier text NOT NULL,
+  format_identifier integer NOT NULL,
+  revtype smallint,
+  CONSTRAINT thesaurus_formats_aud_pkey PRIMARY KEY (rev, thesaurus_identifier, format_identifier)
+);

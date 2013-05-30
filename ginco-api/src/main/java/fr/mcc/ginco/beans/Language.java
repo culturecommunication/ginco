@@ -44,14 +44,10 @@ import java.io.Serializable;
 public class Language implements Serializable {	
 
 	private String id;
-	private String part2b;
-	private String part2t;
 	private String part1;
-	private String scope;
-	private String type;
 	private String refname;
-	private boolean toplanguage;
-	private String comment;
+	private boolean topLanguage;
+	private boolean principalLanguage;
 
 	public String getId() {
 		return id;
@@ -59,42 +55,14 @@ public class Language implements Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getPart2b() {
-		return part2b;
-	}
-	public void setPart2b(String part2b) {
-		this.part2b = part2b;
-	}
-	public String getPart2t() {
-		return part2t;
-	}
-	public void setPart2t(String part2t) {
-		this.part2t = part2t;
-	}
+	
 	public String getPart1() {
 		return part1;
 	}
 	public void setPart1(String part1) {
 		this.part1 = part1;
 	}
-	public String getScope() {
-		return scope;
-	}
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}	
-	public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+	
 	public String getRefname() {
 		return refname;
 	}
@@ -102,17 +70,23 @@ public class Language implements Serializable {
 		this.refname = refname;
 	}
     
-    /**
-	 * @return True if the tested language belongs to most-used languages in the application, and false if it's a language used rarely
-	 */
-	public boolean isToplanguage() {
-		return toplanguage;
-	}
 	/**
+	 * @return True if the tested language belongs to most-used languages in the application, and false if it's a language used rarely
+	 */   
+    public boolean isTopLanguage() {
+		return topLanguage;
+	}
+    /**
 	 * @param toplanguage
 	 * If set to true, the language is declared as frequently used in the application.
 	 */
-	public void setToplanguage(boolean toplanguage) {
-		this.toplanguage = toplanguage;
+	public void setTopLanguage(boolean topLanguage) {
+		this.topLanguage = topLanguage;
+	}
+	public boolean isPrincipalLanguage() {
+		return principalLanguage;
+	}
+	public void setPrincipalLanguage(boolean principalLanguage) {
+		this.principalLanguage = principalLanguage;
 	}	
 }

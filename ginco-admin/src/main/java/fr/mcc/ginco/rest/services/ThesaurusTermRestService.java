@@ -44,7 +44,8 @@ import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.EncodedControl;
+import fr.mcc.ginco.utils.LabelUtil;
+
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -53,10 +54,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 /**
  * Thesaurus Term REST service for all operations on Thesauruses Terms
@@ -111,6 +112,33 @@ public class ThesaurusTermRestService {
 		} else {
 			total = thesaurusTermService.getSandboxedTermsCount(idThesaurus);
 		}
+		
+		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
+		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
+			results.add(new ThesaurusTermView(thesaurusTerm));
+		}
+		ExtJsonFormLoadData<List<ThesaurusTermView> > extTerms = new  ExtJsonFormLoadData<List<ThesaurusTermView> > (results);
+		extTerms.setTotal(total);
+		return extTerms;
+	}
+	
+	/**
+	 * Public method used to get list of all existing Thesaurus terms objects in
+	 * database.
+	 * 
+	 * @return list of ThesaurusTermView, if not found - {@code null}
+	 */
+	@GET
+	@Path("/getPreferredThesaurusTerms")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<ThesaurusTermView> > getPreferredThesaurusTerms
+    (@QueryParam("start") Integer startIndex,
+     @QueryParam("limit") Integer limit,
+     @QueryParam("idThesaurus") String idThesaurus) throws BusinessException{
+		logger.info("Getting Thesaurus Preferred Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit );
+		List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
+		thesaurusTerms = thesaurusTermService.getPaginatedThesaurusPreferredTermsList(startIndex, limit, idThesaurus);	
+		Long total = thesaurusTermService.getPreferredTermsCount(idThesaurus);
 		
 		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
@@ -184,6 +212,7 @@ public class ThesaurusTermRestService {
 	
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
+			indexerService.removeTerm(object);
 			return new ThesaurusTermView(result);
 		}
 		return null;
@@ -201,8 +230,7 @@ public class ThesaurusTermRestService {
 
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		try {
-			ResourceBundle res = ResourceBundle.getBundle("labels", new EncodedControl("UTF-8"));
-			String availableStatusIds[] = res.getString("term-status").split(",");
+			String availableStatusIds[] = LabelUtil.getResourceLabel("term-status").split(",");
 			
 			if ("".equals(availableStatusIds[0])) {
 				//Ids of status for terms are not set correctly
@@ -213,7 +241,7 @@ public class ThesaurusTermRestService {
 	        	GenericStatusView termStatusView = new GenericStatusView();
 	        	termStatusView.setStatus(Integer.valueOf(id));
 	        	
-	        	String label = res.getString("term-status["+ id +"]");
+	        	String label = LabelUtil.getResourceLabel("term-status["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly
 	        		throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");

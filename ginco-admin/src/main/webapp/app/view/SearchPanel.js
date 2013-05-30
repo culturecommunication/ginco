@@ -33,24 +33,139 @@ Ext.define('GincoApp.view.SearchPanel', {
 	xTypeValueColumnLabel : 'Type',
 	xDisplayResultBtnLabel : 'Display',
 	xSearchPanelTitle : 'Search results',
+	xAdvancedSearchPnlTitle : 'Advanced search',
+	xAdvancedSearchBtn : 'Filter',
+	xAdvancedSearchThesaurusFilter : 'Thesaurus',
+	xAdvancedSearchTypeFilter : 'Type',
+	xAdvancedSearchStatusFilter : 'Status',
+	xAdvancedSearchLanguageFilter : 'Language',
+	xAdvancedSearchCreationDateFilter : 'Creation date',
+	xAdvancedSearchModificationDateFilter : 'Modification date',
+	xQueryFieldLbl : 'Query',
 	closable : true,
 	localized : true,
 	searchQuery : '*',
+	xTypeLabels : {
+		ThesaurusTerm : 'Term',
+		ThesaurusConcept : 'Concept'
+	},
 	layout : {
 		type : 'vbox',
 		align : 'stretch'
 	},
+	typeRenderer : function(value, record) {
+		return this.ownerCt.xTypeLabels[value];
+	},
 
 	initComponent : function() {
 		var me = this;
-		var me = this;
 		me.searchStore = Ext.create('GincoApp.store.SearchResultStore');
+		me.thesaurusStore = Ext.create('GincoApp.store.ThesaurusStore',
+		{
+			listeners : {
+				load : {
+					fn : function (theStore)
+					{
+						theStore.insert(0,{
+							id : "-1",
+							title : '-'
+						});
+					}
+				}
+			}
+		});
+		
+		me.langStore = Ext.create('GincoApp.store.ThesaurusLanguageStore',
+		{
+			listeners : {
+				load : {
+					fn : function (theStore)
+					{
+						theStore.insert(0,{
+							id : "-1",
+							refname : '-'
+						});
+					}
+				}
+			}
+		});
 
 		Ext.applyIf(me, {
 			title : me.xSearchPanelTitle,
 			items : [ {
-				xtype : 'gridpanel',
+				xtype : 'form',
+				itemId : 'advancedSearchForm',
 				dock : 'top',
+				title : me.xAdvancedSearchPnlTitle,
+				collapsible : true,
+				collapsed : true,
+				tbar : [ {
+					xtype : 'button',
+					itemId : 'filterBtn',
+					formBind: true,
+					iconCls : 'icon-display',
+					text : me.xAdvancedSearchBtn
+				} ],
+				items : [ {
+					defaults : {
+						margin : '10 0 10 10'
+					},
+					layout : 'column',
+					items : [
+					{
+						xtype : 'textfield',
+						name : 'query',
+						fieldLabel : me.xQueryFieldLbl
+					},
+					{
+						xtype : 'ariacombo',
+						name : 'thesaurus',
+						editable : false,
+						fieldLabel : me.xAdvancedSearchThesaurusFilter,
+						displayField : 'title',
+						valueField : 'id',
+						store :'ThesaurusStore'
+					}, {
+						xtype : 'ariacombo',
+						name : 'type',
+						editable : false,
+						displayField : 'typeLabel',
+						valueField : 'type',
+						fieldLabel : me.xAdvancedSearchTypeFilter,
+						store :'SearchTypeStore'
+					}, {
+						xtype : 'ariacombo',
+						name : 'status',
+						fieldLabel : me.xAdvancedSearchStatusFilter,
+						displayField : 'statusLabel',
+						valueField : 'status',
+						editable : false,
+						store : 'ConceptStatusStore'
+					},
+					{
+						xtype : 'ariacombo',
+						name : 'language',
+						fieldLabel : me.xAdvancedSearchLanguageFilter,
+						displayField : 'refname',
+						valueField : 'id',
+						editable : false,
+						store : me.langStore
+					},
+					{
+						xtype : 'datefield',
+						name : 'creationdate',
+						fieldLabel : me.xAdvancedSearchCreationDateFilter
+					},
+					{
+						xtype : 'datefield',
+						name : 'modificationdate',
+						fieldLabel : me.xAdvancedSearchModificationDateFilter
+					}
+					]
+				} ]
+			}, {
+				xtype : 'gridpanel',
+				dock : 'bottom',
 				title : me.xSearchPanelTitle,
 				flex : 1,
 				store : me.searchStore,
@@ -58,34 +173,51 @@ Ext.define('GincoApp.view.SearchPanel', {
 
 				},
 				tbar : [ {
-						xtype : 'button',
-						itemId : 'displayResultBtn',
-						iconCls:'icon-display',
-						text : me.xDisplayResultBtnLabel
-					}],
-				dockedItems: [{
-			        xtype: 'pagingtoolbar',
-			        store :  me.searchStore,
-			        dock: 'bottom',
-			        displayInfo: true
-			    }],
+					xtype : 'button',
+					itemId : 'displayResultBtn',
+					iconCls : 'icon-display',
+					text : me.xDisplayResultBtnLabel
+				} ],
+				dockedItems : [ {
+					xtype : 'pagingtoolbar',
+					store : me.searchStore,
+					dock : 'bottom',
+					displayInfo : true
+				} ],
 				columns : [ {
 					dataIndex : 'identifier',
-					text : me.xIdentifierColumnLabel
+					text : me.xIdentifierColumnLabel,
+					sortable: false,
 				}, {
 					dataIndex : 'lexicalValue',
 					text : me.xLexicalValueColumnLabel,
-					flex : 1
+					flex : 1,
+					sortable: true
+				},
+				{
+					dataIndex : 'modified',
+					text : me.xAdvancedSearchModificationDateFilter,
+					flex : 1,
+					hidden: true,
+					sortable: true
+				},
+				{
+					dataIndex : 'created',
+					text : me.xAdvancedSearchCreationDateFilter,
+					flex : 1,
+					hidden: true,
+					sortable: true
 				},
 				{
 					dataIndex : 'thesaurusTitle',
 					text : me.xThesaurusTitleColumnLabel,
-					width :200,
-				},
-				{
+					width : 200,
+					sortable: false
+				}, {
 					dataIndex : 'type',
 					text : me.xTypeValueColumnLabel,
-					width :200,
+					renderer : me.typeRenderer,
+					width : 200
 				} ]
 			} ]
 		});

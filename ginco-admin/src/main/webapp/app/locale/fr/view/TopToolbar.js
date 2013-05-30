@@ -44,8 +44,11 @@ Ext.define('GincoApp.locale.fr.view.TopToolbar', {
     xSearchFieldText: "Rechercher un terme",
     xConnectedAsLabel: "Connecté en tant que",
     xNewMenu_ThesaurusLabel: "Vocabulaire",
-    xImportLabel: "Import",
+    xImports: "Imports",
+    xImportSkosLabel: "Import SKOS",
+    xImportGincoXmlLabel : "Import XML Hadoc GINCO",
     xHelpLabel: "Aide",
     xAccessibilityLabel : "Accessibilité",
-    xLogoutBtnLabel : "Déconnexion"
+    xLogoutBtnLabel : "Déconnexion",
+    xSearchBtnTitle : "Lancer la recherche"
 });

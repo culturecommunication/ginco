@@ -66,11 +66,12 @@ public class Thesaurus implements Serializable, IAuditableBean {
     private Date created;
     private Boolean defaultTopConcept;
     private Boolean archived;
-    private ThesaurusFormat format;
     private ThesaurusType type;
     private ThesaurusOrganization creator;
+    private Boolean polyHierarchical;
     
     private Set<Language> lang = new HashSet<Language>();
+    private Set<ThesaurusFormat> format = new HashSet<ThesaurusFormat>();
     private Set<ThesaurusVersionHistory> versions;
 
     public Thesaurus() {
@@ -172,14 +173,6 @@ public class Thesaurus implements Serializable, IAuditableBean {
         this.created = created;
     }
 
-    public ThesaurusFormat getFormat() {
-        return format;
-    }
-
-	public void setFormat(ThesaurusFormat format) {
-		this.format = format;
-	}
-
 	public ThesaurusType getType() {
 		return type;
 	}
@@ -247,5 +240,25 @@ public class Thesaurus implements Serializable, IAuditableBean {
 
     public void setArchived(Boolean archived) {
         this.archived = archived;
+    }
+
+    public Boolean isPolyHierarchical() {
+        return polyHierarchical;
+    }
+
+    public void setPolyHierarchical(Boolean polyHierarchical) {
+        this.polyHierarchical = polyHierarchical;
+    }
+    
+    public Set<ThesaurusFormat> getFormat() {
+		return format;
+	}
+
+	public void setFormat(Set<ThesaurusFormat> format) {
+		this.format = format;
+	}
+	
+	public void addFormat(ThesaurusFormat format) {
+        this.format.add(format);
     }
 }

@@ -41,7 +41,9 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xAdministrationLabel : "Administration",
 	xControlLabel : "Control",
 	xTopWelcomeLabel : "Hadoc GINCO Back-office",
-	xImportLabel : "Import",
+	xImports : "Imports",
+	xImportSkosLabel : "SKOS Import",
+	xImportGincoXmlLabel : "Hadoc GINCO XML Import",
 	xAboutLabel : "About",
 	xSearchLabel : "Search",
 	xSearchFieldText : "Search a term",
@@ -50,6 +52,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xHelpLabel : "Help",
 	xAccessibilityLabel : "Accessibility",
 	xLogoutBtnLabel : "Logout",
+	xSearchBtnTitle : "Click here to launch search",
 	height : 64,
 
 	initComponent : function() {
@@ -100,13 +103,27 @@ Ext.define('GincoApp.view.TopToolbar', {
 				xtype : 'buttongroup',
 				title : me.xAdministrationLabel,
 				columns : 1,
-				items : [{
+				items : [ {
 					xtype : 'button',
-					disabled : false,
-					text : me.xImportLabel,
-					width: 80,
 					requiredRoles : ['ADMIN'],
-					itemId: 'importBtn'
+					disabled : false,
+					text : me.xImports,
+					menu : {
+						xtype : 'menu',
+						width : 200,
+						items : [{
+							xtype : 'keymenuitem',
+							text : me.xImportSkosLabel,
+							requiredRoles : ['ADMIN'],
+							itemId: 'importBtn'
+						},
+						{
+							xtype : 'keymenuitem',
+							text : me.xImportGincoXmlLabel,
+							requiredRoles : ['ADMIN'],
+							itemId: 'importGincoXmlBtn'
+						}]
+					}
 				} ]
 			}, {
 				xtype : 'buttongroup',
@@ -116,11 +133,6 @@ Ext.define('GincoApp.view.TopToolbar', {
 					xtype : 'button',
 					itemId : 'aproposbtn',
 					text : me.xAboutLabel
-				}, {
-					xtype : 'button',
-					itemId : 'accessibilitybtn',
-					text : me.xAccessibilityLabel,
-					enableToggle : true
 				} ]
 			}, {
 				xtype : 'tbseparator',
@@ -136,7 +148,8 @@ Ext.define('GincoApp.view.TopToolbar', {
 				hideTrigger : false,
 				itemId: 'searchBtn',
 				repeatTriggerClick : false,
-				disabled : false
+				disabled : false,
+				triggerTitle : me.xSearchBtnTitle
 			},{
 				xtype : 'tbseparator',
 				flex : 2,

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="SplitNonPreferredTerm" table="split_nonpreferredterm">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+			<generator class="assigned" />
+		</id>
+		<property name="lexicalValue" column="lexicalvalue" not-null="true" />
+		<property name="created"  type="timestamp" not-null="true" />
+		<property name="modified" type="timestamp" not-null="true" />
+		<property name="source" />
+		<property name="status" />
+		<many-to-one name="language" column="lang" lazy="false" />
+		<many-to-one name="thesaurus" column="thesaurusid" lazy="false" update="true"/>
+		<set name="preferredTerms" table="compound_equivalence">
+			<key column="id_split_nonpreferredterm" />
+			<many-to-many class="fr.mcc.ginco.beans.ThesaurusTerm" column="id_preferredterm" />
+		</set>
+	</class>
+</hibernate-mapping>

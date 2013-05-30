@@ -53,20 +53,14 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		topTabs.setActiveTab(tab);
 		tab.show();
 		return aNewPanel;
-	},
-	onAccessibilityClick : function(theButton) {
-		if (theButton.pressed) {
-			Ext.FocusManager.enable(true);
-		} else {
-			Ext.FocusManager.disable();
-		}
-	},
-	
+	},	
 	onImportBtnClick: function(theButton) {
-		Ext.create('GincoApp.view.ImportWin');
-
+		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>Import SKOS</h1>'});
 	},
 
+	onImportGincoXmlBtnClick: function(theButton) {
+		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoxml', xTitleLabel: '<h1>Import XML Ginco</h1>'});
+	},
 	
 	onUserInfoLoaded : function(theController) {
 		
@@ -112,12 +106,12 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			"#newThesaurusBtn" : {
 				click : this.onNewThesaurusBtnClick
 			},			
-			"#accessibilitybtn" : {
-				click : this.onAccessibilityClick
-			},
 			"#importBtn" : {
 				click: this.onImportBtnClick
-			},		
+			},
+			"#importGincoXmlBtn" : {
+				click: this.onImportGincoXmlBtnClick
+			},
 			'#logoutbtn' : {
 				click : this.onLogoutBtn
 			},

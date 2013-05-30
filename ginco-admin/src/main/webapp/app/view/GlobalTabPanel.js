@@ -35,14 +35,23 @@
 
 Ext.define('GincoApp.view.GlobalTabPanel', {
     extend: 'Ext.tab.Panel',
-    alias: 'widget.topTabs',   
-
+    alias: 'widget.topTabs',
+    xCloseAllTlt : 'Close all',
+    localized : true,
     activeTab: 0,
 
     initComponent: function() {
         var me = this;
 
         Ext.applyIf(me, {
+        	tabBar:{
+                items:[{ 
+                    xtype: 'button',
+                    itemId:'closeAllTabs',
+                    hidden :true,
+                    text : this.xCloseAllTlt
+                }]
+            }
         });
 
         me.callParent(arguments);

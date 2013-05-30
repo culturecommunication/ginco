@@ -49,7 +49,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
  * Bean represents <b>thesaurus_term</b> table, contains some lexical
  * value that could be used in different cases.
  */
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
+@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag=true)
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings("serial")
 public class ThesaurusTerm implements Serializable, IAuditableBean {

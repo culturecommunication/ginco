@@ -59,7 +59,9 @@ import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.helpers.ThesaurusHelper;
 import fr.mcc.ginco.imports.ConceptBuilder;
 import fr.mcc.ginco.imports.ConceptNoteBuilder;
 import fr.mcc.ginco.imports.NodeLabelBuilder;
@@ -94,6 +96,9 @@ public class SKOSImportServiceTest {
 
 	@Mock(name = "skosThesaurusBuilder")
 	private ThesaurusBuilder thesaurusBuilder;
+	
+	@Mock(name = "thesaurusVersionHistoryDAO")
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;	
 
 	@Mock(name = "skosConceptBuilder")
 	private ConceptBuilder conceptBuilder;
@@ -110,6 +115,8 @@ public class SKOSImportServiceTest {
 	@Mock(name = "skosNodeLabelBuilder")
 	private NodeLabelBuilder nodeLabelBuilder;
 	
+	@Mock(name = "thesaurushelper")
+	private ThesaurusHelper thesaurusHelper;
 	
 	@InjectMocks	
     private SKOSImportServiceImpl skosImportService ;

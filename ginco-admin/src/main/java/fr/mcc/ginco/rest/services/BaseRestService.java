@@ -34,25 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -60,15 +41,29 @@ import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.pojo.UserInfo;
-import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
-import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import fr.mcc.ginco.extjs.view.utils.GroupsGenerator;
-import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
-import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
+import fr.mcc.ginco.extjs.view.utils.*;
 import fr.mcc.ginco.services.IAdminUserService;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusService;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -114,6 +109,7 @@ public class BaseRestService {
     @Named("adminUserService")
     private IAdminUserService adminUserService; 
    
+   
 
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in
@@ -157,7 +153,10 @@ public class BaseRestService {
 				node.setTitle(thesaurus.getTitle());
 				node.setId(thesaurus.getIdentifier());
 				node.setType(ThesaurusListNodeType.THESAURUS);
-				node.setChildren(folderGenerator.generateFolders(thesaurus
+				if(thesaurus.getCreator() != null) {
+                    node.setOrganizationName(thesaurus.getCreator().getName());
+                }
+                node.setChildren(folderGenerator.generateFolders(thesaurus
 						.getIdentifier()));
 				node.setDisplayable(true);
 				result.add(node);
@@ -168,6 +167,22 @@ public class BaseRestService {
 
 	private String getIdFromParam(String param, String prefix) {
 		return param.substring(param.indexOf(prefix) + prefix.length());
+	}
+	
+	/**
+	 * Public method used to get the name of the user currently connected
+	 * 
+	 * @return 
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
+	 */
+	@GET
+	@Path("/getSession")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public long getSession(@Context HttpServletRequest request) {
+		
+		return request.getSession().getLastAccessedTime();
 	}
 	
 	/**

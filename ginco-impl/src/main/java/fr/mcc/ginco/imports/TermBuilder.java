@@ -109,13 +109,17 @@ public class TermBuilder extends AbstractBuilder {
 			Language defaultLangL = languagesDAO.getById(defaultLang);
 			term.setLanguage(defaultLangL);
 		} else {
-			List<Language> langs = languagesDAO.getByPart1(lang);
-			if (langs.size() > 0) {
-				term.setLanguage(langs.get(0));
+			Language language = languagesDAO.getByPart1(lang);
+			if (language == null){
+				language = languagesDAO.getById(lang);
+			}
+
+			if (language != null) {
+				term.setLanguage(language);			
 			} else {
-				throw new BusinessException("Term " + stmt.getString()
-						+ " is missing it's language",
-						"import-term-with-no-lang");
+				throw new BusinessException("Specified language " + lang + " is unknown : "  
+						+ stmt.getString(),
+						"import-unknown-term-lang", new Object[] {lang, stmt.getString()});
 			}
 		}
 		return term;

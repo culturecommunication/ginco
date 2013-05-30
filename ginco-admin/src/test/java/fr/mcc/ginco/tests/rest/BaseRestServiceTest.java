@@ -34,11 +34,15 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.rest.services.BaseRestService;
+import fr.mcc.ginco.services.IAdminUserService;
+import fr.mcc.ginco.services.IThesaurusService;
 import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -49,13 +53,8 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import fr.mcc.ginco.rest.services.BaseRestService;
-import fr.mcc.ginco.services.IAdminUserService;
-import fr.mcc.ginco.services.IThesaurusService;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseRestServiceTest {
 
@@ -83,9 +82,16 @@ public class BaseRestServiceTest {
 	@Test
 	public final void testGetVocabularies() throws BusinessException {
 		// Generating mocked Thesauruses in a single list "allThesaurus"
+
+        ThesaurusOrganization org = new ThesaurusOrganization();
+        org.setIdentifier(1);
+
 		Thesaurus mockedThesaurus1 = new Thesaurus();
+        mockedThesaurus1.setCreator(org);
 		Thesaurus mockedThesaurus2 = new Thesaurus();
+        mockedThesaurus2.setCreator(org);
 		Thesaurus mockedThesaurus3 = new Thesaurus();
+        mockedThesaurus3.setCreator(org);
 		List<Thesaurus> allThesaurus = new ArrayList<Thesaurus>();
 		allThesaurus.add(mockedThesaurus1);
 		allThesaurus.add(mockedThesaurus2);

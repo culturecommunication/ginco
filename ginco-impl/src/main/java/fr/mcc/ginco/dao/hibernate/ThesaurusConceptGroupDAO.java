@@ -51,15 +51,22 @@ public class ThesaurusConceptGroupDAO extends GenericHibernateDAO<ThesaurusConce
 	}
 
 	@Override
-	public List<ThesaurusConceptGroup> findThesaurusConceptGroupsByThesaurusId(
+	public List<ThesaurusConceptGroup> findThesaurusConceptGroupsByThesaurusId(String excludedConceptGroupId,
 			String thesaurusId) {
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConceptGroup.class, "ta");
         selectThesaurus(criteria, thesaurusId);
+        excludeAGroupById(criteria, excludedConceptGroupId);
         return criteria.list();
 	}
 	
     private void selectThesaurus(Criteria criteria, String thesaurusId) {
         criteria.add(Restrictions.eq("ta.thesaurus.identifier", (String) thesaurusId));
+    }
+    
+    private void excludeAGroupById(Criteria criteria, String excludedConceptGroupId) {
+        if (excludedConceptGroupId != null) {
+        	criteria.add(Restrictions.ne("ta.identifier", (String) excludedConceptGroupId));
+        }
     }
 }

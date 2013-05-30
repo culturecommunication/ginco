@@ -40,9 +40,10 @@ Ext.define('GincoApp.view.LeftPanel', {
 	xRefreshBtnTooltip : "Refresh explorer",
 	xSelectBtnLabel : "Display",
 	xSelectBtnToolTip : "Display the selected element",
+	xFilterLabel : 'Filter',
 	localized : true,
 	frame : false,
-	width : 250,
+	width : 270,
 	collapsible : true,
 	header : true,
 	title : '',
@@ -57,6 +58,21 @@ Ext.define('GincoApp.view.LeftPanel', {
 		    refreshtree: true
 		});
 
+        me.thesaurusOrganizationStore = Ext.create('GincoApp.store.ThesaurusOrganizationStore',
+        {
+            listeners : {
+                load : {
+                    fn : function (theStore)
+                    {
+                        theStore.insert(0,{
+                            identifier : "-1",
+                            name : '-'
+                        });
+                    }
+                }
+            }
+        });
+
 		Ext.applyIf(me, {
 			items : [ {
 				xtype : 'treepanel',
@@ -69,6 +85,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 				displayField : 'title',
 				rootVisible : false,
 				useArrows : true,
+				animate:false,
 				flex : 1,
 				dockedItems: [{
 			        xtype: 'toolbar',
@@ -80,18 +97,32 @@ Ext.define('GincoApp.view.LeftPanel', {
 			            iconCls:'icon-display',
 			            tooltip : me.xSelectBtnToolTip,
 			            tooltipType: 'title'
-			        }]
-			    }],
+			        }]},
+                    {
+    			        xtype: 'toolbar',
+    			        dock: 'bottom',
+    			        items: [{
+    			        	fieldLabel : me.xFilterLabel,
+                            xtype : 'ariacombo',
+                            itemId : 'authorFilter',
+                            labelWidth:70,
+                            editable : false,
+                            displayField : 'name',
+                            valueField : 'name',
+                            store : me.thesaurusOrganizationStore
+                        }]
+                    }
+			    ],
 				viewConfig : {
-					loadMask : true
+					loadMask : true,
+					preserveScrollOnRefresh : true
 				},
 				tools : [ {
 					type : 'refresh',
-					tooltip : this.xRefreshBtnTooltip
+					tooltip : this.xRefreshBtnTooltip,
+					tooltipType: 'title'
 				} ]
-			}
-
-			]
+			} ]
 		});
 
 		me.callParent(arguments);

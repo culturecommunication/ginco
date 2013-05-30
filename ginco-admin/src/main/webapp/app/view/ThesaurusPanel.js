@@ -29,7 +29,8 @@
  * 
  */
 
-Ext.require([ 'GincoApp.view.ThesaurusVersionPanel' ]);
+Ext.require([ 'GincoApp.view.ThesaurusVersionPanel',
+              'GincoApp.view.CustomAttributeTypesPanel']);
 Ext.define('GincoApp.view.ThesaurusPanel', {
 	extend : 'Ext.panel.Panel',
 
@@ -59,7 +60,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xCoverageLabel : 'Coverage',
 	xSubjectLabel : 'Subject',
 	xTypeLabel : 'Type',
-	xFormatLabel : 'Format',
+	xFormatLabel : 'Formats',
 	xLanguagesLabel : 'Languages',
 	xdefaultTopConceptLabel : 'TopTerm by default',
 	xRelationLabel : 'Relation',
@@ -70,10 +71,11 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xNewMenu_ConceptLabel : "Concept",
 	xNewMenu_GroupLabel : "Group of Concepts",
 	xNewMenu_ConceptArrayLabel : "Array of concepts",
+	xNewMenu_ComplexConceptLabel: "Complex Concept",
 	xExport_Skos : "Export SKOS",
 	xExport_Hierarchical : "Export text hierarchical",
 	xExport_Alphabetic : "Export text alphabetical",
-	xExport_Mcc : "Export MCC XML format",
+	xExport_Ginco : "Export Hadoc GINCO XML format",
 	xSave : "Save",
 	xDelete : "Delete",
 	xVersionsTab : 'Versions',
@@ -81,6 +83,10 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xEditJournal: 'Edit history',
     xPublish: 'Publish',
     xArchive: 'Archive',
+    xPolyHierarchical: 'Polyhierarchical',
+    xCustomAttributeTypes: 'Custom atrribute types',
+    xImportSandbox: 'Import sandbox terms',
+    xImportBranch: 'Import a branch',
 	
 	initComponent : function() {
 		var me = this;
@@ -93,6 +99,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 											
 											items : [ {
 												xtype : 'tabpanel',
+												itemId: 'thesaurusTabPanel',
 											flex : 1,
 											items : [ {
 												xtype : 'form',
@@ -130,14 +137,19 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 																cmdTxt : 'Ctrl+3'
 													},{
 																xtype : 'keymenuitem',
+																text : me.xNewMenu_ComplexConceptLabel,
+																itemId : 'newComplexConceptBtn',
+																cmdTxt : 'Ctrl+4'
+													},{
+																xtype : 'keymenuitem',
 																text : me.xNewMenu_ConceptArrayLabel,
 																itemId : 'newConceptArrayBtn',
-																cmdTxt : 'Ctrl+4'
+																cmdTxt : 'Ctrl+5'
 													},{
 																xtype : 'keymenuitem',
 																text : me.xNewMenu_GroupLabel,
 																itemId : 'newConceptGroupBtn',
-																cmdTxt : 'Ctrl+5'
+																cmdTxt : 'Ctrl+6'
 													}]
 												}
 												},{
@@ -183,9 +195,9 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 							                                	 itemId : 'exportAlphabetical'
 							                                 },{
 							                                	 xtype : 'keymenuitem',
-							                                	 text : me.xExport_Mcc,
+							                                	 text : me.xExport_Ginco,
 							                                	 disabled : true,
-							                                	 itemId : 'exportMcc'
+							                                	 itemId : 'exportGinco'
 							                                 }]
 							                            }
 							                    },{
@@ -220,9 +232,26 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                                         cls : 'archive',
                                                         itemId : 'archiveThesaurus',
                                                         iconCls : 'icon-archive'
+                                            },{
+		                                            	xtype : 'button',
+		                                                text : me.xImportSandbox,
+		                                                requiredRoles : ['ADMIN'],
+		                                                disabled : true,
+		                                                itemId : 'importSandbox',
+		                                                iconCls : 'exports-icon'
+                                            },{
+                                                xtype : 'button',
+                                                text : me.xImportBranch,
+                                                requiredRoles : ['ADMIN'],
+                                                disabled : false,
+                                                itemId : 'importBranch',
+                                                iconCls : 'exports-icon'
                                             } ]
 									} ],
-										items : [{
+										items : [ {
+                                            xtype : 'hiddenfield',
+                                            name : 'archived'
+                                        },{
 											xtype : 'displayfield',
 											name : 'id',
 											fieldLabel : me.xIdentifierLabel
@@ -292,7 +321,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												fieldLabel : me.xSubjectLabel,
 												grow : true
 										},{
-												xtype : 'combobox',
+												xtype : 'ariacombo',
 												name : 'type',
 												queryMode : 'local',
 												fieldLabel : me.xTypeLabel,
@@ -303,17 +332,17 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												multiSelect : false,
 												store : 'ThesaurusTypeStore'
 										},{
-												xtype : 'combobox',
-												name : 'format',
+												xtype : 'ariacombo',
+												name : 'formats',
 												fieldLabel : me.xFormatLabel,
 												editable : false,
 												displayField : 'label',
 												valueField : 'identifier',
 												forceSelection : true,
-												multiSelect : false,
+												multiSelect : true,
 												store : 'ThesaurusFormatStore'
 										},{
-												xtype : 'combobox',
+												xtype : 'ariacombo',
 												name : 'languages',
 												fieldLabel : me.xLanguagesLabel,
 												editable : false,
@@ -322,13 +351,20 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												forceSelection : true,
 												multiSelect : true,
 												allowBlank : false,
-												store : 'ThesaurusLanguageStore'
+												store : 'ThesaurusLanguageStore',
+												itemId : 'thesauruslang'
 										},{
 												xtype : 'checkbox',
 												name : 'defaultTopConcept',
 												fieldLabel : me.xdefaultTopConceptLabel,
 												displayField : 'defaultTopConcept'
 										},{
+                                            xtype : 'checkbox',
+                                            name : 'polyHierarchical',
+                                            fieldLabel : me.xPolyHierarchical,
+                                            displayField : 'polyHierarchical',
+                                            cls : 'poly'
+                                        },{
 												xtype : 'htmleditor',
 												name : 'relation',
 												fieldLabel : me.xRelationLabel,
@@ -361,7 +397,15 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												xtype : 'thesaurusVersionPanel',
 												closable : false,
 												disabled :  true
-											}]
+											},
+
+                                                {
+                                                    title : me.xCustomAttributeTypes,
+                                                    itemId : 'customAttributeTypesTab',
+                                                    xtype : 'customAttributeTypesPanel',
+                                                    closable : false,
+                                                    disabled :  false
+                                                }]
 										}]
 									});
 

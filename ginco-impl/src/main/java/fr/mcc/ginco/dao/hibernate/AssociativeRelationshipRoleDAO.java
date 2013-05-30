@@ -34,22 +34,21 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("associativeRelationshipRoleDAO")
 public class AssociativeRelationshipRoleDAO extends GenericHibernateDAO<AssociativeRelationshipRole, String> implements IAssociativeRelationshipRoleDAO  {
-	
+
 	public AssociativeRelationshipRoleDAO() {
 		super(AssociativeRelationshipRole.class);
 	}
-	
+
 	@Override
 	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRole()
 			throws BusinessException {

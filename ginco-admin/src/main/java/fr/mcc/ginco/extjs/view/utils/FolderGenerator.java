@@ -104,6 +104,8 @@ public class FolderGenerator {
 		list.add(getConcepts(parentId));
 
 		list.add(getSandbox(parentId));
+		
+		list.add(getSplitNonPreferredTerms(parentId));
 
 		list.add(getOrphans(parentId));
 
@@ -144,6 +146,19 @@ public class FolderGenerator {
 		sandbox.setChildren(new ArrayList<IThesaurusListNode>());
 		return sandbox;
 	}
+	
+	private IThesaurusListNode getSplitNonPreferredTerms(String parentId) {
+		IThesaurusListNode sandbox = new ThesaurusListBasicNode();
+		sandbox.setTitle("Concepts complexes");
+		sandbox.setId(ClassificationFolderType.COMPLEXCONCEPTS.toString() + "_"
+				+ parentId);
+		sandbox.setType(ThesaurusListNodeType.FOLDER);
+		sandbox.setIconCls("complex");
+		sandbox.setExpanded(false);
+		sandbox.setDisplayable(true);
+		sandbox.setChildren(new ArrayList<IThesaurusListNode>());
+		return sandbox;
+	}
 
 	private IThesaurusListNode getArrays(String parentId) {
 		IThesaurusListNode arrays = new ThesaurusListBasicNode();
@@ -154,7 +169,7 @@ public class FolderGenerator {
 		arrays.setExpanded(false);
 		arrays.setDisplayable(false);
 		List<ThesaurusArray> realArrays = thesaurusArrayService
-				.getAllThesaurusArrayByThesaurusId(parentId);
+				.getAllThesaurusArrayByThesaurusId(null, parentId);
 		if (realArrays != null && realArrays.size() > 0) {
 			arrays.setChildren(null);
 		} else {
@@ -192,7 +207,7 @@ public class FolderGenerator {
 		groups.setDisplayable(false);
 		
 		List<ThesaurusConceptGroup> realArrays = thesaurusConceptGroupService
-				.getAllThesaurusConceptGroupsByThesaurusId(parentId);
+				.getAllThesaurusConceptGroupsByThesaurusId(null, parentId);
 		if (realArrays != null && realArrays.size() > 0) {
 			groups.setChildren(null);
 		} else {

@@ -34,15 +34,14 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * View class corresponding to {@link Thesaurus} bean, but fully serializable;
@@ -67,12 +66,15 @@ public class ThesaurusView implements Serializable {
 	private String title;
 	private String created;
 	private Boolean defaultTopConcept;
-	private Integer format;
+    private Boolean archived;
+    private Boolean canBeDeleted;
 	private Integer type;
 	private String creatorName;
 	private String creatorHomepage;
+    private Boolean polyHierarchical;
 
 	private List<String> languages = new ArrayList<String>();
+	private List<Integer> formats = new ArrayList<Integer>();
 
     public ThesaurusView() {}	
 
@@ -172,14 +174,6 @@ public class ThesaurusView implements Serializable {
 		this.created = created;
 	}
 
-	public Integer getFormat() {
-		return format;
-	}
-
-	public void setFormat(Integer formatId) {
-		this.format = formatId;
-	}
-
 	public Integer getType() {
 		return type;
 	}
@@ -218,5 +212,37 @@ public class ThesaurusView implements Serializable {
 
 	public void setDefaultTopConcept(Boolean defaulttopconcept) {
 		this.defaultTopConcept = defaulttopconcept;
+	}
+
+    public Boolean getArchived() {
+        return archived;
+    }
+
+    public void setArchived(Boolean archived) {
+        this.archived = archived;
+    }
+
+    public Boolean getCanBeDeleted() {
+        return canBeDeleted;
+    }
+
+    public void setCanBeDeleted(Boolean canBeDeleted) {
+        this.canBeDeleted = canBeDeleted;
+    }
+
+    public Boolean getPolyHierarchical() {
+        return polyHierarchical;
+    }
+
+    public void setPolyHierarchical(Boolean polyHierarchical) {
+        this.polyHierarchical = polyHierarchical;
+    }
+
+	public List<Integer> getFormats() {
+		return formats;
+	}
+
+	public void setFormats(List<Integer> formats) {
+		this.formats = formats;
 	}
 }

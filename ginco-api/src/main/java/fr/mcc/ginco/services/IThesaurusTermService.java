@@ -36,7 +36,9 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -61,7 +63,22 @@ public interface IThesaurusTermService {
      * @return List of Thesaurus Terms (the number given in argument), from the start index
      */
     List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex, Integer limit, String idThesaurus);
+    
+    /**
+     * Get list of paginated Thesaurus Preferred Terms.
+     * @return List of Thesaurus Terms (the number given in argument), from the start index
+     */
+    List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(Integer startIndex, Integer limit, String idThesaurus);
 
+
+    /**
+     * Get number of Thesaurus Preferred Terms
+     * @param idThesaurus of a Thesaurus
+     * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
+     */
+    Long getPreferredTermsCount(String idThesaurus) throws BusinessException;
+    
+    
     /**
      * Get number of Thesaurus Sandboxed Terms
      * @param idThesaurus of a Thesaurus
@@ -88,14 +105,7 @@ public interface IThesaurusTermService {
      * @throws BusinessException 
      */
     ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException;
-
     
-    /**
-     * @param listOfTerms
-     * @return
-     * This method returns all the prefered terms
-     */
-    List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms);
     
     /**
      * @param idConcept
@@ -103,15 +113,8 @@ public interface IThesaurusTermService {
      * This method returns all the terms that belong to a concept
      * @throws BusinessException 
      */
-    List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;
+    List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;   
     
-    /**
-     * This method compares lists of terms - if previosly presented term has been deleted
-     * (so it is not anymore in Concept) it will be marked as SandBoxed.
-     * @param sent new list of Terms
-     * @param origin old list of Terms
-     */
-    void markTermsAsSandboxed(List<ThesaurusTerm> sent, List<ThesaurusTerm> origin) throws BusinessException;
 
     /**
      * Get list of paginated Thesaurus Validated Terms.
@@ -125,6 +128,12 @@ public interface IThesaurusTermService {
       * @return list of all existing terms.
      */
     List<ThesaurusTerm> getAllTerms();
+    
+    /**
+     * For indexing purposes.
+      * @return list of all existing terms.
+     */
+    List<ThesaurusTerm> getAllTerms(String thesaurusId);
     
     /**
 	 * This service returns the identifier of a concept by the term
@@ -163,5 +172,16 @@ public interface IThesaurusTermService {
 	 * 
 	 * @return preferred or not preferred
 	 */
-	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
+	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException; 
+	
+	/**
+	 * This method imports sandboxed terms 
+	 * @param list of term lexical values
+	 * @param thesaurus identifier
+	 * 
+	 * @return
+	 * @throws TechnicalException
+	 * @throws BusinessException
+	 */
+	List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId) throws TechnicalException, BusinessException;
 }

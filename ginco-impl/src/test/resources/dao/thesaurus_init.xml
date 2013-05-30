@@ -6,7 +6,6 @@
 		<column>coverage</column>
 		<column>date</column>
 		<column>description</column>
-		<column>format</column>
 		<column>publisher</column>
 		<column>relation</column>
 		<column>rights</column>
@@ -17,13 +16,13 @@
 		<column>creator</column>
 		<column>created</column>
 		<column>defaulttopconcept</column>
+        <column>ispolyhierarchical</column>
 		<row>
 			<value>0</value>
 			<value>test</value>
 			<value>test</value>
 			<value>2013-02-06 15:29:59.66325</value>
 			<value>test</value>
-			<value>0</value>
 			<value>test</value>
 			<value>test</value>
 			<value>test</value>
@@ -34,6 +33,7 @@
 			<value>0</value>
 			<value>2013-02-06 15:29:59.66325</value>
 			<value>false</value>
+            <value>true</value>
 		</row>
 		<row>
 			<value>1</value>
@@ -41,7 +41,6 @@
 			<value>test1</value>
 			<value>2013-02-06 15:29:59.66325</value>
 			<value>test1</value>
-			<value>0</value>
 			<value>test1</value>
 			<value>test1</value>
 			<value>test1</value>
@@ -52,6 +51,7 @@
 			<value>0</value>
 			<value>2013-02-06 15:29:59.66325</value>
 			<value>false</value>
+            <value>true</value>
 		</row>
 		<row>
 			<value>2</value>
@@ -59,7 +59,6 @@
 			<value>test2</value>
 			<value>2013-02-06 15:29:59.66325</value>
 			<value>test2</value>
-			<value>0</value>
 			<value>test2</value>
 			<value>test2</value>
 			<value>test2</value>
@@ -70,25 +69,9 @@
 			<value>0</value>
 			<value>2013-02-06 15:29:59.66325</value>
 			<value>false</value>
+            <value>true</value>
 		</row>
 	</table>
-
-    <table name="thesaurus_format">
-        <column>identifier</column>
-        <column>label</column>
-        <row>
-            <value>0</value>
-            <value>PDF 1.7</value>
-        </row>
-        <row>
-            <value>1</value>
-            <value>CSV</value>
-        </row>
-        <row>
-            <value>2</value>
-            <value>XML/SKOS</value>
-        </row>
-    </table>
 
     <table name="thesaurus_type">
         <column>identifier</column>
@@ -159,23 +142,44 @@
    	
    	<table name="languages_iso639">
 		<column>id</column>
-		<column>part2b</column>	
-		<column>part2t</column>		
 		<column>part1</column>		
-		<column>scope</column>		
-		<column>type</column>		
 		<column>ref_name</column>
 		<column>toplanguage</column>		
-		<column>comment</column>				
 		<row>
 			<value>aaa</value>
-			<value></value>
-			<value></value>			
-			<value></value>			
 			<value>I</value>			
-			<value>L</value>
 			<value>Ghotuo</value>
 			<value>false</value>
 		</row>
 	</table>
+	
+	<table name="thesaurus_format">
+		<column>identifier</column>
+		<column>label</column>		
+		<row>
+			<value>0</value>
+			<value>PDF 1.7</value>			
+		</row>
+		<row>
+			<value>1</value>
+			<value>CSV</value>			
+		</row>
+		<row>
+			<value>2</value>
+			<value>XML/SKOS</value>			
+		</row>
+	</table>
+	
+	 <table name="thesaurus_formats">
+        <column>format_identifier</column>
+        <column>thesaurus_identifier</column>
+        <row>
+            <value>0</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>0</value>
+        </row>
+    </table>
 </dataset>

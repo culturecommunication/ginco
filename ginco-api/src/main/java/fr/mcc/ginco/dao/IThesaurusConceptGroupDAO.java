@@ -47,9 +47,9 @@ public interface IThesaurusConceptGroupDAO extends IGenericDAO<ThesaurusConceptG
 	/**
 	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}
 	 * @param parentId
-	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter
+	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter, excluding the group which id is given in parameter (optional, set null for no exclusion)
 	 */
-	List<ThesaurusConceptGroup> findThesaurusConceptGroupsByThesaurusId(
+	List<ThesaurusConceptGroup> findThesaurusConceptGroupsByThesaurusId(String excludedConceptGroupId,
 			String thesaurusId);
     
 }

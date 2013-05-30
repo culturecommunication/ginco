@@ -37,6 +37,18 @@
 	color: #15498b;
 }
 
+a.x-tab-close-btn:focus  {
+ outline:black dotted 1px !important; }
+
+.x-form-search-trigger:focus  {
+ outline:black dotted 1px !important; }
+
+.x-tool:focus  {
+ outline:black dotted 1px !important; }
+
+*:focus {
+	 outline:black dotted 1px !important;
+}
 
  
 .msg .x-box-mc {
@@ -71,8 +83,14 @@
     background-image: url(../images/basket.png) !important;
 }
 
+.display-concept-panel {
+    background-image: url(../images/display-concept-panel.png) !important;
+}
+
 .icon-detach {
     background-image: url(../images/detach.png) !important;
+    height:16px;
+    width:16px;
 }
 
 .icon-save {
@@ -113,6 +131,23 @@
 	background-image: url(../images/door_in.png) !important;
 }
 
+.close-icon {
+	background-image: url(../images/cross.png) !important;
+}
+
+.icon-archive {
+	background-image: url(../images/package.png) !important;
+}
+
+.icon-publish {
+	background-image: url(../images/world.png) !important;
+}
+
 .mandatory-field {
 	color: red !important;
+}
+
+h1.x-panel-header {
+	height: 30px;
+	text-align: center;
 }

@@ -34,34 +34,37 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.services.INodeLabelService;
+import fr.mcc.ginco.services.IThesaurusArrayConceptService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
-import org.codehaus.plexus.util.StringUtils;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 
 @Component("thesaurusArrayViewConverter")
-public class ThesaurusArrayViewConverter {	
+public class ThesaurusArrayViewConverter {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
-	
+
 	@Inject
 	@Named("thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;
@@ -76,20 +79,25 @@ public class ThesaurusArrayViewConverter {
 
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	private IIDGeneratorService generatorService;
+
+	@Inject
+	@Named("thesaurusArrayConceptService")
+	private IThesaurusArrayConceptService thesaurusArrayConceptService;
 
 	public ThesaurusArray convert(ThesaurusArrayView source)
 			throws BusinessException {
 		ThesaurusArray hibernateRes;
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusArray();
-			hibernateRes.setIdentifier(generatorService.generate(ThesaurusArray.class));
+			hibernateRes.setIdentifier(generatorService
+					.generate(ThesaurusArray.class));
 
 		} else {
 			hibernateRes = thesaurusArrayService.getThesaurusArrayById(source
 					.getIdentifier());
 		}
-		if ("".equals(source.getThesaurusId())) {
+		if (StringUtils.isEmpty(source.getThesaurusId())) {
 			throw new BusinessException(
 					"ThesaurusId is mandatory to save a concept",
 					"mandatory-thesaurus");
@@ -97,34 +105,18 @@ public class ThesaurusArrayViewConverter {
 			Thesaurus thesaurus = thesaurusService.getThesaurusById(source
 					.getThesaurusId());
 			hibernateRes.setThesaurus(thesaurus);
-		}	
+		}
 
 		if (StringUtils.isNotEmpty(source.getSuperOrdinateId())) {
-			hibernateRes
-					.setSuperOrdinateConcept(thesaurusConceptService
-							.getThesaurusConceptById(source
-									.getSuperOrdinateId()));
+			hibernateRes.setSuperOrdinateConcept(thesaurusConceptService
+					.getThesaurusConceptById(source.getSuperOrdinateId()));
 		}
 
-		if (hibernateRes.getConcepts() == null) {
-			hibernateRes.setConcepts(new HashSet<ThesaurusConcept>());
+		hibernateRes.setOrdered(source.getOrder());
+		
+		if (source.getParentArrayId() != null) {
+			hibernateRes.setParent(thesaurusArrayService.getThesaurusArrayById(source.getParentArrayId()));
 		}
-		hibernateRes.getConcepts().clear();
-
-		for (String conceptId : source
-				.getConcepts()) {
-			ThesaurusConcept concept = thesaurusConceptService
-					.getThesaurusConceptById(conceptId);
-			if (concept == null) {
-				throw new BusinessException("Concept doest not exist",
-						"concept-does-not-exist");
-			}
-			hibernateRes.getConcepts().add(concept);
-		}
-		
-		hibernateRes.setOrdered(false);
-		
-		
 
 		return hibernateRes;
 	}
@@ -134,23 +126,28 @@ public class ThesaurusArrayViewConverter {
 		ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
 
 		thesaurusArrayView.setIdentifier(source.getIdentifier());
-		
+
 		if (source.getSuperOrdinateConcept() != null) {
 			thesaurusArrayView.setSuperOrdinateId(source
 					.getSuperOrdinateConcept().getIdentifier());
-			thesaurusArrayView
-					.setSuperOrdinateLabel(thesaurusConceptService
-							.getConceptLabel(source.getSuperOrdinateConcept()
-									.getIdentifier()));
+			thesaurusArrayView.setSuperOrdinateLabel(thesaurusConceptService
+					.getConceptLabel(source.getSuperOrdinateConcept()
+							.getIdentifier()));
 
 		}
 
-		List<String> conceptsIds = new ArrayList<String>();
-		for (ThesaurusConcept concept: source.getConcepts()) {
-			conceptsIds.add(concept.getIdentifier());
+		List<ThesaurusArrayConceptView> arrayConcepts = new ArrayList<ThesaurusArrayConceptView>();
+		for (ThesaurusArrayConcept arrayConcept : source.getConcepts()) {
+			ThesaurusArrayConceptView conceptView = new ThesaurusArrayConceptView();
+			conceptView.setIdentifier(arrayConcept.getIdentifier()
+					.getConceptId());
+			conceptView.setOrder(arrayConcept.getArrayOrder());
+			conceptView.setLabel((thesaurusConceptService
+					.getConceptLabel(arrayConcept.getIdentifier()
+							.getConceptId())));
+			arrayConcepts.add(conceptView);
 		}
-		thesaurusArrayView
-				.setConcepts(conceptsIds);
+		thesaurusArrayView.setConcepts(arrayConcepts);
 
 		NodeLabel label = nodeLabelService
 				.getByThesaurusArrayAndLanguage(source.getIdentifier());
@@ -162,7 +159,30 @@ public class ThesaurusArrayViewConverter {
 		thesaurusArrayView.setModified(DateUtil.toString(label.getModified()));
 		thesaurusArrayView.setThesaurusId(source.getThesaurus()
 				.getThesaurusId());
-
+		thesaurusArrayView.setOrder(source.getOrdered());
+		
+		if (source.getParent() != null) {
+			//We set id and label of parent array
+			thesaurusArrayView.setParentArrayId(source.getParent().getIdentifier());
+			NodeLabel labelOfParent = nodeLabelService.getByThesaurusArray(source.getParent().getIdentifier());
+			thesaurusArrayView.setParentArrayLabel(labelOfParent.getLexicalValue());			
+		}
+		
 		return thesaurusArrayView;
+	}
+
+	/**
+	 * This method converts a list of {@link ThesaurusArray} into a list of
+	 * {@link ThesaurusArrayView}
+	 * 
+	 * @param {@link ThesaurusArray} arrays
+	 * @return {@link ThesaurusArrayView} array views
+	 */
+	public List<ThesaurusArrayView> convert(List<ThesaurusArray> arrays) {
+		List<ThesaurusArrayView> returnedArrayViews = new ArrayList<ThesaurusArrayView>();
+		for (ThesaurusArray thesaurusArray : arrays) {
+			returnedArrayViews.add(convert(thesaurusArray));
+		}
+		return returnedArrayViews;
 	}
 }

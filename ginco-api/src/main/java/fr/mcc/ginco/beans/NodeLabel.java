@@ -37,17 +37,23 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Bean represents node_label table to add label to {@link ThesaurusArray}
  * in different languages.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class NodeLabel implements Serializable{
-
+	@XmlTransient
     private Integer identifier;
     private String lexicalValue;
     private Date modified;
     private Date created;
     private Language language;
+    @XmlTransient
     private ThesaurusArray thesaurusArray;
     
 	public Integer getIdentifier() {

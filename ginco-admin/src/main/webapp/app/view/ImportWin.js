@@ -37,11 +37,17 @@ Ext
 					title : '<h2>Import</h2>',
 					titleAlign : 'center',
 					modal : true,
-
+					
+					config: {
+						importType: null,
+						thesaurusData: null,
+						xTitleLabel : ''
+					},
+					
 					// Labels
 					xEmptyFileLabel : 'Sélectionner un fichier',
 					xFileLabel : 'Fichier',
-					xTitleLabel : '<h1>Import SKOS</h1>',
+					
 					xSaveBtn : 'Importer',
 					xCancelLabel : 'Annuler',
 					
@@ -71,7 +77,7 @@ Ext
 															buttonConfig : {
 																iconCls : 'upload-icon'
 															}
-														} ],
+														}],
 
 														buttons : [
 																{

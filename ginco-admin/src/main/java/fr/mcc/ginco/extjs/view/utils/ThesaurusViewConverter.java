@@ -37,13 +37,11 @@ package fr.mcc.ginco.extjs.view.utils;
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.services.IThesaurusFormatService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.services.IThesaurusTypeService;
+import fr.mcc.ginco.services.*;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LanguageComparator;
 import org.apache.commons.lang3.StringUtils;
@@ -79,7 +77,11 @@ public class ThesaurusViewConverter {
 	
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	private IIDGeneratorService generatorService;
+
+    @Inject
+    @Named("thesaurusVersionHistoryService")
+    private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 
 	
 	@Value("${ginco.default.language}") private String defaultLanguage;
@@ -112,8 +114,7 @@ public class ThesaurusViewConverter {
 		hibernateRes.setSubject(source.getSubject());
 		hibernateRes.setTitle(source.getTitle());
 		hibernateRes.setDefaultTopConcept(source.getDefaultTopConcept());
-		hibernateRes.setFormat(thesaurusFormatService
-				.getThesaurusFormatById(source.getFormat()));
+        hibernateRes.setPolyHierarchical(source.getPolyHierarchical());
 		hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source
 				.getType()));
 		ThesaurusOrganization thesaurusOrganization;
@@ -132,6 +133,20 @@ public class ThesaurusViewConverter {
 				hibernateRes.setCreator(null);
 			}
 		}
+		
+		List<Integer> formats = source.getFormats();
+		Set<ThesaurusFormat> realFormat = new HashSet<ThesaurusFormat>();
+
+		for (Integer format : formats) {
+			ThesaurusFormat thesaurusFormat  = thesaurusFormatService
+					.getThesaurusFormatById(format);
+			if (thesaurusFormat != null) {
+				realFormat.add(thesaurusFormat);
+			}
+		}
+
+		hibernateRes.setFormat(realFormat);
+		
 		List<String> languages = source.getLanguages();
 		Set<Language> realLanguages = new HashSet<Language>();
 
@@ -143,6 +158,7 @@ public class ThesaurusViewConverter {
 		}
 
 		hibernateRes.setLang(realLanguages);
+        hibernateRes.setArchived(source.getArchived());
 
 		return hibernateRes;
 	}
@@ -176,14 +192,21 @@ public class ThesaurusViewConverter {
 				view.setCreatorName(source.getCreator().getName());
 				view.setCreatorHomepage(source.getCreator().getHomepage());
 			}
+
 			if (source.isDefaultTopConcept() != null) {
 				view.setDefaultTopConcept(source.isDefaultTopConcept());
 			} else {
 				view.setDefaultTopConcept(false);
-				}
-			if (source.getFormat() != null) {
-				view.setFormat(source.getFormat().getIdentifier());
 			}
+
+            view.setArchived(source.isArchived());
+            
+            ArrayList<Integer> formatList = new ArrayList<Integer>();
+			for (ThesaurusFormat format : source.getFormat()) {
+				formatList.add(format.getIdentifier());
+			}
+			view.setFormats(formatList);
+            
 			if (source.getType() != null) {
 				view.setType(source.getType().getIdentifier());
 			}
@@ -199,6 +222,13 @@ public class ThesaurusViewConverter {
 				langLabels.add(lang.getId());
 			}
 			view.setLanguages(langLabels);
+
+            if(thesaurusVersionHistoryService.hasPublishedVersion(source) && !source.isArchived()) {
+                view.setCanBeDeleted(false);
+            } else {
+                view.setCanBeDeleted(true);
+            }
+            view.setPolyHierarchical(source.isPolyHierarchical());
 		}
 		return view;
 	}

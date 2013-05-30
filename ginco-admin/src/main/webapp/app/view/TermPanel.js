@@ -46,6 +46,7 @@ Ext
 				'GincoApp.view.TermPanel',
 				{
 					extend : 'GincoApp.view.ThesaurusEntityPanel',
+					requires : ['GincoApp.store.CustomTermAttributeStore'],
 					alias : 'widget.termPanel',
 					localized : true,
 					closable : true,
@@ -67,9 +68,12 @@ Ext
 					xTermPanelTitle : 'New Term',
 					xNotesTab : 'Notes of this term',
 					xStatusLabel : 'Status',
+					xDisplayTheConceptOfTheTerm : 'Display the concept of this term',
 
 					initComponent : function() {
 						var me = this;
+						me.customAttrTypeStore = Ext.create('GincoApp.store.CustomTermAttributeTypeStore');
+						me.customAttrStore = Ext.create('GincoApp.store.CustomTermAttributeStore');
 
 						Ext
 								.applyIf(
@@ -122,7 +126,14 @@ Ext
 																			disabled : true,
 																			itemId : 'createconcept',
 																			iconCls : 'icon-add'
-																		} ]
+																		},
+																		{
+																			xtype : 'button',
+																			text : me.xDisplayTheConceptOfTheTerm,
+																			disabled : true,
+																			itemId : 'displayConcept',
+																			iconCls : 'display-concept-panel'
+																		}]
 															} ],
 															items : [
 																	{
@@ -205,6 +216,13 @@ Ext
 																				.create('GincoApp.store.TermStatusStore'),
 																		anchor : '70%',
 																		margin : '5 0 5 0'
+																	}, {
+																		trackResetOnLoad :true,
+																		border : false,
+																		xtype : 'customattrform',
+																		metadataStore : me.customAttrTypeStore,
+																		dataStore : me.customAttrStore,
+																		itemId : 'customAttributeForm',
 																	} ]
 														},
 														{

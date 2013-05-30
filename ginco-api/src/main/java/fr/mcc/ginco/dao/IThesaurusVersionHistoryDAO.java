@@ -64,4 +64,12 @@ public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersio
 	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
 	 */
 	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
+	
+	/**
+	 * 	This method get last version with the published status for the thesaurus which id is given in parameter
+     * @param thesaurusId
+	 * @return
+	 */
+	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
+			String thesaurusId);
 }

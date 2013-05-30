@@ -40,7 +40,10 @@ Ext.define('GincoApp.locale.fr.controller.ThesaurusFormController', {
     xSucessSavedMsg : 'Le thesaurus a été enregistré avec succès',
     xSucessRemovedMsg : 'Le thesaurus a été supprimé avec succès',
     xProblemLabel : 'Erreur !',
+    xWarningLabel : 'Attention !',
     xProblemSaveMsg : 'Impossible de sauvegarder le thesaurus !',
     xProblemDeleteMsg : 'Impossible de supprimer le thesaurus !',
-    xProblemPublishMsg : "Impossible de publier le thesaurus!"
+    xProblemPublishMsg : "Impossible de publier le thesaurus !",
+    xWarningChangedPoly : "Attention! Vous passez d'un thesaurus polyhierarchique a un thesaurus monohierarchique, veuillez vérifier les relations hierarchiques des concepts.",
+    xWarningChangedLanguages : "Il existe peut-être des termes dans la langue que vous essayez de supprimer. Veuillez vérifier la langues des termes de ce thésaurus."
 });

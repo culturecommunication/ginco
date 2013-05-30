@@ -39,14 +39,7 @@ import fr.mcc.ginco.beans.NodeLabel;
 /**
  * Data Access Object for node_label
  */
-public interface INodeLabelDAO extends IGenericDAO<NodeLabel, Integer> {
-	/**
-	 * Get single object by thesaurus array id and language.
-	 * 
-	 * @param thesaurusArrayId
-	 * @return
-	 */
-	NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId);
+public interface INodeLabelDAO extends IGenericDAO<NodeLabel, Integer> {	
 
 	/**
 	 * Get single object by thesaurus array id

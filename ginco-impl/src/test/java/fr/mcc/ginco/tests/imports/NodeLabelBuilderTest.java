@@ -35,8 +35,6 @@
 package fr.mcc.ginco.tests.imports;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -57,14 +55,12 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.imports.NodeLabelBuilder;
 import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.tests.LoggerTestUtil;
-import fr.mcc.ginco.utils.DateUtil;
 
 public class NodeLabelBuilderTest {	
 	@Inject
@@ -88,9 +84,7 @@ public class NodeLabelBuilderTest {
 		
 		Language french = new Language();
 		french.setId("fr-FR");
-		List<Language> allLangs = new ArrayList<Language>();
-		allLangs.add(french);
-		Mockito.when(languagesDAO.getByPart1("fr")).thenReturn(allLangs);
+		Mockito.when(languagesDAO.getByPart1("fr")).thenReturn(french);
 
 		
 		Model model = ModelFactory.createDefaultModel();

@@ -12,10 +12,12 @@
 		<many-to-one name="thesaurus" column="thesaurusid" lazy="false" />
 		<many-to-one name="superOrdinateConcept" column="superordinateconceptid" lazy="false" />
 		
-		<set name="concepts" table="thesaurus_array_concept">
-			<key column="thesaurusarrayid" not-null="true" />
-			<many-to-many class="fr.mcc.ginco.beans.ThesaurusConcept" column="conceptid" />
-		</set>
-		 
+		<set name="concepts" cascade="all" inverse="true">
+            <key column="thesaurusarrayid" not-null="true"/>
+            <one-to-many class="fr.mcc.ginco.beans.ThesaurusArrayConcept" />
+        </set>  
+                 
+        <many-to-one name="parent" class="ThesaurusArray" column="parentarrayid" unique="true" not-null="false"/>
+        
 	</class>
 </hibernate-mapping>

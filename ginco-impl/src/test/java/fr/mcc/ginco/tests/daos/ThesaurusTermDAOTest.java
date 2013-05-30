@@ -61,6 +61,14 @@ public class ThesaurusTermDAOTest extends BaseDAOTest {
 		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "taxman", actualResponse.get(1).getLexicalValue());
 
     }    
+    
+    @Test
+    public final void testGetConceptPreferredTermWithLanguage() {
+        ThesaurusTerm actualResponse = thesaurusTermDAO.getConceptPreferredTerm("http://www.culturecommunication.gouv.fr/co2", "ita");
+		Assert.assertNotNull(actualResponse);
+		Assert.assertEquals("http://www.culturecommunication.gouv.fr/ter7", actualResponse.getIdentifier());
+
+    }   
      
 	@Override
 	public String  getXmlDataFileInit() {

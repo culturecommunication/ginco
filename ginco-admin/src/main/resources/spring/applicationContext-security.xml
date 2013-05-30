@@ -23,6 +23,8 @@
 	<http pattern="/css/**" security="none" />
 	<http pattern="/app/**" security="none" />
 	<http pattern="/images/**" security="none" />
+	<http pattern="/services/ui/revisionservice/**" security="none" />
+	
 	<http use-expressions="true">
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 		<form-login login-page="/login.jsp" login-processing-url="/login_security_check"

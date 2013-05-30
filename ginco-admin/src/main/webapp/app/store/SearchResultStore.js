@@ -39,12 +39,30 @@
  */
 Ext.define('GincoApp.store.SearchResultStore', {
     extend: 'Ext.data.Store',
+    
+    listeners: {
+        beforeload: function(store, operation,eOpts) {
+        	if (store.proxy.jsonData==null) {
+               store.proxy.jsonData = {"start":operation.start,
+                                      "limit":operation.limit,
+                                       };                        
+            } else {
+            	store.proxy.jsonData["start"] = operation.start;
+            	store.proxy.jsonData["limit"] = operation.limit;
+            	if (operation.sorters.length>0) {
+            		store.proxy.jsonData["sortfield"] = operation.sorters[0].property;
+            		store.proxy.jsonData["sortdir"] = operation.sorters[0].direction;
+            	}
+            }
+        }
+  },
 
     constructor: function(cfg) {
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
             storeId: 'JsonSearchResultStore',
+            remoteSort: true,
             proxy: {
                 type: 'ajax',
                 url: 'services/ui/indexerservice/search',
@@ -52,6 +70,32 @@ Ext.define('GincoApp.store.SearchResultStore', {
                     type: 'json',
                     idProperty: 'identifier',
                     root: 'data'
+                },
+                doRequest: function(operation, callback, scope) {
+                    var writer  = this.getWriter(),
+                        request = this.buildRequest(operation);
+                        
+                    if (operation.allowWrite()) {
+                        request = writer.write(request);
+                    }
+                    
+                    Ext.apply(request, {
+                        binary        : this.binary,
+                        headers       : this.headers,
+                        timeout       : this.timeout,
+                        scope         : this,
+                        callback      : this.createRequestCallback(request, operation, callback, scope),
+                        method        : this.getMethod(request),
+                        jsonData        : this.jsonData,
+                        disableCaching: false // explicitly set it to false, ServerProxy handles caching
+                    });
+                    
+                    Ext.Ajax.request(request);
+                    
+                    return request;
+                },
+                actionMethods: {
+                    read   : 'POST'
                 }
             },
             fields: [
@@ -73,6 +117,14 @@ Ext.define('GincoApp.store.SearchResultStore', {
                 },
                 {
                     name: 'thesaurusTitle',
+                    type: 'string'
+                },
+                {
+                    name: 'created',
+                    type: 'string'
+                },
+                {
+                    name: 'modified',
                     type: 'string'
                 }
                 

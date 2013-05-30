@@ -34,11 +34,12 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-
-import java.util.List;
 
 /**
  * Service used to work with {@link ThesaurusArray} objects, contains basic
@@ -55,19 +56,27 @@ public interface IThesaurusArrayService {
     ThesaurusArray getThesaurusArrayById(String id);
 
     /**
-     * Get list of ThesaurusArray by corresponding Thesaurus.
+     * Get list of ThesaurusArray by corresponding Thesaurus, excluding the concept array which id is given in parameter
+     * @param excludedConceptArrayId : the concept to exclude (can be null)
      * @param thesaurusId
      * @return
      */
-    List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String thesaurusId);
+    List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String excludedConceptArrayId, String thesaurusId);
 
     /**
-     * Update a single Thesaurus Concept Object
-     * @throws BusinessException 
+     * Update a single Thesaurus Concept Object    
+     * @param thesaurusArray
+     * @param label
+     * @param arrayConcepts
+     * @return
+     * @throws BusinessException
      */
-    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label) throws BusinessException;    
-    
-    
+    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label,  List<ThesaurusArrayConcept> arrayConcepts) throws BusinessException;
+
+    /**
+     * Update a single Thesaurus Concept Object without NodeLabel
+     */
+    ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray) throws BusinessException;
     /**
      * Delete a ThesaurusArray
      * @param thesaurusArray
@@ -87,4 +96,7 @@ public interface IThesaurusArrayService {
      * @return
      */
     List<ThesaurusArray> getArraysWithoutParentConcept(String thesaurusId);
+    
+    List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId);
+	List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId);
 }

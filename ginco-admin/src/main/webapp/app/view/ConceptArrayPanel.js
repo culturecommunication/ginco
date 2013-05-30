@@ -69,19 +69,13 @@ Ext
 					xSelectParentConcept : 'Select a parent concept',
 					xActions : 'Actions',
 					xAssociationRemove : 'Detach this concept',
+					xOrderLabel : 'Alphabetical order',
+					xConceptOrderLabel: 'Order',
+					xParentArrayLabel : 'Parent array',
+					xSelectParentArray : 'Select a parent array',
 
 					initComponent : function() {
-						var me = this;
-
-						// This store is used to get only the children concepts
-						// of the superordinateconcept
-						me.associatedConceptStore = Ext.create(
-								'GincoApp.store.SimpleConceptStore', {
-									sorters : [ {
-										property : 'label',
-										direction : 'asc'
-									} ]
-								});
+						var me = this;					
 
 						Ext
 								.applyIf(
@@ -98,7 +92,7 @@ Ext
 												trackResetOnLoad : true,
 												itemId : 'conceptArrayForm',
 												defaults : {
-													anchor : '70%',
+													anchor : '70%'
 												},
 												bbar : Ext.create('GincoApp.view.BottomFormToolbar'),
 												dockedItems : [ {
@@ -167,6 +161,41 @@ Ext
 																	.create('GincoApp.store.ThesaurusLanguageStore')
 														},
 														{
+															xtype : 'checkbox',
+															name : 'order',
+															fieldLabel : me.xOrderLabel
+														},
+														{
+															xtype : 'textfield',
+															name : 'parentArrayId',
+															hidden : true
+														},
+														{
+															xtype : 'container',
+															layout : 'column',
+															defaults : {
+																margin : '0 0 5 0',
+																layout : 'anchor'
+															},
+															items : [
+																	{
+																		xtype : 'textfield',
+																		name : 'parentArrayLabel',
+																		fieldLabel : me.xParentArrayLabel,
+																		allowBlank : true,
+																		readOnly : true
+																	},
+																	{
+																		xtype : 'button',
+																		text : me.xSelectParentArray,
+																		disabled : false,
+																		requiredRoles : ['ADMIN'],
+																		itemId : 'selectParentArray',
+																		cls : 'add',
+																		iconCls : 'icon-add'
+																	} ]
+														},
+														{
 															xtype : 'textfield',
 															name : 'superOrdinateId',
 															hidden : true
@@ -200,7 +229,7 @@ Ext
 															xtype : 'gridpanel',
 															itemId : 'gridPanelConceptArray',
 															title : me.xConceptArrayGridTitle,
-															store : me.associatedConceptStore,
+															store : Ext.create('Ext.data.Store', {model: 'GincoApp.model.ArrayConceptModel'}),
 
 															dockedItems : [ {
 																xtype : 'toolbar',
@@ -209,7 +238,6 @@ Ext
 																	xtype : 'button',
 																	requiredRoles : ['ADMIN'],
 																	text : me.xAddConceptToArray,
-																	disabled : true,
 																	itemId : 'addConceptToArray',
 																	cls : 'add',
 																	iconCls : 'icon-add'
@@ -223,6 +251,11 @@ Ext
 																	{
 																		dataIndex : 'label',
 																		text : me.xLexicalValueLabel,
+																		flex : 1
+																	},
+																	{
+																		dataIndex : 'order',
+																		text : me.xConceptOrderLabel,
 																		flex : 1
 																	},
 																	{

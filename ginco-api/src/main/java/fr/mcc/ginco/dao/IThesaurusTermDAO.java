@@ -71,6 +71,15 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	Long countSandboxedTerms(String idThesaurus) throws BusinessException;
 	
 	/**
+	 * Get number of Thesaurus Preferred Terms
+	 * 
+	 * @param idThesaurus
+	 *            of a Thesaurus
+	 * @return number of Thesaurus Preferred Terms for a given Thesaurus
+	 */
+	Long countPreferredTerms(String idThesaurus) throws BusinessException;
+	
+	/**
 	 * Get number of Thesaurus Sandboxed Validated Terms
 	 * 
 	 * @param idThesaurus
@@ -80,13 +89,32 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException;
 
 	/**
-	 * Returns the preferred ThesaurusTerm of a concept
+	 * Returns the preferred ThesaurusTerm of a concept in the default application language
 	 * 
 	 * @param conceptId
 	 * @return
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException;
+	
+	/**
+	 * Returns the list of preferred ThesaurusTerm of a concept
+	 * 
+	 * @param conceptId
+	 * @return
+	 */
+	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
+			throws BusinessException;
+	
+	/**
+	 * Gets the preferred term of the given concept in the given language, null if none is found
+	 * @param conceptId
+	 * @param languageId
+	 * @return
+	 * @throws BusinessException
+	 */
+	ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId);     
+
 
 	/**
 	 * Returns a list of ThesaurusTerm that belong to the same concept (id given
@@ -97,6 +125,9 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @throws BusinessException
 	 */
 	List<ThesaurusTerm> findTermsByConceptId(String conceptId)
+			throws BusinessException;
+	
+	List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId)
 			throws BusinessException;
 
 	/**
@@ -122,6 +153,22 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 *         specified Thesaurus
 	 */
 	List<ThesaurusTerm> findPaginatedSandboxedValidatedItems(
+			Integer startIndex, Integer limit, String idThesaurus);
+	
+	/**
+	 * Returns a list of Thesaurus Terms filtered by thesaurusId 
+	 * sorted alphabetically on the lexical value with
+	 * a starting index and a limit of items to be returned, and
+	 * with a status validated
+	 * 
+	 * @param start
+	 *            Beginning index
+	 * @param limit
+	 *            Number of items
+	 * @return List<ThesaurusTerm> Paginated list of Thesaurus Terms for a
+	 *         specified Thesaurus
+	 */
+	List<ThesaurusTerm> findPaginatedPreferredItems(
 			Integer startIndex, Integer limit, String idThesaurus);
 	
 	/**

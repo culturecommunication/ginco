@@ -51,6 +51,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
@@ -71,6 +72,10 @@ public class ArraysGenerator {
 	@Inject
 	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
+	
+	@Inject
+	@Named("thesaurusListNodeFactory")
+	ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	@Log
 	private Logger logger;
@@ -87,12 +92,12 @@ public class ArraysGenerator {
 	public List<IThesaurusListNode> generateArrays(String thesaurusId)
 			throws BusinessException {
 		logger.debug("Generating thesaurus arrays list for vocabularyId : " + thesaurusId);
-		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(thesaurusId);
+		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(null, thesaurusId);
 		logger.debug(arrays.size() + " arrays found");
 
 		List<IThesaurusListNode> newArrays = new ArrayList<IThesaurusListNode>();
 		for (ThesaurusArray array : arrays) {
-			ThesaurusListBasicNode arrayNode = new ThesaurusListBasicNode();
+			ThesaurusListBasicNode arrayNode = thesaurusListNodeFactory.getListBasicNode();
 			NodeLabel label = nodeLabelService.getByThesaurusArray(array.getIdentifier());
 			arrayNode.setTitle(LabelUtil.getLocalizedLabel(label.getLexicalValue(), label.getLanguage(), defaultLanguage));
 			

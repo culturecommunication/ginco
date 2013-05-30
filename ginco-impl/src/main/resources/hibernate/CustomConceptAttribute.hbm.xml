@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+    <class name="CustomConceptAttribute" table="custom_concept_attribute">
+        <cache usage="read-write" />
+
+        <id name="identifier" column="identifier">
+            <generator class="assigned" />
+        </id>
+
+        <property name="lexicalValue" column="lexicalvalue" />
+
+        <many-to-one name="entity" column="conceptid" lazy="false" class="ThesaurusConcept" />
+        <many-to-one name="type" column="typeid" lazy="false" class="CustomConceptAttributeType" />
+        <many-to-one name="language" column="lang" lazy="false" class="Language" />
+    </class>
+</hibernate-mapping>

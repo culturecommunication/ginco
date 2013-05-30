@@ -38,28 +38,38 @@ import java.util.List;
 
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
+import fr.mcc.ginco.log.Log;
 
 /**
  * Implementation of {@link ILanguageDAO}; basic class for DAO-related work.
  */
 @Repository("languagesDAO")
-public class LanguageDAO extends GenericHibernateDAO<Language, String> implements ILanguageDAO {
+public class LanguageDAO extends GenericHibernateDAO<Language, String>
+		implements ILanguageDAO {
+	
+	@Log
+	private Logger logger;
 	
 	public LanguageDAO() {
 		super(Language.class);
 	}
-	
+
 	/**
-	 * @return List of Language with favorites Language first, and the other elements sorted alphabetically
-	 * with a starting index and a limit of items to be returned
+	 * @return List of Language with favorites Language first, and the other
+	 *         elements sorted alphabetically with a starting index and a limit
+	 *         of items to be returned
 	 */
 	@Override
 	public List<Language> findPaginatedItems(Integer start, Integer limit) {
-		return getCurrentSession().createCriteria(Language.class).setMaxResults(limit).setFirstResult(start).addOrder(Order.desc("toplanguage")).addOrder(Order.asc("refname")).list();
+		return getCurrentSession().createCriteria(Language.class)
+				.setMaxResults(limit).setFirstResult(start)
+				.addOrder(Order.desc("topLanguage"))
+				.addOrder(Order.asc("refname")).list();
 	}
 
 	/**
@@ -67,16 +77,27 @@ public class LanguageDAO extends GenericHibernateDAO<Language, String> implement
 	 */
 	@Override
 	public List<Language> findTopLanguages() {
-		return getCurrentSession().createCriteria(Language.class).add(Restrictions.eq("toplanguage",true)).list();
+		return getCurrentSession().createCriteria(Language.class)
+				.add(Restrictions.eq("topLanguage", true)).list();
 	}
+
 	
-	/**	 * 
-	 * @return List of top Languages
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.ILanguageDAO#getByPart1(java.lang.String)
 	 */
 	@Override
-	public List<Language> getByPart1(String part1) {
-		return getCurrentSession().createCriteria(Language.class).add(Restrictions.eq("part1",part1)).list();
+	public Language getByPart1(String part1) {
+		List<Language> languages = getCurrentSession()
+				.createCriteria(Language.class)
+				.add(Restrictions.eq("part1", part1))
+				.add(Restrictions.eq("principalLanguage", true)).list();
+		if (languages != null && languages.size() > 0) {
+			if(languages.size() > 01) {
+				logger.warn("Multiple principal languages found for the same part1 " + part1);
+			}
+			return languages.get(0);
+		}
+		return null;
 	}
-	
-	
+
 }

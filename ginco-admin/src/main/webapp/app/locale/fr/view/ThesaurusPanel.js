@@ -53,7 +53,7 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xCoverageLabel : 'Couverture',
 	    xSubjectLabel : 'Sujet',
 	    xTypeLabel : 'Type',
-	    xFormatLabel : 'Format',
+	    xFormatLabel : 'Format(s)',
 	    xLanguagesLabel : 'Langue(s)',
 	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
 	    xRelationLabel : 'Publication(s) associée(s)',
@@ -65,10 +65,11 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xNewMenu_ConceptLabel: 'Concept',
 	    xNewMenu_GroupLabel: 'Groupe de concepts',
 	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
+		xNewMenu_ComplexConceptLabel: "Concept complexe",
         xExport_Skos : "Export SKOS",
         xExport_Hierarchical : "Export texte hiérarchique",
         xExport_Alphabetic : "Export texte alphabétique",
-        xExport_Mcc : "Export XML MCC",
+        xExport_Ginco : "Export XML Hadoc GINCO",
 
         xSave : "Enregistrer",
         xDelete : "Supprimer",
@@ -76,5 +77,10 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
         xJournal: 'Journal des évolutions',
     	xEditJournal: 'Editer au format CSV',
         xPublish: 'Publier',
-        xArchive: 'Archiver'
+        xArchive: 'Archiver',
+        xPolyHierarchical: 'Polyhierarchique',
+        xImportBranch: 'Importer une branche',
+        xCustomAttributeTypes: "Types d'atrributes posonalisé",
+        xImportSandbox: 'Importer des termes',
+        xCustomAttributeTypes: "Attributs personnalisés"
 });

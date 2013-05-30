@@ -44,6 +44,7 @@ import javax.jws.WebService;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.data.FullThesaurus;
 import fr.mcc.ginco.data.ReducedThesaurus;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -100,8 +101,13 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 		}
 		fullThesaurus.setModified(DateUtil.toString(thesaurus.getDate()));
 		fullThesaurus.setDescription(thesaurus.getDescription());
-		if (thesaurus.getFormat() != null) {
-			fullThesaurus.setFormat(thesaurus.getFormat().getLabel());
+		
+		if (thesaurus.getFormat() != null){
+			ArrayList<String> formatList = new ArrayList<String>();
+			for (ThesaurusFormat format : thesaurus.getFormat()) {
+				formatList.add(format.getLabel());
+			}
+			fullThesaurus.setFormats(formatList);
 		}
 		fullThesaurus.setIdentifier(thesaurus.getIdentifier());
 		ArrayList<String> langList = new ArrayList<String>();

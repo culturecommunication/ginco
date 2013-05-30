@@ -116,10 +116,8 @@ public class ConceptNoteBuilderTest {
 				.getConceptNoteTypeList()).thenReturn(conceptNoteTypes);
 		
 		Language french = new Language();
-		french.setId("fr-FR");
-		List<Language> allLangs = new ArrayList<Language>();
-		allLangs.add(french);
-		Mockito.when(languagesDAO.getByPart1("fr")).thenReturn(allLangs);
+		french.setId("fr-FR");		
+		Mockito.when(languagesDAO.getByPart1("fr")).thenReturn(french);
 
 		
 		Model model = ModelFactory.createDefaultModel();

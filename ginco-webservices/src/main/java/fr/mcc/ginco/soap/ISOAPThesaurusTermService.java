@@ -34,50 +34,83 @@
  */
 package fr.mcc.ginco.soap;
 
+import java.util.List;
+
 import javax.jws.WebParam;
 import javax.jws.WebService;
+
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-
 @WebService
 public interface ISOAPThesaurusTermService {
-	
+
 	/**
 	 * This service returns the identifier of a concept by the term
 	 * 
-	 * @param  lexical value of the term,
-	 * @param  thesaurus identifier of the term,
-	 * @param  language identifier of the term
+	 * @param lexical
+	 *            value of the term,
+	 * @param thesaurus
+	 *            identifier of the term,
+	 * @param language
+	 *            identifier of the term
 	 * 
 	 * @return identifier of a concept
 	 */
-	String getConceptIdByTerm(@WebParam(name="lexicalValue")String lexicalValue,@WebParam(name="thesaurusId") String thesaurusId,@WebParam(name="languageId")  String languageId);
-	
+	String getConceptIdByTerm(
+			@WebParam(name = "lexicalValue") String lexicalValue,
+			@WebParam(name = "thesaurusId") String thesaurusId,
+			@WebParam(name = "languageId") String languageId);
+
 	/**
-	 * This service returns:
-	 * lexical value if the term is preferred,
-	 * lexical value of preferred term if current term isn't preferred,
-	 * null if the term doesn't exist 
+	 * This service returns: lexical value if the term is preferred, lexical
+	 * value of preferred term if current term isn't preferred, null if the term
+	 * doesn't exist
 	 * 
-	 * @param  lexical value of the term,
-	 * @param  thesaurus identifier of the term,
-	 * @param  language identifier of the term
+	 * @param lexical
+	 *            value of the term,
+	 * @param thesaurus
+	 *            identifier of the term,
+	 * @param language
+	 *            identifier of the term
 	 * 
 	 * @return reduced preferred term
 	 */
-	ReducedThesaurusTerm getPreferredTermByTerm(@WebParam(name="lexicalValue")String lexicalValue,@WebParam(name="thesaurusId") String thesaurusId, @WebParam(name="languageId") String languageId);
-	
+	ReducedThesaurusTerm getPreferredTermByTerm(
+			@WebParam(name = "lexicalValue") String lexicalValue,
+			@WebParam(name = "thesaurusId") String thesaurusId,
+			@WebParam(name = "languageId") String languageId);
+
 	/**
-	 * This service returns true if the term is preferred, 
-	 * 					   false if the term isn't preferred
+	 * This service returns true if the term is preferred, false if the term
+	 * isn't preferred
 	 * 
-	 * @param  lexical value of the term,
-	 * @param  thesaurus identifier of the term,
-	 * @param  language identifier of the term
+	 * @param lexical
+	 *            value of the term,
+	 * @param thesaurus
+	 *            identifier of the term,
+	 * @param language
+	 *            identifier of the term
 	 * 
 	 * @return preferred or not preferred
 	 */
-	Boolean isPreferred(@WebParam(name="lexicalValue")String lexicalValue,@WebParam(name="thesaurusId") String thesaurusId,@WebParam(name="languageId")  String languageId) throws BusinessException;
-}
+	Boolean isPreferred(@WebParam(name = "lexicalValue") String lexicalValue,
+			@WebParam(name = "thesaurusId") String thesaurusId,
+			@WebParam(name = "languageId") String languageId)
+			throws BusinessException;
 
+	/**
+	 * This service returns list of reduced terms that begin with input string
+	 * 
+	 * @param beginning string,
+	 * @param start index of search,
+	 * @param limit of result rows,
+	 * 
+	 * @return list of reduced terms
+	 */
+
+	List<ReducedThesaurusTerm> getTermsBeginWithSomeString(
+			@WebParam(name = "request") String request,
+			@WebParam(name = "startIndex") int startIndex,
+			@WebParam(name = "limit") int limit) throws BusinessException;
+}

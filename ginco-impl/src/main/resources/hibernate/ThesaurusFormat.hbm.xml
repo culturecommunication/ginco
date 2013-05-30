@@ -6,12 +6,6 @@
 		<id name="identifier" column="identifier">
 			<generator class="native" />
 		</id>
-		<property name="label" not-null="true" />
-		
-		<set name="thesauruses" inverse="true">
-			<key column="identifier" />
-			<one-to-many class="Thesaurus" />
-		</set>
-		
+		<property name="label" not-null="true" />		
 	</class>
 </hibernate-mapping>

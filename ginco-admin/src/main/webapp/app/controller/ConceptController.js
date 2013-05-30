@@ -30,9 +30,10 @@ Ext
 				{
 					extend : 'Ext.app.Controller',
 
-					stores : [ 'MainTreeStore', 'SimpleConceptStore' ],
+					stores : [ 'MainTreeStore', 'SimpleConceptStore',
+                            'AssociationStore', 'AssociationRoleStore', 'HierarchicalAssociationStore' ],
 					models : [ 'ConceptModel', 'ThesaurusModel',
-							'SimpleConceptModel' ],
+							'SimpleConceptModel', 'AssociationModel', 'HierarchicalAssociationModel' ],
 
 					localized : true,
 					_myAppGlobal : this,
@@ -100,7 +101,27 @@ Ext
 								}
 							}
 							theForm.loadRecord(model);
+							this.enableSaveBtn(theForm);
 						}
+						me.initCustomAttributForm(theForm);
+					},
+					
+					initCustomAttributForm: function(theForm)
+					{
+						var conceptPanel = theForm.up('conceptPanel');
+						var customForm = theForm.down('customattrform');
+						customForm.initFields(conceptPanel.thesaurusData.id, function() {
+							if (conceptPanel.gincoId!='')
+							{
+								customForm.load(conceptPanel.gincoId);
+							}
+						});
+					},
+					
+					saveCustomFieldAttributes : function(theForm, conceptId)
+					{
+						var customForm = theForm.down('#customAttributeForm');
+						customForm.save(conceptId,'fr-FR');
 					},
 
 					onGridRender : function(theGrid) {
@@ -174,13 +195,10 @@ Ext
 					onTermDblClick : function(theGrid, record, item, index, e,
 							eOpts) {
 						var me = this;
-						var thePanel = me.getActivePanel();
+						var thePanel = theGrid.up('conceptPanel');
 						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 						topTabs.fireEvent('opentermtab', topTabs, thePanel.thesaurusData.id,
 								record.data.identifier);
-						// Thesaurus.ext.tabs.openTermTab(record.data.identifier,
-						// thePanel.thesaurusData);
-
 					},
 
 					onConceptDblClick : function(theGrid, record, item, index,
@@ -210,6 +228,13 @@ Ext
 					onRemoveParentClick : function(gridview, el, rowIndex,
 							colIndex, e, rec, rowEl) {
 						var theGrid = gridview.up('#gridPanelParentConcepts');
+						var theStore = theGrid.getStore();
+						theStore.remove(rec);
+					},
+					
+					onRemoveChildClick : function(gridview, el, rowIndex,
+							colIndex, e, rec, rowEl) {
+						var theGrid = gridview.up('#gridPanelChildrenConcepts');
 						var theStore = theGrid.getStore();
 						theStore.remove(rec);
 					},
@@ -300,14 +325,24 @@ Ext
 						var theStore = theGrid.getStore();
 						var selectedItem = selectedRow[0];
 						selectedItem.setDirty();
-						theStore.add(selectedItem);
+						
+						var parentModel = Ext.create('GincoApp.model.HierarchicalAssociationModel');
+						parentModel.set('label',selectedItem.get('label'));
+						parentModel.set('identifier',selectedItem.get('identifier'));
+						
+						theStore.add(parentModel);
 					},
 
 					selectAssociativeConcept : function(selectedRow, theGrid) {
 						var theStore = theGrid.getStore();
 						var selectedItem = selectedRow[0];
 						selectedItem.setDirty();
-						theStore.add(selectedItem);
+
+                        var assocModel = Ext.create('GincoApp.model.AssociationModel');
+                        assocModel.set('label',selectedItem.get('label'));
+                        assocModel.set('identifier',selectedItem.get('identifier'));
+
+                        theStore.add(assocModel);
 
 					},
 
@@ -339,30 +374,61 @@ Ext
 						var conceptPanel = me.getActivePanel();
 						var infosConceptPanel = aForm.up('panel');
 						conceptPanel.gincoId = aModel.data.identifier;
-
+						
 						aForm.loadRecord(aModel);
 						var terms = aModel.terms().getRange();
+						conceptTitle = "";
 						Ext.Array.each(terms, function(term) {
-							if (term.data.prefered == true) {
+							if (term.data.prefered == true 
+									&& term.data.language == conceptPanel.thesaurusData.languages[0]) {
 								conceptTitle = term.data.lexicalValue;
+								return false;
 							}
 						});
-
+						
+						if (conceptTitle == ""){
+							Ext.Array.each(terms, function(term) {
+								if (term.data.prefered == true) {
+									conceptTitle = term.data.lexicalValue;
+									return false;
+								}
+							});
+						}
+						
 						conceptPanel.setTitle("Concept : " + conceptTitle);
 						infosConceptPanel.setTitle(conceptTitle);
+						
 						var theGrid = aForm.down('#gridPanelTerms');
+						
 						var theGridStore = theGrid.getStore();
 						theGridStore.removeAll();
 						theGridStore.add(terms);
-
-						var associatedConceptsGrid = aForm
-								.down('#gridPanelAssociatedConcepts');
-						var associatedConceptsGridStore = associatedConceptsGrid
-								.getStore();
-						associatedConceptsGridStore.getProxy().extraParams = {
-							conceptIds : aModel.raw.associatedConcepts
-						};
-						associatedConceptsGridStore.load();
+						this.setupStoreListener(theGrid);
+                        //Load associated concepts to the grid's store
+						var assoc = aModel.associatedConcepts().getRange();
+                        var associatedConceptsGrid = aForm
+                            .down('#gridPanelAssociatedConcepts');
+                        var associatedConceptsGridStore = associatedConceptsGrid
+                            .getStore();
+                        associatedConceptsGridStore.removeAll();
+                        associatedConceptsGridStore.add(assoc);
+                        this.setupStoreListener(associatedConceptsGrid);
+                        
+                        //Load parent concepts to the grid's store
+						var parents = aModel.parentConcepts().getRange();
+                        var parentsGrid = aForm.down('#gridPanelParentConcepts');
+                        var parentConceptsGridStore = parentsGrid.getStore();
+                        parentConceptsGridStore.removeAll();
+                        parentConceptsGridStore.add(parents);
+                        this.setupStoreListener(parentsGrid);
+                        
+                        //Load children concepts to the grid's store
+						var children = aModel.childConcepts().getRange();
+                        var childrenGrid = aForm.down('#gridPanelChildrenConcepts');
+                        var childrenConceptsGridStore = childrenGrid.getStore();
+                        childrenConceptsGridStore.removeAll();
+                        childrenConceptsGridStore.add(children);
+                        this.setupStoreListener(childrenGrid);
 
 						var rootConceptsGrid = aForm
 								.down('#gridPanelRootConcepts');
@@ -371,24 +437,6 @@ Ext
 							conceptIds : aModel.raw.rootConcepts
 						};
 						rootConceptsGridStore.load();
-
-						var parentConceptsGrid = aForm
-								.down('#gridPanelParentConcepts');
-						var parentConceptsGridStore = parentConceptsGrid
-								.getStore();
-						parentConceptsGridStore.getProxy().extraParams = {
-							conceptIds : aModel.raw.parentConcepts
-						};
-						parentConceptsGridStore.load();
-
-						var childrenConceptsGrid = aForm
-								.down('#gridPanelChildrenConcepts');
-						var childrenConceptsGridStore = childrenConceptsGrid
-								.getStore();
-						childrenConceptsGridStore.getProxy().extraParams = {
-							conceptId : aModel.data.identifier
-						};
-						childrenConceptsGridStore.load();
 
 						var noteTab = aForm.up('tabpanel').down(
 								'noteConceptPanel');
@@ -537,15 +585,6 @@ Ext
 						var theStore = theGrid.getStore();
 						var termsData = theStore.getRange();
 
-						var parentGrid = theForm
-								.down('#gridPanelParentConcepts');
-						var parentGridStore = parentGrid.getStore();
-						var parentData = parentGridStore.getRange();
-						var parentIds = Ext.Array.map(parentData, function(
-								parent) {
-							return parent.data.identifier;
-						});
-
 						var rootGrid = theForm.down('#gridPanelRootConcepts');
 						var rootGridStore = rootGrid.getStore();
 						var rootData = rootGridStore.getRange();
@@ -557,10 +596,12 @@ Ext
 								.down('#gridPanelAssociatedConcepts');
 						var associatedGridStore = associatedGrid.getStore();
 						var associatedData = associatedGridStore.getRange();
-						var associatedIds = Ext.Array.map(associatedData,
-								function(associatedConcept) {
-									return associatedConcept.data.identifier;
-								});
+						
+						var hierarchicalParentGrid = theForm.down('#gridPanelParentConcepts');
+						var hierarchicalParentData = hierarchicalParentGrid.getStore().getRange();
+						
+						var hierarchicalChildGrid = theForm.down('#gridPanelChildrenConcepts');
+						var hierarchicalChildData = hierarchicalChildGrid.getStore().getRange();
 
 						var thePanel = me.getActivePanel();
 
@@ -568,16 +609,21 @@ Ext
 						var updatedModel = theForm.getForm().getRecord();
 						updatedModel.terms().removeAll();
 						updatedModel.terms().add(termsData);
+                        updatedModel.associatedConcepts().removeAll();
+                        updatedModel.associatedConcepts().add(associatedData);
+                        updatedModel.parentConcepts().removeAll();
+                        updatedModel.parentConcepts().add(hierarchicalParentData);
+                        updatedModel.childConcepts().removeAll();
+                        updatedModel.childConcepts().add(hierarchicalChildData);
 
-						updatedModel.data.parentConcepts = parentIds;
 						updatedModel.data.rootConcepts = rootIds;
-						updatedModel.data.associatedConcepts = associatedIds;
 
 						updatedModel
 								.save({
 									success : function(record, operation) {
 										var resultRecord = operation
 												.getResultSet().records[0];
+										me.saveCustomFieldAttributes(theForm,resultRecord.get("identifier"));
 										me.loadData(theForm, resultRecord);
 										theForm.getEl().unmask();
 										Thesaurus.ext.utils.msg(
@@ -601,12 +647,43 @@ Ext
 								});
 
 					},
+					
+					exportBranch : function (theButton, theCallback) {
+						var theForm = theButton.up('form');
+				        var url = "services/ui/exportservice/getGincoBranchExport?conceptId="
+				            + encodeURIComponent(theForm.up('conceptPanel').gincoId);
+				        window.open(url);
+					},
+					enableSaveBtn : function (aItem)
+					{
+						var btn = null;
+						if (aItem.up)
+							btn = aItem.down("#saveConcept");
+						else
+							btn = aItem.owner.down("#saveConcept");
+						if (btn == null)
+							btn = aItem.up('form').down("#saveConcept");
+						if (btn!=null)
+							btn.setDisabled(false);
+					},
+					setupStoreListener : function (aGridPanel)
+					{
+						var store = aGridPanel.store;
+						var me = this;
+					    store.on('datachanged', function() {
+					    	me.enableSaveBtn(aGridPanel);
+					    });
+					    store.on('update', function() {
+					    	me.enableSaveBtn(aGridPanel);
+					    });
+					},
 
 					init : function() {
 						this
 								.control({
 									'conceptPanel #conceptForm' : {
-										afterrender : this.onConceptFormRender
+										afterrender : this.onConceptFormRender,
+										dirtychange : this.enableSaveBtn
 									},
 									'conceptPanel #conceptStatusCombo' : {
 										render : this.loadConceptStatus,
@@ -617,6 +694,9 @@ Ext
 									},
 									'conceptPanel #deleteConcept' : {
 										click : this.deleteConcept
+									},
+									'conceptPanel #exportBranch' : {
+										click : this.exportBranch
 									},
 									'conceptPanel  button[cls=addParent]' : {
 										click : this.addParent
@@ -672,6 +752,9 @@ Ext
 									},
 									'conceptPanel #gridPanelParentConcepts #parentConceptActionColumn' : {
 										click : this.onRemoveParentClick
+									},
+									'conceptPanel #gridPanelChildrenConcepts #childConceptActionColumn' : {
+										click : this.onRemoveChildClick
 									}
 								});
 

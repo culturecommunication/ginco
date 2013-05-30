@@ -34,20 +34,29 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.enums.TermStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.ILanguageDAO;
+import fr.mcc.ginco.dao.IThesaurusDAO;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.enums.TermStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.DateUtil;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusTermService")
@@ -56,7 +65,22 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     @Inject
     @Named("thesaurusTermDAO")
     private IThesaurusTermDAO thesaurusTermDAO;
-
+    
+    @Inject
+    @Named("thesaurusDAO")
+    private IThesaurusDAO thesaurusDAO;
+    
+    @Inject
+    @Named("languagesDAO")
+    private ILanguageDAO languageDAO;
+    
+    @Inject
+    @Named("generatorService")
+    private IIDGeneratorService customGeneratorService;
+    
+	@Value("${ginco.default.language}")
+	private String defaultLang;
+	
     @Log
     private Logger logger;
 
@@ -80,20 +104,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	@Override
     public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
         return thesaurusTermDAO.findTermsByConceptId(idConcept);
-    }
-
-    @Override
-    public void markTermsAsSandboxed(List<ThesaurusTerm> sent, List<ThesaurusTerm> origin) throws BusinessException {
-
-        for (ThesaurusTerm old : origin) {
-            if (!sent.contains(old)) {
-                ThesaurusTerm term = thesaurusTermDAO.getById(old.getIdentifier());
-                term.setConcept(null);
-                thesaurusTermDAO.update(term);
-                logger.info("Marking Term with ID " + old.getIdentifier() + " as SandBoxed.");
-            }
-        }
-    }
+    }  
 
 	@Override
     public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException {
@@ -124,18 +135,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
         } else {
             throw new BusinessException("It's not possible to delete a term attached to a concept or with a status different from rejected", "delete-attached-term");
         }
-    }
-
-	@Override
-    public List<ThesaurusTerm> getPreferedTerms(List<ThesaurusTerm> listOfTerms) {
-        List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
-        for (ThesaurusTerm thesaurusTerm : listOfTerms) {
-            if (thesaurusTerm.getPrefered()) {
-                preferedTerms.add(thesaurusTerm);
-            }
-        }
-        return preferedTerms;
-    }
+    }	
 
     @Override
     public List<ThesaurusTerm> getAllTerms() {
@@ -146,6 +146,12 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	public List<ThesaurusTerm> getPaginatedThesaurusSandoxedValidatedTermsList(
 			Integer startIndex, Integer limit, String idThesaurus) {
 		return thesaurusTermDAO.findPaginatedSandboxedValidatedItems(startIndex, limit, idThesaurus);
+	}
+    
+	@Override
+	public Long getPreferredTermsCount(String idThesaurus)
+			throws BusinessException {
+		return thesaurusTermDAO.countPreferredTerms(idThesaurus);
 	}
     
     @Override
@@ -201,5 +207,41 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	}
     		
     	
+	}
+
+	@Override
+	public List<ThesaurusTerm> getAllTerms(String thesaurusId) {
+		return thesaurusTermDAO.findTermsByThesaurusId(thesaurusId);
+	}
+
+	@Override
+	public List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(
+			Integer startIndex, Integer limit, String idThesaurus) {
+		 return thesaurusTermDAO.findPaginatedPreferredItems(startIndex, limit, idThesaurus);
+	}
+	
+	@Transactional(readOnly=false)
+	@Override
+	public List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId) throws TechnicalException, BusinessException{
+		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
+		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
+		if (targetedThesaurus != null){
+			for (String  termLexicalValue : termLexicalValues){
+				ThesaurusTerm termToImport = new ThesaurusTerm();
+				termToImport.setIdentifier(customGeneratorService.generate(ThesaurusTerm.class));
+				termToImport.setLexicalValue(termLexicalValue);
+				termToImport.setThesaurus(targetedThesaurus);
+				termToImport.setLanguage(languageDAO.getById(defaultLang));
+				termToImport.setModified(DateUtil.nowDate());
+				termToImport.setCreated(DateUtil.nowDate());
+				termToImport.setStatus(TermStatusEnum.CANDIDATE.getStatus());
+				updatedTerms.add(thesaurusTermDAO.update(termToImport));
+			}
+		}
+		else{
+			throw new BusinessException("Unknown thesaurus",
+					"unknown-thesaurus");
+		}
+		return updatedTerms;
 	}
 }

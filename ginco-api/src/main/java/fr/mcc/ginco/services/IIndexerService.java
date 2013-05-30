@@ -34,14 +34,13 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SortCriteria;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
@@ -51,6 +50,17 @@ public interface IIndexerService {
      * Deletes all data from SOLR and reindex everything.
      */
     void forceIndexing() throws TechnicalException;
+    
+    /**
+     * Force a thesaurus reindexation
+     */
+    void indexThesaurus(Thesaurus thesaurus) throws TechnicalException;
+    
+    /**
+     * Remove thesaurus index data
+     */
+    void removeThesaurusIndex(String thesaurusId) throws TechnicalException;
+
 
     /**
      * Takes an ThesaurusTerm and adds it to index.
@@ -96,8 +106,10 @@ public interface IIndexerService {
 
     /**
      * Search a term or a concept
-     * @param thesaurusConcept
      * @throws TechnicalException
      */
-    SearchResultList search(String request, int startIndex, int limit) throws SolrServerException;
+    SearchResultList search(String request, Integer type,
+                            String thesaurus, Integer status,
+                            String createdFrom, String modifiedFrom,
+                            String language, SortCriteria sort, int startIndex, int limit) throws SolrServerException;
 }

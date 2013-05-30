@@ -34,9 +34,9 @@
  */
 package fr.mcc.ginco.extjs.view.node;
 
-import java.util.List;
-
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
+
+import java.util.List;
 
 /**
  * Interface for generic node in list of nodes.
@@ -142,4 +142,16 @@ public interface IThesaurusListNode extends Comparable<IThesaurusListNode>{
 	 * @param displayable
 	 */
 	void setDisplayable(boolean displayable);
+
+    /**
+     * Service tag to filter by organization.
+     * @return
+     */
+    String getOrganizationName();
+
+    /**
+     * Sets organization name.
+     * @param organizationName
+     */
+    void setOrganizationName(String organizationName);
 }

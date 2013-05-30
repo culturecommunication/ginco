@@ -73,33 +73,58 @@ Ext
 					xAssociatedConceptsListGridTitle : 'Associated terms',
 					xRootConcepts : 'Root Concepts',
 					xParentConcepts : 'Parent Concepts',
-					xRemoveParent : 'Remove connection to parent Concept',
+					xRemoveParent : 'Remove connection to parent concept',
+					xRemoveChild : 'Remove connection to child concept',
 					xAssociationRemove : 'Remove association',
 					xChildrenConcepts : 'Children Concepts',
 					xConceptStatusLabel : 'Concept status',
 					xHiddenTermColumnLabel : 'Hidden term',
+					xConceptHierarchicalRoleLabels : ['BT-NT','BTG-NTG','BTI-NTI','BTP-NTP'],
+					xNotationLabel : 'Notation',
+					xExportBranch : 'Export this branch',
+					
+					conceptHierarchicalRoleRenderer : function(value,record)
+					{
+						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
+					},
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
 								'Ext.grid.plugin.CellEditing', {
 									clicksToEdit : 1
 								});
+						var cellHierarchicalRoleEditing = Ext.create(
+								'Ext.grid.plugin.CellEditing', {
+									clicksToEdit : 1
+								});
+                        var cellAssociativeRoleEditing = Ext.create(
+                            'Ext.grid.plugin.CellEditing', {
+                                clicksToEdit : 1
+                            });
+						
 						var me = this;
 						me.conceptTermStore = Ext
 								.create('GincoApp.store.ThesaurusTermStore');
+						
+						me.hierarchicalRelationRoleStore = Ext
+						.create('GincoApp.store.HierarchicalRelationRoleStore');
 
-						me.associatedConceptStore = Ext
-								.create('GincoApp.store.SimpleConceptStore');
 						me.rootConceptStore = Ext
 								.create('GincoApp.store.SimpleConceptStore');
 						me.parentConceptStore = Ext
-								.create('GincoApp.store.SimpleConceptStore');
+								.create('GincoApp.store.HierarchicalAssociationStore');
 						me.childrenConceptStore = Ext
-								.create('GincoApp.store.SimpleConceptStore');
-						me.childrenConceptStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
+								.create('GincoApp.store.HierarchicalAssociationStore');
+
+                        me.associatedConceptStore = Ext
+                                .create('GincoApp.store.AssociationStore');
+                        me.associationRoleStore = Ext
+                                .create('GincoApp.store.AssociationRoleStore');
 
 						me.termRoleStore = Ext
 								.create('GincoApp.store.TermRoleStore');
+						me.customAttrTypeStore = Ext.create('GincoApp.store.CustomConceptAttributeTypeStore');
+						me.customAttrStore = Ext.create('GincoApp.store.CustomConceptAttributeStore');
 
 						Ext
 								.applyIf(
@@ -137,7 +162,6 @@ Ext
 																				text : me.xSave,
 																				requiredRoles : ['ADMIN'],
 																				disabled : true,
-																				formBind : true,
 																				cls : 'save',
 																				iconCls : 'icon-save',
 																				itemId : 'saveConcept'
@@ -150,6 +174,13 @@ Ext
 																				itemId : 'deleteConcept',
 																				cls : 'delete',
 																				iconCls : 'icon-delete'
+																			},
+																			{
+																				xtype : 'button',
+																				text : me.xExportBranch,
+																				requiredRoles : ['ADMIN'],
+																				itemId : 'exportBranch',
+																				iconCls : 'exports-icon'
 																			} ]
 																} ],
 																items : [
@@ -188,6 +219,20 @@ Ext
 																			anchor : '70%',
 																			margin : '5 0 5 0'
 																		},
+																		{
+																			xtype : 'textfield',
+																			name : 'notation',
+																			fieldLabel : me.xNotationLabel,
+																			anchor : '70%'
+																		},
+																		{
+																			trackResetOnLoad :true,
+																			border : false,
+																			xtype : 'customattrform',
+																			metadataStore : me.customAttrTypeStore,
+																			dataStore : me.customAttrStore,
+																			itemId : 'customAttributeForm',
+																		} ,
 																		{
 																			xtype : 'gridpanel',
 																			itemId : 'gridPanelTerms',
@@ -312,9 +357,10 @@ Ext
 																		},
 																		{
 																			xtype : 'gridpanel',
+																			itemId : 'gridPanelParentConcepts',
 																			title : me.xParentConcepts,
 																			store : me.parentConceptStore,
-																			itemId : 'gridPanelParentConcepts',
+																			plugins : [ cellHierarchicalRoleEditing ],
 
 																			dockedItems : [ {
 																				xtype : 'toolbar',
@@ -338,6 +384,23 @@ Ext
 																						dataIndex : 'label',
 																						text : me.xLexicalValueLabel,
 																						flex : 1
+																					},
+																					{
+																						dataIndex : 'role',
+																						header : me.xRoleColumnLabel,
+																						stopSelection : false,
+																						renderer : me.conceptHierarchicalRoleRenderer,
+																						editor : new Ext.form.field.ComboBox(
+																								{
+																									typeAhead : true,
+																									triggerAction : 'all',
+																									selectOnTab : true,
+																									store : me.hierarchicalRelationRoleStore,
+																									lazyRender : true,
+																									listClass : 'x-combo-list-small',
+																									displayField : 'roleLabel',
+																									valueField : 'role'
+																								})
 																					},
 																					{
 																						xtype : 'actioncolumn',
@@ -374,6 +437,29 @@ Ext
 																						dataIndex : 'label',
 																						text : me.xLexicalValueLabel,
 																						flex : 1
+																					},
+																					{
+																						dataIndex : 'role',
+																						header : me.xRoleColumnLabel,
+																						stopSelection : false,
+																						renderer : me.conceptHierarchicalRoleRenderer
+																					},
+																					{
+																						xtype : 'actioncolumn',
+																						itemId : 'childConceptActionColumn',
+																						header : me.xActions,
+																						items : [ {
+																							icon : 'images/detach.png',
+																							tooltip : me.xRemoveChild,
+																							handler : function(
+																									view,
+																									rowIndex,
+																									colIndex,
+																									item,
+																									e,
+																									record,
+																									row) {}
+																						} ]
 																					} ]
 																		},
 																		{
@@ -398,6 +484,7 @@ Ext
 																			title : me.xAssociatedConceptsListGridTitle,
 																			store : me.associatedConceptStore,
 																			itemId : 'gridPanelAssociatedConcepts',
+                                                                            plugins : [ cellAssociativeRoleEditing ],
 
 																			dockedItems : [ {
 																				xtype : 'toolbar',
@@ -422,6 +509,22 @@ Ext
 																						text : me.xLexicalValueLabel,
 																						flex : 1
 																					},
+                                                                                    {
+                                                                                        dataIndex : 'roleCode',
+                                                                                        header : me.xRoleColumnLabel,
+                                                                                        stopSelection : false,
+                                                                                        editor : new Ext.form.field.ComboBox(
+                                                                                            {
+                                                                                                typeAhead : true,
+                                                                                                triggerAction : 'all',
+                                                                                                selectOnTab : true,
+                                                                                                store : me.associationRoleStore,
+                                                                                                lazyRender : true,
+                                                                                                listClass : 'x-combo-list-small',
+                                                                                                displayField : 'label',
+                                                                                                valueField : 'code'
+                                                                                            })
+                                                                                    },
 																					{
 																						xtype : 'actioncolumn',
 																						itemId : 'associatedConceptActionColumn',

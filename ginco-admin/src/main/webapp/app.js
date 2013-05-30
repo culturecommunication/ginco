@@ -47,6 +47,7 @@ Ext.onReady(function() {
 
 });
 
+Ext.enableFx=false;
 
 Ext.Loader.setConfig({
     enabled: true
@@ -56,17 +57,11 @@ Ext.Loader.setLocale({
     enabled: true,
     language: 'fr',
     localizedByDefault: false,
-    types: [ 'controller', 'view' ]
+    types: [ 'controller', 'view', 'store' ]
 });
 
 Ext.application({
     models: [
-        'MainTreeModel',
-        'ThesaurusModel',
-        'ThesaurusTermModel',
-        'ConceptModel',
-        'SimpleConceptModel',
-        'ConceptArrayModel',
         'UserInfoModel'
     ],
     stores: [
@@ -87,7 +82,11 @@ Ext.application({
         'TermStatusStore',
         'ConceptStatusStore',
         'ThesaurusVersionStore',
-        'ThesaurusVersionStatusStore'
+        'ThesaurusVersionStatusStore',
+        'SearchTypeStore',
+        'ThesaurusStore',
+        'CustomConceptAttributeTypeStore',
+        'ConceptArrayStore'
     ],
     views: [
         'GincoViewPort',
@@ -112,12 +111,32 @@ Ext.application({
         'ConceptGroupController',
         'ImportController',
         'ThesaurusVersionPanelController',
-        'SearchPanelController'
+        'SearchPanelController',
+        'ComplexConceptPanelController',
+        'ComplexConceptsPanelController',        
+        'CustomAttributeTypesController'
     ],
     init: function(){    	
     },
     launch: function() {
     	var me = this;
+    	var runner = new Ext.util.TaskRunner();
+    	var sessionTask = runner.start({
+    	    run: function() {
+    	        Ext.Ajax.request({
+    	            url: 'services/ui/baseservice/getSession',
+    	            success: function(response){
+    	            },
+    	            failure: function()
+    	            {
+    	            	Ext.Msg.alert("Error","Error communicating with the server");
+    	            	runner.stop(sessionTask);
+       			 	}
+    	        });
+    	    },
+    	    interval: 10000
+    	});
+    	
     	Ext.create('GincoApp.model.UserInfoModel');
     	GincoApp.model.UserInfoModel.load('',{
     			 success: function(record, operation) {
@@ -152,7 +171,9 @@ Ext.application({
         });
         // Run the fade 500 milliseconds after launch.
         task.delay(500);
-    	//Ext.FocusManager.enable();
+        Thesaurus.focus.manager.init();
+        
+        
         var map = new Ext.util.KeyMap(Ext.getBody(), [{
             key: Ext.EventObject.ONE,
             ctrl: true,

@@ -42,6 +42,6 @@ public class BusinessExceptionMapper extends AbstractExceptionMapper<BusinessExc
 
 	@Override
 	public Response toResponse(Throwable exception) {
-		return super.toResponse(exception, ((BusinessException)exception).getUserMessageKey());
+		return super.toResponse(exception, ((BusinessException)exception).getUserMessageKey(), ((BusinessException)exception).getToFormat());
 	}
 }

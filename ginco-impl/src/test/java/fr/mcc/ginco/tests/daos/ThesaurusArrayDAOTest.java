@@ -60,8 +60,15 @@ public class ThesaurusArrayDAOTest extends BaseDAOTest {
 	@Test
 	public void testGetThesaurusArrayListByThesaurusId() {
 		List<ThesaurusArray> arrays = thesaurusArrayDAO
-				.getThesaurusArrayListByThesaurusId("http://www.culturecommunication.gouv.fr/th1");
+				.getThesaurusArrayListByThesaurusId(null, "http://www.culturecommunication.gouv.fr/th1");
 		Assert.assertEquals(5, arrays.size());
+	}
+	
+	@Test
+	public void testGetThesaurusArrayListByThesaurusIdWithExcludedArray() {
+		List<ThesaurusArray> arrays = thesaurusArrayDAO
+				.getThesaurusArrayListByThesaurusId("1", "http://www.culturecommunication.gouv.fr/th1");
+		Assert.assertEquals(4, arrays.size());
 	}
 
 	/*

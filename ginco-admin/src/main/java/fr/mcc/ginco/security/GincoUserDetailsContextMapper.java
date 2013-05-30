@@ -46,6 +46,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsMapper;
 
+import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.services.IAdminUserService;
 
 public class GincoUserDetailsContextMapper extends LdapUserDetailsMapper {
@@ -60,13 +61,11 @@ public class GincoUserDetailsContextMapper extends LdapUserDetailsMapper {
 
 		UserDetails originalUser = super.mapUserFromContext(ctx, username,
 				authorities);
-		
 		if (adminUserService.isUserAdmin(username)) {
 			SimpleGrantedAuthority adminAuthority = new SimpleGrantedAuthority(
 					"ROLE_ADMIN");			
 			((Collection<SimpleGrantedAuthority>)authorities).add(adminAuthority);
 		}
-
 		User newUser = new User(originalUser.getUsername(),
 				originalUser.getPassword(), originalUser.isEnabled(),
 				originalUser.isAccountNonExpired(),

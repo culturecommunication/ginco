@@ -59,6 +59,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 				&& aRecord.data.id.indexOf("SANDBOX") === 0) {
 			this.openSandBoxTab(aRecord.parentNode);
 		}
+		if (aRecord.data.type == "FOLDER"
+			&& aRecord.data.id.indexOf("COMPLEXCONCEPTS") === 0) {
+			this.openComplexConceptTab(aRecord.parentNode);
+		}
 		return false;
 	},
 	openConceptTab: function (aRecord) {
@@ -74,7 +78,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		topTabs.fireEvent('opengrouptab',topTabs, aRecord.data.thesaurusId, aRecord.data.id);
 	},
-
+	openComplexConceptTab: function (aRecord) {
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.fireEvent('opencomplexconceptstab',topTabs,aRecord.data.id);
+	},
     openSandBoxTab : function(aRecord) {
     	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		topTabs.fireEvent('opensandboxtab',topTabs,aRecord.data.id);
@@ -94,11 +101,14 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		this.loadTreeView(theTree);
 	},
 	loadTreeView : function(theTree) {
-		var treeState,me = this;
+		var treeState,scrollPosition,me = this;
 		if (theTree)
 		{
+		    scrollPosition = theTree.getEl().down('.x-grid-view').getScroll();
 			treeState = theTree.getState();
 		}
+		var theFilterCombo = theTree.down('#authorFilter');
+		theFilterCombo.getStore().load();	
 		var MainTreeStore = this.getMainTreeStoreStore();
 		if (MainTreeStore.isLoading()==false) {
 			MainTreeStore.load({
@@ -108,10 +118,16 @@ Ext.define('GincoApp.controller.MainTreeController', {
 						Thesaurus.ext.utils.msg(me.xProblemLabel,
 								me.xProblemLoadMsg+ " : "+ aOperation.error.statusText);
 					} else{
+						MainTreeStore.filter();
 						this.getRootNode().expand();
 						if (treeState)
 						{
-							theTree.applyState(treeState);
+							theTree.applyState(treeState, function(){
+								var task = new Ext.util.DelayedTask(function() {
+								theTree.getEl().down('.x-grid-view').scrollTo('top', scrollPosition.top, false);
+								});
+								task.delay(50);
+							});
 						}
 					}
 					
@@ -135,7 +151,6 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var me = this;
 		this.nav = new Ext.util.KeyNav({
 			target : theTree.getEl(),
-
 			"enter" : function() {
 				me.onEnterKey(theTree);
 			},
@@ -145,7 +160,6 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	onRefreshTreeEvent : function()
 	{
 		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
-		Ext.log({},'onRefreshTreeEvent');
 		this.loadTreeView(theTree);
 	},
 	onItemSelect : function(theTree, theRecord)
@@ -162,6 +176,16 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			this.onNodeDblClick(theTree, node[0]);
 		}
 	},
+    onAuthorFilterSelect : function(theCombo, records) {
+        var theTreeStore = theCombo.up('treepanel').getStore();
+        var orgName = records[0].get('name');
+        if(orgName == '-') {
+        	theTreeStore.clearFilter(true);
+        } else {
+        	theTreeStore.setFilter('organizationName',orgName);
+        	this.loadTreeView(theCombo.up('treepanel'));	
+        }
+ 	},    
 	init : function(application) {
 		// Handling application treeview refresh requests
 		 this.application.on({
@@ -187,7 +211,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			},
 			'#mainTreeView tool[type="refresh"]' : {
 				click : this.onRefreshBtnClick
-			}
+			},
+            '#authorFilter' : {
+                select : this.onAuthorFilterSelect,
+            }
 		});
 	}
 

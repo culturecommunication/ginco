@@ -34,18 +34,17 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -58,6 +57,22 @@ public class ThesaurusConceptDAO extends
 
 	public ThesaurusConceptDAO() {
 		super(ThesaurusConcept.class);
+	}
+	
+	/* 
+	 * This flush is used in a particular case for saving concepts.
+	 * We first save the concept with it relationships (parent/child), we flush (with this method) to save in DB the modifications
+	 * Then, we can save the updated role on hierarchical relationships.
+	 * If the flush is not done, when can't update the role of a relation because its not already saved in DB.
+	 * 
+	 * This is a workaround to fit actual hibernate mapping and musn't not be used in other cases  
+	 * 
+	 * (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#flush()
+	 */
+	public void flush()
+	{
+		getCurrentSession().flush();
 	}
 
 	/*
@@ -213,6 +228,8 @@ public class ThesaurusConceptDAO extends
 
 	private void onlyValidatedConcepts(Criteria criteria,
 			Boolean onlyValidatedConcepts) {
+
+        if(onlyValidatedConcepts == null) return;
 
 		if (onlyValidatedConcepts) {
 			criteria.add(Restrictions.eq("status",

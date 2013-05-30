@@ -34,26 +34,38 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChildrenGeneratorTest {
 
     @Mock(name = "thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
+    
+    @Mock(name = "thesaurusListNodeFactory")
+    private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
     @InjectMocks
     private ChildrenGenerator childrenGenerator = new ChildrenGenerator();
@@ -86,15 +98,21 @@ public class ChildrenGeneratorTest {
                 thesaurusConceptService
                         .getChildrenByConceptId(Matchers.anyString()))
                 .thenReturn(children);
+        
         Mockito.when(
                 thesaurusConceptService
                         .getConceptLabel(Matchers.anyString()))
-                .thenReturn("concept");
+                .thenReturn("a","zzzz");
+        
+        
+        Mockito.when(
+        		thesaurusListNodeFactory.getListBasicNode())
+                .thenReturn(new ThesaurusListBasicNode(),new ThesaurusListBasicNode());
 
         Mockito.when(
                 thesaurusConceptService
                         .hasChildren(Matchers.anyString()))
-                .thenReturn(false);
+                .thenReturn(false); 
 
         List<IThesaurusListNode> nodes =
                 childrenGenerator.getChildrenByConceptId(ChildrenGenerator.ID_PREFIX
@@ -102,7 +120,7 @@ public class ChildrenGeneratorTest {
                 + "5");
 
         Assert.assertEquals("Number of children does not correspond!", 2, nodes.size());
-        Assert.assertEquals("Title does not correspond!", "concept", nodes.get(0).getTitle());
+        Assert.assertEquals("Title does not correspond!", "a", nodes.get(0).getTitle());
         Assert.assertEquals("ID does not correspond!",
                 ChildrenGenerator.ID_PREFIX
                         + "5"
@@ -135,6 +153,17 @@ public class ChildrenGeneratorTest {
                 thesaurusConceptService
                         .getChildrenByConceptId(Matchers.anyString()))
                 .thenReturn(children);
+        
+        Mockito.when(
+        		thesaurusListNodeFactory.getListBasicNode())
+                .thenAnswer(new Answer<ThesaurusListBasicNode>() {
+                		public ThesaurusListBasicNode answer(
+							InvocationOnMock invocation) throws Throwable {
+						return new ThesaurusListBasicNode();
+					}
+                   });
+
+        
         Mockito.when(
                 thesaurusConceptService
                         .getConceptLabel("co1"))

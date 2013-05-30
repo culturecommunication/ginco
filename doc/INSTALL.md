@@ -171,7 +171,7 @@ $ mvn clean package
 ```
 the war files should be available in ginco-admin/target
 
-### Deploying GINCO on Tomcat ###
+### Deploying GINCO on Tomcat (using cargo) ###
 
 In case of the first installation run :
 ```bash
@@ -180,8 +180,14 @@ $ mvn cargo:deploy
 
 In case of a re-installation run :
 ```bash
-$ mvn cargo:redeploy
+$ mvn cargo:redeploye
 ```
+
+### Deploying GINCO on Tomcat (manually) ###
+
+If cargo don't work you can deploy GINCO manually on tomcat
+Run : mvn clean package
+Copy the generated ginco-admin/target/ginco-admin.war and ginco-webservices/target/ginco-webservices.war in the webapps tomcat directory.
 
 ### Run SQL scripts ###
 

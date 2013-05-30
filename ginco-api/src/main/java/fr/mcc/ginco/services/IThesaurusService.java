@@ -99,5 +99,5 @@ public interface IThesaurusService {
      * @param thesaurus
      * @return
      */
-    Thesaurus archiveThesaurus(Thesaurus thesaurus);
+    Thesaurus archiveThesaurus(Thesaurus thesaurus) throws BusinessException, TechnicalException;
 }

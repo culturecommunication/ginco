@@ -33,108 +33,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext
-		.define(
-				'Thesaurus.ext.KeyMenuItem',
-				{
-					extend : 'Ext.menu.Item',
-					alias : 'widget.keymenuitem',
-					renderTpl : [
-							'<tpl if="plain">',
-							'{text}',
-							'</tpl>',
-							'<tpl if="!plain">',
-							'<a id="{id}-itemEl" class="'
-									+ Ext.baseCSSPrefix
-									+ 'menu-item-link keymenuitem-link" href="{href}" <tpl if="hrefTarget">target="{hrefTarget}"</tpl> hidefocus="true" unselectable="on">',
-							'<img id="{id}-iconEl" src="{icon}" class="'
-									+ Ext.baseCSSPrefix
-									+ 'menu-item-icon {iconCls}" />',
-							'<span id="{id}-textEl" class="'
-									+ Ext.baseCSSPrefix
-									+ 'menu-item-text keymenuitem-text">{text}</span>',
-							'<span class="'
-									+ Ext.baseCSSPrefix
-									+ 'menu-item-text keymenuitem-cmdTxt" <tpl if="menu">style="margin-right: 17px;"</tpl> >{cmdTxt}</span>',
-							'<tpl if="menu">',
-							'<img id="{id}-arrowEl" src="{blank}" class="'
-									+ Ext.baseCSSPrefix + 'menu-item-arrow" />',
-							'</tpl>', '</a>', '</tpl>' ],
-					beforeRender : function(ct, pos) {
-						// Intercept the call to onRender so we can add the
-						// keyboard shortcut text to the render data which
-						// will be used by the template
-						var me = this;
-						Ext.applyIf(me.renderData, {
-							cmdTxt : me.cmdTxt
-						});
-						me.callParent(arguments);
-					}
-				});
 
-Ext.view.View.addInheritableStatics({
-	EventMap: {
-        mousedown: 'MouseDown',
-        mouseup: 'MouseUp',
-        click: 'Click',
-        dblclick: 'DblClick',
-        contextmenu: 'ContextMenu',
-        mouseover: 'MouseOver',
-        mouseout: 'MouseOut',
-        mouseenter: 'MouseEnter',
-        mouseleave: 'MouseLeave',
-        keydown: 'KeyDown',
-        focus: 'Focus',
-        blur: 'Blur'
-    }
-}
-);
+/*
+ * Override treeView to be stateful
+ * Add filter capabilies too.
+ */
 
-//Manage focus on table...
-Ext.define('Thesaurus.ext.view.View', {
-	override : 'Ext.view.View',
-	focusCls: 'focus',
-	onBeforeContainerFocus: Ext.emptyFn,
-	onBeforeContainerBlur: Ext.emptyFn,
-	onContainerFocus: function (e) {
-		var me = this,
-			focusCls = me.focusCls;
-		me.getEl().addCls(me.addClsWithUI(focusCls, true));
-		if (!me.hasFocus) {
-            me.hasFocus = true;
-            me.fireEvent('focus', me, e);
-        }
-	},
-	onContainerBlur: function (e) {
-		var me = this,
-			focusCls = me.focusCls;
-		me.getEl().removeCls(me.removeClsWithUI(focusCls, true));
-		me.hasFocus = false;
-        me.fireEvent('blur', me, e);
-	},
-	afterRender: function(){
-        var me = this;
-        me.callParent();
-        me.mon(me.getTargetEl(), {
-            scope: me,
-            /*
-             * We need to make copies of this since some of the events fired here will end up triggering
-             * a new event to be called and the shared event object will be mutated. In future we should
-             * investigate if there are any issues with creating a new event object for each event that
-             * is fired.
-             */
-            freezeEvent: true,
-            focus: me.handleEvent,
-            blur: me.handleEvent
-        });
-    }
-});
-
-
-// Override treeView to be stateful
 Ext.define('Thesaurus.ext.tree.Panel', {
 	override : 'Ext.tree.Panel',
-
+	currentFilter : null,
 	getState : function() {
 		var nodes = [], state = this.callParent();
 
@@ -177,41 +84,24 @@ Ext.define('Thesaurus.ext.tree.Panel', {
 
 	},
 
-	applyState : function(state) {
+	applyState : function(state, callback) {
 		var nodes = state.expandedNodes || [], len = nodes.length;
 		this.collapseAll();
+		var hasBeenExpanded = 0;
 		for ( var i = 0; i < len; i++) {
 			if (typeof nodes[i] != 'undefined') {
-				this.expandPath(nodes[i], 'id', '|');
+				this.expandPath(nodes[i], 'id', '|', function() {
+					hasBeenExpanded++;
+					if (hasBeenExpanded==len && callback)
+						callback();
+				});
 			}
 		}
 		this.callParent(arguments);
-	},
-
-	constructor : function(config) {
-		this.callSuper(arguments);
 	}
 });
 
-// Override treeView to add 'alt' attribute to img in the tree.
-Ext.define('Thesaurus.ext.tree.Column', {
-	override : 'Ext.tree.Column',
-	imgText : '<img src="{1}" class="{0}" alt="treenode" />',
-	constructor : function(config) {
-		this.callSuper(arguments);
-	}
-});
 
-Ext
-		.define(
-				'Thesaurus.panel.Tool',
-				{
-					override : 'Ext.panel.Tool',
-					renderTpl : [ '<img id="{id}-toolEl" src="{blank}" class="{baseCls}-{type}" alt="{type}" role="presentation"/>' ],
-					constructor : function(config) {
-						this.callSuper(arguments);
-					}
-				});
 
 // This function permits to send related objects when we save a model in case of
 // 'hasmany' relation
@@ -347,75 +237,7 @@ Ext.define("Thesaurus.form.field.Trigger", {
 	}
 });
 
-/*
- * Remove width attr from table on fields form
- */
-Ext.define("Thesaurus.form.field.Base", {
-	override : 'Ext.form.field.Base',
-	getLabelCellAttrs: function() {
-        var me = this,
-            labelAlign = me.labelAlign,
-            result = '';
 
-        if (labelAlign !== 'top') {
-            result = 'valign="top" halign="' + labelAlign+ '"';
-        }
-        return result + ' class="' + Ext.baseCSSPrefix + 'field-label-cell"';
-    },
-    getLabelCellStyle: function() {
-        var me = this,
-            hideLabelCell = me.hideLabel || (!me.fieldLabel && me.hideEmptyLabel);
-
-        var style =  hideLabelCell ? 'display:none;' : '';
-        style = style+ ' width:' + (me.labelWidth + me.labelPad) + 'px;';
-        return style;
-    },
-    afterLabelTextTpl : new Ext.XTemplate(
-			'<tpl if="allowBlank === false"><span class="mandatory-field"><abbr title="obligatoire">*</abbr></span></tpl>',
-			{
-				disableFormats : true
-			})
-});
-
-/*
- * Remove default role=presentation
- */
-Ext.define("Thesaurus.layout.container.Box", {
-	override : 'Ext.layout.container.Box',
-	renderTpl: [
-	            '{%var oc,l=values.$comp.layout,oh=l.overflowHandler;',
-	            'if (oh.getPrefixConfig!==Ext.emptyFn) {',
-	                'if(oc=oh.getPrefixConfig())dh.generateMarkup(oc, out)',
-	            '}%}',
-	            '<div id="{ownerId}-innerCt" class="{[l.innerCls]} {[oh.getOverflowCls()]}">',
-	                '<div id="{ownerId}-targetEl" style="position:absolute;',
-	                        // This width for the "CSS container box" of the box child items gives
-	                        // them the room they need to avoid being "crushed" (aka, "wrapped").
-	                        // On Opera, elements cannot be wider than 32767px or else they break
-	                        // the scrollWidth (it becomes == offsetWidth) and you cannot scroll
-	                        // the content.
-	                        'width:20000px;',
-	                        // On IE quirks and IE6/7 strict, a text-align:center style trickles
-	                        // down to this el at times and will cause it to move off the left edge.
-	                        // The easy fix is to just always set left:0px here. The top:0px part
-	                        // is just being paranoid. The requirement for targetEl is that its
-	                        // origin align with innerCt... this ensures that it does!
-	                        'left:0px;top:0px;',
-	                        // If we don't give the element a height, it does not always participate
-	                        // in the scrollWidth.
-	                        'height:1px">',
-	                    '{%this.renderBody(out, values)%}',
-	                '</div>',
-	            '</div>',
-	            '{%if (oh.getSuffixConfig!==Ext.emptyFn) {',
-	                'if(oc=oh.getSuffixConfig())dh.generateMarkup(oc, out)',
-	            '}%}',
-	            {
-	                disableFormats: true,
-	                definitions: 'var dh=Ext.DomHelper;'
-	            }
-	        ]
-});
 
 Ext.define('Thesaurus.container.Container', {
 	override : 'Ext.container.Container',
@@ -446,24 +268,9 @@ Ext.define('Thesaurus.form.Panel', {
 	  }
 	});
 
-/*
- * Add aria role attribute to components.
- * Add check roles to ext components
- */
+
 Ext.define('Thesaurus.Component', {
 	override : 'Ext.Component',
-	initAria: function() {
-        var actionEl = this.getActionEl(),
-            role = this.ariaRole;
-        if (role) {
-            actionEl.dom.setAttribute('role', role);
-        }
-    },
-	afterRender: function() {
-		var me = this;
-		me.callParent();
-		me.initAria();
-	},
 	requiredRoles : [],
 	checkRoles : function () {
 		if (this.requiredRoles.length == 0)
@@ -483,39 +290,111 @@ Ext.define('Thesaurus.Component', {
 });
 
 /*
- * Implement aria-hidden property
+ * Define a component to handle custom attributes on terms and concepts.
  */
-Ext.define("Thesaurus.dom.Element", {
-	override : 'Ext.dom.Element',
-	setVisible : function(visible, animate) {
+Ext.define('Thesaurus.CustomAttrForm', {
+	extend : 'Ext.form.Panel',
+	alias: 'widget.customattrform',
+	metadataStore : null,
+	dataStore : null,
+	initComponent : function() {
 		var me = this;
+		Ext.applyIf(
+				me,
+				{
+					border: false
+				}
+		);
 		me.callParent(arguments);
-		me.set({
-        	'aria-hidden' : !visible
-        });
-		return me;
+	},
+	initFields : function(thesaurusId, aCallback)
+	{
+		var me = this;
+		me.metadataStore.getProxy().extraParams = {
+            thesaurusId: thesaurusId
+        };
+		me.metadataStore.load({
+			scope: this,
+		    callback: function(records, operation, success) {
+		    	if (success == true) {
+		    		for (var i=0;i<records.length;i++)
+		    		{
+		    			var record = records[i];
+		    			var field = Ext.create('Ext.form.field.Text', {
+		    				fieldLabel : record.get('value'),
+		    				name : 'customattr_'+record.get('identifier'),
+		    				anchor : '70%'
+		    			});
+		    			me.add(field);
+		    			field.show();
+		    			
+		    		}
+		    		if (aCallback)
+	    				aCallback();
+		    	}
+		    }
+		});
+	},
+	load : function (entityID)
+	{
+		var me = this;
+		me.dataStore.getProxy().extraParams = {
+            entityId: entityID
+        };
+		me.dataStore.load({
+			scope: me,
+			callback: function(records, operation, success) {
+			    	if (success == true) {
+			    		me.populateForm(records);
+			    	}
+			    }
+		});
+	},
+	populateForm : function (records) {
+		var me = this;
+		var arrayOfAttribute = [];
+		for (var i=0;i<records.length;i++)
+		{
+			var record = records[i];
+			var data = {
+					id : 'customattr_'+record.get('typeid'),
+					value : record.get('lexicalValue'),
+			}
+			arrayOfAttribute.push(data);
+		}
+		me.getForm().setValues(arrayOfAttribute);
+	},
+	save : function (entityID, lang) {
+		var me = this;
+		if (me.items.length>0) {
+			me.dataStore.removeAll();
+			var customFormValues = me.getValues();
+			Ext.Object.each(customFormValues, function(key, value, myself) {
+			    var data = {
+			    		'entityid' : entityID,
+			    		'lang' : lang,
+			    		'typeid' : key.split('_')[1],
+			    		'lexicalValue' : value
+			    };
+			    var model = me.dataStore.add(data);
+			    model[0].setDirty(true);
+			});
+			me.dataStore.save({
+				scope : me,
+				callback : function (records, operation, success) {
+					me.populateForm(operation.operations.update);
+				}
+			});
+		}
+		
 	}
 });
 
-/*
- * Remove border attr from tables
- */
-Ext.view.TableChunker.metaTableTpl = [
-                                                  '{%if (this.openTableWrap)out.push(this.openTableWrap())%}',
-                                                  '<table class="' + Ext.baseCSSPrefix + 'grid-table ' + Ext.baseCSSPrefix + 'grid-table-resizer" cellspacing="0" cellpadding="0" {[this.embedFullWidth(values)]}>',
-                                                      '<tbody>',
-                                                      '<tr class="' + Ext.baseCSSPrefix + 'grid-header-row">',
-                                                      '<tpl for="columns">',
-                                                          '<th class="' + Ext.baseCSSPrefix + 'grid-col-resizer-{id}" style="width: {width}px; height: 0px;"></th>',
-                                                      '</tpl>',
-                                                      '</tr>',
-                                                      '{[this.openRows()]}',
-                                                          '{row}',
-                                                          '<tpl for="features">',
-                                                              '{[this.embedFeature(values, parent, xindex, xcount)]}',
-                                                          '</tpl>',
-                                                      '{[this.closeRows()]}',
-                                                      '</tbody>',
-                                                  '</table>',
-                                                  '{%if (this.closeTableWrap)out.push(this.closeTableWrap())%}'
-                                              ];
+// Backport from ExtJS 4.1.2, fix problem with resetOriginalValues of checkboxes
+Ext.apply(Ext.form.CheckboxManager,{
+	getByName: function(name, formId) {
+        return this.filterBy(function(item) {
+            return item.name == name && item.getFormId() == formId;
+        });
+    }
+});

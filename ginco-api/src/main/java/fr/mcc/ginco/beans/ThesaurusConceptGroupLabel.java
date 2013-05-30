@@ -37,17 +37,23 @@ package fr.mcc.ginco.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Bean represents concept_group_label table
  */
 @SuppressWarnings("serial")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusConceptGroupLabel implements Serializable{
-
+	@XmlTransient
     private Integer identifier;
     private String lexicalValue;
     private Date created;
     private Date modified;
     private Language language;
+    @XmlTransient
     private ThesaurusConceptGroup conceptGroup;
     
 	public Integer getIdentifier() {

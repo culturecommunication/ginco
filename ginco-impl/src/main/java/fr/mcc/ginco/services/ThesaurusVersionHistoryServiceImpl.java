@@ -44,6 +44,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.DateUtil;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +65,9 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
     @Named("generatorService")
     private IIDGeneratorService generatorService;
 
+    @Value("${publish.version.note}")
+    private String publishNote;
+
     @Log
     private Logger logger;
 
@@ -79,6 +83,16 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
 	}
 
     @Override
+    public Boolean hasPublishedVersion(Thesaurus thesaurus) {
+        for(ThesaurusVersionHistory version : thesaurusVersionHistoryDAO.findVersionsByThesaurusId(thesaurus.getIdentifier())) {
+            if(version.getStatus() == ThesaurusVersionStatusEnum.PUBLISHED.getStatus()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     @Transactional(readOnly=false)
     public ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus, String userId) {
         ThesaurusVersionHistory newVersion = new ThesaurusVersionHistory();
@@ -87,6 +101,7 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
         newVersion.setDate(DateUtil.nowDate());
         newVersion.setStatus(ThesaurusVersionStatusEnum.PUBLISHED.getStatus());
         newVersion.setUserId(userId);
+        newVersion.setVersionNote(publishNote);
         newVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
         return createOrUpdateVersion(newVersion);
     }

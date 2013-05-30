@@ -68,22 +68,7 @@ public class ThesaurusTermServiceTest {
     	List<ThesaurusTerm> actualResponse = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(0, 10, "fake-id");
 		Assert.assertEquals(2, actualResponse.size());
     }
-
-    @Test(expected=BusinessException.class)
-    public final void testMarkSandboxedTerms() throws BusinessException {
-        List<ThesaurusTerm> old_list = thesaurusTermService.getTermsByConceptId("http://www.culturecommunication.gouv.fr/co1");
-        ThesaurusTerm termToDetach = thesaurusTermService.getThesaurusTermById("http://www.culturecommunication.gouv.fr/ter2");
-        List<ThesaurusTerm> new_list = new ArrayList<ThesaurusTerm>();
-        new_list.add(termToDetach);
-        thesaurusTermService.markTermsAsSandboxed(old_list, new_list);
-
-        Assert.assertEquals("Term has not been detached !", 1,
-                thesaurusTermService.getTermsByConceptId("http://www.culturecommunication.gouv.fr/co1").size());
-        Assert.assertEquals("Wrong term detached !", "xylophon",
-                thesaurusTermService.getTermsByConceptId("http://www.culturecommunication.gouv.fr/co1")
-                        .get(0).getLexicalValue());
-    }
-    
+   
     @Test
     public final void testGetConceptIdByTerm(){
     	

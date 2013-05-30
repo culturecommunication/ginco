@@ -58,4 +58,16 @@ public class LabelUtilTest {
 		String actualLabel = LabelUtil.getLocalizedLabel("russian lexical value", lang, "fra");
 		Assert.assertEquals("russian lexical value@rus", actualLabel);
 	}
+	
+	@Test
+	public void testGetResourceLabelWithNoBundle() {
+		String actual = LabelUtil.getResourceLabel("non-existing-key");
+		Assert.assertEquals("non-existing-key", actual);
+	}
+	
+	@Test
+	public void testGetResourceLabel() {
+		String actual = LabelUtil.getResourceLabel("my-key");
+		Assert.assertEquals("Ma clé traduite", actual);
+	}
 }

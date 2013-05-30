@@ -34,11 +34,9 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
@@ -53,6 +51,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,12 +81,20 @@ public class ThesaurusRestService {
 	private IThesaurusService thesaurusService;
 
     @Inject
+    @Named("thesaurusOrganizationService")
+    private IThesaurusOrganizationService thesaurusOrganizationService;
+
+    @Inject
     @Named("thesaurusVersionHistoryService")
     private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 	
 	@Inject
 	@Named("thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
+	
+    @Inject
+    @Named("indexerService")
+    private IIndexerService indexerService;
 
 	@Log
 	private Logger logger;
@@ -156,6 +164,20 @@ public class ThesaurusRestService {
 	public ThesaurusView getVocabularyById(@QueryParam("id") String id) {
 		return thesaurusViewConverter.convert(thesaurusService.getThesaurusById(id));
 	}
+	
+	@GET
+	@Path("/getVocabularies")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusView>> getVocabularies() {
+		List<ThesaurusView> listOfThesaurusView = new ArrayList<ThesaurusView>();
+		List<Thesaurus> thesList = thesaurusService.getThesaurusList();
+		for (Thesaurus thes : thesList) {
+			listOfThesaurusView.add(thesaurusViewConverter.convert(thes));
+		}
+		ExtJsonFormLoadData<List<ThesaurusView>> result = new ExtJsonFormLoadData<List<ThesaurusView>>(listOfThesaurusView);
+        result.setTotal((long) listOfThesaurusView.size());
+		return result;
+	}
 
 	/**
 	 * Public method used to create or update
@@ -197,6 +219,12 @@ public class ThesaurusRestService {
 
         if (object != null) {
             thesaurusService.destroyThesaurus(object);
+            try {
+            indexerService.removeThesaurusIndex(object.getIdentifier());
+            } catch (TechnicalException tex)
+            {
+            	logger.error("Problem when removing thesaurus index...",tex);
+            }
         }
     }
 
@@ -228,14 +256,42 @@ public class ThesaurusRestService {
     @GET
     @Path("/archiveVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
-    public ExtJsonFormLoadData archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
+    public ThesaurusView archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
             throws BusinessException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
+        ThesaurusView view = null;
+
         if (object != null) {
-            thesaurusService.archiveThesaurus(object);
+           thesaurusService.archiveThesaurus(object);
+
+            Thesaurus result = thesaurusService.updateThesaurus(object);
+
+            if (result != null) {
+                view = thesaurusViewConverter.convert(result);
+            } else {
+                logger.error("Failed to archive thesaurus");
+            }
         }
 
-        return new ExtJsonFormLoadData(object);
+        return view;
+    }
+
+    @GET
+    @Path("/getAllAuthors")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<ThesaurusOrganization> getAllAuthors() throws BusinessException {
+    	List<ThesaurusOrganization> allOrgs = thesaurusOrganizationService.getOrganizations();
+    	List<String> returnedAuthorNames = new ArrayList<String>();
+    	List<ThesaurusOrganization> returnedOrgs = new ArrayList<ThesaurusOrganization>();
+    	for (ThesaurusOrganization aOrg : allOrgs)
+    	{
+    		if (!StringUtils.isEmpty(aOrg.getName()) && !returnedAuthorNames.contains(aOrg.getName()))
+    		{
+    			returnedOrgs.add(aOrg);
+    			returnedAuthorNames.add(aOrg.getName());
+    		}
+    	}    	
+    	return returnedOrgs;
     }
 }

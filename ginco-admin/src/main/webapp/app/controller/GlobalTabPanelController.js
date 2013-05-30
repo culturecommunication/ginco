@@ -74,8 +74,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			
 			if (dirtyForms.length>0) {
 				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
-					if (theForm.checkRoles('ADMIN')==true)
-						return true;
+					if (theForm.checkRoles('ADMIN')==true) {
+						return true;						
+					}
 				}
 				Ext.MessageBox.show({
 					title : me.xSaveMsgTitle,
@@ -123,6 +124,10 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	},
 	onTabChange : function ( tabPanel, tab, oldCard, eOpts )
 	{
+		if (tab.tab)
+		{
+			tab.tab.focus();
+		}
 		// History handling
 		var tabs = [],
         oldToken, newToken;
@@ -185,10 +190,12 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
             }
 		}
 	},
-	onTabAdded : function ( tabPanel, component, index, eOpts) {
+	onTabAdd : function ( tabPanel, component, index, eOpts) {
 		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
 			component.restrictUI('ADMIN');
 		}
+		var closeBtn = tabPanel.down("#closeAllTabs");
+		closeBtn.setVisible(true);
 	},
 	openConceptTab : function(tabPanel, aThesaurusId, aConceptId)
 	{
@@ -198,27 +205,10 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	{
 		this.openGenericTab(tabPanel, aThesaurusId, aConceptId, "termPanel","GincoApp.view.TermPanel");
 	},
-	/*openTermTab : function (tabPanel, aTermId, aThesaurusData)
+	openComplexConceptTab : function(tabPanel, aThesaurusId, aConceptId)
 	{
-		var termTabs = Ext.ComponentQuery.query('topTabs termPanel');
-		var tabExists = false;
-		Ext.Array.each(termTabs, function(element, index, array) {
-			if (element.gincoId != null && element.gincoId == aTermId) {
-				tabExists = element;
-			}
-		});
-		if (!tabExists) {
-			var TermPanel = Ext.create('GincoApp.view.TermPanel', {
-				thesaurusData : aThesaurusData,
-				gincoId : aTermId
-			});
-			var tab = tabPanel.add(TermPanel);
-			tabPanel.setActiveTab(tab);
-			tab.show();
-		} else {
-			tabPanel.setActiveTab(tabExists);
-		}
-	},*/
+		this.openGenericTab(tabPanel, aThesaurusId, aConceptId, "complexconceptPanel","GincoApp.view.ComplexConceptPanel");
+	},
 	openArrayTab : function (tabPanel, aThesaurusId, aArrayId)
 	{
 		this.openGenericTab(tabPanel, aThesaurusId, aArrayId, "conceptArrayPanel","GincoApp.view.ConceptArrayPanel");
@@ -232,6 +222,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		var existingTabs = Ext.ComponentQuery
 		.query('topTabs '+aXtype);
 		var tabExists = false;
+		
 		Ext.Array.each(existingTabs, function(element, index, array) {
 			if (element.gincoId != null
 					&& element.gincoId == aGincoId) {
@@ -248,7 +239,6 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 								thesaurusData : aModel.data,
 								gincoId : aGincoId
 							});
-		
 					var tab = tabPanel.add(newPanel);
 					tabPanel.setActiveTab(tab);
 					tab.show();
@@ -282,6 +272,11 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			tabPanel.setActiveTab(tabExists);
 		}
 	},
+	openComplexConceptsTab : function (tabPanel, aThesaurusId)
+	{
+		this.openGenericTab(tabPanel, aThesaurusId, null, "complexConceptsPanel","GincoApp.view.ComplexConceptsPanel");
+	},
+	
 	openThesaurusTab : function (tabPanel, aThesaurusId)
 	{
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
@@ -311,8 +306,21 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	{
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		if (topTabs.getActiveTab()!=null) {
-			this.onTabAdded(topTabs,topTabs.getActiveTab());
+			this.onTabAdd(topTabs,topTabs.getActiveTab());
 		}
+	},
+	onTabRemoved: function(theTabPanel) 
+	{
+		if (theTabPanel.items.length==0)
+		{
+			var closeBtn = theTabPanel.down("#closeAllTabs");
+			closeBtn.setVisible(false);
+		}
+	},
+	onCloseAllTabs: function()
+	{
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.items.each(function(c){c.close();});
 	},
 	init : function(application) {
 		this.application.on({
@@ -335,8 +343,15 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			'conceptGroupPanel' : {
 				beforeclose : this.onPanelBeforeClose
 			},
+			'complexconceptPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'#closeAllTabs' : {
+				click : this.onCloseAllTabs
+			},
 			'topTabs' :  {
-				add : this.onTabAdded,
+				add : this.onTabAdd,
+				remove: this.onTabRemoved,
 				tabchange : this.onTabChange,
 				afterrender: this.onTabsAfterRender,
 				openconcepttab : this.openConceptTab,
@@ -344,7 +359,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 				opengrouptab : this.openGroupTab,
 				openarraytab : this.openArrayTab,
 				opensandboxtab : this.openSandboxTab,
-				openthesaurustab : this.openThesaurusTab
+				openthesaurustab : this.openThesaurusTab,
+				opencomplexconceptstab : this.openComplexConceptsTab,
+				opencomplexconcepttab: this.openComplexConceptTab
 			}
 		});
 	}

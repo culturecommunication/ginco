@@ -44,10 +44,14 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
@@ -60,6 +64,9 @@ public class FolderGeneratorTest {
 
 	@Mock(name = "thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;	
+	
+    @Mock(name = "thesaurusListNodeFactory")
+    private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	@InjectMocks
 	private FolderGenerator folderGenerator = new FolderGenerator();
@@ -79,6 +86,16 @@ public class FolderGeneratorTest {
 				thesaurusConceptService
 						.getOrphanThesaurusConceptsCount(Matchers.anyString()))
 				.thenReturn((long) 0);
+		
+        Mockito.when(
+        		thesaurusListNodeFactory.getListBasicNode())
+                .thenAnswer(new Answer<ThesaurusListBasicNode>() {
+                		public ThesaurusListBasicNode answer(
+							InvocationOnMock invocation) throws Throwable {
+						return new ThesaurusListBasicNode();
+					}
+                   });
+		
 		Mockito.when(
 				thesaurusConceptService
 						.getTopTermThesaurusConceptsCount(Matchers.anyString()))
@@ -86,7 +103,7 @@ public class FolderGeneratorTest {
 		List<IThesaurusListNode> nodes = folderGenerator
 				.generateFolders("fake");
 
-		Assert.assertEquals("Invalid number of nodes", 5, nodes.size());
+		Assert.assertEquals("Invalid number of nodes", 6, nodes.size());
 
 		// tests of the top concept node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(0)
@@ -104,22 +121,30 @@ public class FolderGeneratorTest {
 		Assert.assertEquals("Bac à sable", nodes.get(1).getTitle());
 		Assert.assertEquals(false, nodes.get(1).isExpanded());
 		Assert.assertNotNull(nodes.get(1).getChildren());
-
+		
 		// tests of the orphan concepts node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(2)
 				.getType());
-		Assert.assertEquals("ORPHANS_fake", nodes.get(2).getId());
-		Assert.assertEquals("Concepts orphelins", nodes.get(2).getTitle());
+		Assert.assertEquals("COMPLEXCONCEPTS_fake", nodes.get(2).getId());
+		Assert.assertEquals("Concepts complexes", nodes.get(2).getTitle());
 		Assert.assertEquals(false, nodes.get(2).isExpanded());
 		Assert.assertNotNull(nodes.get(2).getChildren());
-
-		// tests of the group node
+		
+		// tests of the orphan concepts node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(3)
 				.getType());
-		Assert.assertEquals("GROUPS_fake", nodes.get(3).getId());
-		Assert.assertEquals("Groupes", nodes.get(3).getTitle());
+		Assert.assertEquals("ORPHANS_fake", nodes.get(3).getId());
+		Assert.assertEquals("Concepts orphelins", nodes.get(3).getTitle());
 		Assert.assertEquals(false, nodes.get(3).isExpanded());
 		Assert.assertNotNull(nodes.get(3).getChildren());
+
+		// tests of the group node
+		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(4)
+				.getType());
+		Assert.assertEquals("GROUPS_fake", nodes.get(4).getId());
+		Assert.assertEquals("Groupes", nodes.get(4).getTitle());
+		Assert.assertEquals(false, nodes.get(4).isExpanded());
+		Assert.assertNotNull(nodes.get(4).getChildren());
 
 	}
 	@Test
@@ -136,7 +161,7 @@ public class FolderGeneratorTest {
 				.generateFolders("fake");
 		
 		Assert.assertNull(nodes.get(0).getChildren());
-		Assert.assertNull(nodes.get(2).getChildren());
+		Assert.assertNull(nodes.get(3).getChildren());
 	}
 
 }

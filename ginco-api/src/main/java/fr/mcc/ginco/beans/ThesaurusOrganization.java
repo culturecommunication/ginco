@@ -36,16 +36,21 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Bean represents <b>thesaurus_organization</b> table, contains information
  * about author of modification.
  */
 @SuppressWarnings("serial")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusOrganization implements Serializable {
+	@XmlTransient
 	private Integer identifier;
 	private String name;
 	private String homepage;
-
 
 	public ThesaurusOrganization() {
 		super();

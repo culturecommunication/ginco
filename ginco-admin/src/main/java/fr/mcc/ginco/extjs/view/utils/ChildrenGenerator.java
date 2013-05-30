@@ -39,6 +39,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import org.slf4j.Logger;
@@ -70,6 +71,10 @@ public class ChildrenGenerator {
     @Inject
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
+    
+	@Inject
+	@Named("thesaurusListNodeFactory")
+	ThesaurusListNodeFactory thesaurusListNodeFactory;
 
     @Log
     private Logger logger;
@@ -90,7 +95,7 @@ public class ChildrenGenerator {
 
         List<IThesaurusListNode> childrenNodes = new ArrayList<IThesaurusListNode>();
         for (ThesaurusConcept topTerm : children) {
-            ThesaurusListBasicNode topTermNode = new ThesaurusListBasicNode();
+            ThesaurusListBasicNode topTermNode = thesaurusListNodeFactory.getListBasicNode();
             topTermNode.setTitle(thesaurusConceptService
                     .getConceptLabel(topTerm.getIdentifier()));
             topTermNode.setId(ID_PREFIX + resultId +

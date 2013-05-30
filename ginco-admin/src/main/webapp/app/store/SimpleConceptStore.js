@@ -64,6 +64,10 @@ Ext.define('GincoApp.store.SimpleConceptStore', {
                     type : 'string'
                 },
                 {
+                    name: 'role',
+                    type: 'int'
+                },
+                {
                     name: 'lang',
                     type : 'string'
                 }

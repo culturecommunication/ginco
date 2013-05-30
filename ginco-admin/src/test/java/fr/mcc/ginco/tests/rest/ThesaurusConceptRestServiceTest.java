@@ -34,14 +34,13 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
+import fr.mcc.ginco.extjs.view.utils.AssociativeRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusConceptRestService;
@@ -82,6 +81,9 @@ public class ThesaurusConceptRestServiceTest {
 
 	@Mock(name="thesaurusConceptViewConverter")
     private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+
+    @Mock(name="associativeRelationshipViewConverter")
+    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
 	
 	@InjectMocks
 	private ThesaurusConceptRestService thesaurusConceptRestService = new ThesaurusConceptRestService();
@@ -118,7 +120,9 @@ public class ThesaurusConceptRestServiceTest {
 		List<ThesaurusTermView> termViews = new ArrayList<ThesaurusTermView>();
 		termViews.add(fakeTermView1);
 		termViews.add(fakeTermView2);
-		
+
+        List<AssociativeRelationshipView> associatedConceptsView = new ArrayList<AssociativeRelationshipView>();
+
 		ThesaurusConcept fakeThesaurusConcept = getFakeThesaurusConceptWithNonMandatoryEmptyFields("fakeConcept1");
 		ThesaurusConceptView fakeConceptView = new ThesaurusConceptView();
 		fakeConceptView.setIdentifier("");
@@ -127,13 +131,17 @@ public class ThesaurusConceptRestServiceTest {
 		fakeConceptView.setTopconcept(false);
 		fakeConceptView.setThesaurusId("1");
 		fakeConceptView.setTerms(termViews);
-		List<String> associatedConcepts = new ArrayList<String>();
+        fakeConceptView.setAssociatedConcepts(associatedConceptsView);
+
+
+        List<AssociativeRelationship> associatedConcepts = new ArrayList<AssociativeRelationship>();
+        List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
+        List<ThesaurusConcept> childToRemove = new ArrayList<ThesaurusConcept>();
 		
 		Mockito.when(thesaurusConceptViewConverter.convert(fakeConceptView)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(termViewConverter.convertTermViewsInTerms(termViews, true)).thenReturn(terms);
-		
-		Mockito.when(thesaurusTermService.getPreferedTerms(terms)).thenReturn(preferedTerms);
-		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts)).thenReturn(fakeThesaurusConcept);
+
+		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts, hierarchicalRelationships, childToRemove)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(thesaurusConceptViewConverter.convert(Mockito.any(ThesaurusConcept.class), Mockito.anyListOf(ThesaurusTerm.class))).thenReturn(fakeConceptView);
 		
 		ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);

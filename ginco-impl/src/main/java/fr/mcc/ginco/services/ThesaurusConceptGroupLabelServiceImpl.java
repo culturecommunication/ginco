@@ -40,12 +40,9 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.utils.LabelUtil;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusConceptGroupLabelService")

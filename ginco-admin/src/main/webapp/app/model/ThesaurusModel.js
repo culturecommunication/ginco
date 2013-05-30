@@ -76,8 +76,11 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 		name : 'defaultTopConcept',
 		type : 'boolean'
 	}, {
-		name : 'format',
-		type : 'int'
+        name : 'archived',
+        type : 'boolean'
+    }, {
+		name : 'formats',
+		type : 'array_of_integer'
 	}, {
 		name : 'type',
 		type : 'int'
@@ -85,12 +88,18 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 		name : 'creatorName',
 		type : 'string'
 	}, {
+        name : 'canBeDeleted',
+        type : 'boolean'
+    }, {
 		name : 'creatorHomepage',
 		type : 'string'
 	}, {
 		name : 'languages',
 		type : 'array_of_string'
-	} ],
+	}, {
+        name : 'polyHierarchical',
+        type : 'boolean'
+    } ],
 
 	proxy : {
 		api : {

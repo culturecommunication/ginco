@@ -76,7 +76,7 @@
         <scp.folder.solr>/etc/solr/conf</scp.folder.solr>
         <folder.conf>${basedir}/conf/local</folder.conf>
         <deploy.plugin.skip>true</deploy.plugin.skip>
-        <solr.folder.conf>${basedir}/solr-conf</solr.folder.conf>
+        <solr.folder.conf>${basedir}/solr</solr.folder.conf>
     </properties>
 
     <profiles>
@@ -442,7 +442,7 @@
                 <groupId>org.apache.solr</groupId>
                 <artifactId>solr-solrj</artifactId>
                 <version>${org.apache.solr}</version>
-            </dependency>
+            </dependency>            
         </dependencies>
     </dependencyManagement>
     <build>
@@ -634,6 +634,7 @@
         <module>ginco-impl</module>
         <module>ginco-admin</module>
         <module>ginco-webservices</module>
+        <module>ginco-solr-conf</module>
     </modules>
 
     <dependencies>
@@ -647,7 +648,7 @@
 
     <repositories>
         <repository>
-            <id>smile-github-repository</id>
+            <id>smile-github-addon</id>
             <name>Smile Github repository</name>
             <url>http://smile-sa.github.com/maven-repository/releases-addon</url>
         </repository>

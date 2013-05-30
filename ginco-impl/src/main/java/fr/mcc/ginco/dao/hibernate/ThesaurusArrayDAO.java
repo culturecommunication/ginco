@@ -53,12 +53,12 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
 	}
 
     @Override
-    public List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String thesaurusId) {
+    public List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String excludedConceptArrayId, String thesaurusId) {
         Criteria criteria = getCurrentSession().createCriteria(
                 ThesaurusArray.class, "ta");
 
         selectThesaurus(criteria, thesaurusId);
-
+        excludeAnArrayById(criteria, excludedConceptArrayId);
         return criteria.list();
     }
 
@@ -68,18 +68,18 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
 
 	@Override
 	public List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId) {
-		Criteria criteria = getCriteriaByThesaurusAndTopConcept(conceptId);
+		Criteria criteria = getCriteriaBySuperOrdinate(conceptId);
 	    return criteria.list();
 	}
 	
 	@Override
 	public List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId, String excludeArrayId) {
-		Criteria criteria = getCriteriaByThesaurusAndTopConcept(conceptId);
+		Criteria criteria = getCriteriaBySuperOrdinate(conceptId);
 	    criteria.add(Restrictions.ne("ta.identifier", excludeArrayId));
 	    return criteria.list();
 	}
 	
-	private Criteria getCriteriaByThesaurusAndTopConcept(String conceptId) {
+	private Criteria getCriteriaBySuperOrdinate(String conceptId) {
 		Criteria criteria = getCurrentSession().createCriteria(
 		         ThesaurusArray.class, "ta");
 		criteria.add(Restrictions.eq("ta.superOrdinateConcept.identifier", conceptId));
@@ -93,6 +93,24 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
         selectThesaurus(criteria, thesaurusId);
         return criteria.list();
     }
-
-
+    
+    private void excludeAnArrayById(Criteria criteria, String excludedConceptArrayId) {
+        if (excludedConceptArrayId != null) {
+        	criteria.add(Restrictions.ne("ta.identifier", (String) excludedConceptArrayId));
+        }
+    }
+    
+    @Override
+    public List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId){
+    	Criteria criteria = getCurrentSession().createCriteria(ThesaurusArray.class, "ta");
+    	criteria.add(Restrictions.isNull("ta.parent.identifier"));
+    	selectThesaurus(criteria, thesaurusId);
+        return criteria.list();
+    }
+    @Override
+	public List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId){
+    	Criteria criteria = getCurrentSession().createCriteria(ThesaurusArray.class, "ta");
+    	criteria.add(Restrictions.eq("ta.parent.identifier", thesaurusArrayId));
+    	return criteria.list();
+    }
 }

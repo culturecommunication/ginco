@@ -39,6 +39,9 @@ Ext.define('GincoApp.view.BottomFormToolbar', {
 	ariaRole : 'toolbar',
 	localized : true,
 	xRequiredLabel : "Star suffixed fields <span class=\"mandatory-field\">*</span> are required",
+    xArchivedLabel : "This Thesaurus is archived",
+    archived : false,
+
 	initComponent : function() {
 		var me = this;
 		me.callParent(arguments);
@@ -48,6 +51,18 @@ Ext.define('GincoApp.view.BottomFormToolbar', {
         });
 		me.add(reqEl);
 		
-	}
+	},
+
+    setArchived : function() {
+        if (this.archived==false)  {
+            var me = this;
+            var reqEl = Ext.create('Ext.toolbar.TextItem', {
+                cls: 'x-status-text mandatory-field ',
+                text: '\n'+me.xArchivedLabel
+            });
+            me.add(reqEl);
+            this.archived = true;
+        }
+    }
 
 });

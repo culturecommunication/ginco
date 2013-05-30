@@ -43,11 +43,12 @@ import java.util.List;
  */
 public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> {
     /**
-     * Get all thesaurusArrays from thesaurus with given id.
+     * Get all thesaurusArrays from thesaurus with given id, excluding the concept array which id is given in parameter
+     * @param excludedConceptArrayId : the concept to exclude (can be null)
      * @param thesaurusId
      * @return
      */
-    List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String thesaurusId);
+    List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String excludedConceptArrayId, String thesaurusId);
     
     /**
      * Returns all arrays this concept is the super ordinate
@@ -71,4 +72,7 @@ public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> 
      */
 	List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId,
 			String excludeArrayId);
+	
+	List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId);
+	List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId);
 }

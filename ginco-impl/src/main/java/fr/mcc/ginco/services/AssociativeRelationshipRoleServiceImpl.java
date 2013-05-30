@@ -34,15 +34,15 @@
  */
 package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 @Transactional(readOnly=true,rollbackFor = BusinessException.class)
 @Service("associativeRelationshipRoleService")
@@ -50,9 +50,19 @@ public class AssociativeRelationshipRoleServiceImpl implements IAssociativeRelat
 
     @Inject
     @Named("associativeRelationshipRoleDAO")
-    private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;   
+    private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
 
-	@Override
+    @Override
+    public List<AssociativeRelationshipRole> getAllAssociationTermRole() {
+        return associativeRelationshipRoleDAO.findAll();
+    }
+
+    @Override
+    public AssociativeRelationshipRole getRoleById(String id) throws BusinessException {
+        return associativeRelationshipRoleDAO.getById(id);
+    }
+
+    @Override
 	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRoleRole()
 			throws BusinessException {
 		return associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole();

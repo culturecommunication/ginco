@@ -229,12 +229,36 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 	},
 	
 	onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
-	    	var me = this;
 	        var thePanel = theGrid.up('conceptGroupPanel');
 	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 			topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
 	    },
+	    
+    selectParentGroup : function(theButton){
+		var me = this;
+		var theForm = theButton.up('form');
+	    var thePanel =theButton.up('conceptGroupPanel');
+	    
+	    var win = Ext.create('GincoApp.view.SelectGroupWin', {
+			thesaurusData : thePanel.thesaurusData,
+			excludedConceptGroupId : thePanel.gincoId,
+			currentParentId : theForm.down('textfield[name="parentGroupId"]').getValue(),
+			listeners: {
+				selectBtn: {
+                fn: function(selectedRow) {
+                        me.selectGroupAsParent(selectedRow, theForm);
+                    }
+            }
+        }
+	    });
+	    win.show();
+	},
 	
+	selectGroupAsParent : function(selectedRow, theForm){
+		theForm.down('textfield[name="parentGroupLabel"]').setValue(selectedRow[0].data.label);
+		theForm.down('textfield[name="parentGroupId"]').setValue(selectedRow[0].data.identifier);
+	},
+
     init:function(){    	  	 
          this.control({
         	'conceptGroupPanel form' : {
@@ -246,6 +270,9 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
  			'conceptGroupPanel #deleteConceptGroupBtn' : {
  				click : this.deleteConceptGroup
  			},
+            'conceptGroupPanel  #selectParentGroup' : {
+                click : this.selectParentGroup
+            },
             'conceptGroupPanel  #addConceptToGroupArray' : {
                 click : this.selectConceptToGroupArray
             },

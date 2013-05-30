@@ -66,6 +66,14 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
             type: 'string'
         },
         {
+            name: 'parentArrayId',
+            type: 'string'
+        },
+        {
+            name: 'parentArrayLabel',
+            type: 'string'
+        },
+        {
             name: 'superOrdinateId',
             type: 'string'
         },
@@ -74,9 +82,12 @@ Ext.define('GincoApp.model.ConceptArrayModel', {
             type: 'string'
         },
         {
-            name : 'concepts',
-            type : 'array_of_string'
+            name: 'order',
+            type: 'boolean'
         }
+    ],
+    associations: [
+                   {type: 'hasMany', model: 'GincoApp.model.ArrayConceptModel', name: 'concepts'}
     ],
     
     idProperty : 'identifier',

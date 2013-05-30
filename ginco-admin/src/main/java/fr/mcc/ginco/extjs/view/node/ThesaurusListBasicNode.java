@@ -35,14 +35,16 @@
 package fr.mcc.ginco.extjs.view.node;
 
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
-
-import java.util.List;
-
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Component;
+
+import java.text.Collator;
+import java.util.List;
 
 /**
  * Class with general behaviour to be shared with every implementation.
  */
+@Component
 public class ThesaurusListBasicNode implements IThesaurusListNode {
     /**
      * Indicates if node should be expanded by default.
@@ -64,7 +66,10 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
      * Type of visual node.
      */
     private ThesaurusListNodeType nodeType;
-    
+    /**
+     * Hidden tag to filter by author.
+     */
+    private String organizationName;
     /**
      * if the node is a leaf.
      */
@@ -85,12 +90,18 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
      */
     private String thesaurusId;
     
+	private Collator collator;
     
     
-
-    public ThesaurusListBasicNode() {
-
+	public ThesaurusListBasicNode() {
+		
     }
+
+    public ThesaurusListBasicNode(Collator collator) {
+    	this.collator = collator;
+    }
+    
+   
 
     /* (non-Javadoc)
      * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#isExpanded()
@@ -225,7 +236,10 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	@Override
 	public int compareTo(IThesaurusListNode o) {
 		if (StringUtils.isNotEmpty(title)) {
-			return title.compareToIgnoreCase(o.getTitle());
+			if (collator!=null)
+				return collator.compare(title, o.getTitle());
+			else
+				return title.compareToIgnoreCase(o.getTitle());
 		} 
 		return -1;
 	}
@@ -240,4 +254,13 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 		this.displayable = displayable;
 	}
 
+    @Override
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    @Override
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
 }
