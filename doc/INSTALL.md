@@ -212,6 +212,72 @@ $ psql < ./sql/postgresql92/data-1.3.sql
 $ psql < ./sql/postgresql92/data-1.4.sql
 ```
 
+
+### Configuring GINCO ###
+
+To override default Ginco configuration.
+Just edit tomcat.conf file, and add option -Dginco-properties=${path_to_custom_properties_files} to JAVA_OPTS
+where "${path_to_custom_properties_files}" is the absolute path to your custom ginco.properties file
+
+Default values of ginco.properties
+```
+#################################################
+# Generator configuration
+#################################################
+#ARK Preferences
+application.ark.nma=http://data.culture.fr/thesaurus/resource
+application.ark.naan=67717
+
+#################################################
+# General configuration
+#################################################
+#default language
+ginco.default.language=fr-FR
+solr.url=http://localhost:8983/solr/thesaurus/
+
+#################################################
+# Imports configuration
+#################################################
+#Dublin core namespaces - values should be separated by comma
+import.default.top.concept=true
+import.skos.default.format=3
+import.skos.default.type=3
+#This property supports a list of values, separated by comma
+import.skos.date.formats=yyyy-MM-dd,yyyy,yyyy-MM-dd HH:mm:ss
+
+
+#################################################
+# LDAP configuration
+#################################################
+ldap.base.provider.url=ldap://hadoc-int.eqx.intranet:389
+ldap.user.base.dn=o=gouv,c=fr
+ldap.security.principal=cn=Manager,o=gouv,c=fr
+ldap.security.credentials=isfet
+ldap.auth.search.filter=(uid={0})
+
+#################################################
+# Publish configuration
+#################################################
+publish.path=/tmp/export/publish/
+publish.version.note=Publication
+archive.path=/tmp/export/archive/
+
+```
+
+#### Configuring LDAP####
+
+Ginco require an LDAP server for authentication.
+
+You've to configure the following keys in you ginco.properties to configure the LDAP connection
+
+ldap.base.provider.url
+ldap.user.base.dn
+ldap.security.principal
+ldap.security.credentials
+ldap.auth.search.filter
+
+
+
 ### Running GINCO ###
 
 * Open a web browser and point to : http://<server-url>:8080/ginco-admin
