@@ -270,14 +270,14 @@ Ginco require an LDAP server for authentication.
 
 You've to configure the following keys in you ginco.properties to configure the LDAP connection
 
-ldap.base.provider.url
-ldap.user.base.dn
-ldap.security.principal
-ldap.security.credentials
-ldap.auth.search.filter
+* ldap.base.provider.url
+* ldap.user.base.dn
+* ldap.security.principal
+* ldap.security.credentials
+* ldap.auth.search.filter
 
 
 
 ### Running GINCO ###
 
-* Open a web browser and point to : http://<server-url>:8080/ginco-admin
+* Open a web browser and point to : ```http://<server-url>:8080/ginco-admin```
