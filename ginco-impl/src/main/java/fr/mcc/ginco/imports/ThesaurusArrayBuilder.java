@@ -34,7 +34,11 @@
  */
 package fr.mcc.ginco.imports;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -51,6 +55,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.utils.ConceptHierarchyUtil;
@@ -65,6 +70,12 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
+	
+	@Inject
+	@Named("thesaurusArrayDAO")
+	private IThesaurusArrayDAO thesaurusArrayDAO;
+	
+	public static Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
 
 	public ThesaurusArrayBuilder() {
 		super();
@@ -91,11 +102,13 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 		Set<ThesaurusConcept> membersConcepts = new HashSet<ThesaurusConcept>();
 		while (stmtMembersItr.hasNext()) {
 			Statement stmt = stmtMembersItr.next();
-			Resource memberConceptRes = stmt.getObject().asResource();
-			String relatedURI = memberConceptRes.getURI();
-			ThesaurusConcept memberConcept = thesaurusConceptDAO
-					.getById(relatedURI);
-			membersConcepts.add(memberConcept);
+			Resource memberRes = stmt.getObject().asResource();
+			String relatedURI = memberRes.getURI();
+			if (thesaurusConceptDAO.getById(relatedURI) != null){
+				ThesaurusConcept memberConcept = thesaurusConceptDAO
+						.getById(relatedURI);
+				membersConcepts.add(memberConcept);
+			}
 		}
 		Set<ThesaurusArrayConcept> thesaurusArrayConcepts = new HashSet<ThesaurusArrayConcept>();
 		int i=0;
@@ -116,7 +129,35 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 
 		array.setOrdered(true);
 
+		builtArrays.put(skosCollection.getURI(), array);
 		return array;
+	}
+	
+	/**
+	 * Builds children of ThesaurusArray from the given resource
+	 * 
+	 * @param skosCollection
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
+	public List<ThesaurusArray> getChildrenArrays(Resource skosCollection,
+			Thesaurus thesaurus) throws BusinessException {
+
+		StmtIterator stmtMembersItr = skosCollection
+				.listProperties(SKOS.MEMBER);
+		List<ThesaurusArray> membersArrays = new ArrayList<ThesaurusArray>();
+		while (stmtMembersItr.hasNext()) {
+			Statement stmt = stmtMembersItr.next();
+			Resource memberRes = stmt.getObject().asResource();
+			String relatedURI = memberRes.getURI();
+			if (builtArrays.get(relatedURI) != null){
+				ThesaurusArray memberArray = builtArrays.get(relatedURI);
+				memberArray.setParent(builtArrays.get(skosCollection.getURI()));
+				membersArrays.add(memberArray);
+			}
+		}	
+		return membersArrays;
 	}
 
 }

@@ -37,7 +37,6 @@ package fr.mcc.ginco.exports;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -46,7 +45,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exports.result.bean.AlphabeticalExportedItem;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;

@@ -50,7 +50,6 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
@@ -100,8 +99,11 @@ public class SKOSArrayExporter {
 
 				for (ThesaurusArrayConcept arrayConcept : array.getConcepts()) {
 						Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());
-						model.add(collectionRes, SKOS.MEMBER, y);
-						model.add(collectionRes, SKOS.MEMBER, y);					
+						model.add(collectionRes, SKOS.MEMBER, y);				
+				}
+				for (ThesaurusArray childrenArray : thesaurusArrayService.getChildrenArrays(array.getIdentifier())){
+					Resource arrayMember = model.createResource(childrenArray.getIdentifier()+"_REMOVEME_");
+					model.add(collectionRes, SKOS.MEMBER, arrayMember);
 				}
 			}
 
@@ -113,6 +115,7 @@ public class SKOSArrayExporter {
 			int start = result.lastIndexOf("core#\">") + "core#\">".length()
 					+ 2;
 			int end = result.lastIndexOf("</rdf:RDF>");
+			result = result.replaceAll("_REMOVEME_", "");
 			return result.substring(start, end);
 		}
 

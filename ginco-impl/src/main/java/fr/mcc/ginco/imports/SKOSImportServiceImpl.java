@@ -198,6 +198,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			buildConceptsAssociations(thesaurus, skosConcepts);
 			buildConceptsRoot(thesaurus, skosConcepts);
 			buildArrays(thesaurus, model);
+			buildChildrenArrays(thesaurus, model);
 
 		} catch (JenaException je) {
 			throw new BusinessException("Error reading imported file :"+je.getMessage(),
@@ -221,11 +222,28 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			ThesaurusArray array = arrayBuilder.buildArray(skosCollection,
 					model, thesaurus);
 			thesaurusArrayDAO.update(array);
-
 			Statement stmtLabel = skosCollection.getProperty(SKOS.PREF_LABEL);
 			NodeLabel nodeLabel = nodeLabelBuilder.buildNodeLabel(stmtLabel,
 					model, thesaurus, array);
 			nodeLabelDAO.update(nodeLabel);
+		}
+	}
+	
+	/**
+	 * Builds thesaurus array relations from the model
+	 * 
+	 * @param thesaurus
+	 * @param model
+	 */
+	
+	private void buildChildrenArrays(Thesaurus thesaurus, Model model){
+		List<Resource> skosCollections = getSKOSRessources(model,
+				SKOS.COLLECTION);
+		for (Resource skosCollection : skosCollections) {
+			List<ThesaurusArray> childrenArrays = arrayBuilder.getChildrenArrays(skosCollection, thesaurus);
+			for (ThesaurusArray childrenArray : childrenArrays){
+				thesaurusArrayDAO.update(childrenArray);
+			}
 		}
 	}
 
