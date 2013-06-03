@@ -24,8 +24,11 @@
 	</bean>
 
 	<bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
-
+	
 	<jaxrs:server id="uiServices" address="/ui" depends-on="loggerPrereqs">
+		<jaxrs:properties>
+	            <entry key="org.apache.cxf.propagate.exception" value="false" />
+	    </jaxrs:properties>
 		<jaxrs:serviceBeans>
 			<bean class="fr.mcc.ginco.rest.services.BaseRestService" />
 			<bean class="fr.mcc.ginco.rest.services.InfoRestService" />
@@ -55,6 +58,9 @@
 		<jaxrs:features>
 			<cxf:logging />
 		</jaxrs:features>
+		<jaxrs:outFaultInterceptors>
+			<bean class="fr.mcc.ginco.rest.services.exceptions.GincoOutFaultInterceptor" />
+		</jaxrs:outFaultInterceptors>
 	</jaxrs:server>
 	
 	

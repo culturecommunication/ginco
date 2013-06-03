@@ -59,8 +59,8 @@ public abstract class AbstractExceptionMapper<E extends Throwable> implements
 		else {
 			msg = LabelUtil.getResourceLabel(messageKey);
 		}
-		log.error("Business Exception in REST services : " + t.getMessage());
-		log.debug("Business Exception in REST services : " + msg);
+		log.error("Exception in REST services : " + t.getMessage());
+		log.debug("Exception in REST services : " + msg);
 		msg = StringEscapeUtils.escapeEcmaScript(msg);
 		return Response.status(Status.OK)
 				.entity("{success:false, message: '" + msg + "'}").build();
