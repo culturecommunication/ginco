@@ -58,8 +58,8 @@
         <cargo.remote.uri>${tomcat.base}manager</cargo.remote.uri>
         <postgresql.jdbc.version>9.1-901.jdbc4</postgresql.jdbc.version>
         <maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
-        <ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
-        <ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
+        <ginco.log.file>${catalina.base}/logs/ginco.log</ginco.log.file>
+        <ginco.webservice.log.file>${catalina.base}/logs/ginco-webservices.log</ginco.webservice.log.file>
         <ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
         <servlet.api.version>2.5</servlet.api.version>
         <apache.commons.lang.version>3.1</apache.commons.lang.version>
