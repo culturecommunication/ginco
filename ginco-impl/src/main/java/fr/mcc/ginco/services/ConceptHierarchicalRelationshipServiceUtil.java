@@ -89,6 +89,11 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 			ThesaurusConcept conceptToUpdate,
 			List<ConceptHierarchicalRelationship> hierarchicalRelationships,
 			List<ThesaurusConcept> childrenConceptToDetach) {
+		
+		
+		List<ThesaurusConcept> childrenConcepts = thesaurusConceptDAO
+				.getChildrenConcepts(conceptToUpdate.getIdentifier());
+		
 
 		// We update the modified relations, and we delete the relations that
 		// have been removed
@@ -98,11 +103,21 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 					.getIdsFromConceptList(new ArrayList<ThesaurusConcept>(
 							conceptToUpdate.getParentConcepts()));
 		}
-
+		
 		List<String> newParentConceptIds = new ArrayList<String>();
 		for (ConceptHierarchicalRelationship relation : hierarchicalRelationships) {
 			newParentConceptIds.add(relation.getIdentifier()
 					.getParentconceptid());
+		}
+		
+		for (ThesaurusConcept childConcept : childrenConcepts)
+		{
+			if (newParentConceptIds.contains(childConcept.getIdentifier()))
+			{
+				throw new BusinessException(
+						"A parent concept cannot be the child of the same concept",
+						"hierarchical-loop-violation");
+			}
 		}
 
 		List<String> addedParentConceptIds = ListUtils.subtract(
