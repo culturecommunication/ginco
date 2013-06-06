@@ -110,6 +110,9 @@ public class ThesaurusArrayViewConverter {
 		if (StringUtils.isNotEmpty(source.getSuperOrdinateId())) {
 			hibernateRes.setSuperOrdinateConcept(thesaurusConceptService
 					.getThesaurusConceptById(source.getSuperOrdinateId()));
+		} else 
+		{
+			hibernateRes.setSuperOrdinateConcept(null);
 		}
 
 		hibernateRes.setOrdered(source.getOrder());

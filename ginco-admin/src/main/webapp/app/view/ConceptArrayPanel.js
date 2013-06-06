@@ -67,6 +67,7 @@ Ext
 					xAddConceptToArray : 'Add a concept',
 					xParentConceptLabel : 'Parent Concept',
 					xSelectParentConcept : 'Select a parent concept',
+					xRemoveParentConcept : 'Remove parent concept',
 					xActions : 'Actions',
 					xAssociationRemove : 'Detach this concept',
 					xOrderLabel : 'Alphabetical order',
@@ -193,10 +194,10 @@ Ext
 																		itemId : 'selectParentArray',
 																		cls : 'add',
 																		iconCls : 'icon-add'
-																	} ]
+																	}]
 														},
 														{
-															xtype : 'textfield',
+															xtype : 'hidden',
 															name : 'superOrdinateId',
 															hidden : true
 														},
@@ -223,7 +224,16 @@ Ext
 																		itemId : 'selectParentConcept',
 																		cls : 'add',
 																		iconCls : 'icon-add'
-																	} ]
+																	} ,
+																	{
+																		xtype : 'button',
+																		text : me.xRemoveParentConcept,
+																		disabled : true,
+																		requiredRoles : ['ADMIN'],
+																		itemId : 'removeParentConcept',
+																		cls : 'add',
+																		iconCls : 'icon-delete'
+																	}]
 														},
 														{
 															xtype : 'gridpanel',
