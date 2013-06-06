@@ -89,6 +89,14 @@ public class SKOSNotesExporter {
 										.getURI()), note.getLexicalValue(),
 								note.getLanguage().getPart1());
 				addList.add(new AddAssertion(vocab, noteAssertion));
+			} else if ("example".equals(note.getNoteType().getCode())) {
+				SKOSDataRelationAssertion noteAssertion = factory
+						.getSKOSDataRelationAssertion(conceptSKOS, factory
+								.getSKOSDataProperty(factory
+										.getSKOSExampleDataProperty()
+										.getURI()), note.getLexicalValue(),
+								note.getLanguage().getPart1());
+				addList.add(new AddAssertion(vocab, noteAssertion));
 			}
 		}
 		return addList;
