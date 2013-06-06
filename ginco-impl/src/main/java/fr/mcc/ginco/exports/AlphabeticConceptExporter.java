@@ -110,6 +110,21 @@ public class AlphabeticConceptExporter {
 				result.add(new FormattedLine(base, LabelUtil
 						.getResourceLabel("NA") + ": " + note.getLexicalValue()));
 			}
+			if ("historyNote".equals(note.getNoteType().getCode())) {
+				result.add(new FormattedLine(base, LabelUtil
+						.getResourceLabel("HN") + ": " + note.getLexicalValue()));
+			}
+		}
+		
+		for (ThesaurusTerm prefTerm : prefTerms)
+		{
+			List<Note> prefTermNotes = noteService.getTermNotePaginatedList(prefTerm.getIdentifier(), 0, 0);
+			for (Note note : prefTermNotes) {
+				if ("definition".equals(note.getNoteType().getCode())) {
+					result.add(new FormattedLine(base, LabelUtil
+							.getResourceLabel("DEF") + ": " + note.getLexicalValue()));
+				}
+			}
 		}
 
 		for (ThesaurusConcept parent : concept.getParentConcepts()) {
@@ -157,6 +172,13 @@ public class AlphabeticConceptExporter {
 				.getConceptNotPreferredTerms(concept.getIdentifier())) {
 			result.add(new FormattedLine(base - 1, thesaurusTermUtils
 					.generatePrefTermText(term)));
+			List<Note> nonPrefTermNotes = noteService.getTermNotePaginatedList(term.getIdentifier(), 0, 0);
+			for (Note note : nonPrefTermNotes) {
+				if ("definition".equals(note.getNoteType().getCode())) {
+					result.add(new FormattedLine(base, LabelUtil
+							.getResourceLabel("DEF") + ": " + note.getLexicalValue()));
+				}
+			}
 			if (term.getRole() == null) {
 				result.add(new FormattedLine(base, thesaurusTermRoleService
 						.getDefaultThesaurusTermRole().getCode()

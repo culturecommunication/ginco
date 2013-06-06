@@ -197,7 +197,7 @@ public class ExportRestService {
 				for (int i = 0; i < results.getTabs(); i++) {
 					out.write(TABULATION_DELIMITER);
 				}
-				out.write(results.getText());
+				out.write(results.getText().replaceAll("<br>", ""));
 				out.newLine();
 				out.flush();
 			}
