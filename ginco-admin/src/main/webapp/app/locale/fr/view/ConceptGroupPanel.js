@@ -55,5 +55,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptGroupPanel', {
     xAssociationRemove : 'Détacher ce concept',
     xAddConceptToGroupArray : 'Ajouter un concept',
     xParentGroupLabel : 'Groupe parent',
-    xSelectParentGroup : 'Sélectionner un groupe parent'
+    xSelectParentGroup : 'Sélectionner un groupe parent',
+    xRemoveParentGroup : 'Supprimer le groupe parent'
 });

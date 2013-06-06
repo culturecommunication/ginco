@@ -88,7 +88,10 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		var theConceptGroupPanel = me.getActivePanel();		
 		theConceptGroupPanel.setTitle("Groupe : "+aModel.data.label);
 		theConceptGroupPanel.gincoId = aModel.data.identifier;
-		
+		if (aModel.get('parentGroupId')!="")
+		{
+			aForm.down('#removeParentGroup').setDisabled(false);
+		}
 		//We get all the concepts included in this concept group
 		var conceptsGrid  = aForm.down('#gridConceptGroupPanelConcepts');
 		var conceptsGridStore = conceptsGrid.getStore();
@@ -242,7 +245,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 	    var win = Ext.create('GincoApp.view.SelectGroupWin', {
 			thesaurusData : thePanel.thesaurusData,
 			excludedConceptGroupId : thePanel.gincoId,
-			currentParentId : theForm.down('textfield[name="parentGroupId"]').getValue(),
+			currentParentId : theForm.down('hidden[name="parentGroupId"]').getValue(),
 			listeners: {
 				selectBtn: {
                 fn: function(selectedRow) {
@@ -256,8 +259,17 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 	
 	selectGroupAsParent : function(selectedRow, theForm){
 		theForm.down('textfield[name="parentGroupLabel"]').setValue(selectedRow[0].data.label);
-		theForm.down('textfield[name="parentGroupId"]').setValue(selectedRow[0].data.identifier);
+		theForm.down('hidden[name="parentGroupId"]').setValue(selectedRow[0].data.identifier);
+		theForm.down('#removeParentGroup').setDisabled(false);
 	},
+	
+	removeParentGroup : function(theButton) {
+		var me = this;
+		var theForm = theButton.up('form');
+		theForm.down('textfield[name="parentGroupLabel"]').setValue("");
+		theForm.down('hidden[name="parentGroupId"]').setValue("");
+		theForm.down('#removeParentGroup').setDisabled(true);
+	}, 
 
     init:function(){    	  	 
          this.control({
@@ -272,6 +284,9 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
  			},
             'conceptGroupPanel  #selectParentGroup' : {
                 click : this.selectParentGroup
+            },
+            'conceptGroupPanel  #removeParentGroup' : {
+                click : this.removeParentGroup
             },
             'conceptGroupPanel  #addConceptToGroupArray' : {
                 click : this.selectConceptToGroupArray
