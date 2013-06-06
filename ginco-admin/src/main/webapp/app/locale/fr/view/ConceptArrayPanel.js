@@ -59,5 +59,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptArrayPanel', {
 	xOrderLabel: 'Trier les concepts par ordre alphabétique',
 	xConceptOrderLabel: 'Ordre',
 	xParentArrayLabel : 'Tableau parent',
-	xSelectParentArray : 'Sélectionner un tableau parent'
+	xSelectParentArray : 'Sélectionner un tableau parent',
+	xRemoveParentArray : 'Supprimer le tableau parent'
 });

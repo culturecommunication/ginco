@@ -74,6 +74,7 @@ Ext
 					xConceptOrderLabel: 'Order',
 					xParentArrayLabel : 'Parent array',
 					xSelectParentArray : 'Select a parent array',
+					xRemoveParentArray : 'Remove parent array',
 
 					initComponent : function() {
 						var me = this;					
@@ -167,9 +168,8 @@ Ext
 															fieldLabel : me.xOrderLabel
 														},
 														{
-															xtype : 'textfield',
-															name : 'parentArrayId',
-															hidden : true
+															xtype : 'hidden',
+															name : 'parentArrayId'
 														},
 														{
 															xtype : 'container',
@@ -194,6 +194,14 @@ Ext
 																		itemId : 'selectParentArray',
 																		cls : 'add',
 																		iconCls : 'icon-add'
+																	},
+																	{
+																		xtype : 'button',
+																		text : me.xRemoveParentArray,
+																		disabled : true,
+																		requiredRoles : ['ADMIN'],
+																		itemId : 'removeParentArray',
+																		iconCls : 'icon-delete'
 																	}]
 														},
 														{

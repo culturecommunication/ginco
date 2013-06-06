@@ -95,6 +95,10 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		{
 			aForm.down('#removeParentConcept').setDisabled(false);
 		}
+		if (aModel.get('parentArrayId')!="")
+		{
+			aForm.down('#removeParentArray').setDisabled(false);
+		}
 		//We get all the concepts included in this concept array		
 		var arrayConcepts = aModel.concepts().getRange();
         var conceptsGrid = aForm
@@ -251,7 +255,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	    var win = Ext.create('GincoApp.view.SelectArrayWin', {
 			thesaurusData : thePanel.thesaurusData,
 			excludedConceptArrayId : thePanel.gincoId,
-			currentParentId : theForm.down('textfield[name="parentArrayId"]').getValue(),
+			currentParentId : theForm.down('hidden[name="parentArrayId"]').getValue(),
 			listeners: {
 				selectBtn: {
                 fn: function(selectedRow) {
@@ -265,7 +269,16 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	
 	selectArrayAsParent : function(selectedRow, theForm){
 		theForm.down('textfield[name="parentArrayLabel"]').setValue(selectedRow[0].data.label);
-		theForm.down('textfield[name="parentArrayId"]').setValue(selectedRow[0].data.identifier);
+		theForm.down('hidden[name="parentArrayId"]').setValue(selectedRow[0].data.identifier);
+		theForm.down('#removeParentArray').setDisabled(false);
+	},
+	
+	removeParentArray : function (theButton) {
+		var me = this;
+		var theForm = theButton.up('form');
+		theForm.down('textfield[name="parentArrayLabel"]').setValue("");
+		theForm.down('hidden[name="parentArrayId"]').setValue("");
+		theButton.setDisabled(true);
 	},
 
 	
@@ -371,8 +384,11 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             'conceptArrayPanel  #selectParentArray' : {
                 click : this.selectParentArray
             },
-            'conceptArrayPanel  #selectParentConcept' : {
-                click : this.selectParentConcept
+            'conceptArrayPanel  #selectParentArray' : {
+                click : this.selectParentArray
+            },
+            'conceptArrayPanel  #removeParentArray' : {
+                click : this.removeParentArray
             },
             'conceptArrayPanel  #removeParentConcept' : {
                 click : this.removeParentConcept
