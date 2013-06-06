@@ -127,6 +127,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			//The term isn't attached to any concept and its status is rejected
 			//We can delete it
 			deleteBtn.setDisabled(false);
+		} else 
+		{
+			deleteBtn.setDisabled(true);
 		}
 		
 		var noteTab= aForm.up('tabpanel').down('noteTermPanel');
