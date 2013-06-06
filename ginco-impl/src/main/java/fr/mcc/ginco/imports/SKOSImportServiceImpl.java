@@ -309,17 +309,20 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			ThesaurusConcept concept = conceptBuilder.buildConcept(skosConcept,
 					thesaurus);
 			thesaurusConceptDAO.update(concept);
+			ThesaurusTerm preferredTerm = null;
 
 			// Concept terms
 			List<ThesaurusTerm> terms = termBuilder.buildTerms(skosConcept,
 					thesaurus, concept);
 			for (ThesaurusTerm term : terms) {
+				if (term.getPrefered())
+					preferredTerm = term;
 				thesaurusTermDAO.update(term);
 			}
 
 			// Concept notes
 			List<Note> conceptNotes = conceptNoteBuilder.buildConceptNotes(
-					skosConcept, concept, thesaurus);
+					skosConcept, concept,preferredTerm, thesaurus);
 			for (Note conceptNote : conceptNotes) {
 				noteDAO.update(conceptNote);
 			}

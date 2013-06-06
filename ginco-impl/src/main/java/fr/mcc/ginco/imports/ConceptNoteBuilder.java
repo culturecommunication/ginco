@@ -81,6 +81,30 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 	public ConceptNoteBuilder() {
 		super();
 	}
+	
+	private Language getNoteLanguage (String SkosLang)
+	{
+		Language lang = null;
+		if (StringUtils.isEmpty(SkosLang)) {
+			lang = languagesDAO
+					.getById(defaultLang);
+			return lang;
+		} else {
+			lang = languagesDAO.getByPart1(SkosLang);
+			if (lang == null){
+				lang = languagesDAO.getById(SkosLang);
+			}
+			
+			if (lang != null) {
+				return lang;
+			} else {
+				throw new BusinessException("Note "
+						+ SkosLang
+						+ " is missing it's language",
+						"import-note-with-no-lang");
+			}
+		}
+	}
 
 	/**
 	 * Returns the list of notes for the given concept
@@ -91,7 +115,7 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 	 * @throws BusinessException
 	 */
 	public List<Note> buildConceptNotes(Resource skosConcept,
-			ThesaurusConcept concept, Thesaurus thesaurus)
+			ThesaurusConcept concept,ThesaurusTerm preferredTerm, Thesaurus thesaurus)
 			throws BusinessException {
 		logger.debug("Building notes for concept " +skosConcept.getURI());
 		List<Note> allConceptNotes = new ArrayList<Note>();
@@ -111,26 +135,7 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 					newNote.setLexicalValue(stmt.getString());
 
 					RDFNode prefLabel = stmt.getObject();
-					String lang = prefLabel.asLiteral().getLanguage();
-					if (StringUtils.isEmpty(lang)) {
-						Language defaultLangL = languagesDAO
-								.getById(defaultLang);
-						newNote.setLanguage(defaultLangL);
-					} else {
-						Language language = languagesDAO.getByPart1(lang);
-						if (language == null){
-							language = languagesDAO.getById(lang);
-						}
-						
-						if (language != null) {
-							newNote.setLanguage(language);
-						} else {
-							throw new BusinessException("Note "
-									+ stmt.getString()
-									+ " is missing it's language",
-									"import-note-with-no-lang");
-						}
-					}
+					newNote.setLanguage(getNoteLanguage(prefLabel.asLiteral().getLanguage()));
 
 					newNote.setModified(thesaurus.getDate());
 					newNote.setNoteType(noteType);
@@ -138,6 +143,22 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 					allConceptNotes.add(newNote);
 				}
 			}
+		} 
+		// Add definition notes to the prefered term...
+		StmtIterator stmtNotesItr = skosConcept
+				.listProperties(SKOS.SKOS_NOTES.get("definition"));
+		while (stmtNotesItr.hasNext()) {
+			Statement stmt = stmtNotesItr.next();
+			Note newNote = new Note();
+			newNote.setCreated(thesaurus.getCreated());
+			newNote.setIdentifier(generatorService.generate(Note.class));
+			newNote.setLexicalValue(stmt.getString());
+			newNote.setModified(thesaurus.getDate());
+			RDFNode prefLabel = stmt.getObject();
+			newNote.setLanguage(getNoteLanguage(prefLabel.asLiteral().getLanguage()));
+			newNote.setNoteType(noteTypeService.getNoteTypeById("definition"));
+			newNote.setTerm(preferredTerm);
+			allConceptNotes.add(newNote);
 		}
 
 		return allConceptNotes;
