@@ -147,8 +147,14 @@ public class TermBuilder extends AbstractBuilder {
 		{
 			throw new BusinessException("No preferred label for concept : "+concept.getIdentifier(),
 					"import-no-prefferedlabelterm", new Object[] {concept.getIdentifier()});
+		} else {
+			StmtIterator stmtPrefItr = skosConcept.listProperties(SKOS.PREF_LABEL);
+			while (stmtPrefItr.hasNext()) {
+				Statement stmtPref = stmtPrefItr.next();
+				terms.add(buildTerm(stmtPref,  thesaurus, concept, true, false));
+	
+			}
 		}
-		terms.add(buildTerm(stmtPreferred,  thesaurus, concept, true, false));
 
 		// Alt terms
 		StmtIterator stmtAltItr = skosConcept.listProperties(SKOS.ALT_LABEL);
