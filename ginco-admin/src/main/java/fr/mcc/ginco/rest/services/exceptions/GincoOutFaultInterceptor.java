@@ -3,6 +3,7 @@ package fr.mcc.ginco.rest.services.exceptions;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
@@ -42,7 +43,8 @@ public class GincoOutFaultInterceptor extends AbstractPhaseInterceptor<Message> 
         log.error("Uncaught exception in REST services : ", ex);
 		HttpServletResponse response = (HttpServletResponse)message.getExchange()
 	            .getInMessage().get(AbstractHTTPDestination.HTTP_RESPONSE);
-	        response.setStatus(500);
+	        response.setStatus(200);
+	        response.setContentType("text/html");
 	        try {
 	            response.getOutputStream().write("{success:false, message: 'unknow exception occured, please consult server log'}".getBytes());
 	            response.getOutputStream().flush();
