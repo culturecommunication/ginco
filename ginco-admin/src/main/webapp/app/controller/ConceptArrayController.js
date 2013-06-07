@@ -295,7 +295,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : theConceptArrayPanel.thesaurusData,
-            conceptId : theConceptArrayForm.down('textfield[name="superOrdinateId"]').value,
+            conceptId : theConceptArrayForm.down('hidden[name="superOrdinateId"]').value,
             showTree : false,
             getArrayConcepts : getArrayConcepts,
 			arrayId : arrayId,

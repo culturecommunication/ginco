@@ -39,7 +39,7 @@ Ext.define('GincoApp.model.MainTreeModel', {
     fields: [
         {
             name: 'title',
-            type: 'string'
+            type: 'auto'
         },
         {
             name: 'type',

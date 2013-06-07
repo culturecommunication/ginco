@@ -102,39 +102,6 @@ Ext.define('Thesaurus.ext.tree.Panel', {
 });
 
 
-
-// This function permits to send related objects when we save a model in case of
-// 'hasmany' relation
-Ext.data.writer.Json.override({
-	getRecordData : function(record) {
-		var me = this, i, association, childStore, data = {};
-		data = me.callParent([ record ]);
-
-		/* Iterate over all the hasMany associations */
-		for (i = 0; i < record.associations.length; i++) {
-			association = record.associations.get(i);
-			if (association.type == 'hasMany') {
-				data[association.name] = [];
-				childStore = eval('record.' + association.name + '()');
-
-				// Iterate over all the children in the current association
-				childStore.each(function(childRecord) {
-
-					// Recursively get the record data for children (depth
-					// first)
-					var childData = this.getRecordData.call(this, childRecord);
-					if (childRecord.dirty | childRecord.phantom
-							| (childData != null)) {
-						data[association.name].push(childData);
-						record.setDirty();
-					}
-				}, me);
-			}
-		}
-		return data;
-	}
-});
-
 Ext.define('Thesaurus.ext.utils', {
 	singleton : true,
 	userInfo : null,
@@ -398,3 +365,192 @@ Ext.apply(Ext.form.CheckboxManager,{
         });
     }
 });
+
+
+
+
+Ext.define('Secure.data.writer.Writer', {
+	override : 'Ext.data.writer.Writer',
+    
+    /**
+     * @cfg {Boolean} writeAllFields
+     * True to write all fields from the record to the server. If set to false it will only send the fields that were
+     * modified. Note that any fields that have {@link Ext.data.Field#persist} set to false will still be ignored.
+     */
+    writeAllFields: true,
+    
+    /**
+     * @cfg {String} dateFormat
+     * This is used for each field of type date in the model to format the value before
+     * it is sent to the server.
+     */
+    
+    /**
+     * @cfg {String} nameProperty
+     * This property is used to read the key for each value that will be sent to the server. For example:
+     *
+     *     Ext.define('Person', {
+     *         extend: 'Ext.data.Model',
+     *         fields: [{
+     *             name: 'first',
+     *             mapping: 'firstName'
+     *         }, {
+     *             name: 'last',
+     *             mapping: 'lastName'
+     *         }, {
+     *             name: 'age'
+     *         }]
+     *     });
+     *     new Ext.data.writer.Writer({
+     *         writeAllFields: true,
+     *         nameProperty: 'mapping'
+     *     });
+     *
+     *     // This will be sent to the server
+     *     {
+     *         firstName: 'first name value',
+     *         lastName: 'last name value',
+     *         age: 1
+     *     }
+     *
+     * If the value is not present, the field name will always be used.
+     */
+    nameProperty: 'name',
+
+    /*
+     * @property {Boolean} isWriter
+     * `true` in this class to identify an object as an instantiated Writer, or subclass thereof.
+     */
+    isWriter: true,
+
+    /**
+     * Creates new Writer.
+     * @param {Object} [config] Config object.
+     */
+    constructor: function(config) {
+        Ext.apply(this, config);
+    },
+
+    /**
+     * Prepares a Proxy's Ext.data.Request object
+     * @param {Ext.data.Request} request The request object
+     * @return {Ext.data.Request} The modified request object
+     */
+    write: function(request) {
+        var operation = request.operation,
+            records   = operation.records || [],
+            len       = records.length,
+            i         = 0,
+            data      = [];
+
+        for (; i < len; i++) {
+            data.push(this.getRecordData(records[i], operation));
+        }
+        return this.writeRecords(request, data);
+    },
+
+    /**
+     * Formats the data for each record before sending it to the server. This
+     * method should be overridden to format the data in a way that differs from the default.
+     * @param {Ext.data.Model} record The record that we are writing to the server.
+     * @param {Ext.data.Operation} [operation] An operation object.
+     * @return {Object} An object literal of name/value keys to be written to the server.
+     * By default this method returns the data property on the record.
+     */
+    getRecordData: function(record, operation) {
+        var isPhantom = record.phantom === true,
+            writeAll = this.writeAllFields || isPhantom,
+            fields = record.fields,
+            fieldItems = fields.items,
+            data = {},
+            clientIdProperty = record.clientIdProperty,
+            changes,
+            field,
+            key,
+            value,
+            f, fLen;
+
+        if (writeAll) {
+            fLen = fieldItems.length;
+
+            for (f = 0; f < fLen; f++) {
+                field = fieldItems[f];
+                if (field.persist) {
+                    this.writeValue(data, field, record);
+                }
+            }
+        } else {
+            // Only write the changes
+            changes = record.getChanges();
+            for (key in changes) {
+                if (changes.hasOwnProperty(key)) {
+                    field = fields.get(key);
+                    if (field.persist) {
+                        this.writeValue(data, field, record);
+                    }
+                }
+            }
+        }
+        if (isPhantom) {
+            if (clientIdProperty && operation && operation.records.length > 1) {
+                // include clientId for phantom records, if multiple records are being written to the server in one operation.
+                // The server can then return the clientId with each record so the operation can match the server records with the client records
+                data[clientIdProperty] = record.internalId;
+            }
+        } else {
+            // always include the id for non phantoms
+            data[record.idProperty] = record.getId();
+        }
+        var me = this, i, association, childStore;
+        
+        for (i = 0; i < record.associations.length; i++) {
+			association = record.associations.get(i);
+			if (association.type == 'hasMany') {
+				data[association.name] = [];
+				childStore = eval('record.' + association.name + '()');
+
+				// Iterate over all the children in the current association
+				childStore.each(function(childRecord) {
+
+					// Recursively get the record data for children (depth
+					// first)
+					var childData = this.getRecordData.call(this, childRecord);
+					if (childRecord.dirty | childRecord.phantom
+							| (childData != null)) {
+						data[association.name].push(childData);
+						record.setDirty();
+					}
+				}, me);
+			}
+		}
+
+        return data;
+    },
+    
+    writeValue: function(data, field, record){
+        var name = field[this.nameProperty] || field.name,
+            dateFormat = this.dateFormat || field.dateWriteFormat || field.dateFormat,
+            value = record.get(field.name);
+            
+        if (field.serialize) {
+            data[name] = field.serialize(value, record);
+        } else if (field.type === Ext.data.Types.DATE && dateFormat && Ext.isDate(value)) {
+            data[name] = Ext.Date.format(value, dateFormat);
+        } else {
+        	if (Ext.isString(value))
+        		data[name] = Ext.String.htmlEncode(value);
+        	else 
+        		data[name] = value;
+        }
+    }
+});
+
+Ext.data.Types.STRING = {
+        convert: function(v) {
+           return  Ext.String.htmlDecode(v);
+        },
+        sortType: Ext.data.SortTypes.asUCString,
+        type: 'string'
+	};
+
+
