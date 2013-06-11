@@ -296,6 +296,7 @@ Ext
 																					{
 																						dataIndex : 'lexicalValue',
 																						text : me.xLexicalValueLabel,
+																						renderer: 'htmlEncode',
 																						flex : 1
 																					},
 																					{

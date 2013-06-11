@@ -110,6 +110,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     columns : [
                         {
                             dataIndex : 'code',
+                            renderer: 'htmlEncode',
                             text : me.xCode,
                             editor: {
                                 xtype: 'textfield',
@@ -118,6 +119,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                         },
                         {
                             dataIndex : 'value',
+                            renderer: 'htmlEncode',
                             flex: 1,
                             text : me.xValue,
                             editor: {
@@ -173,6 +175,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                         {
                             dataIndex : 'code',
                             text : me.xCode,
+                            renderer: 'htmlEncode',
                             editor: {
                                 xtype: 'textfield',
                                 allowBlank: false
@@ -181,6 +184,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                         {
                             dataIndex : 'value',
                             flex: 1,
+                            renderer: 'htmlEncode',
                             text : me.xValue,
                             editor: {
                                 xtype: 'textfield',

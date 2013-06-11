@@ -55,7 +55,7 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
         },
         {
             name: 'source',
-            type: 'string'
+            type: 'htmlstring'
         },
         {
             name: 'prefered',

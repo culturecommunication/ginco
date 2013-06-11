@@ -43,7 +43,7 @@ Ext.define('GincoApp.model.ThesaurusNoteModel', {
         },
         {
             name: 'lexicalValue',
-            type: 'string'
+            type: 'htmlstring'
         },
         {
             name: 'language',
@@ -55,7 +55,7 @@ Ext.define('GincoApp.model.ThesaurusNoteModel', {
         },
         {
             name: 'source',
-            type: 'string'
+            type: 'htmlstring'
         },
         {
             name: 'created',

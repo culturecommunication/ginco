@@ -537,20 +537,31 @@ Ext.define('Secure.data.writer.Writer', {
         } else if (field.type === Ext.data.Types.DATE && dateFormat && Ext.isDate(value)) {
             data[name] = Ext.Date.format(value, dateFormat);
         } else {
-        	if (Ext.isString(value))
-        		data[name] = Ext.String.htmlEncode(value);
-        	else 
+        	//if (Ext.isString(value))
+        	//	data[name] = Ext.String.htmlEncode(value);
+        	//else 
         		data[name] = value;
         }
     }
 });
 
-Ext.data.Types.STRING = {
+Ext.data.Types.HTMLSTRING = {
         convert: function(v) {
-           return  Ext.String.htmlDecode(v);
+           //return  Ext.String.htmlDecode(v);
+        	var defaultValue = this.useNull ? null : '';
+            return (v === undefined || v === null) ? defaultValue : String(v);
         },
         sortType: Ext.data.SortTypes.asUCString,
-        type: 'string'
+        type: 'htmlstring'
 	};
 
+Ext.define('Thesaurus.form.field.Text', {
+	override : 'Ext.form.field.Text',
+    valueToRaw: function(value) {
+        return '' + Ext.value(Ext.String.htmlDecode(value), '');
+    },
+    rawToValue: function(rawValue) {
+        return Ext.String.htmlEncode(rawValue);
+    },
+});
 

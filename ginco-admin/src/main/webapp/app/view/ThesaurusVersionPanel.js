@@ -114,6 +114,7 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 					}, {
 						dataIndex : 'versionNote',
 						text : me.xVersionNote,
+						renderer: 'htmlEncode',
 						flex : 1,
 						editor: {
 			                xtype: 'textfield',
