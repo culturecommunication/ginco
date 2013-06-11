@@ -41,15 +41,6 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		var thePanel = theGrid.up('searchPanel');
 		thePanel.setTitle(thePanel.title + ' : '
 				+ thePanel.searchQuery);
-		/*var theStore = theGrid.getStore();
-		theStore.getProxy().setExtraParam('query',
-				thePanel.searchQuery);
-		theStore.load(function(records, operation, success) {
-		    if (success==false) {
-		    	Thesaurus.ext.utils.msg("Warning",
-						operation.error);
-		    }
-		});*/
 	},
 	
 	onDisplayResultBtn : function(theButton) {
