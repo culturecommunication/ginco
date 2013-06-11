@@ -384,8 +384,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             'conceptArrayPanel  #selectParentArray' : {
                 click : this.selectParentArray
             },
-            'conceptArrayPanel  #selectParentArray' : {
-                click : this.selectParentArray
+            'conceptArrayPanel  #selectParentConcept' : { 
+            	click : this.selectParentConcept
             },
             'conceptArrayPanel  #removeParentArray' : {
                 click : this.removeParentArray
