@@ -101,7 +101,6 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
 			failure : function(batch) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel,
 						me.xProblemSaveMsg + " " + batch.operations[0].request.scope.reader.jsonData["message"]);
-				console.log(batch);
 			}
         });
     },

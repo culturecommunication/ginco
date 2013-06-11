@@ -46,7 +46,5 @@ public interface IGenericCustomAttributeTypeService<T extends GenericCustomAttri
     List<T> getAttributeTypesByThesaurus(Thesaurus thesaurus);
     T getAttributeTypeById(int id);
     T saveOrUpdate(T attribute);
-    boolean isUniqueValue(Thesaurus thesaurus, String value);
-    boolean isUniqueCode(Thesaurus thesaurus, String code);
     void deleteAttribute(T attribute);
 }
