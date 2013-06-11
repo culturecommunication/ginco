@@ -41,6 +41,8 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
 import fr.mcc.ginco.services.*;
 import fr.mcc.ginco.utils.DateUtil;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -139,7 +141,7 @@ public class ThesaurusNoteViewConverter {
 	 */
 	public Note convert(ThesaurusNoteView source) throws BusinessException {
 		Note hibernateRes;
-		if ("".equals(source.getIdentifier())) {
+		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new Note();
 			hibernateRes.setCreated(DateUtil.nowDate());
 			hibernateRes.setIdentifier(generatorService.generate(Note.class));
