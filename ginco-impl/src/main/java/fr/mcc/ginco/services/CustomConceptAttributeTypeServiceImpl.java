@@ -58,7 +58,7 @@ public class CustomConceptAttributeTypeServiceImpl implements ICustomConceptAttr
     @Override
     public List<CustomConceptAttributeType> getAttributeTypesByThesaurus(Thesaurus thesaurus) {
         return customConceptAttributeTypeDAO.getAttributesByThesaurus(thesaurus);
-    }
+    }	
 
     @Override
     public CustomConceptAttributeType saveOrUpdate(CustomConceptAttributeType attribute) {
