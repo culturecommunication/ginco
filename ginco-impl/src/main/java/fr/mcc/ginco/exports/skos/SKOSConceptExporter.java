@@ -149,7 +149,7 @@ public class SKOSConceptExporter {
 		addList.add(new AddAssertion(vocab, inScheme));
 
 
-		addList.addAll(skosNotesExporter.exportNotes(concept.getIdentifier(),
+		addList.addAll(skosNotesExporter.exportNotes(concept.getIdentifier(),prefTerms,
 				factory, conceptSKOS, vocab));
 
 		if (parent != null) {

@@ -49,6 +49,7 @@ import org.semanticweb.skos.SKOSDataset;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.INoteService;
 
 /**
@@ -68,10 +69,15 @@ public class SKOSNotesExporter {
 	 * @param thesaurus
 	 * @return
 	 */
-	public List<SKOSChange> exportNotes(String conceptId, SKOSDataFactory factory, SKOSConcept conceptSKOS, SKOSDataset vocab) {
+	public List<SKOSChange> exportNotes(String conceptId,List<ThesaurusTerm> prefTerms, SKOSDataFactory factory, SKOSConcept conceptSKOS, SKOSDataset vocab) {
 		List<SKOSChange> addList = new ArrayList<SKOSChange>();
 		List<Note> notes = noteService.getConceptNotePaginatedList(
 				conceptId, 0, 0);
+		for (ThesaurusTerm prefTerm : prefTerms) {
+			List<Note> termNotes = noteService.getTermNotePaginatedList(prefTerm.getIdentifier(), 0, 0);
+			notes.addAll(termNotes);
+		}
+		
 		for (Note note : notes) {
 			if ("historyNote".equals(note.getNoteType().getCode())) {
 				SKOSDataRelationAssertion noteAssertion = factory
@@ -94,6 +100,14 @@ public class SKOSNotesExporter {
 						.getSKOSDataRelationAssertion(conceptSKOS, factory
 								.getSKOSDataProperty(factory
 										.getSKOSExampleDataProperty()
+										.getURI()), note.getLexicalValue(),
+								note.getLanguage().getPart1());
+				addList.add(new AddAssertion(vocab, noteAssertion));
+			} else if ("definition".equals(note.getNoteType().getCode())) {
+				SKOSDataRelationAssertion noteAssertion = factory
+						.getSKOSDataRelationAssertion(conceptSKOS, factory
+								.getSKOSDataProperty(factory
+										.getSKOSDefinitionDataProperty()
 										.getURI()), note.getLexicalValue(),
 								note.getLanguage().getPart1());
 				addList.add(new AddAssertion(vocab, noteAssertion));
