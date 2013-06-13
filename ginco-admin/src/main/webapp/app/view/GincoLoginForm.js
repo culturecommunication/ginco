@@ -37,6 +37,7 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 	xPasswordLbl : "Password",
 	xLoginBtnLbl : "Login",
 	xLoginErrorLbl : "Identification error. Please retry.",
+	xLockErrorLbl : "Too many authentication failure, the account is disabled temporarily",
 	closable : false,
 	resizable : false,
 	plain : true,
@@ -59,7 +60,14 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 					cls : 'mandatory-field ',
 					text : me.xLoginErrorLbl,
 					hidden : true
-				} ],
+				},
+				 {
+					xtype: 'tbtext',
+					itemId : 'lockmessage',
+					cls : 'mandatory-field ',
+					text : me.xLockErrorLbl,
+					hidden : true
+				}],
 				items : [ {
 					xtype : 'textfield',
 					fieldLabel : me.xUserNameLbl,

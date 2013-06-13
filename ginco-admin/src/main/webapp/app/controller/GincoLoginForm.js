@@ -46,9 +46,12 @@ Ext.define('GincoLoginApp.controller.GincoLoginForm', {
              scope: me
          });
 		var token = decodeURIComponent(Ext.util.History.getHash());
-		if (token=="failure") {
+		if (token=="failure" && !window.accountLocked) {
 			var theMsg = theWin.down('#message');
 			theMsg.setVisible(true);
+		}
+		if (token=="failure" && window.accountLocked) {
+			theWin.down('#lockmessage').setVisible(true);
 		}
 	},
 	init : function() {

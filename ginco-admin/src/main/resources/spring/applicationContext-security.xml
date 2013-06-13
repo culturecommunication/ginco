@@ -7,11 +7,20 @@
 
     <global-method-security pre-post-annotations="enabled" />
     
+    <beans:bean id="lockoutService" 
+         class="fr.mcc.ginco.security.LockoutService"/>
+    
+    <beans:bean id="ApplicationEventListener" 
+         class="fr.mcc.ginco.security.ApplicationEventListener">
+         <beans:property name="lockoutService" ref="lockoutService"/>
+    </beans:bean>
+         
+
     <beans:bean id="gincoUserDetailsContextMapper" class="fr.mcc.ginco.security.GincoUserDetailsContextMapper"/>    
 
 	<ldap-server url="${ldap.base.provider.url}/o=gouv,c=fr"
 		manager-dn="${ldap.security.principal}" manager-password="${ldap.security.credentials}" />
-	<authentication-manager>
+	<authentication-manager alias="authenticationManager">
 		<ldap-authentication-provider
 			user-search-base="ou=personnes" user-search-filter="uid={0}" user-context-mapper-ref="gincoUserDetailsContextMapper" />
 	</authentication-manager>
@@ -25,10 +34,26 @@
 	<http pattern="/images/**" security="none" />
 	<http pattern="/services/ui/revisionservice/**" security="none" />
 	
-	<http use-expressions="true">
+	<http use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
 		<intercept-url pattern="/**" access="isAuthenticated()" />
-		<form-login login-page="/login.jsp" login-processing-url="/login_security_check"
-			authentication-failure-url="/login.jsp#failure" default-target-url="/index.jsp" />
+		<!-- <form-login login-page="/login.jsp" login-processing-url="/login_security_check"
+			authentication-failure-url="/login.jsp#failure" default-target-url="/index.jsp" /> -->
 		<logout logout-url="/logout" />
+		<custom-filter ref="GincoAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
 	</http>
+	
+	<beans:bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+    <beans:property name="loginFormUrl" value="/login.jsp"/>
+	</beans:bean>
+	<beans:bean id="GincoAuthenticationFilter" 
+         class="fr.mcc.ginco.security.AuthenticationFilter">
+         <beans:property name="filterProcessesUrl" value="/login_security_check"/>
+         <beans:property name="authenticationManager" ref="authenticationManager"/>
+         <beans:property name="lockoutService" ref="lockoutService" />
+         <beans:property name="authenticationFailureHandler">
+	        <beans:bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+	            <beans:property name="defaultFailureUrl" value="/login.jsp#failure"/>       
+	        </beans:bean>
+        </beans:property>
+    </beans:bean>
 </beans:beans>
