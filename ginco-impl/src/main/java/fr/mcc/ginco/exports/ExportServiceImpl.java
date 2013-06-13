@@ -257,9 +257,7 @@ public class ExportServiceImpl implements IExportService {
 		List<ThesaurusArray> childrenArray = thesaurusArrayService.getChildrenArrays(subOrdArray.getIdentifier());
 		Collections.sort(childrenArray, nodeLabelComparator);
 		
-		for (ThesaurusArray children : childrenArray) {
-				addThesaurusArray(result, children, base + 1);
-		}
+
 		if (subOrdArray.getOrdered()) {
 			List<ThesaurusConcept> conceptsInArray = thesaurusArrayHelper
 					.getArrayConcepts(subOrdArray.getIdentifier());
@@ -277,6 +275,9 @@ public class ExportServiceImpl implements IExportService {
 								.getThesaurusConceptById(conceptInArray
 										.getIdentifier().getConceptId())));
 			}
+		}
+		for (ThesaurusArray children : childrenArray) {
+			addThesaurusArray(result, children, base + 1);
 		}
 		
 		
