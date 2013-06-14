@@ -77,6 +77,11 @@ Ext
 															buttonConfig : {
 																iconCls : 'upload-icon'
 															}
+														},
+														{
+															xtype : 'hidden',
+															name : Ext.TokenName,
+															value : Ext.TokenValue
 														}],
 
 														buttons : [

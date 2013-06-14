@@ -90,7 +90,11 @@
 		<dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-ldap</artifactId>
-        </dependency>        
+        </dependency>
+        <dependency>
+        		<groupId>org.owasp.csrfguard</groupId>
+        		<artifactId>Owasp.CsrfGuard</artifactId>
+        </dependency>      
 	</dependencies>
 	<build>
 		<resources>

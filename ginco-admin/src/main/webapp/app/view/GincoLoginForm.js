@@ -80,7 +80,12 @@ Ext.define('GincoLoginApp.view.GincoLoginForm', {
 					name : 'j_password',
 					inputType : 'password',
 					allowBlank : false
-				} ],
+				},
+				{
+					xtype : 'hidden',
+					name : Ext.TokenName,
+					value : Ext.TokenValue
+				}],
 				buttons : [ {
 					text : me.xLoginBtnLbl,
 					itemId : 'loginBtn',

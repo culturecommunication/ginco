@@ -28,6 +28,7 @@
 	
 	<http pattern="/login.jsp" security="none" />
 	<http pattern="/*.js" security="none" />
+	<http pattern="/JavaScriptServlet" security="none" />
 	<http pattern="/extjs/**" security="none" />
 	<http pattern="/css/**" security="none" />
 	<http pattern="/app/**" security="none" />

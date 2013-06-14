@@ -13,5 +13,8 @@
     <script type="text/javascript" src="app.js"></script>
     <script type="text/javascript" src="extjs/locale/ext-lang-fr.js"></script>
 </head>
-<body></body>
+<body>
+<!-- OWASP CSRFGuard JavaScript Support -->
+<script src="./JavaScriptServlet"></script>
+</body>
 </html>

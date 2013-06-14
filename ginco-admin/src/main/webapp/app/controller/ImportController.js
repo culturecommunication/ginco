@@ -60,6 +60,13 @@ Ext.define('GincoApp.controller.ImportController', {
 			importUrl = 'services/ui/importservice/importGincoBranchXml?thesaurusId='
 	            + encodeURIComponent(theForm.up('importWindow').thesaurusData.id);
 		}
+		if (importUrl.indexOf('?') != -1)
+		{
+			importUrl = importUrl + '&' + Ext.TokenName + '=' + Ext.TokenValue;
+		} else 
+		{
+			importUrl = importUrl + '?' + Ext.TokenName + '=' + Ext.TokenValue;
+		}
 		
 		
 		if (theForm.getForm()

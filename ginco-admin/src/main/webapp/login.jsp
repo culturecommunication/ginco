@@ -16,5 +16,8 @@
     <script type="text/javascript">window.accountLocked=true;</script>
     <% } %>
 </head>
-<body></body>
+<body>
+<!-- OWASP CSRFGuard JavaScript Support -->
+<script src="./JavaScriptServlet"></script>
+</body>
 </html>

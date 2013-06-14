@@ -441,7 +441,12 @@
                 <groupId>org.apache.solr</groupId>
                 <artifactId>solr-solrj</artifactId>
                 <version>${org.apache.solr}</version>
-            </dependency>            
+            </dependency>  
+            <dependency>
+        		<groupId>org.owasp.csrfguard</groupId>
+        		<artifactId>Owasp.CsrfGuard</artifactId>
+        		<version>3.0.1-SNAPSHOT</version>
+        	</dependency>          
         </dependencies>
     </dependencyManagement>
     <build>
@@ -650,6 +655,11 @@
             <id>smile-github-addon</id>
             <name>Smile Github repository</name>
             <url>http://smile-sa.github.com/maven-repository/releases-addon</url>
+        </repository>
+        <repository>
+        <id>owasp-repo</id>
+        <name>OWASP REPO</name>
+        <url>https://raw.github.com/cdaller/OWASP-CSRFGuard/master/repository</url>
         </repository>
     </repositories>
 </project>
