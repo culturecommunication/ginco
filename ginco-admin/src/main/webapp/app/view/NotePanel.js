@@ -89,6 +89,7 @@ Ext.define('GincoApp.view.NotePanel', {
 							xtype : 'button',
 							itemId : 'newNoteBtn',
 							requiredRoles : ['ADMIN'],
+							iconCls : 'icon-add',
 							text : me.xAddNote
 						}, {
 							xtype : 'pagingtoolbar',
