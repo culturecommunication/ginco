@@ -13,6 +13,7 @@ import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.slf4j.Logger;
 
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.LabelUtil;
 
 
 public class GincoOutFaultInterceptor extends AbstractPhaseInterceptor<Message> {
@@ -46,7 +47,8 @@ public class GincoOutFaultInterceptor extends AbstractPhaseInterceptor<Message> 
 	        response.setStatus(200);
 	        response.setContentType("text/html");
 	        try {
-	            response.getOutputStream().write("{success:false, message: 'unknow exception occured, please consult server log'}".getBytes());
+	        	String msg = "{success:false, message: '"+LabelUtil.getResourceLabel("unknown-exception")+"'}";
+	            response.getOutputStream().write(msg.getBytes());
 	            response.getOutputStream().flush();
 	            message.getInterceptorChain().abort();           
 	        } catch (IOException ioex) {
