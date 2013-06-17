@@ -59,7 +59,7 @@ Ext
 				    xSelectTermWinTitle : 'Select a Term',
 				    xSave: 'Save',
 					width : 500,
-					height : 530,
+					height : 556,
 					title : 'Sélection d\'un terme',
 					titleAlign : 'center',
 					modal : true,
