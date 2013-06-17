@@ -95,6 +95,7 @@ public class IndexerServiceImpl implements IIndexerService {
 	private SolrServer solrServer;
 
 	@Override
+	@Async
 	public void removeTerm(ThesaurusTerm thesaurusTerm)
 			throws TechnicalException {
 		try {
