@@ -38,6 +38,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.semanticweb.owlapi.vocab.DublinCoreVocabulary;
 import org.semanticweb.skos.AddAssertion;
 import org.semanticweb.skos.SKOSAnnotation;
@@ -139,7 +140,7 @@ public class SKOSThesaurusExporter {
 			SKOSConceptScheme conceptScheme, List<SKOSChange> addList,
 			SKOSDataFactory factory, SKOSDataset vocab) {
 		SKOSAnnotation contributor = factory.getSKOSAnnotation(type.getURI(),
-				line);
+				StringEscapeUtils.unescapeHtml4(line));
 		SKOSAnnotationAssertion conAssertion = factory
 				.getSKOSAnnotationAssertion(conceptScheme, contributor);
 		addList.add(new AddAssertion(vocab, conAssertion));

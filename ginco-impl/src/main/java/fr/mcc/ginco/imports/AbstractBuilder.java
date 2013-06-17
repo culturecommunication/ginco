@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.imports;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -61,7 +63,7 @@ public abstract class AbstractBuilder {
 		if (stmt!= null) {
 			String toReturn = stmt.getString();
 			if (toReturn != null) {
-				return toReturn.trim();
+				return StringEscapeUtils.escapeHtml4(toReturn.trim());
 			}
 		} else {
 			if (altProp != null)

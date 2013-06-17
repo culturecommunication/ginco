@@ -188,6 +188,7 @@
 					<excludes>
 						<exclude>**/extjs*/**/*.js</exclude>
 						<exclude>**/extjs*/**/*.css</exclude>
+						<exclude>**/WEB-INF/*.js</exclude>
 					</excludes>
 					<nosuffix>true</nosuffix>
 				</configuration>
