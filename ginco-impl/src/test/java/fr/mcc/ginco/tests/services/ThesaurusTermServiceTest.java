@@ -4,17 +4,26 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.ILanguageDAO;
+import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ThesaurusTermServiceImpl;
@@ -24,6 +33,15 @@ public class ThesaurusTermServiceTest {
 
 	@Mock(name = "thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
+	
+	@Mock(name = "thesaurusDAO")
+	private IThesaurusDAO thesaurusDAO;
+	
+	@Mock(name = "generatorService")
+    private IIDGeneratorService customGeneratorService;
+	
+	@Mock(name = "languageDAO")
+    private ILanguageDAO languageDAO;
 
 	@InjectMocks	
 	private ThesaurusTermServiceImpl thesaurusTermService;
@@ -94,5 +112,23 @@ public class ThesaurusTermServiceTest {
     	ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
     	when(fakeThesaurusTerm.getConcept()).thenReturn(null);
     	thesaurusTermService.getConceptIdByTerm("fakeLexicalValue", "fakeThesaurusId", "fakeLanguageId");
+    }
+    
+    @Test
+    public final void testimportSandBoxTerms() {
+    	
+    	String importContent = "Terme1\nTerme accentué2";
+    	String thesID = "fakeId";
+    	String[] termsSplit = importContent.split("\n|\r\n");
+    	Thesaurus thes = new Thesaurus();
+    	thes.setIdentifier(thesID);
+    	when(thesaurusDAO.getById(thesID)).thenReturn(thes);
+    	when(languageDAO.getById(anyString())).thenReturn(new Language());
+    	when(customGeneratorService.generate(ThesaurusTerm.class)).thenReturn("fakeId");
+    	when(thesaurusTermDAO.update((ThesaurusTerm) Matchers.anyObject())).then(AdditionalAnswers.returnsFirstArg());
+		List<String> termLexicalValues = Arrays.asList(termsSplit);
+    	List<ThesaurusTerm> terms = thesaurusTermService.importSandBoxTerms(termLexicalValues, thesID);
+    	Assert.assertEquals(terms.size(),2);
+    	Assert.assertEquals("Terme accentu&eacute;2", terms.get(1).getLexicalValue());
     }
 }

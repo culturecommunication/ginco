@@ -40,6 +40,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -229,7 +230,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 			for (String  termLexicalValue : termLexicalValues){
 				ThesaurusTerm termToImport = new ThesaurusTerm();
 				termToImport.setIdentifier(customGeneratorService.generate(ThesaurusTerm.class));
-				termToImport.setLexicalValue(termLexicalValue);
+				termToImport.setLexicalValue(StringEscapeUtils.escapeHtml4(termLexicalValue));
 				termToImport.setThesaurus(targetedThesaurus);
 				termToImport.setLanguage(languageDAO.getById(defaultLang));
 				termToImport.setModified(DateUtil.nowDate());
