@@ -88,6 +88,7 @@ Ext.define('GincoApp.view.ThesaurusVersionPanel', {
 						disabled : true
 					},{
 						xtype : 'button',
+						iconCls : 'icon-add',
 						requiredRoles : ['ADMIN'],
 						itemId : 'createThesaurusVersion',
 						text : me.xCreateThesaurusVersion
