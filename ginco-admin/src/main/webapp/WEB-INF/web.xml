@@ -77,11 +77,11 @@
 		</init-param>
 		<init-param>
 			<param-name>inject-into-forms</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
 		</init-param>
 		<init-param>
 			<param-name>inject-into-attributes</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
 		</init-param>
 		<init-param>
 			<param-name>domain-strict</param-name>
@@ -89,7 +89,7 @@
 		</init-param>
 		<init-param>
 			<param-name>referer-pattern</param-name>
-			<param-value>http://localhost:8080.*</param-value>
+			<param-value>.*</param-value>
 		</init-param>
 		<init-param>
 			<param-name>x-requested-with</param-name>
