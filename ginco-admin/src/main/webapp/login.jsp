@@ -12,6 +12,9 @@
     <script type="text/javascript" src="ext-custom-comp.js"></script>
     <script type="text/javascript" src="login.js"></script>
     <script type="text/javascript" src="extjs/locale/ext-lang-fr.js"></script>
+    <% if (session!=null && session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION") instanceof org.springframework.security.core.AuthenticationException) { %>
+    <script type="text/javascript">window.authenticationException=true;</script>
+    <% } %>
     <% if (session!=null && session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION") instanceof org.springframework.security.authentication.LockedException) { %>
     <script type="text/javascript">window.accountLocked=true;</script>
     <% } %>

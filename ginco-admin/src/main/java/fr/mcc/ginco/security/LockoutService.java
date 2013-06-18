@@ -3,7 +3,11 @@ package fr.mcc.ginco.security;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+
+@Service("lockoutService")
 public class LockoutService {
 	
 	private Map<String, LockoutData> lockMap = new HashMap<String, LockoutData>();
@@ -13,8 +17,15 @@ public class LockoutService {
 		long lastMillis;
 	}
 	
-	private static final int DEFAULT_MAX_ATTEMPTS = 3;
-	private static final long DEFAULT_LOCKOUT_SECONDS = 60;
+	@Value("${login.max.attempts}")
+	private int DEFAULT_MAX_ATTEMPTS;
+	
+	public int getMaxAttemps() {
+		return DEFAULT_MAX_ATTEMPTS;
+	}
+
+	@Value("${login.lockout.seconds}")
+	private long DEFAULT_LOCKOUT_SECONDS;
 
 	public boolean isLockedOut(String username) {
 		LockoutData data = getData(username);

@@ -1,5 +1,8 @@
 package fr.mcc.ginco.security;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
@@ -16,18 +19,11 @@ public class ApplicationEventListener implements ApplicationListener<Application
 	@Log
 	private Logger log;
 	 
-	
+	@Inject
+	@Named("lockoutService")
 	private LockoutService lockoutService;
 	
 	
-	public LockoutService getLockoutService() {
-		return lockoutService;
-	}
-
-	public void setLockoutService(LockoutService lockoutService) {
-		this.lockoutService = lockoutService;
-	}
-
 	private void HandleFailureEvent(String username, long timestamp)
 	{
 		if (!lockoutService.isLockedOut(username)) {

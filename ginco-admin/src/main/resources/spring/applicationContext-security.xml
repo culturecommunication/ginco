@@ -7,12 +7,9 @@
 
     <global-method-security pre-post-annotations="enabled" />
     
-    <beans:bean id="lockoutService" 
-         class="fr.mcc.ginco.security.LockoutService"/>
     
     <beans:bean id="ApplicationEventListener" 
          class="fr.mcc.ginco.security.ApplicationEventListener">
-         <beans:property name="lockoutService" ref="lockoutService"/>
     </beans:bean>
          
 
@@ -37,8 +34,6 @@
 	
 	<http use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
 		<intercept-url pattern="/**" access="isAuthenticated()" />
-		<!-- <form-login login-page="/login.jsp" login-processing-url="/login_security_check"
-			authentication-failure-url="/login.jsp#failure" default-target-url="/index.jsp" /> -->
 		<logout logout-url="/logout" />
 		<custom-filter ref="GincoAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
 	</http>
