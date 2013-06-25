@@ -39,6 +39,12 @@ Ext.define('GincoApp.view.GlobalTabPanel', {
     xCloseAllTlt : 'Close all',
     localized : true,
     activeTab: 0,
+    initAria : function() {
+    	var me = this;
+    	me.callParent();
+    	var actionEl = this.getActionEl();
+        actionEl.dom.setAttribute('aria-live', 'polite');
+    },
 
     initComponent: function() {
         var me = this;

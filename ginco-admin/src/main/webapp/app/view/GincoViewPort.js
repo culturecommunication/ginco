@@ -46,10 +46,12 @@ Ext.define('GincoApp.view.GincoViewPort', {
         type: 'border'
     },
 
+
     initComponent: function() {
         var me = this;
 
         Ext.applyIf(me, {
+            ariaRole :  'application',
             items: [
                 {
                     xtype: 'topTabs',

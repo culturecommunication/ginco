@@ -381,7 +381,6 @@ Ext.define('Thesaurus.Ext.tree.View', {
     	 for (; i < len; i++) {
              row = rows[i];
              record = records[i];
-             console.log(record.getDepth());
              if (record.isExpanded()) {
             	 row.rowAttr = 'aria-expanded="true"'; 
              }  else {
@@ -561,9 +560,11 @@ Ext.define('Thesaurus.Acc.Component', {
 	},
 	setDisabled : function(disabled) {
 		var me = this;
-		me.el.set({
-	    	'aria-disabled' : disabled
-		});
+		if (me.el) {
+			me.el.set({
+		    	'aria-disabled' : disabled
+			});
+		}
 
         return this[disabled ? 'disable': 'enable']();
     },
