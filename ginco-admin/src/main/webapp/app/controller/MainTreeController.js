@@ -101,6 +101,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		this.loadTreeView(theTree);
 	},
 	loadTreeView : function(theTree) {
+		theTree.setLoading(true);
 		var treeState,scrollPosition,me = this;
 		if (theTree)
 		{
@@ -113,6 +114,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		if (MainTreeStore.isLoading()==false) {
 			MainTreeStore.load({
 				callback: function (theStore, aOperation){
+					theTree.setLoading(false);
 					if (aOperation.success==false)
 					{
 						Thesaurus.ext.utils.msg(me.xProblemLabel,
@@ -132,9 +134,9 @@ Ext.define('GincoApp.controller.MainTreeController', {
 					}
 					
 					theTree.getView().focus();
-					theTree.getView().getEl().set({tabindex:0});
 					try {
-						theTree.getSelectionModel().select(0);
+						var selectModel = theTree.getSelectionModel()
+						selectModel.select(0);
 					} catch(e) {} 
 			    }
 			});
@@ -144,18 +146,6 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	onRefreshBtnClick : function(theButton) {
 		var theTreeView = theButton.up("treepanel");
 		this.loadTreeView(theTreeView);
-	},
-	onTreeLoad : function(theTree)
-	{
-		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
-		var me = this;
-		this.nav = new Ext.util.KeyNav({
-			target : theTree.getEl(),
-			"enter" : function() {
-				me.onEnterKey(theTree);
-			},
-			scope : me
-		});
 	},
 	onRefreshTreeEvent : function()
 	{
@@ -203,7 +193,6 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			"#mainTreeView" : {
 				beforeitemdblclick : this.onNodeDblClick,
 				render : this.onTreeRender,
-				load : this.onTreeLoad,
 				select : this.onItemSelect
 			},
 			"#mainTreeView #selectBtn" : {

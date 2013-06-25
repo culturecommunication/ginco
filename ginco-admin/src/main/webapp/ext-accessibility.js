@@ -139,6 +139,16 @@ Ext.define('Thesaurus.form.field.Checkbox', {
 	}
 });
 
+Ext.define('ThesaurusExt.toolbar.Toolbar', {
+	override : 'Ext.toolbar.Toolbar',
+	initAria: function() {
+        var me = this;
+        me.callParent();
+        var actionEl = this.getActionEl();
+        actionEl.dom.setAttribute('aria-live', 'polite');
+    }
+});
+
 Ext.define('Thesaurus.view.BoundList', {
 	extend : 'Ext.view.BoundList',
 	alias: 'widget.ariaboundlist',
@@ -263,7 +273,14 @@ Ext.define('Thesaurus.ext.view.View', {
             me.hasFocus = true;
             me.fireEvent('focus', me, e);
         }
+		var selectModel = me.getSelectionModel();
+		var selectedArray = selectModel.getSelection();
+		if (selectedArray.length==0)
+			selectModel.select(0);
+		else
+			selectModel.select(selectedArray[0]);
 	},
+
 	onContainerBlur: function (e) {
 		var me = this,
 			focusCls = me.focusCls;
@@ -274,6 +291,7 @@ Ext.define('Thesaurus.ext.view.View', {
 	afterRender: function(){
         var me = this;
         me.callParent();
+        me.getEl().set({tabindex:0});
         me.mon(me.getTargetEl(), {
             scope: me,
             /*
@@ -301,18 +319,42 @@ Ext.define('Thesaurus.ext.tree.Column', {
 	}
 });
 
+Ext.define('Thesaurus.Ext.selection.RowModel',
+{
+	override : 'Ext.selection.RowModel',
+	initKeyNav : function(view)
+	{
+		var me = this;
+        me.callParent(arguments);
+        view.el.set({
+            tabIndex: 0
+        });
+	}
+});
+
 /*
  * Override treePanel to add aria role
  */
 Ext.define('Thesaurus.Ext.tree.View', {
 	override : 'Ext.tree.View',
 	ariaRole : 'treegrid',
-	initAria: function() {
+	initComponent : function() {
+		var me = this;
+        me.callParent();
+	},
+	refresh : function () {
+		var me = this;
+        me.callParent();
+        me.focus();
+	},
+ 	initAria: function() {
 		var me = this;
         me.callParent();
         var actionEl = this.getActionEl();
         actionEl.dom.setAttribute('aria-readonly', true);
+        actionEl.dom.setAttribute('tabindex', 0);
 	},
+	
 	onRowSelect: function(rowIdx) {
     	var me = this;
         me.callParent();
@@ -339,11 +381,13 @@ Ext.define('Thesaurus.Ext.tree.View', {
     	 for (; i < len; i++) {
              row = rows[i];
              record = records[i];
+             console.log(record.getDepth());
              if (record.isExpanded()) {
             	 row.rowAttr = 'aria-expanded="true"'; 
              }  else {
             	 row.rowAttr = 'aria-expanded="false"';
              }
+             row.rowAttr+=' aria-level="'+record.getDepth()+'"';
             	 
     	 }
     	return data;
@@ -514,7 +558,71 @@ Ext.define('Thesaurus.Acc.Component', {
 		var me = this;
 		me.callParent();
 		me.initAria();
-	}
+	},
+	setDisabled : function(disabled) {
+		var me = this;
+		me.el.set({
+	    	'aria-disabled' : disabled
+		});
+
+        return this[disabled ? 'disable': 'enable']();
+    },
+	focus: function(selectText, delay) {
+        var me = this,
+            focusEl,
+            focusElDom,
+            containerScrollTop;
+
+        
+        if (delay) {
+            if (!me.focusTask) {
+                me.focusTask = new Ext.util.DelayedTask(me.focus);
+            }
+            me.focusTask.delay(Ext.isNumber(delay) ? delay : 10, null, me, [selectText, false]);
+            return me;
+        }
+
+        if (me.rendered && !me.isDestroyed && me.isVisible(true) && (focusEl = me.getFocusEl())) {
+
+            
+            
+            if (focusEl.isComponent) {
+                return focusEl.focus(selectText, delay);
+            }
+
+            
+            if ((focusElDom = focusEl.dom)) {
+
+                
+                if (focusEl.needsTabIndex()) {
+                	//SMILE CHANGE
+                    focusElDom.tabIndex = 0;
+                }
+
+                if (me.floating) {
+                    containerScrollTop = me.container.dom.scrollTop;
+                }
+
+                
+                
+                
+                focusEl.focus();
+                if (selectText === true) {
+                    focusElDom.select();
+                }
+            }
+
+            
+            
+            if (me.floating) {
+                me.toFront(true);
+                if (containerScrollTop !== undefined) {
+                    me.container.dom.scrollTop = containerScrollTop;
+                }
+            }
+        }
+        return me;
+    }
 });
 
 /*
