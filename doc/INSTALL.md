@@ -26,7 +26,7 @@ You should first add the PostGreSQL repository
 > rpm -Uvh http://yum.postgresql.org/9.2/redhat/rhel-6-x86_64/pgdg-centos92-9.2-6.noarch.rpm
 
 Next install postgresql 
-> yum install postgresql postgresql-server postgresql-contrib
+> yum install postgresql92 postgresql92-server postgresql92-contrib
 
 ### Tomcat ###
 
