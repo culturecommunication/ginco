@@ -646,6 +646,16 @@ Ext.define("Thesaurus.dom.Element", {
 	}
 });
 
+Ext.view.TableChunker.metaRowTpl = [
+                                  '<tr class="' + Ext.baseCSSPrefix + 'grid-row {[this.embedRowCls()]}" {[this.embedRowAttr()]}>',
+                                  '<tpl for="columns">',
+                                      '<td role="gridcell" class="{cls} ' + Ext.baseCSSPrefix + 'grid-cell ' + Ext.baseCSSPrefix + 'grid-cell-{columnId} {{id}-modified} {{id}-tdCls} {[this.firstOrLastCls(xindex, xcount)]}" {{id}-tdAttr} aria-labelledby="{columnId}-textEl">',
+                                          '<div role="presentation" {unselectableAttr} class="' + Ext.baseCSSPrefix + 'grid-cell-inner {unselectableCls}" style="text-align: {align}; {{id}-style};">{{id}}</div>',
+                                      '</td>',
+                                  '</tpl>',
+                              '</tr>'
+                          ]
+
 /*
  * Remove border attr from tables
  */
