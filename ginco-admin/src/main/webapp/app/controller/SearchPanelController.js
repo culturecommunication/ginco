@@ -84,11 +84,18 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		theStore.getProxy().setExtraParam('query',
 				thePanel.searchQuery);
 		theStore.getProxy().jsonData=theQueryModel.data;
-		theStore.loadPage(1,function(records, operation, success) {
-		    if (success==false) {
-		    	Thesaurus.ext.utils.msg("Warning",
-						operation.error);
-		    }
+		theStore.loadPage(1,{ scope :this,
+			callback : 	function(records, operation, success) {
+				    if (success==false) {
+				    	Thesaurus.ext.utils.msg("Warning",
+								operation.error);
+				    } else 
+				    {
+				    	if (records.length>0) {
+				    		theGrid.getSelectionModel().select(0);
+				    	}
+				    }
+				}
 		});
 	},
 	

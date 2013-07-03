@@ -135,7 +135,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 					
 					theTree.getView().focus();
 					try {
-						var selectModel = theTree.getSelectionModel()
+						var selectModel = theTree.getSelectionModel();
 						selectModel.select(0);
 					} catch(e) {} 
 			    }

@@ -332,22 +332,9 @@ Ext.define('Thesaurus.Ext.selection.RowModel',
 	}
 });
 
-/*
- * Override treePanel to add aria role
- */
-Ext.define('Thesaurus.Ext.tree.View', {
-	override : 'Ext.tree.View',
-	ariaRole : 'treegrid',
-	initComponent : function() {
-		var me = this;
-        me.callParent();
-	},
-	refresh : function () {
-		var me = this;
-        me.callParent();
-        me.focus();
-	},
- 	initAria: function() {
+Ext.define('Thesaurus.Ext.view.Table', {
+	override : 'Ext.view.Table',
+	initAria: function() {
 		var me = this;
         me.callParent();
         var actionEl = this.getActionEl();
@@ -372,6 +359,25 @@ Ext.define('Thesaurus.Ext.tree.View', {
             Ext.fly(row).set({'aria-selected':false});
         }
     },
+    refresh : function () {
+		var me = this;
+        me.callParent();
+        me.focus();
+	}
+});
+
+/*
+ * Override treePanel to add aria role
+ */
+Ext.define('Thesaurus.Ext.tree.View', {
+	override : 'Ext.tree.View',
+	ariaRole : 'treegrid',
+	initComponent : function() {
+		var me = this;
+        me.callParent();
+	},
+	
+ 	
     collectData: function(records) {
     	var data = this.callParent(arguments),
         rows = data.rows,
@@ -387,7 +393,6 @@ Ext.define('Thesaurus.Ext.tree.View', {
             	 row.rowAttr = 'aria-expanded="false"';
              }
              row.rowAttr+=' aria-level="'+record.getDepth()+'"';
-            	 
     	 }
     	return data;
     }
