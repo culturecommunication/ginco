@@ -260,7 +260,7 @@ ldap.auth.search.filter=(uid={0})
 #################################################
 default.user.login=admin
 default.user.password=admin
-default.user.disabled=true
+default.user.enabled=disabled
 
 #################################################
 # Publish configuration
@@ -277,7 +277,7 @@ You've to configure the following keys in you ginco.properties to configure the 
 
 * default.user.login=admin
 * default.user.password=admin
-* default.user.disabled=false
+* default.user.enabled=enabled
 
 
 
