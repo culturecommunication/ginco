@@ -27,7 +27,7 @@
 	<beans:bean id="inMemoryDaoImpl" class="org.springframework.security.core.userdetails.memory.InMemoryDaoImpl">
   		<beans:property name="userMap">
 			<beans:value>
-				${default.user.login}=${default.user.password},ROLE_ADMIN,${default.user.disabled}
+				${default.user.login}=${default.user.password},ROLE_ADMIN,${default.user.enabled}
 			</beans:value>
 		</beans:property>
 	</beans:bean>
