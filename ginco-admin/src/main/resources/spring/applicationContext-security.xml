@@ -17,7 +17,7 @@
 
 	<ldap-server url="${ldap.base.provider.url}/o=gouv,c=fr"
 		manager-dn="${ldap.security.principal}" manager-password="${ldap.security.credentials}" />
-	<authentication-manager alias="authenticationManager">
+	<authentication-manager alias="authenticationManager" erase-credentials="false">
 		<ldap-authentication-provider 
 			user-search-base="ou=personnes" user-search-filter="uid={0}" user-context-mapper-ref="gincoUserDetailsContextMapper" />
 		<authentication-provider user-service-ref="inMemoryDaoImpl" >
