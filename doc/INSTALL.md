@@ -256,6 +256,13 @@ ldap.security.credentials=isfet
 ldap.auth.search.filter=(uid={0})
 
 #################################################
+# Non LDAP authentication
+#################################################
+default.user.login=admin
+default.user.password=admin
+default.user.disabled=true
+
+#################################################
 # Publish configuration
 #################################################
 publish.path=/tmp/export/publish/
@@ -263,6 +270,16 @@ publish.version.note=Publication
 archive.path=/tmp/export/archive/
 
 ```
+
+#### Non LDAP Authentication####
+
+You've to configure the following keys in you ginco.properties to configure the basic connection
+
+* default.user.login=admin
+* default.user.password=admin
+* default.user.disabled=false
+
+
 
 #### Configuring LDAP####
 
