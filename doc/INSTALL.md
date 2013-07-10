@@ -283,7 +283,7 @@ You've to configure the following keys in you ginco.properties to configure the 
 
 #### Configuring LDAP####
 
-Ginco require an LDAP server for authentication.
+If you want to use an LDAP server for authentication.
 
 You've to configure the following keys in you ginco.properties to configure the LDAP connection
 
@@ -292,6 +292,21 @@ You've to configure the following keys in you ginco.properties to configure the 
 * ldap.security.principal
 * ldap.security.credentials
 * ldap.auth.search.filter
+
+
+#### Managing Admin Users ####
+
+In the current version GINCO has only a simple right management system.
+There's only two profiles.
+* Reader : the user can only read the thesaurus
+* Admin : the user has access to all ginco functions
+ 
+To configure a user has an admin you have to insert his login name into the  admin_user_id table
+
+```
+psql ginco
+insert into admin_user_id values ('admin');
+```
 
 
 
