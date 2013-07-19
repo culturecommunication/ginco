@@ -1,4 +1,3 @@
-
 Instuctions for installation of GINCO-DEMO :
 
 * Download and install virtualisation VirtualBox tool (version 4.2.X) : https://www.virtualbox.org/wiki/Downloads
