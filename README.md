@@ -34,3 +34,7 @@ Installation
 ------------
 
 Read [doc/INSTALL.md] (doc/INSTALL.md)
+
+Demo
+----
+Read [doc/VM_INSTALL.md] (doc/VM_INSTALL.md)
