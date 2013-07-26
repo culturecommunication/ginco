@@ -117,7 +117,7 @@ public class ThesaurusTermServiceTest {
     @Test
     public final void testimportSandBoxTerms() {
     	
-    	String importContent = "Terme1\nTerme accentué2";
+    	String importContent = "Terme1\nTerme accentué2\nTerme <b>XSS</b>";
     	String thesID = "fakeId";
     	String[] termsSplit = importContent.split("\n|\r\n");
     	Thesaurus thes = new Thesaurus();
@@ -128,7 +128,8 @@ public class ThesaurusTermServiceTest {
     	when(thesaurusTermDAO.update((ThesaurusTerm) Matchers.anyObject())).then(AdditionalAnswers.returnsFirstArg());
 		List<String> termLexicalValues = Arrays.asList(termsSplit);
     	List<ThesaurusTerm> terms = thesaurusTermService.importSandBoxTerms(termLexicalValues, thesID);
-    	Assert.assertEquals(terms.size(),2);
-    	Assert.assertEquals("Terme accentu&eacute;2", terms.get(1).getLexicalValue());
+    	Assert.assertEquals(terms.size(),3);
+    	Assert.assertEquals("Terme accentué2", terms.get(1).getLexicalValue());
+    	Assert.assertEquals("Terme &lt;b&gt;XSS&lt;/b&gt;", terms.get(2).getLexicalValue());
     }
 }
