@@ -230,7 +230,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 			for (String  termLexicalValue : termLexicalValues){
 				ThesaurusTerm termToImport = new ThesaurusTerm();
 				termToImport.setIdentifier(customGeneratorService.generate(ThesaurusTerm.class));
-				termToImport.setLexicalValue(StringEscapeUtils.escapeHtml4(termLexicalValue));
+				termToImport.setLexicalValue(StringEscapeUtils.escapeXml(termLexicalValue));
 				termToImport.setThesaurus(targetedThesaurus);
 				termToImport.setLanguage(languageDAO.getById(defaultLang));
 				termToImport.setModified(DateUtil.nowDate());
