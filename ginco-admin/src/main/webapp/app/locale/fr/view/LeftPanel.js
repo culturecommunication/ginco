@@ -39,5 +39,7 @@ Ext.define('GincoApp.locale.fr.view.LeftPanel',
         xRefreshBtnTooltip : "Rafraichir l'explorateur de vocabulaires",
     	xSelectBtnLabel : "Afficher",
     	xSelectBtnToolTip : "Affiche l'élement selectionné",
-    	xFilterLabel : 'Filtrage'
+    	xFilterLabel : 'Filtrage',
+    	xCollapseToolTip : "Cacher l'explorateur de vocabulaires",
+    	xExpandToolTip : "Montrer l'explorateur de vocabulaires"
 });

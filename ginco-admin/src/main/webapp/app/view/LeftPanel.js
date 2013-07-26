@@ -41,6 +41,8 @@ Ext.define('GincoApp.view.LeftPanel', {
 	xSelectBtnLabel : "Display",
 	xSelectBtnToolTip : "Display the selected element",
 	xFilterLabel : 'Filter',
+	xCollapseToolTip : 'Collapse explorer',
+	xExpandToolTip : 'Expand explorer',
 	localized : true,
 	frame : false,
 	width : 270,
@@ -50,6 +52,11 @@ Ext.define('GincoApp.view.LeftPanel', {
 	layout : {
 		type : 'vbox',
 		align : 'stretch'
+	},
+	addTools : function () {
+		var me = this;
+		me.collapseTool.tooltipType= 'title';
+		me.collapseTool.tooltip=me.xCollapseToolTip;
 	},
 
 	initComponent : function() {

@@ -410,7 +410,20 @@ Ext
 			renderTpl : [ '<img id="{id}-toolEl" src="{blank}" class="{baseCls}-{type}" alt="{type}" role="presentation"/>' ],
 			constructor : function(config) {
 				this.callSuper(arguments);
-			}
+			},
+			afterRender: function() {
+				 var me = this;
+				 me.callParent(arguments);
+				 me.el.dom.setAttribute("tabindex", 0);
+				 me.keyNav = new Ext.util.KeyNav(me.el, {
+			            enter: me.onClick,
+			            space: me.onClick,
+			            scope: me
+			        });
+				 if (me.tooltip) {
+					 me.el.dom.setAttribute("title", me.tooltip);
+				 }
+			 }
 		});
 
 /*
@@ -756,22 +769,7 @@ Ext.define('Thesaurus.Ext.form.field.Trigger', {
 		}
 	}
 });
-/*
- * Make ext panel tool keyboard accessible...
- */
-Ext.define('Thesaurus.Ext.panel.Tool', {
-	override : 'Ext.panel.Tool',
-	 afterRender: function() {
-		 var me = this;
-		 me.callParent(arguments);
-		 me.el.dom.setAttribute("tabindex", 0);
-		 me.keyNav = new Ext.util.KeyNav(me.el, {
-	            enter: me.onClick,
-	            space: me.onClick,
-	            scope: me
-	        });
-	 }
-});
+
 
 Ext.define('Thesaurus.Ext.form.field.Display', {
 	override : 'Ext.form.field.Display',
@@ -848,6 +846,12 @@ Ext.define('Thesaurus.focus.manager', {
 		}
 	}
 });
+
+Ext.define('Thesaurus.Ext.button.Button' , {
+	override : 'Ext.button.Button',
+	tooltipType: 'title'
+}	
+);
 
 
 
