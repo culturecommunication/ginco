@@ -63,7 +63,7 @@ public abstract class AbstractBuilder {
 		if (stmt!= null) {
 			String toReturn = stmt.getString();
 			if (toReturn != null) {
-				return StringEscapeUtils.escapeHtml4(toReturn.trim());
+				return StringEscapeUtils.escapeXml(toReturn.trim());
 			}
 		} else {
 			if (altProp != null)
@@ -93,7 +93,7 @@ public abstract class AbstractBuilder {
 		StmtIterator stmtIterator = skosResource.listProperties(prop);
 		while (stmtIterator.hasNext()) {
 			Statement stmt = stmtIterator.next();
-			lines += stmt.getString();
+			lines += StringEscapeUtils.escapeXml(stmt.getString());
 			if (stmtIterator.hasNext()) {
 				lines += "\n";
 			}

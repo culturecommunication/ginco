@@ -39,11 +39,14 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.semanticweb.skos.*;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +103,7 @@ public class SKOSConceptExporter {
             SKOSDataRelationAssertion prefLabelInsertion = factory
                     .getSKOSDataRelationAssertion(conceptSKOS, factory
                             .getSKOSDataProperty(factory.getSKOSPrefLabelProperty()
-                                    .getURI()), prefTerm.getLexicalValue(), prefTerm.getLanguage().getPart1());
+                                    .getURI()), StringEscapeUtils.unescapeXml(prefTerm.getLexicalValue()), prefTerm.getLanguage().getPart1());
             addList.add(new AddAssertion(vocab, prefLabelInsertion));
         }
 
@@ -129,7 +132,7 @@ public class SKOSConceptExporter {
                         .getSKOSDataRelationAssertion(conceptSKOS, factory
                                 .getSKOSDataProperty(factory
                                         .getSKOSHiddenLabelProperty().getURI()),
-                                altLabel.getLexicalValue(), altLabel.getLanguage()
+                                        StringEscapeUtils.unescapeXml(altLabel.getLexicalValue()), altLabel.getLanguage()
                                 .getPart1());
 
                 addList.add(new AddAssertion(vocab, hiddenLabelInsertion));
@@ -138,7 +141,7 @@ public class SKOSConceptExporter {
                         .getSKOSDataRelationAssertion(conceptSKOS, factory
                                 .getSKOSDataProperty(factory
                                         .getSKOSAltLabelProperty().getURI()),
-                                altLabel.getLexicalValue(), altLabel.getLanguage()
+                                        StringEscapeUtils.unescapeXml(altLabel.getLexicalValue()), altLabel.getLanguage()
                                 .getPart1());
 
                 addList.add(new AddAssertion(vocab, altLabelInsertion));

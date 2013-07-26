@@ -38,6 +38,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -48,6 +49,8 @@ import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +58,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +99,7 @@ public class TermBuilder extends AbstractBuilder {
 		term.setConcept(concept);
 		term.setCreated(thesaurus.getCreated());
 		term.setIdentifier(generatorService.generate(ThesaurusTerm.class));
-		term.setLexicalValue(stmt.getString().trim());
+		term.setLexicalValue(StringEscapeUtils.escapeXml(stmt.getString().trim()));
 		term.setModified(thesaurus.getDate());
 		term.setPrefered(preferred);
         term.setHidden(hidden);

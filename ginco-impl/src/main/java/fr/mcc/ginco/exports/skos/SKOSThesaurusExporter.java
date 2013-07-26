@@ -140,7 +140,7 @@ public class SKOSThesaurusExporter {
 			SKOSConceptScheme conceptScheme, List<SKOSChange> addList,
 			SKOSDataFactory factory, SKOSDataset vocab) {
 		SKOSAnnotation contributor = factory.getSKOSAnnotation(type.getURI(),
-				StringEscapeUtils.unescapeHtml4(line));
+				StringEscapeUtils.unescapeXml(line));
 		SKOSAnnotationAssertion conAssertion = factory
 				.getSKOSAnnotationAssertion(conceptScheme, contributor);
 		addList.add(new AddAssertion(vocab, conAssertion));

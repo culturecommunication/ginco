@@ -92,7 +92,7 @@ public class ThesaurusBuilderTest {
 		ThesaurusType fakeType = new ThesaurusType();
 		
 		Mockito.when(thesaurusTypeDAO
-		.getByLabel("Th&eacute;saurus")).thenReturn(fakeType);
+		.getByLabel("Thésaurus")).thenReturn(fakeType);
 		
 		Language french = new Language();
 		french.setId("fr-FR");
@@ -111,12 +111,12 @@ public class ThesaurusBuilderTest {
 				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");
 		
 		Thesaurus actualThesaurus = thesaurusBuilder.buildThesaurus(skosThesaurus, model);	
-		Assert.assertEquals("Th&eacute;saurus des objets mobiliers", actualThesaurus.getTitle());
+		Assert.assertEquals("Thésaurus des objets mobiliers", actualThesaurus.getTitle());
 		Assert.assertEquals(true, actualThesaurus.getSubject().contains("instruments de musique"));
 		Assert.assertEquals(true, actualThesaurus.getContributor().contains("Renaud"));
-		Assert.assertEquals(true, actualThesaurus.getCoverage().contains("de l'Antiquité à nos jours"));
+		Assert.assertEquals(true, actualThesaurus.getCoverage().contains("de l&apos;Antiquité à nos jours"));
 		Assert.assertEquals("Vocabulaire de la désignation des oeuvres mobilières", actualThesaurus.getDescription());
-		Assert.assertEquals("Minist&egrave;re de la culture et de la communication", actualThesaurus.getPublisher());
+		Assert.assertEquals("Ministère de la culture et de la communication", actualThesaurus.getPublisher());
 		Assert.assertEquals("CC-BY-SA", actualThesaurus.getRights());
 		Assert.assertEquals(fakeType, actualThesaurus.getType());	
 		

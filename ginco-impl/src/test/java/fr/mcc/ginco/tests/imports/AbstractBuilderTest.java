@@ -65,7 +65,7 @@ public class AbstractBuilderTest {
 
     	AbstractBuilder abstractBuilder = Mockito.mock(AbstractBuilder.class, Mockito.CALLS_REAL_METHODS);
     	String simpleString = abstractBuilder.getSimpleStringInfo(skosResource, DC.type);
-    	Assert.assertEquals("Th&eacute;saurus", simpleString);    	
+    	Assert.assertEquals("Thésaurus", simpleString);    	
     }
 	
 	@Test
