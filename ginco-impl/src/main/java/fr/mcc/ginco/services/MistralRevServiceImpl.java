@@ -77,7 +77,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 	@Inject
 	@Named("auditReaderService")
 	private AuditReaderService readerService;
-	
+
 	@Inject
 	@Named("gincoSessionFactory")
 	private SessionFactory sessionFactory;
@@ -97,7 +97,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 	@Inject
 	@Named("auditQueryBuilder")
 	private AuditQueryBuilder auditQueryBuilder;
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -124,23 +124,23 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			throw new TechnicalException("Error writing audit log file", e);
 		}
 	}
-	
+
 	@Override
 	public File getAllRevisions(long timestamp,
 			Language language) throws IOException {
 		File res;
-		
+
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("SELECT DISTINCT THESAURUSID FROM REVINFO WHERE REVTSTMP > :pdate");
 		query.setLong("pdate", timestamp);
-		List<String> allThesaurusId = query.list();				
-				
+		List<String> allThesaurusId = query.list();
+
 		try {
 			res = File.createTempFile("pattern", ".suffix");
 
 			res.deleteOnExit();
 			BufferedWriter out = new BufferedWriter(new FileWriter(res));
-			
-			for (String thesaurusId : allThesaurusId){				
+
+			for (String thesaurusId : allThesaurusId){
 				if (thesaurusId != null && thesaurusService.getThesaurusList()
 						.contains(thesaurusService.getThesaurusById(thesaurusId))){
 					List<CommandLine> eventsByThesaurus = getEventsByThesaurus(thesaurusId, timestamp, language);
@@ -168,7 +168,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			throw new TechnicalException("Error writing audit log file", e);
 		}
 	}
-	
+
 	private List<CommandLine> getEventsByThesaurus(String thesaurusId, long timestamp,
 			Language language) throws IOException{
 		Date startDate;
@@ -203,8 +203,8 @@ public class MistralRevServiceImpl implements IMistralRevService {
 				ThesaurusTerm.class, startRevision,
 				thesaurusId);
 		auditQueryBuilder.addFilterOnLanguage(startTermsQuery, language.getId());
-		
-		
+
+
 		List<ThesaurusTerm> oldTerms = startTermsQuery.getResultList();
 		List<ThesaurusTerm> oldTermsWithValidatedConcept = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm term : oldTerms){
@@ -216,8 +216,8 @@ public class MistralRevServiceImpl implements IMistralRevService {
 		AuditQuery endTermsQuery = auditQueryBuilder
 				.getEntityAtRevision(ThesaurusTerm.class, endRevision,
 						thesaurusId);
-		auditQueryBuilder.addFilterOnLanguage(endTermsQuery, language.getId());		
-		
+		auditQueryBuilder.addFilterOnLanguage(endTermsQuery, language.getId());
+
 		List<ThesaurusTerm> newTerms = endTermsQuery.getResultList();
 		List<ThesaurusTerm> newTermsWithValidatedConcept = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm term : newTerms){
@@ -226,15 +226,15 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			}
 		}
 
+
 		allEvents.addAll(termCommandBuilder.buildAddedTermsLines(oldTermsWithValidatedConcept,
+				newTermsWithValidatedConcept, false));
+		allEvents.addAll(termCommandBuilder.buildChangedTermsLines(oldTermsWithValidatedConcept,
 				newTermsWithValidatedConcept));
-		allEvents.addAll(termCommandBuilder.buildChangedTermsLines(oldTermsWithValidatedConcept, 
-				newTermsWithValidatedConcept));
-		
 
 		AuditQuery startConceptQuery = auditQueryBuilder
 				.getEntityAtRevision(ThesaurusConcept.class, startRevision,
-						thesaurusId);	
+						thesaurusId);
 		auditQueryBuilder.getFilterOnStatus(startConceptQuery, ConceptStatusEnum.VALIDATED.getStatus());
 
 		List<ThesaurusConcept> previousConcepts = startConceptQuery
@@ -253,7 +253,10 @@ public class MistralRevServiceImpl implements IMistralRevService {
 		allEvents.addAll(hierarchyCommandBuilder.buildHierarchyChanges(
 				previousConcepts, currentConcepts, startRevision,
 				endRevision, language.getId()));
-		
+
+		allEvents.addAll(termCommandBuilder.buildAddedTermsLines(oldTermsWithValidatedConcept,
+				newTermsWithValidatedConcept, true));
+
 		allEvents.addAll(termCommandBuilder.buildDeletedTermsLines(oldTermsWithValidatedConcept,
 				newTermsWithValidatedConcept));
 		return allEvents;

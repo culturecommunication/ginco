@@ -101,25 +101,25 @@ public class TermCommandBuilderTest {
 		List<ThesaurusTerm> currentTerms = new ArrayList<ThesaurusTerm>();
 
 		Map<String, ThesaurusTerm> newLexicalValues = new HashMap<String, ThesaurusTerm>();
-		
+
 		ThesaurusTerm prefTerm = new ThesaurusTerm();
 		prefTerm.setIdentifier("pref");
 		prefTerm.setLexicalValue("pref");
 		prefTerm.setPrefered(true);
-		
+
 		ThesaurusTerm notPrefTerm = new ThesaurusTerm();
 		notPrefTerm.setIdentifier("notPref");
 		notPrefTerm.setLexicalValue("notPref");
 		notPrefTerm.setPrefered(false);
-		
+
 		List<ThesaurusTerm> notPreferredTermsList = new ArrayList<ThesaurusTerm>();
 		notPreferredTermsList.add(notPrefTerm);
 		Map<String, List<ThesaurusTerm>> notPreferredTerms = new HashMap<String, List<ThesaurusTerm>>();
 		notPreferredTerms.put("pref", notPreferredTermsList);
-		
+
 		newLexicalValues.put("pref", prefTerm);
 		newLexicalValues.put("notPref", notPrefTerm);
-		
+
 		currentTerms.add(prefTerm);
 		currentTerms.add(notPrefTerm);
 
@@ -192,40 +192,11 @@ public class TermCommandBuilderTest {
 
 	}
 
+	/*
+	 * Test preferred terms without not preferred synonymes
+	 */
 	@Test
-	public void testBuildTermsLinesAdded() {
-		List<ThesaurusTerm> currentTerms = new ArrayList<ThesaurusTerm>();
-
-		Map<String, ThesaurusTerm> newLexicalValues = new HashMap<String, ThesaurusTerm>();
-
-		ThesaurusTerm termToAdd = new ThesaurusTerm();
-		termToAdd.setIdentifier("termToAdd");
-		termToAdd.setLexicalValue("termToAdd");
-		newLexicalValues.put("termToAdd", termToAdd);
-		currentTerms.add(termToAdd);
-
-		Mockito.when(mistralStructuresBuilder.getTermVersionsView(currentTerms))
-				.thenReturn(newLexicalValues);
-
-		List<ThesaurusTerm> previousTerms = new ArrayList<ThesaurusTerm>();
-		Map<String, ThesaurusTerm> oldLexicalValues = new HashMap<String, ThesaurusTerm>();
-
-		Mockito.when(
-				mistralStructuresBuilder.getTermVersionsView(previousTerms))
-				.thenReturn(oldLexicalValues);
-
-		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
-				previousTerms, currentTerms);
-
-		List<String> lineValues = new ArrayList<String>();
-		for (CommandLine line : allLines) {
-			lineValues.add(line.getValue());
-		}
-		ListAssert.assertContains(lineValues, "termToAdd");
-	}
-
-	@Test
-	public void testBuildTermsLinesAddedPref() {
+	public void testBuildPrefTermsLinesAdded() {
 		List<ThesaurusTerm> currentTerms = new ArrayList<ThesaurusTerm>();
 
 		Map<String, ThesaurusTerm> newLexicalValues = new HashMap<String, ThesaurusTerm>();
@@ -246,23 +217,81 @@ public class TermCommandBuilderTest {
 		List<ThesaurusTerm> notPreferredTermsList = new ArrayList<ThesaurusTerm>();
 		Map<String, List<ThesaurusTerm>> notPreferredTerms = new HashMap<String, List<ThesaurusTerm>>();
 		notPreferredTerms.put("termToAdd", notPreferredTermsList);
-		
+
 		Mockito.when(
 				mistralStructuresBuilder.getNotPreferredTermsByTerm(currentTerms))
 				.thenReturn(notPreferredTerms);
-		
+
 		Mockito.when(
 				mistralStructuresBuilder.getTermVersionsView(previousTerms))
 				.thenReturn(oldLexicalValues);
 
+		boolean showPreffered = true;
 		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
-				previousTerms, currentTerms);
+				previousTerms, currentTerms, showPreffered);
 
 		List<String> lineValues = new ArrayList<String>();
 		for (CommandLine line : allLines) {
 			lineValues.add(line.getValue());
 		}
+
 		ListAssert.assertContains(lineValues, "termToAdd");
+	}
+
+	/*
+	 * Test preferred terms with preferred synonymes
+	 */
+	@Test
+	public void testBuildTermsLinesAdded() {
+		List<ThesaurusTerm> currentTerms = new ArrayList<ThesaurusTerm>();
+
+		Map<String, ThesaurusTerm> newLexicalValues = new HashMap<String, ThesaurusTerm>();
+
+		ThesaurusTerm prefTermToAdd = new ThesaurusTerm();
+		prefTermToAdd.setIdentifier("prefTermToAdd");
+		prefTermToAdd.setLexicalValue("prefTermToAdd");
+		prefTermToAdd.setPrefered(true);
+
+		ThesaurusTerm notPrefTermToAdd = new ThesaurusTerm();
+		notPrefTermToAdd.setIdentifier("notPrefTermToAdd");
+		notPrefTermToAdd.setLexicalValue("notPrefTermToAdd");
+		notPrefTermToAdd.setPrefered(false);
+
+		newLexicalValues.put("prefTermToAdd", prefTermToAdd);
+		newLexicalValues.put("notPrefTermToAdd", notPrefTermToAdd);
+
+		currentTerms.add(prefTermToAdd);
+		currentTerms.add(notPrefTermToAdd);
+
+		Mockito.when(mistralStructuresBuilder.getTermVersionsView(currentTerms))
+				.thenReturn(newLexicalValues);
+
+		List<ThesaurusTerm> previousTerms = new ArrayList<ThesaurusTerm>();
+		Map<String, ThesaurusTerm> oldLexicalValues = new HashMap<String, ThesaurusTerm>();
+
+		List<ThesaurusTerm> notPreferredTermsList = new ArrayList<ThesaurusTerm>();
+		notPreferredTermsList.add(notPrefTermToAdd);
+
+		Map<String, List<ThesaurusTerm>> notPreferredTerms = new HashMap<String, List<ThesaurusTerm>>();
+		notPreferredTerms.put("prefTermToAdd", notPreferredTermsList);
+
+		Mockito.when(
+				mistralStructuresBuilder.getNotPreferredTermsByTerm(currentTerms))
+				.thenReturn(notPreferredTerms);
+
+		Mockito.when(
+				mistralStructuresBuilder.getTermVersionsView(previousTerms))
+				.thenReturn(oldLexicalValues);
+
+		boolean showPreffered = true;
+		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
+				previousTerms, currentTerms, showPreffered);
+
+		List<String> lineValues = new ArrayList<String>();
+		for (CommandLine line : allLines) {
+			lineValues.add(line.getValue());
+		}
+		ListAssert.assertContains(lineValues, "**prefTermToAdd");
 	}
 
 }

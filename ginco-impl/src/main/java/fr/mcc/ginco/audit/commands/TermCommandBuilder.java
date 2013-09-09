@@ -47,7 +47,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
  * Component in charge of building CommandLine relatives to terms changes
- * 
+ *
  */
 @Service("termCommandBuilder")
 public class TermCommandBuilder {
@@ -58,7 +58,7 @@ public class TermCommandBuilder {
 
 	/**
 	 * Builds the list of command lines for term changes between two revisions
-	 * 
+	 *
 	 * @param previousTerms
 	 * @param currentTerms
 	 * @return
@@ -81,7 +81,7 @@ public class TermCommandBuilder {
 		}
 		return termsOperations;
 	}
-	
+
 	public List<CommandLine> buildChangedTermsLines(List<ThesaurusTerm> previousTerms,
 			List<ThesaurusTerm> currentTerms){
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
@@ -90,8 +90,8 @@ public class TermCommandBuilder {
 				.getTermVersionsView(currentTerms);
 		Map<String, List<ThesaurusTerm>> newNotPreferredTermsByTerm = mistralStructuresBuilder
 				.getNotPreferredTermsByTerm(currentTerms);
-		
-		
+
+
 		for (ThesaurusTerm oldTerm : previousTerms) {
 			if (newLexicalvalues.containsKey(oldTerm.getLexicalValue())) {
 				if (oldTerm.getPrefered() != newLexicalvalues.get(
@@ -107,7 +107,7 @@ public class TermCommandBuilder {
 						}
 						termsOperations.add(preferredLine);
 
-					} else {
+					} else{
 						CommandLine unpreferredLine = new CommandLine();
 						unpreferredLine.setValue(CommandLine.UNPREFERRERD
 								+ oldTerm.getLexicalValue());
@@ -118,9 +118,9 @@ public class TermCommandBuilder {
 		}
 		return termsOperations;
 	}
-	
+
 	public List<CommandLine> buildAddedTermsLines(List<ThesaurusTerm> previousTerms,
-			List<ThesaurusTerm> currentTerms) {
+			List<ThesaurusTerm> currentTerms, boolean showPreffered) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
 		Map<String, ThesaurusTerm> oldLexicalValues = mistralStructuresBuilder
@@ -128,23 +128,20 @@ public class TermCommandBuilder {
 
 		Map<String, List<ThesaurusTerm>> newNotPreferredTermsByTerm = mistralStructuresBuilder
 				.getNotPreferredTermsByTerm(currentTerms);
-		
-		// Terms addition
+
 		for (ThesaurusTerm currentTerm : currentTerms) {
-			if (!oldLexicalValues.containsKey(currentTerm.getLexicalValue())) {
+			if (!oldLexicalValues.containsKey(currentTerm.getLexicalValue())
+					&& showPreffered == currentTerm.getPrefered()) {
 				CommandLine additionLine = new CommandLine();
-				
 				if (currentTerm.getPrefered() != null
 						&& currentTerm.getPrefered()
 						&& !newNotPreferredTermsByTerm.get(currentTerm.getLexicalValue()).isEmpty()){
-					
-					additionLine.setValue(CommandLine.STARS
-							+ currentTerm.getLexicalValue());
-
-				} else {
+						additionLine.setValue(CommandLine.STARS
+								+ currentTerm.getLexicalValue());
+				} else{
 					additionLine.setValue(currentTerm.getLexicalValue());
 				}
-				termsOperations.add(additionLine);
+					termsOperations.add(additionLine);
 			}
 		}
 		return termsOperations;
