@@ -226,9 +226,6 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			}
 		}
 
-
-		allEvents.addAll(termCommandBuilder.buildAddedTermsLines(oldTermsWithValidatedConcept,
-				newTermsWithValidatedConcept, false));
 		allEvents.addAll(termCommandBuilder.buildChangedTermsLines(oldTermsWithValidatedConcept,
 				newTermsWithValidatedConcept));
 
@@ -254,8 +251,8 @@ public class MistralRevServiceImpl implements IMistralRevService {
 				previousConcepts, currentConcepts, startRevision,
 				endRevision, language.getId()));
 
-		allEvents.addAll(termCommandBuilder.buildAddedTermsLines(oldTermsWithValidatedConcept,
-				newTermsWithValidatedConcept, true));
+		allEvents.addAll(termCommandBuilder.buildAddedPrefTermsLines(oldTermsWithValidatedConcept,
+				newTermsWithValidatedConcept));
 
 		allEvents.addAll(termCommandBuilder.buildDeletedTermsLines(oldTermsWithValidatedConcept,
 				newTermsWithValidatedConcept));

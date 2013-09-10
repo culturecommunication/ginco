@@ -226,9 +226,8 @@ public class TermCommandBuilderTest {
 				mistralStructuresBuilder.getTermVersionsView(previousTerms))
 				.thenReturn(oldLexicalValues);
 
-		boolean showPreffered = true;
-		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
-				previousTerms, currentTerms, showPreffered);
+		List<CommandLine> allLines = termCommandBuilder.buildAddedPrefTermsLines(
+				previousTerms, currentTerms);
 
 		List<String> lineValues = new ArrayList<String>();
 		for (CommandLine line : allLines) {
@@ -283,9 +282,8 @@ public class TermCommandBuilderTest {
 				mistralStructuresBuilder.getTermVersionsView(previousTerms))
 				.thenReturn(oldLexicalValues);
 
-		boolean showPreffered = true;
-		List<CommandLine> allLines = termCommandBuilder.buildAddedTermsLines(
-				previousTerms, currentTerms, showPreffered);
+		List<CommandLine> allLines = termCommandBuilder.buildAddedPrefTermsLines(
+				previousTerms, currentTerms);
 
 		List<String> lineValues = new ArrayList<String>();
 		for (CommandLine line : allLines) {

@@ -119,8 +119,8 @@ public class TermCommandBuilder {
 		return termsOperations;
 	}
 
-	public List<CommandLine> buildAddedTermsLines(List<ThesaurusTerm> previousTerms,
-			List<ThesaurusTerm> currentTerms, boolean showPreffered) {
+	public List<CommandLine> buildAddedPrefTermsLines(List<ThesaurusTerm> previousTerms,
+			List<ThesaurusTerm> currentTerms) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
 		Map<String, ThesaurusTerm> oldLexicalValues = mistralStructuresBuilder
@@ -131,17 +131,15 @@ public class TermCommandBuilder {
 
 		for (ThesaurusTerm currentTerm : currentTerms) {
 			if (!oldLexicalValues.containsKey(currentTerm.getLexicalValue())
-					&& showPreffered == currentTerm.getPrefered()) {
+					&& currentTerm.getPrefered()) {
 				CommandLine additionLine = new CommandLine();
-				if (currentTerm.getPrefered() != null
-						&& currentTerm.getPrefered()
-						&& !newNotPreferredTermsByTerm.get(currentTerm.getLexicalValue()).isEmpty()){
+				if (!newNotPreferredTermsByTerm.get(currentTerm.getLexicalValue()).isEmpty()){
 						additionLine.setValue(CommandLine.STARS
 								+ currentTerm.getLexicalValue());
 				} else{
 					additionLine.setValue(currentTerm.getLexicalValue());
 				}
-					termsOperations.add(additionLine);
+				termsOperations.add(additionLine);
 			}
 		}
 		return termsOperations;
