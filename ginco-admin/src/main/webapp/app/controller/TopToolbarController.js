@@ -35,6 +35,11 @@
 
 Ext.define('GincoApp.controller.TopToolbarController', {
 	extend : 'Ext.app.Controller',
+	
+	localized : true,
+	
+	xImportSkosTitle : 'Import SKOS',
+	xImportGincoXmlTitle : 'Import XML Ginco',
 
 	views : [ 'TopToolbar' ],
 	
@@ -55,11 +60,13 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		return aNewPanel;
 	},	
 	onImportBtnClick: function(theButton) {
-		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>Import SKOS</h1>'});
+		var me = this;
+		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>'+ me.xImportSkosTitle + '</h1>'});
 	},
 
 	onImportGincoXmlBtnClick: function(theButton) {
-		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoxml', xTitleLabel: '<h1>Import XML Ginco</h1>'});
+		var me = this;
+		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoxml', xTitleLabel: '<h1>'+ me.xImportGincoXmlTitle + '</h1>'});
 	},
 	
 	onUserInfoLoaded : function(theController) {

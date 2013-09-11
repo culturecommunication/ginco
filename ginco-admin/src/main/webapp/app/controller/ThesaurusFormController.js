@@ -54,6 +54,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xProblemArchiveMsg : "Error archiving Thesaurus!",
     xWarningChangedPoly : "Attention! You are going to change polyhierarchism of thesaurus, do it on your own risk!",
     xWarningChangedLanguages : "There may be terms in this language. Do it on your own risk!",
+    xImportTermsTitle : "Import terms",
+    xImportBranchTitle : "Import branch",
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -226,7 +228,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
     
     importBranch : function(theButton) {
-		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>Importer une branche</h1>'});
+    	var me = this;
+    	Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>' + me.xImportBranchTitle + '</h1>'});
 	},
 
     exportHierarchical : function(theButton) {
@@ -323,7 +326,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
     
     importSandboxClick : function(theButton) {
-    	Ext.create('GincoApp.view.ImportWin', {importType: 'txt',thesaurusData:theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>Import sandbox terms</h1>'});
+    	var me = this;
+    	Ext.create('GincoApp.view.ImportWin', {importType : 'txt', thesaurusData : theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>'+me.xImportTermsTitle+'</h1>'});
     },
 
 	init : function(application) {
