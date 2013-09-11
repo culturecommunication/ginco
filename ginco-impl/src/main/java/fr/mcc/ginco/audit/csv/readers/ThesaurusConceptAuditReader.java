@@ -58,6 +58,8 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
 
 /**
  * Queries the thesaurus concept audit tables and build RevisionLine or
@@ -129,21 +131,22 @@ public class ThesaurusConceptAuditReader {
 						.getConceptPreviousVersion(revision,
 								concept.getIdentifier());
 
-				Set<String> oldGenericConceptIds = new HashSet<String>();
+				/*Set<String> oldGenericConceptValues = new HashSet<String>();
 				if (previousConcept != null) {
-					oldGenericConceptIds = getConceptIds(previousConcept
+					oldGenericConceptValues = getConceptLexicalValues(previousConcept
 							.getParentConcepts());
 				}
 				Set<ThesaurusConcept> parentConcepts = concept
 						.getParentConcepts();
-				Set<String> actualConceptIds = new HashSet<String>();
-				for (ThesaurusConcept parentConcept : parentConcepts) {
-					actualConceptIds.add(parentConcept.getIdentifier());
-				}
+				Set<String> actualConceptValues = new HashSet<String>();
+				actualConceptValues = getConceptLexicalValues(parentConcepts);*/
+//				for (ThesaurusConcept parentConcept : parentConcepts) {
+//					actualConceptIds.add(parentConcept.getIdentifier());
+//				}
 
 				JournalLine journalLine = journalLineBuilder
 						.buildConceptHierarchyChanged(concept, revision,
-								oldGenericConceptIds, actualConceptIds);
+								previousConcept.getParentConcepts(), concept.getParentConcepts());
 
 				allEvents.add(journalLine);
 			}
@@ -180,13 +183,4 @@ public class ThesaurusConceptAuditReader {
 		}
 		return allEvents;
 	}
-
-	private Set<String> getConceptIds(Set<ThesaurusConcept> concepts) {
-		Set<String> conceptIds = new HashSet<String>();
-		for (ThesaurusConcept concept : concepts) {
-			conceptIds.add(concept.getIdentifier());
-		}
-		return conceptIds;
-	}
-
 }

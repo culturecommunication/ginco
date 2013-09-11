@@ -34,13 +34,19 @@
  */
 package fr.mcc.ginco.audit.csv;
 
+import java.util.HashSet;
 import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
 
 /**
  * Implementation of {@link RevisionLineBuilder} for CSV export
@@ -48,6 +54,10 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
  */
 @Service("journalLineBuilder")
 public class JournalLineBuilder{
+	
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 	/**
 	 * Builds the basic common informations of a revision line
@@ -161,15 +171,42 @@ public class JournalLineBuilder{
 	 */
 	public JournalLine buildConceptHierarchyChanged(
 			ThesaurusConcept conceptAtRevision, GincoRevEntity revision,
-			Set<String> oldGenericConceptIds, Set<String> actualConceptIds) {
+			Set<ThesaurusConcept> oldGenericConcept, Set<ThesaurusConcept> currentGenericConcept) {
 		JournalLine journal = buildLineBase(
 				JournalEventsEnum.THESAURUSCONCEPT_HIERARCHY_UPDATE,
 				revision);
 		journal.setConceptId(conceptAtRevision.getIdentifier());
-		journal.setNewGenericTerm(actualConceptIds);
-		journal.setOldGenericTerm(oldGenericConceptIds);
+		journal.setNewGenericTerm(getConceptLabel(currentGenericConcept));
+		
+		journal.setOldGenericTerm(getConceptLabel(oldGenericConcept));
 
 		return journal;
 	}
-
+	
+	private Set<String> getConceptLabel(Set<ThesaurusConcept> concepts) {
+		Set<String> conceptLabels = new HashSet<String>();
+		for (ThesaurusConcept concept : concepts) {
+			String conceptId = concept.getIdentifier();
+			String conceptLexicalValue = thesaurusConceptService.getConceptLabel(concept.getIdentifier());
+			conceptLabels.add(conceptLexicalValue + " (" + conceptId + ")");
+		}
+		return conceptLabels;
+	}	
+/*	
+	private Set<String> getConceptIds(Set<ThesaurusConcept> concepts) {
+		Set<String> conceptIds = new HashSet<String>();
+		for (ThesaurusConcept concept : concepts) {
+			conceptIds.add(concept.getIdentifier());
+		}
+		return conceptIds;
+	}
+	
+	private Set<String> getConceptLexicalValues(Set<ThesaurusConcept> concepts) {
+		Set<String> conceptLexicalValues = new HashSet<String>();
+		for (ThesaurusConcept concept : concepts) {
+			conceptLexicalValues.add(thesaurusConceptService.getConceptLabel(concept.getIdentifier()));
+		}
+		return conceptLexicalValues;
+	}
+*/
 }
