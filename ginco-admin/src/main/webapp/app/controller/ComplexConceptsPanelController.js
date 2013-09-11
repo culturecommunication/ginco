@@ -65,8 +65,22 @@ Ext.define('GincoApp.controller.ComplexConceptsPanelController',
 				var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 				topTabs.fireEvent('opencomplexconcepttab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
 			},
+			refreshComplexConceptList : function(thesaurusData)
+			{
+				var complexConceptListTabs = Ext.ComponentQuery.query('topTabs complexconceptsPanel');
+				Ext.Array.each(complexConceptListTabs, function(complexConceptList, index, array) {
+					if (complexConceptList.thesaurusData.id ==  thesaurusData.id) {
+						var complexConceptGrid= complexConceptList.down("gridpanel");
+						complexConceptGrid.getStore().load();
+					}
+				});
+			},
 
 			init : function() {
+				this.application.on({
+					termupdated : this.refreshComplexConceptList,
+					termdeleted : this.refreshComplexConceptList,
+				});
 				this.control({
 					'complexconceptsPanel gridpanel' : {
 						render : this.onGridRender,
