@@ -130,24 +130,18 @@ public class ThesaurusConceptAuditReader {
 				ThesaurusConcept previousConcept = auditHelper
 						.getConceptPreviousVersion(revision,
 								concept.getIdentifier());
-
-				/*Set<String> oldGenericConceptValues = new HashSet<String>();
+				
+				
+				Set<ThesaurusConcept> oldGenericConcepts = new HashSet<ThesaurusConcept>();
 				if (previousConcept != null) {
-					oldGenericConceptValues = getConceptLexicalValues(previousConcept
-							.getParentConcepts());
-				}
-				Set<ThesaurusConcept> parentConcepts = concept
-						.getParentConcepts();
-				Set<String> actualConceptValues = new HashSet<String>();
-				actualConceptValues = getConceptLexicalValues(parentConcepts);*/
-//				for (ThesaurusConcept parentConcept : parentConcepts) {
-//					actualConceptIds.add(parentConcept.getIdentifier());
-//				}
-
+					oldGenericConcepts = previousConcept.getParentConcepts();
+			    }
+				
 				JournalLine journalLine = journalLineBuilder
 						.buildConceptHierarchyChanged(concept, revision,
-								previousConcept.getParentConcepts(), concept.getParentConcepts());
-
+								oldGenericConcepts,
+								concept.getParentConcepts());
+				
 				allEvents.add(journalLine);
 			}
 		} catch (AuditException ae) {

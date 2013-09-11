@@ -191,22 +191,5 @@ public class JournalLineBuilder{
 			conceptLabels.add(conceptLexicalValue + " (" + conceptId + ")");
 		}
 		return conceptLabels;
-	}	
-/*	
-	private Set<String> getConceptIds(Set<ThesaurusConcept> concepts) {
-		Set<String> conceptIds = new HashSet<String>();
-		for (ThesaurusConcept concept : concepts) {
-			conceptIds.add(concept.getIdentifier());
-		}
-		return conceptIds;
 	}
-	
-	private Set<String> getConceptLexicalValues(Set<ThesaurusConcept> concepts) {
-		Set<String> conceptLexicalValues = new HashSet<String>();
-		for (ThesaurusConcept concept : concepts) {
-			conceptLexicalValues.add(thesaurusConceptService.getConceptLabel(concept.getIdentifier()));
-		}
-		return conceptLexicalValues;
-	}
-*/
 }
