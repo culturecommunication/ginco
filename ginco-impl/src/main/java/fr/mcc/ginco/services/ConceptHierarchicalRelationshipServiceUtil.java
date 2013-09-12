@@ -35,7 +35,6 @@
 package fr.mcc.ginco.services;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -112,8 +111,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		
 		List<String> newParentConceptIds = new ArrayList<String>();
 		for (ConceptHierarchicalRelationship relation : hierarchicalRelationships) {
-			newParentConceptIds.add(relation.getIdentifier()
-					.getParentconceptid());
+			newParentConceptIds.add(relation.getIdentifier().getParentconceptid());
 		}
 		
 		for (ThesaurusConcept childConcept : childrenConcepts)
@@ -130,10 +128,11 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		// Verify if the concept doesn't have one of its brothers as parent
 		List<String> commonIds;
 		for (String currentParentId : newParentConceptIds){
-			// Comparer newParentConceptId avec la liste des enfants de parentId
 			List<String> childrenOfCurrentParentIds = ThesaurusConceptUtils
 					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId));
 			commonIds = new ArrayList<String>(newParentConceptIds);
+			// Compare both lists and see which elements are in common. 
+			// Those elements are both parents and brothers to the considered concept.
 			commonIds.retainAll(childrenOfCurrentParentIds);
 			
 			if( !commonIds.isEmpty() ){
@@ -142,7 +141,6 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 					if( commonIds.indexOf(conceptId) != 0){
 						commonPreferedTerms += ", ";
 					}
-					//TODO remplacer thesaurusConceptService, on ne peut pas l'injecter.
 					commonPreferedTerms += thesaurusTermDAO.getConceptPreferredTerm(conceptId).getLexicalValue();
 				}
 				throw new BusinessException(
@@ -168,8 +166,6 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 		if (!addedParentConcepts.isEmpty() || !removedParentConcepts.isEmpty()) {
 			// Treatment in case of modified hierarchy (both add or remove)
-			
-			//ACOMBES
 			
 			// We remove this concept in all array it belongs
 			List<ThesaurusArrayConcept> arrays = thesaurusArrayConceptDAO.getArraysOfConcept(conceptToUpdate);

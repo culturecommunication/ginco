@@ -49,6 +49,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -424,5 +425,49 @@ public class ThesaurusConceptServiceTest {
 		List<ThesaurusConcept> returnedConcepts = thesaurusConceptService.getAssociatedConcepts("anyString");
 
 		Assert.assertEquals(2, returnedConcepts.size());*/
-	}	
+	}
+	
+	/**
+	 * Succeeds if BusinessException 
+	 */
+	@Test(expected=BusinessException.class)
+	public void testHierarchieBrotherAsParent() {
+		final ThesaurusConcept parentConcept = new ThesaurusConcept();
+		parentConcept.setIdentifier("parentConcept");
+		final ThesaurusConcept brotherConcept = new ThesaurusConcept();
+		brotherConcept.setIdentifier("brotherConcept");
+		final ThesaurusConcept conflictConcept = new ThesaurusConcept();
+		conflictConcept.setIdentifier("conflictConcept");
+		
+		// Creation of the Hierarchical relationships
+		List<ConceptHierarchicalRelationship> conceptHierarchicalRelationshipList = new ArrayList<ConceptHierarchicalRelationship>();
+		
+		ConceptHierarchicalRelationship relationshipParentConflictConcepts = new ConceptHierarchicalRelationship();
+		ConceptHierarchicalRelationship.Id id1 = new ConceptHierarchicalRelationship.Id();
+		id1.setChildconceptid("conflictConcept");
+		id1.setParentconceptid("parentConcept");
+        relationshipParentConflictConcepts.setIdentifier(id1);
+		conceptHierarchicalRelationshipList.add(relationshipParentConflictConcepts);
+		
+		ConceptHierarchicalRelationship relationshipBrotherConflictConcepts = new ConceptHierarchicalRelationship();
+		ConceptHierarchicalRelationship.Id id2 = new ConceptHierarchicalRelationship.Id();
+		id2.setChildconceptid("conflictConcept");
+		id2.setParentconceptid("brotherConcept");
+		relationshipBrotherConflictConcepts.setIdentifier(id2);
+		conceptHierarchicalRelationshipList.add(relationshipBrotherConflictConcepts);
+		
+		// Mocks
+		List<ThesaurusConcept> childrenOfParentConcept = new ArrayList<ThesaurusConcept>();
+		childrenOfParentConcept.add(brotherConcept);
+		when(thesaurusConceptDAO.getChildrenConcepts("parentConcept")).thenReturn(childrenOfParentConcept);
+		
+		ThesaurusTerm dummyTerm = new ThesaurusTerm();
+		dummyTerm.setLexicalValue("dummy Value");
+		when(thesaurusTermDAO.getConceptPreferredTerm(anyString())).thenReturn(dummyTerm);
+		
+		conceptHierarchicalRelationshipServiceUtil.saveHierarchicalRelationship(
+				conflictConcept,
+				conceptHierarchicalRelationshipList,
+				new ArrayList<ThesaurusConcept>());
+	}
 }
