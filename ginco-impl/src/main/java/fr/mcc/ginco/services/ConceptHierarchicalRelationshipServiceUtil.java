@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -56,6 +57,7 @@ import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.ThesaurusConceptUtils;
@@ -79,6 +81,10 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
+	
+	@Inject
+	@Named("thesaurusTermDAO")
+	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@Inject
 	@Named("conceptHierarchicalRelationshipDAO")
@@ -120,6 +126,31 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 			}
 		}
 
+		
+		// Verify if the concept doesn't have one of its brothers as parent
+		List<String> commonIds;
+		for (String currentParentId : newParentConceptIds){
+			// Comparer newParentConceptId avec la liste des enfants de parentId
+			List<String> childrenOfCurrentParentIds = ThesaurusConceptUtils
+					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId));
+			commonIds = new ArrayList<String>(newParentConceptIds);
+			commonIds.retainAll(childrenOfCurrentParentIds);
+			
+			if( !commonIds.isEmpty() ){
+				String commonPreferedTerms = "";
+				for(String conceptId : commonIds){
+					if( commonIds.indexOf(conceptId) != 0){
+						commonPreferedTerms += ", ";
+					}
+					//TODO remplacer thesaurusConceptService, on ne peut pas l'injecter.
+					commonPreferedTerms += thesaurusTermDAO.getConceptPreferredTerm(conceptId).getLexicalValue();
+				}
+				throw new BusinessException(
+						"A concept cannot have one of its brother ("+ commonPreferedTerms +") as a parent",
+						"hierarchical-brotherIsParent-violation", new Object[] {commonPreferedTerms});
+			}
+		}
+		
 		List<String> addedParentConceptIds = ListUtils.subtract(
 				newParentConceptIds, oldParentConceptIds);
 		List<String> removedParentConceptIds = ListUtils.subtract(
@@ -137,7 +168,9 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 		if (!addedParentConcepts.isEmpty() || !removedParentConcepts.isEmpty()) {
 			// Treatment in case of modified hierarchy (both add or remove)
-
+			
+			//ACOMBES
+			
 			// We remove this concept in all array it belongs
 			List<ThesaurusArrayConcept> arrays = thesaurusArrayConceptDAO.getArraysOfConcept(conceptToUpdate);
 			for (ThesaurusArrayConcept thesaurusArrayConcept : arrays) {
