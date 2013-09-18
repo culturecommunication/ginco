@@ -123,6 +123,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     public Thesaurus getDefaultThesaurus(){
     	Thesaurus defaultThesaurus = new Thesaurus();
     	defaultThesaurus.setPublisher(LabelUtil.getDefaultLabel("thesaurus.publisher"));
+    	defaultThesaurus.setTitle(LabelUtil.getDefaultLabel("thesaurus.title"));
     	return defaultThesaurus;
     }
 
