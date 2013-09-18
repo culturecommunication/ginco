@@ -64,6 +64,7 @@ import fr.mcc.ginco.exports.IGincoThesaurusExportService;
 import fr.mcc.ginco.exports.ISKOSExportService;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
 import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.LanguageComparator;
 
 /**
@@ -75,7 +76,7 @@ import fr.mcc.ginco.utils.LanguageComparator;
 public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Value("${ginco.default.language}")
-	private String defaultLang;	
+	private String defaultLang;
 
     @Value("${publish.path}")
     private String publishPath;
@@ -94,15 +95,15 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Inject
     @Named("skosExportService")
     private ISKOSExportService exportService;
-	
+
 	@Inject
 	@Named("thesaurusVersionHistoryDAO")
-	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;	
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Inject
 	@Named("thesaurusHelper")
 	private ThesaurusHelper	thesaurusHelper;
-	
+
     @Inject
     @Named("gincoThesaurusExportService")
     private IGincoThesaurusExportService gincoThesaurusExportService;
@@ -110,7 +111,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.mcc.ginco.IThesaurusService#getThesaurusById(java.lang.String)
 	 */
     @Override
@@ -118,9 +119,16 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 		return thesaurusDAO.getById(id);
 	}
 
+    @Override
+    public Thesaurus getDefaultThesaurus(){
+    	Thesaurus defaultThesaurus = new Thesaurus();
+    	defaultThesaurus.setPublisher(LabelUtil.getDefaultLabel("thesaurus.publisher"));
+    	return defaultThesaurus;
+    }
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.mcc.ginco.IThesaurusService#getThesaurusList()
 	 */
 	@Override
@@ -130,7 +138,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.IThesaurusService#updateThesaurus(fr.mcc.ginco.beans.Thesaurus
 	 * , fr.mcc.ginco.beans.users.IUser)
@@ -139,12 +147,12 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	@Override
 	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
 		 Thesaurus result = thesaurusDAO.update(object);
-		 
+
 		 //We get the versions of the thesaurus we are creating/updating
 		 //If no version, we initialize one with status PROJECT
 		 List<ThesaurusVersionHistory> versionsOfCurrentThesaurus = thesaurusVersionHistoryDAO.findVersionsByThesaurusId(result.getIdentifier());
 		 if (versionsOfCurrentThesaurus == null || versionsOfCurrentThesaurus.isEmpty()) {
-			ThesaurusVersionHistory defaultVersion = thesaurusHelper.buildDefaultVersion(result);		
+			ThesaurusVersionHistory defaultVersion = thesaurusHelper.buildDefaultVersion(result);
 			Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
 			versions.add(defaultVersion);
 			thesaurusVersionHistoryDAO.update(defaultVersion);
@@ -154,7 +162,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.IThesaurusService#getThesaurusLanguages(java.lang.String)
 	 */

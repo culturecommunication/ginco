@@ -59,6 +59,13 @@ public interface IThesaurusService {
     Thesaurus getThesaurusById(String id);
 
     /**
+     * Get a default thesaurus
+     *
+     * @return thesaurus object
+     */
+    Thesaurus getDefaultThesaurus();
+
+    /**
      * Get list of all objects.
      * @return List of all objects.
      */
@@ -66,12 +73,12 @@ public interface IThesaurusService {
 
     /**
      * Update a single ThesaurusObject
-     * @throws BusinessException 
+     * @throws BusinessException
      */
 
-    Thesaurus updateThesaurus(Thesaurus object) throws BusinessException;  
-    
-    
+    Thesaurus updateThesaurus(Thesaurus object) throws BusinessException;
+
+
     /**
      * Builds the list of the thesauruses languages, where the first language is
      * the default language defined in the property ginco.default.language

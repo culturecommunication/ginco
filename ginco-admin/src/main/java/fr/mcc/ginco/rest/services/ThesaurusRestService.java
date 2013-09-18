@@ -57,7 +57,7 @@ import java.util.List;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
- * 
+ *
  */
 @Service
 @Path("/thesaurusservice")
@@ -87,11 +87,11 @@ public class ThesaurusRestService {
     @Inject
     @Named("thesaurusVersionHistoryService")
     private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
-	
+
 	@Inject
 	@Named("thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
-	
+
     @Inject
     @Named("indexerService")
     private IIndexerService indexerService;
@@ -102,7 +102,7 @@ public class ThesaurusRestService {
 	/**
 	 * Public method used to get list of all existing ThesaurusType objects in
 	 * database.
-	 * 
+	 *
 	 * @return list of objects, if not found - {@code null}
 	 */
 	@GET
@@ -113,9 +113,9 @@ public class ThesaurusRestService {
 
 	/**
 	 * Public method used to get list of existing top Languages in the database.
-	 * 
+	 *
 	 * @return list of objects, if not found - {@code null}
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getTopLanguages")
@@ -134,11 +134,11 @@ public class ThesaurusRestService {
 		return new ExtJsonFormLoadData<List<Language>>(topLanguages);
 
 	}
-	
+
 	/**
 	 * Public method used to get list of all existing ThesaurusFormat objects in
 	 * database.
-	 * 
+	 *
 	 * @return list of objects, if not found - {@code null}
 	 */
 	@GET
@@ -151,10 +151,10 @@ public class ThesaurusRestService {
 	 * Public method used to get
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object by providing
 	 * its id.
-	 * 
+	 *
 	 * @param id
 	 *            {@link String} identifier to try with
-	 * 
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object in JSON
 	 *         format or {@code null} if not found
 	 */
@@ -162,9 +162,14 @@ public class ThesaurusRestService {
 	@Path("/getVocabulary")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusView getVocabularyById(@QueryParam("id") String id) {
-		return thesaurusViewConverter.convert(thesaurusService.getThesaurusById(id));
+			if (!id.isEmpty()){
+				return thesaurusViewConverter.convert(thesaurusService.getThesaurusById(id));
+			}
+			else{
+				return thesaurusViewConverter.convert(thesaurusService.getDefaultThesaurus());
+			}
 	}
-	
+
 	@GET
 	@Path("/getVocabularies")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -192,11 +197,11 @@ public class ThesaurusRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
-		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);		
+		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 
 		ThesaurusView view = null;
         if (object != null) {
-			Thesaurus result = thesaurusService.updateThesaurus(object);			
+			Thesaurus result = thesaurusService.updateThesaurus(object);
 
             if (result != null) {
                 view = thesaurusViewConverter.convert(result);
@@ -291,7 +296,7 @@ public class ThesaurusRestService {
     			returnedOrgs.add(aOrg);
     			returnedAuthorNames.add(aOrg.getName());
     		}
-    	}    	
+    	}
     	return returnedOrgs;
     }
 }
