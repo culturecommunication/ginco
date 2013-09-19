@@ -3,11 +3,11 @@
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd        
+        http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
@@ -29,8 +29,8 @@
 		<property name="initialSize" value="25" />
 		<property name="removeAbandoned" value="true" />
 		<property name="removeAbandonedTimeout" value="300" />
-	</bean>	
-	
+	</bean>
+
 	<bean id="solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
      	<constructor-arg index="0" value="${solr.url}" />
 	</bean>
@@ -45,6 +45,7 @@
 				<value>classpath:application.properties</value>
 				<value>classpath:git.properties</value>
 				<value>classpath:labels.properties</value>
+				<value>classpath:default.properties</value>
 				<value>file:${ginco-properties}</value>
 			</list>
 		</property>

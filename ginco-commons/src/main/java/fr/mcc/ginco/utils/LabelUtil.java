@@ -44,12 +44,12 @@ import fr.mcc.ginco.beans.Language;
 
 /**
  * utility class to get objects labels
- * 
+ *
  */
 public final class LabelUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(LabelUtil.class);
-	
+
 	private static final String LANGUAGE_SEPARATOR = "@";
 
 	private LabelUtil() {
@@ -58,7 +58,7 @@ public final class LabelUtil {
 	/**
 	 * Return a standard label depending on the language value and the default
 	 * language defined
-	 * 
+	 *
 	 * @param lexical
 	 *            value
 	 * @parma language
@@ -74,9 +74,9 @@ public final class LabelUtil {
 		}
 		return resultLabel;
 	}
-	
+
 	public static final String getResourceLabel(String key) {
-		try{  
+		try{
 			ResourceBundle res = ResourceBundle.getBundle("labels",
 				new EncodedControl("UTF-8"));
 			return res.getString(key);
@@ -85,4 +85,16 @@ public final class LabelUtil {
 			return key;
 		}
 	}
+
+	public static final String getDefaultLabel(String key) {
+		try{
+			ResourceBundle res = ResourceBundle.getBundle("default",
+				new EncodedControl("UTF-8"));
+			return res.getString(key);
+		} catch (MissingResourceException me) {
+			logger.warn("Unable to find ResourceBUndle", me);
+			return key;
+		}
+	}
+
 }

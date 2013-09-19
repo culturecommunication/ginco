@@ -66,7 +66,7 @@ public class ThesaurusServiceTest {
 
 	@Mock(name = "thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
-	
+
 	@Mock(name = "thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
@@ -78,7 +78,7 @@ public class ThesaurusServiceTest {
 
     @Mock(name = "thesaurushelper")
 	private ThesaurusHelper thesaurusHelper;
-    
+
 	@InjectMocks
 	private ThesaurusServiceImpl thesaurusService;
 
@@ -94,6 +94,13 @@ public class ThesaurusServiceTest {
 		when(thesaurusDAO.getById(anyString())).thenReturn(mockThesaurus);
 		Thesaurus thesaurusRes = thesaurusService.getThesaurusById("not-empty");
 		Assert.assertNotNull("Error while getting Thesaurus By Id",
+				thesaurusRes);
+	}
+
+	@Test
+	public final void testGetDefaultThesaurus() {
+		Thesaurus thesaurusRes = thesaurusService.getDefaultThesaurus();
+		Assert.assertNotNull("Error while getting default thesaurus",
 				thesaurusRes);
 	}
 
@@ -142,7 +149,7 @@ public class ThesaurusServiceTest {
 				.getThesaurusLanguages("mockedThesaurus");
 		Assert.assertEquals("error while getting thesaurus language list", 3,
 				actualLanguages.size());
-		
+
 		Assert.assertEquals("fra", actualLanguages.get(0).getId());
 		Assert.assertEquals("jpn", actualLanguages.get(1).getId());
 		Assert.assertEquals("rus", actualLanguages.get(2).getId());

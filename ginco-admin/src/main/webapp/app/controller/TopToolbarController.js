@@ -35,14 +35,14 @@
 
 Ext.define('GincoApp.controller.TopToolbarController', {
 	extend : 'Ext.app.Controller',
-	
+
 	localized : true,
-	
+
 	xImportSkosTitle : 'Import SKOS',
 	xImportGincoXmlTitle : 'Import XML Ginco',
 
 	views : [ 'TopToolbar' ],
-	
+
 	onAproposClick : function(button, e, options) {
 		Ext.create('GincoApp.view.AProposWin');
 	},
@@ -58,7 +58,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		topTabs.setActiveTab(tab);
 		tab.show();
 		return aNewPanel;
-	},	
+	},
 	onImportBtnClick: function(theButton) {
 		var me = this;
 		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>'+ me.xImportSkosTitle + '</h1>'});
@@ -68,23 +68,23 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		var me = this;
 		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoxml', xTitleLabel: '<h1>'+ me.xImportGincoXmlTitle + '</h1>'});
 	},
-	
+
 	onUserInfoLoaded : function(theController) {
-		
+
 		var userNameLabel = Ext.ComponentQuery.query('#username')[0];
-		userNameLabel.setText(Thesaurus.ext.utils.userInfo.data.username);	
-		
-		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
+		userNameLabel.setText(Thesaurus.ext.utils.userInfo.data.username);
+
+		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) {
 			var topToolBar = Ext.ComponentQuery.query('topToolBar')[0];
 			topToolBar.restrictUI('ADMIN');
 		}
 	},
-	
-	
+
+
 	onLogoutBtn : function () {
 		window.location.href = "logout";
 	},
-	
+
 	onSearchTrigger : function(theTrigger) {
 		var searchPanel = Ext.create("GincoApp.view.SearchPanel");
 		searchPanel.searchQuery = theTrigger.getValue();
@@ -92,7 +92,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		var tab = topTabs.add(searchPanel);
 		topTabs.setActiveTab(tab);
 		tab.show();
-		
+
 	},
 	onSearchTriggerKey : function (theTrigger,e )
 	{
@@ -112,7 +112,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			},
 			"#newThesaurusBtn" : {
 				click : this.onNewThesaurusBtnClick
-			},			
+			},
 			"#importBtn" : {
 				click: this.onImportBtnClick
 			},

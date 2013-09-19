@@ -65,8 +65,13 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			model.set(thesaurusData);
 			me.loadData(theForm, model);
 		} else {
-			model.id = -1;
-			theForm.loadRecord(model);
+			var modelId = null;
+			model = this.getThesaurusModelModel();
+			model.load(modelId, {
+				success : function(model) {
+					theForm.loadRecord(model);
+				}
+			});
 		}
 	},
 	loadData : function(aForm, aModel) {
@@ -106,27 +111,27 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		var thePanel = theButton.up('thesaurusPanel');
 		this.createPanel('GincoApp.view.TermPanel',thePanel.thesaurusData );
 	},
-	
+
 	onNewConceptBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusPanel');
 		this.createPanel('GincoApp.view.ConceptPanel',thePanel.thesaurusData );
 	},
-	
+
 	onNewConceptArrayBtnClick : function(theButton) {
 		var thePanel = theButton.up('thesaurusPanel');
 		this.createPanel('GincoApp.view.ConceptArrayPanel',thePanel.thesaurusData);
 	},
-	
+
 	onNewConceptGroupBtnClick : function(theButton) {
 		var thePanel = theButton.up('thesaurusPanel');
 		this.createPanel('GincoApp.view.ConceptGroupPanel',thePanel.thesaurusData);
 	},
-	
+
 	onNewComplexConceptBtnClick : function (theButton) {
 		var thePanel = theButton.up('thesaurusPanel');
 		this.createPanel('GincoApp.view.ComplexConceptPanel',thePanel.thesaurusData);
 	},
-	
+
 	createPanel : function(aType, thesaurusData)
 	{
 		var aNewPanel = Ext.create(aType);
@@ -226,7 +231,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             }
         });
     },
-    
+
     importBranch : function(theButton) {
     	var me = this;
     	Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>' + me.xImportBranchTitle + '</h1>'});
@@ -238,7 +243,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
         window.open(url);
     },
-    
+
     exportJournal : function(theButton) {
         var theForm = theButton.up('form');
         var url = "services/ui/journalservice/exportLogJournal?thesaurusId="
@@ -252,7 +257,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
         window.open(url);
     },
-    
+
     exportGinco : function(theButton) {
         var theForm = theButton.up('form');
         var url = "services/ui/exportservice/getGincoThesaurusExport?thesaurusId="
@@ -303,7 +308,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             });
         }
     },
-    
+
     onLangChange : function(theCombo, records) {
     	var thePanel = theCombo.up("thesaurusPanel");
     	var oldLanguages = thePanel.thesaurusData.languages;
@@ -312,7 +317,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     		Ext.Array.forEach(records, function (item) {
     			if (item.get("id")==oldLanguages[i]){
     				found = true;
-    			}	
+    			}
     		});
     		if (found == false){
     			Ext.MessageBox.show({
@@ -324,7 +329,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     		}
     	}
     },
-    
+
     importSandboxClick : function(theButton) {
     	var me = this;
     	Ext.create('GincoApp.view.ImportWin', {importType : 'txt', thesaurusData : theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>'+me.xImportTermsTitle+'</h1>'});
