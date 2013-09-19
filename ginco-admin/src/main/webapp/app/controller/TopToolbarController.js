@@ -35,7 +35,6 @@
 
 Ext.define('GincoApp.controller.TopToolbarController', {
 	extend : 'Ext.app.Controller',
-	models : [ 'ThesaurusModel' ],
 	views : [ 'TopToolbar' ],
 
 	onAproposClick : function(button, e, options) {
@@ -47,25 +46,12 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	},
 	createPanel : function(aType)
 	{
-		/*var aNewPanel = Ext.create(aType);
+		var aNewPanel = Ext.create(aType);
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		var tab = topTabs.add(aNewPanel);
 		topTabs.setActiveTab(tab);
 		tab.show();
-		return aNewPanel;*/
-
-		var model = this.getThesaurusModelModel();
-		model.load(null, {
-			success : function(aModel) {
-				var aNewPanel = Ext.create(aType);
-				aNewPanel.thesaurusData = aModel.data;
-				var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-				var tab = topTabs.add(aNewPanel);
-				topTabs.setActiveTab(tab);
-				tab.show();
-				return aNewPanel;
-			}
-		});
+		return aNewPanel;
 	},
 	onImportBtnClick: function(theButton) {
 		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>Import SKOS</h1>'});

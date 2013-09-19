@@ -75,7 +75,7 @@ public class ThesaurusRestServiceTest {
 
 	@Mock(name = "thesaurusTypeService")
 	private IThesaurusTypeService thesaurusTypeService;
-	
+
 	@Mock(name = "thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
 
@@ -86,12 +86,20 @@ public class ThesaurusRestServiceTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		LoggerTestUtil.initLogger(thesaurusRestService);
-	}	
+	}
+
+	@Test
+	public final void testGetDefaultThesaurus(){
+		String thesaurusId = "";
+		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
+		ThesaurusView view = thesaurusRestService.getVocabularyById(thesaurusId);
+		Assert.assertNotNull(view);
+	}
 
 	/**
 	 * Test the putVocabularyById method with a mock vocabulary
-	 * @throws BusinessException 
-	 * 
+	 * @throws BusinessException
+	 *
 	 */
 	@Test
 	public final void testCreateThesaurus() throws BusinessException {
@@ -103,14 +111,14 @@ public class ThesaurusRestServiceTest {
 				.updateVocabulary(new ThesaurusView());
 
 		Assert.assertNotNull(view);
-		
+
 	}
-	
+
 	@Test
 	public final void testUpdateThesaurus() throws BusinessException {
 		Thesaurus existingTh = new Thesaurus();
 		existingTh.setIdentifier("any-id");
-		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn(existingTh);		
+		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn(existingTh);
 		when(thesaurusService.updateThesaurus(any(Thesaurus.class))).thenReturn(new Thesaurus());
 		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
 
@@ -120,11 +128,11 @@ public class ThesaurusRestServiceTest {
 
 		Assert.assertNotNull(view);
 	}
-	
+
 
 	/**
 	 * Gets all top languages
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@Test
 	public final void testGetTopLanguagesAll() throws BusinessException {
@@ -149,7 +157,7 @@ public class ThesaurusRestServiceTest {
 		Assert.assertEquals("fra", allLanguages.getData().get(0).getId());
 
 	}
-	
+
 	private List<Language> getFakeLanguages() {
 		List<Language> langs = new LinkedList<Language>();
 		Language lang1 = new Language();
