@@ -54,7 +54,6 @@ import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -67,11 +66,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		IConceptHierarchicalRelationshipServiceUtil {
 
 	@Log
-	private Logger logger;
-
-	@Inject
-	@Named("thesaurusArrayDAO")
-	private IThesaurusArrayDAO thesaurusArrayDAO;
+	private Logger logger;	
 	
 	@Inject
 	@Named("thesaurusArrayConceptDAO")

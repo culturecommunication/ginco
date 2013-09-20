@@ -55,7 +55,6 @@ import fr.mcc.ginco.audit.csv.JournalLine;
 import fr.mcc.ginco.audit.csv.readers.ThesaurusAuditReader;
 import fr.mcc.ginco.audit.csv.readers.ThesaurusConceptAuditReader;
 import fr.mcc.ginco.audit.csv.readers.ThesaurusTermAuditReader;
-import fr.mcc.ginco.audit.utils.AuditReaderService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
@@ -89,11 +88,7 @@ public class GincoRevServiceImpl implements IGincoRevService {
 	@Inject
 	@Named("thesaurusAuditReader")
 	ThesaurusAuditReader thesaurusAuditReader;
-
-	@Inject
-	@Named("auditReaderService")
-	private AuditReaderService readerService;
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 

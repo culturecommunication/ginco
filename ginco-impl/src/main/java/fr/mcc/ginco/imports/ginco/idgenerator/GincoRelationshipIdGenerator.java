@@ -43,9 +43,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 
 /**
@@ -55,14 +53,6 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
  */
 @Component("gincoRelationshipIdGenerator")
 public class GincoRelationshipIdGenerator {
-
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;
-
-	@Inject
-	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
 	@Named("gincoIdMapParser")

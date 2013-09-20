@@ -42,7 +42,6 @@ import org.springframework.stereotype.Component;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
-import fr.mcc.ginco.services.IThesaurusArrayConceptService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -54,10 +53,7 @@ public class ThesaurusArrayConceptViewConverter {
     @Inject
     @Named("thesaurusConceptService")
     private IThesaurusConceptService thesaurusConceptService;
-
-    @Inject
-	@Named("thesaurusArrayConceptService")
-	private IThesaurusArrayConceptService thesaurusArrayConceptService;
+   
 
     public ThesaurusArrayConcept convert(ThesaurusArrayConceptView thesaurusArrayConceptView,
                                            ThesaurusArray array) {

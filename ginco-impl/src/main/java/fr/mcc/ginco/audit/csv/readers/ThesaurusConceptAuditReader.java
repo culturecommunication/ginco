@@ -52,14 +52,11 @@ import fr.mcc.ginco.audit.csv.JournalLine;
 import fr.mcc.ginco.audit.csv.JournalLineBuilder;
 import fr.mcc.ginco.audit.utils.AuditHelper;
 import fr.mcc.ginco.audit.utils.AuditQueryBuilder;
-import fr.mcc.ginco.audit.utils.AuditReaderService;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
 
 /**
  * Queries the thesaurus concept audit tables and build RevisionLine or
@@ -76,10 +73,6 @@ public class ThesaurusConceptAuditReader {
 	@Inject
 	@Named("journalLineBuilder")
 	private JournalLineBuilder journalLineBuilder;
-
-	@Inject
-	@Named("auditReaderService")
-	private AuditReaderService readerService;
 
 	@Inject
 	@Named("auditHelper")

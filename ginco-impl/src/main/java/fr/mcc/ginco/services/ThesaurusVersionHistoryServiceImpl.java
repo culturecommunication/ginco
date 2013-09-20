@@ -35,23 +35,23 @@
 package fr.mcc.ginco.services;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.DateUtil;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusVersionHistoryService")
@@ -66,10 +66,7 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
     private IIDGeneratorService generatorService;
 
     @Value("${publish.version.note}")
-    private String publishNote;
-
-    @Log
-    private Logger logger;
+    private String publishNote;  
 
 	@Override
 	public List<ThesaurusVersionHistory> getVersionsByThesaurusId(

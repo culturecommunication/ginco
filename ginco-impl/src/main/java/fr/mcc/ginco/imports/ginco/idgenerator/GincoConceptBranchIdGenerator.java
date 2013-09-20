@@ -43,7 +43,6 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.log.Log;
 
@@ -56,10 +55,6 @@ import fr.mcc.ginco.log.Log;
 public class GincoConceptBranchIdGenerator {
 	
 	private Map<String, String> idMapping = new HashMap<String, String>();
-	
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;
 	
 	@Inject
 	@Named("gincoTermIdGenerator")

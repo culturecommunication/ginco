@@ -48,12 +48,10 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.IThesaurusArrayConceptService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -79,11 +77,7 @@ public class ThesaurusArrayViewConverter {
 
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;
-
-	@Inject
-	@Named("thesaurusArrayConceptService")
-	private IThesaurusArrayConceptService thesaurusArrayConceptService;
+	private IIDGeneratorService generatorService;	
 
 	public ThesaurusArray convert(ThesaurusArrayView source)
 			throws BusinessException {

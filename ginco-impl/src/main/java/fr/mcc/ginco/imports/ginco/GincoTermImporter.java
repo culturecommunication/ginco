@@ -42,7 +42,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Note;
@@ -52,7 +51,6 @@ import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to import terms and terms notes
@@ -67,10 +65,8 @@ public class GincoTermImporter {
 	
 	@Inject
 	@Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;
+	private IThesaurusTermDAO thesaurusTermDAO;	
 	
-	@Log
-	private Logger logger;
 	
 	/**
 	 * This method stores all the terms of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter

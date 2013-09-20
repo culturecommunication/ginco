@@ -40,7 +40,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Thesaurus;
@@ -49,7 +48,6 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class :
@@ -91,10 +89,8 @@ public class GincoThesaurusBuilder {
 
 	@Inject
 	@Named("thesaurusVersionHistoryDAO")
-	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;	
 	
-	@Log
-	private Logger logger;
 	
 	/**
 	 * This method stores a Ginco Thesaurus with all its objects (concepts, terms, arrays, groups etc.).

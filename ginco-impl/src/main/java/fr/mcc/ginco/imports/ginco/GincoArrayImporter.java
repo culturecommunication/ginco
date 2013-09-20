@@ -42,7 +42,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.NodeLabel;
@@ -51,7 +50,6 @@ import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to import arrays and array labels
@@ -66,10 +64,8 @@ public class GincoArrayImporter {
 	
 	@Inject
 	@Named("thesaurusArrayDAO")
-	private IThesaurusArrayDAO thesaurusArrayDAO;
-	
-	@Log
-	private Logger logger;
+	private IThesaurusArrayDAO thesaurusArrayDAO;	
+
 	
 	/**
 	 * This method stores all the array of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter

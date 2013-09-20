@@ -62,11 +62,7 @@ public class GincoConceptIdGenerator {
 
 	@Inject
 	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
-
-	@Inject
-	@Named("gincoIdMapParser")
-	private GincoIdMapParser gincoIdMapParser;
+	private IThesaurusConceptDAO thesaurusConceptDAO;	
 	
 	@Log
 	private Logger logger;

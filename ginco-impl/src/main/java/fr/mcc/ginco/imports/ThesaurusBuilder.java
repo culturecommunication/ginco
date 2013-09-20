@@ -69,7 +69,6 @@ import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.helpers.ThesaurusHelper;
 import fr.mcc.ginco.log.Log;
 
 /**
@@ -89,10 +88,6 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	@Inject
 	@Named("thesaurusTypeDAO")
 	private IThesaurusTypeDAO thesaurusTypeDAO;
-	
-	@Inject
-	@Named("thesaurusHelper")
-	private ThesaurusHelper thesaurusHelper;
 
 	@Inject
 	@Named("languagesDAO")

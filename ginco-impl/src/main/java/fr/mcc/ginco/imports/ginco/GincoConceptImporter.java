@@ -42,7 +42,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Note;
@@ -54,7 +53,6 @@ import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to import concepts and concepts notes
@@ -75,8 +73,6 @@ public class GincoConceptImporter {
 	@Named("splitNonPreferredTermDAO")
 	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 	
-	@Log
-	private Logger logger;
 		
 	/**
 	 * This method stores all the concepts of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter

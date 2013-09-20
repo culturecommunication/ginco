@@ -40,7 +40,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.hibernate.type.CustomCollectionType;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
@@ -57,7 +56,6 @@ import fr.mcc.ginco.services.ICustomTermAttributeService;
 import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
 /**
@@ -68,11 +66,7 @@ public class CustomAttributeConverter {
 
     @Inject
     @Named("customConceptAttributeService")
-    private ICustomConceptAttributeService customConceptAttributeService;
-
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
+    private ICustomConceptAttributeService customConceptAttributeService;   
     
     @Inject 
     @Named("thesaurusTermService")

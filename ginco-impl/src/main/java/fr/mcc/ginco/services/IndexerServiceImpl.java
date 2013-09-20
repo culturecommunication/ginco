@@ -34,12 +34,15 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.*;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.solr.*;
-import fr.mcc.ginco.utils.DateUtil;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -51,18 +54,24 @@ import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.solr.EntityType;
+import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SolrConstants;
+import fr.mcc.ginco.solr.SolrField;
+import fr.mcc.ginco.solr.SolrParam;
+import fr.mcc.ginco.solr.SortCriteria;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * @author hufon
@@ -85,10 +94,7 @@ public class IndexerServiceImpl implements IIndexerService {
 
 	@Inject
 	@Named("noteService")
-	private INoteService noteService;
-
-	@Value("${solr.url}")
-	private String url;
+	private INoteService noteService;	
 
 	@Inject
 	@Named("solrServer")

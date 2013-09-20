@@ -41,13 +41,10 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class generate new ids for notes (both concept or term notes)
@@ -55,11 +52,7 @@ import fr.mcc.ginco.log.Log;
  * 
  */
 @Component("gincoNoteIdGenerator")
-public class GincoNoteIdGenerator {
-
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;
+public class GincoNoteIdGenerator {	
 	
 	@Inject
 	@Named("gincoIdMapParser")

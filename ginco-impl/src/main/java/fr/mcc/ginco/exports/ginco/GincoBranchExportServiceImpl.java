@@ -54,7 +54,6 @@ import fr.mcc.ginco.exports.IGincoExportServiceUtil;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.ThesaurusConceptUtils;
@@ -81,11 +80,6 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
-	@Inject
-	@Named("noteService")
-	private INoteService noteService;
-
 	
 	@Inject
 	@Named("thesaurusTermService")

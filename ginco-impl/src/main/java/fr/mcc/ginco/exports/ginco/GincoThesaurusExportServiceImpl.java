@@ -73,10 +73,7 @@ import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 @Transactional(readOnly = true)
 @Service("gincoThesaurusExportService")
 public class GincoThesaurusExportServiceImpl implements
-		IGincoThesaurusExportService {
-
-	@Log
-	private Logger logger;
+		IGincoThesaurusExportService {	
 
 	@Inject
 	@Named("thesaurusConceptService")

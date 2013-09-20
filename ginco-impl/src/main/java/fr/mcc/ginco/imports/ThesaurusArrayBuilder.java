@@ -55,7 +55,6 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.utils.ConceptHierarchyUtil;
@@ -70,10 +69,7 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
-	
-	@Inject
-	@Named("thesaurusArrayDAO")
-	private IThesaurusArrayDAO thesaurusArrayDAO;
+
 	
 	public static Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
 

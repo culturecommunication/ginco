@@ -41,7 +41,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +55,6 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
@@ -80,10 +78,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     private IIDGeneratorService customGeneratorService;
     
 	@Value("${ginco.default.language}")
-	private String defaultLang;
-	
-    @Log
-    private Logger logger;
+	private String defaultLang;    
 
     @Override
     public ThesaurusTerm getThesaurusTermById(String id) throws BusinessException {

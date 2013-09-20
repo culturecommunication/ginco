@@ -40,7 +40,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +47,6 @@ import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("splitNonPreferredTermService")
@@ -56,10 +54,7 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
 
     @Inject
     @Named("splitNonPreferredTermDAO")
-    private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
-
-    @Log
-    private Logger logger;
+    private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;  
 
     @Override
     public SplitNonPreferredTerm getSplitNonPreferredTermById(String id) throws BusinessException {

@@ -88,11 +88,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Inject
 	@Named("thesaurusDAO")
-	private IThesaurusDAO thesaurusDAO;
-
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
+	private IThesaurusDAO thesaurusDAO;   
 
     @Inject
     @Named("skosExportService")

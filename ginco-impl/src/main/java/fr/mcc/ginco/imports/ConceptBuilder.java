@@ -57,7 +57,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
-import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  * Builder in charge of building ThesaurusConcept
@@ -67,11 +66,7 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 public class ConceptBuilder extends AbstractBuilder {
 
 	@Log
-	private Logger logger;
-
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
+	private Logger logger;	
 	
 	@Inject
 	@Named("conceptHierarchicalRelationshipServiceUtil")

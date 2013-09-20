@@ -41,16 +41,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exports.result.bean.AlphabeticalExportedItem;
 import fr.mcc.ginco.exports.result.bean.FormattedLine;
-import fr.mcc.ginco.services.ISplitNonPreferredTermService;
-import fr.mcc.ginco.services.IThesaurusTermRoleService;
-import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
@@ -59,27 +55,11 @@ import fr.mcc.ginco.utils.ThesaurusTermUtils;
  * 
  */
 @Component("alphabeticComplexConceptExporter")
-public class AlphabeticComplexConceptExporter {
-
-	@Value("${ginco.default.language}")
-	private String defaultLang;
-
-	@Inject
-	@Named("splitNonPreferredTermService")
-	private ISplitNonPreferredTermService splitNonPreferredTermService;
-	
+public class AlphabeticComplexConceptExporter {	
 
 	@Inject
 	@Named("thesaurusTermUtils")
 	private ThesaurusTermUtils thesaurusTermUtils;
-
-	@Inject
-	@Named("thesaurusTermRoleService")
-	private IThesaurusTermRoleService thesaurusTermRoleService;
-
-	@Inject
-	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
 	
 	@Inject
 	@Named("alphabeticalExportedItemComparator")

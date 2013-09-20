@@ -40,7 +40,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Thesaurus;
@@ -50,7 +49,6 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptBranchIdGenerator;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class : - extracts data from a {@link GincoExportedBranch} object, -
@@ -61,17 +59,9 @@ import fr.mcc.ginco.log.Log;
 public class GincoConceptBranchBuilder {
 
 	@Inject
-	@Named("gincoArrayImporter")
-	private GincoArrayImporter gincoArrayImporter;
-
-	@Inject
 	@Named("gincoConceptBranchIdGenerator")
 	private GincoConceptBranchIdGenerator gincoConceptBranchIdGenerator;
-
-	@Inject
-	@Named("gincoGroupImporter")
-	private GincoGroupImporter gincoGroupImporter;
-
+	
 	@Inject
 	@Named("gincoConceptImporter")
 	private GincoConceptImporter gincoConceptImporter;
@@ -91,9 +81,7 @@ public class GincoConceptBranchBuilder {
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
-
-	@Log
-	private Logger logger;
+	
 
 	/**
 	 * This method stores a Ginco Concept branch with all its objects (concept

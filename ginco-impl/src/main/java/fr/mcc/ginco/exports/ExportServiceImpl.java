@@ -59,7 +59,6 @@ import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
 @Service("exportService")
 public class ExportServiceImpl implements IExportService {
@@ -106,11 +105,7 @@ public class ExportServiceImpl implements IExportService {
 
 	@Inject
 	@Named("arrayNaturalComparator")
-	private ArrayNaturalComparator arrayNaturalComparator;
-
-	@Inject
-	@Named("thesaurusTermUtils")
-	private ThesaurusTermUtils thesaurusTermUtils;
+	private ArrayNaturalComparator arrayNaturalComparator;	
 
 	@Override
 	public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)

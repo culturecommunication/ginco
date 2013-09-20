@@ -40,23 +40,21 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
 
 /**
- * Implementation of the data access object to the complex concepts (Non Preferred term associated with 2 Preferred Terms or more)
- *
+ * Implementation of the data access object to the complex concepts (Non
+ * Preferred term associated with 2 Preferred Terms or more)
+ * 
  */
 @Repository("splitNonPreferredTermDAO")
 public class SplitNonPreferredTermDAO extends
-		GenericHibernateDAO<SplitNonPreferredTerm, String> implements ISplitNonPreferredTermDAO {
-	
-	@Value("${ginco.default.language}")
-	private String defaultLang;
-	
+		GenericHibernateDAO<SplitNonPreferredTerm, String> implements
+		ISplitNonPreferredTermDAO {
+
 	public SplitNonPreferredTermDAO() {
 		super(SplitNonPreferredTerm.class);
 	}
@@ -64,21 +62,21 @@ public class SplitNonPreferredTermDAO extends
 	@Override
 	public List<SplitNonPreferredTerm> findItems(Integer start, Integer limit,
 			String idThesaurus) {
-		// TODO Auto-generated method stub
-		Criteria criteria =  getCurrentSession().createCriteria(SplitNonPreferredTerm.class);
+		Criteria criteria = getCurrentSession().createCriteria(
+				SplitNonPreferredTerm.class);
 		criteria.setMaxResults(limit)
-		.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
-		.setFirstResult(start).addOrder(Order.asc("lexicalValue"));
+				.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+				.setFirstResult(start).addOrder(Order.asc("lexicalValue"));
 		return criteria.list();
 	}
 
 	@Override
 	public Long countItems(String idThesaurus) {
-		Criteria criteria =  getCurrentSession().createCriteria(SplitNonPreferredTerm.class);
+		Criteria criteria = getCurrentSession().createCriteria(
+				SplitNonPreferredTerm.class);
 		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
-		.setProjection(Projections.rowCount());
+				.setProjection(Projections.rowCount());
 		return (Long) criteria.list().get(0);
 	}
 
-	
 }
