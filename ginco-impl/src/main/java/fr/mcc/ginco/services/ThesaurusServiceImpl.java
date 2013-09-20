@@ -54,6 +54,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
@@ -122,7 +124,20 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Override
     public Thesaurus getDefaultThesaurus(){
     	Thesaurus defaultThesaurus = new Thesaurus();
-    	defaultThesaurus.setPublisher(LabelUtil.getDefaultLabel("thesaurus.publisher"));
+    	defaultThesaurus.setTitle(LabelUtil.getDefaultLabel("default.thesaurus.title"));
+
+    	ThesaurusOrganization defaultOrganisation = new ThesaurusOrganization();
+    	defaultOrganisation.setHomepage(LabelUtil.getDefaultLabel("default.thesaurus.creator.homepage"));
+    	defaultOrganisation.setName(LabelUtil.getDefaultLabel("default.thesaurus.creator.name"));
+    	defaultThesaurus.setCreator(defaultOrganisation);
+
+    	defaultThesaurus.setContributor(LabelUtil.getDefaultLabel("default.thesaurus.creator.contributor"));
+    	defaultThesaurus.setRights(LabelUtil.getDefaultLabel("default.thesaurus.rights"));
+    	defaultThesaurus.setDescription(LabelUtil.getDefaultLabel("default.thesaurus.description"));
+    	defaultThesaurus.setCoverage(LabelUtil.getDefaultLabel("default.thesaurus.coverage"));
+    	defaultThesaurus.setSubject(LabelUtil.getDefaultLabel("default.thesaurus.subject"));
+    	defaultThesaurus.setPublisher(LabelUtil.getDefaultLabel("default.thesaurus.publisher"));
+
     	return defaultThesaurus;
     }
 
