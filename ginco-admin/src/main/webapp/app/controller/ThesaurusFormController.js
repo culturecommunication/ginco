@@ -65,10 +65,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			model.set(thesaurusData);
 			me.loadData(theForm, model);
 		} else {
-			var modelId = null;
-			model = this.getThesaurusModelModel();
-			model.load(modelId, {
-				success : function(model) {
+			var defaultModel = this.getThesaurusModelModel();
+			defaultModel.load(null, {
+				success : function(newModel) {
+					model.set(newModel.data);
 					theForm.loadRecord(model);
 				}
 			});
