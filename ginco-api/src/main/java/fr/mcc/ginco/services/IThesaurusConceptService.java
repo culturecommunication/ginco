@@ -53,7 +53,7 @@ import java.util.Set;
 public interface IThesaurusConceptService {
 	/**
 	 * Get list of all ThesaurusConcept.
-	 * 
+	 *
 	 * @return
 	 */
 	List<ThesaurusConcept> getThesaurusConceptList();
@@ -67,7 +67,7 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Get single ThesaurusConcept by its id.
-	 * 
+	 *
 	 * @param id
 	 *            of object
 	 * @return {@code null} if not found; object otherwise.
@@ -76,7 +76,7 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Get the ThesaurusConcepts which are not top term in a given thesaurus
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
 	 */
@@ -85,17 +85,17 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Gets the preferred term of a concept
-	 * 
+	 *
 	 * @param conceptId
 	 * @return
 	 * @throws BusinessException
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId)
 			throws BusinessException;
-	
+
 	/**
 	 * Gets the list of the preferred terms of a concept
-	 * 
+	 *
 	 * @param conceptId
 	 * @return
 	 * @throws BusinessException
@@ -105,7 +105,7 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Gets the label of a concept with title@lang notation
-	 * 
+	 *
 	 * @param conceptId
 	 * @return
 	 * @throws BusinessException
@@ -127,7 +127,7 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
 	 */
@@ -136,7 +136,7 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Get the number of orphan thesaurus concept for a given thesaurusId
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
 	 * @throws BusinessException
@@ -146,7 +146,7 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Get the number of top concept for a given thesaurus
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
 	 * @throws BusinessException
@@ -179,7 +179,7 @@ public interface IThesaurusConceptService {
      * @return
      */
     boolean hasChildren(String conceptId);
-   	
+
 	/**
 	 * Delete a ThesaurusConcept object
 	 * @param object
@@ -187,7 +187,7 @@ public interface IThesaurusConceptService {
 	 */
 	ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object) throws BusinessException;
 
-	
+
 	/**
 	 * Asynchronous method to recalculate root for all the node childrens
 	 * @param parentId
@@ -199,22 +199,29 @@ public interface IThesaurusConceptService {
 	 * @param thesaurusId
 	 * @return List of concepts eligible for an array
 	 */
-	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId, String thesaurusId);
+	List<ThesaurusConcept> getAvailableConceptsOfArray (String arrayId, String thesaurusId);
+
+	/**Get all concepts eligible for a group
+	 * @param groupId
+	 * @param thesaurusId
+	 * @return List of concepts eligible for a group
+	 */
+	List<ThesaurusConcept> getAvailableConceptsOfGroup (String groupId, String thesaurusId);
 
     /**
      * For indexing purposes.
      * @return list of all existing concepts.
      */
     List<ThesaurusConcept> getAllConcepts();
-    
+
     /**
      * Return the lexical value of this concept preferred term
      * @param concept
      * @return
      */
     String getConceptTitle(ThesaurusConcept concept);
-	
-    
+
+
     /**
      * return the language of this concept preferred term
      * @param concept
@@ -226,33 +233,33 @@ public interface IThesaurusConceptService {
      * Get hierarchical relations between two concepts
      * @param identifier of first concept
      * @param identifier of second concept
-     * 
+     *
      * @return 0 if relations between concepts don't exist
      * @return 1 if first concept is parent of second concept
      * @return 2 if first concept is child of second concept
      */
-    
-    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
+
+    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId)
     		throws BusinessException;
-    
+
     /**
 	 * Returns the list of not preferred ThesaurusTerms by a concept
-	 * 
+	 *
 	 * @param conceptId
 	 * @return list of not preferred terms
 	 */
 	List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
 			throws BusinessException;
-	
+
 	/**
 	 * Returns the status of a concept
-	 * 
+	 *
 	 * @param conceptId
 	 * @return the status of a concept
 	 */
 	int getStatusByConceptId(String conceptId) throws BusinessException;
-	
-	
+
+
 	/**
 	 * Returns this concept preferred term in the given language, null if none is found
 	 * @param conceptId

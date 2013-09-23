@@ -39,8 +39,11 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.hamcrest.core.AnyOf;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,10 +56,12 @@ import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -71,20 +76,23 @@ public class ThesaurusConceptServiceTest {
 
 	@Mock(name = "thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
-	
+
 	@Mock(name = "thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@Mock(name = "associativeRelationshipDAO")
 	private IGenericDAO<AssociativeRelationship, Class<?>> associativeRelationshipDAO;
-	
+
 	@Mock(name = "thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
+
+	@Mock(name = "thesaurusConceptGroupDAO")
+	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 
 
 	@InjectMocks
 	private ThesaurusConceptServiceImpl thesaurusConceptService;
-	
+
 	@InjectMocks
 	private ConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
@@ -224,7 +232,7 @@ public class ThesaurusConceptServiceTest {
 
 		List<ThesaurusConcept> roots_leaf1_1 = conceptHierarchicalRelationshipServiceUtil
 				.getRootConcepts(leaf1_1);
-		
+
 		Assert.assertEquals(3, roots_leaf1_1.size());
 
 		List<ThesaurusConcept> roots_leaf1_3 = conceptHierarchicalRelationshipServiceUtil
@@ -340,9 +348,9 @@ public class ThesaurusConceptServiceTest {
 		Assert.assertEquals("concept-1", concept.getIdentifier());
 
 	}
-	
+
 	@Test
-	public final void testGetOrphanThesaurusConceptsCount() throws BusinessException {	
+	public final void testGetOrphanThesaurusConceptsCount() throws BusinessException {
 		when(thesaurusDAO.getById(anyString())).thenReturn(new Thesaurus());
 		when(thesaurusConceptDAO.getOrphansThesaurusConceptCount(any(Thesaurus.class))).thenReturn((long)2);
 		long conceptNb = thesaurusConceptService
@@ -350,85 +358,85 @@ public class ThesaurusConceptServiceTest {
 		Assert.assertEquals(2, conceptNb);
 
 	}
-	
+
 	@Test(expected = BusinessException.class)
-	public final void testGetOrphanThesaurusConceptsCountWithNotExistingThesaurus() throws BusinessException {	
+	public final void testGetOrphanThesaurusConceptsCountWithNotExistingThesaurus() throws BusinessException {
 		when(thesaurusDAO.getById(anyString())).thenReturn(null);
 		when(thesaurusConceptDAO.getOrphansThesaurusConceptCount(any(Thesaurus.class))).thenReturn((long)2);
 		thesaurusConceptService
 				.getOrphanThesaurusConceptsCount("thesaurus-1");
 	}
-	
+
 	@Test
-	public final void testDestroyThesaurusConcept() throws BusinessException {	
-		final ThesaurusConcept node1 = new ThesaurusConcept();	
+	public final void testDestroyThesaurusConcept() throws BusinessException {
+		final ThesaurusConcept node1 = new ThesaurusConcept();
 		node1.setIdentifier("concept1");
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		List<ThesaurusTerm> termList = new ArrayList<ThesaurusTerm>();
 		termList.add(term1);
 		when(thesaurusTermDAO.findTermsByConceptId(anyString())).thenReturn(termList);
-		
-		final ThesaurusConcept node2 = new ThesaurusConcept();	
+
+		final ThesaurusConcept node2 = new ThesaurusConcept();
 		node2.setIdentifier("concept2");
 		List<ThesaurusConcept> conceptList = new ArrayList<ThesaurusConcept>();
-		when(thesaurusConceptDAO.getChildrenConcepts(anyString())).thenReturn(conceptList);	
+		when(thesaurusConceptDAO.getChildrenConcepts(anyString())).thenReturn(conceptList);
 
 		when(thesaurusConceptDAO.getAllRootChildren(any(ThesaurusConcept.class))).thenReturn(conceptList);
-		
-	
+
+
 		ThesaurusArray t1 = new ThesaurusArray();
 		List<ThesaurusArray> arrays = new ArrayList<ThesaurusArray>();
 		arrays.add(t1);
 		when(thesaurusArrayDAO
-				.getConceptSuperOrdinateArrays(anyString())).thenReturn(arrays);		
-		when(thesaurusConceptDAO.delete(any(ThesaurusConcept.class))).thenReturn(node1);		
-		
+				.getConceptSuperOrdinateArrays(anyString())).thenReturn(arrays);
+		when(thesaurusConceptDAO.delete(any(ThesaurusConcept.class))).thenReturn(node1);
+
 		ThesaurusConcept concept = thesaurusConceptService.destroyThesaurusConcept(node1);
 		Assert.assertEquals("concept1", concept.getIdentifier());
 
 	}
-	
+
 	@Test
 	public void testGetConceptPreferredTerm()
-			throws BusinessException {		
+			throws BusinessException {
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		term1.setIdentifier("term1");
 		when(thesaurusTermDAO.getConceptPreferredTerm(anyString())).thenReturn(term1);
 		ThesaurusTerm actualTerm = thesaurusConceptService.getConceptPreferredTerm("anyString");
 		Assert.assertEquals("term1", actualTerm.getIdentifier());
 	}
-	
+
 	@Test(expected = BusinessException.class)
 	public void testGetConceptPreferredTermWithNoPreferredTerm()
-			throws BusinessException {		
+			throws BusinessException {
 		when(thesaurusTermDAO.getConceptPreferredTerm(anyString())).thenReturn(null);
 		thesaurusConceptService.getConceptPreferredTerm("anyString");
 	}
-	
+
 	@Test
 	public void testGetAssociatedConcepts()
-			throws BusinessException {		
-		final ThesaurusConcept node1 = new ThesaurusConcept();	
+			throws BusinessException {
+		final ThesaurusConcept node1 = new ThesaurusConcept();
 		node1.setIdentifier("concept1");
-		
-		final ThesaurusConcept node2= new ThesaurusConcept();	
+
+		final ThesaurusConcept node2= new ThesaurusConcept();
 		node2.setIdentifier("concept2");
-		final ThesaurusConcept node3 = new ThesaurusConcept();	
+		final ThesaurusConcept node3 = new ThesaurusConcept();
 		node3.setIdentifier("concept3");
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
 		concepts.add(node2);
 		concepts.add(node3);
-		
+
 		when(thesaurusConceptDAO.getById(anyString())).thenReturn(node1);
 		/*when(thesaurusConceptDAO.getAssociatedConcepts(node1)).thenReturn(concepts);
-		
+
 		List<ThesaurusConcept> returnedConcepts = thesaurusConceptService.getAssociatedConcepts("anyString");
 
 		Assert.assertEquals(2, returnedConcepts.size());*/
 	}
-	
+
 	/**
-	 * Succeeds if BusinessException 
+	 * Succeeds if BusinessException
 	 */
 	@Test(expected=BusinessException.class)
 	public void testHierarchieBrotherAsParent() {
@@ -438,36 +446,68 @@ public class ThesaurusConceptServiceTest {
 		brotherConcept.setIdentifier("brotherConcept");
 		final ThesaurusConcept conflictConcept = new ThesaurusConcept();
 		conflictConcept.setIdentifier("conflictConcept");
-		
+
 		// Creation of the Hierarchical relationships
 		List<ConceptHierarchicalRelationship> conceptHierarchicalRelationshipList = new ArrayList<ConceptHierarchicalRelationship>();
-		
+
 		ConceptHierarchicalRelationship relationshipParentConflictConcepts = new ConceptHierarchicalRelationship();
 		ConceptHierarchicalRelationship.Id id1 = new ConceptHierarchicalRelationship.Id();
 		id1.setChildconceptid("conflictConcept");
 		id1.setParentconceptid("parentConcept");
         relationshipParentConflictConcepts.setIdentifier(id1);
 		conceptHierarchicalRelationshipList.add(relationshipParentConflictConcepts);
-		
+
 		ConceptHierarchicalRelationship relationshipBrotherConflictConcepts = new ConceptHierarchicalRelationship();
 		ConceptHierarchicalRelationship.Id id2 = new ConceptHierarchicalRelationship.Id();
 		id2.setChildconceptid("conflictConcept");
 		id2.setParentconceptid("brotherConcept");
 		relationshipBrotherConflictConcepts.setIdentifier(id2);
 		conceptHierarchicalRelationshipList.add(relationshipBrotherConflictConcepts);
-		
+
 		// Mocks
 		List<ThesaurusConcept> childrenOfParentConcept = new ArrayList<ThesaurusConcept>();
 		childrenOfParentConcept.add(brotherConcept);
 		when(thesaurusConceptDAO.getChildrenConcepts("parentConcept")).thenReturn(childrenOfParentConcept);
-		
+
 		ThesaurusTerm dummyTerm = new ThesaurusTerm();
 		dummyTerm.setLexicalValue("dummy Value");
 		when(thesaurusTermDAO.getConceptPreferredTerm(anyString())).thenReturn(dummyTerm);
-		
+
 		conceptHierarchicalRelationshipServiceUtil.saveHierarchicalRelationship(
 				conflictConcept,
 				conceptHierarchicalRelationshipList,
 				new ArrayList<ThesaurusConcept>());
+	}
+
+
+	@Test
+	public final void testGetAvailableConceptsOfGroup(){
+
+		// Creation of concepts and group
+		ThesaurusConcept concept1 = new ThesaurusConcept();
+		concept1.setIdentifier("concept1");
+		ThesaurusConcept concept2 = new ThesaurusConcept();
+		concept2.setIdentifier("concept2");
+
+		List<ThesaurusConcept> fakeAvailableConcepts = new ArrayList<ThesaurusConcept>();
+		fakeAvailableConcepts.add(concept1);
+		fakeAvailableConcepts.add(concept2);
+
+		ThesaurusConceptGroup fakeCurrentGroup = new ThesaurusConceptGroup();
+		fakeCurrentGroup.setIdentifier("fakeCurrentGroup");
+		Set<ThesaurusConcept> existedConcepts = new HashSet<ThesaurusConcept>();
+		existedConcepts.add(concept1);
+		fakeCurrentGroup.setConcepts(existedConcepts);
+
+		List<ThesaurusConcept> resultAvailableConcepts = new ArrayList<ThesaurusConcept>();
+		resultAvailableConcepts.add(concept2);
+
+		// Mocks
+		when(thesaurusConceptDAO
+				.getAllConceptsByThesaurusId(anyString(), anyString(), any(Boolean.class), any(Boolean.class))).thenReturn(fakeAvailableConcepts);
+		when(thesaurusConceptGroupDAO.getById(anyString())).thenReturn(fakeCurrentGroup);
+
+		fakeAvailableConcepts = thesaurusConceptService.getAvailableConceptsOfGroup ("fakeCurrentGroup", "fakeThesaurus");
+		Assert.assertEquals("The list with 'concept2' expected",fakeAvailableConcepts, resultAvailableConcepts);
 	}
 }

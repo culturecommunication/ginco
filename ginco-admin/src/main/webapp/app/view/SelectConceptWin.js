@@ -48,7 +48,9 @@ Ext
 						conceptId : null,
 						getChildren : false,
 						getArrayConcepts : false,
+						getGroupConcepts : false,
 						arrayId : null,
+						groupId : null,
 						searchOrphans : null,
 						showTree : false,
 						checkstore : null,
@@ -78,7 +80,7 @@ Ext
 
 						me.conceptReducedStore = Ext.create('GincoApp.store.ConceptReducedStore');
 
-						if (!me.getChildren && !me.getArrayConcepts) {
+						if (!me.getChildren && !me.getArrayConcepts && !me.getGroupConcepts) {
 							// Searching all concepts in the thesaurus
 							me.conceptReducedStore.getProxy().extraParams = {
 								id : me.conceptId,
@@ -92,6 +94,12 @@ Ext
 							me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getAvailableConceptsOfArray';
 							me.conceptReducedStore.getProxy().extraParams = {
 								arrayId : me.arrayId,
+								thesaurusId : me.thesaurusData.id
+							};
+						} else if (me.getGroupConcepts){
+							me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getAvailableConceptsOfGroup';
+							me.conceptReducedStore.getProxy().extraParams = {
+								groupId : me.groupId,
 								thesaurusId : me.thesaurusData.id
 							};
 						} else {
@@ -148,7 +156,7 @@ Ext
 																		.fireEvent(
 																				'selectBtn',
 																				record);
-																me.close(); 
+																me.close();
 															}
 														}
 													} ]

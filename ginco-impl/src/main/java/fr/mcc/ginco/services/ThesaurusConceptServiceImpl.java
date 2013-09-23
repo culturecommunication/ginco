@@ -85,6 +85,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
+	@Inject
+	@Named("thesaurusConceptGroupDAO")
+	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
+
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
@@ -110,7 +114,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptList()
 	 */
 	@Override
@@ -120,7 +124,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.services.IThesaurusConceptService#getThesaurusConceptList
 	 * (java.util.List)
@@ -145,7 +149,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.IThesaurusConceptService#getThesaurusConceptById(java.lang
 	 * .String)
@@ -171,7 +175,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.IThesaurusConceptService#getTopTermThesaurusConcept(java
 	 * .lang.String)
@@ -246,7 +250,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.services.IThesaurusConceptService#getConceptPreferredTerm
 	 * (java.lang.String, java.lang.String)
@@ -301,11 +305,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				relation.getIdentifier().setConcept1(object.getIdentifier());
 			}
 		}
-		
+
 		object = conceptHierarchicalRelationshipServiceUtil
 				.saveHierarchicalRelationship(object,
 						hierarchicalRelationships, childrenConceptToDetach);
-		
+
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
 			// We can set status = candidate only if concept has not relation
 			// (both hierarchical or associative)
@@ -331,10 +335,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 
 		}
-		
+
 		ThesaurusConcept concept = thesaurusConceptDAO.update(object);
-		updateConceptTerms(concept, terms);	
-		
+		updateConceptTerms(concept, terms);
+
 		return thesaurusConceptDAO.update(saveAssociativeRelationship(concept, associatedConcepts));
 	}
 
@@ -529,6 +533,21 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		}
 		return returnAvailableConcepts;
+	}
+
+	@Override
+	public 	List<ThesaurusConcept> getAvailableConceptsOfGroup (String groupId, String thesaurusId){
+		ThesaurusConceptGroup currentGroup = new ThesaurusConceptGroup();
+		List<ThesaurusConcept> availableConcepts = thesaurusConceptDAO
+				.getAllConceptsByThesaurusId(null, thesaurusId, null, false);
+		if (StringUtils.isNotEmpty(groupId)) {
+			currentGroup = thesaurusConceptGroupDAO.getById(groupId);
+			Set<ThesaurusConcept> existedConcepts = currentGroup.getConcepts();
+			for (ThesaurusConcept concept : existedConcepts){
+				availableConcepts.remove(concept);
+			}
+		}
+		return availableConcepts;
 	}
 
 	@Override

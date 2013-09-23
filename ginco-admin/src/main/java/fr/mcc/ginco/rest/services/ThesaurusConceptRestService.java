@@ -80,7 +80,7 @@ import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Thesaurus Concept REST service for all operation on a thesaurus' concepts
- * 
+ *
  */
 @Service
 @Path("/thesaurusconceptservice")
@@ -107,11 +107,11 @@ public class ThesaurusConceptRestService {
     @Inject
     @Named("associativeRelationshipViewConverter")
     private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
-    
+
     @Inject
     @Named("hierarchicalRelationshipViewConverter")
     private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
-    
+
 	@Inject
     @Named("indexerService")
     private IIndexerService indexerService;
@@ -123,10 +123,10 @@ public class ThesaurusConceptRestService {
 	 * Public method used to get
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object by
 	 * providing its id.
-	 * 
+	 *
 	 * @param conceptId
 	 *            {@link String} identifier to try with
-	 * 
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object
 	 *         in JSON format or {@code null} if not found
 	 * @throws BusinessException
@@ -149,7 +149,7 @@ public class ThesaurusConceptRestService {
 
         List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
         logger.debug("Trying to load concept with id = " + resultId);
-        
+
 		terms = thesaurusTermService.getTermsByConceptId(resultId);
 		return thesaurusConceptViewConverter.convert(
 				thesaurusConceptService.getThesaurusConceptById(resultId),
@@ -158,7 +158,7 @@ public class ThesaurusConceptRestService {
 
 	/**
 	 * Public method used to create or update a concept
-	 * 
+	 *
 	 * @throws BusinessException
 	 */
 	@POST
@@ -171,7 +171,7 @@ public class ThesaurusConceptRestService {
 
 		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter
 				.convert(conceptView);
-		
+
 		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
 		List<ThesaurusConcept> childrenToDetach = thesaurusConceptViewConverter
 				.convertRemovedChildren(conceptView);
@@ -187,20 +187,20 @@ public class ThesaurusConceptRestService {
         for(AssociativeRelationshipView view : conceptView.getAssociatedConcepts()) {
             associations.add(associativeRelationshipViewConverter.convert(view, convertedConcept));
         }
-        
+
         //We get hierarchical relationships (from child to parents) from the view
         List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
         if (conceptView.getParentConcepts() != null) {
         	for (HierarchicalRelationshipView hierarchicalRelationView : conceptView.getParentConcepts()) {
         		hierarchicalRelationships.add(hierarchicalRelationshipViewConverter.convertRelationFromChildToParent(hierarchicalRelationView, convertedConcept));
-        	}        	
+        	}
         }
 
         //We save or update the concept
         logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
 				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach);
-		
+
 		for (ThesaurusTerm term : terms) {
 			indexerService.addTerm(term);
 		}
@@ -238,7 +238,7 @@ public class ThesaurusConceptRestService {
         } else {
             searchOrphanParam = Boolean.parseBoolean(searchOrphans);
         }
-        
+
         boolean onlyValidated = onlyValidatedConcepts;
         if (onlyValidatedConcepts == null) {
         	//By default, if the value is not set, we return all concepts
@@ -249,18 +249,18 @@ public class ThesaurusConceptRestService {
                 .convert(thesaurusConceptService.getConceptsByThesaurusId(conceptId, thesaurusId,
                         searchOrphanParam, onlyValidated));
     }
-    
+
     @GET
     @Path("/getSimpleConcepts")
     @Produces({ MediaType.APPLICATION_JSON })
     public  ExtJsonFormLoadData<List<ThesaurusConceptReducedView> > getSimpleConcepts(@QueryParam("conceptIds") List<String> associatedConcepts)
-            throws BusinessException {     
+            throws BusinessException {
     	List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
     	for (String conceptId: associatedConcepts) {
     		ThesaurusConcept concept = thesaurusConceptService.getThesaurusConceptById(conceptId);
     		reducedConcepts.add(thesaurusConceptViewConverter.convert(concept));
     	}
-    	 return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(reducedConcepts); 
+    	 return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(reducedConcepts);
     }
 
     @GET
@@ -275,7 +275,7 @@ public class ThesaurusConceptRestService {
         }
         return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(reducedConcepts);
     }
-    
+
     @GET
     @Path("/getAvailableConceptsOfArray")
     @Produces({ MediaType.APPLICATION_JSON })
@@ -284,7 +284,7 @@ public class ThesaurusConceptRestService {
     		@QueryParam("thesaurusId") String thesaurusId
     		)
             throws BusinessException {
-    	
+
         List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
         List<ThesaurusConcept> children = thesaurusConceptService.getAvailableConceptsOfArray(arrayId, thesaurusId);
         for (ThesaurusConcept child : children) {
@@ -292,15 +292,33 @@ public class ThesaurusConceptRestService {
         }
         return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(reducedConcepts);
     }
-    
+
+	@GET
+	@Path("/getAvailableConceptsOfGroup")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getAvailableConceptsOfGroup(
+			@QueryParam("groupId") String groupId,
+			@QueryParam("thesaurusId") String thesaurusId)
+			throws BusinessException {
+
+		List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
+		List<ThesaurusConcept> availableGroupConcepts = thesaurusConceptService
+				.getAvailableConceptsOfGroup(groupId, thesaurusId);
+		for (ThesaurusConcept concept : availableGroupConcepts) {
+			reducedConcepts.add(thesaurusConceptViewConverter.convert(concept));
+		}
+		return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
+				reducedConcepts);
+	}
+
     /**
 	 * Public method used to delete
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} -
-     * thesaurus term JSON object send by extjs
+     * thesaurus term JSON object send by extjssearchOrphanParam
      *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} deleted object
 	 *         in JSON format or {@code null} if not found
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/destroyConcept")
@@ -308,27 +326,27 @@ public class ThesaurusConceptRestService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) throws BusinessException {
 		ThesaurusConcept object = thesaurusConceptViewConverter.convert(thesaurusViewJAXBElement);
-	
+
 		if (object != null) {
 			thesaurusConceptService.destroyThesaurusConcept(object);
 			indexerService.removeConcept(object);
 		}
 	}
-	
+
 	/**
 	 * Public method to get all status for concept (id + label)
 	 * The types are read from a properties file
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getAllConceptStatus")
 	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<GenericStatusView>> getAllConceptStatus() throws BusinessException {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
-		
+
 		try {
 			String availableStatusIds[] = LabelUtil.getResourceLabel("concept-status").split(",");
-			
+
 			if ("".equals(availableStatusIds[0])) {
 				//Ids of status for concepts are not set correctly
 				throw new BusinessException("Error with property file - check values of identifier concept status", "check-values-of-concept-status");
@@ -342,7 +360,7 @@ public class ThesaurusConceptRestService {
 	        for (String id : availableStatusIds) {
 	        	GenericStatusView conceptStatusView = new GenericStatusView();
 	        	conceptStatusView.setStatus(Integer.valueOf(id));
-	        	
+
 	        	String label = LabelUtil.getResourceLabel("concept-status["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly
@@ -359,30 +377,30 @@ public class ThesaurusConceptRestService {
         result.setTotal((long) listOfStatus.size());
 		return result;
 	}
-	
+
 	/**
 	 * Public method to get all roles for hierarchical relationships between concepts
 	 * The types are read from a properties file
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getAllHierarchicalRelationRoles")
 	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<GenericRoleView>> getAllHierarchicalRelationRoles() throws BusinessException {
 		List<GenericRoleView> listOfRoles = new ArrayList<GenericRoleView>();
-		
+
 		try {
 			String availableRoleIds[] = LabelUtil.getResourceLabel("hierarchical-role").split(",");
-			
+
 			if ("".equals(availableRoleIds[0])) {
 				//Ids of roles for hierarchical relationships are not set correctly
 				throw new BusinessException("Error with property file - check values of identifiers for hierarchical relationships", "check-values-of-hierarchical-relationships");
 			}
-			
+
 	        for (String id : availableRoleIds) {
 	        	GenericRoleView roleView = new GenericRoleView();
 	        	roleView.setRole(Integer.valueOf(id));
-	        	
+
 	        	String label = LabelUtil.getResourceLabel("hierarchical-role["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly
