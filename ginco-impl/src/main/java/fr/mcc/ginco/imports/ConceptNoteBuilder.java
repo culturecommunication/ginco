@@ -82,24 +82,24 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 		super();
 	}
 	
-	private Language getNoteLanguage (String SkosLang)
+	private Language getNoteLanguage (String skosLang)
 	{
 		Language lang = null;
-		if (StringUtils.isEmpty(SkosLang)) {
+		if (StringUtils.isEmpty(skosLang)) {
 			lang = languagesDAO
 					.getById(defaultLang);
 			return lang;
 		} else {
-			lang = languagesDAO.getByPart1(SkosLang);
+			lang = languagesDAO.getByPart1(skosLang);
 			if (lang == null){
-				lang = languagesDAO.getById(SkosLang);
+				lang = languagesDAO.getById(skosLang);
 			}
 			
 			if (lang != null) {
 				return lang;
 			} else {
 				throw new BusinessException("Note "
-						+ SkosLang
+						+ skosLang
 						+ " is missing it's language",
 						"import-note-with-no-lang");
 			}

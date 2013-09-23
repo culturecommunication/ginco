@@ -126,10 +126,10 @@ public class ThesaurusTermUtils {
      * 
      * @return
      */
-    public final List<ThesaurusTerm> getPreferedTermsByLang(List<ThesaurusTerm> listOfTerms, String LanguageId) {
+    public final List<ThesaurusTerm> getPreferedTermsByLang(List<ThesaurusTerm> listOfTerms, String languageId) {
         List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
         for (ThesaurusTerm thesaurusTerm : listOfTerms) {
-            if (thesaurusTerm.getPrefered() && thesaurusTerm.getLanguage().getId().equals(LanguageId)) {
+            if (thesaurusTerm.getPrefered() && thesaurusTerm.getLanguage().getId().equals(languageId)) {
                 preferedTerms.add(thesaurusTerm);
             }
         }
