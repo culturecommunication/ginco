@@ -35,12 +35,16 @@
 package fr.mcc.ginco.tests.audit.csv;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.audit.csv.JournalEventsEnum;
 import fr.mcc.ginco.audit.csv.JournalLine;
@@ -48,9 +52,21 @@ import fr.mcc.ginco.audit.csv.JournalLineBuilder;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class JournalLineBuilderTest {
+
+	@Mock(name = "thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
+	@InjectMocks
+	private JournalLineBuilder journalLineBuilder;
+
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
 
 	@Test
 	public void testBuildLineBase() {
@@ -59,8 +75,7 @@ public class JournalLineBuilderTest {
 		gincoRevEntity.setTimestamp(DateUtil.dateFromString(
 				"2012-12-12 12:00:00").getTime());
 
-		JournalLineBuilder builder = new JournalLineBuilder();
-		JournalLine actualBaseLine = builder.buildLineBase(
+		JournalLine actualBaseLine = journalLineBuilder.buildLineBase(
 				JournalEventsEnum.THESAURUSTERM_CREATED, gincoRevEntity);
 
 		Assert.assertEquals(DateUtil.dateFromString("2012-12-12 12:00:00"),
@@ -90,8 +105,7 @@ public class JournalLineBuilderTest {
 		revisionData[0] = term;
 		revisionData[1] = gincoRevEntity;
 
-		JournalLineBuilder builder = new JournalLineBuilder();
-		JournalLine actualJournalLine = builder.buildTermAddedLine(
+		JournalLine actualJournalLine = journalLineBuilder.buildTermAddedLine(
 				(ThesaurusTerm) revisionData[0],
 				(GincoRevEntity) revisionData[1]);
 
@@ -117,8 +131,7 @@ public class JournalLineBuilderTest {
 		term.setLexicalValue("One lexical value");
 		term.setConcept(concept);
 
-		JournalLineBuilder builder = new JournalLineBuilder();
-		JournalLine actualJournalLine = builder
+		JournalLine actualJournalLine = journalLineBuilder
 				.buildTermLexicalValueChangedLine(term, gincoRevEntity,
 						"Old lexical value");
 
@@ -146,15 +159,14 @@ public class JournalLineBuilderTest {
 		term.setConcept(concept);
 		term.setPrefered(true);
 
-		JournalLineBuilder builder = new JournalLineBuilder();
-		JournalLine actualJournalLine = builder.buildTermRoleChangedLine(term,
-				gincoRevEntity);
+		JournalLine actualJournalLine = journalLineBuilder
+				.buildTermRoleChangedLine(term, gincoRevEntity);
 		Assert.assertEquals("fake-term-id", actualJournalLine.getTermId());
 		Assert.assertEquals("fake-concept-id", actualJournalLine.getConceptId());
 		Assert.assertEquals("TP", actualJournalLine.getTermRole());
 
 		term.setPrefered(false);
-		JournalLine actualNonPreferredBaseLine = builder
+		JournalLine actualNonPreferredBaseLine = journalLineBuilder
 				.buildTermRoleChangedLine(term, gincoRevEntity);
 		Assert.assertEquals("TNP", actualNonPreferredBaseLine.getTermRole());
 
@@ -177,9 +189,9 @@ public class JournalLineBuilderTest {
 
 		ThesaurusTerm preferredTerm = new ThesaurusTerm();
 
-		JournalLineBuilder builder = new JournalLineBuilder();
-		JournalLine actualJournalLine = builder.buildTermAttachmentChangedLine(
-				term, gincoRevEntity, preferredTerm);
+		JournalLine actualJournalLine = journalLineBuilder
+				.buildTermAttachmentChangedLine(term, gincoRevEntity,
+						preferredTerm);
 		Assert.assertEquals("fake-term-id", actualJournalLine.getTermId());
 		Assert.assertEquals("One lexical value",
 				actualJournalLine.getNewLexicalValue());
@@ -197,6 +209,15 @@ public class JournalLineBuilderTest {
 		ThesaurusConcept concept = new ThesaurusConcept();
 		concept.setIdentifier("fake-concept-id");
 
+		Set<ThesaurusConcept> oldParents = new HashSet<ThesaurusConcept>();
+		ThesaurusConcept oldConcept1 = new ThesaurusConcept();
+		oldConcept1.setIdentifier("oldConcept1");
+		oldParents.add(oldConcept1);
+
+		ThesaurusConcept oldConcept2 = new ThesaurusConcept();
+		oldConcept2.setIdentifier("oldConcept2");
+		oldParents.add(oldConcept2);
+
 		Set<ThesaurusConcept> currentParents = new HashSet<ThesaurusConcept>();
 		ThesaurusConcept curentConcept1 = new ThesaurusConcept();
 		curentConcept1.setIdentifier("currentConcept1");
@@ -206,36 +227,37 @@ public class JournalLineBuilderTest {
 		curentConcept2.setIdentifier("currentConcept2");
 		currentParents.add(curentConcept2);
 
-		concept.setParentConcepts(currentParents);
+		Mockito.when(thesaurusConceptService.getConceptLabel("oldConcept1"))
+				.thenReturn("Old concept 1");
+		Mockito.when(thesaurusConceptService.getConceptLabel("oldConcept2"))
+				.thenReturn("Old concept 2");
+		Mockito.when(thesaurusConceptService.getConceptLabel("currentConcept1"))
+				.thenReturn("Current concept 1");
+		Mockito.when(thesaurusConceptService.getConceptLabel("currentConcept2"))
+				.thenReturn("Current concept 2");
 
-		Object[] revisionData = new Object[3];
-		revisionData[0] = concept;
-		revisionData[1] = gincoRevEntity;
+		JournalLine actualLine = journalLineBuilder
+				.buildConceptHierarchyChanged(concept, gincoRevEntity,
+						oldParents, currentParents);
 
-		Set<String> oldGenericConceptIds = new HashSet<String>();
-		oldGenericConceptIds.add("concept1");
-		oldGenericConceptIds.add("concept2");
+		Assert.assertEquals("fake-concept-id", actualLine.getConceptId());
 
-		JournalLineBuilder builder = new JournalLineBuilder();
-		/*
-		 * List<RevisionLine> actualBaseLines = builder
-		 * .buildConceptHierarchyChanged(revisionData, oldGenericConceptIds,
-		 * "fr-FR", new AuditReader()); Assert.assertEquals(1,
-		 * actualBaseLines.size()); if (actualBaseLines.get(0) instanceof
-		 * JournalLine) { JournalLine actualJournalLine = (JournalLine)
-		 * actualBaseLines .get(0); Assert.assertEquals("fake-concept-id",
-		 * actualJournalLine.getConceptId()); ListAssert.assertContains( new
-		 * ArrayList<String>(actualJournalLine.getNewGenericTerm()),
-		 * "currentConcept1"); ListAssert.assertContains( new
-		 * ArrayList<String>(actualJournalLine.getNewGenericTerm()),
-		 * "currentConcept2"); ListAssert.assertContains( new
-		 * ArrayList<String>(actualJournalLine.getOldGenericTerm()),
-		 * "concept1"); ListAssert.assertContains( new
-		 * ArrayList<String>(actualJournalLine.getOldGenericTerm()),
-		 * "concept2");
-		 * 
-		 * }
-		 */
+		Assert.assertEquals(
+				true,
+				actualLine.getNewGenericTerm().contains(
+						"Current concept 1 (currentConcept1)"));
+		Assert.assertEquals(
+				true,
+				actualLine.getNewGenericTerm().contains(
+						"Current concept 2 (currentConcept2)"));
+		Assert.assertEquals(
+				true,
+				actualLine.getOldGenericTerm().contains(
+						"Old concept 1 (oldConcept1)"));
+		Assert.assertEquals(
+				true,
+				actualLine.getOldGenericTerm().contains(
+						"Old concept 2 (oldConcept2)"));
 
 	}
 

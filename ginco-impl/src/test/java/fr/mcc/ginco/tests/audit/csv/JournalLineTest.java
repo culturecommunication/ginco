@@ -72,4 +72,39 @@ public class JournalLineTest {
 		Assert.assertEquals("log-journal.thesaurus-concept-created-event,2013-01-20 20:30:00,unknown.author,http://fakeconcept,http://faketerm,TP,concept-status[0],Old term lexical value,New term lexical Value,http://fakeconcept1,http://fakeconcept1|http://fakeconcept2", line.toString());
 		
 	}
+	
+	@Test
+	public void testCompareTo() throws IOException {
+		
+		JournalLine line1 = new JournalLine();
+		line1.setEventDate(DateUtil.dateFromString("2013-01-20 20:30:00"));
+		line1.setEventType(JournalEventsEnum.THESAURUSCONCEPT_CREATED);
+		line1.setRevisionNumber(1);
+		
+		JournalLine line11 = new JournalLine();
+		line11.setEventDate(DateUtil.dateFromString("2013-01-20 20:30:00"));
+		line11.setEventType(JournalEventsEnum.THESAURUSCONCEPT_CREATED);
+		line11.setRevisionNumber(2);
+		
+		JournalLine line2 = new JournalLine();
+		line2.setEventDate(DateUtil.dateFromString("2013-01-21 20:30:00"));
+		line2.setEventType(JournalEventsEnum.THESAURUSCONCEPT_CREATED);
+		line2.setRevisionNumber(1);
+		
+		JournalLine line3 = new JournalLine();
+		line3.setEventDate(DateUtil.dateFromString("2013-01-21 20:30:00"));
+		line3.setEventType(JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT);
+		line3.setRevisionNumber(1);
+		
+		
+		int revisionTest = line1.compareTo(line11);
+		Assert.assertTrue(revisionTest<0);
+		
+		int dateTest = line1.compareTo(line2);
+		Assert.assertTrue(dateTest<0);
+
+		int priorityTest = line1.compareTo(line3);
+		Assert.assertTrue(priorityTest<0);
+		
+	}
 }
