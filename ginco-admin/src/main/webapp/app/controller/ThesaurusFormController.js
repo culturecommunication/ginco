@@ -97,6 +97,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         thesaurusPanel.down('#editJournal').setDisabled(false);
         thesaurusPanel.down('#publishThesaurus').setDisabled(false);
         thesaurusPanel.down('#importSandbox').setDisabled(false);
+        thesaurusPanel.down('#importBranch').setDisabled(false);
 
         if(thesaurusPanel.thesaurusData.archived) {
             thesaurusPanel.down('bottomFormToolBar').setArchived();
