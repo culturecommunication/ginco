@@ -32,59 +32,65 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports.ginco.idgenerator;
+package fr.mcc.ginco.tests.imports.ginco.idgenerator;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import junit.framework.Assert;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.imports.ginco.idgenerator.GincoTermIdGenerator;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 
-/**
- * This class generate new ids for terms for importing branch in existing
- * thesaurus
- * 
- */
-@Component("gincoTermIdGenerator")
-public class GincoTermIdGenerator {
-
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
-
-	@Inject
-	@Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;	
-
+public class GincoTermIdGeneratorTest {		
+	@Mock(name = "generatorService")
+	private IIDGeneratorService generatorService;
+	
 	@Log
 	private Logger logger;
+	@Mock(name = "thesaurusTermDAO")
+	private IThesaurusTermDAO thesaurusTermDAO;	
+	
+	@InjectMocks
+	private GincoTermIdGenerator gincoTermIdGenerator;	
 
-	/**
-	 * This method checks if the id of the term is not already present in the
-	 * application, and replace it if it's the case. It also update the
-	 * conceptid if it has changed
-	 * 
-	 * @param term
-	 * @param idMapping
-	 *            : the map where we store the mapping between old and new ids
-	 * @return ThesaurusTerm updatedTerm
-	 */
-	public String getIdForTerm(String oldId, Map<String, String> idMapping) {
-		if (thesaurusTermDAO.getById(oldId) != null) {
-			String newId = generatorService.generate(ThesaurusTerm.class);
-			idMapping.put(oldId, newId);
-			logger.debug("Setting a new id for the ID" + oldId
-					+ "with new id " + newId);
-			return newId;
-		}
-		return oldId;
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+		LoggerTestUtil.initLogger(gincoTermIdGenerator);
+	}	
+	
+	@Test
+	public void testGetIdForConcept() {
+		
+		ThesaurusTerm term1 = new ThesaurusTerm();
+		String oldId2 = "veryOldId2";
+		String oldId3 = "oldId3";
+
+		Map<String, String> idMapping = new HashMap<String, String>();
+		idMapping.put("veryOldId1", "oldId1");
+		idMapping.put("veryOldId2", "oldId2");
+		
+		Mockito.when(generatorService.generate(ThesaurusTerm.class)).thenReturn("newId2");
+		Mockito.when(thesaurusTermDAO.getById(oldId2)).thenReturn(term1);
+		
+		String actualId3 = gincoTermIdGenerator.getIdForTerm(oldId3, idMapping);
+		Assert.assertEquals("oldId3", actualId3);
+		
+		String actualId2 = gincoTermIdGenerator.getIdForTerm(oldId2, idMapping);
+		Assert.assertEquals("newId2", actualId2);		
 	}
-
+	
 }

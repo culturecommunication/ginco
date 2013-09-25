@@ -59,7 +59,7 @@ public class GincoRelationshipIdGenerator {
 	private GincoIdMapParser gincoIdMapParser;
 
 	/**
-	 * This method updates ids of the hierarchical relations
+	 * This method returns new ids for the hierarchical relations
 	 * 
 	 * @param relations
 	 *            : list of hierarchical relationships
@@ -68,7 +68,7 @@ public class GincoRelationshipIdGenerator {
 	 * @return Map<String, JaxbList<ConceptHierarchicalRelationship>> relations
 	 *         : updated relation map with new ids
 	 */
-	public Map<String, JaxbList<ConceptHierarchicalRelationship>> checkIdsForHierarchicalRelations(
+	public Map<String, JaxbList<ConceptHierarchicalRelationship>> getIdsForHierarchicalRelations(
 			Map<String, JaxbList<ConceptHierarchicalRelationship>> relations,
 			Map<String, String> idMapping) {
 
@@ -99,9 +99,7 @@ public class GincoRelationshipIdGenerator {
 
 			updatedRelations.put(newId, relation);
 		}
-
-		relations.clear();
-		relations.putAll(updatedRelations);
-		return relations;
+		
+		return updatedRelations;
 	}
 }

@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.imports.ginco.idgenerator;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -49,7 +48,6 @@ import fr.mcc.ginco.log.Log;
 @Component("gincoIdMapParser")
 public class GincoIdMapParser {
 	
-	
 	@Log
 	private Logger logger;
 
@@ -60,21 +58,11 @@ public class GincoIdMapParser {
 	 * @return newId : the new id of the element which old id is given in parameter
 	 */
 	public String getNewId(String oldId, Map<String, String> idMapping) {
-		String newId = oldId;
-
-		Iterator<Map.Entry<String, String>> entries = idMapping.entrySet()
-				.iterator();
-		while (entries.hasNext()) {
-			Map.Entry<String, String> entry = entries.next();
-			
-			if (oldId.equals(entry.getKey())) {
-				// Getting the new id
-				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					newId = entry.getValue();
-					logger.debug("Mapping for old id" + oldId + "found with new value : " + newId);
-				}
-			}
-		}
+		String newId = oldId;			
+		if (idMapping.get(oldId) != null && !idMapping.get(oldId).isEmpty()) {
+				newId = idMapping.get(oldId);
+				logger.debug("Mapping for old id " + oldId + " found with new value : " + newId);
+		}	
 		return newId;
 	}
 }
