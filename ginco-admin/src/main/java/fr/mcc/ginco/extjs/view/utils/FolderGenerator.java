@@ -88,7 +88,7 @@ public class FolderGenerator {
 
 	/**
 	 * Creates categorization folders.
-	 * 
+	 *
 	 * @param parentId
 	 *            id of top node.
 	 * @return created list of folders.
@@ -104,7 +104,7 @@ public class FolderGenerator {
 		list.add(getConcepts(parentId));
 
 		list.add(getSandbox(parentId));
-		
+
 		list.add(getSplitNonPreferredTerms(parentId));
 
 		list.add(getOrphans(parentId));
@@ -136,7 +136,7 @@ public class FolderGenerator {
 
 	private IThesaurusListNode getSandbox(String parentId) {
 		IThesaurusListNode sandbox = new ThesaurusListBasicNode();
-		sandbox.setTitle("Bac à sable");
+		sandbox.setTitle("Termes orphelins");
 		sandbox.setId(ClassificationFolderType.SANDBOX.toString() + "_"
 				+ parentId);
 		sandbox.setType(ThesaurusListNodeType.FOLDER);
@@ -146,7 +146,7 @@ public class FolderGenerator {
 		sandbox.setChildren(new ArrayList<IThesaurusListNode>());
 		return sandbox;
 	}
-	
+
 	private IThesaurusListNode getSplitNonPreferredTerms(String parentId) {
 		IThesaurusListNode sandbox = new ThesaurusListBasicNode();
 		sandbox.setTitle("Concepts complexes");
@@ -184,6 +184,7 @@ public class FolderGenerator {
 		orphans.setTitle("Concepts orphelins");
 		orphans.setId(ORPHANS_PREFIX + parentId);
 		orphans.setType(ThesaurusListNodeType.FOLDER);
+		orphans.setIconCls("sandbox");
 		orphans.setExpanded(false);
 		orphans.setDisplayable(false);
 		long nbOrphans = thesaurusConceptService
@@ -205,7 +206,7 @@ public class FolderGenerator {
 		groups.setExpanded(false);
 		groups.setChildren(new ArrayList<IThesaurusListNode>());
 		groups.setDisplayable(false);
-		
+
 		List<ThesaurusConceptGroup> realArrays = thesaurusConceptGroupService
 				.getAllThesaurusConceptGroupsByThesaurusId(null, parentId);
 		if (realArrays != null && realArrays.size() > 0) {
@@ -213,7 +214,7 @@ public class FolderGenerator {
 		} else {
 			groups.setChildren(new ArrayList<IThesaurusListNode>());
 		}
-		
+
 		return groups;
 	}
 

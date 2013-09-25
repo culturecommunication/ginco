@@ -34,7 +34,7 @@
  */
 
 Ext.define('GincoApp.locale.fr.view.SandBoxPanel', {
-	xSandBoxPanelTitle : "Bac à sable",
+	xSandBoxPanelTitle : "Termes orphelins",
 	xIdentifierColumnLabel : "Identifiant",
 	xLexicalValueColumnLabel : "Valeur lexicale",
 	xCreatedColumnLabel : "Date de création",

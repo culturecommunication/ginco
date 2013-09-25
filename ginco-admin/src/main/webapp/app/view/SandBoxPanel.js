@@ -36,7 +36,7 @@
 /*
  * File: app/view/SandBoxPanel.js
  * Term Creation/Edition Form
- * 
+ *
  */
 Ext.define('GincoApp.view.SandBoxPanel', {
 	extend : 'Ext.panel.Panel',
@@ -48,7 +48,7 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 		type : 'vbox',
 		align : 'stretch'
 	},
-	xSandBoxPanelTitle : "Sandbox",
+	xSandBoxPanelTitle : "Orphan terms",
 	xIdentifierColumnLabel : "Identifier",
 	xLexicalValueColumnLabel : "Lexical Value",
 	xCreatedColumnLabel: "Created",
@@ -60,7 +60,7 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 	initComponent : function() {
 		var me = this;
 		me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
-		
+
 		//We always list all the sandboxed terms, so we set onlyValidatedTerms to false
 		me.termStore.getProxy().extraParams = {onlyValidatedTerms: false};
 		Ext.applyIf(me, {
@@ -86,7 +86,7 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 			        dock: 'bottom',
 			        displayInfo: true
 			    }]
-				}]	
+				}]
 
 		});
 

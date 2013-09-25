@@ -63,16 +63,16 @@ public class FolderGeneratorTest {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@Mock(name = "thesaurusArrayService")
-	private IThesaurusArrayService thesaurusArrayService;	
-	
+	private IThesaurusArrayService thesaurusArrayService;
+
     @Mock(name = "thesaurusListNodeFactory")
     private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	@InjectMocks
 	private FolderGenerator folderGenerator = new FolderGenerator();
-	
+
 	@Mock(name = "thesaurusConceptGroupService")
-	private IThesaurusConceptGroupService thesaurusConceptGroupService;	
+	private IThesaurusConceptGroupService thesaurusConceptGroupService;
 
 	@Before
 	public final void setUp() {
@@ -86,7 +86,7 @@ public class FolderGeneratorTest {
 				thesaurusConceptService
 						.getOrphanThesaurusConceptsCount(Matchers.anyString()))
 				.thenReturn((long) 0);
-		
+
         Mockito.when(
         		thesaurusListNodeFactory.getListBasicNode())
                 .thenAnswer(new Answer<ThesaurusListBasicNode>() {
@@ -95,7 +95,7 @@ public class FolderGeneratorTest {
 						return new ThesaurusListBasicNode();
 					}
                    });
-		
+
 		Mockito.when(
 				thesaurusConceptService
 						.getTopTermThesaurusConceptsCount(Matchers.anyString()))
@@ -118,10 +118,10 @@ public class FolderGeneratorTest {
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(1)
 				.getType());
 		Assert.assertEquals("SANDBOX_fake", nodes.get(1).getId());
-		Assert.assertEquals("Bac à sable", nodes.get(1).getTitle());
+		Assert.assertEquals("Termes orphelins", nodes.get(1).getTitle());
 		Assert.assertEquals(false, nodes.get(1).isExpanded());
 		Assert.assertNotNull(nodes.get(1).getChildren());
-		
+
 		// tests of the orphan concepts node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(2)
 				.getType());
@@ -129,7 +129,7 @@ public class FolderGeneratorTest {
 		Assert.assertEquals("Concepts complexes", nodes.get(2).getTitle());
 		Assert.assertEquals(false, nodes.get(2).isExpanded());
 		Assert.assertNotNull(nodes.get(2).getChildren());
-		
+
 		// tests of the orphan concepts node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(3)
 				.getType());
@@ -159,7 +159,7 @@ public class FolderGeneratorTest {
 				.thenReturn((long) 3);
 		List<IThesaurusListNode> nodes = folderGenerator
 				.generateFolders("fake");
-		
+
 		Assert.assertNull(nodes.get(0).getChildren());
 		Assert.assertNull(nodes.get(3).getChildren());
 	}
