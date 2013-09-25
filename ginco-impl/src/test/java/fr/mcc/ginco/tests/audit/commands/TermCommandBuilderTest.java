@@ -51,6 +51,7 @@ import org.mockito.MockitoAnnotations;
 import fr.mcc.ginco.audit.commands.CommandLine;
 import fr.mcc.ginco.audit.commands.MistralStructuresBuilder;
 import fr.mcc.ginco.audit.commands.TermCommandBuilder;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
 public class TermCommandBuilderTest {
@@ -205,6 +206,11 @@ public class TermCommandBuilderTest {
 		termToAdd.setIdentifier("termToAdd");
 		termToAdd.setLexicalValue("termToAdd");
 		termToAdd.setPrefered(true);
+
+		ThesaurusConcept conceptOfTermToAdd = new ThesaurusConcept();
+		conceptOfTermToAdd.setIdentifier("conceptOfTermToAdd");
+		termToAdd.setConcept(conceptOfTermToAdd);
+
 		newLexicalValues.put("termToAdd", termToAdd);
 		currentTerms.add(termToAdd);
 

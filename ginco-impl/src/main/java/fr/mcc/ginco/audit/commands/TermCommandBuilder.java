@@ -35,14 +35,17 @@
 package fr.mcc.ginco.audit.commands;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
@@ -57,7 +60,7 @@ public class TermCommandBuilder {
 	private MistralStructuresBuilder mistralStructuresBuilder;
 
 	/**
-	 * Builds the list of command lines for term changes between two revisions
+	 * Builds the list of command lines for terms deleted between two revisions
 	 *
 	 * @param previousTerms
 	 * @param currentTerms
@@ -82,6 +85,13 @@ public class TermCommandBuilder {
 		return termsOperations;
 	}
 
+	/**
+	 * Builds the list of command lines for terms changed between two revisions
+	 *
+	 * @param previousTerms
+	 * @param currentTerms
+	 * @return
+	 */
 	public List<CommandLine> buildChangedTermsLines(List<ThesaurusTerm> previousTerms,
 			List<ThesaurusTerm> currentTerms){
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
@@ -119,6 +129,13 @@ public class TermCommandBuilder {
 		return termsOperations;
 	}
 
+	/**
+	 * Builds the list of command lines for preferred terms added between two revisions
+	 *
+	 * @param previousTerms
+	 * @param currentTerms
+	 * @return
+	 */
 	public List<CommandLine> buildAddedPrefTermsLines(List<ThesaurusTerm> previousTerms,
 			List<ThesaurusTerm> currentTerms) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
@@ -134,12 +151,19 @@ public class TermCommandBuilder {
 					&& currentTerm.getPrefered()) {
 				CommandLine additionLine = new CommandLine();
 				if (!newNotPreferredTermsByTerm.get(currentTerm.getLexicalValue()).isEmpty()){
-						additionLine.setValue(CommandLine.STARS
-								+ currentTerm.getLexicalValue());
+					additionLine.setValue(CommandLine.STARS	+ currentTerm.getLexicalValue());
+					termsOperations.add(additionLine);
 				} else{
-					additionLine.setValue(currentTerm.getLexicalValue());
+					Set<ThesaurusConcept> allParents = new HashSet<ThesaurusConcept>();
+					for (ThesaurusTerm cuttentChildTerm : currentTerms) {
+						allParents.addAll(cuttentChildTerm.getConcept().getParentConcepts());
+					}
+					if (currentTerm.getConcept().getParentConcepts().isEmpty()
+							&& !allParents.contains(currentTerm.getConcept())){
+						additionLine.setValue(currentTerm.getLexicalValue());
+						termsOperations.add(additionLine);
+					}
 				}
-				termsOperations.add(additionLine);
 			}
 		}
 		return termsOperations;
