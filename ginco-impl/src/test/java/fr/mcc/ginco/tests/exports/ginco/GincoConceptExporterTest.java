@@ -54,7 +54,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.exports.ginco.GincoConceptExporter;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.services.ConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
@@ -129,5 +128,21 @@ public class GincoConceptExporterTest {
 		
 		JaxbList<Note> resultNotes = gincoConceptExporter.getExportConceptNotes(c1);
 		Assert.assertEquals(resultNotes.getList().size(), notes.size());
+	}
+	
+	@Test
+	public void testGetExportAssociativeRelationShip() {
+		
+			ThesaurusConcept thesaurusConcept = new ThesaurusConcept();
+			List<String> relationships  = new ArrayList<String>();
+			relationships.add("http://id1");
+			relationships.add("http://id2");
+
+			Mockito.when(associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept)).thenReturn(relationships);
+			
+			JaxbList<String> actualRes = gincoConceptExporter.getExportAssociativeRelationShip(thesaurusConcept);
+			
+			Assert.assertEquals(2, actualRes.getList().size());
+		
 	}
 }
