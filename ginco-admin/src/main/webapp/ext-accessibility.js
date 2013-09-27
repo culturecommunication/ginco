@@ -395,6 +395,13 @@ Ext.define('Thesaurus.Ext.tree.View', {
              row.rowAttr+=' aria-level="'+record.getDepth()+'"';
     	 }
     	return data;
+    },
+    
+    onBeforeExpand: function(parent, records, index) {
+    	var me = this;
+    	if (index>0)
+    		me.select(index-1);
+        me.callParent();
     }
 });
 
