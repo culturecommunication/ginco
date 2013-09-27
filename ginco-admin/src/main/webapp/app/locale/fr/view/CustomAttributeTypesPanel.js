@@ -2,7 +2,7 @@ Ext.define('GincoApp.locale.fr.view.CustomAttributeTypesPanel',
     {
         xIdentifierLabel : 'Identifiant',
         xCode : 'Code',
-        xValue : 'Valeur',
+        xValue : 'Type',
         xDelete : 'Supprimer',
         xAdd : 'Ajouter un attribut',
         xSave : 'Enregistrer',
