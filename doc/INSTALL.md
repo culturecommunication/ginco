@@ -191,27 +191,13 @@ Copy the generated ginco-admin/target/ginco-admin.war and ginco-webservices/targ
 
 ### Run SQL scripts ###
 
-* Schema scripts 
+* Schema and Populate data 
 
 Run : 
 ```bash
-$ psql < ./sql/postgresql92/schema.sql
-$ psql < ./sql/postgresql92/schema-1.2.sql
-$ psql < ./sql/postgresql92/schema-1.3.sql
-$ psql < ./sql/postgresql92/schema-1.4.sql
-$ psql < ./sql/postgresql92/schema-audit-1.3.sql
+$ psql < ./sql/postgresql92/schema_data.sql
+
 ```
-
-* Populate data
-Run : 
-
-```bash
-$ psql < ./sql/postgresql92/data.sql
-$ psql < ./sql/postgresql92/data-1.2.sql
-$ psql < ./sql/postgresql92/data-1.3.sql
-$ psql < ./sql/postgresql92/data-1.4.sql
-```
-
 
 ### Configuring GINCO ###
 
