@@ -47,7 +47,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	},
 	onPanelBeforeClose : function(thePanel) {
 		var me = this;
-		var theForm = thePanel.down('form');		
+		var theForm = thePanel.down('form');
 		var globalTabs = thePanel.up('topTabs');
 		if (theForm) {
 			var dirtyForms = [];
@@ -59,7 +59,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 					dirtyForms.push(gridPanel.up('form'));
 				}
 			});
-			
+
 			var theForms = thePanel.query('form');
 			Ext.Array.forEach(theForms,function (aForm) {
 				if (aForm.getForm().isDirty())
@@ -71,11 +71,11 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 				}
 			}
 			);
-			
+
 			if (dirtyForms.length>0) {
-				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
+				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) {
 					if (theForm.checkRoles('ADMIN')==true) {
-						return true;						
+						return true;
 					}
 				}
 				Ext.MessageBox.show({
@@ -103,8 +103,8 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 									}
 								}
 							}
-							
-							
+
+
 							break;
 						case 'cancel':
 							break; // leave blank if no action required on
@@ -141,9 +141,9 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			}
 			tabs.push(encodeURIComponent(tab.thesaurusData.id));
 		    newToken = tabs.reverse().join(tokenDelimiter);
-		    
+
 		    oldToken = Ext.History.getToken();
-		   
+
 		    if (oldToken === null || oldToken.search(newToken) === -1) {
 		        Ext.History.add(newToken);
 		    }
@@ -159,7 +159,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
                 length = parts.length;
                 // setActiveTab in all nested tabs
                	tabPanel.setActiveTab(Ext.getCmp(parts[length-1]));
-                
+
             }
         });
 		// Handle reopen tabs at first load
@@ -191,7 +191,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 		}
 	},
 	onTabAdd : function ( tabPanel, component, index, eOpts) {
-		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
+		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) {
 			component.restrictUI('ADMIN');
 		}
 		var closeBtn = tabPanel.down("#closeAllTabs");
@@ -217,19 +217,30 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 	{
 		this.openGenericTab(tabPanel, aThesaurusId, aGroupId, "conceptGroupPanel","GincoApp.view.ConceptGroupPanel");
 	},
+	openSandboxTab : function (tabPanel, aThesaurusId)
+	{
+		this.openGenericTab(tabPanel, aThesaurusId, null, "sandboxPanel","GincoApp.view.SandBoxPanel");
+	},
+	openComplexConceptsTab : function (tabPanel, aThesaurusId)
+	{
+		this.openGenericTab(tabPanel, aThesaurusId, null, "complexconceptsPanel","GincoApp.view.ComplexConceptsPanel");
+	},
 	openGenericTab : function (tabPanel, aThesaurusId, aGincoId, aXtype, aClass)
 	{
 		var existingTabs = Ext.ComponentQuery
 		.query('topTabs '+aXtype);
 		var tabExists = false;
-		
+
 		Ext.Array.each(existingTabs, function(element, index, array) {
 			if (element.gincoId != null
 					&& element.gincoId == aGincoId) {
 				tabExists = element;
+			} else if (element.thesaurusData!=null
+					&& element.thesaurusData.id == aThesaurusId){
+				tabExists = element;
 			}
 		});
-		
+
 		if (!tabExists) {
 			var model = this.getThesaurusModelModel();
 			model.load(aThesaurusId, {
@@ -248,35 +259,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			tabPanel.setActiveTab(tabExists);
 		}
 	},
-	openSandboxTab : function (tabPanel, aThesaurusId)
-	{
-		var sandBoxTabs = Ext.ComponentQuery.query('topTabs sandboxPanel');
-		var tabExists = false;
-		Ext.Array.each(sandBoxTabs,function(element, index, array) {
-			if (element.thesaurusData!=null && element.thesaurusData.id == aThesaurusId) {
-				tabExists = element;
-			}
-		});
-		if (!tabExists) {
-			var model = this.getThesaurusModelModel();
-			model.load(aThesaurusId, {
-				success : function(aModel) {
-					var sandBoxPanel = Ext.create('GincoApp.view.SandBoxPanel');
-					sandBoxPanel.thesaurusData = aModel.data;
-					var tab = tabPanel.add(sandBoxPanel);
-					tabPanel.setActiveTab(tab);
-					tab.show();
-				}
-			});
-		} else {
-			tabPanel.setActiveTab(tabExists);
-		}
-	},
-	openComplexConceptsTab : function (tabPanel, aThesaurusId)
-	{
-		this.openGenericTab(tabPanel, aThesaurusId, null, "complexConceptsPanel","GincoApp.view.ComplexConceptsPanel");
-	},
-	
+
 	openThesaurusTab : function (tabPanel, aThesaurusId)
 	{
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
@@ -309,7 +292,7 @@ Ext.define('GincoApp.controller.GlobalTabPanelController', {
 			this.onTabAdd(topTabs,topTabs.getActiveTab());
 		}
 	},
-	onTabRemoved: function(theTabPanel) 
+	onTabRemoved: function(theTabPanel)
 	{
 		if (theTabPanel.items.length==0)
 		{

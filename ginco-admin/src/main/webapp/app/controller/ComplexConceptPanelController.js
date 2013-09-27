@@ -48,12 +48,12 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 	xProblemSaveMsg : 'Impossible to save the complex concept !',
 	xProblemDeleteMsg : 'Impossible to delete the Complex concept !',
 	xProblemLoadMsg : 'Unable to load the complex concept',
-	
+
 	loadPanel : function(theForm) {
 		var me = this;
 		var thePanel = theForm.up('complexconceptPanel');
 		var thesaurusData = thePanel.thesaurusData;
-		
+
 		var model = this.getSplitNonPreferredTermModelModel();
 		var termId = thePanel.gincoId;
 		if (termId != '') {
@@ -81,7 +81,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			theForm.loadRecord(model);
 		}
 	},
-	
+
 	deleteForm : function(theButton) {
 		var me = this;
 		var theForm = theButton.up('form');
@@ -119,7 +119,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			scope : this
 		});
 	},
-	
+
 	loadData : function(aForm, aModel) {
 		var termPanel = aForm.up('complexconceptPanel');
 		var deleteBtn = aForm.down('#delete');
@@ -144,7 +144,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 				thePanel.thesaurusData.id);
 		theStore.load();
 	},
-	
+
 	loadStatus : function(theCombo) {
 		var theStore = theCombo.getStore();
 		theStore.load();
@@ -199,13 +199,22 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		win.prefered = true;
 		win.show();
 	},
-	
+
 	preferredTermDeleteAction : function(gridview, el, rowIndex,
 			colIndex, e, rec, rowEl) {
 		var theStore = gridview.up('#gridPanelPreferredTerms').getStore();
 		theStore.remove(rec);
 	},
-	
+
+	onPreferredTermDblClick : function(theGrid, record, item, index, e,
+			eOpts) {
+		var me = this;
+		var thePanel = theGrid.up('complexconceptPanel');
+		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		topTabs.fireEvent('opentermtab', topTabs, thePanel.thesaurusData.id,
+				record.data.identifier);
+	},
+
 	init : function() {
 		this.control({
 			'complexconceptPanel #termForm' : {
@@ -228,7 +237,10 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			},
 			'complexconceptPanel #preferredTermDeleteAction' : {
 				click : this.preferredTermDeleteAction
-			}
+			},
+			'complexconceptPanel #gridPanelPreferredTerms' : {
+				itemdblclick : this.onPreferredTermDblClick
+			},
 		});
 	}
 });
