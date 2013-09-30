@@ -33,42 +33,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.view.GincoViewPort', {
-    extend: 'Ext.container.Viewport',
-
-    requires: [
-        'GincoApp.view.GlobalThesaurusTabsPanel',
-        'GincoApp.view.TopToolbar',
-        'GincoApp.view.LeftPanel'
-    ],
-
-    layout: {
-        type: 'border'
+Ext.define('GincoApp.view.GlobalThesaurusTabsPanel', {
+    extend: 'Ext.tab.Panel',
+    alias: 'widget.thesaurusTabs',
+    //xCloseAllTlt : 'Close all',
+    localized : true,
+    activeTab: 0,
+    initAria : function() {
+    	var me = this;
+    	me.callParent();
+    	var actionEl = this.getActionEl();
+        actionEl.dom.setAttribute('aria-live', 'polite');
     },
-
 
     initComponent: function() {
         var me = this;
-
+ /*
         Ext.applyIf(me, {
-            ariaRole :  'application',
-            items: [
-                {
-                    xtype: 'thesaurusTabs',
-                    region: 'center'
-                },
-                {
-                    xtype: 'topToolBar',
-                    region: 'north'
-                },
-                {
-                    xtype: 'leftPanel',
-                    region: 'west',
-                    split: true
-                }
-            ]
+        	tabBar:{
+                items:[{ 
+                    xtype: 'button',
+                    itemId:'closeAllTabs',
+                    hidden :true,
+                    text : this.xCloseAllTlt
+                }]
+            }
         });
-
+*/
         me.callParent(arguments);
     }
 

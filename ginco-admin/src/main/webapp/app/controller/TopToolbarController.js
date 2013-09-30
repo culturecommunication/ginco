@@ -48,7 +48,8 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	},
 
 	onNewThesaurusBtnClick : function(button, e, options) {
-		this.createPanel('GincoApp.view.ThesaurusPanel');
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('newthesaurus',thesaurusTabs);
 	},
 	createPanel : function(aType)
 	{

@@ -90,7 +90,7 @@ Ext.application({
     ],
     views: [
         'GincoViewPort',
-        'GlobalTabPanel',
+        'GlobalThesaurusTabsPanel',
         'LeftPanel',
         'TopToolbar',
         'AProposWin',
@@ -104,7 +104,7 @@ Ext.application({
         'ThesaurusFormController',
         'SandboxPanelController',
         'TermPanelController',
-        'GlobalTabPanelController',
+        'GlobalThesaurusTabsPanelController',
         'ConceptController',
         'NotePanelController',
         'ConceptArrayController',

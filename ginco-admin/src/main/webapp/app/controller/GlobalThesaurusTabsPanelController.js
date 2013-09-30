@@ -33,43 +33,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.view.GincoViewPort', {
-    extend: 'Ext.container.Viewport',
-
-    requires: [
-        'GincoApp.view.GlobalThesaurusTabsPanel',
-        'GincoApp.view.TopToolbar',
-        'GincoApp.view.LeftPanel'
-    ],
-
-    layout: {
-        type: 'border'
-    },
-
-
-    initComponent: function() {
-        var me = this;
-
-        Ext.applyIf(me, {
-            ariaRole :  'application',
-            items: [
-                {
-                    xtype: 'thesaurusTabs',
-                    region: 'center'
-                },
-                {
-                    xtype: 'topToolBar',
-                    region: 'north'
-                },
-                {
-                    xtype: 'leftPanel',
-                    region: 'west',
-                    split: true
-                }
-            ]
-        });
-
-        me.callParent(arguments);
-    }
-
+Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
+	extend : 'Ext.app.Controller',
+	localized : true,
+	
+	
+	onNewThesaurus : function(theTabPanel) {
+		var newThesaurusPanel = Ext.create('GincoApp.view.ThesaurusTabPanel');
+		theTabPanel.add(newThesaurusPanel);
+	},
+	
+	init : function(application) {
+		this.application.on({
+			//userinfoloaded: this.onUserInfoLoaded,
+	        scope: this
+	 });
+		this.control({
+			'thesaurusTabs' : {
+				newthesaurus : this.onNewThesaurus
+			}
+		});
+	}
 });
