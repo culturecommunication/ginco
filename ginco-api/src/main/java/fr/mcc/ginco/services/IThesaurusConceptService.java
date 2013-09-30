@@ -271,8 +271,6 @@ public interface IThesaurusConceptService {
 	/**
 	 * Returns all the concepts that are under the concept which id is given in parameter (children, children of children, etc. recursively)
 	 * @param conceptId
-	 * @param originalParentId
-	 * @param allRecursiveChildren : the list we want to fill in with children get recursively
 	 */
-	List<ThesaurusConcept> getRecursiveChildrenByConceptId(String conceptId, String originalParentId, List<ThesaurusConcept> allRecursiveChildren);
+	List<ThesaurusConcept> getRecursiveChildrenByConceptId(String conceptId);
 }

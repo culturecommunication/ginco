@@ -268,7 +268,6 @@ public class ThesaurusConceptDAO extends
 				ThesaurusConcept.class, "tc");
 		selectThesaurus(criteria, thesaurus.getIdentifier());
 		selectOrphans(criteria, !topConcept);
-		// criteria.add(Restrictions.eq("topConcept", topConcept));
 		selectNoParents(criteria);
 		return criteria;
 	}

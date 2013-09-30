@@ -81,11 +81,7 @@ public class GincoConceptExporter {
 				thesaurusConcept.getIdentifier(), 0, noteService
 						.getConceptNoteCount(thesaurusConcept.getIdentifier())
 						.intValue());
-		JaxbList<Note> conceptNotes = new JaxbList<Note>();
-		for (Note note : notes) {
-			conceptNotes.getList().add(note);
-		}
-		return conceptNotes;
+		return new JaxbList<Note>(notes);
 	}
 
 	/**
@@ -125,10 +121,7 @@ public class GincoConceptExporter {
 			ThesaurusConcept thesaurusConcept) {
 		List<String> associations = associativeRelationshipService
 				.getAssociatedConceptsId(thesaurusConcept);
-		JaxbList<String> associatedConceptsIds = new JaxbList<String>();
-		for (String associatedConceptId : associations) {
-			associatedConceptsIds.getList().add(associatedConceptId);
-		}
+		JaxbList<String> associatedConceptsIds = new JaxbList<String>(associations);		
 		return associatedConceptsIds;
 	}
 

@@ -90,11 +90,9 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 	public String getBranchExport(ThesaurusConcept conceptBranchToExport)
 			throws TechnicalException {
 		String conceptId = conceptBranchToExport.getIdentifier();
-		GincoExportedBranch branchToExport = new GincoExportedBranch();
+		GincoExportedBranch branchToExport = new GincoExportedBranch();		
 		
-		List<ThesaurusConcept> childrenConcepts = new ArrayList<ThesaurusConcept>();
-		
-		thesaurusConceptService.getRecursiveChildrenByConceptId(conceptId, conceptId, childrenConcepts);
+		List<ThesaurusConcept> childrenConcepts = thesaurusConceptService.getRecursiveChildrenByConceptId(conceptId);
 		logger.debug("Getting all children recursively for exporting branch with root concept : " + conceptId);
 
 		List<ThesaurusConcept> allConcepts = new ArrayList<ThesaurusConcept>();

@@ -32,59 +32,46 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports.ginco.idgenerator;
+package fr.mcc.ginco.tests.imports.ginco.idgenerator;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import junit.framework.Assert;
 
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
+import org.junit.Before;
+import org.junit.Test;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.imports.ginco.idgenerator.GincoIdMapParser;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 
-/**
- * This class generate new ids for terms for importing branch in existing
- * thesaurus
- * 
- */
-@Component("gincoTermIdGenerator")
-public class GincoTermIdGenerator {
+public class GincoIdMapParserTest {
+	
+	private GincoIdMapParser gincoIdMapParser = new GincoIdMapParser();
 
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
-
-	@Inject
-	@Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;	
-
-	@Log
-	private Logger logger;
-
-	/**
-	 * This method checks if the id of the term is not already present in the
-	 * application, and replace it if it's the case. It also update the
-	 * conceptid if it has changed
-	 * 
-	 * @param term
-	 * @param idMapping
-	 *            : the map where we store the mapping between old and new ids
-	 * @return ThesaurusTerm updatedTerm
-	 */
-	public String getIdForTerm(String oldId, Map<String, String> idMapping) {
-		if (thesaurusTermDAO.getById(oldId) != null) {
-			String newId = generatorService.generate(ThesaurusTerm.class);
-			idMapping.put(oldId, newId);
-			logger.debug("Setting a new id for the ID" + oldId
-					+ "with new id " + newId);
-			return newId;
-		}
-		return oldId;
+	@Before
+	public void init() {
+		LoggerTestUtil.initLogger(gincoIdMapParser);
 	}
-
+	
+	@Test
+	 public final void testGetNewIdNoMapping(){
+		String oldId = "oldId";
+		Map<String, String> idMapping = new HashMap<String, String>();
+		
+		String newActualId = gincoIdMapParser.getNewId(oldId, idMapping);
+		Assert.assertEquals("oldId", newActualId);
+	}
+		
+	@Test
+	 public final void testGetNewIWithMapping(){
+		String oldId = "oldId";
+		Map<String, String> idMapping = new HashMap<String, String>();
+		idMapping.put("oldTestId", "newTestId");
+		idMapping.put("oldId", "newId");
+		
+		String newActualId = gincoIdMapParser.getNewId(oldId, idMapping);
+		Assert.assertEquals("newId", newActualId);		
+	}
+	
 }

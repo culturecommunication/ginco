@@ -65,10 +65,7 @@ public class GincoTermExporter {
 	 */
 	public JaxbList<Note> getExportTermNotes(ThesaurusTerm thesaurusTerm) {
 		List<Note> notes = noteService.getTermNotePaginatedList(thesaurusTerm.getIdentifier(), 0, noteService.getTermNoteCount(thesaurusTerm.getIdentifier()).intValue());
-		JaxbList<Note> termNotes = new JaxbList<Note>();
-		for (Note note : notes) {
-			termNotes.getList().add(note);
-		}
+		JaxbList<Note> termNotes = new JaxbList<Note>(notes);		
 		return termNotes;
 	}
 

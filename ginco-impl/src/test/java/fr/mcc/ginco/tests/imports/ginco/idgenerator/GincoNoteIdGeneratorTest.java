@@ -32,59 +32,57 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.imports.ginco.idgenerator;
+package fr.mcc.ginco.tests.imports.ginco.idgenerator;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import junit.framework.Assert;
 
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.imports.ginco.idgenerator.GincoIdMapParser;
+import fr.mcc.ginco.imports.ginco.idgenerator.GincoNoteIdGenerator;
 
-/**
- * This class generate new ids for terms for importing branch in existing
- * thesaurus
- * 
- */
-@Component("gincoTermIdGenerator")
-public class GincoTermIdGenerator {
+public class GincoNoteIdGeneratorTest {		
+	@Mock(name = "gincoIdMapParser")
+	private GincoIdMapParser gincoIdMapParser;
 
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	@InjectMocks
+	private GincoNoteIdGenerator gincoNoteIdGenerator;	
 
-	@Inject
-	@Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;	
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}	
+	
+	@Test
+	public void testGetNotesWithNewIds() {
+		Map<String, JaxbList<Note>> notes = new HashMap<String, JaxbList<Note>>();
+		JaxbList<Note> note1 = new JaxbList<Note>();
+		JaxbList<Note> note2 = new JaxbList<Note>();
+		notes.put("idNote1", note1);
+		notes.put("idNote2", note2);
+		
+		Map<String, String> idMapping =  new HashMap<String, String>();
 
-	@Log
-	private Logger logger;
+		Mockito.when(gincoIdMapParser.getNewId("idNote1", idMapping)).thenReturn("newNoteId1");
+		Mockito.when(gincoIdMapParser.getNewId("idNote2", idMapping)).thenReturn("newNoteId2");
 
-	/**
-	 * This method checks if the id of the term is not already present in the
-	 * application, and replace it if it's the case. It also update the
-	 * conceptid if it has changed
-	 * 
-	 * @param term
-	 * @param idMapping
-	 *            : the map where we store the mapping between old and new ids
-	 * @return ThesaurusTerm updatedTerm
-	 */
-	public String getIdForTerm(String oldId, Map<String, String> idMapping) {
-		if (thesaurusTermDAO.getById(oldId) != null) {
-			String newId = generatorService.generate(ThesaurusTerm.class);
-			idMapping.put(oldId, newId);
-			logger.debug("Setting a new id for the ID" + oldId
-					+ "with new id " + newId);
-			return newId;
-		}
-		return oldId;
+		Map<String, JaxbList<Note>> updatedNotes = gincoNoteIdGenerator.getNotesWithNewIds(notes, idMapping);
+		
+		Assert.assertEquals(note1, updatedNotes.get("newNoteId1"));
+		Assert.assertEquals(note2, updatedNotes.get("newNoteId2"));	
+		
 	}
-
+	
 }

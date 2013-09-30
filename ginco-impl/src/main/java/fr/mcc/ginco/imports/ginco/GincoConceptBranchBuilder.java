@@ -109,7 +109,7 @@ public class GincoConceptBranchBuilder {
 
 			// We replace all existing ids by new generated ids
 			gincoConceptBranchIdGenerator
-					.checkIdsForExportedBranch(exportedBranch);
+					.resetIdsForExportedBranch(exportedBranch);
 
 			// We import the concept branch in specified thesaurus
 			List<ThesaurusConcept> rootConcept = new ArrayList<ThesaurusConcept>();

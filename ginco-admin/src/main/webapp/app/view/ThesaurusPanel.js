@@ -240,12 +240,12 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 		                                                itemId : 'importSandbox',
 		                                                iconCls : 'exports-icon'
                                             },{
-                                                xtype : 'button',
-                                                text : me.xImportBranch,
-                                                requiredRoles : ['ADMIN'],
-                                                disabled : false,
-                                                itemId : 'importBranch',
-                                                iconCls : 'exports-icon'
+                                                		xtype : 'button',
+                                                		text : me.xImportBranch,
+                                                		requiredRoles : ['ADMIN'],
+                                                		disabled : true,
+                                                		itemId : 'importBranch',
+                                                		iconCls : 'exports-icon'
                                             } ]
 									} ],
 										items : [ {
