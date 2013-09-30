@@ -68,7 +68,6 @@ public class ThesaurusHelperTest {
 
 		Thesaurus th = new Thesaurus();
 		ThesaurusVersionHistory tvh = thesaurusHelper.buildDefaultVersion(th);
-		System.out.println(tvh.getVersionNote());
 		Assert.assertEquals("versionhistory_id", tvh.getIdentifier());
 		Assert.assertEquals("Nouveau thesaurus", tvh.getVersionNote());
 		Assert.assertTrue(ThesaurusVersionStatusEnum.PROJECT.getStatus() == tvh.getStatus());
