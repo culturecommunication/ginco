@@ -57,6 +57,14 @@ import java.util.List;
 public class ThesaurusTermDAO extends
 		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
 	
+	private static final String LEXICAL_VALUE = "lexicalValue";
+	private static final String LANGUAGE_ID = "language.id";
+	private static final String STATUS = "status";
+	private static final String CONCEPT = "concept";
+	private static final String PREFERED = "prefered";
+	private static final String CONCEPT_IDENTIFIER = "concept.identifier";
+	private static final String THESAURUS_IDENTIFIER = "thesaurus.identifier";
+	
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 	
@@ -83,7 +91,7 @@ public class ThesaurusTermDAO extends
 			Integer startIndex, Integer limit, String idThesaurus) {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		getSandboxedTerms(criteria, startIndex, limit, idThesaurus);
-		criteria.add(Restrictions.eq("status", TermStatusEnum.VALIDATED.getStatus()));
+		criteria.add(Restrictions.eq(STATUS, TermStatusEnum.VALIDATED.getStatus()));
 		return criteria.list();
 	}
 
@@ -98,9 +106,9 @@ public class ThesaurusTermDAO extends
 	public Long countPreferredTerms(String idThesaurus)
 			throws BusinessException {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
-		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
-		.add(Restrictions.isNotNull("concept"))
-		.add(Restrictions.eq("prefered", Boolean.TRUE))
+		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+		.add(Restrictions.isNotNull(CONCEPT))
+		.add(Restrictions.eq(PREFERED, Boolean.TRUE))
 		.setProjection(Projections.rowCount());
 		return (Long) criteria.list().get(0);
 	}
@@ -109,7 +117,7 @@ public class ThesaurusTermDAO extends
 	public Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		countAllSandboxedTerms(criteria, idThesaurus);
-		criteria.add(Restrictions.eq("status", TermStatusEnum.VALIDATED.getStatus()));
+		criteria.add(Restrictions.eq(STATUS, TermStatusEnum.VALIDATED.getStatus()));
 		return (Long) criteria.list().get(0);
 	}	
 	
@@ -131,9 +139,9 @@ public class ThesaurusTermDAO extends
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId){       
         List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("concept.identifier", conceptId))
-                .add(Restrictions.eq("prefered", Boolean.TRUE))
-                .add(Restrictions.eq("language.id", languageId))
+                .add(Restrictions.eq(CONCEPT_IDENTIFIER, conceptId))
+                .add(Restrictions.eq(PREFERED, Boolean.TRUE))
+                .add(Restrictions.eq(LANGUAGE_ID, languageId))
 
                 .list();
 
@@ -147,7 +155,7 @@ public class ThesaurusTermDAO extends
 	public List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException {
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("concept.identifier", conceptId))
+                .add(Restrictions.eq(CONCEPT_IDENTIFIER, conceptId))
                 .list();
 		if(list.size() == 0) {
             throw new BusinessException("No term found for this concept id ! " + conceptId +
@@ -160,7 +168,7 @@ public class ThesaurusTermDAO extends
 	public List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId) throws BusinessException {
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("thesaurus.identifier", thesaurusId))
+                .add(Restrictions.eq(THESAURUS_IDENTIFIER, thesaurusId))
                 .list();
 		return list;
 	}
@@ -169,9 +177,9 @@ public class ThesaurusTermDAO extends
 	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {
 		return (Long) getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("lexicalValue", term.getLexicalValue()))
-                .add(Restrictions.eq("language.id", term.getLanguage().getId()))
-                .add(Restrictions.eq("thesaurus.identifier", term.getThesaurus().getIdentifier()))
+                .add(Restrictions.eq(LEXICAL_VALUE, term.getLexicalValue()))
+                .add(Restrictions.eq(LANGUAGE_ID, term.getLanguage().getId()))
+                .add(Restrictions.eq(THESAURUS_IDENTIFIER, term.getThesaurus().getIdentifier()))
                 .add(Restrictions.ne("identifier", term.getIdentifier()))
                 .setProjection(Projections.rowCount())
                 .list().get(0);
@@ -208,9 +216,9 @@ public class ThesaurusTermDAO extends
 	@Override
 	public ThesaurusTerm getTermByLexicalValueThesaurusIdLanguageId(String lexicalValue, String thesaurusId, String languageId){
 		return (ThesaurusTerm) getCurrentSession().createCriteria(ThesaurusTerm.class)
-		.add(Restrictions.eq("lexicalValue", lexicalValue))
-		.add(Restrictions.eq("thesaurus.identifier", thesaurusId))
-		.add(Restrictions.eq("language.id", languageId)).uniqueResult();
+		.add(Restrictions.eq(LEXICAL_VALUE, lexicalValue))
+		.add(Restrictions.eq(THESAURUS_IDENTIFIER, thesaurusId))
+		.add(Restrictions.eq(LANGUAGE_ID, languageId)).uniqueResult();
 	}
 
 	/**
@@ -222,9 +230,9 @@ public class ThesaurusTermDAO extends
 	 */
 	private void getSandboxedTerms(Criteria criteria, Integer startIndex, Integer limit, String idThesaurus) {
 		criteria.setMaxResults(limit)
-		.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
-		.add(Restrictions.isNull("concept"))
-		.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"));
+		.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+		.add(Restrictions.isNull(CONCEPT))
+		.setFirstResult(startIndex).addOrder(Order.asc(LEXICAL_VALUE));
     }
 	
 	@Override
@@ -232,10 +240,10 @@ public class ThesaurusTermDAO extends
 			Integer limit, String idThesaurus) {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		criteria.setMaxResults(limit)
-		.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
-		.add(Restrictions.isNotNull("concept"))
-		.add(Restrictions.eq("prefered", true))
-		.setFirstResult(startIndex).addOrder(Order.asc("lexicalValue"));
+		.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+		.add(Restrictions.isNotNull(CONCEPT))
+		.add(Restrictions.eq(PREFERED, true))
+		.setFirstResult(startIndex).addOrder(Order.asc(LEXICAL_VALUE));
 		return criteria.list();
 	}
 	
@@ -245,8 +253,8 @@ public class ThesaurusTermDAO extends
 	 * @param idThesaurus
 	 */
 	private void countAllSandboxedTerms(Criteria criteria, String idThesaurus) {
-		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
-		.add(Restrictions.isNull("concept"))
+		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+		.add(Restrictions.isNull(CONCEPT))
 		.setProjection(Projections.rowCount());
 	}
 	
@@ -255,8 +263,8 @@ public class ThesaurusTermDAO extends
 			throws BusinessException{
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
-                .add(Restrictions.eq("concept.identifier", conceptId))
-                .add(Restrictions.eq("prefered", Boolean.FALSE))
+                .add(Restrictions.eq(CONCEPT_IDENTIFIER, conceptId))
+                .add(Restrictions.eq(PREFERED, Boolean.FALSE))
                 .list();
       	return list;
 	}
@@ -266,8 +274,8 @@ public class ThesaurusTermDAO extends
 			throws BusinessException {
 		  List<ThesaurusTerm> list = getCurrentSession()
 	                .createCriteria(ThesaurusTerm.class)
-	                .add(Restrictions.eq("concept.identifier", conceptId))
-	                .add(Restrictions.eq("prefered", Boolean.TRUE))
+	                .add(Restrictions.eq(CONCEPT_IDENTIFIER, conceptId))
+	                .add(Restrictions.eq(PREFERED, Boolean.TRUE))
 	                .list();
 
 	        if(list.size() == 0) {
