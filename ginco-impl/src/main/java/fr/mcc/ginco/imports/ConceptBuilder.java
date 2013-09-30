@@ -76,7 +76,7 @@ public class ConceptBuilder extends AbstractBuilder {
 	@Named("associativeRelationshipRoleService")
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
 
-	public static Map<String, ThesaurusConcept> builtConcepts = new HashMap<String, ThesaurusConcept>();
+	private static Map<String, ThesaurusConcept> builtConcepts = new HashMap<String, ThesaurusConcept>();
 
 	public ConceptBuilder() {
 		super();
@@ -180,4 +180,9 @@ public class ConceptBuilder extends AbstractBuilder {
 		return concept;
 
 	}
+
+	public static Map<String, ThesaurusConcept> getBuiltConcepts() {
+		return builtConcepts;
+	}	
+	
 }

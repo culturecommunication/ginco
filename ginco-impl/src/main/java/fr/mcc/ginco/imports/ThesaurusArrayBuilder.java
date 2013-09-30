@@ -71,7 +71,7 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	
-	public static Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
+	private static Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
 
 	public ThesaurusArrayBuilder() {
 		super();

@@ -79,15 +79,15 @@ public class GincoRevServiceImpl implements IGincoRevService {
 
 	@Inject
 	@Named("thesaurusConceptAuditReader")
-	ThesaurusConceptAuditReader conceptAuditReader;
+	private ThesaurusConceptAuditReader conceptAuditReader;
 
 	@Inject
 	@Named("thesaurusTermAuditReader")
-	ThesaurusTermAuditReader termAuditReader;
+	private ThesaurusTermAuditReader termAuditReader;
 
 	@Inject
 	@Named("thesaurusAuditReader")
-	ThesaurusAuditReader thesaurusAuditReader;
+	private ThesaurusAuditReader thesaurusAuditReader;
 	
 	/*
 	 * (non-Javadoc)

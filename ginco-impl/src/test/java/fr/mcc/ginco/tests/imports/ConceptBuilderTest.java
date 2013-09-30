@@ -112,7 +112,7 @@ public class ConceptBuilderTest {
 		Assert.assertEquals(ConceptStatusEnum.VALIDATED.getStatus(),
 				actualConcept.getStatus().intValue());
 		ListAssert.assertContains(new ArrayList<String>(
-				conceptBuilder.builtConcepts.keySet()), "new-uri");
+				conceptBuilder.getBuiltConcepts().keySet()), "new-uri");
 
 	}
 
@@ -137,10 +137,10 @@ public class ConceptBuilderTest {
 		parentConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423");
 
-		conceptBuilder.builtConcepts
+		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428",
 						currentConcept);		
-		conceptBuilder.builtConcepts
+		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423",
 						parentConcept);
 
@@ -177,10 +177,10 @@ public class ConceptBuilderTest {
 		relatedConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933");		
 
-		conceptBuilder.builtConcepts
+		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428",
 						currentConcept);
-		conceptBuilder.builtConcepts
+		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933",
 						relatedConcept);
 		
@@ -222,7 +222,7 @@ public class ConceptBuilderTest {
 		ThesaurusConcept rootConcept = new ThesaurusConcept();
 		rootConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930");
-		conceptBuilder.builtConcepts
+		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428",
 						currentConcept);
 		List<ThesaurusConcept> realRoots = new ArrayList<ThesaurusConcept>();
