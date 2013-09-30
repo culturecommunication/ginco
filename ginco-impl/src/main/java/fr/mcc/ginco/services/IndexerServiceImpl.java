@@ -401,7 +401,7 @@ public class IndexerServiceImpl implements IIndexerService {
 		}
 	}
 
-	private void removeAllIndex(SolrServer solrCore) {
+	private void removeAllIndex() {
 		try {
 			solrServer.deleteByQuery("*:*");
 			solrServer.commit();
@@ -420,7 +420,7 @@ public class IndexerServiceImpl implements IIndexerService {
 
 	@Override
 	public void forceIndexing() throws TechnicalException {
-		removeAllIndex(solrServer);
+		removeAllIndex();
 		addConcepts(thesaurusConceptService.getAllConcepts());
 		addTerms(thesaurusTermService.getAllTerms());
 		try {
