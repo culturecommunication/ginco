@@ -400,8 +400,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					association
 							.setRelationshipRole(new AssociativeRelationshipRole());
 				}
-				if (association.getRelationshipRole().getCode() == null
-						|| association.getRelationshipRole().getCode() == "") {
+				if (StringUtils.isEmpty(association.getRelationshipRole().getCode())) {
 					association.getRelationshipRole().setCode(
 							associativeRelationshipRoleDAO
 									.getDefaultAssociativeRelationshipRole()
