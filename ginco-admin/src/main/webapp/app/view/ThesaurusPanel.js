@@ -26,7 +26,7 @@
 
 /*
  * File: app/view/ThesaurusPanel.js Thesaurus Creation Form
- * 
+ *
  */
 
 Ext.require([ 'GincoApp.view.ThesaurusVersionPanel',
@@ -88,7 +88,8 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xCustomAttributeTypes: 'Custom atrribute types',
     xImportSandbox: 'Import sandbox terms',
     xImportBranch: 'Import a branch',
-	
+    xMetadataTitle : 'Metadata',
+
 	initComponent : function() {
 		var me = this;
 
@@ -97,7 +98,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 										me,
 										{
 											title : me.xThesaurusTitle,
-											
+
 											items : [ {
 												xtype : 'tabpanel',
 												itemId: 'thesaurusTabPanel',
@@ -157,22 +158,34 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                             xtype : 'hiddenfield',
                                             name : 'archived'
                                         },{
-											xtype : 'displayfield',
-											name : 'id',
-											fieldLabel : me.xIdentifierLabel
-										},{
-											xtype : 'displayfield',
-											name : 'created',
-											fieldLabel : me.xCreatedDateLabel
-										},{
-											xtype : 'displayfield',
-											name : 'date',
-											fieldLabel : me.xDateLabel
-										},{
+                                        	xtype : 'panel',
+											title : me.xMetadataTitle,
+											collapsible : true,
+											collapsed : true,
+											border : false,
+											titleCollapse : true,
+											anchor: '100%',
+											items : [
+													{
+														xtype : 'displayfield',
+														name : 'id',
+														fieldLabel : me.xIdentifierLabel
+													},{
+														xtype : 'displayfield',
+														name : 'created',
+														fieldLabel : me.xCreatedDateLabel
+													},{
+														xtype : 'displayfield',
+														name : 'date',
+														fieldLabel : me.xDateLabel
+													}
+											        ]
+                                        },{
 											xtype : 'textfield',
 											name : 'title',
 											fieldLabel : me.xTitleLabel,
-											allowBlank : false
+											allowBlank : false,
+											padding : '5 0 0 0'
 										},{
 											xtype : 'container',
 											layout : 'column',

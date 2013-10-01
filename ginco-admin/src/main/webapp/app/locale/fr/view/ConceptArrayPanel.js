@@ -36,7 +36,7 @@
 /*
  * File: app/locale/fr/view/ConceptArrayPanel.js
  * Concept Array Panel Translated Items
- * 
+ *
  */
 Ext.define('GincoApp.locale.fr.view.ConceptArrayPanel', {
 	xConceptArrayTabTitle : 'Tableau de concepts',
@@ -60,5 +60,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptArrayPanel', {
 	xConceptOrderLabel: 'Ordre',
 	xParentArrayLabel : 'Tableau parent',
 	xSelectParentArray : 'Sélectionner un tableau parent',
-	xRemoveParentArray : 'Supprimer le tableau parent'
+	xRemoveParentArray : 'Supprimer le tableau parent',
+	xMetadataTitle : 'Métadonnées'
 });

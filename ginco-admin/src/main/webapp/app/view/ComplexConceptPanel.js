@@ -36,7 +36,7 @@
 /*
  * File: app/view/ThesaurusPanel.js
  * Term Creation/Edition Form
- * 
+ *
  */
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
 Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteTermPanel' ]);
@@ -54,6 +54,8 @@ Ext
 						type : 'vbox',
 						align : 'stretch'
 					},
+
+					xMetadataTitle : 'Metadata',
 
 					/* Fields with auto generated values */
 					xIdentifierLabel : 'Identifier',
@@ -129,27 +131,53 @@ Ext
 																		}]
 															} ],
 															items : [
-																	{
-																		xtype : 'displayfield',
-																		name : 'identifier',
-																		fieldLabel : me.xIdentifierLabel
-																	},
-																	{
-																		xtype : 'displayfield',
-																		name : 'created',
-																		fieldLabel : me.xCreatedDateLabel
-																	},
-																	{
-																		xtype : 'displayfield',
-																		name : 'modified',
-																		fieldLabel : me.xDateLabel
-																	},
+															        {
+															        	xtype : 'panel',
+																		title : me.xMetadataTitle,
+																		collapsible : true,
+																		collapsed : true,
+																		border : false,
+																		titleCollapse : true,
+																		items : [
+																				{
+																					xtype : 'displayfield',
+																					name : 'identifier',
+																					fieldLabel : me.xIdentifierLabel
+																				},
+																				{
+																					xtype : 'displayfield',
+																					name : 'created',
+																					fieldLabel : me.xCreatedDateLabel
+																				},
+																				{
+																					xtype : 'displayfield',
+																					name : 'modified',
+																					fieldLabel : me.xDateLabel
+																				},
+																				{
+																					xtype : 'ariacombo',
+																					name : 'status',
+																					itemId : 'statusCombo',
+																					fieldLabel : me.xStatusLabel,
+																					editable : false,
+																					multiSelect : false,
+																					displayField : 'statusLabel',
+																					valueField : 'status',
+																					forceSelection : true,
+																					store : Ext
+																							.create('GincoApp.store.TermStatusStore'),
+																					anchor : '70%',
+																					margin : '5 0 0 0'
+																				}
+																		        ]
+															        },
 																	{
 																		xtype : 'textfield',
 																		name : 'lexicalValue',
 																		fieldLabel : me.xLexicalValueLabel,
 																		allowBlank : false,
-																		anchor : '70%'
+																		anchor : '70%',
+																		padding : '5 0 0 0'
 																	},
 																	{
 																		xtype : 'htmleditor',
@@ -179,21 +207,6 @@ Ext
 																		forceSelection : true,
 																		store : Ext
 																				.create('GincoApp.store.TermLanguageStore'),
-																		anchor : '70%',
-																		margin : '5 0 5 0'
-																	},
-																	{
-																		xtype : 'ariacombo',
-																		name : 'status',
-																		itemId : 'statusCombo',
-																		fieldLabel : me.xStatusLabel,
-																		editable : false,
-																		multiSelect : false,
-																		displayField : 'statusLabel',
-																		valueField : 'status',
-																		forceSelection : true,
-																		store : Ext
-																				.create('GincoApp.store.TermStatusStore'),
 																		anchor : '70%',
 																		margin : '5 0 5 0'
 																	},

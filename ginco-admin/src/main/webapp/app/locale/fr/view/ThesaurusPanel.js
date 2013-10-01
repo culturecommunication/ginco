@@ -36,7 +36,7 @@
 /*
  * File: app/locale/fr/view/ThesaurusPanel.js
  * Thesaurus Translated Items
- * 
+ *
  */
 Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xIdentifierLabel : 'Identifiant',
@@ -82,5 +82,6 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
         xImportBranch: 'Importer une branche',
         xCustomAttributeTypes: "Types d'atrributes posonalisé",
         xImportSandbox: 'Importer des termes',
-        xCustomAttributeTypes: "Attributs personnalisés"
+        xCustomAttributeTypes: "Attributs personnalisés",
+        xMetadataTitle : 'Métadonnées'
 });

@@ -36,7 +36,7 @@
 /*
  * File: app/locale/fr/view/ThesaurusPanel.js
  * Thesaurus Translated Items
- * 
+ *
  */
 Ext.define('GincoApp.locale.fr.view.ComplexConceptPanel', {
 	/* Fields with auto generated values */
@@ -61,4 +61,5 @@ Ext.define('GincoApp.locale.fr.view.ComplexConceptPanel', {
 	xLangueColumnLabel:"Langue",
 	xAddPreferredTerm:"Ajouter un terme préférentiel",
 	xRemoveTerm : "Supprimer ce terme",
+	xMetadataTitle : 'Métadonnées'
 });

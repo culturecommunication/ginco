@@ -36,7 +36,7 @@
 /*
  * File: app/locale/fr/view/ConceptGroupPanel.js
  * Concept Group Panel Translated Items
- * 
+ *
  */
 Ext.define('GincoApp.locale.fr.view.ConceptGroupPanel', {
 	xConceptGroupTitle : 'Groupe de concept',
@@ -56,5 +56,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptGroupPanel', {
     xAddConceptToGroupArray : 'Ajouter un concept',
     xParentGroupLabel : 'Groupe parent',
     xSelectParentGroup : 'Sélectionner un groupe parent',
-    xRemoveParentGroup : 'Supprimer le groupe parent'
+    xRemoveParentGroup : 'Supprimer le groupe parent',
+    xMetadataTitle : 'Métadonnées'
 });

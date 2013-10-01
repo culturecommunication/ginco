@@ -69,6 +69,7 @@ Ext
 					xParentGroupLabel : 'Parent group',
 					xSelectParentGroup : 'Select a parent group',
 					xRemoveParentGroup : 'Remove parent group',
+					xMetadataTitle : 'Metadata',
 
 					initComponent : function() {
 						var me = this;
@@ -126,26 +127,38 @@ Ext
                                                     } ]
 												} ],
 												items : [
-														{
-															xtype : 'displayfield',
-															name : 'identifier',
-															fieldLabel : me.xIdentifierLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'created',
-															fieldLabel : me.xCreatedLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'modified',
-															fieldLabel : me.xModifiedLabel
-														},
+												        {
+												        	xtype : 'panel',
+															title : me.xMetadataTitle,
+															collapsible : true,
+															collapsed : true,
+															border : false,
+															titleCollapse : true,
+															anchor : '100%',
+															items : [
+																	{
+																		xtype : 'displayfield',
+																		name : 'identifier',
+																		fieldLabel : me.xIdentifierLabel
+																	},
+																	{
+																		xtype : 'displayfield',
+																		name : 'created',
+																		fieldLabel : me.xCreatedLabel
+																	},
+																	{
+																		xtype : 'displayfield',
+																		name : 'modified',
+																		fieldLabel : me.xModifiedLabel
+																	},
+															        ]
+												        },
 														{
 															xtype : 'textfield',
 															name : 'label',
 															fieldLabel : me.xLabelLabel,
-															allowBlank : false
+															allowBlank : false,
+															padding : '5 0 0 0'
 														},
 														{
 															xtype : 'textfield',
@@ -219,7 +232,7 @@ Ext
 															itemId : 'gridConceptGroupPanelConcepts',
 															title : me.xConceptsGrid,
 															store : me.associatedConceptToGroupStore,
-															
+
 															dockedItems : [ {
 																xtype : 'toolbar',
 																dock : 'top',
@@ -233,7 +246,7 @@ Ext
 																	iconCls : 'icon-add'
 																} ]
 															} ],
-															
+
 															columns : [
 																	{
 																		dataIndex : 'identifier',

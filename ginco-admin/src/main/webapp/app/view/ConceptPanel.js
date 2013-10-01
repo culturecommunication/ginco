@@ -229,7 +229,7 @@ Ext
 																						store : Ext
 																								.create('GincoApp.store.ConceptStatusStore'),
 																						anchor : '70%',
-																						margin : '5 0 5 0'
+																						margin : '5 0 0 0'
 																					}
 																			         ]
 																        },
