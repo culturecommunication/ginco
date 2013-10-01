@@ -65,7 +65,8 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xdefaultTopConceptLabel : 'TopTerm by default',
 	xRelationLabel : 'Relation',
 	xSourceLabel : 'Source',
-	xThesaurusTitle : 'Thesaurus data',
+	xThesaurusTitle : 'New Thesaurus',
+	xThesaurusTabTitle: 'Thesaurus data',
 	xNewLabel : 'New',
 	xNewMenu_TermLabel : "Term",
 	xNewMenu_ConceptLabel : "Concept",
@@ -100,7 +101,8 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 											items : [ {
 												xtype : 'tabpanel',
 												itemId: 'thesaurusTabPanel',
-											flex : 1,
+												tabPosition: 'bottom',
+												flex : 1,
 											items : [ {
 												xtype : 'form',
 												requiredRoles : ['ADMIN'],

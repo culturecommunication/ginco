@@ -106,7 +106,6 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var createConceptBtn = aForm.down('#createconcept');
 		var displayConcept = aForm.down('#displayConcept');
 		termPanel.setTitle("Terme : "+aModel.data.lexicalValue);
-		aForm.setTitle(aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
 		termPanel.gincoId = aModel.data.identifier;
 		

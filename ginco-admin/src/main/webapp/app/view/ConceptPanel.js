@@ -82,6 +82,7 @@ Ext
 					xConceptHierarchicalRoleLabels : ['BT-NT','BTG-NTG','BTI-NTI','BTP-NTP'],
 					xNotationLabel : 'Notation',
 					xExportBranch : 'Export this branch',
+					xConceptTabPanelTitle: 'Concept data',
 					
 					conceptHierarchicalRoleRenderer : function(value,record)
 					{
@@ -134,10 +135,11 @@ Ext
 											items : [ {
 												xtype : 'tabpanel',
 												flex : 1,
+												tabPosition: 'bottom',
 												items : [
 														{
 															xtype : 'panel',
-															title : me.xConceptPanelTitle,
+															title : me.xConceptTabPanelTitle,
 															layout : {
 																type : 'vbox',
 																align : 'stretch'
