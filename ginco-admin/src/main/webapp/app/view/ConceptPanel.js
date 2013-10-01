@@ -26,7 +26,7 @@
 
 /*
  * File: app/view/ConceptPanel.js Concept Creation/Edition Form + Notes
- * 
+ *
  */
 
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
@@ -82,7 +82,8 @@ Ext
 					xConceptHierarchicalRoleLabels : ['BT-NT','BTG-NTG','BTI-NTI','BTP-NTP'],
 					xNotationLabel : 'Notation',
 					xExportBranch : 'Export this branch',
-					
+					xMetadataTitle : 'Metadata',
+
 					conceptHierarchicalRoleRenderer : function(value,record)
 					{
 						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
@@ -101,11 +102,11 @@ Ext
                             'Ext.grid.plugin.CellEditing', {
                                 clicksToEdit : 1
                             });
-						
+
 						var me = this;
 						me.conceptTermStore = Ext
 								.create('GincoApp.store.ThesaurusTermStore');
-						
+
 						me.hierarchicalRelationRoleStore = Ext
 						.create('GincoApp.store.HierarchicalRelationRoleStore');
 
@@ -183,47 +184,58 @@ Ext
 																				iconCls : 'exports-icon'
 																			} ]
 																} ],
+
 																items : [
-																		{
-																			xtype : 'displayfield',
-																			name : 'identifier',
-																			fieldLabel : me.xIdentifierLabel
-																		},
-																		{
-																			xtype : 'displayfield',
-																			name : 'created',
-																			fieldLabel : me.xCreatedDateLabel
-																		},
-																		{
-																			xtype : 'displayfield',
-																			name : 'modified',
-																			fieldLabel : me.xModificationDateLabel
-																		},
-																		{
-																			xtype : 'checkbox',
-																			name : 'topconcept',
-																			fieldLabel : me.xTopTermConceptLabel
-																		},
-																		{
-																			xtype : 'combobox',
-																			name : 'status',
-																			itemId : 'conceptStatusCombo',
-																			fieldLabel : me.xConceptStatusLabel,
-																			editable : false,
-																			multiSelect : false,
-																			displayField : 'statusLabel',
-																			valueField : 'status',
-																			forceSelection : true,
-																			store : Ext
-																					.create('GincoApp.store.ConceptStatusStore'),
-																			anchor : '70%',
-																			margin : '5 0 5 0'
-																		},
+																        {
+																        	xtype : 'panel',
+																			title : me.xMetadataTitle,
+																			collapsible : true,
+																			collapsed : true,
+																			border : false,
+																			items : [
+																					{
+																						xtype : 'displayfield',
+																						name : 'identifier',
+																						fieldLabel : me.xIdentifierLabel
+																					},
+																					{
+																						xtype : 'displayfield',
+																						name : 'created',
+																						fieldLabel : me.xCreatedDateLabel
+																					},
+																					{
+																						xtype : 'displayfield',
+																						name : 'modified',
+																						fieldLabel : me.xModificationDateLabel
+																					},
+																					{
+																						xtype : 'checkbox',
+																						name : 'topconcept',
+																						fieldLabel : me.xTopTermConceptLabel
+																					},
+																					{
+																						xtype : 'combobox',
+																						name : 'status',
+																						itemId : 'conceptStatusCombo',
+																						fieldLabel : me.xConceptStatusLabel,
+																						editable : false,
+																						multiSelect : false,
+																						displayField : 'statusLabel',
+																						valueField : 'status',
+																						forceSelection : true,
+																						store : Ext
+																								.create('GincoApp.store.ConceptStatusStore'),
+																						anchor : '70%',
+																						margin : '5 0 5 0'
+																					}
+																			         ]
+																        },
 																		{
 																			xtype : 'textfield',
 																			name : 'notation',
 																			fieldLabel : me.xNotationLabel,
-																			anchor : '70%'
+																			anchor : '70%',
+																			padding : '5 0 0 0',
 																		},
 																		{
 																			trackResetOnLoad :true,
