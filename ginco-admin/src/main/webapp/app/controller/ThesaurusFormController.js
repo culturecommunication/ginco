@@ -117,6 +117,11 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		var thePanel = theButton.up('thesaurusPanel');
 		this.createPanel('GincoApp.view.ConceptPanel',thePanel.thesaurusData );
 	},
+	
+	onNewConceptAndTermBtnClick : function(theButton, e, options) {
+		var thePanel = theButton.up('thesaurusPanel');
+		this.createPanel('GincoApp.view.ConceptPanel',thePanel.thesaurusData, true);
+	},
 
 	onNewConceptArrayBtnClick : function(theButton) {
 		var thePanel = theButton.up('thesaurusPanel');
@@ -133,10 +138,11 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		this.createPanel('GincoApp.view.ComplexConceptPanel',thePanel.thesaurusData);
 	},
 
-	createPanel : function(aType, thesaurusData)
+	createPanel : function(aType, thesaurusData, displayPrefTermCreation)
 	{
 		var aNewPanel = Ext.create(aType);
 		aNewPanel.thesaurusData = thesaurusData;
+		aNewPanel.displayPrefTermCreation = displayPrefTermCreation;
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		var tab = topTabs.add(aNewPanel);
 		topTabs.setActiveTab(tab);
@@ -364,6 +370,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             },
 			"thesaurusPanel #newConceptBtn" : {
 				click : this.onNewConceptBtnClick
+			},
+			"thesaurusPanel #newConceptAndTermBtn" : {
+				click : this.onNewConceptAndTermBtnClick
 			},
 			"thesaurusPanel #newComplexConceptBtn" : {
 				click : this.onNewComplexConceptBtnClick

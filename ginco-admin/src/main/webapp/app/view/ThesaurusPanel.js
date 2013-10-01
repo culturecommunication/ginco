@@ -68,8 +68,9 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xThesaurusTitle : 'New Thesaurus',
 	xThesaurusTabTitle: 'Thesaurus data',
 	xNewLabel : 'New',
-	xNewMenu_TermLabel : "Term",
-	xNewMenu_ConceptLabel : "Concept",
+	xNewMenu_ConceptAndTermLabel : 'Concept + term',
+	xNewMenu_TermLabel : "Term only",
+	xNewMenu_ConceptLabel : "Concept only",
 	xNewMenu_GroupLabel : "Group of Concepts",
 	xNewMenu_ConceptArrayLabel : "Array of concepts",
 	xNewMenu_ComplexConceptLabel: "Complex Concept",
@@ -129,29 +130,34 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 															width : 200,
 															items : [ {
 																xtype : 'keymenuitem',
+																text : me.xNewMenu_ConceptAndTermLabel,
+																itemId : 'newConceptAndTermBtn',
+																cmdTxt : 'Ctrl+2'
+													},{
+																xtype : 'keymenuitem',
 																text : me.xNewMenu_TermLabel,
 																itemId : 'newTermBtn',
-																cmdTxt : 'Ctrl+2'
+																cmdTxt : 'Ctrl+3'
 													},{
 																xtype : 'keymenuitem',
 																text : me.xNewMenu_ConceptLabel,
 																itemId : 'newConceptBtn',
-																cmdTxt : 'Ctrl+3'
+																cmdTxt : 'Ctrl+4'
 													},{
 																xtype : 'keymenuitem',
 																text : me.xNewMenu_ComplexConceptLabel,
 																itemId : 'newComplexConceptBtn',
-																cmdTxt : 'Ctrl+4'
+																cmdTxt : 'Ctrl+5'
 													},{
 																xtype : 'keymenuitem',
 																text : me.xNewMenu_ConceptArrayLabel,
 																itemId : 'newConceptArrayBtn',
-																cmdTxt : 'Ctrl+5'
+																cmdTxt : 'Ctrl+6'
 													},{
 																xtype : 'keymenuitem',
 																text : me.xNewMenu_GroupLabel,
 																itemId : 'newConceptGroupBtn',
-																cmdTxt : 'Ctrl+6'
+																cmdTxt : 'Ctrl+7'
 													}]
 												}
 												},{
