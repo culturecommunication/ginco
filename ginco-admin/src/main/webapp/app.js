@@ -105,6 +105,7 @@ Ext.application({
         'SandboxPanelController',
         'TermPanelController',
         'GlobalThesaurusTabsPanelController',
+        'ThesaurusTabPanelController',
         'ConceptController',
         'NotePanelController',
         'ConceptArrayController',

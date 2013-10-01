@@ -33,56 +33,53 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
+Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
 	models : [ 'ThesaurusModel' ],
-	
-	
-	onNewThesaurus : function(theTabPanel) {
-		var newThesaurusPanel = Ext.create('GincoApp.view.ThesaurusTabPanel');
-		theTabPanel.add(newThesaurusPanel);
-		newThesaurusPanel.fireEvent('newthesaurus',newThesaurusPanel);
+	xSaveMsgLabel : 'Do you want to save changes?',
+	xSaveMsgTitle : 'Save changes?',
+	tabs : {
+		conceptPanel : 'GincoApp.view.ConceptPanel',
+		termPanel : 'GincoApp.view.TermPanel',
+		conceptGroupPanel: 'GincoApp.view.ConceptGroupPanel',
+		conceptArrayPanel: 'GincoApp.view.ConceptArrayPanel'
 	},
 	
-	openThesaurusTab : function (tabPanel, aThesaurusId)
-	{
-		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs thesaurusTabPanel');
-		var tabExists = false;
-		Ext.Array.each(thesaurusTabs,function(element, index, array) {
-			if (element.thesaurusData!=null && element.thesaurusData.id == aThesaurusId) {
-				tabExists = element;
-			}
-		});
-		if (!tabExists) {
-			var model = this.getThesaurusModelModel();
-			model.load(aThesaurusId, {
-				success : function(aModel) {
-					var ThesaurusPanel = Ext.create('GincoApp.view.ThesaurusTabPanel');
-					ThesaurusPanel.thesaurusData = aModel.data;
-					var tab = tabPanel.add(ThesaurusPanel);
-					tabPanel.setActiveTab(tab);
-					tab.show();
-					tab.fireEvent('openthesaurusform',tab);
-				}
-			});
+	onNewThesaurus : function (thePanel) {
+		var newThesaurusFormPanel = Ext.create('GincoApp.view.ThesaurusPanel');
+		var itemTabPanel = thePanel.down('#thesaurusItemsTabPanel');
+		itemTabPanel.add(newThesaurusFormPanel);
+	},
+	openThesaurusForm : function (thePanel) {
+		// We look for existing ThesaurusPanel
+		var existingPanel = thePanel.down('thesaurusPanel');
+		var itemTabPanel = thePanel.down('#thesaurusItemsTabPanel');
+		if (existingPanel!=null)
+		{
+			itemTabPanel.setActiveTab(existingPanel);
 		} else {
-			tabPanel.setActiveTab(tabExists);
-			tabExists.fireEvent('openthesaurusform',tabExists);
+			var newThesaurusFormPanel = Ext.create('GincoApp.view.ThesaurusPanel');
+			var itemTabPanel = thePanel.down('#thesaurusItemsTabPanel');
+			itemTabPanel.add(newThesaurusFormPanel);
 		}
 	},
-	
+	onLoad : function(thePanel) {
+		if (thePanel.thesaurusData!=null)
+		{
+			thePanel.setTitle(thePanel.thesaurusData.title);
+		}
+	},
 	init : function(application) {
 		this.application.on({
-			//userinfoloaded: this.onUserInfoLoaded,
 	        scope: this
 	 });
 		this.control({
-			'thesaurusTabs' : {
+			'thesaurusTabPanel' : {
+				afterrender : this.onLoad,
 				newthesaurus : this.onNewThesaurus,
-				openthesaurustab : this.openThesaurusTab
-			},
-			
+				openthesaurusform : this.openThesaurusForm
+			}
 		});
 	}
 });

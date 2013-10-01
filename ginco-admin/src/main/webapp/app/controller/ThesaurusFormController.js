@@ -60,7 +60,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	loadPanel : function(theForm) {
 		var me = this;
 		var model = Ext.create('GincoApp.model.ThesaurusModel');
-		var thesaurusData = theForm.up('thesaurusPanel').thesaurusData;
+		var thesaurusData = theForm.up('thesaurusTabPanel').thesaurusData;
 		if (thesaurusData != null) {
 			model.set(thesaurusData);
 			me.loadData(theForm, model);
@@ -76,7 +76,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	},
 	loadData : function(aForm, aModel) {
 		var thesaurusPanel = aForm.up('thesaurusPanel');
-		thesaurusPanel.setTitle(aModel.data.title);
+		//thesaurusPanel.setTitle(aModel.data.title);
 		thesaurusPanel.thesaurusData = aModel.data;
 		aForm.loadRecord(aModel);
 		thesaurusPanel.down('button[cls=newBtnMenu]').setDisabled(false);

@@ -66,29 +66,29 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		return false;
 	},
 	openConceptTab: function (aRecord) {
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		var conceptId = aRecord.data.id.substring(aRecord.data.id.indexOf('*')+1);
-		topTabs.fireEvent('openconcepttab',topTabs, aRecord.data.thesaurusId, conceptId);
+		thesaurusTabs.fireEvent('openconcepttab',thesaurusTabs, aRecord.data.thesaurusId, conceptId);
 	},
 	openTabArray: function (aRecord) {
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		topTabs.fireEvent('openarraytab',topTabs, aRecord.data.thesaurusId, aRecord.data.id);
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('openarraytab',thesaurusTabs, aRecord.data.thesaurusId, aRecord.data.id);
 	},
 	openTabGroup: function (aRecord) {
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		topTabs.fireEvent('opengrouptab',topTabs, aRecord.data.thesaurusId, aRecord.data.id);
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('opengrouptab',thesaurusTabs, aRecord.data.thesaurusId, aRecord.data.id);
 	},
 	openComplexConceptTab: function (aRecord) {
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		topTabs.fireEvent('opencomplexconceptstab',topTabs,aRecord.data.id);
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('opencomplexconceptstab',thesaurusTabs,aRecord.data.id);
 	},
     openSandBoxTab : function(aRecord) {
-    	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		topTabs.fireEvent('opensandboxtab',topTabs,aRecord.data.id);
+    	var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+    	thesaurusTabs.fireEvent('opensandboxtab',thesaurusTabs,aRecord.data.id);
 	},
 	openThesaurusTab : function(aRecord) {
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		topTabs.fireEvent('openthesaurustab',topTabs,aRecord.data.id);
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('openthesaurustab',thesaurusTabs,aRecord.data.id);
 	},
 	onEnterKey : function(theTree) {
 		var node = theTree.getSelectionModel().getSelection();

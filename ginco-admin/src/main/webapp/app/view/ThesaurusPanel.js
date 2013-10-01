@@ -65,7 +65,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xdefaultTopConceptLabel : 'TopTerm by default',
 	xRelationLabel : 'Relation',
 	xSourceLabel : 'Source',
-	xThesaurusTitle : 'New Thesaurus',
+	xThesaurusTitle : 'Thesaurus data',
 	xNewLabel : 'New',
 	xNewMenu_TermLabel : "Term",
 	xNewMenu_ConceptLabel : "Concept",
