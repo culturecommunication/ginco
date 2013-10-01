@@ -167,6 +167,41 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 		this.openGenericTab(thePanel, "complexconceptPanel","GincoApp.view.ComplexConceptPanel", {gincoId : null});
 	},
 	
+	exportHierarchical : function(theButton) {
+        var thePanel = theButton.up('thesaurusTabPanel');
+        var url = "services/ui/exportservice/getHierarchical?thesaurusId="
+            + encodeURIComponent(thePanel.thesaurusData.id);
+        window.open(url);
+    },
+
+    exportJournal : function(theButton) {
+    	var thePanel = theButton.up('thesaurusTabPanel');
+        var url = "services/ui/journalservice/exportLogJournal?thesaurusId="
+            + encodeURIComponent(thePanel.thesaurusData.id);
+        window.open(url);
+    },
+
+    exportAlphabetical : function(theButton) {
+    	var thePanel = theButton.up('thesaurusTabPanel');
+        var url = "services/ui/exportservice/getAlphabetical?thesaurusId="
+            + encodeURIComponent(thePanel.thesaurusData.id);
+        window.open(url);
+    },
+
+    exportGinco : function(theButton) {
+    	var thePanel = theButton.up('thesaurusTabPanel');
+        var url = "services/ui/exportservice/getGincoThesaurusExport?thesaurusId="
+            + encodeURIComponent(thePanel.thesaurusData.id);
+        window.open(url);
+    },
+
+    exportSKOS : function(theButton) {
+    	var thePanel = theButton.up('thesaurusTabPanel');
+        var url = "services/ui/exportservice/getSKOS?thesaurusId="
+            + encodeURIComponent(thePanel.thesaurusData.id);
+        window.open(url);
+    },
+	
 	init : function(application) {
 		this.application.on({
 	        scope: this

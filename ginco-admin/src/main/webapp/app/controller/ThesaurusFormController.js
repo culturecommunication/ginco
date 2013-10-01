@@ -205,40 +205,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     	Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>' + me.xImportBranchTitle + '</h1>'});
 	},
 
-    exportHierarchical : function(theButton) {
-        var theForm = theButton.up('form');
-        var url = "services/ui/exportservice/getHierarchical?thesaurusId="
-            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
-        window.open(url);
-    },
-
-    exportJournal : function(theButton) {
-        var theForm = theButton.up('form');
-        var url = "services/ui/journalservice/exportLogJournal?thesaurusId="
-            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
-        window.open(url);
-    },
-
-    exportAlphabetical : function(theButton) {
-        var theForm = theButton.up('form');
-        var url = "services/ui/exportservice/getAlphabetical?thesaurusId="
-            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
-        window.open(url);
-    },
-
-    exportGinco : function(theButton) {
-        var theForm = theButton.up('form');
-        var url = "services/ui/exportservice/getGincoThesaurusExport?thesaurusId="
-            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
-        window.open(url);
-    },
-
-    exportSKOS : function(theButton) {
-        var theForm = theButton.up('form');
-        var url = "services/ui/exportservice/getSKOS?thesaurusId="
-            + encodeURIComponent(theForm.up('thesaurusPanel').thesaurusData.id);
-        window.open(url);
-    },
+    
 
 	saveForm : function(theButton, theCallback) {
 		var me = this;
