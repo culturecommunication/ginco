@@ -232,7 +232,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 				termToImport.setLanguage(languageDAO.getById(defaultLang));
 				termToImport.setModified(DateUtil.nowDate());
 				termToImport.setCreated(DateUtil.nowDate());
-				termToImport.setStatus(TermStatusEnum.CANDIDATE.getStatus());
+				termToImport.setStatus(TermStatusEnum.VALIDATED.getStatus());
 				updatedTerms.add(thesaurusTermDAO.update(termToImport));
 			}
 		}

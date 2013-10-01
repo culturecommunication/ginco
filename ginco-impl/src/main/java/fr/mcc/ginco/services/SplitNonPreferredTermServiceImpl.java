@@ -100,7 +100,7 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
 				|| splitNonPreferredTerm.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
             return splitNonPreferredTermDAO.delete(splitNonPreferredTerm);
         } else {
-            throw new BusinessException("It's not possible to delete a complex concept  with a status different from candidate or rejected", "delete-attached-term");
+            throw new BusinessException("It's not possible to delete a complex concept  with a status different from candidate or rejected", "delete-complex-concept");
         }
 	}
 
