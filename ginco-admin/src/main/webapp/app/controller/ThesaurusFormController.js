@@ -100,15 +100,11 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
 
 	},
-	
-
-
-
-
-	createPanel : function(aType, thesaurusData)
+	createPanel : function(aType, thesaurusData, displayPrefTermCreation)
 	{
 		var aNewPanel = Ext.create(aType);
 		aNewPanel.thesaurusData = thesaurusData;
+		aNewPanel.displayPrefTermCreation = displayPrefTermCreation;
 		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 		var tab = topTabs.add(aNewPanel);
 		topTabs.setActiveTab(tab);

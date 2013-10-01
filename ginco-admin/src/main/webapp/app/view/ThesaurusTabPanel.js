@@ -86,6 +86,9 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 	xCustomAttributeTypes : 'Custom atrribute types',
 	xImportSandbox : 'Import sandbox terms',
 	xImportBranch : 'Import a branch',
+	xNewMenu_ConceptAndTermLabel : 'Concept + term',
+	xNewMenu_TermLabel : "Term only",
+	xNewMenu_ConceptLabel : "Concept only",
 
 	initComponent : function() {
 		var me = this;
@@ -108,16 +111,21 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 					menu : {
 						xtype : 'menu',
 						width : 200,
-						items : [ {
+						items : [{
+						    xtype : 'keymenuitem',
+						    text : me.xNewMenu_ConceptAndTermLabel,
+						    itemId : 'newConceptAndTermBtn',
+						    cmdTxt : 'Ctrl+2'
+						},{        
 							xtype : 'keymenuitem',
 							text : me.xNewMenu_TermLabel,
 							itemId : 'newTermBtn',
-							cmdTxt : 'Ctrl+2'
+							cmdTxt : 'Ctrl+3'
 						}, {
 							xtype : 'keymenuitem',
 							text : me.xNewMenu_ConceptLabel,
 							itemId : 'newConceptBtn',
-							cmdTxt : 'Ctrl+3'
+							cmdTxt : 'Ctrl+4'
 						}, {
 							xtype : 'keymenuitem',
 							text : me.xNewMenu_ComplexConceptLabel,
@@ -127,12 +135,12 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							xtype : 'keymenuitem',
 							text : me.xNewMenu_ConceptArrayLabel,
 							itemId : 'newConceptArrayBtn',
-							cmdTxt : 'Ctrl+5'
+							cmdTxt : 'Ctrl+6'
 						}, {
 							xtype : 'keymenuitem',
 							text : me.xNewMenu_GroupLabel,
 							itemId : 'newConceptGroupBtn',
-							cmdTxt : 'Ctrl+6'
+							cmdTxt : 'Ctrl+7'
 						} ]
 					}
 				}, , {

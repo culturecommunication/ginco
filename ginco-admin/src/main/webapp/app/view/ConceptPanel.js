@@ -38,6 +38,7 @@ Ext
 				{
 					extend : 'GincoApp.view.ThesaurusEntityPanel',
 					initPreferedTermBeforeLoad : '',
+					displayPrefTermCreation : false,
 
 					alias : 'widget.conceptPanel',
 					localized : true,

@@ -100,9 +100,14 @@ Ext
 								}
 							}
 							theForm.loadRecord(model);
-							this.enableSaveBtn(theForm);
-						}
-						me.initCustomAttributForm(theForm);
+							if (thePanel.displayPrefTermCreation) {
+								var theGrid = thePanel.down('#gridPanelTerms');
+								me.newTermFromTermsGrid(theGrid, true);
+							}
+							this.enableSaveBtn(theForm);							
+						}						
+						me.initCustomAttributForm(theForm);		
+						
 					},
 
 					initCustomAttributForm: function(theForm)
@@ -128,7 +133,7 @@ Ext
 						var theStore = theGrid.getStore();
 						theStore.getProxy().setExtraParam('idThesaurus',
 								thePanel.thesaurusData.id);
-						theStore.load();
+						theStore.load();						
 					},
 
 					newTermFromConceptPrefBtn : function(theButton) {
@@ -147,13 +152,12 @@ Ext
 						this.selectTermFromConceptBtn(theButton, false);
 					},
 
-					newTermFromConceptBtn : function(theButton, prefered) {
+					newTermFromTermsGrid : function(theGrid, prefered) {
 						var me = this;
-						var thePanel = me.getActivePanel(theButton);
+						var thePanel = me.getActivePanel(theGrid);
 						var win = Ext.create('GincoApp.view.CreateTermWin');
 						win.thesaurusData = thePanel.up('thesaurusTabPanel').thesaurusData;
 						var theForm = win.down('form');
-						var theGrid = theButton.up('#gridPanelTerms');
 						win.store = theGrid.getStore();
 						var model = Ext
 								.create('GincoApp.model.ThesaurusTermModel');
@@ -164,6 +168,12 @@ Ext
 						model.data.conceptId = thePanel.gincoId;
 						theForm.loadRecord(model);
 						win.show();
+					},
+					
+					newTermFromConceptBtn : function(theButton, prefered) {
+						var me = this;
+						var theGrid = theButton.up('#gridPanelTerms');
+						me.newTermFromTermsGrid(theGrid, prefered);
 					},
 
 					selectTermFromConceptBtn : function(theButton, prefered) {
@@ -679,9 +689,9 @@ Ext
 					    });
 					},
 
-					init : function() {
+					init : function() {						
 						this
-								.control({
+								.control({									
 									'conceptPanel #conceptForm' : {
 										afterrender : this.onConceptFormRender,
 										dirtychange : this.enableSaveBtn
@@ -710,7 +720,7 @@ Ext
 									},
 									'conceptPanel #newTermFromConceptPrefBtn' : {
 										click : this.newTermFromConceptPrefBtn
-									},
+									},								
 									'conceptPanel #newTermFromConceptNonPrefBtn' : {
 										click : this.newTermFromConceptNonPrefBtn
 									},

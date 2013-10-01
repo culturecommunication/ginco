@@ -49,7 +49,10 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
         xExport_Hierarchical : "Export texte hiérarchique",
         xExport_Alphabetic : "Export texte alphabétique",
         xExport_Ginco : "Export XML Hadoc GINCO",
-
+        xNewMenu_ConceptAndTermLabel : 'Concept + Terme',
+	    xNewMenu_TermLabel : 'Terme seul',
+	    xNewMenu_ConceptLabel: 'Concept seul',
+	    
         xSave : "Enregistrer",
         xDelete : "Supprimer",
         xVersionsTab : 'Versions',

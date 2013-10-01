@@ -85,41 +85,41 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	},
 	openConceptTab : function(tabPanel, aConceptId)
 	{
-		this.openGenericTab(tabPanel, aConceptId, "conceptPanel","GincoApp.view.ConceptPanel");
+		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : aConceptId});
 	},
 	openTermTab : function(tabPanel, aTermId)
 	{
-		this.openGenericTab(tabPanel, aTermId, "termPanel","GincoApp.view.TermPanel");
+		this.openGenericTab(tabPanel, "termPanel","GincoApp.view.TermPanel", {gincoId : aTermId});
 	},
 	openSandboxTab : function (tabPanel)
 	{
-		this.openGenericTab(tabPanel, null, "sandboxPanel","GincoApp.view.SandBoxPanel");
+		this.openGenericTab(tabPanel, "sandboxPanel","GincoApp.view.SandBoxPanel", {gincoId : null});
 	}, 
 	openGroupTab : function (tabPanel, aGroupId)
 	{
-		this.openGenericTab(tabPanel, aGroupId, "conceptGroupPanel","GincoApp.view.ConceptGroupPanel");
+		this.openGenericTab(tabPanel, "conceptGroupPanel","GincoApp.view.ConceptGroupPanel", {gincoId : aGroupId});
 	}, 
 	openArrayTab : function (tabPanel, aArrayId)
 	{
-		this.openGenericTab(tabPanel, aArrayId, "conceptArrayPanel","GincoApp.view.ConceptArrayPanel");
+		this.openGenericTab(tabPanel, "conceptArrayPanel","GincoApp.view.ConceptArrayPanel", {gincoId : aArrayId});
 	}, 
 	openComplexConceptsTab : function (tabPanel)
 	{
-		this.openGenericTab(tabPanel, null, "complexconceptsPanel","GincoApp.view.ComplexConceptsPanel");
+		this.openGenericTab(tabPanel, "complexconceptsPanel","GincoApp.view.ComplexConceptsPanel", {gincoId : null});
 	}, 
 	openComplexConceptTab: function (tabPanel, aConceptId)
 	{
-		this.openGenericTab(tabPanel, aConceptId, "complexconceptPanel","GincoApp.view.ComplexConceptPanel");
+		this.openGenericTab(tabPanel, "complexconceptPanel","GincoApp.view.ComplexConceptPanel", {gincoId : aConceptId});
 	},
-	openGenericTab : function (tabPanel, aGincoId, aXtype, aClass)
+	openGenericTab : function (tabPanel, aXtype, aClass, panelOptions)
 	{
 		var existingTabs = tabPanel.query(aXtype);
 		var tabExists = false;
 		var itemTabPanel = tabPanel.down('#thesaurusItemsTabPanel');
-		if (aGincoId!=null) {
+		if (panelOptions['gincoId']!=null) {
 			Ext.Array.each(existingTabs, function(element, index, array) {
 				if (element.gincoId != null
-						&& element.gincoId == aGincoId) {
+						&& element.gincoId == panelOptions['gincoId']) {
 					tabExists = element;
 				}
 			});
@@ -130,9 +130,8 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 		}
 		if (!tabExists) {
 			var newPanel = Ext.create(
-					aClass, {
-						gincoId : aGincoId
-					});
+					aClass, panelOptions
+					);
 			var tab = itemTabPanel.add(newPanel);
 			itemTabPanel.setActiveTab(tab);
 			tab.show();
@@ -140,27 +139,32 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			itemTabPanel.setActiveTab(tabExists);
 		}
 	},
+	onNewConceptAndTermBtnClick : function(theButton, e, options) {
+		var thePanel = theButton.up('thesaurusTabPanel');
+		var conceptOptions = {gincoId : null,displayPrefTermCreation: true};
+		this.openGenericTab(thePanel, "conceptPanel","GincoApp.view.ConceptPanel", conceptOptions);
+	},
 	onNewTermBtnClick : function(theButton, e, options) {
 		var thePanel = theButton.up('thesaurusTabPanel');
-		this.openGenericTab(thePanel,null,"termPanel","GincoApp.view.TermPanel");
+		this.openGenericTab(thePanel,"termPanel","GincoApp.view.TermPanel", {gincoId : null});
 	},
 	onNewConceptBtnClick : function (theButton) {
 		var thePanel = theButton.up('thesaurusTabPanel');
-		this.openGenericTab(thePanel,null,"conceptPanel","GincoApp.view.ConceptPanel");
+		this.openGenericTab(thePanel,"conceptPanel","GincoApp.view.ConceptPanel", {gincoId : null});
 	},
 	onNewConceptArrayBtnClick : function(theButton) {
 		var thePanel = theButton.up('thesaurusTabPanel');
-		this.openGenericTab(thePanel,null,"conceptArrayPanel","GincoApp.view.ConceptArrayPanel");
+		this.openGenericTab(thePanel,"conceptArrayPanel","GincoApp.view.ConceptArrayPanel", {gincoId : null});
 	},
 
 	onNewConceptGroupBtnClick : function(theButton) {
 		var thePanel = theButton.up('thesaurusTabPanel');
-		this.openGenericTab(thePanel,null,"conceptGroupPanel","GincoApp.view.ConceptGroupPanel");
+		this.openGenericTab(thePanel,"conceptGroupPanel","GincoApp.view.ConceptGroupPanel", {gincoId : null});
 	},
 
 	onNewComplexConceptBtnClick : function (theButton) {
 		var thePanel = theButton.up('thesaurusTabPanel');
-		this.openGenericTab(thePanel, null, "complexconceptPanel","GincoApp.view.ComplexConceptPanel");
+		this.openGenericTab(thePanel, "complexconceptPanel","GincoApp.view.ComplexConceptPanel", {gincoId : null});
 	},
 	
 	init : function(application) {
@@ -179,6 +183,9 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 				openarraytab : this.openArrayTab,
 				opencomplexconceptstab : this.openComplexConceptsTab,
 				opencomplexconcepttab: this.openComplexConceptTab
+			},
+			"thesaurusTabPanel #newConceptAndTermBtn" : {
+				click : this.onNewConceptAndTermBtnClick
 			},
 			"thesaurusTabPanel #newTermBtn" : {
 				click : this.onNewTermBtnClick
