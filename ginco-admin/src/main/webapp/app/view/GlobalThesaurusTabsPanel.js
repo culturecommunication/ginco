@@ -39,6 +39,7 @@ Ext.define('GincoApp.view.GlobalThesaurusTabsPanel', {
     //xCloseAllTlt : 'Close all',
     localized : true,
     activeTab: 0,
+    flex: 1,
     initAria : function() {
     	var me = this;
     	me.callParent();

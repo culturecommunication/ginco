@@ -33,6 +33,10 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 	extend : 'Ext.panel.Panel',
 
 	thesaurusData : null,
+	layout : {
+		type : 'vbox',
+		align : 'stretch'
+	},
 
 	alias : 'widget.thesaurusTabPanel',
 	localized : true,
@@ -88,7 +92,8 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 			title : me.xThesaurusTitle,
 			items : [ {
 				xtype : 'tabpanel',
-				itemId : 'thesaurusItemsTabPanel'
+				itemId : 'thesaurusItemsTabPanel',
+				flex : 1
 			} ],
 			dockedItems : [ {
 				xtype : 'toolbar',

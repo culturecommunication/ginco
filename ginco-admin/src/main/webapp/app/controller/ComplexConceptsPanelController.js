@@ -41,35 +41,27 @@ Ext.define('GincoApp.controller.ComplexConceptsPanelController',
 
 			onGridRender : function(theGrid) {
 				var thePanel = theGrid.up('complexconceptsPanel');
+				var thesPanel = theGrid.up('thesaurusTabPanel');
 				var theStore = theGrid.getStore();
 				theStore.getProxy().setExtraParam('idThesaurus',
-						thePanel.thesaurusData.id);
+						thesPanel.thesaurusData.id);
 				theStore.load();
-				thePanel.setTitle(thePanel.title + ' : '
-						+ thePanel.thesaurusData.title);
-				
-				var thesaurusId= thePanel.thesaurusData.id;
-				var thesaurusModel= this.getThesaurusModelModel();
-				thesaurusModel.load(thesaurusId, {
-					success : function(model) {
-						thePanel.thesaurusData = model.data;
-					}
-				});
+				thePanel.setTitle(thePanel.title);
 			},
 
 			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {
-				var thePanel = theGrid.up('complexconceptsPanel');
+				var thePanel = theGrid.up('thesaurusTabPanel');
 				this.openThesaurusTermTab(record,thePanel.thesaurusData);
 			},
 			openThesaurusTermTab : function(aRecord, aThesaurusData) {
-				var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+				var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 				topTabs.fireEvent('opencomplexconcepttab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
 			},
 			refreshComplexConceptList : function(thesaurusData)
 			{
-				var complexConceptListTabs = Ext.ComponentQuery.query('topTabs complexconceptsPanel');
+				var complexConceptListTabs = Ext.ComponentQuery.query('thesaurusTabs complexconceptsPanel');
 				Ext.Array.each(complexConceptListTabs, function(complexConceptList, index, array) {
-					if (complexConceptList.thesaurusData.id ==  thesaurusData.id) {
+					if (complexConceptList.up('thesaurusTabPanel').thesaurusData.id ==  thesaurusData.id) {
 						var complexConceptGrid= complexConceptList.down("gridpanel");
 						complexConceptGrid.getStore().load();
 					}

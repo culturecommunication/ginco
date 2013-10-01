@@ -88,7 +88,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	openThesaurusTab : function(aRecord) {
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
-		thesaurusTabs.fireEvent('openthesaurustab',thesaurusTabs,aRecord.data.id);
+		thesaurusTabs.fireEvent('openthesaurustab',thesaurusTabs,aRecord.data.id,null,true);
 	},
 	onEnterKey : function(theTree) {
 		var node = theTree.getSelectionModel().getSelection();

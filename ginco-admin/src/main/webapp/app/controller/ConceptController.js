@@ -284,9 +284,11 @@ Ext
 						win.show();
 					},
 
-					getActivePanel : function() {
-						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-						return topTabs.getActiveTab();
+					getActivePanel : function(child) { 
+						return child.up('conceptPanel');
+					}, 
+					getThesaurusData : function (child) {
+						return child.up('thesaurusTabPanel').thesaurusData;
 					},
 
 					addAssociativeRelationship : function(theButton) {
@@ -371,7 +373,8 @@ Ext
 
 					loadData : function(aForm, aModel) {
 						var me = this;
-						var conceptPanel = me.getActivePanel();
+						var conceptPanel = me.getActivePanel(aForm);
+						var thesaurusData = me.getThesaurusData(aForm);
 						var infosConceptPanel = aForm.up('panel');
 						conceptPanel.gincoId = aModel.data.identifier;
 						
@@ -380,7 +383,7 @@ Ext
 						conceptTitle = "";
 						Ext.Array.each(terms, function(term) {
 							if (term.data.prefered == true 
-									&& term.data.language == conceptPanel.thesaurusData.languages[0]) {
+									&& term.data.language == thesaurusData.languages[0]) {
 								conceptTitle = term.data.lexicalValue;
 								return false;
 							}
