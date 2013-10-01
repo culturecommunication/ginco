@@ -57,7 +57,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
         var model = this.getConceptGroupModelModel();
         var conceptGroupId = theConceptGroupPanel.gincoId;
 
-        if (conceptGroupId != '') {
+        if (conceptGroupId != '' && conceptGroupId!=null) {
         	theForm.getEl().mask("Chargement");
         	var conceptGroupModel = this.getConceptGroupModelModel();
         	conceptGroupModel.load(conceptGroupId, {
@@ -74,10 +74,10 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 			});
 
         } else {
-        	theConceptGroupPanel.setTitle(theConceptGroupPanel.title+' : '+theConceptGroupPanel.thesaurusData.title);
+        	theConceptGroupPanel.setTitle(theConceptGroupPanel.title);
         	model = Ext.create('GincoApp.model.ConceptGroupModel');
-        	model.data.thesaurusId = theConceptGroupPanel.thesaurusData.id;
-        	model.data.language=theConceptGroupPanel.thesaurusData.languages[0];
+        	model.data.thesaurusId = theConceptGroupPanel.up('thesaurusTabPanel').thesaurusData.id;
+        	model.data.language=theConceptGroupPanel.up('thesaurusTabPanel').thesaurusData.languages[0];
         	theForm.loadRecord(model);
         }
 	},

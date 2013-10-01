@@ -60,7 +60,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         var model = this.getConceptArrayModelModel();
         var conceptArrayId = thePanel.gincoId;
 		var deleteConceptArrayBtn = thePanel.down('#deleteConceptArray');
-        if (conceptArrayId != '') {    		
+        if (conceptArrayId != '' && conceptArrayId != null ) {    		
     		theForm.getEl().mask("Chargement");
 			model.load(conceptArrayId, {
 				success : function(model) {
@@ -76,10 +76,10 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			});			
 			deleteConceptArrayBtn.setDisabled(false);
 		} else {
-			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
+			thePanel.setTitle(thePanel.title);
 			model = Ext.create('GincoApp.model.ConceptArrayModel');
-			model.data.thesaurusId = thePanel.thesaurusData.id;
-			model.data.language=thePanel.thesaurusData.languages[0];
+			model.data.thesaurusId = thePanel.up('thesaurusTabPanel').thesaurusData.id;
+			model.data.language=thePanel.up('thesaurusTabPanel').thesaurusData.languages[0];
 			model.data.identifier = "";
 			theForm.loadRecord(model);			
 		}

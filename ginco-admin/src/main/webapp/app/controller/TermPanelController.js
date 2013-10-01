@@ -51,11 +51,11 @@ Ext.define('GincoApp.controller.TermPanelController', {
 	loadPanel : function(theForm) {
 		var me = this;
 		var termPanel = theForm.up('termPanel');
-		var thesaurusData = termPanel.thesaurusData;
+		var thesaurusData = termPanel.up('thesaurusTabPanel').thesaurusData;
 		
 		var model = this.getThesaurusTermModelModel();
 		var termId = termPanel.gincoId;
-		if (termId != '') {
+		if (termId != '' && termId != null) {
 			theForm.getEl().mask("Chargement");
 			model.load(termId, {
 				success : function(model) {
@@ -71,7 +71,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			});
 		} else {
 			model = Ext.create('GincoApp.model.ThesaurusTermModel');
-			model.data.thesaurusId = theForm.up('termPanel').thesaurusData.id;
+			model.data.thesaurusId = thesaurusData.id;
 			model.data.identifier = "";
 			model.data.language=thesaurusData.languages[0];
 			//0 is the status to set by default for a new term, meaning "candidate"
@@ -168,7 +168,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var me = this;
 		var theForm = theButton.up('form');
 		var updatedModel = theForm.getForm().getRecord();
-		var globalTabs = theForm.up('topTabs');
+		var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 		var thePanel = theForm.up('termPanel');
 
 		Ext.MessageBox.show({
@@ -220,15 +220,14 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var thePanel = theButton.up('termPanel');
 		var theForm = theButton.up('form');
 		var theTermModel = theForm.getForm().getRecord();
-		var conceptPanel = this.createPanel('GincoApp.view.ConceptPanel', thePanel.thesaurusData, theTermModel);
+		var conceptPanel = this.createPanel('GincoApp.view.ConceptPanel',theButton, thePanel.thesaurusData, theTermModel);
 	},
 	
-	createPanel : function(aType,thesaurusData, theTermModel)
+	createPanel : function(aType,child, thesaurusData, theTermModel)
 	{
 		var aNewPanel = Ext.create(aType);
-		aNewPanel.thesaurusData = thesaurusData;
 		aNewPanel.initPreferedTermBeforeLoad = theTermModel;
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		var topTabs = child.up('#thesaurusItemsTabPanel');
 		var tab = topTabs.add(aNewPanel);
 		topTabs.setActiveTab(tab);
 		tab.show();

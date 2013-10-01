@@ -75,11 +75,11 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		}
 	},
 	loadData : function(aForm, aModel) {
-		var thesaurusPanel = aForm.up('thesaurusPanel');
+		var thesaurusPanel = aForm.up('thesaurusTabPanel');
 		//thesaurusPanel.setTitle(aModel.data.title);
-		thesaurusPanel.thesaurusData = aModel.data;
+		//thesaurusPanel.thesaurusData = aModel.data;
 		aForm.loadRecord(aModel);
-		thesaurusPanel.down('button[cls=newBtnMenu]').setDisabled(false);
+		
 
         if(thesaurusPanel.thesaurusData.canBeDeleted) {
            thesaurusPanel.down('button[cls=delete]').setDisabled(false);
@@ -87,17 +87,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
            thesaurusPanel.down('button[cls=delete]').setDisabled(true);
         }
 
-        thesaurusPanel.down('button[cls=exportsBtnMenu]').setDisabled(false);
-        thesaurusPanel.down('#exportHierarchical').setDisabled(false);
-        thesaurusPanel.down('#exportSKOS').setDisabled(false);
-        thesaurusPanel.down('#exportAlphabetical').setDisabled(false);
-        thesaurusPanel.down('#exportGinco').setDisabled(false);
+        
         thesaurusPanel.down('#versionTab').setDisabled(false);
-        thesaurusPanel.down('button[cls=journalBtnMenu]').setDisabled(false);
-        thesaurusPanel.down('#editJournal').setDisabled(false);
-        thesaurusPanel.down('#publishThesaurus').setDisabled(false);
-        thesaurusPanel.down('#importSandbox').setDisabled(false);
-        thesaurusPanel.down('#importBranch').setDisabled(false);
+        
 
         if(thesaurusPanel.thesaurusData.archived) {
             thesaurusPanel.down('bottomFormToolBar').setArchived();
@@ -108,30 +100,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
 
 	},
-	onNewTermBtnClick : function(theButton, e, options) {
-		var thePanel = theButton.up('thesaurusPanel');
-		this.createPanel('GincoApp.view.TermPanel',thePanel.thesaurusData );
-	},
+	
 
-	onNewConceptBtnClick : function(theButton, e, options) {
-		var thePanel = theButton.up('thesaurusPanel');
-		this.createPanel('GincoApp.view.ConceptPanel',thePanel.thesaurusData );
-	},
 
-	onNewConceptArrayBtnClick : function(theButton) {
-		var thePanel = theButton.up('thesaurusPanel');
-		this.createPanel('GincoApp.view.ConceptArrayPanel',thePanel.thesaurusData);
-	},
 
-	onNewConceptGroupBtnClick : function(theButton) {
-		var thePanel = theButton.up('thesaurusPanel');
-		this.createPanel('GincoApp.view.ConceptGroupPanel',thePanel.thesaurusData);
-	},
-
-	onNewComplexConceptBtnClick : function (theButton) {
-		var thePanel = theButton.up('thesaurusPanel');
-		this.createPanel('GincoApp.view.ComplexConceptPanel',thePanel.thesaurusData);
-	},
 
 	createPanel : function(aType, thesaurusData)
 	{
@@ -144,16 +116,15 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		return aNewPanel;
 	},
 
-    getActivePanel : function() {
-        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-        return topTabs.getActiveTab();
+    getActivePanel : function(child) {
+        return child.up('thesaurusPanel');
     },
 
     deleteThesaurus : function(theButton){
         var me = this;
         var theForm = theButton.up('form');
-        var globalTabs = theForm.up('topTabs');
-        var thePanel = me.getActivePanel();
+        var globalTabs = theForm.up('thesaurusTabs');
+        var thePanel = me.getActivePanel(theButton);
 
         var updatedModel = theForm.getForm().getRecord();
             Ext.MessageBox.show({
@@ -311,7 +282,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
 
     onLangChange : function(theCombo, records) {
-    	var thePanel = theCombo.up("thesaurusPanel");
+    	var thePanel = theCombo.up('thesaurusTabPanel');
     	var oldLanguages = thePanel.thesaurusData.languages;
     	for (var i=0; i<oldLanguages.length; i++){
     		var found = false;
@@ -346,36 +317,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			},
             "thesaurusPanel #deleteThesaurus" : {
                 click : this.deleteThesaurus
-            },
-			"thesaurusPanel #newTermBtn" : {
-				click : this.onNewTermBtnClick
-			},
-            "thesaurusPanel #exportHierarchical" : {
-                click : this.exportHierarchical
-            },
-            "thesaurusPanel #exportAlphabetical" : {
-                click : this.exportAlphabetical
-            },
-            "thesaurusPanel #exportGinco" : {
-                click : this.exportGinco
-            },
-            "thesaurusPanel #exportSKOS" : {
-                click : this.exportSKOS
-            },
-			"thesaurusPanel #newConceptBtn" : {
-				click : this.onNewConceptBtnClick
-			},
-			"thesaurusPanel #newComplexConceptBtn" : {
-				click : this.onNewComplexConceptBtnClick
-			},
-			"thesaurusPanel #newConceptArrayBtn" : {
-				click : this.onNewConceptArrayBtnClick
-			},
-			"thesaurusPanel #newConceptGroupBtn" : {
-				click : this.onNewConceptGroupBtnClick
-			},
-			"thesaurusPanel #editJournal" : {
-                click : this.exportJournal
             },
             "thesaurusPanel #publishThesaurus" : {
                 click : this.publishThesaurus

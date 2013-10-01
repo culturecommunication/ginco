@@ -38,28 +38,7 @@
  * Thesaurus Translated Items
  * 
  */
-Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
-	    xIdentifierLabel : 'Identifiant',
-	    xCreatedDateLabel : 'Date de création',
-	    xDateLabel : 'Dernière modification',
-	    xTitleLabel : 'Titre',
-	    xServiceLabel : 'Auteur',
-	    xUrlLabel : 'URL',
-	    xContributorLabel : 'Contributeur',
-	    xPublisherLabel : 'Editeur',
-	    xPublisherValue : 'Ministère chargé de la culture',
-	    xRightsLabel : 'Droits',
-	    xDescriptionLabel : 'Description',
-	    xCoverageLabel : 'Couverture',
-	    xSubjectLabel : 'Sujet',
-	    xTypeLabel : 'Type',
-	    xFormatLabel : 'Format(s)',
-	    xLanguagesLabel : 'Langue(s)',
-	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
-	    xRelationLabel : 'Publication(s) associée(s)',
-	    xSourceLabel : 'Ressource(s) liée(s)',
-	    xThesaurusTitle : 'Fiche vocabulaire',
-	    xThesaurusTabTitle : 'Métadonnées',
+Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
 	    xNewLabel : 'Nouveau',
 	    xNewMenu_TermLabel : 'Terme',
 	    xNewMenu_ConceptLabel: 'Concept',

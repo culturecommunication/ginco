@@ -143,6 +143,10 @@ a.x-tab-close-btn:focus  {
 	background-image: url(../images/world.png) !important;
 }
 
+.icon-folder {
+	background-image: url(../images/folder.png) !important;
+}
+
 .mandatory-field {
 	color: red !important;
 }

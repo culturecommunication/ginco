@@ -37,6 +37,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 		type : 'vbox',
 		align : 'stretch'
 	},
+	iconCls : 'icon-folder',
 
 	alias : 'widget.thesaurusTabPanel',
 	localized : true,
@@ -102,7 +103,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 					xtype : 'button',
 					disabled : true,
 					requiredRoles : [ 'ADMIN' ],
-					cls : 'newBtnMenu',
+					itemId : 'newBtnMenu',
 					text : me.xNewLabel,
 					menu : {
 						xtype : 'menu',
@@ -137,7 +138,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 				}, , {
 					xtype : 'button',
 					disabled : true,
-					cls : 'exportsBtnMenu',
+					itemId : 'exportsBtnMenu',
 					text : 'Exports',
 					iconCls : 'exports-icon',
 					menu : {
@@ -168,7 +169,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 				}, {
 					xtype : 'button',
 					disabled : true,
-					cls : 'journalBtnMenu',
+					itemId : 'journalBtnMenu',
 					text : me.xJournal,
 					iconCls : 'exports-icon',
 					menu : {

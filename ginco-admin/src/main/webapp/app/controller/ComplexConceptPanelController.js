@@ -57,7 +57,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 
 		var model = this.getSplitNonPreferredTermModelModel();
 		var termId = thePanel.gincoId;
-		if (termId != '') {
+		if (termId != '' && termId!=null) {
 			theForm.getEl().mask("Chargement");
 			model.load(termId, {
 				success : function(model) {
