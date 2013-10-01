@@ -194,6 +194,7 @@ Ext
 																			collapsible : true,
 																			collapsed : true,
 																			border : false,
+																			titleCollapse : true,
 																			items : [
 																					{
 																						xtype : 'displayfield',
