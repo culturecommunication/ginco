@@ -52,7 +52,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var me = this;
 		var termPanel = theForm.up('termPanel');
 		var thesaurusData = termPanel.thesaurusData;
-		
+
 		var model = this.getThesaurusTermModelModel();
 		var termId = termPanel.gincoId;
 		if (termId != '') {
@@ -74,14 +74,14 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			model.data.thesaurusId = theForm.up('termPanel').thesaurusData.id;
 			model.data.identifier = "";
 			model.data.language=thesaurusData.languages[0];
-			//0 is the status to set by default for a new term, meaning "candidate"
-			model.data.status=0;
+			//1 is the status to set by default for a new term, meaning "validated"
+			model.data.status=1;
 			theForm.down("#statusCombo").setReadOnly(false);
 			theForm.loadRecord(model);
 		}
 		me.initCustomAttributForm(theForm);
 	},
-	
+
 	initCustomAttributForm: function(theForm)
 	{
 		var termPanel = theForm.up('termPanel');
@@ -93,7 +93,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			}
 		});
 	},
-	
+
 	saveCustomFieldAttributes : function(theForm, termId, lang)
 	{
 		var customForm = theForm.down('#customAttributeForm');
@@ -108,7 +108,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		termPanel.setTitle("Terme : "+aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
 		termPanel.gincoId = aModel.data.identifier;
-		
+
 		if (Ext.isEmpty(aModel.data.conceptId)){
 			aForm.down("#statusCombo").setReadOnly(false);
 			if (aModel.data.status == 1) {
@@ -121,16 +121,16 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		} else {
 			displayConcept.setDisabled(false);
 		}
-		
+
 		if (Ext.isEmpty(aModel.data.conceptId) && aModel.data.status == 2){
 			//The term isn't attached to any concept and its status is rejected
 			//We can delete it
 			deleteBtn.setDisabled(false);
-		} else 
+		} else
 		{
 			deleteBtn.setDisabled(true);
 		}
-		
+
 		var noteTab= aForm.up('tabpanel').down('noteTermPanel');
 		noteTab.setDisabled(false);
 	},
@@ -209,20 +209,20 @@ Ext.define('GincoApp.controller.TermPanelController', {
 				thePanel.thesaurusData.id);
 		theStore.load();
 	},
-	
+
 	loadStatus : function(theCombo) {
 		var thePanel = theCombo.up('termPanel');
 		var theStore = theCombo.getStore();
 		theStore.load();
 	},
-	
+
 	loadCreateConceptFromTerm : function(theButton) {
 		var thePanel = theButton.up('termPanel');
 		var theForm = theButton.up('form');
 		var theTermModel = theForm.getForm().getRecord();
 		var conceptPanel = this.createPanel('GincoApp.view.ConceptPanel', thePanel.thesaurusData, theTermModel);
 	},
-	
+
 	createPanel : function(aType,thesaurusData, theTermModel)
 	{
 		var aNewPanel = Ext.create(aType);
@@ -234,7 +234,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		tab.show();
 		return aNewPanel;
 	},
-	
+
 	onDisplayConceptClick : function(theButton) {
 		var thePanel = theButton.up('termPanel');
 		var theForm = theButton.up('form');
@@ -243,7 +243,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		topTabs.fireEvent('openconcepttab', topTabs, thePanel.thesaurusData.id,
 				theModel.data.conceptId);
 	},
-	
+
 	init : function() {
 		this.control({
 			'termPanel #termForm' : {

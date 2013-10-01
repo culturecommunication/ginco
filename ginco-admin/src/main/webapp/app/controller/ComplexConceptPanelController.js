@@ -75,8 +75,8 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			model.data.thesaurusId = thePanel.thesaurusData.id;
 			model.data.identifier = "";
 			model.data.language=thesaurusData.languages[0];
-			//0 is the status to set by default for a new term, meaning "candidate"
-			model.data.status=0;
+			//1 is the status to set by default for a new term, meaning "validated"
+			model.data.status=1;
 			theForm.down("#statusCombo").setReadOnly(false);
 			theForm.loadRecord(model);
 		}

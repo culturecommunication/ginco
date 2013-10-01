@@ -82,9 +82,9 @@ Ext
 							model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
 							model.data.identifier = "";
 
-							// 0 is the status to set by default for a new
-							// concept, meaning "candidate"
-							model.data.status = 0;
+							// 1 is the status to set by default for a new
+							// concept, meaning "validated"
+							model.data.status = 1;
 
 							if (!Ext
 									.isEmpty(thePanel.initPreferedTermBeforeLoad)) {
@@ -105,7 +105,7 @@ Ext
 						}
 						me.initCustomAttributForm(theForm);
 					},
-					
+
 					initCustomAttributForm: function(theForm)
 					{
 						var conceptPanel = theForm.up('conceptPanel');
@@ -117,7 +117,7 @@ Ext
 							}
 						});
 					},
-					
+
 					saveCustomFieldAttributes : function(theForm, conceptId)
 					{
 						var customForm = theForm.down('#customAttributeForm');
@@ -231,7 +231,7 @@ Ext
 						var theStore = theGrid.getStore();
 						theStore.remove(rec);
 					},
-					
+
 					onRemoveChildClick : function(gridview, el, rowIndex,
 							colIndex, e, rec, rowEl) {
 						var theGrid = gridview.up('#gridPanelChildrenConcepts');
@@ -318,18 +318,18 @@ Ext
 
 					/**
 					 * User clicks on button "Select as parent"
-					 * 
+					 *
 					 * @param selectedRow
 					 */
 					selectConceptAsParent : function(selectedRow, theGrid) {
 						var theStore = theGrid.getStore();
 						var selectedItem = selectedRow[0];
 						selectedItem.setDirty();
-						
+
 						var parentModel = Ext.create('GincoApp.model.HierarchicalAssociationModel');
 						parentModel.set('label',selectedItem.get('label'));
 						parentModel.set('identifier',selectedItem.get('identifier'));
-						
+
 						theStore.add(parentModel);
 					},
 
@@ -374,18 +374,18 @@ Ext
 						var conceptPanel = me.getActivePanel();
 						var infosConceptPanel = aForm.up('panel');
 						conceptPanel.gincoId = aModel.data.identifier;
-						
+
 						aForm.loadRecord(aModel);
 						var terms = aModel.terms().getRange();
 						conceptTitle = "";
 						Ext.Array.each(terms, function(term) {
-							if (term.data.prefered == true 
+							if (term.data.prefered == true
 									&& term.data.language == conceptPanel.thesaurusData.languages[0]) {
 								conceptTitle = term.data.lexicalValue;
 								return false;
 							}
 						});
-						
+
 						if (conceptTitle == ""){
 							Ext.Array.each(terms, function(term) {
 								if (term.data.prefered == true) {
@@ -394,11 +394,11 @@ Ext
 								}
 							});
 						}
-						
+
 						conceptPanel.setTitle("Concept : " + conceptTitle);
-						
+
 						var theGrid = aForm.down('#gridPanelTerms');
-						
+
 						var theGridStore = theGrid.getStore();
 						theGridStore.removeAll();
 						theGridStore.add(terms);
@@ -412,7 +412,7 @@ Ext
                         associatedConceptsGridStore.removeAll();
                         associatedConceptsGridStore.add(assoc);
                         this.setupStoreListener(associatedConceptsGrid);
-                        
+
                         //Load parent concepts to the grid's store
 						var parents = aModel.parentConcepts().getRange();
                         var parentsGrid = aForm.down('#gridPanelParentConcepts');
@@ -420,7 +420,7 @@ Ext
                         parentConceptsGridStore.removeAll();
                         parentConceptsGridStore.add(parents);
                         this.setupStoreListener(parentsGrid);
-                        
+
                         //Load children concepts to the grid's store
 						var children = aModel.childConcepts().getRange();
                         var childrenGrid = aForm.down('#gridPanelChildrenConcepts');
@@ -595,10 +595,10 @@ Ext
 								.down('#gridPanelAssociatedConcepts');
 						var associatedGridStore = associatedGrid.getStore();
 						var associatedData = associatedGridStore.getRange();
-						
+
 						var hierarchicalParentGrid = theForm.down('#gridPanelParentConcepts');
 						var hierarchicalParentData = hierarchicalParentGrid.getStore().getRange();
-						
+
 						var hierarchicalChildGrid = theForm.down('#gridPanelChildrenConcepts');
 						var hierarchicalChildData = hierarchicalChildGrid.getStore().getRange();
 
@@ -646,7 +646,7 @@ Ext
 								});
 
 					},
-					
+
 					exportBranch : function (theButton, theCallback) {
 						var theForm = theButton.up('form');
 				        var url = "services/ui/exportservice/getGincoBranchExport?conceptId="
