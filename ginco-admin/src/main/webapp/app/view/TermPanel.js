@@ -68,6 +68,7 @@ Ext
 					xTermPanelTitle : 'New Term',
 					xNotesTab : 'Notes of this term',
 					xStatusLabel : 'Status',
+					xTermTabPanelTitle : 'Term data',
 					xDisplayTheConceptOfTheTerm : 'Display the concept of this term',
 
 					initComponent : function() {
@@ -82,12 +83,13 @@ Ext
 											title : me.xTermPanelTitle,
 											items : [ {
 												xtype : 'tabpanel',
+												tabPosition: 'bottom',
 												flex:1,
 												items : [
 														{
 															xtype : 'form',
 															itemId : 'termForm',
-															title : me.xTermPanelTitle,
+															title : me.xTermTabPanelTitle,
 															flex : 1,
 															requiredRoles : ['ADMIN'],
 															autoScroll : true,

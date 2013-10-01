@@ -396,7 +396,6 @@ Ext
 						}
 						
 						conceptPanel.setTitle("Concept : " + conceptTitle);
-						infosConceptPanel.setTitle(conceptTitle);
 						
 						var theGrid = aForm.down('#gridPanelTerms');
 						
