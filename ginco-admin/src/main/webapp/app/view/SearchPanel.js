@@ -92,6 +92,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 
 		Ext.applyIf(me, {
 			title : me.xSearchPanelTitle,
+			iconCls : 'icon-display',
 			items : [ {
 				xtype : 'form',
 				itemId : 'advancedSearchForm',

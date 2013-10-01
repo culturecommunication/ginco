@@ -51,7 +51,7 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 	
 	onResultDblClick : function (theGrid) 
 	{
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+		var topTabs = theGrid.up('thesaurusTabs');
 		var items = theGrid.getSelectionModel().getSelection();
 		if (items.length > 0) {
 			var item = items[0];

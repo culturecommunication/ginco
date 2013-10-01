@@ -33,52 +33,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.controller.ComplexConceptsPanelController',
-		{
-			extend : 'Ext.app.Controller',
+/*
+ * File: app/locale/fr/view/ThesaurusPanel.js
+ * Thesaurus Translated Items
+ * 
+ */
+Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
+	    xNewLabel : 'Nouveau',
+	    xNewMenu_TermLabel : 'Terme',
+	    xNewMenu_ConceptLabel: 'Concept',
+	    xNewMenu_GroupLabel: 'Groupe de concepts',
+	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
+		xNewMenu_ComplexConceptLabel: "Concept complexe",
+        xExport_Skos : "Export SKOS",
+        xExport_Hierarchical : "Export texte hiérarchique",
+        xExport_Alphabetic : "Export texte alphabétique",
+        xExport_Ginco : "Export XML Hadoc GINCO",
 
-			models : [ 'ThesaurusModel' ],
-
-			onGridRender : function(theGrid) {
-				var thePanel = theGrid.up('complexconceptsPanel');
-				var thesPanel = theGrid.up('thesaurusTabPanel');
-				var theStore = theGrid.getStore();
-				theStore.getProxy().setExtraParam('idThesaurus',
-						thesPanel.thesaurusData.id);
-				theStore.load();
-				thePanel.setTitle(thePanel.title);
-			},
-
-			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {
-				var thePanel = theGrid.up('thesaurusTabPanel');
-				this.openThesaurusTermTab(record,thePanel.thesaurusData);
-			},
-			openThesaurusTermTab : function(aRecord, aThesaurusData) {
-				var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
-				topTabs.fireEvent('opencomplexconcepttab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
-			},
-			refreshComplexConceptList : function(thesaurusData)
-			{
-				var complexConceptListTabs = Ext.ComponentQuery.query('thesaurusTabs complexconceptsPanel');
-				Ext.Array.each(complexConceptListTabs, function(complexConceptList, index, array) {
-					if (complexConceptList.up('thesaurusTabPanel').thesaurusData.id ==  thesaurusData.id) {
-						var complexConceptGrid= complexConceptList.down("gridpanel");
-						complexConceptGrid.getStore().load();
-					}
-				});
-			},
-
-			init : function() {
-				this.application.on({
-					termupdated : this.refreshComplexConceptList,
-					termdeleted : this.refreshComplexConceptList,
-				});
-				this.control({
-					'complexconceptsPanel gridpanel' : {
-						render : this.onGridRender,
-						itemdblclick : this.onNodeDblClick
-					}
-				});
-
-			}
-		});
+        xSave : "Enregistrer",
+        xDelete : "Supprimer",
+        xVersionsTab : 'Versions',
+        xJournal: 'Journal des évolutions',
+    	xEditJournal: 'Editer au format CSV',
+        xPublish: 'Publier',
+        xArchive: 'Archiver',
+        xPolyHierarchical: 'Polyhierarchique',
+        xImportBranch: 'Importer une branche',
+        xCustomAttributeTypes: "Types d'atrributes posonalisé",
+        xImportSandbox: 'Importer des termes',
+        xCustomAttributeTypes: "Attributs personnalisés"
+});

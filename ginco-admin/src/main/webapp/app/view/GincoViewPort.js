@@ -37,7 +37,7 @@ Ext.define('GincoApp.view.GincoViewPort', {
     extend: 'Ext.container.Viewport',
 
     requires: [
-        'GincoApp.view.GlobalTabPanel',
+        'GincoApp.view.GlobalThesaurusTabsPanel',
         'GincoApp.view.TopToolbar',
         'GincoApp.view.LeftPanel'
     ],
@@ -54,7 +54,7 @@ Ext.define('GincoApp.view.GincoViewPort', {
             ariaRole :  'application',
             items: [
                 {
-                    xtype: 'topTabs',
+                    xtype: 'thesaurusTabs',
                     region: 'center'
                 },
                 {

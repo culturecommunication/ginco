@@ -60,7 +60,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         var model = this.getConceptArrayModelModel();
         var conceptArrayId = thePanel.gincoId;
 		var deleteConceptArrayBtn = thePanel.down('#deleteConceptArray');
-        if (conceptArrayId != '') {    		
+        if (conceptArrayId != '' && conceptArrayId != null ) {    		
     		theForm.getEl().mask("Chargement");
 			model.load(conceptArrayId, {
 				success : function(model) {
@@ -76,10 +76,10 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			});			
 			deleteConceptArrayBtn.setDisabled(false);
 		} else {
-			thePanel.setTitle(thePanel.title+' : '+thePanel.thesaurusData.title);
+			thePanel.setTitle(thePanel.title);
 			model = Ext.create('GincoApp.model.ConceptArrayModel');
-			model.data.thesaurusId = thePanel.thesaurusData.id;
-			model.data.language=thePanel.thesaurusData.languages[0];
+			model.data.thesaurusId = thePanel.up('thesaurusTabPanel').thesaurusData.id;
+			model.data.language=thePanel.up('thesaurusTabPanel').thesaurusData.languages[0];
 			model.data.identifier = "";
 			theForm.loadRecord(model);			
 		}
@@ -88,7 +88,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	loadData : function(aForm, aModel) {
 		var me = this;		
 		aForm.loadRecord(aModel);
-		var thePanel = me.getActivePanel();		
+		var thePanel = me.getActivePanel(aForm);		
 		thePanel.setTitle("Tableau de concepts : "+aModel.data.label);
 		thePanel.gincoId = aModel.data.identifier;
 		if (aModel.get('superOrdinateId')!="")
@@ -164,7 +164,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		var me = this;
 		var theForm = theButton.up('form');
 		var globalTabs = theForm.up('topTabs');
-		var thePanel = me.getActivePanel();
+		var thePanel = me.getActivePanel(theButton);
 		
 		var updatedModel = theForm.getForm().getRecord();      
         
@@ -196,15 +196,15 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
     		}); 
 	},	
 	
-	getActivePanel : function() {
-    	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-    	return topTabs.getActiveTab();
-    }, 
+	getActivePanel : function(child) { 
+		return child.up('conceptArrayPanel');
+	},
+
     
 	selectParentConcept : function(theButton){
 		var me = this;
 		var theForm = theButton.up('form');
-	    var thePanel = me.getActivePanel();
+	    var thePanel = me.getActivePanel(theButton);
 	    
 	 	Ext.MessageBox.show({
 			title : me.xChangingParentWarningMsgTitle,
@@ -367,7 +367,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	
 	onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
 	    	var me = this;
-	        var thePanel = me.getActivePanel();
+	        var thePanel = me.getActivePanel(theGrid);
 	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 			topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
 	},	

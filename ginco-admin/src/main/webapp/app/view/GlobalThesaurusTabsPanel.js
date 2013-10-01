@@ -33,52 +33,35 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.controller.ComplexConceptsPanelController',
-		{
-			extend : 'Ext.app.Controller',
+Ext.define('GincoApp.view.GlobalThesaurusTabsPanel', {
+    extend: 'Ext.tab.Panel',
+    alias: 'widget.thesaurusTabs',
+    //xCloseAllTlt : 'Close all',
+    localized : true,
+    activeTab: 0,
+    flex: 1,
+    initAria : function() {
+    	var me = this;
+    	me.callParent();
+    	var actionEl = this.getActionEl();
+        actionEl.dom.setAttribute('aria-live', 'polite');
+    },
 
-			models : [ 'ThesaurusModel' ],
+    initComponent: function() {
+        var me = this;
+ /*
+        Ext.applyIf(me, {
+        	tabBar:{
+                items:[{ 
+                    xtype: 'button',
+                    itemId:'closeAllTabs',
+                    hidden :true,
+                    text : this.xCloseAllTlt
+                }]
+            }
+        });
+*/
+        me.callParent(arguments);
+    }
 
-			onGridRender : function(theGrid) {
-				var thePanel = theGrid.up('complexconceptsPanel');
-				var thesPanel = theGrid.up('thesaurusTabPanel');
-				var theStore = theGrid.getStore();
-				theStore.getProxy().setExtraParam('idThesaurus',
-						thesPanel.thesaurusData.id);
-				theStore.load();
-				thePanel.setTitle(thePanel.title);
-			},
-
-			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {
-				var thePanel = theGrid.up('thesaurusTabPanel');
-				this.openThesaurusTermTab(record,thePanel.thesaurusData);
-			},
-			openThesaurusTermTab : function(aRecord, aThesaurusData) {
-				var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
-				topTabs.fireEvent('opencomplexconcepttab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
-			},
-			refreshComplexConceptList : function(thesaurusData)
-			{
-				var complexConceptListTabs = Ext.ComponentQuery.query('thesaurusTabs complexconceptsPanel');
-				Ext.Array.each(complexConceptListTabs, function(complexConceptList, index, array) {
-					if (complexConceptList.up('thesaurusTabPanel').thesaurusData.id ==  thesaurusData.id) {
-						var complexConceptGrid= complexConceptList.down("gridpanel");
-						complexConceptGrid.getStore().load();
-					}
-				});
-			},
-
-			init : function() {
-				this.application.on({
-					termupdated : this.refreshComplexConceptList,
-					termdeleted : this.refreshComplexConceptList,
-				});
-				this.control({
-					'complexconceptsPanel gridpanel' : {
-						render : this.onGridRender,
-						itemdblclick : this.onNodeDblClick
-					}
-				});
-
-			}
-		});
+});

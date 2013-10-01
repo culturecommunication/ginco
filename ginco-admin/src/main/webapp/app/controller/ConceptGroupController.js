@@ -57,7 +57,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
         var model = this.getConceptGroupModelModel();
         var conceptGroupId = theConceptGroupPanel.gincoId;
 
-        if (conceptGroupId != '') {
+        if (conceptGroupId != '' && conceptGroupId!=null) {
         	theForm.getEl().mask("Chargement");
         	var conceptGroupModel = this.getConceptGroupModelModel();
         	conceptGroupModel.load(conceptGroupId, {
@@ -74,10 +74,10 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 			});
 
         } else {
-        	theConceptGroupPanel.setTitle(theConceptGroupPanel.title+' : '+theConceptGroupPanel.thesaurusData.title);
+        	theConceptGroupPanel.setTitle(theConceptGroupPanel.title);
         	model = Ext.create('GincoApp.model.ConceptGroupModel');
-        	model.data.thesaurusId = theConceptGroupPanel.thesaurusData.id;
-        	model.data.language=theConceptGroupPanel.thesaurusData.languages[0];
+        	model.data.thesaurusId = theConceptGroupPanel.up('thesaurusTabPanel').thesaurusData.id;
+        	model.data.language=theConceptGroupPanel.up('thesaurusTabPanel').thesaurusData.languages[0];
         	theForm.loadRecord(model);
         }
 	},
@@ -85,7 +85,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 	loadData : function(aForm, aModel) {
 		var me = this;
 		aForm.loadRecord(aModel);
-		var theConceptGroupPanel = me.getActivePanel();
+		var theConceptGroupPanel = me.getActivePanel(aForm);
 		theConceptGroupPanel.setTitle("Groupe : "+aModel.data.label);
 		theConceptGroupPanel.gincoId = aModel.data.identifier;
 		if (aModel.get('parentGroupId')!="")
@@ -113,10 +113,9 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		theConceptGroupStore.load();
 	},
 
-	getActivePanel : function() {
-    	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-    	return topTabs.getActiveTab();
-    },
+	getActivePanel : function(child) { 
+		return child.up('conceptGroupPanel');
+	},
 
 	saveConceptGroup : function(theButton, theCallback){
 		var me = this;
@@ -156,7 +155,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		var me = this;
 		var theConceptGroupForm = theButton.up('form');
 		var globalTabs = theConceptGroupForm.up('topTabs');
-		var theConceptGroupPanel = me.getActivePanel();
+		var theConceptGroupPanel = me.getActivePanel(theButton);
 
 		var updatedModel = theConceptGroupForm.getForm().getRecord();
 

@@ -52,11 +52,12 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 	loadPanel : function(theForm) {
 		var me = this;
 		var thePanel = theForm.up('complexconceptPanel');
-		var thesaurusData = thePanel.thesaurusData;
+		var thesPanel = theForm.up('thesaurusTabPanel');
+		var thesaurusData = thesPanel.thesaurusData;
 
 		var model = this.getSplitNonPreferredTermModelModel();
 		var termId = thePanel.gincoId;
-		if (termId != '') {
+		if (termId != '' && termId!=null) {
 			theForm.getEl().mask("Chargement");
 			model.load(termId, {
 				success : function(model) {
@@ -66,7 +67,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 				failure : function(model) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
 							me.xProblemLoadMsg);
-					var globalTabs = theForm.up('topTabs');
+					var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 					globalTabs.remove(thePanel);
 				}
 			});
@@ -155,6 +156,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		var me = this;
 		var theForm = theButton.up('form');
 		var thePanel = theForm.up('complexconceptPanel');
+		var thesPanel = theForm.up('thesaurusTabPanel');
 		if (theForm.getForm().isValid()) {
 			theForm.getEl().mask(me.xLoading);
 			theForm.getForm().updateRecord();
@@ -171,7 +173,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils
 							.msg(me.xSucessLabel, me.xSucessSavedMsg);
-					me.application.fireEvent('termupdated',thePanel.thesaurusData);
+					me.application.fireEvent('termupdated',thesPanel.thesaurusData);
 					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}

@@ -41,28 +41,21 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 
 			onGridRender : function(theGrid) {
 				var thePanel = theGrid.up('sandboxPanel');
+				var thesPanel = theGrid.up('thesaurusTabPanel');
 				var theStore = theGrid.getStore();
 				theStore.getProxy().setExtraParam('idThesaurus',
-						thePanel.thesaurusData.id);
+						thesPanel.thesaurusData.id);
 				theStore.load();
-				thePanel.setTitle(thePanel.title + ' : '
-						+ thePanel.thesaurusData.title);
+				thePanel.setTitle(thePanel.title);
 				
-				var thesaurusId= thePanel.thesaurusData.id;
-				var thesaurusModel= this.getThesaurusModelModel();
-				thesaurusModel.load(thesaurusId, {
-					success : function(model) {
-						thePanel.thesaurusData = model.data;
-					}
-				});
 			},
 
 			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {
-				var thePanel = theGrid.up('sandboxPanel');
-				this.openThesaurusTermTab(record,thePanel.thesaurusData);
+				var thesPanel = theGrid.up('thesaurusTabPanel');
+				this.openThesaurusTermTab(record,thesPanel.thesaurusData);
 			},
 			openThesaurusTermTab : function(aRecord, aThesaurusData) {
-				var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+				var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 				topTabs.fireEvent('opentermtab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
 			},
 			refreshSandBoxList : function(thesaurusData)

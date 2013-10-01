@@ -60,7 +60,7 @@ Ext
 
 						var conceptId = thePanel.gincoId;
 						var model = this.getConceptModelModel();
-						if (conceptId != '') {
+						if (conceptId != '' && conceptId!=null) {
 							theForm.getEl().mask("Chargement");
 							model.load(conceptId, {
 								success : function(model) {
@@ -75,8 +75,7 @@ Ext
 								}
 							});
 						} else {
-							thePanel.setTitle(thePanel.title + ' : '
-									+ thePanel.thesaurusData.title);
+							thePanel.setTitle(thePanel.title);
 							model = Ext.create('GincoApp.model.ConceptModel');
 							model.data.thesaurusId = thePanel.thesaurusData.id;
 							model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
@@ -150,18 +149,18 @@ Ext
 
 					newTermFromConceptBtn : function(theButton, prefered) {
 						var me = this;
-						var thePanel = me.getActivePanel();
+						var thePanel = me.getActivePanel(theButton);
 						var win = Ext.create('GincoApp.view.CreateTermWin');
-						win.thesaurusData = thePanel.thesaurusData;
+						win.thesaurusData = thePanel.up('thesaurusTabPanel').thesaurusData;
 						var theForm = win.down('form');
 						var theGrid = theButton.up('#gridPanelTerms');
 						win.store = theGrid.getStore();
 						var model = Ext
 								.create('GincoApp.model.ThesaurusTermModel');
 						model.data.prefered = prefered;
-						model.data.thesaurusId = thePanel.thesaurusData.id;
+						model.data.thesaurusId = thePanel.up('thesaurusTabPanel').thesaurusData.id;
 						model.data.identifier = "";
-						model.data.language = thePanel.thesaurusData.languages[0];
+						model.data.language = thePanel.up('thesaurusTabPanel').thesaurusData.languages[0];
 						model.data.conceptId = thePanel.gincoId;
 						theForm.loadRecord(model);
 						win.show();
@@ -284,14 +283,16 @@ Ext
 						win.show();
 					},
 
-					getActivePanel : function() {
-						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-						return topTabs.getActiveTab();
+					getActivePanel : function(child) { 
+						return child.up('conceptPanel');
+					}, 
+					getThesaurusData : function (child) {
+						return child.up('thesaurusTabPanel').thesaurusData;
 					},
 
 					addAssociativeRelationship : function(theButton) {
 						var me = this;
-						var thePanel = me.getActivePanel();
+						var thePanel = me.getActivePanel(theButton);
 						var theGrid = thePanel
 								.down('#gridPanelAssociatedConcepts');
 						var theStore = theGrid.getStore();
@@ -371,7 +372,8 @@ Ext
 
 					loadData : function(aForm, aModel) {
 						var me = this;
-						var conceptPanel = me.getActivePanel();
+						var conceptPanel = me.getActivePanel(aForm);
+						var thesaurusData = me.getThesaurusData(aForm);
 						var infosConceptPanel = aForm.up('panel');
 						conceptPanel.gincoId = aModel.data.identifier;
 
@@ -379,8 +381,8 @@ Ext
 						var terms = aModel.terms().getRange();
 						conceptTitle = "";
 						Ext.Array.each(terms, function(term) {
-							if (term.data.prefered == true
-									&& term.data.language == conceptPanel.thesaurusData.languages[0]) {
+							if (term.data.prefered == true 
+									&& term.data.language == thesaurusData.languages[0]) {
 								conceptTitle = term.data.lexicalValue;
 								return false;
 							}
@@ -602,7 +604,7 @@ Ext
 						var hierarchicalChildGrid = theForm.down('#gridPanelChildrenConcepts');
 						var hierarchicalChildData = hierarchicalChildGrid.getStore().getRange();
 
-						var thePanel = me.getActivePanel();
+						var thePanel = me.getActivePanel(theButton);
 
 						theForm.getEl().mask(me.xLoading);
 						var updatedModel = theForm.getForm().getRecord();
