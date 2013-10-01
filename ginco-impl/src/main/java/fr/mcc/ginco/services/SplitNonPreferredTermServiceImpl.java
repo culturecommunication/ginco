@@ -54,7 +54,7 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
 
     @Inject
     @Named("splitNonPreferredTermDAO")
-    private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;  
+    private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 
     @Override
     public SplitNonPreferredTerm getSplitNonPreferredTermById(String id) throws BusinessException {
@@ -70,7 +70,7 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
 	@Override
 	public SplitNonPreferredTerm updateSplitNonPreferredTerm(
 			SplitNonPreferredTerm object) throws BusinessException {
-    	if (object.getPreferredTerms().size()<2) 
+    	if (object.getPreferredTerms().size()<2)
     	{
     		throw new BusinessException("A complex term must have at least 2 preferred term", "invalid-complex-term");
     	} else {
@@ -91,15 +91,16 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
 		// TODO Auto-generated method stub
 		return splitNonPreferredTermDAO.countItems(idThesaurus);
 	}
-	
+
 	@Transactional(readOnly=false)
 	@Override
 	public SplitNonPreferredTerm destroySplitNonPreferredTerm(
 			SplitNonPreferredTerm splitNonPreferredTerm) {
-		if (splitNonPreferredTerm.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
+		if (splitNonPreferredTerm.getStatus()==TermStatusEnum.CANDIDATE.getStatus()
+				|| splitNonPreferredTerm.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
             return splitNonPreferredTermDAO.delete(splitNonPreferredTerm);
         } else {
-            throw new BusinessException("It's not possible to delete a term  with a status different from rejected", "delete-attached-term");
+            throw new BusinessException("It's not possible to delete a complex concept  with a status different from candidate or rejected", "delete-attached-term");
         }
 	}
 
