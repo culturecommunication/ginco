@@ -77,8 +77,8 @@ Ext
 						} else {
 							thePanel.setTitle(thePanel.title);
 							model = Ext.create('GincoApp.model.ConceptModel');
-							model.data.thesaurusId = thePanel.thesaurusData.id;
-							model.data.topconcept = thePanel.thesaurusData.defaultTopConcept;
+							model.data.thesaurusId = thePanel.up('thesaurusTabPanel').thesaurusData.id;
+							model.data.topconcept = thePanel.up('thesaurusTabPanel').thesaurusData.defaultTopConcept;
 							model.data.identifier = "";
 
 							// 1 is the status to set by default for a new
