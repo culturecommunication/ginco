@@ -54,8 +54,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xProblemArchiveMsg : "Error archiving Thesaurus!",
     xWarningChangedPoly : "Attention! You are going to change polyhierarchism of thesaurus, do it on your own risk!",
     xWarningChangedLanguages : "There may be terms in this language. Do it on your own risk!",
-    xImportTermsTitle : "Import terms",
-    xImportBranchTitle : "Import branch",
+
 
 	loadPanel : function(theForm) {
 		var me = this;
@@ -200,12 +199,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         });
     },
 
-    importBranch : function(theButton) {
-    	var me = this;
-    	Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>' + me.xImportBranchTitle + '</h1>'});
-	},
-
-    
 
 	saveForm : function(theButton, theCallback) {
 		var me = this;
@@ -265,10 +258,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     	}
     },
 
-    importSandboxClick : function(theButton) {
-    	var me = this;
-    	Ext.create('GincoApp.view.ImportWin', {importType : 'txt', thesaurusData : theButton.up('thesaurusPanel').thesaurusData, xTitleLabel: '<h1>'+me.xImportTermsTitle+'</h1>'});
-    },
 
 	init : function(application) {
 		this.control({
@@ -287,18 +276,12 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             "thesaurusPanel #archiveThesaurus" : {
                 click : this.archiveThesaurus
             },
-            "thesaurusPanel #importBranch" : {
-                click : this.importBranch
-            },
             "checkbox[cls=poly]" : {
                 change : this.onPolyChange
             },
             "thesaurusPanel #thesauruslang" : {
             	select : this.onLangChange
-            },
-            "thesaurusPanel #importSandbox" : {
-                click : this.importSandboxClick
-            },
+            }
 		});
 	}
 });

@@ -192,22 +192,6 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 					}
 				}, {
 					xtype : 'button',
-					text : me.xPublish,
-					requiredRoles : [ 'ADMIN' ],
-					disabled : true,
-					cls : 'publish',
-					itemId : 'publishThesaurus',
-					iconCls : 'icon-publish'
-				}, {
-					xtype : 'button',
-					text : me.xArchive,
-					requiredRoles : [ 'ADMIN' ],
-					disabled : true,
-					cls : 'archive',
-					itemId : 'archiveThesaurus',
-					iconCls : 'icon-archive'
-				}, {
-					xtype : 'button',
 					text : me.xImportSandbox,
 					requiredRoles : [ 'ADMIN' ],
 					disabled : true,

@@ -39,6 +39,8 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	models : [ 'ThesaurusModel' ],
 	xSaveMsgLabel : 'Do you want to save changes?',
 	xSaveMsgTitle : 'Save changes?',
+    xImportTermsTitle : "Import terms",
+    xImportBranchTitle : "Import branch",
 	tabs : {
 		conceptPanel : 'GincoApp.view.ConceptPanel',
 		termPanel : 'GincoApp.view.TermPanel',
@@ -78,7 +80,6 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			thePanel.down('#exportGinco').setDisabled(false);
 			thePanel.down('#journalBtnMenu').setDisabled(false);
 			thePanel.down('#editJournal').setDisabled(false);
-			thePanel.down('#publishThesaurus').setDisabled(false);
 			thePanel.down('#importSandbox').setDisabled(false);
 			thePanel.down('#importBranch').setDisabled(false);
 		}
@@ -201,6 +202,17 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
             + encodeURIComponent(thePanel.thesaurusData.id);
         window.open(url);
     },
+    
+    importSandboxClick : function(theButton) {
+    	var me = this;
+    	var thePanel = theButton.up('thesaurusTabPanel');
+    	Ext.create('GincoApp.view.ImportWin', {importType : 'txt', thesaurusData : thePanel.thesaurusData, xTitleLabel: '<h1>'+me.xImportTermsTitle+'</h1>'});
+    },
+    importBranch : function(theButton) {
+    	var me = this;
+    	var thePanel = theButton.up('thesaurusTabPanel');
+    	Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:thePanel.thesaurusData, xTitleLabel: '<h1>' + me.xImportBranchTitle + '</h1>'});
+	},
 	
 	init : function(application) {
 		this.application.on({
@@ -251,6 +263,12 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			},
 			"thesaurusTabPanel #editJournal" : {
                 click : this.exportJournal
+            },
+            "thesaurusTabPanel #importSandbox" : {
+                click : this.importSandboxClick
+            },
+            "thesaurusTabPanel #importBranch" : {
+                click : this.importBranch
             },
 		});
 	}
