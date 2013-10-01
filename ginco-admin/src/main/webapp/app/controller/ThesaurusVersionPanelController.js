@@ -43,7 +43,7 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 	xProblemLabel : 'Error !',
 	
 	onRenderGrid : function(theGrid) {
-		var thesaurusId = theGrid.up('thesaurusPanel').thesaurusData.id;
+		var thesaurusId = theGrid.up('thesaurusTabPanel').thesaurusData.id;
 		theGrid.getStore().getProxy().setExtraParam('thesaurusId', thesaurusId);
 		theGrid.getStore().load();
 	},
@@ -103,7 +103,7 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 		var theForm = theButton.up('form');
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
-		updatedModel.data.thesaurusId = theGrid.up('thesaurusPanel').thesaurusData.id ;
+		updatedModel.data.thesaurusId = theGrid.up('thesaurusTabPanel').thesaurusData.id ;
 		theGrid.getStore().add(updatedModel);
 		theGrid.up('form').down('button[itemId=saveThesaurusVersion]').setDisabled(false);
 	},

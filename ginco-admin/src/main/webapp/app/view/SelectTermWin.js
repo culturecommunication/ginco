@@ -44,6 +44,7 @@ Ext
 					thesaurusData : null,
 					store : null,
 					prefered: null,
+					gincoId : null,
 					onlyValidatedTerms : false,
 					existingPreferredTerms : false,
 

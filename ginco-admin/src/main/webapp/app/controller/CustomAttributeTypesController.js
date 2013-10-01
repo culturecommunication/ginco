@@ -72,7 +72,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
 
     onConceptGridRender : function(theGrid) {
         var me = this;
-        var thesaurusData = theGrid.up('thesaurusPanel').thesaurusData;
+        var thesaurusData = theGrid.up('thesaurusTabPanel').thesaurusData;
 
         if (thesaurusData != null) {
             me.loadConceptData(theGrid, thesaurusData.id);
@@ -81,7 +81,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
 
     onTermGridRender : function(theGrid) {
         var me = this;
-        var thesaurusData = theGrid.up('thesaurusPanel').thesaurusData;
+        var thesaurusData = theGrid.up('thesaurusTabPanel').thesaurusData;
 
         if (thesaurusData != null) {
             me.loadTermData(theGrid, thesaurusData.id);
@@ -139,7 +139,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         var theGrid = theButton.up('#conceptAttributTypesGrid');
         var conceptsGridStore = theGrid.getStore();
         var model = Ext.create('GincoApp.model.CustomAttributeTypeModel');
-        var thesaurusData = theButton.up('thesaurusPanel').thesaurusData;
+        var thesaurusData = theButton.up('thesaurusTabPanel').thesaurusData;
         model.set('thesaurusId',thesaurusData.id);
         model.set('value','Nouvel attribut');
         model.set('code','code');

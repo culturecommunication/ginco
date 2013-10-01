@@ -114,8 +114,8 @@ Ext
 					{
 						var conceptPanel = theForm.up('conceptPanel');
 						var customForm = theForm.down('customattrform');
-						customForm.initFields(conceptPanel.thesaurusData.id, function() {
-							if (conceptPanel.gincoId!='')
+						customForm.initFields(conceptPanel.up('thesaurusTabPanel').thesaurusData.id, function() {
+							if (conceptPanel.gincoId!='' && conceptPanel.gincoId!=null)
 							{
 								customForm.load(conceptPanel.gincoId);
 							}
@@ -178,19 +178,20 @@ Ext
 
 					selectTermFromConceptBtn : function(theButton, prefered) {
 						var me = this;
-						var thePanel = me.getActivePanel();
+						var thePanel = me.getActivePanel(theButton);
 						var win = Ext.create('GincoApp.view.SelectTermWin', {
 							onlyValidatedTerms : true
 						});
 						var theGrid = theButton.up('#gridPanelTerms');
+						win.gincoId = thePanel.gincoId;
 						win.conceptGrid = theGrid;
 						win.store = theGrid.getStore();
-						win.thesaurusData = thePanel.thesaurusData;
+						win.thesaurusData = thePanel.up('thesaurusTabPanel').thesaurusData;
 						win.prefered = prefered;
 						win.show();
 					},
 
-					createPanel : function(aType, thesaurusData, termId) {
+					/*createPanel : function(aType, thesaurusData, termId) {
 						var aNewPanel = Ext.create(aType);
 						aNewPanel.thesaurusData = thesaurusData;
 						aNewPanel.termId = termId;
@@ -199,23 +200,23 @@ Ext
 						topTabs.setActiveTab(tab);
 						tab.show();
 						return aNewPanel;
-					},
+					},*/
 
 					onTermDblClick : function(theGrid, record, item, index, e,
 							eOpts) {
 						var me = this;
 						var thePanel = theGrid.up('conceptPanel');
-						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-						topTabs.fireEvent('opentermtab', topTabs, thePanel.thesaurusData.id,
+						var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+						topTabs.fireEvent('opentermtab', topTabs, thePanel.up('thesaurusTabPanel').thesaurusData.id,
 								record.data.identifier);
 					},
 
 					onConceptDblClick : function(theGrid, record, item, index,
 							e, eOpts) {
 						var thePanel = theGrid.up('conceptPanel');
-						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+						var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 						topTabs.fireEvent('openconcepttab', topTabs,
-								thePanel.thesaurusData.id,
+								thePanel.up('thesaurusTabPanel').thesaurusData.id,
 								record.data.identifier);
 					},
 
@@ -256,8 +257,7 @@ Ext
 						} else {
 							record.data.prefered = false;
 						}
-						var thePanel = me.getActivePanel();
-						record.data.conceptId = thePanel.gincoId;
+						record.data.conceptId = theWin.gincoId;
 						if (theWin.store.findRecord('identifier',
 								record.data.identifier) !== null) {
 							Ext.MessageBox.alert(this.xProblemLabel,
@@ -271,12 +271,12 @@ Ext
 
 					addParent : function(theButton) {
 						var me = this;
-						var thePanel = me.getActivePanel();
+						var thePanel = me.getActivePanel(theButton);
 						var theGrid = thePanel.down('#gridPanelParentConcepts');
 						var theStore = theGrid.getStore();
 						var win = Ext.create('GincoApp.view.SelectConceptWin',
 								{
-									thesaurusData : thePanel.thesaurusData,
+									thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
 									conceptId : thePanel.gincoId,
 									showTree : false,
 									checkstore : theStore,
@@ -505,7 +505,7 @@ Ext
 						var me = this;
 						var theForm = theButton.up('form');
 						var globalTabs = theForm.up('topTabs');
-						var thePanel = me.getActivePanel();
+						var thePanel = me.getActivePanel(theButton);
 
 						var updatedModel = theForm.getForm().getRecord();
 						var parentGrid = theForm
