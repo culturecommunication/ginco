@@ -283,9 +283,9 @@ Ext
 						win.show();
 					},
 
-					getActivePanel : function(child) { 
+					getActivePanel : function(child) {
 						return child.up('conceptPanel');
-					}, 
+					},
 					getThesaurusData : function (child) {
 						return child.up('thesaurusTabPanel').thesaurusData;
 					},
@@ -381,7 +381,7 @@ Ext
 						var terms = aModel.terms().getRange();
 						conceptTitle = "";
 						Ext.Array.each(terms, function(term) {
-							if (term.data.prefered == true 
+							if (term.data.prefered == true
 									&& term.data.language == thesaurusData.languages[0]) {
 								conceptTitle = term.data.lexicalValue;
 								return false;
@@ -444,8 +444,8 @@ Ext
 						noteTab.setDisabled(false);
 
 						var deleteConceptBtn = aForm.down('#deleteConcept');
-						if (aModel.data.status == 0) {
-							// The concept has status = candidate, so we can
+						if (aModel.data.status == 0 || aModel.data.status == 2) {
+							// The concept has status = candidate or rejected, so we can
 							// delete it
 							deleteConceptBtn.setDisabled(false);
 						} else {

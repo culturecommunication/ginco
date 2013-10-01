@@ -64,21 +64,21 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     @Inject
     @Named("thesaurusTermDAO")
     private IThesaurusTermDAO thesaurusTermDAO;
-    
+
     @Inject
     @Named("thesaurusDAO")
     private IThesaurusDAO thesaurusDAO;
-    
+
     @Inject
     @Named("languagesDAO")
     private ILanguageDAO languageDAO;
-    
+
     @Inject
     @Named("generatorService")
     private IIDGeneratorService customGeneratorService;
-    
+
 	@Value("${ginco.default.language}")
-	private String defaultLang;    
+	private String defaultLang;
 
     @Override
     public ThesaurusTerm getThesaurusTermById(String id) throws BusinessException {
@@ -100,19 +100,19 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	@Override
     public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
         return thesaurusTermDAO.findTermsByConceptId(idConcept);
-    }  
+    }
 
 	@Override
     public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException {
         return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
     }
-    
+
 	@Override
 	public Long getSandboxedValidatedTermsCount(String idThesaurus)
 			throws BusinessException {
 		return thesaurusTermDAO.countSandboxedValidatedTerms(idThesaurus);
 	}
-    
+
 	@Transactional(readOnly=false)
     @Override
     public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException {
@@ -126,12 +126,14 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	@Transactional(readOnly=false)
     @Override
     public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException {
-        if (object.getConcept() == null && object.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
+        if (object.getConcept() == null
+        		&& (object.getStatus()==TermStatusEnum.CANDIDATE.getStatus()
+        			|| object.getStatus()==TermStatusEnum.REJECTED.getStatus())) {
             return thesaurusTermDAO.delete(object);
         } else {
             throw new BusinessException("It's not possible to delete a term attached to a concept or with a status different from rejected", "delete-attached-term");
         }
-    }	
+    }
 
     @Override
     public List<ThesaurusTerm> getAllTerms() {
@@ -143,13 +145,13 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 			Integer startIndex, Integer limit, String idThesaurus) {
 		return thesaurusTermDAO.findPaginatedSandboxedValidatedItems(startIndex, limit, idThesaurus);
 	}
-    
+
 	@Override
 	public Long getPreferredTermsCount(String idThesaurus)
 			throws BusinessException {
 		return thesaurusTermDAO.countPreferredTerms(idThesaurus);
 	}
-    
+
     @Override
     public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
     	ThesaurusTerm thesaurusTerm = thesaurusTermDAO
@@ -166,7 +168,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	else{
     		throw new BusinessException("The term does not exist", "term-does-not-exist");
     	}
-    		
+
     }
     @Override
     public ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
@@ -186,11 +188,11 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     			else{
     				throw new BusinessException("The concept does not exist", "concept-does-not-exist");
     			}
-    		}		
+    		}
     	}
     	else return null;
     }
-    
+
     @Override
 	public Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO.
@@ -201,8 +203,8 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	else{
     		throw new BusinessException("The term does not exist", "term-does-not-exist");
     	}
-    		
-    	
+
+
 	}
 
 	@Override
@@ -215,7 +217,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 			Integer startIndex, Integer limit, String idThesaurus) {
 		 return thesaurusTermDAO.findPaginatedPreferredItems(startIndex, limit, idThesaurus);
 	}
-	
+
 	@Transactional(readOnly=false)
 	@Override
 	public List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId) throws TechnicalException, BusinessException{

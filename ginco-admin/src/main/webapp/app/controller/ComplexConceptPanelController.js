@@ -132,10 +132,12 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		var theGridStore = aForm.down('#gridPanelPreferredTerms').getStore();
 		theGridStore.removeAll();
 		theGridStore.add(preferredTerms);
-		if (Ext.isEmpty(aModel.data.conceptId) && aModel.data.status == 2){
-			//The term isn't attached to any concept and its status is rejected
-			//We can delete it
+		if ( aModel.data.status == 0 || aModel.data.status == 2){
+			// The concept has status = candidate or rejected, so we can
+			// delete it
 			deleteBtn.setDisabled(false);
+		} else	{
+			deleteBtn.setDisabled(true);
 		}
 	},
 	loadLanguages : function(theCombo) {

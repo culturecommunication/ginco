@@ -121,8 +121,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			displayConcept.setDisabled(false);
 		}
 
-		if (Ext.isEmpty(aModel.data.conceptId) && aModel.data.status == 2){
-			//The term isn't attached to any concept and its status is rejected
+		if (Ext.isEmpty(aModel.data.conceptId) && (aModel.data.status == 0 || aModel.data.status == 2)){
+			//The term isn't attached to any concept and its status is candidate or rejected
 			//We can delete it
 			deleteBtn.setDisabled(false);
 		} else
