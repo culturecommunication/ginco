@@ -39,6 +39,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.DateUtil;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.semanticweb.skos.*;
@@ -53,7 +54,7 @@ import java.util.List;
 
 /**
  * This component is in charge of exporting concept to SKOS
- * 
+ *
  */
 @Component("skosConceptExporter")
 public class SKOSConceptExporter {
@@ -151,7 +152,6 @@ public class SKOSConceptExporter {
 		addList.add(new AddAssertion(vocab, conceptAssertion));
 		addList.add(new AddAssertion(vocab, inScheme));
 
-
 		addList.addAll(skosNotesExporter.exportNotes(concept.getIdentifier(),prefTerms,
 				factory, conceptSKOS, vocab));
 
@@ -179,6 +179,18 @@ public class SKOSConceptExporter {
 
 			}
 		}
+
+		SKOSDataRelationAssertion createdInsertion = factory
+                .getSKOSDataRelationAssertion(conceptSKOS, factory
+                        .getSKOSDataProperty(URI.create("http://purl.org/dct#created")),
+                        		DateUtil.toString(concept.getCreated()));
+        addList.add(new AddAssertion(vocab, createdInsertion));
+
+        SKOSDataRelationAssertion modifiedInsertion = factory
+                .getSKOSDataRelationAssertion(conceptSKOS, factory
+                        .getSKOSDataProperty(URI.create("http://purl.org/dct#modified")),
+                        		DateUtil.toString(concept.getModified()));
+        addList.add(new AddAssertion(vocab, modifiedInsertion));
 
 		return addList;
 	}

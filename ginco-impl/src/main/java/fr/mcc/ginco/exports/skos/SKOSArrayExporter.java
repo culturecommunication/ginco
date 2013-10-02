@@ -45,6 +45,7 @@ import org.springframework.stereotype.Component;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -53,6 +54,7 @@ import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting collections to SKOS
@@ -60,15 +62,15 @@ import fr.mcc.ginco.services.IThesaurusArrayService;
  */
 @Component("skosArrayExporter")
 public class SKOSArrayExporter {
-	
+
 	@Inject
 	@Named("thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;
-	
+
 	@Inject
 	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
-	
+
 	/**
 	 * Export thesaurus arrays from the given thesaurus in SKOS format as a string
 	 * @param thesaurus
@@ -99,15 +101,19 @@ public class SKOSArrayExporter {
 
 				for (ThesaurusArrayConcept arrayConcept : array.getConcepts()) {
 						Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());
-						model.add(collectionRes, SKOS.MEMBER, y);				
+						model.add(collectionRes, SKOS.MEMBER, y);
 				}
 				for (ThesaurusArray childrenArray : thesaurusArrayService.getChildrenArrays(array.getIdentifier())){
 					Resource arrayMember = model.createResource(childrenArray.getIdentifier()+"_REMOVEME_");
 					model.add(collectionRes, SKOS.MEMBER, arrayMember);
 				}
+
+				model.add(collectionRes, DCTerms.created, DateUtil.toString(label.getCreated()));
+				model.add(collectionRes, DCTerms.modified, DateUtil.toString(label.getModified()));
 			}
 
 			model.setNsPrefix("skos", SKOS.getURI());
+			model.setNsPrefix("dct", DCTerms.getURI());
 
 			StringWriter sw = new StringWriter();
 			model.write(sw, "RDF/XML-ABBREV");
@@ -116,7 +122,7 @@ public class SKOSArrayExporter {
 			int start = result.lastIndexOf("core#\">") + "core#\">".length()
 					+ 2;
 			int end = result.lastIndexOf("</rdf:RDF>");
-			
+
 			return result.substring(start, end);
 		}
 
