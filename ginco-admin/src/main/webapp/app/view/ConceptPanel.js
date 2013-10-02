@@ -68,6 +68,7 @@ Ext
 					xExistingTerm : 'Select Existing Term',
 					xDetach : 'Detach from Concept',
 					xAddParent : 'Add parent Concept',
+					xAddChild : 'Add child Concept',
 					xNotesTab : 'Notes of this concept',
 					xActions : 'Actions',
 					xAddRelationship : 'Add associative relationship',
@@ -445,6 +446,19 @@ Ext
 																			store : me.childrenConceptStore,
 																			itemId : 'gridPanelChildrenConcepts',
 
+																			dockedItems : [ {
+																				xtype : 'toolbar',
+																				dock : 'top',
+																				items : [ {
+																					xtype : 'button',
+																					text : me.xAddChild,
+																					disabled : true,
+																					itemId : 'addChild',
+																					cls : 'addChild',
+																					iconCls : 'icon-add-parent'
+																				} ]
+																			} ],
+																			
 																			columns : [
 																					{
 																						dataIndex : 'identifier',

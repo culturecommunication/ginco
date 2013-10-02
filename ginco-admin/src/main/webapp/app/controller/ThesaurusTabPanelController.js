@@ -87,6 +87,10 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	{
 		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : aConceptId});
 	},
+	openChildConceptTab : function(tabPanel, aParentConceptId)
+	{
+		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : null, parentConceptId : aParentConceptId, displayPrefTermCreation: true});
+	},
 	openTermTab : function(tabPanel, aTermId)
 	{
 		this.openGenericTab(tabPanel, "termPanel","GincoApp.view.TermPanel", {gincoId : aTermId});
@@ -125,7 +129,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			});
 		} else
 		{
-			if (existingTabs.length>0)
+			if (existingTabs.length>0 && !existingTabs[0].multiInstance)
 				tabExists = existingTabs[0];
 		}
 		if (!tabExists) {
@@ -177,6 +181,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 				newthesaurus : this.onNewThesaurus,
 				openthesaurusform : this.openThesaurusForm,
 				openconcepttab : this.openConceptTab,
+				openchildconcepttab : this.openChildConceptTab,
 				opensandboxtab : this.openSandboxTab,
 				opentermtab : this.openTermTab,
 				opengrouptab : this.openGroupTab,

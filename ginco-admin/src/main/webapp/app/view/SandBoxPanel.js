@@ -39,7 +39,8 @@
  *
  */
 Ext.define('GincoApp.view.SandBoxPanel', {
-	extend : 'Ext.panel.Panel',
+	extend : 'GincoApp.view.ThesaurusEntityPanel',
+	multiInstance : false,
 	thesaurusData : null,
 	alias : 'widget.sandboxPanel',
 	localized : true,

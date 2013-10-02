@@ -104,6 +104,12 @@ Ext
 								var theGrid = thePanel.down('#gridPanelTerms');
 								me.newTermFromTermsGrid(theGrid, true);
 							}
+							if (!Ext
+									.isEmpty(thePanel.parentConceptId)) {
+								var theGrid = thePanel.down('#gridPanelParentConcepts');
+								me.initParent(theGrid, thePanel.parentConceptId);
+								
+							}
 							this.enableSaveBtn(theForm);							
 						}						
 						me.initCustomAttributForm(theForm);		
@@ -203,7 +209,6 @@ Ext
 
 					onTermDblClick : function(theGrid, record, item, index, e,
 							eOpts) {
-						var me = this;
 						var thePanel = theGrid.up('conceptPanel');
 						var topTabs = Ext.ComponentQuery.query('topTabs')[0];
 						topTabs.fireEvent('opentermtab', topTabs, thePanel.thesaurusData.id,
@@ -268,6 +273,18 @@ Ext
 							theWin.close();
 						}
 					},
+					
+					initParent: function (theGrid, parentId) {						
+						var theStore = theGrid.getStore();
+						//var selectedItem = selectedRow[0];
+						//selectedItem.setDirty();
+
+						var parentModel = Ext.create('GincoApp.model.HierarchicalAssociationModel');
+						//parentModel.set('label',selectedItem.get('label'));
+						parentModel.set('identifier',parentId);
+
+						theStore.add(parentModel);
+					},
 
 					addParent : function(theButton) {
 						var me = this;
@@ -291,6 +308,13 @@ Ext
 									}
 								});
 						win.show();
+					},
+					
+					addChild : function(theButton) {
+						var theThesaurusTabPanel = theButton.up('thesaurusTabPanel');
+						var thePanel = theButton.up('conceptPanel');
+						var conceptId = thePanel.gincoId;
+						theThesaurusTabPanel.fireEvent('openchildconcepttab',theThesaurusTabPanel,conceptId);
 					},
 
 					getActivePanel : function(child) { 
@@ -465,9 +489,12 @@ Ext
 						var addAssociationBtn = aForm
 								.down('#addAssociativeRelationship');
 						var addparent = aForm.down('#addParent');
+						var addChild = aForm.down('#addChild');
+
 						if (aModel.data.status == 1) {
 							addAssociationBtn.setDisabled(false);
 							addparent.setDisabled(false);
+							addChild.setDisabled(false);
 						}
 
 					},
@@ -711,6 +738,9 @@ Ext
 									},
 									'conceptPanel  button[cls=addParent]' : {
 										click : this.addParent
+									},
+									'conceptPanel  button[cls=addChild]' : {
+										click : this.addChild
 									},
 									'conceptPanel  button[cls=removeParent]' : {
 										click : this.removeParent
