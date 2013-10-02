@@ -33,7 +33,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.locale.fr.controller.GlobalTabPanelController',
+Ext.define('GincoApp.locale.fr.controller.ThesaurusTabPanelController',
     {
         xSaveMsgLabel: "Voulez vous enregistrer les changements?",
         xSaveMsgTitle: 'Enregistrer les changements?'

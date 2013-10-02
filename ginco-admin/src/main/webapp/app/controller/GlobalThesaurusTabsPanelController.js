@@ -26,7 +26,7 @@
 
 Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 	extend : 'Ext.app.Controller',
-	localized : true,
+	localized : false,
 	models : [ 'ThesaurusModel' ],
 
 	onNewThesaurus : function(theTabPanel) {
