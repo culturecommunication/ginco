@@ -65,11 +65,6 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         termsGridStore.load();
     },
 
-    getActivePanel : function() {
-        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-        return topTabs.getActiveTab();
-    },
-
     onConceptGridRender : function(theGrid) {
         var me = this;
         var thesaurusData = theGrid.up('thesaurusTabPanel').thesaurusData;

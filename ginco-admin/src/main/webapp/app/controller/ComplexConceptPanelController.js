@@ -73,7 +73,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			});
 		} else {
 			model = Ext.create('GincoApp.model.SplitNonPreferredTermModel');
-			model.data.thesaurusId = thePanel.thesaurusData.id;
+			model.data.thesaurusId = thesaurusData.id;
 			model.data.identifier = "";
 			model.data.language=thesaurusData.languages[0];
 			//1 is the status to set by default for a new term, meaning "validated"
@@ -87,7 +87,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		var me = this;
 		var theForm = theButton.up('form');
 		var updatedModel = theForm.getForm().getRecord();
-		var globalTabs = theForm.up('topTabs');
+		var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 		var thePanel = theForm.up('complexconceptPanel');
 
 		Ext.MessageBox.show({
@@ -103,7 +103,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 						success : function(record, operation) {
 							Thesaurus.ext.utils.msg(me.xSucessLabel,
 									me.xSucessRemovedMsg);
-							me.application.fireEvent('termdeleted',thePanel.thesaurusData);
+							me.application.fireEvent('termdeleted',thePanel.up('thesaurusTabPanel').thesaurusData);
 							globalTabs.remove(thePanel);
 						},
 						failure : function(record, operation) {
@@ -199,7 +199,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		var theGrid = theButton.up('#gridPanelPreferredTerms');
 		win.conceptGrid = theGrid;
 		win.store = theGrid.getStore();
-		win.thesaurusData = thePanel.thesaurusData;
+		win.thesaurusData = thePanel.up('thesaurusTabPanel').thesaurusData;
 		win.prefered = true;
 		win.show();
 	},
@@ -214,8 +214,8 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			eOpts) {
 		var me = this;
 		var thePanel = theGrid.up('complexconceptPanel');
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		topTabs.fireEvent('opentermtab', topTabs, thePanel.thesaurusData.id,
+		var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		topTabs.fireEvent('opentermtab', topTabs, thePanel.up('thesaurusTabPanel').thesaurusData.id,
 				record.data.identifier);
 	},
 

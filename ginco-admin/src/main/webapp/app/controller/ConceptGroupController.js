@@ -68,7 +68,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 				failure : function(model) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
 							me.xProblemLoadMsg);
-					var globalTabs = theForm.up('topTabs');
+					var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 					globalTabs.remove(thePanel);
 				}
 			});
@@ -154,7 +154,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 	deleteConceptGroup : function(theButton){
 		var me = this;
 		var theConceptGroupForm = theButton.up('form');
-		var globalTabs = theConceptGroupForm.up('topTabs');
+		var globalTabs = theConceptGroupForm.up('#thesaurusItemsTabPanel');
 		var theConceptGroupPanel = me.getActivePanel(theButton);
 
 		var updatedModel = theConceptGroupForm.getForm().getRecord();
@@ -237,8 +237,8 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 
 	onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
 	        var thePanel = theGrid.up('conceptGroupPanel');
-	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-			topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
+	        var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+			topTabs.fireEvent('openconcepttab',topTabs, thePanel.up('thesaurusTabPanel').thesaurusData.id ,record.data.identifier);
 	    },
 
     selectParentGroup : function(theButton){

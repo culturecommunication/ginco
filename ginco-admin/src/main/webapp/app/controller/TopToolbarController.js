@@ -51,15 +51,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		thesaurusTabs.fireEvent('newthesaurus',thesaurusTabs);
 	},
-	createPanel : function(aType)
-	{
-		var aNewPanel = Ext.create(aType);
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var tab = topTabs.add(aNewPanel);
-		topTabs.setActiveTab(tab);
-		tab.show();
-		return aNewPanel;
-	},
+	
 	onImportBtnClick: function(theButton) {
 		var me = this;
 		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>'+ me.xImportSkosTitle + '</h1>'});
@@ -89,14 +81,6 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	onSearchTrigger : function(theTrigger) {
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		thesaurusTabs.fireEvent('searchquery',thesaurusTabs,theTrigger.getValue());
-		
-		/*var searchPanel = Ext.create("GincoApp.view.SearchPanel");
-		searchPanel.searchQuery = 
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var tab = topTabs.add(searchPanel);
-		topTabs.setActiveTab(tab);
-		tab.show();
-*/
 	},
 	onSearchTriggerKey : function (theTrigger,e )
 	{

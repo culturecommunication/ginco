@@ -32,6 +32,7 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 	onNewThesaurus : function(theTabPanel) {
 		var newThesaurusPanel = Ext.create('GincoApp.view.ThesaurusTabPanel');
 		theTabPanel.add(newThesaurusPanel);
+		theTabPanel.setActiveTab(newThesaurusPanel);
 		newThesaurusPanel.fireEvent('newthesaurus', newThesaurusPanel);
 	},
 
@@ -107,6 +108,7 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 		tabPanel.setActiveTab(tab);
 		tab.show();
 	},
+
 	init : function(application) {
 		this.application.on({
 			// userinfoloaded: this.onUserInfoLoaded,

@@ -70,7 +70,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 				failure : function(model) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
 							me.xProblemLoadMsg);
-					var globalTabs = theForm.up('topTabs');
+					var globalTabs = theForm.up('thesaurusTabPanel');
 					globalTabs.remove(thePanel);
 				}
 			});			
@@ -163,7 +163,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	deleteConceptArray: function(theButton){
 		var me = this;
 		var theForm = theButton.up('form');
-		var globalTabs = theForm.up('topTabs');
+		var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 		var thePanel = me.getActivePanel(theButton);
 		
 		var updatedModel = theForm.getForm().getRecord();      
@@ -216,7 +216,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 					break; // manually removes tab from tab panel
 					case 'yes':
 						var win = Ext.create('GincoApp.view.SelectConceptWin', {
-							thesaurusData : thePanel.thesaurusData,
+							thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
 							showTree : false,
 							onlyValidatedConcepts : true,
 							listeners: {
@@ -253,7 +253,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	    var thePanel =theButton.up('conceptArrayPanel');
 	    
 	    var win = Ext.create('GincoApp.view.SelectArrayWin', {
-			thesaurusData : thePanel.thesaurusData,
+			thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
 			excludedConceptArrayId : thePanel.gincoId,
 			currentParentId : theForm.down('hidden[name="parentArrayId"]').getValue(),
 			listeners: {
@@ -294,7 +294,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         var arrayId = theConceptArrayPanel.gincoId ;
         
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
-            thesaurusData : theConceptArrayPanel.thesaurusData,
+            thesaurusData : theConceptArrayPanel.up('thesaurusTabPanel').thesaurusData,
             conceptId : theConceptArrayForm.down('hidden[name="superOrdinateId"]').value,
             showTree : false,
             getArrayConcepts : getArrayConcepts,
@@ -368,8 +368,8 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
 	    	var me = this;
 	        var thePanel = me.getActivePanel(theGrid);
-	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-			topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
+	        var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+			topTabs.fireEvent('openconcepttab',topTabs, thePanel.up('thesaurusTabPanel').thesaurusData.id ,record.data.identifier);
 	},	
 	
 	

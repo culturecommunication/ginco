@@ -218,11 +218,112 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
     	Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:thePanel.thesaurusData, xTitleLabel: '<h1>' + me.xImportBranchTitle + '</h1>'});
 	},
 	
+	onPanelBeforeClose : function(thePanel) {
+		var me = this;
+		var theForm = thePanel.down('form');
+		var globalTabs = thePanel.up('#thesaurusItemsTabPanel');
+		if (theForm) {
+			var dirtyForms = [];
+			var gridPanels = thePanel.query('gridpanel');
+			Ext.Array.forEach(gridPanels,function (gridPanel) {
+				var gridStore = gridPanel.getStore();
+				if(gridStore.getModifiedRecords().length>0 || gridStore.getRemovedRecords().length>0 )
+				{
+					dirtyForms.push(gridPanel.up('form'));
+				}
+			});
+
+			var theForms = thePanel.query('form');
+			Ext.Array.forEach(theForms,function (aForm) {
+				if (aForm.getForm().isDirty())
+				{
+					if (Ext.Array.indexOf(dirtyForms, aForm)==-1)
+					{
+						dirtyForms.push(aForm);
+					}
+				}
+			}
+			);
+
+			if (dirtyForms.length>0) {
+				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) {
+					if (theForm.checkRoles('ADMIN')==true) {
+						return true;
+					}
+				}
+				Ext.MessageBox.show({
+					title : me.xSaveMsgTitle,
+					msg : me.xSaveMsgLabel,
+					buttons : Ext.MessageBox.YESNOCANCEL,
+					fn : function(buttonId) {
+						switch (buttonId) {
+						case 'no':
+							globalTabs.remove(thePanel);
+							break; // manually removes tab from tab panel
+						case 'yes':
+							for (var i=0;i<dirtyForms.length;i++)
+							{
+								var dirtyForm = dirtyForms[i];
+								var saveButton = dirtyForm.down('button[cls=save]');
+								if (saveButton != null) {
+									if (i==dirtyForms.length-1) {
+										saveButton.fireEvent('click', saveButton, function(){
+											globalTabs.remove(thePanel);
+										});
+									} else
+									{
+										saveButton.fireEvent('click', saveButton);
+									}
+								}
+							}
+
+
+							break;
+						case 'cancel':
+							break; // leave blank if no action required on
+						// cancel
+						}
+					},
+					scope : this
+				});
+
+				return false; /*
+								 * returning false to beforeclose cancels the
+								 * close event
+								 */
+			}
+		}
+		return true;
+	},
+	onThesaurusUpdated : function(thePanel, thesaurusData)
+	{
+		thePanel.thesaurusData = thesaurusData;
+		this.onLoad(thePanel);
+	},
+	
 	init : function(application) {
 		this.application.on({
 	        scope: this
 	 });
 		this.control({
+			'thesaurusPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'termPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'conceptPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'conceptArrayPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'conceptGroupPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
+			'complexconceptPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
 			'thesaurusTabPanel' : {
 				afterrender : this.onLoad,
 				newthesaurus : this.onNewThesaurus,
@@ -234,7 +335,8 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 				opengrouptab : this.openGroupTab,
 				openarraytab : this.openArrayTab,
 				opencomplexconceptstab : this.openComplexConceptsTab,
-				opencomplexconcepttab: this.openComplexConceptTab
+				opencomplexconcepttab: this.openComplexConceptTab,
+				thesaurusupdated : this.onThesaurusUpdated
 			},
 			"thesaurusTabPanel #newConceptAndTermBtn" : {
 				click : this.onNewConceptAndTermBtnClick

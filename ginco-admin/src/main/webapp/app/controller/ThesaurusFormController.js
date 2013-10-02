@@ -99,17 +99,6 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
 
 	},
-	createPanel : function(aType, thesaurusData, displayPrefTermCreation)
-	{
-		var aNewPanel = Ext.create(aType);
-		aNewPanel.thesaurusData = thesaurusData;
-		aNewPanel.displayPrefTermCreation = displayPrefTermCreation;
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var tab = topTabs.add(aNewPanel);
-		topTabs.setActiveTab(tab);
-		tab.show();
-		return aNewPanel;
-	},
 
     getActivePanel : function(child) {
         return child.up('thesaurusPanel');
@@ -209,11 +198,12 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 			var updatedModel = theForm.getForm().getRecord();
 			updatedModel.save({
 				success : function(record, operation) {
+					theButton.up('thesaurusTabPanel').fireEvent('thesaurusupdated',theButton.up('thesaurusTabPanel'),record.data);
 					me.loadData(theForm, record);
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils.msg('Succès',
 							'Le thesaurus a été enregistré!');
-					me.application.fireEvent('thesaurusupdated');
+					me.application.fireEvent('thesaurusupdated',record.data);
 					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}
@@ -239,22 +229,24 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
     onLangChange : function(theCombo, records) {
     	var thePanel = theCombo.up('thesaurusTabPanel');
-    	var oldLanguages = thePanel.thesaurusData.languages;
-    	for (var i=0; i<oldLanguages.length; i++){
-    		var found = false;
-    		Ext.Array.forEach(records, function (item) {
-    			if (item.get("id")==oldLanguages[i]){
-    				found = true;
-    			}
-    		});
-    		if (found == false){
-    			Ext.MessageBox.show({
-    	    		title: this.xWarningLabel,
-    	    		msg: this.xWarningChangedLanguages,
-    	    		buttons: Ext.MessageBox.OK,
-    	            icon: Ext.MessageBox.WARNING
-    			});
-    		}
+    	if (thePanel.thesaurusData) {
+	    	var oldLanguages = thePanel.thesaurusData.languages;
+	    	for (var i=0; i<oldLanguages.length; i++){
+	    		var found = false;
+	    		Ext.Array.forEach(records, function (item) {
+	    			if (item.get("id")==oldLanguages[i]){
+	    				found = true;
+	    			}
+	    		});
+	    		if (found == false){
+	    			Ext.MessageBox.show({
+	    	    		title: this.xWarningLabel,
+	    	    		msg: this.xWarningChangedLanguages,
+	    	    		buttons: Ext.MessageBox.OK,
+	    	            icon: Ext.MessageBox.WARNING
+	    			});
+	    		}
+	    	}
     	}
     },
 

@@ -41,6 +41,7 @@
 Ext.define('GincoApp.view.ComplexConceptsPanel', {
 	extend : 'Ext.panel.Panel',
 	thesaurusData : null,
+	multiInstance : false,
 	requires : ['GincoApp.store.SplitNonPreferredTermStore'],
 	alias : 'widget.complexconceptsPanel',
 	localized : true,
