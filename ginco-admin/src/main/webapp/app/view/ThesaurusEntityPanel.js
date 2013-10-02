@@ -39,6 +39,7 @@ Ext
 					extend : 'Ext.panel.Panel',
 					gincoId : '',
 					thesaurusData : '',
+					multiInstance : true,
 					setGincoId : function (aGincoId) {
 						this.gincoId = aGincoId;
 					}

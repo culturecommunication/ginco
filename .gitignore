@@ -11,6 +11,7 @@
 .classpath
 .settings/
 */.settings/*
+*/.externalToolBuilders/*
 
 # Maven target folder #
 target
