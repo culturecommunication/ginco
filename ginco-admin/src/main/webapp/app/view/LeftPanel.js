@@ -128,7 +128,13 @@ Ext.define('GincoApp.view.LeftPanel', {
 					type : 'refresh',
 					tooltip : this.xRefreshBtnTooltip,
 					tooltipType: 'title'
-				} ]
+				},
+				{
+					itemId : 'pinBtn',
+					type : 'unpin',
+					tooltip : this.xRefreshBtnTooltip,
+					tooltipType: 'title'
+				}]
 			} ]
 		});
 

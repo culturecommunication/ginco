@@ -485,7 +485,16 @@ Ext
 							addparent.setDisabled(false);
 							addChild.setDisabled(false);
 						}
-
+						conceptPanel.addNodePath(thesaurusData.id);
+						conceptPanel.addNodePath("CONCEPTS_"+thesaurusData.id);
+						var nodeId = "";
+						for (var i=0;i<aModel.raw.conceptsPath.length;i++) {
+							if (i>0) 
+								nodeId=aModel.raw.conceptsPath[i-1]+"*"+aModel.raw.conceptsPath[i]
+							else 
+								nodeId="*"+aModel.raw.conceptsPath[i];
+							conceptPanel.addNodePath("CONCEPT_"+nodeId);
+						}
 					},
 
 					checkValidatedSelected : function(theCombobox, theRecord,

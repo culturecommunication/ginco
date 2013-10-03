@@ -129,7 +129,14 @@ public class ThesaurusConceptViewConverter {
 
 		List<HierarchicalRelationshipView> parentConcepts = hierarchicalRelationshipViewConverter.getParentViews(concept);
 		view.setParentConcepts(parentConcepts);
-		
+		ArrayList<String> parentIdPath = new ArrayList<String>();
+		List<ThesaurusConcept> parentPath = thesaurusConceptService.getRecursiveParentsByConceptId(concept.getIdentifier());
+		for (int i = parentPath.size() - 1; i >= 0; i--) 
+		{
+			parentIdPath.add(parentPath.get(i).getIdentifier());
+		}
+		parentIdPath.add(concept.getIdentifier());
+		view.setConceptsPath(parentIdPath);
 		List<HierarchicalRelationshipView> childrenConcepts = hierarchicalRelationshipViewConverter.getChildrenViews(concept);
 		view.setChildConcepts(childrenConcepts);
 		

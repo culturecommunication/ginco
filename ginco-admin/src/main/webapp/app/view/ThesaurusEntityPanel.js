@@ -38,10 +38,22 @@ Ext
 				'GincoApp.view.ThesaurusEntityPanel', {
 					extend : 'Ext.panel.Panel',
 					gincoId : '',
+					treeNodeId : '',
 					thesaurusData : '',
 					multiInstance : true,
+					trackable : false,
 					setGincoId : function (aGincoId) {
 						this.gincoId = aGincoId;
+					},
+					constructor: function () {
+				        this.nodesPath = [];
+				        this.callParent(arguments);
+				    },
+					addNodePath : function (aNode) {
+						this.nodesPath.push(aNode);
+					},
+					getNodesPath : function() {
+						return "|root|"+this.nodesPath.join('|');
 					}
 				}
 );

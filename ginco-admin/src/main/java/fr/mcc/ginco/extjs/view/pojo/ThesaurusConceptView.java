@@ -60,6 +60,7 @@ public class ThesaurusConceptView implements Serializable {
     private List<HierarchicalRelationshipView> childConcepts;
     private List<String> rootConcepts;
 	private List<AssociativeRelationshipView> associatedConcepts;
+	private List<String> conceptsPath;
 
 	
 	public ThesaurusConceptView() {}	
@@ -158,5 +159,13 @@ public class ThesaurusConceptView implements Serializable {
 
 	public void setChildConcepts(List<HierarchicalRelationshipView> childConcepts) {
 		this.childConcepts = childConcepts;
+	}
+
+	public List<String> getConceptsPath() {
+		return conceptsPath;
+	}
+
+	public void setConceptsPath(List<String> conceptsPath) {
+		this.conceptsPath = conceptsPath;
 	}
 }
