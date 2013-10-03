@@ -119,7 +119,7 @@ public class SKOSArrayExporter {
 			model.write(sw, "RDF/XML-ABBREV");
 			String result = sw.toString();
 			result = result.replaceAll("_REMOVEME_", "");
-			int start = result.lastIndexOf("core#\">") + "core#\">".length()
+			int start = result.lastIndexOf("terms/\">") + "terms\"/>".length()
 					+ 2;
 			int end = result.lastIndexOf("</rdf:RDF>");
 
