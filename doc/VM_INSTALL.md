@@ -8,6 +8,9 @@ Instuctions for installation of GINCO-DEMO :
       * Import in progress...
       * VM GINCO-DEMO should appear in list
       * Wait for Login window which should display URL to use in browser
+      * Do not login into the VM itself!
       * Copy and paste this URL in a browser
-      * Login/passwd to use is : admin / admin
+      * You could now enter the application by entering the following Login/Password in the browser:
+      Login : admin 
+      Password : admin
 
