@@ -325,7 +325,7 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) throws BusinessException {
-		ThesaurusConcept object = thesaurusConceptViewConverter.convert(thesaurusViewJAXBElement);
+		ThesaurusConcept object =  thesaurusConceptService.getThesaurusConceptById(thesaurusViewJAXBElement.getIdentifier());
 
 		if (object != null) {
 			thesaurusConceptService.destroyThesaurusConcept(object);

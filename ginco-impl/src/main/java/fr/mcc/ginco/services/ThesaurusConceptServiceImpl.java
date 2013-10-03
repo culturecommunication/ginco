@@ -198,7 +198,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId) {
 		return thesaurusConceptDAO.getChildrenConcepts(conceptId);
 	}
-	
+
 	@Override
 	public List<ThesaurusConcept> getRecursiveChildrenByConceptId(
 			String conceptId) {
@@ -418,34 +418,39 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object)
 			throws BusinessException {
-		List<ThesaurusTerm> terms = thesaurusTermDAO
-				.findTermsByConceptId(object.getIdentifier());
-		for (ThesaurusTerm term : terms) {
-			term.setConcept(null);
-			thesaurusTermDAO.update(term);
-		}
+		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()
+				|| object.getStatus() == ConceptStatusEnum.REJECTED.getStatus()) {
+			List<ThesaurusTerm> terms = thesaurusTermDAO
+					.findTermsByConceptId(object.getIdentifier());
+			for (ThesaurusTerm term : terms) {
+				term.setConcept(null);
+				thesaurusTermDAO.update(term);
+			}
 
-		List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(object
-				.getIdentifier());
-		for (ThesaurusConcept childConcept : childrenConcepts) {
-			childConcept.getParentConcepts().remove(object);
-			thesaurusConceptDAO.update(childConcept);
-		}
+			List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(object
+					.getIdentifier());
+			for (ThesaurusConcept childConcept : childrenConcepts) {
+				childConcept.getParentConcepts().remove(object);
+				thesaurusConceptDAO.update(childConcept);
+			}
 
-		List<ThesaurusConcept> rootChildrenConcepts = thesaurusConceptDAO
-				.getAllRootChildren(object);
-		for (ThesaurusConcept rootChild : rootChildrenConcepts) {
-			rootChild.getRootConcepts().remove(object);
-			thesaurusConceptDAO.update(rootChild);
-		}
+			List<ThesaurusConcept> rootChildrenConcepts = thesaurusConceptDAO
+					.getAllRootChildren(object);
+			for (ThesaurusConcept rootChild : rootChildrenConcepts) {
+				rootChild.getRootConcepts().remove(object);
+				thesaurusConceptDAO.update(rootChild);
+			}
 
-		List<ThesaurusArray> arrays = thesaurusArrayDAO
-				.getConceptSuperOrdinateArrays(object.getIdentifier());
-		for (ThesaurusArray array : arrays) {
-			thesaurusArrayDAO.delete(array);
-		}
+			List<ThesaurusArray> arrays = thesaurusArrayDAO
+					.getConceptSuperOrdinateArrays(object.getIdentifier());
+			for (ThesaurusArray array : arrays) {
+				thesaurusArrayDAO.delete(array);
+			}
 
-		return thesaurusConceptDAO.delete(object);
+			return thesaurusConceptDAO.delete(object);
+        } else {
+            throw new BusinessException("It's not possible to delete a concept with a status different from candidate or rejected", "delete-concept");
+        }
 	}
 
 	private void updateConceptTerms(ThesaurusConcept concept,
