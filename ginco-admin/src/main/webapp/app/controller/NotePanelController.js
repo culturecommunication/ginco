@@ -101,7 +101,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			//we are editing a note for a concept
 			win = Ext.create('GincoApp.view.CreateNoteWin', {
 				storeNoteTypes : Ext.create('GincoApp.store.ConceptNoteTypeStore'),
-				thesaurusData : theGrid.up('conceptPanel').thesaurusData,
+				thesaurusData : theGrid.up('thesaurusTabPanel').thesaurusData,
 				listeners: {
 					saveNoteButton: function (theButton){
 						me.afterSavingNewNote(theGrid, theButton);
@@ -112,7 +112,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			//we are editing a note for a term
 			win = Ext.create('GincoApp.view.CreateNoteWin', {
 				storeNoteTypes : Ext.create('GincoApp.store.TermNoteTypeStore'),
-				thesaurusData : theGrid.up('termPanel').thesaurusData,
+				thesaurusData : theGrid.up('thesaurusTabPanel').thesaurusData,
 				listeners: {
 					saveNoteButton: function (theButton){
 						me.afterSavingNewNote(theGrid, theButton);
