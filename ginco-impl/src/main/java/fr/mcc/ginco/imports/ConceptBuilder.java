@@ -48,6 +48,7 @@ import org.springframework.stereotype.Service;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -57,6 +58,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Builder in charge of building ThesaurusConcept
@@ -66,8 +68,8 @@ import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 public class ConceptBuilder extends AbstractBuilder {
 
 	@Log
-	private Logger logger;	
-	
+	private Logger logger;
+
 	@Inject
 	@Named("conceptHierarchicalRelationshipServiceUtil")
 	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
@@ -96,8 +98,21 @@ public class ConceptBuilder extends AbstractBuilder {
 		concept.setIdentifier(skosConcept.getURI());
 		concept.setThesaurus(thesaurus);
 		concept.setTopConcept(thesaurus.isDefaultTopConcept());
-		concept.setCreated(thesaurus.getCreated());
-		concept.setModified(thesaurus.getDate());
+
+		Statement stmtCreated = skosConcept.getProperty(DCTerms.created);
+		if (stmtCreated != null){
+			concept.setCreated(DateUtil.dateFromString(stmtCreated.getString()));
+		} else {
+			concept.setCreated(thesaurus.getCreated());
+		}
+
+		Statement stmtModified = skosConcept.getProperty(DCTerms.modified);
+		if (stmtModified != null){
+			concept.setModified(DateUtil.dateFromString(stmtModified.getString()));
+		} else {
+			concept.setModified(thesaurus.getDate());
+		}
+
 		concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
 		builtConcepts.put(skosConcept.getURI(), concept);
 
@@ -120,10 +135,10 @@ public class ConceptBuilder extends AbstractBuilder {
 		while (stmtRelatedtItr.hasNext()) {
 			Statement stmt = stmtRelatedtItr.next();
 			Resource relatedConceptRes = stmt.getObject().asResource();
-			
+
 			ThesaurusConcept relatedConcept = builtConcepts
 					.get(relatedConceptRes.getURI());
-		
+
 			AssociativeRelationship relationshipLeft = new AssociativeRelationship();
 			AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
 			relationshipId.setConcept1(concept.getIdentifier());
@@ -160,7 +175,7 @@ public class ConceptBuilder extends AbstractBuilder {
 				parentConcepts.add(parentConcept);
 		}
 		concept.setParentConcepts(parentConcepts);
-	
+
 		return concept;
 	}
 
@@ -183,6 +198,6 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	public static Map<String, ThesaurusConcept> getBuiltConcepts() {
 		return builtConcepts;
-	}	
-	
+	}
+
 }

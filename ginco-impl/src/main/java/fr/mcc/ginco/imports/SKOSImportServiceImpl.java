@@ -83,7 +83,7 @@ import fr.mcc.ginco.log.Log;
 
 /**
  * Implementation of the SKOS thesaurus import service
- * 
+ *
  */
 @Transactional
 @Service("skosImportService")
@@ -119,11 +119,11 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Inject
 	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
-	
+
 	@Inject
 	@Named("thesaurusVersionHistoryDAO")
-	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;	
-	
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
+
 	@Inject
 	@Named("thesaurusHelper")
 	private ThesaurusHelper thesaurusHelper;
@@ -154,7 +154,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.imports.ISKOSImportService#importSKOSFile(java.lang.String,
 	 * java.lang.String, java.io.File)
@@ -182,10 +182,10 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 							"import-already-existing-thesaurus");
 				}
 				thesaurus = thesaurusBuilder.buildThesaurus(thesaurusSKOS,
-						model);					
-				
+						model);
+
 				thesaurusDAO.update(thesaurus);
-				
+
 				//Set default version history
 				ThesaurusVersionHistory defaultVersion = thesaurusHelper.buildDefaultVersion(thesaurus);
 				Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
@@ -211,7 +211,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Builds the thesaurus arrays from the model
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param model
 	 */
@@ -222,20 +222,18 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			ThesaurusArray array = arrayBuilder.buildArray(skosCollection,
 					model, thesaurus);
 			thesaurusArrayDAO.update(array);
-			Statement stmtLabel = skosCollection.getProperty(SKOS.PREF_LABEL);
-			NodeLabel nodeLabel = nodeLabelBuilder.buildNodeLabel(stmtLabel,
-					model, thesaurus, array);
+			NodeLabel nodeLabel = nodeLabelBuilder.buildNodeLabel(skosCollection, thesaurus, array);
 			nodeLabelDAO.update(nodeLabel);
 		}
 	}
-	
+
 	/**
 	 * Builds thesaurus array relations from the model
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param model
 	 */
-	
+
 	private void buildChildrenArrays(Thesaurus thesaurus, Model model){
 		List<Resource> skosCollections = getSKOSRessources(model,
 				SKOS.COLLECTION);
@@ -249,7 +247,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Launch the calculation of the root concepts and set it
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
@@ -265,7 +263,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Builds the parent/child and relationship associations
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
@@ -299,7 +297,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Builds the concept with minimal informations and it's terms and notes
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
@@ -331,7 +329,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Gets the thesaurus resource from the model, returning the first one only
-	 * 
+	 *
 	 * @param model
 	 * @return
 	 */
@@ -360,7 +358,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Gets the list of resources from the gien model
-	 * 
+	 *
 	 * @param model
 	 * @param resource
 	 * @return
@@ -395,7 +393,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private URI writeTempFile(String fileContent, String fileName, File tempDir)
 			throws BusinessException {
 		logger.debug("Writing temporary file for import");
-		
+
 		File file;
 		try {
 			file = File.createTempFile("skosimport", ".tmp", tempDir);

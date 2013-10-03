@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.imports;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -44,7 +46,9 @@ import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.NodeLabel;
@@ -53,6 +57,7 @@ import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Builder in charge of building the thesaurus arrays node labels
@@ -77,22 +82,33 @@ public class NodeLabelBuilder extends AbstractBuilder {
 
 	/**
 	 * Builds a NodeLabel object for the given array
-	 * @param stmt
-	 * @param model
-	 * @param thesaurus
+	 * @param skosCollection
 	 * @param array
 	 * @return
 	 * @throws BusinessException
 	 */
-	public NodeLabel buildNodeLabel(Statement stmt, Model model,
-			Thesaurus thesaurus, ThesaurusArray array) throws BusinessException {
+	public NodeLabel buildNodeLabel(Resource skosCollection, Thesaurus thesaurus, ThesaurusArray array)
+			throws BusinessException {
 		logger.debug("Building node label for thesaurus array " + array.getIdentifier());
 		NodeLabel nodeLabel = new NodeLabel();
-		nodeLabel.setCreated(thesaurus.getCreated());
 
-		nodeLabel.setModified(thesaurus.getDate());
+		Statement stmtCreated = skosCollection.getProperty(DCTerms.created);
+		if (stmtCreated != null){
+			nodeLabel.setCreated(DateUtil.dateFromString(stmtCreated.getString()));
+		} else {
+			nodeLabel.setCreated(thesaurus.getCreated());
+		}
 
-		RDFNode prefLabel = stmt.getObject();
+		Statement stmtModified = skosCollection.getProperty(DCTerms.modified);
+		if (stmtModified != null){
+			nodeLabel.setModified(DateUtil.dateFromString(stmtModified.getString()));
+		} else {
+			nodeLabel.setCreated(thesaurus.getDate());
+		}
+
+		Statement stmtLabel = skosCollection.getProperty(SKOS.PREF_LABEL);
+
+		RDFNode prefLabel = stmtLabel.getObject();
 		String lang = prefLabel.asLiteral().getLanguage();
 		if (StringUtils.isEmpty(lang)) {
 			Language defaultLangL = languagesDAO.getById(defaultLang);
@@ -102,17 +118,17 @@ public class NodeLabelBuilder extends AbstractBuilder {
 			if (language == null){
 				language = languagesDAO.getById(lang);
 			}
-			
+
 			if (language != null) {
 				nodeLabel.setLanguage(language);
 			} else {
-				throw new BusinessException("Specified language " + lang + " is unknown : "  
-						+ stmt.getString(),
-						"import-unknown-term-lang", new Object[] {lang, stmt.getString()});
+				throw new BusinessException("Specified language " + lang + " is unknown : "
+						+ stmtLabel.getString(),
+						"import-unknown-term-lang", new Object[] {lang, stmtLabel.getString()});
 			}
 		}
 
-		nodeLabel.setLexicalValue(stmt.getString());
+		nodeLabel.setLexicalValue(stmtLabel.getString());
 
 		nodeLabel.setThesaurusArray(array);
 
