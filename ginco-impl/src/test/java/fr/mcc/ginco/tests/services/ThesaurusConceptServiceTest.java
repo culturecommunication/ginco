@@ -66,6 +66,7 @@ import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
@@ -373,6 +374,7 @@ public class ThesaurusConceptServiceTest {
 	public final void testDestroyThesaurusConcept() throws BusinessException {
 		final ThesaurusConcept node1 = new ThesaurusConcept();
 		node1.setIdentifier("concept1");
+		node1.setStatus(ConceptStatusEnum.CANDIDATE.getStatus());
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		List<ThesaurusTerm> termList = new ArrayList<ThesaurusTerm>();
 		termList.add(term1);
@@ -512,15 +514,15 @@ public class ThesaurusConceptServiceTest {
 		fakeAvailableConcepts = thesaurusConceptService.getAvailableConceptsOfGroup ("fakeCurrentGroup", "fakeThesaurus");
 		Assert.assertEquals("The list with 'concept2' expected",fakeAvailableConcepts, resultAvailableConcepts);
 	}
-	
-	
-	
+
+
+
 	@Test
 	public void testGetRecursiveChildrenByConceptId() {
 		String conceptId1 = "http://c1";
 		ThesaurusConcept concept1 = new ThesaurusConcept();
 		concept1.setIdentifier(conceptId1);
-		
+
 		String conceptId11 = "http://c11";
 		ThesaurusConcept concept11 = new ThesaurusConcept();
 		concept11.setIdentifier(conceptId11);
@@ -532,19 +534,19 @@ public class ThesaurusConceptServiceTest {
 		String conceptId121 = "http://c121";
 		ThesaurusConcept concept121 = new ThesaurusConcept();
 		concept121.setIdentifier(conceptId121);
-		
+
 		String conceptId1211 = "http://c1211";
 		ThesaurusConcept concept1211 = new ThesaurusConcept();
 		concept1211.setIdentifier(conceptId1211);
 
-		
+
 		List<ThesaurusConcept> level1Concepts = new ArrayList<ThesaurusConcept>();
 		level1Concepts.add(concept11);
 		level1Concepts.add(concept12);
 		List<ThesaurusConcept> level2Concepts = new ArrayList<ThesaurusConcept>();
-		level2Concepts.add(concept121);		
+		level2Concepts.add(concept121);
 		List<ThesaurusConcept> level3Concepts = new ArrayList<ThesaurusConcept>();
-		level3Concepts.add(concept1211);	
+		level3Concepts.add(concept1211);
 		List<ThesaurusConcept> recursiveConcepts = new ArrayList<ThesaurusConcept>();
 		level3Concepts.add(concept1211);
 
@@ -556,16 +558,16 @@ public class ThesaurusConceptServiceTest {
 				.getChildrenConcepts("http://c121")).thenReturn(level3Concepts);
 		Mockito.when( thesaurusConceptDAO
 				.getChildrenConcepts("http://c1211")).thenReturn(recursiveConcepts);
-		
+
 		List<ThesaurusConcept> actualconcepts= thesaurusConceptService.getRecursiveChildrenByConceptId(conceptId1);
 		Assert.assertEquals(4, actualconcepts.size());
 		ListAssert.assertContains(actualconcepts, concept11);
 		ListAssert.assertContains(actualconcepts, concept12);
 		ListAssert.assertContains(actualconcepts, concept121);
 		ListAssert.assertContains(actualconcepts, concept1211);
-		
-	}
-	
 
-	
+	}
+
+
+
 }
