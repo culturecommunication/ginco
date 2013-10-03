@@ -34,8 +34,6 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -44,7 +42,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -103,7 +100,7 @@ public class NodeLabelBuilder extends AbstractBuilder {
 		if (stmtModified != null){
 			nodeLabel.setModified(DateUtil.dateFromString(stmtModified.getString()));
 		} else {
-			nodeLabel.setCreated(thesaurus.getDate());
+			nodeLabel.setModified(thesaurus.getDate());
 		}
 
 		Statement stmtLabel = skosCollection.getProperty(SKOS.PREF_LABEL);
