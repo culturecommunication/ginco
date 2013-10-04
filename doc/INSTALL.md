@@ -10,6 +10,7 @@ Requirements
 * PostGreSQL 9.x (tested on PostGreSQL 9.2) (required)
 * Tomcat >= 6.x (should works with tomcat 7) (required)
 * Apache Maven >= 3.x (required for building)
+* SOLR >= 4.2 (required for search)
 * Git (required for building)
 * Apache Web Server (2.x) (optional)
 
@@ -31,6 +32,7 @@ Next install postgresql
 ### Tomcat ###
 
 > yum install tomcat6 tomcat6-webapps tomcat6-admin-webapps
+
 
 Configuring prerequisites
 -------------------------
@@ -267,7 +269,7 @@ You've to configure the following keys in you ginco.properties to configure the 
 
 
 
-#### Configuring LDAP####
+#### Configuring LDAP ####
 
 If you want to use an LDAP server for authentication.
 
@@ -294,7 +296,9 @@ psql ginco
 insert into admin_user_id values ('admin');
 ```
 
+#### SOLR indexing ###
 
+* Open a web browser and point to : ```http://<server-url>:8080/ginco-admin/services/ui/indexerservice/reindex```
 
 ### Running GINCO ###
 
