@@ -635,21 +635,22 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public List<ThesaurusConcept> getRecursiveParentsByConceptId(
 			String conceptId) {
+		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
+				.getById(conceptId);
 		return getRecursiveParentByConceptId(
-				conceptId, 
+				thesaurusConcept, 
 				new ArrayList<ThesaurusConcept>());
 	}
 
 	private List<ThesaurusConcept> getRecursiveParentByConceptId(
-			String conceptId,
+			ThesaurusConcept beginConcept,
 			ArrayList<ThesaurusConcept> arrayOfParent) {
-		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
-				.getById(conceptId);
-		Set<ThesaurusConcept> parentConcepts = thesaurusConcept.getParentConcepts();
+		
+		Set<ThesaurusConcept> parentConcepts = beginConcept.getParentConcepts();
 		if (parentConcepts.size()>0) {
 			ThesaurusConcept parent = parentConcepts.iterator().next();
 			arrayOfParent.add(parent);
-			getRecursiveParentByConceptId(parent.getIdentifier(),arrayOfParent);
+			getRecursiveParentByConceptId(parent,arrayOfParent);
 		}
 		return arrayOfParent;
 	}

@@ -39,6 +39,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -513,6 +514,41 @@ public class ThesaurusConceptServiceTest {
 		Assert.assertEquals("The list with 'concept2' expected",fakeAvailableConcepts, resultAvailableConcepts);
 	}
 	
+	@Test
+	public void testGetRecursiveParentsByConceptId() {
+		String conceptId1 = "http://c1";
+		ThesaurusConcept concept1 = new ThesaurusConcept();
+		concept1.setIdentifier(conceptId1);
+		
+		String conceptId11 = "http://c11";
+		ThesaurusConcept concept11 = new ThesaurusConcept();
+		concept11.setIdentifier(conceptId11);
+		concept11.setParentConcepts(new HashSet<ThesaurusConcept>(Arrays.asList(concept1)));
+
+		String conceptId12 = "http://c12";
+		ThesaurusConcept concept12 = new ThesaurusConcept();
+		concept12.setIdentifier(conceptId12);
+		concept12.setParentConcepts(new HashSet<ThesaurusConcept>(Arrays.asList(concept1)));
+
+		String conceptId121 = "http://c121";
+		ThesaurusConcept concept121 = new ThesaurusConcept();
+		concept121.setIdentifier(conceptId121);
+		concept121.setParentConcepts(new HashSet<ThesaurusConcept>(Arrays.asList(concept12)));
+		
+		String conceptId1211 = "http://c1211";
+		ThesaurusConcept concept1211 = new ThesaurusConcept();
+		concept1211.setIdentifier(conceptId1211);
+		concept1211.setParentConcepts(new HashSet<ThesaurusConcept>(Arrays.asList(concept121)));
+		
+		Mockito.when( thesaurusConceptDAO
+				.getById("http://c1211")).thenReturn(concept1211);
+		List<ThesaurusConcept> parentConcepts = thesaurusConceptService.getRecursiveParentsByConceptId(conceptId1211);
+		Assert.assertEquals(3, parentConcepts.size());
+		ListAssert.assertContains(parentConcepts, concept1);
+		ListAssert.assertContains(parentConcepts, concept12);
+		ListAssert.assertContains(parentConcepts, concept121);
+	}
+	
 	
 	
 	@Test
@@ -536,8 +572,6 @@ public class ThesaurusConceptServiceTest {
 		String conceptId1211 = "http://c1211";
 		ThesaurusConcept concept1211 = new ThesaurusConcept();
 		concept1211.setIdentifier(conceptId1211);
-
-		
 		List<ThesaurusConcept> level1Concepts = new ArrayList<ThesaurusConcept>();
 		level1Concepts.add(concept11);
 		level1Concepts.add(concept12);
