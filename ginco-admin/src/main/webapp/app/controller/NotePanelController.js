@@ -36,13 +36,13 @@
 Ext.define('GincoApp.controller.NotePanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
-	
+
 	xLoading : 'Loading',
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Note saved successfully',
 	xProblemLabel : 'Error !',
 	xProblemSaveMsg : 'Unable to save this note!',
-	
+
 	onRenderGrid : function(theGrid) {
 		if (theGrid.up('conceptPanel') != null) {
 			var theConceptId = theGrid.up('conceptPanel').gincoId;
@@ -52,7 +52,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
 		}
 		theGrid.getStore().load();
-		
+
 	},
 
 	newNoteBtn : function(theButton){
@@ -64,7 +64,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		theForm.loadRecord(model);
 		win.show();
 	},
-	
+
 	loadLanguages : function(theCombo) {
 		var thePanel = theCombo.up('createNoteWin');
 		var theStore = theCombo.getStore();
@@ -76,7 +76,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			}
 		});
 	},
-	
+
 	saveNoteWin : function(theButton) {
 		var theForm = theButton.up('form');
 		var theWin = theButton.up('createNoteWin');
@@ -86,14 +86,14 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			theWin.store.add(updatedModel);
 		}
 	},
-	
+
 	onDeleteNote : function (gridview, el, rowIndex, colIndex, e, rec, rowEl) {
 		var theGrid = gridview.up('gridpanel');
         var theStore = theGrid.getStore();
         theStore.remove(rec);
         theGrid.up('panel').down('button[itemId=saveNote]').setDisabled(false);
 	},
-	
+
 	createNoteWindow : function (theGrid) {
 		var win = null;
 		var me=this;
@@ -123,7 +123,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		win.store = theGrid.getStore();
 		return win;
 	},
-	
+
 	afterSavingNewNote : function(theGrid, theButton) {
 		this.saveNoteWin(theButton);
 		theGrid.up('panel').down('button[itemId=saveNote]').setDisabled(false);
@@ -136,7 +136,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		theForm.loadRecord(record);
 		win.show();
     },
-	
+
 	saveNoteBtn : function(theButton,theCallback) {
 		var me=this;
 		var theGrid = theButton.up('panel').down('gridpanel');
