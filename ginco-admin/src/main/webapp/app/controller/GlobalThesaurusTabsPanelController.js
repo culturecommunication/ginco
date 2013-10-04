@@ -108,6 +108,16 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 		tabPanel.setActiveTab(tab);
 		tab.show();
 	},
+	onTabChange : function ( tabPanel, tab, oldCard, eOpts )
+	{
+		var thesaurusTabPanel = tab.down("#thesaurusItemsTabPanel");
+		if (thesaurusTabPanel!=null) {
+			var activeTab = thesaurusTabPanel.getActiveTab();
+			if (activeTab!=null) {
+				thesaurusTabPanel.fireEvent("tabchange", tab,activeTab);
+			}
+		}
+	},
 
 	init : function(application) {
 		this.application.on({
@@ -125,7 +135,8 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 				openarraytab : this.openArrayTab,
 				opencomplexconceptstab : this.openComplexConceptsTab,
 				opencomplexconcepttab: this.openComplexConceptTab,
-				searchquery : this.onSearchQuery
+				searchquery : this.onSearchQuery,
+				tabchange : this.onTabChange
 			}
 
 		});

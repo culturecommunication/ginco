@@ -45,6 +45,7 @@ Ext
 
 					localized : true,
 					closable : true,
+					trackable : true,
 					layout : {
 						type : 'vbox',
 						align : 'stretch'

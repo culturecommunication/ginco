@@ -273,4 +273,10 @@ public interface IThesaurusConceptService {
 	 * @param conceptId
 	 */
 	List<ThesaurusConcept> getRecursiveChildrenByConceptId(String conceptId);
+	
+	/**
+	 * Returns all the concepts that are over the concept which id is given in parameter (children, children of children, etc. recursively)
+	 * @param conceptId
+	 */
+	List<ThesaurusConcept> getRecursiveParentsByConceptId(String conceptId);
 }

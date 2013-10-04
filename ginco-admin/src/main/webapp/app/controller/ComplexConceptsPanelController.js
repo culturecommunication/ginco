@@ -47,6 +47,8 @@ Ext.define('GincoApp.controller.ComplexConceptsPanelController',
 						thesPanel.thesaurusData.id);
 				theStore.load();
 				thePanel.setTitle(thePanel.title);
+				thePanel.addNodePath(thesPanel.thesaurusData.id);
+				thePanel.addNodePath("COMPLEXCONCEPTS_"+thesPanel.thesaurusData.id);
 			},
 
 			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {

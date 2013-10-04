@@ -96,7 +96,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         } else {
             thesaurusPanel.down('#archiveThesaurus').setDisabled(false);
         }
-
+        aForm.up('thesaurusPanel').addNodePath(aModel.data.id);
 
 	},
 

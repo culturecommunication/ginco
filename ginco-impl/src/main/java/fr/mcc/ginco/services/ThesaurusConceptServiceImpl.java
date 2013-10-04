@@ -44,6 +44,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
+
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -633,5 +635,28 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					"concept-does-not-have-a-preferred-term");
 		}
 		return preferredTerms;
+	}
+
+	@Override
+	public List<ThesaurusConcept> getRecursiveParentsByConceptId(
+			String conceptId) {
+		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
+				.getById(conceptId);
+		return getRecursiveParentByConceptId(
+				thesaurusConcept, 
+				new ArrayList<ThesaurusConcept>());
+	}
+
+	private List<ThesaurusConcept> getRecursiveParentByConceptId(
+			ThesaurusConcept beginConcept,
+			ArrayList<ThesaurusConcept> arrayOfParent) {
+		
+		Set<ThesaurusConcept> parentConcepts = beginConcept.getParentConcepts();
+		if (parentConcepts.size()>0) {
+			ThesaurusConcept parent = parentConcepts.iterator().next();
+			arrayOfParent.add(parent);
+			getRecursiveParentByConceptId(parent,arrayOfParent);
+		}
+		return arrayOfParent;
 	}
 }

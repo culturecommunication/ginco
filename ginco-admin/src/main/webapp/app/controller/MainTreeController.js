@@ -35,13 +35,13 @@
 
 Ext.define('GincoApp.controller.MainTreeController', {
 	extend : 'Ext.app.Controller',
-
+	
 	views : [ 'LeftPanel' ],
 	stores : [ 'MainTreeStore' ],
     models : [ 'ThesaurusModel' ],
 	xProblemLabel : 'Problem',
 	xProblemLoadMsg : 'Unable to load thesaurus tree',
-
+	trackTabs : false,
 	onNodeDblClick : function(tree, aRecord, item, index, e, eOpts) {
 		if (aRecord.data.type == "THESAURUS") {
 			this.openThesaurusTab(aRecord);
@@ -176,6 +176,36 @@ Ext.define('GincoApp.controller.MainTreeController', {
         	this.loadTreeView(theCombo.up('treepanel'));	
         }
  	},    
+ 	onPinBtnClic : function (theBtn) {
+ 		if (theBtn.type=="pin")
+ 		{
+ 			this.trackTabs = false;
+ 			theBtn.setType('unpin');
+ 		} else
+ 		{
+ 			this.trackTabs = true;
+ 			theBtn.setType('pin');
+ 			var globalTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+ 			var activeTab = globalTabs.getActiveTab();
+ 			if (activeTab!=null)
+ 			{
+ 				activeTab = activeTab.down('#thesaurusItemsTabPanel').getActiveTab();
+ 				if (activeTab!=null)
+ 					this.onTabChange(activeTab);
+ 			}
+ 		}
+ 	},
+ 	onTabChange : function (theChangedPanel) {
+ 		if (this.trackTabs == true && theChangedPanel.trackable==true)
+ 		{
+ 			this.trackTreeSelection(theChangedPanel);
+ 		}
+ 	},
+ 	trackTreeSelection : function (theChangedPanel) {
+ 		console.log("trackTreeSelection",theChangedPanel.getNodesPath());
+ 		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
+ 		theTree.selectPath(theChangedPanel.getNodesPath(),'id', '|');
+ 	},
 	init : function(application) {
 		// Handling application treeview refresh requests
 		 this.application.on({
@@ -193,7 +223,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 			"#mainTreeView" : {
 				beforeitemdblclick : this.onNodeDblClick,
 				render : this.onTreeRender,
-				select : this.onItemSelect
+				select : this.onItemSelect,
+				tabchange : this.onTabChange
 			},
 			"#mainTreeView #selectBtn" : {
 				click : this.onSelectBtnClick
@@ -202,7 +233,10 @@ Ext.define('GincoApp.controller.MainTreeController', {
 				click : this.onRefreshBtnClick
 			},
             '#authorFilter' : {
-                select : this.onAuthorFilterSelect,
+                select : this.onAuthorFilterSelect
+            },
+            '#mainTreeView #pinBtn' : {
+            	click : this.onPinBtnClic
             }
 		});
 	}

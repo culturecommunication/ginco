@@ -39,10 +39,11 @@ Ext
 					extend : 'GincoApp.view.ThesaurusEntityPanel',
 					initPreferedTermBeforeLoad : '',
 					displayPrefTermCreation : false,
-
+					trackable : true,
 					alias : 'widget.conceptPanel',
 					localized : true,
 					closable : true,
+					path : [],
 					layout : {
 						type : 'vbox',
 						align : 'stretch'
@@ -134,6 +135,7 @@ Ext
 								.applyIf(
 										me,
 										{
+											path : [],
 											title : me.xConceptPanelTitle,
 											items : [ {
 												xtype : 'tabpanel',

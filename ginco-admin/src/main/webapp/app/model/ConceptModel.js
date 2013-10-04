@@ -52,6 +52,10 @@ Ext.define('GincoApp.model.ConceptModel', {
         {
             name: 'topconcept',
             type: 'boolean'
+        },      
+        {
+            name: 'topistopterm',
+            type: 'boolean'
         },
         {
             name: 'thesaurusId',
@@ -67,6 +71,10 @@ Ext.define('GincoApp.model.ConceptModel', {
         },
         {
             name : 'rootConcepts',
+            type : 'array_of_string'
+        },
+        {
+            name : 'conceptsPath',
             type : 'array_of_string'
         }
     ],

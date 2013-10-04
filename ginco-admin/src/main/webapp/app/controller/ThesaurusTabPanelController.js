@@ -66,6 +66,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			var newThesaurusFormPanel = Ext.create('GincoApp.view.ThesaurusPanel');
 			var itemTabPanel = thePanel.down('#thesaurusItemsTabPanel');
 			itemTabPanel.add(newThesaurusFormPanel);
+			itemTabPanel.setActiveTab(newThesaurusFormPanel);
 		}
 	},
 	onLoad : function(thePanel) {
@@ -300,12 +301,44 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 		thePanel.thesaurusData = thesaurusData;
 		this.onLoad(thePanel);
 	},
+	onTabChange : function ( tabPanel, tab, oldCard, eOpts )
+	{
+		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
+		theTree.fireEvent('tabchange', tab);
+		if (tab.tab)
+		{
+			tab.tab.focus();
+		}
+		// History handling
+		var tabs = [],
+        oldToken, newToken;
+		var tokenDelimiter = ';';
+		if (tab.thesaurusData && tab.thesaurusData.id) {
+			tabs.push(tab.id);
+			tabs.push(tab.getXType());
+			if (tab.gincoId && tab.gincoId!='')
+			{
+				tabs.push(encodeURIComponent(tab.gincoId));
+			}
+			tabs.push(encodeURIComponent(tab.thesaurusData.id));
+		    newToken = tabs.reverse().join(tokenDelimiter);
+
+		    oldToken = Ext.History.getToken();
+
+		    if (oldToken === null || oldToken.search(newToken) === -1) {
+		        Ext.History.add(newToken);
+		    }
+		}
+	},
 	
 	init : function(application) {
 		this.application.on({
 	        scope: this
 	 });
 		this.control({
+			'#thesaurusItemsTabPanel' : {
+				tabchange : this.onTabChange
+			},
 			'thesaurusPanel' : {
 				beforeclose : this.onPanelBeforeClose
 			},

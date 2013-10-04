@@ -485,7 +485,19 @@ Ext
 							addparent.setDisabled(false);
 							addChild.setDisabled(false);
 						}
-
+						conceptPanel.addNodePath(thesaurusData.id);
+						if (aModel.data.topistopterm == true)
+							conceptPanel.addNodePath("CONCEPTS_"+thesaurusData.id);
+						else
+							conceptPanel.addNodePath("ORPHANS_"+thesaurusData.id);
+						var nodeId = "";
+						for (var i=0;i<aModel.raw.conceptsPath.length;i++) {
+							if (i>0) 
+								nodeId=aModel.raw.conceptsPath[i-1]+"*"+aModel.raw.conceptsPath[i]
+							else 
+								nodeId="*"+aModel.raw.conceptsPath[i];
+							conceptPanel.addNodePath("CONCEPT_"+nodeId);
+						}
 					},
 
 					checkValidatedSelected : function(theCombobox, theRecord,
