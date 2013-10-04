@@ -32,13 +32,14 @@
 Ext.require([ 'GincoApp.view.ThesaurusVersionPanel',
               'GincoApp.view.CustomAttributeTypesPanel']);
 Ext.define('GincoApp.view.ThesaurusPanel', {
-	extend : 'Ext.panel.Panel',
+	extend : 'GincoApp.view.ThesaurusEntityPanel',
 
 	thesaurusData : null,
 
 	alias : 'widget.thesaurusPanel',
 	localized : true,
 	closable : true,
+	trackable : true,
 	layout : {
 		type : 'vbox',
 		align : 'stretch'

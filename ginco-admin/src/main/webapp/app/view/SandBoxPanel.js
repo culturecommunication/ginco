@@ -45,6 +45,7 @@ Ext.define('GincoApp.view.SandBoxPanel', {
 	alias : 'widget.sandboxPanel',
 	localized : true,
 	closable : true,
+	trackable : true,
 	iconCls : 'sandbox',
 	layout : {
 		type : 'vbox',

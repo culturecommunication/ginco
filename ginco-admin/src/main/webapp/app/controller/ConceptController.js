@@ -486,7 +486,10 @@ Ext
 							addChild.setDisabled(false);
 						}
 						conceptPanel.addNodePath(thesaurusData.id);
-						conceptPanel.addNodePath("CONCEPTS_"+thesaurusData.id);
+						if (aModel.data.topistopterm == true)
+							conceptPanel.addNodePath("CONCEPTS_"+thesaurusData.id);
+						else
+							conceptPanel.addNodePath("ORPHANS_"+thesaurusData.id);
 						var nodeId = "";
 						for (var i=0;i<aModel.raw.conceptsPath.length;i++) {
 							if (i>0) 

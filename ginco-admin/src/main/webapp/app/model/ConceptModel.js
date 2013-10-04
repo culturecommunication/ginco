@@ -52,6 +52,10 @@ Ext.define('GincoApp.model.ConceptModel', {
         {
             name: 'topconcept',
             type: 'boolean'
+        },      
+        {
+            name: 'topistopterm',
+            type: 'boolean'
         },
         {
             name: 'thesaurusId',

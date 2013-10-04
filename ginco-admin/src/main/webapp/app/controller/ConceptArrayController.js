@@ -115,6 +115,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
        
         var deleteConceptArrayBtn = aForm.down('#deleteConceptArray');
         deleteConceptArrayBtn.setDisabled(false);
+        thePanel.addNodePath(aModel.data.thesaurusId);
+        thePanel.addNodePath("ARRAYS_"+aModel.data.thesaurusId);
+        thePanel.addNodePath(aModel.data.identifier);
 	},
 	
 	loadLanguages : function(theCombo) {

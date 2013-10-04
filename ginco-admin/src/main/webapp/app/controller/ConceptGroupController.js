@@ -102,7 +102,9 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 
 		var deleteConceptGroupBtn = aForm.down('#deleteConceptGroupBtn');
 		deleteConceptGroupBtn.setDisabled(false);
-
+		theConceptGroupPanel.addNodePath(aModel.data.thesaurusId);
+		theConceptGroupPanel.addNodePath("GROUPS_"+aModel.data.thesaurusId);
+		theConceptGroupPanel.addNodePath(aModel.data.identifier);
 	},
 
 	loadLanguages : function(theCombo) {

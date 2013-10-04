@@ -136,6 +136,10 @@ public class ThesaurusConceptViewConverter {
 			parentIdPath.add(parentPath.get(i).getIdentifier());
 		}
 		parentIdPath.add(concept.getIdentifier());
+		if (parentPath.size()>0)
+			view.setTopistopterm(parentPath.get(0).getTopConcept());
+		else
+			view.setTopistopterm(concept.getTopConcept());
 		view.setConceptsPath(parentIdPath);
 		List<HierarchicalRelationshipView> childrenConcepts = hierarchicalRelationshipViewConverter.getChildrenViews(concept);
 		view.setChildConcepts(childrenConcepts);

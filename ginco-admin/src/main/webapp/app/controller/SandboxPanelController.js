@@ -47,7 +47,8 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 						thesPanel.thesaurusData.id);
 				theStore.load();
 				thePanel.setTitle(thePanel.title);
-				
+				thePanel.addNodePath(thesPanel.thesaurusData.id);
+				thePanel.addNodePath("SANDBOX_"+thesPanel.thesaurusData.id);
 			},
 
 			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {

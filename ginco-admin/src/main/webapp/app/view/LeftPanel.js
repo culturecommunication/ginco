@@ -38,6 +38,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 	alias : 'widget.leftPanel',
 	xThesaurusLabel : "Thesaurus Explorer",
 	xRefreshBtnTooltip : "Refresh explorer",
+	xPinBtnTooltip : "Link with tabs",
 	xSelectBtnLabel : "Display",
 	xSelectBtnToolTip : "Display the selected element",
 	xFilterLabel : 'Filter',
@@ -132,7 +133,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 				{
 					itemId : 'pinBtn',
 					type : 'unpin',
-					tooltip : this.xRefreshBtnTooltip,
+					tooltip : this.xPinBtnTooltip,
 					tooltipType: 'title'
 				}]
 			} ]
