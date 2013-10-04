@@ -219,6 +219,7 @@ public class ThesaurusRestService {
     @POST
     @Path("/destroyVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void destroyVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
         Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 
@@ -241,6 +242,7 @@ public class ThesaurusRestService {
     @GET
     @Path("/publishVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ExtJsonFormLoadData publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
                                                  @QueryParam("userId") String userId)
             throws BusinessException {
@@ -261,6 +263,7 @@ public class ThesaurusRestService {
     @GET
     @Path("/archiveVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ThesaurusView archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
             throws BusinessException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);

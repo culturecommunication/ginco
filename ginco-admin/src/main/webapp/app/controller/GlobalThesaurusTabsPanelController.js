@@ -118,6 +118,11 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 			}
 		}
 	},
+	onTabAdd : function ( tabPanel, component, index, eOpts) {
+		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) {
+			component.restrictUI('ADMIN');
+		}
+	},
 
 	init : function(application) {
 		this.application.on({
@@ -136,7 +141,8 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 				opencomplexconceptstab : this.openComplexConceptsTab,
 				opencomplexconcepttab: this.openComplexConceptTab,
 				searchquery : this.onSearchQuery,
-				tabchange : this.onTabChange
+				tabchange : this.onTabChange,
+				add : this.onTabAdd
 			}
 
 		});

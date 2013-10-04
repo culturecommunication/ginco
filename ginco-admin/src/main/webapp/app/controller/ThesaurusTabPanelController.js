@@ -330,6 +330,11 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 		    }
 		}
 	},
+	onTabAdd : function ( tabPanel, component, index, eOpts) {
+		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) {
+			component.restrictUI('ADMIN');
+		}
+	},
 	
 	init : function(application) {
 		this.application.on({
@@ -337,7 +342,8 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	 });
 		this.control({
 			'#thesaurusItemsTabPanel' : {
-				tabchange : this.onTabChange
+				tabchange : this.onTabChange,
+				add : this.onTabAdd
 			},
 			'thesaurusPanel' : {
 				beforeclose : this.onPanelBeforeClose
