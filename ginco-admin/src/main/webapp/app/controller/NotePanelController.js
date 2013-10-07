@@ -43,16 +43,12 @@ Ext.define('GincoApp.controller.NotePanelController', {
 	xProblemLabel : 'Error !',
 	xProblemSaveMsg : 'Unable to save this note!',
 
-	onRenderGrid : function(theGrid) {
-		if (theGrid.up('conceptPanel') != null) {
-			var theConceptId = theGrid.up('conceptPanel').gincoId;
-			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
-		} else {
+	onRenderTermNoteGrid : function(theGrid) {
+		if (theGrid.up('termPanel') != null){
 			var theTermId = theGrid.up('termPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
+			theGrid.getStore().load();
 		}
-		theGrid.getStore().load();
-
 	},
 
 	newNoteBtn : function(theButton){
@@ -161,7 +157,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 	init : function() {
 		this.control({
 			'notePanel #notegrid' : {
- 				render : this.onRenderGrid,
+ 				render : this.onRenderTermNoteGrid,
  				itemdblclick : this.onNoteDblClick
  			},
 			'notePanel #saveNote' : {

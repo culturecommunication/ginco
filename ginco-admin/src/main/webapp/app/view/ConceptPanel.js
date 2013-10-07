@@ -109,6 +109,8 @@ Ext
 								});
 
 						var me = this;
+						me.noteConceptStore = Ext.create('GincoApp.store.ThesaurusNoteStore', {
+						});
 						me.conceptTermStore = Ext
 								.create('GincoApp.store.ThesaurusTermStore');
 
@@ -154,7 +156,8 @@ Ext
 															items : [
 																	{
 																		xtype : 'rightNotePanel',
-																		region : 'east'
+																		region : 'east',
+																		noteConceptStore : me.noteConceptStore
 																	},
 																	{
 																		xtype : 'form',
@@ -592,6 +595,7 @@ Ext
 															title : me.xNotesTab,
 															xtype : 'noteConceptPanel',
 															closable : false,
+															noteConceptStore : me.noteConceptStore,
 															disabled : true
 														} ]
 											} ]
