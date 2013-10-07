@@ -42,6 +42,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 	alias : 'widget.thesaurusTabPanel',
 	localized : true,
 	closable : true,
+	isClosing : false,
 	/* Fields with auto generated values */
 	xIdentifierLabel : 'Identifier',
 	xCreatedDateLabel : 'Creation date',

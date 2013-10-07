@@ -123,6 +123,12 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 			component.restrictUI('ADMIN');
 		}
 	},
+	
+	onPanelBeforeClose : function(thePanel) {
+		
+		thePanel.fireEvent('closeall',thePanel);
+		return false;
+	},
 
 	init : function(application) {
 		this.application.on({
@@ -130,6 +136,9 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 			scope : this
 		});
 		this.control({
+			'thesaurusTabPanel' : {
+				beforeclose : this.onPanelBeforeClose
+			},
 			'thesaurusTabs' : {
 				newthesaurus : this.onNewThesaurus,
 				openthesaurustab : this.openThesaurusTab,

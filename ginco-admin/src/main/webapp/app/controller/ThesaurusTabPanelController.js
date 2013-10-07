@@ -260,6 +260,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 						switch (buttonId) {
 						case 'no':
 							globalTabs.remove(thePanel);
+							globalTabs.up().fireEvent('subpanelclosed',globalTabs.up());
 							break; // manually removes tab from tab panel
 						case 'yes':
 							for (var i=0;i<dirtyForms.length;i++)
@@ -270,6 +271,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 									if (i==dirtyForms.length-1) {
 										saveButton.fireEvent('click', saveButton, function(){
 											globalTabs.remove(thePanel);
+											globalTabs.up().fireEvent('subpanelclosed',globalTabs.up());
 										});
 									} else
 									{
@@ -335,6 +337,36 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			component.restrictUI('ADMIN');
 		}
 	},
+	onCloseAll : function (thePanel) {
+		var nbPanelToClose = 0;
+		thePanel.isClosing = true;
+		thePanel.down('#thesaurusItemsTabPanel').items.each(
+			function(c){
+				nbPanelToClose++;
+				c.close();
+			}
+		);
+		if (nbPanelToClose==0)
+		{
+			thePanel.fireEvent('alltabsclosed',thePanel);
+		}
+	},
+	onSubPanelClose : function (thePanel)
+	{
+		var nbPanel = thePanel.down('#thesaurusItemsTabPanel').items.getCount();
+		if (nbPanel <= 1 && thePanel.isClosing == true)
+		{
+			thePanel.fireEvent('alltabsclosed',thePanel);
+		}
+	},
+	onPanelClose : function (thePanel) 
+	{
+		thePanel.up('thesaurusTabPanel').fireEvent('subpanelclosed',thePanel.up('thesaurusTabPanel'));
+	},
+	onAllTabsClosed : function (thePanel)
+	{
+		thePanel.up().remove(thePanel);
+	},
 	
 	init : function(application) {
 		this.application.on({
@@ -344,6 +376,9 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			'#thesaurusItemsTabPanel' : {
 				tabchange : this.onTabChange,
 				add : this.onTabAdd
+			},
+			'#thesaurusItemsTabPanel panel' : {
+				close : this.onPanelClose
 			},
 			'thesaurusPanel' : {
 				beforeclose : this.onPanelBeforeClose
@@ -364,6 +399,9 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 				beforeclose : this.onPanelBeforeClose
 			},
 			'thesaurusTabPanel' : {
+				subpanelclosed : this.onSubPanelClose,
+				alltabsclosed : this.onAllTabsClosed,
+				closeall : this.onCloseAll,
 				afterrender : this.onLoad,
 				newthesaurus : this.onNewThesaurus,
 				openthesaurusform : this.openThesaurusForm,
