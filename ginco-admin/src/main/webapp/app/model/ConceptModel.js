@@ -75,7 +75,8 @@ Ext.define('GincoApp.model.ConceptModel', {
         },
         {
             name : 'conceptsPath',
-            type : 'array_of_string'
+            type : 'array_of_string', 
+            defaultValue : []
         }
     ],
     associations: [
