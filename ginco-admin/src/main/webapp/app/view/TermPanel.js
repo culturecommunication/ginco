@@ -77,6 +77,8 @@ Ext
 						var me = this;
 						me.customAttrTypeStore = Ext.create('GincoApp.store.CustomTermAttributeTypeStore');
 						me.customAttrStore = Ext.create('GincoApp.store.CustomTermAttributeStore');
+						me.noteConceptStore = Ext.create('GincoApp.store.ThesaurusNoteStore', {
+						});
 
 						Ext
 								.applyIf(
@@ -244,6 +246,7 @@ Ext
 														{
 															title : me.xNotesTab,
 															xtype : 'noteTermPanel',
+															noteConceptStore : me.noteConceptStore,
 															closable : false,
 															disabled : true
 														} ]

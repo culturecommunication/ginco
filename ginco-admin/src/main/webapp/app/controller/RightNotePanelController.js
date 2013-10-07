@@ -34,11 +34,19 @@
  */
 
 Ext.define('GincoApp.controller.RightNotePanelController', {
-	extend : 'GincoApp.controller.NotePanelController',
+	extend : 'Ext.app.Controller',
+
+	onRenderGrid : function(theGrid) {
+		if (theGrid.up('conceptPanel') != null){
+			var theConceptId = theGrid.up('conceptPanel').gincoId;
+			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
+			theGrid.getStore().load();
+		}
+	},
 
 	init : function() {
 		this.control({
-    		'rightNotePanel #rightNoteGrid' : {
+			'rightNotePanel #rightNoteGrid' : {
     			render : this.onRenderGrid
      		}
 		});

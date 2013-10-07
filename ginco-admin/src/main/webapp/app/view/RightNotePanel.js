@@ -56,11 +56,10 @@ Ext.define('GincoApp.view.RightNotePanel', {
 	xLexicalValueLabel : 'Lexical Value',
 	xTypeLabel : 'Type',
 	xLanguageLabel : 'Language',
+	noteConceptStore : null,
 
 	initComponent : function() {
 		var me = this;
-		me.noteConceptStore = Ext.create('GincoApp.store.ThesaurusNoteStore');
-
 		Ext.applyIf(me, {
 				title : me.xTitle,
 				items : [ {

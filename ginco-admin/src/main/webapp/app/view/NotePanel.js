@@ -26,7 +26,7 @@
 
 /*
  * File: app/view/NotePanel.js Note Creation/Edition
- * 
+ *
  */
 Ext.define('GincoApp.view.NotePanel', {
 	extend : 'Ext.panel.Panel',
@@ -53,10 +53,10 @@ Ext.define('GincoApp.view.NotePanel', {
 	xLanguageLabel : 'Language',
 	xAddNote : 'Add a note',
 	xDetach : 'Delete a note',
+	noteConceptStore : null,
 
 	initComponent : function() {
 		var me = this;
-		me.noteConceptStore = Ext.create('GincoApp.store.ThesaurusNoteStore');
 
 		Ext.applyIf(me, {
 			items : [ {
