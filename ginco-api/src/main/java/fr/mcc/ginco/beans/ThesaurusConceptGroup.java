@@ -49,15 +49,16 @@ import javax.xml.bind.annotation.XmlTransient;
 public class ThesaurusConceptGroup implements Serializable{
 
     private String identifier;
-    
+
     @XmlTransient
     private Thesaurus thesaurus;
     private ThesaurusConceptGroupType conceptGroupType;
+    private String notation;
     private Set<ThesaurusConcept> concepts;
-    
+
     @XmlTransient
     private ThesaurusConceptGroup parent;
-    
+
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -75,6 +76,12 @@ public class ThesaurusConceptGroup implements Serializable{
 	}
 	public void setConceptGroupType(ThesaurusConceptGroupType conceptGroupType) {
 		this.conceptGroupType = conceptGroupType;
+	}
+	public String getNotation() {
+		return notation;
+	}
+	public void setNotation(String notation) {
+		this.notation = notation;
 	}
 	public Set<ThesaurusConcept> getConcepts() {
 		return concepts;

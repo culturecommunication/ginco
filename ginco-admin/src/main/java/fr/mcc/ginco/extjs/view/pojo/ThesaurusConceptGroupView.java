@@ -43,7 +43,7 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 
 /**
  * View class corresponding to {@link ThesaurusConceptGroup} bean, but fully serializable
- * 
+ *
  * @see fr.mcc.ginco.beans
  */
 @SuppressWarnings("serial")
@@ -57,6 +57,7 @@ public class ThesaurusConceptGroupView implements Serializable {
 	private Integer groupConceptLabelId;
 	private String type;
 	private String language;
+	private String notation;
 	private List<String> concepts;
 	private String parentGroupId;
 	private String parentGroupLabel;
@@ -117,6 +118,14 @@ public class ThesaurusConceptGroupView implements Serializable {
 		this.language = language;
 	}
 
+	public String getNotation() {
+		return notation;
+	}
+
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
+
 	public List<String> getConcepts() {
 		return concepts;
 	}
@@ -149,6 +158,6 @@ public class ThesaurusConceptGroupView implements Serializable {
 		this.parentGroupLabel = parentGroupLabel;
 	}
 
-	
-	
+
+
 }

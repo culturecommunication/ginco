@@ -55,7 +55,7 @@ public class ThesaurusConceptGroupLabel implements Serializable{
     private Language language;
     @XmlTransient
     private ThesaurusConceptGroup conceptGroup;
-    
+
 	public Integer getIdentifier() {
 		return identifier;
 	}

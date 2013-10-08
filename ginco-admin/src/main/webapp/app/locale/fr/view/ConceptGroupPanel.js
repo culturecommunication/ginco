@@ -48,6 +48,7 @@ Ext.define('GincoApp.locale.fr.view.ConceptGroupPanel', {
     xLabelLabel : 'Titre',
     xTypeLabel : 'Type',
     xLanguageLabel : 'Langue',
+    xNotationLabel : 'Notation',
     xConceptGroupFormTitle : 'Groupe de concepts',
     xConceptsGrid : 'Concepts',
     xActions : 'Actions',

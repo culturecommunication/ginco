@@ -52,7 +52,7 @@ import java.util.List;
 
 @Component("thesaurusConceptGroupViewConverter")
 public class ThesaurusConceptGroupViewConverter {
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -60,27 +60,27 @@ public class ThesaurusConceptGroupViewConverter {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupService")
 	private IThesaurusConceptGroupService thesaurusConceptGroupService;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupTypeService")
 	private IThesaurusConceptGroupTypeService thesaurusConceptGroupTypeService;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupLabelService")
 	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
-	
+
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	private IIDGeneratorService generatorService;
 
 	public ThesaurusConceptGroup convert(ThesaurusConceptGroupView source)
 			throws BusinessException {
 		ThesaurusConceptGroup hibernateRes;
-		
+
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusConceptGroup();
 			hibernateRes.setIdentifier(generatorService.generate(ThesaurusConceptGroup.class));
@@ -97,7 +97,7 @@ public class ThesaurusConceptGroupViewConverter {
 					.getThesaurusId());
 			hibernateRes.setThesaurus(thesaurus);
 		}
-		
+
 		if (hibernateRes.getConcepts() == null) {
 			hibernateRes.setConcepts(new HashSet<ThesaurusConcept>());
 		}
@@ -112,7 +112,7 @@ public class ThesaurusConceptGroupViewConverter {
 			}
 			hibernateRes.getConcepts().add(concept);
 		}
-		
+
 		if ("".equals(source.getType())) {
 			throw new BusinessException(
 					"Type is mandatory to save a concept group",
@@ -121,11 +121,15 @@ public class ThesaurusConceptGroupViewConverter {
 			ThesaurusConceptGroupType conceptGroupType = thesaurusConceptGroupTypeService.getTypeById(source.getType());
 			hibernateRes.setConceptGroupType(conceptGroupType);
 		}
-		
+
+		if (source.getNotation() != null) {
+			hibernateRes.setNotation(source.getNotation());
+		}
+
 		if (source.getParentGroupId() != null) {
 			hibernateRes.setParent(thesaurusConceptGroupService.getConceptGroupById(source.getParentGroupId()));
 		}
-		
+
 		return hibernateRes;
 	}
 
@@ -139,38 +143,39 @@ public class ThesaurusConceptGroupViewConverter {
 			thesaurusConceptGroupView.setCreated(DateUtil.toString(label.getCreated()));
 			thesaurusConceptGroupView.setModified(DateUtil.toString(label.getModified()));
 			thesaurusConceptGroupView.setLabel(label.getLexicalValue());
-			
+
 			if (source.getThesaurus() != null) {
 				thesaurusConceptGroupView.setThesaurusId(source.getThesaurus().getThesaurusId());
 			}
 			thesaurusConceptGroupView.setType(source.getConceptGroupType().getCode());
 			thesaurusConceptGroupView.setLanguage(label.getLanguage().getId());
+			thesaurusConceptGroupView.setNotation(source.getNotation());
 			thesaurusConceptGroupView.setGroupConceptLabelId(label.getIdentifier());
-			
+
 			List<String> conceptsIds = new ArrayList<String>();
 			for (ThesaurusConcept concept: source.getConcepts()) {
 				conceptsIds.add(concept.getIdentifier());
 			}
 			thesaurusConceptGroupView.setConcepts(conceptsIds);
-			
+
 			if (source.getParent() != null) {
 				//We set id and label of parent concept group
 				thesaurusConceptGroupView.setParentGroupId(source.getParent().getIdentifier());
 				ThesaurusConceptGroupLabel labelOfParent = thesaurusConceptGroupLabelService.getByThesaurusConceptGroupAndLanguage(source.getParent().getIdentifier());
-				thesaurusConceptGroupView.setParentGroupLabel(labelOfParent.getLexicalValue());			
+				thesaurusConceptGroupView.setParentGroupLabel(labelOfParent.getLexicalValue());
 			}
 		}
-		
+
 		return thesaurusConceptGroupView;
 	}
-	
+
 	/**
 	 * This method converts a list of {@link ThesaurusConceptGroup} into a list of {@link ThesaurusConceptGroupView}
 	 * @param {@link ThesaurusConceptGroup} groups
 	 * @return {@link ThesaurusConceptGroupView} group views
 	 */
 	public List<ThesaurusConceptGroupView> convert(List<ThesaurusConceptGroup> groups) {
-		List<ThesaurusConceptGroupView> returnedGroupViews = new ArrayList<ThesaurusConceptGroupView>(); 
+		List<ThesaurusConceptGroupView> returnedGroupViews = new ArrayList<ThesaurusConceptGroupView>();
 		for (ThesaurusConceptGroup thesaurusConceptGroup : groups) {
 			returnedGroupViews.add(convert(thesaurusConceptGroup));
 		}

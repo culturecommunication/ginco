@@ -61,6 +61,7 @@ Ext
 					xLabelLabel : 'Group Title',
 					xTypeLabel : 'Type',
 					xLanguageLabel : 'Language',
+					xNotationLabel : 'Notation',
 					xConceptGroupFormTitle : 'Concept group',
 					xConceptsGrid : 'Concepts',
 					xActions : 'Actions',
@@ -190,6 +191,12 @@ Ext
 															multiSelect : false,
 															allowBlank : false,
 															store : Ext.create('GincoApp.store.ThesaurusLanguageStore')
+														},
+														{
+															xtype : 'textfield',
+															name : 'notation',
+															fieldLabel : me.xNotationLabel,
+															anchor : '70%'
 														},
 														{
 															xtype : 'hidden',
