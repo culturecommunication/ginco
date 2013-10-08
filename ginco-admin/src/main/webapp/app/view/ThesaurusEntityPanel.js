@@ -40,6 +40,16 @@ Ext
 					gincoId : '',
 					treeNodeId : '',
 					thesaurusData : '',
+					getThesaurusData : function() {
+						var me = this;
+						if (me.thesaurusData != '' && me.thesaurusData != null)
+						{
+							return me.thesaurusData;
+						} else 
+						{
+							return me.up().up().getThesaurusData();
+						}
+					},
 					multiInstance : true,
 					trackable : false,
 					setGincoId : function (aGincoId) {

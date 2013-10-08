@@ -183,7 +183,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 						success : function(record, operation) {
 							Thesaurus.ext.utils.msg(me.xSucessLabel,
 									me.xSucessRemovedMsg);
-							me.application.fireEvent('termdeleted',thePanel.thesaurusData);
+							me.application.fireEvent('termdeleted',thePanel.getThesaurusData());
 							globalTabs.remove(thePanel);
 						},
 						failure : function(record, operation) {

@@ -90,122 +90,127 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 	xNewMenu_TermLabel : "Term only",
 	xNewMenu_ConceptLabel : "Concept only",
 
+	getThesaurusData : function() {
+		var me = this;
+		return me.thesaurusData;
+	},
+
 	initComponent : function() {
 		var me = this;
 		Ext.applyIf(me, {
 			title : me.xThesaurusTitle,
-			items : [ {
-				xtype : 'tabpanel',
-				itemId : 'thesaurusItemsTabPanel',
-				flex : 1
-			} ],
-			dockedItems : [ {
+			items : [{
+						xtype : 'tabpanel',
+						itemId : 'thesaurusItemsTabPanel',
+						flex : 1
+					}],
+			dockedItems : [{
 				xtype : 'toolbar',
 				dock : 'top',
-				items : [ {
-					xtype : 'button',
-					disabled : true,
-					requiredRoles : [ 'ADMIN' ],
-					itemId : 'newBtnMenu',
-					text : me.xNewLabel,
-					menu : {
-						xtype : 'menu',
-						width : 200,
-						items : [{
-						    xtype : 'keymenuitem',
-						    text : me.xNewMenu_ConceptAndTermLabel,
-						    itemId : 'newConceptAndTermBtn',
-						    cmdTxt : 'Ctrl+2'
-						},{        
-							xtype : 'keymenuitem',
-							text : me.xNewMenu_TermLabel,
-							itemId : 'newTermBtn',
-							cmdTxt : 'Ctrl+3'
-						}, {
-							xtype : 'keymenuitem',
-							text : me.xNewMenu_ConceptLabel,
-							itemId : 'newConceptBtn',
-							cmdTxt : 'Ctrl+4'
-						}, {
-							xtype : 'keymenuitem',
-							text : me.xNewMenu_ComplexConceptLabel,
-							itemId : 'newComplexConceptBtn',
-							cmdTxt : 'Ctrl+4'
-						}, {
-							xtype : 'keymenuitem',
-							text : me.xNewMenu_ConceptArrayLabel,
-							itemId : 'newConceptArrayBtn',
-							cmdTxt : 'Ctrl+6'
-						}, {
-							xtype : 'keymenuitem',
-							text : me.xNewMenu_GroupLabel,
-							itemId : 'newConceptGroupBtn',
-							cmdTxt : 'Ctrl+7'
-						} ]
-					}
-				}, , {
-					xtype : 'button',
-					disabled : true,
-					itemId : 'exportsBtnMenu',
-					text : 'Exports',
-					iconCls : 'exports-icon',
-					menu : {
-						xtype : 'menu',
-						width : 200,
-						items : [ {
-							xtype : 'keymenuitem',
-							text : me.xExport_Skos,
+				items : [{
+							xtype : 'button',
 							disabled : true,
-							itemId : 'exportSKOS'
+							requiredRoles : ['ADMIN'],
+							itemId : 'newBtnMenu',
+							text : me.xNewLabel,
+							menu : {
+								xtype : 'menu',
+								width : 200,
+								items : [{
+											xtype : 'keymenuitem',
+											text : me.xNewMenu_ConceptAndTermLabel,
+											itemId : 'newConceptAndTermBtn',
+											cmdTxt : 'Ctrl+2'
+										}, {
+											xtype : 'keymenuitem',
+											text : me.xNewMenu_TermLabel,
+											itemId : 'newTermBtn',
+											cmdTxt : 'Ctrl+3'
+										}, {
+											xtype : 'keymenuitem',
+											text : me.xNewMenu_ConceptLabel,
+											itemId : 'newConceptBtn',
+											cmdTxt : 'Ctrl+4'
+										}, {
+											xtype : 'keymenuitem',
+											text : me.xNewMenu_ComplexConceptLabel,
+											itemId : 'newComplexConceptBtn',
+											cmdTxt : 'Ctrl+4'
+										}, {
+											xtype : 'keymenuitem',
+											text : me.xNewMenu_ConceptArrayLabel,
+											itemId : 'newConceptArrayBtn',
+											cmdTxt : 'Ctrl+6'
+										}, {
+											xtype : 'keymenuitem',
+											text : me.xNewMenu_GroupLabel,
+											itemId : 'newConceptGroupBtn',
+											cmdTxt : 'Ctrl+7'
+										}]
+							}
+						}, , {
+							xtype : 'button',
+							disabled : true,
+							itemId : 'exportsBtnMenu',
+							text : 'Exports',
+							iconCls : 'exports-icon',
+							menu : {
+								xtype : 'menu',
+								width : 200,
+								items : [{
+											xtype : 'keymenuitem',
+											text : me.xExport_Skos,
+											disabled : true,
+											itemId : 'exportSKOS'
+										}, {
+											xtype : 'keymenuitem',
+											text : me.xExport_Hierarchical,
+											disabled : true,
+											itemId : 'exportHierarchical'
+										}, {
+											xtype : 'keymenuitem',
+											text : me.xExport_Alphabetic,
+											disabled : true,
+											itemId : 'exportAlphabetical'
+										}, {
+											xtype : 'keymenuitem',
+											text : me.xExport_Ginco,
+											disabled : true,
+											itemId : 'exportGinco'
+										}]
+							}
 						}, {
-							xtype : 'keymenuitem',
-							text : me.xExport_Hierarchical,
+							xtype : 'button',
 							disabled : true,
-							itemId : 'exportHierarchical'
+							itemId : 'journalBtnMenu',
+							text : me.xJournal,
+							iconCls : 'exports-icon',
+							menu : {
+								xtype : 'menu',
+								width : 200,
+								items : [{
+											xtype : 'keymenuitem',
+											text : me.xEditJournal,
+											disabled : true,
+											itemId : 'editJournal'
+										}]
+							}
 						}, {
-							xtype : 'keymenuitem',
-							text : me.xExport_Alphabetic,
+							xtype : 'button',
+							text : me.xImportSandbox,
+							requiredRoles : ['ADMIN'],
 							disabled : true,
-							itemId : 'exportAlphabetical'
+							itemId : 'importSandbox',
+							iconCls : 'exports-icon'
 						}, {
-							xtype : 'keymenuitem',
-							text : me.xExport_Ginco,
+							xtype : 'button',
+							text : me.xImportBranch,
+							requiredRoles : ['ADMIN'],
 							disabled : true,
-							itemId : 'exportGinco'
-						} ]
-					}
-				}, {
-					xtype : 'button',
-					disabled : true,
-					itemId : 'journalBtnMenu',
-					text : me.xJournal,
-					iconCls : 'exports-icon',
-					menu : {
-						xtype : 'menu',
-						width : 200,
-						items : [ {
-							xtype : 'keymenuitem',
-							text : me.xEditJournal,
-							disabled : true,
-							itemId : 'editJournal'
-						} ]
-					}
-				}, {
-					xtype : 'button',
-					text : me.xImportSandbox,
-					requiredRoles : [ 'ADMIN' ],
-					disabled : true,
-					itemId : 'importSandbox',
-					iconCls : 'exports-icon'
-				}, {
-					xtype : 'button',
-					text : me.xImportBranch,
-					requiredRoles : [ 'ADMIN' ],
-					disabled : true,
-					itemId : 'importBranch',
-					iconCls : 'exports-icon'
-				} ]
-			} ]
+							itemId : 'importBranch',
+							iconCls : 'exports-icon'
+						}]
+			}]
 		});
 		me.callParent(arguments);
 	}
