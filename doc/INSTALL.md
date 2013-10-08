@@ -41,29 +41,30 @@ Run the following command:
 > wget http://wwwftp.ciril.fr/pub/apache/lucene/solr/4.2.1/solr-4.2.1.tgz
 
 Extract the following archive:
-> tar xvf solr-4.2.1.tgz-C / usr / local /
+> tar xvf solr-4.2.1.tgz -C /usr/local/
 
 (The /local/usr can be changed at your convenience ...) 
 
 * Installing Solr server
 
 Go to the directory of Solr:
-> cd / usr/local/solr-4.2.1/
+> cd /usr/local/solr-4.2.1/
 
 Delete the default configuration:
-> rm-rf. /example/solr/
+> rm -rf /example/solr/
 
 Rename the example directory:
-> mv example /GINCO/ 
+> mv example ginco
 
 * Installing Solr server
 
 Go in Installing the available configuration Solr
 Copy available configuration from the Solr to install the Solr server:
-> cp-r. /solr /usr/local/solr-4.2.1/ginco/ 
+> cp -r /solr /usr/local/solr-4.2.1/ginco/ 
 
 * Init script SolR
-This script can be modified variables to be consistent with the installation is complete:
+
+This script can be modified to be consistent with the installation :
 
 check:
 
@@ -73,7 +74,7 @@ check:
 
 • LOG_FILE: Location of log file
 
-This script must be copied into the directory / etc / init.d /
+This script must be copied into the directory /etc/init.d/
 
 ```
 # 
