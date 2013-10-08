@@ -201,7 +201,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		var groupId = theConceptGroupPanel.gincoId ;
 
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
-			thesaurusData : theConceptGroupPanel.thesaurusData,
+			thesaurusData : theConceptGroupPanel.up('thesaurusTabPanel').thesaurusData,
 			getChildren : false,
 			showTree : false,
 			getGroupConcepts : getGroupConcepts,
@@ -249,7 +249,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 	    var thePanel =theButton.up('conceptGroupPanel');
 
 	    var win = Ext.create('GincoApp.view.SelectGroupWin', {
-			thesaurusData : thePanel.thesaurusData,
+			thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
 			excludedConceptGroupId : thePanel.gincoId,
 			currentParentId : theForm.down('hidden[name="parentGroupId"]').getValue(),
 			listeners: {
