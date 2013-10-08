@@ -89,10 +89,33 @@ Ext
 					xExportBranch : 'Export this branch',
 					xConceptTabPanelTitle : 'Concept data',
 					xMetadataTitle : 'Metadata',
+					xAlignments: 'Alignments',
+					xAddAlignment : 'Add an alignment',
+					xAlignmentType : 'Type',
+					xAlignmentAndRelation : 'AND',
+					xAlignmentConcepts: 'Concepts',
+					xAlignmentRemove: 'Remove alignment',
 
 					conceptHierarchicalRoleRenderer : function(value, record) {
 						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
 					},
+					
+					alignmentConceptRenderer : function(value, meta, record, rowIndex, colIndex, store, view)
+					{	
+						var targetConcepts = '';		
+						if (record.data['targetConcepts']) {
+							Ext.Array.each(record.data['targetConcepts'],function(targetConcept, index, array) {
+								targetConcepts += targetConcept.internalTargetConcept;
+								targetConcepts += '<br/>';
+							});
+						} else {
+							Ext.Array.each(record.raw['targetConcepts'],function(targetConcept, index, array) {
+								targetConcepts += targetConcept.internalTargetConcept;
+								targetConcepts += '<br/>';
+							});
+						}
+						return targetConcepts;
+					},				
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
@@ -135,6 +158,10 @@ Ext
 								.create('GincoApp.store.CustomConceptAttributeTypeStore');
 						me.customAttrStore = Ext
 								.create('GincoApp.store.CustomConceptAttributeStore');
+						me.alignmentsStore = Ext
+						.create('GincoApp.store.AlignmentsStore');			
+						me.alignmentTypeStore = Ext.create('GincoApp.store.AlignmentTypeStore');				
+
 
 						Ext
 								.applyIf(
@@ -314,6 +341,7 @@ Ext
 																											}
 																										} ]
 																							}
+
 																						} ]
 																					} ],
 
@@ -402,6 +430,7 @@ Ext
 																							itemId : 'addParent',
 																							cls : 'addParent',
 																							iconCls : 'icon-add-parent'
+
 																						} ]
 																					} ],
 
@@ -587,9 +616,61 @@ Ext
 
 																									}
 																								} ]
-																							} ]
+																							} ]																																		
+
+																		},{
+																			xtype : 'gridpanel',
+																			title : me.xAlignments,
+																			store : me.alignmentsStore,
+																			itemId : 'gridPanelAlignments',
+																			dockedItems : [ {
+																				xtype : 'toolbar',
+																				dock : 'top',
+																				items : [ {
+																					xtype : 'button',
+																					text : me.xAddAlignment,
+																					disabled : true,
+																					itemId : 'addAlignment',
+																					cls : 'addAlignment',
+																					iconCls : 'icon-add-associative-relationship'
 																				} ]
-																	} ]
+																			} ],
+
+																			columns : [
+																					{
+																						dataIndex : 'identifier',
+																						text : me.xIdentifierLabel
+																					},{
+																						dataIndex : 'alignmentType',
+																						text : me.xAlignmentType,
+																						renderer : function(value, meta, record, rowIndex, colIndex, store, view)
+																						{			
+																							var record = me.alignmentTypeStore.findRecord( 'identifier', value);
+																							if (record != null) 
+																								return record.data.label;
+																						}
+																						
+																					},{
+																						dataIndex : 'andRelation',
+																						header : me.xAlignmentAndRelation,
+																					}, {
+																						text: me.xAlignmentConcepts,
+																						dataIndex: 'targetConcepts',
+																						renderer: me.alignmentConceptRenderer,
+																						flex : 1
+																					},{
+																						xtype : 'actioncolumn',
+																						itemId : 'alignmentActionColumn',
+																						header : me.xActions,
+																						items : [ {
+																							icon : 'images/detach.png',
+																							tooltip : me.xAlignmentRemove
+																						} ]
+																					} 
+																			]																		
+																		}
+																		]
+															} ]
 														},
 														{
 															title : me.xNotesTab,

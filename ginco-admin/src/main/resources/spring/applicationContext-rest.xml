@@ -48,6 +48,7 @@
             <bean class="fr.mcc.ginco.rest.services.RevisionsRestService" />
             <bean class="fr.mcc.ginco.rest.services.CustomAttributesRestService" />
             <bean class="fr.mcc.ginco.rest.services.SplitNonPreferredTermRestService" />  
+            <bean class="fr.mcc.ginco.rest.services.AlignmentsRestService" />  
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />

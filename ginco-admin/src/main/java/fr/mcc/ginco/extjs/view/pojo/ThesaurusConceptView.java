@@ -34,11 +34,13 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import java.io.Serializable;
 import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 
 
 /**
@@ -62,6 +64,7 @@ public class ThesaurusConceptView implements Serializable {
 	private List<AssociativeRelationshipView> associatedConcepts;
 	private List<String> conceptsPath;
 	private Boolean topistopterm;
+	private List<AlignmentView> alignments;
 
 	
 	public ThesaurusConceptView() {}	
@@ -177,4 +180,11 @@ public class ThesaurusConceptView implements Serializable {
 	public void setTopistopterm(Boolean topistopterm) {
 		this.topistopterm = topistopterm;
 	}
+	public List<AlignmentView> getAlignments() {
+		return alignments;
+	}
+
+	public void setAlignments(List<AlignmentView> alignments) {
+		this.alignments = alignments;
+	}	
 }

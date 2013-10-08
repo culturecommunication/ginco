@@ -86,7 +86,9 @@ Ext.application({
         'SearchTypeStore',
         'ThesaurusStore',
         'CustomConceptAttributeTypeStore',
-        'ConceptArrayStore'
+        'ConceptArrayStore',
+        'AlignmentsStore',
+        'AlignmentTypeStore'
     ],
     views: [
         'GincoViewPort',
@@ -116,7 +118,8 @@ Ext.application({
         'ComplexConceptPanelController',
         'ComplexConceptsPanelController',
         'CustomAttributeTypesController',
-        'RightNotePanelController'
+        'RightNotePanelController',
+        'AlignmentController'
     ],
     init: function(){
     },

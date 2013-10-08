@@ -46,6 +46,10 @@
                 <value>hibernate/SplitNonPreferredTerm.hbm.xml</value>
                 <value>hibernate/CustomConceptAttribute.hbm.xml</value>
                 <value>hibernate/CustomTermAttribute.hbm.xml</value>
+                <value>hibernate/Alignment.hbm.xml</value>
+                <value>hibernate/AlignmentConcept.hbm.xml</value>
+                <value>hibernate/AlignmentType.hbm.xml</value>
+                <value>hibernate/ExternalThesaurus.hbm.xml</value>                
             </list>
         </property>
         <property name="hibernateProperties">
@@ -90,4 +94,12 @@
         <constructor-arg value="fr.mcc.ginco.beans.ThesaurusArk" />
     </bean>
 
+    <bean id="alignmentTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.AlignmentType" />
+    </bean>
+        
+   <bean id="alignmentConceptDAO"  class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.AlignmentConcept" />
+    </bean>   
+    
 </beans>

@@ -46,17 +46,20 @@ import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.AlignmentView;
 import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.HierarchicalRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IAlignmentService;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -86,6 +89,14 @@ public class ThesaurusConceptViewConverter {
     @Inject
     @Named("hierarchicalRelationshipViewConverter")
     private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
+    
+    @Inject
+    @Named("alignmentViewConverter")
+    private AlignmentViewConverter alignmentViewConverter;
+    
+    @Inject
+	@Named("alignmentService")
+	private IAlignmentService alignmentService;
 	
 	@Inject
 	@Named("associativeRelationshipService")
@@ -165,6 +176,13 @@ public class ThesaurusConceptViewConverter {
 		}
 
         view.setAssociatedConcepts(associatedConcepts);
+        
+        List<AlignmentView> alignmentViews = new ArrayList<AlignmentView>();
+        List<Alignment> alignments  = alignmentService.getAlignmentsBySourceConceptId(concept.getIdentifier());
+        for (Alignment alignment: alignments) {        	
+        	alignmentViews.add(alignmentViewConverter.convertAlignment(alignment));
+        }
+        view.setAlignments(alignmentViews);
 
         return view;
 	}

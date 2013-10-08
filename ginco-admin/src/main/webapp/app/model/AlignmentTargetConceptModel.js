@@ -33,7 +33,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-Ext.define('GincoApp.model.ConceptModel', {
+Ext.define('GincoApp.model.AlignmentTargetConceptModel', {
     extend: 'Ext.data.Model',
 
     fields: [
@@ -42,67 +42,14 @@ Ext.define('GincoApp.model.ConceptModel', {
             type: 'string'
         },
         {
-            name: 'created',
+            name: 'externalTargetConcept',
             type: 'string'
         },
         {
-            name: 'modified',
+            name: 'internalTargetConcept',
             type: 'string'
-        },
-        {
-            name: 'topconcept',
-            type: 'boolean'
-        },      
-        {
-            name: 'topistopterm',
-            type: 'boolean'
-        },
-        {
-            name: 'thesaurusId',
-            type: 'string'
-        },
-        {
-            name: 'status',
-            type: 'integer'
-        },
-        {
-            name: 'notation',
-            type: 'string'
-        },
-        {
-            name : 'rootConcepts',
-            type : 'array_of_string'
-        },
-        {
-            name : 'conceptsPath',
-            type : 'array_of_string', 
-            defaultValue : []
         }
     ],
-    associations: [
-                    {type: 'hasMany', model: 'GincoApp.model.ThesaurusTermModel',    name: 'terms'},
-                    {type: 'hasMany', model: 'GincoApp.model.AssociationModel',    name: 'associatedConcepts'},
-                    {type: 'hasMany', model: 'GincoApp.model.HierarchicalAssociationModel',    name: 'parentConcepts'},
-                    {type: 'hasMany', model: 'GincoApp.model.HierarchicalAssociationModel',    name: 'childConcepts'},
-                    {type: 'hasMany', model: 'GincoApp.model.AlignmentModel',    name: 'alignments'}
-   ],
-   idProperty : 'identifier',
-    
-    proxy : {
-		api : {
-			create : 'services/ui/thesaurusconceptservice/updateConcept',
-			update : 'services/ui/thesaurusconceptservice/updateConcept',
-			read :   'services/ui/thesaurusconceptservice/getConcept',
-			destroy: 'services/ui/thesaurusconceptservice/destroyConcept'
-		},
-		type : 'ajax',
-		reader : {
-			type : 'json',
-			messageProperty: 'message'
-		},
-		writer : {
-			type : 'json'
-		}
-	}
-    
+   idProperty : 'identifier'
+
 });

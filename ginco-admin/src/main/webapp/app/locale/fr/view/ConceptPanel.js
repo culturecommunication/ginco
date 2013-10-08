@@ -72,4 +72,10 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
     xNotationLabel : 'Notation',
     xExportBranch : 'Exporter cette branche',
     xMetadataTitle : 'Métadonnées',
+    xAlignments : 'Alignements',
+    xAddAlignment: 'Ajouter un alignement',
+	xAlignmentType : 'Type',
+	xAlignmentAndRelation : 'ET',
+	xAlignmentConcepts: 'Concepts',
+	xAlignmentRemove: 'Supprimer l\'alignment'
 });

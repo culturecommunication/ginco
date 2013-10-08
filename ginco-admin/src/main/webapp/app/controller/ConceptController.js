@@ -31,9 +31,9 @@ Ext
 					extend : 'Ext.app.Controller',
 
 					stores : [ 'MainTreeStore', 'SimpleConceptStore',
-                            'AssociationStore', 'AssociationRoleStore', 'HierarchicalAssociationStore' ],
+                            'AssociationStore', 'AssociationRoleStore', 'HierarchicalAssociationStore', 'AlignmentsStore' ],
 					models : [ 'ConceptModel', 'ThesaurusModel',
-							'SimpleConceptModel', 'AssociationModel', 'HierarchicalAssociationModel' ],
+							'SimpleConceptModel', 'AssociationModel', 'HierarchicalAssociationModel', 'AlignmentModel' ],
 
 					localized : true,
 					_myAppGlobal : this,
@@ -242,9 +242,16 @@ Ext
 						var theStore = theGrid.getStore();
 						theStore.remove(rec);
 					},
+					
+					onRemoveAlignmentClick : function(gridview, el, rowIndex,
+							colIndex, e, rec, rowEl) {
+						var theGrid = gridview
+								.up('#gridPanelAlignments');
+						var theStore = theGrid.getStore();
+						theStore.remove(rec);
+					},
 
 					onSelectTermDblClick : function(theGrid, record) {
-						var me = this;
 						var theWin = theGrid.up('selectTermWin');
 						if (theWin.prefered == true) {
 							record.data.prefered = true;
@@ -264,14 +271,9 @@ Ext
 					},
 					
 					initParent: function (theGrid, parentId) {						
-						var theStore = theGrid.getStore();
-						//var selectedItem = selectedRow[0];
-						//selectedItem.setDirty();
-
+						var theStore = theGrid.getStore();						
 						var parentModel = Ext.create('GincoApp.model.HierarchicalAssociationModel');
-						//parentModel.set('label',selectedItem.get('label'));
 						parentModel.set('identifier',parentId);
-
 						theStore.add(parentModel);
 					},
 
@@ -297,6 +299,52 @@ Ext
 									}
 								});
 						win.show();
+					},
+					
+					addAlignment : function(theButton) {
+						var me = this;
+						var thePanel = me.getActivePanel(theButton);
+						var theGrid = thePanel
+								.down('#gridPanelAlignments');
+						
+						var win = Ext.create('GincoApp.view.AlignmentWin',
+								{
+									thesaurusData : thePanel.thesaurusData,
+									conceptId : thePanel.gincoId,
+									storeAlignmentTypes : Ext.create('GincoApp.store.AlignmentTypeStore'),
+									listeners: {
+										addAlignment : {
+						                    fn: function(theButton) {
+						                            me.saveAlignment(theGrid, theButton);
+						                    }
+										}
+									}
+									
+								});						
+						win.show();	
+					},
+					
+					saveAlignment: function(theGrid, theButton) {						
+						var theForm = theButton.up('form');
+						var theWin = theButton.up('alignmentWin');						
+						var theAlignmentGridStore = theGrid.getStore();		
+						
+						var model = Ext.create('GincoApp.model.AlignmentModel');
+						model.data.andRelation = theForm.down('#isAndCheckbox').value;
+						model.data.alignmentType = theForm.down('#typeCombo').value;	
+						var fields = theForm.getForm().getFields();
+						model.data.targetConcepts=[];
+						
+				        for(idx in fields.items) {
+				        	field = fields.items[idx];
+				            if(field.getName() == 'internal_concept') {
+				            	var alignmentConceptModel = Ext.create('GincoApp.model.AlignmentTargetConceptModel');
+				            	alignmentConceptModel.internalTargetConcept=field.value;
+								model.data.targetConcepts.push(alignmentConceptModel);
+				            }				        	  
+				        }						
+						theAlignmentGridStore.add(model);
+						theWin.close();
 					},
 					
 					addChild : function(theButton) {
@@ -397,7 +445,6 @@ Ext
 						var me = this;
 						var conceptPanel = me.getActivePanel(aForm);
 						var thesaurusData = me.getThesaurusData(aForm);
-						var infosConceptPanel = aForm.up('panel');
 						conceptPanel.gincoId = aModel.data.identifier;
 
 						aForm.loadRecord(aModel);
@@ -453,6 +500,16 @@ Ext
                         childrenConceptsGridStore.removeAll();
                         childrenConceptsGridStore.add(children);
                         this.setupStoreListener(childrenGrid);
+                        
+                       //Load alignments to the grid's store
+						var alignment = aModel.alignments().getRange();
+                        var alignmentsGrid = aForm
+                            .down('#gridPanelAlignments');
+                        var alignmentsGridStore = alignmentsGrid
+                            .getStore();
+                        alignmentsGridStore.removeAll();
+                        alignmentsGridStore.add(alignment);
+                        this.setupStoreListener(alignmentsGrid);
 
 						var rootConceptsGrid = aForm
 								.down('#gridPanelRootConcepts');
@@ -479,11 +536,12 @@ Ext
 								.down('#addAssociativeRelationship');
 						var addparent = aForm.down('#addParent');
 						var addChild = aForm.down('#addChild');
-
+						var addAlignment = aForm.down('#addAlignment');
 						if (aModel.data.status == 1) {
 							addAssociationBtn.setDisabled(false);
 							addparent.setDisabled(false);
 							addChild.setDisabled(false);
+							addAlignment.setDisabled(false);
 						}
 						conceptPanel.addNodePath(thesaurusData.id);
 						if (aModel.data.topistopterm == true)
@@ -641,6 +699,9 @@ Ext
 
 						var hierarchicalChildGrid = theForm.down('#gridPanelChildrenConcepts');
 						var hierarchicalChildData = hierarchicalChildGrid.getStore().getRange();
+						
+						var alignmentsGrid = theForm.down('#gridPanelAlignments');
+						var alignmentsData = alignmentsGrid.getStore().getRange();							
 
 						var thePanel = me.getActivePanel(theButton);
 
@@ -654,6 +715,8 @@ Ext
                         updatedModel.parentConcepts().add(hierarchicalParentData);
                         updatedModel.childConcepts().removeAll();
                         updatedModel.childConcepts().add(hierarchicalChildData);
+                        updatedModel.alignments().removeAll();
+                        updatedModel.alignments().add(alignmentsData);
 
 						updatedModel.data.rootConcepts = rootIds;
 
@@ -797,6 +860,12 @@ Ext
 									},
 									'conceptPanel #gridPanelChildrenConcepts #childConceptActionColumn' : {
 										click : this.onRemoveChildClick
+									},
+									'conceptPanel  button[cls=addAlignment]' : {
+										click : this.addAlignment
+									},
+									'conceptPanel #gridPanelAlignments  #alignmentActionColumn' : {
+										click : this.onRemoveAlignmentClick
 									}
 								});
 

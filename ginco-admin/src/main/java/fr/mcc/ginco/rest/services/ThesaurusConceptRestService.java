@@ -53,6 +53,7 @@ import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -60,12 +61,14 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.AlignmentView;
 import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.GenericRoleView;
 import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.HierarchicalRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
+import fr.mcc.ginco.extjs.view.utils.AlignmentViewConverter;
 import fr.mcc.ginco.extjs.view.utils.AssociativeRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.HierarchicalRelationshipViewConverter;
@@ -111,6 +114,10 @@ public class ThesaurusConceptRestService {
     @Inject
     @Named("hierarchicalRelationshipViewConverter")
     private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
+    
+    @Inject
+    @Named("alignmentViewConverter")
+    private AlignmentViewConverter alignmentViewConverter;
 
 	@Inject
     @Named("indexerService")
@@ -196,10 +203,19 @@ public class ThesaurusConceptRestService {
         	}
         }
 
+        
+        //We get alignments from the view
+        List<Alignment> alignments = new ArrayList<Alignment>();
+        if (conceptView.getAlignments() != null) {
+        	for (AlignmentView alignmentView : conceptView.getAlignments()) {
+        		alignments.add(alignmentViewConverter.convertAlignmentView(alignmentView, convertedConcept));
+        	}
+        }
+        
         //We save or update the concept
         logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
-				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach);
+				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach, alignments);
 
 		for (ThesaurusTerm term : terms) {
 			indexerService.addTerm(term);

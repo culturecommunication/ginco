@@ -34,14 +34,16 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+import java.util.Set;
+
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Service used to work with {@link ThesaurusConcept} objects, contains basic
@@ -119,11 +121,12 @@ public interface IThesaurusConceptService {
 	 * @param The ids of associated concepts
 	 * @param The hierarchical relations (from current concept (child) to its parents)
 	 * @param The list of children concepts we must detach (must not be still children of our concept)
+	 * @param The list of alignemnts where this concept is the source
 	 * @return The updated concept
 	 * @throws BusinessException
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept>childrenConceptToDetach) throws BusinessException;
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<Alignment> alignments) throws BusinessException;
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
