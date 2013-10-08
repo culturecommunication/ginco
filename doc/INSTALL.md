@@ -33,6 +33,101 @@ Next install postgresql
 
 > yum install tomcat6 tomcat6-webapps tomcat6-admin-webapps
 
+### SOLR ###
+
+* Download the bundle Solr
+
+Run the following command:
+> wget http://wwwftp.ciril.fr/pub/apache/lucene/solr/4.2.1/solr-4.2.1.tgz
+
+Extract the following archive:
+> tar xvf solr-4.2.1.tgz-C / usr / local /
+
+(The /local/usr can be changed at your convenience ...) 
+
+* Installing Solr server
+
+Go to the directory of Solr:
+> cd / usr/local/solr-4.2.1/
+
+Delete the default configuration:
+> rm-rf. /example/solr/
+
+Rename the example directory:
+> mv example /GINCO/ 
+
+* Installing Solr server
+
+Go in Installing the available configuration Solr
+Copy available configuration from the Solr to install the Solr server:
+> cp-r. /solr /usr/local/solr-4.2.1/ginco/ 
+
+* Init script SolR
+This script can be modified variables to be consistent with the installation is complete:
+
+check:
+
+• SOLR_DIR: Location of Solr configuration directory provided
+
+• JAVA_OPTIONS: Subject to change depending on the application setting Solr.
+
+• LOG_FILE: Location of log file
+
+This script must be copied into the directory / etc / init.d /
+
+```
+# 
+# Solr Control Script 
+# 
+# chkconfig: 3 80 20 
+# Provides: solr 
+# Required-Start: $local_fs $remote_fs $network $syslog $named 
+# Required-Stop: $local_fs $remote_fs $network $syslog $named 
+# Default-Start: 2 3 4 5 
+# Default-Stop: 0 1 6 
+# Short-Description: Solr and Jetty application Server 
+# Description: Starts and stops the solr daemon. 
+# 
+# To use this script 
+# run it as root - it will switch to the specified user 
+# It loses all console output - use the log. 
+# 
+# Starts, stops, and restarts solr 
+SOLR_DIR="/usr/local/solr-4.2.1/ginco" 
+JAVA_OPTIONS="-Xmx1024m -DSTOP.PORT=8079 -DSTOP.KEY=stopkey -jar start.jar" 
+LOG_FILE="/var/log/solr.log" 
+case $1 in 
+start) 
+echo "Starting Solr" 
+cd $SOLR_DIR 
+java $JAVA_OPTIONS > $LOG_FILE 2>&1 & 
+;; 
+stop) 
+echo "Stopping Solr" 
+cd $SOLR_DIR 
+java $JAVA_OPTIONS --stop 
+;; 
+restart) 
+$0 stop 
+sleep 1 
+$0 start 
+;; 
+*) 
+echo "Usage: $0 {start|stop|restart}" >&2 
+exit 1 
+;; 
+esac 
+exit 0 
+```
+
+* Test operation of Solr
+
+Once launched the service (via the command /etc/init.d/solr start)
+
+Point a browser to the URL http://<url-du-serveur>:8983/solr/
+
+The administration interface of Solr should appear. 
+
 
 Configuring prerequisites
 -------------------------
