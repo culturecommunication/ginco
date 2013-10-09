@@ -42,6 +42,7 @@ import javax.inject.Named;
 
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
+import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.GincoRevEntity;
@@ -70,15 +71,18 @@ public class AuditHelper {
 	public ThesaurusTerm getPreferredTermAtRevision(Number revisionNumber, String conceptId, String lang) {
 		AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(ThesaurusTerm.class, revisionNumber)
 				.add(AuditEntity.relatedId("concept").eq(conceptId))
-				.add(AuditEntity.property("prefered").eq(true));
+				.add(AuditEntity.property("prefered").eq(true))
+				.addOrder(AuditEntity.revisionNumber().desc())
+				.setMaxResults(1);
 		if (lang != null) {
 			auditQueryBuilder.addFilterOnLanguage(query, lang);
 		}
-		if (query.getResultList().isEmpty()){
+		List results = query.getResultList();
+		if (results.isEmpty()){
 			return null;
 		}
 		else {
-			return (ThesaurusTerm) query.getSingleResult();
+			return (ThesaurusTerm) results.get(0);
 		}
 	}
 	

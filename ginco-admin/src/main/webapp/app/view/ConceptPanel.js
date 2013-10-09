@@ -92,10 +92,12 @@ Ext
 					xAlignments: 'Alignments',
 					xAddAlignment : 'Add an alignment',
 					xAlignmentType : 'Type',
-					xAlignmentAndRelation : 'AND',
+					xAlignmentAndRelation : 'Relation',
 					xAlignmentConcepts: 'Concepts',
 					xAlignmentRemove: 'Remove alignment',
-
+					xAlignmentAndRelation: 'AND',
+					xAlignmentOrRelation: 'OR',
+					
 					conceptHierarchicalRoleRenderer : function(value, record) {
 						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
 					},
@@ -111,7 +113,8 @@ Ext
 						}
 						
 						return targetConcepts;
-					},				
+					},					
+					
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
@@ -649,6 +652,18 @@ Ext
 																					},{
 																						dataIndex : 'andRelation',
 																						header : me.xAlignmentAndRelation,
+																						renderer: function(value, meta, record, rowIndex, colIndex, store, view){	
+																							var alignmentType = record.data.alignmentType;
+																							var typeRecord = me.alignmentTypeStore.findRecord('identifier', alignmentType);
+																							if (typeRecord && typeRecord.data.multiConcept) {
+																								if (value){
+																									return me.xAlignmentAndRelation;
+																								}else  {
+																									return me.xAlignmentOrRelation;;
+																								}						
+																							}
+																							return '';
+																						}				
 																					}, {
 																						text: me.xAlignmentConcepts,
 																						dataIndex: 'targetConcepts',
