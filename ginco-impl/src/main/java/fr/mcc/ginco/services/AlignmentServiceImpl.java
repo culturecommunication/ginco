@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,17 +41,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.cxf.common.util.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
-import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.log.Log;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("alignmentService")
@@ -69,6 +69,9 @@ public class AlignmentServiceImpl implements IAlignmentService {
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
+	
+	@Log
+	private Logger logger;
 
 	@Override
 	public Alignment getAlignmentById(String identifier) {
@@ -117,6 +120,7 @@ public class AlignmentServiceImpl implements IAlignmentService {
 			}
 			Set<AlignmentConcept> concepts  = alignment.getTargetConcepts();
 			for (AlignmentConcept alignmentConcept: concepts) {
+				logger.debug("Updateing alignmentConcept with internalConceptId = " + alignmentConcept.getInternalTargetConcept().getIdentifier());
 				alignmentConceptDAO.update(alignmentConcept);
 			}
 

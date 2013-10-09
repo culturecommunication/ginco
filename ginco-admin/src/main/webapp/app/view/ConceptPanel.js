@@ -103,17 +103,13 @@ Ext
 					alignmentConceptRenderer : function(value, meta, record, rowIndex, colIndex, store, view)
 					{	
 						var targetConcepts = '';		
-						if (record.data['targetConcepts']) {
-							Ext.Array.each(record.data['targetConcepts'],function(targetConcept, index, array) {
-								targetConcepts += targetConcept.internalTargetConcept;
+						if (record.targetConcepts) {
+						Ext.Array.each(record.targetConcepts().getRange(),function(targetConcept, index, array) {
+								targetConcepts += targetConcept.get('internalTargetConcept');
 								targetConcepts += '<br/>';
-							});
-						} else {
-							Ext.Array.each(record.raw['targetConcepts'],function(targetConcept, index, array) {
-								targetConcepts += targetConcept.internalTargetConcept;
-								targetConcepts += '<br/>';
-							});
+						});
 						}
+						
 						return targetConcepts;
 					},				
 

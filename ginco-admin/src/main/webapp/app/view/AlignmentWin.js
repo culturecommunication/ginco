@@ -95,6 +95,7 @@ Ext
 												disabled : false,
 												iconCls : 'icon-add',
 												itemId : 'addInternalConceptId',
+												disabled : true,
 												cls: 'addInternalConcept',
 											}]
 										} ],

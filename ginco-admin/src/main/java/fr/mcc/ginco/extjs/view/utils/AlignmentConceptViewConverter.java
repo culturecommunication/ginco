@@ -38,12 +38,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.AlignmentConceptView;
+import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -56,7 +59,8 @@ public class AlignmentConceptViewConverter {
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-
+	@Log
+	private Logger logger;
 	/**
 	 * convert an Alignment object to an AlignmentView suitable for display
 	 * 
@@ -88,6 +92,7 @@ public class AlignmentConceptViewConverter {
 	 */
 	public AlignmentConcept convertAlignmentConceptView(
 			AlignmentConceptView alignmentConceptView, Alignment alignment) {
+		logger.debug("AlignmentConceptView to store : " + alignmentConceptView.toString());
 		AlignmentConcept alignmentConcept = new AlignmentConcept();
 		alignmentConcept.setAlignment(alignment);
 		
@@ -95,10 +100,13 @@ public class AlignmentConceptViewConverter {
 			alignmentConcept.setExternalTargetConcept(alignmentConceptView.getExternalTargetConcept());
 		}
 		if (StringUtils.isNotEmpty(alignmentConceptView.getInternalTargetConcept())) {
-			ThesaurusConcept target = thesaurusConceptService.getThesaurusConceptById(alignmentConceptView.getInternalTargetConcept());
+			ThesaurusConcept target = thesaurusConceptService.getThesaurusConceptById(alignmentConceptView.getInternalTargetConcept().trim());
+			if (target == null) {
+				throw new BusinessException("Alignment internal target concept does not exist",
+						"missing-alignment-internal-target-concept", new Object[]{alignmentConceptView.getInternalTargetConcept()});
+			}
 			alignmentConcept.setInternalTargetConcept(target);
 		}
-
 		return alignmentConcept;
 	}
 }

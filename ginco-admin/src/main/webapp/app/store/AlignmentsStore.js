@@ -38,7 +38,7 @@
  * This file contains all Thesaurus formats displayed in dropdown lists
  */
 Ext.define('GincoApp.store.AlignmentsStore', {
-    extend: 'Ext.data.Store',
+    extend: 'Ext.data.Store',  
 
     constructor: function(cfg) {
         var me = this;

@@ -333,14 +333,12 @@ Ext
 						model.data.andRelation = theForm.down('#isAndCheckbox').value;
 						model.data.alignmentType = theForm.down('#typeCombo').value;	
 						var fields = theForm.getForm().getFields();
-						model.data.targetConcepts=[];
-						
 				        for(idx in fields.items) {
 				        	field = fields.items[idx];
 				            if(field.getName() == 'internal_concept') {
 				            	var alignmentConceptModel = Ext.create('GincoApp.model.AlignmentTargetConceptModel');
-				            	alignmentConceptModel.internalTargetConcept=field.value;
-								model.data.targetConcepts.push(alignmentConceptModel);
+				            	alignmentConceptModel.set('internalTargetConcept',field.value);
+								model.targetConcepts().add(alignmentConceptModel);
 				            }				        	  
 				        }						
 						theAlignmentGridStore.add(model);
@@ -502,13 +500,13 @@ Ext
                         this.setupStoreListener(childrenGrid);
                         
                        //Load alignments to the grid's store
-						var alignment = aModel.alignments().getRange();
+						var alignments = aModel.alignments().getRange();						
                         var alignmentsGrid = aForm
                             .down('#gridPanelAlignments');
                         var alignmentsGridStore = alignmentsGrid
                             .getStore();
                         alignmentsGridStore.removeAll();
-                        alignmentsGridStore.add(alignment);
+                        alignmentsGridStore.add(alignments);
                         this.setupStoreListener(alignmentsGrid);
 
 						var rootConceptsGrid = aForm
@@ -701,8 +699,12 @@ Ext
 						var hierarchicalChildData = hierarchicalChildGrid.getStore().getRange();
 						
 						var alignmentsGrid = theForm.down('#gridPanelAlignments');
-						var alignmentsData = alignmentsGrid.getStore().getRange();							
-
+						var alignmentsData = alignmentsGrid.getStore().getRange();
+						Ext.Array.each(alignmentsData, function(alignment) {	
+							var targetConceptData = alignment.targetConceptsStore.getRange();
+							alignment.targetConcepts().removeAll();
+							alignment.targetConcepts().add(targetConceptData);
+						});
 						var thePanel = me.getActivePanel(theButton);
 
 						theForm.getEl().mask(me.xLoading);
@@ -716,7 +718,7 @@ Ext
                         updatedModel.childConcepts().removeAll();
                         updatedModel.childConcepts().add(hierarchicalChildData);
                         updatedModel.alignments().removeAll();
-                        updatedModel.alignments().add(alignmentsData);
+                        updatedModel.alignments().add(alignmentsData);						
 
 						updatedModel.data.rootConcepts = rootIds;
 

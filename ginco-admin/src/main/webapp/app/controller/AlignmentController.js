@@ -46,20 +46,46 @@ Ext.define('GincoApp.controller.AlignmentController',
 				var form = theCombobox.up('form');
 				var multiCheckbox=form.down('#isAndCheckbox');
 				if (theRecord[0].data.multiConcept) {					
-					multiCheckbox.show();
+					multiCheckbox.show();	
+					form.down('#addInternalConceptId').setDisabled(false);
 				} else {
 					multiCheckbox.hide();
+					if (form.getForm().findField("internal_concept")) {
+						form.down('#addInternalConceptId').setDisabled(true);
+						var fields = form.getForm().getFields();
+						var cpt = 0;
+				        for(idx in fields.items) {
+				        	field = fields.items[idx];
+				            if(field.getName() == 'internal_concept') {
+				            	if (cpt > 0) {
+				            		form.remove(field);
+				            	}
+				            	cpt ++;				           
+				            }
+				        }
+					} else {
+						form.down('#addInternalConceptId').setDisabled(false);
+					}
 				}
 			},
 			
-			displayAddInternalConceptField: function(theButton, eOpts) {
-				var me=this;
-				var alignmentForm = theButton.up('form');	
-					var tf = Ext.create('Ext.form.field.Text', {
-	                    name: 'internal_concept',
-	                    fieldLabel: me.xInternalConceptId
-					});
-					alignmentForm.add(tf);		
+			displayAddInternalConceptField: function(theButton, e, eOpts) {
+				var me=this;							
+				var alignmentForm = theButton.up('form');							
+				
+				var tf = Ext.create('Ext.form.field.Text', {
+	                   name: 'internal_concept',
+	                   fieldLabel: me.xInternalConceptId
+				});
+				alignmentForm.add(tf);	
+				
+				var multiCheckbox=alignmentForm.down('#typeCombo');
+				var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
+				if (!theRecord.data.multiConcept) {		
+					if (alignmentForm.getForm().findField("internal_concept")) {
+						alignmentForm.down('#addInternalConceptId').setDisabled(true);
+					}
+				}
 			},
 			
 			init : function() {			

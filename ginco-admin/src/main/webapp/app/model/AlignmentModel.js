@@ -35,6 +35,7 @@
 
 Ext.define('GincoApp.model.AlignmentModel', {
     extend: 'Ext.data.Model',
+    requires: ['GincoApp.model.AlignmentTargetConceptModel'],
 
     fields: [
         {
@@ -72,7 +73,7 @@ Ext.define('GincoApp.model.AlignmentModel', {
     ],   
    idProperty : 'identifier',
    associations: [
-                  {type: 'hasMany', model: 'GincoApp.model.AlignmentTargetConceptModel',    name: 'targetConcepts'}
+                  {type: 'hasMany', model: 'GincoApp.model.AlignmentTargetConceptModel', name: 'targetConcepts'}
                  
   ]
     
