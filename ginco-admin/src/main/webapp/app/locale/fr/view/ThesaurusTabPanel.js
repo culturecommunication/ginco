@@ -36,7 +36,7 @@
 /*
  * File: app/locale/fr/view/ThesaurusPanel.js
  * Thesaurus Translated Items
- * 
+ *
  */
 Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
 	    xNewLabel : 'Nouveau',
@@ -52,7 +52,8 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
         xNewMenu_ConceptAndTermLabel : 'Concept + Terme',
 	    xNewMenu_TermLabel : 'Terme seul',
 	    xNewMenu_ConceptLabel: 'Concept seul',
-	    
+	    xNewMenu_DynamicGroupLabel : 'Groupe dynamique',
+
         xSave : "Enregistrer",
         xDelete : "Supprimer",
         xVersionsTab : 'Versions',

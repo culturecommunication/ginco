@@ -130,6 +130,18 @@ public class ThesaurusConceptGroupViewConverter {
 			hibernateRes.setParent(thesaurusConceptGroupService.getConceptGroupById(source.getParentGroupId()));
 		}
 
+		if (source.getIsDynamic() != null) {
+			hibernateRes.setIsDynamic(source.getIsDynamic());
+		}
+
+		if (StringUtils.isNotEmpty(source.getParentConceptId())) {
+			hibernateRes.setParentConcept(thesaurusConceptService
+					.getThesaurusConceptById(source.getParentConceptId()));
+		} else
+		{
+			hibernateRes.setParentConcept(null);
+		}
+
 		return hibernateRes;
 	}
 
@@ -151,6 +163,7 @@ public class ThesaurusConceptGroupViewConverter {
 			thesaurusConceptGroupView.setLanguage(label.getLanguage().getId());
 			thesaurusConceptGroupView.setNotation(source.getNotation());
 			thesaurusConceptGroupView.setGroupConceptLabelId(label.getIdentifier());
+			thesaurusConceptGroupView.setIsDynamic(source.getIsDynamic());
 
 			List<String> conceptsIds = new ArrayList<String>();
 			for (ThesaurusConcept concept: source.getConcepts()) {
@@ -163,6 +176,14 @@ public class ThesaurusConceptGroupViewConverter {
 				thesaurusConceptGroupView.setParentGroupId(source.getParent().getIdentifier());
 				ThesaurusConceptGroupLabel labelOfParent = thesaurusConceptGroupLabelService.getByThesaurusConceptGroupAndLanguage(source.getParent().getIdentifier());
 				thesaurusConceptGroupView.setParentGroupLabel(labelOfParent.getLexicalValue());
+			}
+
+			if (source.getParentConcept() != null) {
+				//We set id and label of parent concept
+				thesaurusConceptGroupView.setParentConceptId(source.getParentConcept().getIdentifier());
+				thesaurusConceptGroupView.setParentConceptLabel(thesaurusConceptService
+						.getConceptLabel(source.getParentConcept()
+								.getIdentifier()));
 			}
 		}
 

@@ -49,7 +49,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 		sandboxPanel : 'GincoApp.view.SandBoxPanel',
 		complexconceptsPanel: 'GincoApp.view.ComplexConceptsPanel'
 	},
-	
+
 	onNewThesaurus : function (thePanel) {
 		var newThesaurusFormPanel = Ext.create('GincoApp.view.ThesaurusPanel');
 		var itemTabPanel = thePanel.down('#thesaurusItemsTabPanel');
@@ -100,19 +100,19 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	openSandboxTab : function (tabPanel)
 	{
 		this.openGenericTab(tabPanel, "sandboxPanel","GincoApp.view.SandBoxPanel", {gincoId : null});
-	}, 
+	},
 	openGroupTab : function (tabPanel, aGroupId)
 	{
 		this.openGenericTab(tabPanel, "conceptGroupPanel","GincoApp.view.ConceptGroupPanel", {gincoId : aGroupId});
-	}, 
+	},
 	openArrayTab : function (tabPanel, aArrayId)
 	{
 		this.openGenericTab(tabPanel, "conceptArrayPanel","GincoApp.view.ConceptArrayPanel", {gincoId : aArrayId});
-	}, 
+	},
 	openComplexConceptsTab : function (tabPanel)
 	{
 		this.openGenericTab(tabPanel, "complexconceptsPanel","GincoApp.view.ComplexConceptsPanel", {gincoId : null});
-	}, 
+	},
 	openComplexConceptTab: function (tabPanel, aConceptId)
 	{
 		this.openGenericTab(tabPanel, "complexconceptPanel","GincoApp.view.ComplexConceptPanel", {gincoId : aConceptId});
@@ -165,14 +165,21 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 
 	onNewConceptGroupBtnClick : function(theButton) {
 		var thePanel = theButton.up('thesaurusTabPanel');
-		this.openGenericTab(thePanel,"conceptGroupPanel","GincoApp.view.ConceptGroupPanel", {gincoId : null});
+		var groupOptions = {gincoId : null, isDynamic : false};
+		this.openGenericTab(thePanel,"conceptGroupPanel","GincoApp.view.ConceptGroupPanel", groupOptions);
+	},
+
+	onNewConceptDynamicGroupBtnClick : function(theButton) {
+		var thePanel = theButton.up('thesaurusTabPanel');
+		var groupOptions = {gincoId : null, isDynamic : true};
+		this.openGenericTab(thePanel,"conceptGroupPanel","GincoApp.view.ConceptGroupPanel", groupOptions);
 	},
 
 	onNewComplexConceptBtnClick : function (theButton) {
 		var thePanel = theButton.up('thesaurusTabPanel');
 		this.openGenericTab(thePanel, "complexconceptPanel","GincoApp.view.ComplexConceptPanel", {gincoId : null});
 	},
-	
+
 	exportHierarchical : function(theButton) {
         var thePanel = theButton.up('thesaurusTabPanel');
         var url = "services/ui/exportservice/getHierarchical?thesaurusId="
@@ -207,7 +214,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
             + encodeURIComponent(thePanel.thesaurusData.id);
         window.open(url);
     },
-    
+
     importSandboxClick : function(theButton) {
     	var me = this;
     	var thePanel = theButton.up('thesaurusTabPanel');
@@ -218,7 +225,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
     	var thePanel = theButton.up('thesaurusTabPanel');
     	Ext.create('GincoApp.view.ImportWin', {importType: 'gincoBranchXml', thesaurusData:thePanel.thesaurusData, xTitleLabel: '<h1>' + me.xImportBranchTitle + '</h1>'});
 	},
-	
+
 	onPanelBeforeClose : function(thePanel) {
 		var me = this;
 		var theForm = thePanel.down('form');
@@ -335,7 +342,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			component.restrictUI('ADMIN');
 		}
 	},
-	
+
 	init : function(application) {
 		this.application.on({
 	        scope: this
@@ -407,6 +414,9 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			"thesaurusTabPanel #newConceptGroupBtn" : {
 				click : this.onNewConceptGroupBtnClick
 			},
+            "thesaurusTabPanel #newConceptDynamicGroupBtn" : {
+            	click : this.onNewConceptDynamicGroupBtnClick
+            },
 			"thesaurusTabPanel #editJournal" : {
                 click : this.exportJournal
             },
@@ -415,7 +425,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
             },
             "thesaurusTabPanel #importBranch" : {
                 click : this.importBranch
-            },
+            }
 		});
 	}
 });

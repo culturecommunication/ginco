@@ -74,6 +74,18 @@ Ext.define('GincoApp.model.ConceptGroupModel', {
             type: 'string'
         },
         {
+            name: 'isDynamic',
+            type: 'boolean'
+        },
+        {
+            name: 'parentConceptId',
+            type: 'string'
+        },
+        {
+            name: 'parentConceptLabel',
+            type: 'string'
+        },
+        {
             name: 'parentGroupId',
             type: 'string'
         },

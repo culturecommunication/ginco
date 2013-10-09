@@ -61,6 +61,9 @@ public class ThesaurusConceptGroupView implements Serializable {
 	private List<String> concepts;
 	private String parentGroupId;
 	private String parentGroupLabel;
+	private String parentConceptId;
+	private String parentConceptLabel;
+	private Boolean isDynamic;
 
 	public String getIdentifier() {
 		return identifier;
@@ -158,6 +161,27 @@ public class ThesaurusConceptGroupView implements Serializable {
 		this.parentGroupLabel = parentGroupLabel;
 	}
 
+	public String getParentConceptId() {
+		return parentConceptId;
+	}
 
+	public void setParentConceptId(String parentConceptId) {
+		this.parentConceptId = parentConceptId;
+	}
 
+	public String getParentConceptLabel() {
+		return parentConceptLabel;
+	}
+
+	public void setParentConceptLabel(String parentConceptLabel) {
+		this.parentConceptLabel = parentConceptLabel;
+	}
+
+	public Boolean getIsDynamic() {
+		return isDynamic;
+	}
+
+	public void setIsDynamic(Boolean isDynamic) {
+		this.isDynamic = isDynamic;
+	}
 }

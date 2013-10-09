@@ -26,7 +26,7 @@
 
 /*
  * File: app/view/ThesaurusPanel.js Thesaurus Creation Form
- * 
+ *
  */
 
 Ext.define('GincoApp.view.ThesaurusTabPanel', {
@@ -89,6 +89,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 	xNewMenu_ConceptAndTermLabel : 'Concept + term',
 	xNewMenu_TermLabel : "Term only",
 	xNewMenu_ConceptLabel : "Concept only",
+	xNewMenu_DynamicGroupLabel : "Dynamic group",
 
 	initComponent : function() {
 		var me = this;
@@ -116,7 +117,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 						    text : me.xNewMenu_ConceptAndTermLabel,
 						    itemId : 'newConceptAndTermBtn',
 						    cmdTxt : 'Ctrl+2'
-						},{        
+						},{
 							xtype : 'keymenuitem',
 							text : me.xNewMenu_TermLabel,
 							itemId : 'newTermBtn',
@@ -130,7 +131,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							xtype : 'keymenuitem',
 							text : me.xNewMenu_ComplexConceptLabel,
 							itemId : 'newComplexConceptBtn',
-							cmdTxt : 'Ctrl+4'
+							cmdTxt : 'Ctrl+5'
 						}, {
 							xtype : 'keymenuitem',
 							text : me.xNewMenu_ConceptArrayLabel,
@@ -141,6 +142,11 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							text : me.xNewMenu_GroupLabel,
 							itemId : 'newConceptGroupBtn',
 							cmdTxt : 'Ctrl+7'
+						}, {
+							xtype : 'keymenuitem',
+							text : me.xNewMenu_DynamicGroupLabel,
+							itemId : 'newConceptDynamicGroupBtn',
+							cmdTxt : 'Ctrl+8'
 						} ]
 					}
 				}, , {

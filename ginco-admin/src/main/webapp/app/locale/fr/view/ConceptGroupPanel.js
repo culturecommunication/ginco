@@ -40,8 +40,10 @@
  */
 Ext.define('GincoApp.locale.fr.view.ConceptGroupPanel', {
 	xConceptGroupTitle : 'Groupe de concept',
+	xConceptGroupFormTitle : 'Groupe de concepts',
 	xSave : 'Enregistrer',
 	xDelete : 'Supprimer',
+	xMetadataTitle : 'Métadonnées',
     xIdentifierLabel : 'Identifiant',
     xCreatedLabel : 'Date de création',
     xModifiedLabel : 'Date de modification',
@@ -49,14 +51,15 @@ Ext.define('GincoApp.locale.fr.view.ConceptGroupPanel', {
     xTypeLabel : 'Type',
     xLanguageLabel : 'Langue',
     xNotationLabel : 'Notation',
-    xConceptGroupFormTitle : 'Groupe de concepts',
+    xParentGroupLabel : 'Groupe parent',
+    xSelectParentGroup : 'Sélectionner un groupe parent',
+    xRemoveParentGroup : 'Supprimer le groupe parent',
+    xParentConceptLabel : 'Concept parent',
+	xSelectParentConcept : 'Sélectionner un concept parent',
+	xRemoveParentConcept : 'Supprimer le concept parent',
     xConceptsGrid : 'Concepts',
     xActions : 'Actions',
     xLexicalValueLabel : 'Valeur lexicale',
     xAssociationRemove : 'Détacher ce concept',
-    xAddConceptToGroupArray : 'Ajouter un concept',
-    xParentGroupLabel : 'Groupe parent',
-    xSelectParentGroup : 'Sélectionner un groupe parent',
-    xRemoveParentGroup : 'Supprimer le groupe parent',
-    xMetadataTitle : 'Métadonnées'
+    xAddConceptToGroupArray : 'Ajouter un concept'
 });
