@@ -105,6 +105,7 @@ public class AlignmentConceptViewConverter {
 				throw new BusinessException("Alignment internal target concept does not exist",
 						"missing-alignment-internal-target-concept", new Object[]{alignmentConceptView.getInternalTargetConcept()});
 			}
+			
 			alignmentConcept.setInternalTargetConcept(target);
 		}
 		return alignmentConcept;

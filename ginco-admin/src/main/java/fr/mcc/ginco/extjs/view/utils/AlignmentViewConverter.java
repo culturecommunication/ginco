@@ -48,7 +48,9 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.AlignmentConceptView;
 import fr.mcc.ginco.extjs.view.pojo.AlignmentView;
 import fr.mcc.ginco.log.Log;
@@ -159,17 +161,33 @@ public class AlignmentViewConverter {
 		alignment.setSourceConcept(convertedConcept);
 
 		Set<AlignmentConcept> targets = new HashSet<AlignmentConcept>();
-		if (alignmentView.getTargetConcepts() != null) {
+		if (alignmentView.getTargetConcepts() != null && !alignmentView.getTargetConcepts().isEmpty()) {
+			String targetInternalthesaurusId = "";
 			for (AlignmentConceptView alignmentConceptview : alignmentView
 					.getTargetConcepts()) {
 				logger.debug("Found " +  alignmentView
 						.getTargetConcepts().size()
 						+ " target concepts view to convert");
+				
 				AlignmentConcept target = alignmentConceptViewConverter
 						.convertAlignmentConceptView(alignmentConceptview,
 								alignment);
 				targets.add(target);
+				
+				if (StringUtils.isEmpty(targetInternalthesaurusId)) {
+					targetInternalthesaurusId = target.getInternalTargetConcept().getThesaurusId();
+				} else if (!targetInternalthesaurusId.equals(target.getInternalTargetConcept().getThesaurusId())) {
+					throw new BusinessException("Internal target concepts not in the same thesaurus",
+							"no-unique-thesaurus-for-internal-target-concepts");
+				}
 			}
+		} else {
+			throw new BusinessException("Missing target concept for alignment", "missing-target-concepts-for-alignment");
+		}
+		AlignmentConcept firstTarget = targets.iterator().next();
+		if (firstTarget.getInternalTargetConcept() != null) {
+			Thesaurus internalTargetThesaurus = firstTarget.getInternalTargetConcept().getThesaurus();
+			alignment.setInternalTargetThesaurus(internalTargetThesaurus);
 		}
 		alignment.setTargetConcepts(targets);
 

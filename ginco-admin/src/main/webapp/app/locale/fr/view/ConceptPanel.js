@@ -75,7 +75,9 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
     xAlignments : 'Alignements',
     xAddAlignment: 'Ajouter un alignement',
 	xAlignmentType : 'Type',
-	xAlignmentAndRelation : 'ET',
+	xAlignmentAndRelation : 'Relation',
 	xAlignmentConcepts: 'Concepts',
-	xAlignmentRemove: 'Supprimer l\'alignment'
+	xAlignmentRemove: 'Supprimer l\'alignment',
+	xAlignmentAndRelation: 'ET',
+	xAlignmentOrRelation: 'OU',
 });
