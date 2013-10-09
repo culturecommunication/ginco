@@ -1,4 +1,10 @@
 ALTER TABLE concept_group ADD COLUMN notation text;
+ALTER TABLE concept_group ADD COLUMN isdynamic boolean;
+ALTER TABLE concept_group ADD COLUMN parentconceptid text;
+ALTER TABLE concept_group
+  ADD CONSTRAINT fk_group_parent_concept FOREIGN KEY (parentconceptid)
+      REFERENCES  thesaurus_concept (identifier) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 -- Table: alignment
 CREATE TABLE alignment
@@ -79,14 +85,15 @@ ALTER TABLE alignment
   ADD CONSTRAINT fk_alignment_type FOREIGN KEY (alignment_type)
       REFERENCES alignment_type (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
-      
+
 -- ALTER TABLE alignment DROP CONSTRAINT fk_alignment_external_thesaurus;
 ALTER TABLE alignment
   ADD CONSTRAINT fk_alignment_external_thesaurus FOREIGN KEY (external_target_thesaurus_id)
       REFERENCES external_thesaurus (identifier) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;    
-      
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
 -- Indexes on table alignment
 CREATE INDEX idx_alignment_sourceconceptid
   ON alignment
-  USING btree (source_concept_id); 
+  USING btree (source_concept_id);
+

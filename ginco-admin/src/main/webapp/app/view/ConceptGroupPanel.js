@@ -53,8 +53,10 @@ Ext
 
 					// Labels
 					xConceptGroupTitle : 'Concept Group',
+					xConceptsGrid : 'Concepts',
 					xSave : 'Save',
 					xDelete : 'Delete',
+					xMetadataTitle : 'Metadata',
 					xIdentifierLabel : 'Identifier',
 					xCreatedLabel : 'Created',
 					xModifiedLabel : 'Modified',
@@ -63,15 +65,16 @@ Ext
 					xLanguageLabel : 'Language',
 					xNotationLabel : 'Notation',
 					xConceptGroupFormTitle : 'Concept group',
-					xConceptsGrid : 'Concepts',
+					xParentGroupLabel : 'Parent group',
+					xSelectParentGroup : 'Select a parent group',
+					xRemoveParentGroup : 'Remove parent group',
+					xParentConceptLabel : 'Parent Concept',
+					xSelectParentConcept : 'Select a parent concept',
+					xRemoveParentConcept : 'Remove parent concept',
 					xActions : 'Actions',
 					xLexicalValueLabel : 'Lexical value',
 					xAssociationRemove : 'Detach this concept',
 					xAddConceptToGroupArray : 'Add a concept',
-					xParentGroupLabel : 'Parent group',
-					xSelectParentGroup : 'Select a parent group',
-					xRemoveParentGroup : 'Remove parent group',
-					xMetadataTitle : 'Metadata',
 
 					initComponent : function() {
 						var me = this;
@@ -236,10 +239,51 @@ Ext
 																	}]
 														},
 														{
+															xtype : 'hidden',
+															name : 'parentConceptId',
+															hidden : true
+														},
+														{
+															xtype : 'container',
+															itemId : 'parentConceptContainer',
+															hidden : true,
+															layout : 'column',
+															defaults : {
+																margin : '0 0 5 0',
+																layout : 'anchor'
+															},
+															items : [
+																	{
+																		xtype : 'textfield',
+																		name : 'parentConceptLabel',
+																		fieldLabel : me.xParentConceptLabel,
+																		allowBlank : true,
+																		readOnly : true
+																	},
+																	{
+																		xtype : 'button',
+																		text : me.xSelectParentConcept,
+																		disabled : false,
+																		requiredRoles : ['ADMIN'],
+																		itemId : 'selectParentConcept',
+																		cls : 'add',
+																		iconCls : 'icon-add'
+																	} ,
+																	{
+																		xtype : 'button',
+																		text : me.xRemoveParentConcept,
+																		disabled : true,
+																		requiredRoles : ['ADMIN'],
+																		itemId : 'removeParentConcept',
+																		iconCls : 'icon-delete'
+																	}]
+														},
+														{
 															xtype : 'gridpanel',
 															itemId : 'gridConceptGroupPanelConcepts',
 															title : me.xConceptsGrid,
 															store : me.associatedConceptToGroupStore,
+															hidden : true,
 
 															dockedItems : [ {
 																xtype : 'toolbar',

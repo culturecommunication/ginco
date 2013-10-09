@@ -54,6 +54,8 @@ public class ThesaurusConceptGroup implements Serializable{
     private Thesaurus thesaurus;
     private ThesaurusConceptGroupType conceptGroupType;
     private String notation;
+    private Boolean isDynamic;
+    private ThesaurusConcept parentConcept;
     private Set<ThesaurusConcept> concepts;
 
     @XmlTransient
@@ -82,6 +84,18 @@ public class ThesaurusConceptGroup implements Serializable{
 	}
 	public void setNotation(String notation) {
 		this.notation = notation;
+	}
+	public Boolean getIsDynamic() {
+		return isDynamic;
+	}
+	public void setIsDynamic(Boolean isDynamic) {
+		this.isDynamic = isDynamic;
+	}
+	public ThesaurusConcept getParentConcept() {
+		return parentConcept;
+	}
+	public void setParentConcept(ThesaurusConcept parentConcept) {
+		this.parentConcept = parentConcept;
 	}
 	public Set<ThesaurusConcept> getConcepts() {
 		return concepts;
