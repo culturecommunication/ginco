@@ -68,6 +68,7 @@ Ext
 					xRelationLabel : 'Relation',
 					xSourceLabel : 'Source',
 					xTermPanelTitle : 'New Complex Concept',
+					xTermBottomTabPanelTitle : 'Complex Concept data',
 					xNotesTab : 'Notes of this term',
 					xStatusLabel : 'Status',
 					xPreferredTermsTableTitle : 'Preferred terms',
@@ -93,11 +94,12 @@ Ext
 											items : [ {
 												xtype : 'tabpanel',
 												flex:1,
+												tabPosition : 'bottom',
 												items : [
 														{
 															xtype : 'form',
 															itemId : 'termForm',
-															title : me.xTermPanelTitle,
+															title : me.xTermBottomTabPanelTitle,
 															flex : 1,
 															requiredRoles : ['ADMIN'],
 															autoScroll : true,

@@ -125,7 +125,6 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		var termPanel = aForm.up('complexconceptPanel');
 		var deleteBtn = aForm.down('#delete');
 		termPanel.setTitle("Concept complexe : "+aModel.data.lexicalValue);
-		aForm.setTitle(aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
 		termPanel.gincoId = aModel.data.identifier;
 		var preferredTerms = aModel.preferredTerms().getRange();
@@ -157,7 +156,6 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 	{
 		var me = this;
 		var theForm = theButton.up('form');
-		var thePanel = theForm.up('complexconceptPanel');
 		var thesPanel = theForm.up('thesaurusTabPanel');
 		if (theForm.getForm().isValid()) {
 			theForm.getEl().mask(me.xLoading);
@@ -190,7 +188,6 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 	},
 	addPreferredTerm :function(theButton)
 	{
-		var me = this;
 		var thePanel = theButton.up('complexconceptPanel');
 		var win = Ext.create('GincoApp.view.SelectTermWin', {
 			onlyValidatedTerms : true,
@@ -212,7 +209,6 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 
 	onPreferredTermDblClick : function(theGrid, record, item, index, e,
 			eOpts) {
-		var me = this;
 		var thePanel = theGrid.up('complexconceptPanel');
 		var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		topTabs.fireEvent('opentermtab', topTabs, thePanel.up('thesaurusTabPanel').thesaurusData.id,

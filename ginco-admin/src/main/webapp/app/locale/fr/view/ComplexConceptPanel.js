@@ -49,6 +49,7 @@ Ext.define('GincoApp.locale.fr.view.ComplexConceptPanel', {
 	xLanguagesLabel : 'Langue',
 	xSourceLabel : 'Source',
 	xTermPanelTitle : 'Nouveau concept complexe',
+	xTermBottomTabPanelTitle : 'Fiche concept complexe',
 	xNotesTab : 'Notes',
 	xStatusLabel : 'Statut',
 	xPreferredTermsTableTitle : 'Termes préférentiels',
