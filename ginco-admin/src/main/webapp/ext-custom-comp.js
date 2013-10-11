@@ -251,7 +251,7 @@ Ext.define('Thesaurus.Component', {
 	restrict : function() {
 		this.setDisabled(true);
 		// Set No-OP for enable function...
-		this.enable = function () { 
+		this.enable = function () {
 		};
 	}
 });
@@ -280,6 +280,7 @@ Ext.define('Thesaurus.CustomAttrForm', {
 		me.metadataStore.getProxy().extraParams = {
             thesaurusId: thesaurusId
         };
+
 		me.metadataStore.load({
 			scope: this,
 		    callback: function(records, operation, success) {
@@ -287,14 +288,27 @@ Ext.define('Thesaurus.CustomAttrForm', {
 		    		for (var i=0;i<records.length;i++)
 		    		{
 		    			var record = records[i];
-		    			var field = Ext.create('Ext.form.field.Text', {
-		    				fieldLabel : record.get('value'),
-		    				name : 'customattr_'+record.get('identifier'),
-		    				anchor : '70%'
+		    			var attributField = Ext.create('Ext.container.Container', {
+							layout : 'column',
+							anchor : '70%',
+							defaults : {
+								margin : '0 0 5 0'
+							},
+		    			    items: [{
+		    			        xtype: 'textfield',
+		    			        fieldLabel : record.get('value'),
+			    				name : 'customattr_'+record.get('identifier'),
+			    				columnWidth: 1
+		    			    },{
+		    			        xtype: 'button',
+		    			        iconCls : 'icon-display',
+		    			        itemId : 'customattrurl_'+record.get('identifier'),
+		    			        hidden : true,
+		    			        margin : '0 0 0 5'
+		    			    }]
 		    			});
-		    			me.add(field);
-		    			field.show();
-		    			
+						me.add(attributField);
+						attributField.show();
 		    		}
 		    		if (aCallback)
 	    				aCallback();
@@ -323,14 +337,32 @@ Ext.define('Thesaurus.CustomAttrForm', {
 		for (var i=0;i<records.length;i++)
 		{
 			var record = records[i];
-			var data = {
-					id : 'customattr_'+record.get('typeid'),
-					value : record.get('lexicalValue'),
+			var recordTypeId = record.get('typeid');
+			var recordLexicalValue = record.get('lexicalValue');
+
+			// Check URIs
+			var urlReg = new RegExp("(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z](\/\S*)?");
+			var theButton = me.down('#customattrurl_' + recordTypeId);
+			if (urlReg.test(recordLexicalValue)) {
+				theButton.show();
+				theButton.on('click', function(url) {
+					return function() {
+						window.open(url);
+					};
+				} (recordLexicalValue), this);
+			} else {
+				theButton.hide();
 			}
+
+			var data = {
+					id : 'customattr_' + recordTypeId,
+					value : recordLexicalValue,
+			};
 			arrayOfAttribute.push(data);
 		}
 		me.getForm().setValues(arrayOfAttribute);
 	},
+
 	save : function (entityID, lang) {
 		var me = this;
 		if (me.items.length>0) {
@@ -353,7 +385,7 @@ Ext.define('Thesaurus.CustomAttrForm', {
 				}
 			});
 		}
-		
+
 	}
 });
 
@@ -371,20 +403,20 @@ Ext.apply(Ext.form.CheckboxManager,{
 
 Ext.define('Secure.data.writer.Writer', {
 	override : 'Ext.data.writer.Writer',
-    
+
     /**
      * @cfg {Boolean} writeAllFields
      * True to write all fields from the record to the server. If set to false it will only send the fields that were
      * modified. Note that any fields that have {@link Ext.data.Field#persist} set to false will still be ignored.
      */
     writeAllFields: true,
-    
+
     /**
      * @cfg {String} dateFormat
      * This is used for each field of type date in the model to format the value before
      * it is sent to the server.
      */
-    
+
     /**
      * @cfg {String} nameProperty
      * This property is used to read the key for each value that will be sent to the server. For example:
@@ -502,7 +534,7 @@ Ext.define('Secure.data.writer.Writer', {
             data[record.idProperty] = record.getId();
         }
         var me = this, i, association, childStore;
-        
+
         for (i = 0; i < record.associations.length; i++) {
 			association = record.associations.get(i);
 			if (association.type == 'hasMany') {
@@ -526,12 +558,12 @@ Ext.define('Secure.data.writer.Writer', {
 
         return data;
     },
-    
+
     writeValue: function(data, field, record){
         var name = field[this.nameProperty] || field.name,
             dateFormat = this.dateFormat || field.dateWriteFormat || field.dateFormat,
             value = record.get(field.name);
-            
+
         if (field.serialize) {
             data[name] = field.serialize(value, record);
         } else if (field.type === Ext.data.Types.DATE && dateFormat && Ext.isDate(value)) {
@@ -539,7 +571,7 @@ Ext.define('Secure.data.writer.Writer', {
         } else {
         	//if (Ext.isString(value))
         	//	data[name] = Ext.String.htmlEncode(value);
-        	//else 
+        	//else
         		data[name] = value;
         }
     }

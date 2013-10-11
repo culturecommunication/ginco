@@ -121,9 +121,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         var theGrid = theButton.up('#termAttributTypesGrid');
         var termsGridStore = theGrid.getStore();
         var model = Ext.create('GincoApp.model.CustomAttributeTypeModel');
-
-        var thesaurusData = theButton.up('thesaurusPanel').thesaurusData;
-
+        var thesaurusData = theButton.up('thesaurusTabPanel').thesaurusData;
         model.set('thesaurusId',thesaurusData.id);
         model.set('value','Nouvel attribut');
         model.set('code','code');

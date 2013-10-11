@@ -97,24 +97,24 @@ Ext
 					xAlignmentRemove: 'Remove alignment',
 					xAlignmentAndRelation: 'AND',
 					xAlignmentOrRelation: 'OR',
-					
+
 					conceptHierarchicalRoleRenderer : function(value, record) {
 						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
 					},
-					
+
 					alignmentConceptRenderer : function(value, meta, record, rowIndex, colIndex, store, view)
-					{	
-						var targetConcepts = '';		
+					{
+						var targetConcepts = '';
 						if (record.targetConcepts) {
 						Ext.Array.each(record.targetConcepts().getRange(),function(targetConcept, index, array) {
 								targetConcepts += targetConcept.get('internalTargetConcept');
 								targetConcepts += '<br/>';
 						});
 						}
-						
+
 						return targetConcepts;
-					},					
-					
+					},
+
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
@@ -158,8 +158,8 @@ Ext
 						me.customAttrStore = Ext
 								.create('GincoApp.store.CustomConceptAttributeStore');
 						me.alignmentsStore = Ext
-						.create('GincoApp.store.AlignmentsStore');			
-						me.alignmentTypeStore = Ext.create('GincoApp.store.AlignmentTypeStore');				
+						.create('GincoApp.store.AlignmentsStore');
+						me.alignmentTypeStore = Ext.create('GincoApp.store.AlignmentTypeStore');
 
 
 						Ext
@@ -278,7 +278,7 @@ Ext
 																					name : 'notation',
 																					fieldLabel : me.xNotationLabel,
 																					anchor : '70%',
-																					padding : '5 0 0 0',
+																					padding : '5 0 0 0'
 																				},
 																				{
 																					trackResetOnLoad : true,
@@ -615,7 +615,7 @@ Ext
 
 																									}
 																								} ]
-																							} ]																																		
+																							} ]
 
 																		},{
 																			xtype : 'gridpanel',
@@ -643,16 +643,16 @@ Ext
 																						dataIndex : 'alignmentType',
 																						text : me.xAlignmentType,
 																						renderer : function(value, meta, record, rowIndex, colIndex, store, view)
-																						{			
+																						{
 																							var record = me.alignmentTypeStore.findRecord( 'identifier', value);
-																							if (record != null) 
+																							if (record != null)
 																								return record.data.label;
 																						}
-																						
+
 																					},{
 																						dataIndex : 'andRelation',
 																						header : me.xAlignmentAndRelation,
-																						renderer: function(value, meta, record, rowIndex, colIndex, store, view){	
+																						renderer: function(value, meta, record, rowIndex, colIndex, store, view){
 																							var alignmentType = record.data.alignmentType;
 																							var typeRecord = me.alignmentTypeStore.findRecord('identifier', alignmentType);
 																							if (typeRecord && typeRecord.data.multiConcept) {
@@ -660,10 +660,10 @@ Ext
 																									return me.xAlignmentAndRelation;
 																								}else  {
 																									return me.xAlignmentOrRelation;;
-																								}						
+																								}
 																							}
 																							return '';
-																						}				
+																						}
 																					}, {
 																						text: me.xAlignmentConcepts,
 																						dataIndex: 'targetConcepts',
@@ -677,8 +677,8 @@ Ext
 																							icon : 'images/detach.png',
 																							tooltip : me.xAlignmentRemove
 																						} ]
-																					} 
-																			]																		
+																					}
+																			]
 																		}
 																		]
 															} ]
