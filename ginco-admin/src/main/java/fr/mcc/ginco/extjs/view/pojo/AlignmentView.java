@@ -44,7 +44,7 @@ public class AlignmentView {
 	private Boolean andRelation;
 	private Integer alignmentType;
 	private String internalThesaurusId;
-	private String externalThesaurusId;
+	private List<ExternalThesaurusView> externalThesaurus;
     private List<AlignmentConceptView> targetConcepts;
 
 	public String getIdentifier() {
@@ -93,17 +93,17 @@ public class AlignmentView {
 
 	public void setInternalThesaurusId(String internalThesaurusId) {
 		this.internalThesaurusId = internalThesaurusId;
+	}	   
+
+	public List<ExternalThesaurusView> getExternalThesaurus() {
+		return externalThesaurus;
 	}
 
-	public String getExternalThesaurusId() {
-		return externalThesaurusId;
+	public void setExternalThesaurus(List<ExternalThesaurusView> externalThesaurus) {
+		this.externalThesaurus = externalThesaurus;
 	}
 
-	public void setExternalThesaurusId(String externalThesaurusId) {
-		this.externalThesaurusId = externalThesaurusId;
-	}
-
-    public List<AlignmentConceptView> getTargetConcepts() {
+	public List<AlignmentConceptView> getTargetConcepts() {
         return targetConcepts;
     }
 

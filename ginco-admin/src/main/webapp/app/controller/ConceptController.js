@@ -33,7 +33,7 @@ Ext
 					stores : [ 'MainTreeStore', 'SimpleConceptStore',
                             'AssociationStore', 'AssociationRoleStore', 'HierarchicalAssociationStore', 'AlignmentsStore' ],
 					models : [ 'ConceptModel', 'ThesaurusModel',
-							'SimpleConceptModel', 'AssociationModel', 'HierarchicalAssociationModel', 'AlignmentModel' ],
+							'SimpleConceptModel', 'AssociationModel', 'HierarchicalAssociationModel', 'AlignmentModel', 'ExternalThesaurusModel' ],
 
 					localized : true,
 					_myAppGlobal : this,
@@ -332,6 +332,9 @@ Ext
 						var model = Ext.create('GincoApp.model.AlignmentModel');
 						model.data.andRelation = theForm.down('#isAndCheckbox').value;
 						model.data.alignmentType = theForm.down('#typeCombo').value;	
+						
+						var externalThesaurusModel = Ext.create('GincoApp.model.ExternalThesaurusModel');
+						
 						var fields = theForm.getForm().getFields();
 				        for(idx in fields.items) {
 				        	field = fields.items[idx];
@@ -339,8 +342,20 @@ Ext
 				            	var alignmentConceptModel = Ext.create('GincoApp.model.AlignmentTargetConceptModel');
 				            	alignmentConceptModel.set('internalTargetConcept',field.value);
 								model.targetConcepts().add(alignmentConceptModel);
-				            }				        	  
-				        }						
+				            }		
+				            if(field.getName() == 'external_concept') {
+				            	var alignmentConceptModel = Ext.create('GincoApp.model.AlignmentTargetConceptModel');
+				            	alignmentConceptModel.set('externalTargetConcept',field.value);
+								model.targetConcepts().add(alignmentConceptModel);
+				            }
+				            if (field.getName()== 'external_thesaurus') {
+				            	externalThesaurusModel.set('externalId', field.value);
+				            }
+				            if (field.getName()== 'external_thesaurus_type') {
+				            	externalThesaurusModel.set('externalThesaurusType', field.value);
+				            }
+				        }		
+				        model.externalThesaurus().add(externalThesaurusModel);
 						theAlignmentGridStore.add(model);
 						theWin.close();
 					},
@@ -700,7 +715,7 @@ Ext
 						
 						var alignmentsGrid = theForm.down('#gridPanelAlignments');
 						var alignmentsData = alignmentsGrid.getStore().getRange();
-						Ext.Array.each(alignmentsData, function(alignment) {	
+						Ext.Array.each(alignmentsData, function(alignment) {
 							var targetConceptData = alignment.targetConceptsStore.getRange();
 							alignment.targetConcepts().removeAll();
 							alignment.targetConcepts().add(targetConceptData);

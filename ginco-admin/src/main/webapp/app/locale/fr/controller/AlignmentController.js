@@ -34,5 +34,8 @@
  */
 
 Ext.define('GincoApp.locale.fr.controller.AlignmentController', {
-	xInternalConceptId: "Identifiant interne"
+	xInternalConceptId: "Identifiant interne",
+	xExternalThesaurusId: "Identifiant du thésaurus",
+	xExternalThesaurusType: "Type de thésaurus",
+	xExternalConceptId: "Identifiant externe"
 });

@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="fr.mcc.ginco.beans">
-	<class name="ExternalThesaurus" table="external_thesaurus">
+	<class name="ExternalThesaurusType" table="external_thesaurus_type">
 		<cache usage="read-write" />
 		<id name="identifier" column="identifier">
             <generator class="sequence">
-                <param name="sequence">external_thesaurus_identifier_seq</param>
+                <param name="sequence">external_thesaurus_type_identifier_seq</param>
             </generator>
         </id>
-		<property name="externalId" column="external_id" not-null="true" />
-		<many-to-one name="externalThesaurusType" column="thesaurus_type" lazy="false" />        		
+		<property name="label" />		
 	</class>
 </hibernate-mapping>

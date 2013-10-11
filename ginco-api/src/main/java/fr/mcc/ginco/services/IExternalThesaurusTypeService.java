@@ -32,17 +32,33 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.services;
 
-/*
- * File: app/locale/fr/view/ConceptGroupPanel.js
- * Concept Group Panel Translated Items
+import java.util.List;
+
+import fr.mcc.ginco.beans.ExternalThesaurusType;
+
+/**
+ * Service used to deal with {@link ExternalThesaurusType} objects, contains basic
+ * methods exposed to client part. 
  *
+ * @see fr.mcc.ginco.beans
  */
-Ext.define('GincoApp.locale.fr.view.AlignmentWin', {
-	xIdentifierColumnLabel : "Identifiant",
-	xAlignmentWinTitle: "Créer l'alignement",
-	xTypeLabel: "Type d'alignement",
-	xAndOrOr: "ET entre les concepts",
-	xAddInternalConceptId: "Ajouter un concept Ginco",
-	xAddExternalConceptId : "Ajouter un concept externe"	
-});
+public interface IExternalThesaurusTypeService {
+	/**
+     * Get list of all ExternalThesaurusType available for an external thesaurus.
+     * @return
+     */
+    List<ExternalThesaurusType> getExternalThesaurusTypeList();   
+    
+    
+    
+
+    /**
+     * Get the ExternalThesaurusType by it's id
+     * @param identifier
+     * @return
+     */
+    ExternalThesaurusType getExternalThesaurusTypeById(Integer identifier);
+  
+}

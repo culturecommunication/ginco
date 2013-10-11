@@ -32,17 +32,37 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.extjs.view.pojo;
 
-/*
- * File: app/locale/fr/view/ConceptGroupPanel.js
- * Concept Group Panel Translated Items
- *
- */
-Ext.define('GincoApp.locale.fr.view.AlignmentWin', {
-	xIdentifierColumnLabel : "Identifiant",
-	xAlignmentWinTitle: "Créer l'alignement",
-	xTypeLabel: "Type d'alignement",
-	xAndOrOr: "ET entre les concepts",
-	xAddInternalConceptId: "Ajouter un concept Ginco",
-	xAddExternalConceptId : "Ajouter un concept externe"	
-});
+
+public class ExternalThesaurusView {
+
+	private Integer identifier;	
+	private String externalId;
+	private Integer externalThesaurusType;	
+
+	public Integer getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
+	}
+
+	public Integer getExternalThesaurusType() {
+		return externalThesaurusType;
+	}
+
+	public void setExternalThesaurusType(Integer externalThesaurusType) {
+		this.externalThesaurusType = externalThesaurusType;
+	}
+	
+}

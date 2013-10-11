@@ -106,15 +106,18 @@ Ext
 					{	
 						var targetConcepts = '';		
 						if (record.targetConcepts) {
-						Ext.Array.each(record.targetConcepts().getRange(),function(targetConcept, index, array) {
+						Ext.Array.each(record.targetConcepts().getRange(),function(targetConcept, index, array) {	
+							if (targetConcept.get('internalTargetConcept')) {
 								targetConcepts += targetConcept.get('internalTargetConcept');
-								targetConcepts += '<br/>';
+							} else if (targetConcept.get('externalTargetConcept')) {
+								targetConcepts += '<a href="' + targetConcept.get('externalTargetConcept') + '">' + targetConcept.get('externalTargetConcept') + '</a>';
+							}
+							targetConcepts += '<br/>';
 						});
 						}
 						
 						return targetConcepts;
-					},					
-					
+					},	
 
 					initComponent : function() {
 						var cellEditing = Ext.create(
@@ -669,7 +672,7 @@ Ext
 																						dataIndex: 'targetConcepts',
 																						renderer: me.alignmentConceptRenderer,
 																						flex : 1
-																					},{
+																					}, {
 																						xtype : 'actioncolumn',
 																						itemId : 'alignmentActionColumn',
 																						header : me.xActions,

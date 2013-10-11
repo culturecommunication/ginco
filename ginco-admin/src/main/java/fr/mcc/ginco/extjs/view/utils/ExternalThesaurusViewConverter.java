@@ -32,71 +32,63 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
-
-import java.util.List;
+package fr.mcc.ginco.extjs.view.utils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.beans.AlignmentType;
-import fr.mcc.ginco.beans.ExternalThesaurusType;
+import fr.mcc.ginco.beans.ExternalThesaurus;
+import fr.mcc.ginco.extjs.view.pojo.ExternalThesaurusView;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.IAlignmentTypeService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 
-
 /**
- * Thesaurus Concept REST service for all operation on a thesaurus' concepts
  *
  */
-@Service
-@Path("/thesaurusalignmentservice")
-@Produces({ MediaType.APPLICATION_JSON })
-@PreAuthorize("isAuthenticated()")
-public class AlignmentsRestService {	
-
-	@Inject
-	@Named("alignmentTypeService")
-	private IAlignmentTypeService alignmentTypeService;
+@Component("externalThesaurusViewConverter")
+public class ExternalThesaurusViewConverter {
 	
 	@Inject
 	@Named("externalThesaurusTypeService")
 	private IExternalThesaurusTypeService externalThesaurusTypeService;
 
-	
-   @Log
+	@Log
 	private Logger logger;
-
-	
 	/**
-	 * Method to get the list of alignment types
+	 * convert an ExternalThesaurus object to an ExternalThesaurusView suitable for display
+	 * 
+	 * @param alignment
 	 * @return
 	 */
-	@GET
-	@Path("/getAlignmentTypes")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<AlignmentType> getAlignmentTypes() {       
-		return alignmentTypeService.getAlignmentTypeList();
-	}
-	
-	/**
-	 * Method to get the list of external thesaurus types
-	 * @return
-	 */
-	@GET
-	@Path("/getExternalThesaurusTypes")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<ExternalThesaurusType> getExternalThesaurusTypes() {       
-		return externalThesaurusTypeService.getExternalThesaurusTypeList();
+	public ExternalThesaurusView convertExternalThseaurus(
+			ExternalThesaurus externalThesaurus) {
+		ExternalThesaurusView view = new ExternalThesaurusView();
+
+		view.setIdentifier(externalThesaurus.getIdentifier());
+		view.setIdentifier(externalThesaurus.getIdentifier());
+		view.setExternalThesaurusType(externalThesaurus.getExternalThesaurusType().getIdentifier());	
+
+		return view;
 	}
 
+	/**
+	 * This method convert a {@link ExternalThesaurusView} to the matching {@link ExternalThesaurus}
+	 * object
+	 * 
+	 * @param alignmentView
+	 * @param convertedConcept
+	 * @return
+	 */
+	public ExternalThesaurus convertExternalThesaurusView(
+			ExternalThesaurusView externalThesaurusView) {
+		
+		ExternalThesaurus externalThesaurus = new ExternalThesaurus();
+		externalThesaurus.setExternalId(externalThesaurusView.getExternalId());
+	    externalThesaurus.setExternalThesaurusType(externalThesaurusTypeService.getExternalThesaurusTypeById(externalThesaurusView.getExternalThesaurusType()));
+
+		return externalThesaurus;
+	}
 }

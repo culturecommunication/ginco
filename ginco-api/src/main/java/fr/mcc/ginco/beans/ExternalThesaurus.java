@@ -36,15 +36,15 @@ package fr.mcc.ginco.beans;
 
 public class ExternalThesaurus {
 
-	private String identifier;
+	private Integer identifier;
 	private String externalId;
-	private String type;
+	private ExternalThesaurusType externalThesaurusType;
 
-	public String getIdentifier() {
+	public Integer getIdentifier() {
 		return identifier;
 	}
 
-	public void setIdentifier(String identifier) {
+	public void setIdentifier(Integer identifier) {
 		this.identifier = identifier;
 	}
 
@@ -56,12 +56,12 @@ public class ExternalThesaurus {
 		this.externalId = externalId;
 	}
 
-	public String getType() {
-		return type;
+	public ExternalThesaurusType getExternalThesaurusType() {
+		return externalThesaurusType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setExternalThesaurusType(ExternalThesaurusType externalThesaurusType) {
+		this.externalThesaurusType = externalThesaurusType;
 	}
 
 }

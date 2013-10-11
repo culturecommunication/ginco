@@ -34,15 +34,36 @@
  */
 
 /*
- * File: app/locale/fr/view/ConceptGroupPanel.js
- * Concept Group Panel Translated Items
- *
+ * Concept Note Type Store 
+ * This file contains all note types displayed in dropdown lists
  */
-Ext.define('GincoApp.locale.fr.view.AlignmentWin', {
-	xIdentifierColumnLabel : "Identifiant",
-	xAlignmentWinTitle: "Créer l'alignement",
-	xTypeLabel: "Type d'alignement",
-	xAndOrOr: "ET entre les concepts",
-	xAddInternalConceptId: "Ajouter un concept Ginco",
-	xAddExternalConceptId : "Ajouter un concept externe"	
+Ext.define('GincoApp.store.ExternalThesaurusTypeStore', {
+    extend: 'Ext.data.Store',
+
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: 'services/ui/thesaurusalignmentservice/getExternalThesaurusTypes',
+                reader: {
+                    type: 'json',
+                    idProperty: 'identifier',
+                    root: 'data'
+                }
+            },
+            fields: [
+                {
+                    name: 'identifier',
+                    type: 'integer'
+                },
+                {
+                    name: 'label',
+                    type: 'string'
+                }               
+            ]
+        }, cfg)]);
+    }
 });

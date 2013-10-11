@@ -40,7 +40,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.cxf.common.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
+import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
@@ -65,6 +66,10 @@ public class AlignmentServiceImpl implements IAlignmentService {
 	@Inject
 	@Named("alignmentConceptDAO")
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
+	
+	@Inject
+	@Named("externalThesaurusDAO")
+	private IGenericDAO<ExternalThesaurus, String> externalThesaurusDAO;
 
 	@Inject
 	@Named("generatorService")
@@ -120,22 +125,14 @@ public class AlignmentServiceImpl implements IAlignmentService {
 			}
 			Set<AlignmentConcept> concepts  = alignment.getTargetConcepts();
 			for (AlignmentConcept alignmentConcept: concepts) {
-				logger.debug("Updateing alignmentConcept with internalConceptId = " + alignmentConcept.getInternalTargetConcept().getIdentifier());
 				alignmentConceptDAO.update(alignmentConcept);
 			}
-
-			/*if (alignmentConcepts == null) {
-				alignment.setTargetConcepts(new HashSet<AlignmentConcept>());
-			} else {
-				for (AlignmentConcept alignmentConcept : alignment
-						.getTargetConcepts()) {
-					alignmentConceptDAO.delete(alignmentConcept);
-				}
-				for (AlignmentConcept c1 : alignmentConcepts) {
-					AlignmentConcept targetConcept = c1;
-					alignmentConceptDAO.update(targetConcept);
-				}
-			}*/
+			
+			ExternalThesaurus externalThesaurus = alignment.getExternalTargetThesaurus();
+			if (externalThesaurus != null) {
+				externalThesaurusDAO.update(externalThesaurus);
+			}
+			
 			alignmentDAO.update(alignment);
 
 		}

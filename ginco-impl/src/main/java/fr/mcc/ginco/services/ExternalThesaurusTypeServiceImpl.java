@@ -32,17 +32,35 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.services;
 
-/*
- * File: app/locale/fr/view/ConceptGroupPanel.js
- * Concept Group Panel Translated Items
- *
- */
-Ext.define('GincoApp.locale.fr.view.AlignmentWin', {
-	xIdentifierColumnLabel : "Identifiant",
-	xAlignmentWinTitle: "Créer l'alignement",
-	xTypeLabel: "Type d'alignement",
-	xAndOrOr: "ET entre les concepts",
-	xAddInternalConceptId: "Ajouter un concept Ginco",
-	xAddExternalConceptId : "Ajouter un concept externe"	
-});
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import fr.mcc.ginco.beans.ExternalThesaurusType;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+
+@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Service("externalThesaurusTypeService")
+public class ExternalThesaurusTypeServiceImpl implements IExternalThesaurusTypeService {
+	
+	@Inject
+	@Named("externalThesaurusTypeDAO")
+	private IGenericDAO<ExternalThesaurusType, Integer> externalThesaurusTypeDAO;
+
+	@Override
+	public List<ExternalThesaurusType> getExternalThesaurusTypeList() {
+		return externalThesaurusTypeDAO.findAll();
+	}
+
+	@Override
+	public ExternalThesaurusType getExternalThesaurusTypeById(Integer identifier) {
+		return externalThesaurusTypeDAO.getById(identifier);
+	}
+}

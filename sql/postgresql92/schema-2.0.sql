@@ -97,3 +97,27 @@ CREATE INDEX idx_alignment_sourceconceptid
   ON alignment
   USING btree (source_concept_id);
 
+-- Table: external_thesaurus_type
+CREATE TABLE external_thesaurus_type
+(
+  identifier integer NOT NULL,
+  label text NOT NULL, 
+  CONSTRAINT pk_external_thesaurus_type PRIMARY KEY (identifier)
+);
+
+CREATE SEQUENCE external_thesaurus_type_identifier_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+ALTER SEQUENCE external_thesaurus_type_identifier_seq OWNED BY external_thesaurus_type.identifier;
+
+
+CREATE SEQUENCE external_thesaurus_identifier_seq
+ INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+ALTER SEQUENCE external_thesaurus_identifier_seq OWNED BY external_thesaurus.identifier;

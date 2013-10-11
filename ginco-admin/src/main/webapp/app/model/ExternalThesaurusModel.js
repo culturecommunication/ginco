@@ -33,16 +33,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-/*
- * File: app/locale/fr/view/ConceptGroupPanel.js
- * Concept Group Panel Translated Items
- *
- */
-Ext.define('GincoApp.locale.fr.view.AlignmentWin', {
-	xIdentifierColumnLabel : "Identifiant",
-	xAlignmentWinTitle: "Créer l'alignement",
-	xTypeLabel: "Type d'alignement",
-	xAndOrOr: "ET entre les concepts",
-	xAddInternalConceptId: "Ajouter un concept Ginco",
-	xAddExternalConceptId : "Ajouter un concept externe"	
+Ext.define('GincoApp.model.ExternalThesaurusModel', {
+    extend: 'Ext.data.Model',
+
+    fields: [
+        {
+            name: 'identifier',
+            type: 'string'
+        },
+        {
+            name: 'externalId',
+            type: 'string'
+        },
+        {
+            name: 'externalThesaurusType',
+            type: 'integer'
+        }
+    ],   
+   idProperty : 'identifier'
 });

@@ -58,7 +58,8 @@ Ext
 					xAlignmentWinTitle: "Create alignment",
 					xTypeLabel: "Aligment type",
 					xAndOrOr: "AND between concepts",
-					xAddInternalConceptId: "Add a ginco concept",					
+					xAddInternalConceptId: "Add a ginco concept",	
+					xAddExternalConceptId : "Add an external concept",
 					width : 500,					
 					titleAlign : 'center',
 					modal : true,
@@ -97,6 +98,14 @@ Ext
 												itemId : 'addInternalConceptId',
 												disabled : true,
 												cls: 'addInternalConcept',
+											},{
+												xtype : 'button',
+												text : me.xAddExternalConceptId,
+												disabled : false,
+												iconCls : 'icon-add',
+												itemId : 'addExternalConceptId',
+												disabled : true,
+												cls: 'addExternalConcept',
 											}]
 										} ],
 										defaults : {

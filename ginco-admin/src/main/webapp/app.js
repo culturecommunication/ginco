@@ -88,7 +88,8 @@ Ext.application({
         'CustomConceptAttributeTypeStore',
         'ConceptArrayStore',
         'AlignmentsStore',
-        'AlignmentTypeStore'
+        'AlignmentTypeStore',
+        'ExternalThesaurusTypeStore'
     ],
     views: [
         'GincoViewPort',

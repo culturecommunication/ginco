@@ -35,7 +35,8 @@
 
 Ext.define('GincoApp.model.AlignmentModel', {
     extend: 'Ext.data.Model',
-    requires: ['GincoApp.model.AlignmentTargetConceptModel'],
+    requires: ['GincoApp.model.AlignmentTargetConceptModel',
+               'GincoApp.model.ExternalThesaurusModel'],
 
     fields: [
         {
@@ -59,22 +60,20 @@ Ext.define('GincoApp.model.AlignmentModel', {
             type: 'string'
         },
         {
-            name: 'externalThesaurusId',
-            type: 'string'
-        },
-        {
-            name: 'externalThesaurusId',
-            type: 'string'
-        },
-        {
             name: 'alignmentType',
             type: 'integer'
         }
     ],   
    idProperty : 'identifier',
    associations: [
-                  {type: 'hasMany', model: 'GincoApp.model.AlignmentTargetConceptModel', name: 'targetConcepts'}
-                 
-  ]
-    
+                  {
+                	  type: 'hasMany', 
+                	  model: 'GincoApp.model.AlignmentTargetConceptModel',
+                	  name: 'targetConcepts'
+                  },{
+                	  type: 'hasMany',
+                	  model: 'GincoApp.model.ExternalThesaurusModel',
+                	  name: 'externalThesaurus'
+                  }           
+  ]    
 });

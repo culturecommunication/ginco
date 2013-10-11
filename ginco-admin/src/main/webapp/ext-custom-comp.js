@@ -521,6 +521,9 @@ Ext.define('Secure.data.writer.Writer', {
 						record.setDirty();
 					}
 				}, me);
+			} else if (association.type == 'hasOne') {
+				console.log("coucou le record");
+				console.log(record.getExternalThesaurus());
 			}
 		}
 
@@ -532,7 +535,7 @@ Ext.define('Secure.data.writer.Writer', {
             dateFormat = this.dateFormat || field.dateWriteFormat || field.dateFormat,
             value = record.get(field.name);
             
-        if (field.serialize) {
+        if (field.serialize){
             data[name] = field.serialize(value, record);
         } else if (field.type === Ext.data.Types.DATE && dateFormat && Ext.isDate(value)) {
             data[name] = Ext.Date.format(value, dateFormat);
