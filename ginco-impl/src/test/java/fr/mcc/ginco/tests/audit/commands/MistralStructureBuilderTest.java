@@ -40,6 +40,7 @@ import java.util.Map;
 
 import junitx.framework.ListAssert;
 
+import org.hamcrest.core.AnyOf;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +48,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.matchers.Any;
 
 import fr.mcc.ginco.audit.commands.MistralStructuresBuilder;
 import fr.mcc.ginco.audit.utils.AuditHelper;
@@ -91,8 +93,8 @@ public class MistralStructureBuilderTest {
 						"parentConcept", lang)).thenReturn(parentTerm);
 
 		Mockito.when(
-				auditHelper.getConceptChildrenAtRevision(revision,
-						parentConcept)).thenReturn(childrenConcept);
+				auditHelper.getConceptChildrenAtRevision(Mockito.eq(revision),
+						Mockito.eq(parentConcept),Mockito.anyListOf(ThesaurusConcept.class))).thenReturn(childrenConcept);
 
 		ThesaurusTerm child1 = new ThesaurusTerm();
 		child1.setLexicalValue("abbaye");

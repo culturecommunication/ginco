@@ -74,6 +74,7 @@ public class MistralStructuresBuilder {
 			List<ThesaurusConcept> conceptsAtRevision, Number revision,
 			String lang) {
 		Map<String, List<String>> hierarchies = new HashMap<String, List<String>>();
+		List<ThesaurusConcept> allConcepts = new ArrayList<ThesaurusConcept>();
 		for (ThesaurusConcept previousConcept : conceptsAtRevision) {
 			ThesaurusTerm previousPrefTerm = auditHelper
 					.getPreferredTermAtRevision(revision,
@@ -81,7 +82,7 @@ public class MistralStructuresBuilder {
 
 			if (previousPrefTerm != null){
 				List<ThesaurusConcept> children = auditHelper
-						.getConceptChildrenAtRevision(revision, previousConcept);
+						.getConceptChildrenAtRevision(revision, previousConcept, allConcepts);
 
 				List<String> childrenLexicalValues = new ArrayList<String>();
 

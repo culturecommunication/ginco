@@ -93,14 +93,16 @@ public class AuditHelper {
 	 * @param conceptId
 	 * @return
 	 */
-	public List<ThesaurusConcept> getConceptChildrenAtRevision(Number revisionNumber, ThesaurusConcept concept) {
+	public List<ThesaurusConcept> getConceptChildrenAtRevision(Number revisionNumber, ThesaurusConcept concept, List<ThesaurusConcept> allThesaurusConcepts) {
 		//This type of relation is not supported by Envers yet
 		//AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(ThesaurusConcept.class, revisionNumber)
 		//		.add(AuditEntity.relatedId("parentConcepts").eq(conceptId));
 		List<ThesaurusConcept> childrenConceptAtRevision = new ArrayList<ThesaurusConcept>();
-		AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(ThesaurusConcept.class, revisionNumber)
-						.add(AuditEntity.relatedId("thesaurus").eq(concept.getThesaurus().getIdentifier()));
-		List<ThesaurusConcept> allThesaurusConcepts = query.getResultList();
+		if (allThesaurusConcepts.size() == 0) {
+			AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(ThesaurusConcept.class, revisionNumber)
+							.add(AuditEntity.relatedId("thesaurus").eq(concept.getThesaurus().getIdentifier()));
+			allThesaurusConcepts.addAll(query.getResultList());
+		}
 		for (ThesaurusConcept curConcept:allThesaurusConcepts) {
 			if (curConcept.getParentConcepts().contains(concept)) {
 				childrenConceptAtRevision.add(curConcept);
