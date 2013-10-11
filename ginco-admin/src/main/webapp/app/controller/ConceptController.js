@@ -349,7 +349,12 @@ Ext
 								model.targetConcepts().add(alignmentConceptModel);
 				            }
 				            if (field.getName()== 'external_thesaurus') {
-				            	externalThesaurusModel.set('externalId', field.value);
+				            	externalThesaurusModel.set('externalId', field.getValue());
+				            }
+				            if (field.getName()== 'external_thesaurus_id') {				            
+				            	if (field.value) {
+				            		externalThesaurusModel.set('identifier', field.value);
+				            	}
 				            }
 				            if (field.getName()== 'external_thesaurus_type') {
 				            	externalThesaurusModel.set('externalThesaurusType', field.value);
@@ -564,7 +569,7 @@ Ext
 						var nodeId = "";
 						for (var i=0;i<aModel.raw.conceptsPath.length;i++) {
 							if (i>0) 
-								nodeId=aModel.raw.conceptsPath[i-1]+"*"+aModel.raw.conceptsPath[i]
+								nodeId=aModel.raw.conceptsPath[i-1]+"*"+aModel.raw.conceptsPath[i];
 							else 
 								nodeId="*"+aModel.raw.conceptsPath[i];
 							conceptPanel.addNodePath("CONCEPT_"+nodeId);

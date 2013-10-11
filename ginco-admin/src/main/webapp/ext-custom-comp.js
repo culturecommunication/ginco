@@ -357,6 +357,7 @@ Ext.define('Thesaurus.CustomAttrForm', {
 			var data = {
 					id : 'customattr_' + recordTypeId,
 					value : recordLexicalValue,
+
 			};
 			arrayOfAttribute.push(data);
 		}

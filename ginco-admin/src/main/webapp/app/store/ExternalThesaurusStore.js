@@ -32,62 +32,46 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
 
-public class ExternalThesaurus {
+/*
+ * Concept Note Type Store 
+ * This file contains all note types displayed in dropdown lists
+ */
+Ext.define('GincoApp.store.ExternalThesaurusStore', {
+    extend: 'Ext.data.Store',
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((identifier == null) ? 0 : identifier.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ExternalThesaurus other = (ExternalThesaurus) obj;
-		if (identifier == null) {
-			if (other.identifier != null)
-				return false;
-		} else if (!identifier.equals(other.identifier))
-			return false;
-		return true;
-	}
-
-	private Integer identifier;
-	private String externalId;
-	private ExternalThesaurusType externalThesaurusType;
-
-	public Integer getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(Integer identifier) {
-		this.identifier = identifier;
-	}
-
-	public String getExternalId() {
-		return externalId;
-	}
-
-	public void setExternalId(String externalId) {
-		this.externalId = externalId;
-	}
-
-	public ExternalThesaurusType getExternalThesaurusType() {
-		return externalThesaurusType;
-	}
-
-	public void setExternalThesaurusType(ExternalThesaurusType externalThesaurusType) {
-		this.externalThesaurusType = externalThesaurusType;
-	}
-
-}
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: 'services/ui/thesaurusalignmentservice/getExternalThesauruses',
+                reader: {
+                    type: 'json',
+                    idProperty: 'identifier',
+                    root: 'data'
+                }
+            },
+            fields: [
+                  {
+                	  name: 'identifier',
+                	  type: 'string'
+                  },
+                  {
+                	  name: 'externalId',
+                	  type: 'string'
+                  },
+                  {
+                	  name: 'externalThesaurusType',
+                	  type: 'integer'
+                  }
+            ],
+            sorters: [{
+                property: 'externalId',
+                direction: 'ASC'
+              }]
+        }, cfg)]);
+    }
+});

@@ -37,6 +37,7 @@ package fr.mcc.ginco.extjs.view.utils;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -68,7 +69,7 @@ public class ExternalThesaurusViewConverter {
 		ExternalThesaurusView view = new ExternalThesaurusView();
 
 		view.setIdentifier(externalThesaurus.getIdentifier());
-		view.setIdentifier(externalThesaurus.getIdentifier());
+		view.setExternalId(externalThesaurus.getExternalId());
 		view.setExternalThesaurusType(externalThesaurus.getExternalThesaurusType().getIdentifier());	
 
 		return view;
@@ -86,9 +87,12 @@ public class ExternalThesaurusViewConverter {
 			ExternalThesaurusView externalThesaurusView) {
 		
 		ExternalThesaurus externalThesaurus = new ExternalThesaurus();
+		if(externalThesaurusView.getIdentifier() != null && externalThesaurusView.getIdentifier()!= 0) {
+			externalThesaurus.setIdentifier(externalThesaurusView.getIdentifier());
+		}
 		externalThesaurus.setExternalId(externalThesaurusView.getExternalId());
-	    externalThesaurus.setExternalThesaurusType(externalThesaurusTypeService.getExternalThesaurusTypeById(externalThesaurusView.getExternalThesaurusType()));
-
+		externalThesaurus.setExternalThesaurusType(externalThesaurusTypeService.getExternalThesaurusTypeById(externalThesaurusView.getExternalThesaurusType()));
+		
 		return externalThesaurus;
 	}
 }

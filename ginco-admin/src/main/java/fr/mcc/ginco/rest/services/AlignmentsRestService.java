@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,9 +49,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.AlignmentType;
+import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.ExternalThesaurusType;
+import fr.mcc.ginco.extjs.view.pojo.ExternalThesaurusView;
+import fr.mcc.ginco.extjs.view.utils.ExternalThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAlignmentTypeService;
+import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 
 
@@ -71,7 +76,16 @@ public class AlignmentsRestService {
 	@Inject
 	@Named("externalThesaurusTypeService")
 	private IExternalThesaurusTypeService externalThesaurusTypeService;
+	
+	@Inject
+	@Named("externalThesaurusService")
+	private IExternalThesaurusService externalThesaurusService;
 
+	@Inject
+	@Named("externalThesaurusViewConverter")
+	private ExternalThesaurusViewConverter externalThesaurusViewConverter;
+
+	
 	
    @Log
 	private Logger logger;
@@ -99,4 +113,15 @@ public class AlignmentsRestService {
 		return externalThesaurusTypeService.getExternalThesaurusTypeList();
 	}
 
+	
+	@GET
+	@Path("/getExternalThesauruses")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<ExternalThesaurusView> getExternalThesauruses() {       
+		 List<ExternalThesaurusView> views = new ArrayList<ExternalThesaurusView>();
+		 for (ExternalThesaurus externalThesaurus: externalThesaurusService.getExternalThesaurusList()) {
+			 views.add(externalThesaurusViewConverter.convertExternalThseaurus(externalThesaurus));
+		 }
+		return views;
+	}
 }

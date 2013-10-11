@@ -42,10 +42,11 @@ Ext.define('GincoApp.controller.AlignmentController',
 			xExternalThesaurusId: "External thesaurus identifier",
 			xExternalThesaurusType: "External thesaurus type",
 			
-			stores : [ 'AlignmentsStore', 'ExternalThesaurusTypeStore'],
+			stores : [ 'AlignmentsStore', 'ExternalThesaurusTypeStore', 'ExternalThesaurusStore'],
 			models : [ 'AlignmentModel' ],
 			storeExternalThesaurusType: Ext.create('GincoApp.store.ExternalThesaurusTypeStore'),
-			
+			storeExternalThesaurus: Ext.create('GincoApp.store.ExternalThesaurusStore'),
+
 			chooseAlignmentType : function(theCombobox, theRecord,	eOpts) {
 				var form = theCombobox.up('form');
 				var multiCheckbox=form.down('#isAndCheckbox');
@@ -90,7 +91,7 @@ Ext.define('GincoApp.controller.AlignmentController',
 		        }
 			},
 			
-			hideAllFields : function(form, fieldName) {
+			removeField : function(form, fieldName) {
 				var fields = form.getForm().getFields();
 		        for(idx in fields.items) {
 		        	field = fields.items[idx];
@@ -110,9 +111,11 @@ Ext.define('GincoApp.controller.AlignmentController',
 				});
 				alignmentForm.add(tf);	
 				
-				this.hideAllFields(alignmentForm, 'external_thesaurus');
-				this.hideAllFields(alignmentForm, 'external_thesaurus_type');
-				this.hideAllFields(alignmentForm, 'external_concept');
+				this.removeField(alignmentForm, 'external_thesaurus');
+				this.removeField(alignmentForm, 'external_thesaurus_type');
+				this.removeField(alignmentForm, 'external_concept');
+				this.removeField(alignmentForm, 'external_thesaurus_id');
+
 				
 				var multiCheckbox=alignmentForm.down('#typeCombo');
 				var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
@@ -134,14 +137,27 @@ Ext.define('GincoApp.controller.AlignmentController',
 				var alignmentForm = theButton.up('form');	
 				
 				if (!alignmentForm.getForm().findField("external_thesaurus")) {
-					var tf = Ext.create('Ext.form.field.Text', {
+					var tf1 = Ext.create('Ext.form.field.ComboBox', {
+						itemId:'externalThesaurus',
 						name: 'external_thesaurus',
-						fieldLabel: me.xExternalThesaurusId
+						displayField : 'externalId',
+						fieldLabel: me.xExternalThesaurusId,
+						store : me.storeExternalThesaurus,
+						allowBlank : false,
+						editable: true
 					});
-					alignmentForm.add(tf);	
+					alignmentForm.add(tf1);	
+					
+					var tf4 = Ext.create('Ext.form.field.Text', {
+		                   name: 'external_thesaurus_id',
+		                   hidden :true,
+		                   itemId:'externalThesaurusId'
+
+					});
+					alignmentForm.add(tf4);	
+
 				
-				
-					var tf = Ext.create('Ext.form.field.ComboBox', {
+					var tf2 = Ext.create('Ext.form.field.ComboBox', {
 						name: 'external_thesaurus_type',
 						fieldLabel: me.xExternalThesaurusType,
 	                   	itemId : 'thesaurusTypeCombo',
@@ -152,16 +168,16 @@ Ext.define('GincoApp.controller.AlignmentController',
 						store : me.storeExternalThesaurusType,
 						allowBlank : false			
 					});
-					alignmentForm.add(tf);
+					alignmentForm.add(tf2);
 				}
 				
-				var tf = Ext.create('Ext.form.field.Text', {
+				var tf3 = Ext.create('Ext.form.field.Text', {
 	                   name: 'external_concept',
 	                   fieldLabel: me.xExternalConceptId
 				});
-				alignmentForm.add(tf);	
+				alignmentForm.add(tf3);	
 				
-				this.hideAllFields(alignmentForm, 'internal_concept');
+				this.removeField(alignmentForm, 'internal_concept');
 				
 				var multiCheckbox=alignmentForm.down('#typeCombo');
 				var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
@@ -179,6 +195,14 @@ Ext.define('GincoApp.controller.AlignmentController',
 				}
 			},
 			
+			updateExternalThesaurusType: function(theCombobox, theRecord,	eOpts) {
+				var thesaurusTypeCombo  = theCombobox.up('form').down('#thesaurusTypeCombo');
+				thesaurusTypeCombo.clearValue();			
+				thesaurusTypeCombo.setValue(theRecord[0].data.externalThesaurusType);	
+				var externalThesaurusIdField  = theCombobox.up('form').down('#externalThesaurusId');
+				externalThesaurusIdField.setValue(theRecord[0].data.identifier);
+			},
+			
 			init : function() {			
 				this.control({
 					'alignmentWin #typeCombo' : {
@@ -189,6 +213,9 @@ Ext.define('GincoApp.controller.AlignmentController',
 					},
 					'alignmentWin  #addExternalConceptId' : {
 						click: this.displayAddExternalConceptFields
+					},					
+					'alignmentWin  #externalThesaurus' : {
+						select: this.updateExternalThesaurusType
 					}
 				});
 

@@ -32,62 +32,23 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
+package fr.mcc.ginco.services;
 
-public class ExternalThesaurus {
+import java.util.List;
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((identifier == null) ? 0 : identifier.hashCode());
-		return result;
-	}
+import fr.mcc.ginco.beans.ExternalThesaurus;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ExternalThesaurus other = (ExternalThesaurus) obj;
-		if (identifier == null) {
-			if (other.identifier != null)
-				return false;
-		} else if (!identifier.equals(other.identifier))
-			return false;
-		return true;
-	}
-
-	private Integer identifier;
-	private String externalId;
-	private ExternalThesaurusType externalThesaurusType;
-
-	public Integer getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(Integer identifier) {
-		this.identifier = identifier;
-	}
-
-	public String getExternalId() {
-		return externalId;
-	}
-
-	public void setExternalId(String externalId) {
-		this.externalId = externalId;
-	}
-
-	public ExternalThesaurusType getExternalThesaurusType() {
-		return externalThesaurusType;
-	}
-
-	public void setExternalThesaurusType(ExternalThesaurusType externalThesaurusType) {
-		this.externalThesaurusType = externalThesaurusType;
-	}
-
+/**
+ * Service used to deal with {@link ExternalThesaurus} objects, contains basic
+ * methods exposed to client part. 
+ *
+ * @see fr.mcc.ginco.beans
+ */
+public interface IExternalThesaurusService {
+	/**
+     * Get list of all {@link ExternalThesaurus} already existing
+     * @return
+     */
+    List<ExternalThesaurus> getExternalThesaurusList();      
+   
 }

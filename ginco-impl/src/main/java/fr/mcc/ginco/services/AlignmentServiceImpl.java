@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -118,6 +119,7 @@ public class AlignmentServiceImpl implements IAlignmentService {
 			}
 		}
 		
+		List<ExternalThesaurus> externalThesaurusesToSave = new ArrayList<ExternalThesaurus>();
 		for (Alignment alignment : alignments) {
 			if (StringUtils.isEmpty(alignment.getIdentifier())) {
 				alignment.setIdentifier(generatorService
@@ -129,14 +131,16 @@ public class AlignmentServiceImpl implements IAlignmentService {
 			}
 			
 			ExternalThesaurus externalThesaurus = alignment.getExternalTargetThesaurus();
-			if (externalThesaurus != null) {
-				externalThesaurusDAO.update(externalThesaurus);
-			}
 			
+			if (externalThesaurus != null && ! externalThesaurusesToSave.contains(externalThesaurus)) {
+				externalThesaurusesToSave.add(externalThesaurus);
+			}			
 			alignmentDAO.update(alignment);
-
 		}
 		
+		for (ExternalThesaurus externalThesaurus:externalThesaurusesToSave) {
+			externalThesaurusDAO.update(externalThesaurus);
+		}
 
 		return concept;
 	}
