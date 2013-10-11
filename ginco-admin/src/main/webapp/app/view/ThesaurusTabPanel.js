@@ -121,38 +121,31 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							items : [{
 							    xtype : 'keymenuitem',
 							    text : me.xNewMenu_ConceptAndTermLabel,
-							    itemId : 'newConceptAndTermBtn',
-							    cmdTxt : 'Ctrl+2'
+							    itemId : 'newConceptAndTermBtn'
 							},{
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_TermLabel,
-								itemId : 'newTermBtn',
-								cmdTxt : 'Ctrl+3'
+								itemId : 'newTermBtn'
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_ConceptLabel,
-								itemId : 'newConceptBtn',
-								cmdTxt : 'Ctrl+4'
+								itemId : 'newConceptBtn'
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_ComplexConceptLabel,
-								itemId : 'newComplexConceptBtn',
-								cmdTxt : 'Ctrl+5'
+								itemId : 'newComplexConceptBtn'
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_ConceptArrayLabel,
-								itemId : 'newConceptArrayBtn',
-								cmdTxt : 'Ctrl+6'
+								itemId : 'newConceptArrayBtn'
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_GroupLabel,
-								itemId : 'newConceptGroupBtn',
-								cmdTxt : 'Ctrl+7'
+								itemId : 'newConceptGroupBtn'
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_DynamicGroupLabel,
-								itemId : 'newConceptDynamicGroupBtn',
-								cmdTxt : 'Ctrl+8'
+								itemId : 'newConceptDynamicGroupBtn'
 							} ]
 						}
 					}, , {

@@ -94,8 +94,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 						items : [ {
 							xtype : 'keymenuitem',
 							itemId : 'newThesaurusBtn',
-							text : me.xNewMenu_ThesaurusLabel,
-							cmdTxt : 'Ctrl+1'
+							text : me.xNewMenu_ThesaurusLabel
 						} ]
 					}
 				} ]
@@ -155,21 +154,21 @@ Ext.define('GincoApp.view.TopToolbar', {
 				flex : 2,
 				height : 10,
 				width : 10
-			}, 
+			},
 			{
 				xtype : 'tbtext',
 				text : me.xConnectedAsLabel
 			},
 			{
 				xtype : 'tbtext',
-				itemId : 'username' 
+				itemId : 'username'
 			},
 			{
 				xtype : 'tbseparator',
 				flex : 2,
 				height : 10,
 				width : 10
-			}, 
+			},
 			{
 				xtype : 'button',
 				itemId : 'logoutbtn',
