@@ -85,7 +85,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 	{
 		var termPanel = theForm.up('termPanel');
 		var customForm = theForm.down('customattrform');
-		customForm.initFields(termPanel.thesaurusData.id, function() {
+		customForm.initFields(termPanel.up('thesaurusTabPanel').thesaurusData.id, function() {
 			if (termPanel.gincoId!='')
 			{
 				customForm.load(termPanel.gincoId);
