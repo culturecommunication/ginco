@@ -37,7 +37,7 @@ Ext.define('GincoApp.view.GlobalThesaurusTabsPanel', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.thesaurusTabs',
     //xCloseAllTlt : 'Close all',
-    localized : true,
+    localized : false,
     activeTab: 0,
     flex: 1,
     initAria : function() {
