@@ -57,6 +57,8 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 
 		var model = this.getSplitNonPreferredTermModelModel();
 		var termId = thePanel.gincoId;
+		thePanel.addNodePath(thesaurusData.id);
+		thePanel.addNodePath("COMPLEXCONCEPTS_"+thesaurusData.id);
 		if (termId != '' && termId!=null) {
 			theForm.getEl().mask("Chargement");
 			model.load(termId, {
