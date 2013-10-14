@@ -444,6 +444,8 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object)
 			throws BusinessException {
+		/*if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()
+				|| object.getStatus() == ConceptStatusEnum.REJECTED.getStatus()) {*/
 			List<ThesaurusTerm> terms = thesaurusTermDAO
 					.findTermsByConceptId(object.getIdentifier());
 			for (ThesaurusTerm term : terms) {
@@ -472,6 +474,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 
 			return thesaurusConceptDAO.delete(object);
+			/*} else {
+		           throw new BusinessException("It's not possible to delete a concept with a status different from candidate or rejected", "delete-concept");
+			}*/
 	}
 
 	private void updateConceptTerms(ThesaurusConcept concept,
