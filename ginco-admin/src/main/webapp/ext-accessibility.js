@@ -275,10 +275,12 @@ Ext.define('Thesaurus.ext.view.View', {
         }
 		var selectModel = me.getSelectionModel();
 		var selectedArray = selectModel.getSelection();
-		if (selectedArray.length==0)
-			selectModel.select(0);
-		else
-			selectModel.select(selectedArray[0]);
+		if (selectModel.store.getCount()>0) {
+			if (selectedArray.length==0)
+				selectModel.select(0);
+			else
+				selectModel.select(selectedArray[0]);
+		}
 	},
 
 	onContainerBlur: function (e) {
