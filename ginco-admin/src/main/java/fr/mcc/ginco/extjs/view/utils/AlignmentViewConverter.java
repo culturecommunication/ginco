@@ -156,7 +156,8 @@ public class AlignmentViewConverter {
 		alignment.setAndRelation(alignmentView.getAndRelation());
 
 		if (alignmentView.getExternalThesaurus() != null
-				&& alignmentView.getExternalThesaurus().size()>0) {
+				&& alignmentView.getExternalThesaurus().size()>0
+				&& StringUtils.isNotEmpty(alignmentView.getExternalThesaurus().get(0).getExternalId())) {
 			alignment.setExternalTargetThesaurus(externalThesaurusViewConverter
 					.convertExternalThesaurusView(alignmentView
 							.getExternalThesaurus().get(0)));
