@@ -83,6 +83,10 @@ a.x-tab-close-btn:focus  {
     background-image: url(../images/basket.png) !important;
 }
 
+.archived {
+    background-image: url(../images/folder_database.png) !important;
+}
+
 .display-concept-panel {
     background-image: url(../images/display-concept-panel.png) !important;
 }

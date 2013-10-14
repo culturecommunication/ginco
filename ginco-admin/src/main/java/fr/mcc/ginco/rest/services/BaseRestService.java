@@ -161,6 +161,9 @@ public class BaseRestService {
                 node.setChildren(folderGenerator.generateFolders(thesaurus
 						.getIdentifier()));
 				node.setDisplayable(true);
+				if (thesaurus.isArchived()!=null && thesaurus.isArchived()==true)
+					node.setIconCls("archived");
+
 				result.add(node);
 			}
 		}
