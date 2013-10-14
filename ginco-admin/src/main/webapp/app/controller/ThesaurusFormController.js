@@ -74,13 +74,11 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		}
 	},
 	loadData : function(aForm, aModel) {
-		var thesaurusPanel = aForm.up('thesaurusTabPanel');
-		//thesaurusPanel.setTitle(aModel.data.title);
-		//thesaurusPanel.thesaurusData = aModel.data;
+		var thesaurusPanel = aForm.up('thesaurusPanel');
 		aForm.loadRecord(aModel);
 		
 
-        if(thesaurusPanel.thesaurusData.canBeDeleted) {
+        if(thesaurusPanel.getThesaurusData().canBeDeleted) {
            thesaurusPanel.down('button[cls=delete]').setDisabled(false);
         } else {
            thesaurusPanel.down('button[cls=delete]').setDisabled(true);
@@ -90,14 +88,13 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         thesaurusPanel.down('#versionTab').setDisabled(false);
         
 
-        if(thesaurusPanel.thesaurusData.archived) {
+        if(thesaurusPanel.getThesaurusData().archived) {
             thesaurusPanel.down('bottomFormToolBar').setArchived();
             thesaurusPanel.down('#archiveThesaurus').setDisabled(true);
         } else {
             thesaurusPanel.down('#archiveThesaurus').setDisabled(false);
         }
-        aForm.up('thesaurusPanel').addNodePath(aModel.data.id);
-
+        thesaurusPanel.addNodePath(aModel.data.id);
 	},
 
     getActivePanel : function(child) {
