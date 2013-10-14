@@ -30,7 +30,8 @@
  */
 
 Ext.require([ 'GincoApp.view.ThesaurusVersionPanel',
-              'GincoApp.view.CustomAttributeTypesPanel']);
+              'GincoApp.view.CustomAttributeTypesPanel',
+              'GincoApp.view.ThesaurusStatisticsTabPanel']);
 Ext.define('GincoApp.view.ThesaurusPanel', {
 	extend : 'GincoApp.view.ThesaurusEntityPanel',
 
@@ -88,6 +89,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xImportSandbox: 'Import sandbox terms',
     xImportBranch: 'Import a branch',
     xMetadataTitle : 'Metadata',
+    xStatisticsTabTile : 'Statistics',
 
 	initComponent : function() {
 		var me = this;
@@ -320,6 +322,13 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                                     title : me.xCustomAttributeTypes,
                                                     itemId : 'customAttributeTypesTab',
                                                     xtype : 'customAttributeTypesPanel',
+                                                    closable : false,
+                                                    disabled :  false
+                                                },
+                                                {
+                                                    title : me.xStatisticsTabTile,
+                                                    itemId : 'statisticsTab',
+                                                    xtype : 'thesaurusStatisticsTabPanel',
                                                     closable : false,
                                                     disabled :  false
                                                 }]
