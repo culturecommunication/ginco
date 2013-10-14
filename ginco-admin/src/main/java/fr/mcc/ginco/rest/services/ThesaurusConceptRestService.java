@@ -114,7 +114,7 @@ public class ThesaurusConceptRestService {
     @Inject
     @Named("hierarchicalRelationshipViewConverter")
     private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
-    
+
     @Inject
     @Named("alignmentViewConverter")
     private AlignmentViewConverter alignmentViewConverter;
@@ -203,7 +203,7 @@ public class ThesaurusConceptRestService {
         	}
         }
 
-        
+
         //We get alignments from the view
         List<Alignment> alignments = new ArrayList<Alignment>();
         if (conceptView.getAlignments() != null) {
@@ -211,7 +211,7 @@ public class ThesaurusConceptRestService {
         		alignments.add(alignmentViewConverter.convertAlignmentView(alignmentView, convertedConcept));
         	}
         }
-        
+
         //We save or update the concept
         logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
@@ -341,7 +341,7 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) throws BusinessException {
-		ThesaurusConcept object =  thesaurusConceptService.getThesaurusConceptById(thesaurusViewJAXBElement.getIdentifier());
+		ThesaurusConcept object = thesaurusConceptViewConverter.convert(thesaurusViewJAXBElement);
 
 		if (object != null) {
 			thesaurusConceptService.destroyThesaurusConcept(object);

@@ -128,7 +128,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Inject
 	@Named("thesaurusTermUtils")
 	private ThesaurusTermUtils thesaurusTermUtils;
-	
+
 	@Inject
 	@Named("alignmentService")
 	private IAlignmentService alignmentService;
@@ -369,7 +369,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		updateConceptTerms(concept, terms);
 
 		alignmentService.saveAlignments(concept, alignments);
-		
+
 		return thesaurusConceptDAO.update(saveAssociativeRelationship(concept, associatedConcepts));
 	}
 
@@ -437,15 +437,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		return concept;
 	}
-	
-	
+
+
 
 	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object)
 			throws BusinessException {
-		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()
-				|| object.getStatus() == ConceptStatusEnum.REJECTED.getStatus()) {
 			List<ThesaurusTerm> terms = thesaurusTermDAO
 					.findTermsByConceptId(object.getIdentifier());
 			for (ThesaurusTerm term : terms) {
@@ -474,9 +472,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 
 			return thesaurusConceptDAO.delete(object);
-        } else {
-            throw new BusinessException("It's not possible to delete a concept with a status different from candidate or rejected", "delete-concept");
-        }
 	}
 
 	private void updateConceptTerms(ThesaurusConcept concept,
@@ -667,14 +662,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
 				.getById(conceptId);
 		return getRecursiveParentByConceptId(
-				thesaurusConcept, 
+				thesaurusConcept,
 				new ArrayList<ThesaurusConcept>());
 	}
 
 	private List<ThesaurusConcept> getRecursiveParentByConceptId(
 			ThesaurusConcept beginConcept,
 			ArrayList<ThesaurusConcept> arrayOfParent) {
-		
+
 		Set<ThesaurusConcept> parentConcepts = beginConcept.getParentConcepts();
 		if (parentConcepts.size()>0) {
 			ThesaurusConcept parent = parentConcepts.iterator().next();
