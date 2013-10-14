@@ -54,6 +54,7 @@ Ext
 						type : 'vbox',
 						align : 'stretch'
 					},
+					trackable : true,
 
 					xMetadataTitle : 'Metadata',
 

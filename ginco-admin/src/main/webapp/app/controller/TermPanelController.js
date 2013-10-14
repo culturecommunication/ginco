@@ -54,6 +54,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var thesaurusData = termPanel.up('thesaurusTabPanel').thesaurusData;
 		var model = this.getThesaurusTermModelModel();
 		var termId = termPanel.gincoId;
+		termPanel.addNodePath(thesaurusData.id);
+		termPanel.addNodePath("SANDBOX_"+thesaurusData.id);
 		if (termId != '' && termId != null) {
 			theForm.getEl().mask("Chargement");
 			model.load(termId, {
