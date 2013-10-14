@@ -408,9 +408,9 @@
 		addEvent(window,'unload',EventCache.flush);
 		addEvent(window,'load', function() {
 			injectTokens("%TOKEN_NAME%", "%TOKEN_VALUE%");
-			Ext.TokenName = "%TOKEN_NAME%";
-			Ext.TokenValue = "%TOKEN_VALUE%";
 		});
+		Ext.TokenName = "%TOKEN_NAME%";
+		Ext.TokenValue = "%TOKEN_VALUE%";
 	} else {
 		alert("OWASP CSRFGuard JavaScript was included from within an unauthorized domain!");
 	}
