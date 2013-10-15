@@ -159,7 +159,7 @@ CREATE TABLE associative_relationship
   concept2 text NOT NULL,
   role text,
   CONSTRAINT pk_associative_relationship PRIMARY KEY (concept1, concept2)
-); 
+);
 
 CREATE TABLE associative_relationship_role
 (
@@ -181,12 +181,12 @@ ALTER TABLE thesaurus_concept
     ADD FOREIGN KEY (thesaurusid)
     REFERENCES thesaurus (identifier)
     ON UPDATE NO ACTION ON DELETE CASCADE;
-    
+
 ALTER TABLE hierarchical_relationship
    ADD FOREIGN KEY (childconceptid)
    REFERENCES thesaurus_concept (identifier)
     ON UPDATE NO ACTION ON DELETE CASCADE;
-   
+
 ALTER TABLE hierarchical_relationship
    ADD FOREIGN KEY (parentconceptid)
    REFERENCES thesaurus_concept (identifier)
@@ -196,27 +196,27 @@ ALTER TABLE top_relationship
    ADD FOREIGN KEY (childconceptid)
    REFERENCES thesaurus_concept (identifier)
    ON UPDATE NO ACTION ON DELETE CASCADE;
-      
+
 ALTER TABLE top_relationship
    ADD FOREIGN KEY (rootconceptid)
    REFERENCES thesaurus_concept (identifier)
    ON UPDATE NO ACTION ON DELETE CASCADE;
-   
+
 ALTER TABLE associative_relationship
       ADD FOREIGN KEY (role)
       REFERENCES associative_relationship_role (code);
-   
+
 ALTER TABLE associative_relationship
-      ADD FOREIGN KEY (concept1)      
+      ADD FOREIGN KEY (concept1)
       REFERENCES thesaurus_concept (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
-      
+
 ALTER TABLE associative_relationship
       ADD FOREIGN KEY (concept2)
       REFERENCES thesaurus_concept (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
-      
-      
+
+
 CREATE TABLE thesaurus_array
 (
   identifier text NOT NULL,
@@ -237,7 +237,7 @@ ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (thesaurusid)
       REFERENCES thesaurus (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
-      
+
 ALTER TABLE thesaurus_array
       ADD FOREIGN KEY (parentarrayid)
       REFERENCES thesaurus_array (identifier)
@@ -263,12 +263,12 @@ ALTER TABLE concept_group
       ADD FOREIGN KEY (thesaurusid)
       REFERENCES thesaurus (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
-      
+
 ALTER TABLE concept_group
       ADD FOREIGN KEY (conceptgrouptypecode)
       REFERENCES concept_group_type (code)
       ON UPDATE NO ACTION ON DELETE NO ACTION;
-      
+
 ALTER TABLE concept_group
       ADD FOREIGN KEY (parentgroupid)
       REFERENCES concept_group (identifier)
@@ -289,7 +289,7 @@ ALTER TABLE concept_group_label
     ADD FOREIGN KEY (conceptgroupid)
     REFERENCES concept_group (identifier)
     ON UPDATE NO ACTION ON DELETE CASCADE;
-    
+
 ALTER TABLE concept_group_label
     ADD FOREIGN KEY (lang)
     REFERENCES languages_iso639 (id)
@@ -311,28 +311,28 @@ ALTER TABLE node_label
       ADD FOREIGN KEY (thesaurusarrayid)
       REFERENCES thesaurus_array (identifier)
       ON UPDATE NO ACTION ON DELETE CASCADE;
-    
+
 CREATE SEQUENCE node_label_id_seq START WITH 1  INCREMENT BY 1;
 
 CREATE TABLE thesaurus_array_concept
 (
   thesaurusarrayid text NOT NULL,
   conceptid text NOT NULL,
-  CONSTRAINT pk_thesaurus_array_concept PRIMARY KEY (thesaurusarrayid, conceptid) 
+  CONSTRAINT pk_thesaurus_array_concept PRIMARY KEY (thesaurusarrayid, conceptid)
 );
 
 ALTER TABLE thesaurus_array_concept
       ADD FOREIGN KEY (thesaurusarrayid)
       REFERENCES thesaurus_array (identifier)
-       ON UPDATE NO ACTION ON DELETE CASCADE; 
-      
+       ON UPDATE NO ACTION ON DELETE CASCADE;
+
 ALTER TABLE thesaurus_array_concept
       ADD FOREIGN KEY (conceptid)
       REFERENCES thesaurus_concept (identifier)
-      ON UPDATE NO ACTION ON DELETE CASCADE; 
-      
+      ON UPDATE NO ACTION ON DELETE CASCADE;
+
 CREATE SEQUENCE revinfo_identifier_seq  START WITH 1  INCREMENT BY 1 ;
-CREATE SEQUENCE revinfoentitytypes_identifier_seq START WITH 1  INCREMENT BY 1 ; 
+CREATE SEQUENCE revinfoentitytypes_identifier_seq START WITH 1  INCREMENT BY 1 ;
 
 
 CREATE TABLE revinfo (
@@ -396,6 +396,7 @@ CREATE TABLE custom_concept_attribute_type
   code text NOT NULL,
   value text NOT NULL,
   thesaurusid text NOT NULL,
+  exportable boolean,
   CONSTRAINT pk_custom_concept_attribute_type PRIMARY KEY (identifier)
 );
 

@@ -1,3 +1,4 @@
+-- Add notation and dynamic groups to a concept group
 ALTER TABLE concept_group ADD COLUMN notation text;
 ALTER TABLE concept_group ADD COLUMN isdynamic boolean;
 ALTER TABLE concept_group ADD COLUMN parentconceptid text;
@@ -5,6 +6,9 @@ ALTER TABLE concept_group
   ADD CONSTRAINT fk_group_parent_concept FOREIGN KEY (parentconceptid)
       REFERENCES  thesaurus_concept (identifier) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE SET NULL;
+
+-- Add parameter "exportable" to a custom concept attribute types
+ALTER TABLE custom_concept_attribute_type ADD COLUMN exportable boolean;
 
 -- Table: alignment
 CREATE TABLE alignment

@@ -165,34 +165,39 @@
         </row>
     </table>
 
-    <table name="custom_concept_attribute_type">
+	<table name="custom_concept_attribute_type">
         <column>identifier</column>
         <column>code</column>
         <column>value</column>
         <column>thesaurusid</column>
+        <column>exportable</column>
         <row>
             <value>1</value>
             <value>test_attr 1</value>
             <value>value 1</value>
             <value>0</value>
+            <value>true</value>
         </row>
         <row>
             <value>2</value>
             <value>test_attr 2</value>
             <value>value 2</value>
             <value>0</value>
+            <value>false</value>
         </row>
         <row>
             <value>3</value>
             <value>test_attr 1</value>
             <value>value 1</value>
             <value>1</value>
+            <value>false</value>
         </row>
         <row>
             <value>4</value>
             <value>test_attr 1</value>
             <value>value 1</value>
             <value>0</value>
+            <value>false</value>
         </row>
     </table>
 

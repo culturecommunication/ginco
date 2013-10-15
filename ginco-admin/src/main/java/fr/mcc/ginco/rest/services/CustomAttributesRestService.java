@@ -117,7 +117,7 @@ public class CustomAttributesRestService {
 
 	/**
 	 * Return list of all custom attribute types for concept in given thesaurus
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
 	 * @throws BusinessException
@@ -133,12 +133,12 @@ public class CustomAttributesRestService {
 		return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
 				customAttributesTypeConverter
 						.convertList(customConceptAttributeTypeService
-								.getAttributeTypesByThesaurus(thesaurus)));
+								.getAttributeTypesByThesaurus(thesaurus), true));
 	}
 
 	/**
 	 * Updates a list of concept's type attributes.
-	 * 
+	 *
 	 * @param list
 	 * @throws BusinessException
 	 * @throws TechnicalException
@@ -157,14 +157,14 @@ public class CustomAttributesRestService {
 				customConceptAttributeTypeService
 						.saveOrUpdate(conceptAttributeType);
 				newList.add(conceptAttributeType);
-			
+
 		}
-		return customAttributesTypeConverter.convertList(newList);
+		return customAttributesTypeConverter.convertList(newList, true);
 	}
 
 	/**
 	 * Removes a list of concept's type attributes.
-	 * 
+	 *
 	 * @param list
 	 * @throws BusinessException
 	 * @throws TechnicalException
@@ -186,7 +186,7 @@ public class CustomAttributesRestService {
 
 	/**
 	 * Return list of all custom attribute types for term in given thesaurus
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
 	 * @throws BusinessException
@@ -202,12 +202,12 @@ public class CustomAttributesRestService {
 		return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
 				customAttributesTypeConverter
 						.convertList(customTermAttributeTypeService
-								.getAttributeTypesByThesaurus(thesaurus)));
+								.getAttributeTypesByThesaurus(thesaurus), false));
 	}
 
 	/**
 	 * Updates a list of term type attributes.
-	 * 
+	 *
 	 * @param list
 	 * @throws BusinessException
 	 * @throws TechnicalException
@@ -226,12 +226,12 @@ public class CustomAttributesRestService {
 				customTermAttributeTypeService.saveOrUpdate(termAttributeType);
 				newList.add(termAttributeType);
 		}
-		return customAttributesTypeConverter.convertList(newList);
+		return customAttributesTypeConverter.convertList(newList, false);
 	}
 
 	/**
 	 * Removes a list of term's type attributes.
-	 * 
+	 *
 	 * @param list
 	 * @throws BusinessException
 	 * @throws TechnicalException
@@ -253,7 +253,7 @@ public class CustomAttributesRestService {
 
 	/**
 	 * Updates a list of term type attributes.
-	 * 
+	 *
 	 * @param list
 	 * @throws BusinessException
 	 * @throws TechnicalException
@@ -275,7 +275,7 @@ public class CustomAttributesRestService {
 
 	/**
 	 * Return list of all custom attribute for term
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
 	 * @throws BusinessException
@@ -296,7 +296,7 @@ public class CustomAttributesRestService {
 
 	/**
 	 * Return list of all custom attribute for concept
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
 	 * @throws BusinessException
@@ -317,7 +317,7 @@ public class CustomAttributesRestService {
 
 	/**
 	 * Updates a list of term type attributes.
-	 * 
+	 *
 	 * @param list
 	 * @throws BusinessException
 	 * @throws TechnicalException

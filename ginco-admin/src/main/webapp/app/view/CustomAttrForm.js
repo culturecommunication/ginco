@@ -85,7 +85,6 @@ Ext.define('GincoApp.view.CustomAttrForm', {
 	},
 	onTextChange : function (theTextField, newValue)
 	{
-		console.log("newValue : "+newValue);
 		// Check URIs
 		var urlReg = new RegExp("(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z](\/\S*)?");
 		var theButton = theTextField.up().down('button');

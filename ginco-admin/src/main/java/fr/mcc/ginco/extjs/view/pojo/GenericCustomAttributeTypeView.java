@@ -42,6 +42,7 @@ public class GenericCustomAttributeTypeView {
     private String code;
     private String value;
     private String thesaurusId;
+    private Boolean exportable;
 
     public int getIdentifier() {
         return identifier;
@@ -74,4 +75,12 @@ public class GenericCustomAttributeTypeView {
     public void setThesaurusId(String thesaurusId) {
         this.thesaurusId = thesaurusId;
     }
+
+	public Boolean getExportable() {
+		return exportable;
+	}
+
+	public void setExportable(Boolean exportable) {
+		this.exportable = exportable;
+	}
 }

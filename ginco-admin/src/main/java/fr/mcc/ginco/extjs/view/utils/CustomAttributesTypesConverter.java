@@ -67,31 +67,34 @@ public class CustomAttributesTypesConverter {
     @Named("customTermAttributeTypeService")
     private ICustomTermAttributeTypeService customTermAttributeTypeService;
 
-    public GenericCustomAttributeTypeView convert(GenericCustomAttributeType source) {
-        GenericCustomAttributeTypeView view = new GenericCustomAttributeTypeView();
-        view.setCode(source.getCode());
-        view.setIdentifier(source.getIdentifier());
-        view.setThesaurusId(source.getThesaurus().getIdentifier());
-        view.setValue(source.getValue());
+    public GenericCustomAttributeTypeView convert(GenericCustomAttributeType source, boolean isConcept) {
+	    GenericCustomAttributeTypeView view = new GenericCustomAttributeTypeView();
+	    view.setCode(source.getCode());
+	    view.setIdentifier(source.getIdentifier());
+	    view.setThesaurusId(source.getThesaurus().getIdentifier());
+	    view.setValue(source.getValue());
+	    if (isConcept){
+	    	CustomConceptAttributeType conceptSource = (CustomConceptAttributeType) source;
+	    	view.setExportable(conceptSource.getExportable());
+	    }
+	    return view;
+	}
 
-        return view;
-    }
+	public List<GenericCustomAttributeTypeView> convertList(List<? extends GenericCustomAttributeType> sourceList, boolean isConcept) {
+	    List<GenericCustomAttributeTypeView> list = new ArrayList<GenericCustomAttributeTypeView>();
+	    for(GenericCustomAttributeType attributeType : sourceList) {
+	        list.add(convert(attributeType, isConcept));
+	    }
 
-    public List<GenericCustomAttributeTypeView> convertList(List<? extends GenericCustomAttributeType> sourceList) {
-        List<GenericCustomAttributeTypeView> list = new ArrayList<GenericCustomAttributeTypeView>();
-        for(GenericCustomAttributeType attributeType : sourceList) {
-            list.add(convert(attributeType));
-        }
-
-        return list;
-    }
+	    return list;
+	}
 
     public GenericCustomAttributeType convert(GenericCustomAttributeTypeView view, boolean isConcept) {
 
         Thesaurus thesaurus = thesaurusService.getThesaurusById(view.getThesaurusId());
 
         if(isConcept) {
-            GenericCustomAttributeType hibernateRes = customConceptAttributeTypeService.getAttributeTypeById(view.getIdentifier());
+            CustomConceptAttributeType hibernateRes = customConceptAttributeTypeService.getAttributeTypeById(view.getIdentifier());
             if(hibernateRes == null) {
                 hibernateRes = new CustomConceptAttributeType();
                 hibernateRes.setThesaurus(thesaurus);
@@ -99,10 +102,11 @@ public class CustomAttributesTypesConverter {
 
             hibernateRes.setCode(view.getCode().replace(' ','_').toLowerCase());
             hibernateRes.setValue(view.getValue());
+            hibernateRes.setExportable(view.getExportable());
 
             return hibernateRes;
         } else {
-            GenericCustomAttributeType hibernateRes = customTermAttributeTypeService.getAttributeTypeById(view.getIdentifier());
+            CustomTermAttributeType hibernateRes = customTermAttributeTypeService.getAttributeTypeById(view.getIdentifier());
             if(hibernateRes == null) {
                 hibernateRes = new CustomTermAttributeType();
                 hibernateRes.setThesaurus(thesaurus);

@@ -8,5 +8,6 @@ Ext.define('GincoApp.locale.fr.view.CustomAttributeTypesPanel',
         xSave : 'Enregistrer',
         xActions : 'Actions',
         xConceptsTitle : "Attributs personnalisés (Concepts)",
-        xTermsTitle : "Attributs personnalisés (Termes)"
+        xTermsTitle : "Attributs personnalisés (Termes)",
+        xExportableConceptColumnLabel : 'Exportable',
     });

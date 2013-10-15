@@ -34,10 +34,22 @@
  */
 package fr.mcc.ginco.beans;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 
 /**
  *
  */
 public class CustomConceptAttributeType extends GenericCustomAttributeType {
+
+	private Boolean exportable;
+
+	public Boolean getExportable() {
+		return exportable;
+	}
+
+	public void setExportable(Boolean exportable) {
+		this.exportable = exportable;
+	}
 }

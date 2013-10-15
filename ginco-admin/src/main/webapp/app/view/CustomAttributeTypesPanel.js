@@ -55,6 +55,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
     xActions : 'Actions',
     xConceptsTitle : 'Concepts custom attributes',
     xTermsTitle : 'Terms custom attributes',
+    xExportableConceptColumnLabel : 'Exportable',
 
     conceptAttrStore : null,
     termAttrStore : null,
@@ -116,8 +117,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                                 xtype: 'textfield',
                                 allowBlank: false
                             }
-                        },
-                        {
+                        },{
                             dataIndex : 'value',
                             renderer: 'htmlEncode',
                             flex: 1,
@@ -127,6 +127,11 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                                 allowBlank: false
                             }
                         },{
+							xtype : 'checkcolumn',
+							dataIndex : 'exportable',
+							header : me.xExportableConceptColumnLabel,
+							stopSelection : false
+						},{
                             xtype : 'actioncolumn',
                             itemId : 'conceptActionColumn',
                             header : me.xActions,
