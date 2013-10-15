@@ -43,6 +43,10 @@ import fr.mcc.ginco.exceptions.BusinessException;
 /**
  * Data Access Object for thesaurus_concept
  */
+/**
+ * @author hufon
+ *
+ */
 public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
 	
 	/**
@@ -120,7 +124,16 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param concept
      * @return
      */
-    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept); 
+    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept);
+
+	/**
+	 * @param idThesaurus
+	 * @return Number of concept in a thesaurus
+	 * @throws BusinessException
+	 */
+	Long countConcepts(String idThesaurus) throws BusinessException;
+
+	Long countConceptsWoNotes(String idThesaurus) throws BusinessException; 
     
     
 }

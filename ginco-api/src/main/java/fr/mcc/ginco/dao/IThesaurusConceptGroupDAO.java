@@ -51,5 +51,7 @@ public interface IThesaurusConceptGroupDAO extends IGenericDAO<ThesaurusConceptG
 	 */
 	List<ThesaurusConceptGroup> findThesaurusConceptGroupsByThesaurusId(String excludedConceptGroupId,
 			String thesaurusId);
+
+	Long countItems(String idThesaurus);
     
 }

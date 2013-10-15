@@ -37,9 +37,11 @@ package fr.mcc.ginco.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 
@@ -69,4 +71,13 @@ public class ThesaurusConceptGroupDAO extends GenericHibernateDAO<ThesaurusConce
         	criteria.add(Restrictions.ne("ta.identifier", (String) excludedConceptGroupId));
         }
     }
+    
+    @Override
+	public Long countItems(String idThesaurus) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConceptGroup.class);
+		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+				.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
 }

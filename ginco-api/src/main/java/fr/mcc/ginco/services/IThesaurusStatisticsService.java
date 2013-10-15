@@ -32,49 +32,25 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
-
-import fr.mcc.ginco.beans.ThesaurusArray;
+package fr.mcc.ginco.services;
 
 import java.util.List;
 
+import fr.mcc.ginco.beans.ThesaurusStatistics;
+import fr.mcc.ginco.beans.ThesaurusType;
+
 /**
- * Data Access Object for thesaurus array
+ * Service used to work with {@link ThesaurusType} objects, contains basic
+ * methods exposed to client part. For example, to get all
+ * ThesaurusType objects, use {@link #getThesaurusTypeList()}
+ *
+ * @see fr.mcc.ginco.beans
  */
-public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> {
+public interface IThesaurusStatisticsService {
     /**
-     * Get all thesaurusArrays from thesaurus with given id, excluding the concept array which id is given in parameter
-     * @param excludedConceptArrayId : the concept to exclude (can be null)
-     * @param thesaurusId
+     * Get a Thesaurus statistics object
+     * @param thesaurus
      * @return
      */
-    List<ThesaurusArray> getThesaurusArrayListByThesaurusId(String excludedConceptArrayId, String thesaurusId);
-    
-    /**
-     * Returns all arrays this concept is the super ordinate
-     * @param conceptId
-     * @return
-     */
-    List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId);
-
-    /**
-     * Return list of all arrays who have not SuperOrdinatedConcept.
-     * @param thesaurusId
-     * @return
-     */
-    List<ThesaurusArray> getArraysWithoutSuperordinatedConcept(String thesaurusId);
-    
-    /**
-     * Returns all arrays matching this concept as super ordinate, excepted the array which id is given in parameter.
-     * @param String conceptId
-     * @param String excludeArrayId
-     * @return List of ThesaurusArrays
-     */
-	List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId,
-			String excludeArrayId);
-	
-	List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId);
-	List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId);
-
-	Long countItems(String idThesaurus);
+	ThesaurusStatistics getStatistics(String thesaurusId);
 }

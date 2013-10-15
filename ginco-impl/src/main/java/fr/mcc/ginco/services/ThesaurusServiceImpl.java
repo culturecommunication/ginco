@@ -55,7 +55,6 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
-import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusDAO;
@@ -245,5 +244,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
             throw new BusinessException("Error deleting thesaurus!","error-deleting-thesaurus",ex);
         }
     }
+
+	
 
 }

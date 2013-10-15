@@ -42,6 +42,7 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.*;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -79,6 +80,10 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
+	
+	@Inject
+	@Named("thesaurusStatisticsService")
+	private IThesaurusStatisticsService thesaurusStatisticsService;
 
     @Inject
     @Named("thesaurusOrganizationService")
@@ -301,5 +306,12 @@ public class ThesaurusRestService {
     		}
     	}
     	return returnedOrgs;
+    }
+    
+    @GET
+    @Path("/getStatistics")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public ThesaurusStatistics getStatistics(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+    	return thesaurusStatisticsService.getStatistics(thesaurusId);
     }
 }

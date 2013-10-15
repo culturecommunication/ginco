@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusStatistics;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
@@ -107,4 +108,6 @@ public interface IThesaurusService {
      * @return
      */
     Thesaurus archiveThesaurus(Thesaurus thesaurus) throws BusinessException, TechnicalException;
+
+
 }

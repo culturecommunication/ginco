@@ -41,12 +41,14 @@ import fr.mcc.ginco.exceptions.BusinessException;
 
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
+import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -111,6 +113,38 @@ public class ThesaurusTermDAO extends
 		.add(Restrictions.eq(PREFERED, Boolean.TRUE))
 		.setProjection(Projections.rowCount());
 		return (Long) criteria.list().get(0);
+	}
+	
+	@Override
+	public Long countNonPreferredTerms(String idThesaurus)
+			throws BusinessException {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+		.add(Restrictions.isNotNull(CONCEPT))
+		.add(Restrictions.eq(PREFERED, Boolean.FALSE))
+		.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
+	
+	@Override
+	public Long countTerms(String idThesaurus)
+			throws BusinessException {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
+		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+		.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
+	
+	@Override
+	public Long countTermsWoNotes(String idThesaurus)
+			throws BusinessException {
+		Query query = getCurrentSession().createSQLQuery("select count(*) "
++"from thesaurus_term t "
++"left join note n on t.identifier = n.termid " 
++"where t.thesaurusid=:pthesaurusid" 
++" and n.identifier is null");
+		query.setParameter("pthesaurusid", idThesaurus);
+		return ((BigInteger)query.list().get(0)).longValue();
 	}
 	
 	@Override

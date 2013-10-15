@@ -34,9 +34,12 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -113,4 +116,13 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
     	criteria.add(Restrictions.eq("ta.parent.identifier", thesaurusArrayId));
     	return criteria.list();
     }
+    
+    @Override
+	public Long countItems(String idThesaurus) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusArray.class);
+		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+				.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
 }

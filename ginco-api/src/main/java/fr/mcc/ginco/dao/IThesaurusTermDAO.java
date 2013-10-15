@@ -190,4 +190,10 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 */
 	List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
 			throws BusinessException;
+
+	Long countTerms(String idThesaurus) throws BusinessException;
+
+	Long countNonPreferredTerms(String idThesaurus) throws BusinessException;
+
+	Long countTermsWoNotes(String idThesaurus) throws BusinessException;
 }

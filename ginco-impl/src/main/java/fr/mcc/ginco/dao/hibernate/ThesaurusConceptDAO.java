@@ -36,14 +36,18 @@ package fr.mcc.ginco.dao.hibernate;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
+
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -54,6 +58,8 @@ import java.util.List;
 public class ThesaurusConceptDAO extends
 		GenericHibernateDAO<ThesaurusConcept, String> implements
 		IThesaurusConceptDAO {
+	
+	private static final String THESAURUS_IDENTIFIER = "thesaurus.identifier";
 
 	public ThesaurusConceptDAO() {
 		super(ThesaurusConcept.class);
@@ -270,6 +276,27 @@ public class ThesaurusConceptDAO extends
 		selectOrphans(criteria, !topConcept);
 		selectNoParents(criteria);
 		return criteria;
+	}
+	
+	@Override
+	public Long countConcepts(String idThesaurus)
+			throws BusinessException {
+		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusConcept.class);
+		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+		.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
+	
+	@Override
+	public Long countConceptsWoNotes(String idThesaurus)
+			throws BusinessException {
+		Query query = getCurrentSession().createSQLQuery("select count(*) "
++"from thesaurus_concept c  "
++"left join note n on c.identifier = n.conceptid  " 
++"where c.thesaurusid=:pthesaurusid" 
++" and n.identifier is null");
+		query.setParameter("pthesaurusid", idThesaurus);
+		return ((BigInteger)query.list().get(0)).longValue();
 	}
 
 }
