@@ -192,6 +192,14 @@ public class SKOSConceptExporter {
                         		DateUtil.toString(concept.getModified()));
         addList.add(new AddAssertion(vocab, modifiedInsertion));
 
+        if (concept.getNotation() != null &&  !concept.getNotation().isEmpty()){
+        	SKOSDataRelationAssertion notationInsertion = factory
+                    .getSKOSDataRelationAssertion(conceptSKOS, factory
+                            .getSKOSDataProperty(factory.getSKOSNotationProperty().getURI()),
+                            		concept.getNotation());
+            addList.add(new AddAssertion(vocab, notationInsertion));
+        }
+
 		return addList;
 	}
 }

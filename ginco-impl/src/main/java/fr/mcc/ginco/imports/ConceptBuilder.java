@@ -113,6 +113,11 @@ public class ConceptBuilder extends AbstractBuilder {
 			concept.setModified(thesaurus.getDate());
 		}
 
+		Statement stmtNotation = skosConcept.getProperty(SKOS.NOTATION);
+		if (stmtNotation != null){
+			concept.setNotation(stmtNotation.getString());
+		}
+
 		concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
 		builtConcepts.put(skosConcept.getURI(), concept);
 

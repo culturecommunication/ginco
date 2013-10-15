@@ -11,13 +11,17 @@ import com.hp.hpl.jena.rdf.model.Resource;
 /**
  * SKOS vocabulary class for namespace http://www.w3.org/2004/02/skos/core#
  */
+/**
+ * @author sofas
+ *
+ */
 public class SKOS {
 
 	private static final String uri = "http://www.w3.org/2004/02/skos/core#";
 
 	/**
 	 * returns the URI for this schema
-	 * 
+	 *
 	 * @return the URI for this schema
 	 */
 	public static String getURI() {
@@ -57,12 +61,12 @@ public class SKOS {
 	 * broader property
 	 */
 	public static final Property BROADER = m.createProperty(uri + "broader");
-	
+
 	/**
 	 * narrower property
 	 */
 	public static final Property NARROWER = m.createProperty(uri + "narrower");
-	
+
 	/**
 	 * related property
 	 */
@@ -73,47 +77,47 @@ public class SKOS {
      */
     public static final Resource COLLECTION = m.createResource(uri
             + "Collection");
-    
+
     /**
      * member property
      */
     public static final Property MEMBER = m.createProperty(uri + "member");
-    
+
     /**
      * inScheme property
      */
     public static final Property IN_SCHEME = m.createProperty(uri + "inScheme");
-    
+
 	/**
 	 * scopeNote property
 	 */
 	public static final Property SCOPE_NOTE = m.createProperty(uri + "scopeNote");
-	
+
 	/**
 	 * changeNote property
 	 */
 	public static final Property CHANGE_NOTE = m.createProperty(uri + "changeNote");
-	
+
 	/**
 	 * definition property
 	 */
 	public static final Property DEFINITION = m.createProperty(uri + "definition");
-	
+
 	/**
 	 * editorialNote property
 	 */
 	public static final Property EDITORIAL_NOTE = m.createProperty(uri + "editorialNote");
-	
+
 	/**
 	 * example property
 	 */
 	public static final Property EXAMPLE = m.createProperty(uri + "example");
-	
+
 	/**
 	 * historyNote property
 	 */
 	public static final Property HISTORY_NOTE = m.createProperty(uri + "historyNote");
-	
+
 	/**
 	 * MAP of all notes types
 	 */
@@ -126,5 +130,8 @@ public class SKOS {
 		put(HISTORY_NOTE.getLocalName(),HISTORY_NOTE);
 	}};
 
-    
+	/**
+	 * notation property
+	 */
+	public static final Property NOTATION = m.createProperty(uri + "notation");
 }
