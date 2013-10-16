@@ -78,6 +78,7 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
 
@@ -341,8 +342,9 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) throws BusinessException {
-		ThesaurusConcept object = thesaurusConceptViewConverter.convert(thesaurusViewJAXBElement);
-
+		ThesaurusConcept object = thesaurusConceptService
+				.getThesaurusConceptById(thesaurusViewJAXBElement.getIdentifier());
+		object.setModified(DateUtil.nowDate());
 		if (object != null) {
 			thesaurusConceptService.destroyThesaurusConcept(object);
 			indexerService.removeConcept(object);

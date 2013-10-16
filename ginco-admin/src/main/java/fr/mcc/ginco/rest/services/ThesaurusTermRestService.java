@@ -44,6 +44,7 @@ import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
 import org.slf4j.Logger;
@@ -208,8 +209,9 @@ public class ThesaurusTermRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
-		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement, false);
-	
+		ThesaurusTerm object =thesaurusTermService
+				.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());
+		object.setModified(DateUtil.nowDate());
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
 			indexerService.removeTerm(object);
