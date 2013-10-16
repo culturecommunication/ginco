@@ -32,28 +32,45 @@ Ext.define('GincoApp.view.ThesaurusStatisticsTabPanel', {
 				type : 'vbox',
 				align : 'stretch'
 			},
+			localized : true,
+			iconCls : 'icon-chart',
 			xStatisticsTitle : 'Statistics',
+			xnbOfTerms : 'Number of terms',
+			xnbOfConcepts : 'Number of concepts',
+			xnbOfNonPreferredTerms : 'Number of non-preferred terms',
+			xnbOfComplexConcepts : 'Number of complex concepts',
+			xnbOfThesaurusArrays : 'Number of arrays',
+			xnbOfThesaurusGroups : 'Number of concepts groups',
+			xnbOfTermsWoNotes : 'Number of terms without notes',
+			xnbOfConceptsWoNotes : 'Number of concepts without notes',
 
 			initComponent : function() {
 				var me = this;
 				Ext.applyIf(me, {
 							title : me.xStatisticsTitle,
 							items : [{
-								xtype : 'propertygrid',
-								source : {
-									
-								},
-								listeners : {
-									'beforeedit' : {
-										fn : function() {
-											return false;
+										xtype : 'propertygrid',
+										source : {},
+										nameColumnWidth : 300,
+										propertyNames : {
+											nbOfTerms:  me.xnbOfTerms,
+											nbOfConcepts : me.xnbOfConcepts,
+											nbOfNonPreferredTerms : me.xnbOfNonPreferredTerms,
+											nbOfComplexConcepts : me.xnbOfComplexConcepts,
+											nbOfThesaurusArrays : me.xnbOfThesaurusArrays,
+											nbOfThesaurusGroups : me.xnbOfThesaurusGroups,
+											nbOfTermsWoNotes : me.xnbOfTermsWoNotes,
+											nbOfConceptsWoNotes : me.xnbOfConceptsWoNotes
+										},
+										listeners : {
+											'beforeedit' : {
+												fn : function() {
+													return false;
+												}
+											}
 										}
-									}
-								}
-							}]
+									}]
 						});
 				me.callParent(arguments);
 			}
-			,
-
 		});

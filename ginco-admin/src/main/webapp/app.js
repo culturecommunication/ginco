@@ -121,7 +121,8 @@ Ext.application({
         'ComplexConceptsPanelController',
         'CustomAttributeTypesController',
         'RightNotePanelController',
-        'AlignmentController'
+        'AlignmentController',
+        'ThesaurusStatisticsTabPanelController'
     ],
     init: function(){
     },

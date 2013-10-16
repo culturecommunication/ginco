@@ -311,7 +311,7 @@ public class ThesaurusRestService {
     @GET
     @Path("/getStatistics")
     @Produces({ MediaType.APPLICATION_JSON })
-    public ThesaurusStatistics getStatistics(@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
-    	return thesaurusStatisticsService.getStatistics(thesaurusId);
+    public ExtJsonFormLoadData getStatistics(@QueryParam("id") String thesaurusId) throws BusinessException {
+    	return new ExtJsonFormLoadData(thesaurusStatisticsService.getStatistics(thesaurusId));
     }
 }

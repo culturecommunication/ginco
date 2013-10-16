@@ -36,6 +36,8 @@
 package fr.mcc.ginco.beans;
 
 public class ThesaurusStatistics {
+	
+	private String thesaurusId = "";
 	private Number nbOfTerms = 0;
 	private Number nbOfTermsWoNotes = 0;
 	private Number nbOfNonPreferredTerms = 0;
@@ -44,6 +46,10 @@ public class ThesaurusStatistics {
 	private Number nbOfComplexConcepts = 0;
 	private Number nbOfThesaurusArrays = 0;
 	private Number nbOfThesaurusGroups = 0;
+
+	public ThesaurusStatistics(String thesaurusId2) {
+		this.thesaurusId = thesaurusId2;
+	}
 
 	public Number getNbOfTerms() {
 		return nbOfTerms;
@@ -107,5 +113,13 @@ public class ThesaurusStatistics {
 
 	public void setNbOfConceptsWoNotes(Number nbOfConceptsWoNotes) {
 		this.nbOfConceptsWoNotes = nbOfConceptsWoNotes;
+	}
+
+	public String getThesaurusId() {
+		return thesaurusId;
+	}
+
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
 	}
 }

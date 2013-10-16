@@ -89,7 +89,7 @@ public class ThesaurusStatisticsServiceImpl implements IThesaurusStatisticsServi
 		if (th == null) {
 			throw new BusinessException("Invalid thesaurusId : " + thesaurusId, "invalid-thesaurus-id");
 		}
-		ThesaurusStatistics stats = new ThesaurusStatistics();
+		ThesaurusStatistics stats = new ThesaurusStatistics(thesaurusId);
 		stats.setNbOfTerms(termDAO.countTerms(thesaurusId));
 		stats.setNbOfNonPreferredTerms(termDAO.countNonPreferredTerms(thesaurusId));
 		stats.setNbOfConcepts(conceptDAO.countConcepts(thesaurusId));

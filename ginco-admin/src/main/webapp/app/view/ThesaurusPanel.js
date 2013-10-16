@@ -326,7 +326,6 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                                     disabled :  false
                                                 },
                                                 {
-                                                    title : me.xStatisticsTabTile,
                                                     itemId : 'statisticsTab',
                                                     xtype : 'thesaurusStatisticsTabPanel',
                                                     closable : false,

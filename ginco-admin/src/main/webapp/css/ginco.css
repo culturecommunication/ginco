@@ -151,6 +151,10 @@ a.x-tab-close-btn:focus  {
 	background-image: url(../images/folder.png) !important;
 }
 
+.icon-chart {
+	background-image: url(../images/chart_bar.png) !important;
+}
+
 .mandatory-field {
 	color: red !important;
 }
