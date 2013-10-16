@@ -58,6 +58,10 @@ public class ExternalThesaurusServiceImpl implements IExternalThesaurusService {
 	public List<ExternalThesaurus> getExternalThesaurusList() {
 		return externalThesaurusDAO.findAll();
 	}
-
+	
+	@Override
+	public ExternalThesaurus getExternalThesaurusById(Integer identifier) {
+		return externalThesaurusDAO.getById(identifier);
+	}
 	
 }

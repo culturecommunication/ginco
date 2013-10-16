@@ -53,7 +53,7 @@ Ext
 					xDeleteNotAvailableParentMsgLabel : 'Please remove the parents relationships',
 					xDeleteNotAvailableAssociationMsgLabel : 'Please remove the associative relationships',
 					xDeleteNotAvailableParentAssociationMsgLabel : 'Please remove the parent and associative relationships',
-
+					
 					onConceptFormRender : function(theForm) {
 						var me = this;
 						var thePanel = theForm.up('conceptPanel');
@@ -250,6 +250,21 @@ Ext
 						var theStore = theGrid.getStore();
 						theStore.remove(rec);
 					},
+					
+					onAlignmentAction: function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
+				    	var m = e.getTarget().className.match(/\bicon-(\w+)\b/);
+				    	 if(m){
+				             switch(m[1]){
+				                 case 'edit':
+				                     this.onEditAlignmentClick(gridview, el, rowIndex, colIndex, e, rec, rowEl);
+				                	 break;
+				                 case 'delete':
+				                     this.onRemoveAlignmentClick(gridview, el, rowIndex, colIndex, e, rec, rowEl);
+				                     break;
+				             }
+				         }
+						
+					},	
 
 					onSelectTermDblClick : function(theGrid, record) {
 						var theWin = theGrid.up('selectTermWin');
@@ -306,36 +321,61 @@ Ext
 						var thePanel = me.getActivePanel(theButton);
 						var theGrid = thePanel
 								.down('#gridPanelAlignments');
-						
+						var win = this.createAlignmentWin(thePanel,theGrid);		
+						win.show();	
+
+					},
+					
+					onEditAlignmentClick : function(gridview, el, rowIndex,
+							colIndex, e, rec, rowEl) {
+						var me = this;
+						var theGrid = gridview
+								.up('#gridPanelAlignments');
+						var thePanel = me.getActivePanel(theGrid);
+						var win = this.createAlignmentWin(thePanel, theGrid, rec);
+						win.show();						
+						win.fireEvent('loadAlignment', rec, win);
+							
+					},
+					
+					createAlignmentWin: function(thePanel, theGrid, record) {
+						var me=this;
 						var win = Ext.create('GincoApp.view.AlignmentWin',
-								{
+							{
 									thesaurusData : thePanel.thesaurusData,
 									conceptId : thePanel.gincoId,
-									storeAlignmentTypes : Ext.create('GincoApp.store.AlignmentTypeStore'),
+									storeAlignmentTypes : Ext.create('GincoApp.store.AlignmentTypeStore'),								
 									listeners: {
 										addAlignment : {
 						                    fn: function(theButton) {
-						                            me.saveAlignment(theGrid, theButton);
+						                            me.saveAlignment(theGrid, theButton, record);
 						                    }
 										}
 									}
 									
-								});						
-						win.show();	
+							});		
+						return win;
 					},
 					
-					saveAlignment: function(theGrid, theButton) {						
+					saveAlignment: function(theGrid, theButton, record) {	
+						var me = this;
+						
 						var theForm = theButton.up('form');
 						var theWin = theButton.up('alignmentWin');						
-						var theAlignmentGridStore = theGrid.getStore();		
-						
+						var theAlignmentGridStore = theGrid.getStore();						
+					
 						var model = Ext.create('GincoApp.model.AlignmentModel');
+						if (record) {
+							model = record;
+						}
+						
 						model.data.andRelation = theForm.down('#isAndCheckbox').value;
 						model.data.alignmentType = theForm.down('#typeCombo').value;	
 						
 						var externalThesaurusModel = Ext.create('GincoApp.model.ExternalThesaurusModel');
 						
 						var fields = theForm.getForm().getFields();
+						model.targetConcepts().removeAll();
 				        for(idx in fields.items) {
 				        	field = fields.items[idx];
 				            if(field.getName() == 'internal_concept') {
@@ -351,7 +391,7 @@ Ext
 				            if (field.getName()== 'external_thesaurus') {
 				            	externalThesaurusModel.set('externalId', field.getValue());
 				            }
-				            if (field.getName()== 'external_thesaurus_id') {				            
+				            if (field.getName()== 'external_thesaurus_id') {	
 				            	if (field.value) {
 				            		externalThesaurusModel.set('identifier', field.value);
 				            	}
@@ -360,8 +400,15 @@ Ext
 				            	externalThesaurusModel.set('externalThesaurusType', field.value);
 				            }
 				        }		
+						model.externalThesaurus().removeAll();
 				        model.externalThesaurus().add(externalThesaurusModel);
-						theAlignmentGridStore.add(model);
+						if (theAlignmentGridStore.findRecord('identifier', model.data.identifier) == null && !record){
+							theAlignmentGridStore.add(model);
+						} else {
+							record.setDirty();
+							theGrid.getView().refresh();
+							me.enableSaveBtn(theGrid);
+						}
 						theWin.close();
 					},
 					
@@ -886,9 +933,9 @@ Ext
 									'conceptPanel  button[cls=addAlignment]' : {
 										click : this.addAlignment
 									},
-									'conceptPanel #gridPanelAlignments  #alignmentActionColumn' : {
-										click : this.onRemoveAlignmentClick
-									}
+									'conceptPanel #gridPanelAlignments #alignmentActionColumn': {
+										click: this.onAlignmentAction								        
+								    }
 								});
 
 					}

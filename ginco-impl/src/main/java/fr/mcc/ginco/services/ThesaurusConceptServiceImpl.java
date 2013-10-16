@@ -297,7 +297,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
 		return LabelUtil.getLocalizedLabel(term.getLexicalValue(),
 				term.getLanguage(), defaultLang);
-	}
+	}	
 
 	@Transactional(readOnly = false)
 	@Override
@@ -310,6 +310,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			throws BusinessException {
 
 		thesaurusTermUtils.checkTerms(terms);
+		alignmentService.saveExternalThesauruses(alignments);
 
 		if (StringUtils.isNotEmpty(object.getIdentifier())) {
 			List<ThesaurusTerm> existingTerms = thesaurusTermDAO
@@ -323,7 +324,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					logger.info("Marking Term with ID "
 							+ existingTerm.getIdentifier() + " as SandBoxed.");
 				}
-			}
+			}			
 		} else {
 			object.setIdentifier(generatorService
 					.generate(ThesaurusConcept.class));
