@@ -157,6 +157,25 @@
             <value>fra</value>
         </row>
 	</table>  
+	
+	<table name="note">
+		<column>identifier</column>
+		<column>lexicalvalue</column>		
+		<column>lang</column>
+		<column>source</column>
+		<column>notetypecode</column>		
+		<column>conceptid</column>	
+		<column>termid</column>	
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/note1</value>
+			<value>my test note</value>			
+			<value>eng</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value>http://www.culturecommunication.gouv.fr/ter8</value>
+		</row>
+	</table>
 		<table name="languages_iso639">
 		<column>id</column>
 		<column>part1</column>		

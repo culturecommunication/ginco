@@ -69,6 +69,13 @@ public class ThesaurusTermDAOTest extends BaseDAOTest {
 		Assert.assertEquals("http://www.culturecommunication.gouv.fr/ter7", actualResponse.getIdentifier());
 
     }   
+    
+    @Test
+    public final void testCountTermsWoNotes() {
+    	Long count = thesaurusTermDAO.countTermsWoNotes("http://www.culturecommunication.gouv.fr/th1");
+		Assert.assertNotNull(count);
+		Assert.assertEquals("Bad number of terms without notes",5, count.intValue());
+    }   
      
 	@Override
 	public String  getXmlDataFileInit() {

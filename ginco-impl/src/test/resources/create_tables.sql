@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS custom_concept_attribute_type;
 DROP TABLE IF EXISTS custom_term_attribute_type;
 DROP TABLE IF EXISTS custom_concept_attribute;
 DROP TABLE IF EXISTS custom_term_attribute;
+DROP TABLE IF EXISTS note;
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
@@ -378,6 +379,18 @@ CREATE TABLE note_type
   isconcept boolean NOT NULL,
   CONSTRAINT pk_note_type PRIMARY KEY (code)
  );
+ 
+CREATE TABLE note
+(
+  identifier text NOT NULL,
+  lexicalvalue text NOT NULL,
+  lang text NOT NULL,
+  source text,
+  notetypecode text NOT NULL,
+  conceptid text,
+  termid text,
+  CONSTRAINT pk_note_identifier PRIMARY KEY (identifier)
+);
 
   CREATE TABLE thesaurus_ark
   (
