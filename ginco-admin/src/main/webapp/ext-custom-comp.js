@@ -562,6 +562,6 @@ Ext.define('Thesaurus.form.field.Text', {
     },
     rawToValue: function(rawValue) {
         return Ext.String.htmlEncode(rawValue);
-    },
+    }
 });
 
