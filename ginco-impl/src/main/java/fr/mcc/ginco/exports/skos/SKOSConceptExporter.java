@@ -36,12 +36,9 @@ package fr.mcc.ginco.exports.skos;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.DateUtil;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.semanticweb.skos.*;
 import org.springframework.stereotype.Component;
 
@@ -64,16 +61,16 @@ public class SKOSConceptExporter {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
+	@Named("skosTermsExporter")
+	private SKOSTermsExporter skosTermsExporter;
+
+	@Inject
 	@Named("skosNotesExporter")
 	private SKOSNotesExporter skosNotesExporter;
 
 	@Inject
-	@Named("associativeRelationshipService")
-	private IAssociativeRelationshipService associativeRelationshipService;
-
-	@Inject
-	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
+	@Named("skosAssociativeRelationshipExporter")
+	private SKOSAssociativeRelationshipExporter skosAssociativeRelationshipExporter;
 
     /**
      * Export a concept to SKOS using the skos API
@@ -87,73 +84,53 @@ public class SKOSConceptExporter {
 	public List<SKOSChange> exportConceptSKOS(ThesaurusConcept concept,
 			SKOSConcept parent, SKOSConceptScheme scheme,
 			SKOSDataFactory factory, SKOSDataset vocab) {
+
 		List<SKOSChange> addList = new ArrayList<SKOSChange>();
 
 		SKOSConcept conceptSKOS = factory.getSKOSConcept(URI.create(concept
 				.getIdentifier()));
+
 		SKOSEntityAssertion conceptAssertion = factory
 				.getSKOSEntityAssertion(conceptSKOS);
+		addList.add(new AddAssertion(vocab, conceptAssertion));
 
 		SKOSObjectRelationAssertion inScheme = factory
 				.getSKOSObjectRelationAssertion(conceptSKOS,
 						factory.getSKOSInSchemeProperty(), scheme);
-
-        List<ThesaurusTerm> prefTerms = thesaurusConceptService.getConceptPreferredTerms(concept.getIdentifier());
-
-        for (ThesaurusTerm prefTerm : prefTerms) {
-            SKOSDataRelationAssertion prefLabelInsertion = factory
-                    .getSKOSDataRelationAssertion(conceptSKOS, factory
-                            .getSKOSDataProperty(factory.getSKOSPrefLabelProperty()
-                                    .getURI()), StringEscapeUtils.unescapeXml(prefTerm.getLexicalValue()), prefTerm.getLanguage().getPart1());
-            addList.add(new AddAssertion(vocab, prefLabelInsertion));
-        }
-
-
-		for (ThesaurusConcept related : thesaurusConceptService
-				.getThesaurusConceptList(associativeRelationshipService
-						.getAssociatedConceptsId(concept))) {
-			SKOSConcept relConcept = factory.getSKOSConcept(URI.create(related
-					.getIdentifier()));
-
-			SKOSObjectRelationAssertion relAssertion = factory
-					.getSKOSObjectRelationAssertion(conceptSKOS,
-							factory.getSKOSRelatedProperty(), relConcept);
-
-			addList.add(new AddAssertion(vocab, relAssertion));
-		}
-
-		for (ThesaurusTerm altLabel : thesaurusTermService
-				.getTermsByConceptId(concept.getIdentifier())) {
-			if (altLabel.getPrefered()) {
-				continue;
-            }
-
-            if(altLabel.getHidden()) {
-                SKOSDataRelationAssertion hiddenLabelInsertion = factory
-                        .getSKOSDataRelationAssertion(conceptSKOS, factory
-                                .getSKOSDataProperty(factory
-                                        .getSKOSHiddenLabelProperty().getURI()),
-                                        StringEscapeUtils.unescapeXml(altLabel.getLexicalValue()), altLabel.getLanguage()
-                                .getPart1());
-
-                addList.add(new AddAssertion(vocab, hiddenLabelInsertion));
-            } else {
-                SKOSDataRelationAssertion altLabelInsertion = factory
-                        .getSKOSDataRelationAssertion(conceptSKOS, factory
-                                .getSKOSDataProperty(factory
-                                        .getSKOSAltLabelProperty().getURI()),
-                                        StringEscapeUtils.unescapeXml(altLabel.getLexicalValue()), altLabel.getLanguage()
-                                .getPart1());
-
-                addList.add(new AddAssertion(vocab, altLabelInsertion));
-            }
-		}
-
-		addList.add(new AddAssertion(vocab, conceptAssertion));
 		addList.add(new AddAssertion(vocab, inScheme));
 
-		addList.addAll(skosNotesExporter.exportNotes(concept.getIdentifier(),prefTerms,
-				factory, conceptSKOS, vocab));
+		SKOSDataRelationAssertion createdAssertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
+				factory.getSKOSDataProperty(URI
+						.create("http://purl.org/dct#created")), DateUtil
+						.toString(concept.getCreated()));
+		addList.add(new AddAssertion(vocab, createdAssertion));
+
+		SKOSDataRelationAssertion modifiedAssertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
+				factory.getSKOSDataProperty(URI
+						.create("http://purl.org/dct#modified")), DateUtil
+						.toString(concept.getModified()));
+		addList.add(new AddAssertion(vocab, modifiedAssertion));
+
+		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
+			SKOSDataRelationAssertion notationAssertion = factory
+					.getSKOSDataRelationAssertion(conceptSKOS, factory
+							.getSKOSDataProperty(factory
+									.getSKOSNotationProperty().getURI()),
+							concept.getNotation());
+			addList.add(new AddAssertion(vocab, notationAssertion));
+		}
+
+		List<ThesaurusTerm> prefTerms = thesaurusConceptService
+				.getConceptPreferredTerms(concept.getIdentifier());
+
+		addList.addAll(skosTermsExporter.exportConceptPreferredTerms(prefTerms,
+				conceptSKOS, factory, vocab));
+		addList.addAll(skosTermsExporter.exportConceptNotPreferredTerms(
+				concept.getIdentifier(), conceptSKOS, factory, vocab));
+
+		addList.addAll(skosAssociativeRelationshipExporter
+				.exportAssociativeRelationships(concept, factory, conceptSKOS,
+						vocab));
 
 		if (parent != null) {
 			SKOSObjectRelationAssertion childConnection = factory
@@ -176,29 +153,11 @@ public class SKOSConceptExporter {
 					.getChildrenByConceptId(concept.getIdentifier())) {
 				addList.addAll(exportConceptSKOS(child, conceptSKOS, scheme,
 						factory, vocab));
-
 			}
 		}
 
-		SKOSDataRelationAssertion createdInsertion = factory
-                .getSKOSDataRelationAssertion(conceptSKOS, factory
-                        .getSKOSDataProperty(URI.create("http://purl.org/dct#created")),
-                        		DateUtil.toString(concept.getCreated()));
-        addList.add(new AddAssertion(vocab, createdInsertion));
-
-        SKOSDataRelationAssertion modifiedInsertion = factory
-                .getSKOSDataRelationAssertion(conceptSKOS, factory
-                        .getSKOSDataProperty(URI.create("http://purl.org/dct#modified")),
-                        		DateUtil.toString(concept.getModified()));
-        addList.add(new AddAssertion(vocab, modifiedInsertion));
-
-        if (concept.getNotation() != null &&  !concept.getNotation().isEmpty()){
-        	SKOSDataRelationAssertion notationInsertion = factory
-                    .getSKOSDataRelationAssertion(conceptSKOS, factory
-                            .getSKOSDataProperty(factory.getSKOSNotationProperty().getURI()),
-                            		concept.getNotation());
-            addList.add(new AddAssertion(vocab, notationInsertion));
-        }
+		addList.addAll(skosNotesExporter.exportNotes(concept.getIdentifier(),
+				prefTerms, factory, conceptSKOS, vocab));
 
 		return addList;
 	}

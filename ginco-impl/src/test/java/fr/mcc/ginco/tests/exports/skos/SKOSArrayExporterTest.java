@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.tests.exports.skos;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -42,19 +41,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.Assert;
-
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.NodeLabel;
@@ -63,7 +55,6 @@ import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exports.skos.SKOSArrayExporter;
-import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.utils.DateUtil;
