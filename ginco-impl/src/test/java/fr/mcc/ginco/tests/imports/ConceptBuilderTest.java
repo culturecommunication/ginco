@@ -52,6 +52,7 @@ import org.mockito.MockitoAnnotations;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -69,7 +70,7 @@ public class ConceptBuilderTest {
 
 	@Mock(name = "thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Mock(name = "conceptHierarchicalRelationshipServiceUtil")
 	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
@@ -95,8 +96,12 @@ public class ConceptBuilderTest {
 		fakeThesaurus.setDate(DateUtil.dateFromString("2013-05-02 02:10:13"));
 
 		fakeThesaurus.setDefaultTopConcept(false);
+
 		Model model = ModelFactory.createDefaultModel();
 		Resource skosConcept = model.createResource("new-uri", SKOS.CONCEPT);
+		skosConcept.addProperty(DCTerms.created, "2013-10-03 15:10:13");
+		skosConcept.addProperty(DCTerms.modified, "2013-10-05 16:15:56");
+		skosConcept.addProperty(SKOS.NOTATION, "concept-notation");
 
 		ThesaurusConcept actualConcept = conceptBuilder.buildConcept(
 				skosConcept, fakeThesaurus);
@@ -104,10 +109,14 @@ public class ConceptBuilderTest {
 		Assert.assertEquals("thesaurus-uri", actualConcept.getThesaurus()
 				.getIdentifier());
 		Assert.assertEquals(false, actualConcept.getTopConcept());
-		Assert.assertEquals(DateUtil.dateFromString("2013-02-01 01:05:03"),
+
+		Assert.assertEquals(DateUtil.dateFromString("2013-10-03 15:10:13"),
 				actualConcept.getCreated());
-		Assert.assertEquals(DateUtil.dateFromString("2013-05-02 02:10:13"),
+		Assert.assertEquals(DateUtil.dateFromString("2013-10-05 16:15:56"),
 				actualConcept.getModified());
+
+		Assert.assertEquals("concept-notation",
+				actualConcept.getNotation());
 
 		Assert.assertEquals(ConceptStatusEnum.VALIDATED.getStatus(),
 				actualConcept.getStatus().intValue());
@@ -131,21 +140,21 @@ public class ConceptBuilderTest {
 
 		ThesaurusConcept currentConcept = new ThesaurusConcept();
 		currentConcept
-				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");		
-		
+				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
+
 		ThesaurusConcept parentConcept = new ThesaurusConcept();
 		parentConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423");
 
 		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428",
-						currentConcept);		
+						currentConcept);
 		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423",
 						parentConcept);
 
 		ThesaurusConcept actualConcept = conceptBuilder.buildConceptHierarchicalRelationships(skosConcept, fakeThesaurus);
-		
+
 		Set<ThesaurusConcept> actualParents = actualConcept.getParentConcepts();
 		List<String> parentIds = new ArrayList<String>();
 		for (ThesaurusConcept actualParent : actualParents) {
@@ -156,7 +165,7 @@ public class ConceptBuilderTest {
 				.assertContains(parentIds,
 						"http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423");
 	}
-	
+
 	@Test
 	public void testBuildConceptAssociativeRelationships() {
 		Thesaurus fakeThesaurus = new Thesaurus();
@@ -175,7 +184,7 @@ public class ConceptBuilderTest {
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
 		ThesaurusConcept relatedConcept = new ThesaurusConcept();
 		relatedConcept
-				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933");		
+				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933");
 
 		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428",
@@ -183,7 +192,7 @@ public class ConceptBuilderTest {
 		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933",
 						relatedConcept);
-		
+
 
 		Set<AssociativeRelationship> actualRelations = conceptBuilder
 				.buildConceptAssociativerelationship(skosConcept, fakeThesaurus);
@@ -214,11 +223,11 @@ public class ConceptBuilderTest {
 
 		Resource skosConcept = model
 				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
-		
+
 		ThesaurusConcept currentConcept = new ThesaurusConcept();
 		currentConcept
-				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");		
-		
+				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
+
 		ThesaurusConcept rootConcept = new ThesaurusConcept();
 		rootConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930");
@@ -227,14 +236,14 @@ public class ConceptBuilderTest {
 						currentConcept);
 		List<ThesaurusConcept> realRoots = new ArrayList<ThesaurusConcept>();
 		realRoots.add(rootConcept);
-		
+
 		Mockito.when(conceptHierarchicalRelationshipServiceUtil.getRootConcepts(currentConcept)).thenReturn(realRoots);
 		ThesaurusConcept actualConcept = conceptBuilder
 				.buildConceptRoot(skosConcept, fakeThesaurus);
-		
+
 		Assert.assertEquals(1, actualConcept.getRootConcepts().size());
 		Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930", actualConcept.getRootConcepts().iterator().next().getIdentifier());
 
 	}
-	
+
 }
