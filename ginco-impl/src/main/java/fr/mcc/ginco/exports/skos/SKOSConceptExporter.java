@@ -156,17 +156,6 @@ public class SKOSConceptExporter {
 			}
 		}
 
-		addList.addAll(skosNotesExporter.exportNotes(concept.getIdentifier(),
-				prefTerms, factory, conceptSKOS, vocab));
-
-        if (concept.getNotation() != null &&  !concept.getNotation().isEmpty()){
-        	SKOSDataRelationAssertion notationInsertion = factory
-                    .getSKOSDataRelationAssertion(conceptSKOS, factory
-                            .getSKOSDataProperty(factory.getSKOSNotationProperty().getURI()),
-                            		concept.getNotation());
-            addList.add(new AddAssertion(vocab, notationInsertion));
-        }
-
 		return addList;
 	}
 }
