@@ -801,6 +801,10 @@ Ext
 					    	me.enableSaveBtn(aGridPanel);
 					    });
 					},
+					onGotoAlignedConcept: function (theButton, conceptId)
+					{
+						console.log(conceptId);
+					},
 
 					init : function() {						
 						this
@@ -888,6 +892,9 @@ Ext
 									},
 									'conceptPanel #gridPanelAlignments  #alignmentActionColumn' : {
 										click : this.onRemoveAlignmentClick
+									},
+									'conceptPanel #gridPanelAlignments  #alignmentUrlColumn' : {
+										gotoconcept : this.onGotoAlignedConcept
 									}
 								});
 
