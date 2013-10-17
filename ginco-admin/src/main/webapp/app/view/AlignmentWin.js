@@ -59,6 +59,7 @@ Ext
 					xAndOrOr: "AND between concepts",
 					xAddInternalConceptId: "Add a ginco concept",	
 					xAddExternalConceptId : "Add an external concept",
+					xSaveBtn : "Save",
 					width : 500,					
 					titleAlign : 'center',
 					modal : true,
@@ -85,6 +86,8 @@ Ext
 												formBind : true,
 												itemId : 'saveAlignmentPopup',
 												iconCls : 'icon-save',
+												tooltip : me.xSaveBtn,
+												tooltipType: 'title',
 												handler : function(
 															theButton) {
 													me

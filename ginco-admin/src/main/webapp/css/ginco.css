@@ -163,3 +163,7 @@ h1.x-panel-header {
 	height: 30px;
 	text-align: center;
 }
+
+.alignment_item {
+	padding-bottom: 7px;
+}

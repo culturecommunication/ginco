@@ -99,6 +99,7 @@ Ext
 					xAlignmentAndRelation: 'AND',
 					xAlignmentOrRelation: 'OR',
 					xAlignmentEdit: 'Edit alignment',
+					xAlignmentGoBtn : 'View',
 
 					conceptHierarchicalRoleRenderer : function(value, record) {
 						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
@@ -656,7 +657,7 @@ Ext
 																						dataIndex: 'targetConcepts',
 																						itemId : 'alignmentUrlColumn',
 																						xtype: 'alignmentcolumn',
-																						//renderer: me.alignmentConceptRenderer,
+																						btnLbl : me.xAlignmentGoBtn,
 																						flex : 1
 																					}, {
 																						xtype : 'actioncolumn',
