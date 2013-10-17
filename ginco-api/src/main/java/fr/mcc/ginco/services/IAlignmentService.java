@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 
 /**
@@ -71,4 +70,7 @@ public interface IAlignmentService {
 	 */
 	ThesaurusConcept saveAlignments(ThesaurusConcept concept,
 			List<Alignment> alignments);
+	
+	void saveExternalThesauruses(List<Alignment> alignments);
+
 }

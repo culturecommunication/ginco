@@ -37,16 +37,18 @@ package fr.mcc.ginco.extjs.view.utils;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.extjs.view.pojo.ExternalThesaurusView;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 
+
 /**
+ *Tool to convert {@link ExternalThesaurus} to {@link ExternalThesaurusView} and vice-versa
  *
  */
 @Component("externalThesaurusViewConverter")
@@ -55,16 +57,21 @@ public class ExternalThesaurusViewConverter {
 	@Inject
 	@Named("externalThesaurusTypeService")
 	private IExternalThesaurusTypeService externalThesaurusTypeService;
+	
+	@Inject
+	@Named("externalThesaurusService")
+	private IExternalThesaurusService externalThesaurusService;
+
 
 	@Log
 	private Logger logger;
 	/**
-	 * convert an ExternalThesaurus object to an ExternalThesaurusView suitable for display
+	 * convert an {@link ExternalThesaurus} object to an {@link ExternalThesaurusView} suitable for display
 	 * 
-	 * @param alignment
+	 * @param externalThesaurus
 	 * @return
 	 */
-	public ExternalThesaurusView convertExternalThseaurus(
+	public ExternalThesaurusView convertExternalThesaurus(
 			ExternalThesaurus externalThesaurus) {
 		ExternalThesaurusView view = new ExternalThesaurusView();
 
@@ -79,15 +86,23 @@ public class ExternalThesaurusViewConverter {
 	 * This method convert a {@link ExternalThesaurusView} to the matching {@link ExternalThesaurus}
 	 * object
 	 * 
-	 * @param alignmentView
-	 * @param convertedConcept
+	 * @param externalThesaurusView
 	 * @return
 	 */
 	public ExternalThesaurus convertExternalThesaurusView(
 			ExternalThesaurusView externalThesaurusView) {
+		ExternalThesaurus externalThesaurus;
+		if (externalThesaurusView.getIdentifier() == null) {
+			externalThesaurus = new ExternalThesaurus();
+			logger.info("Creating a new alignment");
+		} else {
+			externalThesaurus = externalThesaurusService.getExternalThesaurusById(externalThesaurusView
+					.getIdentifier());
+			logger.info("Getting an existing alignment");
+		}
 		
-		ExternalThesaurus externalThesaurus = new ExternalThesaurus();
-		if(externalThesaurusView.getIdentifier() != null && externalThesaurusView.getIdentifier()!= 0) {
+		
+		if (externalThesaurusView.getIdentifier() != null && externalThesaurusView.getIdentifier()!= 0) {
 			externalThesaurus.setIdentifier(externalThesaurusView.getIdentifier());
 		}
 		externalThesaurus.setExternalId(externalThesaurusView.getExternalId());

@@ -42,9 +42,8 @@ Ext
 					requires : ['GincoApp.controller.AlignmentController'],
 					localized : true,
 					config : {
-						thesaurusData : null,
-						conceptId : null,	
-						storeAlignmentTypes : null					
+						storeAlignmentTypes : null	,
+						alignmentId : null
 					},
 
 					viewConfig : {
@@ -63,6 +62,7 @@ Ext
 					width : 500,					
 					titleAlign : 'center',
 					modal : true,
+					store: null,
 					
 					initComponent : function() {
 						var me = this;
@@ -74,6 +74,7 @@ Ext
 									items : [ {
 										xtype : 'form',
 										height : 400,
+										itemId: 'alignmentForm',
 
 										dockedItems : [ {
 											xtype : 'toolbar',

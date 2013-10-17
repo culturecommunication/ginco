@@ -117,9 +117,7 @@ public class AlignmentServiceImpl implements IAlignmentService {
 				}
 				alignmentDAO.delete(existingAlignment);
 			}
-		}
-		
-		List<ExternalThesaurus> externalThesaurusesToSave = new ArrayList<ExternalThesaurus>();
+		}		
 		for (Alignment alignment : alignments) {
 			if (StringUtils.isEmpty(alignment.getIdentifier())) {
 				alignment.setIdentifier(generatorService
@@ -129,20 +127,26 @@ public class AlignmentServiceImpl implements IAlignmentService {
 			for (AlignmentConcept alignmentConcept: concepts) {
 				alignmentConceptDAO.update(alignmentConcept);
 			}
-			
-			ExternalThesaurus externalThesaurus = alignment.getExternalTargetThesaurus();
-			
-			if (externalThesaurus != null && ! externalThesaurusesToSave.contains(externalThesaurus)) {
-				externalThesaurusesToSave.add(externalThesaurus);
-			}			
+								
 			alignmentDAO.update(alignment);
-		}
-		
-		for (ExternalThesaurus externalThesaurus:externalThesaurusesToSave) {
-			externalThesaurusDAO.update(externalThesaurus);
 		}
 
 		return concept;
+	}
+	
+	public void saveExternalThesauruses(List<Alignment> alignments) {
+		List<ExternalThesaurus> externalThesaurusesToSave = new ArrayList<ExternalThesaurus>();
+
+		for (Alignment alignment:alignments) {
+			ExternalThesaurus externalThesaurus = alignment.getExternalTargetThesaurus();
+		
+			if (externalThesaurus != null && ! externalThesaurusesToSave.contains(externalThesaurus)) {
+				externalThesaurusesToSave.add(externalThesaurus);
+			}			
+		}
+		for (ExternalThesaurus extThesaurus:externalThesaurusesToSave) {
+			externalThesaurusDAO.update(extThesaurus);
+		}
 	}
 
 }

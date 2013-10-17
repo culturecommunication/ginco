@@ -41,11 +41,13 @@ Ext.define('GincoApp.controller.AlignmentController',
 			xExternalConceptId: "External identifier", 
 			xExternalThesaurusId: "External thesaurus identifier",
 			xExternalThesaurusType: "External thesaurus type",
-			
+			xEditAlignmentWinTitle: 'Edit alignment',
+
 			stores : [ 'AlignmentsStore', 'ExternalThesaurusTypeStore', 'ExternalThesaurusStore'],
-			models : [ 'AlignmentModel' ],
+			models : [ 'AlignmentModel' ],			
+			
 			storeExternalThesaurusType: Ext.create('GincoApp.store.ExternalThesaurusTypeStore'),
-			storeExternalThesaurus: Ext.create('GincoApp.store.ExternalThesaurusStore'),
+			storeExternalThesaurus: Ext.create('GincoApp.store.ExternalThesaurusStore'),		
 
 			chooseAlignmentType : function(theCombobox, theRecord,	eOpts) {
 				var form = theCombobox.up('form');
@@ -101,9 +103,13 @@ Ext.define('GincoApp.controller.AlignmentController',
 		        }
 			},
 			
-			displayAddInternalConceptField: function(theButton, e, eOpts) {
+			displayAddInternalConceptFieldByBytton: function(theButton, e, eOpts) {
+				var alignmentForm = theButton.up('form');
+				this.displayAddInternalConceptField(alignmentForm);
+			},
+			
+			displayAddInternalConceptField: function(alignmentForm, e, eOpts) {
 				var me=this;							
-				var alignmentForm = theButton.up('form');							
 				
 				var tf = Ext.create('Ext.form.field.Text', {
 	                   name: 'internal_concept',
@@ -118,6 +124,7 @@ Ext.define('GincoApp.controller.AlignmentController',
 
 				
 				var multiCheckbox=alignmentForm.down('#typeCombo');
+			
 				var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
 				if (!theRecord.data.multiConcept) {		
 					if (alignmentForm.getForm().findField("internal_concept")) {
@@ -130,12 +137,16 @@ Ext.define('GincoApp.controller.AlignmentController',
 				} else {
 					this.enableAddButtons(alignmentForm);
 				}
+				return tf;
 			},
 			
-			displayAddExternalConceptFields: function(theButton, e, eOpts) {
-				var me=this;							
+			displayAddExternalConceptFieldsByButton: function(theButton, e, eOpts) {
 				var alignmentForm = theButton.up('form');	
-				
+				this.displayAddExternalConceptFields(alignmentForm, e, eOpts);
+			},
+			
+			displayAddExternalConceptFields: function(alignmentForm, e, eOpts) {
+				var me=this;							
 				if (!alignmentForm.getForm().findField("external_thesaurus")) {
 					var tf1 = Ext.create('Ext.form.field.ComboBox', {
 						itemId:'externalThesaurus',
@@ -152,7 +163,6 @@ Ext.define('GincoApp.controller.AlignmentController',
 		                   name: 'external_thesaurus_id',
 		                   hidden :true,
 		                   itemId:'externalThesaurusId'
-
 					});
 					alignmentForm.add(tf4);	
 
@@ -179,9 +189,8 @@ Ext.define('GincoApp.controller.AlignmentController',
 				
 				this.removeField(alignmentForm, 'internal_concept');
 				
-				var multiCheckbox=alignmentForm.down('#typeCombo');
+				var multiCheckbox=alignmentForm.down('#typeCombo');				
 				var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
-
 				if (!theRecord.data.multiConcept) {		
 					if (alignmentForm.getForm().findField("external_concept")) {
 						alignmentForm.down('#addInternalConceptId').setDisabled(false);
@@ -193,6 +202,7 @@ Ext.define('GincoApp.controller.AlignmentController',
 				} else {
 					this.enableAddButtons(alignmentForm);
 				}
+				return tf3;
 			},
 			
 			updateExternalThesaurusType: function(theCombobox, theRecord,	eOpts) {
@@ -201,21 +211,74 @@ Ext.define('GincoApp.controller.AlignmentController',
 				thesaurusTypeCombo.setValue(theRecord[0].data.externalThesaurusType);	
 				var externalThesaurusIdField  = theCombobox.up('form').down('#externalThesaurusId');
 				externalThesaurusIdField.setValue(theRecord[0].data.identifier);
-			},
+			},			
+			
+			
+			loadData: function(rec,win) {
+				var me=this;
+
+				win.title=me.xEditAlignmentWinTitle;
+				
+				var alignmentTypeStore = win.storeAlignmentTypes;
+				var alignmentForm = win.down('form');
+				var isExternal = false;
+
+				alignmentTypeStore.load(function(records, operation, success) {
+					var selectedType = alignmentTypeStore.findRecord( 'identifier', rec.data.alignmentType);
+					win.down("#typeCombo").select(selectedType);
+					win.down("#typeCombo").fireEvent('select',win.down("#typeCombo"), [selectedType]);
+					win.down("#isAndCheckbox").setValue(rec.data.andRelation);		
+					var targetConceptData = rec.targetConceptsStore.getRange();
+					Ext.Array.each(targetConceptData, function(targetConcept) {
+						if (targetConcept.data.internalTargetConcept) {
+							var internalField = me.displayAddInternalConceptField(alignmentForm) ;
+							internalField.setValue(targetConcept.data.internalTargetConcept);						
+						}
+						if (targetConcept.data.externalTargetConcept) {
+							var externalField = me.displayAddExternalConceptFields(alignmentForm) ;
+							externalField.setValue(targetConcept.data.externalTargetConcept);
+							isExternal = true;
+						}
+					});	
+					if (isExternal) {
+						var externalThesaurusStore = me.storeExternalThesaurus;
+						externalThesaurusStore.load(function(records, operation, success) {		
+							var selectedThesaurus= externalThesaurusStore.findRecord( 'identifier',rec.externalThesaurus().data.items[0].data.identifier);
+							if (selectedThesaurus) {
+								alignmentForm.getForm().findField('external_thesaurus').select(selectedThesaurus);
+								alignmentForm.getForm().findField('external_thesaurus_id').setValue(selectedThesaurus.data.identifier);
+
+							} else {
+								alignmentForm.getForm().findField('external_thesaurus').select(rec.externalThesaurus().data.items[0].data.externalId);
+								alignmentForm.getForm().findField('external_thesaurus_id').setValue(rec.externalThesaurus().data.items[0].data.identifier);
+							}
+							alignmentForm.getForm().findField('external_thesaurus_type').select(rec.externalThesaurus().data.items[0].data.externalThesaurusType);
+
+						});						
+					}
+				});
+				
+
+			},			
+			
 			
 			init : function() {			
 				this.control({
+					
 					'alignmentWin #typeCombo' : {
 						select : this.chooseAlignmentType
 					},
 					'alignmentWin  #addInternalConceptId' : {
-						click : this.displayAddInternalConceptField
+						click : this.displayAddInternalConceptFieldByBytton
 					},
 					'alignmentWin  #addExternalConceptId' : {
-						click: this.displayAddExternalConceptFields
+						click: this.displayAddExternalConceptFieldsByButton
 					},					
 					'alignmentWin  #externalThesaurus' : {
 						select: this.updateExternalThesaurusType
+					},
+					'alignmentWin' :{
+						loadAlignment: this.loadData
 					}
 				});
 

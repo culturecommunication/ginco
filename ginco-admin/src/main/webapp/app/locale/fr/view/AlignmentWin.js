@@ -44,5 +44,5 @@ Ext.define('GincoApp.locale.fr.view.AlignmentWin', {
 	xTypeLabel: "Type d'alignement",
 	xAndOrOr: "ET entre les concepts",
 	xAddInternalConceptId: "Ajouter un concept Ginco",
-	xAddExternalConceptId : "Ajouter un concept externe"	
+	xAddExternalConceptId : "Ajouter un concept externe"
 });

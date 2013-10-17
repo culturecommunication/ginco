@@ -49,6 +49,15 @@ public interface IExternalThesaurusService {
      * Get list of all {@link ExternalThesaurus} already existing
      * @return
      */
-    List<ExternalThesaurus> getExternalThesaurusList();      
+    List<ExternalThesaurus> getExternalThesaurusList();   
+    
+    
+    /**
+	 * Get the external thesaurus by it's id
+	 * 
+	 * @param identifier
+	 * @return
+	 */
+    ExternalThesaurus getExternalThesaurusById(Integer identifier);
    
 }

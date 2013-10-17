@@ -98,6 +98,7 @@ Ext
 					xAlignmentRemove: 'Remove alignment',
 					xAlignmentAndRelation: 'AND',
 					xAlignmentOrRelation: 'OR',
+					xAlignmentEdit: 'Edit alignment',
 
 					conceptHierarchicalRoleRenderer : function(value, record) {
 						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
@@ -147,7 +148,7 @@ Ext
 						me.alignmentsStore = Ext
 						.create('GincoApp.store.AlignmentsStore');
 						me.alignmentTypeStore = Ext.create('GincoApp.store.AlignmentTypeStore');
-
+						me.addEvents('alignmentremoved');
 
 						Ext
 								.applyIf(
@@ -662,8 +663,13 @@ Ext
 																						itemId : 'alignmentActionColumn',
 																						header : me.xActions,
 																						items : [ {
+																							icon : 'images/pencil.png',
+																							tooltip : me.xAlignmentEdit,
+																							iconCls: 'icon-edit'
+																						},{
 																							icon : 'images/detach.png',
-																							tooltip : me.xAlignmentRemove
+																							tooltip : me.xAlignmentRemove,
+																							iconCls: 'icon-delete-alignment'
 																						} ]
 																					}
 																			]

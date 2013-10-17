@@ -53,6 +53,7 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.AlignmentConceptView;
 import fr.mcc.ginco.extjs.view.pojo.AlignmentView;
+import fr.mcc.ginco.extjs.view.pojo.ExternalThesaurusView;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAlignmentService;
 import fr.mcc.ginco.services.IAlignmentTypeService;
@@ -99,10 +100,11 @@ public class AlignmentViewConverter {
 		view.setAlignmentType(alignment.getAlignmentType().getIdentifier());
 		view.setAndRelation(alignment.isAndRelation());
 		view.setCreated(DateUtil.toString(alignment.getCreated()));
-		// if (alignment.getExternalTargetThesaurus() != null) {
-		// view.setExternalThesaurusId(alignment.getExternalTargetThesaurus()
-		// .getIdentifier());
-		// }
+		if (alignment.getExternalTargetThesaurus() != null) {
+			List<ExternalThesaurusView> externalThesauruses = new ArrayList<ExternalThesaurusView>();
+			externalThesauruses.add(externalThesaurusViewConverter.convertExternalThesaurus(alignment.getExternalTargetThesaurus()));
+		    view.setExternalThesaurus(externalThesauruses);
+		}
 		view.setIdentifier(alignment.getIdentifier());
 		if (alignment.getInternalTargetThesaurus() != null) {
 			view.setInternalThesaurusId(alignment.getInternalTargetThesaurus()
@@ -157,7 +159,8 @@ public class AlignmentViewConverter {
 
 		if (alignmentView.getExternalThesaurus() != null
 				&& alignmentView.getExternalThesaurus().size()>0
-				&& StringUtils.isNotEmpty(alignmentView.getExternalThesaurus().get(0).getExternalId())) {
+				&& StringUtils.isNotEmpty(alignmentView.getExternalThesaurus().get(0).getExternalId())) {			
+		
 			alignment.setExternalTargetThesaurus(externalThesaurusViewConverter
 					.convertExternalThesaurusView(alignmentView
 							.getExternalThesaurus().get(0)));

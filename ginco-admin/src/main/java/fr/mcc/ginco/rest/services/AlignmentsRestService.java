@@ -120,7 +120,7 @@ public class AlignmentsRestService {
 	public List<ExternalThesaurusView> getExternalThesauruses() {       
 		 List<ExternalThesaurusView> views = new ArrayList<ExternalThesaurusView>();
 		 for (ExternalThesaurus externalThesaurus: externalThesaurusService.getExternalThesaurusList()) {
-			 views.add(externalThesaurusViewConverter.convertExternalThseaurus(externalThesaurus));
+			 views.add(externalThesaurusViewConverter.convertExternalThesaurus(externalThesaurus));
 		 }
 		return views;
 	}

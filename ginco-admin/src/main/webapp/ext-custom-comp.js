@@ -422,10 +422,7 @@ Ext.define('Secure.data.writer.Writer', {
 						record.setDirty();
 					}
 				}, me);
-			} else if (association.type == 'hasOne') {
-				console.log("coucou le record");
-				console.log(record.getExternalThesaurus());
-			}
+			} 
 		}
 
         return data;

@@ -35,7 +35,35 @@
 package fr.mcc.ginco.beans;
 
 public class ExternalThesaurus {
+	private Integer identifier;
+	private String externalId;
+	private ExternalThesaurusType externalThesaurusType;	
+	
 
+	public Integer getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
+	}
+
+	public ExternalThesaurusType getExternalThesaurusType() {
+		return externalThesaurusType;
+	}
+
+	public void setExternalThesaurusType(ExternalThesaurusType externalThesaurusType) {
+		this.externalThesaurusType = externalThesaurusType;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -62,32 +90,5 @@ public class ExternalThesaurus {
 		return true;
 	}
 
-	private Integer identifier;
-	private String externalId;
-	private ExternalThesaurusType externalThesaurusType;
-
-	public Integer getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(Integer identifier) {
-		this.identifier = identifier;
-	}
-
-	public String getExternalId() {
-		return externalId;
-	}
-
-	public void setExternalId(String externalId) {
-		this.externalId = externalId;
-	}
-
-	public ExternalThesaurusType getExternalThesaurusType() {
-		return externalThesaurusType;
-	}
-
-	public void setExternalThesaurusType(ExternalThesaurusType externalThesaurusType) {
-		this.externalThesaurusType = externalThesaurusType;
-	}
 
 }
