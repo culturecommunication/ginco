@@ -38,7 +38,9 @@ package fr.mcc.ginco.tests.exports.skos;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -50,58 +52,41 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.semanticweb.skos.SKOSChange;
 import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSConceptScheme;
 import org.semanticweb.skos.SKOSCreationException;
 import org.semanticweb.skos.SKOSDataFactory;
 import org.semanticweb.skos.SKOSDataset;
 import org.semanticweb.skosapibinding.SKOSManager;
 
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AlignmentConcept;
+import fr.mcc.ginco.beans.AlignmentType;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.skos.SKOSAlignmentExporter;
-import fr.mcc.ginco.exports.skos.SKOSAssociativeRelationshipExporter;
-import fr.mcc.ginco.exports.skos.SKOSConceptExporter;
-import fr.mcc.ginco.exports.skos.SKOSNotesExporter;
-import fr.mcc.ginco.exports.skos.SKOSTermsExporter;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.services.IAlignmentService;
 
-public class SKOSConceptExporterTest {
+public class SKOSAlignmentExporterTest{
 
 	@InjectMocks
-	SKOSConceptExporter skosConceptExporter;
-
-	@Mock(name="thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
-
-	@Mock(name="skosTermsExporter")
-	private SKOSTermsExporter skosTermsExporter;
-
-	@Mock(name="skosNotesExporter")
-	private SKOSNotesExporter skosNotesExporter;
-
-	@Mock(name="skosAssociativeRelationshipExporter")
-	private SKOSAssociativeRelationshipExporter skosAssociativeRelationshipExporter;
-
-	@Mock(name="skosAlignmentExporter")
-	private SKOSAlignmentExporter skosAlignmentExporter;
+	SKOSAlignmentExporter skosAlignmentExporter;
 
 	SKOSManager man;
 	SKOSDataset vocab;
 	SKOSDataFactory factory;
-	SKOSConceptScheme scheme;
-	SKOSConcept conceptSKOS;
+
+	@Mock(name="alignmentService")
+	private IAlignmentService alignmentService;
+
 
 	@Before
 	public void init() {
-		MockitoAnnotations.initMocks(this);
+			MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
-	public void testExportConceptSKOS() throws IOException{
+	public void testExportAlignments() throws IOException {
 
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
@@ -113,39 +98,53 @@ public class SKOSConceptExporterTest {
 					"error-in-skos-objects", e);
 		}
 		factory = man.getSKOSDataFactory();
-		scheme = factory.getSKOSConceptScheme(URI.create(th.getIdentifier()));
 		Language lang = new Language();
 		lang.setPart1("fr");
 
+		// Source concept
 		ThesaurusConcept c1 = new ThesaurusConcept();
 		c1.setIdentifier("http://c1");
-		c1.setCreated(DateUtil.nowDate());
-		c1.setModified(DateUtil.nowDate());
-		c1.setNotation("c1_notation");
 
-		conceptSKOS = factory.getSKOSConcept(URI.create("http://c1"));
+		// Target internal concept
+		ThesaurusConcept c2 = new ThesaurusConcept();
+		c2.setIdentifier("http://c2");
 
-		List<ThesaurusTerm> prefTerms = new ArrayList<ThesaurusTerm>();
+		List<Alignment> alignements = new ArrayList<Alignment>();
 
-		Mockito.when(thesaurusConceptService.getConceptPreferredTerms("http://c1")).thenReturn(prefTerms);
-		Mockito.when(skosTermsExporter.exportConceptPreferredTerms(prefTerms,
-				conceptSKOS, factory, vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(skosTermsExporter.exportConceptNotPreferredTerms(
-				"http://c1", conceptSKOS, factory, vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(skosAssociativeRelationshipExporter
-				.exportAssociativeRelationships(c1, factory, conceptSKOS,
-						vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(skosAssociativeRelationshipExporter
-				.exportAssociativeRelationships(c1, factory, conceptSKOS,
-						vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(thesaurusConceptService.hasChildren("http://c1")).thenReturn(false);
-		Mockito.when(skosNotesExporter.exportNotes("http://c1",
-				prefTerms, factory, conceptSKOS, vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(skosAlignmentExporter.exportAlignments(
-				"http://c1", factory, conceptSKOS, vocab)).thenReturn(new ArrayList<SKOSChange>());
+		// Alignment =EQ (internal)
+		Alignment a_exact = new Alignment();
+		AlignmentType t_exact = new AlignmentType();
+		AlignmentConcept alignment_concept_exact = new AlignmentConcept();
+		alignment_concept_exact.setInternalTargetConcept(c2);
+		Set<AlignmentConcept> target_concepts_exact = new HashSet<AlignmentConcept>();
+		target_concepts_exact.add(alignment_concept_exact);
+		t_exact.setIsoCode("=EQ");
+		a_exact.setIdentifier("http://a_exact");
+		a_exact.setAlignmentType(t_exact);
+		a_exact.setSourceConcept(c1);
+		a_exact.setTargetConcepts(target_concepts_exact);
+		alignements.add(a_exact);
 
-		List<SKOSChange> skosChanges  = skosConceptExporter.exportConceptSKOS(c1, null, scheme, factory, vocab);
-		Assert.assertEquals(6, skosChanges.size());
+		// Alignment ~EQ (external)
+		Alignment a_close = new Alignment();
+		AlignmentType t_close = new AlignmentType();
+		AlignmentConcept alignment_concept_close = new AlignmentConcept();
+		alignment_concept_close.setExternalTargetConcept("http://external_concept");
+		Set<AlignmentConcept> target_concepts_close = new HashSet<AlignmentConcept>();
+		target_concepts_close.add(alignment_concept_close);
+		t_close.setIsoCode("~EQ");
+		a_close.setIdentifier("http://a_close");
+		a_close.setAlignmentType(t_close);
+		a_close.setSourceConcept(c1);
+		a_close.setTargetConcepts(target_concepts_close);
+		alignements.add(a_close);
+
+		Mockito.when(alignmentService.getAlignmentsBySourceConceptId("http://c1")).thenReturn(alignements);
+		SKOSConcept conceptSKOS = factory.getSKOSConcept(URI.create(c1
+				.getIdentifier()));
+
+		List<SKOSChange> skosChanges  = skosAlignmentExporter.exportAlignments(c1
+				.getIdentifier(), factory, conceptSKOS, vocab);
+		Assert.assertEquals(2, skosChanges.size());
 	}
-
 }

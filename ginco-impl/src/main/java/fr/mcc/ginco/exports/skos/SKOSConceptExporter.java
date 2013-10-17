@@ -72,15 +72,20 @@ public class SKOSConceptExporter {
 	@Named("skosAssociativeRelationshipExporter")
 	private SKOSAssociativeRelationshipExporter skosAssociativeRelationshipExporter;
 
-    /**
-     * Export a concept to SKOS using the skos API
-     * @param concept
-     * @param parent
-     * @param scheme
-     * @param factory
-     * @param vocab
-     * @return
-     */
+	@Inject
+	@Named("skosAlignmentExporter")
+	private SKOSAlignmentExporter skosAlignmentExporter;
+
+	/**
+	 * Export a concept to SKOS using the skos API
+	 *
+	 * @param concept
+	 * @param parent
+	 * @param scheme
+	 * @param factory
+	 * @param vocab
+	 * @return
+	 */
 	public List<SKOSChange> exportConceptSKOS(ThesaurusConcept concept,
 			SKOSConcept parent, SKOSConceptScheme scheme,
 			SKOSDataFactory factory, SKOSDataset vocab) {
@@ -99,16 +104,18 @@ public class SKOSConceptExporter {
 						factory.getSKOSInSchemeProperty(), scheme);
 		addList.add(new AddAssertion(vocab, inScheme));
 
-		SKOSDataRelationAssertion createdAssertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
-				factory.getSKOSDataProperty(URI
-						.create("http://purl.org/dct#created")), DateUtil
-						.toString(concept.getCreated()));
+		SKOSDataRelationAssertion createdAssertion = factory
+				.getSKOSDataRelationAssertion(conceptSKOS, factory
+						.getSKOSDataProperty(URI
+								.create("http://purl.org/dct#created")),
+						DateUtil.toString(concept.getCreated()));
 		addList.add(new AddAssertion(vocab, createdAssertion));
 
-		SKOSDataRelationAssertion modifiedAssertion = factory.getSKOSDataRelationAssertion(conceptSKOS,
-				factory.getSKOSDataProperty(URI
-						.create("http://purl.org/dct#modified")), DateUtil
-						.toString(concept.getModified()));
+		SKOSDataRelationAssertion modifiedAssertion = factory
+				.getSKOSDataRelationAssertion(conceptSKOS, factory
+						.getSKOSDataProperty(URI
+								.create("http://purl.org/dct#modified")),
+						DateUtil.toString(concept.getModified()));
 		addList.add(new AddAssertion(vocab, modifiedAssertion));
 
 		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
@@ -155,6 +162,9 @@ public class SKOSConceptExporter {
 						factory, vocab));
 			}
 		}
+
+		addList.addAll(skosAlignmentExporter.exportAlignments(
+				concept.getIdentifier(), factory, conceptSKOS, vocab));
 
 		return addList;
 	}
