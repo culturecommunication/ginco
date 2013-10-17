@@ -435,4 +435,11 @@ public class ThesaurusConceptRestService {
         result.setTotal((long) listOfRoles.size());
 		return result;
 	}
+	
+	@GET
+	@Path("/getConceptThesaurusId")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<String> getConceptThesaurusId (@QueryParam("id") String conceptId) {
+		return new ExtJsonFormLoadData<String>(thesaurusConceptService.getThesaurusConceptById(conceptId).getThesaurusId());
+	}
 }

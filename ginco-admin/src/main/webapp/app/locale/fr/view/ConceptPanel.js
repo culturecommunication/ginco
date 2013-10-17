@@ -80,5 +80,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
 	xAlignmentRemove: 'Supprimer l\'alignment',
 	xAlignmentAndRelation: 'ET',
 	xAlignmentOrRelation: 'OU',
-	xAlignmentEdit: 'Modifier l\'alignement'
+	xAlignmentEdit: 'Modifier l\'alignement',
+	xAlignmentGoBtn : 'Aller à'
 });

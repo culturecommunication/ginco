@@ -202,7 +202,6 @@ Ext.define('GincoApp.controller.MainTreeController', {
  		}
  	},
  	trackTreeSelection : function (theChangedPanel) {
- 		console.log("trackTreeSelection",theChangedPanel.getNodesPath());
  		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
  		theTree.selectPath(theChangedPanel.getNodesPath(),'id', '|');
  	},

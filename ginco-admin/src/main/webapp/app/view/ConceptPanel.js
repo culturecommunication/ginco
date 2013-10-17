@@ -31,7 +31,8 @@
 
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
 Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteConceptPanel',
-		'GincoApp.view.RightNotePanel', 'GincoApp.view.CustomAttrForm' ]);
+		'GincoApp.view.RightNotePanel', 'GincoApp.view.CustomAttrForm', 'GincoApp.view.AlignmentColumn'
+		]);
 
 Ext
 		.define(
@@ -98,26 +99,10 @@ Ext
 					xAlignmentAndRelation: 'AND',
 					xAlignmentOrRelation: 'OR',
 					xAlignmentEdit: 'Edit alignment',
+					xAlignmentGoBtn : 'View',
 
 					conceptHierarchicalRoleRenderer : function(value, record) {
 						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
-					},
-
-					alignmentConceptRenderer : function(value, meta, record, rowIndex, colIndex, store, view)
-					{
-						var targetConcepts = '';
-						if (record.targetConcepts) {
-						Ext.Array.each(record.targetConcepts().getRange(),function(targetConcept, index, array) {
-							if (targetConcept.get('internalTargetConcept')) {
-								targetConcepts += targetConcept.get('internalTargetConcept');
-							} else if (targetConcept.get('externalTargetConcept')) {
-								targetConcepts += '<a href="' + targetConcept.get('externalTargetConcept') + '">' + targetConcept.get('externalTargetConcept') + '</a>';
-							}
-							targetConcepts += '<br/>';
-						});
-						}
-
-						return targetConcepts;
 					},
 
 					initComponent : function() {
@@ -670,7 +655,9 @@ Ext
 																					}, {
 																						text: me.xAlignmentConcepts,
 																						dataIndex: 'targetConcepts',
-																						renderer: me.alignmentConceptRenderer,
+																						itemId : 'alignmentUrlColumn',
+																						xtype: 'alignmentcolumn',
+																						btnLbl : me.xAlignmentGoBtn,
 																						flex : 1
 																					}, {
 																						xtype : 'actioncolumn',
