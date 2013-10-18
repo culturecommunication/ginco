@@ -32,7 +32,7 @@
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
 Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteConceptPanel',
 		'GincoApp.view.RightNotePanel', 'GincoApp.view.CustomAttrForm', 'GincoApp.view.AlignmentColumn'
-		]);
+		,'GincoApp.view.MetaDataPanel']);
 
 Ext
 		.define(
@@ -219,12 +219,8 @@ Ext
 
 																		items : [
 																				{
-																					xtype : 'panel',
+																					xtype : 'metaDataPanel',
 																					title : me.xMetadataTitle,
-																					collapsible : true,
-																					collapsed : true,
-																					border : false,
-																					titleCollapse : true,
 																					items : [
 																							{
 																								xtype : 'displayfield',

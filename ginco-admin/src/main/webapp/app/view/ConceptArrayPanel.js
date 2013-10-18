@@ -38,6 +38,8 @@
  *
  */
 
+Ext.require([ 'GincoApp.view.MetaDataPanel' ]);
+
 Ext
 		.define(
 				'GincoApp.view.ConceptArrayPanel',
@@ -125,13 +127,8 @@ Ext
 												} ],
 												items : [
 												        {
-												        	xtype : 'panel',
+												        	xtype : 'metaDataPanel',
 															title : me.xMetadataTitle,
-															collapsible : true,
-															collapsed : true,
-															border : false,
-															titleCollapse : true,
-															anchor: '100%',
 															items : [
 																	{
 																		xtype : 'displayfield',

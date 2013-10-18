@@ -81,5 +81,6 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
         xCustomAttributeTypes: "Types d'atrributes posonalisé",
         xImportSandbox: 'Importer des termes',
         xCustomAttributeTypes: "Attributs personnalisés",
-        xMetadataTitle : 'Métadonnées'
+        xMetadataTitle : 'Métadonnées',
+        xMetadataTooltip : 'Cliquez ici pour voir/cacher les métadonnées du thésaurus'
 });

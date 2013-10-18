@@ -155,6 +155,10 @@ a.x-tab-close-btn:focus  {
 	background-image: url(../images/chart_bar.png) !important;
 }
 
+.icon-gear {
+	background-image: url(../images/gear.png) !important;
+}
+
 .mandatory-field {
 	color: red !important;
 }
@@ -166,4 +170,8 @@ h1.x-panel-header {
 
 .alignment_item {
 	padding-bottom: 7px;
+}
+
+.metadatapanel .x-panel-body {
+	background-color: rgb(239, 239, 239);
 }

@@ -31,7 +31,8 @@
 
 Ext.require([ 'GincoApp.view.ThesaurusVersionPanel',
               'GincoApp.view.CustomAttributeTypesPanel',
-              'GincoApp.view.ThesaurusStatisticsTabPanel']);
+              'GincoApp.view.ThesaurusStatisticsTabPanel',
+              'GincoApp.view.MetaDataPanel']);
 Ext.define('GincoApp.view.ThesaurusPanel', {
 	extend : 'GincoApp.view.ThesaurusEntityPanel',
 
@@ -90,6 +91,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xImportBranch: 'Import a branch',
     xMetadataTitle : 'Metadata',
     xStatisticsTabTile : 'Statistics',
+    xMetadataTooltip : 'Click here to expand/collapse metadatas of this thesaurus',
 
 	initComponent : function() {
 		var me = this;
@@ -159,13 +161,9 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                             xtype : 'hiddenfield',
                                             name : 'archived'
                                         },{
-                                        	xtype : 'panel',
+                                        	xtype : 'metaDataPanel',
 											title : me.xMetadataTitle,
-											collapsible : true,
-											collapsed : true,
-											border : false,
-											titleCollapse : true,
-											anchor: '100%',
+											collapseTooltip : me.xMetadataTooltip,
 											items : [
 													{
 														xtype : 'displayfield',

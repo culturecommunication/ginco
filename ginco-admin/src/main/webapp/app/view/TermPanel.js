@@ -39,7 +39,7 @@
  *
  */
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
-Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteTermPanel', 'GincoApp.view.CustomAttrForm' ]);
+Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteTermPanel', 'GincoApp.view.CustomAttrForm', 'GincoApp.view.MetaDataPanel' ]);
 
 Ext
 		.define(
@@ -144,12 +144,8 @@ Ext
 															} ],
 															items : [
 															        {
-															        	xtype : 'panel',
+															        	xtype : 'metaDataPanel',
 																		title : me.xMetadataTitle,
-																		collapsible : true,
-																		collapsed : true,
-																		border : false,
-																		titleCollapse : true,
 																		items : [
 																				{
 																					xtype : 'displayfield',
@@ -182,7 +178,7 @@ Ext
 																							.create('GincoApp.store.TermStatusStore'),
 																					anchor : '70%',
 																					margin : '5 0 0 0'
-																				},
+																				}
 																		        ]
 															        },
 																	{
