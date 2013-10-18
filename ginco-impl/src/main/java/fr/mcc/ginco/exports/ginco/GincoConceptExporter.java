@@ -41,11 +41,13 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.services.IAlignmentService;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
@@ -64,6 +66,10 @@ public class GincoConceptExporter {
 	@Inject
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
+	
+	@Inject
+	@Named("alignmentService")
+	private IAlignmentService alignmentService;
 
 	@Inject
 	@Named("conceptHierarchicalRelationshipDAO")
@@ -123,6 +129,11 @@ public class GincoConceptExporter {
 				.getAssociatedConceptsId(thesaurusConcept);
 		JaxbList<String> associatedConceptsIds = new JaxbList<String>(associations);		
 		return associatedConceptsIds;
+	}
+	
+	public JaxbList<Alignment> getExportAlignments(ThesaurusConcept thesaurusConcept) {
+		List<Alignment> alignments = alignmentService.getAlignmentsBySourceConceptId(thesaurusConcept.getIdentifier());
+		return new JaxbList<Alignment>(alignments);
 	}
 
 }

@@ -43,6 +43,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.CustomTermAttributeType;
@@ -63,7 +64,7 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
  */
 @SuppressWarnings("serial")
 @XmlRootElement
-@XmlSeeAlso({Note.class, NodeLabel.class, ThesaurusConceptGroupLabel.class, ConceptHierarchicalRelationship.class})
+@XmlSeeAlso({Note.class, NodeLabel.class, ThesaurusConceptGroupLabel.class, ConceptHierarchicalRelationship.class, Alignment.class})
 public class GincoExportedThesaurus implements Serializable {
 	
 	//Thesaurus, concepts and terms are read by Jaxb and automatically added to the XML structure
@@ -86,6 +87,7 @@ public class GincoExportedThesaurus implements Serializable {
     private Map<String, JaxbList<String>> associativeRelationship = new Hashtable<String, JaxbList<String>>();
     private Map<String, JaxbList<Note>> termNotes = new Hashtable<String, JaxbList<Note>>();
     private Map<String, JaxbList<Note>> conceptNotes = new Hashtable<String, JaxbList<Note>>();
+    private Map<String, JaxbList<Alignment>> alignments = new Hashtable<String, JaxbList<Alignment>>();
 
 	public Thesaurus getThesaurus() {
 		return thesaurus;
@@ -208,5 +210,12 @@ public class GincoExportedThesaurus implements Serializable {
 		this.conceptAttributeTypes = conceptAttributeTypes;
 	}
 
+	public Map<String, JaxbList<Alignment>> getAlignments() {
+		return alignments;
+	}
+
+	public void setAlignments(Map<String, JaxbList<Alignment>> alignments) {
+		this.alignments = alignments;
+	}	
     
 }

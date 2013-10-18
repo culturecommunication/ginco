@@ -42,6 +42,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
@@ -205,6 +206,14 @@ public class GincoThesaurusExportServiceImpl implements
 				thesaurusToExport.getAssociativeRelationship().put(
 						thesaurusConcept.getIdentifier(), associations);
 			}
+			
+			// Exporting alignments
+			JaxbList<Alignment> alignments = gincoConceptExporter.getExportAlignments(thesaurusConcept);
+			if (alignments != null && !alignments.isEmpty()) {
+				thesaurusToExport.getAlignments().put(
+						thesaurusConcept.getIdentifier(), alignments);
+			}
+
 		}
 		
 		//Exporting Custom Attributes Types for concepts and terms

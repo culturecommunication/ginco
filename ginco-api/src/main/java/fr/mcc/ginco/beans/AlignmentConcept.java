@@ -34,10 +34,17 @@
  */
 package fr.mcc.ginco.beans;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AlignmentConcept {
 	private Integer identifier;
 	private String externalTargetConcept;
 	private ThesaurusConcept internalTargetConcept;
+	
+	@XmlTransient
 	private Alignment alignment;
 
 	public Integer getIdentifier() {

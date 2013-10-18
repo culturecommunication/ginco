@@ -70,6 +70,7 @@ public class GincoExportServiceUtilImpl implements IGincoExportServiceUtil {
 			marshaller.marshal(thesaurusToExport, output);
 			result = output.toString();
 		} catch (JAXBException e) {
+			logger.error("Error when trying to serialize a thesaurus to XML with JAXB",e);
 			throw new TechnicalException(
 					"Error when trying to serialize a thesaurus to XML with JAXB",
 					e);
