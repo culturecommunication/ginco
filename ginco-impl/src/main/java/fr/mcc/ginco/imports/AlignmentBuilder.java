@@ -146,7 +146,7 @@ public class AlignmentBuilder extends AbstractBuilder{
 		} else {
 			ExternalThesaurus externalThesaurus = new ExternalThesaurus();
 
-			Pattern pt = Pattern.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}\\/ark\\:\\/(\\S*)\\/");
+			Pattern pt = Pattern.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/ark\\:\\/(\\S*)\\/");
 	        Matcher mt = pt.matcher(stmt.getString());
 
 	        if (mt.find()) {
