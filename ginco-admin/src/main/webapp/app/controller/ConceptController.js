@@ -774,7 +774,11 @@ Ext.define('GincoApp.controller.ConceptController', {
 						Thesaurus.ext.utils.msg(me.xSucessLabel,
 								me.xSucessSavedMsg);
 						me.application.fireEvent('conceptupdated',
-								thePanel.thesaurusData);
+								thePanel.getThesaurusData(),resultRecord
+										.get("identifier"));
+						if (!Ext.isEmpty(thePanel.parentConceptId)) {
+							me.reloadParentConceptWindow(thePanel.parentConceptId);
+						}
 						if (theCallback && typeof(theCallback) == "function") {
 							theCallback();
 						}
@@ -786,6 +790,14 @@ Ext.define('GincoApp.controller.ConceptController', {
 					}
 				});
 
+	},
+	reloadParentConceptWindow : function (parentConceptId) {
+		var me = this;
+		var thesTabs = me.getTopTabs();
+		var parentTab =thesTabs.down('conceptPanel[gincoId="'+parentConceptId+'"]');
+		if (parentTab != null) {
+			me.onConceptFormRender(parentTab.down('#conceptForm'));
+		}
 	},
 
 	exportBranch : function(theButton, theCallback) {
