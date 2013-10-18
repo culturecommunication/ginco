@@ -372,18 +372,16 @@ Ext.define('GincoApp.controller.ConceptController', {
 		model.targetConcepts().removeAll();
 		for (idx in fields.items) {
 			field = fields.items[idx];
-			if (field.getName() == 'internal_concept') {
-				var alignmentConceptModel = Ext
-						.create('GincoApp.model.AlignmentTargetConceptModel');
-				alignmentConceptModel.set('internalTargetConcept', field.value);
+			if(field.getName() == 'internal_concept'  && field.value && Ext.String.trim(field.value) != '') {
+            	var alignmentConceptModel = Ext.create('GincoApp.model.AlignmentTargetConceptModel');
+            	alignmentConceptModel.set('internalTargetConcept',field.value);
 				model.targetConcepts().add(alignmentConceptModel);
-			}
-			if (field.getName() == 'external_concept') {
-				var alignmentConceptModel = Ext
-						.create('GincoApp.model.AlignmentTargetConceptModel');
-				alignmentConceptModel.set('externalTargetConcept', field.value);
+            }		
+            if(field.getName() == 'external_concept' && field.value  && Ext.String.trim(field.value) != '') {
+            	var alignmentConceptModel = Ext.create('GincoApp.model.AlignmentTargetConceptModel');
+            	alignmentConceptModel.set('externalTargetConcept',field.value);
 				model.targetConcepts().add(alignmentConceptModel);
-			}
+            }
 			if (field.getName() == 'external_thesaurus') {
 				externalThesaurusModel.set('externalId', field.getValue());
 			}
