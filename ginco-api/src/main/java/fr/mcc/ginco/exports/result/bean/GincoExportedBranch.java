@@ -43,6 +43,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -54,7 +55,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
  */
 @SuppressWarnings("serial")
 @XmlRootElement
-@XmlSeeAlso({ Note.class, ConceptHierarchicalRelationship.class })
+@XmlSeeAlso({ Note.class, ConceptHierarchicalRelationship.class, Alignment.class })
 public class GincoExportedBranch implements Serializable {
 
 	// Concept and terms are read by Jaxb and automatically added to the XML
@@ -71,6 +72,7 @@ public class GincoExportedBranch implements Serializable {
 	private Map<String, JaxbList<ConceptHierarchicalRelationship>> hierarchicalRelationship = new Hashtable<String, JaxbList<ConceptHierarchicalRelationship>>();
 	private Map<String, JaxbList<Note>> termNotes = new Hashtable<String, JaxbList<Note>>();
 	private Map<String, JaxbList<Note>> conceptNotes = new Hashtable<String, JaxbList<Note>>();
+    private Map<String, JaxbList<Alignment>> alignments = new Hashtable<String, JaxbList<Alignment>>();
 
 	public List<ThesaurusTerm> getTerms() {
 		return terms;
@@ -120,4 +122,13 @@ public class GincoExportedBranch implements Serializable {
 	public void setRootConcept(ThesaurusConcept rootConcept) {
 		this.rootConcept = rootConcept;
 	}
+
+	public Map<String, JaxbList<Alignment>> getAlignments() {
+		return alignments;
+	}
+
+	public void setAlignments(Map<String, JaxbList<Alignment>> alignments) {
+		this.alignments = alignments;
+	}
+	
 }

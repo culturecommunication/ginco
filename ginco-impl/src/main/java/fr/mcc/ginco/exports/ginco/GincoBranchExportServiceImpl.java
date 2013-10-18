@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -145,6 +146,13 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 						concept.getIdentifier(),
 						parentConceptHierarchicalRelationship);
 			}
+		}
+		// Exporting alignments
+		JaxbList<Alignment> alignments = gincoConceptExporter.getExportAlignments(conceptBranchToExport);
+		if (alignments != null && !alignments.isEmpty()) {
+						branchToExport.getAlignments().put(
+						
+								conceptBranchToExport.getIdentifier(), alignments);
 		}
 		return gincoExportServiceUtil.serializeBranchToXmlWithJaxb(branchToExport);
 	}
