@@ -30,11 +30,14 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 	alias : 'widget.alignmentcolumn',
 	iconCls : 'icon-display',
 	btnLbl : 'View',
-	btnComponents : [],
 	tpl : Ext
 			.create('Ext.ux.CTemplate',
 					'<tpl for="."><div class="alignment_item">{url} {button}</div></tpl>'),
 	actionIdRe : new RegExp(Ext.baseCSSPrefix + 'action-col-(\\d+)'),
+	constructor : function() {
+		this.btnComponents = [];
+		this.callParent(arguments);
+	},
 	defaultRenderer : function(value, meta, record, rowIndex, colIndex, store,
 			view) {
 		var me = this, targetConcepts = '', i = 0, prefix = Ext.baseCSSPrefix;
@@ -106,48 +109,48 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 		me.mon(view, 'itemadd', me.onViewChange, me);
 		me.mon(view, 'itemremove', me.onViewChange, me);
 	},
-	    /* In IE setting the innerHTML will destroy the nodes for the previous content. If we try to reuse components it
-     * will fail as their DOM nodes will have been torn apart. To defend against this we must remove the components
-     * from the DOM just before the grid view is refreshed.
-     */
-    beforeViewRefresh: function() {
-        if (Ext.isIE) {
-            var ids = this.compIds,
-                index = 0,
-                len = ids.length,
-                item,
-                el,
-                parentEl;
+	/*
+	 * In IE setting the innerHTML will destroy the nodes for the previous
+	 * content. If we try to reuse components it will fail as their DOM nodes
+	 * will have been torn apart. To defend against this we must remove the
+	 * components from the DOM just before the grid view is refreshed.
+	 */
+	beforeViewRefresh : function() {
+		if (Ext.isIE) {
+			var ids = this.compIds, index = 0, len = ids.length, item, el, parentEl;
 
-            for ( ; index < len ; index++) {
-                if ((item = Ext.getCmp(ids[index])) && (el = item.getEl()) && (el = el.dom) && (parentEl = el.parentNode)) {
-                    parentEl.removeChild(el);
-                }
-            }
-        }
-    },
-    
-    // View has changed, may be a full refresh or just a single row
-    onViewChange: function() {
-        var me = this,
-        	tpl = me.tpl;
-        // Batch the resizing of child components until after they've all been injected
-       if (tpl.isCTemplate) {
-            // No need to wait for the polling, the sooner we inject the less painful it is
-            tpl.injectComponents();
+			for (; index < len; index++) {
+				if ((item = Ext.getCmp(ids[index])) && (el = item.getEl())
+						&& (el = el.dom) && (parentEl = el.parentNode)) {
+					parentEl.removeChild(el);
+				}
+			}
+		}
+	},
 
-            // If the template picked up other components in the data we can just ignore them, they're not for us
-            tpl.reset();
-        }
-        // A view change could mean scrollbar problems. Note this won't actually do anything till we call resumeResizing
-        me.redoScrollbars();
+	// View has changed, may be a full refresh or just a single row
+	onViewChange : function() {
+		var me = this, tpl = me.tpl;
+		// Batch the resizing of child components until after they've all been
+		// injected
+		if (tpl.isCTemplate) {
+			// No need to wait for the polling, the sooner we inject the less
+			// painful it is
+			tpl.injectComponents();
 
-    },
-    redoScrollbars: function() {
-    	var me = this,
-           grid = me.up('tablepanel');
+			// If the template picked up other components in the data we can
+			// just ignore them, they're not for us
+			tpl.reset();
+		}
+		// A view change could mean scrollbar problems. Note this won't actually
+		// do anything till we call resumeResizing
+		me.redoScrollbars();
+
+	},
+	redoScrollbars : function() {
+		var me = this, grid = me.up('tablepanel');
 		grid.doLayout();
-    },
+	},
 
 	onBtnClick : function(theButton) {
 		var me = this;
