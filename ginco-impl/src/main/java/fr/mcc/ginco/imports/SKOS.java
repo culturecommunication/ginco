@@ -11,10 +11,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 /**
  * SKOS vocabulary class for namespace http://www.w3.org/2004/02/skos/core#
  */
-/**
- * @author sofas
- *
- */
+
 public class SKOS {
 
 	private static final String uri = "http://www.w3.org/2004/02/skos/core#";
@@ -134,4 +131,40 @@ public class SKOS {
 	 * notation property
 	 */
 	public static final Property NOTATION = m.createProperty(uri + "notation");
+
+	/**
+	 * exactMatch property
+	 */
+	public static final Property EXACT_MATCH = m.createProperty(uri + "exactMatch");
+
+	/**
+	 * closeMatch property
+	 */
+	public static final Property CLOSE_MATCH = m.createProperty(uri + "closeMatch");
+
+	/**
+	 * narrowMatch property
+	 */
+	public static final Property NARROW_MATCH = m.createProperty(uri + "narrowMatch");
+
+	/**
+	 * broadMatch property
+	 */
+	public static final Property BROAD_MATCH = m.createProperty(uri + "broadMatch");
+
+	/**
+	 * relatedMatch property
+	 */
+	public static final Property RELATED_MATCH = m.createProperty(uri + "relatedMatch");
+
+	/**
+	 * MAP of all notes types
+	 */
+	public static final Map<String, Property> SKOS_ALIGNMENTS = new HashMap<String, Property>() {{
+		put("=EQ", EXACT_MATCH);
+		put("~EQ",CLOSE_MATCH);
+		put("BM",BROAD_MATCH);
+		put("NM",NARROW_MATCH);
+		put("RM",RELATED_MATCH);
+	}};
 }

@@ -61,7 +61,10 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.util.FileManager;
 
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -69,7 +72,9 @@ import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
@@ -151,6 +156,18 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Inject
 	@Named("skosNodeLabelBuilder")
 	private NodeLabelBuilder nodeLabelBuilder;
+
+	@Inject
+	@Named("skosAlignmentBuilder")
+	private AlignmentBuilder alignmentBuilder;
+
+	@Inject
+	@Named("alignmentDAO")
+	private IAlignmentDAO alignmentDAO;
+
+	@Inject
+	@Named("alignmentConceptDAO")
+	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
 
 	/*
 	 * (non-Javadoc)
@@ -306,6 +323,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			// Minimal concept informations
 			ThesaurusConcept concept = conceptBuilder.buildConcept(skosConcept,
 					thesaurus);
+
 			thesaurusConceptDAO.update(concept);
 			ThesaurusTerm preferredTerm = null;
 
@@ -323,6 +341,15 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 					skosConcept, concept,preferredTerm, thesaurus);
 			for (Note conceptNote : conceptNotes) {
 				noteDAO.update(conceptNote);
+			}
+
+			// Concept alignments
+			List<Alignment> alignments = alignmentBuilder.buildAlignments(skosConcept, concept);
+			for (Alignment alignment: alignments) {
+				for (AlignmentConcept alignmentConcept : alignment.getTargetConcepts()){
+					alignmentConceptDAO.update(alignmentConcept);
+				}
+				alignmentDAO.update(alignment);
 			}
 		}
 	}

@@ -125,25 +125,6 @@ public class SKOSConceptExporterTest {
 
 		conceptSKOS = factory.getSKOSConcept(URI.create("http://c1"));
 
-		List<ThesaurusTerm> prefTerms = new ArrayList<ThesaurusTerm>();
-
-		Mockito.when(thesaurusConceptService.getConceptPreferredTerms("http://c1")).thenReturn(prefTerms);
-		Mockito.when(skosTermsExporter.exportConceptPreferredTerms(prefTerms,
-				conceptSKOS, factory, vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(skosTermsExporter.exportConceptNotPreferredTerms(
-				"http://c1", conceptSKOS, factory, vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(skosAssociativeRelationshipExporter
-				.exportAssociativeRelationships(c1, factory, conceptSKOS,
-						vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(skosAssociativeRelationshipExporter
-				.exportAssociativeRelationships(c1, factory, conceptSKOS,
-						vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(thesaurusConceptService.hasChildren("http://c1")).thenReturn(false);
-		Mockito.when(skosNotesExporter.exportNotes("http://c1",
-				prefTerms, factory, conceptSKOS, vocab)).thenReturn(new ArrayList<SKOSChange>());
-		Mockito.when(skosAlignmentExporter.exportAlignments(
-				"http://c1", factory, conceptSKOS, vocab)).thenReturn(new ArrayList<SKOSChange>());
-
 		List<SKOSChange> skosChanges  = skosConceptExporter.exportConceptSKOS(c1, null, scheme, factory, vocab);
 		Assert.assertEquals(6, skosChanges.size());
 	}

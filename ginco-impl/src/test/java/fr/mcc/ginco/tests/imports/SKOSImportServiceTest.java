@@ -38,6 +38,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import junit.framework.Assert;
 
 import org.apache.cxf.helpers.IOUtils;
@@ -62,6 +65,7 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
+import fr.mcc.ginco.imports.AlignmentBuilder;
 import fr.mcc.ginco.imports.ConceptBuilder;
 import fr.mcc.ginco.imports.ConceptNoteBuilder;
 import fr.mcc.ginco.imports.NodeLabelBuilder;
@@ -96,9 +100,9 @@ public class SKOSImportServiceTest {
 
 	@Mock(name = "skosThesaurusBuilder")
 	private ThesaurusBuilder thesaurusBuilder;
-	
+
 	@Mock(name = "thesaurusVersionHistoryDAO")
-	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;	
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Mock(name = "skosConceptBuilder")
 	private ConceptBuilder conceptBuilder;
@@ -114,11 +118,14 @@ public class SKOSImportServiceTest {
 
 	@Mock(name = "skosNodeLabelBuilder")
 	private NodeLabelBuilder nodeLabelBuilder;
-	
+
 	@Mock(name = "thesaurushelper")
 	private ThesaurusHelper thesaurusHelper;
-	
-	@InjectMocks	
+
+	@Mock(name = "skosAlignmentBuilder")
+	private AlignmentBuilder alignmentBuilder;
+
+	@InjectMocks
     private SKOSImportServiceImpl skosImportService ;
 
 	@Before
@@ -126,7 +133,7 @@ public class SKOSImportServiceTest {
 		MockitoAnnotations.initMocks(this);
 		LoggerTestUtil.initLogger(skosImportService);
 	}
-	
+
     @Test
     public void testImportSKOSFile() throws BusinessException, IOException {
     	Thesaurus returnedThesaurus = new Thesaurus();
@@ -134,21 +141,21 @@ public class SKOSImportServiceTest {
     	Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(null);
   		Mockito.when(thesaurusBuilder.buildThesaurus(Mockito.any(Resource.class),	Mockito.any(Model.class))).thenReturn(returnedThesaurus);
 
-    	
+
       String fileName = "concept_collections_temp.rdf";
       String tempDir = System.getProperty("java.io.tmpdir");
       InputStream is = ConceptBuilderTest.class
 				.getResourceAsStream("/imports/concept_collections.rdf");
       String fileContent = IOUtils.toString(is);
-      
+
       Thesaurus th = skosImportService.importSKOSFile(fileContent, fileName, new File(tempDir));
       Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69", th.getIdentifier());
-    }  
-    
+    }
+
     @Test(expected=BusinessException.class)
     public void testImportSKOSFileExistingThesaurus() throws BusinessException, IOException {
     	Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(new Thesaurus());
-    	
+
       String fileName = "concept_collections_temp.rdf";
       String tempDir = System.getProperty("java.io.tmpdir");
       InputStream is = ConceptBuilderTest.class
@@ -156,6 +163,4 @@ public class SKOSImportServiceTest {
       String fileContent = IOUtils.toString(is);
       skosImportService.importSKOSFile(fileContent, fileName, new File(tempDir));
     }
-    
-    
 }
