@@ -812,6 +812,8 @@ Ext.define('Thesaurus.focus.manager', {
 								components.push(cmp.btnEl);
 							else if (cmp && cmp.toolEl)
 								components.push(cmp);
+							else if (cmp.xtype == "gridview" && cmp.el && cmp.el.focusable())
+								components.push(cmp);
 							else if (cmp && cmp.inputEl
 									&& cmp.inputEl.focusable())
 								components.push(cmp.inputEl);
@@ -825,12 +827,19 @@ Ext.define('Thesaurus.focus.manager', {
 							? e.keyCode === 9
 							: true)) {
 				var focused = document.activeElement;
+				console.log(focused,components);
 				var goBack = e.shiftKey;
 				if (goBack === false && components.length > 0
 						&& focused.id === components[components.length - 1].id) {
 					e.preventDefault();
 					Ext.getCmp(id).focus();
-				} else if (goBack === true
+				}else if (goBack === false && components.length > 0
+						&& focused.boundView && focused.boundView === components[components.length - 1].id)
+				{
+					e.preventDefault();
+					Ext.getCmp(id).focus();
+				}
+				else if (goBack === true
 						&& components.length > 0
 						&& (focused.id === id || focused.id === components[0].id)) {
 					e.preventDefault();
