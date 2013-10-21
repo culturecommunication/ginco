@@ -32,42 +32,22 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.dao;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.ExternalThesaurus;
-import fr.mcc.ginco.dao.IExternalThesaurusDAO;
-import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
-@Service("externalThesaurusService")
-public class ExternalThesaurusServiceImpl implements IExternalThesaurusService {
+/**
+ * Data Access Object for external thesaurus
+ */
+public interface IExternalThesaurusDAO extends IGenericDAO<ExternalThesaurus, Integer> {
 
-	@Inject
-	@Named("externalThesaurusDAO")
-	private IExternalThesaurusDAO externalThesaurusDAO;
-
-	@Override
-	public List<ExternalThesaurus> getExternalThesaurusList() {
-		return externalThesaurusDAO.findAll();
-	}
-
-	@Override
-	public ExternalThesaurus getExternalThesaurusById(Integer identifier) {
-		return externalThesaurusDAO.getById(identifier);
-	}
-
-	@Override
-	public List<ExternalThesaurus> getThesaurusByExternalId(String externalId) {
-		return externalThesaurusDAO.findBySourceExternalId(externalId);
-	}
-
+	/**
+	 * @param externalId
+	 * @return
+	 */
+	List<ExternalThesaurus> findBySourceExternalId(String externalId);
 }
+
+

@@ -40,7 +40,7 @@ import fr.mcc.ginco.beans.ExternalThesaurus;
 
 /**
  * Service used to deal with {@link ExternalThesaurus} objects, contains basic
- * methods exposed to client part. 
+ * methods exposed to client part.
  *
  * @see fr.mcc.ginco.beans
  */
@@ -49,15 +49,23 @@ public interface IExternalThesaurusService {
      * Get list of all {@link ExternalThesaurus} already existing
      * @return
      */
-    List<ExternalThesaurus> getExternalThesaurusList();   
-    
-    
+    List<ExternalThesaurus> getExternalThesaurusList();
+
+
     /**
 	 * Get the external thesaurus by it's id
-	 * 
+	 *
 	 * @param identifier
 	 * @return
 	 */
     ExternalThesaurus getExternalThesaurusById(Integer identifier);
-   
+
+    /**
+	 * Get the external thesaurus by it's external id
+	 *
+	 * @param external id
+	 * @return
+	 */
+    List<ExternalThesaurus> getThesaurusByExternalId(String externalId);
+
 }

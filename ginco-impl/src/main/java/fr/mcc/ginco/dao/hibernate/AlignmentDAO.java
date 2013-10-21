@@ -49,14 +49,14 @@ import fr.mcc.ginco.dao.IAlignmentDAO;
  */
 @Repository("alignmentDAO")
 public class AlignmentDAO extends
-		GenericHibernateDAO<Alignment, String> implements IAlignmentDAO {	
-	
-	
+		GenericHibernateDAO<Alignment, String> implements IAlignmentDAO {
+
+
 	public AlignmentDAO() {
 		super(Alignment.class);
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.IAlignmentDAO#findBySourceConceptId(java.lang.String)
 	 */
@@ -65,6 +65,6 @@ public class AlignmentDAO extends
 		Criteria criteria =  getCurrentSession().createCriteria(Alignment.class);
 		criteria.add(Restrictions.eq("sourceConcept.identifier", sourceConceptId));
 		return criteria.list();
-	}	
-	
+	}
+
 }

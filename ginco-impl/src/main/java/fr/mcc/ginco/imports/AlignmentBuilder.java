@@ -58,10 +58,10 @@ import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AlignmentType;
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAlignmentTypeService;
+import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
@@ -93,8 +93,10 @@ public class AlignmentBuilder extends AbstractBuilder{
 	private IExternalThesaurusTypeService externalThesaurusTypeService;
 
 	@Inject
-	@Named("externalThesaurusDAO")
-	private IGenericDAO<ExternalThesaurus, String> externalThesaurusDAO;
+	@Named("externalThesaurusService")
+	private IExternalThesaurusService externalThesaurusService;
+
+
 
 	/**
 	 * Returns the list of alignments for the given source concept
@@ -144,22 +146,23 @@ public class AlignmentBuilder extends AbstractBuilder{
 			targetConcept.setInternalTargetConcept(internalTargetConcept);
 			alignment.setInternalTargetThesaurus(internalTargetConcept.getThesaurus());
 		} else {
-			ExternalThesaurus externalThesaurus = new ExternalThesaurus();
-
 			Pattern pt = Pattern.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/ark\\:\\/(\\S*)\\/");
 	        Matcher mt = pt.matcher(stmt.getString());
 
 	        if (mt.find()) {
-	        	externalThesaurus.setExternalId(mt.group());
+	        	if(externalThesaurusService.getThesaurusByExternalId(mt.group()).isEmpty()){
+	        		ExternalThesaurus externalThesaurus = new ExternalThesaurus();
+	        		externalThesaurus.setExternalId(mt.group());
+	        		externalThesaurus.setExternalThesaurusType(externalThesaurusTypeService.getExternalThesaurusTypeList().get(0));
+	        		alignment.setExternalTargetThesaurus(externalThesaurus);
+	        	} else {
+	        		alignment.setExternalTargetThesaurus(externalThesaurusService.getThesaurusByExternalId(mt.group()).get(0));
+	        	}
 	        } else {
 	        	throw new BusinessException(
 						"Unable to identify external thesaurus",
 						"import-invalid-external-thesaurus", new Object[]{stmt.getString()});
 	        }
-			externalThesaurus.setExternalThesaurusType(externalThesaurusTypeService.getExternalThesaurusTypeList().get(0));
-			externalThesaurusDAO.update(externalThesaurus);
-
-			alignment.setExternalTargetThesaurus(externalThesaurus);
 			targetConcept.setExternalTargetConcept(stmt.getString());
 		}
 		targetConcepts.add(targetConcept);

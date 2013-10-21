@@ -64,7 +64,6 @@ import com.hp.hpl.jena.util.FileManager;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -74,6 +73,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.INoteDAO;
@@ -168,6 +168,10 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Inject
 	@Named("alignmentConceptDAO")
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
+
+	@Inject
+	@Named("externalThesaurusDAO")
+	private IExternalThesaurusDAO externalThesaurusDAO;
 
 	/*
 	 * (non-Javadoc)
@@ -346,6 +350,9 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			// Concept alignments
 			List<Alignment> alignments = alignmentBuilder.buildAlignments(skosConcept, concept);
 			for (Alignment alignment: alignments) {
+				if (alignment.getExternalTargetThesaurus() != null){
+					externalThesaurusDAO.update(alignment.getExternalTargetThesaurus());
+				}
 				for (AlignmentConcept alignmentConcept : alignment.getTargetConcepts()){
 					alignmentConceptDAO.update(alignmentConcept);
 				}

@@ -32,42 +32,38 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
+package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
-import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
-@Service("externalThesaurusService")
-public class ExternalThesaurusServiceImpl implements IExternalThesaurusService {
+/**
+ * Implementation of the data access object to the external_thesaurus database table
+ *
+ */
+@Repository("externalThesaurusDAO")
+public class ExternalThesaurusDAO extends
+	GenericHibernateDAO<ExternalThesaurus, Integer> implements IExternalThesaurusDAO{
 
-	@Inject
-	@Named("externalThesaurusDAO")
-	private IExternalThesaurusDAO externalThesaurusDAO;
-
-	@Override
-	public List<ExternalThesaurus> getExternalThesaurusList() {
-		return externalThesaurusDAO.findAll();
+	public ExternalThesaurusDAO() {
+		super(ExternalThesaurus.class);
 	}
 
-	@Override
-	public ExternalThesaurus getExternalThesaurusById(Integer identifier) {
-		return externalThesaurusDAO.getById(identifier);
-	}
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IExternalThesaurusDAO#findBySourceExternalIdId(java.lang.String)
+	 */
 	@Override
-	public List<ExternalThesaurus> getThesaurusByExternalId(String externalId) {
-		return externalThesaurusDAO.findBySourceExternalId(externalId);
+	public List<ExternalThesaurus> findBySourceExternalId(String externalId) {
+		Criteria criteria =  getCurrentSession().createCriteria(ExternalThesaurus.class);
+		criteria.add(Restrictions.eq("externalId", externalId));
+		return criteria.list();
 	}
 
 }

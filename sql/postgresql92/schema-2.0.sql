@@ -125,3 +125,9 @@ CREATE SEQUENCE external_thesaurus_identifier_seq
     START 1
     CACHE 1;
 ALTER SEQUENCE external_thesaurus_identifier_seq OWNED BY external_thesaurus.identifier;
+
+-- Indexes on table external_thesaurus
+CREATE INDEX idx_thesaurus_externalid
+  ON external_thesaurus
+  USING btree
+  (external_id COLLATE pg_catalog."default" );
