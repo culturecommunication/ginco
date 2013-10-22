@@ -43,9 +43,9 @@ public class AlignmentConcept {
 	@XmlTransient
 	private Integer identifier;
 	private String externalTargetConcept;
-	
+
 	private ThesaurusConcept internalTargetConcept;
-	
+
 	@XmlTransient
 	private Alignment alignment;
 
@@ -85,8 +85,14 @@ public class AlignmentConcept {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((identifier == null) ? 0 : identifier.hashCode());
+		result = prime
+				* result
+				+ ((externalTargetConcept == null) ? 0 : externalTargetConcept
+						.hashCode());
+		result = prime
+				* result
+				+ ((internalTargetConcept == null) ? 0 : internalTargetConcept
+						.hashCode());
 		return result;
 	}
 
@@ -99,12 +105,19 @@ public class AlignmentConcept {
 		if (getClass() != obj.getClass())
 			return false;
 		AlignmentConcept other = (AlignmentConcept) obj;
-		if (identifier == null) {
-			if (other.identifier != null)
+		if (externalTargetConcept == null) {
+			if (other.externalTargetConcept != null)
 				return false;
-		} else if (!identifier.equals(other.identifier))
+		} else if (!externalTargetConcept.equals(other.externalTargetConcept))
+			return false;
+		if (internalTargetConcept == null) {
+			if (other.internalTargetConcept != null)
+				return false;
+		} else if (!internalTargetConcept.equals(other.internalTargetConcept))
 			return false;
 		return true;
-	}	
+	}
+
+
 
 }
