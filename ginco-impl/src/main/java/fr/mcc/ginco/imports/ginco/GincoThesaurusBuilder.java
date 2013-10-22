@@ -84,6 +84,10 @@ public class GincoThesaurusBuilder {
 	private GincoTermImporter gincoTermImporter;
 	
 	@Inject
+	@Named("gincoAlignmentImporter")
+	private GincoAlignmentImporter gincoAlignmentImporter;
+	
+	@Inject
 	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
@@ -131,6 +135,8 @@ public class GincoThesaurusBuilder {
 			
 			gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedThesaurus.getTermAttributeTypes(), exportedThesaurus.getThesaurus());
 			gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedThesaurus.getConceptAttributeTypes(), exportedThesaurus.getThesaurus());
+			
+			gincoAlignmentImporter.storeAlignments(exportedThesaurus.getAlignments());
 		}
 		return thesaurus;
 	}

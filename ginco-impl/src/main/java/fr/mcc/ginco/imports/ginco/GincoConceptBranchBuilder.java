@@ -82,6 +82,10 @@ public class GincoConceptBranchBuilder {
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
+	@Inject
+	@Named("gincoAlignmentImporter")
+	private GincoAlignmentImporter gincoAlignmentImporter;
+	
 
 	/**
 	 * This method stores a Ginco Concept branch with all its objects (concept
@@ -132,6 +136,9 @@ public class GincoConceptBranchBuilder {
 			gincoRelationshipImporter
 					.storeHierarchicalRelationship(exportedBranch
 							.getHierarchicalRelationship());
+			
+			gincoAlignmentImporter.storeAlignments(exportedBranch.getAlignments());
+
 		}
 		return result;
 	}

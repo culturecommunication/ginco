@@ -34,8 +34,15 @@
  */
 package fr.mcc.ginco.beans;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ExternalThesaurus {
+	@XmlTransient
 	private Integer identifier;
+	
 	private String externalId;
 	private ExternalThesaurusType externalThesaurusType;	
 	

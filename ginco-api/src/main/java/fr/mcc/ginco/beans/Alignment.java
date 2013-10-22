@@ -41,6 +41,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Beans represents <b>thesaurus_array</b> table and is a sub-container for
@@ -58,6 +59,8 @@ public class Alignment implements Serializable {
     private Set<AlignmentConcept> targetConcepts = new HashSet<AlignmentConcept>();
     private AlignmentType alignmentType;
     private ExternalThesaurus externalTargetThesaurus;
+    
+    @XmlTransient
     private Thesaurus internalTargetThesaurus;
     private boolean andRelation;
     
@@ -121,5 +124,30 @@ public class Alignment implements Serializable {
 	public void setAndRelation(boolean andRelation) {
 		this.andRelation = andRelation;
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((identifier == null) ? 0 : identifier.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Alignment other = (Alignment) obj;
+		if (identifier == null) {
+			if (other.identifier != null)
+				return false;
+		} else if (!identifier.equals(other.identifier))
+			return false;
+		return true;
+	}
+	
 
 }
