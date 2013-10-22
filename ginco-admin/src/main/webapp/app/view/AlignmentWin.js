@@ -101,7 +101,7 @@ Ext
 												iconCls : 'icon-add',
 												itemId : 'addInternalConceptId',
 												disabled : true,
-												cls: 'addInternalConcept',
+												cls: 'addInternalConcept'
 											},{
 												xtype : 'button',
 												text : me.xAddExternalConceptId,
@@ -109,7 +109,7 @@ Ext
 												iconCls : 'icon-add',
 												itemId : 'addExternalConceptId',
 												disabled : true,
-												cls: 'addExternalConcept',
+												cls: 'addExternalConcept'
 											}]
 										} ],
 										defaults : {

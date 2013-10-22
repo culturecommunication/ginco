@@ -561,12 +561,14 @@ Ext.define('GincoApp.controller.ConceptController', {
 		this.setupStoreListener(childrenGrid);
 
 		// Load alignments to the grid's store
-		var alignments = aModel.alignments().getRange();
-		var alignmentsGrid = aForm.down('#gridPanelAlignments');
-		var alignmentsGridStore = alignmentsGrid.getStore();
-		alignmentsGridStore.removeAll();
-		alignmentsGridStore.add(alignments);
-		this.setupStoreListener(alignmentsGrid);
+		conceptPanel.alignmentTypeStore.load(function () {
+			var alignments = aModel.alignments().getRange();
+			var alignmentsGrid = aForm.down('#gridPanelAlignments');
+			var alignmentsGridStore = alignmentsGrid.getStore();
+			alignmentsGridStore.removeAll();
+			alignmentsGridStore.add(alignments);
+			me.setupStoreListener(alignmentsGrid);
+		});
 
 		var rootConceptsGrid = aForm.down('#gridPanelRootConcepts');
 		var rootConceptsGridStore = rootConceptsGrid.getStore();

@@ -166,7 +166,7 @@ Ext
 															xtype : 'panel',
 															title : me.xConceptTabPanelTitle,
 															layout : {
-																type : 'border',
+																type : 'border'
 															},
 															items : [
 																	{
@@ -271,7 +271,7 @@ Ext
 																					xtype : 'customattrform',
 																					metadataStore : me.customAttrTypeStore,
 																					dataStore : me.customAttrStore,
-																					itemId : 'customAttributeForm',
+																					itemId : 'customAttributeForm'
 																				},
 																				{
 																					xtype : 'gridpanel',

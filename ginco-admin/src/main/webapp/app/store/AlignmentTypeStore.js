@@ -44,7 +44,7 @@ Ext.define('GincoApp.store.AlignmentTypeStore', {
         var me = this;
         cfg = cfg || {};
         me.callParent([Ext.apply({
-            autoLoad: true,
+            autoLoad: false,
             proxy: {
                 type: 'ajax',
                 url: 'services/ui/thesaurusalignmentservice/getAlignmentTypes',
