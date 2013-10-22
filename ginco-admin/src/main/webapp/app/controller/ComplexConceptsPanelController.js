@@ -73,7 +73,7 @@ Ext.define('GincoApp.controller.ComplexConceptsPanelController',
 			init : function() {
 				this.application.on({
 					termupdated : this.refreshComplexConceptList,
-					termdeleted : this.refreshComplexConceptList,
+					termdeleted : this.refreshComplexConceptList
 				});
 				this.control({
 					'complexconceptsPanel gridpanel' : {

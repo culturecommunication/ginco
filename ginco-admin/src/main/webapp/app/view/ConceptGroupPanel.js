@@ -152,7 +152,7 @@ Ext
 																		xtype : 'displayfield',
 																		name : 'modified',
 																		fieldLabel : me.xModifiedLabel
-																	},
+																	}
 															        ]
 												        },
 														{

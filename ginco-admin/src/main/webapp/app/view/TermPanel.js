@@ -237,7 +237,7 @@ Ext
 																		xtype : 'customattrform',
 																		metadataStore : me.customAttrTypeStore,
 																		dataStore : me.customAttrStore,
-																		itemId : 'customAttributeForm',
+																		itemId : 'customAttributeForm'
 																	} ]
 														},
 														{

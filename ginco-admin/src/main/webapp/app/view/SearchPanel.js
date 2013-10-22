@@ -188,7 +188,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				columns : [ {
 					dataIndex : 'identifier',
 					text : me.xIdentifierColumnLabel,
-					sortable: false,
+					sortable: false
 				}, {
 					dataIndex : 'lexicalValue',
 					text : me.xLexicalValueColumnLabel,

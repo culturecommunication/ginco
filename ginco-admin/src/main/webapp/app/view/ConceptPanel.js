@@ -643,7 +643,7 @@ Ext
 																								if (value){
 																									return me.xAlignmentAndRelation;
 																								}else  {
-																									return me.xAlignmentOrRelation;;
+																									return me.xAlignmentOrRelation;
 																								}
 																							}
 																							return '';

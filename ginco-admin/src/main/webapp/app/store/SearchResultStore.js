@@ -44,7 +44,7 @@ Ext.define('GincoApp.store.SearchResultStore', {
         beforeload: function(store, operation,eOpts) {
         	if (store.proxy.jsonData==null) {
                store.proxy.jsonData = {"start":operation.start,
-                                      "limit":operation.limit,
+                                      "limit":operation.limit
                                        };                        
             } else {
             	store.proxy.jsonData["start"] = operation.start;

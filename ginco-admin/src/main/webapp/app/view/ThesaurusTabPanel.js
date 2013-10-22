@@ -148,7 +148,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 								itemId : 'newConceptDynamicGroupBtn'
 							} ]
 						}
-					}, , {
+					}, {
 						xtype : 'button',
 						disabled : true,
 						itemId : 'exportsBtnMenu',

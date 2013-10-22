@@ -152,7 +152,7 @@ Ext
 															name : 'label',
 															fieldLabel : me.xLabelLabel,
 															allowBlank : false,
-															padding : '5 0 0 0',
+															padding : '5 0 0 0'
 														},
 														{
 															xtype : 'textfield',

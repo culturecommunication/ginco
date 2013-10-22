@@ -242,7 +242,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			},
 			'complexconceptPanel #gridPanelPreferredTerms' : {
 				itemdblclick : this.onPreferredTermDblClick
-			},
+			}
 		});
 	}
 });
