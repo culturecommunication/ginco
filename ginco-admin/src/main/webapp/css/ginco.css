@@ -33,7 +33,7 @@
  .x-webkit .x-tab-focus button,.x-tab-focus button  { color: #3366ff;
  outline:black dotted 1px !important; }
 
-.x-grid-view-focus:focus { 
+.x-grid-view-focus:focus {
 	color: #15498b;
 }
 
@@ -50,7 +50,7 @@ a.x-tab-close-btn:focus  {
 	 outline:black dotted 1px !important;
 }
 
- 
+
 .msg .x-box-mc {
     font-size:14px;
 }
@@ -174,4 +174,12 @@ h1.x-panel-header {
 
 .metadatapanel .x-panel-body {
 	background-color: rgb(239, 239, 239);
+}
+
+.right-notes .x-grid-row .x-grid-cell-inner {
+    white-space: normal;
+}
+
+.right-notes .x-grid-row-over .x-grid-cell-inner {
+    white-space: normal;
 }
