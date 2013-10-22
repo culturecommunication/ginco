@@ -44,26 +44,35 @@ import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 
 /**
- * Implementation of the data access object to the external_thesaurus database table
- *
+ * Implementation of the data access object to the external_thesaurus database
+ * table
+ * 
  */
 @Repository("externalThesaurusDAO")
 public class ExternalThesaurusDAO extends
-	GenericHibernateDAO<ExternalThesaurus, Integer> implements IExternalThesaurusDAO{
+		GenericHibernateDAO<ExternalThesaurus, Integer> implements
+		IExternalThesaurusDAO {
 
 	public ExternalThesaurusDAO() {
 		super(ExternalThesaurus.class);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.IExternalThesaurusDAO#findBySourceExternalIdId(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.dao.IExternalThesaurusDAO#findBySourceExternalIdId(java.
+	 * lang.String)
 	 */
 	@Override
-	public List<ExternalThesaurus> findBySourceExternalId(String externalId) {
+	public ExternalThesaurus findBySourceExternalId(String externalId) {
 		Criteria criteria =  getCurrentSession().createCriteria(ExternalThesaurus.class);
 		criteria.add(Restrictions.eq("externalId", externalId));
-		return criteria.list();
+		List<ExternalThesaurus> externalThesauruses = criteria.list();
+		if (externalThesauruses != null && externalThesauruses.size()>0) {
+		return externalThesauruses.get(0);
+		} else {
+			return null;
+		}
 	}
-
 }

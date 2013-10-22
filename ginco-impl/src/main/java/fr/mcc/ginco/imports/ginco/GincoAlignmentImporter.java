@@ -49,6 +49,7 @@ import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.dao.IAlignmentDAO;
+import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
@@ -70,12 +71,12 @@ public class GincoAlignmentImporter {
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
 
 	@Inject
-	@Named("externalThesaurusDAO")
-	private IGenericDAO<ExternalThesaurus, String> externalThesaurusDAO;
-
-	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
+
+	@Inject
+	@Named("externalThesaurusDAO")
+	private IExternalThesaurusDAO externalThesaurusDAO;
 
 	@Log
 	private Logger logger;
@@ -96,8 +97,14 @@ public class GincoAlignmentImporter {
 				if (externalThesaurus != null
 						&& !externalThesaurusesToSave
 								.contains(externalThesaurus)) {
-					//TODO : check if this external thesaurus already exists
-					externalThesaurusesToSave.add(externalThesaurus);
+					ExternalThesaurus existingThesaurus = externalThesaurusDAO
+							.findBySourceExternalId(externalThesaurus
+									.getExternalId());
+					if (existingThesaurus != null) {
+						ali.setExternalTargetThesaurus(existingThesaurus);
+					} else {
+						externalThesaurusesToSave.add(externalThesaurus);
+					}
 				}
 			}
 
@@ -109,12 +116,13 @@ public class GincoAlignmentImporter {
 
 		for (String conceptKey : alignments.keySet()) {
 			JaxbList<Alignment> alignmentImported = alignments.get(conceptKey);
-			for (Alignment ali : alignmentImported.getList()) {				
+			for (Alignment ali : alignmentImported.getList()) {
 				Set<AlignmentConcept> concepts = ali.getTargetConcepts();
 				for (AlignmentConcept alignmentConcept : concepts) {
-					//TODO : if internal concept, check if the target concept exists
+					// TODO : if internal concept, check if the target concept
+					// exists
 					// if no, list the error to the user
-					//otherwise fill in the internal target thesaurus
+					// otherwise fill in the internal target thesaurus
 					alignmentConcept.setAlignment(ali);
 					alignmentConceptDAO.update(alignmentConcept);
 				}

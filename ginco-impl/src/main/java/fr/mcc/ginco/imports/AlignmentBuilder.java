@@ -66,12 +66,12 @@ import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
- * 	Builder in charge of building concept alignments
- *
+ * Builder in charge of building concept alignments
+ * 
  */
 
 @Service("skosAlignmentBuilder")
-public class AlignmentBuilder extends AbstractBuilder{
+public class AlignmentBuilder extends AbstractBuilder {
 
 	@Log
 	private Logger logger;
@@ -96,10 +96,9 @@ public class AlignmentBuilder extends AbstractBuilder{
 	@Named("externalThesaurusService")
 	private IExternalThesaurusService externalThesaurusService;
 
-
-
 	/**
 	 * Returns the list of alignments for the given source concept
+	 * 
 	 * @param skosConcept
 	 * @param concept
 	 * @return
@@ -109,7 +108,8 @@ public class AlignmentBuilder extends AbstractBuilder{
 			ThesaurusConcept concept) throws BusinessException {
 		logger.debug("Building alignments for concept " + skosConcept.getURI());
 		List<Alignment> alignments = new ArrayList<Alignment>();
-		List<AlignmentType> alignmentTypes = alignmentTypeService.getAlignmentTypeList();
+		List<AlignmentType> alignmentTypes = alignmentTypeService
+				.getAlignmentTypeList();
 
 		for (AlignmentType alignmentType : alignmentTypes) {
 			String ISOCode = alignmentType.getIsoCode();
@@ -118,18 +118,20 @@ public class AlignmentBuilder extends AbstractBuilder{
 						.listProperties(SKOS.SKOS_ALIGNMENTS.get(ISOCode));
 				while (stmtItr.hasNext()) {
 					Statement stmtAlignment = stmtItr.next();
-					alignments.add(buildAlignment(stmtAlignment, alignmentType, concept));
+					alignments.add(buildAlignment(stmtAlignment, alignmentType,
+							concept));
 				}
 			}
 		}
 		return alignments;
 	}
 
-	public Alignment buildAlignment(Statement stmt, AlignmentType alignmentType, ThesaurusConcept concept) throws BusinessException {
+	public Alignment buildAlignment(Statement stmt,
+			AlignmentType alignmentType, ThesaurusConcept concept)
+			throws BusinessException {
 		logger.debug("Building alignment " + stmt.getString());
 		Alignment alignment = new Alignment();
-		alignment.setIdentifier(generatorService
-				.generate(Alignment.class));
+		alignment.setIdentifier(generatorService.generate(Alignment.class));
 		alignment.setAlignmentType(alignmentType);
 		alignment.setAndRelation(false);
 		alignment.setCreated(concept.getCreated());
@@ -141,28 +143,36 @@ public class AlignmentBuilder extends AbstractBuilder{
 		AlignmentConcept targetConcept = new AlignmentConcept();
 		targetConcept.setAlignment(alignment);
 
-		ThesaurusConcept internalTargetConcept = thesaurusConceptService.getThesaurusConceptById(stmt.getString());
-		if (internalTargetConcept != null){
+		ThesaurusConcept internalTargetConcept = thesaurusConceptService
+				.getThesaurusConceptById(stmt.getString());
+		if (internalTargetConcept != null) {
 			targetConcept.setInternalTargetConcept(internalTargetConcept);
-			alignment.setInternalTargetThesaurus(internalTargetConcept.getThesaurus());
+			alignment.setInternalTargetThesaurus(internalTargetConcept
+					.getThesaurus());
 		} else {
-			Pattern pt = Pattern.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/ark\\:\\/(\\S*)\\/");
-	        Matcher mt = pt.matcher(stmt.getString());
+			Pattern pt = Pattern
+					.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/ark\\:\\/(\\S*)\\/");
+			Matcher mt = pt.matcher(stmt.getString());
 
-	        if (mt.find()) {
-	        	if(externalThesaurusService.getThesaurusByExternalId(mt.group()).isEmpty()){
-	        		ExternalThesaurus externalThesaurus = new ExternalThesaurus();
-	        		externalThesaurus.setExternalId(mt.group());
-	        		externalThesaurus.setExternalThesaurusType(externalThesaurusTypeService.getExternalThesaurusTypeList().get(0));
-	        		alignment.setExternalTargetThesaurus(externalThesaurus);
-	        	} else {
-	        		alignment.setExternalTargetThesaurus(externalThesaurusService.getThesaurusByExternalId(mt.group()).get(0));
-	        	}
-	        } else {
-	        	throw new BusinessException(
+			if (mt.find()) {
+				ExternalThesaurus existingExternalThes = externalThesaurusService
+						.getThesaurusByExternalId(mt.group());
+				if (existingExternalThes == null) {
+					ExternalThesaurus externalThesaurus = new ExternalThesaurus();
+					externalThesaurus.setExternalId(mt.group());
+					externalThesaurus
+							.setExternalThesaurusType(externalThesaurusTypeService
+									.getExternalThesaurusTypeList().get(0));
+					alignment.setExternalTargetThesaurus(externalThesaurus);
+				} else {
+					alignment.setExternalTargetThesaurus(existingExternalThes);
+				}
+			} else {
+				throw new BusinessException(
 						"Unable to identify external thesaurus",
-						"import-invalid-external-thesaurus", new Object[]{stmt.getString()});
-	        }
+						"import-invalid-external-thesaurus",
+						new Object[] { stmt.getString() });
+			}
 			targetConcept.setExternalTargetConcept(stmt.getString());
 		}
 		targetConcepts.add(targetConcept);

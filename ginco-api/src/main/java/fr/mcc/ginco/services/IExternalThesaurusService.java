@@ -61,11 +61,11 @@ public interface IExternalThesaurusService {
     ExternalThesaurus getExternalThesaurusById(Integer identifier);
 
     /**
-	 * Get the external thesaurus by it's external id
+	 * Get the first external thesaurus matching the given external id
 	 *
 	 * @param external id
 	 * @return
 	 */
-    List<ExternalThesaurus> getThesaurusByExternalId(String externalId);
+    ExternalThesaurus getThesaurusByExternalId(String externalId);
 
 }

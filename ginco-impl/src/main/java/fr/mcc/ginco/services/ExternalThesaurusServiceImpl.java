@@ -66,7 +66,7 @@ public class ExternalThesaurusServiceImpl implements IExternalThesaurusService {
 	}
 
 	@Override
-	public List<ExternalThesaurus> getThesaurusByExternalId(String externalId) {
+	public ExternalThesaurus getThesaurusByExternalId(String externalId) {
 		return externalThesaurusDAO.findBySourceExternalId(externalId);
 	}
 
