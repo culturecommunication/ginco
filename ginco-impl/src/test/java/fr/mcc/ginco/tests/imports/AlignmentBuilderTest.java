@@ -38,6 +38,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,6 +62,7 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.imports.AlignmentBuilder;
 import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.IAlignmentTypeService;
+import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
@@ -77,6 +81,9 @@ public class AlignmentBuilderTest {
 
 	@Mock(name = "externalThesaurusTypeService")
 	private IExternalThesaurusTypeService externalThesaurusTypeService;
+
+	@Mock(name = "externalThesaurusService")
+	private IExternalThesaurusService externalThesaurusService;
 
 	@InjectMocks
 	private AlignmentBuilder alignmentBuilder;
@@ -187,7 +194,7 @@ public class AlignmentBuilderTest {
 
 		Mockito.when(externalThesaurusTypeService.getExternalThesaurusTypeList()).thenReturn(externalThesaurusTypes);
 
-		//Alignment alignement = alignmentBuilder.buildAlignment(stmt, exact, concept);
-		//Assert.assertEquals(alignement.getExternalTargetThesaurus().getExternalId(), "http://data.bnf.fr/ark:/12148/");
+		Alignment alignement = alignmentBuilder.buildAlignment(stmt, exact, concept);
+		Assert.assertEquals(alignement.getExternalTargetThesaurus().getExternalId(), "http://data.bnf.fr/ark:/12148/");
 	}
 }

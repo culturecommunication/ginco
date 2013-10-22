@@ -52,6 +52,7 @@ import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAlignmentDAO;
+import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
@@ -67,15 +68,15 @@ public class AlignmentServiceImpl implements IAlignmentService {
 	@Inject
 	@Named("alignmentConceptDAO")
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
-	
+
 	@Inject
 	@Named("externalThesaurusDAO")
-	private IGenericDAO<ExternalThesaurus, String> externalThesaurusDAO;
+	private IExternalThesaurusDAO externalThesaurusDAO;
 
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
-	
+
 	@Log
 	private Logger logger;
 
@@ -86,7 +87,7 @@ public class AlignmentServiceImpl implements IAlignmentService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.services.IAlignmentService#getAlignmentsBySourceConceptId
 	 * (java.lang.String)
@@ -99,16 +100,16 @@ public class AlignmentServiceImpl implements IAlignmentService {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.services.IAlignmentService#saveAlignments(fr.mcc.ginco.beans
 	 * .ThesaurusConcept, java.util.List)
 	 */
 	public ThesaurusConcept saveAlignments(ThesaurusConcept concept,
 			List<Alignment> alignments) {
-		
+
 		List<Alignment> existingAlignments  = alignmentDAO.findBySourceConceptId(concept.getIdentifier());
-		
+
 		for (Alignment existingAlignment:existingAlignments) {
 			if (!alignments.contains(existingAlignment)) {
 				Set<AlignmentConcept> concepts  = existingAlignment.getTargetConcepts();
@@ -117,7 +118,7 @@ public class AlignmentServiceImpl implements IAlignmentService {
 				}
 				alignmentDAO.delete(existingAlignment);
 			}
-		}		
+		}
 		for (Alignment alignment : alignments) {
 			if (StringUtils.isEmpty(alignment.getIdentifier())) {
 				alignment.setIdentifier(generatorService
@@ -127,22 +128,22 @@ public class AlignmentServiceImpl implements IAlignmentService {
 			for (AlignmentConcept alignmentConcept: concepts) {
 				alignmentConceptDAO.update(alignmentConcept);
 			}
-								
+
 			alignmentDAO.update(alignment);
 		}
 
 		return concept;
 	}
-	
+
 	public void saveExternalThesauruses(List<Alignment> alignments) {
 		List<ExternalThesaurus> externalThesaurusesToSave = new ArrayList<ExternalThesaurus>();
 
 		for (Alignment alignment:alignments) {
 			ExternalThesaurus externalThesaurus = alignment.getExternalTargetThesaurus();
-		
+
 			if (externalThesaurus != null && ! externalThesaurusesToSave.contains(externalThesaurus)) {
 				externalThesaurusesToSave.add(externalThesaurus);
-			}			
+			}
 		}
 		for (ExternalThesaurus extThesaurus:externalThesaurusesToSave) {
 			externalThesaurusDAO.update(extThesaurus);
