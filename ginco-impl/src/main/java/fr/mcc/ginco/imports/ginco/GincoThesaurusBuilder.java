@@ -35,13 +35,18 @@
 package fr.mcc.ginco.imports.ginco;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusDAO;
@@ -106,8 +111,11 @@ public class GincoThesaurusBuilder {
 	 * @param {@GincoExportedThesaurus} : the previously exported thesaurus we want to import
 	 * @return The imported {@link Thesaurus}
 	 */
-	public Thesaurus storeGincoExportedThesaurus(GincoExportedThesaurus exportedThesaurus) {
+	public Map<Thesaurus,Set<Alignment>> storeGincoExportedThesaurus(GincoExportedThesaurus exportedThesaurus) {
 		Thesaurus thesaurus = new Thesaurus();
+		Map<Thesaurus,Set<Alignment>> res = new HashMap<Thesaurus,Set<Alignment>>();
+		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
+
 		if (exportedThesaurus.getThesaurus() != null) {
 			if (thesaurusDAO.getById(exportedThesaurus.getThesaurus().getIdentifier()) == null) {
 				thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
@@ -136,9 +144,12 @@ public class GincoThesaurusBuilder {
 			gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedThesaurus.getTermAttributeTypes(), exportedThesaurus.getThesaurus());
 			gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedThesaurus.getConceptAttributeTypes(), exportedThesaurus.getThesaurus());
 			
-			gincoAlignmentImporter.storeAlignments(exportedThesaurus.getAlignments());
+			bannedAlignments = gincoAlignmentImporter.storeAlignments(exportedThesaurus.getAlignments());
+			gincoAlignmentImporter.storeExternalThesauruses(exportedThesaurus.getAlignments(), bannedAlignments);
 		}
-		return thesaurus;
+		res.put(thesaurus, bannedAlignments);
+
+		return res;
 	}
 		
 	/**

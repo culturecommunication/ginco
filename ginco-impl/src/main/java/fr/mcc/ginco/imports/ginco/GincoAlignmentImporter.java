@@ -35,6 +35,7 @@
 package fr.mcc.ginco.imports.ginco;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,6 +49,7 @@ import org.springframework.stereotype.Component;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.ExternalThesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
@@ -86,24 +88,76 @@ public class GincoAlignmentImporter {
 	 * 
 	 * @param alignments
 	 */
-	public void storeAlignments(Map<String, JaxbList<Alignment>> alignments) {
+	public Set<Alignment> storeAlignments(
+			Map<String, JaxbList<Alignment>> alignments) {
+		Map<Alignment, List<AlignmentConcept>> missingInternalconcepts = new HashMap<Alignment, List<AlignmentConcept>>();
+
+		for (String conceptKey : alignments.keySet()) {
+			JaxbList<Alignment> alignmentImported = alignments.get(conceptKey);
+			for (Alignment ali : alignmentImported.getList()) {
+				Set<AlignmentConcept> concepts = ali.getTargetConcepts();
+				List<ThesaurusConcept> existingInternalConcepts = new ArrayList<ThesaurusConcept>();
+				for (AlignmentConcept alignmentConcept : concepts) {
+					if (alignmentConcept.getInternalTargetConcept() != null) {
+						ThesaurusConcept existingTarget = thesaurusConceptDAO
+								.getById(alignmentConcept
+										.getInternalTargetConcept()
+										.getIdentifier());
+						if (existingTarget == null) {
+							if (missingInternalconcepts.containsKey(ali)) {
+								List<AlignmentConcept> aliConcepts = missingInternalconcepts
+										.get(ali);
+								aliConcepts.add(alignmentConcept);
+								missingInternalconcepts.put(ali, aliConcepts);
+
+							} else {
+								List<AlignmentConcept> aliConcepts = new ArrayList<AlignmentConcept>();
+								aliConcepts.add(alignmentConcept);
+								missingInternalconcepts.put(ali, aliConcepts);
+							}
+
+						} else {
+							existingInternalConcepts.add(existingTarget);
+							alignmentConcept
+									.setInternalTargetConcept(existingTarget);
+							alignmentConcept.setAlignment(ali);
+							alignmentConceptDAO.update(alignmentConcept);
+						}
+					} else {
+						alignmentConcept.setAlignment(ali);
+						alignmentConceptDAO.update(alignmentConcept);
+					}
+				}
+				if (!missingInternalconcepts.containsKey(ali)) {					
+					alignmentDAO.update(ali);
+				}
+			}
+		}
+		return missingInternalconcepts.keySet();
+	}
+
+	public void storeExternalThesauruses(
+			Map<String, JaxbList<Alignment>> alignments,
+			Set<Alignment> bannedAlignments) {
 		List<ExternalThesaurus> externalThesaurusesToSave = new ArrayList<ExternalThesaurus>();
 
 		for (String conceptKey : alignments.keySet()) {
 			JaxbList<Alignment> alignmentImported = alignments.get(conceptKey);
 			for (Alignment ali : alignmentImported.getList()) {
-				ExternalThesaurus externalThesaurus = ali
-						.getExternalTargetThesaurus();
-				if (externalThesaurus != null
-						&& !externalThesaurusesToSave
-								.contains(externalThesaurus)) {
-					ExternalThesaurus existingThesaurus = externalThesaurusDAO
-							.findBySourceExternalId(externalThesaurus
-									.getExternalId());
-					if (existingThesaurus != null) {
-						ali.setExternalTargetThesaurus(existingThesaurus);
-					} else {
-						externalThesaurusesToSave.add(externalThesaurus);
+				if (!bannedAlignments.contains(ali)) {
+					ExternalThesaurus externalThesaurus = ali
+							.getExternalTargetThesaurus();
+					if (externalThesaurus != null
+							&& !externalThesaurusesToSave
+									.contains(externalThesaurus)) {
+						ExternalThesaurus existingThesaurus = externalThesaurusDAO
+								.findBySourceExternalId(externalThesaurus
+										.getExternalId());
+						if (existingThesaurus != null) {
+							ali.setExternalTargetThesaurus(existingThesaurus);
+						} else {
+							externalThesaurusesToSave.add(externalThesaurus);
+						}
 					}
 				}
 			}
@@ -112,23 +166,6 @@ public class GincoAlignmentImporter {
 
 		for (ExternalThesaurus extThesaurus : externalThesaurusesToSave) {
 			externalThesaurusDAO.update(extThesaurus);
-		}
-
-		for (String conceptKey : alignments.keySet()) {
-			JaxbList<Alignment> alignmentImported = alignments.get(conceptKey);
-			for (Alignment ali : alignmentImported.getList()) {
-				Set<AlignmentConcept> concepts = ali.getTargetConcepts();
-				for (AlignmentConcept alignmentConcept : concepts) {
-					// TODO : if internal concept, check if the target concept
-					// exists
-					// if no, list the error to the user
-					// otherwise fill in the internal target thesaurus
-					alignmentConcept.setAlignment(ali);
-					alignmentConceptDAO.update(alignmentConcept);
-				}
-				ali.setSourceConcept(thesaurusConceptDAO.getById(conceptKey));
-				alignmentDAO.update(ali);
-			}
 		}
 
 	}

@@ -41,7 +41,10 @@ Ext.define('GincoApp.controller.ImportController', {
 	xWaitingLabel : 'Importing...',
 	xSucessLabelTitle : 'Success',
 	xSucessLabel : 'Element successfully imported : ',
+	xSucessLabelWithMissingAlignmentsPart1 :  'Element partially imported : ',
+	xSucessLabelWithMissingAlignmentsPart2 :  'Some alignments were not imported because the following internal concepts were missing : ',
 	xSucessSandboxLabel : 'Elements successfully imported',
+	xSucessLabelWithMissingAlignments3: 'Some alignments were not imported because the internal concepts were missing',
 	xFailureLabelTitle: 'Error',
 	
 	importSaveClick : function(theButton){
@@ -77,7 +80,7 @@ Ext.define('GincoApp.controller.ImportController', {
 						waitMsg : me.xWaitingLabel,
 						success : function(
 								fp,
-								o) {			
+								o) {	
 							if(theWin.importType == 'txt'){
 								Ext.Msg
 								.show({
@@ -89,19 +92,56 @@ Ext.define('GincoApp.controller.ImportController', {
 									buttons : Ext.Msg.OK
 								});
 							}
-							else{
+							else if (theWin.importType == 'gincoxml') {
+								var succLabel = me.xSucessLabel + o.result.data.thesaurusTitle;
+								if ( !Ext.isEmpty(o.result.data.conceptsMissingAlignments)) {
+									succLabel = me.xSucessLabelWithMissingAlignmentsPart1 + o.result.data.title;
+									succLabel += '<br>';
+									succLabel += me.xSucessLabelWithMissingAlignmentsPart2;									
+									Ext.Array.each(o.result.data.conceptsMissingAlignments, function(missingConcept) {
+										succLabel += '<br>';
+										succLabel += missingConcept;
+									});
+								}
 								Ext.Msg
 								.show({
 									title : me.xSucessLabelTitle,
-									msg : me.xSucessLabel
-											+ o.result.data.title,
+									msg : succLabel,
 									minWidth : 200,
 									modal : true,
 									icon : Ext.Msg.INFO,
 									buttons : Ext.Msg.OK
 								});
 								me.application.fireEvent('thesaurusupdated');	
-							}					
+							} else if (theWin.importType == 'gincoBranchXml') {
+								var succLabel = me.xSucessLabel + o.result.data.title;
+								if ( o.result.data.targetInternalConceptsMissing) {
+									succLabel = me.xSucessLabelWithMissingAlignmentsPart1 + o.result.data.title;
+									succLabel += '<br>';
+									succLabel += me.xSucessLabelWithMissingAlignments3;	
+								}
+								Ext.Msg
+								.show({
+									title : me.xSucessLabelTitle,
+									msg : succLabel,
+									minWidth : 200,
+									modal : true,
+									icon : Ext.Msg.INFO,
+									buttons : Ext.Msg.OK
+								});
+								me.application.fireEvent('thesaurusupdated');	
+							}	 else {
+								Ext.Msg
+								.show({
+									title : me.xSucessLabelTitle,
+									msg : me.xSucessLabel + o.result.data.title,
+									minWidth : 200,
+									modal : true,
+									icon : Ext.Msg.INFO,
+									buttons : Ext.Msg.OK
+								});
+								me.application.fireEvent('thesaurusupdated');	
+							}									
 						},
 						failure: function(form, action) {
 							Ext.MessageBox.show({

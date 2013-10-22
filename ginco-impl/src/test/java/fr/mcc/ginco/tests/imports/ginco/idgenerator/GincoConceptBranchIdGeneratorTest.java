@@ -54,6 +54,7 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.imports.ginco.idgenerator.GincoAlignmentIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptBranchIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoNoteIdGenerator;
@@ -74,6 +75,9 @@ public class GincoConceptBranchIdGeneratorTest {
 
 	@Mock(name = "gincoRelationshipIdGenerator")
 	private GincoRelationshipIdGenerator gincoRelationshipIdGenerator;
+	
+	@Mock(name = "gincoAlignmentIdGenerator")
+	private GincoAlignmentIdGenerator gincoAlignmentIdGenerator;
 	
 	@InjectMocks
 	private GincoConceptBranchIdGenerator gincoConceptBranchIdGenerator;

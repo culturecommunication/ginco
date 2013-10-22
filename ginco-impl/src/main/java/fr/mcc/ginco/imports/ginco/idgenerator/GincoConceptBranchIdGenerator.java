@@ -45,6 +45,7 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -77,6 +78,10 @@ public class GincoConceptBranchIdGenerator {
 	@Named("gincoRelationshipIdGenerator")
 	private GincoRelationshipIdGenerator gincoRelationshipIdGenerator;
 	
+	@Inject
+	@Named("gincoAlignmentIdGenerator")
+	private GincoAlignmentIdGenerator gincoAlignmentIdGenerator;
+
 	private Map<String, String> idMapping = new HashMap<String, String>();
 
 
@@ -123,11 +128,18 @@ public class GincoConceptBranchIdGenerator {
 		branchToUpdate.getTermNotes().clear();
 		branchToUpdate.getTermNotes().putAll(updatedTermNotes);
 		
-		logger.debug("Branch import : generating new ids for hierarichical relationships");
+		logger.debug("Branch import : generating new ids for hierarchical relationships");
 		Map<String, JaxbList<ConceptHierarchicalRelationship>> updatedRelations = gincoRelationshipIdGenerator
 				.getIdsForHierarchicalRelations(
 						branchToUpdate.getHierarchicalRelationship(), idMapping);
 		branchToUpdate.getHierarchicalRelationship().clear();
 		branchToUpdate.getHierarchicalRelationship().putAll(updatedRelations);
+		
+		logger.debug("Branch import : generating new ids for alignments");
+		Map<String, JaxbList<Alignment>> updateAlignments = gincoAlignmentIdGenerator.getIdsForAlignments(branchToUpdate.getAlignments(), idMapping);
+		branchToUpdate.getAlignments().clear();
+		branchToUpdate.getAlignments().putAll(updateAlignments);
+
+	
 	}
 }

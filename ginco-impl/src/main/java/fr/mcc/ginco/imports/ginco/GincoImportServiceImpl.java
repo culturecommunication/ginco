@@ -39,12 +39,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-
 import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
@@ -53,6 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hp.hpl.jena.util.FileManager;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -85,7 +87,7 @@ public class GincoImportServiceImpl implements IGincoImportService {
 	 * @see fr.mcc.ginco.imports.IGincoImportService#importGincoXmlThesaurusFile(java.lang.String, java.lang.String, java.io.File)
 	 */
 	@Override
-	public Thesaurus importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws TechnicalException, BusinessException {
+	public Map<Thesaurus,Set<Alignment>> importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws TechnicalException, BusinessException {
 		URI fileURI = writeTempFile(content, fileName, tempDir);
 		InputStream in = FileManager.get().open(fileURI.toString());
 		GincoExportedThesaurus unmarshalledExportedThesaurus = new GincoExportedThesaurus();
@@ -106,7 +108,7 @@ public class GincoImportServiceImpl implements IGincoImportService {
 	 * @see fr.mcc.ginco.imports.IGincoImportService#importGincoXmlThesaurusFile(java.lang.String, java.lang.String, java.io.File)
 	 */
 	@Override
-	public ThesaurusConcept importGincoBranchXmlFile(String content, String fileName, File tempDir, String thesaurusId) throws TechnicalException, BusinessException {
+	public Map<ThesaurusConcept,Set<Alignment>> importGincoBranchXmlFile(String content, String fileName, File tempDir, String thesaurusId) throws TechnicalException, BusinessException {
 		URI fileURI = writeTempFile(content, fileName, tempDir);
 		InputStream in = FileManager.get().open(fileURI.toString());
 		GincoExportedBranch unmarshalledExportedThesaurus = new GincoExportedBranch();

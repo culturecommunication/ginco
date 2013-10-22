@@ -36,8 +36,13 @@ package fr.mcc.ginco.rest.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -49,7 +54,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
@@ -57,10 +61,10 @@ import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.eclipse.jetty.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -68,7 +72,10 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
+import fr.mcc.ginco.extjs.view.ImportedThesaurusResponse;
+import fr.mcc.ginco.extjs.view.pojo.AlignmentView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
+import fr.mcc.ginco.extjs.view.utils.AlignmentViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
@@ -119,7 +126,7 @@ public class ImportRestService {
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -162,8 +169,10 @@ public class ImportRestService {
 
 	/**
 	 * This method is called to import a Ginco XML thesaurus. The
-	 * @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is
-	 * used by an ajax call and IE cannot display result if JSOn is returned
+	 * 
+	 * @Produces({MediaType.TEXT_HTML ) is not a mistake : this rest service is
+	 *                                used by an ajax call and IE cannot display
+	 *                                result if JSOn is returned
 	 * 
 	 * @param body
 	 * @param request
@@ -189,19 +198,32 @@ public class ImportRestService {
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
 
-		Thesaurus thesaurus = gincoImportService.importGincoXmlThesaurusFile(
+		Map<Thesaurus, Set<Alignment>> importResult = gincoImportService.importGincoXmlThesaurusFile(
 				content, fileName, tempDir);
+		Thesaurus thesaurus = importResult.keySet().iterator().next();
+		
 		indexerService.indexThesaurus(thesaurus);
+		
+		ImportedThesaurusResponse response = new ImportedThesaurusResponse();
+		response.setThesaurusTitle(thesaurus.getTitle());
+		List<String> missingInternalConcepts = new ArrayList<String>();
+		Set<Alignment> bannedAlignments  = importResult.get(thesaurus);
+		for (Alignment ali:bannedAlignments) {
+			missingInternalConcepts.add(ali.getSourceConcept().getIdentifier());
+		}		
+		response.setConceptsMissingAlignments(missingInternalConcepts);
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				thesaurusViewConverter.convert(thesaurus)));
+				response));		
 		return serialized;
 	}
 
 	/**
 	 * This method is called to import a Ginco XML concept branch. The
-	 * @Produces({MediaType.TEXT_HTML}) is not a mistake : this rest service is
-	 * used by an ajax call and IE cannot display result if JSOn is returned
+	 * 
+	 * @Produces({MediaType.TEXT_HTML ) is not a mistake : this rest service is
+	 *                                used by an ajax call and IE cannot display
+	 *                                result if JSOn is returned
 	 * 
 	 * @param body
 	 * @param request
@@ -229,47 +251,52 @@ public class ImportRestService {
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
 
-		ThesaurusConcept concept = gincoImportService.importGincoBranchXmlFile(
+		Map<ThesaurusConcept, Set<Alignment>> importResult = gincoImportService.importGincoBranchXmlFile(
 				content, fileName, tempDir, thesaurusId);
-		indexerService.indexThesaurus(thesaurusService.getThesaurusById(thesaurusId));
+		indexerService.indexThesaurus(thesaurusService
+				.getThesaurusById(thesaurusId));
+		ThesaurusConcept concept = importResult.keySet().iterator().next();		
 		ObjectMapper mapper = new ObjectMapper();
 		ImportedBranchResponse response = new ImportedBranchResponse();
 		response.setTitle(thesaurusConceptService.getConceptTitle(concept));
 		response.setConceptView(thesaurusConceptViewConverter.convert(concept));
+		if (!importResult.get(concept).isEmpty()) {
+			response.setTargetInternalConceptsMissing(true);
+		} else {
+			response.setTargetInternalConceptsMissing(false);
+		}					
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				response));
+				response));		
 		return serialized;
 	}
-	
+
 	@POST
 	@Path("/importSandBoxTerms")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
-	public String importSandBoxTerms (MultipartBody body,
+	public String importSandBoxTerms(MultipartBody body,
 			@QueryParam("thesaurusId") String thesaurusId,
 			@Context HttpServletRequest request)
 			throws JsonGenerationException, JsonMappingException, IOException,
 			TechnicalException, BusinessException {
-		try{
+		try {
 			Attachment file = body.getAttachment("import-file-path");
 			String content = file.getObject(String.class);
-			
+
 			String[] termsSplit = content.split("\n|\r\n");
 			List<String> termLexicalValues = Arrays.asList(termsSplit);
-			
-			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService.importSandBoxTerms(termLexicalValues, thesaurusId);
-			for (ThesaurusTerm sandboxedTerm : sandboxedTerms){
+
+			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
+					.importSandBoxTerms(termLexicalValues, thesaurusId);
+			for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
 				indexerService.addTerm(sandboxedTerm);
 			}
 			return "{ 'success':true,'msg': 'imported'}";
-		}
-		catch (BusinessException ex) {
+		} catch (BusinessException ex) {
 			throw ex;
-		}
-		catch (Exception re)
-		{
-			throw new BusinessException("Error reading imported file :"+re.getMessage(),
-					"import-unable-to-read-file", re);
+		} catch (Exception re) {
+			throw new BusinessException("Error reading imported file :"
+					+ re.getMessage(), "import-unable-to-read-file", re);
 		}
 	}
 }

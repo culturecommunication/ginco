@@ -35,13 +35,18 @@
 package fr.mcc.ginco.imports.ginco;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
@@ -95,13 +100,17 @@ public class GincoConceptBranchBuilder {
 	 *        exported branch we want to import
 	 * @return The imported {@link ThesaurusConcept} root
 	 */
-	public ThesaurusConcept storeGincoExportedBranch(
+	public Map<ThesaurusConcept,Set<Alignment>> storeGincoExportedBranch(
 			GincoExportedBranch exportedBranch, String thesaurusId) {
+		
+		Map<ThesaurusConcept,Set<Alignment>> res = new HashMap<ThesaurusConcept,Set<Alignment>>();
+		Set<Alignment> bannedAlignments = new HashSet<Alignment>();		
+		
 		ThesaurusConcept result = new ThesaurusConcept();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
 		
 		ThesaurusConcept existingConceptRoot = thesaurusConceptDAO.getById(exportedBranch.getRootConcept().getIdentifier());
-		if (existingConceptRoot.getThesaurus() != null &&  existingConceptRoot.getThesaurus().getIdentifier().equals(targetedThesaurus.getIdentifier())) {
+		if (existingConceptRoot != null && existingConceptRoot.getThesaurus() != null &&  existingConceptRoot.getThesaurus().getIdentifier().equals(targetedThesaurus.getIdentifier())) {
 			throw new BusinessException("Not possible to import a branch where root concept already exists in target thesaurus",
 					"root-concept-exist-in-target-thesaurus");
 		}
@@ -137,9 +146,11 @@ public class GincoConceptBranchBuilder {
 					.storeHierarchicalRelationship(exportedBranch
 							.getHierarchicalRelationship());
 			
-			gincoAlignmentImporter.storeAlignments(exportedBranch.getAlignments());
+			bannedAlignments = gincoAlignmentImporter.storeAlignments(exportedBranch.getAlignments());
+			gincoAlignmentImporter.storeExternalThesauruses(exportedBranch.getAlignments(), bannedAlignments);
 
 		}
-		return result;
+		res.put(result, bannedAlignments);
+		return res;
 	}
 }

@@ -34,39 +34,29 @@
  */
 package fr.mcc.ginco.extjs.view;
 
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
+import java.util.List;
 
 /**
  * Class for JSON representation of a data object for extjs.
  */
-public class ImportedBranchResponse {
-	private ThesaurusConceptReducedView conceptView;
-	private String title;
-	private boolean targetInternalConceptsMissing;
+public class ImportedThesaurusResponse {
+	private String thesaurusTitle;
+	private List<String> conceptsMissingAlignments;
 
-	public String getTitle() {
-		return title;
+	public String getThesaurusTitle() {
+		return thesaurusTitle;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setThesaurusTitle(String thesaurusTitle) {
+		this.thesaurusTitle = thesaurusTitle;
 	}
 
-	public ThesaurusConceptReducedView getConceptView() {
-		return conceptView;
+	public List<String> getConceptsMissingAlignments() {
+		return conceptsMissingAlignments;
 	}
 
-	public void setConceptView(ThesaurusConceptReducedView conceptView) {
-		this.conceptView = conceptView;
-	}
-
-	public boolean isTargetInternalConceptsMissing() {
-		return targetInternalConceptsMissing;
-	}
-
-	public void setTargetInternalConceptsMissing(
-			boolean targetInternalConceptsMissing) {
-		this.targetInternalConceptsMissing = targetInternalConceptsMissing;
+	public void setConceptsMissingAlignments(List<String> conceptsMissingAlignments) {
+		this.conceptsMissingAlignments = conceptsMissingAlignments;
 	}
 
 }
