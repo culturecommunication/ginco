@@ -57,6 +57,7 @@ Ext.define('GincoApp.view.RightNotePanel', {
 	xTypeLabel : 'Type',
 	xLanguageLabel : 'Language',
 	noteConceptStore : null,
+	autoScroll: true,
 
 	initComponent : function() {
 		var me = this;
@@ -66,6 +67,7 @@ Ext.define('GincoApp.view.RightNotePanel', {
 					xtype : 'gridpanel',
 					itemId : 'rightNoteGrid',
 					store : me.noteConceptStore,
+					cls: "right-notes",
 
 					columns : [ {
 						dataIndex : 'identifier',
@@ -81,7 +83,8 @@ Ext.define('GincoApp.view.RightNotePanel', {
 						hidden : true
 					}, {
 						dataIndex : 'type',
-						text : me.xTypeLabel
+						text : me.xTypeLabel,
+						hidden : true
 					}, {
 						dataIndex : 'created',
 						text : me.xCreatedDateLabel,
