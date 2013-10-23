@@ -45,7 +45,7 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xTitleLabel : 'Titre',
 	    xServiceLabel : 'Auteur',
 	    xUrlLabel : 'URL',
-	    xEmailLabel : 'Email',
+	    xEmailLabel : 'Courriel',
 	    xContributorLabel : 'Contributeur',
 	    xPublisherLabel : 'Editeur',
 	    xPublisherValue : 'Ministère chargé de la culture',

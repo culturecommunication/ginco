@@ -211,7 +211,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												columnWidth : 0.50,
 												fieldLabel : me.xEmailLabel,
 												margin : '0 0 5 10',
-												labelWidth : 40,
+												labelWidth : 50,
 												vtype : 'email'
 											} ]
 										},{
