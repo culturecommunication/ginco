@@ -39,7 +39,6 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 
 
@@ -48,7 +47,7 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusConceptView implements Serializable {
+public class ThesaurusConceptView implements Serializable, SecuredResourceView {
 	
 	private String identifier;
 	private String created;

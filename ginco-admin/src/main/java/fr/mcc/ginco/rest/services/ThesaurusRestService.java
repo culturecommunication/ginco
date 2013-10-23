@@ -200,7 +200,8 @@ public class ThesaurusRestService {
 	@POST
 	@Path("/updateVocabulary")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, 'edit')")
 	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
 		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 

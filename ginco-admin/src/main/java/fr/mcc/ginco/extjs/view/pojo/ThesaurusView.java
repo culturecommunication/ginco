@@ -51,8 +51,9 @@ import java.util.List;
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusView implements Serializable {
 
+public class ThesaurusView implements Serializable, SecuredResourceView {	
+	
 	private String id;
 	private String contributor;
 	private String coverage;
@@ -253,5 +254,10 @@ public class ThesaurusView implements Serializable {
 
 	public void setFormats(List<Integer> formats) {
 		this.formats = formats;
+	}
+
+	@Override
+	public String getThesaurusId() {		
+		return id;
 	}
 }

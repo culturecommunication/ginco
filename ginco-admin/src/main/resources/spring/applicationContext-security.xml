@@ -5,7 +5,16 @@
     http://www.springframework.org/schema/security
     http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <global-method-security pre-post-annotations="enabled" />
+    <beans:bean id="gincoPermissionEvaluator" 
+        class="fr.mcc.ginco.security.BasePermissionEvaluator"/>
+
+    <beans:bean id="gincoExpressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+        <beans:property name="permissionEvaluator" ref="gincoPermissionEvaluator"/>
+    </beans:bean>
+    
+    <global-method-security pre-post-annotations="enabled" >
+        <expression-handler ref="gincoExpressionHandler"/>
+    </global-method-security>
     
     
     <beans:bean id="ApplicationEventListener" 
@@ -31,6 +40,8 @@
 			</beans:value>
 		</beans:property>
 	</beans:bean>
+	
+	
 	
 	<http pattern="/login.jsp" security="none" />
 	<http pattern="/*.js" security="none" />
