@@ -37,7 +37,6 @@ package fr.mcc.ginco.tests.exports.skos;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -46,7 +45,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.semanticweb.skos.SKOSChange;
 import org.semanticweb.skos.SKOSConcept;
@@ -59,7 +57,6 @@ import org.semanticweb.skosapibinding.SKOSManager;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.skos.SKOSAlignmentExporter;
 import fr.mcc.ginco.exports.skos.SKOSAssociativeRelationshipExporter;

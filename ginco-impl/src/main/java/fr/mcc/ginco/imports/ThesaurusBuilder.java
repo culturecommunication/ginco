@@ -73,7 +73,7 @@ import fr.mcc.ginco.log.Log;
 
 /**
  * Builder in charge of building a thesaurus
- * 
+ *
  */
 @Service("skosThesaurusBuilder")
 public class ThesaurusBuilder extends AbstractBuilder {
@@ -111,7 +111,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 	/**
 	 * Builds a Thesaurus object from the given resource and model
-	 * 
+	 *
 	 * @param skosThesaurus
 	 * @param model
 	 * @return
@@ -155,7 +155,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 				DCTerms.created);
 		if (thesaurusCreated!=null) {
 			thesaurus.setCreated(getSkosDate(thesaurusCreated));
-		} else 
+		} else
 		{
 			thesaurus.setCreated(new Date());
 		}
@@ -165,10 +165,10 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		thesaurus.setLang(getLanguages(skosThesaurus,DC.language));
 		if (thesaurus.getLang().isEmpty())
 		{
-			throw new BusinessException("Missing language for imported thesaurus ",   
+			throw new BusinessException("Missing language for imported thesaurus ",
 					"import-missing-lang-thesaurus");
 		}
-		
+
 		ThesaurusFormat format = thesaurusFormatDAO
 				.getById(defaultThesaurusFormat);
 		if (format == null) {
@@ -177,18 +177,18 @@ public class ThesaurusBuilder extends AbstractBuilder {
 							+ defaultThesaurusFormat + " is unknown",
 					"import-unknown-default-format");
 		}
-		thesaurus.addFormat(format);		
+		thesaurus.addFormat(format);
 
 		thesaurus.setDefaultTopConcept(defaultTopConcept);
 
 		thesaurus.setCreator(getCreator(skosThesaurus, model));
-	
+
 		return thesaurus;
 	}
-	
+
 	/**
 	 * Gets the thesaurus creator from the FOAF elements
-	 * 
+	 *
 	 * @param skosThesaurus
 	 * @param model
 	 * @return
@@ -202,9 +202,9 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		if (stmt != null) {
 			RDFNode node = stmt.getObject();
 			if (node.isResource()) {
-				Resource cretaorResource = node.asResource();
+				Resource creatorResource = node.asResource();
 				SimpleSelector organizationSelector = new SimpleSelector(
-						cretaorResource, null, (RDFNode) null) {
+						creatorResource, null, (RDFNode) null) {
 					public boolean selects(Statement s) {
 						if (s.getObject().isResource()) {
 							Resource res = s.getObject().asResource();
@@ -214,17 +214,27 @@ public class ThesaurusBuilder extends AbstractBuilder {
 						}
 					}
 				};
-	
+
 				StmtIterator iter = model.listStatements(organizationSelector);
 				while (iter.hasNext()) {
 					Statement orgStms = iter.next();
 					Resource organizationRes = orgStms.getSubject().asResource();
-					Statement foafName = organizationRes.getProperty(FOAF.name);
+					Statement foafName = organizationRes
+							.getProperty(FOAF.name);
 					Statement foafHomepage = organizationRes
 							.getProperty(FOAF.homepage);
+					Statement foafEmail = organizationRes
+							.getProperty(FOAF.mbox);
 					ThesaurusOrganization org = new ThesaurusOrganization();
-					org.setHomepage(foafHomepage.getString());
-					org.setName(foafName.getString());
+					if (foafName != null){
+						org.setName(foafName.getString());
+					}
+					if (foafHomepage != null){
+						org.setHomepage(foafHomepage.getString());
+					}
+					if (foafEmail != null){
+						org.setEmail(foafEmail.getString());
+					}
 					return org;
 				}
 			} else if (node.isLiteral())
@@ -240,7 +250,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 	/**
 	 * Gets the list of defined languages for the given thesaurus
-	 * 
+	 *
 	 * @param skosThesaurus
 	 * @return
 	 * @throws BusinessException
@@ -254,7 +264,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 			Statement stmt = stmtIterator.next();
 			Language lang = languagesDAO.getById(stmt.getString());
 			if (lang == null) {
-				lang = languagesDAO.getByPart1(stmt.getString()); 
+				lang = languagesDAO.getByPart1(stmt.getString());
 				if (lang == null)
 					throw new BusinessException(
 						"Specified thesaurus language is unknown :  "
@@ -269,7 +279,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 	/**
 	 * Parse the given date
-	 * 
+	 *
 	 * @param skosDate
 	 * @return
 	 * @throws BusinessException

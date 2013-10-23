@@ -55,14 +55,14 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting a thesaurus data SKOS
- * 
+ *
  */
 @Component("skosThesaurusExporter")
 public class SKOSThesaurusExporter {
 
 	/**
 	 * Export the thesaurus data skos API
-	 * 
+	 *
 	 * @param thesaurus
 	 * @return
 	 */

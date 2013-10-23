@@ -6,6 +6,7 @@
 			<foaf:Organization>
 				<foaf:name>Inventaire général du patrimoine culturel</foaf:name>
 				<foaf:homepage>http://www.inventaire.culture.gouv.fr</foaf:homepage>
+				<foaf:mbox>contact@culture.gouv.fr</foaf:mbox>
 			</foaf:Organization>
 		</dc:creator>
 		<dc:contributor>Hélène Verdier (dir.)</dc:contributor>

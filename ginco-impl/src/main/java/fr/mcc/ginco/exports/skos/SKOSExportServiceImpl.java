@@ -72,15 +72,15 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Inject
 	@Named("skosArrayExporter")
 	private SKOSArrayExporter skosArrayExporter;
-	
+
 	@Inject
 	@Named("skosConceptExporter")
 	private SKOSConceptExporter skosConceptExporter;
-	
+
 	@Inject
 	@Named("skosThesaurusExporter")
 	private SKOSThesaurusExporter skosThesaurusExporter;
@@ -117,7 +117,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 		List<SKOSChange> addList = new ArrayList<SKOSChange>();
 		addList.add(new AddAssertion(vocab, schemaAssertion));
 
-		addList.addAll(skosThesaurusExporter.exportThesaurusSKOS(thesaurus, factory,  vocab,  scheme));		
+		addList.addAll(skosThesaurusExporter.exportThesaurusSKOS(thesaurus, factory,  vocab,  scheme));
 
 		for (ThesaurusConcept conceptTT : tt) {
 			addList.addAll(skosConceptExporter.exportConceptSKOS(conceptTT, null, scheme, factory, vocab));
@@ -144,7 +144,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 
 			String dct_old = "xmlns:dct=\"http://purl.org/dct#\"";
 			String dct = "xmlns:dct=\"http://purl.org/dc/terms/\"";
-			
+
 			String xmlhead_old = "xml version=\"1.0\"";
 			String xmlhead = "xml version=\"1.0\" encoding=\"UTF-8\"";
 
@@ -155,14 +155,23 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 
 			if (thesaurus.getCreator() != null) {
 
-				String org = "\n\t\t<foaf:Organization>\n"
-						+ "\t\t\t<foaf:name>NAME</foaf:name>\n"
-						+ "\t\t\t<foaf:homepage>URL</foaf:homepage>\n"
-						+ "\t\t</foaf:Organization>";
+				String creatorName = thesaurus.getCreator().getName();
+				String creatorHomepage = thesaurus.getCreator().getHomepage();
+				String creatorEmail = thesaurus.getCreator().getEmail();
 
-				org = org
-						.replaceAll("NAME", thesaurus.getCreator().getName())
-						.replaceAll("URL", thesaurus.getCreator().getHomepage());
+				String org = "\n\t\t<foaf:Organization>\n";
+
+				if (creatorName != null && !creatorName.isEmpty()){
+					org = org + "\t\t\t<foaf:name>" + creatorName + "</foaf:name>\n";
+				}
+				if (creatorHomepage != null && !creatorHomepage.isEmpty()){
+					org = org + "\t\t\t<foaf:homepage>" + creatorHomepage + "</foaf:homepage>\n";
+				}
+				if (creatorEmail != null && !creatorEmail.isEmpty()){
+					org = org + "\t\t\t<foaf:mbox>" + creatorEmail + "</foaf:mbox>\n";
+				}
+
+				org = org + "\t\t</foaf:Organization>";
 
 				String creator = "<dc:creator rdf:datatype=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral\">";
 
@@ -192,6 +201,6 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 					"export-unable-to-write-temporary-file", e);
 		}
 	}
-	
+
 
 }

@@ -45,7 +45,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -62,18 +61,18 @@ import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.imports.ThesaurusBuilder;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
-public class ThesaurusBuilderTest {	
+public class ThesaurusBuilderTest {
 
-	
+
 	@Mock(name = "thesaurusFormatDAO")
 	private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
 
 	@Mock(name = "thesaurusTypeDAO")
 	private IThesaurusTypeDAO thesaurusTypeDAO;
-	
+
 	@Mock(name = "languagesDAO")
 	private ILanguageDAO languagesDAO;
-	
+
 	@InjectMocks
 	private ThesaurusBuilder thesaurusBuilder;
 
@@ -81,27 +80,27 @@ public class ThesaurusBuilderTest {
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 		List<String> langFormats = new ArrayList<String>();
-		langFormats.add("yyyy");		
+		langFormats.add("yyyy");
 		ReflectionTestUtils.setField(thesaurusBuilder, "skosDefaultDateFormats", langFormats);
-		ReflectionTestUtils.setField(thesaurusBuilder, "defaultThesaurusFormat", 3);	
+		ReflectionTestUtils.setField(thesaurusBuilder, "defaultThesaurusFormat", 3);
 		LoggerTestUtil.initLogger(thesaurusBuilder);
 	}
 
 	@Test
 	public void testBuildTerms() {
 		ThesaurusType fakeType = new ThesaurusType();
-		
+
 		Mockito.when(thesaurusTypeDAO
 		.getByLabel("Thésaurus")).thenReturn(fakeType);
-		
+
 		Language french = new Language();
 		french.setId("fr-FR");
 		Mockito.when(languagesDAO.getById("fr-FR")).thenReturn(french);
-		
+
 		ThesaurusFormat format = new ThesaurusFormat();
 		format.setLabel("SKOS");
 		Mockito.when(thesaurusFormatDAO	.getById(3)).thenReturn(format);
-		
+
 		Model model = ModelFactory.createDefaultModel();
 		InputStream is = ThesaurusBuilderTest.class
 				.getResourceAsStream("/imports/concept_associations.rdf");
@@ -109,8 +108,8 @@ public class ThesaurusBuilderTest {
 
 		Resource skosThesaurus = model
 				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");
-		
-		Thesaurus actualThesaurus = thesaurusBuilder.buildThesaurus(skosThesaurus, model);	
+
+		Thesaurus actualThesaurus = thesaurusBuilder.buildThesaurus(skosThesaurus, model);
 		Assert.assertEquals("Thésaurus des objets mobiliers", actualThesaurus.getTitle());
 		Assert.assertEquals(true, actualThesaurus.getSubject().contains("instruments de musique"));
 		Assert.assertEquals(true, actualThesaurus.getContributor().contains("Renaud"));
@@ -118,9 +117,9 @@ public class ThesaurusBuilderTest {
 		Assert.assertEquals("Vocabulaire de la désignation des oeuvres mobilières", actualThesaurus.getDescription());
 		Assert.assertEquals("Ministère de la culture et de la communication", actualThesaurus.getPublisher());
 		Assert.assertEquals("CC-BY-SA", actualThesaurus.getRights());
-		Assert.assertEquals(fakeType, actualThesaurus.getType());	
-		
+		Assert.assertEquals(fakeType, actualThesaurus.getType());
+
 	}
 
-	
+
 }
