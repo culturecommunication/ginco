@@ -101,7 +101,8 @@ CREATE TABLE languages_iso639 (
 CREATE TABLE thesaurus_organization (
   identifier integer NOT NULL,
   name text NOT NULL,
-  homepage text
+  homepage text,
+  email text
 );
 CREATE SEQUENCE thesaurus_creator_identifier_seq START WITH 1  INCREMENT BY 1;
 
@@ -379,7 +380,7 @@ CREATE TABLE note_type
   isconcept boolean NOT NULL,
   CONSTRAINT pk_note_type PRIMARY KEY (code)
  );
- 
+
 CREATE TABLE note
 (
   identifier text NOT NULL,

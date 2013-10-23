@@ -58,14 +58,14 @@ import java.util.*;
  */
 @Component("thesaurusViewConverter")
 public class ThesaurusViewConverter {
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
-	
+
 	@Inject
 	@Named("languagesService")
-	private ILanguagesService languagesService;    
+	private ILanguagesService languagesService;
 
 	@Inject
 	@Named("thesaurusTypeService")
@@ -73,8 +73,8 @@ public class ThesaurusViewConverter {
 
 	@Inject
 	@Named("thesaurusFormatService")
-	private IThesaurusFormatService thesaurusFormatService;	
-	
+	private IThesaurusFormatService thesaurusFormatService;
+
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
@@ -83,7 +83,7 @@ public class ThesaurusViewConverter {
     @Named("thesaurusVersionHistoryService")
     private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 
-	
+
 	@Value("${ginco.default.language}") private String defaultLanguage;
 
     /**
@@ -119,7 +119,8 @@ public class ThesaurusViewConverter {
 				.getType()));
 		ThesaurusOrganization thesaurusOrganization;
 		if (StringUtils.isNotEmpty(source.getCreatorName())
-				|| StringUtils.isNotEmpty(source.getCreatorHomepage())) {
+				|| StringUtils.isNotEmpty(source.getCreatorHomepage())
+				|| StringUtils.isNotEmpty(source.getCreatorEmail())) {
 			if (hibernateRes.getCreator() != null) {
 				thesaurusOrganization = hibernateRes.getCreator();
 			} else {
@@ -127,13 +128,14 @@ public class ThesaurusViewConverter {
 			}
 			thesaurusOrganization.setName(source.getCreatorName());
 			thesaurusOrganization.setHomepage(source.getCreatorHomepage());
+			thesaurusOrganization.setEmail(source.getCreatorEmail());
 			hibernateRes.setCreator(thesaurusOrganization);
 		} else {
 			if (hibernateRes.getCreator() != null) {
 				hibernateRes.setCreator(null);
 			}
 		}
-		
+
 		List<Integer> formats = source.getFormats();
 		Set<ThesaurusFormat> realFormat = new HashSet<ThesaurusFormat>();
 
@@ -146,7 +148,7 @@ public class ThesaurusViewConverter {
 		}
 
 		hibernateRes.setFormat(realFormat);
-		
+
 		List<String> languages = source.getLanguages();
 		Set<Language> realLanguages = new HashSet<Language>();
 
@@ -191,6 +193,7 @@ public class ThesaurusViewConverter {
 			if (source.getCreator() != null) {
 				view.setCreatorName(source.getCreator().getName());
 				view.setCreatorHomepage(source.getCreator().getHomepage());
+				view.setCreatorEmail(source.getCreator().getEmail());
 			}
 
 			if (source.isDefaultTopConcept() != null) {
@@ -200,13 +203,13 @@ public class ThesaurusViewConverter {
 			}
 
             view.setArchived(source.isArchived());
-            
+
             ArrayList<Integer> formatList = new ArrayList<Integer>();
 			for (ThesaurusFormat format : source.getFormat()) {
 				formatList.add(format.getIdentifier());
 			}
 			view.setFormats(formatList);
-            
+
 			if (source.getType() != null) {
 				view.setType(source.getType().getIdentifier());
 			}

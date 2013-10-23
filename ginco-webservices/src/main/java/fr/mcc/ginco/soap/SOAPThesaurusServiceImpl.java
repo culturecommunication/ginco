@@ -98,6 +98,7 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 			fullThesaurus.setCreatorName(thesaurus.getCreator().getName());
 			fullThesaurus.setCreatorHomepage(thesaurus.getCreator()
 					.getHomepage());
+			fullThesaurus.setCreatorEmail(thesaurus.getCreator().getEmail());
 		}
 		fullThesaurus.setModified(DateUtil.toString(thesaurus.getDate()));
 		fullThesaurus.setDescription(thesaurus.getDescription());

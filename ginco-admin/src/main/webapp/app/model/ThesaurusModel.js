@@ -99,7 +99,10 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 	}, {
         name : 'polyHierarchical',
         type : 'boolean'
-    } ],
+    }, {
+    	name : 'creatorEmail',
+		type : 'string'
+    }],
 
 	proxy : {
 		api : {

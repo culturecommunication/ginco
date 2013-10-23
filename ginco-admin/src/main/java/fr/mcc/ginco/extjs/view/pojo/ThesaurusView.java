@@ -47,12 +47,12 @@ import java.util.List;
  * View class corresponding to {@link Thesaurus} bean, but fully serializable;
  * contains all links to other business-objects (full beans
  * {@link ThesaurusType} and {@link ThesaurusFormat}).
- * 
+ *
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusView implements Serializable {	
-	
+public class ThesaurusView implements Serializable {
+
 	private String id;
 	private String contributor;
 	private String coverage;
@@ -71,12 +71,13 @@ public class ThesaurusView implements Serializable {
 	private Integer type;
 	private String creatorName;
 	private String creatorHomepage;
+	private String creatorEmail;
     private Boolean polyHierarchical;
 
 	private List<String> languages = new ArrayList<String>();
 	private List<Integer> formats = new ArrayList<Integer>();
 
-    public ThesaurusView() {}	
+    public ThesaurusView() {}
 
 	public String getId() {
 		return id;
@@ -196,6 +197,14 @@ public class ThesaurusView implements Serializable {
 
 	public void setCreatorHomepage(String creatorHomepage) {
 		this.creatorHomepage = creatorHomepage;
+	}
+
+	public String getCreatorEmail() {
+		return creatorEmail;
+	}
+
+	public void setCreatorEmail(String creatorEmail) {
+		this.creatorEmail = creatorEmail;
 	}
 
 	public List<String> getLanguages() {

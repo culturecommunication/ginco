@@ -76,10 +76,12 @@
         <column>identifier</column>
         <column>name</column>
         <column>homepage</column>
+        <column>email</column>
         <row>
             <value>0</value>
             <value>Smile</value>
             <value>http://smile.fr</value>
+            <value>contact@smile.fr</value>
         </row>
     </table>
 

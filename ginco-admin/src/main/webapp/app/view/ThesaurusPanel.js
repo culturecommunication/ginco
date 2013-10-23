@@ -55,6 +55,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xTitleLabel : 'Title',
 	xServiceLabel : 'Service',
 	xUrlLabel : 'URL',
+	xEmailLabel : 'Email',
 	xContributorLabel : 'Contributor',
 	xPublisherLabel : 'Publisher',
 	xPublisherValue : 'Ministère chargé de la culture',
@@ -70,7 +71,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xSourceLabel : 'Source',
 	xThesaurusTitle : 'Thesaurus data',
 	xThesaurusTabTitle: 'Metadata',
-	xNewLabel : 'New',	
+	xNewLabel : 'New',
 	xNewMenu_GroupLabel : "Group of Concepts",
 	xNewMenu_ConceptArrayLabel : "Array of concepts",
 	xNewMenu_ComplexConceptLabel: "Complex Concept",
@@ -92,6 +93,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xMetadataTitle : 'Metadata',
     xStatisticsTabTile : 'Statistics',
     xMetadataTooltip : 'Click here to expand/collapse metadatas of this thesaurus',
+
 
 	initComponent : function() {
 		var me = this;
@@ -186,6 +188,10 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 											allowBlank : false,
 											padding : '5 0 0 0'
 										},{
+											xtype : 'textfield',
+											name : 'creatorName',
+											fieldLabel : me.xServiceLabel
+										},{
 											xtype : 'container',
 											layout : 'column',
 											defaults : {
@@ -194,17 +200,19 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 											},
 											items : [{
 												xtype : 'textfield',
-												name : 'creatorName',
-												columnWidth : 0.50,
-												fieldLabel : me.xServiceLabel
-											},{
-												xtype : 'textfield',
 												name : 'creatorHomepage',
 												columnWidth : 0.50,
 												margin : '0 0 5 0',
 												fieldLabel : me.xUrlLabel,
-												labelWidth : 50,
 												vtype : 'url'
+											},{
+												xtype : 'textfield',
+												name : 'creatorEmail',
+												columnWidth : 0.50,
+												fieldLabel : me.xEmailLabel,
+												margin : '0 0 5 10',
+												labelWidth : 40,
+												vtype : 'email'
 											} ]
 										},{
 												xtype : 'textareafield',

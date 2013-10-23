@@ -56,6 +56,7 @@ public class FullThesaurus extends ReducedThesaurus{
     private String type;
     private String creatorName;
     private String creatorHomepage;
+    private String creatorEmail;
 
 
     private List<String> languages = new ArrayList<String>();
@@ -164,6 +165,14 @@ public class FullThesaurus extends ReducedThesaurus{
 		this.creatorHomepage = creatorHomepage;
 	}
 
+	public String getCreatorEmail() {
+		return creatorEmail;
+	}
+
+	public void setCreatorEmail(String creatorEmail) {
+		this.creatorEmail = creatorEmail;
+	}
+
 	public List<String> getLanguages() {
 		return languages;
 	}
@@ -178,5 +187,5 @@ public class FullThesaurus extends ReducedThesaurus{
 
 	public void setFormats(List<String> formats) {
 		this.formats = formats;
-	} 	
+	}
 }

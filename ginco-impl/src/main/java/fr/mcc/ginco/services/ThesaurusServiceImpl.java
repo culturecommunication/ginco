@@ -87,7 +87,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Inject
 	@Named("thesaurusDAO")
-	private IThesaurusDAO thesaurusDAO;   
+	private IThesaurusDAO thesaurusDAO;
 
     @Inject
     @Named("skosExportService")
@@ -123,6 +123,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
     	ThesaurusOrganization defaultOrganisation = new ThesaurusOrganization();
     	defaultOrganisation.setHomepage(LabelUtil.getDefaultLabel("default.thesaurus.creator.homepage"));
+    	defaultOrganisation.setEmail(LabelUtil.getDefaultLabel("default.thesaurus.creator.email"));
     	defaultOrganisation.setName(LabelUtil.getDefaultLabel("default.thesaurus.creator.name"));
     	defaultThesaurus.setCreator(defaultOrganisation);
 
@@ -245,6 +246,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
         }
     }
 
-	
+
 
 }
