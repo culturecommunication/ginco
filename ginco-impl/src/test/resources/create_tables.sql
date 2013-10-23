@@ -31,6 +31,8 @@ DROP TABLE IF EXISTS custom_term_attribute_type;
 DROP TABLE IF EXISTS custom_concept_attribute;
 DROP TABLE IF EXISTS custom_term_attribute;
 DROP TABLE IF EXISTS note;
+DROP TABLE IF EXISTS user_role;
+
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
 DROP SEQUENCE IF EXISTS thesaurus_creator_identifier_seq;
@@ -39,6 +41,7 @@ DROP SEQUENCE IF EXISTS revinfo_identifier_seq;
 DROP SEQUENCE IF EXISTS revinfoentitytypes_identifier_seq;
 DROP SEQUENCE IF EXISTS custom_concept_attribute_type_identifier_seq;
 DROP SEQUENCE IF EXISTS custom_term_attribute_type_identifier_seq;
+DROP SEQUENCE IF EXISTS user_role_identifier_seq;
 
 
 CREATE TABLE thesaurus
@@ -465,7 +468,7 @@ CREATE TABLE thesaurus_formats
 (
   format_identifier integer NOT NULL,
   thesaurus_identifier text NOT NULL,
-  CONSTRAINT pk_thesaurus_formats PRIMARY KEY (format_identifier, thesaurus_identifier),
+  CONSTRAINT pk_thesaurus_formats PRIMARY KEY (format_identifier, thesaurus_identifier)
 );
 
 CREATE TABLE thesaurus_formats_aud
@@ -476,3 +479,15 @@ CREATE TABLE thesaurus_formats_aud
   revtype smallint,
   CONSTRAINT thesaurus_formats_aud_pkey PRIMARY KEY (rev, thesaurus_identifier, format_identifier)
 );
+
+CREATE TABLE user_role
+(
+  identifier integer NOT NULL,
+  username text,
+  thesaurus_id text, 
+  role integer,
+  CONSTRAINT pk_user_role PRIMARY KEY (identifier)
+);
+
+CREATE SEQUENCE user_role_identifier_seq START WITH 1  INCREMENT BY 1 ;
+

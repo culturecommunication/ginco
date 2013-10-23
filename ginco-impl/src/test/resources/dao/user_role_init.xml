@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>    
+	<table name="user_role">
+		<column>identifier</column>
+		<column>username</column>		
+		<column>thesaurus_id</column>
+		<column>role</column>		
+		<row>
+			<value>1</value>
+			<value>john</value>
+			<value>http://thesaurus1</value>
+			<value>0</value>
+		</row>
+		<row>
+            <value>2</value>
+            <value>paul</value>
+            <value>http://thesaurus1</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>george</value>
+            <value>http://thesaurus2</value>
+            <value>0</value>
+        </row>		
+	</table>
+	<table name="thesaurus">
+        <column>identifier</column>
+        <column>title</column>
+        <row>
+            <value>http://thesaurus1</value>
+            <value>Thesaurus 1</value>
+        </row>
+        <row>
+            <value>http://thesaurus2</value>
+            <value>Thesaurus 2</value>            
+        </row>
+    </table>    
+</dataset>

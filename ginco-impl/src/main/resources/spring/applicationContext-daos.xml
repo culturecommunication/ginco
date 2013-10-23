@@ -51,6 +51,7 @@
                 <value>hibernate/AlignmentType.hbm.xml</value>
                 <value>hibernate/ExternalThesaurus.hbm.xml</value>
                 <value>hibernate/ExternalThesaurusType.hbm.xml</value>
+                <value>hibernate/UserRole.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">

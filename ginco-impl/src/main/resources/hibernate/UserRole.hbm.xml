@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="UserRole" table="user_role">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+             <generator class="sequence">
+                <param name="sequence">user_role_identifier_seq</param>
+            </generator>
+        </id>      
+        <property name="username" />
+        <many-to-one name="thesaurus" column="thesaurus_id" lazy="false" />  
+        <property name="role">        
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">fr.mcc.ginco.beans.Role</param>
+            </type>
+      </property>
+	</class>
+</hibernate-mapping>
