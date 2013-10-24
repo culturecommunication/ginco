@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.tests.daos;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +67,12 @@ public class UserRoleDAOTest extends BaseDAOTest {
         UserRole actualResponse3 = userRoleDAO.getUserRoleOnThesaurus("george", "http://thesaurus1");
         Assert.assertNull(actualResponse3);		
 
+    }    
+    
+    @Test
+    public final void testGetUserRolesOnThesaurus() {
+        List<UserRole> actualResponse1 = userRoleDAO.getUserRolesOnThesaurus("http://thesaurus1");
+		Assert.assertEquals(2, actualResponse1.size());
     }    
 
      

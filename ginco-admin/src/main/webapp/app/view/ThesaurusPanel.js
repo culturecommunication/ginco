@@ -32,6 +32,7 @@
 Ext.require([ 'GincoApp.view.ThesaurusVersionPanel',
               'GincoApp.view.CustomAttributeTypesPanel',
               'GincoApp.view.ThesaurusStatisticsTabPanel',
+              'GincoApp.view.UsersTabPanel',
               'GincoApp.view.MetaDataPanel']);
 Ext.define('GincoApp.view.ThesaurusPanel', {
 	extend : 'GincoApp.view.ThesaurusEntityPanel',
@@ -334,6 +335,12 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                                 {
                                                     itemId : 'statisticsTab',
                                                     xtype : 'thesaurusStatisticsTabPanel',
+                                                    closable : false,
+                                                    disabled :  false
+                                                },
+                                                {
+                                                    itemId : 'usersTab',
+                                                    xtype : 'usersTabPanel',
                                                     closable : false,
                                                     disabled :  false
                                                 }]

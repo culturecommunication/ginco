@@ -34,15 +34,11 @@
  */
 package fr.mcc.ginco.beans;
 
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
-
 import java.io.Serializable;
 
 /**
- * Bean representing and adminstrator user
+ * Bean representing the associatio between a user and a role on a thesaurus
  */
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
 public class UserRole implements Serializable {		
 	private Integer identifier;
 	private String username;

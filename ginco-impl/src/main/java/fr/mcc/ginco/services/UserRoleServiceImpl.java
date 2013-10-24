@@ -34,6 +34,9 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -42,6 +45,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.dao.IUserRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -59,6 +63,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
 	private Logger logger;
 	
 
+	@Override
 	public boolean hasRole(String username, String thesaurusId, Role role) {
 		UserRole userRole = userRoleDAO.getUserRoleOnThesaurus(username,
 				thesaurusId);
@@ -68,6 +73,24 @@ public class UserRoleServiceImpl implements IUserRoleService {
 		} else {
 			return userRole.getRole().equals(role);
 		}
+	}
+
+
+	@Override
+	public List<UserRole> getThesaurusUsers(String thesaurusId) {
+		return userRoleDAO.getUserRolesOnThesaurus(thesaurusId);
+	}
+
+
+	@Override
+	public UserRole getUserRole(Integer identifier) {
+		return userRoleDAO.getById(identifier);
+	}
+	
+	@Override
+	@Transactional(readOnly=false)
+	public UserRole updateUserRole(UserRole userRole) {		
+		return userRoleDAO.update(userRole);
 	}
 
 }

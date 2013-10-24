@@ -32,56 +32,39 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
+package fr.mcc.ginco.extjs.view.pojo;
 
-import java.util.List;
+import java.io.Serializable;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.UserRole;
-import fr.mcc.ginco.dao.IUserRoleDAO;
-
-/**
- * Implementation of the data access object to the user_role table
- * 
- */
-@Repository("userRoleDAO")
-public class UserRoleDAO extends GenericHibernateDAO<UserRole, Integer>
-		implements IUserRoleDAO {
-
-	public UserRoleDAO() {
-		super(UserRole.class);
+public class UserRoleView implements Serializable {
+	private String username;
+	private Integer identifier;
+    private Integer role;
+    private String thesaurusId;
+    
+	public String getUsername() {
+		return username;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * fr.mcc.ginco.dao.IUserRoleDAO#getUserRoleOnThesaurus(java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public UserRole getUserRoleOnThesaurus(String username, String thesaurusId) {
-		Criteria criteria = getCurrentSession().createCriteria(UserRole.class);
-		criteria.add(Restrictions.eq("username", username));
-		criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
-		List<UserRole> userRoles = criteria.list();
-		if (userRoles != null && !userRoles.isEmpty()) {
-			return userRoles.get(0);
-		}
-		return null;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.IUserRoleDAO#getUserRolesOnThesaurus(java.lang.String)
-	 */
-	@Override
-	public List<UserRole> getUserRolesOnThesaurus(String thesaurusId) {
-		Criteria criteria = getCurrentSession().createCriteria(UserRole.class);
-		criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
-		return criteria.list();	
+	public Integer getIdentifier() {
+		return identifier;
 	}
-
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+	public Integer getRole() {
+		return role;
+	}
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+	public String getThesaurusId() {
+		return thesaurusId;
+	}
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
+	}	
 }

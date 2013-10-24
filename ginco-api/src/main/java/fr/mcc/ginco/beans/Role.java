@@ -50,5 +50,4 @@ public enum Role {
 	public void setIdentifier(Integer identifier) {
 		this.identifier = identifier;
 	}
-
 }

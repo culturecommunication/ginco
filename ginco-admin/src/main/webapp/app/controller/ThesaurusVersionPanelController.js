@@ -82,7 +82,6 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 	
 	createThesaurusVersion : function(theButton) {
 			var me = this;
-			var thePanel = theButton.up('form');
 			var theGrid = theButton.up('form').down('#versionGrid');
 			win = Ext.create('GincoApp.view.CreateVersionWin', {
 				listeners: {
@@ -99,7 +98,6 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 	},
 	
 	afterSavingNewVersion : function(theGrid, theButton) {
-		var theWin = theButton.up('createVersionWin');
 		var theForm = theButton.up('form');
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
@@ -107,10 +105,11 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 		theGrid.getStore().add(updatedModel);
 		theGrid.up('form').down('button[itemId=saveThesaurusVersion]').setDisabled(false);
 	},
+	
 	onVersionPanelActivate: function (thePanel)
 	{
 		var theGrid = thePanel.down('#versionGrid');
-		this.onRenderGrid(theGrid)
+		this.onRenderGrid(theGrid);
 	},
 
 	init : function() {

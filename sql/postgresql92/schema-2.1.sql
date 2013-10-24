@@ -21,3 +21,7 @@ CREATE SEQUENCE user_role_identifier_seq
     START 1
     CACHE 1;
 ALTER SEQUENCE user_role_identifier_seq OWNED BY user_role.identifier;
+
+CREATE INDEX user_role_username_thesaurus_id_idx ON user_role USING btree(username, thesaurus_id);
+CREATE INDEX user_role_thesaurus_id_idx ON user_role USING btree(thesaurus_id);
+

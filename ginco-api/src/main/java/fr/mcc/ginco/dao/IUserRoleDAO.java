@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.dao;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.UserRole;
 
 /**
@@ -50,4 +52,15 @@ public interface IUserRoleDAO extends IGenericDAO<UserRole, Integer> {
 	 * @return
 	 */
 	UserRole getUserRoleOnThesaurus(String username, String thesaurusId);
+	
+	
+	/**
+	 * Gets the list of UserRole objects scoped on the given thesaurus
+	 * present, null otherwise
+	 * 
+	 * @param username
+	 * @param thesaurusId
+	 * @return
+	 */
+	List<UserRole> getUserRolesOnThesaurus(String thesaurusId);
 }

@@ -158,6 +158,9 @@ a.x-tab-close-btn:focus  {
 .icon-gear {
 	background-image: url(../images/gear.png) !important;
 }
+.icon-user {
+    background-image: url(../images/group.png) !important;
+}
 
 .mandatory-field {
 	color: red !important;

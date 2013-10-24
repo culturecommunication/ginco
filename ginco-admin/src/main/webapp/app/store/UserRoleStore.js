@@ -32,56 +32,38 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
-import fr.mcc.ginco.beans.UserRole;
-import fr.mcc.ginco.dao.IUserRoleDAO;
-
-/**
- * Implementation of the data access object to the user_role table
- * 
+/*
+ * Thesaurus Term Store 
+ * This file contains all Thesaurus formats displayed in dropdown lists
  */
-@Repository("userRoleDAO")
-public class UserRoleDAO extends GenericHibernateDAO<UserRole, Integer>
-		implements IUserRoleDAO {
-
-	public UserRoleDAO() {
-		super(UserRole.class);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * fr.mcc.ginco.dao.IUserRoleDAO#getUserRoleOnThesaurus(java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public UserRole getUserRoleOnThesaurus(String username, String thesaurusId) {
-		Criteria criteria = getCurrentSession().createCriteria(UserRole.class);
-		criteria.add(Restrictions.eq("username", username));
-		criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
-		List<UserRole> userRoles = criteria.list();
-		if (userRoles != null && !userRoles.isEmpty()) {
-			return userRoles.get(0);
-		}
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.dao.IUserRoleDAO#getUserRolesOnThesaurus(java.lang.String)
-	 */
-	@Override
-	public List<UserRole> getUserRolesOnThesaurus(String thesaurusId) {
-		Criteria criteria = getCurrentSession().createCriteria(UserRole.class);
-		criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
-		return criteria.list();	
-	}
-
-}
+Ext.define('GincoApp.store.UserRoleStore', {
+    extend: 'Ext.data.Store',
+    requires  : ['GincoApp.model.UserRoleModel'],
+    constructor: function(cfg) {
+        var me = this;
+        cfg = cfg || {};
+        me.callParent([Ext.apply({
+            autoLoad: false,
+            alias: 'store.userrolestore',
+            pageSize: 50,
+            model : 'GincoApp.model.UserRoleModel',
+            proxy: {
+                type: 'ajax',
+                api : {
+					read : 'services/ui/userroleservice/getThesaurusUsers',
+					update : 'services/ui/userroleservice/updateThesaurusUsers',
+				},				
+				writer : {
+					type : 'json',
+					allowSingle : false
+				},
+                reader: {
+                    type: 'json',
+                    idProperty: 'identifier',
+                    root: 'data'
+                }
+            }
+        }, cfg)]);
+    }
+});

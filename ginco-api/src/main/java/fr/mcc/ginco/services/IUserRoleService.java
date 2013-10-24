@@ -34,7 +34,10 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.beans.UserRole;
 
 /**
@@ -54,5 +57,28 @@ public interface IUserRoleService {
 	 * @return
 	 */
 	boolean hasRole(String username, String thesaurusId, Role role);
+	
+	/**
+	 * Gets the list of declared users with their role for the given thesaurus id
+	 * @param thesaurusId
+	 * @return
+	 */
+	List<UserRole> getThesaurusUsers(String thesaurusId);
+	
+	
+	/**
+	 * Gets the UserRole with the given identifier
+	 * @param identifier
+	 * @return
+	 */
+	UserRole getUserRole(Integer identifier);
+	
+	/**
+	 * Create or update a {@link UserRole}
+	 * @param userRole
+	 * @return The created or updated object
+	 */
+	UserRole updateUserRole(UserRole userRole);
+	
 
 }
