@@ -57,6 +57,7 @@ import org.semanticweb.skosapibinding.SKOSManager;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.skos.SKOSAlignmentExporter;
 import fr.mcc.ginco.exports.skos.SKOSAssociativeRelationshipExporter;
@@ -119,11 +120,12 @@ public class SKOSConceptExporterTest {
 		c1.setCreated(DateUtil.nowDate());
 		c1.setModified(DateUtil.nowDate());
 		c1.setNotation("c1_notation");
+		c1.setStatus(ConceptStatusEnum.DEPRECATED.getStatus());
 
 		conceptSKOS = factory.getSKOSConcept(URI.create("http://c1"));
 
 		List<SKOSChange> skosChanges  = skosConceptExporter.exportConceptSKOS(c1, null, scheme, factory, vocab);
-		Assert.assertEquals(6, skosChanges.size());
+		Assert.assertEquals(7, skosChanges.size());
 	}
 
 }

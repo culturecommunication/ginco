@@ -76,6 +76,9 @@ public class SKOSConceptExporter {
 	@Named("skosAlignmentExporter")
 	private SKOSAlignmentExporter skosAlignmentExporter;
 
+	private static final String dct_uri = "http://purl.org/dct#";
+	private static final String skos_thes_uri = "http://www.niso.org/schemas/iso25964/skos-thes#";
+
 	/**
 	 * Export a concept to SKOS using the skos API
 	 *
@@ -95,37 +98,8 @@ public class SKOSConceptExporter {
 		SKOSConcept conceptSKOS = factory.getSKOSConcept(URI.create(concept
 				.getIdentifier()));
 
-		SKOSEntityAssertion conceptAssertion = factory
-				.getSKOSEntityAssertion(conceptSKOS);
-		addList.add(new AddAssertion(vocab, conceptAssertion));
-
-		SKOSObjectRelationAssertion inScheme = factory
-				.getSKOSObjectRelationAssertion(conceptSKOS,
-						factory.getSKOSInSchemeProperty(), scheme);
-		addList.add(new AddAssertion(vocab, inScheme));
-
-		SKOSDataRelationAssertion createdAssertion = factory
-				.getSKOSDataRelationAssertion(conceptSKOS, factory
-						.getSKOSDataProperty(URI
-								.create("http://purl.org/dct#created")),
-						DateUtil.toString(concept.getCreated()));
-		addList.add(new AddAssertion(vocab, createdAssertion));
-
-		SKOSDataRelationAssertion modifiedAssertion = factory
-				.getSKOSDataRelationAssertion(conceptSKOS, factory
-						.getSKOSDataProperty(URI
-								.create("http://purl.org/dct#modified")),
-						DateUtil.toString(concept.getModified()));
-		addList.add(new AddAssertion(vocab, modifiedAssertion));
-
-		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
-			SKOSDataRelationAssertion notationAssertion = factory
-					.getSKOSDataRelationAssertion(conceptSKOS, factory
-							.getSKOSDataProperty(factory
-									.getSKOSNotationProperty().getURI()),
-							concept.getNotation());
-			addList.add(new AddAssertion(vocab, notationAssertion));
-		}
+		addList.addAll(exportConceptInformation(concept,
+				conceptSKOS, scheme, factory, vocab));
 
 		List<ThesaurusTerm> prefTerms = thesaurusConceptService
 				.getConceptPreferredTerms(concept.getIdentifier());
@@ -165,6 +139,64 @@ public class SKOSConceptExporter {
 
 		addList.addAll(skosAlignmentExporter.exportAlignments(
 				concept.getIdentifier(), factory, conceptSKOS, vocab));
+
+		return addList;
+	}
+
+	/**
+	 * Export minimal concept information
+	 *
+	 * @param concept
+	 * @param parent
+	 * @param scheme
+	 * @param factory
+	 * @param vocab
+	 * @return
+	 */
+	public List<SKOSChange> exportConceptInformation(ThesaurusConcept concept,
+			SKOSConcept conceptSKOS, SKOSConceptScheme scheme,
+			SKOSDataFactory factory, SKOSDataset vocab) {
+
+		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+
+		SKOSEntityAssertion conceptAssertion = factory
+				.getSKOSEntityAssertion(conceptSKOS);
+		addList.add(new AddAssertion(vocab, conceptAssertion));
+
+		SKOSObjectRelationAssertion inScheme = factory
+				.getSKOSObjectRelationAssertion(conceptSKOS,
+						factory.getSKOSInSchemeProperty(), scheme);
+		addList.add(new AddAssertion(vocab, inScheme));
+
+		SKOSDataRelationAssertion createdAssertion = factory
+				.getSKOSDataRelationAssertion(conceptSKOS, factory
+						.getSKOSDataProperty(URI
+								.create(dct_uri + "created")),
+						DateUtil.toString(concept.getCreated()));
+		addList.add(new AddAssertion(vocab, createdAssertion));
+
+		SKOSDataRelationAssertion modifiedAssertion = factory
+				.getSKOSDataRelationAssertion(conceptSKOS, factory
+						.getSKOSDataProperty(URI
+								.create(dct_uri + "modified")),
+						DateUtil.toString(concept.getModified()));
+		addList.add(new AddAssertion(vocab, modifiedAssertion));
+
+		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
+			SKOSDataRelationAssertion notationAssertion = factory
+					.getSKOSDataRelationAssertion(conceptSKOS, factory
+							.getSKOSDataProperty(factory
+									.getSKOSNotationProperty().getURI()),
+							concept.getNotation());
+			addList.add(new AddAssertion(vocab, notationAssertion));
+		}
+
+		SKOSDataRelationAssertion statusAssertion = factory
+				.getSKOSDataRelationAssertion(conceptSKOS, factory
+						.getSKOSDataProperty(URI
+								.create(skos_thes_uri + "status")),
+						concept.getStatus().toString());
+		addList.add(new AddAssertion(vocab, statusAssertion));
 
 		return addList;
 	}
