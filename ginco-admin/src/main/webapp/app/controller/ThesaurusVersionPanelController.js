@@ -101,7 +101,6 @@ Ext.define('GincoApp.controller.ThesaurusVersionPanelController', {
 		var theForm = theButton.up('form');
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
-		updatedModel.data.thesaurusId = theGrid.up('thesaurusTabPanel').thesaurusData.id ;
 		theGrid.getStore().add(updatedModel);
 		theGrid.up('form').down('button[itemId=saveThesaurusVersion]').setDisabled(false);
 	},

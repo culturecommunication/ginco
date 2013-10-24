@@ -32,22 +32,13 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.beans;
 
-public enum Role {
-	MANAGER(0), EXPERT(1);
+Ext.define('GincoApp.locale.fr.view.CreateRoleUserWin',
+    {
+	xTitle: 'Nouvel utilisateur',
+	xSave : 'Ajouter l\'utilisateur',
+	xCreateVersionWinTitle : 'Nouvel utilisateur',
+	xRoleLabel : 'Rôle',
+	xUsernameLabel : 'Identifiant',
 
-	private Integer identifier;
-
-	private Role(Integer identifier) {
-		this.identifier = identifier;
-	}
-
-	public Integer getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(Integer identifier) {
-		this.identifier = identifier;
-	}	
-}
+});

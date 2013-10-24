@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.extjs.view;
 
+import java.util.List;
+
 
 /**
  * Class for JSON representation of a data object for extjs.
@@ -70,6 +72,13 @@ public  class ExtJsonFormLoadData<T>  {
 	public ExtJsonFormLoadData (T aData)
 	{
 		success = true;
-		data = aData;
+		data = aData;		
+	}
+	
+	public ExtJsonFormLoadData (T aData, long aTotal)
+	{
+		success = true;
+		data = aData;	
+		total = aTotal;
 	}
 }

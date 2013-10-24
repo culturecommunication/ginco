@@ -99,8 +99,8 @@ public class UserRoleRestService {
 		for (UserRole userRole : userRoles) {
 			UserRoleView userRoleView = userRoleViewConverter.convert(userRole);
 			userRoleViews.add(userRoleView);
-		}
-		return new ExtJsonFormLoadData<List<UserRoleView>>(userRoleViews);
+		}		
+		return new ExtJsonFormLoadData<List<UserRoleView>>(userRoleViews, userRoleViews.size());
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class UserRoleRestService {
 		}
 
 		ExtJsonFormLoadData<List<RoleView>> result = new ExtJsonFormLoadData<List<RoleView>>(
-				roleViews);
+				roleViews, roleViews.size());
 		return result;
 	}
 
@@ -153,7 +153,7 @@ public class UserRoleRestService {
 			updatedUserRoleViews.add(userRoleView);
 		}
 
-		return new ExtJsonFormLoadData<List<UserRoleView>>(userRoleViews);
+		return new ExtJsonFormLoadData<List<UserRoleView>>(userRoleViews, userRoleViews.size());
 
 	}
 

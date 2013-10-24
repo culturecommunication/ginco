@@ -42,6 +42,7 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Users saved successfully',
 	xProblemLabel : 'Error !',
+	xProblemSaveMsg : 'An error was encountered',
 
     onGridRender : function(theGrid) {
 		
@@ -76,10 +77,38 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 				}
 			},
 			failure : function(model, operation) {
-				Thesaurus.ext.utils.msg(me.xProblemLabel, model.exceptions[0].error);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
 				thePanel.getEl().unmask();
 			}
 		});
+	},
+	
+	createThesaurusUser : function(theButton) {
+		var me = this;
+		var theGrid = theButton.up('form').down('#userGrid');
+		win = Ext.create('GincoApp.view.CreateRoleUserWin', {
+			listeners: {
+				saveRoleUserButton: function (theButton){
+					me.afterSavingRoleUser(theGrid, theButton);
+				}
+			}
+		});
+		var theForm = win.down('form');
+		var model = Ext.create('GincoApp.model.UserRoleModel');
+		model.data.thesaurusId=theGrid.up('thesaurusTabPanel').thesaurusData.id;
+		console.log("model!");
+		console.log(model);
+		theForm.loadRecord(model);
+		win.show();
+	},
+	
+	afterSavingRoleUser : function(theGrid, theButton) {
+		var theForm = theButton.up('form');
+		theForm.getForm().updateRecord();
+		var updatedModel = theForm.getForm().getRecord();
+		updatedModel.data.thesaurusId = theGrid.up('thesaurusTabPanel').thesaurusData.id ;
+		theGrid.getStore().add(updatedModel);
+		theGrid.up('form').down('button[itemId=saveUsers]').setDisabled(false);		
 	},
 
 	init : function() {
@@ -92,7 +121,10 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 			}			,
  			'usersTabPanel #saveUsers' : {
  				click : this.saveUsers
-			},
+			},			
+			'usersTabPanel #addThesaurusUser' : {
+				click : this.createThesaurusUser
+			}
 		});
 	}
 });

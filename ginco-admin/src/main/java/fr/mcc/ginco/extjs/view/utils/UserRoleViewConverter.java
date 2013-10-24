@@ -98,7 +98,7 @@ public class UserRoleViewConverter {
 				+ " to UserRole");
 
 		UserRole userRole;
-		if (userRoleView.getIdentifier() == null) {
+		if (userRoleView.getIdentifier() == null || userRoleView.getIdentifier() == 0) {
 			logger.debug("UserRole does not exist for user "
 					+ userRoleView.getUsername() + ", creating one");
 			userRole = new UserRole();
