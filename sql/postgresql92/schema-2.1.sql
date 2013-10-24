@@ -6,12 +6,12 @@ CREATE TABLE user_role
 (
   identifier integer NOT NULL,
   username text,
-  thesaurus_id text, 
+  thesaurus_id text,
   role integer,
   CONSTRAINT pk_user_role PRIMARY KEY (identifier),
   CONSTRAINT fk_user_role_thesaurus FOREIGN KEY (thesaurus_id)
       REFERENCES thesaurus (identifier) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE 
+      ON UPDATE NO ACTION ON DELETE CASCADE
 );
 
 CREATE SEQUENCE user_role_identifier_seq
@@ -24,4 +24,6 @@ ALTER SEQUENCE user_role_identifier_seq OWNED BY user_role.identifier;
 
 CREATE INDEX user_role_username_thesaurus_id_idx ON user_role USING btree(username, thesaurus_id);
 CREATE INDEX user_role_thesaurus_id_idx ON user_role USING btree(thesaurus_id);
+
+ALTER TABLE thesaurus_organization ALTER COLUMN name DROP NOT NULL;
 
