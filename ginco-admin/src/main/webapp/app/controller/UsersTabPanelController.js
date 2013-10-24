@@ -95,9 +95,7 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 		});
 		var theForm = win.down('form');
 		var model = Ext.create('GincoApp.model.UserRoleModel');
-		model.data.thesaurusId=theGrid.up('thesaurusTabPanel').thesaurusData.id;
-		console.log("model!");
-		console.log(model);
+		model.data.thesaurusId=theGrid.up('thesaurusTabPanel').thesaurusData.id;		
 		theForm.loadRecord(model);
 		win.show();
 	},
