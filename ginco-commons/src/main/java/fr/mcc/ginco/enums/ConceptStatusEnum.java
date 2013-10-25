@@ -34,20 +34,38 @@
  */
 package fr.mcc.ginco.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This enum intended to list different available status for concepts.
- * The translation of these items is externalized in a property file 
+ * The translation of these items is externalized in a property file
  */
 public enum ConceptStatusEnum {
     CANDIDATE(0), VALIDATED(1), REJECTED(2), DEPRECATED(3), PROHIBITED(4);
-    
+
     private int status;
-    
+    private static Map<Integer, ConceptStatusEnum> codeToConceptStatusMapping;
+
     private ConceptStatusEnum(int status) {
     	this.status = status;
     }
-    
+
     public int getStatus() {
     	return status;
+    }
+
+    private static void initMapping() {
+    	codeToConceptStatusMapping = new HashMap<Integer, ConceptStatusEnum>();
+        for (ConceptStatusEnum s : values()) {
+        	codeToConceptStatusMapping.put(s.status, s);
+        }
+    }
+
+    public static ConceptStatusEnum getStatusByCode(int i) {
+        if (codeToConceptStatusMapping == null) {
+            initMapping();
+        }
+        return codeToConceptStatusMapping.get(i);
     }
 }

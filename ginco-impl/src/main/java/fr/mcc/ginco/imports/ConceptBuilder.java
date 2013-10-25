@@ -45,6 +45,7 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
@@ -118,7 +119,36 @@ public class ConceptBuilder extends AbstractBuilder {
 			concept.setNotation(stmtNotation.getString());
 		}
 
-		concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
+		Statement stmtStatus = skosConcept
+				.getProperty(ModelFactory
+						.createDefaultModel()
+						.createProperty(
+								"http://www.niso.org/schemas/iso25964/skos-thes#status"));
+		if (stmtStatus != null) {
+			try {
+				Integer status = stmtStatus.getInt();
+				if (ConceptStatusEnum.getStatusByCode(status) != null) {
+					concept.setStatus(status);
+				} else {
+					logger.warn("Unable to get status for concept : "
+							+ skosConcept.getURI()
+							+ ". Status with code '"
+							+ stmtStatus.getString()
+							+ "' does not exist in the system. Exported with status 1: 'validated'");
+					concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
+				}
+			} catch (NumberFormatException ex) {
+				logger.warn("Unable to get status for concept : "
+						+ skosConcept.getURI()
+						+ ". Status with code '"
+						+ stmtStatus.getString()
+						+ "' is not a number. Exported with status 1: 'validated'");
+				concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
+			}
+		} else {
+			concept.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
+		}
+
 		builtConcepts.put(skosConcept.getURI(), concept);
 
 		return concept;
