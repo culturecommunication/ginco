@@ -324,26 +324,25 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												closable : false,
 												disabled :  true
 											},
-
-                                                {
-                                                    title : me.xCustomAttributeTypes,
-                                                    itemId : 'customAttributeTypesTab',
-                                                    xtype : 'customAttributeTypesPanel',
-                                                    closable : false,
-                                                    disabled :  false
-                                                },
-                                                {
-                                                    itemId : 'statisticsTab',
-                                                    xtype : 'thesaurusStatisticsTabPanel',
-                                                    closable : false,
-                                                    disabled :  false
-                                                },
-                                                {
-                                                    itemId : 'usersTab',
-                                                    xtype : 'usersTabPanel',
-                                                    closable : false,
-                                                    disabled :  false
-                                                }]
+                                            {
+                                                title : me.xCustomAttributeTypes,
+                                                itemId : 'customAttributeTypesTab',
+                                                xtype : 'customAttributeTypesPanel',
+                                                closable : false,
+                                                disabled :  true
+                                            },
+                                            {
+                                                itemId : 'statisticsTab',
+                                                xtype : 'thesaurusStatisticsTabPanel',
+                                                closable : false,
+                                                disabled :  true
+                                            },
+                                            {
+                                                itemId : 'usersTab',
+                                                xtype : 'usersTabPanel',
+                                                closable : false,
+                                                disabled :  true
+                                            }]
 										}]
 									});
 

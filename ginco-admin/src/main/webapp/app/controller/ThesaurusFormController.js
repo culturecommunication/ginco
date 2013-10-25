@@ -86,6 +86,9 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
         
         thesaurusPanel.down('#versionTab').setDisabled(false);
+        thesaurusPanel.down('#customAttributeTypesTab').setDisabled(false);
+        thesaurusPanel.down('#statisticsTab').setDisabled(false);
+        thesaurusPanel.down('#usersTab').setDisabled(false);
         
 
         if(thesaurusPanel.getThesaurusData().archived) {
