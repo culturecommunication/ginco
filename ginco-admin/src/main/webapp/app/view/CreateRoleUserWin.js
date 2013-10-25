@@ -43,7 +43,6 @@ Ext
 					title : this.xTitle,
 					titleAlign : 'center',
 					modal : true,
-					store : null,
 
 					initComponent : function() {
 						var me = this;

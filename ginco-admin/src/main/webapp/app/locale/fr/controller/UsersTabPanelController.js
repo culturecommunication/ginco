@@ -38,6 +38,5 @@ Ext.define('GincoApp.locale.fr.controller.UsersTabPanelController',
 	xLoading : 'Chargement',
 	xSucessLabel : 'Succès !',
 	xSucessSavedMsg : 'Utilisateurs enregistrés avec succès',
-	xProblemLabel : 'Erreur !',
-	xProblemSaveMsg: 'Une erreur a été rencontrée lors de la sauvegarde'
+	xProblemLabel : 'Erreur !'
 });

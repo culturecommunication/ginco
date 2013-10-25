@@ -35,7 +35,9 @@
 package fr.mcc.ginco.rest.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -135,17 +137,21 @@ public class UserRoleRestService {
 	public ExtJsonFormLoadData<List<UserRoleView>> updateThesaurusUsers(
 			List<UserRoleView> userRoleViews) throws BusinessException {
 
-		List<UserRole> userRoles = new ArrayList<UserRole>();
+		Map<String, UserRole> userRoles = new HashMap<String, UserRole>();
 		List<UserRoleView> updatedUserRoleViews = new ArrayList<UserRoleView>();
 
 		for (UserRoleView userRoleView : userRoleViews) {
-			UserRole userRole = userRoleViewConverter.convert(userRoleView);
-			userRoles.add(userRole);
+			if (!userRoles.keySet().contains(userRoleView.getUsername())) {
+				UserRole userRole = userRoleViewConverter.convert(userRoleView);
+				userRoles.put(userRoleView.getUsername(), userRole);
+			} else {
+				 throw new BusinessException("Duplicate username on the same thesaurus : " + userRoleView.getUsername() + " - " + userRoleView.getThesaurusId(), "duplicate-username-on-thesaurus");
+			}
 		}
 
 		List<UserRole> updatedUserRoles = new ArrayList<UserRole>();
 
-		for (UserRole userRole : userRoles) {
+		for (UserRole userRole : userRoles.values()) {
 			UserRole updatedUserRole = userRoleService.updateUserRole(userRole);
 			updatedUserRoles.add(updatedUserRole);
 			UserRoleView userRoleView = userRoleViewConverter
@@ -157,4 +163,17 @@ public class UserRoleRestService {
 
 	}
 
+	
+	@POST
+	@Path("/deleteThesaurusUsers")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void deleteThesaurusUsers(
+			List<UserRoleView> userRoleViews)
+			throws BusinessException {
+		for (UserRoleView userRoleView : userRoleViews) {
+			UserRole userRole = userRoleViewConverter.convert(userRoleView);
+			userRoleService
+					.deleteUserRole(userRole);
+		}
+	}
 }

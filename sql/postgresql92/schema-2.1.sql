@@ -26,4 +26,3 @@ CREATE INDEX user_role_username_thesaurus_id_idx ON user_role USING btree(userna
 CREATE INDEX user_role_thesaurus_id_idx ON user_role USING btree(thesaurus_id);
 
 ALTER TABLE thesaurus_organization ALTER COLUMN name DROP NOT NULL;
-

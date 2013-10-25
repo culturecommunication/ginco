@@ -40,6 +40,8 @@ Ext.define('GincoApp.view.UsersTabPanel', {
 			xAddThesaurusUser: 'Add a thesaurus user',
 			xSave: 'Save',
 			xRoleLabels : ['Manager','Expert'],
+			xDelete: 'Remove',
+		    xActions : 'Actions',
 			userRoleStore : null,
 			
 			roleRenderer : function(value,record)
@@ -123,9 +125,19 @@ Ext.define('GincoApp.view.UsersTabPanel', {
 													lazyRender : true,
 													listClass : 'x-combo-list-small',
 													displayField : 'roleLabel',
-													valueField : 'role'
-												})
-									}						           
+													valueField : 'role',
+													forceSelection: true
+												})							        
+							        
+									},{
+			                            xtype : 'actioncolumn',
+			                            itemId : 'userRoleActionColumn',
+			                            header : me.xActions,
+			                            items : [ {
+			                                icon : 'images/detach.png',
+			                                tooltip : me.xDelete
+			                            } ]
+			                        }						           
 						           ],
 						           dockedItems: [{
 						        	   xtype: 'pagingtoolbar',

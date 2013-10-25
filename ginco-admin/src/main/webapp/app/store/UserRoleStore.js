@@ -53,7 +53,8 @@ Ext.define('GincoApp.store.UserRoleStore', {
                 api : {
 					read : 'services/ui/userroleservice/getThesaurusUsers',
 					update : 'services/ui/userroleservice/updateThesaurusUsers',
-					create : 'services/ui/userroleservice/updateThesaurusUsers'
+					create : 'services/ui/userroleservice/updateThesaurusUsers',
+                    destroy : 'services/ui/userroleservice/deleteThesaurusUsers'
 
 				},				
 				writer : {
@@ -63,7 +64,8 @@ Ext.define('GincoApp.store.UserRoleStore', {
                 reader: {
                     type: 'json',
                     idProperty: 'identifier',
-                    root: 'data'
+                    root: 'data',
+                    messageProperty: 'message'
                 }
             }
         }, cfg)]);

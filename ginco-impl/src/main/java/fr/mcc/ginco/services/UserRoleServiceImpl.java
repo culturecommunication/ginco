@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,7 +44,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Role;
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.dao.IUserRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -87,10 +85,23 @@ public class UserRoleServiceImpl implements IUserRoleService {
 		return userRoleDAO.getById(identifier);
 	}
 	
+	
 	@Override
 	@Transactional(readOnly=false)
-	public UserRole updateUserRole(UserRole userRole) {		
-		return userRoleDAO.update(userRole);
+	public UserRole updateUserRole(UserRole userRole) throws BusinessException {	
+		UserRole existingUserRole = userRoleDAO.getUserRoleOnThesaurus(userRole.getUsername(),
+				userRole.getThesaurus().getIdentifier());	
+		if (existingUserRole == null || existingUserRole.equals(userRole)) {
+			return userRoleDAO.update(userRole);
+		} else {
+			 throw new BusinessException("Duplicate username on the same thesaurus : " + userRole.getUsername() + " - " + userRole.getThesaurus().getIdentifier(), "duplicate-username-on-thesaurus");
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=false)
+	public void deleteUserRole(UserRole userRole) {
+		userRoleDAO.delete(userRole);
 	}
 
 }

@@ -43,6 +43,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.dao.IUserRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -51,7 +52,6 @@ import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class UserRoleServiceTest {
 
-	
 	@Mock(name = "userRoleDAO")
 	private IUserRoleDAO userRoleDAO;
 
@@ -68,14 +68,60 @@ public class UserRoleServiceTest {
 	public final void testHasRole() throws BusinessException {
 		UserRole userRole = new UserRole();
 		userRole.setIdentifier(1);
-		userRole.setRole(Role.EXPERT);		
-		Mockito.when(userRoleDAO.getUserRoleOnThesaurus("username1", "thesaurus1")).thenReturn(userRole);
-		boolean hasRole = userRoleService.hasRole("username1", "thesaurus1", Role.EXPERT);
+		userRole.setRole(Role.EXPERT);
+		Mockito.when(
+				userRoleDAO.getUserRoleOnThesaurus("username1", "thesaurus1"))
+				.thenReturn(userRole);
+		boolean hasRole = userRoleService.hasRole("username1", "thesaurus1",
+				Role.EXPERT);
 		Assert.assertTrue(hasRole);
-		
-		Mockito.when(userRoleDAO.getUserRoleOnThesaurus("username2", "thesaurus2")).thenReturn(null);
-		boolean hasRole2 = userRoleService.hasRole("username2", "thesaurus2", Role.EXPERT);
-		Assert.assertFalse(hasRole2);		
+
+		Mockito.when(
+				userRoleDAO.getUserRoleOnThesaurus("username2", "thesaurus2"))
+				.thenReturn(null);
+		boolean hasRole2 = userRoleService.hasRole("username2", "thesaurus2",
+				Role.EXPERT);
+		Assert.assertFalse(hasRole2);
+	}
+
+	@Test
+	public final void testUpdateNewUserRole() throws BusinessException {
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("thesaurus2");
+		UserRole userRole = new UserRole();
+		userRole.setIdentifier(1);
+		userRole.setRole(Role.EXPERT);
+		userRole.setUsername("username2");
+		userRole.setThesaurus(fakeThesaurus);
+		Mockito.when(
+				userRoleDAO.getUserRoleOnThesaurus("username2", "thesaurus2"))
+				.thenReturn(null);
+		Mockito.when(userRoleDAO.update(userRole)).thenReturn(userRole);
+
+		UserRole actual = userRoleService.updateUserRole(userRole);
+		Assert.assertEquals(userRole, actual);
+
+	}
+
+	@Test(expected = BusinessException.class)
+	public final void testUpdateExistingUserRole() throws BusinessException {
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("thesaurus2");
+		UserRole userRole = new UserRole();
+		userRole.setIdentifier(1);
+		userRole.setRole(Role.EXPERT);
+		userRole.setUsername("username2");
+		userRole.setThesaurus(fakeThesaurus);
+
+		UserRole userRole2 = new UserRole();
+		userRole2.setIdentifier(2);
+
+		Mockito.when(
+				userRoleDAO.getUserRoleOnThesaurus("username2", "thesaurus2"))
+				.thenReturn(userRole2);
+
+		userRoleService.updateUserRole(userRole);
+
 	}
 
 }

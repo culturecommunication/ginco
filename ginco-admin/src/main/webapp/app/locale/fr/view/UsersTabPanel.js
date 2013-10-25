@@ -44,5 +44,7 @@ Ext.define('GincoApp.locale.fr.view.UsersTabPanel', {
 			xRoleColumnLabel: 'Rôle',
 			xAddThesaurusUser: 'Ajouter un utilisateur',
 			xSave: 'Enregistrer',
-			xRoleLabels : ['Responsable opérationnel','Expert']
+			xRoleLabels : ['Responsable opérationnel','Expert'],
+			xDelete: 'Supprimer',
+		    xActions : 'Actions'
 });

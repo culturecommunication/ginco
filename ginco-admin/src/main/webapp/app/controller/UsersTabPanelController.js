@@ -42,7 +42,6 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Users saved successfully',
 	xProblemLabel : 'Error !',
-	xProblemSaveMsg : 'An error was encountered',
 
     onGridRender : function(theGrid) {
 		
@@ -51,8 +50,6 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 		theStore.getProxy().setExtraParam('idThesaurus',
 				thesPanel.thesaurusData.id);
 		theStore.load();
-
-	
 	},
 	
 	onUpdateUserGrid : function( editor, e, eOpts){
@@ -77,10 +74,11 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 				}
 			},
 			failure : function(model, operation) {
-				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, model.exceptions[0].error);
 				thePanel.getEl().unmask();
 			}
 		});
+		thePanel.getEl().unmask();
 	},
 	
 	createThesaurusUser : function(theButton) {
@@ -108,6 +106,13 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 		theGrid.getStore().add(updatedModel);
 		theGrid.up('form').down('button[itemId=saveUsers]').setDisabled(false);		
 	},
+	
+	onDeleteUserRole : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
+	    var theGrid = gridview.up('gridpanel');
+	    var theStore = theGrid.getStore();
+	    theStore.remove(rec); 
+	    theGrid.up('form').down('button[itemId=saveUsers]').setDisabled(false);	
+	},	
 
 	init : function() {
 		this.control({
@@ -122,7 +127,10 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 			},			
 			'usersTabPanel #addThesaurusUser' : {
 				click : this.createThesaurusUser
-			}
+			},			
+            'usersTabPanel gridpanel #userRoleActionColumn' : {
+                click : this.onDeleteUserRole
+            },
 		});
 	}
 });
