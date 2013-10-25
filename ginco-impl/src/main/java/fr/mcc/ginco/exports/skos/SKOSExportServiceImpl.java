@@ -148,10 +148,14 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 			String xmlhead_old = "xml version=\"1.0\"";
 			String xmlhead = "xml version=\"1.0\" encoding=\"UTF-8\"";
 
+			String isothes_old = "xmlns:iso-thes=\"http://www.niso.org/schemas/iso25964/iso-thes#\"";
+			String isothes = "xmlns:iso-thes=\"http://www.niso.org/schemas/iso25964/skos-thes#\"";
+
 			content = content.replaceAll(dc, dc + "\n" + foaf)
 					.replaceAll(dct_old, dct)
 					.replaceAll("</rdf:RDF>", collections + "</rdf:RDF>")
-					.replaceAll(xmlhead_old, xmlhead);
+					.replaceAll(xmlhead_old, xmlhead)
+					.replaceAll(isothes_old, isothes);
 
 			if (thesaurus.getCreator() != null) {
 

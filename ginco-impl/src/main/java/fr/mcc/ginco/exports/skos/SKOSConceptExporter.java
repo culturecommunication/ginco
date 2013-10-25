@@ -77,7 +77,7 @@ public class SKOSConceptExporter {
 	private SKOSAlignmentExporter skosAlignmentExporter;
 
 	private static final String dct_uri = "http://purl.org/dct#";
-	private static final String skos_thes_uri = "http://www.niso.org/schemas/iso25964/skos-thes#";
+	private static final String isothes_uri = "http://www.niso.org/schemas/iso25964/iso-thes#";
 
 	/**
 	 * Export a concept to SKOS using the skos API
@@ -194,7 +194,7 @@ public class SKOSConceptExporter {
 		SKOSDataRelationAssertion statusAssertion = factory
 				.getSKOSDataRelationAssertion(conceptSKOS, factory
 						.getSKOSDataProperty(URI
-								.create(skos_thes_uri + "status")),
+								.create(isothes_uri + "status")),
 						concept.getStatus().toString());
 		addList.add(new AddAssertion(vocab, statusAssertion));
 
