@@ -41,10 +41,12 @@ import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.print.attribute.standard.MediaSize.ISO;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.hp.hpl.jena.rdf.arp.lang.Iso639;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -120,10 +122,7 @@ public class ConceptBuilder extends AbstractBuilder {
 		}
 
 		Statement stmtStatus = skosConcept
-				.getProperty(ModelFactory
-						.createDefaultModel()
-						.createProperty(
-								"http://www.niso.org/schemas/iso25964/skos-thes#status"));
+				.getProperty(ISOTHES.STATUS);
 		if (stmtStatus != null) {
 			try {
 				Integer status = stmtStatus.getInt();
