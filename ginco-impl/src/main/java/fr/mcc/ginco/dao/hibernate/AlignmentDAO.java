@@ -66,5 +66,13 @@ public class AlignmentDAO extends
 		criteria.add(Restrictions.eq("sourceConcept.identifier", sourceConceptId));
 		return criteria.list();
 	}
+	
+	@Override
+	public List<Alignment> findByTargetConceptId(String targetConceptId) {
+		Criteria criteria =  getCurrentSession().createCriteria(Alignment.class);
+		criteria.createAlias("targetConcepts","tc");
+		criteria.add(Restrictions.eq("tc.internalTargetConcept.identifier", targetConceptId));
+		return criteria.list();
+	}
 
 }

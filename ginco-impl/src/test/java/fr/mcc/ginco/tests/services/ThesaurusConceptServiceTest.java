@@ -61,6 +61,7 @@ import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
@@ -92,6 +93,9 @@ public class ThesaurusConceptServiceTest {
 
 	@Mock(name = "thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
+
+	@Mock(name = "alignmentDAO")
+	private IAlignmentDAO alignmentDAO;
 
 
 	@InjectMocks

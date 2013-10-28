@@ -48,4 +48,6 @@ public interface IAlignmentDAO extends IGenericDAO<Alignment, String> {
 	 * @return
 	 */
 	List<Alignment> findBySourceConceptId(String sourceConceptId);
+
+	List<Alignment> findByTargetConceptId(String targetConceptId);
 }

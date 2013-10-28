@@ -60,6 +60,7 @@ import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
@@ -132,6 +133,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Inject
 	@Named("alignmentService")
 	private IAlignmentService alignmentService;
+	
+	@Inject
+	@Named("alignmentDAO")
+	private IAlignmentDAO alignmentDAO;
 
 	/*
 	 * (non-Javadoc)
@@ -473,7 +478,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			for (ThesaurusArray array : arrays) {
 				thesaurusArrayDAO.delete(array);
 			}
-
+			List<Alignment> alignments = alignmentDAO.findByTargetConceptId(object.getIdentifier());
+			for (Alignment alignment : alignments) {
+				if (alignment.getTargetConcepts().size()<=1) {
+					alignmentDAO.delete(alignment);
+				}
+			}
+			
 			return thesaurusConceptDAO.delete(object);
 			} else {
 		           throw new BusinessException("It's not possible to delete a concept with a status different from candidate or rejected", "delete-concept");
