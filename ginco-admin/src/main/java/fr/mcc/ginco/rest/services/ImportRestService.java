@@ -38,8 +38,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,9 +71,6 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
 import fr.mcc.ginco.extjs.view.ImportedThesaurusResponse;
-import fr.mcc.ginco.extjs.view.pojo.AlignmentView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
-import fr.mcc.ginco.extjs.view.utils.AlignmentViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
@@ -122,7 +117,7 @@ public class ImportRestService {
 	@Inject
 	@Named("thesaurusConceptViewConverter")
 	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
-	
+
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
@@ -135,7 +130,7 @@ public class ImportRestService {
 	 * This method is called to import a SKOS thesaurus the @Produces({
 	 * MediaType.TEXT_HTML}) is no mistake : this rest service is used by an
 	 * ajax call and IE cannot display result if JSOn is returned
-	 * 
+	 *
 	 * @param body
 	 * @param request
 	 * @return The imported thesaurus in JSOn string representig a
@@ -158,22 +153,38 @@ public class ImportRestService {
 		File tempdir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
 
-		Thesaurus importedThesaurus = skosImportService.importSKOSFile(content,
-				fileName, tempdir);
-		indexerService.indexThesaurus(importedThesaurus);
+		Map<Thesaurus, Set<Alignment>> importResult = skosImportService
+				.importSKOSFile(content, fileName, tempdir);
+		Thesaurus thesaurus = importResult.keySet().iterator().next();
+
+		indexerService.indexThesaurus(thesaurus);
+
+		ImportedThesaurusResponse response = new ImportedThesaurusResponse();
+		response.setThesaurusTitle(thesaurus.getTitle());
+		List<String> conceptsMissingAlignments = new ArrayList<String>();
+		List<String> externalConceptIds = new ArrayList<String>();
+		Set<Alignment> bannedAlignments = importResult.get(thesaurus);
+		for (Alignment alignment : bannedAlignments) {
+			conceptsMissingAlignments.add(alignment.getSourceConcept()
+					.getIdentifier());
+			externalConceptIds.add(alignment.getTargetConcepts().iterator()
+			.next().getExternalTargetConcept());
+		}
+		response.setConceptsMissingAlignments(conceptsMissingAlignments);
+		response.setExternalConceptIds(externalConceptIds);
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				thesaurusViewConverter.convert(importedThesaurus)));
+				response));
 		return StringEscapeUtils.unescapeHtml4(serialized);
 	}
 
 	/**
 	 * This method is called to import a Ginco XML thesaurus. The
-	 * 
+	 *
 	 * @Produces({MediaType.TEXT_HTML ) is not a mistake : this rest service is
 	 *                                used by an ajax call and IE cannot display
 	 *                                result if JSOn is returned
-	 * 
+	 *
 	 * @param body
 	 * @param request
 	 * @return The imported thesaurus in JSOn string representing a
@@ -201,30 +212,30 @@ public class ImportRestService {
 		Map<Thesaurus, Set<Alignment>> importResult = gincoImportService.importGincoXmlThesaurusFile(
 				content, fileName, tempDir);
 		Thesaurus thesaurus = importResult.keySet().iterator().next();
-		
+
 		indexerService.indexThesaurus(thesaurus);
-		
+
 		ImportedThesaurusResponse response = new ImportedThesaurusResponse();
 		response.setThesaurusTitle(thesaurus.getTitle());
-		List<String> missingInternalConcepts = new ArrayList<String>();
+		List<String> missingExternalConcepts = new ArrayList<String>();
 		Set<Alignment> bannedAlignments  = importResult.get(thesaurus);
 		for (Alignment ali:bannedAlignments) {
-			missingInternalConcepts.add(ali.getSourceConcept().getIdentifier());
-		}		
-		response.setConceptsMissingAlignments(missingInternalConcepts);
+			missingExternalConcepts.add(ali.getSourceConcept().getIdentifier());
+		}
+		response.setConceptsMissingAlignments(missingExternalConcepts);
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				response));		
+				response));
 		return serialized;
 	}
 
 	/**
 	 * This method is called to import a Ginco XML concept branch. The
-	 * 
+	 *
 	 * @Produces({MediaType.TEXT_HTML ) is not a mistake : this rest service is
 	 *                                used by an ajax call and IE cannot display
 	 *                                result if JSOn is returned
-	 * 
+	 *
 	 * @param body
 	 * @param request
 	 * @return The imported concept branch in JSOn string representing a
@@ -255,7 +266,7 @@ public class ImportRestService {
 				content, fileName, tempDir, thesaurusId);
 		indexerService.indexThesaurus(thesaurusService
 				.getThesaurusById(thesaurusId));
-		ThesaurusConcept concept = importResult.keySet().iterator().next();		
+		ThesaurusConcept concept = importResult.keySet().iterator().next();
 		ObjectMapper mapper = new ObjectMapper();
 		ImportedBranchResponse response = new ImportedBranchResponse();
 		response.setTitle(thesaurusConceptService.getConceptTitle(concept));
@@ -264,9 +275,9 @@ public class ImportRestService {
 			response.setTargetInternalConceptsMissing(true);
 		} else {
 			response.setTargetInternalConceptsMissing(false);
-		}					
+		}
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				response));		
+				response));
 		return serialized;
 	}
 
