@@ -139,8 +139,7 @@ Ext.define('GincoApp.controller.ImportController', {
 								var conceptsMissingAlignments = o.result.data.conceptsMissingAlignments;
 								var externalConceptIds = o.result.data.externalConceptIds;
 								if ( !Ext.isEmpty(conceptsMissingAlignments)) {
-									succLabel = me.xSucessLabelWithMissingAlignmentsPart1;
-									succLabel += '<br><br>';
+									succLabel = '';
 									for (var i = 0; i < conceptsMissingAlignments.length; i++) {
 										succLabel += me.xSucessLabelWithMissingExternalThesaurusPart1 + conceptsMissingAlignments[i];
 										succLabel += '<br>';
