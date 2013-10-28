@@ -42,6 +42,7 @@ import java.util.List;
 public class ImportedThesaurusResponse {
 	private String thesaurusTitle;
 	private List<String> conceptsMissingAlignments;
+	private List<String> externalConceptIds;
 
 	public String getThesaurusTitle() {
 		return thesaurusTitle;
@@ -57,6 +58,13 @@ public class ImportedThesaurusResponse {
 
 	public void setConceptsMissingAlignments(List<String> conceptsMissingAlignments) {
 		this.conceptsMissingAlignments = conceptsMissingAlignments;
+	}
+
+	public List<String> getExternalConceptIds() {
+		return externalConceptIds;
+	}
+	public void setExternalConceptIds(List<String> externalConceptIds) {
+		this.externalConceptIds = externalConceptIds;
 	}
 
 }

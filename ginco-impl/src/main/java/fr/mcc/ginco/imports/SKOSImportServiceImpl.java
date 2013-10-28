@@ -40,8 +40,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -181,10 +183,14 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	 * java.lang.String, java.io.File)
 	 */
 	@Override
-	public Thesaurus importSKOSFile(String fileContent, String fileName,
+	public Map<Thesaurus,Set<Alignment>> importSKOSFile(String fileContent, String fileName,
 			File tempDir) throws BusinessException {
-		URI fileURI = writeTempFile(fileContent, fileName, tempDir);
+
+		Map<Thesaurus,Set<Alignment>> res = new HashMap<Thesaurus,Set<Alignment>>();
+		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 		Thesaurus thesaurus = null;
+
+		URI fileURI = writeTempFile(fileContent, fileName, tempDir);
 		try {
 			// Reader init
 			Model model = ModelFactory.createDefaultModel();
@@ -215,11 +221,13 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			}
 
 			List<Resource> skosConcepts = getSKOSRessources(model, SKOS.CONCEPT);
-			buildConcepts(thesaurus, skosConcepts);
+			bannedAlignments = buildConcepts(thesaurus, skosConcepts);
 			buildConceptsAssociations(thesaurus, skosConcepts);
 			buildConceptsRoot(thesaurus, skosConcepts);
 			buildArrays(thesaurus, model);
 			buildChildrenArrays(thesaurus, model);
+
+			res.put(thesaurus, bannedAlignments);
 
 		} catch (JenaException je) {
 			throw new BusinessException("Error reading imported file :"+je.getMessage(),
@@ -227,7 +235,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		} finally {
 			deleteTempFile(fileURI);
 		}
-		return thesaurus;
+		return res;
 	}
 
 	/**
@@ -322,7 +330,8 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
-	private void buildConcepts(Thesaurus thesaurus, List<Resource> skosConcepts) {
+	private Set<Alignment> buildConcepts(Thesaurus thesaurus, List<Resource> skosConcepts) {
+		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 		for (Resource skosConcept : skosConcepts) {
 			// Minimal concept informations
 			ThesaurusConcept concept = conceptBuilder.buildConcept(skosConcept,
@@ -353,12 +362,19 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 				if (alignment.getExternalTargetThesaurus() != null){
 					externalThesaurusDAO.update(alignment.getExternalTargetThesaurus());
 				}
-				for (AlignmentConcept alignmentConcept : alignment.getTargetConcepts()){
-					alignmentConceptDAO.update(alignmentConcept);
+				if (alignment.getInternalTargetThesaurus() != null
+						|| alignment.getExternalTargetThesaurus() != null){
+					for (AlignmentConcept alignmentConcept : alignment.getTargetConcepts()){
+						alignmentConceptDAO.update(alignmentConcept);
+					}
+					alignmentDAO.update(alignment);
+				} else {
+					bannedAlignments.add(alignment);
 				}
-				alignmentDAO.update(alignment);
+
 			}
 		}
+		return bannedAlignments;
 	}
 
 	/**

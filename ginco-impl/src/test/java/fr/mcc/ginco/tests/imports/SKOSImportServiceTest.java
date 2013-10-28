@@ -37,9 +37,8 @@ package fr.mcc.ginco.tests.imports;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.Map;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -54,6 +53,7 @@ import org.mockito.MockitoAnnotations;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.INodeLabelDAO;
@@ -148,8 +148,8 @@ public class SKOSImportServiceTest {
 				.getResourceAsStream("/imports/concept_collections.rdf");
       String fileContent = IOUtils.toString(is);
 
-      Thesaurus th = skosImportService.importSKOSFile(fileContent, fileName, new File(tempDir));
-      Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69", th.getIdentifier());
+      Map<Thesaurus, Set<Alignment>> res = skosImportService.importSKOSFile(fileContent, fileName, new File(tempDir));
+      Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69", res.keySet().iterator().next().getIdentifier());
     }
 
     @Test(expected=BusinessException.class)

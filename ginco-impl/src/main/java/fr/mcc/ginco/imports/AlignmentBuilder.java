@@ -67,7 +67,7 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  * Builder in charge of building concept alignments
- * 
+ *
  */
 
 @Service("skosAlignmentBuilder")
@@ -98,7 +98,7 @@ public class AlignmentBuilder extends AbstractBuilder {
 
 	/**
 	 * Returns the list of alignments for the given source concept
-	 * 
+	 *
 	 * @param skosConcept
 	 * @param concept
 	 * @return
@@ -167,11 +167,6 @@ public class AlignmentBuilder extends AbstractBuilder {
 				} else {
 					alignment.setExternalTargetThesaurus(existingExternalThes);
 				}
-			} else {
-				throw new BusinessException(
-						"Unable to identify external thesaurus",
-						"import-invalid-external-thesaurus",
-						new Object[] { stmt.getString() });
 			}
 			targetConcept.setExternalTargetConcept(stmt.getString());
 		}
