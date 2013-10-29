@@ -340,8 +340,10 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 		}
 	},
 	onTabAdd : function ( tabPanel, component, index, eOpts) {
-		var thesaurusId = tabPanel.ownerCt.thesaurusData.id;		
-		Thesaurus.ext.utils.restrictRoles(component, thesaurusId);		
+		if (tabPanel.ownerCt.thesaurusData) {
+			var thesaurusId = tabPanel.ownerCt.thesaurusData.id;		
+			Thesaurus.ext.utils.restrictRoles(component, thesaurusId);
+		}
 	},
 	onCloseAll : function (thePanel) {
 		var nbPanelToClose = 0;
