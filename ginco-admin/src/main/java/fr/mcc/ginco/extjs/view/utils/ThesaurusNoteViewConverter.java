@@ -92,6 +92,7 @@ public class ThesaurusNoteViewConverter {
 			view.setLexicalValue(source.getLexicalValue());
 			view.setLanguage(source.getLanguage().getId());
 			view.setType(source.getNoteType().getCode());
+			
 			if (source.getSource() != null) {
 				view.setSource(source.getSource());
 			}
@@ -106,8 +107,10 @@ public class ThesaurusNoteViewConverter {
 
 			if (source.getConcept() != null) {
 				view.setConceptId(source.getConcept().getIdentifier());
+				view.setThesaurusId(source.getConcept().getThesaurusId());
 			} else if (source.getTerm() != null) {
 				view.setTermId(source.getTerm().getIdentifier());
+				view.setThesaurusId(source.getTerm().getThesaurusId());
 			}
 		}
 

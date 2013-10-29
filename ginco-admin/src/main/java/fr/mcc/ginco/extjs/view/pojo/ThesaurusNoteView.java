@@ -45,7 +45,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusNoteView implements Serializable {
+public class ThesaurusNoteView implements Serializable, SecuredResourceView {
+	
 	
 	private String identifier;
 	private String lexicalValue;
@@ -56,6 +57,8 @@ public class ThesaurusNoteView implements Serializable {
 	private String modified;
 	private String conceptId;
 	private String termId;
+	private String thesaurusId;
+
 	
     public ThesaurusNoteView() {}
 
@@ -130,4 +133,14 @@ public class ThesaurusNoteView implements Serializable {
 	public void setTermId(String termId) {
 		this.termId = termId;
 	}
+
+	@Override
+	public String getThesaurusId() {
+		return thesaurusId;
+	}
+
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
+	}	
+	
 }

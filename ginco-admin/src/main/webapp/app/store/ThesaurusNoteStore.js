@@ -65,7 +65,8 @@ Ext.define('GincoApp.store.ThesaurusNoteStore', {
 				reader : {
 					type : 'json',
 					root : 'data',
-					idProperty : 'identifier'
+					idProperty : 'identifier',
+					messageProperty: 'message'
 				}
 			}
 		}, cfg) ]);

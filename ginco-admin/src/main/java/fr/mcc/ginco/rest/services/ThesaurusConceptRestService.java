@@ -172,7 +172,7 @@ public class ThesaurusConceptRestService {
 	@POST
 	@Path("/updateConcept")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#conceptView, '0') or hasPermission(#conceptView, '1')")
 	public ThesaurusConceptView updateConcept(
 			ThesaurusConceptView conceptView)
 			throws BusinessException, TechnicalException {
@@ -340,7 +340,7 @@ public class ThesaurusConceptRestService {
 	@POST
 	@Path("/destroyConcept")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
 	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) throws BusinessException {
 		ThesaurusConcept object = thesaurusConceptService
 				.getThesaurusConceptById(thesaurusViewJAXBElement.getIdentifier());

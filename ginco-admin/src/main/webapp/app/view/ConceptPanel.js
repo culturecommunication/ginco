@@ -176,7 +176,7 @@ Ext
 																	},
 																	{
 																		xtype : 'form',
-																		requiredRoles : [ 'ADMIN' ],
+																		requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT'],
 																		region : 'center',
 																		itemId : 'conceptForm',
 																		flex : 1,
@@ -193,7 +193,7 @@ Ext
 																					{
 																						xtype : 'button',
 																						text : me.xSave,
-																						requiredRoles : [ 'ADMIN' ],
+																						requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT'],
 																						disabled : true,
 																						cls : 'save',
 																						iconCls : 'icon-save',
@@ -202,7 +202,7 @@ Ext
 																					{
 																						xtype : 'button',
 																						text : me.xDelete,
-																						requiredRoles : [ 'ADMIN' ],
+																						requiredRoles : [ 'ADMIN', 'MANAGER'],
 																						disabled : true,
 																						itemId : 'deleteConcept',
 																						cls : 'delete',
@@ -211,7 +211,6 @@ Ext
 																					{
 																						xtype : 'button',
 																						text : me.xExportBranch,
-																						requiredRoles : [ 'ADMIN' ],
 																						itemId : 'exportBranch',
 																						iconCls : 'exports-icon'
 																					} ]
@@ -285,8 +284,9 @@ Ext
 																						items : [ {
 																							xtype : 'button',
 																							text : me.xAddTerm,
+																							requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT'],
 																							menu : {
-																								xtype : 'menu',
+																								xtype : 'menu',																								
 																								items : [
 																										{
 																											xtype : 'menuitem',
@@ -412,7 +412,8 @@ Ext
 																							disabled : true,
 																							itemId : 'addParent',
 																							cls : 'addParent',
-																							iconCls : 'icon-add-parent'
+																							iconCls : 'icon-add-parent',
+																							requiredRoles : [ 'ADMIN', 'MANAGER']
 
 																						} ]
 																					} ],
@@ -479,7 +480,8 @@ Ext
 																							disabled : true,
 																							itemId : 'addChild',
 																							cls : 'addChild',
-																							iconCls : 'icon-add-parent'
+																							iconCls : 'icon-add-parent',
+																							requiredRoles : [ 'ADMIN', 'MANAGER']
 																						} ]
 																					} ],
 
@@ -551,7 +553,8 @@ Ext
 																							disabled : true,
 																							itemId : 'addAssociativeRelationship',
 																							cls : 'addAssociativeRelationship',
-																							iconCls : 'icon-add-associative-relationship'
+																							iconCls : 'icon-add-associative-relationship',
+																							requiredRoles : [ 'ADMIN', 'MANAGER']
 																						} ]
 																					} ],
 
@@ -615,7 +618,8 @@ Ext
 																					disabled : true,
 																					itemId : 'addAlignment',
 																					cls : 'addAlignment',
-																					iconCls : 'icon-add-associative-relationship'
+																					iconCls : 'icon-add-associative-relationship',
+																					requiredRoles : [ 'ADMIN', 'MANAGER']
 																				} ]
 																			} ],
 

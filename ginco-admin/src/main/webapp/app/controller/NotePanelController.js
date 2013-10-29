@@ -78,6 +78,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		var theWin = theButton.up('createNoteWin');
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
+		updatedModel.data.thesaurusId=theWin.thesaurusData.id;
 		if (theWin.store.findRecord('identifier', updatedModel.data.identifier) == null ){
 			theWin.store.add(updatedModel);
 		}
@@ -148,7 +149,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 				}
 			},
 			failure : function(model, operation) {
-				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, model.exceptions[0].error);
 				thePanel.getEl().unmask();
 			}
 		});

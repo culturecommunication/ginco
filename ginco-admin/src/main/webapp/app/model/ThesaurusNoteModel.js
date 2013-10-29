@@ -64,6 +64,10 @@ Ext.define('GincoApp.model.ThesaurusNoteModel', {
         {
             name: 'modified',
             type: 'string'
+        },
+        {
+        	name: 'thesaurusId',
+        	type: 'string'
         }
     ],
     idProperty : 'identifier'

@@ -164,7 +164,7 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/createNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#noteViews, '0')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> createNotes(List<ThesaurusNoteView> noteViews, @QueryParam("conceptId") String conceptId, @QueryParam("termId") String termId) throws BusinessException {
 		//We set for each note if it belongs to a concept or a term
 		for (ThesaurusNoteView view : noteViews) {
@@ -203,7 +203,7 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/updateNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#noteViews, '0')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> updateNotes(List<ThesaurusNoteView> noteViews) throws BusinessException {
 		
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
@@ -229,7 +229,7 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/destroyNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#noteViews, '0')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews) throws BusinessException {
 		
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
