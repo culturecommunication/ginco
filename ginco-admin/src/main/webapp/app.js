@@ -150,7 +150,7 @@ Ext.application({
 
     	Ext.create('GincoApp.model.UserInfoModel');
     	GincoApp.model.UserInfoModel.load('',{
-    			 success: function(record, operation) {
+    			 success: function(record, operation) {    				
     				 Thesaurus.ext.utils.userInfo=record;
     				 me.fireEvent("userinfoloaded");
     			 },

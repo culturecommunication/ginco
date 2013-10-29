@@ -35,6 +35,7 @@
 
 Ext.define('GincoApp.model.UserInfoModel', {
     extend: 'Ext.data.Model',
+    requires: ['GincoApp.model.UserThesaurusRoleModel'],
     proxy: {
         type: 'ajax',
         url: 'services/ui/baseservice/getUserInfo',
@@ -53,5 +54,12 @@ Ext.define('GincoApp.model.UserInfoModel', {
                  name: 'admin',
                  type : 'boolean'
              }
-         ]
+         ],
+    associations: [
+            {
+                 	  type: 'hasMany', 
+                 	  model: 'GincoApp.model.UserThesaurusRoleModel',
+                 	  name: 'userThesaurusRoles'
+      }       
+   ]    
 });

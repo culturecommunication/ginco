@@ -35,6 +35,10 @@
 package fr.mcc.ginco.security;
 
 import java.io.Serializable;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,31 +46,89 @@ import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 
+import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.extjs.view.pojo.SecuredResourceView;
+import fr.mcc.ginco.services.IAdminUserService;
+import fr.mcc.ginco.services.IUserRoleService;
 
 public class BasePermissionEvaluator implements PermissionEvaluator {
-	
+
+	@Inject
+	@Named("userRoleService")
+	private IUserRoleService userRoleService;
+
+	@Inject
+	@Named("adminUserService")
+	IAdminUserService adminUserService;
+
 	private Logger log = LoggerFactory.getLogger(BasePermissionEvaluator.class);
-	
+
 	@Override
 	public boolean hasPermission(Authentication authentication,
 			Object targetDomainObject, Object permission) {
-		if (!(targetDomainObject instanceof SecuredResourceView)) {
-			log.error("Permission exception : trying to apply hasPermission to a non SecuredResourceView object");
+		if (targetDomainObject instanceof List) {
+			List targetObjects = (List) targetDomainObject;
+			if (targetObjects != null && !targetObjects.isEmpty()) {
+				if (!(targetObjects.get(0) instanceof SecuredResourceView)) {
+					log.error("Permission exception : trying to apply hasPermission to a non SecuredResourceView or String object");
+					return false;
+				}
+			}
+		} else if (!(targetDomainObject instanceof SecuredResourceView || targetDomainObject instanceof String)) {
+			log.error("Permission exception : trying to apply hasPermission to a non SecuredResourceView or String object");
 			return false;
 		}
-		
-		SecuredResourceView viewObject = (SecuredResourceView)targetDomainObject;
-		String scopeThesaurus = viewObject.getThesaurusId();
-		User curUser = (User)authentication.getPrincipal();
-		log.debug("Checking permission " + permission + " on thesaurus " + scopeThesaurus + " for user " + curUser.getUsername());
-		return true;
+
+		String scopeThesaurus = "";
+		if (targetDomainObject instanceof SecuredResourceView) {
+			SecuredResourceView viewObject = (SecuredResourceView) targetDomainObject;
+			scopeThesaurus = viewObject.getThesaurusId();
+		} else if (targetDomainObject instanceof List) {
+			List targetObjects = (List) targetDomainObject;
+			if (targetObjects != null && !targetObjects.isEmpty()) {
+				SecuredResourceView viewObject = (SecuredResourceView) targetObjects
+						.get(0);
+				scopeThesaurus = viewObject.getThesaurusId();
+			}
+		} else {
+			scopeThesaurus = (String) targetDomainObject;
+		}
+		User curUser = (User) authentication.getPrincipal();
+
+		log.debug("Checking permission " + permission + " on thesaurus "
+				+ scopeThesaurus + " for user " + curUser.getUsername());
+
+		if (adminUserService.isUserAdmin(curUser.getUsername())) {
+			log.debug("User  " + curUser.getUsername()
+					+ " is administrator, everything is possible");
+			return true;
+		}
+
+		Role roleToCheck = null;
+
+		for (Role role : Role.values()) {
+			if (role.getIdentifier().toString().equals((String) permission)) {
+				log.debug("Found matching role " + role.name()
+						+ " for permission " + permission);
+				roleToCheck = role;
+				break;
+			}
+		}
+		if (roleToCheck == null) {
+			log.error("Permission exception : unknow role " + permission);
+			return false;
+		}
+
+		return userRoleService.hasRole(curUser.getUsername(), scopeThesaurus,
+				roleToCheck);
+
 	}
 
 	@Override
 	public boolean hasPermission(Authentication authentication,
 			Serializable targetId, String targetType, Object permission) {
-		return true;
+		log.error("Permission exception - not implemented : trying tio apply the wrong haspermission method");
+		return false;
 	}
 
 }

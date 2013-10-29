@@ -112,7 +112,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 				items : [ {
 						xtype : 'button',
 						disabled : true,
-						requiredRoles : [ 'ADMIN' ],
+						requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT'],
 						itemId : 'newBtnMenu',
 						text : me.xNewLabel,
 						menu : {
@@ -121,31 +121,38 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							items : [{
 							    xtype : 'keymenuitem',
 							    text : me.xNewMenu_ConceptAndTermLabel,
-							    itemId : 'newConceptAndTermBtn'
+							    itemId : 'newConceptAndTermBtn',
+							    requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT']
 							},{
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_TermLabel,
-								itemId : 'newTermBtn'
+								itemId : 'newTermBtn',
+								requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT']
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_ConceptLabel,
-								itemId : 'newConceptBtn'
+								itemId : 'newConceptBtn',
+							    requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT']
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_ComplexConceptLabel,
-								itemId : 'newComplexConceptBtn'
+								itemId : 'newComplexConceptBtn',
+							    requiredRoles : [ 'ADMIN', 'MANAGER']
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_ConceptArrayLabel,
-								itemId : 'newConceptArrayBtn'
+								itemId : 'newConceptArrayBtn',
+							    requiredRoles : [ 'ADMIN', 'MANAGER']
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_GroupLabel,
-								itemId : 'newConceptGroupBtn'
+								itemId : 'newConceptGroupBtn',
+							    requiredRoles : [ 'ADMIN', 'MANAGER']
 							}, {
 								xtype : 'keymenuitem',
 								text : me.xNewMenu_DynamicGroupLabel,
-								itemId : 'newConceptDynamicGroupBtn'
+								itemId : 'newConceptDynamicGroupBtn',
+							    requiredRoles : [ 'ADMIN', 'MANAGER']
 							} ]
 						}
 					}, {
@@ -205,7 +212,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 						}, {
 							xtype : 'button',
 							text : me.xImportBranch,
-							requiredRoles : ['ADMIN'],
+							requiredRoles : ['ADMIN', 'MANAGER'],
 							disabled : true,
 							itemId : 'importBranch',
 							iconCls : 'exports-icon'

@@ -147,6 +147,7 @@ public class CustomAttributesRestService {
 	@Path("/updateConceptAttributeTypes")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@PreAuthorize("hasPermission(#list, '0')")
 	public List<GenericCustomAttributeTypeView> updateConceptAttributeTypes(
 			List<GenericCustomAttributeTypeView> list)
 			throws BusinessException, TechnicalException {
@@ -172,6 +173,7 @@ public class CustomAttributesRestService {
 	@POST
 	@Path("/deleteConceptAttributeTypes")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@PreAuthorize("hasPermission(#list, '0')")
 	public void deleteConceptAttributeTypes(
 			List<GenericCustomAttributeTypeView> list)
 			throws BusinessException, TechnicalException {
@@ -216,6 +218,7 @@ public class CustomAttributesRestService {
 	@Path("/updateTermAttributeTypes")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@PreAuthorize("hasPermission(#list, '0')")
 	public List<GenericCustomAttributeTypeView> updateTermAttributeTypes(
 			List<GenericCustomAttributeTypeView> list)
 			throws BusinessException, TechnicalException {
@@ -239,6 +242,7 @@ public class CustomAttributesRestService {
 	@POST
 	@Path("/deleteTermAttributeTypes")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@PreAuthorize("hasPermission(#list, '0')")
 	public void deleteTermAttributeTypes(
 			List<GenericCustomAttributeTypeView> list)
 			throws BusinessException, TechnicalException {

@@ -200,8 +200,7 @@ public class ThesaurusRestService {
 	@POST
 	@Path("/updateVocabulary")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	//@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, 'edit')")
+	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
 	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
 		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 
@@ -248,7 +247,7 @@ public class ThesaurusRestService {
     @GET
     @Path("/publishVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusId, '0')")
     public ExtJsonFormLoadData publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
                                                  @QueryParam("userId") String userId)
             throws BusinessException {
@@ -269,7 +268,7 @@ public class ThesaurusRestService {
     @GET
     @Path("/archiveVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusId, '0')")
     public ThesaurusView archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
             throws BusinessException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);

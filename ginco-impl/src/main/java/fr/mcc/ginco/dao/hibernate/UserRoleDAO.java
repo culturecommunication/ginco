@@ -51,6 +51,9 @@ import fr.mcc.ginco.dao.IUserRoleDAO;
 public class UserRoleDAO extends GenericHibernateDAO<UserRole, Integer>
 		implements IUserRoleDAO {
 
+	private static final String USERNAME2 = "username";
+	private static final String THESAURUS_IDENTIFIER = "thesaurus.identifier";
+
 	public UserRoleDAO() {
 		super(UserRole.class);
 	}
@@ -65,8 +68,8 @@ public class UserRoleDAO extends GenericHibernateDAO<UserRole, Integer>
 	@Override
 	public UserRole getUserRoleOnThesaurus(String username, String thesaurusId) {
 		Criteria criteria = getCurrentSession().createCriteria(UserRole.class);
-		criteria.add(Restrictions.eq("username", username));
-		criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
+		criteria.add(Restrictions.eq(USERNAME2, username));
+		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, thesaurusId));
 		List<UserRole> userRoles = criteria.list();
 		if (userRoles != null && !userRoles.isEmpty()) {
 			return userRoles.get(0);
@@ -80,8 +83,18 @@ public class UserRoleDAO extends GenericHibernateDAO<UserRole, Integer>
 	@Override
 	public List<UserRole> getUserRolesOnThesaurus(String thesaurusId) {
 		Criteria criteria = getCurrentSession().createCriteria(UserRole.class);
-		criteria.add(Restrictions.eq("thesaurus.identifier", thesaurusId));
+		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, thesaurusId));
 		return criteria.list();	
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IUserRoleDAO#getUserRoles(java.lang.String)
+	 */
+	@Override
+	public List<UserRole> getUserRoles(String username) {
+		Criteria criteria = getCurrentSession().createCriteria(UserRole.class);
+		criteria.add(Restrictions.eq(USERNAME2, username));
+		return criteria.list();
 	}
 
 }

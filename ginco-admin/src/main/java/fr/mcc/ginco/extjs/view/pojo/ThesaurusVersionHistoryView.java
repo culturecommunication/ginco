@@ -47,7 +47,7 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusVersionHistoryView implements Serializable {
+public class ThesaurusVersionHistoryView implements Serializable, SecuredResourceView {
 	
 	private String identifier;
     private String date;

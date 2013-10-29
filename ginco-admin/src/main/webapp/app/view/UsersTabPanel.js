@@ -79,11 +79,12 @@ Ext.define('GincoApp.view.UsersTabPanel', {
 								cls : 'save',
 								iconCls : 'icon-save',
 								itemId : 'saveUsers',
-								disabled : true
+								disabled : true,
+								requiredRoles : ['ADMIN', 'MANAGER']
 							},{
 								xtype : 'button',
 								iconCls : 'icon-add',
-								requiredRoles : ['ADMIN'],
+								requiredRoles : ['ADMIN', 'MANAGER'],
 								itemId : 'addThesaurusUser',
 								text : me.xAddThesaurusUser
 							} ]

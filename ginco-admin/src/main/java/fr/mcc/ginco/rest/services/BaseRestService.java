@@ -56,12 +56,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.pojo.UserInfo;
+import fr.mcc.ginco.extjs.view.pojo.UserThesaurusRole;
 import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
@@ -70,6 +72,7 @@ import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
 import fr.mcc.ginco.services.IAdminUserService;
 import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IUserRoleService;
 
 /**
  * Base REST service intended to be used for getting tree of {@link Thesaurus},
@@ -110,6 +113,10 @@ public class BaseRestService {
     @Inject
     @Named("adminUserService")
     private IAdminUserService adminUserService; 
+    
+    @Inject
+	@Named("userRoleService")
+	private IUserRoleService userRoleService;
    
    
 
@@ -207,6 +214,16 @@ public class BaseRestService {
 				.getAuthentication();
 		userInfos.setUsername(auth.getName());		
 		userInfos.setAdmin(adminUserService.isUserAdmin(auth.getName()));
+		
+		List<UserThesaurusRole> userThesaurusRoles  = new ArrayList<UserThesaurusRole>();
+		List<UserRole> userRoles = userRoleService.getUserRoles(auth.getName());
+		for (UserRole userRole:userRoles) {
+			UserThesaurusRole userThesaurusRole = new UserThesaurusRole();
+			userThesaurusRole.setThesaurusId(userRole.getThesaurus().getThesaurusId());
+			userThesaurusRole.setRole(userRole.getRole().getIdentifier());
+			userThesaurusRoles.add(userThesaurusRole);
+		}
+		userInfos.setUserThesaurusRoles(userThesaurusRoles);
 		return new ExtJsonFormLoadData<UserInfo>(userInfos);
 	}		
 	

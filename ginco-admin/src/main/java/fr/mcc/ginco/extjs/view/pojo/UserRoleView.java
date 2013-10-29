@@ -37,7 +37,7 @@ package fr.mcc.ginco.extjs.view.pojo;
 import java.io.Serializable;
 
 
-public class UserRoleView implements Serializable {
+public class UserRoleView implements Serializable, SecuredResourceView {
 	private String username;
 	private Integer identifier;
     private Integer role;

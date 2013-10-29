@@ -112,7 +112,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												flex : 1,
 											items : [ {
 												xtype : 'form',
-												requiredRoles : ['ADMIN'],
+												requiredRoles : [ 'ADMIN', 'MANAGER'],
 												title : me.xThesaurusTabTitle,
 												flex : 1,
 												autoScroll : true,
@@ -130,14 +130,14 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 														text : me.xSave,
 														disabled : true,
 														formBind : true,
-														requiredRoles : ['ADMIN'],
+														requiredRoles : [ 'ADMIN', 'MANAGER'],
 														cls : 'save',
 														itemId : 'saveThesaurus',
 														iconCls : 'icon-save'
 												},{
 							                            xtype : 'button',
 							                            text : me.xDelete,
-							                            requiredRoles : ['ADMIN'],
+							                            requiredRoles : [ 'ADMIN', 'MANAGER'],
 							                            disabled : true,
 							                            cls : 'delete',
 							                            itemId : 'deleteThesaurus',
@@ -145,7 +145,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 							                    },{
                                                         xtype : 'button',
                                                         text : me.xPublish,
-                                                        requiredRoles : ['ADMIN'],
+                                                        requiredRoles : [ 'ADMIN', 'MANAGER'],
                                                         disabled : true,
                                                         cls : 'publish',
                                                         itemId : 'publishThesaurus',
@@ -153,7 +153,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                             },{
                                                         xtype : 'button',
                                                         text : me.xArchive,
-                                                        requiredRoles : ['ADMIN'],
+                                                        requiredRoles : [ 'ADMIN', 'MANAGER'],
                                                         disabled : true,
                                                         cls : 'archive',
                                                         itemId : 'archiveThesaurus',

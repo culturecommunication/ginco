@@ -34,31 +34,52 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.util.List;
-
-public class UserInfo {
+public class UserThesaurusRole {
 	
-	private String username;
-	private boolean isAdmin;
-	private List<UserThesaurusRole> userThesaurusRoles;
+	private String thesaurusId;
+	private Integer role;
 	
-	public String getUsername() {
-		return username;
+	public String getThesaurusId() {
+		return thesaurusId;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
 	}
-	public boolean isAdmin() {
-		return isAdmin;
+	public Integer getRole() {
+		return role;
 	}
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
+	public void setRole(Integer role) {
+		this.role = role;
 	}
-	public List<UserThesaurusRole> getUserThesaurusRoles() {
-		return userThesaurusRoles;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result
+				+ ((thesaurusId == null) ? 0 : thesaurusId.hashCode());
+		return result;
 	}
-	public void setUserThesaurusRoles(List<UserThesaurusRole> userThesaurusRole) {
-		this.userThesaurusRoles = userThesaurusRole;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserThesaurusRole other = (UserThesaurusRole) obj;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (thesaurusId == null) {
+			if (other.thesaurusId != null)
+				return false;
+		} else if (!thesaurusId.equals(other.thesaurusId))
+			return false;
+		return true;
 	}	
 
 }

@@ -52,56 +52,63 @@ import fr.mcc.ginco.log.Log;
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("userRoleService")
 public class UserRoleServiceImpl implements IUserRoleService {
-	
+
 	@Inject
 	@Named("userRoleDAO")
 	private IUserRoleDAO userRoleDAO;
-	
+
 	@Log
 	private Logger logger;
-	
 
 	@Override
 	public boolean hasRole(String username, String thesaurusId, Role role) {
 		UserRole userRole = userRoleDAO.getUserRoleOnThesaurus(username,
 				thesaurusId);
 		if (userRole == null) {
-			logger.debug("No role for user " + username  + " was found on thesaurus " + thesaurusId);
+			logger.debug("No role for user " + username
+					+ " was found on thesaurus " + thesaurusId);
 			return false;
 		} else {
 			return userRole.getRole().equals(role);
 		}
 	}
 
-
 	@Override
 	public List<UserRole> getThesaurusUsers(String thesaurusId) {
 		return userRoleDAO.getUserRolesOnThesaurus(thesaurusId);
 	}
 
-
 	@Override
 	public UserRole getUserRole(Integer identifier) {
 		return userRoleDAO.getById(identifier);
 	}
-	
-	
+
 	@Override
-	@Transactional(readOnly=false)
-	public UserRole updateUserRole(UserRole userRole) throws BusinessException {	
-		UserRole existingUserRole = userRoleDAO.getUserRoleOnThesaurus(userRole.getUsername(),
-				userRole.getThesaurus().getIdentifier());	
+	@Transactional(readOnly = false)
+	public UserRole updateUserRole(UserRole userRole) throws BusinessException {
+		UserRole existingUserRole = userRoleDAO
+				.getUserRoleOnThesaurus(userRole.getUsername(), userRole
+						.getThesaurus().getIdentifier());
 		if (existingUserRole == null || existingUserRole.equals(userRole)) {
 			return userRoleDAO.update(userRole);
 		} else {
-			 throw new BusinessException("Duplicate username on the same thesaurus : " + userRole.getUsername() + " - " + userRole.getThesaurus().getIdentifier(), "duplicate-username-on-thesaurus");
+			throw new BusinessException(
+					"Duplicate username on the same thesaurus : "
+							+ userRole.getUsername() + " - "
+							+ userRole.getThesaurus().getIdentifier(),
+					"duplicate-username-on-thesaurus");
 		}
 	}
-	
+
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	public void deleteUserRole(UserRole userRole) {
 		userRoleDAO.delete(userRole);
+	}
+
+	@Override
+	public List<UserRole> getUserRoles(String username) {
+		return userRoleDAO.getUserRoles(username);
 	}
 
 }

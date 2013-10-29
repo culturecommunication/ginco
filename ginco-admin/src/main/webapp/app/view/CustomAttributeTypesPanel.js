@@ -94,7 +94,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     tbar : [ {
                         xtype : 'button',
                         text : me.xSave,
-                        requiredRoles : ['ADMIN'],
+                        requiredRoles : ['ADMIN', 'MANAGER'],
                         cls : 'save',
                         iconCls : 'icon-save',
                         itemId : 'saveConceptAttributTypes',
@@ -102,7 +102,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     },{
                         xtype : 'button',
                         text : me.xAdd,
-                        requiredRoles : ['ADMIN'],
+                        requiredRoles : ['ADMIN', 'MANAGER'],
                         cls : 'add',
                         iconCls : 'icon-add',
                         itemId : 'addConceptAttributTypes',
@@ -162,7 +162,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     tbar : [ {
                         xtype : 'button',
                         text : me.xSave,
-                        requiredRoles : ['ADMIN'],
+                        requiredRoles : ['ADMIN','MANAGER'],
                         cls : 'save',
                         iconCls : 'icon-save',
                         itemId : 'saveTermAttributTypes',
@@ -170,7 +170,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     },{
                             xtype : 'button',
                             text : me.xAdd,
-                            requiredRoles : ['ADMIN'],
+                            requiredRoles : ['ADMIN','MANAGER'],
                             cls : 'add',
                             iconCls : 'icon-add',
                             itemId : 'addTermAttributTypes',

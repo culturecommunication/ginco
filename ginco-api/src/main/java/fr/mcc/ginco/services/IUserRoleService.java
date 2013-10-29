@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Role;
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.exceptions.BusinessException;
 
@@ -81,7 +80,18 @@ public interface IUserRoleService {
 	 */
 	UserRole updateUserRole(UserRole userRole) throws BusinessException;
 	
+	/**
+	 * removes a UserRole
+	 * @param userRole
+	 */
 	void deleteUserRole(UserRole userRole);
+	
+	/**
+	 * Returns the list of all the UserRole for the given user
+	 * @param username
+	 * @return
+	 */
+	List<UserRole> getUserRoles(String username);
 	
 
 }

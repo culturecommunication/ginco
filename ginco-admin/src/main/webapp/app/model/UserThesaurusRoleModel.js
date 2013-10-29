@@ -32,33 +32,18 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.pojo;
 
-import java.util.List;
-
-public class UserInfo {
-	
-	private String username;
-	private boolean isAdmin;
-	private List<UserThesaurusRole> userThesaurusRoles;
-	
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public boolean isAdmin() {
-		return isAdmin;
-	}
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
-	public List<UserThesaurusRole> getUserThesaurusRoles() {
-		return userThesaurusRoles;
-	}
-	public void setUserThesaurusRoles(List<UserThesaurusRole> userThesaurusRole) {
-		this.userThesaurusRoles = userThesaurusRole;
-	}	
-
-}
+Ext.define('GincoApp.model.UserThesaurusRoleModel', {
+    extend: 'Ext.data.Model',   
+    fields: [
+             {
+                 name : 'thesaurusId',
+                 type : 'string'
+             },
+             {
+                 name: 'role',
+                 type : 'integer'
+             }
+         ],         
+    idProperty : 'thesaurusId'
+});

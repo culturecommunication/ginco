@@ -63,4 +63,12 @@ public interface IUserRoleDAO extends IGenericDAO<UserRole, Integer> {
 	 * @return
 	 */
 	List<UserRole> getUserRolesOnThesaurus(String thesaurusId);
+	
+	
+	/**
+	 * Gets the list of roles for the given user
+	 * @param username
+	 * @return
+	 */
+	List<UserRole> getUserRoles(String username);
 }

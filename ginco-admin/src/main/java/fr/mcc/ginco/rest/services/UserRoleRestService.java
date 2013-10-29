@@ -86,7 +86,7 @@ public class UserRoleRestService {
 
 	/**
 	 * Method to get the list of the thesaurus users
-	 * 
+	 * s
 	 * @return
 	 */
 	@GET
@@ -133,7 +133,7 @@ public class UserRoleRestService {
 	@POST
 	@Path("/updateThesaurusUsers")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#userRoleViews, '0')")
 	public ExtJsonFormLoadData<List<UserRoleView>> updateThesaurusUsers(
 			List<UserRoleView> userRoleViews) throws BusinessException {
 
@@ -167,6 +167,7 @@ public class UserRoleRestService {
 	@POST
 	@Path("/deleteThesaurusUsers")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@PreAuthorize("hasPermission(#userRoleViews, '0')")
 	public void deleteThesaurusUsers(
 			List<UserRoleView> userRoleViews)
 			throws BusinessException {

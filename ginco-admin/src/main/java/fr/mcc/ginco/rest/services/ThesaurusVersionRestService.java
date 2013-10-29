@@ -144,7 +144,7 @@ public class ThesaurusVersionRestService {
 	@POST
 	@Path("/updateVersions")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#versionViews, '0')")
 	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> updateVersions(List<ThesaurusVersionHistoryView> versionViews) throws BusinessException {
 	
 		List<ThesaurusVersionHistory> versions = thesaurusVersionHistoryViewConverter.convertViewList(versionViews);

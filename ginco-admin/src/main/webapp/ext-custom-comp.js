@@ -128,6 +128,26 @@ Ext.define('Thesaurus.ext.utils', {
 			delay : 5000,
 			remove : true
 		});
+	},
+	restrictRoles : function (component, thesaurusId) {
+		if  (Thesaurus.ext.utils.userInfo!=null) {
+			var userRoles = [];			
+			if (thesaurusId) {
+				var userThesaurusRole = Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById(thesaurusId);
+				if (userThesaurusRole != null && Thesaurus.ext.utils.userInfo.data.admin == false) {			
+					
+					if (userThesaurusRole.data.role==0) {
+						userRoles.push('MANAGER');
+					} else if ((userThesaurusRole.data.role==1)){
+						userRoles.push('EXPERT');
+					}
+				}
+			}
+			if  (Thesaurus.ext.utils.userInfo.data.admin == true) {
+				userRoles.push('ADMIN');
+			}
+			component.restrictUI(userRoles);
+		}
 	}
 });
 
@@ -209,11 +229,11 @@ Ext.define("Thesaurus.form.field.Trigger", {
 Ext.define('Thesaurus.container.Container', {
 	override : 'Ext.container.Container',
 	restrictUI : function ()
-	{
+	{				
 		var items = this.query("component");
 		for (var i = 0; i < items.length; i++) {
 			var item = items[i];
-				if (item.checkRoles(arguments) == false) {
+				if (item.checkRoles(arguments) == true) {
 					item.restrict();
 				}
 		}
@@ -241,12 +261,16 @@ Ext.define('Thesaurus.Component', {
 	requiredRoles : [],
 	checkRoles : function () {
 		if (this.requiredRoles.length == 0)
-			return true;
-		for (var i = 0; i < arguments.length; i++) {
-		    if (Ext.Array.contains(this.requiredRoles,arguments[i]))
-		    { return true;}
+			return false;
+		
+		var userRoles = arguments[0];
+		for (var i = 0; i < userRoles.length; i++) {
+		    if (Ext.Array.contains(this.requiredRoles, userRoles[i][0]))
+		    { 
+		    	return false;	    	
+		    }
 		}
-		return false;
+		return true;
 	},
 	restrict : function() {
 		this.setDisabled(true);

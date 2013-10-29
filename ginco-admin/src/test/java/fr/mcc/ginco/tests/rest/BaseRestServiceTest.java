@@ -34,15 +34,12 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusOrganization;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
-import fr.mcc.ginco.rest.services.BaseRestService;
-import fr.mcc.ginco.services.IAdminUserService;
-import fr.mcc.ginco.services.IThesaurusService;
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Assert;
+import junitx.framework.ListAssert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -53,8 +50,18 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.beans.UserRole;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.pojo.UserThesaurusRole;
+import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.rest.services.BaseRestService;
+import fr.mcc.ginco.services.IAdminUserService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IUserRoleService;
 
 public class BaseRestServiceTest {
 
@@ -65,8 +72,11 @@ public class BaseRestServiceTest {
 	private FolderGenerator folderGenerator;
 
 	@Mock(name = "adminUserService")
-	 private IAdminUserService adminUserService;
-	
+	private IAdminUserService adminUserService;
+
+	@Mock(name = "userRoleService")
+	private IUserRoleService userRoleService;
+
 	@InjectMocks
 	private BaseRestService baseRestService = new BaseRestService();
 
@@ -83,15 +93,15 @@ public class BaseRestServiceTest {
 	public final void testGetVocabularies() throws BusinessException {
 		// Generating mocked Thesauruses in a single list "allThesaurus"
 
-        ThesaurusOrganization org = new ThesaurusOrganization();
-        org.setIdentifier(1);
+		ThesaurusOrganization org = new ThesaurusOrganization();
+		org.setIdentifier(1);
 
 		Thesaurus mockedThesaurus1 = new Thesaurus();
-        mockedThesaurus1.setCreator(org);
+		mockedThesaurus1.setCreator(org);
 		Thesaurus mockedThesaurus2 = new Thesaurus();
-        mockedThesaurus2.setCreator(org);
+		mockedThesaurus2.setCreator(org);
 		Thesaurus mockedThesaurus3 = new Thesaurus();
-        mockedThesaurus3.setCreator(org);
+		mockedThesaurus3.setCreator(org);
 		List<Thesaurus> allThesaurus = new ArrayList<Thesaurus>();
 		allThesaurus.add(mockedThesaurus1);
 		allThesaurus.add(mockedThesaurus2);
@@ -130,6 +140,48 @@ public class BaseRestServiceTest {
 
 		String userName = baseRestService.getUserInfo().getData().getUsername();
 		Assert.assertEquals("username", userName);
+	}
+
+	@Test
+	public final void testGetUserRoles() throws BusinessException {
+		Authentication auth = new TestingAuthenticationToken("username",
+				"password");
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		Thesaurus thesaurus1 = new Thesaurus();
+		thesaurus1.setIdentifier("http://thesaurus1");
+
+		Thesaurus thesaurus2 = new Thesaurus();
+		thesaurus2.setIdentifier("http://thesaurus2");
+
+		List<UserRole> userRoles = new ArrayList<UserRole>();
+		UserRole userRole1 = new UserRole();
+		userRole1.setThesaurus(thesaurus1);
+		userRole1.setRole(Role.EXPERT);
+		userRoles.add(userRole1);
+
+		UserRole userRole2 = new UserRole();
+		userRole2.setThesaurus(thesaurus2);
+		userRole2.setRole(Role.MANAGER);
+		userRoles.add(userRole2);
+
+		Mockito.when(userRoleService.getUserRoles("username")).thenReturn(
+				userRoles);
+
+		List<UserThesaurusRole> userThesaurusRoles = baseRestService
+				.getUserInfo().getData().getUserThesaurusRoles();
+		
+		UserThesaurusRole expectedUserThesaurusRole1 = new UserThesaurusRole();
+		expectedUserThesaurusRole1.setRole(1);
+		expectedUserThesaurusRole1.setThesaurusId("http://thesaurus1");
+		
+		UserThesaurusRole expectedUserThesaurusRole2 = new UserThesaurusRole();
+		expectedUserThesaurusRole2.setRole(0);
+		expectedUserThesaurusRole2.setThesaurusId("http://thesaurus2");
+		
+		Assert.assertEquals(2, userThesaurusRoles.size());
+		ListAssert.assertContains(userThesaurusRoles, expectedUserThesaurusRole1);
+		ListAssert.assertContains(userThesaurusRoles, expectedUserThesaurusRole2);
+
 	}
 
 }

@@ -37,7 +37,7 @@ package fr.mcc.ginco.extjs.view.pojo;
 /**
  *
  */
-public class GenericCustomAttributeTypeView {
+public class GenericCustomAttributeTypeView implements SecuredResourceView{
     private int identifier;
     private String code;
     private String value;
