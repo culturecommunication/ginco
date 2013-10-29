@@ -54,7 +54,7 @@ import fr.mcc.ginco.utils.DateUtil;
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class SplitNonPreferredTermView implements Serializable {
+public class SplitNonPreferredTermView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String lexicalValue;
 	private String created;

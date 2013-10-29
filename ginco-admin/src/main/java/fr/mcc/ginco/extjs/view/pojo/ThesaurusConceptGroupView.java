@@ -48,7 +48,7 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroup;
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusConceptGroupView implements Serializable {
+public class ThesaurusConceptGroupView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String created;
 	private String modified;

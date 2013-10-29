@@ -45,7 +45,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusArrayView implements Serializable {
+public class ThesaurusArrayView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String superOrdinateId;
 	private String superOrdinateConceptLabel;

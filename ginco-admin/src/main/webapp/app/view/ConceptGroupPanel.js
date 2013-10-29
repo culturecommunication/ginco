@@ -99,7 +99,7 @@ Ext
 											title : me.xConceptGroupTitle,
 											items : [ {
 												xtype : 'form',
-												requiredRoles : ['ADMIN'],
+												requiredRoles : ['ADMIN', 'MANAGER'],
 												title : me.xConceptGroupFormTitle,
 												flex : 1,
 												autoScroll : true,
@@ -115,7 +115,7 @@ Ext
 													dock : 'top',
 													items : [ {
 														xtype : 'button',
-														requiredRoles : ['ADMIN'],
+														requiredRoles : ['ADMIN', 'MANAGER'],
 														text : me.xSave,
 														disabled : true,
 														formBind : true,
@@ -125,7 +125,7 @@ Ext
 													},
                                                     {
                                                         xtype : 'button',
-                                                        requiredRoles : ['ADMIN'],
+                                                        requiredRoles : ['ADMIN', 'MANAGER'],
                                                         text : me.xDelete,
                                                         disabled : true,
                                                         cls : 'delete',
@@ -221,7 +221,7 @@ Ext
 																		xtype : 'button',
 																		text : me.xSelectParentGroup,
 																		disabled : false,
-																		requiredRoles : ['ADMIN'],
+																		requiredRoles : ['ADMIN', 'MANAGER'],
 																		itemId : 'selectParentGroup',
 																		cls : 'add',
 																		iconCls : 'icon-add'
@@ -230,7 +230,7 @@ Ext
 																		xtype : 'button',
 																		text : me.xRemoveParentGroup,
 																		disabled : true,
-																		requiredRoles : ['ADMIN'],
+																		requiredRoles : ['ADMIN', 'MANAGER'],
 																		itemId : 'removeParentGroup',
 																		iconCls : 'icon-delete'
 																	}]
@@ -261,7 +261,7 @@ Ext
 																		xtype : 'button',
 																		text : me.xSelectParentConcept,
 																		disabled : false,
-																		requiredRoles : ['ADMIN'],
+																		requiredRoles : ['ADMIN', 'MANAGER'],
 																		itemId : 'selectParentConcept',
 																		cls : 'add',
 																		iconCls : 'icon-add'
@@ -270,7 +270,7 @@ Ext
 																		xtype : 'button',
 																		text : me.xRemoveParentConcept,
 																		disabled : true,
-																		requiredRoles : ['ADMIN'],
+																		requiredRoles : ['ADMIN', 'MANAGER'],
 																		itemId : 'removeParentConcept',
 																		iconCls : 'icon-delete'
 																	}]
@@ -287,7 +287,7 @@ Ext
 																dock : 'top',
 																items : [ {
 																	xtype : 'button',
-																	requiredRoles : ['ADMIN'],
+																	requiredRoles : ['ADMIN', 'MANAGER'],
 																	text : me.xAddConceptToGroupArray,
 																	disabled : false,
 																	itemId : 'addConceptToGroupArray',
@@ -312,7 +312,7 @@ Ext
 																		header : me.xActions,
 																		items : [ {
 																			icon : 'images/detach.png',
-																			requiredRoles : ['ADMIN'],
+																			requiredRoles : ['ADMIN', 'MANAGER'],
 																			tooltip : me.xAssociationRemove
 																		} ]
 																	} ]

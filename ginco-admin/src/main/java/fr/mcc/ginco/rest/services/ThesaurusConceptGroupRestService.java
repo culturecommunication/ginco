@@ -148,7 +148,7 @@ public class ThesaurusConceptGroupRestService {
 	@POST
 	@Path("/updateConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusConceptGroupViewJAXBElement, '0')")
 	public ThesaurusConceptGroupView updateThesaurusConceptGroup(
 			ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement)
 	
@@ -173,7 +173,7 @@ public class ThesaurusConceptGroupRestService {
 	@POST
 	@Path("/destroyConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusConceptGroupViewJAXBElement, '0')")
 	public void destroyConceptGroup(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) throws BusinessException {
 		ThesaurusConceptGroup object = thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
 		if (object != null) {

@@ -34,38 +34,34 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.SplitNonPreferredTerm;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
-import fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.extjs.view.utils.SplitNonPreferredTermViewConverter;
-import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.IIndexerService;
-import fr.mcc.ginco.services.ISplitNonPreferredTermService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.utils.EncodedControl;
-import fr.mcc.ginco.utils.LabelUtil;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView;
+import fr.mcc.ginco.extjs.view.utils.SplitNonPreferredTermViewConverter;
+import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 
 /**
- * Thesaurus Term REST service for all operations on Thesauruses Terms
+ * Thesaurus Term REST service for all operations on complex concepts
  * 
  */
 @Service
@@ -112,7 +108,7 @@ public class SplitNonPreferredTermRestService {
 	@POST
 	@Path("/updateTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#splitTermView, '0')")
 	public SplitNonPreferredTermView updateTerm(SplitNonPreferredTermView splitTermView)
             throws BusinessException, TechnicalException {
 
@@ -168,7 +164,7 @@ public class SplitNonPreferredTermRestService {
 	@POST
 	@Path("/destroyTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#element, '0')")
 	public void destroyTerm(SplitNonPreferredTermView element) throws BusinessException {
 		SplitNonPreferredTerm object = splitNonPreferredTermViewConverter.convert(element);
 	

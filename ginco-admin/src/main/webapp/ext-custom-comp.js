@@ -228,14 +228,16 @@ Ext.define("Thesaurus.form.field.Trigger", {
 
 Ext.define('Thesaurus.container.Container', {
 	override : 'Ext.container.Container',
-	restrictUI : function ()
-	{				
-		var items = this.query("component");
-		for (var i = 0; i < items.length; i++) {
-			var item = items[i];
-				if (item.checkRoles(arguments) == true) {
-					item.restrict();
-				}
+	restrictUI : function (userRoles)
+	{			
+		if (!Ext.Array.contains(userRoles, 'ADMIN')) {				 
+			var items = this.query("component");
+			for (var i = 0; i < items.length; i++) {
+				var item = items[i];
+					if (item.checkRoles(userRoles) == true) {
+						item.restrict();
+					}
+			}
 		}
 	}
 });
@@ -259,13 +261,12 @@ Ext.define('Thesaurus.form.Panel', {
 Ext.define('Thesaurus.Component', {
 	override : 'Ext.Component',
 	requiredRoles : [],
-	checkRoles : function () {
+	checkRoles : function (userRoles) {
 		if (this.requiredRoles.length == 0)
 			return false;
 		
-		var userRoles = arguments[0];
 		for (var i = 0; i < userRoles.length; i++) {
-		    if (Ext.Array.contains(this.requiredRoles, userRoles[i][0]))
+		    if (Ext.Array.contains(this.requiredRoles, userRoles[i]))
 		    { 
 		    	return false;	    	
 		    }

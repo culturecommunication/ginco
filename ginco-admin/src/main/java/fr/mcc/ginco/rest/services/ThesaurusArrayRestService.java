@@ -146,7 +146,7 @@ public class ThesaurusArrayRestService {
 	@POST
 	@Path("/updateArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusArrayViewJAXBElement, '0')")
 	public ThesaurusArrayView updateThesaurusArray(
 			ThesaurusArrayView thesaurusArrayViewJAXBElement)
 
@@ -182,7 +182,7 @@ public class ThesaurusArrayRestService {
 	@POST
 	@Path("/destroyArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusArrayViewJAXBElement, '0')")
 	public void destroyArray(ThesaurusArrayView thesaurusArrayViewJAXBElement)
 			throws BusinessException {
 		ThesaurusArray object = thesaurusArrayViewConverter

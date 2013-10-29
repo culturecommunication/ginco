@@ -205,7 +205,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 						}, {
 							xtype : 'button',
 							text : me.xImportSandbox,
-							requiredRoles : ['ADMIN'],
+							requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 							disabled : true,
 							itemId : 'importSandbox',
 							iconCls : 'exports-icon'
