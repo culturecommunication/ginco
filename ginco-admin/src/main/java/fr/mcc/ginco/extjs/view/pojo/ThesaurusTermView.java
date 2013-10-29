@@ -51,7 +51,7 @@ import fr.mcc.ginco.utils.DateUtil;
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusTermView implements Serializable {
+public class ThesaurusTermView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String lexicalValue;
 	private String created;

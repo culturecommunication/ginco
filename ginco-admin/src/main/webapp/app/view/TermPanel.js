@@ -96,7 +96,7 @@ Ext
 															itemId : 'termForm',
 															title : me.xTermTabPanelTitle,
 															flex : 1,
-															requiredRoles : ['ADMIN'],
+															requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 															autoScroll : true,
 															pollForChanges : true,
 															trackResetOnLoad : true,
@@ -110,7 +110,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Enregistrer',
-																			requiredRoles : ['ADMIN'],
+																			requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 																			disabled : true,
 																			formBind : true,
 																			cls : 'save',
@@ -120,7 +120,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Supprimer',
-																			requiredRoles : ['ADMIN'],
+																			requiredRoles : ['ADMIN', 'MANAGER'],
 																			disabled : true,
 																			itemId : 'delete',
 																			cls : 'delete',
@@ -129,7 +129,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Créer un concept depuis ce terme',
-																			requiredRoles : ['ADMIN'],
+																			requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 																			disabled : true,
 																			itemId : 'createconcept',
 																			iconCls : 'icon-add'

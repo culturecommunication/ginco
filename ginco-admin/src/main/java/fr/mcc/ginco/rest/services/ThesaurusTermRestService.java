@@ -176,7 +176,7 @@ public class ThesaurusTermRestService {
 	@POST
 	@Path("/updateTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
 	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement)
             throws BusinessException, TechnicalException {
 
@@ -207,7 +207,7 @@ public class ThesaurusTermRestService {
 	@POST
 	@Path("/destroyTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
 	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) throws BusinessException {
 		ThesaurusTerm object =thesaurusTermService
 				.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());
