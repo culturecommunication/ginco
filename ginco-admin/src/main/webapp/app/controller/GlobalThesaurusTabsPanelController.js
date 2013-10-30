@@ -133,7 +133,6 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 
 	init : function(application) {
 		this.application.on({
-			// userinfoloaded: this.onUserInfoLoaded,
 			scope : this
 		});
 		this.control({

@@ -127,7 +127,7 @@ public class BasePermissionEvaluator implements PermissionEvaluator {
 	@Override
 	public boolean hasPermission(Authentication authentication,
 			Serializable targetId, String targetType, Object permission) {
-		log.error("Permission exception - not implemented : trying tio apply the wrong haspermission method");
+		log.error("Permission exception - not implemented : trying to apply the wrong haspermission method");
 		return false;
 	}
 

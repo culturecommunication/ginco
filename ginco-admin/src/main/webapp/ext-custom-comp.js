@@ -131,24 +131,29 @@ Ext.define('Thesaurus.ext.utils', {
 	},
 	restrictRoles : function (component, thesaurusId) {
 		if  (Thesaurus.ext.utils.userInfo!=null) {
-			var userRoles = [];			
-			if (thesaurusId) {
-				var userThesaurusRole = Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById(thesaurusId);
-				if (userThesaurusRole != null && Thesaurus.ext.utils.userInfo.data.admin == false) {			
-					
-					if (userThesaurusRole.data.role==0) {
-						userRoles.push('MANAGER');
-					} else if ((userThesaurusRole.data.role==1)){
-						userRoles.push('EXPERT');
-					}
-				}
-			}
-			if  (Thesaurus.ext.utils.userInfo.data.admin == true) {
-				userRoles.push('ADMIN');
-			}
+			var userRoles = Thesaurus.ext.utils.getUserRoles(thesaurusId);
 			component.restrictUI(userRoles);
 		}
+	},
+	getUserRoles : function (thesaurusId) {
+		var userRoles = [];			
+		if (thesaurusId) {
+			var userThesaurusRole = Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById(thesaurusId);
+			if (userThesaurusRole != null && Thesaurus.ext.utils.userInfo.data.admin == false) {			
+				
+				if (userThesaurusRole.data.role==0) {
+					userRoles.push('MANAGER');
+				} else if ((userThesaurusRole.data.role==1)){
+					userRoles.push('EXPERT');
+				}
+			}
+		}
+		if  (Thesaurus.ext.utils.userInfo.data.admin == true) {
+			userRoles.push('ADMIN');
+		}
+		return userRoles;
 	}
+	
 });
 
 
@@ -265,7 +270,7 @@ Ext.define('Thesaurus.Component', {
 		if (this.requiredRoles.length == 0)
 			return false;
 		
-		for (var i = 0; i < userRoles.length; i++) {
+		for (var i = 0; i < userRoles.length; i++) {			
 		    if (Ext.Array.contains(this.requiredRoles, userRoles[i]))
 		    { 
 		    	return false;	    	

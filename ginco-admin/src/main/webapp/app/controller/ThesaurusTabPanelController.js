@@ -254,9 +254,13 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			);
 
 			if (dirtyForms.length>0) {
-				if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) {
-					if (theForm.checkRoles('ADMIN')==true) {
-						return true;
+				if  (Thesaurus.ext.utils.userInfo != null ) {
+					var thesData = thePanel.up('thesaurusTabPanel').thesaurusData;
+					if (thesData) {
+						var userRoles = Thesaurus.ext.utils.getUserRoles(thesData.id);
+						if (theForm.checkRoles(userRoles) == true) {
+							return false;
+						}	
 					}
 				}
 				Ext.MessageBox.show({
