@@ -42,6 +42,6 @@ Ext.define('GincoApp.locale.fr.controller.ImportController', {
 	xSucessLabelWithMissingAlignmentsPart2 :  'Certains alignement n\'ont pas pu être importés car ils pointaient vers des concepts internes qui n\'existent pas : ',
 	xSucessLabelWithMissingAlignments3: 'Certains alignement n\'ont pas pu être importés car ils pointaient vers des concepts internes qui n\'existent pas',
 
-	xSucessLabelWithMissingExternalThesaurusPart1: 'L\'import d\'alignement sur le concept ',
-	xSucessLabelWithMissingExternalThesaurusPart2: ' a été ignoré, impossible de trouver l\'identifiant du thesaurus du concept externe : '
+	xSucessLabelWithMissingExternalThesaurusPart1: 'L\'import de l\'alignement sur le concept "',
+	xSucessLabelWithMissingExternalThesaurusPart2: '" a été ignoré, impossible de trouver l\'identifiant du thesaurus du concept externe : '
 });

@@ -46,8 +46,8 @@ Ext.define('GincoApp.controller.ImportController', {
 	xSucessSandboxLabel : 'Elements successfully imported',
 	xSucessLabelWithMissingAlignments3: 'Some alignments were not imported because the internal concepts were missing',
 
-	xSucessLabelWithMissingExternalThesaurusPart1: 'L\'import d\'alignement sur le concept ',
-	xSucessLabelWithMissingExternalThesaurusPart2: ' a été ignoré, impossible de trouver l\'identifiant du thesaurus du concept externe : ',
+	xSucessLabelWithMissingExternalThesaurusPart1: 'Alignement import of concept "',
+	xSucessLabelWithMissingExternalThesaurusPart2: '" was ignored, unable to find thesaurus identifier of external concept : ',
 
 	xFailureLabelTitle: 'Error',
 
@@ -107,7 +107,7 @@ Ext.define('GincoApp.controller.ImportController', {
 										succLabel += missingConcept;
 									});
 								}
-								Ext.Msg
+								Ext.MsgBox
 								.show({
 									title : me.xSucessLabelTitle,
 									msg : succLabel,
@@ -141,9 +141,9 @@ Ext.define('GincoApp.controller.ImportController', {
 								if ( !Ext.isEmpty(conceptsMissingAlignments)) {
 									succLabel = '';
 									for (var i = 0; i < conceptsMissingAlignments.length; i++) {
-										succLabel += me.xSucessLabelWithMissingExternalThesaurusPart1 + conceptsMissingAlignments[i];
-										succLabel += '<br>';
-										succLabel += me.xSucessLabelWithMissingExternalThesaurusPart2 + externalConceptIds[i];
+										succLabel += me.xSucessLabelWithMissingExternalThesaurusPart1
+										+ conceptsMissingAlignments[i]
+										+ me.xSucessLabelWithMissingExternalThesaurusPart2 + externalConceptIds[i];
 										succLabel += '<br><br>';
 									};
 								}

@@ -165,10 +165,11 @@ public class ImportRestService {
 		List<String> externalConceptIds = new ArrayList<String>();
 		Set<Alignment> bannedAlignments = importResult.get(thesaurus);
 		for (Alignment alignment : bannedAlignments) {
-			conceptsMissingAlignments.add(alignment.getSourceConcept()
-					.getIdentifier());
+			conceptsMissingAlignments.add(thesaurusConceptService
+					.getConceptLabel(alignment.getSourceConcept()
+							.getIdentifier()));
 			externalConceptIds.add(alignment.getTargetConcepts().iterator()
-			.next().getExternalTargetConcept());
+					.next().getExternalTargetConcept());
 		}
 		response.setConceptsMissingAlignments(conceptsMissingAlignments);
 		response.setExternalConceptIds(externalConceptIds);
@@ -209,8 +210,8 @@ public class ImportRestService {
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
 
-		Map<Thesaurus, Set<Alignment>> importResult = gincoImportService.importGincoXmlThesaurusFile(
-				content, fileName, tempDir);
+		Map<Thesaurus, Set<Alignment>> importResult = gincoImportService
+				.importGincoXmlThesaurusFile(content, fileName, tempDir);
 		Thesaurus thesaurus = importResult.keySet().iterator().next();
 
 		indexerService.indexThesaurus(thesaurus);
@@ -218,8 +219,8 @@ public class ImportRestService {
 		ImportedThesaurusResponse response = new ImportedThesaurusResponse();
 		response.setThesaurusTitle(thesaurus.getTitle());
 		List<String> missingExternalConcepts = new ArrayList<String>();
-		Set<Alignment> bannedAlignments  = importResult.get(thesaurus);
-		for (Alignment ali:bannedAlignments) {
+		Set<Alignment> bannedAlignments = importResult.get(thesaurus);
+		for (Alignment ali : bannedAlignments) {
 			missingExternalConcepts.add(ali.getSourceConcept().getIdentifier());
 		}
 		response.setConceptsMissingAlignments(missingExternalConcepts);
@@ -262,8 +263,9 @@ public class ImportRestService {
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
 
-		Map<ThesaurusConcept, Set<Alignment>> importResult = gincoImportService.importGincoBranchXmlFile(
-				content, fileName, tempDir, thesaurusId);
+		Map<ThesaurusConcept, Set<Alignment>> importResult = gincoImportService
+				.importGincoBranchXmlFile(content, fileName, tempDir,
+						thesaurusId);
 		indexerService.indexThesaurus(thesaurusService
 				.getThesaurusById(thesaurusId));
 		ThesaurusConcept concept = importResult.keySet().iterator().next();
