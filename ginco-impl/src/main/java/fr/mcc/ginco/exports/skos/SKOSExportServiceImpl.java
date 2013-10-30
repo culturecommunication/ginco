@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -64,6 +65,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.ISKOSExportService;
+import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.utils.DateUtil;
 
@@ -72,6 +74,10 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+
+	@Inject
+	@Named("customConceptAttributeTypeService")
+	private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
 
 	@Inject
 	@Named("skosArrayExporter")
@@ -85,6 +91,9 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Named("skosThesaurusExporter")
 	private SKOSThesaurusExporter skosThesaurusExporter;
 
+	@Inject
+	@Named("skosCustomConceptAttributeTypesExporter")
+	private SKOSCustomConceptAttributeTypesExporter skosCustomConceptAttributeTypesExporter;
 
 	@Override
 	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {
@@ -126,6 +135,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 		try {
 
 			String collections = skosArrayExporter.exportCollections(thesaurus);
+
 			man.applyChanges(addList);
 
 			File temp = File.createTempFile("skosExport"
@@ -151,11 +161,22 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 			String isothes_old = "xmlns:iso-thes=\"http://www.niso.org/schemas/iso25964/iso-thes#\"";
 			String isothes = "xmlns:iso-thes=\"http://www.niso.org/schemas/iso25964/skos-thes#\"";
 
+			String ginco_old = "xmlns:ginco=\"http://data.culture.fr/thesaurus/ginco/\"";
+			String ginco = "xmlns:ginco=\"http://data.culture.fr/thesaurus/ginco/ns/\"";
+
 			content = content.replaceAll(dc, dc + "\n" + foaf)
 					.replaceAll(dct_old, dct)
 					.replaceAll("</rdf:RDF>", collections + "</rdf:RDF>")
+
 					.replaceAll(xmlhead_old, xmlhead)
-					.replaceAll(isothes_old, isothes);
+					.replaceAll(isothes_old, isothes)
+					.replaceAll(ginco_old, ginco);
+
+			Map<String, String> customAttributesOWL = skosCustomConceptAttributeTypesExporter.exportCustomConceptAttributeTypes(thesaurus);
+			for (String code : customAttributesOWL.keySet()){
+				String datatype_old = "<owl:DatatypeProperty rdf:about=\"http://data.culture.fr/thesaurus/ginco/" + code + "\"/>";
+				content = content.replaceAll(datatype_old, customAttributesOWL.get(code) + "</ginco:CustomConceptAttribute>");
+			}
 
 			if (thesaurus.getCreator() != null) {
 

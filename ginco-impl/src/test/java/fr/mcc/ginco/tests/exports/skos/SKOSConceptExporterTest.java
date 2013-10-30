@@ -39,6 +39,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -62,6 +65,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.skos.SKOSAlignmentExporter;
 import fr.mcc.ginco.exports.skos.SKOSAssociativeRelationshipExporter;
 import fr.mcc.ginco.exports.skos.SKOSConceptExporter;
+import fr.mcc.ginco.exports.skos.SKOSCustomConceptAttributeExporter;
 import fr.mcc.ginco.exports.skos.SKOSNotesExporter;
 import fr.mcc.ginco.exports.skos.SKOSTermsExporter;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -86,6 +90,9 @@ public class SKOSConceptExporterTest {
 
 	@Mock(name="skosAlignmentExporter")
 	private SKOSAlignmentExporter skosAlignmentExporter;
+
+	@Mock(name="skosCustomConceptAttributeExporter")
+	private SKOSCustomConceptAttributeExporter skosCustomConceptAttributeExporter;
 
 	SKOSManager man;
 	SKOSDataset vocab;

@@ -41,13 +41,10 @@ import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.print.attribute.standard.MediaSize.ISO;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.arp.lang.Iso639;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;

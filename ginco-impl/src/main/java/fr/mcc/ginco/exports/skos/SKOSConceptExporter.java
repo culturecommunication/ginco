@@ -76,6 +76,10 @@ public class SKOSConceptExporter {
 	@Named("skosAlignmentExporter")
 	private SKOSAlignmentExporter skosAlignmentExporter;
 
+	@Inject
+	@Named("skosCustomConceptAttributeExporter")
+	private SKOSCustomConceptAttributeExporter skosCustomConceptAttributeExporter;
+
 	private static final String dct_uri = "http://purl.org/dct#";
 	private static final String isothes_uri = "http://www.niso.org/schemas/iso25964/iso-thes#";
 
@@ -139,6 +143,7 @@ public class SKOSConceptExporter {
 
 		addList.addAll(skosAlignmentExporter.exportAlignments(
 				concept.getIdentifier(), factory, conceptSKOS, vocab));
+		addList.addAll(skosCustomConceptAttributeExporter.exportCustomConceptAttributes(concept, conceptSKOS, factory, vocab));
 
 		return addList;
 	}
