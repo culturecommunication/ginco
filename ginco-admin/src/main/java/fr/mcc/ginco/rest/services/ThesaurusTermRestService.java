@@ -34,7 +34,9 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -44,11 +46,15 @@ import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
 import org.slf4j.Logger;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -81,6 +87,10 @@ public class ThesaurusTermRestService {
     @Inject
     @Named("indexerService")
     private IIndexerService indexerService;
+    
+    @Inject
+	@Named("userRoleService")
+	private IUserRoleService userRoleService;
     
 	@Log
 	private Logger logger;
@@ -179,7 +189,15 @@ public class ThesaurusTermRestService {
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
 	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement)
             throws BusinessException, TechnicalException {
-
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String username = auth.getName();
+		
+		if (userRoleService.hasRole(username, thesaurusViewJAXBElement.getThesaurusId(), Role.EXPERT)) {
+			if (thesaurusViewJAXBElement.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
+				throw new AccessDeniedException("you-can-save-only-cadidate-terms");
+			}
+		}
 		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement, false);
 		
 		if (object != null) {

@@ -220,7 +220,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Transactional(readOnly=false)
 	@Override
-	public List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId) throws TechnicalException, BusinessException{
+	public List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId, int defaultStatus) throws TechnicalException, BusinessException{
 		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
 		if (targetedThesaurus != null){
@@ -232,7 +232,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 				termToImport.setLanguage(languageDAO.getById(defaultLang));
 				termToImport.setModified(DateUtil.nowDate());
 				termToImport.setCreated(DateUtil.nowDate());
-				termToImport.setStatus(TermStatusEnum.VALIDATED.getStatus());
+				termToImport.setStatus(defaultStatus);
 				updatedTerms.add(thesaurusTermDAO.update(termToImport));
 			}
 		}

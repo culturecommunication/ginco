@@ -50,14 +50,19 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.ext.Nullable;
 import org.slf4j.Logger;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -78,6 +83,7 @@ import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
@@ -123,6 +129,10 @@ public class ThesaurusConceptRestService {
 	@Inject
     @Named("indexerService")
     private IIndexerService indexerService;
+	
+	@Inject
+    @Named("userRoleService")
+  	private IUserRoleService userRoleService;
 
 	@Log
 	private Logger logger;
@@ -176,6 +186,15 @@ public class ThesaurusConceptRestService {
 	public ThesaurusConceptView updateConcept(
 			ThesaurusConceptView conceptView)
 			throws BusinessException, TechnicalException {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String username = auth.getName();
+		
+		if (userRoleService.hasRole(username, conceptView.getThesaurusId(), Role.EXPERT)) {
+			if (conceptView.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus() || conceptView.getTopconcept()) {
+				throw new AccessDeniedException("you-can-save-only-cadidate-and-non-top-terms-concepts");
+			}
+		}
 
 		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter
 				.convert(conceptView);

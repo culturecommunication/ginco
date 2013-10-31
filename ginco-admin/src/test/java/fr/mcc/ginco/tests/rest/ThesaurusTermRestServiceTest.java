@@ -35,50 +35,54 @@
 
 package fr.mcc.ginco.tests.rest;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
-import fr.mcc.ginco.rest.services.ThesaurusTermRestService;
-import fr.mcc.ginco.services.IIndexerService;
-import fr.mcc.ginco.services.ILanguagesService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.TermStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
+import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
+import fr.mcc.ginco.rest.services.ThesaurusTermRestService;
+import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusTermRestServiceTest{
 	
 	@Mock(name="thesaurusTermService")
-	private IThesaurusTermService termService;
+	private IThesaurusTermService termService;	
 	
-	@Mock(name="thesaurusService")
-	private IThesaurusService thesaurusService;
-	
-	@Mock(name="languagesService")
-	private ILanguagesService languagesService;
 	
     @Mock(name="termViewConverter")
     private TermViewConverter termViewConverter;
 
     @Mock(name="indexerService")
     private IIndexerService indexerService;
+    
+    @Mock(name="userRoleService")
+  	private IUserRoleService userRoleService;
 
 	@InjectMocks
 	private ThesaurusTermRestService thesaurusTermRestService = new ThesaurusTermRestService();
@@ -115,13 +119,30 @@ public class ThesaurusTermRestServiceTest{
 		Assert.assertEquals(new Long(2), actualResponse.getTotal());
 		Assert.assertEquals(mockedThesaurusTermView1.getIdentifier(), actualResponse.getData().get(0).getIdentifier());
 	}
-	
+	/**
+	 * Test the updateTerm method
+	 * @throws BusinessException 
+	 */
+	@Test(expected=AccessDeniedException.class)
+	public final void testUpdateTermWithExpertRol() {
+		Authentication authent = Mockito.mock(Authentication.class);
+		SecurityContextHolder.getContext()
+				.setAuthentication(authent);
+		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(true);
+		ThesaurusTermView fakeThesaurusTermView = new ThesaurusTermView();
+		fakeThesaurusTermView.setStatus(TermStatusEnum.VALIDATED.getStatus());
+		thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
+	}
 	/**
 	 * Test the updateTerm method
 	 * @throws BusinessException 
 	 */
 	@Test
 	public final void testUpdateTerm() throws BusinessException {
+		Authentication authent = Mockito.mock(Authentication.class);
+		SecurityContextHolder.getContext()
+				.setAuthentication(authent);
+		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(false);
 		
 		//Generating fake objects
 		ThesaurusTerm fakeThesaurusTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fake1");
@@ -138,8 +159,6 @@ public class ThesaurusTermRestServiceTest{
 		fakeThesaurusTermView.setLexicalValue("lexicale value");
 		
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
-		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString())).thenReturn(fakeThesaurus1);
-		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
 		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class), Mockito.anyBoolean())).thenReturn(fakeThesaurusTerm1);
 		
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusTerm1);
@@ -179,8 +198,6 @@ public class ThesaurusTermRestServiceTest{
 		fakeThesaurusTermView.setLexicalValue("lexicale value");
 		
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
-		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString())).thenReturn(fakeThesaurus1);
-		Mockito.when(languagesService.getLanguageById(Mockito.anyString())).thenReturn(fakeLanguage1);
 		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class), Mockito.anyBoolean())).thenReturn(fakeThesaurusTerm1);
 		
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusCreationReturn);

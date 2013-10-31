@@ -48,6 +48,7 @@ import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 import junit.framework.Assert;
@@ -57,6 +58,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +88,9 @@ public class ThesaurusConceptRestServiceTest {
     @Mock(name="associativeRelationshipViewConverter")
     private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
 	
+    @Mock(name="userRoleService")
+  	private IUserRoleService userRoleService;
+    
 	@InjectMocks
 	private ThesaurusConceptRestService thesaurusConceptRestService = new ThesaurusConceptRestService();
 	
@@ -101,6 +107,11 @@ public class ThesaurusConceptRestServiceTest {
 	 */
 	@Test
 	public final void putNewTopConceptWithTwoTermsAndOnlyOneWhichIsPrefered() throws BusinessException {
+		Authentication authent = Mockito.mock(Authentication.class);
+		SecurityContextHolder.getContext()
+				.setAuthentication(authent);
+		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(false);
+		
 		ThesaurusTerm fakeTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm1");
 		ThesaurusTerm fakeTerm2 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm2");
 		fakeTerm1.setPrefered(true);

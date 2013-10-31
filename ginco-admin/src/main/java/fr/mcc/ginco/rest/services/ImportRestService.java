@@ -60,12 +60,16 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -79,6 +83,7 @@ import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.IUserRoleService;
 
 /**
  * Base REST service intended to be used for SKOS Import the @Produces({
@@ -88,7 +93,6 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 @Service
 @Path("/importservice")
 @Produces({ MediaType.TEXT_HTML })
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class ImportRestService {
 	@Inject
 	@Context
@@ -121,6 +125,10 @@ public class ImportRestService {
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
+	
+	@Inject
+    @Named("userRoleService")
+  	private IUserRoleService userRoleService;
 
 	@Inject
 	@Named("thesaurusService")
@@ -144,6 +152,7 @@ public class ImportRestService {
 	@Path("/import")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String uploadFile(MultipartBody body,
 			@Context HttpServletRequest request) throws BusinessException,
 			JsonGenerationException, JsonMappingException, IOException {
@@ -200,6 +209,7 @@ public class ImportRestService {
 	@Path("/importGincoXml")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String uploadGincoXmlThesaurusFile(MultipartBody body,
 			@Context HttpServletRequest request)
 			throws JsonGenerationException, JsonMappingException, IOException,
@@ -251,6 +261,7 @@ public class ImportRestService {
 	@Path("/importGincoBranchXml")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
+	@PreAuthorize("hasPermission(#thesaurusId, '0')")
 	public String uploadGincoBranchXmlFile(MultipartBody body,
 			@QueryParam("thesaurusId") String thesaurusId,
 			@Context HttpServletRequest request)
@@ -287,7 +298,8 @@ public class ImportRestService {
 	@Path("/importSandBoxTerms")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
-	public String importSandBoxTerms(MultipartBody body,
+	@PreAuthorize("hasPermission(#thesaurusId, '0') or hasPermission(#thesaurusId, '1')")
+    public String importSandBoxTerms(MultipartBody body,
 			@QueryParam("thesaurusId") String thesaurusId,
 			@Context HttpServletRequest request)
 			throws JsonGenerationException, JsonMappingException, IOException,
@@ -299,8 +311,18 @@ public class ImportRestService {
 			String[] termsSplit = content.split("\n|\r\n");
 			List<String> termLexicalValues = Arrays.asList(termsSplit);
 
+			int defaultStatus = TermStatusEnum.VALIDATED.getStatus();
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			String username = auth.getName();
+			
+			if (userRoleService.hasRole(username, thesaurusId, Role.EXPERT)) {
+				defaultStatus = TermStatusEnum.CANDIDATE.getStatus();
+			}
+			
+			
 			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
-					.importSandBoxTerms(termLexicalValues, thesaurusId);
+					.importSandBoxTerms(termLexicalValues, thesaurusId, defaultStatus);
 			for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
 				indexerService.addTerm(sandboxedTerm);
 			}

@@ -25,6 +25,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ThesaurusTermServiceImpl;
 
@@ -127,7 +128,7 @@ public class ThesaurusTermServiceTest {
     	when(customGeneratorService.generate(ThesaurusTerm.class)).thenReturn("fakeId");
     	when(thesaurusTermDAO.update((ThesaurusTerm) Matchers.anyObject())).then(AdditionalAnswers.returnsFirstArg());
 		List<String> termLexicalValues = Arrays.asList(termsSplit);
-    	List<ThesaurusTerm> terms = thesaurusTermService.importSandBoxTerms(termLexicalValues, thesID);
+    	List<ThesaurusTerm> terms = thesaurusTermService.importSandBoxTerms(termLexicalValues, thesID, TermStatusEnum.VALIDATED.getStatus());
     	Assert.assertEquals(terms.size(),3);
     	Assert.assertEquals("Terme accentué2", terms.get(1).getLexicalValue());
     	Assert.assertEquals("Terme &lt;b&gt;XSS&lt;/b&gt;", terms.get(2).getLexicalValue());

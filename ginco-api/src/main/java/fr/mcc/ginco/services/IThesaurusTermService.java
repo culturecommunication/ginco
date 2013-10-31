@@ -34,12 +34,11 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * Service used to work with {@link ThesaurusTerm} objects, contains basic
@@ -178,10 +177,11 @@ public interface IThesaurusTermService {
 	 * This method imports sandboxed terms 
 	 * @param list of term lexical values
 	 * @param thesaurus identifier
+	 * @param defaultStatus 
 	 * 
 	 * @return
 	 * @throws TechnicalException
 	 * @throws BusinessException
 	 */
-	List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId) throws TechnicalException, BusinessException;
+	List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId, int defaultStatus) throws TechnicalException, BusinessException;
 }
