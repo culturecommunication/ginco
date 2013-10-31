@@ -42,5 +42,7 @@ Ext.define('GincoApp.locale.fr.view.LeftPanel',
     	xFilterLabel : 'Filtrage',
     	xCollapseToolTip : "Cacher l'explorateur de vocabulaires",
     	xExpandToolTip : "Montrer l'explorateur de vocabulaires",
-    	xPinBtnTooltip : "Lier aux onglets"
+    	xPinBtnTooltip : "Lier aux onglets",
+    	xRoleFilterBtnLabel: 'Tout afficher',
+    	xRoleFilterBtnToolTip: 'Filtrer la liste en fonction de mes rôles'
 });

@@ -41,6 +41,8 @@ Ext.define('GincoApp.view.LeftPanel', {
 	xPinBtnTooltip : "Link with tabs",
 	xSelectBtnLabel : "Display",
 	xSelectBtnToolTip : "Display the selected element",
+	xRoleFilterBtnLabel: 'Display all',
+	xRoleFilterBtnToolTip: 'Filter the list according to my roles',
 	xFilterLabel : 'Filter',
 	xCollapseToolTip : 'Collapse explorer',
 	xExpandToolTip : 'Expand explorer',
@@ -105,6 +107,18 @@ Ext.define('GincoApp.view.LeftPanel', {
 			            iconCls:'icon-display',
 			            tooltip : me.xSelectBtnToolTip,
 			            tooltipType: 'title'
+			        },
+			        { 
+			        	xtype: 'tbspacer',
+			        	flex: 1
+			        }, {
+			        	xtype : 'button',
+			            text: me.xRoleFilterBtnLabel,
+			            itemId : 'roleFilterBtn',
+			            tooltip : me.xRoleFilterBtnToolTip,
+			            tooltipType: 'title',
+			            enableToggle: true,
+			            pressed: false
 			        }]},
                     {
     			        xtype: 'toolbar',
