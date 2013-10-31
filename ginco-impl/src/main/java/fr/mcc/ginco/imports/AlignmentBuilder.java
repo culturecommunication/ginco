@@ -64,6 +64,7 @@ import fr.mcc.ginco.services.IAlignmentTypeService;
 import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * Builder in charge of building concept alignments

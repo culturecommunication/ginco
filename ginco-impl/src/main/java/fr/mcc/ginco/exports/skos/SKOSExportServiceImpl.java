@@ -95,6 +95,10 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Named("skosCustomConceptAttributeTypesExporter")
 	private SKOSCustomConceptAttributeTypesExporter skosCustomConceptAttributeTypesExporter;
 
+	@Inject
+	@Named("skosGroupExporter")
+	private SKOSGroupExporter skosGroupExporter;
+
 	@Override
 	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {
 
@@ -135,6 +139,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 		try {
 
 			String collections = skosArrayExporter.exportCollections(thesaurus);
+			String groups = skosGroupExporter.exportGroups(thesaurus);
 
 			man.applyChanges(addList);
 
@@ -152,7 +157,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 			String foaf = "xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"";
 			String dc = "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"";
 
-			String dct_old = "xmlns:dct=\"http://purl.org/dct#\"";
+			String dct_old = "xcollectionsmlns:dct=\"http://purl.org/dct#\"";
 			String dct = "xmlns:dct=\"http://purl.org/dc/terms/\"";
 
 			String xmlhead_old = "xml version=\"1.0\"";
@@ -164,13 +169,13 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 			String ginco_old = "xmlns:ginco=\"http://data.culture.fr/thesaurus/ginco/\"";
 			String ginco = "xmlns:ginco=\"http://data.culture.fr/thesaurus/ginco/ns/\"";
 
-			content = content.replaceAll(dc, dc + "\n" + foaf)
+			content = content.replaceAll(dc, dc + "\n" + foaf + "\n" + ginco)
 					.replaceAll(dct_old, dct)
 					.replaceAll("</rdf:RDF>", collections + "</rdf:RDF>")
-
+					.replaceAll("</rdf:RDF>", groups + "</rdf:RDF>")
 					.replaceAll(xmlhead_old, xmlhead)
 					.replaceAll(isothes_old, isothes)
-					.replaceAll(ginco_old, ginco);
+					.replaceAll(ginco_old, "");
 
 			Map<String, String> customAttributesOWL = skosCustomConceptAttributeTypesExporter.exportCustomConceptAttributeTypes(thesaurus);
 			for (String code : customAttributesOWL.keySet()){

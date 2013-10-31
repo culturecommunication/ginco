@@ -34,16 +34,15 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.SplitNonPreferredTerm;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 
 /**
  * Implementation of {@link IThesaurusArrayDAO}
@@ -74,14 +73,14 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
 		Criteria criteria = getCriteriaBySuperOrdinate(conceptId);
 	    return criteria.list();
 	}
-	
+
 	@Override
 	public List<ThesaurusArray> getConceptSuperOrdinateArrays(String conceptId, String excludeArrayId) {
 		Criteria criteria = getCriteriaBySuperOrdinate(conceptId);
 	    criteria.add(Restrictions.ne("ta.identifier", excludeArrayId));
 	    return criteria.list();
 	}
-	
+
 	private Criteria getCriteriaBySuperOrdinate(String conceptId) {
 		Criteria criteria = getCurrentSession().createCriteria(
 		         ThesaurusArray.class, "ta");
@@ -96,13 +95,13 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
         selectThesaurus(criteria, thesaurusId);
         return criteria.list();
     }
-    
+
     private void excludeAnArrayById(Criteria criteria, String excludedConceptArrayId) {
         if (excludedConceptArrayId != null) {
         	criteria.add(Restrictions.ne("ta.identifier", (String) excludedConceptArrayId));
         }
     }
-    
+
     @Override
     public List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId){
     	Criteria criteria = getCurrentSession().createCriteria(ThesaurusArray.class, "ta");
@@ -116,7 +115,7 @@ public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, Strin
     	criteria.add(Restrictions.eq("ta.parent.identifier", thesaurusArrayId));
     	return criteria.list();
     }
-    
+
     @Override
 	public Long countItems(String idThesaurus) {
 		Criteria criteria = getCurrentSession().createCriteria(

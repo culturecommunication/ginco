@@ -52,7 +52,7 @@ public interface IThesaurusConceptGroupService {
 	/**
 	 * This method gets a {@link ThesaurusConceptGroup} by its identifier
 	 * @param conceptGroupId
-	 * @return A {@link ThesaurusConceptGroup} object 
+	 * @return A {@link ThesaurusConceptGroup} object
 	 */
 	ThesaurusConceptGroup getConceptGroupById(String conceptGroupId);
 
@@ -60,8 +60,8 @@ public interface IThesaurusConceptGroupService {
 	 * This method updates a concept group with its associated label
 	 * @param convertedConceptGroup
 	 * @param conceptGroupLabel
-	 * @return The {@link ThesaurusConceptGroup} object updated 
-	 * @throws BusinessException 
+	 * @return The {@link ThesaurusConceptGroup} object updated
+	 * @throws BusinessException
 	 */
 	ThesaurusConceptGroup updateThesaurusConceptGroup(
 			ThesaurusConceptGroup convertedConceptGroup,
@@ -81,5 +81,12 @@ public interface IThesaurusConceptGroupService {
 	 * @return The deleted {@link ThesaurusConceptGroup}
 	 */
 	ThesaurusConceptGroup destroyThesaurusConceptGroup(ThesaurusConceptGroup object);
-	
+
+	/**
+	 * Get all child {@link ThesaurusConceptGroup} of a group by its identifier
+	 * @param conceptGroupId
+	 * @return A list of all child {@link ThesaurusConceptGroup} of a group
+	 */
+	List<ThesaurusConceptGroup> getChildGroups(String conceptGroupId);
+
 }

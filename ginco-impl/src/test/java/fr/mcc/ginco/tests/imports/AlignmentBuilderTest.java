@@ -60,11 +60,11 @@ import fr.mcc.ginco.beans.AlignmentType;
 import fr.mcc.ginco.beans.ExternalThesaurusType;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.imports.AlignmentBuilder;
-import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.IAlignmentTypeService;
 import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 

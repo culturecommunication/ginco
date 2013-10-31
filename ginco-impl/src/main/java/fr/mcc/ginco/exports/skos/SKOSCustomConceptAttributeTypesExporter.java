@@ -18,8 +18,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.imports.GINCO;
 import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
+import fr.mcc.ginco.skos.namespaces.GINCO;
 
 @Component("skosCustomConceptAttributeTypesExporter")
 public class SKOSCustomConceptAttributeTypesExporter {
@@ -39,11 +39,11 @@ public class SKOSCustomConceptAttributeTypesExporter {
 
 		if (!types.isEmpty()){
 			OntModel ontmodel = ModelFactory.createOntologyModel();
-			DatatypeProperty typeProperty = ontmodel.createDatatypeProperty(GINCO.CUSTOM_CONCEPT_ATTRIBUTE_URI);
-			typeProperty.addLabel(ontmodel.createLiteral("CustomConceptAttribute"));
+			DatatypeProperty typeProperty = ontmodel.createDatatypeProperty(GINCO.CUSTOM_CONCEPT_ATTRIBUTE.getURI());
+			typeProperty.addLabel(ontmodel.createLiteral(GINCO.CUSTOM_CONCEPT_ATTRIBUTE.getLocalName()));
 			for (CustomConceptAttributeType type : types){
 				if (type.getExportable()){
-					DatatypeProperty typeAttributeProperty = ontmodel.createDatatypeProperty(GINCO.getCustomAttributeTypeURI(type.getCode()));
+					DatatypeProperty typeAttributeProperty = ontmodel.createDatatypeProperty(GINCO.getResourceURI(type.getCode()));
 					typeAttributeProperty.addRDFType(typeProperty);
 					typeAttributeProperty.addLabel(ontmodel.createLiteral(type.getCode()));
 					codes.add(type.getCode());

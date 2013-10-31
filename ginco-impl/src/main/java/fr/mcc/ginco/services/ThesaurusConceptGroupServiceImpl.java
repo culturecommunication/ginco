@@ -76,7 +76,7 @@ public class ThesaurusConceptGroupServiceImpl implements
 			}
 			updated = thesaurusConceptGroupDAO.update(conceptGroup);
 			conceptGroupLabel.setConceptGroup(updated);
-			thesaurusConceptGroupLabelDAO.update(conceptGroupLabel);			
+			thesaurusConceptGroupLabelDAO.update(conceptGroupLabel);
 		}
 		return updated;
 	}
@@ -93,6 +93,11 @@ public class ThesaurusConceptGroupServiceImpl implements
 	public ThesaurusConceptGroup destroyThesaurusConceptGroup(
 			ThesaurusConceptGroup object) {
 		return thesaurusConceptGroupDAO.delete(object);
+	}
+
+	@Override
+	public List<ThesaurusConceptGroup> getChildGroups(String conceptGroupId) {
+		return thesaurusConceptGroupDAO.getChildGroups(conceptGroupId);
 	}
 
 }

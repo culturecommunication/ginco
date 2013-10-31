@@ -5,5 +5,6 @@
 		<cache usage="read-write" />
 		<id name="code" />
 		<property name="label" />
+		<property name="skosLabel" column="skoslabel" />
 	</class>
 </hibernate-mapping>

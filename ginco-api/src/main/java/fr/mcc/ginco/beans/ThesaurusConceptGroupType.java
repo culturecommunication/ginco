@@ -44,7 +44,8 @@ public class ThesaurusConceptGroupType implements Serializable{
 
     private String code;
     private String label;
-    
+    private String skosLabel;
+
 	public String getCode() {
 		return code;
 	}
@@ -56,5 +57,11 @@ public class ThesaurusConceptGroupType implements Serializable{
 	}
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	public String getSkosLabel() {
+		return skosLabel;
+	}
+	public void setSkosLabel(String skosLabel) {
+		this.skosLabel = skosLabel;
 	}
 }

@@ -1,7 +1,8 @@
-package fr.mcc.ginco.imports;
+package fr.mcc.ginco.skos.namespaces;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * GINCO vocabulary class for namespace http://data.culture.fr/thesaurus/ginco/ns/
@@ -23,15 +24,23 @@ public class GINCO {
 	private static Model m = ModelFactory.createDefaultModel();
 
 	/**
-	 * Get URIs for different custom concept attribute types
+	 * Get GINCO resource URIs
 	 */
-	public static String getCustomAttributeTypeURI(String type){
+	public static String getResourceURI(String type){
 		return uri + type;
 	}
 
 	/**
-	 * CustomConceptAttribute URI
+	 * Get GINCO resource
 	 */
-	public static final String CUSTOM_CONCEPT_ATTRIBUTE_URI = uri + "CustomConceptAttribute";
+	public static Resource getResource(String type){
+		return m.createResource(uri + type);
+	}
+
+	/**
+	 * custom concept attribute resource
+	 */
+	public static final Resource CUSTOM_CONCEPT_ATTRIBUTE = m
+			.createResource(uri + "CustomConceptAttribute");
 
 }

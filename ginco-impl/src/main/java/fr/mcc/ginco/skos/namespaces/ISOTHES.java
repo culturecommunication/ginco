@@ -32,32 +32,53 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.skos.namespaces;
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * Data Access Object for thesaurus array
+ * ISOTHES vocabulary class for namespace http://www.niso.org/schemas/iso25964/skos-thes#
  */
-public interface IThesaurusConceptGroupDAO extends IGenericDAO<ThesaurusConceptGroup, String> {
+
+public class ISOTHES {
+	private static final String uri = "http://www.niso.org/schemas/iso25964/skos-thes#";
 
 	/**
-	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}
-	 * @param parentId
-	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter, excluding the group which id is given in parameter (optional, set null for no exclusion)
+	 * returns the URI for this schema
+	 *
+	 * @return the URI for this schema
 	 */
-	List<ThesaurusConceptGroup> findThesaurusConceptGroupsByThesaurusId(String excludedConceptGroupId,
-			String thesaurusId);
+	public static String getURI() {
+		return uri;
+	}
 
-	Long countItems(String idThesaurus);
+	private static Model m = ModelFactory.createDefaultModel();
 
 	/**
-	 * Get all child {@link ThesaurusConceptGroup} of a group by its identifier
-	 * @param conceptGroupId
-	 * @return A list of all child {@link ThesaurusConceptGroup} of a group
+	 * status property
 	 */
-	List<ThesaurusConceptGroup> getChildGroups(String conceptGroupId);
+	public static final Property STATUS = m.createProperty(uri
+			+ "status");
+
+	/**
+	 * super group property
+	 */
+	public static final Property SUPER_GROUP = m.createProperty(uri
+			+ "superGroup");
+
+	/**
+	 * sub group property
+	 */
+	public static final Property SUB_GROUP = m.createProperty(uri
+			+ "subGroup");
+
+	/**
+	 * conceptGroup resource
+	 */
+	public static final Resource CONCEPT_GROUP = m.createProperty(uri
+			+ "ConceptGroup");
+
 }

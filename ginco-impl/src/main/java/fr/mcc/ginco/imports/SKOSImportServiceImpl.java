@@ -87,6 +87,7 @@ import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
 import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * Implementation of the SKOS thesaurus import service
