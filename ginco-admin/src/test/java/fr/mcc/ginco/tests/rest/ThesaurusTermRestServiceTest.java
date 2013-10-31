@@ -124,11 +124,30 @@ public class ThesaurusTermRestServiceTest{
 	 * @throws BusinessException 
 	 */
 	@Test(expected=AccessDeniedException.class)
-	public final void testUpdateTermWithExpertRol() {
+	public final void testUpdateTermWithExpertRole1() {
 		Authentication authent = Mockito.mock(Authentication.class);
 		SecurityContextHolder.getContext()
 				.setAuthentication(authent);
 		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(true);
+		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
+		fakeThesaurusTerm.setStatus(TermStatusEnum.VALIDATED.getStatus());
+		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm);
+
+		ThesaurusTermView fakeThesaurusTermView = new ThesaurusTermView();
+		fakeThesaurusTermView.setStatus(TermStatusEnum.VALIDATED.getStatus());
+		thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
+	}
+	
+	@Test(expected=AccessDeniedException.class)
+	public final void testUpdateTermWithExpertRole2() {
+		Authentication authent = Mockito.mock(Authentication.class);
+		SecurityContextHolder.getContext()
+				.setAuthentication(authent);
+		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(true);
+		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
+		fakeThesaurusTerm.setStatus(TermStatusEnum.CANDIDATE.getStatus());
+		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm);
+
 		ThesaurusTermView fakeThesaurusTermView = new ThesaurusTermView();
 		fakeThesaurusTermView.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		thesaurusTermRestService.updateTerm(fakeThesaurusTermView);

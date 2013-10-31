@@ -194,8 +194,18 @@ public class ThesaurusTermRestService {
 		String username = auth.getName();
 		
 		if (userRoleService.hasRole(username, thesaurusViewJAXBElement.getThesaurusId(), Role.EXPERT)) {
+			
+			try {
+				ThesaurusTerm existingTerm = thesaurusTermService.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());
+				if ( existingTerm.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
+					throw new AccessDeniedException("You can save only candidate terms");
+				}
+			} catch (BusinessException be) {
+				//Do nothing, term just doen't exist
+				logger.debug("Case of term creation detected");
+			}
 			if (thesaurusViewJAXBElement.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
-				throw new AccessDeniedException("you-can-save-only-cadidate-terms");
+				throw new AccessDeniedException("You can save only candidate terms");
 			}
 		}
 		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement, false);
