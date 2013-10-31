@@ -413,11 +413,6 @@ public class ThesaurusConceptRestService {
 						"check-values-of-concept-status");
 			}
 
-			GenericStatusView firstEmpty = new GenericStatusView();
-			firstEmpty.setStatus(-1);
-			firstEmpty.setStatusLabel("-");
-			listOfStatus.add(firstEmpty);
-
 			for (String id : availableStatusIds) {
 				GenericStatusView conceptStatusView = new GenericStatusView();
 				conceptStatusView.setStatus(Integer.valueOf(id));

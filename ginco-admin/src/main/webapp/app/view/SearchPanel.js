@@ -89,6 +89,21 @@ Ext.define('GincoApp.view.SearchPanel', {
 				}
 			}
 		});
+		
+		me.conceptStatusStore = Ext.create('GincoApp.store.ConceptStatusStore',
+				{
+					listeners : {
+						load : {
+							fn : function (theStore)
+							{
+								theStore.insert(0,{
+									status : "-1",
+									statusLabel : '-'
+								});
+							}
+						}
+					}
+		});
 
 		Ext.applyIf(me, {
 			title : me.xSearchPanelTitle,
@@ -141,7 +156,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 						displayField : 'statusLabel',
 						valueField : 'status',
 						editable : false,
-						store : 'ConceptStatusStore'
+						store : me.conceptStatusStore
 					},
 					{
 						xtype : 'ariacombo',
