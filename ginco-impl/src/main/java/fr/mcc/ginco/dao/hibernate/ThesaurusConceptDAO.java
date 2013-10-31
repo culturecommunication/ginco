@@ -87,9 +87,9 @@ public class ThesaurusConceptDAO extends
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConcept
 	 */
 	@Override
-	public List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus)
+	public List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus, int maxResults)
 			throws BusinessException {
-		return getListByThesaurusAndTopConcept(thesaurus, false);
+		return getListByThesaurusAndTopConcept(thesaurus, false, maxResults);
 	}
 
 	/*
@@ -111,9 +111,9 @@ public class ThesaurusConceptDAO extends
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConcept
 	 */
 	@Override
-	public List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus)
+	public List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults)
 			throws BusinessException {
-		return getListByThesaurusAndTopConcept(thesaurus, true);
+		return getListByThesaurusAndTopConcept(thesaurus, true, maxResults);
 	}
 
 	/*
@@ -132,16 +132,16 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getRootConcepts(String thesaurusId,
 			Boolean searchOrphans) {
-		return getConcepts(null, thesaurusId, searchOrphans);
+		return getConcepts(null, thesaurusId, searchOrphans, 0);
 	}
 
 	@Override
-	public List<ThesaurusConcept> getChildrenConcepts(String conceptId) {
-		return getConcepts(conceptId, null, null);
+	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults) {
+		return getConcepts(conceptId, null, null, maxResults);
 	}
 
 	private List<ThesaurusConcept> getConcepts(String conceptId,
-			String thesaurusId, Boolean searchOrphans) {
+			String thesaurusId, Boolean searchOrphans, int maxResults) {
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConcept.class, "tc");
 
@@ -156,7 +156,8 @@ public class ThesaurusConceptDAO extends
 		}
 
 		selectOrphans(criteria, searchOrphans);
-
+		if (maxResults>0)
+			criteria.setMaxResults(maxResults);
 		return criteria.list();
 	}
 
@@ -244,15 +245,16 @@ public class ThesaurusConceptDAO extends
 	}
 
 	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
-			Thesaurus thesaurus, boolean topConcept) throws BusinessException {
+			Thesaurus thesaurus, boolean topConcept, int maxResults) throws BusinessException {
 
 		if (thesaurus == null) {
 			throw new BusinessException("Object thesaurus can't be null !",
 					"empty-thesaurus");
 		}
-
-		return getCriteriaByThesaurusAndTopConcept(thesaurus, topConcept)
-				.list();
+		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus, topConcept);
+		if (maxResults>0)
+			crit.setMaxResults(maxResults);
+		return crit	.list();
 	}
 
 	private long getListByThesaurusAndTopConceptCount(Thesaurus thesaurus,

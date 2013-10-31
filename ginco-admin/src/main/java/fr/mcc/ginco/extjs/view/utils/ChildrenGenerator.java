@@ -40,81 +40,98 @@ import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
+import fr.mcc.ginco.extjs.view.node.WarningNode;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
- * Class used to generate nodes containing children
- * of given concept (by its ID).
+ * Class used to generate nodes containing children of given concept (by its
+ * ID).
  */
 @Component(value = "childrenGenerator")
 public class ChildrenGenerator {
 
-    public static final String ID_PREFIX = ThesaurusListNodeType.CONCEPT
-            .toString() + "_";
+	public static final String ID_PREFIX = ThesaurusListNodeType.CONCEPT
+			.toString() + "_";
 
-    /**
-     * Separator between parent ID and ID of child.
-     * For example, Root node has id "CONCEPT_co1".
-     * So, ID of all children will be "CONCEPT_co1<b>*</b>CHILDREN_ID"
-     */
-    public static final String PARENT_SEPARATOR = "*";
+	/**
+	 * Separator between parent ID and ID of child. For example, Root node has
+	 * id "CONCEPT_co1". So, ID of all children will be
+	 * "CONCEPT_co1<b>*</b>CHILDREN_ID"
+	 */
+	public static final String PARENT_SEPARATOR = "*";
 
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-    
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
 	@Inject
 	@Named("thesaurusListNodeFactory")
 	ThesaurusListNodeFactory thesaurusListNodeFactory;
 
-    @Log
-    private Logger logger;
+	@Log
+	private Logger logger;
 
-    public List<IThesaurusListNode> getChildrenByConceptId(String conceptTopTermId)
-            throws BusinessException {
-        logger.debug("Generating children concepts list for conceptTopTermId : "
-                + conceptTopTermId);
+	@Value("${conceptstree.maxresults}")
+	private int maxResults;
 
-        String resultId =
-            conceptTopTermId.substring(
-                    conceptTopTermId.indexOf(
-                            ChildrenGenerator.PARENT_SEPARATOR) + ChildrenGenerator.PARENT_SEPARATOR.length(),
-                                     conceptTopTermId.length());
+	public List<IThesaurusListNode> getChildrenByConceptId(
+			String conceptTopTermId) throws BusinessException {
+		logger.debug("Generating children concepts list for conceptTopTermId : "
+				+ conceptTopTermId);
 
-        List<ThesaurusConcept> children = thesaurusConceptService.getChildrenByConceptId(resultId);
-        logger.debug(children.size() + " children found");
+		String resultId = conceptTopTermId.substring(
+				conceptTopTermId.indexOf(ChildrenGenerator.PARENT_SEPARATOR)
+						+ ChildrenGenerator.PARENT_SEPARATOR.length(),
+				conceptTopTermId.length());
 
-        List<IThesaurusListNode> childrenNodes = new ArrayList<IThesaurusListNode>();
-        for (ThesaurusConcept topTerm : children) {
-            ThesaurusListBasicNode topTermNode = thesaurusListNodeFactory.getListBasicNode();
-            topTermNode.setTitle(thesaurusConceptService
-                    .getConceptLabel(topTerm.getIdentifier()));
-            topTermNode.setId(ID_PREFIX + resultId +
-                    PARENT_SEPARATOR + topTerm.getIdentifier());
-            topTermNode.setType(ThesaurusListNodeType.CONCEPT);
-            topTermNode.setThesaurusId(topTerm.getThesaurusId());
-            topTermNode.setDisplayable(true);
+		List<ThesaurusConcept> children = thesaurusConceptService
+				.getChildrenByConceptId(resultId, maxResults + 1);
+		logger.debug(children.size() + " children found");
+		Boolean hasTooMany = false;
+		if (children.size() > maxResults) {
+			logger.warn("Limit : " + maxResults + " exceeded");
+			hasTooMany = true;
+			children.remove(children.size() - 1);
+		}
+		List<IThesaurusListNode> childrenNodes = new ArrayList<IThesaurusListNode>();
+		for (ThesaurusConcept topTerm : children) {
+			ThesaurusListBasicNode childNode = thesaurusListNodeFactory
+					.getListBasicNode();
+			childNode.setTitle(thesaurusConceptService.getConceptLabel(topTerm
+					.getIdentifier()));
+			childNode.setId(ID_PREFIX + resultId + PARENT_SEPARATOR
+					+ topTerm.getIdentifier());
+			childNode.setType(ThesaurusListNodeType.CONCEPT);
+			childNode.setThesaurusId(topTerm.getThesaurusId());
+			childNode.setDisplayable(true);
 
-            if(!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
-                topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
-                topTermNode.setLeaf(true);
-            } else {
-                topTermNode.setChildren(null);
-                topTermNode.setLeaf(false);
-            }
-
-            childrenNodes.add(topTermNode);
-        }
-        Collections.sort(childrenNodes);
-        return childrenNodes;
-    }
+			if (!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
+				childNode.setChildren(new ArrayList<IThesaurusListNode>());
+				childNode.setLeaf(true);
+			} else {
+				childNode.setChildren(null);
+				childNode.setLeaf(false);
+			}
+			childrenNodes.add(childNode);
+		}
+		Collections.sort(childrenNodes);
+		if (hasTooMany) {
+			WarningNode tooManyNode = new WarningNode(maxResults);
+			childrenNodes.add(tooManyNode);
+		}
+		return childrenNodes;
+	}
 }

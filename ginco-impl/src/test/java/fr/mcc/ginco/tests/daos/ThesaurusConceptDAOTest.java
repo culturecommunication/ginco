@@ -67,7 +67,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
 		List<ThesaurusConcept> actualConcepts = thesaurusConceptDAO
-				.getOrphansThesaurusConcept(th);
+				.getOrphansThesaurusConcept(th, 0);
 		Assert.assertEquals(2, actualConcepts.size());
 	}
 
@@ -87,7 +87,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
 		List<ThesaurusConcept> actualConcepts = thesaurusConceptDAO
-				.getTopTermThesaurusConcept(th);
+				.getTopTermThesaurusConcept(th, 0);
 		Assert.assertEquals(1, actualConcepts.size());
 	}
 
@@ -129,7 +129,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		th.setIdentifier(thesaurusId);
 
 		List<ThesaurusConcept> list = thesaurusConceptDAO
-				.getTopTermThesaurusConcept(th);
+				.getTopTermThesaurusConcept(th, 0);
 		Assert.assertEquals(list.size(), 1);
 		Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list
 				.get(0).getIdentifier());
@@ -142,7 +142,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		th.setIdentifier(thesaurusId);
 
 		List<ThesaurusConcept> list = thesaurusConceptDAO
-				.getChildrenConcepts("http://www.culturecommunication.gouv.fr/co2");
+				.getChildrenConcepts("http://www.culturecommunication.gouv.fr/co2", 0);
 		Assert.assertEquals(list.size(), 2);
 
 		List<String> expectedIds = new ArrayList<String>();

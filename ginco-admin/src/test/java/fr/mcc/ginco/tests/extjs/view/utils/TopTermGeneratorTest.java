@@ -45,6 +45,7 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,6 +55,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +66,7 @@ public class TopTermGeneratorTest {
     private IThesaurusConceptService thesaurusConceptService;
 
     @InjectMocks
-    private TopTermGenerator topTermGenerator = new TopTermGenerator();
+    private TopTermGenerator topTermGenerator;
     
     @Mock(name = "thesaurusListNodeFactory")
     private ThesaurusListNodeFactory thesaurusListNodeFactory;
@@ -73,6 +75,8 @@ public class TopTermGeneratorTest {
     public final void setUp() {
         MockitoAnnotations.initMocks(this);
         LoggerTestUtil.initLogger(topTermGenerator);
+        ReflectionTestUtils.setField(topTermGenerator, "maxResults",
+				5000);
     }
 
     @Test
@@ -101,7 +105,7 @@ public class TopTermGeneratorTest {
         concepts.add(co2);
 
         Mockito.when(thesaurusConceptService
-                .getTopTermThesaurusConcepts(Mockito.anyString())).thenReturn(concepts);
+                .getTopTermThesaurusConcepts(Mockito.anyString(), Mockito.eq(5001))).thenReturn(concepts);
         Mockito.when(thesaurusConceptService.getConceptLabel("co1")).thenReturn("zzzz");
         Mockito.when(thesaurusConceptService.getConceptLabel("co2")).thenReturn("aaaa");
         List<IThesaurusListNode> nodes = topTermGenerator.generateTopTerm("anystring");

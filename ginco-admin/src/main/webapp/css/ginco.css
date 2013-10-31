@@ -162,6 +162,10 @@ a.x-tab-close-btn:focus  {
     background-image: url(../images/group.png) !important;
 }
 
+.icon-warning {
+    background-image: url(../images/warning.png) !important;
+}
+
 .mandatory-field {
 	color: red !important;
 }

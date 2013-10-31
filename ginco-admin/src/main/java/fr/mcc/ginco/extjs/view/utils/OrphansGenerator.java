@@ -42,6 +42,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -50,6 +51,7 @@ import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
+import fr.mcc.ginco.extjs.view.node.WarningNode;
 import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
@@ -69,6 +71,9 @@ public class OrphansGenerator {
 
 	@Log
 	private Logger logger;
+	
+	@Value("${conceptstree.maxresults}")
+	private int maxResults;
 
 	/**
 	 * Creates a list of orphan concepts for a given thesaurus
@@ -81,8 +86,14 @@ public class OrphansGenerator {
 			throws BusinessException {
 		logger.debug("Generating orphans concepts list for vocabularyId : " + parentId);
 		List<ThesaurusConcept> orphans = thesaurusConceptService
-				.getOrphanThesaurusConcepts(parentId);
+				.getOrphanThesaurusConcepts(parentId, maxResults + 1);
 		logger.debug(orphans.size() + " orphans found");
+		Boolean hasTooMany = false;
+		if (orphans.size() > maxResults) {
+			logger.warn("Limit : " + maxResults + " exceeded");
+			hasTooMany = true;
+			orphans.remove(orphans.size() - 1);
+		}
 
 		List<IThesaurusListNode> newOrphans = new ArrayList<IThesaurusListNode>();
 		for (ThesaurusConcept orphan : orphans) {
@@ -109,6 +120,10 @@ public class OrphansGenerator {
 			newOrphans.add(orphanNode);
 		}
 		Collections.sort(newOrphans);
+		if (hasTooMany) {
+			WarningNode tooManyNode = new WarningNode(maxResults);
+			newOrphans.add(tooManyNode);
+		}
 		return newOrphans;
 	}
 

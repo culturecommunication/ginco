@@ -35,6 +35,7 @@
 package fr.mcc.ginco.tests.services;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -116,7 +117,7 @@ public class ThesaurusConceptServiceTest {
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
 		when(
 				thesaurusConceptDAO
-						.getOrphansThesaurusConcept(any(Thesaurus.class)))
+						.getOrphansThesaurusConcept(any(Thesaurus.class), eq(0)))
 				.thenReturn(concepts);
 
 		List<ThesaurusConcept> thesaurusRes = thesaurusConceptService
@@ -132,7 +133,7 @@ public class ThesaurusConceptServiceTest {
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
 		when(
 				thesaurusConceptDAO
-						.getOrphansThesaurusConcept(any(Thesaurus.class)))
+						.getOrphansThesaurusConcept(any(Thesaurus.class), eq(0)))
 				.thenReturn(concepts);
 
 		thesaurusConceptService.getOrphanThesaurusConcepts("any-thesaurus-id");
@@ -163,11 +164,11 @@ public class ThesaurusConceptServiceTest {
 		list.add(co1);
 		when(
 				thesaurusConceptDAO
-						.getTopTermThesaurusConcept(any(Thesaurus.class)))
+						.getTopTermThesaurusConcept(any(Thesaurus.class), eq(0)))
 				.thenReturn(list);
 
 		Assert.assertNotNull("Not null list expected", thesaurusConceptDAO
-				.getTopTermThesaurusConcept(any(Thesaurus.class)));
+				.getTopTermThesaurusConcept(any(Thesaurus.class), eq(0)));
 	}
 
 	// ------------------------------------------
@@ -388,7 +389,7 @@ public class ThesaurusConceptServiceTest {
 		final ThesaurusConcept node2 = new ThesaurusConcept();
 		node2.setIdentifier("concept2");
 		List<ThesaurusConcept> conceptList = new ArrayList<ThesaurusConcept>();
-		when(thesaurusConceptDAO.getChildrenConcepts(anyString())).thenReturn(conceptList);
+		when(thesaurusConceptDAO.getChildrenConcepts(anyString(), eq(0))).thenReturn(conceptList);
 
 		when(thesaurusConceptDAO.getAllRootChildren(any(ThesaurusConcept.class))).thenReturn(conceptList);
 
@@ -476,7 +477,7 @@ public class ThesaurusConceptServiceTest {
 		// Mocks
 		List<ThesaurusConcept> childrenOfParentConcept = new ArrayList<ThesaurusConcept>();
 		childrenOfParentConcept.add(brotherConcept);
-		when(thesaurusConceptDAO.getChildrenConcepts("parentConcept")).thenReturn(childrenOfParentConcept);
+		when(thesaurusConceptDAO.getChildrenConcepts("parentConcept", 0)).thenReturn(childrenOfParentConcept);
 
 		ThesaurusTerm dummyTerm = new ThesaurusTerm();
 		dummyTerm.setLexicalValue("dummy Value");
@@ -590,13 +591,13 @@ public class ThesaurusConceptServiceTest {
 		level3Concepts.add(concept1211);
 
 		Mockito.when( thesaurusConceptDAO
-				.getChildrenConcepts("http://c1")).thenReturn(level1Concepts);
+				.getChildrenConcepts("http://c1", 0)).thenReturn(level1Concepts);
 		Mockito.when( thesaurusConceptDAO
-				.getChildrenConcepts("http://c11")).thenReturn(level2Concepts);
+				.getChildrenConcepts("http://c11", 0)).thenReturn(level2Concepts);
 		Mockito.when( thesaurusConceptDAO
-				.getChildrenConcepts("http://c121")).thenReturn(level3Concepts);
+				.getChildrenConcepts("http://c121", 0)).thenReturn(level3Concepts);
 		Mockito.when( thesaurusConceptDAO
-				.getChildrenConcepts("http://c1211")).thenReturn(recursiveConcepts);
+				.getChildrenConcepts("http://c1211", 0)).thenReturn(recursiveConcepts);
 
 		List<ThesaurusConcept> actualconcepts= thesaurusConceptService.getRecursiveChildrenByConceptId(conceptId1);
 		Assert.assertEquals(4, actualconcepts.size());

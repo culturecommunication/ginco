@@ -63,7 +63,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 * @return
      * @throws BusinessException in case of error.
 	 */
-	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus) throws BusinessException ;
+	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus, int maxResults) throws BusinessException ;
 
     /**
      * Gets the list of ThesaurusConcept which are top term given
@@ -72,7 +72,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @return
      * @throws BusinessException in case of error.
      */
-	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus) throws BusinessException;
+	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults) throws BusinessException;
 	
 	
 	/**
@@ -106,7 +106,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param conceptId
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getChildrenConcepts(String conceptId);
+    List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults);
 
     /**
      * Get list of all concepts by id of Thesaurus, excluding given conceptId and

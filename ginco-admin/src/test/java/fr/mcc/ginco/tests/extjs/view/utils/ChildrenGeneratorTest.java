@@ -47,6 +47,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -74,6 +75,8 @@ public class ChildrenGeneratorTest {
     public final void setUp() {
         MockitoAnnotations.initMocks(this);
         LoggerTestUtil.initLogger(childrenGenerator);
+		ReflectionTestUtils.setField(childrenGenerator, "maxResults",
+				5000);
     }
 
     @Test
@@ -96,7 +99,7 @@ public class ChildrenGeneratorTest {
 
         Mockito.when(
                 thesaurusConceptService
-                        .getChildrenByConceptId(Matchers.anyString()))
+                        .getChildrenByConceptId(Matchers.anyString(), Matchers.eq(5001)))
                 .thenReturn(children);
         
         Mockito.when(
@@ -151,7 +154,7 @@ public class ChildrenGeneratorTest {
 
         Mockito.when(
                 thesaurusConceptService
-                        .getChildrenByConceptId(Matchers.anyString()))
+                        .getChildrenByConceptId(Matchers.anyString(),Matchers.eq(5001)))
                 .thenReturn(children);
         
         Mockito.when(

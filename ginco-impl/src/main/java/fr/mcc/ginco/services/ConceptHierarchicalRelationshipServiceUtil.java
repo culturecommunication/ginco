@@ -92,7 +92,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		
 		
 		List<ThesaurusConcept> childrenConcepts = thesaurusConceptDAO
-				.getChildrenConcepts(conceptToUpdate.getIdentifier());
+				.getChildrenConcepts(conceptToUpdate.getIdentifier(), 0);
 		
 
 		// We update the modified relations, and we delete the relations that
@@ -124,7 +124,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		List<String> commonIds;
 		for (String currentParentId : newParentConceptIds){
 			List<String> childrenOfCurrentParentIds = ThesaurusConceptUtils
-					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId));
+					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId, 0));
 			commonIds = new ArrayList<String>(newParentConceptIds);
 			// Compare both lists and see which elements are in common. 
 			// Those elements are both parents and brothers to the considered concept.
@@ -214,7 +214,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 	public void calculateChildrenRoots(String parentId, String originalParentId) {
 		List<ThesaurusConcept> childrenConcepts = thesaurusConceptDAO
-				.getChildrenConcepts(parentId);
+				.getChildrenConcepts(parentId,0);
 		for (ThesaurusConcept concept : childrenConcepts) {
 			if (concept.getIdentifier() != originalParentId) {
 				logger.info("calculating root concept for chiled with concept Id : "

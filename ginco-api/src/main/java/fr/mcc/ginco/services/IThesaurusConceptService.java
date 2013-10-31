@@ -75,6 +75,15 @@ public interface IThesaurusConceptService {
 	 * @return {@code null} if not found; object otherwise.
 	 */
 	ThesaurusConcept getThesaurusConceptById(String id);
+	
+	/**
+	 * Get the ThesaurusConcepts which are not top term in a given thesaurus
+	 *
+	 * @param thesaurusId
+	 * @return
+	 */
+	List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId, int maxResults)
+			throws BusinessException;
 
 	/**
 	 * Get the ThesaurusConcepts which are not top term in a given thesaurus
@@ -128,6 +137,7 @@ public interface IThesaurusConceptService {
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
 			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<Alignment> alignments) throws BusinessException;
 
+	
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
 	 *
@@ -135,6 +145,16 @@ public interface IThesaurusConceptService {
 	 * @return
 	 */
 	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId)
+			throws BusinessException;
+	
+	/**
+	 * Get the ThesaurusConcepts which are top term in a given thesaurus
+	 *
+	 * @param thesaurusId
+	 * @param maxResults
+	 * @return
+	 */
+	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, int maxResults)
 			throws BusinessException;
 
 	/**
@@ -163,7 +183,15 @@ public interface IThesaurusConceptService {
      * @return list of objects.
      */
     List<ThesaurusConcept> getChildrenByConceptId(String conceptId);
+    
+    /**
+     * Search children of concept with given id (orphan or not).
+     * @param conceptId id of concept.
+     * @return list of objects.
+     */
+    List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults);
 
+    
     /**
      * Search concepts of thesaurus excluding given conceptId
      * with given parameter (orphan or not).

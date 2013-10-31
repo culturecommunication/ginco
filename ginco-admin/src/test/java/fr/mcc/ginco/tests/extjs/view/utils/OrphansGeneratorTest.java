@@ -46,6 +46,7 @@ import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,9 +56,13 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class OrphansGeneratorTest {
 
@@ -65,7 +70,7 @@ public class OrphansGeneratorTest {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@InjectMocks
-	private OrphansGenerator orphanGenerator = new OrphansGenerator();
+	private OrphansGenerator orphanGenerator;
 	
     @Mock(name = "thesaurusListNodeFactory")
     private ThesaurusListNodeFactory thesaurusListNodeFactory;
@@ -74,6 +79,8 @@ public class OrphansGeneratorTest {
 	public final void setUp() {
 		MockitoAnnotations.initMocks(this);
 		LoggerTestUtil.initLogger(orphanGenerator);
+		ReflectionTestUtils.setField(orphanGenerator, "maxResults",
+				5000);
 	}
 	
 	@Test
@@ -102,7 +109,7 @@ public class OrphansGeneratorTest {
 		concepts.add(co1);
 
 		 Mockito.when(thesaurusConceptService
-			.getOrphanThesaurusConcepts(Mockito.anyString())).thenReturn(concepts);
+			.getOrphanThesaurusConcepts(Mockito.anyString(), Mockito.eq(5001))).thenReturn(concepts);
 		 Mockito.when(thesaurusConceptService.getConceptLabel("co1")).thenReturn("zzzzz");
 		 Mockito.when(thesaurusConceptService.getConceptLabel("co2")).thenReturn("aaaa");
 		 List<IThesaurusListNode> nodes = orphanGenerator.generateOrphans("anystring");
