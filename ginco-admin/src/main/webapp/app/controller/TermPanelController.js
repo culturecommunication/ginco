@@ -76,7 +76,12 @@ Ext.define('GincoApp.controller.TermPanelController', {
 			model.data.identifier = "";
 			model.data.language=thesaurusData.languages[0];
 			//1 is the status to set by default for a new term, meaning "validated"
-			model.data.status=1;
+			if (Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById(thesaurusData.id) != null
+					&& Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById(thesaurusData.id).data.role == 1) {
+				model.data.status=0;
+			}else {
+				model.data.status=1;
+			}
 			theForm.down("#statusCombo").setReadOnly(false);
 			theForm.loadRecord(model);
 		}

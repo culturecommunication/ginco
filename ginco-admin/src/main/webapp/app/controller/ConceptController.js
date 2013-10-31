@@ -87,8 +87,13 @@ Ext.define('GincoApp.controller.ConceptController', {
 
 			// 1 is the status to set by default for a new
 			// concept, meaning "validated"
-			model.data.status = 1;
-
+			if (Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById( thePanel.up('thesaurusTabPanel').thesaurusData.id) != null
+					&& Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById( thePanel.up('thesaurusTabPanel').thesaurusData.id).data.role == 1) {
+				model.data.status = 0;
+				model.data.topconcept = false;
+			} else {
+				model.data.status = 1;
+			}
 			if (!Ext.isEmpty(thePanel.initPreferedTermBeforeLoad)) {
 				if (!Ext
 						.isEmpty(thePanel.initPreferedTermBeforeLoad.data.identifier)) {
