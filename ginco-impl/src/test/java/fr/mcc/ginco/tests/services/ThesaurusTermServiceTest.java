@@ -135,13 +135,23 @@ public class ThesaurusTermServiceTest {
 		termsToImport.put("Terme <b>XSS</b>",lang2);
 
     	List<ThesaurusTerm> terms = thesaurusTermService.importSandBoxTerms(termsToImport, thesID, TermStatusEnum.VALIDATED.getStatus());
-    	Assert.assertEquals(terms.size(),3);
-    	ThesaurusTerm expectedTerm2 =  new ThesaurusTerm();
-    	expectedTerm2.setLexicalValue("Terme accentué2");
-    	expectedTerm2.setLanguage(lang1);
+    	Assert.assertEquals(3,terms.size());
+    	
+    	
+    	Map<String, Language> termsToImport1 = new HashMap<String, Language>();
+    	termsToImport1.put("Terme accentué2",lang1 );
+    	List<ThesaurusTerm> terms1 = thesaurusTermService.importSandBoxTerms(termsToImport1, thesID, TermStatusEnum.VALIDATED.getStatus());
+    	Assert.assertEquals(1,terms1.size());
+    	Assert.assertEquals("Terme accentué2", terms1.get(0).getLexicalValue());
+    	Assert.assertEquals(lang1, terms1.get(0).getLanguage());
+    	
+    	Map<String, Language> termsToImport2 = new HashMap<String, Language>();
+    	termsToImport2.put("Terme <b>XSS</b>",lang2);
 
-    	//ListAssert.assertContains(terms, expectedTerm2);
-    	//Assert.assertEquals(lang1, terms.get(1).getLanguage());
-    	//Assert.assertEquals("Terme &lt;b&gt;XSS&lt;/b&gt;", terms.get(2).getLexicalValue());
+    	List<ThesaurusTerm> terms2 = thesaurusTermService.importSandBoxTerms(termsToImport2, thesID, TermStatusEnum.VALIDATED.getStatus());
+    	Assert.assertEquals(1,terms2.size());
+    	Assert.assertEquals("Terme &lt;b&gt;XSS&lt;/b&gt;", terms2.get(0).getLexicalValue());
+    	Assert.assertEquals(lang2, terms2.get(0).getLanguage());
+    	
     }
 }
