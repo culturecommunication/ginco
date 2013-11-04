@@ -55,18 +55,13 @@ public class UserRoleServiceImpl implements IUserRoleService {
 
 	@Inject
 	@Named("userRoleDAO")
-	private IUserRoleDAO userRoleDAO;
-
-	@Log
-	private Logger logger;
+	private IUserRoleDAO userRoleDAO;	
 
 	@Override
 	public boolean hasRole(String username, String thesaurusId, Role role) {
 		UserRole userRole = userRoleDAO.getUserRoleOnThesaurus(username,
 				thesaurusId);
-		if (userRole == null) {
-			logger.debug("No role for user " + username
-					+ " was found on thesaurus " + thesaurusId);
+		if (userRole == null) {			
 			return false;
 		} else {
 			return userRole.getRole().equals(role);
