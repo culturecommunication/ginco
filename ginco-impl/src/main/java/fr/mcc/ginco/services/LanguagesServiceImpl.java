@@ -85,4 +85,12 @@ public class LanguagesServiceImpl implements ILanguagesService {
     public Language getLanguageById(String id) {
         return languagesDAO.getById(id);
     }
+    
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.services.ILanguagesService#getLanguageByPart1(java.lang.String)
+     */
+    @Override
+    public Language getLanguageByPart1(String part1) {
+        return languagesDAO.getByPart1(part1);
+    }
 }

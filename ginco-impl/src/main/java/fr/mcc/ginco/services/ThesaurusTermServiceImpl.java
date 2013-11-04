@@ -36,16 +36,17 @@ package fr.mcc.ginco.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -75,10 +76,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
     @Inject
     @Named("generatorService")
-    private IIDGeneratorService customGeneratorService;
-
-	@Value("${ginco.default.language}")
-	private String defaultLang;
+    private IIDGeneratorService customGeneratorService;	
 
     @Override
     public ThesaurusTerm getThesaurusTermById(String id) throws BusinessException {
@@ -220,16 +218,16 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Transactional(readOnly=false)
 	@Override
-	public List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId, int defaultStatus) throws TechnicalException, BusinessException{
+	public List<ThesaurusTerm> importSandBoxTerms(Map<String, Language> termLexicalValues, String thesaurusId, int defaultStatus) throws TechnicalException, BusinessException{
 		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
 		if (targetedThesaurus != null){
-			for (String  termLexicalValue : termLexicalValues){
+			for (String  term : termLexicalValues.keySet()){
 				ThesaurusTerm termToImport = new ThesaurusTerm();
 				termToImport.setIdentifier(customGeneratorService.generate(ThesaurusTerm.class));
-				termToImport.setLexicalValue(StringEscapeUtils.escapeXml(termLexicalValue));
+				termToImport.setLexicalValue(StringEscapeUtils.escapeXml(term));
 				termToImport.setThesaurus(targetedThesaurus);
-				termToImport.setLanguage(languageDAO.getById(defaultLang));
+				termToImport.setLanguage(termLexicalValues.get(term));
 				termToImport.setModified(DateUtil.nowDate());
 				termToImport.setCreated(DateUtil.nowDate());
 				termToImport.setStatus(defaultStatus);

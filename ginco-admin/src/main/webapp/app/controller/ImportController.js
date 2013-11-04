@@ -49,6 +49,9 @@ Ext.define('GincoApp.controller.ImportController', {
 	xSucessLabelWithMissingExternalThesaurusPart1: 'Alignement import of concept "',
 	xSucessLabelWithMissingExternalThesaurusPart2: '" was ignored, unable to find thesaurus identifier of external concept : ',
 
+	xPartialSucessSandboxLabel :'Elements partially imported', 
+	xSandboxErrorsLabel: 'The following terms were not imported due to language not found : ',
+	
 	xFailureLabelTitle: 'Error',
 
 	importSaveClick : function(theButton){
@@ -86,10 +89,20 @@ Ext.define('GincoApp.controller.ImportController', {
 								fp,
 								o) {
 							if(theWin.importType == 'txt'){
+								var succLabel = me.xSucessSandboxLabel;
+								if ( !Ext.isEmpty(o.result.data.termsInError)) {
+									succLabel = me.xPartialSucessSandboxLabel;
+									succLabel += '<br>';
+									succLabel += me.xSandboxErrorsLabel;
+									Ext.Array.each(o.result.data.termsInError, function(termInError) {
+										succLabel += '<br>';
+										succLabel += termInError;
+									});
+								}
 								Ext.Msg
 								.show({
 									title : me.xSucessLabelTitle,
-									msg : me.xSucessSandboxLabel,
+									msg : succLabel,
 									minWidth : 200,
 									modal : true,
 									icon : Ext.Msg.INFO,

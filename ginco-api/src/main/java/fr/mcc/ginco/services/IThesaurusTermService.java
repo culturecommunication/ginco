@@ -35,7 +35,9 @@
 package fr.mcc.ginco.services;
 
 import java.util.List;
+import java.util.Map;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
@@ -175,7 +177,7 @@ public interface IThesaurusTermService {
 	
 	/**
 	 * This method imports sandboxed terms 
-	 * @param list of term lexical values
+	 * @param list of term lexical values with language
 	 * @param thesaurus identifier
 	 * @param defaultStatus 
 	 * 
@@ -183,5 +185,5 @@ public interface IThesaurusTermService {
 	 * @throws TechnicalException
 	 * @throws BusinessException
 	 */
-	List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId, int defaultStatus) throws TechnicalException, BusinessException;
+	List<ThesaurusTerm> importSandBoxTerms(Map<String, Language> termLexicalValues, String thesaurusId, int defaultStatus) throws TechnicalException, BusinessException;
 }

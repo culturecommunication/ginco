@@ -32,19 +32,21 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.extjs.view;
 
-Ext.define('GincoApp.locale.fr.controller.ImportController', {
-	xWaitingLabel : 'Import en cours',
-	xSucessLabelTitle : 'Succès',
-	xSucessLabel : 'Element importé avec succès : ',
-	xSucessSandboxLabel : 'Elements importés avec succès',
-	xSucessLabelWithMissingAlignmentsPart1 :  'Element importé partiellement :  ',
-	xSucessLabelWithMissingAlignmentsPart2 :  'Certains alignement n\'ont pas pu être importés car ils pointaient vers des concepts internes qui n\'existent pas : ',
-	xSucessLabelWithMissingAlignments3: 'Certains alignement n\'ont pas pu être importés car ils pointaient vers des concepts internes qui n\'existent pas',
+import java.util.List;
 
-	xSucessLabelWithMissingExternalThesaurusPart1: 'L\'import de l\'alignement sur le concept "',
-	xSucessLabelWithMissingExternalThesaurusPart2: '" a été ignoré, impossible de trouver l\'identifiant du thesaurus du concept externe : ',
-		
-	xPartialSucessSandboxLabel :'Elements importés partiellement', 
-	xSandboxErrorsLabel : 'Les termes suivants n\'ont pas pu être importés car la langue n\'a pas été trouvée : '
-});
+/**
+ * Class for JSON representation of a data object for extjs.
+ */
+public class ImportedTermsResponse {
+	private List<String> termsInError;
+
+	public List<String> getTermsInError() {
+		return termsInError;
+	}
+
+	public void setTermsInError(List<String> termsInError) {
+		this.termsInError = termsInError;
+	}
+}

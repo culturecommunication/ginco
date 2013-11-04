@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,17 +55,20 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -74,12 +78,14 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
+import fr.mcc.ginco.extjs.view.ImportedTermsResponse;
 import fr.mcc.ginco.extjs.view.ImportedThesaurusResponse;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
 import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
@@ -133,6 +139,13 @@ public class ImportRestService {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
+	
+	@Inject
+	@Named("languagesService")
+	private ILanguagesService languageService;
+	
+	@Value("${ginco.default.language}")
+	private String defaultLang;
 
 	/**
 	 * This method is called to import a SKOS thesaurus the @Produces({
@@ -309,7 +322,28 @@ public class ImportRestService {
 			String content = file.getObject(String.class);
 
 			String[] termsSplit = content.split("\n|\r\n");
-			List<String> termLexicalValues = Arrays.asList(termsSplit);
+			List<String> termsLines = Arrays.asList(termsSplit);
+			Map<String, Language> terms = new HashMap<String, Language>();
+			List<String> termsInError = new ArrayList<String>();
+			for (String termLine:termsLines) {
+				String[] termSplitted = termLine.split("@");
+				if (termSplitted.length==2) {
+					String lexValue = termSplitted[0];
+					Language lang = languageService.getLanguageById(termSplitted[1]);
+					if (lang == null) {
+						lang = languageService.getLanguageByPart1(termSplitted[1]);
+					}
+					if (lang != null) {
+						terms.put(lexValue, lang);
+					} else {
+						termsInError.add(termLine);
+					}
+				} else {
+					String lexValue = termLine;
+					Language lang = languageService.getLanguageById(defaultLang);
+					terms.put(lexValue, lang);					
+				}
+			}
 
 			int defaultStatus = TermStatusEnum.VALIDATED.getStatus();
 			Authentication auth = SecurityContextHolder.getContext()
@@ -322,11 +356,17 @@ public class ImportRestService {
 			
 			
 			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
-					.importSandBoxTerms(termLexicalValues, thesaurusId, defaultStatus);
+					.importSandBoxTerms(terms, thesaurusId, defaultStatus);
 			for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
 				indexerService.addTerm(sandboxedTerm);
 			}
-			return "{ 'success':true,'msg': 'imported'}";
+			ImportedTermsResponse response = new ImportedTermsResponse();
+			response.setTermsInError(termsInError);
+			ObjectMapper mapper = new ObjectMapper();
+			String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+					response));
+			return serialized;
+			
 		} catch (BusinessException ex) {
 			throw ex;
 		} catch (Exception re) {

@@ -70,4 +70,14 @@ public interface ILanguagesService {
      * @return
      */
     Language getLanguageById(String id);
+    
+    
+    /**
+     * Get single object by its part1 (ie. en, it, fr...)
+     * @param part1
+     * @return
+     */
+    Language getLanguageByPart1(String part1);
+    
+
 }
