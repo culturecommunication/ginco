@@ -36,7 +36,6 @@ package fr.mcc.ginco.exports.skos;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -95,7 +94,8 @@ public class SKOSGroupExporter {
 			OntModel ontmodel = buildGroupOntologyModel();
 
 			for (ThesaurusConceptGroup group : groups) {
-				addGroupToOntModel(ontmodel, group.getConceptGroupType().getSkosLabel());
+				addGroupToOntModel(ontmodel, group.getConceptGroupType()
+						.getSkosLabel());
 				buildGroup(thesaurus, group, model);
 			}
 
@@ -121,7 +121,8 @@ public class SKOSGroupExporter {
 					+ "rdf-schema#\">".length() + 2;
 			int end = result.lastIndexOf("</rdf:RDF>");
 
-			return ontresult.substring(ontstart, ontend) + result.substring(start, end);
+			return ontresult.substring(ontstart, ontend)
+					+ result.substring(start, end);
 		}
 		return "";
 	}
@@ -130,24 +131,30 @@ public class SKOSGroupExporter {
 
 		OntModel ontmodel = ModelFactory.createOntologyModel();
 
-		OntClass groupClass = ontmodel.createClass(ISOTHES.CONCEPT_GROUP.getURI());
-		groupClass.addLabel(ontmodel.createLiteral(ISOTHES.CONCEPT_GROUP.getLocalName()));
+		OntClass groupClass = ontmodel.createClass(ISOTHES.CONCEPT_GROUP
+				.getURI());
+		groupClass.addLabel(ontmodel.createLiteral(ISOTHES.CONCEPT_GROUP
+				.getLocalName()));
 		groupClass.addSuperClass(SKOS.COLLECTION);
 
-		ObjectProperty subGroup = ontmodel.createObjectProperty(ISOTHES.SUB_GROUP.getURI());
-		subGroup.addLabel(ontmodel.createLiteral(ISOTHES.SUB_GROUP.getLocalName()));
+		ObjectProperty subGroup = ontmodel
+				.createObjectProperty(ISOTHES.SUB_GROUP.getURI());
+		subGroup.addLabel(ontmodel.createLiteral(ISOTHES.SUB_GROUP
+				.getLocalName()));
 		subGroup.addRange(groupClass);
 		subGroup.addDomain(groupClass);
 
-		ObjectProperty superGroup = ontmodel.createObjectProperty(ISOTHES.SUPER_GROUP.getURI());
-		superGroup.addLabel(ontmodel.createLiteral(ISOTHES.SUPER_GROUP.getLocalName()));
+		ObjectProperty superGroup = ontmodel
+				.createObjectProperty(ISOTHES.SUPER_GROUP.getURI());
+		superGroup.addLabel(ontmodel.createLiteral(ISOTHES.SUPER_GROUP
+				.getLocalName()));
 		superGroup.addRange(groupClass);
 		superGroup.addDomain(groupClass);
 
 		return ontmodel;
 	}
 
-	public void addGroupToOntModel(OntModel ontmodel, String groupType){
+	public void addGroupToOntModel(OntModel ontmodel, String groupType) {
 		OntClass groupTypeRes = ontmodel.createClass(GINCO.getResource(
 				groupType).getURI());
 		groupTypeRes.addLabel(ontmodel.createLiteral(GINCO.getResource(
@@ -156,16 +163,15 @@ public class SKOSGroupExporter {
 				.getURI()));
 	}
 
-
-	public void buildGroup(Thesaurus thesaurus, ThesaurusConceptGroup group, Model model) {
+	public void buildGroup(Thesaurus thesaurus, ThesaurusConceptGroup group,
+			Model model) {
 		ThesaurusConceptGroupLabel label = thesaurusConceptGroupLabelService
 				.getByThesaurusConceptGroup(group.getIdentifier());
 
 		Resource groupRes = model.createResource(group.getIdentifier(),
 				GINCO.getResource(group.getConceptGroupType().getSkosLabel()));
 
-		Resource inScheme = model.createResource(thesaurus
-				.getIdentifier());
+		Resource inScheme = model.createResource(thesaurus.getIdentifier());
 
 		model.add(groupRes, SKOS.IN_SCHEME, inScheme);
 
@@ -175,34 +181,46 @@ public class SKOSGroupExporter {
 		model.add(groupRes, DCTerms.modified,
 				DateUtil.toString(label.getModified()));
 
-		model.add(groupRes, RDFS.label, label.getLexicalValue(),
-				label.getLanguage().getPart1());
+		model.add(groupRes, RDFS.label, label.getLexicalValue(), label
+				.getLanguage().getPart1());
 
-		model.add(groupRes, SKOS.NOTATION, group.getNotation());
-
-		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
-		if (group.getIsDynamic()){
-			concepts = thesaurusConceptService.getRecursiveChildrenByConceptId(group.getParentConcept().getIdentifier());
-			concepts.add(group.getParentConcept());
-		} else {
-			concepts.addAll(group.getConcepts());
+		String notation = group.getNotation();
+		if (!"".equals(notation) && notation != null) {
+			model.add(groupRes, SKOS.NOTATION, group.getNotation());
 		}
 
-		for (ThesaurusConcept concept : concepts){
+		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+		if (group.getIsDynamic()) {
+			if (group.getParentConcept() != null) {
+				concepts = thesaurusConceptService
+						.getRecursiveChildrenByConceptId(group
+								.getParentConcept().getIdentifier());
+				concepts.add(group.getParentConcept());
+			}
+		} else {
+			if (group.getConcepts() != null) {
+				concepts.addAll(group.getConcepts());
+			}
+		}
+
+		for (ThesaurusConcept concept : concepts) {
 			Resource conceptRes = model.createResource(concept.getIdentifier());
 			model.add(groupRes, SKOS.MEMBER, conceptRes);
 		}
 
 		ThesaurusConceptGroup parentGroup = group.getParent();
-		if (parentGroup != null){
-			Resource parentRes = ResourceFactory.createResource(parentGroup.getIdentifier()+"_REMOVEME_");
+		if (parentGroup != null) {
+			Resource parentRes = ResourceFactory.createResource(parentGroup
+					.getIdentifier() + "_REMOVEME_");
 			model.add(groupRes, ISOTHES.SUPER_GROUP, parentRes);
 		}
 
-		List<ThesaurusConceptGroup> childGroups = thesaurusConceptGroupService.getChildGroups(group.getIdentifier());
-		if (!childGroups.isEmpty()){
-			for (ThesaurusConceptGroup childGroup : childGroups){
-				Resource childRes = ResourceFactory.createResource(childGroup.getIdentifier()+"_REMOVEME_");
+		List<ThesaurusConceptGroup> childGroups = thesaurusConceptGroupService
+				.getChildGroups(group.getIdentifier());
+		if (!childGroups.isEmpty()) {
+			for (ThesaurusConceptGroup childGroup : childGroups) {
+				Resource childRes = ResourceFactory.createResource(childGroup
+						.getIdentifier() + "_REMOVEME_");
 				model.add(groupRes, ISOTHES.SUB_GROUP, childRes);
 			}
 		}
