@@ -103,6 +103,10 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Named("skosHierarshicalRelationshipRolesExporter")
 	private SKOSHierarshicalRelationshipRolesExporter skosHierarshicalRelationshipRolesExporter;
 
+	@Inject
+	@Named("skosAssociativeRelationshipRolesExporter")
+	private SKOSAssociativeRelationshipRolesExporter skosAssociativeRelationshipRolesExporter;
+
 	@Override
 	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {
 
@@ -193,12 +197,20 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 			}
 
 			Map<String, String> hierarshicalRelationshipRolesOWL = skosHierarshicalRelationshipRolesExporter
-					.exportHierarshicalRelationshipRolesExporter();
+					.exportHierarshicalRelationshipRoles();
 			for (String code : hierarshicalRelationshipRolesOWL.keySet()) {
 				String object_property_old = "<owl:ObjectProperty rdf:about=\"http://data.culture.fr/thesaurus/ginco/"
 						+ code + "\"/>";
 				content = content.replaceAll(object_property_old,
 						hierarshicalRelationshipRolesOWL.get(code) + "</owl:ObjectProperty>");
+			}
+
+			Map<String, String> associativeRelationshipRolesOWL = skosAssociativeRelationshipRolesExporter.exportAssociativeRelationshipRoles();
+			for (String code : associativeRelationshipRolesOWL.keySet()) {
+				String object_property_old = "<owl:ObjectProperty rdf:about=\"http://data.culture.fr/thesaurus/ginco/"
+						+ code + "\"/>";
+				content = content.replaceAll(object_property_old,
+						associativeRelationshipRolesOWL.get(code) + "</owl:ObjectProperty>");
 			}
 
 			if (thesaurus.getCreator() != null) {

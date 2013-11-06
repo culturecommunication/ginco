@@ -4,15 +4,18 @@
         <column>code</column>
         <column>label</column>
         <column>defaultrole</column>
+        <column>skoslabel</column>
         <row>
             <value>P</value>
             <value>Partitive</value>
             <value>true</value>
+            <value>Partitive</value>
         </row>
         <row>
             <value>I</value>
             <value>Instance</value>
             <value>false</value>
+            <value>Instance</value>
         </row>
     </table>
 </dataset>

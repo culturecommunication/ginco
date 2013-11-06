@@ -45,7 +45,7 @@ public class AssociativeRelationshipRole implements Serializable {
     private String code;
     private String label;
     private boolean defaultRole;
-  
+    private String skosLabel;
 
     public String getCode() {
         return code;
@@ -70,4 +70,12 @@ public class AssociativeRelationshipRole implements Serializable {
     public void setDefaultRole(boolean defaultRole) {
         this.defaultRole = defaultRole;
     }
+
+	public String getSkosLabel() {
+		return skosLabel;
+	}
+
+	public void setSkosLabel(String skosLabel) {
+		this.skosLabel = skosLabel;
+	}
 }

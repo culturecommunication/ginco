@@ -171,6 +171,7 @@ CREATE TABLE associative_relationship_role
   code text NOT NULL,
   label text,
   defaultrole boolean,
+  skoslabel text,
   CONSTRAINT pk_associative_relationship_role PRIMARY KEY (code)
 );
 
@@ -484,7 +485,7 @@ CREATE TABLE user_role
 (
   identifier integer NOT NULL,
   username text,
-  thesaurus_id text, 
+  thesaurus_id text,
   role integer,
   CONSTRAINT pk_user_role PRIMARY KEY (identifier)
 );

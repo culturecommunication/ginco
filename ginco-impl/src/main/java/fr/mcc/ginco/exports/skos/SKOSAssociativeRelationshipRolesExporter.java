@@ -36,42 +36,40 @@ package fr.mcc.ginco.exports.skos;
 
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
-import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
+import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.skos.namespaces.GINCO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
-@Component("skosHierarshicalRelationshipRolesExporter")
-public class SKOSHierarshicalRelationshipRolesExporter {
+@Component("skosAssociativeRelationshipRolesExporter")
+public class SKOSAssociativeRelationshipRolesExporter {
 
-	public Map<String, String> exportHierarshicalRelationshipRoles(){
+	@Inject
+	@Named("associativeRelationshipRoleService")
+	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
+
+	public Map<String, String> exportAssociativeRelationshipRoles(){
 		Map<String, String> roleToOWLString = new HashMap<String, String>();
-		ConceptHierarchicalRelationshipRoleEnum[] roles = ConceptHierarchicalRelationshipRoleEnum.values();
+		List<AssociativeRelationshipRole> roles = associativeRelationshipRoleService.getAllAssociationTermRole();
 			OntModel ontmodel = ModelFactory.createOntologyModel();
-			for (ConceptHierarchicalRelationshipRoleEnum role : roles){
-				String parentSkosLabel = role.getParentSkosLabel();
-				String childSkosLabel = role.getChildSkosLabel();
-				if(!parentSkosLabel.isEmpty() && !childSkosLabel.isEmpty()){
-
-					ObjectProperty broaderRoleProperty = ontmodel.createObjectProperty(GINCO.getResourceURI(parentSkosLabel));
-					broaderRoleProperty.addLabel(ontmodel.createLiteral(GINCO.getResource(parentSkosLabel).getLocalName()));
-					broaderRoleProperty.addProperty(RDFS.subPropertyOf, SKOS.BROADER);
-
-					ObjectProperty narrowerRoleProperty = ontmodel.createObjectProperty(GINCO.getResourceURI(childSkosLabel));
-					narrowerRoleProperty.addLabel(ontmodel.createLiteral(GINCO.getResource(childSkosLabel).getLocalName()));
-					narrowerRoleProperty.addProperty(RDFS.subPropertyOf, SKOS.NARROWER);
-
-					broaderRoleProperty.addProperty(OWL.inverseOf, narrowerRoleProperty);
-					narrowerRoleProperty.addProperty(OWL.inverseOf, broaderRoleProperty);
+			for (AssociativeRelationshipRole role : roles){
+					String roleSkosLabel = role.getSkosLabel();
+					ObjectProperty broaderRoleProperty = ontmodel.createObjectProperty(GINCO.getResourceURI(roleSkosLabel));
+					broaderRoleProperty.addLabel(ontmodel.createLiteral(GINCO.getResource(roleSkosLabel).getLocalName()));
+					broaderRoleProperty.addProperty(RDFS.subPropertyOf, SKOS.RELATED);
 
 					ontmodel.setNsPrefix("ginco", GINCO.getURI());
 
@@ -84,14 +82,11 @@ public class SKOSHierarshicalRelationshipRolesExporter {
 					int end = result.lastIndexOf("</rdf:RDF>");
 					String[] owlStrings = result.substring(start, end).split("</owl:ObjectProperty>");
 					for (String owlString : owlStrings){
-						if (owlString.contains("<rdfs:label>" + parentSkosLabel)){
-							roleToOWLString.put(parentSkosLabel, owlString);
-						} else if (owlString.contains("<rdfs:label>" + childSkosLabel)){
-							roleToOWLString.put(childSkosLabel, owlString);
+						if (owlString.contains("<rdfs:label>" + roleSkosLabel)){
+							roleToOWLString.put(roleSkosLabel, owlString);
 						}
 					}
-				}
-		}
+			}
 		return roleToOWLString;
 	}
 }

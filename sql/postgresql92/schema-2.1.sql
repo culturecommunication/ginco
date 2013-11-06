@@ -29,3 +29,6 @@ ALTER TABLE thesaurus_organization ALTER COLUMN name DROP NOT NULL;
 
 -- Add skos label to a concept group type
 ALTER TABLE concept_group_type ADD COLUMN skoslabel text;
+
+-- Add skos label to associative relationship roles
+ALTER TABLE associative_relationship_role ADD COLUMN skoslabel text;

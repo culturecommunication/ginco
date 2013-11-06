@@ -70,6 +70,8 @@ public class SKOSAssociativeRelationshipExporter {
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
 
+	private static final String ginco_uri = "http://data.culture.fr/thesaurus/ginco/";
+
 	/**
 	 * Export concept associative relationships to SKOS using the skos API
 	 * @param concept
@@ -85,14 +87,27 @@ public class SKOSAssociativeRelationshipExporter {
 		for (ThesaurusConcept related : thesaurusConceptService
 				.getThesaurusConceptList(associativeRelationshipService
 						.getAssociatedConceptsId(concept))) {
+
 			SKOSConcept relConcept = factory.getSKOSConcept(URI.create(related
 					.getIdentifier()));
 
 			SKOSObjectRelationAssertion relAssertion = factory
 					.getSKOSObjectRelationAssertion(conceptSKOS,
 							factory.getSKOSRelatedProperty(), relConcept);
-
 			addList.add(new AddAssertion(vocab, relAssertion));
+
+			String roleSkosLabel = associativeRelationshipService
+					.getAssociativeRelationshipById(concept.getIdentifier(),
+							related.getIdentifier()).getRelationshipRole()
+					.getSkosLabel();
+			if (!roleSkosLabel.isEmpty()){
+				SKOSObjectRelationAssertion relGincoAssertion = factory
+						.getSKOSObjectRelationAssertion(
+								conceptSKOS,
+								factory.getSKOSObjectProperty(URI.create(ginco_uri
+										+ roleSkosLabel)), relConcept);
+				addList.add(new AddAssertion(vocab, relGincoAssertion));
+			}
 		}
 		return addList;
 	}
