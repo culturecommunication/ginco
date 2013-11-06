@@ -39,9 +39,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -66,6 +63,7 @@ import fr.mcc.ginco.exports.skos.SKOSAlignmentExporter;
 import fr.mcc.ginco.exports.skos.SKOSAssociativeRelationshipExporter;
 import fr.mcc.ginco.exports.skos.SKOSConceptExporter;
 import fr.mcc.ginco.exports.skos.SKOSCustomConceptAttributeExporter;
+import fr.mcc.ginco.exports.skos.SKOSHierarchicalRelationshipExporter;
 import fr.mcc.ginco.exports.skos.SKOSNotesExporter;
 import fr.mcc.ginco.exports.skos.SKOSTermsExporter;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -93,6 +91,9 @@ public class SKOSConceptExporterTest {
 
 	@Mock(name="skosCustomConceptAttributeExporter")
 	private SKOSCustomConceptAttributeExporter skosCustomConceptAttributeExporter;
+
+	@Mock(name="skosHierarchicalRelationshipExporter")
+	private SKOSHierarchicalRelationshipExporter skosHierarchicalRelationshipExporter;
 
 	SKOSManager man;
 	SKOSDataset vocab;
@@ -132,7 +133,7 @@ public class SKOSConceptExporterTest {
 		conceptSKOS = factory.getSKOSConcept(URI.create("http://c1"));
 
 		List<SKOSChange> skosChanges  = skosConceptExporter.exportConceptSKOS(c1, null, scheme, factory, vocab);
-		Assert.assertEquals(7, skosChanges.size());
+		Assert.assertEquals(6, skosChanges.size());
 	}
 
 }

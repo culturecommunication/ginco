@@ -80,6 +80,10 @@ public class SKOSConceptExporter {
 	@Named("skosCustomConceptAttributeExporter")
 	private SKOSCustomConceptAttributeExporter skosCustomConceptAttributeExporter;
 
+	@Inject
+	@Named("skosHierarchicalRelationshipExporter")
+	private SKOSHierarchicalRelationshipExporter skosHierarchicalRelationshipExporter;
+
 	private static final String dct_uri = "http://purl.org/dct#";
 	private static final String isothes_uri = "http://www.niso.org/schemas/iso25964/iso-thes#";
 
@@ -117,21 +121,14 @@ public class SKOSConceptExporter {
 				.exportAssociativeRelationships(concept, factory, conceptSKOS,
 						vocab));
 
-		if (parent != null) {
-			SKOSObjectRelationAssertion childConnection = factory
-					.getSKOSObjectRelationAssertion(conceptSKOS,
-							factory.getSKOSBroaderProperty(), parent);
-			SKOSObjectRelationAssertion parentConnection = factory
-					.getSKOSObjectRelationAssertion(parent,
-							factory.getSKOSNarrowerProperty(), conceptSKOS);
-			addList.add(new AddAssertion(vocab, childConnection));
-			addList.add(new AddAssertion(vocab, parentConnection));
-		} else {
-			SKOSObjectRelationAssertion topConcept = factory
-					.getSKOSObjectRelationAssertion(scheme,
-							factory.getSKOSHasTopConceptProperty(), conceptSKOS);
-			addList.add(new AddAssertion(vocab, topConcept));
-		}
+		addList.addAll(skosHierarchicalRelationshipExporter
+				.exportHierarchicalRelationships(parent, factory,
+						conceptSKOS, scheme, vocab));
+
+		addList.addAll(skosAlignmentExporter.exportAlignments(
+				concept.getIdentifier(), factory, conceptSKOS, vocab));
+
+		addList.addAll(skosCustomConceptAttributeExporter.exportCustomConceptAttributes(concept, conceptSKOS, factory, vocab));
 
 		if (thesaurusConceptService.hasChildren(concept.getIdentifier())) {
 			for (ThesaurusConcept child : thesaurusConceptService
@@ -140,10 +137,6 @@ public class SKOSConceptExporter {
 						factory, vocab));
 			}
 		}
-
-		addList.addAll(skosAlignmentExporter.exportAlignments(
-				concept.getIdentifier(), factory, conceptSKOS, vocab));
-		addList.addAll(skosCustomConceptAttributeExporter.exportCustomConceptAttributes(concept, conceptSKOS, factory, vocab));
 
 		return addList;
 	}

@@ -34,20 +34,56 @@
  */
 package fr.mcc.ginco.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This enum intended to list different available roles for thesaurus hierarchical relationships.
- * The translation of these items is externalized in a property file 
+ * The translation of these items is externalized in a property file
  */
 public enum ConceptHierarchicalRelationshipRoleEnum {
-    TGTS(0), TGGTSG(1), TGITSI(2), TGPTSP(3);
-    
+	TGTS(0, "", ""), TGGTSG(1, "broaderGeneric", "narrowerGeneric"), TGITSI(2,
+			"broaderInstantive", "narrowerInstantive"), TGPTSP(3,
+			"broaderPartitive", "narrowerPartitive");
+
     private int status;
-    
-    private ConceptHierarchicalRelationshipRoleEnum(int status) {
+    private String parentSkosLabel;
+    private String childSkosLabel;
+
+    private static Map<Integer, ConceptHierarchicalRelationshipRoleEnum> codeToHierarchicalRelationshipRoleMapping;
+
+    private ConceptHierarchicalRelationshipRoleEnum(int status, String parentSkosLabel, String childSkosLabel) {
     	this.status = status;
+    	this.parentSkosLabel = parentSkosLabel;
+    	this.childSkosLabel = childSkosLabel;
     }
-    
+
+    private static void initMapping() {
+    	codeToHierarchicalRelationshipRoleMapping = new HashMap<Integer, ConceptHierarchicalRelationshipRoleEnum>();
+        for (ConceptHierarchicalRelationshipRoleEnum s : values()) {
+        	codeToHierarchicalRelationshipRoleMapping.put(s.status, s);
+        }
+    }
+
+    public static ConceptHierarchicalRelationshipRoleEnum getStatusByCode(int i) {
+        if (codeToHierarchicalRelationshipRoleMapping == null) {
+            initMapping();
+        }
+        return codeToHierarchicalRelationshipRoleMapping.get(i);
+    }
+
     public int getStatus() {
     	return status;
     }
+
+	public String getParentSkosLabel() {
+		return parentSkosLabel;
+	}
+
+	public String getChildSkosLabel() {
+		return childSkosLabel;
+	}
+
+
+
 }

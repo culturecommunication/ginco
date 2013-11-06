@@ -99,6 +99,10 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Named("skosGroupExporter")
 	private SKOSGroupExporter skosGroupExporter;
 
+	@Inject
+	@Named("skosHierarshicalRelationshipRolesExporter")
+	private SKOSHierarshicalRelationshipRolesExporter skosHierarshicalRelationshipRolesExporter;
+
 	@Override
 	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {
 
@@ -141,6 +145,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 			String collections = skosArrayExporter.exportCollections(thesaurus);
 			String groups = skosGroupExporter.exportGroups(thesaurus);
 
+
 			man.applyChanges(addList);
 
 			File temp = File.createTempFile("skosExport"
@@ -177,10 +182,23 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 					.replaceAll(isothes_old, isothes)
 					.replaceAll(ginco_old, "");
 
-			Map<String, String> customAttributesOWL = skosCustomConceptAttributeTypesExporter.exportCustomConceptAttributeTypes(thesaurus);
-			for (String code : customAttributesOWL.keySet()){
-				String datatype_old = "<owl:DatatypeProperty rdf:about=\"http://data.culture.fr/thesaurus/ginco/" + code + "\"/>";
-				content = content.replaceAll(datatype_old, customAttributesOWL.get(code) + "</ginco:CustomConceptAttribute>");
+			Map<String, String> customAttributesOWL = skosCustomConceptAttributeTypesExporter
+					.exportCustomConceptAttributeTypes(thesaurus);
+			for (String code : customAttributesOWL.keySet()) {
+				String datatype_old = "<owl:DatatypeProperty rdf:about=\"http://data.culture.fr/thesaurus/ginco/"
+						+ code + "\"/>";
+				content = content.replaceAll(datatype_old,
+						customAttributesOWL.get(code)
+								+ "</ginco:CustomConceptAttribute>");
+			}
+
+			Map<String, String> hierarshicalRelationshipRolesOWL = skosHierarshicalRelationshipRolesExporter
+					.exportHierarshicalRelationshipRolesExporter();
+			for (String code : hierarshicalRelationshipRolesOWL.keySet()) {
+				String object_property_old = "<owl:ObjectProperty rdf:about=\"http://data.culture.fr/thesaurus/ginco/"
+						+ code + "\"/>";
+				content = content.replaceAll(object_property_old,
+						hierarshicalRelationshipRolesOWL.get(code) + "</owl:ObjectProperty>");
 			}
 
 			if (thesaurus.getCreator() != null) {
