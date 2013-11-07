@@ -32,49 +32,33 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.skos.namespaces;
+package fr.mcc.ginco.exports.skos;
+
+import java.util.List;
+
+import org.semanticweb.skos.SKOSChange;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * GINCO vocabulary class for namespace http://data.culture.fr/thesaurus/ginco/ns/
+ * @author dabel
+ *
  */
+public class MixedSKOSModel {
+	private List<SKOSChange> skosChanges;
+	private List<Model> models;
 
-public class GINCO {
-
-	private static final String uri = "http://data.culture.fr/thesaurus/ginco/ns/";
-
-	/**
-	 * returns the URI for this schema
-	 *
-	 * @return the URI for this schema
-	 */
-	public static String getURI() {
-		return uri;
+	public List<SKOSChange> getSkosChanges() {
+		return skosChanges;
 	}
-
-	private static Model m = ModelFactory.createDefaultModel();
-
-	/**
-	 * Get GINCO resource URIs
-	 */
-	public static String getResourceURI(String type){
-		return uri + type;
+	public void setSkosChanges(List<SKOSChange> skosChanges) {
+		this.skosChanges = skosChanges;
 	}
-
-	/**
-	 * Get GINCO resource
-	 */
-	public static Resource getResource(String type){
-		return m.createResource(uri + type);
+	public List<Model> getModels() {
+		return models;
 	}
-
-	/**
-	 * custom concept attribute resource
-	 */
-	public static final Resource CUSTOM_CONCEPT_ATTRIBUTE = m
-			.createResource(uri + "CustomConceptAttribute");
+	public void setModels(List<Model> models) {
+		this.models = models;
+	}
 
 }

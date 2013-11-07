@@ -42,6 +42,8 @@ import fr.mcc.ginco.utils.DateUtil;
 import org.semanticweb.skos.*;
 import org.springframework.stereotype.Component;
 
+import com.hp.hpl.jena.rdf.model.Model;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -97,11 +99,13 @@ public class SKOSConceptExporter {
 	 * @param vocab
 	 * @return
 	 */
-	public List<SKOSChange> exportConceptSKOS(ThesaurusConcept concept,
+	public MixedSKOSModel exportConceptSKOS(ThesaurusConcept concept,
 			SKOSConcept parent, SKOSConceptScheme scheme,
 			SKOSDataFactory factory, SKOSDataset vocab) {
 
+		MixedSKOSModel result  = new MixedSKOSModel();
 		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+		List<Model> models = new ArrayList<Model>();
 
 		SKOSConcept conceptSKOS = factory.getSKOSConcept(URI.create(concept
 				.getIdentifier()));
@@ -112,10 +116,15 @@ public class SKOSConceptExporter {
 		List<ThesaurusTerm> prefTerms = thesaurusConceptService
 				.getConceptPreferredTerms(concept.getIdentifier());
 
-		addList.addAll(skosTermsExporter.exportConceptPreferredTerms(prefTerms,
-				conceptSKOS, factory, vocab));
-		addList.addAll(skosTermsExporter.exportConceptNotPreferredTerms(
-				concept.getIdentifier(), conceptSKOS, factory, vocab));
+		MixedSKOSModel prefRes = skosTermsExporter.exportConceptPreferredTerms(prefTerms,
+				conceptSKOS, factory, vocab);
+		addList.addAll(prefRes.getSkosChanges());
+		models.addAll(prefRes.getModels());
+
+		MixedSKOSModel simpleNonPrefRes = skosTermsExporter.exportConceptNotPreferredTerms(
+				concept.getIdentifier(), conceptSKOS, factory, vocab);
+		addList.addAll(simpleNonPrefRes.getSkosChanges());
+		models.addAll(simpleNonPrefRes.getModels());
 
 		addList.addAll(skosAssociativeRelationshipExporter
 				.exportAssociativeRelationships(concept, factory, conceptSKOS,
@@ -133,12 +142,16 @@ public class SKOSConceptExporter {
 		if (thesaurusConceptService.hasChildren(concept.getIdentifier())) {
 			for (ThesaurusConcept child : thesaurusConceptService
 					.getChildrenByConceptId(concept.getIdentifier())) {
-				addList.addAll(exportConceptSKOS(child, conceptSKOS, scheme,
-						factory, vocab));
+				MixedSKOSModel childRes = exportConceptSKOS(child, conceptSKOS, scheme,
+						factory, vocab);
+				addList.addAll(childRes.getSkosChanges());
+				models.addAll(childRes.getModels());
 			}
 		}
 
-		return addList;
+		result.setSkosChanges(addList);
+		result.setModels(models);
+		return result;
 	}
 
 	/**

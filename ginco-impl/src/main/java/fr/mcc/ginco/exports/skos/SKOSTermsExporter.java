@@ -35,6 +35,8 @@
 
 package fr.mcc.ginco.exports.skos;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,12 +48,20 @@ import org.semanticweb.skos.AddAssertion;
 import org.semanticweb.skos.SKOSChange;
 import org.semanticweb.skos.SKOSConcept;
 import org.semanticweb.skos.SKOSDataFactory;
+import org.semanticweb.skos.SKOSDataProperty;
 import org.semanticweb.skos.SKOSDataRelationAssertion;
 import org.semanticweb.skos.SKOSDataset;
+import org.semanticweb.skos.SKOSObjectProperty;
+import org.semanticweb.skos.SKOSObjectRelationAssertion;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.hp.hpl.jena.rdf.model.Model;
+
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.skos.namespaces.SKOSXL;
 
 /**
  * This component is in charge of exporting concept terms to SKOS
@@ -65,32 +75,70 @@ public class SKOSTermsExporter {
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
 
+
+	@Inject
+	@Named("skosModelTermsExporter")
+	private SKOSModelTermsExporter skosModelTermsExporter;
+
+	@Log
+	private Logger logger;
+
 	/**
 	 * Export concept preferred terms to SKOS using the skos API
+	 *
 	 * @param prefTerms
 	 * @param conceptSKOS
 	 * @param factory
 	 * @param vocab
 	 *
 	 * @return list of concept preferred terms for skos
+	 * @throws URISyntaxException
 	 */
 
-	public List<SKOSChange> exportConceptPreferredTerms(List<ThesaurusTerm> prefTerms, SKOSConcept conceptSKOS,
-			SKOSDataFactory factory, SKOSDataset vocab){
-		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+	public MixedSKOSModel exportConceptPreferredTerms(
+			List<ThesaurusTerm> prefTerms, SKOSConcept conceptSKOS,
+			SKOSDataFactory factory, SKOSDataset vocab) {
+		MixedSKOSModel result = new MixedSKOSModel();
 
-	    for (ThesaurusTerm prefTerm : prefTerms) {
-	        SKOSDataRelationAssertion prefLabelInsertion = factory
-	                .getSKOSDataRelationAssertion(conceptSKOS, factory
-	                        .getSKOSDataProperty(factory.getSKOSPrefLabelProperty()
-	                                .getURI()), StringEscapeUtils.unescapeXml(prefTerm.getLexicalValue()), prefTerm.getLanguage().getPart1());
-	        addList.add(new AddAssertion(vocab, prefLabelInsertion));
-	    }
-	    return addList;
+		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+		List<Model> models = new ArrayList<Model>();
+
+		for (ThesaurusTerm prefTerm : prefTerms) {
+			SKOSDataRelationAssertion prefLabelInsertion = factory
+					.getSKOSDataRelationAssertion(conceptSKOS, factory
+							.getSKOSDataProperty(factory
+									.getSKOSPrefLabelProperty().getURI()),
+							StringEscapeUtils.unescapeXml(prefTerm
+									.getLexicalValue()), prefTerm.getLanguage()
+									.getPart1());
+			addList.add(new AddAssertion(vocab, prefLabelInsertion));
+
+
+			SKOSConcept fakeConcept = factory.getSKOSConcept(URI.create(prefTerm
+					.getIdentifier()));
+			SKOSObjectProperty dataProperty = factory.getSKOSObjectProperty(URI.create(SKOSXL
+					.getURI() + "prefLabel"));
+			SKOSObjectRelationAssertion prefLabelXLInsertion = factory
+						.getSKOSObjectRelationAssertion(
+								conceptSKOS,
+								dataProperty,
+								fakeConcept);
+
+			addList.add(new AddAssertion(vocab, prefLabelXLInsertion));
+
+			Model prefTermModel = skosModelTermsExporter.exportConceptPreferredTerm(prefTerm);
+			logger.debug("Preferred term Model is =  " + prefTermModel);
+			models.add(prefTermModel);
+		}
+
+		result.setSkosChanges(addList);
+		result.setModels(models);
+		return result;
 	}
 
 	/**
 	 * Export concept not preferred terms to SKOS using the skos API
+	 *
 	 * @param conceptId
 	 * @param conceptSKOS
 	 * @param factory
@@ -99,35 +147,65 @@ public class SKOSTermsExporter {
 	 * @return list of concept not preferred terms for skos
 	 */
 
-	public List<SKOSChange> exportConceptNotPreferredTerms(String conceptId,
-			SKOSConcept conceptSKOS, SKOSDataFactory factory, SKOSDataset vocab){
+	public MixedSKOSModel exportConceptNotPreferredTerms(String conceptId,
+			SKOSConcept conceptSKOS, SKOSDataFactory factory, SKOSDataset vocab) {
+		MixedSKOSModel result = new MixedSKOSModel();
 		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+		List<Model> models = new ArrayList<Model>();
 		for (ThesaurusTerm altLabel : thesaurusTermService
 				.getTermsByConceptId(conceptId)) {
 			if (altLabel.getPrefered()) {
 				continue;
-	        }
+			}
 
-	        if(altLabel.getHidden()) {
-	            SKOSDataRelationAssertion hiddenLabelInsertion = factory
-	                    .getSKOSDataRelationAssertion(conceptSKOS, factory
-	                            .getSKOSDataProperty(factory
-	                                    .getSKOSHiddenLabelProperty().getURI()),
-	                                    StringEscapeUtils.unescapeXml(altLabel.getLexicalValue()), altLabel.getLanguage()
-	                            .getPart1());
+			if (altLabel.getHidden()) {
+				SKOSDataRelationAssertion hiddenLabelInsertion = factory
+						.getSKOSDataRelationAssertion(
+								conceptSKOS,
+								factory.getSKOSDataProperty(factory
+										.getSKOSHiddenLabelProperty().getURI()),
+								StringEscapeUtils.unescapeXml(altLabel
+										.getLexicalValue()), altLabel
+										.getLanguage().getPart1());
 
-	            addList.add(new AddAssertion(vocab, hiddenLabelInsertion));
-	        } else {
-	            SKOSDataRelationAssertion altLabelInsertion = factory
-	                    .getSKOSDataRelationAssertion(conceptSKOS, factory
-	                            .getSKOSDataProperty(factory
-	                                    .getSKOSAltLabelProperty().getURI()),
-	                                    StringEscapeUtils.unescapeXml(altLabel.getLexicalValue()), altLabel.getLanguage()
-	                            .getPart1());
+				addList.add(new AddAssertion(vocab, hiddenLabelInsertion));
 
-	            addList.add(new AddAssertion(vocab, altLabelInsertion));
-	        }
+
+				SKOSDataProperty dataProperty = factory.getSKOSDataProperty(URI.create(SKOSXL
+						.getURI() + "hiddenLabel"));
+				SKOSDataRelationAssertion hiddenLabelXLInsertion = factory
+							.getSKOSDataRelationAssertion(
+									conceptSKOS,
+									dataProperty,
+									altLabel.getLexicalValue());
+				addList.add(new AddAssertion(vocab, hiddenLabelXLInsertion));
+
+			} else {
+				SKOSDataRelationAssertion altLabelInsertion = factory
+						.getSKOSDataRelationAssertion(conceptSKOS, factory
+								.getSKOSDataProperty(factory
+										.getSKOSAltLabelProperty().getURI()),
+								StringEscapeUtils.unescapeXml(altLabel
+										.getLexicalValue()), altLabel
+										.getLanguage().getPart1());
+
+				addList.add(new AddAssertion(vocab, altLabelInsertion));
+
+				SKOSDataProperty dataProperty = factory.getSKOSDataProperty(URI.create(SKOSXL
+						.getURI() + "altLabel"));
+				SKOSDataRelationAssertion altLabelXLInsertion = factory
+							.getSKOSDataRelationAssertion(
+									conceptSKOS,
+									dataProperty,
+									altLabel.getLexicalValue());
+				addList.add(new AddAssertion(vocab, altLabelXLInsertion));
+			}
+			Model simpleNonPrefTermModel = skosModelTermsExporter.exportConceptSimpleNonPreferredTerm(altLabel);
+			logger.debug("Simple non preferred term Model is =  " + simpleNonPrefTermModel);
+			models.add(simpleNonPrefTermModel);
 		}
-		return addList;
+		result.setSkosChanges(addList);
+		result.setModels(models);
+		return result;
 	}
 }

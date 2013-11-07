@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,18 +60,45 @@ import org.semanticweb.skos.SKOSEntityAssertion;
 import org.semanticweb.skos.SKOSStorageException;
 import org.semanticweb.skosapibinding.SKOSFormatExt;
 import org.semanticweb.skosapibinding.SKOSManager;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.ISKOSExportService;
+import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Service("skosExportService")
 public class SKOSExportServiceImpl implements ISKOSExportService {
+
+	private static final String RDF_END_TAG = "</rdf:RDF>";
+
+	private static final String XMLNS_GINCO = "xmlns:ginco=\"http://data.culture.fr/thesaurus/ginco/ns/\"";
+
+	private static final String XMLNS_GINCO_OLD = "xmlns:ginco=\"http://data.culture.fr/thesaurus/ginco/\"";
+
+	private static final String XMLNS_ISO_THES = "xmlns:iso-thes=\"http://www.niso.org/schemas/iso25964/skos-thes#\"";
+
+	private static final String XMLNS_ISO_THES_OLD = "xmlns:iso-thes=\"http://www.niso.org/schemas/iso25964/iso-thes#\"";
+
+	private static final String XML_HEAD = "xml version=\"1.0\" encoding=\"UTF-8\"";
+
+	private static final String XML_HEAD_OLD = "xml version=\"1.0\"";
+
+	private static final String XMLNS_DCT = "xmlns:dct=\"http://purl.org/dc/terms/\"";
+
+	private static final String XMLNS_DCT_OLD = "xmlns:dct=\"http://purl.org/dct#\"";
+
+	private static final String XMLNS_DC = "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"";
+
+	private static final String XMLNS_FOAF = "xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"";
+
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
@@ -107,6 +135,13 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Named("skosAssociativeRelationshipRolesExporter")
 	private SKOSAssociativeRelationshipRolesExporter skosAssociativeRelationshipRolesExporter;
 
+	@Inject
+	@Named("skosComplexConceptExporter")
+	private SKOSComplexConceptExporter skosComplexConceptExporter;
+
+	@Log
+	Logger logger;
+
 	@Override
 	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {
 
@@ -140,17 +175,32 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 
 		addList.addAll(skosThesaurusExporter.exportThesaurusSKOS(thesaurus, factory,  vocab,  scheme));
 
+		String termModels = "";
 		for (ThesaurusConcept conceptTT : tt) {
-			addList.addAll(skosConceptExporter.exportConceptSKOS(conceptTT, null, scheme, factory, vocab));
+			MixedSKOSModel mixedModel = skosConceptExporter.exportConceptSKOS(conceptTT, null, scheme, factory, vocab);
+			addList.addAll(mixedModel.getSkosChanges());
+			if (mixedModel != null && mixedModel.getModels() != null) {
+				for (Model termModel: mixedModel.getModels()) {
+					StringWriter sw = new StringWriter();
+					termModel.write(sw, "RDF/XML-ABBREV");
+					String result = sw.toString();
+					int start = result.lastIndexOf("skos-xl#\">") + "skos-xl#\">".length()
+							+ 2;
+					int end = result.lastIndexOf("</rdf:RDF>");
+					termModels = termModels.concat(result.substring(start, end));
+				}
+			}
 		}
+		logger.debug("termModels = " + termModels);
 
 		try {
 
 			String collections = skosArrayExporter.exportCollections(thesaurus);
 			String groups = skosGroupExporter.exportGroups(thesaurus);
-
+			String complexConcepts = skosComplexConceptExporter.exportComplexConcept(thesaurus);
 
 			man.applyChanges(addList);
+
 
 			File temp = File.createTempFile("skosExport"
 					+ DateUtil.nowDate().getTime(), ".rdf");
@@ -163,28 +213,15 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 			String content = IOUtils.toString(fis);
 			fis.close();
 
-			String foaf = "xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"";
-			String dc = "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"";
-
-			String dct_old = "xcollectionsmlns:dct=\"http://purl.org/dct#\"";
-			String dct = "xmlns:dct=\"http://purl.org/dc/terms/\"";
-
-			String xmlhead_old = "xml version=\"1.0\"";
-			String xmlhead = "xml version=\"1.0\" encoding=\"UTF-8\"";
-
-			String isothes_old = "xmlns:iso-thes=\"http://www.niso.org/schemas/iso25964/iso-thes#\"";
-			String isothes = "xmlns:iso-thes=\"http://www.niso.org/schemas/iso25964/skos-thes#\"";
-
-			String ginco_old = "xmlns:ginco=\"http://data.culture.fr/thesaurus/ginco/\"";
-			String ginco = "xmlns:ginco=\"http://data.culture.fr/thesaurus/ginco/ns/\"";
-
-			content = content.replaceAll(dc, dc + "\n" + foaf + "\n" + ginco)
-					.replaceAll(dct_old, dct)
-					.replaceAll("</rdf:RDF>", collections + "</rdf:RDF>")
-					.replaceAll("</rdf:RDF>", groups + "</rdf:RDF>")
-					.replaceAll(xmlhead_old, xmlhead)
-					.replaceAll(isothes_old, isothes)
-					.replaceAll(ginco_old, "");
+			content = content.replaceAll(XMLNS_DC, XMLNS_DC + "\n" + XMLNS_FOAF + "\n" + XMLNS_GINCO)
+					.replaceAll(XMLNS_DCT_OLD, XMLNS_DCT)
+					.replaceAll(RDF_END_TAG, collections + RDF_END_TAG)
+					.replaceAll(RDF_END_TAG, groups + RDF_END_TAG)
+					.replaceAll(RDF_END_TAG, complexConcepts + RDF_END_TAG)
+					.replaceAll(XML_HEAD_OLD, XML_HEAD)
+					.replaceAll(XMLNS_ISO_THES_OLD, XMLNS_ISO_THES)
+					.replaceAll(XMLNS_GINCO_OLD, "")
+					.replaceAll(RDF_END_TAG, termModels + RDF_END_TAG);
 
 			Map<String, String> customAttributesOWL = skosCustomConceptAttributeTypesExporter
 					.exportCustomConceptAttributeTypes(thesaurus);

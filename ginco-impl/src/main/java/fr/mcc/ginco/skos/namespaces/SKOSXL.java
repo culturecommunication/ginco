@@ -40,11 +40,12 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * ISOTHES vocabulary class for namespace http://www.niso.org/schemas/iso25964/skos-thes#
+ * SKOS vocabulary class for namespace http://www.w3.org/2008/05/skos-xl#
  */
 
-public class ISOTHES {
-	private static final String uri = "http://www.niso.org/schemas/iso25964/skos-thes#";
+public class SKOSXL {
+
+	private static final String uri = "http://www.w3.org/2008/05/skos-xl#";
 
 	/**
 	 * returns the URI for this schema
@@ -58,62 +59,31 @@ public class ISOTHES {
 	private static Model m = ModelFactory.createDefaultModel();
 
 	/**
-	 * status property
+	 * prefLabel property
 	 */
-	public static final Property STATUS = m.createProperty(uri
-			+ "status");
+	public static final Property PREF_LABEL = m.createProperty(uri
+			+ "prefLabel");
+
 
 	/**
-	 * super group property
+	 * custom concept attribute resource
 	 */
-	public static final Property SUPER_GROUP = m.createProperty(uri
-			+ "superGroup");
+	public static final Resource PREF_LABEL_RES = m
+			.createResource(uri + "prefLabel");
 
 	/**
-	 * sub group property
+	 * altLabel property
 	 */
-	public static final Property SUB_GROUP = m.createProperty(uri
-			+ "subGroup");
+	public static final Property ALT_LABEL = m.createProperty(uri + "altLabel");
 
 	/**
-	 * conceptGroup resource
+	 * hiddenLabel property
 	 */
-	public static final Resource CONCEPT_GROUP = m.createResource(uri
-			+ "ConceptGroup");
+	public static final Property HIDDEN_LABEL = m.createProperty(uri
+			+ "hiddenLabel");
 
-	/**
-	 * PreferredTerm resource
-	 */
-	public static final Resource PREFERRED_TERM = m.createResource(uri
-			+ "PreferredTerm");
+	public static final Property LITERAL_FORM = m.createProperty(uri
+			+ "literalForm");
 
-	/**
-	 * SimpleNonPreferredTerm resource
-	 */
-	public static final Resource SIMPLE_NON_PREFERRED_TERM = m.createResource(uri
-			+ "SimpleNonPreferredTerm");
 
-	/**
-	 * SplitNonPreferredTerm resource
-	 */
-	public static final Resource SPLIT_NON_PREFERRED_TERM = m.createResource(uri
-			+ "SplitNonPreferredTerm");
-
-	/**
-	 * CompoundEquivalence resource
-	 */
-	public static final Resource COMPOUND_EQUIVALENCE = m.createResource(uri
-			+ "CompoundEquivalence");
-
-	/**
-	 * plusUF property
-	 */
-	public static final Property PLUS_UF = m.createProperty(uri
-			+ "plusUF");
-
-	/**
-	 * plusUse property
-	 */
-	public static final Property PLUS_USE = m.createProperty(uri
-			+ "plusUse");
 }
