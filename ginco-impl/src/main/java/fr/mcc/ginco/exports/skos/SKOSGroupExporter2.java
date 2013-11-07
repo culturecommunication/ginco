@@ -40,6 +40,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.ontology.ObjectProperty;
@@ -167,7 +168,7 @@ public class SKOSGroupExporter2 {
 				.getLanguage().getPart1());
 
 		String notation = group.getNotation();
-		if (!"".equals(notation) && notation != null) {
+		if (StringUtils.isNotEmpty(notation)) {
 			model.add(groupRes, SKOS.NOTATION, group.getNotation());
 		}
 

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.ontology.DatatypeProperty;
@@ -27,28 +28,35 @@ public class SKOSCustomConceptAttributeExporter2 {
 	@Named("customConceptAttributeService")
 	private ICustomConceptAttributeService customConceptAttributeService;
 
-
-	public Model exportCustomConceptAttributes(
-			ThesaurusConcept concept, Model model, Resource conceptResource, OntModel ontModel) {
+	public Model exportCustomConceptAttributes(ThesaurusConcept concept,
+			Model model, Resource conceptResource, OntModel ontModel) {
 
 		List<CustomConceptAttribute> attributes = customConceptAttributeService
 				.getAttributesByEntity(concept);
-		
-		DatatypeProperty customAttrOnt = ontModel.createDatatypeProperty(GINCO.getURI()
-				+ "CustomConceptAttribute");
+
+		DatatypeProperty customAttrOnt = ontModel.createDatatypeProperty(GINCO
+				.getURI() + "CustomConceptAttribute");
 		Literal l = ontModel.createLiteral("CustomConceptAttribute");
 		customAttrOnt.addLabel(l);
-	
+
 		for (CustomConceptAttribute attribute : attributes) {
-			if (attribute.getType().getExportable()) {						
+			if (attribute.getType().getExportable()) {
+
+				Resource customAttrRes = model.createResource(GINCO.getURI()
+						+ attribute.getType().getCode(),
+						GINCO.CUSTOM_CONCEPT_ATTRIBUTE);
+				model.add(customAttrRes, RDFS.label, attribute.getType()
+						.getCode());
 				
-			Resource customAttrRes  = model.createResource(GINCO.getURI() + attribute.getType().getCode(), GINCO.CUSTOM_CONCEPT_ATTRIBUTE);
-			model.add(customAttrRes, RDFS.label, attribute.getType().getCode());
-		
-			Property customAttributeProperty = model.createProperty(GINCO.getURI() + attribute.getType().getCode());
 				
-			model.add(conceptResource, customAttributeProperty, attribute.getLexicalValue());				
-				
+				if (StringUtils.isNotEmpty(attribute.getLexicalValue())) {
+					Property customAttributeProperty = model.createProperty(GINCO
+						.getURI() + attribute.getType().getCode());
+
+					model.add(conceptResource, customAttributeProperty,
+						attribute.getLexicalValue());
+				}
+
 			}
 		}
 		return model;
