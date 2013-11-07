@@ -74,7 +74,7 @@ import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.utils.DateUtil;
 
-@Service("skosExportService")
+@Service("skosExportServiceOld")
 public class SKOSExportServiceImpl implements ISKOSExportService {
 
 	private static final String RDF_END_TAG = "</rdf:RDF>";

@@ -190,6 +190,12 @@ public class SKOS {
 	 * relatedMatch property
 	 */
 	public static final Property RELATED_MATCH = m.createProperty(uri + "relatedMatch");
+	
+	
+	/**
+	 * hasTopConcept
+	 */
+	public static final Property HAS_TOP_CONCEPT = m.createProperty(uri + "hasTopConcept");
 
 	/**
 	 * MAP of all alignment types
