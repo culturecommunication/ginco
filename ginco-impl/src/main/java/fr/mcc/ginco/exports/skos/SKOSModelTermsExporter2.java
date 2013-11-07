@@ -35,11 +35,13 @@
 
 package fr.mcc.ginco.exports.skos;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -73,7 +75,9 @@ public class SKOSModelTermsExporter2 {
 		model.add(prefTermRes, SKOSXL.LITERAL_FORM, term.getLexicalValue(),
 				term.getLanguage().getPart1());
 		model.add(prefTermRes, ISOTHES.STATUS, term.getStatus().toString());	
-
+		if (StringUtils.isNotEmpty(term.getSource())) {
+			model.add(prefTermRes, DC.source, term.getSource());
+		}
 		return model;
 	}
 	
@@ -97,6 +101,10 @@ public class SKOSModelTermsExporter2 {
 			conceptResource.addProperty(SKOSXL.HIDDEN_LABEL, prefTermRes);
 		} else {
 			conceptResource.addProperty(SKOSXL.ALT_LABEL, prefTermRes);
+		}
+		
+		if (StringUtils.isNotEmpty(term.getSource())) {
+			model.add(prefTermRes, DC.source, term.getSource());
 		}
 
 		return model;
