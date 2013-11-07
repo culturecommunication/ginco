@@ -34,6 +34,11 @@
  */
 package fr.mcc.ginco.tests.exports.skos;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -78,31 +83,43 @@ public class SKOSGroupExporterTest {
 			MockitoAnnotations.initMocks(this);
 	}
 
-	@Test
-	public void testBuildGroup(){
 
-		Language lang = new Language();
-		lang.setPart1("fr");
+	@Test
+	public void testBuildSimpleGroup(){
 
 		Model model = ModelFactory.createDefaultModel();
 
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
 
+		Language lang = new Language();
+		lang.setPart1("fr");
+
 		ThesaurusConcept c1 = new ThesaurusConcept();
 		c1.setIdentifier("http://c1");
-
 		ThesaurusConcept c2 = new ThesaurusConcept();
 		c2.setIdentifier("http://c2");
+		ThesaurusConcept c3 = new ThesaurusConcept();
+		c3.setIdentifier("http://c3");
+
+		Set<ThesaurusConcept> concepts = new HashSet<ThesaurusConcept>();
+		concepts.add(c1);
+		concepts.add(c2);
+		concepts.add(c3);
 
 		ThesaurusConceptGroupType type = new ThesaurusConceptGroupType();
 		type.setSkosLabel("Domaine");
 
+		ThesaurusConceptGroup g2 = new ThesaurusConceptGroup();
+		g2.setIdentifier("http://g2");
+
 		ThesaurusConceptGroup g1 = new ThesaurusConceptGroup();
 		g1.setIdentifier("http://g1");
-		g1.setIsDynamic(true);
-		g1.setParentConcept(c1);
+		g1.setIsDynamic(false);
 		g1.setConceptGroupType(type);
+		g1.setConcepts(concepts);
+		g1.setParent(g2);
+		g1.setNotation("notation");
 
 		ThesaurusConceptGroupLabel label1 = new ThesaurusConceptGroupLabel();
 		label1.setCreated(DateUtil.nowDate());
@@ -111,34 +128,61 @@ public class SKOSGroupExporterTest {
 		label1.setLanguage(lang);
 		label1.setConceptGroup(g1);
 
-		ThesaurusConceptGroup g2 = new ThesaurusConceptGroup();
-		g2.setIdentifier("http://g2");
-		g2.setIsDynamic(false);
-		g2.setConceptGroupType(type);
-		g2.setParent(g1);
-		g2.setNotation("notation");
-
-		ThesaurusConceptGroupLabel label2 = new ThesaurusConceptGroupLabel();
-		label2.setCreated(DateUtil.nowDate());
-		label2.setModified(DateUtil.nowDate());
-		label2.setLexicalValue("group2");
-		label2.setLanguage(lang);
-		label2.setConceptGroup(g2);
-
 		Mockito.when(thesaurusConceptGroupLabelService
 		.getByThesaurusConceptGroup(g1.getIdentifier())).thenReturn(label1);
 
-		Mockito.when(thesaurusConceptGroupLabelService
-				.getByThesaurusConceptGroup(g2.getIdentifier())).thenReturn(label2);
-
 		skosGroupExporter.buildGroup(th, g1, model);
-		skosGroupExporter.buildGroup(th, g2, model);
 
 		StmtIterator properties1 = model.getResource("http://g1").listProperties();
-		StmtIterator properties2 = model.getResource("http://g2").listProperties();
-
-		Assert.assertEquals(6, properties1.toList().size());
-		Assert.assertEquals(7, properties2.toList().size());
+		Assert.assertEquals(10, properties1.toList().size());
 	}
 
+	@Test
+	public void testBuildDynamicGroup(){
+
+		Model model = ModelFactory.createDefaultModel();
+
+		Thesaurus th = new Thesaurus();
+		th.setIdentifier("http://th1");
+
+		Language lang = new Language();
+		lang.setPart1("fr");
+
+		ThesaurusConcept c1 = new ThesaurusConcept();
+		c1.setIdentifier("http://c1");
+		ThesaurusConcept c2 = new ThesaurusConcept();
+		c2.setIdentifier("http://c2");
+		ThesaurusConcept c3 = new ThesaurusConcept();
+		c3.setIdentifier("http://c3");
+
+		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
+		concepts.add(c2);
+		concepts.add(c3);
+
+		ThesaurusConceptGroupType type = new ThesaurusConceptGroupType();
+		type.setSkosLabel("Domaine");
+
+		ThesaurusConceptGroup g1 = new ThesaurusConceptGroup();
+		g1.setIdentifier("http://g1");
+		g1.setIsDynamic(true);
+		g1.setConceptGroupType(type);
+		g1.setParentConcept(c1);
+
+		ThesaurusConceptGroupLabel label1 = new ThesaurusConceptGroupLabel();
+		label1.setCreated(DateUtil.nowDate());
+		label1.setModified(DateUtil.nowDate());
+		label1.setLexicalValue("group1");
+		label1.setLanguage(lang);
+		label1.setConceptGroup(g1);
+
+		Mockito.when(thesaurusConceptGroupLabelService
+				.getByThesaurusConceptGroup(g1.getIdentifier())).thenReturn(label1);
+
+		Mockito.when(thesaurusConceptService
+		.getRecursiveChildrenByConceptId(c1.getIdentifier())).thenReturn(concepts);
+
+		skosGroupExporter.buildGroup(th, g1, model);
+		StmtIterator properties1 = model.getResource("http://g1").listProperties();
+		Assert.assertEquals(8, properties1.toList().size());
+	}
 }
