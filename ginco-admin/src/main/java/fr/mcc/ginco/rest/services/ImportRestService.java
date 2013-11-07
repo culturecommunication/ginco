@@ -131,7 +131,7 @@ public class ImportRestService {
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
-	
+
 	@Inject
     @Named("userRoleService")
   	private IUserRoleService userRoleService;
@@ -139,11 +139,11 @@ public class ImportRestService {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
-	
+
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languageService;
-	
+
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
@@ -329,19 +329,23 @@ public class ImportRestService {
 				String[] termSplitted = termLine.split("@");
 				if (termSplitted.length==2) {
 					String lexValue = termSplitted[0];
-					Language lang = languageService.getLanguageById(termSplitted[1]);
-					if (lang == null) {
-						lang = languageService.getLanguageByPart1(termSplitted[1]);
-					}
-					if (lang != null) {
-						terms.put(lexValue, lang);
+					if (StringUtils.isNotEmpty(lexValue)){
+						Language lang = languageService.getLanguageById(termSplitted[1]);
+						if (lang == null) {
+							lang = languageService.getLanguageByPart1(termSplitted[1]);
+						}
+						if (lang != null) {
+							terms.put(lexValue, lang);
+						} else {
+							termsInError.add(termLine);
+						}
 					} else {
 						termsInError.add(termLine);
 					}
 				} else {
 					String lexValue = termLine;
 					Language lang = languageService.getLanguageById(defaultLang);
-					terms.put(lexValue, lang);					
+					terms.put(lexValue, lang);
 				}
 			}
 
@@ -349,12 +353,12 @@ public class ImportRestService {
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
 			String username = auth.getName();
-			
+
 			if (userRoleService.hasRole(username, thesaurusId, Role.EXPERT)) {
 				defaultStatus = TermStatusEnum.CANDIDATE.getStatus();
 			}
-			
-			
+
+
 			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
 					.importSandBoxTerms(terms, thesaurusId, defaultStatus);
 			for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
@@ -366,7 +370,7 @@ public class ImportRestService {
 			String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 					response));
 			return serialized;
-			
+
 		} catch (BusinessException ex) {
 			throw ex;
 		} catch (Exception re) {
