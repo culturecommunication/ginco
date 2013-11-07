@@ -38,7 +38,7 @@ Next install postgresql
 * Download the bundle Solr
 
 Run the following command:
-> wget http://wwwftp.ciril.fr/pub/apache/lucene/solr/4.2.1/solr-4.2.1.tgz
+> wget http://archive.apache.org/dist/lucene/solr/4.2.1/solr-4.2.1.tgz
 
 Extract the following archive:
 > tar xvf solr-4.2.1.tgz -C /usr/local/
