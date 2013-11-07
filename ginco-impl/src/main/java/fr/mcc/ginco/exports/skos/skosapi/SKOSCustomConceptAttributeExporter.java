@@ -1,4 +1,4 @@
-package fr.mcc.ginco.exports.skos;
+package fr.mcc.ginco.exports.skos.skosapi;
 
 import java.net.URI;
 import java.util.ArrayList;

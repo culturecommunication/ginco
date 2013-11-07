@@ -60,7 +60,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.skos.SKOSHierarchicalRelationshipExporter;
+import fr.mcc.ginco.exports.skos.skosapi.SKOSHierarchicalRelationshipExporter;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
 
 public class SKOSHierarchicalRelationshipExporterTest {

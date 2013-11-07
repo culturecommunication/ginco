@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,7 +43,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;

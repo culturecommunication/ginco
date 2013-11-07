@@ -63,7 +63,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.skos.SKOSAssociativeRelationshipExporter;
+import fr.mcc.ginco.exports.skos.skosapi.SKOSAssociativeRelationshipExporter;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 

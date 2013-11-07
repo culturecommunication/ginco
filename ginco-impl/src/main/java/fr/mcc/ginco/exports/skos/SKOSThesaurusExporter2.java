@@ -34,18 +34,13 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -58,6 +53,8 @@ import fr.mcc.ginco.utils.DateUtil;
  */
 @Component("skosThesaurusExporter2")
 public class SKOSThesaurusExporter2 {
+
+	private static final String SEPARATOR = "\\r?\\n";
 
 	/**
 	 * Export the thesaurus data skos API
@@ -78,26 +75,23 @@ public class SKOSThesaurusExporter2 {
 		model.add(thesaurusResource, DC.title, thesaurus.getTitle());
 
 		if (thesaurus.getCreator() != null) {
-			
-			Resource creatorResource = model.createResource(DC.creator);
-			Resource foefOrgResource = model.createResource(FOAF.Organization);
-			
-			//creatorResource.addProperty(RDF.type, foefOrgResource);
-			
+
+			Resource foafOrgResource = model.createResource(FOAF.Organization);
+
 			String creatorName = thesaurus.getCreator().getName();
 			String creatorHomepage = thesaurus.getCreator().getHomepage();
 			String creatorEmail = thesaurus.getCreator().getEmail();
 
 			if (creatorName != null && !creatorName.isEmpty()) {
-				foefOrgResource.addProperty(FOAF.name, creatorName);
+				foafOrgResource.addProperty(FOAF.name, creatorName);
 			}
 			if (creatorHomepage != null && !creatorHomepage.isEmpty()) {
-				foefOrgResource.addProperty(FOAF.homepage, creatorHomepage);
+				foafOrgResource.addProperty(FOAF.homepage, creatorHomepage);
 			}
 			if (creatorEmail != null && !creatorEmail.isEmpty()) {
-				foefOrgResource.addProperty(FOAF.mbox, creatorEmail);
+				foafOrgResource.addProperty(FOAF.mbox, creatorEmail);
 			}
-			thesaurusResource.addProperty(DC.creator, foefOrgResource);
+			thesaurusResource.addProperty(DC.creator, foafOrgResource);
 
 		}
 
@@ -116,17 +110,17 @@ public class SKOSThesaurusExporter2 {
 					.getLabel());
 		}
 
-		String[] contributors = thesaurus.getContributor().split("\\r?\\n");
+		String[] contributors = thesaurus.getContributor().split(SEPARATOR);
 		for (String contributor : contributors) {
 			model.add(thesaurusResource, DC.contributor, contributor);
 		}
 
-		String[] coverages = thesaurus.getCoverage().split("\\r?\\n");
+		String[] coverages = thesaurus.getCoverage().split(SEPARATOR);
 		for (String coverage : coverages) {
 			model.add(thesaurusResource, DC.coverage, coverage);
 		}
 
-		String[] subjects = thesaurus.getSubject().split("\\r?\\n");
+		String[] subjects = thesaurus.getSubject().split(SEPARATOR);
 		for (String subject : subjects) {
 			model.add(thesaurusResource, DC.subject, subject);
 		}

@@ -32,7 +32,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports.skos;
+package fr.mcc.ginco.exports.skos.skosapi;
 
 import java.io.StringWriter;
 import java.util.List;
@@ -40,97 +40,92 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
-import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.services.ISplitNonPreferredTermService;
-import fr.mcc.ginco.skos.namespaces.ISOTHES;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusArrayConcept;
+import fr.mcc.ginco.services.INodeLabelService;
+import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.skos.namespaces.SKOSXL;
 import fr.mcc.ginco.utils.DateUtil;
 
 /**
- * This component is in charge of exporting complex concept to SKOS
+ * This component is in charge of exporting collections to SKOS
  *
  */
-@Component("skosComplexConceptExporter")
-public class SKOSComplexConceptExporter {
+@Component("skosArrayExporter")
+public class SKOSArrayExporter {
 
 	@Inject
-	@Named("splitNonPreferredTermService")
-	private ISplitNonPreferredTermService splitNonPreferredTermService;
+	@Named("thesaurusArrayService")
+	private IThesaurusArrayService thesaurusArrayService;
 
-	public String exportComplexConcept(Thesaurus thesaurus) {
-		List<SplitNonPreferredTerm> complexConcepts = splitNonPreferredTermService
-				.getSplitNonPreferredTermList(0, -1,
-						thesaurus.getThesaurusId());
-		if (!complexConcepts.isEmpty()) {
+	@Inject
+	@Named("nodeLabelService")
+	private INodeLabelService nodeLabelService;
+
+	/**
+	 * Export thesaurus arrays from the given thesaurus in SKOS format as a string
+	 * @param thesaurus
+	 * @return
+	 */
+	public String exportCollections(Thesaurus thesaurus) {
+		List<ThesaurusArray> arrays = thesaurusArrayService
+				.getAllThesaurusArrayByThesaurusId(null, thesaurus.getIdentifier());
+
+		if (arrays.size() != 0) {
+
 			Model model = ModelFactory.createDefaultModel();
 
-			for (SplitNonPreferredTerm complexConcept : complexConcepts) {
+			for (ThesaurusArray array : arrays) {
+				NodeLabel label = nodeLabelService.getByThesaurusArray(array
+						.getIdentifier());
 
-				Resource inScheme = model.createResource(complexConcept
-						.getThesaurus().getIdentifier());
+				Resource collectionRes = model.createResource(
+						array.getIdentifier(), SKOS.COLLECTION);
 
-				// Add splitNonPreferredTerm resource
-				Resource complexConceptRes = model.createResource(
-						complexConcept.getIdentifier(),
-						ISOTHES.SPLIT_NON_PREFERRED_TERM);
+				Resource inScheme = model.createResource(thesaurus
+						.getIdentifier());
+				model.add(collectionRes, SKOS.IN_SCHEME, inScheme);
 
-				model.add(complexConceptRes, SKOS.IN_SCHEME, inScheme);
+				collectionRes
+						.addProperty(SKOS.PREF_LABEL, label.getLexicalValue(),
+								label.getLanguage().getPart1());
 
-				model.add(complexConceptRes, SKOSXL.LITERAL_FORM,
-						complexConcept.getLexicalValue(), complexConcept
-								.getLanguage().getPart1());
-				model.add(complexConceptRes, DCTerms.created,
-						DateUtil.toString(complexConcept.getCreated()));
-				model.add(complexConceptRes, DCTerms.modified,
-						DateUtil.toString(complexConcept.getModified()));
-				model.add(complexConceptRes, ISOTHES.STATUS, complexConcept
-						.getStatus().toString());
-
-				if (StringUtils.isNotEmpty(complexConcept.getSource())) {
-					model.add(complexConceptRes, DC.source,
-							complexConcept.getSource());
+				for (ThesaurusArrayConcept arrayConcept : array.getConcepts()) {
+						Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());
+						model.add(collectionRes, SKOS.MEMBER, y);
+				}
+				for (ThesaurusArray childrenArray : thesaurusArrayService.getChildrenArrays(array.getIdentifier())){
+					Resource arrayMember = model.createResource(childrenArray.getIdentifier()+"_REMOVEME_");
+					model.add(collectionRes, SKOS.MEMBER, arrayMember);
 				}
 
-				// Add compoundEquivalence resource
-
-				Resource compoundEquivalenceRes = model
-						.createResource(ISOTHES.COMPOUND_EQUIVALENCE);
-				model.add(compoundEquivalenceRes, SKOS.IN_SCHEME, inScheme);
-				model.add(compoundEquivalenceRes, ISOTHES.PLUS_UF, complexConcept.getIdentifier());
-				for (ThesaurusTerm term : complexConcept.getPreferredTerms()){
-					model.add(compoundEquivalenceRes, ISOTHES.PLUS_USE, term.getIdentifier());
-				}
+				model.add(collectionRes, DCTerms.created, DateUtil.toString(label.getCreated()));
+				model.add(collectionRes, DCTerms.modified, DateUtil.toString(label.getModified()));
 			}
 
 			model.setNsPrefix("skos", SKOS.getURI());
 			model.setNsPrefix("dct", DCTerms.getURI());
-			model.setNsPrefix("dc", DC.getURI());
-			model.setNsPrefix("skos-xl", SKOSXL.getURI());
-			model.setNsPrefix("iso-thes", ISOTHES.getURI());
 
 			StringWriter sw = new StringWriter();
 			model.write(sw, "RDF/XML-ABBREV");
 			String result = sw.toString();
 			result = result.replaceAll("_REMOVEME_", "");
-
-			int start = result.lastIndexOf("skos-xl#\">")
-					+ "skos-xl#\">".length() + 2;
+			int start = result.lastIndexOf("terms/\">") + "terms\"/>".length()
+					+ 2;
 			int end = result.lastIndexOf("</rdf:RDF>");
 
 			return result.substring(start, end);
 		}
+
 		return "";
 	}
 }

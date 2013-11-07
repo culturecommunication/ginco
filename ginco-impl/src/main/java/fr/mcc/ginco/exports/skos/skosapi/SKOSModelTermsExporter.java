@@ -33,7 +33,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package fr.mcc.ginco.exports.skos;
+package fr.mcc.ginco.exports.skos.skosapi;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

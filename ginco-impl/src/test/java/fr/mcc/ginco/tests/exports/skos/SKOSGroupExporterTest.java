@@ -58,7 +58,7 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
-import fr.mcc.ginco.exports.skos.SKOSGroupExporter;
+import fr.mcc.ginco.exports.skos.skosapi.SKOSGroupExporter;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;

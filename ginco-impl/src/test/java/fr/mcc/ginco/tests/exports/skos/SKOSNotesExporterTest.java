@@ -61,7 +61,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.skos.SKOSNotesExporter;
+import fr.mcc.ginco.exports.skos.skosapi.SKOSNotesExporter;
 import fr.mcc.ginco.services.INoteService;
 
 /**

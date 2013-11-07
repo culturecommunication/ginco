@@ -49,6 +49,8 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
@@ -75,6 +77,8 @@ import fr.mcc.ginco.utils.DateUtil;
 
 @Service("skosExportService")
 public class SKOSExportServiceImpl2 implements ISKOSExportService {
+	
+	private static final String XML_HEADER = "<xml version=\"1.0\" encoding=\"UTF-8\">";
 
 	@Inject
 	@Named("thesaurusConceptService")
@@ -121,19 +125,19 @@ public class SKOSExportServiceImpl2 implements ISKOSExportService {
 		List<ThesaurusConcept> tt = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
 
-		String res = "";
 		Model model = ModelFactory.createDefaultModel();
-		
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+
 		skosThesaurusExporter.exportThesaurusSKOS(thesaurus, model);
 
 		for (ThesaurusConcept conceptTT : tt) {
-			skosConceptExporter.exportConceptSKOS(conceptTT, null, model);			
+			skosConceptExporter.exportConceptSKOS(conceptTT, null, model, ontModel);			
 			
 		}
 		skosArrayExporter.exportCollections(thesaurus, model);
-		skosGroupExporter.exportGroups(thesaurus, model);
-		skosAssociativeRelationshipRolesExporter.exportAssociativeRelationshipRoles(model);
-		skosHierarshicalRelationshipRolesExporter.exportHierarchicalRelationshipRoles(model);
+		skosGroupExporter.exportGroups(thesaurus, model, ontModel);
+		skosAssociativeRelationshipRolesExporter.exportAssociativeRelationshipRoles(model, ontModel);
+		skosHierarshicalRelationshipRolesExporter.exportHierarchicalRelationshipRoles(model, ontModel);
 		skosComplexConceptExporter.exportComplexConcept(thesaurus, model);
 		
 		model.setNsPrefix("skos", SKOS.getURI());
@@ -169,11 +173,10 @@ public class SKOSExportServiceImpl2 implements ISKOSExportService {
 		RDFWriter w =  model.getWriter("RDF/XML-ABBREV");
 		w.setProperty("tab", 4);
 		w.setProperty("prettyTypes",rootTypes.toArray(new Resource[rootTypes.size()]));		
-		
 		StringWriter sw = new StringWriter();
-
+		sw.write(XML_HEADER);
 		w.write(model, sw, null);		
-		res+=sw.toString();
+		String res =sw.toString();
 		
 		logger.debug("termModels = " + res);
 

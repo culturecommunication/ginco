@@ -51,7 +51,7 @@ import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exports.skos.SKOSComplexConceptExporter;
+import fr.mcc.ginco.exports.skos.skosapi.SKOSComplexConceptExporter;
 import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.utils.DateUtil;
 

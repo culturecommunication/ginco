@@ -9,14 +9,10 @@ import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.ontology.DatatypeProperty;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 import fr.mcc.ginco.beans.CustomConceptAttribute;
@@ -33,18 +29,15 @@ public class SKOSCustomConceptAttributeExporter2 {
 
 
 	public Model exportCustomConceptAttributes(
-			ThesaurusConcept concept, Model model, Resource conceptResource) {
+			ThesaurusConcept concept, Model model, Resource conceptResource, OntModel ontModel) {
 
 		List<CustomConceptAttribute> attributes = customConceptAttributeService
 				.getAttributesByEntity(concept);
 		
-		OntModel m = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
-		DatatypeProperty customAttrOnt = m.createDatatypeProperty(GINCO.getURI()
+		DatatypeProperty customAttrOnt = ontModel.createDatatypeProperty(GINCO.getURI()
 				+ "CustomConceptAttribute");
-		Literal l = m.createLiteral("CustomConceptAttribute");
+		Literal l = ontModel.createLiteral("CustomConceptAttribute");
 		customAttrOnt.addLabel(l);
-		
-		
 	
 		for (CustomConceptAttribute attribute : attributes) {
 			if (attribute.getType().getExportable()) {						
@@ -58,7 +51,6 @@ public class SKOSCustomConceptAttributeExporter2 {
 				
 			}
 		}
-		model.add(m);
 		return model;
 	}
 }

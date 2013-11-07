@@ -64,7 +64,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.skos.SKOSAlignmentExporter;
+import fr.mcc.ginco.exports.skos.skosapi.SKOSAlignmentExporter;
 import fr.mcc.ginco.services.IAlignmentService;
 
 public class SKOSAlignmentExporterTest{

@@ -43,10 +43,8 @@ import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.ontology.DatatypeProperty;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
@@ -73,8 +71,8 @@ public class SKOSConceptExporter2 {
 	private SKOSTermsExporter2 skosTermsExporter;
 
 	@Inject
-	@Named("skosNotesExporter")
-	private SKOSNotesExporter skosNotesExporter;
+	@Named("skosNotesExporter2")
+	private SKOSNotesExporter2 skosNotesExporter;
 
 	@Inject
 	@Named("skosAssociativeRelationshipExporter2")
@@ -105,12 +103,12 @@ public class SKOSConceptExporter2 {
 	 * @return
 	 */
 	public Model exportConceptSKOS(ThesaurusConcept concept,
-			ThesaurusConcept parent, Model model) {		
+			ThesaurusConcept parent, Model model, OntModel ontModel) {		
 
 		Resource conceptResource = model.createResource(
 				concept.getIdentifier(), SKOS.CONCEPT);		
 
-		exportConceptInformation(concept, conceptResource, model);
+		exportConceptInformation(concept, conceptResource, model, ontModel);
 
 		List<ThesaurusTerm> prefTerms = thesaurusConceptService
 				.getConceptPreferredTerms(concept.getIdentifier());
@@ -120,39 +118,17 @@ public class SKOSConceptExporter2 {
 
 		skosTermsExporter.exportConceptNotPreferredTerms(
 				concept.getIdentifier(), model, conceptResource);
+		
+		skosNotesExporter.exportNotes(model, prefTerms, concept);
 
 		skosAssociativeRelationshipExporter.exportAssociativeRelationships(
 				concept, model, conceptResource);
-
-		if (parent != null) {
-
-			Resource parentRes = model.createResource(parent
-					.getIdentifier(),SKOS.CONCEPT);	
-			
-			model.add(conceptResource, SKOS.BROADER,
-					parentRes);			
-			
-			model.add(parentRes, SKOS.NARROWER, conceptResource);
-
-		} else {
-			// TODO
-			/*
-			 * SKOSObjectRelationAssertion topConcept = factory
-			 * .getSKOSObjectRelationAssertion(scheme,
-			 * factory.getSKOSHasTopConceptProperty(), conceptSKOS);
-			 * addList.add(new AddAssertion(vocab, topConcept));
-			 * 
-			 * defaultModel.add(conceptResource, SKOS.TOPCONCEPT,
-			 * conceptResource);
-			 */
-
-		}		
 
 		if (thesaurusConceptService.hasChildren(concept.getIdentifier())) {
 			for (ThesaurusConcept child : thesaurusConceptService
 					.getChildrenByConceptId(concept.getIdentifier())) {			
 
-				exportConceptSKOS(child, concept, model);
+				exportConceptSKOS(child, concept, model, ontModel);
 
 			}
 		}	
@@ -164,7 +140,7 @@ public class SKOSConceptExporter2 {
 				conceptResource, model);
 
 		skosCustomConceptAttributeExporter.exportCustomConceptAttributes(
-				concept, model, conceptResource);
+				concept, model, conceptResource, ontModel);
 
 		return model;
 	}
@@ -180,34 +156,33 @@ public class SKOSConceptExporter2 {
 	 * @return
 	 */
 	public Model exportConceptInformation(ThesaurusConcept concept,
-			Resource conceptResource, Model conceptModel) {
+			Resource conceptResource, Model model, OntModel ontModel) {
 
-		Resource inScheme = conceptModel.createResource(concept.getThesaurus()
+		Resource inScheme = model.createResource(concept.getThesaurus()
 				.getIdentifier());
-		conceptModel.add(conceptResource, SKOS.IN_SCHEME, inScheme);
+		model.add(conceptResource, SKOS.IN_SCHEME, inScheme);
 
-		conceptModel.add(conceptResource, DCTerms.created,
+		model.add(conceptResource, DCTerms.created,
 				DateUtil.toString(concept.getCreated()));
-		conceptModel.add(conceptResource, DCTerms.modified,
+		model.add(conceptResource, DCTerms.modified,
 				DateUtil.toString(concept.getModified()));
 
+		
 		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
 
-			conceptModel.add(conceptResource, SKOS.NOTATION,
+			model.add(conceptResource, SKOS.NOTATION,
 					concept.getNotation());
 
 		}
 
-		OntModel m = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
-		DatatypeProperty statusOnt = m.createDatatypeProperty(ISOTHES.getURI()
+		DatatypeProperty statusOnt = ontModel.createDatatypeProperty(ISOTHES.getURI()
 				+ "status");
-		Literal l = m.createLiteral("iso-thes:status");
+		Literal l = ontModel.createLiteral("status");
 		statusOnt.addLabel(l);
 
-		conceptModel.add(m);
-		conceptModel.add(conceptResource, ISOTHES.STATUS, concept.getStatus()
+		model.add(conceptResource, ISOTHES.STATUS, concept.getStatus()
 				.toString());
 
-		return conceptModel;
+		return model;
 	}
 }

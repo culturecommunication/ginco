@@ -39,8 +39,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.semanticweb.skos.AddAssertion;
-import org.semanticweb.skos.SKOSDataRelationAssertion;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -53,7 +51,7 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * This component is in charge of exporting concept alignments to SKOS
- *
+ * 
  */
 
 @Component("skosAlignmentExporter2")
@@ -65,86 +63,71 @@ public class SKOSAlignmentExporter2 {
 
 	/**
 	 * Export concept alignments to SKOS using the skos API
-	 *
+	 * 
 	 * @param conceptId
 	 * @param factory
 	 * @param conceptSKOS
 	 * @param vocab
-	 *
+	 * 
 	 * @return
 	 */
-	public Model exportAlignments(String conceptId, Resource conceptResource, Model defaultModel) {
-		//List<SKOSChange> addList = new ArrayList<SKOSChange>();
-		List<Alignment> alignments = alignmentService.getAlignmentsBySourceConceptId(conceptId);
-		for (Alignment alignment : alignments){
-			ThesaurusConcept internalTargetConcept = alignment.getTargetConcepts().iterator().next()
+	public Model exportAlignments(String conceptId, Resource conceptResource,
+			Model defaultModel) {
+		List<Alignment> alignments = alignmentService
+				.getAlignmentsBySourceConceptId(conceptId);
+		for (Alignment alignment : alignments) {
+			ThesaurusConcept internalTargetConcept = alignment
+					.getTargetConcepts().iterator().next()
 					.getInternalTargetConcept();
 			String targetConceptId = "";
-			if (internalTargetConcept != null){
+			if (internalTargetConcept != null) {
 				targetConceptId = internalTargetConcept.getIdentifier();
 			} else {
-				targetConceptId = alignment.getTargetConcepts().iterator().next()
-						.getExternalTargetConcept();
+				targetConceptId = alignment.getTargetConcepts().iterator()
+						.next().getExternalTargetConcept();
 			}
 
 			String alignmentType = alignment.getAlignmentType().getIsoCode();
-			if ("=EQ".equals(alignmentType)){
-				/*SKOSDataRelationAssertion alignmentAssertion = factory
-						.getSKOSDataRelationAssertion(conceptSKOS, factory
-								.getSKOSDataProperty(factory
-										.getSKOSExactMatchProperty().getURI()), targetConceptId);
-				addList.add(new AddAssertion(vocab, alignmentAssertion));*/				
-				
-				Resource alignmentRes = defaultModel.createResource(targetConceptId);
-				defaultModel.add(conceptResource, SKOS.EXACT_MATCH, alignmentRes);
-				
-				
+			if ("=EQ".equals(alignmentType)) {
+
+				Resource alignmentRes = defaultModel
+						.createResource(targetConceptId);
+				defaultModel.add(conceptResource, SKOS.EXACT_MATCH,
+						alignmentRes);
+
 			} else if ("~EQ".equals(alignmentType)) {
-				/*SKOSDataRelationAssertion alignmentAssertion = factory
-						.getSKOSDataRelationAssertion(conceptSKOS, factory
-								.getSKOSDataProperty(factory
-										.getSKOSCloseMatchProperty().getURI()), targetConceptId);
-				addList.add(new AddAssertion(vocab, alignmentAssertion));*/
-				
-				Resource alignmentRes = defaultModel.createResource(targetConceptId);
-				defaultModel.add(conceptResource, SKOS.CLOSE_MATCH, alignmentRes);
-				
-				
+
+				Resource alignmentRes = defaultModel
+						.createResource(targetConceptId);
+				defaultModel.add(conceptResource, SKOS.CLOSE_MATCH,
+						alignmentRes);
+
 			} else if ("BM".equals(alignmentType)
 					|| "BMG".equals(alignmentType)
 					|| "BMP".equals(alignmentType)
 					|| "BMI".equals(alignmentType)) {
-				/*SKOSDataRelationAssertion alignmentAssertion = factory
-						.getSKOSDataRelationAssertion(conceptSKOS, factory
-								.getSKOSDataProperty(factory
-										.getSKOSBroadMatchProperty().getURI()), targetConceptId);
-				addList.add(new AddAssertion(vocab, alignmentAssertion));*/
-				
-				Resource alignmentRes = defaultModel.createResource(targetConceptId);
-				defaultModel.add(conceptResource, SKOS.BROAD_MATCH, alignmentRes);
-				
+
+				Resource alignmentRes = defaultModel
+						.createResource(targetConceptId);
+				defaultModel.add(conceptResource, SKOS.BROAD_MATCH,
+						alignmentRes);
+
 			} else if ("NM".equals(alignmentType)
 					|| "NMG".equals(alignmentType)
 					|| "NMP".equals(alignmentType)
 					|| "NMI".equals(alignmentType)) {
-				/*SKOSDataRelationAssertion alignmentAssertion = factory
-						.getSKOSDataRelationAssertion(conceptSKOS, factory
-								.getSKOSDataProperty(factory
-										.getSKOSNarrowMatchProperty().getURI()), targetConceptId);
-				addList.add(new AddAssertion(vocab, alignmentAssertion));*/
-				
-				Resource alignmentRes = defaultModel.createResource(targetConceptId);
-				defaultModel.add(conceptResource, SKOS.NARROW_MATCH, alignmentRes);
-				
-			} else if ("RM".equals(alignmentType)){
-				/*SKOSDataRelationAssertion alignmentAssertion = factory
-						.getSKOSDataRelationAssertion(conceptSKOS, factory
-								.getSKOSDataProperty(factory
-										.getSKOSRelatedMatchProperty().getURI()), targetConceptId);
-				addList.add(new AddAssertion(vocab, alignmentAssertion));*/
-				
-				Resource alignmentRes = defaultModel.createResource(targetConceptId);
-				defaultModel.add(conceptResource, SKOS.RELATED_MATCH, alignmentRes);
+
+				Resource alignmentRes = defaultModel
+						.createResource(targetConceptId);
+				defaultModel.add(conceptResource, SKOS.NARROW_MATCH,
+						alignmentRes);
+
+			} else if ("RM".equals(alignmentType)) {
+
+				Resource alignmentRes = defaultModel
+						.createResource(targetConceptId);
+				defaultModel.add(conceptResource, SKOS.RELATED_MATCH,
+						alignmentRes);
 			}
 		}
 		return defaultModel;

@@ -32,44 +32,33 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports.skos;
+package fr.mcc.ginco.exports.skos.skosapi;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import org.semanticweb.skos.SKOSChange;
 
-import org.springframework.stereotype.Component;
-
-import com.hp.hpl.jena.ontology.ObjectProperty;
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
-import fr.mcc.ginco.skos.namespaces.GINCO;
-import fr.mcc.ginco.skos.namespaces.SKOS;
+/**
+ * @author dabel
+ *
+ */
+public class MixedSKOSModel {
+	private List<SKOSChange> skosChanges;
+	private List<Model> models;
 
-@Component("skosAssociativeRelationshipRolesExporter2")
-public class SKOSAssociativeRelationshipRolesExporter2 {
-
-	@Inject
-	@Named("associativeRelationshipRoleService")
-	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
-
-	public Model exportAssociativeRelationshipRoles(Model model, OntModel ontModel) {
-		List<AssociativeRelationshipRole> roles = associativeRelationshipRoleService
-				.getAllAssociationTermRole();
-		for (AssociativeRelationshipRole role : roles) {
-			String roleSkosLabel = role.getSkosLabel();
-			ObjectProperty broaderRoleProperty = ontModel
-					.createObjectProperty(GINCO.getResourceURI(roleSkosLabel));
-			broaderRoleProperty.addLabel(ontModel.createLiteral(GINCO
-					.getResource(roleSkosLabel).getLocalName()));
-			broaderRoleProperty.addProperty(RDFS.subPropertyOf, SKOS.RELATED);
-
-		}
-		return model;
+	public List<SKOSChange> getSkosChanges() {
+		return skosChanges;
 	}
+	public void setSkosChanges(List<SKOSChange> skosChanges) {
+		this.skosChanges = skosChanges;
+	}
+	public List<Model> getModels() {
+		return models;
+	}
+	public void setModels(List<Model> models) {
+		this.models = models;
+	}
+
 }

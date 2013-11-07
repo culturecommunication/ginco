@@ -51,10 +51,9 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 @Component("skosHierarchicalRelationshipRolesExporter2")
 public class SKOSHierarchicalRelationshipRolesExporter2 {
 
-	public Model exportHierarchicalRelationshipRoles(Model model) {
+	public Model exportHierarchicalRelationshipRoles(Model model, OntModel ontModel) {
 		ConceptHierarchicalRelationshipRoleEnum[] roles = ConceptHierarchicalRelationshipRoleEnum
 				.values();
-		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 		for (ConceptHierarchicalRelationshipRoleEnum role : roles) {
 			String parentSkosLabel = role.getParentSkosLabel();
 			String childSkosLabel = role.getChildSkosLabel();

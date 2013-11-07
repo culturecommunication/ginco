@@ -36,29 +36,63 @@ package fr.mcc.ginco.exports.skos;
 
 import java.util.List;
 
-import org.semanticweb.skos.SKOSChange;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
- * @author dabel
+ * This component is in charge of exporting concept notes to SKOS
  *
  */
-public class MixedSKOSModel {
-	private List<SKOSChange> skosChanges;
-	private List<Model> models;
+@Component("skosNotesExporter2")
+public class SKOSNotesExporter2 {
+	
+	@Inject
+	@Named("noteService")
+	private INoteService noteService;
+	
+	
+	/**
+	 * Export concept notes to SKOS using the skos API
+	 * @param thesaurus
+	 * @return
+	 */
+	public Model exportNotes(Model model, List<ThesaurusTerm> prefTerms, ThesaurusConcept concept) {
 
-	public List<SKOSChange> getSkosChanges() {
-		return skosChanges;
-	}
-	public void setSkosChanges(List<SKOSChange> skosChanges) {
-		this.skosChanges = skosChanges;
-	}
-	public List<Model> getModels() {
-		return models;
-	}
-	public void setModels(List<Model> models) {
-		this.models = models;
-	}
-
+		Resource conceptRes= model.createResource(concept.getIdentifier()); 
+		
+		List<Note> notes = noteService.getConceptNotePaginatedList(
+				concept.getIdentifier(), 0, 0);
+		for (ThesaurusTerm prefTerm : prefTerms) {
+			List<Note> termNotes = noteService.getTermNotePaginatedList(prefTerm.getIdentifier(), 0, 0);
+			notes.addAll(termNotes);
+		}
+		
+		for (Note note : notes) {
+			if ("historyNote".equals(note.getNoteType().getCode())) {
+				model.add(conceptRes, SKOS.HISTORY_NOTE, note.getLexicalValue(),
+						note.getLanguage().getPart1());				
+			} else if ("scopeNote".equals(note.getNoteType().getCode())) {
+				model.add(conceptRes, SKOS.SCOPE_NOTE, note.getLexicalValue(),
+						note.getLanguage().getPart1());
+			} else if ("example".equals(note.getNoteType().getCode())) {
+				model.add(conceptRes, SKOS.EXAMPLE, note.getLexicalValue(),
+						note.getLanguage().getPart1());					
+			} else if ("definition".equals(note.getNoteType().getCode())) {
+				model.add(conceptRes, SKOS.DEFINITION, note.getLexicalValue(),
+						note.getLanguage().getPart1());		
+			}
+		}
+		return model;
+	}	
 }

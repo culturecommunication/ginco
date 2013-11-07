@@ -45,9 +45,7 @@ import org.springframework.stereotype.Component;
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.vocabulary.DCTerms;
@@ -90,19 +88,18 @@ public class SKOSGroupExporter2 {
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-	public Model exportGroups(Thesaurus thesaurus, Model model) {
+	public Model exportGroups(Thesaurus thesaurus, Model model, OntModel ontModel) {
 		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService
 				.getAllThesaurusConceptGroupsByThesaurusId(null,
 						thesaurus.getIdentifier());
 		if (!groups.isEmpty()) {
-			OntModel ontmodel = buildGroupOntologyModel();
+			buildGroupOntologyModel(ontModel);
 			
 			for (ThesaurusConceptGroupType groupType:thesaurusConceptGroupTypeService.getConceptGroupTypeList()) {
-				addGroupTypeToOntModel(ontmodel, groupType
+				addGroupTypeToOntModel(ontModel, groupType
 						.getSkosLabel());		
 			}
 			
-			model.add(ontmodel);
 			for (ThesaurusConceptGroup group : groups) {						
 				buildGroup(thesaurus, group, model);
 			}
@@ -111,34 +108,33 @@ public class SKOSGroupExporter2 {
 		return model;
 	}
 
-	public OntModel buildGroupOntologyModel() {
+	private OntModel buildGroupOntologyModel(OntModel ontModel) {
 
-		OntModel ontmodel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 
-		OntClass groupClass = ontmodel.createClass(ISOTHES.CONCEPT_GROUP
+		OntClass groupClass = ontModel.createClass(ISOTHES.CONCEPT_GROUP
 				.getURI());
-		groupClass.addLabel(ontmodel.createLiteral(ISOTHES.CONCEPT_GROUP
+		groupClass.addLabel(ontModel.createLiteral(ISOTHES.CONCEPT_GROUP
 				.getLocalName()));
 		groupClass.addSuperClass(SKOS.COLLECTION);
 
-		ObjectProperty subGroup = ontmodel
+		ObjectProperty subGroup = ontModel
 				.createObjectProperty(ISOTHES.SUB_GROUP.getURI());
-		subGroup.addLabel(ontmodel.createLiteral(ISOTHES.SUB_GROUP
+		subGroup.addLabel(ontModel.createLiteral(ISOTHES.SUB_GROUP
 				.getLocalName()));
 		subGroup.addRange(groupClass);
 		subGroup.addDomain(groupClass);
 
-		ObjectProperty superGroup = ontmodel
+		ObjectProperty superGroup = ontModel
 				.createObjectProperty(ISOTHES.SUPER_GROUP.getURI());
-		superGroup.addLabel(ontmodel.createLiteral(ISOTHES.SUPER_GROUP
+		superGroup.addLabel(ontModel.createLiteral(ISOTHES.SUPER_GROUP
 				.getLocalName()));
 		superGroup.addRange(groupClass.asResource());
 		superGroup.addDomain(groupClass.asResource());
 
-		return ontmodel;
+		return ontModel;
 	}
 
-	public OntClass addGroupTypeToOntModel(OntModel ontmodel, String groupType) {		
+	private OntClass addGroupTypeToOntModel(OntModel ontmodel, String groupType) {		
 		OntClass groupTypeRes = ontmodel.createClass(GINCO.getResource(
 				groupType).getURI());
 		groupTypeRes.addLabel(ontmodel.createLiteral(GINCO.getResource(
@@ -149,7 +145,7 @@ public class SKOSGroupExporter2 {
 				
 	}
 
-	public void buildGroup(Thesaurus thesaurus, ThesaurusConceptGroup group,
+	private void buildGroup(Thesaurus thesaurus, ThesaurusConceptGroup group,
 			Model model) {
 		ThesaurusConceptGroupLabel label = thesaurusConceptGroupLabelService
 				.getByThesaurusConceptGroup(group.getIdentifier());
