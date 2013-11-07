@@ -78,7 +78,7 @@ import fr.mcc.ginco.utils.DateUtil;
 @Service("skosExportService")
 public class SKOSExportServiceImpl2 implements ISKOSExportService {
 	
-	private static final String XML_HEADER = "<xml version=\"1.0\" encoding=\"UTF-8\">";
+	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
 	@Inject
 	@Named("thesaurusConceptService")
