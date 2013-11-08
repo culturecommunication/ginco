@@ -293,6 +293,28 @@ Ext.define('GincoApp.controller.ConceptController', {
 		parentModel.set('identifier', parentId);
 		theStore.add(parentModel);
 	},
+	
+	addExistingChild : function (theButton) {
+		var me = this;
+		var thePanel = me.getActivePanel(theButton);
+		var theGrid = thePanel.down('#gridPanelChildrenConcepts');
+		var theStore = theGrid.getStore();
+		var win = Ext.create('GincoApp.view.SelectConceptWin', {
+					thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
+					conceptId : thePanel.gincoId,
+					showTree : false,
+					checkstore : theStore,
+					onlyValidatedConcepts : true,
+					listeners : {
+						selectBtn : {
+							fn : function(selectedRow) {
+								me.selectConceptAsParent(selectedRow, theGrid);
+							}
+						}
+					}
+				});
+		win.show();
+	},
 
 	addParent : function(theButton) {
 		var me = this;
@@ -471,7 +493,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 
 		theStore.add(parentModel);
 	},
-
+	
 	selectAssociativeConcept : function(selectedRow, theGrid) {
 		var theStore = theGrid.getStore();
 		var selectedItem = selectedRow[0];
@@ -602,6 +624,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			addAssociationBtn.setDisabled(false);
 			addparent.setDisabled(false);
 			addChild.setDisabled(false);
+			aForm.down('#addExistingChild').setDisabled(false);
 			addAlignment.setDisabled(false);
 		}
 		conceptPanel.addNodePath(thesaurusData.id);
@@ -894,6 +917,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 			},
 			'conceptPanel  button[cls=addChild]' : {
 				click : this.addChild
+			},
+			'conceptPanel  #addExistingChild' : {
+				click : this.addExistingChild
 			},
 			'conceptPanel  button[cls=removeParent]' : {
 				click : this.removeParent

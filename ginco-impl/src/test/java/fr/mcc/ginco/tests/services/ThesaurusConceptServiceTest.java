@@ -486,6 +486,9 @@ public class ThesaurusConceptServiceTest {
 		conceptHierarchicalRelationshipServiceUtil.saveHierarchicalRelationship(
 				conflictConcept,
 				conceptHierarchicalRelationshipList,
+				new ArrayList<ThesaurusConcept>(),
+				new ArrayList<ThesaurusConcept>(),
+				new ArrayList<ThesaurusConcept>(),
 				new ArrayList<ThesaurusConcept>());
 	}
 

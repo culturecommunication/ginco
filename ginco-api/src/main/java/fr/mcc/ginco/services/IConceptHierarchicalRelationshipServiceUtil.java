@@ -55,7 +55,7 @@ public interface IConceptHierarchicalRelationshipServiceUtil {
 	 * @param childrenConceptToDetach : The list of children concepts to detach from the concept
 	 * @return The updated {@link ThesaurusConcept}
 	 */
-	ThesaurusConcept saveHierarchicalRelationship(ThesaurusConcept conceptToUpdate, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept>childrenConceptToDetach);
+	ThesaurusConcept saveHierarchicalRelationship(ThesaurusConcept conceptToUpdate, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> allRecursiveParents, List<ThesaurusConcept> allRecursiveChilds, List<ThesaurusConcept>childrenConceptToDetach, List<ThesaurusConcept>childrenConceptToAttach);
 	
 	/**
 	 * This method calculates all the roots for the children 

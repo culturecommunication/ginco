@@ -148,12 +148,13 @@ public class ThesaurusConceptRestServiceTest {
         List<AssociativeRelationship> associatedConcepts = new ArrayList<AssociativeRelationship>();
         List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
         List<ThesaurusConcept> childToRemove = new ArrayList<ThesaurusConcept>();
+        List<ThesaurusConcept> childToAdd = new ArrayList<ThesaurusConcept>();
         List<Alignment> alignments = new ArrayList<Alignment>();
 
 		Mockito.when(thesaurusConceptViewConverter.convert(fakeConceptView)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(termViewConverter.convertTermViewsInTerms(termViews, true)).thenReturn(terms);
 
-		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts, hierarchicalRelationships, childToRemove, alignments)).thenReturn(fakeThesaurusConcept);
+		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts, hierarchicalRelationships,childToAdd, childToRemove, alignments)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(thesaurusConceptViewConverter.convert(Mockito.any(ThesaurusConcept.class), Mockito.anyListOf(ThesaurusTerm.class))).thenReturn(fakeConceptView);
 		
 		ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);

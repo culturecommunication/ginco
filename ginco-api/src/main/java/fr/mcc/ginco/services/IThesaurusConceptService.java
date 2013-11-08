@@ -129,13 +129,14 @@ public interface IThesaurusConceptService {
 	 * @param The list of the concept's terms
 	 * @param The ids of associated concepts
 	 * @param The hierarchical relations (from current concept (child) to its parents)
+	 * @param The list of children concepts we must attach
 	 * @param The list of children concepts we must detach (must not be still children of our concept)
 	 * @param The list of alignemnts where this concept is the source
 	 * @return The updated concept
 	 * @throws BusinessException
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<Alignment> alignments) throws BusinessException;
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<ThesaurusConcept> childrenConceptToAttach, List<Alignment> alignments) throws BusinessException;
 
 	
 	/**

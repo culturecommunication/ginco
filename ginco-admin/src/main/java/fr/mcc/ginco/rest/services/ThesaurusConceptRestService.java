@@ -211,7 +211,11 @@ public class ThesaurusConceptRestService {
 		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
 		List<ThesaurusConcept> childrenToDetach = thesaurusConceptViewConverter
 				.convertRemovedChildren(conceptView);
-
+		
+		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
+	    List<ThesaurusConcept> childrenToAttach = thesaurusConceptViewConverter
+						.convertAddedChildren(conceptView);
+	    logger.info("Number of added children terms : " + childrenToAttach.size());
 		List<ThesaurusTerm> terms = termViewConverter
 				.convertTermViewsInTerms(conceptView
                         .getTerms(), true);
@@ -244,7 +248,7 @@ public class ThesaurusConceptRestService {
         //We save or update the concept
         logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
-				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach, alignments);
+				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach, childrenToAttach, alignments);
 
 		for (ThesaurusTerm term : terms) {
 			indexerService.addTerm(term);

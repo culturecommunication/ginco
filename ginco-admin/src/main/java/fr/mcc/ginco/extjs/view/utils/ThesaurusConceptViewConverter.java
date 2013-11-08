@@ -244,6 +244,35 @@ public class ThesaurusConceptViewConverter {
 		}
 		return thesaurusConcept;
 	}
+	
+	
+	/**
+	 * This method generates a list of children concept we have to attach to the concept we are updating
+	 * @param conceptView
+	 */
+	public List<ThesaurusConcept> convertAddedChildren(ThesaurusConceptView conceptView) {
+		List<ThesaurusConcept> addedChildren = new ArrayList<ThesaurusConcept>();
+		Set<ThesaurusConcept> oldChildren = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(conceptView.getIdentifier()));
+		List<String> oldChildrenIds = getIdsFromConceptList(oldChildren);
+		
+		List<String> newChildrenIds = new ArrayList<String>();
+		for (HierarchicalRelationshipView viewOfChild : conceptView.getChildConcepts()) {
+			newChildrenIds.add(viewOfChild.getIdentifier());
+		}
+		
+		List<String> addedChildrenIds = new ArrayList<String>();
+		if (conceptView.getChildConcepts() != null) {
+			addedChildrenIds = ListUtils.subtract(newChildrenIds, oldChildrenIds);
+		} else {
+			addedChildrenIds = oldChildrenIds;
+		}
+		
+		for (String addedChildId : addedChildrenIds) {
+			addedChildren.add(thesaurusConceptService.getThesaurusConceptById(addedChildId));
+		}
+		
+		return addedChildren;
+	}
 
 	/**
 	 * This method generates a list of children concept we have to detach from the concept we are updating

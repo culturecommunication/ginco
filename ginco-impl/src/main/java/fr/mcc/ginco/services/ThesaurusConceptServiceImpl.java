@@ -328,6 +328,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			List<AssociativeRelationship> associatedConcepts,
 			List<ConceptHierarchicalRelationship> hierarchicalRelationships,
 			List<ThesaurusConcept> childrenConceptToDetach,
+			List<ThesaurusConcept> childrenConceptToAttach,
 			List<Alignment> alignments)
 			throws BusinessException {
 
@@ -357,10 +358,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				relation.getIdentifier().setConcept1(object.getIdentifier());
 			}
 		}
+		List<ThesaurusConcept> allRecursiveChild = getRecursiveChildrenByConceptId(object.getIdentifier());
+		List<ThesaurusConcept> allRecursiveParents = getRecursiveParentsByConceptId(object.getIdentifier());
 
 		object = conceptHierarchicalRelationshipServiceUtil
 				.saveHierarchicalRelationship(object,
-						hierarchicalRelationships, childrenConceptToDetach);
+						hierarchicalRelationships,allRecursiveParents ,allRecursiveChild, childrenConceptToDetach, childrenConceptToAttach);
 
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
 			// We can set status = candidate only if concept has not relation
@@ -695,9 +698,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			String conceptId) {
 		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
 				.getById(conceptId);
+		if (thesaurusConcept != null) {
 		return getRecursiveParentByConceptId(
 				thesaurusConcept,
 				new ArrayList<ThesaurusConcept>());
+		} else 
+		{
+			return new ArrayList<ThesaurusConcept>();
+		}
 	}
 
 	private List<ThesaurusConcept> getRecursiveParentByConceptId(

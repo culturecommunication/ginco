@@ -72,6 +72,7 @@ Ext
 					xDetach : 'Detach from Concept',
 					xAddParent : 'Add parent Concept',
 					xAddChild : 'Add child Concept',
+					xAddExistingChild : 'Add existing child concept',
 					xNotesTab : 'Notes of this concept',
 					xActions : 'Actions',
 					xAddRelationship : 'Add associative relationship',
@@ -482,7 +483,15 @@ Ext
 																							cls : 'addChild',
 																							iconCls : 'icon-add-parent',
 																							requiredRoles : [ 'ADMIN', 'MANAGER']
-																						} ]
+																						},
+																						{
+																							xtype : 'button',
+																							text : me.xAddExistingChild,
+																							disabled : true,
+																							itemId : 'addExistingChild',
+																							iconCls : 'icon-add-parent',
+																							requiredRoles : [ 'ADMIN', 'MANAGER']
+																						}]
 																					} ],
 
 																					columns : [

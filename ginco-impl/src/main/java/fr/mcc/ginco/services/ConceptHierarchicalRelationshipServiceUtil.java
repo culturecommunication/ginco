@@ -88,13 +88,11 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	public ThesaurusConcept saveHierarchicalRelationship(
 			ThesaurusConcept conceptToUpdate,
 			List<ConceptHierarchicalRelationship> hierarchicalRelationships,
-			List<ThesaurusConcept> childrenConceptToDetach) {
-		
-		
-		List<ThesaurusConcept> childrenConcepts = thesaurusConceptDAO
-				.getChildrenConcepts(conceptToUpdate.getIdentifier(), 0);
-		
-
+			List<ThesaurusConcept> allRecursiveParents,
+			List<ThesaurusConcept> allRecursiveChilds,
+			List<ThesaurusConcept> childrenConceptToDetach,
+			List<ThesaurusConcept> childrenConceptToAttach) {
+				
 		// We update the modified relations, and we delete the relations that
 		// have been removed
 		List<String> oldParentConceptIds = new ArrayList<String>();
@@ -109,7 +107,12 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 			newParentConceptIds.add(relation.getIdentifier().getParentconceptid());
 		}
 		
-		for (ThesaurusConcept childConcept : childrenConcepts)
+		List<String> newChildConceptIds = new ArrayList<String>();
+		for (ThesaurusConcept newChild : childrenConceptToAttach) {
+			newChildConceptIds.add(newChild.getIdentifier());
+		}
+		// Check loops
+		for (ThesaurusConcept childConcept : allRecursiveChilds)
 		{
 			if (newParentConceptIds.contains(childConcept.getIdentifier()))
 			{
@@ -118,19 +121,49 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 						"hierarchical-loop-violation");
 			}
 		}
+		// Check loops
+		for (ThesaurusConcept parentConcept : allRecursiveParents)
+		{
+			if (newChildConceptIds.contains(parentConcept.getIdentifier()))
+			{
+				throw new BusinessException(
+						"A child concept cannot be the parent of the same concept",
+						"hierarchical-loop-violation");
+			}
+		}
 
 		
 		// Verify if the concept doesn't have one of its brothers as parent
-		List<String> commonIds;
 		for (String currentParentId : newParentConceptIds){
 			List<String> childrenOfCurrentParentIds = ThesaurusConceptUtils
 					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId, 0));
-			commonIds = new ArrayList<String>(newParentConceptIds);
+			List<String> commonIds = new ArrayList<String>(newParentConceptIds);
 			// Compare both lists and see which elements are in common. 
 			// Those elements are both parents and brothers to the considered concept.
 			commonIds.retainAll(childrenOfCurrentParentIds);
 			
 			if( !commonIds.isEmpty() ){
+				String commonPreferedTerms = "";
+				for(String conceptId : commonIds){
+					if( commonIds.indexOf(conceptId) != 0){
+						commonPreferedTerms += ", ";
+					}
+					commonPreferedTerms += thesaurusTermDAO.getConceptPreferredTerm(conceptId).getLexicalValue();
+				}
+				throw new BusinessException(
+						"A concept cannot have one of its brother ("+ commonPreferedTerms +") as a parent",
+						"hierarchical-brotherIsParent-violation", new Object[] {commonPreferedTerms});
+			}
+		}
+		List<String> brotherIds = new ArrayList<String>();
+		for (ThesaurusConcept parentConcept : conceptToUpdate.getParentConcepts()){
+			brotherIds.addAll(ThesaurusConceptUtils
+					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(parentConcept.getIdentifier(), 0)));
+		}
+		// Verify if the concept doesn't have one of its brothers as child
+		for (String currentChildId : newChildConceptIds){
+			if (brotherIds.contains(currentChildId)) {
+				List<String> commonIds = new ArrayList<String>(newChildConceptIds);
 				String commonPreferedTerms = "";
 				for(String conceptId : commonIds){
 					if( commonIds.indexOf(conceptId) != 0){
@@ -203,13 +236,33 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		}
 
 		// We process children delete
+		addChildren(conceptToUpdate, childrenConceptToAttach);
 		removeChildren(conceptToUpdate, childrenConceptToDetach);
+		
 
 		thesaurusConceptDAO.update(conceptToUpdate);
 		thesaurusConceptDAO.flush();
 		saveRoleOfHierarchicalRelationship(hierarchicalRelationships);
 
 		return conceptToUpdate;
+	}
+
+	private void addChildren(ThesaurusConcept conceptToUpdate,
+			List<ThesaurusConcept> childrenConceptToAttach) {
+		for (ThesaurusConcept childConcept : childrenConceptToAttach) {
+			if (!conceptToUpdate.getThesaurus().isPolyHierarchical()
+					&& childConcept.getParentConcepts().size() > 0) {
+				throw new BusinessException(
+						"Thesaurus is monohierarchical, but some concepts have multiple parents!",
+						"monohierarchical-violation");
+			} else {
+				childConcept.getParentConcepts().add(conceptToUpdate);
+				thesaurusConceptDAO.update(childConcept);
+				thesaurusConceptDAO.flush();
+			}
+		}
+		calculateChildrenRoots(conceptToUpdate.getIdentifier(),
+				conceptToUpdate.getIdentifier());
 	}
 
 	public void calculateChildrenRoots(String parentId, String originalParentId) {
