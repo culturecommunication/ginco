@@ -32,7 +32,7 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 	btnLbl : 'View',
 	tpl : Ext
 			.create('Ext.ux.CTemplate',
-					'<tpl for="."><div class="alignment_item">{url} {button}</div></tpl>'),
+					'<tpl for="."><div class="alignment_item">{button} {url}</div></tpl>'),
 	actionIdRe : new RegExp(Ext.baseCSSPrefix + 'action-col-(\\d+)'),
 	constructor : function() {
 		this.btnComponents = [];
