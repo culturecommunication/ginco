@@ -76,7 +76,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 	loadData : function(aForm, aModel) {
 		var thesaurusPanel = aForm.up('thesaurusPanel');
 		aForm.loadRecord(aModel);
-		
+
 
         if(thesaurusPanel.getThesaurusData().canBeDeleted) {
            thesaurusPanel.down('button[cls=delete]').setDisabled(false);
@@ -84,13 +84,14 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
            thesaurusPanel.down('button[cls=delete]').setDisabled(true);
         }
 
-        
+
         thesaurusPanel.down('#versionTab').setDisabled(false);
         thesaurusPanel.down('#customAttributeTypesTab').setDisabled(false);
         thesaurusPanel.down('#statisticsTab').setDisabled(false);
         thesaurusPanel.down('#usersTab').setDisabled(false);
-        
 
+
+        thesaurusPanel.down('#publishThesaurus').setDisabled(false);
         if(thesaurusPanel.getThesaurusData().archived) {
             thesaurusPanel.down('bottomFormToolBar').setArchived();
             thesaurusPanel.down('#archiveThesaurus').setDisabled(true);
