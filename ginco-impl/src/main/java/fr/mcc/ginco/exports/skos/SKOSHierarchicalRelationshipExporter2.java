@@ -47,7 +47,6 @@ import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.skos.namespaces.GINCO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
@@ -57,41 +56,37 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
  * 
  */
 @Component("skosHierarchicalRelationshipExporter2")
-public class SKOSHierarchicalRelationshipExporter2 {
-
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
+public class SKOSHierarchicalRelationshipExporter2 {	
 
 	@Inject
 	@Named("conceptHierarchicalRelationshipService")
 	private IConceptHierarchicalRelationshipService conceptHierarchicalRelationshipService;
 
-
-	public Model exportHierarchicalRelationships(Model model, ThesaurusConcept parentConcept, ThesaurusConcept childConcept) {
-
-		
+	public Model exportHierarchicalRelationships(Model model,
+			ThesaurusConcept parentConcept, ThesaurusConcept childConcept) {
 		Resource childRes = model.createResource(childConcept.getIdentifier());
 
 		if (parentConcept != null) {
-			Resource parentRes = model.createResource(parentConcept.getIdentifier());
+			Resource parentRes = model.createResource(parentConcept
+					.getIdentifier());
 			ConceptHierarchicalRelationship relationship = conceptHierarchicalRelationshipService
 					.getByChildAndParentIds(childConcept.getIdentifier(),
 							parentConcept.getIdentifier());
 			String parentGincoLabel = ConceptHierarchicalRelationshipRoleEnum
 					.getStatusByCode(relationship.getRole())
 					.getParentSkosLabel();
-			buildHierarchicalRelationship(model, childRes, parentRes, SKOS.BROADER,
-					parentGincoLabel);
+			buildHierarchicalRelationship(model, childRes, parentRes,
+					SKOS.BROADER, parentGincoLabel);
 
 			String childGincoLabel = ConceptHierarchicalRelationshipRoleEnum
 					.getStatusByCode(relationship.getRole())
 					.getChildSkosLabel();
-			buildHierarchicalRelationship(model, parentRes, childRes, SKOS.NARROWER,
-					childGincoLabel);
+			buildHierarchicalRelationship(model, parentRes, childRes,
+					SKOS.NARROWER, childGincoLabel);
 
-		} else {			
-			Resource scheme = model.createResource(childConcept.getThesaurusId());			
+		} else {
+			Resource scheme = model.createResource(childConcept
+					.getThesaurusId());
 			model.add(scheme, SKOS.HAS_TOP_CONCEPT, childRes);
 		}
 

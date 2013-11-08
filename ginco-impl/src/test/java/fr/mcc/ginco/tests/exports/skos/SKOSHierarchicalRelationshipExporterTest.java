@@ -35,9 +35,6 @@
 
 package fr.mcc.ginco.tests.exports.skos;
 
-import java.net.URI;
-import java.util.List;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -46,56 +43,40 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSCreationException;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skosapibinding.SKOSManager;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSHierarchicalRelationshipExporter;
+import fr.mcc.ginco.exports.skos.SKOSHierarchicalRelationshipExporter2;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
+import fr.mcc.ginco.skos.namespaces.GINCO;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 public class SKOSHierarchicalRelationshipExporterTest {
 
-	@Mock(name="conceptHierarchicalRelationshipService")
+	@Mock(name = "conceptHierarchicalRelationshipService")
 	private IConceptHierarchicalRelationshipService conceptHierarchicalRelationshipService;
 
 	@InjectMocks
-	SKOSHierarchicalRelationshipExporter skosHierarchicalRelationshipExporter;
-
-	SKOSManager man;
-	SKOSDataset vocab;
-	SKOSDataFactory factory;
-	SKOSConceptScheme scheme;
-	SKOSConcept conceptSKOS;
-	SKOSConcept parent;
+	private SKOSHierarchicalRelationshipExporter2 skosHierarchicalRelationshipExporter;
 
 	@Before
 	public void init() {
-			MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
-	public void testExportSimpleHierarchicalRelationships(){
+	public void testExportSimpleHierarchicalRelationshipsTGTS() {
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
-		try {
-			man = new SKOSManager();
-			vocab = man.createSKOSDataset(URI.create(th.getIdentifier()));
-		} catch (SKOSCreationException e) {
-			throw new BusinessException("Error creating dataset from URI.",
-					"error-in-skos-objects", e);
-		}
-		factory = man.getSKOSDataFactory();
-		scheme = factory.getSKOSConceptScheme(URI.create(th.getIdentifier()));
+
 		Language lang = new Language();
 		lang.setPart1("fr");
 
@@ -108,31 +89,69 @@ public class SKOSHierarchicalRelationshipExporterTest {
 		ConceptHierarchicalRelationship r1 = new ConceptHierarchicalRelationship();
 		r1.setRole(ConceptHierarchicalRelationshipRoleEnum.TGTS.getStatus());
 
-		Mockito.when(conceptHierarchicalRelationshipService.getByChildAndParentIds("http://c1", "http://c2")).thenReturn(r1);
+		Mockito.when(
+				conceptHierarchicalRelationshipService.getByChildAndParentIds(
+						"http://c2", "http://c1")).thenReturn(r1);
 
-		conceptSKOS = factory.getSKOSConcept(URI.create("http://c1"));
-		parent = factory.getSKOSConcept(URI.create("http://c2"));
+		Model model = ModelFactory.createDefaultModel();
+		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
+				model, c1, c2);
 
-		List<SKOSChange> skosChanges = skosHierarchicalRelationshipExporter
-				.exportHierarchicalRelationships(parent, factory, conceptSKOS,
-						scheme, vocab);
+		Model expectedModel = ModelFactory.createDefaultModel();
+		Resource c1Res = expectedModel.createResource("http://c1");
+		Resource c2Res = expectedModel.createResource("http://c2");
 
-		Assert.assertEquals(2, skosChanges.size());
+		Assert.assertTrue(model.contains(c1Res, SKOS.NARROWER, c2Res));
+		Assert.assertTrue(model.contains(c2Res, SKOS.BROADER, c1Res));
+
 	}
 
 	@Test
-	public void testExportHierarchicalRelationships(){
+	public void testExportSimpleHierarchicalRelationshipsTGGTSG() {
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
-		try {
-			man = new SKOSManager();
-			vocab = man.createSKOSDataset(URI.create(th.getIdentifier()));
-		} catch (SKOSCreationException e) {
-			throw new BusinessException("Error creating dataset from URI.",
-					"error-in-skos-objects", e);
-		}
-		factory = man.getSKOSDataFactory();
-		scheme = factory.getSKOSConceptScheme(URI.create(th.getIdentifier()));
+
+		Language lang = new Language();
+		lang.setPart1("fr");
+
+		ThesaurusConcept c1 = new ThesaurusConcept();
+		c1.setIdentifier("http://c1");
+
+		ThesaurusConcept c2 = new ThesaurusConcept();
+		c2.setIdentifier("http://c2");
+
+		ConceptHierarchicalRelationship r1 = new ConceptHierarchicalRelationship();
+		r1.setRole(ConceptHierarchicalRelationshipRoleEnum.TGGTSG.getStatus());
+
+		Mockito.when(
+				conceptHierarchicalRelationshipService.getByChildAndParentIds(
+						"http://c2", "http://c1")).thenReturn(r1);
+
+		Model model = ModelFactory.createDefaultModel();
+		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
+				model, c1, c2);
+
+		Model expectedModel = ModelFactory.createDefaultModel();
+		Resource c1Res = expectedModel.createResource("http://c1");
+		Resource c2Res = expectedModel.createResource("http://c2");
+
+		Property gincoRelBProperty = expectedModel.createProperty(GINCO
+				.getURI() + "broaderGeneric");
+		Property gincoRelNProperty = expectedModel.createProperty(GINCO
+				.getURI() + "narrowerGeneric");
+
+		Assert.assertTrue(model.contains(c1Res, SKOS.NARROWER, c2Res));
+		Assert.assertTrue(model.contains(c2Res, SKOS.BROADER, c1Res));
+
+		Assert.assertTrue(model.contains(c1Res, gincoRelNProperty, c2Res));
+		Assert.assertTrue(model.contains(c2Res, gincoRelBProperty, c1Res));
+	}
+
+	@Test
+	public void testExportSimpleHierarchicalRelationshipsTGITSI() {
+		Thesaurus th = new Thesaurus();
+		th.setIdentifier("http://th1");
+
 		Language lang = new Language();
 		lang.setPart1("fr");
 
@@ -145,15 +164,94 @@ public class SKOSHierarchicalRelationshipExporterTest {
 		ConceptHierarchicalRelationship r1 = new ConceptHierarchicalRelationship();
 		r1.setRole(ConceptHierarchicalRelationshipRoleEnum.TGITSI.getStatus());
 
-		Mockito.when(conceptHierarchicalRelationshipService.getByChildAndParentIds("http://c1", "http://c2")).thenReturn(r1);
+		Mockito.when(
+				conceptHierarchicalRelationshipService.getByChildAndParentIds(
+						"http://c2", "http://c1")).thenReturn(r1);
 
-		conceptSKOS = factory.getSKOSConcept(URI.create("http://c1"));
-		parent = factory.getSKOSConcept(URI.create("http://c2"));
+		Model model = ModelFactory.createDefaultModel();
+		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
+				model, c1, c2);
 
-		List<SKOSChange> skosChanges = skosHierarchicalRelationshipExporter
-				.exportHierarchicalRelationships(parent, factory, conceptSKOS,
-						scheme, vocab);
+		Model expectedModel = ModelFactory.createDefaultModel();
+		Resource c1Res = expectedModel.createResource("http://c1");
+		Resource c2Res = expectedModel.createResource("http://c2");
 
-		Assert.assertEquals(4, skosChanges.size());
+		Property gincoRelBProperty = expectedModel.createProperty(GINCO
+				.getURI() + "broaderInstantive");
+		Property gincoRelNProperty = expectedModel.createProperty(GINCO
+				.getURI() + "narrowerInstantive");
+
+		Assert.assertTrue(model.contains(c1Res, SKOS.NARROWER, c2Res));
+		Assert.assertTrue(model.contains(c2Res, SKOS.BROADER, c1Res));
+
+		Assert.assertTrue(model.contains(c1Res, gincoRelNProperty, c2Res));
+		Assert.assertTrue(model.contains(c2Res, gincoRelBProperty, c1Res));
 	}
+
+	@Test
+	public void testExportSimpleHierarchicalRelationshipsTGPTSP() {
+		Thesaurus th = new Thesaurus();
+		th.setIdentifier("http://th1");
+
+		Language lang = new Language();
+		lang.setPart1("fr");
+
+		ThesaurusConcept c1 = new ThesaurusConcept();
+		c1.setIdentifier("http://c1");
+
+		ThesaurusConcept c2 = new ThesaurusConcept();
+		c2.setIdentifier("http://c2");
+
+		ConceptHierarchicalRelationship r1 = new ConceptHierarchicalRelationship();
+		r1.setRole(ConceptHierarchicalRelationshipRoleEnum.TGPTSP.getStatus());
+
+		Mockito.when(
+				conceptHierarchicalRelationshipService.getByChildAndParentIds(
+						"http://c2", "http://c1")).thenReturn(r1);
+
+		Model model = ModelFactory.createDefaultModel();
+		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
+				model, c1, c2);
+
+		Model expectedModel = ModelFactory.createDefaultModel();
+		Resource c1Res = expectedModel.createResource("http://c1");
+		Resource c2Res = expectedModel.createResource("http://c2");
+
+		Property gincoRelBProperty = expectedModel.createProperty(GINCO
+				.getURI() + "broaderPartitive");
+		Property gincoRelNProperty = expectedModel.createProperty(GINCO
+				.getURI() + "narrowerPartitive");
+
+		Assert.assertTrue(model.contains(c1Res, SKOS.NARROWER, c2Res));
+		Assert.assertTrue(model.contains(c2Res, SKOS.BROADER, c1Res));
+
+		Assert.assertTrue(model.contains(c1Res, gincoRelNProperty, c2Res));
+		Assert.assertTrue(model.contains(c2Res, gincoRelBProperty, c1Res));
+	}
+
+	@Test
+	public void testExportSimpleHierarchicalRelationshipsTopconcept() {
+		Thesaurus th = new Thesaurus();
+		th.setIdentifier("http://th1");
+
+		Language lang = new Language();
+		lang.setPart1("fr");
+
+		ThesaurusConcept c2 = new ThesaurusConcept();
+		c2.setIdentifier("http://c2");
+		c2.setThesaurus(th);
+
+		Model model = ModelFactory.createDefaultModel();
+		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
+				model, null, c2);
+
+		Model expectedModel = ModelFactory.createDefaultModel();
+		Resource scheme = expectedModel.createResource("http://th1");
+		Resource childRes = expectedModel.createResource("http://c2");
+
+		Assert.assertTrue(model
+				.contains(scheme, SKOS.HAS_TOP_CONCEPT, childRes));
+
+	}
+
 }
