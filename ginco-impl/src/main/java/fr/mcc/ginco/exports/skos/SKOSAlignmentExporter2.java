@@ -86,19 +86,15 @@ public class SKOSAlignmentExporter2 {
 				targetConceptId = alignment.getTargetConcepts().iterator()
 						.next().getExternalTargetConcept();
 			}
+			Resource alignmentRes = defaultModel
+					.createResource(targetConceptId);
 
 			String alignmentType = alignment.getAlignmentType().getIsoCode();
 			if ("=EQ".equals(alignmentType)) {
-
-				Resource alignmentRes = defaultModel
-						.createResource(targetConceptId);
 				defaultModel.add(conceptResource, SKOS.EXACT_MATCH,
 						alignmentRes);
 
 			} else if ("~EQ".equals(alignmentType)) {
-
-				Resource alignmentRes = defaultModel
-						.createResource(targetConceptId);
 				defaultModel.add(conceptResource, SKOS.CLOSE_MATCH,
 						alignmentRes);
 
@@ -106,9 +102,6 @@ public class SKOSAlignmentExporter2 {
 					|| "BMG".equals(alignmentType)
 					|| "BMP".equals(alignmentType)
 					|| "BMI".equals(alignmentType)) {
-
-				Resource alignmentRes = defaultModel
-						.createResource(targetConceptId);
 				defaultModel.add(conceptResource, SKOS.BROAD_MATCH,
 						alignmentRes);
 
@@ -116,16 +109,11 @@ public class SKOSAlignmentExporter2 {
 					|| "NMG".equals(alignmentType)
 					|| "NMP".equals(alignmentType)
 					|| "NMI".equals(alignmentType)) {
-
-				Resource alignmentRes = defaultModel
-						.createResource(targetConceptId);
 				defaultModel.add(conceptResource, SKOS.NARROW_MATCH,
 						alignmentRes);
 
 			} else if ("RM".equals(alignmentType)) {
 
-				Resource alignmentRes = defaultModel
-						.createResource(targetConceptId);
 				defaultModel.add(conceptResource, SKOS.RELATED_MATCH,
 						alignmentRes);
 			}

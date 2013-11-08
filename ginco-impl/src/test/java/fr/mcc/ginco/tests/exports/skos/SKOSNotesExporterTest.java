@@ -35,9 +35,7 @@
 package fr.mcc.ginco.tests.exports.skos;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -47,12 +45,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSCreationException;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skosapibinding.SKOSManager;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Note;
@@ -60,27 +56,21 @@ import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSNotesExporter;
+import fr.mcc.ginco.exports.skos.SKOSNotesExporter2;
 import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * This component is in charge of exporting collections to SKOS
  *
  */
-public class SKOSNotesExporterTest {
-	
-	
-	@InjectMocks
-	SKOSNotesExporter skosNotesExporter;
-	
-	SKOSManager man;
-	SKOSDataset vocab;
-
-	SKOSDataFactory factory;
-	
+public class SKOSNotesExporterTest {		
 	@Mock(name="noteService")
 	private INoteService noteService;
+	
+	@InjectMocks
+	private SKOSNotesExporter2 skosNotesExporter;	
+	
 	
 	
 	@Before
@@ -91,48 +81,76 @@ public class SKOSNotesExporterTest {
 	@Test
 	public void testExportNotes() throws IOException {		
 
+		NoteType exType = new NoteType();
+		exType.setCode("example");
+		
+		NoteType defType = new NoteType();
+		defType.setCode("definition");
+		
+		
+		NoteType historyType = new NoteType();
+		historyType.setCode("historyNote");
+		
+		NoteType scopeType = new NoteType();
+		scopeType.setCode("scopeNote");
+		
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
-		try {
-			man = new SKOSManager();
-			vocab = man.createSKOSDataset(URI.create(th.getIdentifier()));
-		} catch (SKOSCreationException e) {
-			throw new BusinessException("Error creating dataset from URI.",
-					"error-in-skos-objects", e);
-		}
-		factory = man.getSKOSDataFactory();
+		
 		Language lang = new Language();
 		lang.setPart1("fr");
 		
 		
 		ThesaurusConcept c1 = new ThesaurusConcept();
 		c1.setIdentifier("http://c1");
-		NoteType exType = new NoteType();
-		exType.setCode("example");
-		NoteType defType = new NoteType();
-		defType.setCode("definition");
+		
 		Note n1 = new Note();
 		n1.setNoteType(exType);
 		n1.setLanguage(lang);
-		n1.setLexicalValue("exemple");
+		n1.setLexicalValue("exemple");		
+		
+		Note n2 = new Note();
+		n2.setNoteType(historyType);
+		n2.setLanguage(lang);
+		n2.setLexicalValue("history");
+		
 		ArrayList<Note> conceptNotes = new ArrayList<Note>();
 		conceptNotes.add(n1);
+		conceptNotes.add(n2);
+
 		ThesaurusTerm t1 = new ThesaurusTerm();
 		t1.setIdentifier("http://t1");
-		Note n2 = new Note();
-		n2.setNoteType(defType);
-		n2.setLanguage(lang);
-		n2.setLexicalValue("definition");
+		
+		Note n3 = new Note();
+		n3.setNoteType(defType);
+		n3.setLanguage(lang);
+		n3.setLexicalValue("definition");
+		
+		Note n4 = new Note();
+		n4.setNoteType(scopeType);
+		n4.setLanguage(lang);
+		n4.setLexicalValue("scope");
+		
 		ArrayList<Note> termNotes = new ArrayList<Note>();
-		termNotes.add(n2);
+		termNotes.add(n3);
+		termNotes.add(n4);
+
 		ArrayList<ThesaurusTerm> prefTerms = new ArrayList<ThesaurusTerm>();
 		prefTerms.add(t1);
+		
 		Mockito.when(noteService.getConceptNotePaginatedList("http://c1", 0, 0)).thenReturn(conceptNotes);
 		Mockito.when(noteService.getTermNotePaginatedList("http://t1", 0, 0)).thenReturn(termNotes);
-		SKOSConcept conceptSKOS = factory.getSKOSConcept(URI.create(c1
-				.getIdentifier()));
+	
+		Model model = ModelFactory.createDefaultModel();
+		skosNotesExporter.exportNotes(model,prefTerms,c1);
 		
-		List<SKOSChange> skosChanges  = skosNotesExporter.exportNotes(c1.getIdentifier(),prefTerms,factory,conceptSKOS,vocab);
-		Assert.assertEquals(2, skosChanges.size());	
+		Model expectedModel = ModelFactory.createDefaultModel();
+		Resource expectedRes = expectedModel.createResource("http://c1");
+		
+		Assert.assertTrue(model.contains(expectedRes, SKOS.EXAMPLE, "exemple", "fr"));
+		Assert.assertTrue(model.contains(expectedRes, SKOS.HISTORY_NOTE, "history", "fr"));
+		Assert.assertTrue(model.contains(expectedRes, SKOS.DEFINITION, "definition", "fr"));
+		Assert.assertTrue(model.contains(expectedRes, SKOS.SCOPE_NOTE, "scope", "fr"));
+	
 	}
 }

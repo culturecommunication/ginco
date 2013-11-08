@@ -35,11 +35,13 @@
 package fr.mcc.ginco.tests.exports.skos;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -48,15 +50,21 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSArrayExporter;
+import fr.mcc.ginco.exports.skos.SKOSArrayExporter2;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.utils.DateUtil;
 
 /**
@@ -72,7 +80,7 @@ public class SKOSArrayExporterTest {
 	private INodeLabelService nodeLabelService;
 
 	@InjectMocks
-	SKOSArrayExporter skosArrayExporter;
+	SKOSArrayExporter2 skosArrayExporter;
 
 	@Before
 	public void init() {
@@ -165,12 +173,18 @@ public class SKOSArrayExporterTest {
 		nodeLabel2.setCreated(DateUtil.nowDate());
 		nodeLabel2.setModified(DateUtil.nowDate());
 		Mockito.when(nodeLabelService.getByThesaurusArray("http://th2")).thenReturn(nodeLabel2);
+        Mockito.when(thesaurusArrayService.getAllThesaurusArrayByThesaurusId(Mockito.anyString(), Mockito.anyString())).thenReturn(arrays);
+		
+        Model model = ModelFactory.createDefaultModel();
+		skosArrayExporter.exportCollections(th, model);
+		
+		Model modelExpected = ModelFactory.createDefaultModel();
+		Resource collec = modelExpected.createResource("http://th2");
+		Resource c5Res = modelExpected.createResource("http://c5");
 
-		Mockito.when(thesaurusArrayService.getAllThesaurusArrayByThesaurusId(Mockito.anyString(), Mockito.anyString())).thenReturn(arrays);
-
-		String skosArrays  = skosArrayExporter.exportCollections(th);
-
-		InputStream is = SKOSArrayExporterTest.class.getResourceAsStream("/exports/arrays_export.rdf");
-		//Assert.assertEquals(IOUtils.toString(is), skosArrays);
-	}
+		Assert.assertTrue(model.containsResource(collec));		
+		Assert.assertTrue(model.contains(collec, SKOS.MEMBER, c5Res));
+		
+	}	
+	
 }
