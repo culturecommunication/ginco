@@ -43,9 +43,6 @@ import javax.inject.Named;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.hp.hpl.jena.ontology.ObjectProperty;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -56,10 +53,8 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
-import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.skos.namespaces.GINCO;
 import fr.mcc.ginco.skos.namespaces.ISOTHES;
@@ -70,8 +65,8 @@ import fr.mcc.ginco.utils.DateUtil;
  * This component is in charge of exporting groups to SKOS
  *
  */
-@Component("skosGroupExporter2")
-public class SKOSGroupExporter2 {
+@Component("skosGroupExporter")
+public class SKOSGroupExporter {
 
 	@Inject
 	@Named("thesaurusConceptGroupService")
@@ -80,73 +75,14 @@ public class SKOSGroupExporter2 {
 	@Inject
 	@Named("thesaurusConceptGroupLabelService")
 	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
-	
-	@Inject
-	@Named("thesaurusConceptGroupTypeService")
-	private IThesaurusConceptGroupTypeService thesaurusConceptGroupTypeService;
+
 
 	@Inject
 	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
+	private IThesaurusConceptService thesaurusConceptService;	
+	
 
-	public Model exportGroups(Thesaurus thesaurus, Model model, OntModel ontModel) {
-		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService
-				.getAllThesaurusConceptGroupsByThesaurusId(null,
-						thesaurus.getIdentifier());
-		if (!groups.isEmpty()) {
-			buildGroupOntologyModel(ontModel);
-			
-			for (ThesaurusConceptGroupType groupType:thesaurusConceptGroupTypeService.getConceptGroupTypeList()) {
-				addGroupTypeToOntModel(ontModel, groupType
-						.getSkosLabel());		
-			}
-			
-			for (ThesaurusConceptGroup group : groups) {						
-				buildGroup(thesaurus, group, model);
-			}
-		
-		}
-		return model;
-	}
-
-	private OntModel buildGroupOntologyModel(OntModel ontModel) {
-
-
-		OntClass groupClass = ontModel.createClass(ISOTHES.CONCEPT_GROUP
-				.getURI());
-		groupClass.addLabel(ontModel.createLiteral(ISOTHES.CONCEPT_GROUP
-				.getLocalName()));
-		groupClass.addSuperClass(SKOS.COLLECTION);
-
-		ObjectProperty subGroup = ontModel
-				.createObjectProperty(ISOTHES.SUB_GROUP.getURI());
-		subGroup.addLabel(ontModel.createLiteral(ISOTHES.SUB_GROUP
-				.getLocalName()));
-		subGroup.addRange(groupClass);
-		subGroup.addDomain(groupClass);
-
-		ObjectProperty superGroup = ontModel
-				.createObjectProperty(ISOTHES.SUPER_GROUP.getURI());
-		superGroup.addLabel(ontModel.createLiteral(ISOTHES.SUPER_GROUP
-				.getLocalName()));
-		superGroup.addRange(groupClass.asResource());
-		superGroup.addDomain(groupClass.asResource());
-
-		return ontModel;
-	}
-
-	private OntClass addGroupTypeToOntModel(OntModel ontmodel, String groupType) {		
-		OntClass groupTypeRes = ontmodel.createClass(GINCO.getResource(
-				groupType).getURI());
-		groupTypeRes.addLabel(ontmodel.createLiteral(GINCO.getResource(
-				groupType).getLocalName()));
-		groupTypeRes.addSuperClass(ontmodel.getResource(ISOTHES.CONCEPT_GROUP
-				.getURI()));
-		return groupTypeRes;
-				
-	}
-
-	private void buildGroup(Thesaurus thesaurus, ThesaurusConceptGroup group,
+	public void exportGroup(Thesaurus thesaurus, ThesaurusConceptGroup group,
 			Model model) {
 		ThesaurusConceptGroupLabel label = thesaurusConceptGroupLabelService
 				.getByThesaurusConceptGroup(group.getIdentifier());

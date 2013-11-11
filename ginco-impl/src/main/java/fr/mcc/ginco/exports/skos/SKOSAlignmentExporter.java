@@ -32,8 +32,9 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
 package fr.mcc.ginco.exports.skos;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,62 +42,83 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.services.IAssociativeRelationshipService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.skos.namespaces.GINCO;
+import fr.mcc.ginco.services.IAlignmentService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
- * This component is in charge of exporting concept associative relationships to SKOS
- *
+ * This component is in charge of exporting concept alignments to SKOS
+ * 
  */
 
-@Component("skosAssociativeRelationshipExporter2")
-public class SKOSAssociativeRelationshipExporter2 {
+@Component("skosAlignmentExporter")
+public class SKOSAlignmentExporter {
 
 	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
-
-	@Inject
-	@Named("associativeRelationshipService")
-	private IAssociativeRelationshipService associativeRelationshipService;
+	@Named("alignmentService")
+	private IAlignmentService alignmentService;
 
 	/**
-	 * Export concept associative relationships to SKOS using the skos API
-	 * @param concept
+	 * Export concept alignments model
+	 * 
+	 * @param conceptId
 	 * @param factory
 	 * @param conceptSKOS
 	 * @param vocab
-	 *
-	 * @return list of concept associative relationships for skos
+	 * 
+	 * @return
 	 */
-	public Model exportAssociativeRelationships(ThesaurusConcept concept,
-			Model defaultModel, Resource conceptResource){
-		for (ThesaurusConcept related : thesaurusConceptService
-				.getThesaurusConceptList(associativeRelationshipService
-						.getAssociatedConceptsId(concept))) {		
+	public Model exportAlignments(String conceptId, 
+			Model defaultModel) {
+		Resource conceptResource = defaultModel.createResource(
+				conceptId, SKOS.CONCEPT);		
+		List<Alignment> alignments = alignmentService
+				.getAlignmentsBySourceConceptId(conceptId);
+		for (Alignment alignment : alignments) {
+			ThesaurusConcept internalTargetConcept = alignment
+					.getTargetConcepts().iterator().next()
+					.getInternalTargetConcept();
+			String targetConceptId = "";
+			if (internalTargetConcept != null) {
+				targetConceptId = internalTargetConcept.getIdentifier();
+			} else {
+				targetConceptId = alignment.getTargetConcepts().iterator()
+						.next().getExternalTargetConcept();
+			}
+			Resource alignmentRes = defaultModel
+					.createResource(targetConceptId);
 
-			Resource relatedConcept = defaultModel.createResource(related
-					.getIdentifier());	
+			String alignmentType = alignment.getAlignmentType().getIsoCode();
+			if ("=EQ".equals(alignmentType)) {
+				defaultModel.add(conceptResource, SKOS.EXACT_MATCH,
+						alignmentRes);
 
-			defaultModel.add(conceptResource, SKOS.RELATED, relatedConcept);
+			} else if ("~EQ".equals(alignmentType)) {
+				defaultModel.add(conceptResource, SKOS.CLOSE_MATCH,
+						alignmentRes);
 
-			
-			String roleSkosLabel = associativeRelationshipService
-					.getAssociativeRelationshipById(concept.getIdentifier(),
-							related.getIdentifier()).getRelationshipRole()
-					.getSkosLabel();
-			
-			Property customAttributeProperty = 
-					defaultModel.createProperty(GINCO.getURI() + roleSkosLabel);
+			} else if ("BM".equals(alignmentType)
+					|| "BMG".equals(alignmentType)
+					|| "BMP".equals(alignmentType)
+					|| "BMI".equals(alignmentType)) {
+				defaultModel.add(conceptResource, SKOS.BROAD_MATCH,
+						alignmentRes);
 
-			defaultModel.add(conceptResource, customAttributeProperty, relatedConcept);			
-			
+			} else if ("NM".equals(alignmentType)
+					|| "NMG".equals(alignmentType)
+					|| "NMP".equals(alignmentType)
+					|| "NMI".equals(alignmentType)) {
+				defaultModel.add(conceptResource, SKOS.NARROW_MATCH,
+						alignmentRes);
+
+			} else if ("RM".equals(alignmentType)) {
+
+				defaultModel.add(conceptResource, SKOS.RELATED_MATCH,
+						alignmentRes);
+			}
 		}
 		return defaultModel;
 	}

@@ -51,8 +51,8 @@ import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.skos.namespaces.GINCO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
-@Component("skosAssociativeRelationshipRolesExporter2")
-public class SKOSAssociativeRelationshipRolesExporter2 {
+@Component("skosAssociativeRelationshipRolesExporter")
+public class SKOSAssociativeRelationshipRolesExporter {
 
 	@Inject
 	@Named("associativeRelationshipRoleService")

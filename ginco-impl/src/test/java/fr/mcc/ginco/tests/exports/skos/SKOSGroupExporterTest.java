@@ -35,6 +35,7 @@
 package fr.mcc.ginco.tests.exports.skos;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +51,10 @@ import org.mockito.MockitoAnnotations;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -58,10 +62,13 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSGroupExporter;
+import fr.mcc.ginco.exports.skos.SKOSGroupExporter;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.GINCO;
+import fr.mcc.ginco.skos.namespaces.ISOTHES;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class SKOSGroupExporterTest {
@@ -76,7 +83,7 @@ public class SKOSGroupExporterTest {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@InjectMocks
-	SKOSGroupExporter skosGroupExporter;
+	private SKOSGroupExporter skosGroupExporter;
 
 	@Before
 	public void init() {
@@ -85,10 +92,7 @@ public class SKOSGroupExporterTest {
 
 
 	@Test
-	public void testBuildSimpleGroup(){
-
-		Model model = ModelFactory.createDefaultModel();
-
+	public void testExportSimpleGroup(){
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
 
@@ -112,6 +116,11 @@ public class SKOSGroupExporterTest {
 
 		ThesaurusConceptGroup g2 = new ThesaurusConceptGroup();
 		g2.setIdentifier("http://g2");
+		
+		ThesaurusConceptGroup g3 = new ThesaurusConceptGroup();
+		g3.setIdentifier("http://g3");
+		ArrayList<ThesaurusConceptGroup> childrenGroups = new ArrayList<ThesaurusConceptGroup>();
+		childrenGroups.add(g3);
 
 		ThesaurusConceptGroup g1 = new ThesaurusConceptGroup();
 		g1.setIdentifier("http://g1");
@@ -121,26 +130,51 @@ public class SKOSGroupExporterTest {
 		g1.setParent(g2);
 		g1.setNotation("notation");
 
+		Date now = DateUtil.nowDate();
 		ThesaurusConceptGroupLabel label1 = new ThesaurusConceptGroupLabel();
-		label1.setCreated(DateUtil.nowDate());
-		label1.setModified(DateUtil.nowDate());
+		label1.setCreated(now);
+		label1.setModified(now);
 		label1.setLexicalValue("group1");
 		label1.setLanguage(lang);
 		label1.setConceptGroup(g1);
 
 		Mockito.when(thesaurusConceptGroupLabelService
 		.getByThesaurusConceptGroup(g1.getIdentifier())).thenReturn(label1);
+		
+		Mockito.when(thesaurusConceptGroupService.getChildGroups("http://g1")).thenReturn(childrenGroups);
 
-		skosGroupExporter.buildGroup(th, g1, model);
+		Model model  = ModelFactory.createDefaultModel();
+		skosGroupExporter.exportGroup(th, g1, model);
+		
+		Model expectedModel  = ModelFactory.createDefaultModel();
+		Resource groupeRes = expectedModel.createResource("http://g1");
+		Resource schemeRes = expectedModel.createResource("http://th1");
+		Resource c1Res = expectedModel.createResource("http://c1");
+		Resource c2Res = expectedModel.createResource("http://c2");
+		Resource c3Res = expectedModel.createResource("http://c3");
+		Resource g2Res = expectedModel.createResource("http://g2");
+		Resource g3Res = expectedModel.createResource("http://g3");
 
-		StmtIterator properties1 = model.getResource("http://g1").listProperties();
-		Assert.assertEquals(10, properties1.toList().size());
+
+		Assert.assertTrue(model.containsResource(groupeRes));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(RDF.type, GINCO.getResource("Domaine")));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.IN_SCHEME, schemeRes));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(DCTerms.created, DateUtil.toString(now)));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(DCTerms.modified, DateUtil.toString(now)));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(RDFS.label, "group1", "fr"));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.NOTATION, "notation"));
+		
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.MEMBER, c1Res));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.MEMBER, c2Res));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.MEMBER, c3Res));
+		
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(ISOTHES.SUPER_GROUP, g2Res));
+
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(ISOTHES.SUB_GROUP, g3Res));
 	}
-
+	
 	@Test
 	public void testBuildDynamicGroup(){
-
-		Model model = ModelFactory.createDefaultModel();
 
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
@@ -181,8 +215,15 @@ public class SKOSGroupExporterTest {
 		Mockito.when(thesaurusConceptService
 		.getRecursiveChildrenByConceptId(c1.getIdentifier())).thenReturn(concepts);
 
-		skosGroupExporter.buildGroup(th, g1, model);
-		StmtIterator properties1 = model.getResource("http://g1").listProperties();
-		Assert.assertEquals(8, properties1.toList().size());
+		Model model  = ModelFactory.createDefaultModel();
+		skosGroupExporter.exportGroup(th, g1, model);
+		
+		Model expectedModel  = ModelFactory.createDefaultModel();
+		Resource c2Res = expectedModel.createResource("http://c2");
+		Resource c3Res = expectedModel.createResource("http://c3");
+		
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.MEMBER, c2Res));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.MEMBER, c3Res));	
+		
 	}
 }

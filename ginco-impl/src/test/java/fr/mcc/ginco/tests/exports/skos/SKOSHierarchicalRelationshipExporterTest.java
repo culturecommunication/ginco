@@ -54,7 +54,7 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
-import fr.mcc.ginco.exports.skos.SKOSHierarchicalRelationshipExporter2;
+import fr.mcc.ginco.exports.skos.SKOSHierarchicalRelationshipExporter;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
 import fr.mcc.ginco.skos.namespaces.GINCO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
@@ -65,7 +65,7 @@ public class SKOSHierarchicalRelationshipExporterTest {
 	private IConceptHierarchicalRelationshipService conceptHierarchicalRelationshipService;
 
 	@InjectMocks
-	private SKOSHierarchicalRelationshipExporter2 skosHierarchicalRelationshipExporter;
+	private SKOSHierarchicalRelationshipExporter skosHierarchicalRelationshipExporter;
 
 	@Before
 	public void init() {

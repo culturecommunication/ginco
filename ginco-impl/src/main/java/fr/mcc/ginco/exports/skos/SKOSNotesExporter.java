@@ -54,8 +54,8 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
  * This component is in charge of exporting concept notes to SKOS
  *
  */
-@Component("skosNotesExporter2")
-public class SKOSNotesExporter2 {
+@Component("skosNotesExporter")
+public class SKOSNotesExporter {
 	
 	@Inject
 	@Named("noteService")

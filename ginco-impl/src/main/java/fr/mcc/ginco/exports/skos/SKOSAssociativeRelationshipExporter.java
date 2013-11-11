@@ -33,26 +33,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package fr.mcc.ginco.exports.skos.skosapi;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+package fr.mcc.ginco.exports.skos;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.semanticweb.skos.AddAssertion;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skos.SKOSObjectRelationAssertion;
 import org.springframework.stereotype.Component;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.GINCO;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * This component is in charge of exporting concept associative relationships to SKOS
@@ -70,8 +66,6 @@ public class SKOSAssociativeRelationshipExporter {
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
 
-	private static final String ginco_uri = "http://data.culture.fr/thesaurus/ginco/";
-
 	/**
 	 * Export concept associative relationships to SKOS using the skos API
 	 * @param concept
@@ -81,34 +75,32 @@ public class SKOSAssociativeRelationshipExporter {
 	 *
 	 * @return list of concept associative relationships for skos
 	 */
-	public List<SKOSChange> exportAssociativeRelationships(ThesaurusConcept concept,
-			SKOSDataFactory factory, SKOSConcept conceptSKOS, SKOSDataset vocab){
-		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+	public Model exportAssociativeRelationships(ThesaurusConcept concept,
+			Model defaultModel){
+		Resource conceptResource = defaultModel.createResource(
+				concept.getIdentifier(), SKOS.CONCEPT);		
+		
 		for (ThesaurusConcept related : thesaurusConceptService
 				.getThesaurusConceptList(associativeRelationshipService
-						.getAssociatedConceptsId(concept))) {
+						.getAssociatedConceptsId(concept))) {		
 
-			SKOSConcept relConcept = factory.getSKOSConcept(URI.create(related
-					.getIdentifier()));
+			Resource relatedConcept = defaultModel.createResource(related
+					.getIdentifier());	
 
-			SKOSObjectRelationAssertion relAssertion = factory
-					.getSKOSObjectRelationAssertion(conceptSKOS,
-							factory.getSKOSRelatedProperty(), relConcept);
-			addList.add(new AddAssertion(vocab, relAssertion));
+			defaultModel.add(conceptResource, SKOS.RELATED, relatedConcept);
 
+			
 			String roleSkosLabel = associativeRelationshipService
 					.getAssociativeRelationshipById(concept.getIdentifier(),
 							related.getIdentifier()).getRelationshipRole()
 					.getSkosLabel();
-			if (!roleSkosLabel.isEmpty()){
-				SKOSObjectRelationAssertion relGincoAssertion = factory
-						.getSKOSObjectRelationAssertion(
-								conceptSKOS,
-								factory.getSKOSObjectProperty(URI.create(ginco_uri
-										+ roleSkosLabel)), relConcept);
-				addList.add(new AddAssertion(vocab, relGincoAssertion));
-			}
+			
+			Property customAttributeProperty = 
+					defaultModel.createProperty(GINCO.getURI() + roleSkosLabel);
+
+			defaultModel.add(conceptResource, customAttributeProperty, relatedConcept);			
+			
 		}
-		return addList;
+		return defaultModel;
 	}
 }

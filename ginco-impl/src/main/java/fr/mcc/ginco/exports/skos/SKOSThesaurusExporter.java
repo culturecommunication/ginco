@@ -51,8 +51,8 @@ import fr.mcc.ginco.utils.DateUtil;
  * This component is in charge of exporting a thesaurus data SKOS
  * 
  */
-@Component("skosThesaurusExporter2")
-public class SKOSThesaurusExporter2 {
+@Component("skosThesaurusExporter")
+public class SKOSThesaurusExporter {
 
 	private static final String SEPARATOR = "\\r?\\n";
 

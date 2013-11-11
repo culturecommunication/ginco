@@ -35,10 +35,12 @@
 package fr.mcc.ginco.tests.exports.skos;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -46,30 +48,40 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDF;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSComplexConceptExporter;
+import fr.mcc.ginco.exports.skos.SKOSComplexConceptExporter;
 import fr.mcc.ginco.services.ISplitNonPreferredTermService;
+import fr.mcc.ginco.skos.namespaces.ISOTHES;
+import fr.mcc.ginco.skos.namespaces.SKOS;
+import fr.mcc.ginco.skos.namespaces.SKOSXL;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class SKOSComplexConceptExporterTest {
 
-	@Mock(name="splitNonPreferredTermService")
+	@Mock(name = "splitNonPreferredTermService")
 	private ISplitNonPreferredTermService splitNonPreferredTermService;
 
 	@InjectMocks
-	SKOSComplexConceptExporter skosComplexConceptExporter;
+	private SKOSComplexConceptExporter skosComplexConceptExporter;
 
 	@Before
 	public void init() {
-			MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
-	public void testExportComplexConcept(){
+	public void testExportComplexConcept() {
 
 		Language lang = new Language();
 		lang.setPart1("fr");
@@ -79,11 +91,13 @@ public class SKOSComplexConceptExporterTest {
 
 		List<SplitNonPreferredTerm> complexConceptsInThesaurus = new ArrayList<SplitNonPreferredTerm>();
 
+		Date now = DateUtil.nowDate();
+		String nowInString = DateUtil.toString(now);
 		SplitNonPreferredTerm complexConcept = new SplitNonPreferredTerm();
 		complexConcept.setThesaurus(th);
 		complexConcept.setIdentifier("http://cc1");
-		complexConcept.setCreated(DateUtil.nowDate());
-		complexConcept.setModified(DateUtil.nowDate());
+		complexConcept.setCreated(now);
+		complexConcept.setModified(now);
 		complexConcept.setStatus(ConceptStatusEnum.CANDIDATE.getStatus());
 		complexConcept.setLexicalValue("fake complex concept");
 		complexConcept.setSource("fake source");
@@ -102,10 +116,44 @@ public class SKOSComplexConceptExporterTest {
 
 		complexConceptsInThesaurus.add(complexConcept);
 
-		Mockito.when(splitNonPreferredTermService
-				.getSplitNonPreferredTermList(Mockito.anyInt(), Mockito.anyInt(),
-						Mockito.eq(th.getThesaurusId()))).thenReturn(complexConceptsInThesaurus);
+		Mockito.when(
+				splitNonPreferredTermService.getSplitNonPreferredTermList(
+						Mockito.anyInt(), Mockito.anyInt(),
+						Mockito.eq(th.getThesaurusId()))).thenReturn(
+				complexConceptsInThesaurus);
 
-		skosComplexConceptExporter.exportComplexConcept(th);
+		Model model = ModelFactory.createDefaultModel();
+		skosComplexConceptExporter.exportComplexConcept(th, model);
+
+		Model expectedModel = ModelFactory.createDefaultModel();
+		Resource complexConceptRes = expectedModel.createResource("http://cc1");
+		Resource schemeRes = expectedModel.createResource("http://th1");
+
+		Assert.assertTrue(model.containsResource(complexConceptRes));
+
+		Assert.assertTrue(model.getResource("http://cc1").hasProperty(RDF.type, ISOTHES.SPLIT_NON_PREFERRED_TERM));
+
+		Assert.assertTrue(model.contains(complexConceptRes, SKOS.IN_SCHEME,
+				schemeRes));
+		Assert.assertTrue(model.contains(complexConceptRes,
+				SKOSXL.LITERAL_FORM, "fake complex concept", "fr"));
+		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.created,
+				nowInString));
+		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.modified,
+				nowInString));
+		Assert.assertTrue(model.contains(complexConceptRes, ISOTHES.STATUS,
+				Integer.toString(ConceptStatusEnum.CANDIDATE.getStatus())));
+		Assert.assertTrue(model.contains(complexConceptRes, DC.source,
+				"fake source"));
+
+		Assert.assertTrue(model.containsResource(ISOTHES.COMPOUND_EQUIVALENCE));
+		
+		//Assert.assertTrue(model.contains(ISOTHES.COMPOUND_EQUIVALENCE, SKOS.IN_SCHEME, schemeRes));
+
+		//Assert.assertTrue(model.contains(ISOTHES.COMPOUND_EQUIVALENCE, ISOTHES.PLUS_UF, "http://cc1"));
+		//Assert.assertTrue(model.contains(ISOTHES.COMPOUND_EQUIVALENCE, ISOTHES.PLUS_USE, "http://t1"));
+		//Assert.assertTrue(model.getResource(ISOTHES.COMPOUND_EQUIVALENCE, ISOTHES.PLUS_USE, "http://t2"));
+
 	}
+
 }

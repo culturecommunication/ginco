@@ -32,97 +32,78 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports.skos.skosapi;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+package fr.mcc.ginco.exports.skos;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.semanticweb.skos.AddAssertion;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skos.SKOSObjectProperty;
-import org.semanticweb.skos.SKOSObjectRelationAssertion;
 import org.springframework.stereotype.Component;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.GINCO;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * This component is in charge of exporting concept hierarchical relationships
  * to SKOS
- *
+ * 
  */
 @Component("skosHierarchicalRelationshipExporter")
-public class SKOSHierarchicalRelationshipExporter {
-
-	@Inject
-	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
+public class SKOSHierarchicalRelationshipExporter {	
 
 	@Inject
 	@Named("conceptHierarchicalRelationshipService")
 	private IConceptHierarchicalRelationshipService conceptHierarchicalRelationshipService;
 
-	private static final String ginco_uri = "http://data.culture.fr/thesaurus/ginco/";
+	public Model exportHierarchicalRelationships(Model model,
+			ThesaurusConcept parentConcept, ThesaurusConcept childConcept) {
+		Resource childRes = model.createResource(childConcept.getIdentifier());
 
-	public List<SKOSChange> exportHierarchicalRelationships(SKOSConcept parent, SKOSDataFactory factory,
-			SKOSConcept conceptSKOS, SKOSConceptScheme scheme, SKOSDataset vocab) {
-
-		List<SKOSChange> addList = new ArrayList<SKOSChange>();
-		if (parent != null) {
+		if (parentConcept != null) {
+			Resource parentRes = model.createResource(parentConcept
+					.getIdentifier());
 			ConceptHierarchicalRelationship relationship = conceptHierarchicalRelationshipService
-					.getByChildAndParentIds(conceptSKOS.getURI().toString(),
-							parent.getURI().toString());
-
+					.getByChildAndParentIds(childConcept.getIdentifier(),
+							parentConcept.getIdentifier());
 			String parentGincoLabel = ConceptHierarchicalRelationshipRoleEnum
 					.getStatusByCode(relationship.getRole())
 					.getParentSkosLabel();
-			addList.addAll(buildHierarchicalRelationship (factory, vocab, conceptSKOS, parent, factory.getSKOSBroaderProperty(), parentGincoLabel));
+			buildHierarchicalRelationship(model, childRes, parentRes,
+					SKOS.BROADER, parentGincoLabel);
 
 			String childGincoLabel = ConceptHierarchicalRelationshipRoleEnum
 					.getStatusByCode(relationship.getRole())
 					.getChildSkosLabel();
-			addList.addAll(buildHierarchicalRelationship (factory, vocab, parent, conceptSKOS, factory.getSKOSNarrowerProperty(), childGincoLabel));
+			buildHierarchicalRelationship(model, parentRes, childRes,
+					SKOS.NARROWER, childGincoLabel);
 
 		} else {
-			SKOSObjectRelationAssertion topConcept = factory
-					.getSKOSObjectRelationAssertion(scheme,
-							factory.getSKOSHasTopConceptProperty(), conceptSKOS);
-			addList.add(new AddAssertion(vocab, topConcept));
+			Resource scheme = model.createResource(childConcept
+					.getThesaurusId());
+			model.add(scheme, SKOS.HAS_TOP_CONCEPT, childRes);
 		}
 
-		return addList;
+		return model;
 	}
 
-	private List<SKOSChange> buildHierarchicalRelationship(
-			SKOSDataFactory factory, SKOSDataset vocab,
-			SKOSConcept conceptSKOS, SKOSConcept relatedConcept,
-			SKOSObjectProperty skosRelation, String skosLabel) {
+	private Model buildHierarchicalRelationship(Model defaultModel,
+			Resource sourceConcept, Resource relatedConcept,
+			Property skosRelation, String skosLabel) {
+		defaultModel.add(sourceConcept, skosRelation, relatedConcept);
+		if (!skosLabel.isEmpty()) {
+			Property gincoRelProperty = defaultModel.createProperty(GINCO
+					.getURI() + skosLabel);
 
-		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+			defaultModel.add(sourceConcept, gincoRelProperty, relatedConcept);
 
-		SKOSObjectRelationAssertion skosConnection = factory
-				.getSKOSObjectRelationAssertion(conceptSKOS, skosRelation,
-						relatedConcept);
-		addList.add(new AddAssertion(vocab, skosConnection));
-
-		if (!skosLabel.isEmpty()){
-			SKOSObjectRelationAssertion gincoConnection = factory
-					.getSKOSObjectRelationAssertion(
-							conceptSKOS,
-							factory.getSKOSObjectProperty(URI.create(ginco_uri
-									+ skosLabel)), relatedConcept);
-			addList.add(new AddAssertion(vocab, gincoConnection));
 		}
-		return addList;
+		return defaultModel;
 	}
 }

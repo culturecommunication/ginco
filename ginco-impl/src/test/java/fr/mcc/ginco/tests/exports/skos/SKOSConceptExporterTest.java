@@ -36,71 +36,67 @@
 package fr.mcc.ginco.tests.exports.skos;
 
 import java.io.IOException;
-import java.net.URI;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSCreationException;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skosapibinding.SKOSManager;
+
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.skos.skosapi.MixedSKOSModel;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSAlignmentExporter;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSAssociativeRelationshipExporter;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSConceptExporter;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSCustomConceptAttributeExporter;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSHierarchicalRelationshipExporter;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSNotesExporter;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSTermsExporter;
+import fr.mcc.ginco.exports.skos.SKOSAlignmentExporter;
+import fr.mcc.ginco.exports.skos.SKOSAssociativeRelationshipExporter;
+import fr.mcc.ginco.exports.skos.SKOSConceptExporter;
+import fr.mcc.ginco.exports.skos.SKOSCustomConceptAttributeExporter;
+import fr.mcc.ginco.exports.skos.SKOSHierarchicalRelationshipExporter;
+import fr.mcc.ginco.exports.skos.SKOSNotesExporter;
+import fr.mcc.ginco.exports.skos.SKOSTermsExporter;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.ISOTHES;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class SKOSConceptExporterTest {
 
 	@InjectMocks
-	SKOSConceptExporter skosConceptExporter;
+	private SKOSConceptExporter skosConceptExporter;
 
-	@Mock(name="thesaurusConceptService")
+	@Mock(name = "thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-	@Mock(name="skosTermsExporter")
+	@Mock(name = "skosTermsExporter")
 	private SKOSTermsExporter skosTermsExporter;
 
-	@Mock(name="skosNotesExporter")
+	@Mock(name = "skosNotesExporter")
 	private SKOSNotesExporter skosNotesExporter;
 
-	@Mock(name="skosAssociativeRelationshipExporter")
+	@Mock(name = "skosAssociativeRelationshipExporter")
 	private SKOSAssociativeRelationshipExporter skosAssociativeRelationshipExporter;
 
-	@Mock(name="skosAlignmentExporter")
+	@Mock(name = "skosAlignmentExporter")
 	private SKOSAlignmentExporter skosAlignmentExporter;
 
-	@Mock(name="skosCustomConceptAttributeExporter")
+	@Mock(name = "skosCustomConceptAttributeExporter")
 	private SKOSCustomConceptAttributeExporter skosCustomConceptAttributeExporter;
 
-	@Mock(name="skosHierarchicalRelationshipExporter")
+	@Mock(name = "skosHierarchicalRelationshipExporter")
 	private SKOSHierarchicalRelationshipExporter skosHierarchicalRelationshipExporter;
-
-	SKOSManager man;
-	SKOSDataset vocab;
-	SKOSDataFactory factory;
-	SKOSConceptScheme scheme;
-	SKOSConcept conceptSKOS;
 
 	@Before
 	public void init() {
@@ -108,33 +104,85 @@ public class SKOSConceptExporterTest {
 	}
 
 	@Test
-	public void testExportConceptSKOS() throws IOException{
+	public void testExportConceptSKOS() throws IOException {
 
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
-		try {
-			man = new SKOSManager();
-			vocab = man.createSKOSDataset(URI.create(th.getIdentifier()));
-		} catch (SKOSCreationException e) {
-			throw new BusinessException("Error creating dataset from URI.",
-					"error-in-skos-objects", e);
-		}
-		factory = man.getSKOSDataFactory();
-		scheme = factory.getSKOSConceptScheme(URI.create(th.getIdentifier()));
+
 		Language lang = new Language();
 		lang.setPart1("fr");
 
+		Date now = DateUtil.nowDate();
+
 		ThesaurusConcept c1 = new ThesaurusConcept();
 		c1.setIdentifier("http://c1");
-		c1.setCreated(DateUtil.nowDate());
-		c1.setModified(DateUtil.nowDate());
+		c1.setCreated(now);
+		c1.setModified(now);
 		c1.setNotation("c1_notation");
 		c1.setStatus(ConceptStatusEnum.DEPRECATED.getStatus());
+		c1.setThesaurus(th);
 
-		conceptSKOS = factory.getSKOSConcept(URI.create("http://c1"));
+		ThesaurusConcept c2 = new ThesaurusConcept();
+		c2.setIdentifier("http://c2");
+		c2.setCreated(now);
+		c2.setModified(now);
+		c2.setNotation("c2_notation");
+		c2.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
+		c2.setThesaurus(th);
 
-		//MixedSKOSModel mixedSKOSModel  = skosConceptExporter.exportConceptSKOS(c1, null, scheme, factory, vocab);
-		//Assert.assertEquals(6, mixedSKOSModel.getSkosChanges());
+		List<ThesaurusConcept> children = new ArrayList<ThesaurusConcept>();
+		children.add(c2);
+
+		Mockito.when(thesaurusConceptService.hasChildren("http://c1"))
+				.thenReturn(true);
+		Mockito.when(
+				thesaurusConceptService.getChildrenByConceptId("http://c1"))
+				.thenReturn(children);
+
+		Model model = ModelFactory.createDefaultModel();
+		OntModel ontModel = ModelFactory
+				.createOntologyModel(OntModelSpec.OWL_MEM);
+
+		skosConceptExporter.exportConceptSKOS(c1, null, model, ontModel);
+
+		Model expectedModel = ModelFactory.createDefaultModel();
+		Resource expectedConceptRes = expectedModel.createResource("http://c1");
+		Resource expectedThesRes = expectedModel.createResource("http://th1");
+		Resource expectedConceptRes2 = expectedModel
+				.createResource("http://c2");
+
+		Assert.assertTrue(model.containsResource(expectedConceptRes));
+		Assert.assertTrue(model.getResource("http://c1").hasProperty(RDF.type,
+				SKOS.CONCEPT));
+
+		Assert.assertTrue(model.getResource("http://c1").hasProperty(
+				SKOS.IN_SCHEME, expectedThesRes));
+		Assert.assertTrue(model.getResource("http://c1").hasProperty(
+				DCTerms.created, DateUtil.toString(now)));
+		Assert.assertTrue(model.getResource("http://c1").hasProperty(
+				DCTerms.modified, DateUtil.toString(now)));
+		Assert.assertTrue(model.getResource("http://c1").hasProperty(
+				SKOS.NOTATION, "c1_notation"));
+		Assert.assertTrue(model.getResource("http://c1").hasProperty(
+				ISOTHES.STATUS, "3"));
+
+		Assert.assertTrue(model.containsResource(expectedConceptRes2));
+		Assert.assertTrue(model.getResource("http://c2").hasProperty(RDF.type,
+				SKOS.CONCEPT));
+
+		Assert.assertTrue(model.getResource("http://c2").hasProperty(
+				SKOS.IN_SCHEME, expectedThesRes));
+		Assert.assertTrue(model.getResource("http://c2").hasProperty(
+				DCTerms.created, DateUtil.toString(now)));
+		Assert.assertTrue(model.getResource("http://c2").hasProperty(
+				DCTerms.modified, DateUtil.toString(now)));
+		Assert.assertTrue(model.getResource("http://c2").hasProperty(
+				SKOS.NOTATION, "c2_notation"));
+		Assert.assertTrue(model.getResource("http://c2").hasProperty(
+				ISOTHES.STATUS, "1"));
+
+		Assert.assertNotNull(ontModel.getDatatypeProperty(ISOTHES.getURI()
+				+ "status"));
 	}
 
 }

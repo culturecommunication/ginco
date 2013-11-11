@@ -59,38 +59,36 @@ import fr.mcc.ginco.utils.DateUtil;
  * This component is in charge of exporting concept to SKOS
  * 
  */
-@Component("skosConceptExporter2")
-public class SKOSConceptExporter2 {
+@Component("skosConceptExporter")
+public class SKOSConceptExporter {
 
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
-	@Named("skosTermsExporter2")
-	private SKOSTermsExporter2 skosTermsExporter;
+	@Named("skosTermsExporter")
+	private SKOSTermsExporter skosTermsExporter;
 
 	@Inject
-	@Named("skosNotesExporter2")
-	private SKOSNotesExporter2 skosNotesExporter;
+	@Named("skosNotesExporter")
+	private SKOSNotesExporter skosNotesExporter;
 
 	@Inject
-	@Named("skosAssociativeRelationshipExporter2")
-	private SKOSAssociativeRelationshipExporter2 skosAssociativeRelationshipExporter;
+	@Named("skosAssociativeRelationshipExporter")
+	private SKOSAssociativeRelationshipExporter skosAssociativeRelationshipExporter;
 
 	@Inject
-	@Named("skosAlignmentExporter2")
-	private SKOSAlignmentExporter2 skosAlignmentExporter;
+	@Named("skosAlignmentExporter")
+	private SKOSAlignmentExporter skosAlignmentExporter;
 
 	@Inject
-	@Named("skosCustomConceptAttributeExporter2")
-	private SKOSCustomConceptAttributeExporter2 skosCustomConceptAttributeExporter;
-	
-	
-	@Inject
-	@Named("skosHierarchicalRelationshipExporter2")
-	private SKOSHierarchicalRelationshipExporter2 skosHierarchicalRelationshipExporter;
+	@Named("skosCustomConceptAttributeExporter")
+	private SKOSCustomConceptAttributeExporter skosCustomConceptAttributeExporter;
 
+	@Inject
+	@Named("skosHierarchicalRelationshipExporter")
+	private SKOSHierarchicalRelationshipExporter skosHierarchicalRelationshipExporter;
 
 	/**
 	 * Export a concept to SKOS using the skos API
@@ -103,10 +101,10 @@ public class SKOSConceptExporter2 {
 	 * @return
 	 */
 	public Model exportConceptSKOS(ThesaurusConcept concept,
-			ThesaurusConcept parent, Model model, OntModel ontModel) {		
+			ThesaurusConcept parent, Model model, OntModel ontModel) {
 
 		Resource conceptResource = model.createResource(
-				concept.getIdentifier(), SKOS.CONCEPT);		
+				concept.getIdentifier(), SKOS.CONCEPT);
 
 		exportConceptInformation(concept, conceptResource, model, ontModel);
 
@@ -118,26 +116,25 @@ public class SKOSConceptExporter2 {
 
 		skosTermsExporter.exportConceptNotPreferredTerms(
 				concept.getIdentifier(), model, conceptResource);
-		
+
 		skosNotesExporter.exportNotes(model, prefTerms, concept);
 
 		skosAssociativeRelationshipExporter.exportAssociativeRelationships(
-				concept, model, conceptResource);
+				concept, model);
 
 		if (thesaurusConceptService.hasChildren(concept.getIdentifier())) {
 			for (ThesaurusConcept child : thesaurusConceptService
-					.getChildrenByConceptId(concept.getIdentifier())) {			
+					.getChildrenByConceptId(concept.getIdentifier())) {
 
 				exportConceptSKOS(child, concept, model, ontModel);
 
 			}
-		}	
-		
-		skosHierarchicalRelationshipExporter
-				.exportHierarchicalRelationships(model, parent, concept);
+		}
 
-		skosAlignmentExporter.exportAlignments(concept.getIdentifier(),
-				conceptResource, model);
+		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
+				model, parent, concept);
+
+		skosAlignmentExporter.exportAlignments(concept.getIdentifier(), model);
 
 		skosCustomConceptAttributeExporter.exportCustomConceptAttributes(
 				concept, model, conceptResource, ontModel);
@@ -155,7 +152,7 @@ public class SKOSConceptExporter2 {
 	 * @param vocab
 	 * @return
 	 */
-	public Model exportConceptInformation(ThesaurusConcept concept,
+	private Model exportConceptInformation(ThesaurusConcept concept,
 			Resource conceptResource, Model model, OntModel ontModel) {
 
 		Resource inScheme = model.createResource(concept.getThesaurus()
@@ -167,16 +164,14 @@ public class SKOSConceptExporter2 {
 		model.add(conceptResource, DCTerms.modified,
 				DateUtil.toString(concept.getModified()));
 
-		
 		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
 
-			model.add(conceptResource, SKOS.NOTATION,
-					concept.getNotation());
+			model.add(conceptResource, SKOS.NOTATION, concept.getNotation());
 
 		}
 
-		DatatypeProperty statusOnt = ontModel.createDatatypeProperty(ISOTHES.getURI()
-				+ "status");
+		DatatypeProperty statusOnt = ontModel.createDatatypeProperty(ISOTHES
+				.getURI() + "status");
 		Literal l = ontModel.createLiteral("status");
 		statusOnt.addLabel(l);
 

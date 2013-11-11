@@ -32,9 +32,8 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports.skos.skosapi;
+package fr.mcc.ginco.exports.skos;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,7 +43,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
@@ -69,12 +67,11 @@ public class SKOSComplexConceptExporter {
 	@Named("splitNonPreferredTermService")
 	private ISplitNonPreferredTermService splitNonPreferredTermService;
 
-	public String exportComplexConcept(Thesaurus thesaurus) {
+	public Model exportComplexConcept(Thesaurus thesaurus, Model model) {
 		List<SplitNonPreferredTerm> complexConcepts = splitNonPreferredTermService
 				.getSplitNonPreferredTermList(0, -1,
 						thesaurus.getThesaurusId());
 		if (!complexConcepts.isEmpty()) {
-			Model model = ModelFactory.createDefaultModel();
 
 			for (SplitNonPreferredTerm complexConcept : complexConcepts) {
 
@@ -113,24 +110,8 @@ public class SKOSComplexConceptExporter {
 					model.add(compoundEquivalenceRes, ISOTHES.PLUS_USE, term.getIdentifier());
 				}
 			}
-
-			model.setNsPrefix("skos", SKOS.getURI());
-			model.setNsPrefix("dct", DCTerms.getURI());
-			model.setNsPrefix("dc", DC.getURI());
-			model.setNsPrefix("skos-xl", SKOSXL.getURI());
-			model.setNsPrefix("iso-thes", ISOTHES.getURI());
-
-			StringWriter sw = new StringWriter();
-			model.write(sw, "RDF/XML-ABBREV");
-			String result = sw.toString();
-			result = result.replaceAll("_REMOVEME_", "");
-
-			int start = result.lastIndexOf("skos-xl#\">")
-					+ "skos-xl#\">".length() + 2;
-			int end = result.lastIndexOf("</rdf:RDF>");
-
-			return result.substring(start, end);
+			
 		}
-		return "";
+		return model;
 	}
 }

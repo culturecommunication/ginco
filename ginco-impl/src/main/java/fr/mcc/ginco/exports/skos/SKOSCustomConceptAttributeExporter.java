@@ -21,8 +21,8 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.services.ICustomConceptAttributeService;
 import fr.mcc.ginco.skos.namespaces.GINCO;
 
-@Component("skosCustomConceptAttributeExporter2")
-public class SKOSCustomConceptAttributeExporter2 {
+@Component("skosCustomConceptAttributeExporter")
+public class SKOSCustomConceptAttributeExporter {
 
 	@Inject
 	@Named("customConceptAttributeService")

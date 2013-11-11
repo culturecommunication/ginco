@@ -36,7 +36,6 @@ package fr.mcc.ginco.tests.exports.skos;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,7 +52,7 @@ import org.mockito.MockitoAnnotations;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.NodeLabel;
@@ -61,7 +60,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exports.skos.SKOSArrayExporter2;
+import fr.mcc.ginco.exports.skos.SKOSArrayExporter;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
@@ -80,7 +79,7 @@ public class SKOSArrayExporterTest {
 	private INodeLabelService nodeLabelService;
 
 	@InjectMocks
-	SKOSArrayExporter2 skosArrayExporter;
+	SKOSArrayExporter skosArrayExporter;
 
 	@Before
 	public void init() {
@@ -182,7 +181,9 @@ public class SKOSArrayExporterTest {
 		Resource collec = modelExpected.createResource("http://th2");
 		Resource c5Res = modelExpected.createResource("http://c5");
 
-		Assert.assertTrue(model.containsResource(collec));		
+		Assert.assertTrue(model.containsResource(collec));	
+		Assert.assertTrue(model.getResource("http://th2").hasProperty(RDF.type, SKOS.COLLECTION));
+
 		Assert.assertTrue(model.contains(collec, SKOS.MEMBER, c5Res));
 		
 	}	

@@ -38,9 +38,7 @@ import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
@@ -48,8 +46,8 @@ import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
 import fr.mcc.ginco.skos.namespaces.GINCO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
-@Component("skosHierarchicalRelationshipRolesExporter2")
-public class SKOSHierarchicalRelationshipRolesExporter2 {
+@Component("skosHierarchicalRelationshipRolesExporter")
+public class SKOSHierarchicalRelationshipRolesExporter {
 
 	public Model exportHierarchicalRelationshipRoles(Model model, OntModel ontModel) {
 		ConceptHierarchicalRelationshipRoleEnum[] roles = ConceptHierarchicalRelationshipRoleEnum

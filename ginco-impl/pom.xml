@@ -158,15 +158,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>uk.ac.manchester.cs.skos</groupId>
-			<artifactId>skosapi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>uk.ac.manchester.cs.owl</groupId>
-			<artifactId>owlapi</artifactId>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>

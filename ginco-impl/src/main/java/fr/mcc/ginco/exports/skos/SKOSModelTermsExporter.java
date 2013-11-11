@@ -55,8 +55,8 @@ import fr.mcc.ginco.utils.DateUtil;
  * 
  */
 
-@Component("skosModelTermsExporter2")
-public class SKOSModelTermsExporter2 {
+@Component("skosModelTermsExporter")
+public class SKOSModelTermsExporter {
 
 	@Log
 	private Logger logger;

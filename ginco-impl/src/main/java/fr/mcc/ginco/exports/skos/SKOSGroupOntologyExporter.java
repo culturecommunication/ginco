@@ -32,33 +32,60 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports.skos.skosapi;
+package fr.mcc.ginco.exports.skos;
 
-import java.util.List;
+import org.springframework.stereotype.Component;
 
-import org.semanticweb.skos.SKOSChange;
+import com.hp.hpl.jena.ontology.ObjectProperty;
+import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntModel;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import fr.mcc.ginco.skos.namespaces.GINCO;
+import fr.mcc.ginco.skos.namespaces.ISOTHES;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
- * @author dabel
+ * This component is in charge of exporting groups to SKOS
  *
  */
-public class MixedSKOSModel {
-	private List<SKOSChange> skosChanges;
-	private List<Model> models;
+@Component("skosGroupOntologyExporter")
+public class SKOSGroupOntologyExporter {
+	
+	public OntModel buildGroupOntologyModel(OntModel ontModel) {
 
-	public List<SKOSChange> getSkosChanges() {
-		return skosChanges;
-	}
-	public void setSkosChanges(List<SKOSChange> skosChanges) {
-		this.skosChanges = skosChanges;
-	}
-	public List<Model> getModels() {
-		return models;
-	}
-	public void setModels(List<Model> models) {
-		this.models = models;
+
+		OntClass groupClass = ontModel.createClass(ISOTHES.CONCEPT_GROUP
+				.getURI());
+		groupClass.addLabel(ontModel.createLiteral(ISOTHES.CONCEPT_GROUP
+				.getLocalName()));
+		groupClass.addSuperClass(SKOS.COLLECTION);
+
+		ObjectProperty subGroup = ontModel
+				.createObjectProperty(ISOTHES.SUB_GROUP.getURI());
+		subGroup.addLabel(ontModel.createLiteral(ISOTHES.SUB_GROUP
+				.getLocalName()));
+		subGroup.addRange(groupClass);
+		subGroup.addDomain(groupClass);
+
+		ObjectProperty superGroup = ontModel
+				.createObjectProperty(ISOTHES.SUPER_GROUP.getURI());
+		superGroup.addLabel(ontModel.createLiteral(ISOTHES.SUPER_GROUP
+				.getLocalName()));
+		superGroup.addRange(groupClass.asResource());
+		superGroup.addDomain(groupClass.asResource());
+
+		return ontModel;
 	}
 
+	public OntClass addGroupTypeToOntModel(OntModel ontmodel, String groupType) {		
+		OntClass groupTypeRes = ontmodel.createClass(GINCO.getResource(
+				groupType).getURI());
+		groupTypeRes.addLabel(ontmodel.createLiteral(GINCO.getResource(
+				groupType).getLocalName()));
+		groupTypeRes.addSuperClass(ontmodel.getResource(ISOTHES.CONCEPT_GROUP
+				.getURI()));
+		return groupTypeRes;
+				
+	}
+	
 }

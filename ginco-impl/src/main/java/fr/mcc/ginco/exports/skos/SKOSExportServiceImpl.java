@@ -76,7 +76,7 @@ import fr.mcc.ginco.skos.namespaces.SKOSXL;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Service("skosExportService")
-public class SKOSExportServiceImpl2 implements ISKOSExportService {
+public class SKOSExportServiceImpl implements ISKOSExportService {
 	
 	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
@@ -85,36 +85,36 @@ public class SKOSExportServiceImpl2 implements ISKOSExportService {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
-	@Named("skosArrayExporter2")
-	private SKOSArrayExporter2 skosArrayExporter;
+	@Named("skosArrayExporter")
+	private SKOSArrayExporter skosArrayExporter;
 
 	@Inject
-	@Named("skosConceptExporter2")
-	private SKOSConceptExporter2 skosConceptExporter;
+	@Named("skosConceptExporter")
+	private SKOSConceptExporter skosConceptExporter;
 
 	@Inject
-	@Named("skosThesaurusExporter2")
-	private SKOSThesaurusExporter2 skosThesaurusExporter;
+	@Named("skosThesaurusExporter")
+	private SKOSThesaurusExporter skosThesaurusExporter;
 
 	@Inject
-	@Named("skosGroupExporter2")
-	private SKOSGroupExporter2 skosGroupExporter;
+	@Named("skosGroupsExporter")
+	private SKOSGroupsExporter skosGroupsExporter;
 	
 	@Inject
-	@Named("skosAssociativeRelationshipRolesExporter2")
-	private SKOSAssociativeRelationshipRolesExporter2 skosAssociativeRelationshipRolesExporter;
+	@Named("skosAssociativeRelationshipRolesExporter")
+	private SKOSAssociativeRelationshipRolesExporter skosAssociativeRelationshipRolesExporter;
 	
 	@Inject
-	@Named("skosHierarchicalRelationshipRolesExporter2")
-	private SKOSHierarchicalRelationshipRolesExporter2 skosHierarshicalRelationshipRolesExporter;
+	@Named("skosHierarchicalRelationshipRolesExporter")
+	private SKOSHierarchicalRelationshipRolesExporter skosHierarshicalRelationshipRolesExporter;
 
 	@Inject
 	@Named("thesaurusConceptGroupTypeService")
 	private IThesaurusConceptGroupTypeService thesaurusConceptGroupTypeService;
 	
 	@Inject
-	@Named("skosComplexConceptExporter2")
-	private SKOSComplexConceptExporter2 skosComplexConceptExporter;
+	@Named("skosComplexConceptExporter")
+	private SKOSComplexConceptExporter skosComplexConceptExporter;
 
 	@Log
 	Logger logger;
@@ -135,7 +135,7 @@ public class SKOSExportServiceImpl2 implements ISKOSExportService {
 			
 		}
 		skosArrayExporter.exportCollections(thesaurus, model);
-		skosGroupExporter.exportGroups(thesaurus, model, ontModel);
+		skosGroupsExporter.exportGroups(thesaurus, model, ontModel);
 		skosAssociativeRelationshipRolesExporter.exportAssociativeRelationshipRoles(model, ontModel);
 		skosHierarshicalRelationshipRolesExporter.exportHierarchicalRelationshipRoles(model, ontModel);
 		skosComplexConceptExporter.exportComplexConcept(thesaurus, model);

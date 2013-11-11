@@ -35,37 +35,32 @@
 
 package fr.mcc.ginco.tests.exports.skos;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSCreationException;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skosapibinding.SKOSManager;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.skos.skosapi.SKOSAssociativeRelationshipExporter;
+import fr.mcc.ginco.exports.skos.SKOSAssociativeRelationshipExporter;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.GINCO;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 public class SKOSAssociativeRelationshipExporterTest {
 
@@ -76,35 +71,16 @@ public class SKOSAssociativeRelationshipExporterTest {
 	private IAssociativeRelationshipService associativeRelationshipService;
 
 	@InjectMocks
-	SKOSAssociativeRelationshipExporter skosAssociativeRelationshipExporter;
+	private SKOSAssociativeRelationshipExporter skosAssociativeRelationshipExporter;
 
-	SKOSManager man;
-	SKOSDataset vocab;
-	SKOSDataFactory factory;
-	SKOSConceptScheme scheme;
-	SKOSConcept conceptSKOS;
-	SKOSConcept parent;
-
+	
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
-	public void testExportAssociativeRelationship() {
-		Thesaurus th = new Thesaurus();
-		th.setIdentifier("http://th1");
-		try {
-			man = new SKOSManager();
-			vocab = man.createSKOSDataset(URI.create(th.getIdentifier()));
-		} catch (SKOSCreationException e) {
-			throw new BusinessException("Error creating dataset from URI.",
-					"error-in-skos-objects", e);
-		}
-		factory = man.getSKOSDataFactory();
-		scheme = factory.getSKOSConceptScheme(URI.create(th.getIdentifier()));
-		Language lang = new Language();
-		lang.setPart1("fr");
+	public void testExportAssociativeRelationship() {	
 
 		ThesaurusConcept c1 = new ThesaurusConcept();
 		c1.setIdentifier("http://c1");
@@ -113,32 +89,41 @@ public class SKOSAssociativeRelationshipExporterTest {
 		c2.setIdentifier("http://c2");
 
 		AssociativeRelationshipRole role1 = new AssociativeRelationshipRole();
-		role1.setCode("TA");
+		//role1.setCode("TA");
 		role1.setSkosLabel("TermeAssocie");
 
 		AssociativeRelationship r1 = new AssociativeRelationship();
 		r1.setRelationshipRole(role1);
 
-		List<String> c1_associatedConceptIds = new ArrayList<String>();
-		c1_associatedConceptIds.add(c2.getIdentifier());
+		List<String> c1AssociatedConceptIds = new ArrayList<String>();
+		c1AssociatedConceptIds.add(c2.getIdentifier());
 
-		Set<ThesaurusConcept> c1_associatedConcepts = new HashSet<ThesaurusConcept>();
-		c1_associatedConcepts.add(c2);
+		Set<ThesaurusConcept> c1AssociatedConcepts = new HashSet<ThesaurusConcept>();
+		c1AssociatedConcepts.add(c2);
 
 		Mockito.when(thesaurusConceptService
-				.getThesaurusConceptList(c1_associatedConceptIds)).thenReturn(c1_associatedConcepts);
+				.getThesaurusConceptList(c1AssociatedConceptIds)).thenReturn(c1AssociatedConcepts);
 
 		Mockito.when(associativeRelationshipService.getAssociatedConceptsId(c1))
-				.thenReturn(c1_associatedConceptIds);
+				.thenReturn(c1AssociatedConceptIds);
 
 		Mockito.when(associativeRelationshipService
 					.getAssociativeRelationshipById(c1.getIdentifier(),
 							c2.getIdentifier())).thenReturn(r1);
 
-		conceptSKOS = factory.getSKOSConcept(URI.create("http://c1"));
+		Model model = ModelFactory.createDefaultModel();
+		skosAssociativeRelationshipExporter.exportAssociativeRelationships(c1, model);
+		
+		Model expectedModel= ModelFactory.createDefaultModel();
+		Resource conceptResource = expectedModel.createResource("http://c1");
+		Resource relatedConcept = expectedModel.createResource("http://c2");
+		Property customAttributeProperty = 
+				expectedModel.createProperty(GINCO.getURI() + "TermeAssocie");
 
-		List<SKOSChange> skosChanges = skosAssociativeRelationshipExporter.exportAssociativeRelationships(c1, factory, conceptSKOS, vocab);
+		Assert.assertTrue(model.contains(conceptResource, SKOS.RELATED, relatedConcept));
+		Assert.assertTrue(model.contains(conceptResource, customAttributeProperty, relatedConcept));
 
-		Assert.assertEquals(2, skosChanges.size());
 	}
+	
+	
 }

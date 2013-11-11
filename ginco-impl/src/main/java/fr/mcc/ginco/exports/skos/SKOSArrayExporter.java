@@ -32,9 +32,8 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.exports.skos.skosapi;
+package fr.mcc.ginco.exports.skos;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,7 +42,6 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
@@ -72,17 +70,15 @@ public class SKOSArrayExporter {
 	private INodeLabelService nodeLabelService;
 
 	/**
-	 * Export thesaurus arrays from the given thesaurus in SKOS format as a string
+	 * Export thesaurus arrays from the given thesaurus in SKOS format
 	 * @param thesaurus
 	 * @return
 	 */
-	public String exportCollections(Thesaurus thesaurus) {
+	public Model exportCollections(Thesaurus thesaurus, Model model) {
 		List<ThesaurusArray> arrays = thesaurusArrayService
 				.getAllThesaurusArrayByThesaurusId(null, thesaurus.getIdentifier());
 
 		if (arrays.size() != 0) {
-
-			Model model = ModelFactory.createDefaultModel();
 
 			for (ThesaurusArray array : arrays) {
 				NodeLabel label = nodeLabelService.getByThesaurusArray(array
@@ -104,28 +100,16 @@ public class SKOSArrayExporter {
 						model.add(collectionRes, SKOS.MEMBER, y);
 				}
 				for (ThesaurusArray childrenArray : thesaurusArrayService.getChildrenArrays(array.getIdentifier())){
-					Resource arrayMember = model.createResource(childrenArray.getIdentifier()+"_REMOVEME_");
+					Resource arrayMember = model.createResource(childrenArray.getIdentifier());
 					model.add(collectionRes, SKOS.MEMBER, arrayMember);
 				}
 
 				model.add(collectionRes, DCTerms.created, DateUtil.toString(label.getCreated()));
 				model.add(collectionRes, DCTerms.modified, DateUtil.toString(label.getModified()));
 			}
-
-			model.setNsPrefix("skos", SKOS.getURI());
-			model.setNsPrefix("dct", DCTerms.getURI());
-
-			StringWriter sw = new StringWriter();
-			model.write(sw, "RDF/XML-ABBREV");
-			String result = sw.toString();
-			result = result.replaceAll("_REMOVEME_", "");
-			int start = result.lastIndexOf("terms/\">") + "terms\"/>".length()
-					+ 2;
-			int end = result.lastIndexOf("</rdf:RDF>");
-
-			return result.substring(start, end);
+			
 		}
 
-		return "";
+		return model;
 	}
 }

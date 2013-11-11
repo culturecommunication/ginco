@@ -64,8 +64,6 @@
         <servlet.api.version>2.5</servlet.api.version>
         <apache.commons.lang.version>3.1</apache.commons.lang.version>
         <apache.jena.version>2.10.0</apache.jena.version>
-        <skosapi.version>3.0.0</skosapi.version>
-        <owlapi.version>3.2.4</owlapi.version>
         <org.apache.solr>4.2.0</org.apache.solr>
 
         <!-- remote configuration -->
@@ -420,16 +418,6 @@
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-ldap</artifactId>
                 <version>${org.springsecurity.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>uk.ac.manchester.cs.skos</groupId>
-                <artifactId>skosapi</artifactId>
-                <version>${skosapi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>uk.ac.manchester.cs.owl</groupId>
-                <artifactId>owlapi</artifactId>
-                <version>${owlapi.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.jena</groupId>

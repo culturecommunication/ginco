@@ -59,16 +59,16 @@ import fr.mcc.ginco.skos.namespaces.SKOSXL;
  * 
  */
 
-@Component("skosTermsExporter2")
-public class SKOSTermsExporter2 {
+@Component("skosTermsExporter")
+public class SKOSTermsExporter {
 
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
 
 	@Inject
-	@Named("skosModelTermsExporter2")
-	private SKOSModelTermsExporter2 skosModelTermsExporter;
+	@Named("skosModelTermsExporter")
+	private SKOSModelTermsExporter skosModelTermsExporter;
 
 	@Log
 	private Logger logger;

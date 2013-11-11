@@ -56,7 +56,7 @@ import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exports.skos.SKOSNotesExporter2;
+import fr.mcc.ginco.exports.skos.SKOSNotesExporter;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
@@ -69,7 +69,7 @@ public class SKOSNotesExporterTest {
 	private INoteService noteService;
 	
 	@InjectMocks
-	private SKOSNotesExporter2 skosNotesExporter;	
+	private SKOSNotesExporter skosNotesExporter;	
 	
 	
 	
