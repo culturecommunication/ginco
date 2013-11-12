@@ -212,13 +212,13 @@ public class ConceptBuilder extends AbstractBuilder {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public ThesaurusConcept buildConceptHierarchicalRelationships(
+	public Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> buildConceptHierarchicalRelationships(
 			Resource skosConcept, Thesaurus thesaurus,
 			List<ObjectProperty> broaderTypes) throws BusinessException {
 		logger.debug("Building relationships for concept : "
 				+ skosConcept.getURI());
-
-		List<ConceptHierarchicalRelationship> res = new ArrayList<ConceptHierarchicalRelationship>();
+		Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> res = new HashMap<ThesaurusConcept, List<ConceptHierarchicalRelationship>>();
+		List<ConceptHierarchicalRelationship> relations = new ArrayList<ConceptHierarchicalRelationship>();
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		StmtIterator stmtParentItr = skosConcept.listProperties(SKOS.BROADER);
 
@@ -265,18 +265,14 @@ public class ConceptBuilder extends AbstractBuilder {
 					relation.setRole(role.getStatus());
 
 				}
-				res.add(relation);
+				relations.add(relation);
 
 			}
 		}
 
-		concept.setParentConcepts(parentConcepts);
-
-		conceptHierarchicalRelationshipServiceUtil
-				.saveHierarchicalRelationship(concept, res,
-						new ArrayList<ThesaurusConcept>());
-
-		return concept;
+		concept.setParentConcepts(parentConcepts);	
+		res.put(concept, relations);
+		return res;
 	}
 
 	/**

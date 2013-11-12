@@ -37,6 +37,7 @@ package fr.mcc.ginco.tests.imports;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import junitx.framework.ListAssert;
@@ -181,20 +182,25 @@ public class ConceptBuilderTest {
 		broaderTypes.add(ontModel.createObjectProperty(GINCO
 				.getURI() + "broaderGeneric"));
 		
-		ThesaurusConcept concept = conceptBuilder.buildConceptHierarchicalRelationships(skosConcept, fakeThesaurus, broaderTypes);
+		Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> actualRes = conceptBuilder.buildConceptHierarchicalRelationships(skosConcept, fakeThesaurus, broaderTypes);
 
+		ThesaurusConcept actualConcept = actualRes.keySet().iterator().next();
+		List<ConceptHierarchicalRelationship> actualHierarchicalRelations = actualRes.get(actualConcept);
 		List<String> parentIds = new ArrayList<String>();
-		//for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : actualHierarchicalRelations) {
-		//	parentIds.add(conceptHierarchicalRelationship.getIdentifier().getParentconceptid());
-		//}
+		for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : actualHierarchicalRelations) {
+		parentIds.add(conceptHierarchicalRelationship.getIdentifier().getParentconceptid());
+		}
 		
-		Assert.assertEquals(1, concept.getParentConcepts().size());
-		//Assert.assertEquals(1, actualHierarchicalRelations.size());
+		Assert.assertEquals(1, actualConcept.getParentConcepts().size());
+		ThesaurusConcept actualParentConcept =  actualConcept.getParentConcepts().iterator().next();
+		Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423", actualParentConcept.getIdentifier());
+
+		Assert.assertEquals(1, actualHierarchicalRelations.size());
 
 		
-		//ConceptHierarchicalRelationship actualRelationship = actualHierarchicalRelations.iterator().next();
-		//Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423", actualRelationship.getIdentifier().getParentconceptid());
-		//Assert.assertEquals(1, actualRelationship.getRole().intValue());
+		ConceptHierarchicalRelationship actualRelationship = actualHierarchicalRelations.iterator().next();
+		Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423", actualRelationship.getIdentifier().getParentconceptid());
+	   Assert.assertEquals(1, actualRelationship.getRole().intValue());
 
 		
 	}

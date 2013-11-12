@@ -37,6 +37,7 @@ package fr.mcc.ginco.imports;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -50,6 +51,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -62,34 +64,34 @@ import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 
 /**
  * Builder in charge of building ThesaurusConcept
- *
+ * 
  */
 @Service("skosConceptsBuilder")
 public class ConceptsBuilder extends AbstractBuilder {
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
-	
+
 	@Inject
 	@Named("associativeRelationshipDAO")
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
-	
+
 	@Inject
 	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
-	
 
 	@Inject
 	@Named("noteDAO")
-	private INoteDAO noteDAO;	
-	
+	private INoteDAO noteDAO;
+
 	@Inject
 	@Named("skosConceptBuilder")
 	private ConceptBuilder conceptBuilder;
-	
+
 	@Inject
 	@Named("skosConceptNoteBuilder")
 	private ConceptNoteBuilder conceptNoteBuilder;
@@ -105,19 +107,23 @@ public class ConceptsBuilder extends AbstractBuilder {
 	@Inject
 	@Named("externalThesaurusDAO")
 	private IExternalThesaurusDAO externalThesaurusDAO;
-	
+
 	@Inject
 	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
-	
 
 	@Inject
 	@Named("skosAlignmentsBuilder")
 	private AlignmentsBuilder alignmentsBuilder;
-	
+
 	@Inject
 	@Named("skosTermBuilder")
 	private TermBuilder termBuilder;
+
+	@Inject
+	@Named("conceptHierarchicalRelationshipServiceUtil")
+	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
+
 	/**
 	 * Launch the calculation of the root concepts and set it
 	 * 
@@ -144,11 +150,20 @@ public class ConceptsBuilder extends AbstractBuilder {
 			List<Resource> skosConcepts, List<ObjectProperty> broaderTypes) {
 		List<AssociativeRelationship> allRelations = new ArrayList<AssociativeRelationship>();
 		for (Resource skosConcept : skosConcepts) {
-			
-			ThesaurusConcept concept = conceptBuilder
+
+			Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> relationsThesaurusConcept = conceptBuilder
 					.buildConceptHierarchicalRelationships(skosConcept,
 							thesaurus, broaderTypes);
-			thesaurusConceptDAO.update(concept);			
+			if (relationsThesaurusConcept.keySet().iterator().hasNext()) {
+				ThesaurusConcept concept = relationsThesaurusConcept.keySet()
+						.iterator().next();
+				conceptHierarchicalRelationshipServiceUtil
+						.saveHierarchicalRelationship(concept,
+								relationsThesaurusConcept.get(concept),
+								new ArrayList<ThesaurusConcept>());
+
+				thesaurusConceptDAO.update(concept);
+			}
 
 			Set<AssociativeRelationship> associativeRelationships = conceptBuilder
 					.buildConceptAssociativerelationship(skosConcept, thesaurus);
@@ -228,5 +243,4 @@ public class ConceptsBuilder extends AbstractBuilder {
 		return bannedAlignments;
 	}
 
-	
 }
