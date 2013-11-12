@@ -103,15 +103,15 @@ public class FolderGenerator {
 
 		list.add(getConcepts(parentId));
 
-		list.add(getSandbox(parentId));
-
 		list.add(getSplitNonPreferredTerms(parentId));
-
-		list.add(getOrphans(parentId));
 
 		list.add(getGroups(parentId));
 
 		list.add(getArrays(parentId));
+
+		list.add(getOrphans(parentId));
+
+		list.add(getSandbox(parentId));
 
 		return list;
 	}
