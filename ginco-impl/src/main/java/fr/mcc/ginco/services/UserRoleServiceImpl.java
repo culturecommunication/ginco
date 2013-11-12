@@ -39,7 +39,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +46,6 @@ import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.dao.IUserRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("userRoleService")

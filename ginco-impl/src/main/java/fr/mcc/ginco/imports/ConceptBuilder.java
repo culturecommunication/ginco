@@ -34,8 +34,10 @@
  */
 package fr.mcc.ginco.imports;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,14 +47,19 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.log.Log;
@@ -64,7 +71,7 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Builder in charge of building ThesaurusConcept
- *
+ * 
  */
 @Service("skosConceptBuilder")
 public class ConceptBuilder extends AbstractBuilder {
@@ -80,6 +87,14 @@ public class ConceptBuilder extends AbstractBuilder {
 	@Named("associativeRelationshipRoleService")
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
 
+	@Inject
+	@Named("conceptHierarchicalRelationshipDAO")
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+
+	@Inject
+	@Named("thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
+
 	private static Map<String, ThesaurusConcept> builtConcepts = new HashMap<String, ThesaurusConcept>();
 
 	public ConceptBuilder() {
@@ -88,6 +103,7 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	/**
 	 * Sets the basic attributes of a concept
+	 * 
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
@@ -102,26 +118,26 @@ public class ConceptBuilder extends AbstractBuilder {
 		concept.setTopConcept(thesaurus.isDefaultTopConcept());
 
 		Statement stmtCreated = skosConcept.getProperty(DCTerms.created);
-		if (stmtCreated != null){
+		if (stmtCreated != null) {
 			concept.setCreated(DateUtil.dateFromString(stmtCreated.getString()));
 		} else {
 			concept.setCreated(thesaurus.getCreated());
 		}
 
 		Statement stmtModified = skosConcept.getProperty(DCTerms.modified);
-		if (stmtModified != null){
-			concept.setModified(DateUtil.dateFromString(stmtModified.getString()));
+		if (stmtModified != null) {
+			concept.setModified(DateUtil.dateFromString(stmtModified
+					.getString()));
 		} else {
 			concept.setModified(thesaurus.getDate());
 		}
 
 		Statement stmtNotation = skosConcept.getProperty(SKOS.NOTATION);
-		if (stmtNotation != null){
+		if (stmtNotation != null) {
 			concept.setNotation(stmtNotation.getString());
 		}
 
-		Statement stmtStatus = skosConcept
-				.getProperty(ISOTHES.STATUS);
+		Statement stmtStatus = skosConcept.getProperty(ISOTHES.STATUS);
 		if (stmtStatus != null) {
 			try {
 				Integer status = stmtStatus.getInt();
@@ -154,13 +170,14 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	/**
 	 * Build associative relationships between concepts
+	 * 
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
 	 * @throws BusinessException
 	 */
-	public Set<AssociativeRelationship> buildConceptAssociativerelationship(Resource skosConcept,
-			Thesaurus thesaurus) throws BusinessException {
+	public Set<AssociativeRelationship> buildConceptAssociativerelationship(
+			Resource skosConcept, Thesaurus thesaurus) throws BusinessException {
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		StmtIterator stmtRelatedtItr = skosConcept.listProperties(SKOS.RELATED);
 		Set<AssociativeRelationship> relationshipsLeft = new HashSet<AssociativeRelationship>();
@@ -186,34 +203,85 @@ public class ConceptBuilder extends AbstractBuilder {
 		}
 		return relationshipsLeft;
 	}
+
 	/**
 	 * Build direct hierarchical and associative relationships between concepts
+	 * 
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
 	 * @throws BusinessException
 	 */
-	public ThesaurusConcept buildConceptHierarchicalRelationships(Resource skosConcept,
-			Thesaurus thesaurus) throws BusinessException {
-		logger.debug("Building relationships for concept : " + skosConcept.getURI());
+	public ThesaurusConcept buildConceptHierarchicalRelationships(
+			Resource skosConcept, Thesaurus thesaurus,
+			List<ObjectProperty> broaderTypes) throws BusinessException {
+		logger.debug("Building relationships for concept : "
+				+ skosConcept.getURI());
+
+		List<ConceptHierarchicalRelationship> res = new ArrayList<ConceptHierarchicalRelationship>();
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		StmtIterator stmtParentItr = skosConcept.listProperties(SKOS.BROADER);
+
 		Set<ThesaurusConcept> parentConcepts = new HashSet<ThesaurusConcept>();
 		while (stmtParentItr.hasNext()) {
 			Statement stmt = stmtParentItr.next();
 			Resource parentConceptRes = stmt.getObject().asResource();
 			String relatedURI = parentConceptRes.getURI();
 			ThesaurusConcept parentConcept = builtConcepts.get(relatedURI);
-			if (parentConcept!=null)
+
+			if (parentConcept != null) {
 				parentConcepts.add(parentConcept);
+				boolean specialTypeFound = false;
+
+				ConceptHierarchicalRelationship.Id relationshipId = new ConceptHierarchicalRelationship.Id();
+				relationshipId.setChildconceptid(concept.getIdentifier());
+				relationshipId
+						.setParentconceptid(parentConcept.getIdentifier());
+				ConceptHierarchicalRelationship relation = conceptHierarchicalRelationshipDAO
+						.getById(relationshipId);
+
+				if (relation == null) {
+					ConceptHierarchicalRelationship.Id id = new ConceptHierarchicalRelationship.Id();
+					id.setChildconceptid(concept.getIdentifier());
+					id.setParentconceptid(parentConcept.getIdentifier());
+					relation = new ConceptHierarchicalRelationship();
+					relation.setIdentifier(id);
+				}
+
+				for (ObjectProperty broaderType : broaderTypes) {
+					if (skosConcept.hasProperty(broaderType, parentConceptRes)) {
+						specialTypeFound = true;
+						String[] labels = broaderType.getURI().split("/");
+						String label = labels[labels.length - 1];
+						ConceptHierarchicalRelationshipRoleEnum role = ConceptHierarchicalRelationshipRoleEnum
+								.getStatusByParentSKOSLabel(label);
+						relation.setRole(role.getStatus());
+					}
+
+				}
+				if (!specialTypeFound) {
+					ConceptHierarchicalRelationshipRoleEnum role = ConceptHierarchicalRelationshipRoleEnum
+							.getStatusByParentSKOSLabel("");
+					relation.setRole(role.getStatus());
+
+				}
+				res.add(relation);
+
+			}
 		}
+
 		concept.setParentConcepts(parentConcepts);
+
+		conceptHierarchicalRelationshipServiceUtil
+				.saveHierarchicalRelationship(concept, res,
+						new ArrayList<ThesaurusConcept>());
 
 		return concept;
 	}
 
 	/**
 	 * Launch the calculation and set the root concepts of the given concept
+	 * 
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
@@ -221,10 +289,12 @@ public class ConceptBuilder extends AbstractBuilder {
 	 */
 	public ThesaurusConcept buildConceptRoot(Resource skosConcept,
 			Thesaurus thesaurus) throws BusinessException {
-		logger.debug("Building root concepts for concept : " + skosConcept.getURI());
+		logger.debug("Building root concepts for concept : "
+				+ skosConcept.getURI());
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		concept.setRootConcepts(new HashSet<ThesaurusConcept>(
-				conceptHierarchicalRelationshipServiceUtil.getRootConcepts(concept)));
+				conceptHierarchicalRelationshipServiceUtil
+						.getRootConcepts(concept)));
 		return concept;
 
 	}

@@ -55,23 +55,13 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
-import fr.mcc.ginco.dao.INodeLabelDAO;
-import fr.mcc.ginco.dao.INoteDAO;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
-import fr.mcc.ginco.imports.AlignmentsBuilder;
-import fr.mcc.ginco.imports.ConceptBuilder;
-import fr.mcc.ginco.imports.ConceptNoteBuilder;
-import fr.mcc.ginco.imports.NodeLabelBuilder;
+import fr.mcc.ginco.imports.ConceptsBuilder;
 import fr.mcc.ginco.imports.SKOSImportServiceImpl;
-import fr.mcc.ginco.imports.TermBuilder;
-import fr.mcc.ginco.imports.ThesaurusArrayBuilder;
+import fr.mcc.ginco.imports.ThesaurusArraysBuilder;
 import fr.mcc.ginco.imports.ThesaurusBuilder;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
@@ -80,50 +70,21 @@ public class SKOSImportServiceTest {
 	@Mock(name = "thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
-	@Mock(name = "thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
+	@Mock(name = "thesaurusVersionHistoryDAO")
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
-	@Mock(name = "thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;
-
-	@Mock(name = "associativeRelationshipDAO")
-	private IAssociativeRelationshipDAO associativeRelationshipDAO;
-
-	@Mock(name = "noteDAO")
-	private INoteDAO noteDAO;
-
-	@Mock(name = "thesaurusArrayDAO")
-	private IThesaurusArrayDAO thesaurusArrayDAO;
-
-	@Mock(name = "nodeLabelDAO")
-	private INodeLabelDAO nodeLabelDAO;
+	@Mock(name = "thesaurusHelper")
+	private ThesaurusHelper thesaurusHelper;
 
 	@Mock(name = "skosThesaurusBuilder")
 	private ThesaurusBuilder thesaurusBuilder;
 
-	@Mock(name = "thesaurusVersionHistoryDAO")
-	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
+	@Mock(name = "skosConceptsBuilder")
+	private ConceptsBuilder conceptsBuilder;
 
-	@Mock(name = "skosConceptBuilder")
-	private ConceptBuilder conceptBuilder;
-
-	@Mock(name = "skosConceptNoteBuilder")
-	private ConceptNoteBuilder conceptNoteBuilder;
-
-	@Mock(name = "skosTermBuilder")
-	private TermBuilder termBuilder;
-
-	@Mock(name = "skosArrayBuilder")
-	private ThesaurusArrayBuilder arrayBuilder;
-
-	@Mock(name = "skosNodeLabelBuilder")
-	private NodeLabelBuilder nodeLabelBuilder;
-
-	@Mock(name = "thesaurushelper")
-	private ThesaurusHelper thesaurusHelper;
-
-	@Mock(name = "skosAlignmentBuilder")
-	private AlignmentsBuilder alignmentBuilder;
+	@Mock(name = "skosArraysBuilder")
+	private ThesaurusArraysBuilder arraysBuilder;
+	
 
 	@InjectMocks
     private SKOSImportServiceImpl skosImportService ;

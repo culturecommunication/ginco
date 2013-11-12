@@ -49,19 +49,27 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.hp.hpl.jena.ontology.ObjectProperty;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.imports.ConceptBuilder;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.GINCO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
@@ -76,6 +84,13 @@ public class ConceptBuilderTest {
 
 	@Mock(name = "associativeRelationshipRoleService")
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
+	
+	@Mock(name = "thesaurusConceptDAO")
+	private IThesaurusConceptDAO thesaurusConceptDAO;
+	
+	@Mock(name = "conceptHierarchicalRelationshipDAO")
+	 private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+	
 
 	@InjectMocks
 	private ConceptBuilder conceptBuilder;
@@ -136,8 +151,11 @@ public class ConceptBuilderTest {
 		model.read(is, null);
 
 		Resource skosConcept = model
-				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
-
+				.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
+		Property gincoRelProperty = model.createProperty(GINCO
+				.getURI() + "broaderGeneric");
+		model.add(skosConcept, gincoRelProperty, model.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423"));
+		
 		ThesaurusConcept currentConcept = new ThesaurusConcept();
 		currentConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
@@ -152,18 +170,33 @@ public class ConceptBuilderTest {
 		conceptBuilder.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423",
 						parentConcept);
+		Mockito.when(this.thesaurusConceptDAO.update(currentConcept)).thenReturn(currentConcept);
+		
+		
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+		List<ObjectProperty> broaderTypes = new ArrayList<ObjectProperty>();
+		ObjectProperty generic = ontModel.createObjectProperty(GINCO
+				.getURI() + "broaderGeneric");
+		generic.setLabel("broaderGeneric", null);
+		broaderTypes.add(ontModel.createObjectProperty(GINCO
+				.getURI() + "broaderGeneric"));
+		
+		ThesaurusConcept concept = conceptBuilder.buildConceptHierarchicalRelationships(skosConcept, fakeThesaurus, broaderTypes);
 
-		ThesaurusConcept actualConcept = conceptBuilder.buildConceptHierarchicalRelationships(skosConcept, fakeThesaurus);
-
-		Set<ThesaurusConcept> actualParents = actualConcept.getParentConcepts();
 		List<String> parentIds = new ArrayList<String>();
-		for (ThesaurusConcept actualParent : actualParents) {
-			parentIds.add(actualParent.getIdentifier());
-		}
-		Assert.assertEquals(1, actualParents.size());
-		ListAssert
-				.assertContains(parentIds,
-						"http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423");
+		//for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : actualHierarchicalRelations) {
+		//	parentIds.add(conceptHierarchicalRelationship.getIdentifier().getParentconceptid());
+		//}
+		
+		Assert.assertEquals(1, concept.getParentConcepts().size());
+		//Assert.assertEquals(1, actualHierarchicalRelations.size());
+
+		
+		//ConceptHierarchicalRelationship actualRelationship = actualHierarchicalRelations.iterator().next();
+		//Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423", actualRelationship.getIdentifier().getParentconceptid());
+		//Assert.assertEquals(1, actualRelationship.getRole().intValue());
+
+		
 	}
 
 	@Test

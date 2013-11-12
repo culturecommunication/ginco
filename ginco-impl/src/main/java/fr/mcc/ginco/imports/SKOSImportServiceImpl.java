@@ -39,7 +39,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -53,6 +52,8 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -62,29 +63,11 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.AlignmentConcept;
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
-import fr.mcc.ginco.dao.IAlignmentDAO;
-import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
-import fr.mcc.ginco.dao.IExternalThesaurusDAO;
-import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.dao.INodeLabelDAO;
-import fr.mcc.ginco.dao.INoteDAO;
-import fr.mcc.ginco.dao.IThesaurusArrayDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
@@ -107,30 +90,6 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
-
-	@Inject
-	@Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;
-
-	@Inject
-	@Named("associativeRelationshipDAO")
-	private IAssociativeRelationshipDAO associativeRelationshipDAO;
-
-	@Inject
-	@Named("noteDAO")
-	private INoteDAO noteDAO;
-
-	@Inject
-	@Named("thesaurusArrayDAO")
-	private IThesaurusArrayDAO thesaurusArrayDAO;
-
-	@Inject
-	@Named("nodeLabelDAO")
-	private INodeLabelDAO nodeLabelDAO;
-
-	@Inject
 	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
@@ -143,40 +102,12 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private ThesaurusBuilder thesaurusBuilder;
 
 	@Inject
-	@Named("skosConceptBuilder")
-	private ConceptBuilder conceptBuilder;
+	@Named("skosConceptsBuilder")
+	private ConceptsBuilder conceptsBuilder;
 
 	@Inject
-	@Named("skosConceptNoteBuilder")
-	private ConceptNoteBuilder conceptNoteBuilder;
-
-	@Inject
-	@Named("skosTermBuilder")
-	private TermBuilder termBuilder;
-
-	@Inject
-	@Named("skosArrayBuilder")
-	private ThesaurusArrayBuilder arrayBuilder;
-
-	@Inject
-	@Named("skosNodeLabelBuilder")
-	private NodeLabelBuilder nodeLabelBuilder;
-
-	@Inject
-	@Named("skosAlignmentsBuilder")
-	private AlignmentsBuilder alignmentsBuilder;
-
-	@Inject
-	@Named("alignmentDAO")
-	private IAlignmentDAO alignmentDAO;
-
-	@Inject
-	@Named("alignmentConceptDAO")
-	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
-
-	@Inject
-	@Named("externalThesaurusDAO")
-	private IExternalThesaurusDAO externalThesaurusDAO;
+	@Named("skosArraysBuilder")
+	private ThesaurusArraysBuilder arraysBuilder;
 
 	/*
 	 * (non-Javadoc)
@@ -197,9 +128,13 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		try {
 			// Reader init
 			Model model = ModelFactory.createDefaultModel();
+			OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+			
 			InputStream in = FileManager.get().open(fileURI.toString());
 			model.read(in, null);
-
+			
+			InputStream inOnt = FileManager.get().open(fileURI.toString());
+			ontModel.read(inOnt, null);
 			// Getting thesaurus
 			Resource thesaurusSKOS = getSKOSThesaurus(model);
 			if (thesaurusSKOS == null) {
@@ -224,12 +159,14 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 				thesaurusVersionHistoryDAO.update(defaultVersion);
 			}
 
-			List<Resource> skosConcepts = getSKOSRessources(model, SKOS.CONCEPT);
-			bannedAlignments = buildConcepts(thesaurus, skosConcepts);
-			buildConceptsAssociations(thesaurus, skosConcepts);
-			buildConceptsRoot(thesaurus, skosConcepts);
-			buildArrays(thesaurus, model);
-			buildChildrenArrays(thesaurus, model);
+			List<Resource> skosConcepts = SKOSImportUtils.getSKOSRessources(
+					model, SKOS.CONCEPT);
+			bannedAlignments = conceptsBuilder.buildConcepts(thesaurus,
+					skosConcepts);
+			conceptsBuilder.buildConceptsAssociations(thesaurus, skosConcepts, SKOSImportUtils.getBroaderTypeProperty(ontModel));
+			conceptsBuilder.buildConceptsRoot(thesaurus, skosConcepts);
+			arraysBuilder.buildArrays(thesaurus, model);
+			arraysBuilder.buildChildrenArrays(thesaurus, model);
 
 			res.put(thesaurus, bannedAlignments);
 
@@ -241,153 +178,6 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			deleteTempFile(fileURI);
 		}
 		return res;
-	}
-
-	/**
-	 * Builds the thesaurus arrays from the model
-	 * 
-	 * @param thesaurus
-	 * @param model
-	 */
-	private void buildArrays(Thesaurus thesaurus, Model model) {
-		List<Resource> skosCollections = getSKOSRessources(model,
-				SKOS.COLLECTION);
-		for (Resource skosCollection : skosCollections) {
-			ThesaurusArray array = arrayBuilder.buildArray(skosCollection,
-					model, thesaurus);
-			thesaurusArrayDAO.update(array);
-			NodeLabel nodeLabel = nodeLabelBuilder.buildNodeLabel(
-					skosCollection, thesaurus, array);
-			nodeLabelDAO.update(nodeLabel);
-		}
-	}
-
-	/**
-	 * Builds thesaurus array relations from the model
-	 * 
-	 * @param thesaurus
-	 * @param model
-	 */
-
-	private void buildChildrenArrays(Thesaurus thesaurus, Model model) {
-		List<Resource> skosCollections = getSKOSRessources(model,
-				SKOS.COLLECTION);
-		for (Resource skosCollection : skosCollections) {
-			List<ThesaurusArray> childrenArrays = arrayBuilder
-					.getChildrenArrays(skosCollection, thesaurus);
-			for (ThesaurusArray childrenArray : childrenArrays) {
-				thesaurusArrayDAO.update(childrenArray);
-			}
-		}
-	}
-
-	/**
-	 * Launch the calculation of the root concepts and set it
-	 * 
-	 * @param thesaurus
-	 * @param skosConcepts
-	 */
-	private void buildConceptsRoot(Thesaurus thesaurus,
-			List<Resource> skosConcepts) {
-		for (Resource skosConcept : skosConcepts) {
-			// Root calculation
-			ThesaurusConcept concept = conceptBuilder.buildConceptRoot(
-					skosConcept, thesaurus);
-			thesaurusConceptDAO.update(concept);
-		}
-	}
-
-	/**
-	 * Builds the parent/child and relationship associations
-	 * 
-	 * @param thesaurus
-	 * @param skosConcepts
-	 */
-	private void buildConceptsAssociations(Thesaurus thesaurus,
-			List<Resource> skosConcepts) {
-		List<AssociativeRelationship> allRelations = new ArrayList<AssociativeRelationship>();
-		for (Resource skosConcept : skosConcepts) {
-			ThesaurusConcept concept = conceptBuilder
-					.buildConceptHierarchicalRelationships(skosConcept,
-							thesaurus);
-			thesaurusConceptDAO.update(concept);
-
-			Set<AssociativeRelationship> associativeRelationships = conceptBuilder
-					.buildConceptAssociativerelationship(skosConcept, thesaurus);
-			for (AssociativeRelationship relation : associativeRelationships) {
-				Boolean isRelationAdded = false;
-				for (AssociativeRelationship existedRelation : allRelations) {
-					if (existedRelation.getConceptLeft().equals(
-							relation.getConceptRight())
-							&& existedRelation.getConceptRight().equals(
-									relation.getConceptLeft())
-							|| existedRelation.equals(relation)) {
-						isRelationAdded = true;
-					}
-				}
-				if (!isRelationAdded) {
-					allRelations.add(relation);
-					associativeRelationshipDAO.update(relation);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Builds the concept with minimal informations and it's terms and notes
-	 * 
-	 * @param thesaurus
-	 * @param skosConcepts
-	 */
-	private Set<Alignment> buildConcepts(Thesaurus thesaurus,
-			List<Resource> skosConcepts) {
-		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
-		for (Resource skosConcept : skosConcepts) {
-			// Minimal concept informations
-			ThesaurusConcept concept = conceptBuilder.buildConcept(skosConcept,
-					thesaurus);
-
-			thesaurusConceptDAO.update(concept);
-			ThesaurusTerm preferredTerm = null;
-
-			// Concept terms
-			List<ThesaurusTerm> terms = termBuilder.buildTerms(skosConcept,
-					thesaurus, concept);
-			for (ThesaurusTerm term : terms) {
-				if (term.getPrefered())
-					preferredTerm = term;
-				thesaurusTermDAO.update(term);
-			}
-
-			// Concept notes
-			List<Note> conceptNotes = conceptNoteBuilder.buildConceptNotes(
-					skosConcept, concept, preferredTerm, thesaurus);
-			for (Note conceptNote : conceptNotes) {
-				noteDAO.update(conceptNote);
-			}
-
-			// Concept alignments
-			List<Alignment> alignments = alignmentsBuilder.buildAlignments(
-					skosConcept, concept);
-			for (Alignment alignment : alignments) {
-				if (alignment.getExternalTargetThesaurus() != null) {
-					externalThesaurusDAO.update(alignment
-							.getExternalTargetThesaurus());
-				}
-				if (alignment.getInternalTargetThesaurus() != null
-						|| alignment.getExternalTargetThesaurus() != null) {
-					for (AlignmentConcept alignmentConcept : alignment
-							.getTargetConcepts()) {
-						alignmentConceptDAO.update(alignmentConcept);
-					}
-					alignmentDAO.update(alignment);
-				} else {
-					bannedAlignments.add(alignment);
-				}
-
-			}
-		}
-		return bannedAlignments;
 	}
 
 	/**
@@ -417,40 +207,6 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			thesaurusSKOS = s.getSubject().asResource();
 		}
 		return thesaurusSKOS;
-	}
-
-	/**
-	 * Gets the list of resources from the given model
-	 * 
-	 * @param model
-	 * @param resource
-	 * @return
-	 */
-	private List<Resource> getSKOSRessources(Model model,
-			final Resource resource) {
-		SimpleSelector schemeSelector = new SimpleSelector(null, null,
-				(RDFNode) null) {
-			public boolean selects(Statement s) {
-				if (s.getObject().isResource()
-						&& !s.getSubject().hasProperty(RDF.type, OWL.Class)
-						&& !s.getSubject().hasProperty(RDF.type,
-								OWL.ObjectProperty)
-						&& !s.getSubject().hasProperty(RDF.type,
-								OWL.DatatypeProperty)) {
-					return s.getObject().asResource().equals(resource);
-				} else {
-					return false;
-				}
-			}
-		};
-		StmtIterator iter = model.listStatements(schemeSelector);
-
-		List<Resource> skosRessources = new ArrayList<Resource>();
-		while (iter.hasNext()) {
-			Statement s = iter.next();
-			skosRessources.add(s.getSubject().asResource());
-		}
-		return skosRessources;
 	}
 
 	private void deleteTempFile(URI fileURI) {
