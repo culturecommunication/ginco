@@ -51,6 +51,7 @@ import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.AlignmentView;
 import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
@@ -81,26 +82,26 @@ public class ThesaurusConceptViewConverter {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
- 
+
     @Inject
     @Named("associativeRelationshipViewConverter")
-    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;    
+    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
 
     @Inject
     @Named("hierarchicalRelationshipViewConverter")
     private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
-    
+
     @Inject
     @Named("alignmentViewConverter")
     private AlignmentViewConverter alignmentViewConverter;
-    
+
     @Inject
 	@Named("alignmentService")
 	private IAlignmentService alignmentService;
-	
+
 	@Inject
 	@Named("associativeRelationshipService")
-	private IAssociativeRelationshipService associativeRelationshipService;	
+	private IAssociativeRelationshipService associativeRelationshipService;
 
 	public List<ThesaurusConceptReducedView> convert(
 			List<ThesaurusConcept> conceptList) throws BusinessException {
@@ -142,7 +143,7 @@ public class ThesaurusConceptViewConverter {
 		view.setParentConcepts(parentConcepts);
 		ArrayList<String> parentIdPath = new ArrayList<String>();
 		List<ThesaurusConcept> parentPath = thesaurusConceptService.getRecursiveParentsByConceptId(concept.getIdentifier());
-		for (int i = parentPath.size() - 1; i >= 0; i--) 
+		for (int i = parentPath.size() - 1; i >= 0; i--)
 		{
 			parentIdPath.add(parentPath.get(i).getIdentifier());
 		}
@@ -154,7 +155,7 @@ public class ThesaurusConceptViewConverter {
 		view.setConceptsPath(parentIdPath);
 		List<HierarchicalRelationshipView> childrenConcepts = hierarchicalRelationshipViewConverter.getChildrenViews(concept);
 		view.setChildConcepts(childrenConcepts);
-		
+
 		view.setRootConcepts(getIdsFromConceptList(concept.getRootConcepts()));
 		List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
@@ -176,10 +177,10 @@ public class ThesaurusConceptViewConverter {
 		}
 
         view.setAssociatedConcepts(associatedConcepts);
-        
+
         List<AlignmentView> alignmentViews = new ArrayList<AlignmentView>();
         List<Alignment> alignments  = alignmentService.getAlignmentsBySourceConceptId(concept.getIdentifier());
-        for (Alignment alignment: alignments) {        	
+        for (Alignment alignment: alignments) {
         	alignmentViews.add(alignmentViewConverter.convertAlignment(alignment));
         }
         view.setAlignments(alignmentViews);
@@ -230,12 +231,14 @@ public class ThesaurusConceptViewConverter {
 			thesaurusConcept.setThesaurus(thesaurus);
 		}
 		thesaurusConcept.setModified(DateUtil.nowDate());
-		thesaurusConcept.setTopConcept(source.getTopconcept());
-
-		if (source.getStatus() != null) {
-			thesaurusConcept.setStatus(source.getStatus());
+		thesaurusConcept.setStatus(source.getStatus());
+		if (source.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()
+				|| source.getStatus() == ConceptStatusEnum.REJECTED.getStatus()){
+			thesaurusConcept.setTopConcept(false);
+		} else {
+			thesaurusConcept.setTopConcept(source.getTopconcept());
 		}
-		
+
 		if (source.getNotation() != null) {
 			thesaurusConcept.setNotation(source.getNotation());
 		}
@@ -250,23 +253,23 @@ public class ThesaurusConceptViewConverter {
 		List<ThesaurusConcept> removedChildren = new ArrayList<ThesaurusConcept>();
 		Set<ThesaurusConcept> oldChildren = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(conceptView.getIdentifier()));
 		List<String> oldChildrenIds = getIdsFromConceptList(oldChildren);
-		
+
 		List<String> newChildrenIds = new ArrayList<String>();
 		for (HierarchicalRelationshipView viewOfChild : conceptView.getChildConcepts()) {
 			newChildrenIds.add(viewOfChild.getIdentifier());
 		}
-		
+
 		List<String> removedChildrenIds = new ArrayList<String>();
 		if (conceptView.getChildConcepts() != null) {
 			removedChildrenIds = ListUtils.subtract(oldChildrenIds, newChildrenIds);
 		} else {
 			removedChildrenIds = oldChildrenIds;
 		}
-		
+
 		for (String removedChildId : removedChildrenIds) {
 			removedChildren.add(thesaurusConceptService.getThesaurusConceptById(removedChildId));
 		}
-		
+
 		return removedChildren;
 	}
 
