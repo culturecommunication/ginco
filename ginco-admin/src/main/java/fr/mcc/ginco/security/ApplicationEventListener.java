@@ -24,7 +24,7 @@ public class ApplicationEventListener implements ApplicationListener<Application
 	private LockoutService lockoutService;
 	
 	
-	private void HandleFailureEvent(String username, long timestamp)
+	private void handleFailureEvent(String username, long timestamp)
 	{
 		if (!lockoutService.isLockedOut(username)) {
 			lockoutService.notifyLoginFailure(username, timestamp);
@@ -41,7 +41,6 @@ public class ApplicationEventListener implements ApplicationListener<Application
 	 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
-		// TODO Auto-generated method stub
 		if (event instanceof AuthenticationSuccessEvent) {
 			registerSuccessLogin(((AbstractAuthenticationEvent) event).getAuthentication().getName());
 		}
@@ -50,7 +49,7 @@ public class ApplicationEventListener implements ApplicationListener<Application
 			String cause = ((AbstractAuthenticationFailureEvent) event).getException().toString();
 			log.warn("Failed authentication for user '" + username + " caused by " + cause);
 			if (event instanceof AuthenticationFailureBadCredentialsEvent) {
-				this.HandleFailureEvent(username, event.getTimestamp()); 
+				this.handleFailureEvent(username, event.getTimestamp()); 
 			}
 		}
 	}

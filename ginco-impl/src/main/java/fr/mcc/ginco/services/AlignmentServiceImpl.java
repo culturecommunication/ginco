@@ -42,7 +42,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +54,6 @@ import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("alignmentService")
@@ -75,10 +73,7 @@ public class AlignmentServiceImpl implements IAlignmentService {
 
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;
-
-	@Log
-	private Logger logger;
+	private IIDGeneratorService generatorService;	
 
 	@Override
 	public Alignment getAlignmentById(String identifier) {

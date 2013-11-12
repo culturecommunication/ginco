@@ -44,7 +44,6 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 
 /**
@@ -58,11 +57,6 @@ public class GincoAlignmentIdGenerator {
 	@Inject
 	@Named("gincoIdMapParser")
 	private GincoIdMapParser gincoIdMapParser;
-	
-	@Inject
-	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;	
-
 
 	/**
 	 * This method returns new ids for the hierarchical relations

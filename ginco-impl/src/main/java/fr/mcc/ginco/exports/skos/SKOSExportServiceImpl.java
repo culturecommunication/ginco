@@ -117,7 +117,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	private SKOSComplexConceptExporter skosComplexConceptExporter;
 
 	@Log
-	Logger logger;
+	private Logger logger;
 
 	@Override
 	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {

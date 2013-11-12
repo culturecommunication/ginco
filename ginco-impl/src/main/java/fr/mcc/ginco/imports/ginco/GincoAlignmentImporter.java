@@ -43,7 +43,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
@@ -55,7 +54,6 @@ import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to import alignments
@@ -78,10 +76,7 @@ public class GincoAlignmentImporter {
 
 	@Inject
 	@Named("externalThesaurusDAO")
-	private IExternalThesaurusDAO externalThesaurusDAO;
-
-	@Log
-	private Logger logger;
+	private IExternalThesaurusDAO externalThesaurusDAO;	
 
 	/**
 	 * This method stores all the alignments

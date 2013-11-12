@@ -50,7 +50,6 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -69,11 +68,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     @Inject
     @Named("thesaurusDAO")
     private IThesaurusDAO thesaurusDAO;
-
-    @Inject
-    @Named("languagesDAO")
-    private ILanguageDAO languageDAO;
-
+   
     @Inject
     @Named("generatorService")
     private IIDGeneratorService customGeneratorService;	
@@ -117,8 +112,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
     	if (object.getStatus() != TermStatusEnum.VALIDATED.getStatus() && object.getConcept() != null){
     		throw new BusinessException("The term is associated to a concept. The status must be set to validated", "term-selected-must-have-validated-status");
     	}
-    	ThesaurusTerm updatedThesaurus = thesaurusTermDAO.update(object);
-    	return updatedThesaurus;
+    	return thesaurusTermDAO.update(object);
     }
 
 	@Transactional(readOnly=false)

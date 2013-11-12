@@ -74,8 +74,7 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
     	{
     		throw new BusinessException("A complex term must have at least 2 preferred term", "invalid-complex-term");
     	} else {
-    		SplitNonPreferredTerm updatedThesaurus = splitNonPreferredTermDAO.update(object);
-    		return updatedThesaurus;
+    		return splitNonPreferredTermDAO.update(object);
     	}
 	}
 

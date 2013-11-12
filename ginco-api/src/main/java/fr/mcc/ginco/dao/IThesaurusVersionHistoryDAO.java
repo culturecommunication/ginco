@@ -48,7 +48,7 @@ public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersio
 	 * @param String thesaurusId
 	 * @return A list of {@ThesaurusVersionHistory}
 	 */
-	public List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
+	List<ThesaurusVersionHistory> findVersionsByThesaurusId(String thesaurusId);
 	
 	/**
 	 * This method gets all {@ThesaurusVersionHistory} with column thisVersion = true for the thesaurus which id is given in parameter, excepted one version which id is specified in parameter
@@ -56,20 +56,20 @@ public interface IThesaurusVersionHistoryDAO extends IGenericDAO<ThesaurusVersio
 	 * @param String excludedVersion
 	 * @return A list of {@ThesaurusVersionHistory}
 	 */
-	public List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
+	List<ThesaurusVersionHistory> findAllOtherThisVersionTrueByThesaurusId(String thesaurusId, String excludedVersionId);
 	
 	/**
 	 * This method get the version which have the flag thisVersion to true for the thesaurus which id is given in parameter
 	 * @param thesaurusId
 	 * @return A {@ThesaurusVersionHistory} that have thisVersion to true 
 	 */
-	public ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
+	ThesaurusVersionHistory findThisVersionByThesaurusId(String thesaurusId);
 	
 	/**
 	 * 	This method get last version with the published status for the thesaurus which id is given in parameter
      * @param thesaurusId
 	 * @return
 	 */
-	public ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
+	ThesaurusVersionHistory getLastPublishedVersionByThesaurusId(
 			String thesaurusId);
 }

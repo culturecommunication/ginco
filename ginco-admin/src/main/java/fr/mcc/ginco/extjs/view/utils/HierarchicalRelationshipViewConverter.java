@@ -38,19 +38,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
-import fr.mcc.ginco.extjs.view.pojo.HierarchicalRelationshipView;
-import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
-import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import org.springframework.stereotype.Component;
-
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.stereotype.Component;
+
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.extjs.view.pojo.HierarchicalRelationshipView;
+import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  *

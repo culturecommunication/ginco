@@ -54,7 +54,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 * Flush must not be used manually. 
 	 * Implemented here for a particular case (see comment in implementation).
 	 */
-	public void flush();
+	void flush();
 
 	/**
 	 * Gets the list of ThesaurusConcept which are not top term given

@@ -127,8 +127,7 @@ public class GincoConceptExporter {
 			ThesaurusConcept thesaurusConcept) {
 		List<String> associations = associativeRelationshipService
 				.getAssociatedConceptsId(thesaurusConcept);
-		JaxbList<String> associatedConceptsIds = new JaxbList<String>(associations);		
-		return associatedConceptsIds;
+		return new JaxbList<String>(associations);		
 	}
 	
 	public JaxbList<Alignment> getExportAlignments(ThesaurusConcept thesaurusConcept) {

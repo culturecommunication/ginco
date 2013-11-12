@@ -42,14 +42,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.skos.namespaces.SKOSXL;
@@ -70,8 +68,6 @@ public class SKOSTermsExporter {
 	@Named("skosModelTermsExporter")
 	private SKOSModelTermsExporter skosModelTermsExporter;
 
-	@Log
-	private Logger logger;
 
 	/**
 	 * Export concept preferred terms to SKOS using the skos API
