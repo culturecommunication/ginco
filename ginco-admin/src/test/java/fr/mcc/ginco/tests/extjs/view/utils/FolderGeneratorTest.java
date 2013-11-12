@@ -105,7 +105,7 @@ public class FolderGeneratorTest {
 
 		Assert.assertEquals("Invalid number of nodes", 6, nodes.size());
 
-		// tests of the top concept node
+		// tests of the top concepts node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(0)
 				.getType());
 		Assert.assertEquals("CONCEPTS_fake", nodes.get(0).getId());
@@ -114,37 +114,45 @@ public class FolderGeneratorTest {
 		Assert.assertEquals(false, nodes.get(0).isExpanded());
 		Assert.assertNotNull(nodes.get(0).getChildren());
 
-		// tests of the sandbox node
+		// tests of the complex concepts node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(1)
 				.getType());
-		Assert.assertEquals("SANDBOX_fake", nodes.get(1).getId());
-		Assert.assertEquals("Termes orphelins", nodes.get(1).getTitle());
+		Assert.assertEquals("COMPLEXCONCEPTS_fake", nodes.get(1).getId());
+		Assert.assertEquals("Concepts complexes", nodes.get(1).getTitle());
 		Assert.assertEquals(false, nodes.get(1).isExpanded());
 		Assert.assertNotNull(nodes.get(1).getChildren());
 
-		// tests of the orphan concepts node
+		// tests of the groups node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(2)
 				.getType());
-		Assert.assertEquals("COMPLEXCONCEPTS_fake", nodes.get(2).getId());
-		Assert.assertEquals("Concepts complexes", nodes.get(2).getTitle());
+		Assert.assertEquals("GROUPS_fake", nodes.get(2).getId());
+		Assert.assertEquals("Groupes", nodes.get(2).getTitle());
 		Assert.assertEquals(false, nodes.get(2).isExpanded());
 		Assert.assertNotNull(nodes.get(2).getChildren());
 
-		// tests of the orphan concepts node
+		// tests of the concept arrays node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(3)
 				.getType());
-		Assert.assertEquals("ORPHANS_fake", nodes.get(3).getId());
-		Assert.assertEquals("Concepts orphelins", nodes.get(3).getTitle());
+		Assert.assertEquals("ARRAYS_fake", nodes.get(3).getId());
+		Assert.assertEquals("Tableaux", nodes.get(3).getTitle());
 		Assert.assertEquals(false, nodes.get(3).isExpanded());
 		Assert.assertNotNull(nodes.get(3).getChildren());
 
-		// tests of the group node
+		// tests of the orphan concepts node
 		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(4)
 				.getType());
-		Assert.assertEquals("GROUPS_fake", nodes.get(4).getId());
-		Assert.assertEquals("Groupes", nodes.get(4).getTitle());
+		Assert.assertEquals("ORPHANS_fake", nodes.get(4).getId());
+		Assert.assertEquals("Concepts orphelins", nodes.get(4).getTitle());
 		Assert.assertEquals(false, nodes.get(4).isExpanded());
 		Assert.assertNotNull(nodes.get(4).getChildren());
+
+		// tests of sandboxed terms
+		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(5)
+				.getType());
+		Assert.assertEquals("SANDBOX_fake", nodes.get(5).getId());
+		Assert.assertEquals("Termes orphelins", nodes.get(5).getTitle());
+		Assert.assertEquals(false, nodes.get(5).isExpanded());
+		Assert.assertNotNull(nodes.get(5).getChildren());
 
 	}
 	@Test
@@ -161,7 +169,7 @@ public class FolderGeneratorTest {
 				.generateFolders("fake");
 
 		Assert.assertNull(nodes.get(0).getChildren());
-		Assert.assertNull(nodes.get(3).getChildren());
+		Assert.assertNull(nodes.get(4).getChildren());
 	}
 
 }
