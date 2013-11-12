@@ -83,7 +83,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         }
     },
 
-    saveConceptTypes : function(theButton) {
+    saveConceptTypes : function(theButton, theCallback) {
         var me = this;
         var theGrid = theButton.up('#conceptAttributTypesGrid');
         var conceptsGridStore = theGrid.getStore();
@@ -92,6 +92,9 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
+        		if (theCallback && typeof(theCallback) == "function") {
+					theCallback();
+				}
         	},
 			failure : function(batch) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel,
@@ -100,7 +103,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         });
     },
 
-    saveTermTypes : function(theButton) {
+    saveTermTypes : function(theButton, theCallback) {
         var me = this;
         var theGrid = theButton.up('#termAttributTypesGrid');
         var termsGridStore = theGrid.getStore();
@@ -109,6 +112,9 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
+        		if (theCallback && typeof(theCallback) == "function") {
+					theCallback();
+				}
         	},
         	failure : function(batch) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel,

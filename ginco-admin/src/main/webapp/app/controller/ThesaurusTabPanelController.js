@@ -237,7 +237,15 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 				var gridStore = gridPanel.getStore();
 				if(gridStore.getModifiedRecords().length>0 || gridStore.getRemovedRecords().length>0 )
 				{
-					dirtyForms.push(gridPanel.up('form'));
+					if (gridPanel.up('form') != null){
+						dirtyForms.push(gridPanel.up('form'));
+					} else {
+						if (gridPanel.up('panel').down('form') != null){
+							dirtyForms.push(gridPanel.up('panel').down('form'));
+						} else {
+							dirtyForms.push(gridPanel);
+						}
+					}
 				}
 			});
 
@@ -260,7 +268,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 						var userRoles = Thesaurus.ext.utils.getUserRoles(thesData.id);
 						if (theForm.checkRoles(userRoles) == true) {
 							return false;
-						}	
+						}
 					}
 				}
 				Ext.MessageBox.show({
@@ -278,14 +286,13 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 							{
 								var dirtyForm = dirtyForms[i];
 								var saveButton = dirtyForm.down('button[cls=save]');
-								if (saveButton != null) {
+								if (saveButton != null){
 									if (i==dirtyForms.length-1) {
 										saveButton.fireEvent('click', saveButton, function(){
 											globalTabs.remove(thePanel);
 											globalTabs.up().fireEvent('subpanelclosed',globalTabs.up());
 										});
-									} else
-									{
+									} else	{
 										saveButton.fireEvent('click', saveButton);
 									}
 								}
@@ -345,7 +352,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	},
 	onTabAdd : function ( tabPanel, component, index, eOpts) {
 		if (tabPanel.ownerCt.thesaurusData) {
-			var thesaurusId = tabPanel.ownerCt.thesaurusData.id;		
+			var thesaurusId = tabPanel.ownerCt.thesaurusData.id;
 			Thesaurus.ext.utils.restrictRoles(component, thesaurusId);
 		}
 	},
