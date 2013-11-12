@@ -62,6 +62,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
@@ -91,7 +93,7 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * Implementation of the SKOS thesaurus import service
- *
+ * 
  */
 @Transactional
 @Service("skosImportService")
@@ -178,16 +180,16 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * fr.mcc.ginco.imports.ISKOSImportService#importSKOSFile(java.lang.String,
 	 * java.lang.String, java.io.File)
 	 */
 	@Override
-	public Map<Thesaurus,Set<Alignment>> importSKOSFile(String fileContent, String fileName,
-			File tempDir) throws BusinessException {
+	public Map<Thesaurus, Set<Alignment>> importSKOSFile(String fileContent,
+			String fileName, File tempDir) throws BusinessException {
 
-		Map<Thesaurus,Set<Alignment>> res = new HashMap<Thesaurus,Set<Alignment>>();
+		Map<Thesaurus, Set<Alignment>> res = new HashMap<Thesaurus, Set<Alignment>>();
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 		Thesaurus thesaurus = null;
 
@@ -214,8 +216,9 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 				thesaurusDAO.update(thesaurus);
 
-				//Set default version history
-				ThesaurusVersionHistory defaultVersion = thesaurusHelper.buildDefaultVersion(thesaurus);
+				// Set default version history
+				ThesaurusVersionHistory defaultVersion = thesaurusHelper
+						.buildDefaultVersion(thesaurus);
 				Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
 				versions.add(defaultVersion);
 				thesaurusVersionHistoryDAO.update(defaultVersion);
@@ -232,8 +235,8 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 		} catch (JenaException je) {
 			logger.error("Error reading RDF", je);
-			throw new BusinessException("Error reading imported file :"+je.getMessage(),
-					"import-unable-to-read-file", je);
+			throw new BusinessException("Error reading imported file :"
+					+ je.getMessage(), "import-unable-to-read-file", je);
 		} finally {
 			deleteTempFile(fileURI);
 		}
@@ -242,7 +245,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Builds the thesaurus arrays from the model
-	 *
+	 * 
 	 * @param thesaurus
 	 * @param model
 	 */
@@ -253,24 +256,26 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			ThesaurusArray array = arrayBuilder.buildArray(skosCollection,
 					model, thesaurus);
 			thesaurusArrayDAO.update(array);
-			NodeLabel nodeLabel = nodeLabelBuilder.buildNodeLabel(skosCollection, thesaurus, array);
+			NodeLabel nodeLabel = nodeLabelBuilder.buildNodeLabel(
+					skosCollection, thesaurus, array);
 			nodeLabelDAO.update(nodeLabel);
 		}
 	}
 
 	/**
 	 * Builds thesaurus array relations from the model
-	 *
+	 * 
 	 * @param thesaurus
 	 * @param model
 	 */
 
-	private void buildChildrenArrays(Thesaurus thesaurus, Model model){
+	private void buildChildrenArrays(Thesaurus thesaurus, Model model) {
 		List<Resource> skosCollections = getSKOSRessources(model,
 				SKOS.COLLECTION);
 		for (Resource skosCollection : skosCollections) {
-			List<ThesaurusArray> childrenArrays = arrayBuilder.getChildrenArrays(skosCollection, thesaurus);
-			for (ThesaurusArray childrenArray : childrenArrays){
+			List<ThesaurusArray> childrenArrays = arrayBuilder
+					.getChildrenArrays(skosCollection, thesaurus);
+			for (ThesaurusArray childrenArray : childrenArrays) {
 				thesaurusArrayDAO.update(childrenArray);
 			}
 		}
@@ -278,7 +283,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Launch the calculation of the root concepts and set it
-	 *
+	 * 
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
@@ -294,7 +299,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Builds the parent/child and relationship associations
-	 *
+	 * 
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
@@ -311,12 +316,14 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 					.buildConceptAssociativerelationship(skosConcept, thesaurus);
 			for (AssociativeRelationship relation : associativeRelationships) {
 				Boolean isRelationAdded = false;
-				for (AssociativeRelationship existedRelation : allRelations){
-						if (existedRelation.getConceptLeft().equals(relation.getConceptRight())
-								&& existedRelation.getConceptRight().equals(relation.getConceptLeft())
-								|| existedRelation.equals(relation)){
-							isRelationAdded = true;
-						}
+				for (AssociativeRelationship existedRelation : allRelations) {
+					if (existedRelation.getConceptLeft().equals(
+							relation.getConceptRight())
+							&& existedRelation.getConceptRight().equals(
+									relation.getConceptLeft())
+							|| existedRelation.equals(relation)) {
+						isRelationAdded = true;
+					}
 				}
 				if (!isRelationAdded) {
 					allRelations.add(relation);
@@ -328,11 +335,12 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Builds the concept with minimal informations and it's terms and notes
-	 *
+	 * 
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
-	private Set<Alignment> buildConcepts(Thesaurus thesaurus, List<Resource> skosConcepts) {
+	private Set<Alignment> buildConcepts(Thesaurus thesaurus,
+			List<Resource> skosConcepts) {
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 		for (Resource skosConcept : skosConcepts) {
 			// Minimal concept informations
@@ -353,20 +361,23 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 			// Concept notes
 			List<Note> conceptNotes = conceptNoteBuilder.buildConceptNotes(
-					skosConcept, concept,preferredTerm, thesaurus);
+					skosConcept, concept, preferredTerm, thesaurus);
 			for (Note conceptNote : conceptNotes) {
 				noteDAO.update(conceptNote);
 			}
 
 			// Concept alignments
-			List<Alignment> alignments = alignmentsBuilder.buildAlignments(skosConcept, concept);
-			for (Alignment alignment: alignments) {
-				if (alignment.getExternalTargetThesaurus() != null){
-					externalThesaurusDAO.update(alignment.getExternalTargetThesaurus());
+			List<Alignment> alignments = alignmentsBuilder.buildAlignments(
+					skosConcept, concept);
+			for (Alignment alignment : alignments) {
+				if (alignment.getExternalTargetThesaurus() != null) {
+					externalThesaurusDAO.update(alignment
+							.getExternalTargetThesaurus());
 				}
 				if (alignment.getInternalTargetThesaurus() != null
-						|| alignment.getExternalTargetThesaurus() != null){
-					for (AlignmentConcept alignmentConcept : alignment.getTargetConcepts()){
+						|| alignment.getExternalTargetThesaurus() != null) {
+					for (AlignmentConcept alignmentConcept : alignment
+							.getTargetConcepts()) {
 						alignmentConceptDAO.update(alignmentConcept);
 					}
 					alignmentDAO.update(alignment);
@@ -381,7 +392,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 	/**
 	 * Gets the thesaurus resource from the model, returning the first one only
-	 *
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -409,8 +420,8 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	}
 
 	/**
-	 * Gets the list of resources from the gien model
-	 *
+	 * Gets the list of resources from the given model
+	 * 
 	 * @param model
 	 * @param resource
 	 * @return
@@ -420,7 +431,12 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		SimpleSelector schemeSelector = new SimpleSelector(null, null,
 				(RDFNode) null) {
 			public boolean selects(Statement s) {
-				if (s.getObject().isResource()) {
+				if (s.getObject().isResource()
+						&& !s.getSubject().hasProperty(RDF.type, OWL.Class)
+						&& !s.getSubject().hasProperty(RDF.type,
+								OWL.ObjectProperty)
+						&& !s.getSubject().hasProperty(RDF.type,
+								OWL.DatatypeProperty)) {
 					return s.getObject().asResource().equals(resource);
 				} else {
 					return false;
