@@ -87,7 +87,7 @@ public class SKOSTermsExporter {
 		for (ThesaurusTerm prefTerm : prefTerms) {
 			model.add(conceptResource, SKOS.PREF_LABEL,
 					StringEscapeUtils.unescapeXml(prefTerm.getLexicalValue()),
-					prefTerm.getLanguage().getPart1());			
+					prefTerm.getLanguage().getId());			
 
 			model.add(conceptResource, SKOSXL.PREF_LABEL,
 					model.createResource(prefTerm.getIdentifier()));		
@@ -121,12 +121,12 @@ public class SKOSTermsExporter {
 			if (altLabel.getHidden()) {
 				model.add(conceptResource, SKOS.HIDDEN_LABEL, StringEscapeUtils
 						.unescapeXml(altLabel.getLexicalValue()), altLabel
-						.getLanguage().getPart1());
+						.getLanguage().getId());
 
 			} else {
 				model.add(conceptResource, SKOS.ALT_LABEL, StringEscapeUtils
 						.unescapeXml(altLabel.getLexicalValue()), altLabel
-						.getLanguage().getPart1());
+						.getLanguage().getId());
 
 			}
 			skosModelTermsExporter.exportConceptNotPreferredTerm(altLabel, model,

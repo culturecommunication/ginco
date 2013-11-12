@@ -73,7 +73,7 @@ public class SKOSModelTermsExporter {
 		model.add(prefTermRes, DCTerms.modified,
 				DateUtil.toString(term.getModified()));
 		model.add(prefTermRes, SKOSXL.LITERAL_FORM, term.getLexicalValue(),
-				term.getLanguage().getPart1());
+				term.getLanguage().getId());
 		model.add(prefTermRes, ISOTHES.STATUS, term.getStatus().toString());	
 		if (StringUtils.isNotEmpty(term.getSource())) {
 			model.add(prefTermRes, DC.source, term.getSource());
@@ -94,7 +94,7 @@ public class SKOSModelTermsExporter {
 		model.add(prefTermRes, DCTerms.modified,
 				DateUtil.toString(term.getModified()));
 		model.add(prefTermRes, SKOSXL.LITERAL_FORM, term.getLexicalValue(),
-				term.getLanguage().getPart1());
+				term.getLanguage().getId());
 		model.add(prefTermRes, ISOTHES.STATUS, term.getStatus().toString());
 		
 		if (hidden) {

@@ -98,8 +98,8 @@ public class SKOSNotesExporterTest {
 		th.setIdentifier("http://th1");
 		
 		Language lang = new Language();
-		lang.setPart1("fr");
-		
+		lang.setId("fr-FR");
+
 		
 		ThesaurusConcept c1 = new ThesaurusConcept();
 		c1.setIdentifier("http://c1");
@@ -147,10 +147,10 @@ public class SKOSNotesExporterTest {
 		Model expectedModel = ModelFactory.createDefaultModel();
 		Resource expectedRes = expectedModel.createResource("http://c1");
 		
-		Assert.assertTrue(model.contains(expectedRes, SKOS.EXAMPLE, "exemple", "fr"));
-		Assert.assertTrue(model.contains(expectedRes, SKOS.HISTORY_NOTE, "history", "fr"));
-		Assert.assertTrue(model.contains(expectedRes, SKOS.DEFINITION, "definition", "fr"));
-		Assert.assertTrue(model.contains(expectedRes, SKOS.SCOPE_NOTE, "scope", "fr"));
+		Assert.assertTrue(model.contains(expectedRes, SKOS.EXAMPLE, "exemple", "fr-FR"));
+		Assert.assertTrue(model.contains(expectedRes, SKOS.HISTORY_NOTE, "history", "fr-FR"));
+		Assert.assertTrue(model.contains(expectedRes, SKOS.DEFINITION, "definition", "fr-FR"));
+		Assert.assertTrue(model.contains(expectedRes, SKOS.SCOPE_NOTE, "scope", "fr-FR"));
 	
 	}
 }

@@ -101,7 +101,7 @@ public class SKOSGroupExporter {
 				DateUtil.toString(label.getModified()));
 
 		model.add(groupRes, RDFS.label, label.getLexicalValue(), label
-				.getLanguage().getPart1());
+				.getLanguage().getId());
 
 		String notation = group.getNotation();
 		if (StringUtils.isNotEmpty(notation)) {

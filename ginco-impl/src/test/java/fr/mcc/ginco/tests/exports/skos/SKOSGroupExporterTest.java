@@ -97,7 +97,7 @@ public class SKOSGroupExporterTest {
 		th.setIdentifier("http://th1");
 
 		Language lang = new Language();
-		lang.setPart1("fr");
+		lang.setId("fr-FR");
 
 		ThesaurusConcept c1 = new ThesaurusConcept();
 		c1.setIdentifier("http://c1");
@@ -161,7 +161,7 @@ public class SKOSGroupExporterTest {
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.IN_SCHEME, schemeRes));
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(DCTerms.created, DateUtil.toString(now)));
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(DCTerms.modified, DateUtil.toString(now)));
-		Assert.assertTrue(model.getResource("http://g1").hasProperty(RDFS.label, "group1", "fr"));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(RDFS.label, "group1", "fr-FR"));
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.NOTATION, "notation"));
 		
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.MEMBER, c1Res));

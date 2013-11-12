@@ -93,7 +93,7 @@ public class SKOSArrayExporter {
 
 				collectionRes
 						.addProperty(SKOS.PREF_LABEL, label.getLexicalValue(),
-								label.getLanguage().getPart1());
+								label.getLanguage().getId());
 
 				for (ThesaurusArrayConcept arrayConcept : array.getConcepts()) {
 						Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());

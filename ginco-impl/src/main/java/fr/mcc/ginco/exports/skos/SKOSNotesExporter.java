@@ -79,18 +79,16 @@ public class SKOSNotesExporter {
 		}
 		
 		for (Note note : notes) {
+			String lexicalValue = note.getLexicalValue();
+			String lang = note.getLanguage().getId();
 			if ("historyNote".equals(note.getNoteType().getCode())) {
-				model.add(conceptRes, SKOS.HISTORY_NOTE, note.getLexicalValue(),
-						note.getLanguage().getPart1());				
+				model.add(conceptRes, SKOS.HISTORY_NOTE, lexicalValue, lang);
 			} else if ("scopeNote".equals(note.getNoteType().getCode())) {
-				model.add(conceptRes, SKOS.SCOPE_NOTE, note.getLexicalValue(),
-						note.getLanguage().getPart1());
+				model.add(conceptRes, SKOS.SCOPE_NOTE, lexicalValue, lang);
 			} else if ("example".equals(note.getNoteType().getCode())) {
-				model.add(conceptRes, SKOS.EXAMPLE, note.getLexicalValue(),
-						note.getLanguage().getPart1());					
+				model.add(conceptRes, SKOS.EXAMPLE, lexicalValue, lang);					
 			} else if ("definition".equals(note.getNoteType().getCode())) {
-				model.add(conceptRes, SKOS.DEFINITION, note.getLexicalValue(),
-						note.getLanguage().getPart1());		
+				model.add(conceptRes, SKOS.DEFINITION, lexicalValue, lang);	
 			}
 		}
 		return model;

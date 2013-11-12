@@ -84,7 +84,7 @@ public class SKOSComplexConceptExporterTest {
 	public void testExportComplexConcept() {
 
 		Language lang = new Language();
-		lang.setPart1("fr");
+		lang.setId("fr-FR");
 
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier("http://th1");
@@ -136,7 +136,7 @@ public class SKOSComplexConceptExporterTest {
 		Assert.assertTrue(model.contains(complexConceptRes, SKOS.IN_SCHEME,
 				schemeRes));
 		Assert.assertTrue(model.contains(complexConceptRes,
-				SKOSXL.LITERAL_FORM, "fake complex concept", "fr"));
+				SKOSXL.LITERAL_FORM, "fake complex concept", "fr-FR"));
 		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.created,
 				nowInString));
 		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.modified,
