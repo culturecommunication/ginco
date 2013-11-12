@@ -49,48 +49,40 @@ import org.mockito.MockitoAnnotations;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentType;
-import fr.mcc.ginco.beans.ExternalThesaurusType;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.imports.AlignmentBuilder;
-import fr.mcc.ginco.services.IExternalThesaurusService;
-import fr.mcc.ginco.services.IExternalThesaurusTypeService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.skos.namespaces.SKOS;
+import fr.mcc.ginco.imports.AlignmentsBuilder;
+import fr.mcc.ginco.services.IAlignmentTypeService;
 import fr.mcc.ginco.tests.LoggerTestUtil;
+import fr.mcc.ginco.utils.DateUtil;
 
-public class AlignmentBuilderTest {
+public class AlignmentsBuilderTest {
 
-	@Mock(name = "generatorService")
-	private IIDGeneratorService generatorService;
+	@Mock(name = "alignmentTypeService")
+	private IAlignmentTypeService alignmentTypeService;
 
-	@Mock(name = "thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;
-
-	@Mock(name = "externalThesaurusTypeService")
-	private IExternalThesaurusTypeService externalThesaurusTypeService;
-
-	@Mock(name = "externalThesaurusService")
-	private IExternalThesaurusService externalThesaurusService;
+	@Mock(name = "alignmentBuilder")
+	private AlignmentBuilder alignmentBuilder;	
 
 	@InjectMocks
-	private AlignmentBuilder alignmentBuilder;
+	private AlignmentsBuilder alignmentsBuilder;
 
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(alignmentBuilder);
+		LoggerTestUtil.initLogger(alignmentsBuilder);
 	}
 
 	@Test
-	public void identifyExternalThesaurusTest() {
+	public void testBuildAlignments() {
 
 		ThesaurusConcept concept = new ThesaurusConcept();
-		concept.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-411");
+		concept.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-413");
+		concept.setCreated(DateUtil.nowDate());
+		concept.setModified(DateUtil.nowDate());
 
 		Model model = ModelFactory.createDefaultModel();
 		InputStream is = TermBuilderTest.class
@@ -98,22 +90,37 @@ public class AlignmentBuilderTest {
 		model.read(is, null);
 
 		Resource skosConcept = model
-				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-411");
+				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-413");
 
-		Statement stmt = skosConcept.getProperty(SKOS.SKOS_ALIGNMENTS.get("=EQ"));
+		List<AlignmentType> alignmentTypes = new ArrayList<AlignmentType>();
 
 		AlignmentType exact = new AlignmentType();
 		exact.setIsoCode("=EQ");
+		alignmentTypes.add(exact);
 
-		List<ExternalThesaurusType> externalThesaurusTypes = new ArrayList<ExternalThesaurusType>();
-		ExternalThesaurusType exType = new ExternalThesaurusType();
-		exType.setIdentifier(1);
-		exType.setLabel("Autorités");
-		externalThesaurusTypes.add(exType);
+		AlignmentType close = new AlignmentType();
+		close.setIsoCode("~EQ");
+		alignmentTypes.add(close);
 
-		Mockito.when(externalThesaurusTypeService.getExternalThesaurusTypeList()).thenReturn(externalThesaurusTypes);
+		AlignmentType broad = new AlignmentType();
+		broad.setIsoCode("BM");
+		alignmentTypes.add(broad);
 
-		Alignment alignement = alignmentBuilder.buildAlignment(stmt, exact, concept);
-		Assert.assertEquals(alignement.getExternalTargetThesaurus().getExternalId(), "http://data.bnf.fr/ark:/12148/");
+		AlignmentType narrow = new AlignmentType();
+		narrow.setIsoCode("NM");
+		alignmentTypes.add(narrow);
+
+		AlignmentType related = new AlignmentType();
+		related.setIsoCode("RM");
+		alignmentTypes.add(related);
+
+		Mockito.when(alignmentTypeService.getAlignmentTypeList()).thenReturn(
+				alignmentTypes);
+
+		List<Alignment> alignements = alignmentsBuilder.buildAlignments(skosConcept, concept);
+
+		Assert.assertEquals(5, alignements.size());
 	}
+
+	
 }

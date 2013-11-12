@@ -161,8 +161,8 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private NodeLabelBuilder nodeLabelBuilder;
 
 	@Inject
-	@Named("skosAlignmentBuilder")
-	private AlignmentBuilder alignmentBuilder;
+	@Named("skosAlignmentsBuilder")
+	private AlignmentsBuilder alignmentsBuilder;
 
 	@Inject
 	@Named("alignmentDAO")
@@ -231,6 +231,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			res.put(thesaurus, bannedAlignments);
 
 		} catch (JenaException je) {
+			logger.error("Error reading RDF", je);
 			throw new BusinessException("Error reading imported file :"+je.getMessage(),
 					"import-unable-to-read-file", je);
 		} finally {
@@ -358,7 +359,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			}
 
 			// Concept alignments
-			List<Alignment> alignments = alignmentBuilder.buildAlignments(skosConcept, concept);
+			List<Alignment> alignments = alignmentsBuilder.buildAlignments(skosConcept, concept);
 			for (Alignment alignment: alignments) {
 				if (alignment.getExternalTargetThesaurus() != null){
 					externalThesaurusDAO.update(alignment.getExternalTargetThesaurus());

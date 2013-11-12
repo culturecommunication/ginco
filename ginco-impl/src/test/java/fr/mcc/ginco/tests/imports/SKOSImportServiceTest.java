@@ -65,7 +65,7 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
-import fr.mcc.ginco.imports.AlignmentBuilder;
+import fr.mcc.ginco.imports.AlignmentsBuilder;
 import fr.mcc.ginco.imports.ConceptBuilder;
 import fr.mcc.ginco.imports.ConceptNoteBuilder;
 import fr.mcc.ginco.imports.NodeLabelBuilder;
@@ -123,7 +123,7 @@ public class SKOSImportServiceTest {
 	private ThesaurusHelper thesaurusHelper;
 
 	@Mock(name = "skosAlignmentBuilder")
-	private AlignmentBuilder alignmentBuilder;
+	private AlignmentsBuilder alignmentBuilder;
 
 	@InjectMocks
     private SKOSImportServiceImpl skosImportService ;
