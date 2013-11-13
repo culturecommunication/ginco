@@ -35,7 +35,9 @@
 package fr.mcc.ginco.tests.exports.skos;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -130,10 +132,17 @@ public class SKOSGroupExporterTest {
 		g1.setParent(g2);
 		g1.setNotation("notation");
 
-		Date now = DateUtil.nowDate();
+		Calendar cal1 = new GregorianCalendar();
+		cal1.set(2013,10,06, 21,33,9);
+		cal1.set(Calendar.MILLISECOND, 0);
+		
+		Calendar cal2 = new GregorianCalendar();
+		cal2.set(2012,10,06, 21,33,9);
+		cal2.set(Calendar.MILLISECOND, 0);
+		
 		ThesaurusConceptGroupLabel label1 = new ThesaurusConceptGroupLabel();
-		label1.setCreated(now);
-		label1.setModified(now);
+		label1.setCreated(cal1.getTime());
+		label1.setModified(cal2.getTime());
 		label1.setLexicalValue("group1");
 		label1.setLanguage(lang);
 		label1.setConceptGroup(g1);
@@ -157,10 +166,15 @@ public class SKOSGroupExporterTest {
 
 
 		Assert.assertTrue(model.containsResource(groupeRes));
+		Resource groupRes = model.getResource("http://g1");
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(RDF.type, GINCO.getResource("Domaine")));
-		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.IN_SCHEME, schemeRes));
-		Assert.assertTrue(model.getResource("http://g1").hasProperty(DCTerms.created, DateUtil.toString(now)));
-		Assert.assertTrue(model.getResource("http://g1").hasProperty(DCTerms.modified, DateUtil.toString(now)));
+		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.IN_SCHEME, schemeRes));	
+		
+		Assert.assertTrue(model.contains(groupRes, DCTerms.created));
+		Assert.assertTrue(model.getProperty(groupRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.contains(groupRes, DCTerms.modified));
+		Assert.assertTrue(model.getProperty(groupRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(RDFS.label, "group1", "fr-FR"));
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.NOTATION, "notation"));
 		

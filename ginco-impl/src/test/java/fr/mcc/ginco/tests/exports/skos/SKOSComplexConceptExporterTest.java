@@ -35,7 +35,8 @@
 package fr.mcc.ginco.tests.exports.skos;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +66,6 @@ import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.skos.namespaces.ISOTHES;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.skos.namespaces.SKOSXL;
-import fr.mcc.ginco.utils.DateUtil;
 
 public class SKOSComplexConceptExporterTest {
 
@@ -91,13 +91,19 @@ public class SKOSComplexConceptExporterTest {
 
 		List<SplitNonPreferredTerm> complexConceptsInThesaurus = new ArrayList<SplitNonPreferredTerm>();
 
-		Date now = DateUtil.nowDate();
-		String nowInString = DateUtil.toString(now);
+		Calendar cal1 = new GregorianCalendar();
+		cal1.set(2013,10,06, 21,33,9);
+		cal1.set(Calendar.MILLISECOND, 0);
+		
+		Calendar cal2 = new GregorianCalendar();
+		cal2.set(2012,10,06, 21,33,9);
+		cal2.set(Calendar.MILLISECOND, 0);
+		
 		SplitNonPreferredTerm complexConcept = new SplitNonPreferredTerm();
 		complexConcept.setThesaurus(th);
 		complexConcept.setIdentifier("http://cc1");
-		complexConcept.setCreated(now);
-		complexConcept.setModified(now);
+		complexConcept.setCreated(cal1.getTime());
+		complexConcept.setModified(cal2.getTime());
 		complexConcept.setStatus(ConceptStatusEnum.CANDIDATE.getStatus());
 		complexConcept.setLexicalValue("fake complex concept");
 		complexConcept.setSource("fake source");
@@ -137,10 +143,14 @@ public class SKOSComplexConceptExporterTest {
 				schemeRes));
 		Assert.assertTrue(model.contains(complexConceptRes,
 				SKOSXL.LITERAL_FORM, "fake complex concept", "fr-FR"));
-		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.created,
-				nowInString));
-		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.modified,
-				nowInString));
+		
+		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.created));
+		Assert.assertTrue(model.getProperty(complexConceptRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		
+	
+		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.modified));
+		Assert.assertTrue(model.getProperty(complexConceptRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		
 		Assert.assertTrue(model.contains(complexConceptRes, ISOTHES.STATUS,
 				Integer.toString(ConceptStatusEnum.CANDIDATE.getStatus())));
 		Assert.assertTrue(model.contains(complexConceptRes, DC.source,

@@ -95,10 +95,10 @@ public class SKOSGroupExporter {
 		model.add(groupRes, SKOS.IN_SCHEME, inScheme);
 
 		model.add(groupRes, DCTerms.created,
-				DateUtil.toString(label.getCreated()));
+				DateUtil.toISO8601String(label.getCreated()));
 
 		model.add(groupRes, DCTerms.modified,
-				DateUtil.toString(label.getModified()));
+				DateUtil.toISO8601String(label.getModified()));
 
 		model.add(groupRes, RDFS.label, label.getLexicalValue(), label
 				.getLanguage().getId());

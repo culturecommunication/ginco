@@ -77,9 +77,9 @@ public class SKOSThesaurusExporter {
 				thesaurus.getIdentifier(), SKOS.CONCEPTSCHEME);
 
 		model.add(thesaurusResource, DCTerms.created,
-				DateUtil.toString(thesaurus.getCreated()));
+				DateUtil.toISO8601String(thesaurus.getCreated()));
 		model.add(thesaurusResource, DCTerms.modified,
-				DateUtil.toString(thesaurus.getDate()));
+				DateUtil.toISO8601String(thesaurus.getDate()));
 
 		model.add(thesaurusResource, DC.title, thesaurus.getTitle());
 

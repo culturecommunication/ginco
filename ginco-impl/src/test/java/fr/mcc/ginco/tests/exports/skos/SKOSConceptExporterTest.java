@@ -37,7 +37,8 @@ package fr.mcc.ginco.tests.exports.skos;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.junit.Assert;
@@ -70,7 +71,6 @@ import fr.mcc.ginco.exports.skos.SKOSTermsExporter;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.skos.namespaces.ISOTHES;
 import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.utils.DateUtil;
 
 public class SKOSConceptExporterTest {
 
@@ -111,21 +111,28 @@ public class SKOSConceptExporterTest {
 
 		Language lang = new Language();
 		lang.setPart1("fr");
-
-		Date now = DateUtil.nowDate();
+		
+		Calendar cal1 = new GregorianCalendar();
+		cal1.set(2013,10,06, 21,33,9);
+		cal1.set(Calendar.MILLISECOND, 0);
+		
+		Calendar cal2 = new GregorianCalendar();
+		cal2.set(2012,10,06, 21,33,9);
+		cal2.set(Calendar.MILLISECOND, 0);
+		
 
 		ThesaurusConcept c1 = new ThesaurusConcept();
 		c1.setIdentifier("http://c1");
-		c1.setCreated(now);
-		c1.setModified(now);
+		c1.setCreated(cal1.getTime());
+		c1.setModified(cal2.getTime());
 		c1.setNotation("c1_notation");
 		c1.setStatus(ConceptStatusEnum.DEPRECATED.getStatus());
 		c1.setThesaurus(th);
 
 		ThesaurusConcept c2 = new ThesaurusConcept();
 		c2.setIdentifier("http://c2");
-		c2.setCreated(now);
-		c2.setModified(now);
+		c2.setCreated(cal1.getTime());
+		c2.setModified(cal2.getTime());
 		c2.setNotation("c2_notation");
 		c2.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
 		c2.setThesaurus(th);
@@ -157,10 +164,15 @@ public class SKOSConceptExporterTest {
 
 		Assert.assertTrue(model.getResource("http://c1").hasProperty(
 				SKOS.IN_SCHEME, expectedThesRes));
-		Assert.assertTrue(model.getResource("http://c1").hasProperty(
-				DCTerms.created, DateUtil.toString(now)));
-		Assert.assertTrue(model.getResource("http://c1").hasProperty(
-				DCTerms.modified, DateUtil.toString(now)));
+		
+		Resource conceptRes = model.getResource("http://c1");
+		Assert.assertTrue(model.contains(conceptRes, DCTerms.created));
+		Assert.assertTrue(model.getProperty(conceptRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.contains(conceptRes, DCTerms.modified));
+		Assert.assertTrue(model.getProperty(conceptRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		
+		
+		
 		Assert.assertTrue(model.getResource("http://c1").hasProperty(
 				SKOS.NOTATION, "c1_notation"));
 		Assert.assertTrue(model.getResource("http://c1").hasProperty(
@@ -169,13 +181,18 @@ public class SKOSConceptExporterTest {
 		Assert.assertTrue(model.containsResource(expectedConceptRes2));
 		Assert.assertTrue(model.getResource("http://c2").hasProperty(RDF.type,
 				SKOS.CONCEPT));
-
+		
 		Assert.assertTrue(model.getResource("http://c2").hasProperty(
-				SKOS.IN_SCHEME, expectedThesRes));
-		Assert.assertTrue(model.getResource("http://c2").hasProperty(
-				DCTerms.created, DateUtil.toString(now)));
-		Assert.assertTrue(model.getResource("http://c2").hasProperty(
-				DCTerms.modified, DateUtil.toString(now)));
+				DCTerms.modified, "2012-11-06T21:33:09.00+0100"));
+		
+		Resource conceptRes2 = model.getResource("http://c2");
+		Assert.assertTrue(model.contains(conceptRes2, DCTerms.created));
+		Assert.assertTrue(model.getProperty(conceptRes2, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.contains(conceptRes2, DCTerms.modified));
+		Assert.assertTrue(model.getProperty(conceptRes2, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		
+		
+		
 		Assert.assertTrue(model.getResource("http://c2").hasProperty(
 				SKOS.NOTATION, "c2_notation"));
 		Assert.assertTrue(model.getResource("http://c2").hasProperty(

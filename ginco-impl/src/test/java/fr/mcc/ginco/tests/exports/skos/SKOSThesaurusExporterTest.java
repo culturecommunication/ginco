@@ -35,7 +35,8 @@
 package fr.mcc.ginco.tests.exports.skos;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,7 +66,6 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exports.skos.SKOSThesaurusExporter;
 import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting collections to SKOS
@@ -102,8 +102,14 @@ public class SKOSThesaurusExporterTest {
 		languages.add(lang1);
 		languages.add(lang2);
 		
-		Date now = DateUtil.nowDate();
-
+		Calendar cal1 = new GregorianCalendar();
+		cal1.set(2013,10,06, 21,33,9);
+		cal1.set(Calendar.MILLISECOND, 0);
+		
+		Calendar cal2 = new GregorianCalendar();
+		cal2.set(2012,10,06, 21,33,9);
+		cal2.set(Calendar.MILLISECOND, 0);
+		
 		ThesaurusType type = new ThesaurusType();
 		type.setLabel("Thésaurus");
 		
@@ -115,8 +121,8 @@ public class SKOSThesaurusExporterTest {
 		Thesaurus thesaurus = new Thesaurus();
 		thesaurus.setIdentifier("http://thesaurus1");
 		thesaurus.setTitle("Thesaurus title");
-		thesaurus.setCreated(now);
-		thesaurus.setDate(now);
+		thesaurus.setCreated(cal1.getTime());
+		thesaurus.setDate(cal2.getTime());
 		thesaurus.setRights("thesaurus rights");
 		thesaurus.setDescription("thesaurus description");
 		thesaurus.setRelation("thesaurus relation");
@@ -140,8 +146,12 @@ public class SKOSThesaurusExporterTest {
 		Resource actualRes = model.getResource("http://thesaurus1");
 		Assert.assertTrue(actualRes.hasProperty(DC.title, "Thesaurus title"));
 		Assert.assertTrue(actualRes.hasProperty(DCTerms.issued, "note de version"));
-		Assert.assertTrue(actualRes.hasProperty(DCTerms.created, DateUtil.toString(now)));
-		Assert.assertTrue(actualRes.hasProperty(DCTerms.modified, DateUtil.toString(now)));
+		
+		Assert.assertTrue(model.contains(actualRes, DCTerms.created));
+		Assert.assertTrue(model.getProperty(actualRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.contains(actualRes, DCTerms.modified));
+		Assert.assertTrue(model.getProperty(actualRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		
 		Assert.assertTrue(actualRes.hasProperty(DCTerms.issued, "note de version"));
 
 		Assert.assertTrue(actualRes.hasProperty(DC.rights, "thesaurus rights"));

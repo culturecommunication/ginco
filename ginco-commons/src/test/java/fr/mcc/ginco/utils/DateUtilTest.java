@@ -117,5 +117,20 @@ public class DateUtilTest {
 		Date actualDate = DateUtil.dateFromString("not:a:date");
 		Assert.assertEquals(null, actualDate);
 	}
+	
+	@Test
+	public void testToISO8601String() {
+		Calendar gCal = GregorianCalendar.getInstance();
+		gCal.set(Calendar.DAY_OF_MONTH, 1);
+		gCal.set(Calendar.MONTH, 2);
+		gCal.set(Calendar.YEAR, 2013);
+		gCal.set(Calendar.HOUR_OF_DAY, 22);
+		gCal.set(Calendar.MINUTE, 21);
+		gCal.set(Calendar.SECOND, 01);
+		gCal.set(Calendar.MILLISECOND, 0);
+		
+		String isoDate  =  DateUtil.toISO8601String(gCal.getTime());
+		Assert.assertTrue(isoDate.startsWith("2013-03-01T22:21:01.00"));
+	}
 
 }

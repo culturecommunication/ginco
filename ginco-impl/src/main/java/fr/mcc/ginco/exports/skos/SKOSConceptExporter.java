@@ -160,9 +160,9 @@ public class SKOSConceptExporter {
 		model.add(conceptResource, SKOS.IN_SCHEME, inScheme);
 
 		model.add(conceptResource, DCTerms.created,
-				DateUtil.toString(concept.getCreated()));
+				DateUtil.toISO8601String(concept.getCreated()));
 		model.add(conceptResource, DCTerms.modified,
-				DateUtil.toString(concept.getModified()));
+				DateUtil.toISO8601String(concept.getModified()));
 
 		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
 

@@ -89,9 +89,9 @@ public class SKOSComplexConceptExporter {
 						complexConcept.getLexicalValue(), complexConcept
 								.getLanguage().getId());
 				model.add(complexConceptRes, DCTerms.created,
-						DateUtil.toString(complexConcept.getCreated()));
+						DateUtil.toISO8601String(complexConcept.getCreated()));
 				model.add(complexConceptRes, DCTerms.modified,
-						DateUtil.toString(complexConcept.getModified()));
+						DateUtil.toISO8601String(complexConcept.getModified()));
 				model.add(complexConceptRes, ISOTHES.STATUS, complexConcept
 						.getStatus().toString());
 

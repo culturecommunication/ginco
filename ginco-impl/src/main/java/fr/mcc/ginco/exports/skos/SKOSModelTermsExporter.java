@@ -69,9 +69,9 @@ public class SKOSModelTermsExporter {
 				ISOTHES.PREFERRED_TERM);
 
 		model.add(prefTermRes, DCTerms.created,
-				DateUtil.toString(term.getCreated()));
+				DateUtil.toISO8601String(term.getCreated()));
 		model.add(prefTermRes, DCTerms.modified,
-				DateUtil.toString(term.getModified()));
+				DateUtil.toISO8601String(term.getModified()));
 		model.add(prefTermRes, SKOSXL.LITERAL_FORM, term.getLexicalValue(),
 				term.getLanguage().getId());
 		model.add(prefTermRes, ISOTHES.STATUS, term.getStatus().toString());	
@@ -90,9 +90,9 @@ public class SKOSModelTermsExporter {
 				ISOTHES.SIMPLE_NON_PREFERRED_TERM);
 
 		model.add(prefTermRes, DCTerms.created,
-				DateUtil.toString(term.getCreated()));
+				DateUtil.toISO8601String(term.getCreated()));
 		model.add(prefTermRes, DCTerms.modified,
-				DateUtil.toString(term.getModified()));
+				DateUtil.toISO8601String(term.getModified()));
 		model.add(prefTermRes, SKOSXL.LITERAL_FORM, term.getLexicalValue(),
 				term.getLanguage().getId());
 		model.add(prefTermRes, ISOTHES.STATUS, term.getStatus().toString());

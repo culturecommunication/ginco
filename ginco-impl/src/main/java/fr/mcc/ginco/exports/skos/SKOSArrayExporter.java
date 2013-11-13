@@ -104,8 +104,8 @@ public class SKOSArrayExporter {
 					model.add(collectionRes, SKOS.MEMBER, arrayMember);
 				}
 
-				model.add(collectionRes, DCTerms.created, DateUtil.toString(label.getCreated()));
-				model.add(collectionRes, DCTerms.modified, DateUtil.toString(label.getModified()));
+				model.add(collectionRes, DCTerms.created, DateUtil.toISO8601String(label.getCreated()));
+				model.add(collectionRes, DCTerms.modified, DateUtil.toISO8601String(label.getModified()));
 			}
 			
 		}

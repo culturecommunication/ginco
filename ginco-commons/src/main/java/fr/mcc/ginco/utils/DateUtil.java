@@ -49,6 +49,8 @@ public final class DateUtil {
 	}
 
 	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static SimpleDateFormat iso8601formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSZZ");
+
 
     /**
      * Converts Date to String.
@@ -58,6 +60,13 @@ public final class DateUtil {
     public static String toString(Date date) {
         if(date != null) {
             return formatter.format(date);
+        }
+        return null;
+    }
+    
+    public static String toISO8601String(Date date) {
+        if(date != null) {
+            return iso8601formatter.format(date);
         }
         return null;
     }
