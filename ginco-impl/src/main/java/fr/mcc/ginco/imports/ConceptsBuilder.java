@@ -156,6 +156,9 @@ public class ConceptsBuilder extends AbstractBuilder {
 				conceptHierarchicalRelationshipServiceUtil
 						.saveHierarchicalRelationship(concept,
 								relationsThesaurusConcept.get(concept),
+								new ArrayList<ThesaurusConcept>(),
+								new ArrayList<ThesaurusConcept>(),
+								new ArrayList<ThesaurusConcept>(),
 								new ArrayList<ThesaurusConcept>());
 
 				thesaurusConceptDAO.update(concept);
