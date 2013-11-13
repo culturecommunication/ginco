@@ -92,13 +92,16 @@ public class ExternalThesaurusViewConverter {
 	public ExternalThesaurus convertExternalThesaurusView(
 			ExternalThesaurusView externalThesaurusView) {
 		ExternalThesaurus externalThesaurus;
-		if (externalThesaurusView.getIdentifier() == null) {
-			externalThesaurus = new ExternalThesaurus();
-			logger.info("Creating a new alignment");
+		if (externalThesaurusView.getIdentifier() == null) {			
+			externalThesaurus =	externalThesaurusService.getThesaurusByExternalId(externalThesaurusView.getExternalId());
+			if (externalThesaurus == null) {
+				externalThesaurus = new ExternalThesaurus();
+				logger.info("Creating a new external thesaurus");
+			}
 		} else {
 			externalThesaurus = externalThesaurusService.getExternalThesaurusById(externalThesaurusView
 					.getIdentifier());
-			logger.info("Getting an existing alignment");
+			logger.info("Getting an existing external thesaurus");
 		}
 		
 		
