@@ -64,11 +64,7 @@ import fr.mcc.ginco.utils.DateUtil;
  *
  */
 @Component("alignmentViewConverter")
-public class AlignmentViewConverter {
-
-	@Inject
-	@Named("thesaurusService")
-	private IThesaurusService thesaurusService;
+public class AlignmentViewConverter {	
 
 	@Inject
 	@Named("alignmentService")

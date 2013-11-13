@@ -79,10 +79,7 @@ public class UserRoleRestService {
 
 	@Inject
 	@Named("userRoleViewConverter")
-	private UserRoleViewConverter userRoleViewConverter;
-
-	@Log
-	private Logger logger;
+	private UserRoleViewConverter userRoleViewConverter;	
 
 	/**
 	 * Method to get the list of the thesaurus users

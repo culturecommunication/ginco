@@ -107,11 +107,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 	@Inject
 	@Named("externalThesaurusDAO")
 	private IExternalThesaurusDAO externalThesaurusDAO;
-
-	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
-	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
-
+	
 	@Inject
 	@Named("skosAlignmentsBuilder")
 	private AlignmentsBuilder alignmentsBuilder;

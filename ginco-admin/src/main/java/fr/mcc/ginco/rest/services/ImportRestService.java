@@ -121,10 +121,6 @@ public class ImportRestService {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
-	@Named("thesaurusViewConverter")
-	private ThesaurusViewConverter thesaurusViewConverter;
-
-	@Inject
 	@Named("thesaurusConceptViewConverter")
 	private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
 

@@ -34,6 +34,10 @@
  */
 package fr.mcc.ginco.exports.skos;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -44,6 +48,7 @@ import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.utils.DateUtil;
 
@@ -53,6 +58,10 @@ import fr.mcc.ginco.utils.DateUtil;
  */
 @Component("skosThesaurusExporter")
 public class SKOSThesaurusExporter {
+
+	@Inject
+	@Named("thesaurusVersionHistoryDAO")
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	private static final String SEPARATOR = "\\r?\\n";
 
@@ -128,6 +137,13 @@ public class SKOSThesaurusExporter {
 		for (Language lang : thesaurus.getLang()) {
 
 			model.add(thesaurusResource, DC.language, lang.getId());
+		}
+
+		String currentVersionValue = thesaurusVersionHistoryDAO
+				.findThisVersionByThesaurusId(thesaurus.getIdentifier())
+				.getVersionNote();
+		if (StringUtils.isNotEmpty(currentVersionValue)) {
+			model.add(thesaurusResource, DCTerms.issued, currentVersionValue);
 		}
 
 		return model;

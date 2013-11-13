@@ -86,11 +86,6 @@ public class AlignmentsRestService {
 	private ExternalThesaurusViewConverter externalThesaurusViewConverter;
 
 	
-	
-   @Log
-	private Logger logger;
-
-	
 	/**
 	 * Method to get the list of alignment types
 	 * @return
