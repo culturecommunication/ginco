@@ -9,13 +9,13 @@
             <value>P</value>
             <value>Partitive</value>
             <value>true</value>
-            <value>Partitive</value>
+            <value>PartitiveSkos</value>
         </row>
         <row>
             <value>I</value>
             <value>Instance</value>
             <value>false</value>
-            <value>Instance</value>
+            <value>InstanceSkos</value>
         </row>
     </table>
 </dataset>

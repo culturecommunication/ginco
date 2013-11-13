@@ -67,4 +67,10 @@ public class AssociativeRelationshipRoleServiceImpl implements IAssociativeRelat
 			throws BusinessException {
 		return associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole();
 	}
+    
+    @Override
+    public AssociativeRelationshipRole getRoleBySkosLabel(String skosLabel) {
+        return associativeRelationshipRoleDAO.getBySkosLabel(skosLabel);
+    }
+
 }

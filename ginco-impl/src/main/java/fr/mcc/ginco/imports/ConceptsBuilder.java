@@ -147,7 +147,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 	 * @param skosConcepts
 	 */
 	public void buildConceptsAssociations(Thesaurus thesaurus,
-			List<Resource> skosConcepts, List<ObjectProperty> broaderTypes) {
+			List<Resource> skosConcepts, List<ObjectProperty> broaderTypes, List<ObjectProperty> associationTypes) {
 		List<AssociativeRelationship> allRelations = new ArrayList<AssociativeRelationship>();
 		for (Resource skosConcept : skosConcepts) {
 
@@ -166,7 +166,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 			}
 
 			Set<AssociativeRelationship> associativeRelationships = conceptBuilder
-					.buildConceptAssociativerelationship(skosConcept, thesaurus);
+					.buildConceptAssociativerelationship(skosConcept, thesaurus, associationTypes);
 			for (AssociativeRelationship relation : associativeRelationships) {
 				Boolean isRelationAdded = false;
 				for (AssociativeRelationship existedRelation : allRelations) {

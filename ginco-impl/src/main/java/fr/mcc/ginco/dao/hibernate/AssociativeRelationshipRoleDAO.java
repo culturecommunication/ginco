@@ -35,8 +35,11 @@
 package fr.mcc.ginco.dao.hibernate;
 
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
+import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -62,6 +65,18 @@ public class AssociativeRelationshipRoleDAO extends GenericHibernateDAO<Associat
 			throw new BusinessException("No defaultRole defined", "no-default-role-defined");
 		}
 	}	
+	
+	@Override
+	public AssociativeRelationshipRole getBySkosLabel(String skosLabel) {
+		 Criteria criteria = getCurrentSession().createCriteria(
+				 AssociativeRelationshipRole.class);
+	       criteria.add(Restrictions.eq("skosLabel", skosLabel));
+	    List<AssociativeRelationshipRole>  foundroles = criteria.list();
+	    if (foundroles.size()>0) {
+	    	return foundroles.get(0);
+	    }
+	    return null;
+	}
 	
 	
 }

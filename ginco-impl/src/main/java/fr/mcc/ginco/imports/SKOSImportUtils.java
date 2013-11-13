@@ -102,4 +102,17 @@ public class SKOSImportUtils {
 		
 	}
 	
+	public static List<ObjectProperty> getRelatedTypeProperty(OntModel model) {
+		List<ObjectProperty> skosRessources = new ArrayList<ObjectProperty>();
+		ExtendedIterator<ObjectProperty> properties = model.listObjectProperties();
+		while (properties.hasNext()) {
+			ObjectProperty property = properties.next();
+			if (property.hasSuperProperty(SKOS.RELATED, true)) {
+				skosRessources.add(property);
+			}
+		}
+		return skosRessources;
+		
+	}
+	
 }

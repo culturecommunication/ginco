@@ -34,7 +34,8 @@
  */
 package fr.mcc.ginco.tests.imports;
 
-import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,15 +51,19 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.imports.ThesaurusBuilder;
+import fr.mcc.ginco.imports.ThesaurusOrganizationBuilder;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusBuilderTest {
@@ -72,6 +77,9 @@ public class ThesaurusBuilderTest {
 
 	@Mock(name = "languagesDAO")
 	private ILanguageDAO languagesDAO;
+	
+	@Mock(name = "skosThesaurusOrganizationBuilder")
+	private ThesaurusOrganizationBuilder thesaurusOrganizationBuilder;
 
 	@InjectMocks
 	private ThesaurusBuilder thesaurusBuilder;
@@ -79,15 +87,15 @@ public class ThesaurusBuilderTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		List<String> langFormats = new ArrayList<String>();
-		langFormats.add("yyyy");
-		ReflectionTestUtils.setField(thesaurusBuilder, "skosDefaultDateFormats", langFormats);
+		List<String> dateFormats = new ArrayList<String>();
+		dateFormats.add("yyyy-MM-dd HH:mm:ss");
+		ReflectionTestUtils.setField(thesaurusBuilder, "skosDefaultDateFormats", dateFormats);
 		ReflectionTestUtils.setField(thesaurusBuilder, "defaultThesaurusFormat", 3);
 		LoggerTestUtil.initLogger(thesaurusBuilder);
 	}
 
 	@Test
-	public void testBuildTerms() {
+	public void testBuildThesaurus() throws ParseException {
 		ThesaurusType fakeType = new ThesaurusType();
 
 		Mockito.when(thesaurusTypeDAO
@@ -100,16 +108,36 @@ public class ThesaurusBuilderTest {
 		ThesaurusFormat format = new ThesaurusFormat();
 		format.setLabel("SKOS");
 		Mockito.when(thesaurusFormatDAO	.getById(3)).thenReturn(format);
+		
 
-		Model model = ModelFactory.createDefaultModel();
-		InputStream is = ThesaurusBuilderTest.class
-				.getResourceAsStream("/imports/concept_associations.rdf");
-		model.read(is, null);
+		Model model = ModelFactory.createDefaultModel();		
 
 		Resource skosThesaurus = model
-				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");
+				.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");		
+		
+		ThesaurusOrganization org = new ThesaurusOrganization();
+		Mockito.when(thesaurusOrganizationBuilder.getCreator(skosThesaurus, model)).thenReturn(org);
+		
 
+
+		skosThesaurus.addProperty(DC.title,"Thésaurus des objets mobiliers");
+		skosThesaurus.addProperty(DC.subject, "test\ninstruments de musique");
+		skosThesaurus.addProperty(DCTerms.contributor, "Renaud");
+		skosThesaurus.addProperty(DC.coverage, "de l'Antiquité à nos jours");
+		skosThesaurus.addProperty(DC.description, "Vocabulaire de la désignation des oeuvres mobilières");
+		skosThesaurus.addProperty(DC.publisher, "Ministère de la culture et de la communication");
+		skosThesaurus.addProperty(DC.rights, "CC-BY-SA");
+		skosThesaurus.addProperty(DC.type, "Thésaurus");
+		skosThesaurus.addProperty(DC.relation, "relation");
+		skosThesaurus.addProperty(DC.source, "source");
+		skosThesaurus.addProperty(DCTerms.created, "2013-11-13 11:09:10");
+		skosThesaurus.addProperty(DCTerms.modified, "2012-11-13 11:09:10");
+		skosThesaurus.addProperty(DC.language, "fr-FR");
+
+		
 		Thesaurus actualThesaurus = thesaurusBuilder.buildThesaurus(skosThesaurus, model);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Assert.assertEquals("Thésaurus des objets mobiliers", actualThesaurus.getTitle());
 		Assert.assertEquals(true, actualThesaurus.getSubject().contains("instruments de musique"));
 		Assert.assertEquals(true, actualThesaurus.getContributor().contains("Renaud"));
@@ -118,6 +146,14 @@ public class ThesaurusBuilderTest {
 		Assert.assertEquals("Ministère de la culture et de la communication", actualThesaurus.getPublisher());
 		Assert.assertEquals("CC-BY-SA", actualThesaurus.getRights());
 		Assert.assertEquals(fakeType, actualThesaurus.getType());
+		Assert.assertEquals("relation", actualThesaurus.getRelation());
+		Assert.assertEquals("source", actualThesaurus.getSource());
+		Assert.assertTrue(actualThesaurus.isPolyHierarchical());
+		Assert.assertEquals(sdf.parse("2013-11-13 11:09:10"), actualThesaurus.getCreated());
+		Assert.assertEquals(sdf.parse("2012-11-13 11:09:10"), actualThesaurus.getDate());
+		Assert.assertTrue(actualThesaurus.getLang().contains(french));
+		Assert.assertTrue(actualThesaurus.getFormat().contains(format));
+		Assert.assertEquals(org, actualThesaurus.getCreator());
 
 	}
 

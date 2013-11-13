@@ -54,6 +54,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -177,7 +178,8 @@ public class ConceptBuilder extends AbstractBuilder {
 	 * @throws BusinessException
 	 */
 	public Set<AssociativeRelationship> buildConceptAssociativerelationship(
-			Resource skosConcept, Thesaurus thesaurus) throws BusinessException {
+			Resource skosConcept, Thesaurus thesaurus,
+			List<ObjectProperty> relatedTypes) throws BusinessException {
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		StmtIterator stmtRelatedtItr = skosConcept.listProperties(SKOS.RELATED);
 		Set<AssociativeRelationship> relationshipsLeft = new HashSet<AssociativeRelationship>();
@@ -196,9 +198,22 @@ public class ConceptBuilder extends AbstractBuilder {
 			relationshipLeft.setIdentifier(relationshipId);
 			relationshipLeft.setConceptLeft(concept);
 			relationshipLeft.setConceptRight(relatedConcept);
-			relationshipLeft
-					.setRelationshipRole(associativeRelationshipRoleService
-							.getDefaultAssociativeRelationshipRoleRole());
+			AssociativeRelationshipRole role = associativeRelationshipRoleService
+					.getDefaultAssociativeRelationshipRoleRole();
+			for (ObjectProperty relatedType : relatedTypes) {
+				if (skosConcept.hasProperty(relatedType, relatedConceptRes)) {
+					String[] labels = relatedType.getURI().split("/");
+					String label = labels[labels.length - 1];
+					AssociativeRelationshipRole tmpRole = associativeRelationshipRoleService
+							.getRoleBySkosLabel(label);
+					if (tmpRole != null) {
+						role = tmpRole;
+						break;
+					}
+				}
+			}
+
+			relationshipLeft.setRelationshipRole(role);
 			relationshipsLeft.add(relationshipLeft);
 		}
 		return relationshipsLeft;
@@ -270,7 +285,7 @@ public class ConceptBuilder extends AbstractBuilder {
 			}
 		}
 
-		concept.setParentConcepts(parentConcepts);	
+		concept.setParentConcepts(parentConcepts);
 		res.put(concept, relations);
 		return res;
 	}

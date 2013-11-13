@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.tests.imports;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +59,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -85,13 +85,12 @@ public class ConceptBuilderTest {
 
 	@Mock(name = "associativeRelationshipRoleService")
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
-	
+
 	@Mock(name = "thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
-	
+
 	@Mock(name = "conceptHierarchicalRelationshipDAO")
-	 private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
-	
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
 	@InjectMocks
 	private ConceptBuilder conceptBuilder;
@@ -131,13 +130,12 @@ public class ConceptBuilderTest {
 		Assert.assertEquals(DateUtil.dateFromString("2013-10-05 16:15:56"),
 				actualConcept.getModified());
 
-		Assert.assertEquals("concept-notation",
-				actualConcept.getNotation());
+		Assert.assertEquals("concept-notation", actualConcept.getNotation());
 
 		Assert.assertEquals(ConceptStatusEnum.VALIDATED.getStatus(),
 				actualConcept.getStatus().intValue());
-		ListAssert.assertContains(new ArrayList<String>(
-				conceptBuilder.getBuiltConcepts().keySet()), "new-uri");
+		ListAssert.assertContains(new ArrayList<String>(conceptBuilder
+				.getBuiltConcepts().keySet()), "new-uri");
 
 	}
 
@@ -147,15 +145,18 @@ public class ConceptBuilderTest {
 		fakeThesaurus.setIdentifier("thesaurus-uri");
 
 		Model model = ModelFactory.createDefaultModel();
-		InputStream is = ConceptBuilderTest.class
-				.getResourceAsStream("/imports/concept_associations.rdf");
-		model.read(is, null);
 
 		Resource skosConcept = model
 				.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
-		Property gincoRelProperty = model.createProperty(GINCO
-				.getURI() + "broaderGeneric");
-		model.add(skosConcept, gincoRelProperty, model.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423"));
+		Property gincoRelProperty = model.createProperty(GINCO.getURI()
+				+ "broaderGeneric");
+		model.add(
+				skosConcept,
+				gincoRelProperty,
+				model.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423"));
+
+		skosConcept.addProperty(SKOS.BROADER, model
+				.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423"));
 		
 		ThesaurusConcept currentConcept = new ThesaurusConcept();
 		currentConcept
@@ -165,44 +166,50 @@ public class ConceptBuilderTest {
 		parentConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423");
 
-		conceptBuilder.getBuiltConcepts()
+		conceptBuilder
+				.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428",
 						currentConcept);
-		conceptBuilder.getBuiltConcepts()
+		conceptBuilder
+				.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423",
 						parentConcept);
-		Mockito.when(this.thesaurusConceptDAO.update(currentConcept)).thenReturn(currentConcept);
-		
-		
-		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+		Mockito.when(this.thesaurusConceptDAO.update(currentConcept))
+				.thenReturn(currentConcept);
+
+		OntModel ontModel = ModelFactory
+				.createOntologyModel(OntModelSpec.OWL_MEM);
 		List<ObjectProperty> broaderTypes = new ArrayList<ObjectProperty>();
-		ObjectProperty generic = ontModel.createObjectProperty(GINCO
-				.getURI() + "broaderGeneric");
+		ObjectProperty generic = ontModel.createObjectProperty(GINCO.getURI()
+				+ "broaderGeneric");
 		generic.setLabel("broaderGeneric", null);
-		broaderTypes.add(ontModel.createObjectProperty(GINCO
-				.getURI() + "broaderGeneric"));
-		
-		Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> actualRes = conceptBuilder.buildConceptHierarchicalRelationships(skosConcept, fakeThesaurus, broaderTypes);
+		broaderTypes.add(ontModel.createObjectProperty(GINCO.getURI()
+				+ "broaderGeneric"));
+
+		Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> actualRes = conceptBuilder
+				.buildConceptHierarchicalRelationships(skosConcept,
+						fakeThesaurus, broaderTypes);
 
 		ThesaurusConcept actualConcept = actualRes.keySet().iterator().next();
-		List<ConceptHierarchicalRelationship> actualHierarchicalRelations = actualRes.get(actualConcept);
-		List<String> parentIds = new ArrayList<String>();
-		for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : actualHierarchicalRelations) {
-		parentIds.add(conceptHierarchicalRelationship.getIdentifier().getParentconceptid());
-		}
-		
+		List<ConceptHierarchicalRelationship> actualHierarchicalRelations = actualRes
+				.get(actualConcept);
+
 		Assert.assertEquals(1, actualConcept.getParentConcepts().size());
-		ThesaurusConcept actualParentConcept =  actualConcept.getParentConcepts().iterator().next();
-		Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423", actualParentConcept.getIdentifier());
+		ThesaurusConcept actualParentConcept = actualConcept
+				.getParentConcepts().iterator().next();
+		Assert.assertEquals(
+				"http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423",
+				actualParentConcept.getIdentifier());
 
 		Assert.assertEquals(1, actualHierarchicalRelations.size());
 
-		
-		ConceptHierarchicalRelationship actualRelationship = actualHierarchicalRelations.iterator().next();
-		Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423", actualRelationship.getIdentifier().getParentconceptid());
-	   Assert.assertEquals(1, actualRelationship.getRole().intValue());
+		ConceptHierarchicalRelationship actualRelationship = actualHierarchicalRelations
+				.iterator().next();
+		Assert.assertEquals(
+				"http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423",
+				actualRelationship.getIdentifier().getParentconceptid());
+		Assert.assertEquals(1, actualRelationship.getRole().intValue());
 
-		
 	}
 
 	@Test
@@ -211,12 +218,19 @@ public class ConceptBuilderTest {
 		fakeThesaurus.setIdentifier("thesaurus-uri");
 
 		Model model = ModelFactory.createDefaultModel();
-		InputStream is = ConceptBuilderTest.class
-				.getResourceAsStream("/imports/concept_associations.rdf");
-		model.read(is, null);
 
 		Resource skosConcept = model
-				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
+				.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
+		Property gincoRelProperty = model.createProperty(GINCO.getURI()
+				+ "termeAssocie");
+		model.add(
+				skosConcept,
+				gincoRelProperty,
+				model.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933"));
+		skosConcept
+				.addProperty(
+						SKOS.RELATED,
+						model.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933"));
 
 		ThesaurusConcept currentConcept = new ThesaurusConcept();
 		currentConcept
@@ -225,29 +239,50 @@ public class ConceptBuilderTest {
 		relatedConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933");
 
-		conceptBuilder.getBuiltConcepts()
+		conceptBuilder
+				.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428",
 						currentConcept);
-		conceptBuilder.getBuiltConcepts()
+		conceptBuilder
+				.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933",
 						relatedConcept);
 
+		OntModel ontModel = ModelFactory
+				.createOntologyModel(OntModelSpec.OWL_MEM);
+		List<ObjectProperty> relatedTypes = new ArrayList<ObjectProperty>();
+		ObjectProperty generic = ontModel.createObjectProperty(GINCO.getURI()
+				+ "termeAssocie");
+		generic.setLabel("termeAssocie", null);
+		relatedTypes.add(ontModel.createObjectProperty(GINCO.getURI()
+				+ "termeAssocie"));
+
+		AssociativeRelationshipRole role = new AssociativeRelationshipRole();
+		role.setCode("valeur_de_test");
+
+		Mockito.when(
+				associativeRelationshipRoleService
+						.getRoleBySkosLabel("termeAssocie")).thenReturn(role);
 
 		Set<AssociativeRelationship> actualRelations = conceptBuilder
-				.buildConceptAssociativerelationship(skosConcept, fakeThesaurus);
-		List<String> relatedIds = new ArrayList<String>();
-		for (AssociativeRelationship actualRelation : actualRelations) {
-			if (actualRelation.getIdentifier().getConcept1().equals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428")) {
-				relatedIds.add(actualRelation.getIdentifier().getConcept2());
-			} else {
-				relatedIds.add(actualRelation.getIdentifier().getConcept1());
+				.buildConceptAssociativerelationship(skosConcept,
+						fakeThesaurus, relatedTypes);
 
-			}
-		}
-		Assert.assertEquals(1, relatedIds.size());
-		ListAssert
-				.assertContains(relatedIds,
-						"http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933");
+		Assert.assertEquals(1, actualRelations.size());
+		AssociativeRelationship relationship = actualRelations.iterator()
+				.next();
+		Assert.assertEquals("valeur_de_test", relationship
+				.getRelationshipRole().getCode());
+
+		Assert.assertTrue("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933"
+				.equals(relationship.getIdentifier().getConcept1())
+				|| "http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1933"
+						.equals(relationship.getIdentifier().getConcept2()));
+		Assert.assertTrue("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428"
+				.equals(relationship.getIdentifier().getConcept1())
+				|| "http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428"
+						.equals(relationship.getIdentifier().getConcept2()));
+
 	}
 
 	@Test
@@ -256,9 +291,6 @@ public class ConceptBuilderTest {
 		fakeThesaurus.setIdentifier("thesaurus-uri");
 
 		Model model = ModelFactory.createDefaultModel();
-		InputStream is = ConceptBuilderTest.class
-				.getResourceAsStream("/imports/concept_associations.rdf");
-		model.read(is, null);
 
 		Resource skosConcept = model
 				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
@@ -270,18 +302,24 @@ public class ConceptBuilderTest {
 		ThesaurusConcept rootConcept = new ThesaurusConcept();
 		rootConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930");
-		conceptBuilder.getBuiltConcepts()
+		conceptBuilder
+				.getBuiltConcepts()
 				.put("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428",
 						currentConcept);
 		List<ThesaurusConcept> realRoots = new ArrayList<ThesaurusConcept>();
 		realRoots.add(rootConcept);
 
-		Mockito.when(conceptHierarchicalRelationshipServiceUtil.getRootConcepts(currentConcept)).thenReturn(realRoots);
-		ThesaurusConcept actualConcept = conceptBuilder
-				.buildConceptRoot(skosConcept, fakeThesaurus);
+		Mockito.when(
+				conceptHierarchicalRelationshipServiceUtil
+						.getRootConcepts(currentConcept)).thenReturn(realRoots);
+		ThesaurusConcept actualConcept = conceptBuilder.buildConceptRoot(
+				skosConcept, fakeThesaurus);
 
 		Assert.assertEquals(1, actualConcept.getRootConcepts().size());
-		Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930", actualConcept.getRootConcepts().iterator().next().getIdentifier());
+		Assert.assertEquals(
+				"http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1930",
+				actualConcept.getRootConcepts().iterator().next()
+						.getIdentifier());
 
 	}
 

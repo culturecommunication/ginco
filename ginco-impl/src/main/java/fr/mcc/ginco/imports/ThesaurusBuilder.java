@@ -51,19 +51,15 @@ import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
@@ -88,6 +84,11 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	@Inject
 	@Named("thesaurusTypeDAO")
 	private IThesaurusTypeDAO thesaurusTypeDAO;
+
+	
+	@Inject
+	@Named("skosThesaurusOrganizationBuilder")
+	private ThesaurusOrganizationBuilder thesaurusOrganizationBuilder;
 
 	@Inject
 	@Named("languagesDAO")
@@ -181,73 +182,12 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 		thesaurus.setDefaultTopConcept(defaultTopConcept);
 
-		thesaurus.setCreator(getCreator(skosThesaurus, model));
+		thesaurus.setCreator(thesaurusOrganizationBuilder.getCreator(skosThesaurus, model));
 
 		return thesaurus;
 	}
 
-	/**
-	 * Gets the thesaurus creator from the FOAF elements
-	 *
-	 * @param skosThesaurus
-	 * @param model
-	 * @return
-	 */
-	private ThesaurusOrganization getCreator(Resource skosThesaurus, Model model) {
-		Statement stmt = skosThesaurus.getProperty(DC.creator);
-		if (stmt == null)
-		{
-			stmt = skosThesaurus.getProperty(DCTerms.creator);
-		}
-		if (stmt != null) {
-			RDFNode node = stmt.getObject();
-			if (node.isResource()) {
-				Resource creatorResource = node.asResource();
-				SimpleSelector organizationSelector = new SimpleSelector(
-						creatorResource, null, (RDFNode) null) {
-					public boolean selects(Statement s) {
-						if (s.getObject().isResource()) {
-							Resource res = s.getObject().asResource();
-							return res.equals(FOAF.Organization);
-						} else {
-							return false;
-						}
-					}
-				};
-
-				StmtIterator iter = model.listStatements(organizationSelector);
-				while (iter.hasNext()) {
-					Statement orgStms = iter.next();
-					Resource organizationRes = orgStms.getSubject().asResource();
-					Statement foafName = organizationRes
-							.getProperty(FOAF.name);
-					Statement foafHomepage = organizationRes
-							.getProperty(FOAF.homepage);
-					Statement foafEmail = organizationRes
-							.getProperty(FOAF.mbox);
-					ThesaurusOrganization org = new ThesaurusOrganization();
-					if (foafName != null){
-						org.setName(foafName.getString());
-					}
-					if (foafHomepage != null){
-						org.setHomepage(foafHomepage.getString());
-					}
-					if (foafEmail != null){
-						org.setEmail(foafEmail.getString());
-					}
-					return org;
-				}
-			} else if (node.isLiteral())
-			{
-				ThesaurusOrganization org = new ThesaurusOrganization();
-				org.setName(stmt.getString());
-				return org;
-			}
-		}
-
-		return null;
-	}
-
+	
 	/**
 	 * Gets the list of defined languages for the given thesaurus
 	 *

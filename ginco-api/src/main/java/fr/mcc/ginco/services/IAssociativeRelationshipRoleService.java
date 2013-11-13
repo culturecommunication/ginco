@@ -66,4 +66,12 @@ public interface IAssociativeRelationshipRoleService {
      * @return
      */
     List<AssociativeRelationshipRole> getAllAssociationTermRole();
+    
+    /**
+     * 
+     * Return an associative rola by its skos label
+     * @param skosLabel
+     * @return
+     */
+    AssociativeRelationshipRole getRoleBySkosLabel(String skosLabel);
 }

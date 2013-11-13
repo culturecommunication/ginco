@@ -163,7 +163,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 					model, SKOS.CONCEPT);
 			bannedAlignments = conceptsBuilder.buildConcepts(thesaurus,
 					skosConcepts);
-			conceptsBuilder.buildConceptsAssociations(thesaurus, skosConcepts, SKOSImportUtils.getBroaderTypeProperty(ontModel));
+			conceptsBuilder.buildConceptsAssociations(thesaurus, skosConcepts, SKOSImportUtils.getBroaderTypeProperty(ontModel), SKOSImportUtils.getRelatedTypeProperty(ontModel));
 			conceptsBuilder.buildConceptsRoot(thesaurus, skosConcepts);
 			arraysBuilder.buildArrays(thesaurus, model);
 			arraysBuilder.buildChildrenArrays(thesaurus, model);

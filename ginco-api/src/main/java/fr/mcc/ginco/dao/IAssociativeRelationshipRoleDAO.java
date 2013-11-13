@@ -47,5 +47,13 @@ public interface IAssociativeRelationshipRoleDAO extends IGenericDAO<Associative
 	 * @throws BusinessException if there is no default role defined
 	 */
 	AssociativeRelationshipRole getDefaultAssociativeRelationshipRole() throws BusinessException;
+	
+	/**
+	 * Return an AssociativeRelationshipRole by it's skosLabel
+	 * @param skosLabel
+	 * @return
+	 */
+	AssociativeRelationshipRole getBySkosLabel(String skosLabel);
+
 
 }

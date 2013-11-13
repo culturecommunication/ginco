@@ -60,6 +60,14 @@ public class AssociativeRelationshipRoleDAOTest extends BaseDAOTest {
 				.getDefaultAssociativeRelationshipRole();
 		Assert.assertEquals("P", role.getCode());
 	}
+	
+	@Test
+	public void testGetBySkosLabel()
+			throws BusinessException {
+		AssociativeRelationshipRole role = associativeRelationshipRoleDAO
+				.getBySkosLabel("InstanceSkos");
+		Assert.assertEquals("I", role.getCode());
+	}
 
 	@Override
 	public String getXmlDataFileInit() {

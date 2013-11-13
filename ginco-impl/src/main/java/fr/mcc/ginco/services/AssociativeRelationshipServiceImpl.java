@@ -61,7 +61,6 @@ public class AssociativeRelationshipServiceImpl implements IAssociativeRelations
     @Override
     public List<String> getAssociatedConceptsId(ThesaurusConcept concept)
             throws BusinessException {
-
         return associativeRelationshipDAO.getAssociatedConcepts(concept);
     }
 

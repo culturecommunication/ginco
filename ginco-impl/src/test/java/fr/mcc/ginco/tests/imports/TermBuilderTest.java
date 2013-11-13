@@ -60,6 +60,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.imports.TermBuilder;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class TermBuilderTest {	
@@ -92,14 +93,14 @@ public class TermBuilderTest {
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("thesaurus-uri");
 
-		Model model = ModelFactory.createDefaultModel();
-		InputStream is = TermBuilderTest.class
-				.getResourceAsStream("/imports/concept_associations.rdf");
-		model.read(is, null);
+		Model model = ModelFactory.createDefaultModel();	
 
 		Resource skosConcept = model
 				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1937");
-
+		skosConcept.addProperty(SKOS.PREF_LABEL, "selle");
+		skosConcept.addProperty(SKOS.ALT_LABEL, "selles");
+		skosConcept.addProperty(SKOS.HIDDEN_LABEL, "selle à traire");
+		
 		ThesaurusConcept concept = new ThesaurusConcept();
 		concept.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1937");
 		List<ThesaurusTerm> actualTerms = termBuilder.buildTerms(skosConcept, fakeThesaurus, concept);	
