@@ -100,9 +100,10 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 		this.openThesaurusTab(tabPanel, aThesaurusId, aConceptId, false,
 		"opencomplexconcepttab");
 	},
-	onSearchQuery : function(tabPanel, aSearchQuery) 
+	onSearchQuery : function(tabPanel, aSearchQuery, aThesaurusId)
 	{
 		var searchPanel = Ext.create("GincoApp.view.SearchPanel");
+		searchPanel.searchThesaurus = aThesaurusId;
 		searchPanel.searchQuery = aSearchQuery;
 		var tab = tabPanel.add(searchPanel);
 		tabPanel.setActiveTab(tab);
@@ -124,9 +125,9 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 			Thesaurus.ext.utils.restrictRoles(component, thesaurusId);
 		}
 	},
-	
+
 	onPanelBeforeClose : function(thePanel) {
-		
+
 		thePanel.fireEvent('closeall',thePanel);
 		return false;
 	},

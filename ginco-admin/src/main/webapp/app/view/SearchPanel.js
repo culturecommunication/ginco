@@ -45,6 +45,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 	closable : true,
 	localized : true,
 	searchQuery : '*',
+	searchThesaurus : '-1',
 	xTypeLabels : {
 		ThesaurusTerm : 'Term',
 		ThesaurusConcept : 'Concept'
@@ -74,7 +75,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				}
 			}
 		});
-		
+
 		me.langStore = Ext.create('GincoApp.store.ThesaurusLanguageStore',
 		{
 			listeners : {
@@ -89,7 +90,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				}
 			}
 		});
-		
+
 		me.conceptStatusStore = Ext.create('GincoApp.store.ConceptStatusStore',
 				{
 					listeners : {
@@ -115,6 +116,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				title : me.xAdvancedSearchPnlTitle,
 				collapsible : true,
 				collapsed : true,
+				titleCollapse : true,
 				tbar : [ {
 					xtype : 'button',
 					itemId : 'filterBtn',

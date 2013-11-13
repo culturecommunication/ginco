@@ -51,7 +51,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		thesaurusTabs.fireEvent('newthesaurus',thesaurusTabs);
 	},
-	
+
 	onImportBtnClick: function(theButton) {
 		var me = this;
 		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>'+ me.xImportSkosTitle + '</h1>'});
@@ -66,9 +66,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 
 		var userNameLabel = Ext.ComponentQuery.query('#username')[0];
 		userNameLabel.setText(Thesaurus.ext.utils.userInfo.data.username);
-		
+
 		var topToolBar = Ext.ComponentQuery.query('topToolBar')[0];
-		Thesaurus.ext.utils.restrictRoles(topToolBar);		
+		Thesaurus.ext.utils.restrictRoles(topToolBar);
 	},
 
 
@@ -77,8 +77,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	},
 
 	onSearchTrigger : function(theTrigger) {
+		var thesaurusId = "-1";
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
-		thesaurusTabs.fireEvent('searchquery',thesaurusTabs,theTrigger.getValue());
+		thesaurusTabs.fireEvent('searchquery',thesaurusTabs,theTrigger.getValue(), thesaurusId);
 	},
 	onSearchTriggerKey : function (theTrigger,e )
 	{

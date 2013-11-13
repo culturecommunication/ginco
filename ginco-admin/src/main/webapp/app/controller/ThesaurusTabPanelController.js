@@ -386,6 +386,17 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	{
 		thePanel.up().remove(thePanel);
 	},
+	onSearchInThesaurusTrigger : function(theTrigger) {
+		var thePanel = theTrigger.up('thesaurusTabPanel');
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('searchquery',thesaurusTabs,theTrigger.getValue(), thePanel.thesaurusData.id);
+	},
+	onSearchInThesaurusTriggerKey : function (theTrigger,e )
+	{
+		if (e.getKey() == e.ENTER) {
+			this.onSearchInThesaurusTrigger(theTrigger);
+        }
+	},
 	init : function(application) {
 		this.application.on({
 	        scope: this
@@ -474,7 +485,11 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
             },
             "thesaurusTabPanel #importBranch" : {
                 click : this.importBranch
-            }
+            },
+			'#searchInThesaurusBtn' : {
+				trigger : this.onSearchInThesaurusTrigger,
+				specialkey : this.onSearchInThesaurusTriggerKey
+			}
 		});
 	}
 });

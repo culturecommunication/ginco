@@ -36,20 +36,20 @@
 Ext.define('GincoApp.controller.SearchPanelController', {
 	extend : 'Ext.app.Controller',
 
-	onSearchGridLoad : function (theGrid) 
+	onSearchGridLoad : function (theGrid)
 	{
 		var thePanel = theGrid.up('searchPanel');
 		thePanel.setTitle(thePanel.title + ' : '
 				+ thePanel.searchQuery);
 	},
-	
+
 	onDisplayResultBtn : function(theButton) {
 		var theGrid = theButton.up("gridpanel");
 		this.onResultDblClick(theGrid);
-		
+
 	},
-	
-	onResultDblClick : function (theGrid) 
+
+	onResultDblClick : function (theGrid)
 	{
 		var topTabs = theGrid.up('thesaurusTabs');
 		var items = theGrid.getSelectionModel().getSelection();
@@ -63,15 +63,16 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 			}
 		}
 	},
-	
+
 	onSearchPanelLoad: function (thePanel)
 	{
 		var model = Ext.create('GincoApp.model.FilterCriteriaModel');
 		model.set('query',thePanel.up('searchPanel').searchQuery);
+		model.set('thesaurus', thePanel.up('searchPanel').searchThesaurus);
 		thePanel.loadRecord(model);
 		this.onFilterBtn(thePanel.down('#filterBtn'));
-	}, 
-	
+	},
+
 	onFilterBtn : function (theBtn)
 	{
 		var theForm = theBtn.up('#advancedSearchForm');
@@ -79,7 +80,7 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		var theQueryModel = theForm.getForm().getRecord();
 		var thePanel = theForm.up("searchPanel");
 		var theGrid = thePanel.down('gridpanel');
-		
+
 		var theStore = theGrid.getStore();
 		theStore.getProxy().setExtraParam('query',
 				thePanel.searchQuery);
@@ -89,7 +90,7 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 				    if (success==false) {
 				    	Thesaurus.ext.utils.msg("Warning",
 								operation.error);
-				    } else 
+				    } else
 				    {
 				    	if (records.length>0) {
 				    		theGrid.getSelectionModel().select(0);
@@ -98,7 +99,7 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 				}
 		});
 	},
-	
+
 	init : function(application) {
 		this.control({
 			'#advancedSearchForm' : {
@@ -110,7 +111,7 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 			'searchPanel gridpanel' : {
 				afterrender : this.onSearchGridLoad,
 				itemdblclick : this.onResultDblClick
-			}, 
+			},
 			'#displayResultBtn' :  {
 				click : this.onDisplayResultBtn
 			}

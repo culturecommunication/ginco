@@ -91,6 +91,8 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 	xNewMenu_TermLabel : "Term only",
 	xNewMenu_ConceptLabel : "Concept only",
 	xNewMenu_DynamicGroupLabel : "Dynamic group",
+	xSearchFieldText : "Search in thesaurus",
+	xSearchBtnTitle : "Click here to launch search in thesaurus",
 
 	getThesaurusData : function() {
 		var me = this;
@@ -216,7 +218,20 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							disabled : true,
 							itemId : 'importBranch',
 							iconCls : 'exports-icon'
-						}]
+						}, {
+							xtype : 'tbspacer',
+							flex : 1,
+						}, {
+            				xtype : 'triggerfield',
+            				width : 190,
+            				triggerCls: 'x-form-search-trigger',
+            				emptyText : me.xSearchFieldText,
+            				hideTrigger : false,
+            				itemId: 'searchInThesaurusBtn',
+            				repeatTriggerClick : false,
+            				disabled : false,
+            				triggerTitle : me.xSearchBtnTitle
+            			} ]
 			}]
 		});
 		me.callParent(arguments);
