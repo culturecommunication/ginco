@@ -59,7 +59,6 @@ import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -68,7 +67,6 @@ import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.skos.namespaces.ISOTHES;
 import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Builder in charge of building ThesaurusConcept
@@ -91,6 +89,11 @@ public class ConceptBuilder extends AbstractBuilder {
 	@Inject
 	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+	
+	@Inject
+	@Named("skosImportUtils")
+	private SKOSImportUtils skosImportUtils;
+
 	
 
 	private static Map<String, ThesaurusConcept> builtConcepts = new HashMap<String, ThesaurusConcept>();
@@ -117,14 +120,14 @@ public class ConceptBuilder extends AbstractBuilder {
 
 		Statement stmtCreated = skosConcept.getProperty(DCTerms.created);
 		if (stmtCreated != null) {
-			concept.setCreated(DateUtil.dateFromString(stmtCreated.getString()));
+			concept.setCreated(skosImportUtils.getSkosDate(stmtCreated.getString()));
 		} else {
 			concept.setCreated(thesaurus.getCreated());
 		}
 
 		Statement stmtModified = skosConcept.getProperty(DCTerms.modified);
 		if (stmtModified != null) {
-			concept.setModified(DateUtil.dateFromString(stmtModified
+			concept.setModified(skosImportUtils.getSkosDate(stmtModified
 					.getString()));
 		} else {
 			concept.setModified(thesaurus.getDate());

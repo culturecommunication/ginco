@@ -34,11 +34,19 @@
  */
 package fr.mcc.ginco.tests.imports;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -54,7 +62,16 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 
 public class SKOSImportUtilsTest {
 
-	private SKOSImportUtils SKOSImportUtils = new SKOSImportUtils();
+	@InjectMocks
+	private SKOSImportUtils skosImportUtils;
+	
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+		List<String> dateFormats = new ArrayList<String>();
+		dateFormats.add("yyyy-MM-dd HH:mm:ss");
+		ReflectionTestUtils.setField(skosImportUtils, "skosDefaultDateFormats", dateFormats);		
+	}
 
 	@Test
 	public void testGetSKOSRessources() {
@@ -70,7 +87,7 @@ public class SKOSImportUtilsTest {
 
 		model.add(ontModel);
 
-		List<Resource> actualRes = SKOSImportUtils.getSKOSRessources(model,
+		List<Resource> actualRes = skosImportUtils.getSKOSRessources(model,
 				SKOS.COLLECTION);
 
 		Assert.assertEquals(2, actualRes.size());
@@ -115,13 +132,28 @@ public class SKOSImportUtilsTest {
 		ontModel.createObjectProperty("http://relatedProperty2").addProperty(
 				RDFS.subPropertyOf, SKOS.RELATED);
 
-		List<ObjectProperty> actualRes = SKOSImportUtils
+		List<ObjectProperty> actualRes = skosImportUtils
 				.getRelatedTypeProperty(ontModel);
 
 		Assert.assertEquals(2, actualRes.size());		
 		for (ObjectProperty prop:actualRes) {
 			Assert.assertTrue(prop.getURI().equals("http://relatedProperty1") ||prop.getURI().equals("http://relatedProperty2"));
-		}
+		}	
+
+	}
+	
+	@Test
+	public void testGetSKOSDate() {
+		Date skosDate = skosImportUtils.getSkosDate("2013-01-20 20:35:05");		
+		Calendar actualCal = new GregorianCalendar();
+		actualCal.setTime(skosDate);
+	
+		Assert.assertEquals(2013, actualCal.get(Calendar.YEAR));
+		Assert.assertEquals(0, actualCal.get(Calendar.MONTH));
+		Assert.assertEquals(20, actualCal.get(Calendar.DAY_OF_MONTH));
+		Assert.assertEquals(20, actualCal.get(Calendar.HOUR_OF_DAY));
+		Assert.assertEquals(35, actualCal.get(Calendar.MINUTE));
+		Assert.assertEquals(5, actualCal.get(Calendar.SECOND));
 
 	}
 

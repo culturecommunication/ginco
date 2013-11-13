@@ -73,6 +73,10 @@ public class NodeLabelBuilder extends AbstractBuilder {
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
+	
+	@Inject
+	@Named("skosImportUtils")
+	private SKOSImportUtils skosImportUtils;
 
 	public NodeLabelBuilder() {
 		super();
@@ -92,14 +96,14 @@ public class NodeLabelBuilder extends AbstractBuilder {
 
 		Statement stmtCreated = skosCollection.getProperty(DCTerms.created);
 		if (stmtCreated != null){
-			nodeLabel.setCreated(DateUtil.dateFromString(stmtCreated.getString()));
+			nodeLabel.setCreated(skosImportUtils.getSkosDate(stmtCreated.getString()));
 		} else {
 			nodeLabel.setCreated(thesaurus.getCreated());
 		}
 
 		Statement stmtModified = skosCollection.getProperty(DCTerms.modified);
 		if (stmtModified != null){
-			nodeLabel.setModified(DateUtil.dateFromString(stmtModified.getString()));
+			nodeLabel.setModified(skosImportUtils.getSkosDate(stmtModified.getString()));
 		} else {
 			nodeLabel.setModified(thesaurus.getDate());
 		}

@@ -35,6 +35,8 @@
 package fr.mcc.ginco.tests.imports;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,6 +69,7 @@ import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.imports.ConceptBuilder;
+import fr.mcc.ginco.imports.SKOSImportUtils;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -91,6 +94,9 @@ public class ConceptBuilderTest {
 
 	@Mock(name = "conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+	
+	@Mock(name = "skosImportUtils")
+	private SKOSImportUtils skosImportUtils;
 
 	@InjectMocks
 	private ConceptBuilder conceptBuilder;
@@ -110,24 +116,30 @@ public class ConceptBuilderTest {
 				.setCreated(DateUtil.dateFromString("2013-02-01 01:05:03"));
 		fakeThesaurus.setDate(DateUtil.dateFromString("2013-05-02 02:10:13"));
 
+
 		fakeThesaurus.setDefaultTopConcept(false);
 
 		Model model = ModelFactory.createDefaultModel();
 		Resource skosConcept = model.createResource("new-uri", SKOS.CONCEPT);
-		skosConcept.addProperty(DCTerms.created, "2013-10-03 15:10:13");
-		skosConcept.addProperty(DCTerms.modified, "2013-10-05 16:15:56");
+		skosConcept.addProperty(DCTerms.created, "2013-11-06T21:33:09.00+0100");
 		skosConcept.addProperty(SKOS.NOTATION, "concept-notation");
-
+		
+		Calendar cal = new GregorianCalendar();
+		cal.set(2013,  10,6,21,33,9);
+		cal.set(Calendar.MILLISECOND, 0);
+		Mockito.when(skosImportUtils.getSkosDate("2013-11-06T21:33:09.00+0100")).thenReturn(cal.getTime());
+		
 		ThesaurusConcept actualConcept = conceptBuilder.buildConcept(
 				skosConcept, fakeThesaurus);
+		
 		Assert.assertEquals("new-uri", actualConcept.getIdentifier());
 		Assert.assertEquals("thesaurus-uri", actualConcept.getThesaurus()
 				.getIdentifier());
 		Assert.assertEquals(false, actualConcept.getTopConcept());
 
-		Assert.assertEquals(DateUtil.dateFromString("2013-10-03 15:10:13"),
+		Assert.assertEquals(cal.getTime(),
 				actualConcept.getCreated());
-		Assert.assertEquals(DateUtil.dateFromString("2013-10-05 16:15:56"),
+		Assert.assertEquals(DateUtil.dateFromString("2013-05-02 02:10:13"),
 				actualConcept.getModified());
 
 		Assert.assertEquals("concept-notation", actualConcept.getNotation());

@@ -36,8 +36,7 @@ package fr.mcc.ginco.tests.imports;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -62,9 +61,11 @@ import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
+import fr.mcc.ginco.imports.SKOSImportUtils;
 import fr.mcc.ginco.imports.ThesaurusBuilder;
 import fr.mcc.ginco.imports.ThesaurusOrganizationBuilder;
 import fr.mcc.ginco.tests.LoggerTestUtil;
+import fr.mcc.ginco.utils.DateUtil;
 
 public class ThesaurusBuilderTest {
 
@@ -80,16 +81,16 @@ public class ThesaurusBuilderTest {
 	
 	@Mock(name = "skosThesaurusOrganizationBuilder")
 	private ThesaurusOrganizationBuilder thesaurusOrganizationBuilder;
+	
+	@Mock(name = "skosImportUtils")
+	private SKOSImportUtils skosImportUtils;
 
 	@InjectMocks
 	private ThesaurusBuilder thesaurusBuilder;
 
 	@Before
 	public void init() {
-		MockitoAnnotations.initMocks(this);
-		List<String> dateFormats = new ArrayList<String>();
-		dateFormats.add("yyyy-MM-dd HH:mm:ss");
-		ReflectionTestUtils.setField(thesaurusBuilder, "skosDefaultDateFormats", dateFormats);
+		MockitoAnnotations.initMocks(this);	
 		ReflectionTestUtils.setField(thesaurusBuilder, "defaultThesaurusFormat", 3);
 		LoggerTestUtil.initLogger(thesaurusBuilder);
 	}
@@ -116,10 +117,12 @@ public class ThesaurusBuilderTest {
 				.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");		
 		
 		ThesaurusOrganization org = new ThesaurusOrganization();
-		Mockito.when(thesaurusOrganizationBuilder.getCreator(skosThesaurus, model)).thenReturn(org);
+		Mockito.when(thesaurusOrganizationBuilder.getCreator(skosThesaurus, model)).thenReturn(org);		
 		
-
-
+		Date now = DateUtil.nowDate();
+		Mockito.when(skosImportUtils.getSkosDate("2013-11-13 11:09:10")).thenReturn(now);
+		Mockito.when(skosImportUtils.getSkosDate("2012-11-13 11:09:10")).thenReturn(now);
+		
 		skosThesaurus.addProperty(DC.title,"Thésaurus des objets mobiliers");
 		skosThesaurus.addProperty(DC.subject, "test\ninstruments de musique");
 		skosThesaurus.addProperty(DCTerms.contributor, "Renaud");
@@ -149,8 +152,8 @@ public class ThesaurusBuilderTest {
 		Assert.assertEquals("relation", actualThesaurus.getRelation());
 		Assert.assertEquals("source", actualThesaurus.getSource());
 		Assert.assertTrue(actualThesaurus.isPolyHierarchical());
-		Assert.assertEquals(sdf.parse("2013-11-13 11:09:10"), actualThesaurus.getCreated());
-		Assert.assertEquals(sdf.parse("2012-11-13 11:09:10"), actualThesaurus.getDate());
+		Assert.assertEquals(now, actualThesaurus.getCreated());
+		Assert.assertEquals(now, actualThesaurus.getDate());
 		Assert.assertTrue(actualThesaurus.getLang().contains(french));
 		Assert.assertTrue(actualThesaurus.getFormat().contains(format));
 		Assert.assertEquals(org, actualThesaurus.getCreator());

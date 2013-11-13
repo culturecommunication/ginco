@@ -97,14 +97,15 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	@Value("${import.default.top.concept}")
 	private boolean defaultTopConcept;
 
-	@Value("#{'${import.skos.date.formats}'.split(',')}")
-	private List<String> skosDefaultDateFormats;
-
 	@Value("${import.skos.default.format}")
 	private Integer defaultThesaurusFormat;
 
     @Value("${import.skos.default.type}")
     private Integer defaultThesaurusType;
+    
+    @Inject
+	@Named("skosImportUtils")
+    private SKOSImportUtils skosImportUtils;
 
 	public ThesaurusBuilder() {
 		super();
@@ -155,12 +156,12 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		String thesaurusCreated = getSimpleStringInfo(skosThesaurus,
 				DCTerms.created);
 		if (thesaurusCreated!=null) {
-			thesaurus.setCreated(getSkosDate(thesaurusCreated));
+			thesaurus.setCreated(skosImportUtils.getSkosDate(thesaurusCreated));
 		} else
 		{
 			thesaurus.setCreated(new Date());
 		}
-		thesaurus.setDate(getSkosDate(getSimpleStringInfo(skosThesaurus,
+		thesaurus.setDate(skosImportUtils.getSkosDate(getSimpleStringInfo(skosThesaurus,
 				DCTerms.modified,DCTerms.date)));
 
 		thesaurus.setLang(getLanguages(skosThesaurus,DC.language));
@@ -217,27 +218,5 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		return langs;
 	}
 
-	/**
-	 * Parse the given date
-	 *
-	 * @param skosDate
-	 * @return
-	 * @throws BusinessException
-	 */
-	private Date getSkosDate(String skosDate) throws BusinessException {
-		if (StringUtils.isEmpty(skosDate))
-		{
-			return new Date();
-		}
-		for (String skosDefaultDateFormat : skosDefaultDateFormats) {
-			SimpleDateFormat sdf = new SimpleDateFormat(skosDefaultDateFormat);
-			try {
-				return sdf.parse(skosDate);
-			} catch (ParseException e) {
-				logger.warn("Invalid date format for skosDate : " + skosDate);
-			}
-		}
-		throw new BusinessException("InvalidDateFormat for input string "
-				+ skosDate, "import-invalid-date-format");
-	}
+	
 }

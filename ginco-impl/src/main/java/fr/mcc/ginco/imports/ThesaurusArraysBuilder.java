@@ -85,6 +85,10 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
 	
+	@Inject
+	@Named("skosImportUtils")
+	private SKOSImportUtils skosImportUtils;
+	
 	/**
 	 * Builds the thesaurus arrays from the model
 	 * 
@@ -92,7 +96,7 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 	 * @param model
 	 */
 	public void buildArrays(Thesaurus thesaurus, Model model) {
-		List<Resource> skosCollections = SKOSImportUtils.getSKOSRessources(model,
+		List<Resource> skosCollections = skosImportUtils.getSKOSRessources(model,
 				SKOS.COLLECTION);
 		for (Resource skosCollection : skosCollections) {
 			ThesaurusArray array = arrayBuilder.buildArray(skosCollection,
@@ -112,7 +116,7 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 	 */
 
 	public void buildChildrenArrays(Thesaurus thesaurus, Model model) {
-		List<Resource> skosCollections = SKOSImportUtils.getSKOSRessources(model,
+		List<Resource> skosCollections = skosImportUtils.getSKOSRessources(model,
 				SKOS.COLLECTION);
 		for (Resource skosCollection : skosCollections) {
 			List<ThesaurusArray> childrenArrays = arrayBuilder

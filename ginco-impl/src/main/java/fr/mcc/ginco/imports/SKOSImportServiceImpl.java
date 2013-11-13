@@ -108,6 +108,11 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Inject
 	@Named("skosArraysBuilder")
 	private ThesaurusArraysBuilder arraysBuilder;
+	
+	@Inject
+	@Named("skosImportUtils")
+	private SKOSImportUtils skosImportUtils;
+
 
 	/*
 	 * (non-Javadoc)
@@ -159,11 +164,11 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 				thesaurusVersionHistoryDAO.update(defaultVersion);
 			}
 
-			List<Resource> skosConcepts = SKOSImportUtils.getSKOSRessources(
+			List<Resource> skosConcepts = skosImportUtils.getSKOSRessources(
 					model, SKOS.CONCEPT);
 			bannedAlignments = conceptsBuilder.buildConcepts(thesaurus,
 					skosConcepts);
-			conceptsBuilder.buildConceptsAssociations(thesaurus, skosConcepts, SKOSImportUtils.getBroaderTypeProperty(ontModel), SKOSImportUtils.getRelatedTypeProperty(ontModel));
+			conceptsBuilder.buildConceptsAssociations(thesaurus, skosConcepts, skosImportUtils.getBroaderTypeProperty(ontModel), skosImportUtils.getRelatedTypeProperty(ontModel));
 			conceptsBuilder.buildConceptsRoot(thesaurus, skosConcepts);
 			arraysBuilder.buildArrays(thesaurus, model);
 			arraysBuilder.buildChildrenArrays(thesaurus, model);
