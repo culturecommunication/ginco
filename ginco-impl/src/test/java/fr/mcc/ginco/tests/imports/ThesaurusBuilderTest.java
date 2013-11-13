@@ -35,7 +35,6 @@
 package fr.mcc.ginco.tests.imports;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.Assert;
@@ -140,7 +139,6 @@ public class ThesaurusBuilderTest {
 		
 		Thesaurus actualThesaurus = thesaurusBuilder.buildThesaurus(skosThesaurus, model);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Assert.assertEquals("Thésaurus des objets mobiliers", actualThesaurus.getTitle());
 		Assert.assertEquals(true, actualThesaurus.getSubject().contains("instruments de musique"));
 		Assert.assertEquals(true, actualThesaurus.getContributor().contains("Renaud"));
@@ -157,7 +155,7 @@ public class ThesaurusBuilderTest {
 		Assert.assertTrue(actualThesaurus.getLang().contains(french));
 		Assert.assertTrue(actualThesaurus.getFormat().contains(format));
 		Assert.assertEquals(org, actualThesaurus.getCreator());
-
+		Assert.assertFalse(actualThesaurus.isArchived());
 	}
 
 

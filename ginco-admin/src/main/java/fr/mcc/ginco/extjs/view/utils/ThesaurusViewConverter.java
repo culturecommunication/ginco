@@ -225,8 +225,10 @@ public class ThesaurusViewConverter {
 				langLabels.add(lang.getId());
 			}
 			view.setLanguages(langLabels);
+			
+			boolean isArchived = source.isArchived()!= null? source.isArchived():false ;
 
-            if(thesaurusVersionHistoryService.hasPublishedVersion(source) && !source.isArchived()) {
+            if(thesaurusVersionHistoryService.hasPublishedVersion(source) && !isArchived) {
                 view.setCanBeDeleted(false);
             } else {
                 view.setCanBeDeleted(true);

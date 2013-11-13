@@ -185,6 +185,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 		thesaurus.setCreator(thesaurusOrganizationBuilder.getCreator(skosThesaurus, model));
 
+		thesaurus.setArchived(false);
 		return thesaurus;
 	}
 
