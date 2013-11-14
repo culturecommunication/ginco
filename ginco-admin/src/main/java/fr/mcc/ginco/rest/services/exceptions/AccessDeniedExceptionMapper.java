@@ -47,5 +47,6 @@ public class AccessDeniedExceptionMapper  extends AbstractExceptionMapper<Access
 	@Override
 	public Response toResponse(Throwable exception) {
 		return super.toResponse(exception, "access-denied-exception-text", null);
-	}
+	}	
+	
 }

@@ -56,6 +56,7 @@
 			<bean class="fr.mcc.ginco.rest.services.exceptions.BusinessExceptionMapper" />
             <bean class="fr.mcc.ginco.rest.services.exceptions.TechnicalExceptionMapper" />
             <bean class="fr.mcc.ginco.rest.services.exceptions.AccessDeniedExceptionMapper" />
+            <bean class="fr.mcc.ginco.rest.services.exceptions.ThesaurusArchivedAccessDeniedExceptionMapper" />
 		</jaxrs:providers>
 		<jaxrs:features>
 			<cxf:logging />

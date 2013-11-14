@@ -198,7 +198,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
             throws BusinessException, TechnicalException {
 
         String fileContent = gincoThesaurusExportService.getThesaurusExport(thesaurus);
-        File ready = new File(archivePath + thesaurus.getTitle().replaceAll(" ", "_") + "_"
+        File ready = new File(archivePath + thesaurus.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + "_"
                 + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_")
                 + ".xml");
         try {
@@ -215,7 +215,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
             throw new TechnicalException("Error writing file to path : " + publishPath, e);
         }
 
-        thesaurus.setArchived(true);
+        thesaurus.setArchived(Boolean.TRUE);
         return thesaurusDAO.update(thesaurus);
     }
 

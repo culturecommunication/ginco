@@ -32,23 +32,21 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.rest.services.exceptions;
 
-Ext.define('GincoApp.locale.fr.controller.ThesaurusFormController', {
-    xDeleteMsgLabel : 'Êtes-vous sûr de vouloir supprimer ce thesaurus ?',
-    xDeleteMsgTitle : 'Supprimer le thesaurus ?',
-    xSucessLabel : 'Succès !',
-    xSucessSavedMsg : 'Le thesaurus a été enregistré avec succès',
-    xSucessRemovedMsg : 'Le thesaurus a été supprimé avec succès',
-    xProblemLabel : 'Erreur !',
-    xWarningLabel : 'Attention !',
-    xProblemSaveMsg : 'Impossible de sauvegarder le thesaurus !',
-    xProblemDeleteMsg : 'Impossible de supprimer le thesaurus !',
-    xProblemPublishMsg : "Impossible de publier le thesaurus !",
-    xWarningChangedPoly : "Attention! Vous passez d'un thesaurus polyhierarchique a un thesaurus monohierarchique, veuillez vérifier les relations hierarchiques des concepts.",
-    xWarningChangedLanguages : "Il existe peut-être des termes dans la langue que vous essayez de supprimer. Veuillez vérifier la langues des termes de ce thésaurus.",
-    xImportTermsTitle : "Importer des termes",
-    xImportBranchTitle : "Importer une branche",
-    xArchiveSuccess: "Le thesaurus a été archivé!",
-    xPublishSuccess: "Le thesaurus a été publié!",
-    xProblemArchiveMsg: "Erreur lors de l'archivage du thésaurus"
-});
+import javax.ws.rs.core.Response;
+
+import org.springframework.security.access.AccessDeniedException;
+
+/**
+ * Exception mapper for spring security access denied
+ *
+ */
+public class ThesaurusArchivedAccessDeniedExceptionMapper  extends AbstractExceptionMapper<ThesaurusArchivedAccessDeniedException>{
+	
+	@Override
+	public Response toResponse(Throwable exception) {
+		return super.toResponse(exception, "thesaurs-archived-only-deletion-supported", null);
+	}	
+	
+}

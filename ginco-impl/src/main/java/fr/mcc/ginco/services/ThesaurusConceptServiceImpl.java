@@ -44,6 +44,7 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -84,8 +85,7 @@ import fr.mcc.ginco.utils.ThesaurusTermUtils;
 @Service("thesaurusConceptService")
 public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
-	@Log
-	private Logger logger;
+	private Logger logger = LoggerFactory.getLogger(ThesaurusConceptServiceImpl.class);
 
 	@Inject
 	@Named("thesaurusDAO")

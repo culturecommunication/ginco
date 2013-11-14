@@ -34,27 +34,48 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusFormat;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.*;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.IThesaurusFormatService;
+import fr.mcc.ginco.services.IThesaurusOrganizationService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IThesaurusStatisticsService;
+import fr.mcc.ginco.services.IThesaurusTypeService;
+import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
@@ -224,7 +245,7 @@ public class ThesaurusRestService {
     @POST
     @Path("/destroyVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') && hasPermission(#thesaurusViewJAXBElement, 'DELETION')")
     public void destroyVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
         Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 
@@ -243,14 +264,18 @@ public class ThesaurusRestService {
     /**
      * Public method used to publish thesaurus
      * @throws BusinessException
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonGenerationException 
      */
     @GET
     @Path("/publishVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
-    public ExtJsonFormLoadData publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
+    public String publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
                                                  @QueryParam("userId") String userId)
-            throws BusinessException {
+            throws BusinessException, JsonGenerationException, JsonMappingException, IOException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
         if (object != null) {
@@ -258,27 +283,33 @@ public class ThesaurusRestService {
             thesaurusVersionHistoryService.publishThesaurus(object, userId);
         }
 
-        return new ExtJsonFormLoadData(object);
+        ObjectMapper mapper = new ObjectMapper();
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+				object));
+		return StringEscapeUtils.unescapeHtml4(serialized);       
     }
 
     /**
      * Public method used to archive thesaurus
      * @throws BusinessException
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonGenerationException 
      */
     @GET
     @Path("/archiveVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
-    public ThesaurusView archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
-            throws BusinessException {
+    public String archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
+            throws BusinessException, JsonGenerationException, JsonMappingException, IOException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
         ThesaurusView view = null;
 
-        if (object != null) {
-           thesaurusService.archiveThesaurus(object);
+        if (object != null) {         
 
-            Thesaurus result = thesaurusService.updateThesaurus(object);
+            Thesaurus result =  thesaurusService.archiveThesaurus(object);
 
             if (result != null) {
                 view = thesaurusViewConverter.convert(result);
@@ -287,7 +318,10 @@ public class ThesaurusRestService {
             }
         }
 
-        return view;
+        ObjectMapper mapper = new ObjectMapper();
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+				view));
+		return StringEscapeUtils.unescapeHtml4(serialized);       
     }
 
     @GET

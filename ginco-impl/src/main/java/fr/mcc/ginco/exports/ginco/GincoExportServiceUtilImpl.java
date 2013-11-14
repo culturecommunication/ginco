@@ -41,19 +41,18 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.IGincoExportServiceUtil;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
-import fr.mcc.ginco.log.Log;
 
 @Service("gincoExportServiceUtil")
 public class GincoExportServiceUtilImpl implements IGincoExportServiceUtil {
 
-	@Log
-	private Logger logger;
+	private Logger logger = LoggerFactory.getLogger(GincoExportServiceUtilImpl.class);
 
 	@Override
 	public String serializeThesaurusToXmlWithJaxb(

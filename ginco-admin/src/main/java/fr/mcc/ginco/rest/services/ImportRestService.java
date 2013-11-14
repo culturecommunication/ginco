@@ -81,7 +81,6 @@ import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
 import fr.mcc.ginco.extjs.view.ImportedTermsResponse;
 import fr.mcc.ginco.extjs.view.ImportedThesaurusResponse;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
-import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
 import fr.mcc.ginco.services.IIndexerService;

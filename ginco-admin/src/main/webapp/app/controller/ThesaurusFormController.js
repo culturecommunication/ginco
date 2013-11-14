@@ -54,6 +54,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xProblemArchiveMsg : "Error archiving Thesaurus!",
     xWarningChangedPoly : "Attention! You are going to change polyhierarchism of thesaurus, do it on your own risk!",
     xWarningChangedLanguages : "There may be terms in this language. Do it on your own risk!",
+    xArchiveSuccess: "Thesaurus has been archived!",
+    xPublishSuccess: 'thesaurus has been published!',
 
 
 	loadPanel : function(theForm) {
@@ -156,13 +158,16 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         Ext.Ajax.request({
             url: url,
             method: 'GET',
-            success: function() {
-               Thesaurus.ext.utils.msg('Succès',
-                   'Le thesaurus a été publié!');
-                me.application.fireEvent('thesaurusupdated');
-            },
-            failure: function() {
-                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemPublishMsg);
+            success: function(response) {
+            	var jsonData = Ext.JSON.decode(response.responseText);            	
+            	if (jsonData.success) {
+            		Thesaurus.ext.utils.msg(m.xSucessLabel,
+                 		   me.xPublishSuccess);
+                     me.application.fireEvent('thesaurusupdated');
+            	}else {
+                    Thesaurus.ext.utils.msg(me.xProblemLabel, jsonData.message);
+            	}
+               
             }
         });
     },
@@ -176,15 +181,21 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         Ext.Ajax.request({
             url: url,
             method: 'GET',
-            success: function() {
-                var record = theForm.getForm().getRecord();
-                record.set("archived",true);
-                me.loadData(theForm, record);
-                Thesaurus.ext.utils.msg('Succès',
-                    'Le thesaurus a été archivé!');
-            },
-            failure: function() {
-                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemArchiveMsg);
+            success: function(response) {
+            	var jsonData = Ext.JSON.decode(response.responseText);            	
+            	if (jsonData.success) {
+            		 var record = theForm.getForm().getRecord();
+                     record.set("archived",true);
+                     me.loadData(theForm, record);
+                     Thesaurus.ext.utils.msg(me.xSucessLabel,
+                         me.xArchiveSuccess);
+                     me.application.fireEvent('thesaurusupdated');
+
+				} else 
+				{
+                    Thesaurus.ext.utils.msg(me.xProblemLabel, jsonData.message);
+
+				}
             }
         });
     },

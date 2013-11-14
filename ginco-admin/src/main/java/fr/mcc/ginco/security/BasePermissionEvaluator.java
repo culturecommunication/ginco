@@ -47,8 +47,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 
 import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.extjs.view.pojo.SecuredResourceView;
+import fr.mcc.ginco.rest.services.exceptions.ThesaurusArchivedAccessDeniedException;
 import fr.mcc.ginco.services.IAdminUserService;
+import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IUserRoleService;
 
 public class BasePermissionEvaluator implements PermissionEvaluator {
@@ -59,7 +62,11 @@ public class BasePermissionEvaluator implements PermissionEvaluator {
 
 	@Inject
 	@Named("adminUserService")
-	IAdminUserService adminUserService;
+	private IAdminUserService adminUserService;
+	
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
 	private Logger log = LoggerFactory.getLogger(BasePermissionEvaluator.class);
 
@@ -93,6 +100,17 @@ public class BasePermissionEvaluator implements PermissionEvaluator {
 		} else {
 			scopeThesaurus = (String) targetDomainObject;
 		}
+		
+		Thesaurus thesaurusObject = thesaurusService.getThesaurusById(scopeThesaurus);
+		if (thesaurusObject.isArchived() != null && thesaurusObject.isArchived().booleanValue()) {
+			if (!"DELETION".equals((String) permission)) {
+					log.error("Permission denied : thesaurus is archived");
+					throw new ThesaurusArchivedAccessDeniedException("Thesaurus is archived, only deletion is authorized");
+			} else {
+				return true;
+			}
+		}
+		
 		User curUser = (User) authentication.getPrincipal();
 
 		log.debug("Checking permission " + permission + " on thesaurus "
