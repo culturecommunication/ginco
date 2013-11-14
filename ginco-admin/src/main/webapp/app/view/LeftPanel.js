@@ -53,11 +53,11 @@ Ext.define('GincoApp.view.LeftPanel', {
 		me.collapseTool.tooltipType = 'title';
 		me.collapseTool.tooltip = me.xCollapseToolTip;
 	},
-	setFilter: function (filterStatus) {
+	setFilter : function(filterStatus) {
 		var me = this;
-		if (filterStatus) 
+		if (filterStatus)
 			me.down('treepanel').setTitle(me.xThesaurusLabelFiltered);
-			else
+		else
 			me.down('treepanel').setTitle(me.xThesaurusLabelUnfiltered);
 	},
 
@@ -83,85 +83,77 @@ Ext.define('GincoApp.view.LeftPanel', {
 
 		Ext.applyIf(me, {
 			items : [{
-				xtype : 'treepanel',
-				id : 'mainTreeView',
-				autoScroll : true,
-				dblClickExpand : false,
-				collapsible : false,
-				title : me.xThesaurusLabelFiltered,
-				store : 'MainTreeStore',
-				displayField : 'title',
-				rootVisible : false,
-				useArrows : true,
-				animate : false,
-				flex : 1,
-				dockedItems : [{
-							xtype : 'toolbar',
-							dock : 'bottom',
-							items : [{
-										text : me.xSelectBtnLabel,
-										disabled : true,
-										itemId : 'selectBtn',
-										iconCls : 'icon-right',
-										iconAlign: 'right',
-										tooltip : me.xSelectBtnToolTip,
-										tooltipType : 'title',
-										flex : 1
-									}]
-						}, {
-							xtype : 'toolbar',
-							dock : 'top',
-							vertical : true,
-							items : [{
-										xtype : 'container',
-										flex : 1,
-										layout : {
-											type : 'hbox',
-											align : 'middle'
-										},
-										items : [{
-													xtype : 'button',
-													flex : 1,
-													text : me.xRoleFilterBtnLabel,
-													itemId : 'roleFilterBtn',
-													tooltip : me.xRoleFilterBtnToolTip,
-													tooltipType : 'title',
-													enableToggle : true,
-													pressed : true
-												}]
-									}, {
-										xtype : 'container',
-										layout : {
-											type : 'hbox',
-											align : 'middle'
-										},
-										items : [{
-											fieldLabel : me.xFilterLabel,
-											xtype : 'ariacombo',
-											itemId : 'authorFilter',
-											labelWidth : 70,
-											editable : false,
-											displayField : 'name',
-											valueField : 'name',
-											store : me.thesaurusOrganizationStore
-										}]
-									}]
-						}],
-				viewConfig : {
-					// loadMask : true,
-					preserveScrollOnRefresh : true
-				},
-				tools : [{
-							type : 'refresh',
-							tooltip : this.xRefreshBtnTooltip,
-							tooltipType : 'title'
-						}, {
-							itemId : 'pinBtn',
-							type : 'unpin',
-							tooltip : this.xPinBtnTooltip,
-							tooltipType : 'title'
-						}]
-			}]
+						xtype : 'treepanel',
+						id : 'mainTreeView',
+						autoScroll : true,
+						dblClickExpand : false,
+						collapsible : false,
+						title : me.xThesaurusLabelFiltered,
+						store : 'MainTreeStore',
+						displayField : 'title',
+						rootVisible : false,
+						useArrows : true,
+						animate : false,
+						flex : 1,
+						dockedItems : [{
+									xtype : 'toolbar',
+									dock : 'bottom',
+									items : [{
+												text : me.xSelectBtnLabel,
+												disabled : true,
+												itemId : 'selectBtn',
+												iconCls : 'icon-right',
+												iconAlign : 'right',
+												tooltip : me.xSelectBtnToolTip,
+												tooltipType : 'title',
+												flex : 1
+											}]
+								}, {
+									xtype : 'panel',
+									dock : 'top',
+									layout: {
+								        type: 'vbox',
+								        align : 'stretch'
+								    },
+									flex : 1,
+									frame : true,
+									items : [{
+												xtype : 'button',
+												flex : 1,
+												text : me.xRoleFilterBtnLabel,
+												itemId : 'roleFilterBtn',
+												tooltip : me.xRoleFilterBtnToolTip,
+												tooltipType : 'title',
+												enableToggle : true,
+												pressed : true,
+												margin : '0 0 5 0'
+											}, {
+												fieldLabel : me.xFilterLabel,
+												flex : 1,
+												xtype : 'ariacombo',
+												itemId : 'authorFilter',
+												labelWidth : 70,
+												editable : false,
+												displayField : 'name',
+												valueField : 'name',
+												store : me.thesaurusOrganizationStore
+											}]
+								}],
+						viewConfig : {
+							// loadMask : true,
+							preserveScrollOnRefresh : true
+						},
+						tools : [{
+									type : 'refresh',
+									tooltip : this.xRefreshBtnTooltip,
+									tooltipType : 'title'
+								}, {
+									itemId : 'pinBtn',
+									type : 'unpin',
+									tooltip : this.xPinBtnTooltip,
+									tooltipType : 'title'
+								}]
+					}]
 		});
 
 		me.callParent(arguments);
