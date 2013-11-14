@@ -47,6 +47,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -66,7 +67,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.ISKOSExportService;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.skos.namespaces.GINCO;
@@ -116,8 +116,8 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Named("skosComplexConceptExporter")
 	private SKOSComplexConceptExporter skosComplexConceptExporter;
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(SKOSExportServiceImpl.class);
+
 
 	@Override
 	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {

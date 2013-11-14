@@ -38,13 +38,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.UserRoleView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IUserRoleService;
 
@@ -63,8 +63,8 @@ public class UserRoleViewConverter {
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(UserRoleViewConverter.class);
+
 
 	/**
 	 * Main method used to convert from {@link UserRole} to {@link UserRoleView}

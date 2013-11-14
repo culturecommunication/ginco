@@ -46,7 +46,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
@@ -57,7 +56,6 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusViewConverterTest {
 	@Mock(name = "thesaurusService")
@@ -78,7 +76,6 @@ public class ThesaurusViewConverterTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(converter);
 	}
 
 	@Test

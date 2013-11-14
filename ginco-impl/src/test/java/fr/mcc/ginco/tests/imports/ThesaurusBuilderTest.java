@@ -63,7 +63,6 @@ import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.imports.SKOSImportUtils;
 import fr.mcc.ginco.imports.ThesaurusBuilder;
 import fr.mcc.ginco.imports.ThesaurusOrganizationBuilder;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class ThesaurusBuilderTest {
@@ -91,7 +90,6 @@ public class ThesaurusBuilderTest {
 	public void init() {
 		MockitoAnnotations.initMocks(this);	
 		ReflectionTestUtils.setField(thesaurusBuilder, "defaultThesaurusFormat", 3);
-		LoggerTestUtil.initLogger(thesaurusBuilder);
 	}
 
 	@Test

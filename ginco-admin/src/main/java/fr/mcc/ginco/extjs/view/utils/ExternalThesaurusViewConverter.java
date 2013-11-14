@@ -38,11 +38,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.extjs.view.pojo.ExternalThesaurusView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 
@@ -63,8 +63,8 @@ public class ExternalThesaurusViewConverter {
 	private IExternalThesaurusService externalThesaurusService;
 
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(ExternalThesaurusViewConverter.class);
+
 	/**
 	 * convert an {@link ExternalThesaurus} object to an {@link ExternalThesaurusView} suitable for display
 	 * 

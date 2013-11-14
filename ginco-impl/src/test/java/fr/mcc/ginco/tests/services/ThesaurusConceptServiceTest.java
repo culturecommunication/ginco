@@ -35,8 +35,8 @@
 package fr.mcc.ginco.tests.services;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -73,7 +73,6 @@ import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusConceptServiceTest {
 
@@ -108,7 +107,6 @@ public class ThesaurusConceptServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusConceptService);
 	}
 
 	@Test

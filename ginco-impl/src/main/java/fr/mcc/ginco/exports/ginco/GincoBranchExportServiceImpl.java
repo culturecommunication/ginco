@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +55,6 @@ import fr.mcc.ginco.exports.IGincoBranchExportService;
 import fr.mcc.ginco.exports.IGincoExportServiceUtil;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.ThesaurusConceptUtils;
@@ -63,8 +63,8 @@ import fr.mcc.ginco.utils.ThesaurusConceptUtils;
 @Service("gincoBranchExportService")
 public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(GincoBranchExportServiceImpl.class);
+
 	
 	@Inject
 	@Named("gincoConceptExporter")

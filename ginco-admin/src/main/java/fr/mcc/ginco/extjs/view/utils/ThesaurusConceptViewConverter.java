@@ -44,6 +44,7 @@ import javax.inject.Named;
 
 import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
@@ -59,7 +60,6 @@ import fr.mcc.ginco.extjs.view.pojo.HierarchicalRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAlignmentService;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -72,8 +72,8 @@ import fr.mcc.ginco.utils.DateUtil;
  */
 @Component("thesaurusConceptViewConverter")
 public class ThesaurusConceptViewConverter {
-	@Log
-	private Logger logger;
+	
+	private Logger logger  = LoggerFactory.getLogger(ThesaurusConceptViewConverter.class);
 
 	@Inject
 	@Named("thesaurusService")

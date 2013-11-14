@@ -37,9 +37,8 @@ package fr.mcc.ginco.imports.ginco.idgenerator;
 import java.util.Map;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to use the ids mapping table
@@ -48,8 +47,8 @@ import fr.mcc.ginco.log.Log;
 @Component("gincoIdMapParser")
 public class GincoIdMapParser {
 	
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(GincoIdMapParser.class);
+
 
 	/**
 	 * This method returns the new id of an element ready for import

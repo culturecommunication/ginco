@@ -43,6 +43,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
@@ -52,7 +53,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class generate new ids for all items (concepts, terms, notes, relations,
@@ -84,9 +84,7 @@ public class GincoConceptBranchIdGenerator {
 
 	private Map<String, String> idMapping = new HashMap<String, String>();
 
-
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(GincoConceptBranchIdGenerator.class);
 
 	public void resetIdsForExportedBranch(
 			GincoExportedBranch branchToUpdate) {

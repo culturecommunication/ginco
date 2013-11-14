@@ -42,6 +42,7 @@ import java.util.List;
 
 import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -58,14 +59,13 @@ import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
 @Service("skosImportUtils")
 public class SKOSImportUtils {
 	
-	@Log
-	private Logger logger;	
+	private static Logger logger = LoggerFactory.getLogger(SKOSImportUtils.class);
+
 
 	@Value("#{'${import.skos.date.formats}'.split(',')}")
 	private List<String> skosDefaultDateFormats;

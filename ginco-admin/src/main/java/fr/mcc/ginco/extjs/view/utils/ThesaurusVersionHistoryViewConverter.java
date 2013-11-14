@@ -34,22 +34,24 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusVersionHistoryView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 import fr.mcc.ginco.utils.DateUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Small class responsible for converting real {@link ThesaurusVersionHistory} object into
@@ -70,8 +72,8 @@ public class ThesaurusVersionHistoryViewConverter {
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(ThesaurusVersionHistoryViewConverter.class);
+
 
 	/**
 	 * Main method used to do conversion from {@link ThesaurusVersionHistory} to {@link ThesaurusVersionHistoryView}.

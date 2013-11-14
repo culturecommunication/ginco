@@ -58,7 +58,6 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ChildrenGeneratorTest {
 
@@ -74,7 +73,6 @@ public class ChildrenGeneratorTest {
     @Before
     public final void setUp() {
         MockitoAnnotations.initMocks(this);
-        LoggerTestUtil.initLogger(childrenGenerator);
 		ReflectionTestUtils.setField(childrenGenerator, "maxResults",
 				5000);
     }

@@ -45,21 +45,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoTermIdGenerator;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class GincoTermIdGeneratorTest {		
 	@Mock(name = "generatorService")
-	private IIDGeneratorService generatorService;
+	private IIDGeneratorService generatorService;	
 	
-	@Log
-	private Logger logger;
 	@Mock(name = "thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;	
 	
@@ -69,7 +64,6 @@ public class GincoTermIdGeneratorTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(gincoTermIdGenerator);
 	}	
 	
 	@Test

@@ -60,7 +60,6 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusRestServiceTest {
 
@@ -85,7 +84,6 @@ public class ThesaurusRestServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusRestService);
 	}
 
 	@Test

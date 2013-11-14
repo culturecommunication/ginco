@@ -47,6 +47,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,6 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.FileResponse;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IMistralRevService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -81,8 +81,8 @@ public class RevisionsRestService {
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
-	@Log
-	private Logger log;
+	private Logger logger  = LoggerFactory.getLogger(RevisionsRestService.class);
+
 
 	/**
 	 * Return revisions command file in .txt format; name begins with current DateTime.
@@ -113,7 +113,7 @@ public class RevisionsRestService {
 			lang = languagesService.getLanguageById(language);
 		}
 		if (lang == null) {
-			log.info("No language set in exportRevisions, defaulting to default language "
+			logger.info("No language set in exportRevisions, defaulting to default language "
 					+ defaultLang);
 			lang = languagesService.getLanguageById(defaultLang);
 		}
@@ -144,7 +144,7 @@ public class RevisionsRestService {
 			lang = languagesService.getLanguageById(language);
 		}
 		if (lang == null) {
-			log.info("No language set in exportRevisions, defaulting to default language "
+			logger.info("No language set in exportRevisions, defaulting to default language "
 					+ defaultLang);
 			lang = languagesService.getLanguageById(defaultLang);
 		}

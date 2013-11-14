@@ -50,6 +50,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.ext.Nullable;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -63,7 +64,6 @@ import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -80,7 +80,6 @@ import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.HierarchicalRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
@@ -134,8 +133,8 @@ public class ThesaurusConceptRestService {
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(ThesaurusConceptRestService.class);
+
 
 	/**
 	 * Public method used to get

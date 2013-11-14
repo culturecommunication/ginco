@@ -48,6 +48,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,6 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView;
 import fr.mcc.ginco.extjs.view.utils.SplitNonPreferredTermViewConverter;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 
 /**
@@ -79,8 +79,8 @@ public class SplitNonPreferredTermRestService {
     private SplitNonPreferredTermViewConverter splitNonPreferredTermViewConverter;
    
     
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(SplitNonPreferredTermRestService.class);
+
 
 	/**
 	 * Public method used to get the details of a single {@link SplitNonPreferredTerm}

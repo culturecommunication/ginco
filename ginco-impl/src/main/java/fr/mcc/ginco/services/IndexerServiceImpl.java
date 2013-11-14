@@ -54,6 +54,7 @@ import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -63,7 +64,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.solr.EntityType;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
@@ -81,8 +81,8 @@ import fr.mcc.ginco.utils.DateUtil;
 @Service("indexerService")
 public class IndexerServiceImpl implements IIndexerService {
 
-	@Log
-	private Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(IndexerServiceImpl.class);
+
 
 	@Inject
 	@Named("thesaurusConceptService")

@@ -49,6 +49,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.envers.query.AuditQuery;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,14 +66,13 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("mistralRevService")
 public class MistralRevServiceImpl implements IMistralRevService {
-	@Log
-	private Logger logger;
+	
+	private static Logger logger = LoggerFactory.getLogger(MistralRevServiceImpl.class);
 
 	@Inject
 	@Named("auditReaderService")

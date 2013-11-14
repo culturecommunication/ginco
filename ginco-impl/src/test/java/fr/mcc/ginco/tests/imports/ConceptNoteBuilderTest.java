@@ -64,7 +64,6 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.imports.ConceptNoteBuilder;
 import fr.mcc.ginco.services.INoteTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class ConceptNoteBuilderTest {
@@ -87,7 +86,6 @@ public class ConceptNoteBuilderTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(conceptNoteBuilder);
 	}
 
 	@Test

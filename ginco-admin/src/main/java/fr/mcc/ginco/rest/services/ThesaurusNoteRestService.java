@@ -48,6 +48,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusNoteViewConverter;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.INoteTypeService;
@@ -87,8 +87,8 @@ public class ThesaurusNoteRestService {
     @Named("indexerService")
     private IIndexerService indexerService;
 	
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(ThesaurusNoteRestService.class);
+
 	
 	/**
 	 * Public method used to get the list of all concept note types in the database.

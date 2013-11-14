@@ -37,6 +37,7 @@ package fr.mcc.ginco.exports.skos;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -45,7 +46,6 @@ import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.skos.namespaces.ISOTHES;
 import fr.mcc.ginco.skos.namespaces.SKOSXL;
 import fr.mcc.ginco.utils.DateUtil;
@@ -58,8 +58,8 @@ import fr.mcc.ginco.utils.DateUtil;
 @Component("skosModelTermsExporter")
 public class SKOSModelTermsExporter {
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(SKOSModelTermsExporter.class);
+
 
 	public Model exportConceptPreferredTerm(ThesaurusTerm term, Model model ) {
 		logger.debug("Start generating model for preferred term "

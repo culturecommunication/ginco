@@ -42,23 +42,16 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import fr.mcc.ginco.audit.csv.AuditCSVWriter;
 import fr.mcc.ginco.audit.csv.JournalEventsEnum;
 import fr.mcc.ginco.audit.csv.JournalLine;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class AuditCSVWriterTest {
 
 	private AuditCSVWriter auditCSVWriter = new AuditCSVWriter();
-	
-	@Before
-	public void init() {
-		LoggerTestUtil.initLogger(auditCSVWriter);
-	}
 	
 	@Test
 	public void testWriteHeader() throws IOException {

@@ -49,6 +49,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +63,6 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.imports.IGincoImportService;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to import a thesaurus from a XML file (custom Ginco format)
@@ -72,8 +72,7 @@ import fr.mcc.ginco.log.Log;
 @Service("gincoImportService")
 public class GincoImportServiceImpl implements IGincoImportService {
 	
-	@Log
-	private Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(GincoImportServiceImpl.class);
 	
 	@Inject
 	@Named("gincoConceptBranchBuilder")

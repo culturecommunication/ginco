@@ -58,7 +58,6 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.imports.NodeLabelBuilder;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class NodeLabelBuilderTest {
 	@Inject
@@ -72,7 +71,6 @@ public class NodeLabelBuilderTest {
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 		ReflectionTestUtils.setField(nodeLabelBuilder, "defaultLang", "fr-FR");
-		LoggerTestUtil.initLogger(nodeLabelBuilder);
 	}
 
 	@Test

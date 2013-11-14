@@ -48,7 +48,6 @@ import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.dao.IUserRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.UserRoleServiceImpl;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class UserRoleServiceTest {
 
@@ -60,7 +59,6 @@ public class UserRoleServiceTest {
 
 	@Before
 	public void init() {
-		LoggerTestUtil.initLogger(userRoleService);
 		MockitoAnnotations.initMocks(this);
 	}
 

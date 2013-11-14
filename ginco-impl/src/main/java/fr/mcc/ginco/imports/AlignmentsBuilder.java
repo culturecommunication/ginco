@@ -42,6 +42,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -52,7 +53,6 @@ import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentType;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAlignmentTypeService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
@@ -64,8 +64,7 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 @Service("skosAlignmentsBuilder")
 public class AlignmentsBuilder extends AbstractBuilder {
 
-	@Log
-	private Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(AlignmentsBuilder.class);
 
 	@Inject
 	@Named("alignmentTypeService")

@@ -1,16 +1,15 @@
 package fr.mcc.ginco.tests.services;
 
-import fr.mcc.ginco.beans.*;
-import fr.mcc.ginco.services.INoteService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IndexerServiceImpl;
-import fr.mcc.ginco.solr.EntityType;
-import fr.mcc.ginco.solr.SearchResultList;
-import fr.mcc.ginco.solr.SolrConstants;
-import fr.mcc.ginco.solr.SolrField;
-import fr.mcc.ginco.solr.SortCriteria;
-import fr.mcc.ginco.tests.LoggerTestUtil;
-import fr.mcc.ginco.utils.DateUtil;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -27,13 +26,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IndexerServiceImpl;
+import fr.mcc.ginco.solr.EntityType;
+import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SolrConstants;
+import fr.mcc.ginco.solr.SolrField;
+import fr.mcc.ginco.solr.SortCriteria;
+import fr.mcc.ginco.utils.DateUtil;
 
 public class IndexerServiceTest {
 
@@ -52,7 +58,6 @@ public class IndexerServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(indexerService);
 	}
 
 	@Test

@@ -56,7 +56,6 @@ import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class FolderGeneratorTest {
 	@Mock(name = "thesaurusConceptService")
@@ -77,7 +76,6 @@ public class FolderGeneratorTest {
 	@Before
 	public final void setUp() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(folderGenerator);
 	}
 
 	@Test

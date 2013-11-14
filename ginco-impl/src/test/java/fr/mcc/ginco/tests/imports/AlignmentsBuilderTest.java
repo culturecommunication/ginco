@@ -56,7 +56,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.imports.AlignmentBuilder;
 import fr.mcc.ginco.imports.AlignmentsBuilder;
 import fr.mcc.ginco.services.IAlignmentTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class AlignmentsBuilderTest {
@@ -73,7 +72,6 @@ public class AlignmentsBuilderTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(alignmentsBuilder);
 	}
 
 	@Test

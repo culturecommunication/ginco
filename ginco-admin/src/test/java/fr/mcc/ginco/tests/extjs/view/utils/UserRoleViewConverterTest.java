@@ -50,7 +50,6 @@ import fr.mcc.ginco.extjs.view.pojo.UserRoleView;
 import fr.mcc.ginco.extjs.view.utils.UserRoleViewConverter;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IUserRoleService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class UserRoleViewConverterTest {
 
@@ -66,7 +65,6 @@ public class UserRoleViewConverterTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(converter);
 	}
 
 	@Test

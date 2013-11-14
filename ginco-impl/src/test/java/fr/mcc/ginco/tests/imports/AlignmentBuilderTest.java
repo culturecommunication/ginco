@@ -61,7 +61,6 @@ import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class AlignmentBuilderTest {
 
@@ -83,7 +82,6 @@ public class AlignmentBuilderTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(alignmentBuilder);
 	}
 
 	@Test

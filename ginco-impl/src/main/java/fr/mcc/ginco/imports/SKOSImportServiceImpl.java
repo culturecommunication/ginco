@@ -49,6 +49,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,7 +72,6 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
@@ -82,8 +82,7 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 @Service("skosImportService")
 public class SKOSImportServiceImpl implements ISKOSImportService {
 
-	@Log
-	private Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(SKOSImportServiceImpl.class);
 
 	@Inject
 	@Named("thesaurusDAO")

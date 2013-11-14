@@ -57,7 +57,6 @@ import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.ThesaurusArrayServiceImpl;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusArrayServiceTest {
 
@@ -76,7 +75,6 @@ public class ThesaurusArrayServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusArrayService);
 	}
 
     @Test

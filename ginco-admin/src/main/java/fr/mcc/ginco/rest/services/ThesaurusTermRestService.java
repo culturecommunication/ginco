@@ -34,6 +34,28 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -43,28 +65,11 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
-
-import org.slf4j.Logger;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.MissingResourceException;
 
 /**
  * Thesaurus Term REST service for all operations on Thesauruses Terms
@@ -92,8 +97,8 @@ public class ThesaurusTermRestService {
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
     
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(ThesaurusTermRestService.class);
+
 
 	/**
 	 * Public method used to get list of all existing Thesaurus terms objects in

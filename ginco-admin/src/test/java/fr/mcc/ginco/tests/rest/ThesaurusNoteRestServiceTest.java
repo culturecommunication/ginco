@@ -55,7 +55,6 @@ import fr.mcc.ginco.extjs.view.utils.ThesaurusNoteViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusNoteRestService;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.INoteTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusNoteRestServiceTest {
 	
@@ -75,7 +74,6 @@ public class ThesaurusNoteRestServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusNoteRestService);
 	}
 	
 	/**

@@ -44,6 +44,7 @@ import javax.inject.Named;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
@@ -54,10 +55,8 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.AlignmentConceptView;
 import fr.mcc.ginco.extjs.view.pojo.AlignmentView;
 import fr.mcc.ginco.extjs.view.pojo.ExternalThesaurusView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAlignmentService;
 import fr.mcc.ginco.services.IAlignmentTypeService;
-import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
 
 /**
@@ -82,8 +81,7 @@ public class AlignmentViewConverter {
 	@Named("externalThesaurusViewConverter")
 	private ExternalThesaurusViewConverter externalThesaurusViewConverter;
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(AlignmentViewConverter.class);
 
 	/**
 	 * convert an Alignment object to an AlignmentView suitable for display

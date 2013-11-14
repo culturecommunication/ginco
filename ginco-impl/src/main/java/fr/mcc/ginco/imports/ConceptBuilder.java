@@ -45,6 +45,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.ontology.ObjectProperty;
@@ -62,7 +63,6 @@ import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.skos.namespaces.ISOTHES;
@@ -75,8 +75,7 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 @Service("skosConceptBuilder")
 public class ConceptBuilder extends AbstractBuilder {
 
-	@Log
-	private Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(ConceptBuilder.class);
 
 	@Inject
 	@Named("conceptHierarchicalRelationshipServiceUtil")

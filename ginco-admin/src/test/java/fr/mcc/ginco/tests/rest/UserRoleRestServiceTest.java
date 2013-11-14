@@ -51,14 +51,12 @@ import org.mockito.MockitoAnnotations;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.UserRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.RoleView;
 import fr.mcc.ginco.extjs.view.pojo.UserRoleView;
 import fr.mcc.ginco.extjs.view.utils.UserRoleViewConverter;
 import fr.mcc.ginco.rest.services.UserRoleRestService;
 import fr.mcc.ginco.services.IUserRoleService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class UserRoleRestServiceTest {
 
@@ -74,7 +72,6 @@ public class UserRoleRestServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(userRoleRestService);
 	}
 
 	@Test

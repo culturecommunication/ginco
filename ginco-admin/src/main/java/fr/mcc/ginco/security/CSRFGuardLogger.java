@@ -5,14 +5,11 @@ import org.owasp.csrfguard.log.LogLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.mcc.ginco.log.Log;
-
 public class CSRFGuardLogger implements ILogger {
 
 	private static final long serialVersionUID = -6227944540521232578L;
 	
-	@Log
-	private Logger logger= LoggerFactory.getLogger(CSRFGuardLogger.class);
+	private Logger logger  = LoggerFactory.getLogger(CSRFGuardLogger.class);
 
 	@Override
 	public void log(String msg) {

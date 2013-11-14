@@ -40,11 +40,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class generate new ids for terms for importing branch in existing
@@ -62,8 +62,8 @@ public class GincoConceptIdGenerator {
 	@Named("gincoIdMapParser")
 	private GincoIdMapParser gincoIdMapParser;
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(GincoConceptIdGenerator.class);
+
 
 	/**
 	 * This method gets the id of the concept : the existing one or a new if the

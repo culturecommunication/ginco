@@ -48,7 +48,6 @@ import fr.mcc.ginco.extjs.view.pojo.ExternalThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ExternalThesaurusViewConverter;
 import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ExternalThesaurusViewConverterTest {
 
@@ -64,7 +63,6 @@ public class ExternalThesaurusViewConverterTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(converter);
 	}
 
 	@Test

@@ -49,16 +49,13 @@ import org.mockito.MockitoAnnotations;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
-import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusConceptGroupRestService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusConceptGroupRestServiceTest {
 	
@@ -82,7 +79,6 @@ public class ThesaurusConceptGroupRestServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusConceptGroupRestService);
 	}
 
 	

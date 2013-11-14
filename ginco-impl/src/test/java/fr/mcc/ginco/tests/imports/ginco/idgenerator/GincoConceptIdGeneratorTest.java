@@ -37,9 +37,6 @@ package fr.mcc.ginco.tests.imports.ginco.idgenerator;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -51,10 +48,8 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoIdMapParser;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class GincoConceptIdGeneratorTest {		
 	@Mock(name = "generatorService")
@@ -69,7 +64,6 @@ public class GincoConceptIdGeneratorTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(gincoConceptIdGenerator);
 	}	
 	
 	@Test

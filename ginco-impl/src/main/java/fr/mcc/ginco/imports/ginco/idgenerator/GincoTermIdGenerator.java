@@ -40,12 +40,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class generate new ids for terms for importing branch in existing
@@ -63,8 +63,8 @@ public class GincoTermIdGenerator {
 	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;	
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(GincoTermIdGenerator.class);
+
 
 	/**
 	 * This method checks if the id of the term is not already present in the

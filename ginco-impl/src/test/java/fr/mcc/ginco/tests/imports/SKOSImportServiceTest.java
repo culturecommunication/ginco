@@ -64,7 +64,6 @@ import fr.mcc.ginco.imports.SKOSImportServiceImpl;
 import fr.mcc.ginco.imports.SKOSImportUtils;
 import fr.mcc.ginco.imports.ThesaurusArraysBuilder;
 import fr.mcc.ginco.imports.ThesaurusBuilder;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 
 public class SKOSImportServiceTest {
@@ -96,7 +95,6 @@ public class SKOSImportServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(skosImportService);
 	}
 
     @Test

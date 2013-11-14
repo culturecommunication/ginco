@@ -48,7 +48,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.hibernate.ThesaurusConceptDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusConceptDAOTest extends BaseDAOTest {
 
@@ -57,7 +56,6 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	@Before
 	public void handleSetUpOperation() throws Exception {
 		super.handleSetUpOperation();
-		LoggerTestUtil.initLogger(thesaurusConceptDAO);
 		thesaurusConceptDAO.setSessionFactory(getSessionFactory());
 	}
 

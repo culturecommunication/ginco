@@ -73,7 +73,6 @@ import fr.mcc.ginco.enums.ConceptHierarchicalRelationsEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
 
@@ -85,7 +84,7 @@ import fr.mcc.ginco.utils.ThesaurusTermUtils;
 @Service("thesaurusConceptService")
 public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
-	private Logger logger = LoggerFactory.getLogger(ThesaurusConceptServiceImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(ThesaurusConceptServiceImpl.class);
 
 	@Inject
 	@Named("thesaurusDAO")

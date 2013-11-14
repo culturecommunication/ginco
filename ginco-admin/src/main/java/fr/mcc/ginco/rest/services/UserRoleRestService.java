@@ -49,7 +49,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +59,6 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.RoleView;
 import fr.mcc.ginco.extjs.view.pojo.UserRoleView;
 import fr.mcc.ginco.extjs.view.utils.UserRoleViewConverter;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.utils.LabelUtil;
 

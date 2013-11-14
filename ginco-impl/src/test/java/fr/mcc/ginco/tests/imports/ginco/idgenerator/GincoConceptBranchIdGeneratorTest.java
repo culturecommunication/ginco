@@ -60,7 +60,6 @@ import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoNoteIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoRelationshipIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoTermIdGenerator;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class GincoConceptBranchIdGeneratorTest {	
 	
@@ -85,8 +84,6 @@ public class GincoConceptBranchIdGeneratorTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(gincoConceptBranchIdGenerator);
-
 	}
 	
 	@Test

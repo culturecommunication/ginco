@@ -53,7 +53,6 @@ import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.imports.ThesaurusArrayBuilder;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusArrayBuilderTest {	
 
@@ -67,7 +66,6 @@ public class ThesaurusArrayBuilderTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);		
-		LoggerTestUtil.initLogger(thesaurusArrayBuilder);
 	}
 
 	@Test

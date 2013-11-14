@@ -46,6 +46,7 @@ import javax.inject.Named;
 
 import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +58,6 @@ import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.ThesaurusConceptUtils;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
@@ -65,8 +65,7 @@ import fr.mcc.ginco.utils.ThesaurusConceptUtils;
 public class ConceptHierarchicalRelationshipServiceUtil implements
 		IConceptHierarchicalRelationshipServiceUtil {
 
-	@Log
-	private Logger logger;	
+	private static Logger logger = LoggerFactory.getLogger(ConceptHierarchicalRelationshipServiceUtil.class);
 	
 	@Inject
 	@Named("thesaurusArrayConceptDAO")

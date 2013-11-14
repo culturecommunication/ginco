@@ -39,6 +39,7 @@ import javax.inject.Named;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -53,9 +54,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Builder in charge of building the thesaurus arrays node labels
@@ -64,8 +63,7 @@ import fr.mcc.ginco.utils.DateUtil;
 @Service("skosNodeLabelBuilder")
 public class NodeLabelBuilder extends AbstractBuilder {
 
-	@Log
-	private Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(NodeLabelBuilder.class);
 
 	@Inject
 	@Named("languagesDAO")

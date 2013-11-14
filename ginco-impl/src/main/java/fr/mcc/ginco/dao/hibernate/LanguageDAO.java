@@ -39,11 +39,11 @@ import java.util.List;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
-import fr.mcc.ginco.log.Log;
 
 /**
  * Implementation of {@link ILanguageDAO}; basic class for DAO-related work.
@@ -52,8 +52,8 @@ import fr.mcc.ginco.log.Log;
 public class LanguageDAO extends GenericHibernateDAO<Language, String>
 		implements ILanguageDAO {
 	
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(LanguageDAO.class);
+
 	
 	public LanguageDAO() {
 		super(Language.class);

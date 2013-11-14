@@ -34,26 +34,28 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.NodeLabelView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.utils.DateUtil;
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @Component("nodeLabelViewConverter")
 public class NodeLabelViewConverter {
@@ -61,8 +63,8 @@ public class NodeLabelViewConverter {
     @Value("${ginco.default.language}")
     private String language;
 
-    @Log
-    private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(NodeLabelViewConverter.class);
+
 
     @Inject
     @Named("nodeLabelService")

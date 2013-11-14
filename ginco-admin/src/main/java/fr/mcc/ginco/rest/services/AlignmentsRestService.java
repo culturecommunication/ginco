@@ -44,7 +44,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +52,6 @@ import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.ExternalThesaurusType;
 import fr.mcc.ginco.extjs.view.pojo.ExternalThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ExternalThesaurusViewConverter;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IAlignmentTypeService;
 import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;

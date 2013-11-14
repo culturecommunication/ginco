@@ -67,7 +67,6 @@ import fr.mcc.ginco.rest.services.ThesaurusTermRestService;
 import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusTermRestServiceTest{
 	
@@ -90,7 +89,6 @@ public class ThesaurusTermRestServiceTest{
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusTermRestService);
 	}
 	/**
 	 * Test to get all Thesaurus Sandboxed Items method

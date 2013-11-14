@@ -45,6 +45,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
@@ -54,11 +55,9 @@ import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 
 /**
@@ -89,8 +88,8 @@ public class GincoRelationshipImporter {
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
-	@Log
-	private Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(GincoRelationshipImporter.class);
+
 	
 	/**
 	 * This method stores all the hierarchical relationships

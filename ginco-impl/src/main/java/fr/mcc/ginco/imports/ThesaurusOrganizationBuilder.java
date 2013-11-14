@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.imports;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -48,7 +47,6 @@ import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.ThesaurusOrganization;
-import fr.mcc.ginco.log.Log;
 
 /**
  * Builder in charge of building a thesaurus

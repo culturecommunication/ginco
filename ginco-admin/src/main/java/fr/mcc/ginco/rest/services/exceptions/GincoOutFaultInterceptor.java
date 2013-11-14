@@ -3,7 +3,6 @@ package fr.mcc.ginco.rest.services.exceptions;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
@@ -11,8 +10,8 @@ import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 
 
@@ -26,8 +25,8 @@ public class GincoOutFaultInterceptor extends AbstractPhaseInterceptor<Message> 
         
     }
     
-    @Log
-	private Logger log;
+	private Logger logger  = LoggerFactory.getLogger(GincoOutFaultInterceptor.class);
+
     
     private boolean handleMessageCalled;
 
@@ -41,7 +40,7 @@ public class GincoOutFaultInterceptor extends AbstractPhaseInterceptor<Message> 
         if (!(ex instanceof Fault)) {
             throw new RuntimeException("Fault is expected");
         }
-        log.error("Uncaught exception in REST services : ", ex);
+        logger.error("Uncaught exception in REST services : ", ex);
 		HttpServletResponse response = (HttpServletResponse)message.getExchange()
 	            .getInMessage().get(AbstractHTTPDestination.HTTP_RESPONSE);
 	        response.setStatus(200);

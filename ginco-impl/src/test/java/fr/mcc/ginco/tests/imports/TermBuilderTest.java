@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.tests.imports;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +60,6 @@ import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.imports.TermBuilder;
 import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class TermBuilderTest {	
 
@@ -81,7 +79,6 @@ public class TermBuilderTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(termBuilder);
 	}
 
 	@Test

@@ -42,14 +42,15 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 
 public abstract class AbstractExceptionMapper<E extends Throwable> implements
 		ExceptionMapper {
-	@Log
-	private Logger log;
+	
+	private Logger logger  = LoggerFactory.getLogger(AbstractExceptionMapper.class);
+
 
 	protected Response toResponse(Throwable t, String messageKey, Object[] toFormat) {
 		String msg = new String();
@@ -59,8 +60,8 @@ public abstract class AbstractExceptionMapper<E extends Throwable> implements
 		else {
 			msg = LabelUtil.getResourceLabel(messageKey);
 		}
-		log.error("Exception in REST services : " + t.getMessage());
-		log.debug("Exception in REST services : " + msg);
+		logger.error("Exception in REST services : " + t.getMessage());
+		logger.debug("Exception in REST services : " + msg);
 		msg = StringEscapeUtils.escapeEcmaScript(msg);
 		return Response.status(Status.OK)
 				.entity("{success:false, message: '" + msg + "'}").build();

@@ -47,6 +47,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,14 +61,13 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("gincoRevService")
 public class GincoRevServiceImpl implements IGincoRevService {
-	@Log
-	private Logger logger;
+	
+	private static Logger logger = LoggerFactory.getLogger(GincoRevServiceImpl.class);
 
 	@Inject
 	@Named("thesaurusVersionHistoryDAO")

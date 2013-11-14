@@ -56,7 +56,6 @@ import fr.mcc.ginco.rest.services.RevisionsRestService;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IMistralRevService;
 import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class RevisionsRestServiceTest {
 
@@ -77,7 +76,6 @@ public class RevisionsRestServiceTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(revisionsRestService);
 		ReflectionTestUtils.setField(revisionsRestService, "defaultLang",
 				"fr-FR");
 	}

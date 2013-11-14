@@ -39,20 +39,14 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoIdMapParser;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class GincoIdMapParserTest {
 	
 	private GincoIdMapParser gincoIdMapParser = new GincoIdMapParser();
 
-	@Before
-	public void init() {
-		LoggerTestUtil.initLogger(gincoIdMapParser);
-	}
 	
 	@Test
 	 public final void testGetNewIdNoMapping(){

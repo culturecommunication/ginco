@@ -34,11 +34,8 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -46,6 +43,7 @@ import javax.inject.Named;
 
 import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +63,6 @@ import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 
 /**
  * Builder in charge of building a thesaurus
@@ -73,9 +70,6 @@ import fr.mcc.ginco.log.Log;
  */
 @Service("skosThesaurusBuilder")
 public class ThesaurusBuilder extends AbstractBuilder {
-
-	@Log
-	private Logger logger;
 
 	@Inject
 	@Named("thesaurusFormatDAO")
