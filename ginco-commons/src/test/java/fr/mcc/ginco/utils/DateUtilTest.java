@@ -130,7 +130,7 @@ public class DateUtilTest {
 		gCal.set(Calendar.MILLISECOND, 0);
 		
 		String isoDate  =  DateUtil.toISO8601String(gCal.getTime());
-		Assert.assertTrue(isoDate.startsWith("2013-03-01T22:21:01.00"));
+		Assert.assertTrue(isoDate.startsWith("2013-03-01T22:21:01"));
 	}
 
 }

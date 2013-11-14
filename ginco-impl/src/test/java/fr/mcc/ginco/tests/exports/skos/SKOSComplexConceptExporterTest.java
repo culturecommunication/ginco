@@ -145,11 +145,11 @@ public class SKOSComplexConceptExporterTest {
 				SKOSXL.LITERAL_FORM, "fake complex concept", "fr-FR"));
 		
 		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.created));
-		Assert.assertTrue(model.getProperty(complexConceptRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(complexConceptRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09"));
 		
 	
 		Assert.assertTrue(model.contains(complexConceptRes, DCTerms.modified));
-		Assert.assertTrue(model.getProperty(complexConceptRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(complexConceptRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09"));
 		
 		Assert.assertTrue(model.contains(complexConceptRes, ISOTHES.STATUS,
 				Integer.toString(ConceptStatusEnum.CANDIDATE.getStatus())));

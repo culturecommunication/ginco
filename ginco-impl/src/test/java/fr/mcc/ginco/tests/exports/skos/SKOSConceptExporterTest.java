@@ -167,9 +167,9 @@ public class SKOSConceptExporterTest {
 		
 		Resource conceptRes = model.getResource("http://c1");
 		Assert.assertTrue(model.contains(conceptRes, DCTerms.created));
-		Assert.assertTrue(model.getProperty(conceptRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(conceptRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09"));
 		Assert.assertTrue(model.contains(conceptRes, DCTerms.modified));
-		Assert.assertTrue(model.getProperty(conceptRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(conceptRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09"));
 		
 		
 		
@@ -180,16 +180,14 @@ public class SKOSConceptExporterTest {
 
 		Assert.assertTrue(model.containsResource(expectedConceptRes2));
 		Assert.assertTrue(model.getResource("http://c2").hasProperty(RDF.type,
-				SKOS.CONCEPT));
+				SKOS.CONCEPT));	
 		
-		Assert.assertTrue(model.getResource("http://c2").hasProperty(
-				DCTerms.modified, "2012-11-06T21:33:09.00+0100"));
 		
 		Resource conceptRes2 = model.getResource("http://c2");
 		Assert.assertTrue(model.contains(conceptRes2, DCTerms.created));
-		Assert.assertTrue(model.getProperty(conceptRes2, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(conceptRes2, DCTerms.created).getString().startsWith("2013-11-06T21:33:09"));
 		Assert.assertTrue(model.contains(conceptRes2, DCTerms.modified));
-		Assert.assertTrue(model.getProperty(conceptRes2, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(conceptRes2, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09"));
 		
 		
 		

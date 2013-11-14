@@ -171,9 +171,9 @@ public class SKOSGroupExporterTest {
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.IN_SCHEME, schemeRes));	
 		
 		Assert.assertTrue(model.contains(groupRes, DCTerms.created));
-		Assert.assertTrue(model.getProperty(groupRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(groupRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09"));
 		Assert.assertTrue(model.contains(groupRes, DCTerms.modified));
-		Assert.assertTrue(model.getProperty(groupRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(groupRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09"));
 		
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(RDFS.label, "group1", "fr-FR"));
 		Assert.assertTrue(model.getResource("http://g1").hasProperty(SKOS.NOTATION, "notation"));

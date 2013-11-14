@@ -148,9 +148,9 @@ public class SKOSThesaurusExporterTest {
 		Assert.assertTrue(actualRes.hasProperty(DCTerms.issued, "note de version"));
 		
 		Assert.assertTrue(model.contains(actualRes, DCTerms.created));
-		Assert.assertTrue(model.getProperty(actualRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(actualRes, DCTerms.created).getString().startsWith("2013-11-06T21:33:09"));
 		Assert.assertTrue(model.contains(actualRes, DCTerms.modified));
-		Assert.assertTrue(model.getProperty(actualRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09.00"));
+		Assert.assertTrue(model.getProperty(actualRes, DCTerms.modified).getString().startsWith("2012-11-06T21:33:09"));
 		
 		Assert.assertTrue(actualRes.hasProperty(DCTerms.issued, "note de version"));
 
