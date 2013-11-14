@@ -35,14 +35,15 @@
 
 Ext.define('GincoApp.locale.fr.view.LeftPanel',
     {
-        xThesaurusLabel: "Explorateur de Vocabulaires",
+        xThesaurusLabelUnfiltered : 'Tous les vocabulaires',
+		xThesaurusLabelFiltered : 'Mes vocabulaires',
         xRefreshBtnTooltip : "Rafraichir l'explorateur de vocabulaires",
-    	xSelectBtnLabel : "Afficher",
+    	xSelectBtnLabel : "Afficher selection",
     	xSelectBtnToolTip : "Affiche l'élement selectionné",
     	xFilterLabel : 'Filtrage',
     	xCollapseToolTip : "Cacher l'explorateur de vocabulaires",
     	xExpandToolTip : "Montrer l'explorateur de vocabulaires",
     	xPinBtnTooltip : "Lier aux onglets",
-    	xRoleFilterBtnLabel: 'Tout afficher',
+    	xRoleFilterBtnLabel: 'Afficher mes vocabulaires',
     	xRoleFilterBtnToolTip: 'Filtrer la liste en fonction de mes rôles'
 });

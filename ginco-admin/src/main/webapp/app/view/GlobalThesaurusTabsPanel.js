@@ -46,6 +46,19 @@ Ext.define('GincoApp.view.GlobalThesaurusTabsPanel', {
     	var actionEl = this.getActionEl();
         actionEl.dom.setAttribute('aria-live', 'polite');
     },
+    tabBar: {
+    		cls : 'globaltabs',
+            defaults: {
+                height: 25 //sets the default height of the actual tab
+            },
+            height: 27,  //sets the height of the tabBar component
+            listeners: {
+                afterrender: function(cmp){
+                 // this will set the height of the tabBar body to the height of the tabBar component
+                    cmp.body.setHeight(cmp.getHeight()); 
+                }
+            }
+    },
 
     initComponent: function() {
         var me = this;

@@ -101,6 +101,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	},
 	onTreeRender : function(theTree) {
 		this.loadTreeView(theTree);
+		theTree.setTitle("sdfqf");
+		theTree.setTitle(this.xThesaurusLabelFiltered);
 	},
 	
 	onUserInfoLoaded: function () {
@@ -214,13 +216,17 @@ Ext.define('GincoApp.controller.MainTreeController', {
  	
  	onRoleFilterClick: function (theBtn, pressed) {
        var MainTreeStore = this.getMainTreeStoreStore();
+       var treePanel =theBtn.up('treepanel');
  		if (pressed) {
- 			MainTreeStore.isRoleFiltered=false; 
- 					
+ 			MainTreeStore.isRoleFiltered=true; 
+ 			treePanel.up().setFilter(true);
+ 				
  		} else {
- 			MainTreeStore.isRoleFiltered=true;
+ 			MainTreeStore.isRoleFiltered=false;
+ 			treePanel.up().setFilter(false);
  		} 		
- 		this.loadTreeView(theBtn.up('treepanel'));		
+ 		
+ 		this.loadTreeView(treePanel);		
  	},
  	
  	onTabChange : function (theChangedPanel) {

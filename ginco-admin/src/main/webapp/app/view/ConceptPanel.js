@@ -184,7 +184,9 @@ Ext
 																		autoScroll : true,
 																		pollForChanges : true,
 																		trackResetOnLoad : true,
-																		defaults : {},
+																		defaults : {
+																			margin: "0 0 10 0"
+																		},
 																		bbar : Ext
 																				.create('GincoApp.view.BottomFormToolbar'),
 																		dockedItems : [ {
@@ -279,6 +281,7 @@ Ext
 																					title : me.xTermListGridTitle,
 																					store : me.conceptTermStore,
 																					plugins : [ cellEditing ],
+																					frame : true,
 																					dockedItems : [ {
 																						xtype : 'toolbar',
 																						dock : 'top',
@@ -403,7 +406,7 @@ Ext
 																					title : me.xParentConcepts,
 																					store : me.parentConceptStore,
 																					plugins : [ cellHierarchicalRoleEditing ],
-
+																					frame : true,
 																					dockedItems : [ {
 																						xtype : 'toolbar',
 																						dock : 'top',
@@ -471,7 +474,7 @@ Ext
 																					title : me.xChildrenConcepts,
 																					store : me.childrenConceptStore,
 																					itemId : 'gridPanelChildrenConcepts',
-
+																					frame : true,
 																					dockedItems : [ {
 																						xtype : 'toolbar',
 																						dock : 'top',
@@ -534,7 +537,7 @@ Ext
 																					title : me.xRootConcepts,
 																					store : me.rootConceptStore,
 																					itemId : 'gridPanelRootConcepts',
-
+																					frame : true,
 																					columns : [
 																							{
 																								dataIndex : 'identifier',
@@ -548,6 +551,7 @@ Ext
 																				},
 																				{
 																					xtype : 'gridpanel',
+																					frame : true,
 																					title : me.xAssociatedConceptsListGridTitle,
 																					store : me.associatedConceptStore,
 																					itemId : 'gridPanelAssociatedConcepts',
@@ -615,6 +619,7 @@ Ext
 
 																		},{
 																			xtype : 'gridpanel',
+																			frame : true,
 																			title : me.xAlignments,
 																			store : me.alignmentsStore,
 																			itemId : 'gridPanelAlignments',

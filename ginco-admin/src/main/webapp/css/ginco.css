@@ -166,6 +166,10 @@ a.x-tab-close-btn:focus  {
     background-image: url(../images/warning.png) !important;
 }
 
+.icon-right {
+    background-image: url(../images/arrow_right.png) !important;
+}
+
 .mandatory-field {
 	color: red !important;
 }
@@ -197,5 +201,18 @@ h1.x-panel-header {
 }
 
 .x-toolbar .x-toolbar-text.username {
+	font-weight: bold;
+}
+
+.globaltabs .x-tab button {
+	font-size: 13px;
+
+}
+.x-tab button {
+	font-weight: normal;
+}
+
+
+.x-tab.x-tab-active button {
 	font-weight: bold;
 }
