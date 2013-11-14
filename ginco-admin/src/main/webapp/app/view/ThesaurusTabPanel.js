@@ -223,7 +223,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							flex : 1,
 						}, {
             				xtype : 'triggerfield',
-            				width : 190,
+            				width : 200,
             				triggerCls: 'x-form-search-trigger',
             				emptyText : me.xSearchFieldText,
             				hideTrigger : false,
