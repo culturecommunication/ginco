@@ -33,6 +33,7 @@ DROP TABLE IF EXISTS custom_term_attribute;
 DROP TABLE IF EXISTS note;
 DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS alignment;
+DROP TABLE IF EXISTS suggestion;
 
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
@@ -43,6 +44,7 @@ DROP SEQUENCE IF EXISTS revinfoentitytypes_identifier_seq;
 DROP SEQUENCE IF EXISTS custom_concept_attribute_type_identifier_seq;
 DROP SEQUENCE IF EXISTS custom_term_attribute_type_identifier_seq;
 DROP SEQUENCE IF EXISTS user_role_identifier_seq;
+DROP SEQUENCE IF EXISTS suggestion_identifier_seq;
 
 
 CREATE TABLE thesaurus
@@ -506,4 +508,20 @@ CREATE TABLE alignment
   and_relation boolean NOT NULL,
   CONSTRAINT pk_alignment PRIMARY KEY (identifier)
 );
+
+-- Table: suggestion
+CREATE TABLE suggestion
+(
+  identifier integer NOT NULL,
+  created text NOT NULL,
+  creator text NOT NULL,
+  recipient text NOT NULL,
+  content text NOT NULL,
+  term_id text,
+  concept_id text,  
+  CONSTRAINT pk_suggestion PRIMARY KEY (identifier)  
+);
+
+CREATE SEQUENCE suggestion_identifier_seq START WITH 1  INCREMENT BY 1 ;
+
 
