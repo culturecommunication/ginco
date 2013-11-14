@@ -56,32 +56,32 @@ import fr.mcc.ginco.exceptions.BusinessException;
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusStatisticsService")
 public class ThesaurusStatisticsServiceImpl implements IThesaurusStatisticsService {
-	
-	
+
+
 	@Inject
 	@Named("thesaurusDAO")
-	private IThesaurusDAO thesaurusDAO; 
-	
+	private IThesaurusDAO thesaurusDAO;
+
 	@Inject
 	@Named("thesaurusTermDAO")
-	private IThesaurusTermDAO termDAO; 
-	
+	private IThesaurusTermDAO termDAO;
+
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO conceptDAO;
-	
+
 	@Inject
 	@Named("splitNonPreferredTermDAO")
 	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
-	
+
 	@Inject
 	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
-	
+
 	@Override
 	public ThesaurusStatistics getStatistics(String thesaurusId) {
 		// TODO Auto-generated method stub
@@ -98,6 +98,9 @@ public class ThesaurusStatisticsServiceImpl implements IThesaurusStatisticsServi
 		stats.setNbOfThesaurusGroups(thesaurusConceptGroupDAO.countItems(thesaurusId));
 		stats.setNbOfTermsWoNotes(termDAO.countTermsWoNotes(thesaurusId));
 		stats.setNbOfConceptsWoNotes(conceptDAO.countConceptsWoNotes(thesaurusId));
+		stats.setNbOfConceptsAlignedToIntThes(conceptDAO.countConceptsAlignedToIntThes(thesaurusId));
+		stats.setNbOfConceptsAlignedToExtThes(conceptDAO.countConceptsAlignedToExtThes(thesaurusId));
+		stats.setNbOfConceptsAlignedToMyThes(conceptDAO.countConceptsAlignedToMyThes(thesaurusId));
 		return stats;
 	}
 

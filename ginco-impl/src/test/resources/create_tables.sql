@@ -32,6 +32,7 @@ DROP TABLE IF EXISTS custom_concept_attribute;
 DROP TABLE IF EXISTS custom_term_attribute;
 DROP TABLE IF EXISTS note;
 DROP TABLE IF EXISTS user_role;
+DROP TABLE IF EXISTS alignment;
 
 
 DROP SEQUENCE IF EXISTS thesaurus_term_role_identifier_seq;
@@ -491,4 +492,18 @@ CREATE TABLE user_role
 );
 
 CREATE SEQUENCE user_role_identifier_seq START WITH 1  INCREMENT BY 1 ;
+
+CREATE TABLE alignment
+(
+  identifier text NOT NULL,
+  created text NOT NULL,
+  modified text NOT NULL,
+  author text,
+  source_concept_id text,
+  alignment_type integer,
+  external_target_thesaurus_id text,
+  internal_target_thesaurus_id text,
+  and_relation boolean NOT NULL,
+  CONSTRAINT pk_alignment PRIMARY KEY (identifier)
+);
 

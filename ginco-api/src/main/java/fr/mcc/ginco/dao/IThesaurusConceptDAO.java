@@ -48,10 +48,10 @@ import fr.mcc.ginco.exceptions.BusinessException;
  *
  */
 public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
-	
+
 	/**
 	 * This method flushes the Hibernate Session.
-	 * Flush must not be used manually. 
+	 * Flush must not be used manually.
 	 * Implemented here for a particular case (see comment in implementation).
 	 */
 	void flush();
@@ -73,8 +73,8 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @throws BusinessException in case of error.
      */
 	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults) throws BusinessException;
-	
-	
+
+
 	/**
 	 * Gets the number of orphan concepts for a given thesaurus
 	 * @param thesaurus
@@ -116,9 +116,9 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param searchOrphans could be null if doesn't matter.
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);   
-   
-    
+    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
+
+
     /**
      * Returns all children (recursive) from the given root
      * @param concept
@@ -133,7 +133,31 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 */
 	Long countConcepts(String idThesaurus) throws BusinessException;
 
-	Long countConceptsWoNotes(String idThesaurus) throws BusinessException; 
-    
-    
+	Long countConceptsWoNotes(String idThesaurus) throws BusinessException;
+
+	/**
+	 * Returns the number of concepts aligned to internal thesauruses
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
+	Long countConceptsAlignedToIntThes(String idThesaurus) throws BusinessException;
+
+	/**
+	 * Returns the number of concepts aligned to external thesauruses
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
+	Long countConceptsAlignedToExtThes(String idThesaurus) throws BusinessException;
+
+	/**
+	 * Returns the number of concepts aligned to my thesaurus
+	 * @param thesaurus
+	 * @return
+	 * @throws BusinessException
+	 */
+	Long countConceptsAlignedToMyThes(String idThesaurus) throws BusinessException;
+
+
 }

@@ -43,6 +43,9 @@ Ext.define('GincoApp.view.ThesaurusStatisticsTabPanel', {
 			xnbOfThesaurusGroups : 'Number of concepts groups',
 			xnbOfTermsWoNotes : 'Number of terms without notes',
 			xnbOfConceptsWoNotes : 'Number of concepts without notes',
+			xnbOfConceptsAlignedToIntThes : 'Number of concepts aligned to internal thesauruses',
+			xnbOfConceptsAlignedToExtThes : 'Number of concepts aligned to external thesauruses',
+			xnbOfConceptsAlignedToMyThes : 'Number of concepts aligned to my thesaurus',
 
 			initComponent : function() {
 				var me = this;
@@ -51,7 +54,7 @@ Ext.define('GincoApp.view.ThesaurusStatisticsTabPanel', {
 							items : [{
 										xtype : 'propertygrid',
 										source : {},
-										nameColumnWidth : 300,
+										nameColumnWidth : 330,
 										propertyNames : {
 											nbOfTerms:  me.xnbOfTerms,
 											nbOfConcepts : me.xnbOfConcepts,
@@ -60,7 +63,10 @@ Ext.define('GincoApp.view.ThesaurusStatisticsTabPanel', {
 											nbOfThesaurusArrays : me.xnbOfThesaurusArrays,
 											nbOfThesaurusGroups : me.xnbOfThesaurusGroups,
 											nbOfTermsWoNotes : me.xnbOfTermsWoNotes,
-											nbOfConceptsWoNotes : me.xnbOfConceptsWoNotes
+											nbOfConceptsWoNotes : me.xnbOfConceptsWoNotes,
+											nbOfConceptsAlignedToIntThes : me.xnbOfConceptsAlignedToIntThes,
+											nbOfConceptsAlignedToExtThes : me.xnbOfConceptsAlignedToExtThes,
+											nbOfConceptsAlignedToMyThes : me.xnbOfConceptsAlignedToMyThes
 										},
 										listeners : {
 											'beforeedit' : {

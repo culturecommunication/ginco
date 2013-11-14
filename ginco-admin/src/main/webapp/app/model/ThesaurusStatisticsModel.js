@@ -75,6 +75,18 @@ Ext.define('GincoApp.model.ThesaurusStatisticsModel', {
              {
                  name : 'nbOfConceptsWoNotes',
                  type : 'int'
+             },
+             {
+            	 name : 'nbOfConceptsAlignedToIntThes',
+            	 type : 'int'
+             },
+             {
+            	 name : 'nbOfConceptsAlignedToExtThes',
+            	 type : 'int'
+             },
+             {
+            	 name : 'nbOfConceptsAlignedToMyThes',
+            	 type : 'int'
              }
          ]
 });
