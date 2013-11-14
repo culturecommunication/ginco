@@ -87,36 +87,7 @@ public class ExternalThesaurusViewConverterTest {
 		Assert.assertEquals(new Integer(3),
 				actualView.getExternalThesaurusType());
 
-	}
-
-	@Test
-	public void testConvertExternalThesaurusViewExisting() {
-
-		ExternalThesaurusView externalThesaurusView = new ExternalThesaurusView();
-		externalThesaurusView.setIdentifier(1);
-		externalThesaurusView
-				.setExternalId("http://catalogue.bnf.fr/ark:/12148/cb15929801j");
-		externalThesaurusView.setExternalThesaurusType(3);
-		ExternalThesaurusType type = new ExternalThesaurusType();
-		ExternalThesaurus existingThesaurus = new ExternalThesaurus();
-		Mockito.when(externalThesaurusService.getExternalThesaurusById(1))
-				.thenReturn(existingThesaurus);
-		;
-		Mockito.when(
-				externalThesaurusTypeService.getExternalThesaurusTypeById(3))
-				.thenReturn(type);
-
-		ExternalThesaurus actualExternalThesaurus = converter
-				.convertExternalThesaurusView(externalThesaurusView);
-
-		Assert.assertEquals(new Integer(1),
-				actualExternalThesaurus.getIdentifier());
-		Assert.assertEquals("http://catalogue.bnf.fr/ark:/12148/cb15929801j",
-				actualExternalThesaurus.getExternalId());
-		Assert.assertEquals(type,
-				actualExternalThesaurus.getExternalThesaurusType());
-
-	}
+	}	
 
 	@Test
 	public void testConvertExternalThesaurusViewNotExisting() {
