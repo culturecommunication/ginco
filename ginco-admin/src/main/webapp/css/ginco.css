@@ -190,3 +190,12 @@ h1.x-panel-header {
 .right-notes .x-grid-row-over .x-grid-cell-inner {
     white-space: normal;
 }
+
+#mainTreeView .x-grid-row-focused .x-grid-cell  {
+	background-color: #2E3784;
+	color:white;
+}
+
+.x-toolbar .x-toolbar-text.username {
+	font-weight: bold;
+}

@@ -161,7 +161,8 @@ Ext.define('GincoApp.view.TopToolbar', {
 			},
 			{
 				xtype : 'tbtext',
-				itemId : 'username'
+				itemId : 'username',
+				cls : 'username'
 			},
 			{
 				xtype : 'tbseparator',
