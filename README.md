@@ -1,6 +1,35 @@
 GINCO
 =====
 
+[English version see below]
+
+
+GINCO est une application multiutilisateurs dédiée à la gestion de référentiels terminologiques. Elle met en oeuvre les principes définis dans la norme ISO 25964-1:2011 Information et documentation -- Thésaurus et interopérabilité avec d'autres vocabulaires -- Partie 1: Thésaurus pour la recherche documentaire.
+
+# Fonctionnalités
+Les principales fonctionnalités d'ores et déjà développées permettent :
+* la conception et la gestion de multiples listes d'autorités, taxonomies, thésaurus ;
+* la gestion des termes : statut, langue, identifiant unique de type URI, notes typées associées aux termes, affectation des termes à des concepts, équivalences entre termes ... ;
+* la gestion des concepts : statut, identifiant unique de type URI, notes typées associées aux concepts, relations hiérarchiques et associatives entre concepts …
+* la gestion des tableaux de concepts (relais virtuels, facettes) et leur exploitation dans les éditions ;
+* la gestion des groupes de concepts (microthésaurus, thématique, domaine …) ; 
+* les éditions alphabétiques et hiérarchiques ;
+* les imports et les exports de thésaurus au format SKOS/RDF ; 
+* la consultation par des web services.
+
+# Méthode de développement
+
+La première version de l'application a été développée selon la méthodologie agile SCRUM. Le « backlog » présente la liste priorisée des fonctionnalités développées ou prévues. Il est mis à la disposition de la communauté, qui peut nous faire part de ses suggestions et propositions.
+
+# Perspectives
+
+Les développements prévus dans la version 2 de l'application portent principalement sur :
+* les fonctions collaboratives ;
+* les alignements entre vocabulaires ou vers des ressources externes ;
+* la mise en place d'un référentiel terminologique, en vue de mettre à la disposition des usagers un accès unifié à l'ensemble des vocabulaires (serveur de terminologies)
+
+
+
 What is GINCO ?
 ---------------
 
