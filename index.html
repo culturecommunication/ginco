@@ -1,42 +1,72 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ginco : Gestion Informatisée de Nomenclatures Collaboratives et Ouvertes" />
 
-  <title>Ginco</title>
-  <meta name="description" content="Gestion Informatisée de Nomenclatures Collaboratives et Ouvertes">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Ginco</title>
+  </head>
 
-</head>
+  <body>
 
-<body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/culturecommunication/ginco">View on GitHub</a>
 
-  <div class="wrapper">
-    <header>
-      <h1 class="title">Ginco</h1>
-    </header>
-    <div id="container">
-      <p class="tagline">Gestion Informatisée de Nomenclatures Collaboratives et Ouvertes</p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/culturecommunication/ginco/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/culturecommunication/ginco/zipball/master" class="download-button zip"><span>Download</span></a>
-          <a href="https://github.com/culturecommunication/ginco" class="code">View Ginco on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
-          <h2>
+          <h1 id="project_title">Ginco</h1>
+          <h2 id="project_tagline">Gestion Informatisée de Nomenclatures Collaboratives et Ouvertes</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/culturecommunication/ginco/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/culturecommunication/ginco/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="ginco" class="anchor" href="#ginco"><span class="octicon octicon-link"></span></a>GINCO</h1>
+
+<p>[English version see below]</p>
+
+<p>GINCO est une application multiutilisateurs dédiée à la gestion de référentiels terminologiques. Elle met en oeuvre les principes définis dans la norme ISO 25964-1:2011 Information et documentation -- Thésaurus et interopérabilité avec d'autres vocabulaires -- Partie 1: Thésaurus pour la recherche documentaire.</p>
+
+<h1>
+<a name="fonctionnalit%C3%A9s" class="anchor" href="#fonctionnalit%C3%A9s"><span class="octicon octicon-link"></span></a>Fonctionnalités</h1>
+
+<p>Les principales fonctionnalités d'ores et déjà développées permettent :</p>
+
+<ul>
+<li>la conception et la gestion de multiples listes d'autorités, taxonomies, thésaurus ;</li>
+<li>la gestion des termes : statut, langue, identifiant unique de type URI, notes typées associées aux termes, affectation des termes à des concepts, équivalences entre termes ... ;</li>
+<li>la gestion des concepts : statut, identifiant unique de type URI, notes typées associées aux concepts, relations hiérarchiques et associatives entre concepts …</li>
+<li>la gestion des tableaux de concepts (relais virtuels, facettes) et leur exploitation dans les éditions ;</li>
+<li>la gestion des groupes de concepts (microthésaurus, thématique, domaine …) ; </li>
+<li>les éditions alphabétiques et hiérarchiques ;</li>
+<li>les imports et les exports de thésaurus au format SKOS/RDF ; </li>
+<li>la consultation par des web services.</li>
+</ul><h1>
+<a name="m%C3%A9thode-de-d%C3%A9veloppement" class="anchor" href="#m%C3%A9thode-de-d%C3%A9veloppement"><span class="octicon octicon-link"></span></a>Méthode de développement</h1>
+
+<p>La première version de l'application a été développée selon la méthodologie agile SCRUM. Le « backlog » présente la liste priorisée des fonctionnalités développées ou prévues. Il est mis à la disposition de la communauté, qui peut nous faire part de ses suggestions et propositions.</p>
+
+<h1>
+<a name="perspectives" class="anchor" href="#perspectives"><span class="octicon octicon-link"></span></a>Perspectives</h1>
+
+<p>Les développements prévus dans la version 2 de l'application portent principalement sur :</p>
+
+<ul>
+<li>les fonctions collaboratives ;</li>
+<li>les alignements entre vocabulaires ou vers des ressources externes ;</li>
+<li>la mise en place d'un référentiel terminologique, en vue de mettre à la disposition des usagers un accès unifié à l'ensemble des vocabulaires (serveur de terminologies)</li>
+</ul><h2>
 <a name="what-is-ginco-" class="anchor" href="#what-is-ginco-"><span class="octicon octicon-link"></span></a>What is GINCO ?</h2>
 
 <p>GINCO is a free software developped by the Ministry of Culture and Communication (France) and is dedicated to the management of vocabularies. It implements the principles defined in the ISO standard 25964-1:2011 Information and documentation -- Thesauri and interoperability with other vocabularies -- Part 1 : Thesauri for information retrieval.</p>
@@ -49,49 +79,46 @@
 <h2>
 <a name="ginco-features" class="anchor" href="#ginco-features"><span class="octicon octicon-link"></span></a>GINCO features</h2>
 
-<p>The main features already developed allow : </p>
+<p>The main features already developed allow : </p>
 
 <ul>
-<li>the design and the management of multiple lists of authorities, taxonomies, thesauruses ;</li>
+<li>the design and the management of multiple lists of authorities, taxonomies, thesauruses ;</li>
 <li>the management of terms: status, language, unique identifier of type URI, notes of different types associated with the terms, assigment of terms to concepts, equivalence relationships between terms;</li>
-<li>the management of concepts: status, unique identifier of type URI, notes of different types associated with concepts, hierarchical ans associative relationships between concepts ;</li>
+<li>the management of concepts: status, unique identifier of type URI, notes of different types associated with concepts, hierarchical ans associative relationships between concepts ;</li>
 <li>the management of thesaurus arrays (virtual relays, facets) and their exploitation in hierarchical editions ;</li>
 <li>the management of groups of concepts (microthesaurus, theme, domain);</li>
-<li>the alphabetical and hierarchical editions ;</li>
-<li>the import and export of thesaurus in SKOS / RDF format ;</li>
+<li>the alphabetical and hierarchical editions ;</li>
+<li>the import and export of thesaurus in SKOS / RDF format ;</li>
 <li>the consultation through web services.</li>
-</ul><p>The first version of the software is under development according to the SCRUM agile methodology. The "<a href="backlog/HADOC%20VOC_MCC-HADOC-GINCO_backlog.ods">backlog</a>" presents the prioritized list of developed or planned features. It is made available to the community, which can provide us with suggestions and proposals.</p>
+</ul><p>The first version of the software is under development according to the SCRUM agile methodology. The "<a href="https://www.pivotaltracker.com/s/projects/926794">backlog</a>" presents the prioritized list of developed or planned features. It is made available to the community, which can provide us with suggestions and proposals.</p>
 
-<p>The developments envisaged in version 2 of the application focus on :</p>
+<p>The developments envisaged in version 2 of the application focus on :</p>
 
 <ul>
-<li>collaborative features ;</li>
-<li>alignments between vocabularies and to external ressources ;</li>
+<li>collaborative features ;</li>
+<li>alignments between vocabularies and to external ressources ;</li>
 <li>the implementation of a reference terminology, in order to provide users with unified access to all vocabularies (terminologies server) </li>
 </ul><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>Read <a href="doc/INSTALL.md">install</a></p>
-        </article>
-      </div>
+<p>Read <a href="doc/INSTALL.md">doc/INSTALL.md</a></p>
+
+<h2>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h2>
+
+<p>Read <a href="doc/VM_INSTALL.md">doc/VM_INSTALL.md</a></p>
+      </section>
     </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/culturecommunication" class="avatar"><img src="https://secure.gravatar.com/avatar/3e2efeff9a649569531021441ea5f1f7?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png" width="48" height="48"/></a> <a href="https://github.com/culturecommunication">culturecommunication</a> maintains <a href="https://github.com/culturecommunication/ginco">Ginco</a></p>
 
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ginco maintained by <a href="https://github.com/culturecommunication">culturecommunication</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
 
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
-  </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/culturecommunication/ginco/tarball/master" class="tar">tar</a><a href="https://github.com/culturecommunication/ginco/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
+    
 
-  
-</body>
+  </body>
 </html>
