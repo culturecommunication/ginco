@@ -102,7 +102,7 @@ public class BasePermissionEvaluator implements PermissionEvaluator {
 		}
 		
 		Thesaurus thesaurusObject = thesaurusService.getThesaurusById(scopeThesaurus);
-		if (thesaurusObject.isArchived() != null && thesaurusObject.isArchived().booleanValue()) {
+		if (thesaurusObject!= null && thesaurusObject.isArchived() != null && thesaurusObject.isArchived().booleanValue()) {
 			if (!"DELETION".equals((String) permission)) {
 					log.error("Permission denied : thesaurus is archived");
 					throw new ThesaurusArchivedAccessDeniedException("Thesaurus is archived, only deletion is authorized");
