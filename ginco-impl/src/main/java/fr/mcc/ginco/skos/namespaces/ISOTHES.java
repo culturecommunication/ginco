@@ -40,11 +40,11 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
- * ISOTHES vocabulary class for namespace http://www.niso.org/schemas/iso25964/skos-thes#
+ * ISOTHES vocabulary class for namespace http://purl.org/iso25964/skos-thes#
  */
 
 public class ISOTHES {
-	private static final String uri = "http://www.niso.org/schemas/iso25964/skos-thes#";
+	private static final String uri = "http://purl.org/iso25964/skos-thes#";
 
 	/**
 	 * returns the URI for this schema
