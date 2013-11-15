@@ -34,9 +34,9 @@
  */
 
 Ext.define('GincoApp.locale.fr.controller.AlignmentController', {
-	xInternalConceptId: "Identifiant interne",
-	xExternalThesaurusId: "Identifiant du thésaurus",
-	xExternalThesaurusType: "Type de thésaurus",
-	xExternalConceptId: "Identifiant externe",
+	xInternalConceptId: "Identifiant du concept",
+	xExternalThesaurusId: "Identifiant du vocabulaire",
+	xExternalThesaurusType: "Type de vocabulaire",
+	xExternalConceptId: "Identifiant du concept",
 	xEditAlignmentWinTitle : 'Mise à jour de l\'alignement'
 });
