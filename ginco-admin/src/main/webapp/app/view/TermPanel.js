@@ -73,6 +73,7 @@ Ext
 					xStatusLabel : 'Status',
 					xTermTabPanelTitle : 'Term data',
 					xDisplayTheConceptOfTheTerm : 'Display the concept of this term',
+					xSuggestionsTab : 'Suggestions',
 
 					initComponent : function() {
 						var me = this;
@@ -245,6 +246,12 @@ Ext
 															xtype : 'noteTermPanel',
 															noteConceptStore : me.noteConceptStore,
 															closable : false,
+															disabled : true
+														},
+														{
+															title : me.xSuggestionsTab,
+															xtype : 'suggestionPanel',
+															closable : false,															
 															disabled : true
 														} ]
 											} ]

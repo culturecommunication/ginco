@@ -47,8 +47,11 @@ Ext.define('GincoApp.controller.SuggestionPanelController', {
 		if (theGrid.up('conceptPanel') != null){
 			var theConceptId = theGrid.up('conceptPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
-			theGrid.getStore().load();
-		} 
+		} else if (theGrid.up('termPanel') != null){
+			var theTermId = theGrid.up('termPanel').gincoId;
+			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
+		}
+		theGrid.getStore().load();
 	},
 	
 	newSuggestionBtn : function(theButton){
@@ -63,7 +66,6 @@ Ext.define('GincoApp.controller.SuggestionPanelController', {
 	createSuggestionWindow : function (theGrid) {
 		var win = null;
 		var me=this;
-		if (theGrid.up('conceptPanel') != null) {
 			win = Ext.create('GincoApp.view.CreateSuggestionWin', {
 				thesaurusData : theGrid.up('thesaurusTabPanel').thesaurusData,
 				listeners: {
@@ -71,18 +73,8 @@ Ext.define('GincoApp.controller.SuggestionPanelController', {
 						me.afterSavingNewSuggestion(theGrid, theButton);
 					}
 				}
-			});
-		} else {
-			//win = Ext.create('GincoApp.view.CreateNoteWin', {
-			//	storeNoteTypes : Ext.create('GincoApp.store.TermNoteTypeStore'),
-			//	thesaurusData : theGrid.up('thesaurusTabPanel').thesaurusData,
-			//	listeners: {
-//					saveNoteButton: function (theButton){
-//						me.afterSavingNewNote(theGrid, theButton);
-//					}
-//				}
-//					});
-		}
+		});
+		
 		win.store = theGrid.getStore();
 		return win;
 	},
@@ -125,10 +117,19 @@ Ext.define('GincoApp.controller.SuggestionPanelController', {
 		});
 	},
 	
+	onSuggestionDblClick : function(theGridView, record, item, index, e, eOpts ) {
+		var theGrid = theGridView.up('gridpanel');
+		var win = this.createSuggestionWindow(theGrid);
+		var theForm = win.down('form');
+		theForm.loadRecord(record);
+		win.show();
+    },
+	
 	init : function() {
 		this.control({
 			'suggestionPanel #suggestiongrid' : {
- 				render : this.onRenderSuggestionGrid
+ 				render : this.onRenderSuggestionGrid,
+ 				itemdblclick : this.onSuggestionDblClick
  			},
  			'suggestionPanel #newSuggestionBtn' : {
  				click : this.newSuggestionBtn

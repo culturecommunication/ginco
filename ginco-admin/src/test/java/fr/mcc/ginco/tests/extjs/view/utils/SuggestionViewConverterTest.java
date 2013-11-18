@@ -34,12 +34,15 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Suggestion;
@@ -48,8 +51,21 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.extjs.view.pojo.SuggestionView;
 import fr.mcc.ginco.extjs.view.utils.SuggestionViewConverter;
+import fr.mcc.ginco.services.ISuggestionService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.utils.DateUtil;
 
 public class SuggestionViewConverterTest {
+
+	@Mock(name = "suggestionService")
+	private ISuggestionService suggestionService;
+
+	@Mock(name = "thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+
+	@Mock(name = "thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
 
 	@InjectMocks
 	private SuggestionViewConverter converter = new SuggestionViewConverter();
@@ -107,6 +123,87 @@ public class SuggestionViewConverterTest {
 				actualView2.getThesaurusId());
 		Assert.assertNull(actualView2.getConceptId());
 
+	}
+
+	@Test
+	public void testConvertFromSuggestionViewNotExistingWithConceptId() {
+
+		SuggestionView suggestionView = new SuggestionView();
+		suggestionView.setContent("Content");
+		suggestionView.setCreator("creator@test.com");
+		suggestionView.setRecipient("recipient@test.com");
+		suggestionView.setConceptId("http://data/culture.gouv.fr:/ark/123/co1");
+
+		ThesaurusConcept concept = new ThesaurusConcept();
+		concept.setIdentifier("http://data/culture.gouv.fr:/ark/123/co1");
+		Mockito.when(
+				thesaurusConceptService
+						.getThesaurusConceptById("http://data/culture.gouv.fr:/ark/123/co1"))
+				.thenReturn(concept);
+
+		Suggestion suggestion = converter.convert(suggestionView);
+
+		Assert.assertEquals("Content", suggestion.getContent());
+		Assert.assertEquals("creator@test.com", suggestion.getCreator());
+		Assert.assertEquals("recipient@test.com", suggestion.getRecipient());
+		Assert.assertEquals(concept, suggestion.getConcept());
+	}
+
+	@Test
+	public void testConvertFromSuggestionViewNotExistingWithTermId() {
+		SuggestionView suggestionView = new SuggestionView();
+		suggestionView.setContent("Content");
+		suggestionView.setCreator("creator@test.com");
+		suggestionView.setRecipient("recipient@test.com");
+		suggestionView.setTermId("http://data/culture.gouv.fr:/ark/123/te1");
+
+		ThesaurusTerm term = new ThesaurusTerm();
+		term.setIdentifier("http://data/culture.gouv.fr:/ark/123/te1");			
+		
+		Mockito.when(
+				thesaurusTermService
+						.getThesaurusTermById("http://data/culture.gouv.fr:/ark/123/te1"))
+				.thenReturn(term);
+
+		Suggestion suggestion = converter.convert(suggestionView);
+
+		Assert.assertEquals("Content", suggestion.getContent());
+		Assert.assertEquals("creator@test.com", suggestion.getCreator());
+		Assert.assertEquals("recipient@test.com", suggestion.getRecipient());
+		Assert.assertEquals(term, suggestion.getTerm());
+
+	}
+
+	@Test
+	public void testConvertFromSuggestionViewExistingWithTermId() {
+		SuggestionView suggestionView = new SuggestionView();
+		suggestionView.setIdentifier(2);
+		suggestionView.setContent("Content");
+		suggestionView.setCreator("creator@test.com");
+		suggestionView.setRecipient("recipient@test.com");
+		suggestionView.setTermId("http://data/culture.gouv.fr:/ark/123/te1");
+
+		ThesaurusTerm term = new ThesaurusTerm();
+		term.setIdentifier("http://data/culture.gouv.fr:/ark/123/te1");
+		Mockito.when(
+				thesaurusTermService
+						.getThesaurusTermById("http://data/culture.gouv.fr:/ark/123/te1"))
+				.thenReturn(term);
+
+		Date now = DateUtil.nowDate();
+		Suggestion existingSuggestion = new Suggestion();
+		existingSuggestion.setCreated(now);
+
+		Mockito.when(suggestionService.getSuggestionById(2)).thenReturn(
+				existingSuggestion);
+		Suggestion suggestion = converter.convert(suggestionView);
+
+		Assert.assertEquals("Content", suggestion.getContent());
+		Assert.assertEquals("creator@test.com", suggestion.getCreator());
+		Assert.assertEquals("recipient@test.com", suggestion.getRecipient());
+		Assert.assertEquals(term, suggestion.getTerm());
+		Assert.assertEquals(existingSuggestion, suggestion);
+		Assert.assertEquals(now, suggestion.getCreated());
 	}
 
 }

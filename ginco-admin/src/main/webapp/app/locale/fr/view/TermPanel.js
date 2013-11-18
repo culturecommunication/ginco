@@ -49,5 +49,6 @@ Ext.define('GincoApp.locale.fr.view.TermPanel', {
 	xNotesTab : 'Notes du terme',
 	xStatusLabel : 'Statut',
 	xDisplayTheConceptOfTheTerm : 'Afficher le concept de ce terme',
-	xMetadataTitle : 'Métadonnées'
+	xMetadataTitle : 'Métadonnées',
+	xSuggestionsTab : 'Suggestions'
 });

@@ -1,8 +1,7 @@
 CREATE INDEX associative_relationship_role_skoslabel_idx ON associative_relationship_role USING btree(skoslabel);
 
 
-
--- Table: user_role
+-- Table: suggestion
 CREATE TABLE suggestion
 (
   identifier integer NOT NULL,

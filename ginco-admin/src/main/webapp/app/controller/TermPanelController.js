@@ -139,6 +139,9 @@ Ext.define('GincoApp.controller.TermPanelController', {
 
 		var noteTab= aForm.up('tabpanel').down('noteTermPanel');
 		noteTab.setDisabled(false);
+		
+		var suggestionTab = aForm.up('tabpanel').down('suggestionPanel');
+		suggestionTab.setDisabled(false);
 	},
 
 	saveForm : function(theButton, theCallback) {

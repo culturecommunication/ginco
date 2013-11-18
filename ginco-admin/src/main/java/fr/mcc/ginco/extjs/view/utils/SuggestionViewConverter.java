@@ -37,9 +37,11 @@ package fr.mcc.ginco.extjs.view.utils;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Suggestion;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.SuggestionView;
 import fr.mcc.ginco.services.ISuggestionService;
@@ -116,12 +118,13 @@ public class SuggestionViewConverter {
 		hibernateRes.setCreator(source.getCreator());
 		hibernateRes.setRecipient(source.getRecipient());
 
-		if (source.getConceptId() != null) {
+		if (StringUtils.isNotEmpty(source.getConceptId())) {
 			hibernateRes.setConcept(thesaurusConceptService
 					.getThesaurusConceptById(source.getConceptId()));
-		} else if (source.getTermId() != null) {
-			hibernateRes.setTerm(thesaurusTermService
-					.getThesaurusTermById(source.getTermId()));
+		} else if (StringUtils.isNotEmpty(source.getTermId())) {
+			ThesaurusTerm term = thesaurusTermService
+					.getThesaurusTermById(source.getTermId());
+			hibernateRes.setTerm(term);
 		}
 
 		return hibernateRes;

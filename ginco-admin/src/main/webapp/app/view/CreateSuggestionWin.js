@@ -48,12 +48,18 @@ Ext
 					title : this.xCreateSuggestionWinTitle,
 					titleAlign : 'center',
 					modal : true,	
-
+					store : null,
+					
 					initComponent : function() {
 						var me = this;
 						me.addEvents('saveSuggestionButton');
 						me.declaredUserStore = Ext.create('GincoApp.store.DeclaredUserStore');
 						me.declaredUserStore.getProxy().setExtraParam('idThesaurus',me.thesaurusData.id);
+						me.declaredUserStore.load({
+							callback: function (theStore, aOperation){
+								me.down("form").loadRecord(theForm.getRecord());
+							}
+						});
 						Ext
 								.applyIf(
 										me,
