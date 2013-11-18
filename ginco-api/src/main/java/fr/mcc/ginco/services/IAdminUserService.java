@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.AdminUser;
 
 /**
@@ -52,6 +54,11 @@ public interface IAdminUserService {
 	 */
 	boolean isUserAdmin(String userId);
 
-	
+	/**
+	 * Gets the list of all admins
+	 * @return
+	 */
+	public List<AdminUser> getAllAdmin();
+
 
 }

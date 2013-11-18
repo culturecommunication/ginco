@@ -36,7 +36,8 @@ package fr.mcc.ginco.dao.hibernate;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -48,7 +49,7 @@ import fr.mcc.ginco.dao.ISuggestionDAO;
  * 
  */
 @Repository("suggestionDAO")
-public class SuggestionDAO extends GenericHibernateDAO<Suggestion, String>
+public class SuggestionDAO extends GenericHibernateDAO<Suggestion, Integer>
 		implements ISuggestionDAO {
 
 	public SuggestionDAO() {
@@ -58,28 +59,67 @@ public class SuggestionDAO extends GenericHibernateDAO<Suggestion, String>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see fr.mcc.ginco.dao.ISuggestionDAO#getTermSuggestions(java.lang.String)
+	 * @see
+	 * fr.mcc.ginco.dao.ISuggestionDAO#findConceptPaginatedSuggestions(java.
+	 * lang.String, java.lang.Integer, java.lang.Integer)
 	 */
 	@Override
-	public List<Suggestion> getTermSuggestions(String termId) {
-		Criteria criteria = getCurrentSession()
-				.createCriteria(Suggestion.class).add(
-						Restrictions.eq("term.identifier", termId));
-		return criteria.list();
+	public List<Suggestion> findConceptPaginatedSuggestions(String conceptId,
+			Integer startIndex, Integer limit) {
+		return getCurrentSession().createCriteria(Suggestion.class)
+				.setMaxResults(limit)
+				.add(Restrictions.eq("concept.identifier", conceptId))
+				.setFirstResult(startIndex).addOrder(Order.desc("created"))
+				.list();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * fr.mcc.ginco.dao.ISuggestionDAO#getConceptSuggestions(java.lang.String)
+	 * fr.mcc.ginco.dao.ISuggestionDAO#findTermPaginatedSuggestions(java.lang
+	 * .String, java.lang.Integer, java.lang.Integer)
 	 */
 	@Override
-	public List<Suggestion> getConceptSuggestions(String conceptId) {
-		Criteria criteria = getCurrentSession()
-				.createCriteria(Suggestion.class).add(
-						Restrictions.eq("concept.identifier", conceptId));
-		return criteria.list();
+	public List<Suggestion> findTermPaginatedSuggestions(String termId,
+			Integer startIndex, Integer limit) {
+		return getCurrentSession().createCriteria(Suggestion.class)
+				.setMaxResults(limit)
+				.add(Restrictions.eq("term.identifier", termId))
+				.setFirstResult(startIndex).addOrder(Order.desc("created"))
+				.list();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.dao.ISuggestionDAO#getConceptSuggestionCount(java.lang.String
+	 * )
+	 */
+	@Override
+	public Long getConceptSuggestionCount(String conceptId) {
+		return (Long) getCurrentSession().createCriteria(Suggestion.class)
+				.add(Restrictions.eq("concept.identifier", conceptId))
+				.setProjection(Projections.rowCount()).list().get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see fr.mcc.ginco.dao.INoteDAO#getTermNoteCount(java.lang.String)
+	 */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.dao.ISuggestionDAO#getTermSuggestionCount(java.lang.String)
+	 */
+	@Override
+	public Long getTermSuggestionCount(String termId) {
+		return (Long) getCurrentSession().createCriteria(Suggestion.class)
+				.add(Restrictions.eq("term.identifier", termId))
+				.setProjection(Projections.rowCount()).list().get(0);
 	}
 
 }

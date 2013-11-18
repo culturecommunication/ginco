@@ -37,6 +37,7 @@ package fr.mcc.ginco.tests.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Assert;
 import junitx.framework.ListAssert;
@@ -47,7 +48,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import fr.mcc.ginco.beans.AdminUser;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.UserRole;
@@ -56,12 +61,16 @@ import fr.mcc.ginco.extjs.view.pojo.RoleView;
 import fr.mcc.ginco.extjs.view.pojo.UserRoleView;
 import fr.mcc.ginco.extjs.view.utils.UserRoleViewConverter;
 import fr.mcc.ginco.rest.services.UserRoleRestService;
+import fr.mcc.ginco.services.IAdminUserService;
 import fr.mcc.ginco.services.IUserRoleService;
 
 public class UserRoleRestServiceTest {
 
 	@Mock(name = "userRoleService")
 	private IUserRoleService userRoleService;
+	
+	@Mock(name = "adminUserService")
+	private IAdminUserService adminUserService;
 
 	@Mock(name = "userRoleViewConverter")
 	private UserRoleViewConverter userRoleViewConverter;
@@ -189,6 +198,52 @@ public class UserRoleRestServiceTest {
 		ListAssert.assertContains(actualUserRoleView.getData(), userRoleView1);
 		ListAssert.assertContains(actualUserRoleView.getData(), userRoleView2);
 
+	}
+	
+	@Test
+	public void testGetDeclaredUsers(){
+		
+		String thesaurusId = "http://data/culture.gouv.fr/123/th1";
+	
+		UserRole userRole1 = new UserRole();
+		userRole1.setUsername("john");
+		
+		UserRole userRole2 = new UserRole();
+		userRole2.setUsername("paul");
+		
+		List<UserRole> userRoles = new ArrayList<UserRole>();
+		userRoles.add(userRole1);
+		userRoles.add(userRole2);
+
+		AdminUser adminUser1 = new AdminUser();
+		adminUser1.setUserId("paul");
+		
+		AdminUser adminUser2 = new AdminUser();
+		adminUser2.setUserId("ringo");
+		
+		AdminUser adminUser3 = new AdminUser();
+		adminUser3.setUserId("george");
+		
+		List<AdminUser> adminUsers = new ArrayList<AdminUser>();
+		adminUsers.add(adminUser1);
+		adminUsers.add(adminUser2);
+		adminUsers.add(adminUser3);
+		
+		Authentication auth = new TestingAuthenticationToken("george",
+				"password");
+		
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+		Mockito.when(userRoleService.getThesaurusUsers("http://data/culture.gouv.fr/123/th1")).thenReturn(userRoles);
+		Mockito.when(adminUserService.getAllAdmin()).thenReturn(adminUsers);		
+		
+		ExtJsonFormLoadData<Set<String>>  actualUsers = userRoleRestService.getDeclaredUsers(thesaurusId);
+		
+		Assert.assertEquals(3, actualUsers.getData().size());
+		Assert.assertTrue(actualUsers.getData().contains("john"));
+		Assert.assertTrue(actualUsers.getData().contains("paul"));
+		Assert.assertTrue(actualUsers.getData().contains("ringo"));
+		
 	}
 
 }

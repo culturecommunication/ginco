@@ -606,6 +606,9 @@ Ext.define('GincoApp.controller.ConceptController', {
 
 		var noteTab = aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
+		
+		var suggestionTab = aForm.up('tabpanel').down('suggestionPanel');
+		suggestionTab.setDisabled(false);
 
 		var deleteConceptBtn = aForm.down('#deleteConcept');
 		if (aModel.data.status == 0 || aModel.data.status == 2) {

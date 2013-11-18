@@ -92,7 +92,9 @@ Ext.application({
         'ExternalThesaurusTypeStore',
         'ExternalThesaurusStore',
         'UserRoleStore',
-        'RoleStore'
+        'RoleStore',
+        'SuggestionStore',
+        'DeclaredUserStore'
     ],
     views: [
         'GincoViewPort',
@@ -125,7 +127,8 @@ Ext.application({
         'RightNotePanelController',
         'AlignmentController',
         'ThesaurusStatisticsTabPanelController',
-        'UsersTabPanelController'
+        'UsersTabPanelController',
+        'SuggestionPanelController'
     ],
     init: function(){
     },

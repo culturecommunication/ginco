@@ -37,13 +37,11 @@ package fr.mcc.ginco.tests.daos;
 import java.util.List;
 
 import junit.framework.Assert;
-import junitx.framework.ListAssert;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import fr.mcc.ginco.beans.Suggestion;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.hibernate.SuggestionDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
@@ -59,18 +57,42 @@ public class SuggestionDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetTermSuggestions()
+	public void testFindTermPaginatedSuggestions()
 			throws BusinessException {		
-		List<Suggestion> actualSuggestions = suggestionDAO.getTermSuggestions("http://www.culturecommunication.gouv.fr/ter1");
+		List<Suggestion> actualSuggestions = suggestionDAO.findTermPaginatedSuggestions("http://www.culturecommunication.gouv.fr/ter1", 0,10);
 		Assert.assertEquals(2, actualSuggestions.size());	
+		
+		List<Suggestion> actualSuggestions2 = suggestionDAO.findTermPaginatedSuggestions("http://www.culturecommunication.gouv.fr/ter1", 0,1);
+		Assert.assertEquals(1, actualSuggestions2.size());	
+		Assert.assertEquals(1, actualSuggestions2.get(0).getIdentifier().intValue());
 
 	}
 	
 	@Test
-	public void testGetConceptSuggestions()
+	public void testFindConceptPaginatedSuggestions()
 			throws BusinessException {		
-		List<Suggestion> actualSuggestions = suggestionDAO.getConceptSuggestions("http://www.culturecommunication.gouv.fr/co1");
+		List<Suggestion> actualSuggestions = suggestionDAO.findConceptPaginatedSuggestions("http://www.culturecommunication.gouv.fr/co1", 0,10);
 		Assert.assertEquals(2, actualSuggestions.size());	
+		
+		List<Suggestion> actualSuggestions2 = suggestionDAO.findConceptPaginatedSuggestions("http://www.culturecommunication.gouv.fr/co1", 0,1);
+		Assert.assertEquals(1, actualSuggestions2.size());	
+		Assert.assertEquals(3, actualSuggestions2.get(0).getIdentifier().intValue());
+
+	}
+	
+	@Test
+	public void testGetConceptSuggestionCount()
+			throws BusinessException {		
+		Long actualSuggestionsNb = suggestionDAO.getConceptSuggestionCount("http://www.culturecommunication.gouv.fr/co1");
+		Assert.assertEquals(2, actualSuggestionsNb.intValue());	
+
+	}
+	
+	@Test
+	public void testGetTermSuggestionCount()
+			throws BusinessException {		
+		Long actualSuggestionsNb = suggestionDAO.getTermSuggestionCount("http://www.culturecommunication.gouv.fr/ter1");
+		Assert.assertEquals(2, actualSuggestionsNb.intValue());	
 
 	}
 	

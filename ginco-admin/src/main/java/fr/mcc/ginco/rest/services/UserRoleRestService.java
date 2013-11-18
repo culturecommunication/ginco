@@ -36,8 +36,10 @@ package fr.mcc.ginco.rest.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,8 +52,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.AdminUser;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -59,6 +64,7 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.RoleView;
 import fr.mcc.ginco.extjs.view.pojo.UserRoleView;
 import fr.mcc.ginco.extjs.view.utils.UserRoleViewConverter;
+import fr.mcc.ginco.services.IAdminUserService;
 import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.utils.LabelUtil;
 
@@ -74,6 +80,11 @@ public class UserRoleRestService {
 	@Inject
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
+	
+	@Inject
+	@Named("adminUserService")
+	private IAdminUserService adminUserService;
+
 
 	@Inject
 	@Named("userRoleViewConverter")
@@ -172,4 +183,33 @@ public class UserRoleRestService {
 					.deleteUserRole(userRole);
 		}
 	}
+	
+	@GET
+	@Path("/getDeclaredUsers")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<Set<String>> getDeclaredUsers(@QueryParam("idThesaurus") String idThesaurus)
+			throws BusinessException {
+		
+		Set<String> allUsers = new HashSet<String>();
+		List<UserRole> thesaurusUsers = userRoleService.getThesaurusUsers(idThesaurus);
+		List<AdminUser> admins = adminUserService.getAllAdmin();
+		
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String currentUser = auth.getName();
+		
+		for (UserRole thesaurusUser: thesaurusUsers) {
+			if (!thesaurusUser.getUsername().equals(currentUser)) {
+				allUsers.add(thesaurusUser.getUsername());
+			}
+		}
+		for (AdminUser admin: admins) {
+			if (!admin.getUserId().equals(currentUser)) {
+				allUsers.add(admin.getUserId());
+			}
+		}
+		return new ExtJsonFormLoadData(allUsers, allUsers.size());
+	}
+
+	
 }

@@ -32,49 +32,18 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Suggestion;
-
-/**
- * Data Access Object for suggestion
+/*
+ * File: app/locale/fr/view/NotePanel.js
+ * Note Translated Items
+ * 
  */
-public interface ISuggestionDAO extends IGenericDAO<Suggestion, Integer> {
-    
-    /**
-	 * Gets the list of suggestions attached to a given concept
-	 * @param conceptId
-	 * @param startIndex
-	 * @param limit
-	 * @return  List<Note> List of paginated suggestions for a term
-	 */
-	List<Suggestion> findConceptPaginatedSuggestions(String conceptId, Integer startIndex, Integer limit);
-	
-	
-	/**
-	 * Gets the list of suggestions attached to a given term
-	 * @param termId
-	 * @param startIndex
-	 * @param limit
-	 * @return  List<Note> List of paginated suggestions for a term
-	 */
-	List<Suggestion> findTermPaginatedSuggestions(String termId, Integer startIndex, Integer limit);
-    
-    
-    /**
-     * Counts the number of suggestions of the given concept
-     * @param conceptId
-     * @return
-     */
-    Long getConceptSuggestionCount(String conceptId);
-    
-    /**
-     * Counts the number of suggestions of the given term
-     * @param termId
-     * @return
-     */
-    Long getTermSuggestionCount(String termId);
-}
+Ext.define('GincoApp.locale.fr.view.SuggestionPanel', {
+	xCreatedDateLabel : 'Date de création',
+	xSave : 'Enregistrer',
+	xCreatorLabel : 'Créateur',
+	xRecipientLabel : 'Destinataire',
+	xContentLabel : 'Contenu',
+	xSuggestionListGridTitle: 'Liste des suggestions',
+	xAddSuggestion: 'Ajouter une suggestion'
+});

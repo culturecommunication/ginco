@@ -32,7 +32,7 @@
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
 Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteConceptPanel',
 		'GincoApp.view.RightNotePanel', 'GincoApp.view.CustomAttrForm', 'GincoApp.view.AlignmentColumn'
-		,'GincoApp.view.MetaDataPanel']);
+		,'GincoApp.view.MetaDataPanel', 'GincoApp.view.SuggestionPanel']);
 
 Ext
 		.define(
@@ -101,6 +101,7 @@ Ext
 					xAlignmentOrRelation: 'OR',
 					xAlignmentEdit: 'Edit alignment',
 					xAlignmentGoBtn : 'View',
+					xSuggestionsTab : 'Suggestions',
 
 					conceptHierarchicalRoleRenderer : function(value, record) {
 						return this.ownerCt.ownerCt.ownerCt.ownerCt.xConceptHierarchicalRoleLabels[value];
@@ -698,7 +699,13 @@ Ext
 															closable : false,
 															noteConceptStore : me.noteConceptStore,
 															disabled : true
-														} ]
+														},
+														{
+															title : me.xSuggestionsTab,
+															xtype : 'suggestionPanel',
+															closable : false,															
+															disabled : true
+														}]
 											} ]
 										});
 

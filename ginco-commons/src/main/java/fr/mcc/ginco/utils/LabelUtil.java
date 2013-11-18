@@ -66,7 +66,7 @@ public final class LabelUtil {
 	 * @return the term lexical value + @ language if the language is not the
 	 *         specified default language
 	 */
-	public static final String getLocalizedLabel(String lexicalValue,
+	public static String getLocalizedLabel(String lexicalValue,
 			Language language, String defaultLang) {
 		String resultLabel = lexicalValue;
 		if (!defaultLang.equals(language.getId())) {
@@ -75,7 +75,7 @@ public final class LabelUtil {
 		return resultLabel;
 	}
 
-	public static final String getResourceLabel(String key) {
+	public static String getResourceLabel(String key) {
 		try{
 			ResourceBundle res = ResourceBundle.getBundle("labels",
 				new EncodedControl("UTF-8"));
@@ -86,7 +86,7 @@ public final class LabelUtil {
 		}
 	}
 
-	public static final String getDefaultLabel(String key) {
+	public static String getDefaultLabel(String key) {
 		try{
 			ResourceBundle res = ResourceBundle.getBundle("default",
 				new EncodedControl("UTF-8"));

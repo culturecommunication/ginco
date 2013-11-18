@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -54,6 +56,11 @@ public class AdminUserServiceImpl implements IAdminUserService {
 	@Override
 	public boolean isUserAdmin(String userId) {
 		return (adminUserDAO.getById(userId)) != null;
+	}
+	
+	@Override
+	public List<AdminUser> getAllAdmin() {
+		return adminUserDAO.findAll();
 	}
   
 }

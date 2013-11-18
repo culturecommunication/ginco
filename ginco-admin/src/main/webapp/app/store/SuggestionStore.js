@@ -32,49 +32,37 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+Ext.define('GincoApp.store.SuggestionStore', {
+	extend : 'Ext.data.Store',
+	requires : [ 'GincoApp.model.SuggestionModel' ],
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Suggestion;
-
-/**
- * Data Access Object for suggestion
- */
-public interface ISuggestionDAO extends IGenericDAO<Suggestion, Integer> {
-    
-    /**
-	 * Gets the list of suggestions attached to a given concept
-	 * @param conceptId
-	 * @param startIndex
-	 * @param limit
-	 * @return  List<Note> List of paginated suggestions for a term
-	 */
-	List<Suggestion> findConceptPaginatedSuggestions(String conceptId, Integer startIndex, Integer limit);
-	
-	
-	/**
-	 * Gets the list of suggestions attached to a given term
-	 * @param termId
-	 * @param startIndex
-	 * @param limit
-	 * @return  List<Note> List of paginated suggestions for a term
-	 */
-	List<Suggestion> findTermPaginatedSuggestions(String termId, Integer startIndex, Integer limit);
-    
-    
-    /**
-     * Counts the number of suggestions of the given concept
-     * @param conceptId
-     * @return
-     */
-    Long getConceptSuggestionCount(String conceptId);
-    
-    /**
-     * Counts the number of suggestions of the given term
-     * @param termId
-     * @return
-     */
-    Long getTermSuggestionCount(String termId);
-}
+	constructor : function(cfg) {
+		var me = this;
+		cfg = cfg || {};
+		me.callParent([ Ext.apply({
+			autoLoad : false,
+			pageSize : 10,
+			alias : 'store.suggestionstore',
+			model : 'GincoApp.model.SuggestionModel',
+			proxy : {
+				type : 'ajax',
+				api : {
+					read : 'services/ui/suggestionservice/getSuggestions',
+					update : 'services/ui/suggestionservice/updateSuggestions',
+					create : 'services/ui/suggestionservice/createSuggestions'
+					//destroy : 'services/ui/thesaurusnoteservice/destroyNotes'
+				},
+				writer : {
+					type : 'json',
+					allowSingle : false
+				},
+				reader : {
+					type : 'json',
+					root : 'data',
+					idProperty : 'identifier',
+					messageProperty: 'message'
+				}
+			}
+		}, cfg) ]);
+	}
+});

@@ -92,6 +92,5 @@ public interface IUserRoleService {
 	 * @return
 	 */
 	List<UserRole> getUserRoles(String username);
-	
 
 }

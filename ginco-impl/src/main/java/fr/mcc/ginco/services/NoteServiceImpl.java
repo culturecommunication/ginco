@@ -65,7 +65,6 @@ public class NoteServiceImpl implements INoteService {
      * (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#getTermNotePaginatedList(java.lang.String,Integer,Integer)
 	 */
-	@Transactional(readOnly=true)
 	@Override
 	public List<Note> getTermNotePaginatedList(String termId, Integer startIndex, Integer limit) {
 		return noteDAO.findTermPaginatedNotes(termId, startIndex, limit);
@@ -75,7 +74,6 @@ public class NoteServiceImpl implements INoteService {
      * (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#getNoteById(java.lang.String)
 	 */
-	@Transactional(readOnly=true)
 	@Override
 	public Note getNoteById(String id) {
 		return noteDAO.getById(id);

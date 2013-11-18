@@ -32,49 +32,73 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.dao;
+package fr.mcc.ginco.services;
 
 import java.util.List;
 
-import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Suggestion;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
- * Data Access Object for suggestion
+ * Service used to work with {@link Suggestion} objects, contains basic
+ * methods exposed to client part.
+ *
+ * @see fr.mcc.ginco.beans.Suggestion
  */
-public interface ISuggestionDAO extends IGenericDAO<Suggestion, Integer> {
+public interface ISuggestionService {
+	
+	/**
+     * Get list of paginated suggestions available for a concept.    
+     * @param conceptId
+     * @param startIndex
+     * @param limit
+     * @return
+     */
+    List<Suggestion> getConceptSuggestionPaginatedList(String conceptId, Integer startIndex, Integer limit);
     
-    /**
-	 * Gets the list of suggestions attached to a given concept
-	 * @param conceptId
-	 * @param startIndex
-	 * @param limit
-	 * @return  List<Note> List of paginated suggestions for a term
+	/**
+     * Get list of paginated suggestions available for a term.    
+     * @param termId
+     * @param startIndex
+     * @param limit
+     * @return
+     */
+    List<Suggestion> getTermSuggestionPaginatedList(String termId, Integer startIndex, Integer limit);
+
+	/**
+	 * Get a suggestion by its id
+	 * @param id
+	 * @return Suggestion
 	 */
-	List<Suggestion> findConceptPaginatedSuggestions(String conceptId, Integer startIndex, Integer limit);
+    Suggestion getSuggestionById(Integer id);
 	
 	
 	/**
-	 * Gets the list of suggestions attached to a given term
-	 * @param termId
-	 * @param startIndex
-	 * @param limit
-	 * @return  List<Note> List of paginated suggestions for a term
+	 * Create or update a new suggestion
+	 * @param suggestion
+	 * @return the created or updated suggestion
+	 * @throws BusinessException 
 	 */
-	List<Suggestion> findTermPaginatedSuggestions(String termId, Integer startIndex, Integer limit);
-    
-    
-    /**
-     * Counts the number of suggestions of the given concept
-     * @param conceptId
-     * @return
-     */
-    Long getConceptSuggestionCount(String conceptId);
-    
-    /**
-     * Counts the number of suggestions of the given term
-     * @param termId
-     * @return
-     */
-    Long getTermSuggestionCount(String termId);
+    Suggestion createOrUpdateSuggestion(Suggestion suggestion) throws BusinessException;
+
+	/**
+	 * Delete a suggestion
+	 * @param suggestion
+	 * @return the deleted suggestion
+	 */
+    Suggestion deleteSuggestion(Suggestion suggestion);
+
+	/**
+	 * Count the number of suggestions for a concept
+	 * @param conceptId
+	 * @return
+	 */
+	Long getConceptSuggestionCount(String conceptId);
+	
+	/**
+	 * Count the number of suggestions for a term
+	 * @param conceptId
+	 * @return
+	 */
+	Long getTermSuggestionCount(String termId);
 }
