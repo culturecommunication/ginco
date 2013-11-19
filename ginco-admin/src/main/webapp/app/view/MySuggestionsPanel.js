@@ -43,11 +43,8 @@ Ext.define('GincoApp.view.MySuggestionsPanel', {
 	
 	typeRenderer :function(value, meta, record, rowIndex, colIndex, store, view) {
 		if (record.data.conceptId != "") {
-			console.log(this.ownerCt.xTypeLabelsThesaurusConcept);
 			return this.ownerCt.xTypeLabelsThesaurusConcept;
 		} else {
-			console.log("term detected");
-
 			return this.ownerCt.xTypeLabelsThesaurusTerm;
 		}
 	},	
@@ -64,7 +61,7 @@ Ext.define('GincoApp.view.MySuggestionsPanel', {
 		
 		Ext.applyIf(me, {
 			title : me.xMySuggestionsTitle,
-			iconCls : 'icon-display',
+			iconCls : 'icon-suggestions',
 			items : [ {
 				xtype : 'gridpanel',
 				dock : 'bottom',

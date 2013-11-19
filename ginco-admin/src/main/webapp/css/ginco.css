@@ -108,7 +108,9 @@ a.x-tab-close-btn:focus  {
 .icon-display {
     background-image: url(../images/magnifier.png) !important;
 }
-
+.icon-suggestions {
+	background-image: url(../images/user_comment.png) !important;
+}
 .icon-add {
     background-image: url(../images/add.png) !important;
 }
