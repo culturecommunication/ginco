@@ -32,11 +32,52 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.solr;
+package fr.mcc.ginco.tests.daos;
 
-public class SolrConstants {
-    public static final String SCORE = "score";
-    public static final String DESCENDING = "desc";
-    public static final String ASCENDING = "asc";
-    public static final String EDISMAX = "edismax";
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.NoteType;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.hibernate.NoteDAO;
+import fr.mcc.ginco.tests.BaseDAOTest;
+import fr.mcc.ginco.utils.DateUtil;
+
+public class NoteDAOTest extends BaseDAOTest{
+
+	private NoteDAO noteDAO = new NoteDAO();
+
+
+
+	@Before
+	public void handleSetUpOperation() throws Exception {
+		super.handleSetUpOperation();
+		noteDAO.setSessionFactory(getSessionFactory());
+	}
+
+	@Test
+	public final void testFindNotesByThesaurusId() {
+
+		Thesaurus th1 = new Thesaurus();
+		th1.setIdentifier("http://th1");
+
+		List<Note> actualThesaurusNotes = noteDAO
+				.findNotesByThesaurusId("http://th1");
+
+		Assert.assertEquals(2, actualThesaurusNotes.size());
+
+	}
+
+	@Override
+	public String  getXmlDataFileInit() {
+		return "/note_init.xml";
+	}
 }

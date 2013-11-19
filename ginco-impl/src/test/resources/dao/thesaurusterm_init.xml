@@ -50,7 +50,7 @@
 		<column>status</column>
 		<column>role</column>
 		<column>conceptid</column>
-		<column>thesaurusid</column>	
+		<column>thesaurusid</column>
 		<column>lang</column>
 		<row>
 			<value>http://www.culturecommunication.gouv.fr/ter2</value>
@@ -62,8 +62,8 @@
 			<value>0</value>
             <null />
             <value>http://www.culturecommunication.gouv.fr/co1</value>
-			<value>http://www.culturecommunication.gouv.fr/th1</value>		
-			<value>eng</value>				
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>eng</value>
 		</row>
 		<row>
 			<value>http://www.culturecommunication.gouv.fr/ter1</value>
@@ -75,7 +75,7 @@
 			<value>0</value>
             <null />
 			<null />
-			<value>http://www.culturecommunication.gouv.fr/th1</value>	
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
 			<value>eng</value>
 		</row>
 		<row>
@@ -156,40 +156,44 @@
             <value>http://www.culturecommunication.gouv.fr/th1</value>
             <value>fra</value>
         </row>
-	</table>  
-	
+	</table>
+
 	<table name="note">
 		<column>identifier</column>
-		<column>lexicalvalue</column>		
+		<column>lexicalvalue</column>
 		<column>lang</column>
 		<column>source</column>
-		<column>notetypecode</column>		
-		<column>conceptid</column>	
-		<column>termid</column>	
+		<column>notetypecode</column>
+		<column>conceptid</column>
+		<column>termid</column>
+		<column>created</column>
+		<column>modified</column>
 		<row>
 			<value>http://www.culturecommunication.gouv.fr/note1</value>
-			<value>my test note</value>			
+			<value>my test note</value>
 			<value>eng</value>
 			<value></value>
 			<value></value>
 			<value></value>
 			<value>http://www.culturecommunication.gouv.fr/ter8</value>
+			<value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
 		</row>
 	</table>
 		<table name="languages_iso639">
 		<column>id</column>
-		<column>part1</column>		
+		<column>part1</column>
 		<column>ref_name</column>
-		<column>toplanguage</column>		
+		<column>toplanguage</column>
 		<row>
 			<value>eng</value>
-			<value>I</value>			
+			<value>I</value>
 			<value>English</value>
 			<value>false</value>
 		</row>
 		<row>
             <value>ita</value>
-            <value>I</value>            
+            <value>I</value>
             <value>Italian</value>
             <value>false</value>
         </row>

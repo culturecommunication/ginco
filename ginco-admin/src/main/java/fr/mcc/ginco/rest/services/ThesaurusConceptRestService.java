@@ -80,16 +80,17 @@ import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.HierarchicalRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.solr.IConceptIndexerService;
+import fr.mcc.ginco.solr.ITermIndexerService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Thesaurus Concept REST service for all operation on a thesaurus' concepts
- * 
+ *
  */
 @Service
 @Path("/thesaurusconceptservice")
@@ -126,8 +127,12 @@ public class ThesaurusConceptRestService {
 	private AlignmentViewConverter alignmentViewConverter;
 
 	@Inject
-	@Named("indexerService")
-	private IIndexerService indexerService;
+	@Named("termIndexerService")
+	private ITermIndexerService termIndexerService;
+
+	@Inject
+	@Named("conceptIndexerService")
+	private IConceptIndexerService conceptIndexerService;
 
 	@Inject
 	@Named("userRoleService")
@@ -140,10 +145,10 @@ public class ThesaurusConceptRestService {
 	 * Public method used to get
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object by
 	 * providing its id.
-	 * 
+	 *
 	 * @param conceptId
 	 *            {@link String} identifier to try with
-	 * 
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} object
 	 *         in JSON format or {@code null} if not found
 	 * @throws BusinessException
@@ -175,7 +180,7 @@ public class ThesaurusConceptRestService {
 
 	/**
 	 * Public method used to create or update a concept
-	 * 
+	 *
 	 * @throws BusinessException
 	 */
 	@POST
@@ -188,7 +193,7 @@ public class ThesaurusConceptRestService {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		String username = auth.getName();
-		
+
 		if (userRoleService.hasRole(username, conceptView.getThesaurusId(),
 				Role.EXPERT)) {
 			ThesaurusConcept existingConcept = thesaurusConceptService
@@ -210,7 +215,7 @@ public class ThesaurusConceptRestService {
 		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
 		List<ThesaurusConcept> childrenToDetach = thesaurusConceptViewConverter
 				.convertRemovedChildren(conceptView);
-		
+
 		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
 	    List<ThesaurusConcept> childrenToAttach = thesaurusConceptViewConverter
 						.convertAddedChildren(conceptView);
@@ -250,9 +255,9 @@ public class ThesaurusConceptRestService {
 				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach, childrenToAttach, alignments);
 
 		for (ThesaurusTerm term : terms) {
-			indexerService.addTerm(term);
+			termIndexerService.addTerm(term);
 		}
-		indexerService.addConcept(convertedConcept);
+		conceptIndexerService.addConcept(convertedConcept);
 		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
@@ -371,7 +376,7 @@ public class ThesaurusConceptRestService {
 	 * Public method used to delete
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} - thesaurus
 	 * term JSON object send by extjssearchOrphanParam
-	 * 
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptView} deleted
 	 *         object in JSON format or {@code null} if not found
 	 * @throws BusinessException
@@ -388,14 +393,14 @@ public class ThesaurusConceptRestService {
 		object.setModified(DateUtil.nowDate());
 		if (object != null) {
 			thesaurusConceptService.destroyThesaurusConcept(object);
-			indexerService.removeConcept(object);
+			conceptIndexerService.removeConcept(object);
 		}
 	}
 
 	/**
 	 * Public method to get all status for concept (id + label) The types are
 	 * read from a properties file
-	 * 
+	 *
 	 * @throws BusinessException
 	 */
 	@GET
@@ -446,7 +451,7 @@ public class ThesaurusConceptRestService {
 	/**
 	 * Public method to get all roles for hierarchical relationships between
 	 * concepts The types are read from a properties file
-	 * 
+	 *
 	 * @throws BusinessException
 	 */
 	@GET

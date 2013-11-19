@@ -39,7 +39,8 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.FilterCriteria;
-import fr.mcc.ginco.services.IIndexerService;
+import fr.mcc.ginco.solr.IIndexerService;
+import fr.mcc.ginco.solr.ISearcherService;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
 import fr.mcc.ginco.solr.SortCriteria;
@@ -61,10 +62,14 @@ import java.util.List;
 @Service
 @Path("/indexerservice")
 public class IndexerRestService {
-   
+
 	@Inject
     @Named("indexerService")
     private IIndexerService indexerService;
+
+	@Inject
+    @Named("searcherService")
+    private ISearcherService searcherService;
 
     @GET
     @Path("/reindex")
@@ -83,7 +88,7 @@ public class IndexerRestService {
     public  ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
         try {
         	SortCriteria sort = new SortCriteria(filter.getSortfield(), filter.getSortdir());
-        	SearchResultList searchResults  = indexerService.search(filter.getQuery(), filter.getType(),
+        	SearchResultList searchResults  = searcherService.search(filter.getQuery(), filter.getType(),
                     filter.getThesaurus(), filter.getStatus(),
                     filter.getCreationdate(), filter.getModificationdate(),
                     filter.getLanguage(),sort, filter.getStart(),filter.getLimit());

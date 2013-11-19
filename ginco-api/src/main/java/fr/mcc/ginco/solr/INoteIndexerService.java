@@ -34,9 +34,34 @@
  */
 package fr.mcc.ginco.solr;
 
-public class SolrConstants {
-    public static final String SCORE = "score";
-    public static final String DESCENDING = "desc";
-    public static final String ASCENDING = "asc";
-    public static final String EDISMAX = "edismax";
+import java.util.List;
+
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.exceptions.TechnicalException;
+
+public interface INoteIndexerService {
+
+	/**
+     * Takes an {@link Note} and adds it to index
+     *
+     * @param Updated/created {@link Note} to save to index
+     * @throws TechnicalException
+     */
+	public void addNote(Note note) throws TechnicalException;
+
+	/**
+     * Takes a list of {@link Note} and adds it to index
+     *
+     * @param List of updated/created {@link Note} to save to index
+     * @throws TechnicalException
+     */
+	public void addNotes(List<Note> notes) throws TechnicalException;
+
+	/**
+     * Remove {@link Note} from search index
+     * @param {@link Note}
+     * @throws TechnicalException
+     */
+	public void removeNote(Note note) throws TechnicalException;
+
 }

@@ -64,35 +64,35 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusTermRestService;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.solr.ITermIndexerService;
 
 public class ThesaurusTermRestServiceTest{
-	
+
 	@Mock(name="thesaurusTermService")
-	private IThesaurusTermService termService;	
-	
-	
+	private IThesaurusTermService termService;
+
+
     @Mock(name="termViewConverter")
     private TermViewConverter termViewConverter;
 
-    @Mock(name="indexerService")
-    private IIndexerService indexerService;
-    
+    @Mock(name="termIndexerService")
+    private ITermIndexerService termIndexerService;
+
     @Mock(name="userRoleService")
   	private IUserRoleService userRoleService;
 
 	@InjectMocks
 	private ThesaurusTermRestService thesaurusTermRestService = new ThesaurusTermRestService();
-	
+
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 	}
 	/**
 	 * Test to get all Thesaurus Sandboxed Items method
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@Test
 	public final void getAllThesaurusSandboxedTerms() throws BusinessException {
@@ -101,25 +101,25 @@ public class ThesaurusTermRestServiceTest{
 		ThesaurusTerm fakeThesaurusTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("mock1");
 		ThesaurusTerm fakeThesaurusTerm2 = getFakeThesaurusTermWithNonMandatoryEmptyFields("mock2");
 		ThesaurusTermView mockedThesaurusTermView1 = new ThesaurusTermView(fakeThesaurusTerm1);
-		
+
 		List<ThesaurusTerm> fakeTerms = new ArrayList<ThesaurusTerm>();
 		fakeTerms.add(fakeThesaurusTerm1);
 		fakeTerms.add(fakeThesaurusTerm2);
-		
+
 		//Mocking the service
 		Mockito.when(termService.getPaginatedThesaurusSandoxedTermsList(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString())).thenReturn(fakeTerms);
 		Mockito.when(termService.getSandboxedTermsCount(Mockito.anyString())).thenReturn((long)fakeTerms.size());
-		
+
 		//Getting thesauruses from rest webservice method and testing
 		ExtJsonFormLoadData<List<ThesaurusTermView>> actualResponse = thesaurusTermRestService.getSandboxedThesaurusTerms(1, 2, "1", false);
-		
+
 		//Assert
 		Assert.assertEquals(new Long(2), actualResponse.getTotal());
 		Assert.assertEquals(mockedThesaurusTermView1.getIdentifier(), actualResponse.getData().get(0).getIdentifier());
 	}
 	/**
 	 * Test the updateTerm method
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@Test(expected=AccessDeniedException.class)
 	public final void testUpdateTermWithExpertRole1() {
@@ -135,7 +135,7 @@ public class ThesaurusTermRestServiceTest{
 		fakeThesaurusTermView.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
 	}
-	
+
 	@Test(expected=AccessDeniedException.class)
 	public final void testUpdateTermWithExpertRole2() {
 		Authentication authent = Mockito.mock(Authentication.class);
@@ -152,7 +152,7 @@ public class ThesaurusTermRestServiceTest{
 	}
 	/**
 	 * Test the updateTerm method
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@Test
 	public final void testUpdateTerm() throws BusinessException {
@@ -160,51 +160,51 @@ public class ThesaurusTermRestServiceTest{
 		SecurityContextHolder.getContext()
 				.setAuthentication(authent);
 		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(false);
-		
+
 		//Generating fake objects
 		ThesaurusTerm fakeThesaurusTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fake1");
 		Thesaurus fakeThesaurus1 =  new Thesaurus();
 		fakeThesaurus1.setIdentifier("fakeTh1");
-		
+
 		Language fakeLanguage1 = new Language();
 		fakeLanguage1.setId("fra");
 		fakeLanguage1.setRefname("fra");
-		
+
 		//Creating a Thesaurus View for the test
 		ThesaurusTermView fakeThesaurusTermView = new ThesaurusTermView();
 		fakeThesaurusTermView.setIdentifier("fake1");
 		fakeThesaurusTermView.setLexicalValue("lexicale value");
-		
+
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
 		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class), Mockito.anyBoolean())).thenReturn(fakeThesaurusTerm1);
-		
+
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusTerm1);
 
 		ThesaurusTermView actualResponse = thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
-		
+
 		//Assert
 		Assert.assertEquals("fake1", actualResponse.getIdentifier());
 	}
 	/**
 	 * Test the createTerm method
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@Test
 	public final void testCreateTerm() throws BusinessException {
-		
+
 		//Generating mocked objects
 		ThesaurusTerm fakeThesaurusTerm1 = new ThesaurusTerm();
 		fakeThesaurusTerm1.setIdentifier("");
 		ThesaurusTerm fakeThesaurusCreationReturn = new ThesaurusTerm();
 
-		
+
 		Language fakeLanguage1 = new Language();
 		fakeLanguage1.setId("fra");
 		fakeLanguage1.setRefname("fra");
-		
+
 		Thesaurus fakeThesaurus1 =  new Thesaurus();
 		fakeThesaurus1.setIdentifier("mockTh1");
-		
+
 		fakeThesaurusCreationReturn.setIdentifier("mock1");
 		fakeThesaurusCreationReturn.setThesaurus(fakeThesaurus1);
 		fakeThesaurusCreationReturn.setLanguage(fakeLanguage1);
@@ -213,18 +213,18 @@ public class ThesaurusTermRestServiceTest{
 		ThesaurusTermView fakeThesaurusTermView = new ThesaurusTermView();
 		fakeThesaurusTermView.setIdentifier("mock1");
 		fakeThesaurusTermView.setLexicalValue("lexicale value");
-		
+
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
 		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class), Mockito.anyBoolean())).thenReturn(fakeThesaurusTerm1);
-		
+
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusCreationReturn);
-		
+
 		ThesaurusTermView actualResponse = thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
-		
+
 		//Assert
 		Assert.assertEquals("mock1", actualResponse.getIdentifier());
 	}
-	
+
 	private ThesaurusTerm getFakeThesaurusTermWithNonMandatoryEmptyFields(String id) {
 		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
 		fakeThesaurusTerm.setIdentifier(id);
@@ -241,9 +241,9 @@ public class ThesaurusTermRestServiceTest{
 		Assert.assertEquals("lexicale value", actualResponse.getLexicalValue());
 	}
 	@Test(expected=BusinessException.class)
-	public void testGetThesaurusTermWithWrongId() throws BusinessException {		
+	public void testGetThesaurusTermWithWrongId() throws BusinessException {
 		when(termService.getThesaurusTermById(anyString())).thenThrow(BusinessException.class);
 		thesaurusTermRestService.getThesaurusTerm("fake-id");
 	}
-	
+
 }

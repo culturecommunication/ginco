@@ -142,7 +142,7 @@ CREATE TABLE thesaurus_term
   role text,
   conceptid text,
   thesaurusid text NOT NULL,
-  lang character varying(3) NOT NULL,
+  lang character varying(5) NOT NULL,
   hidden boolean DEFAULT false NOT NULL
 );
 
@@ -397,6 +397,8 @@ CREATE TABLE note
   notetypecode text NOT NULL,
   conceptid text,
   termid text,
+  created text NOT NULL,
+  modified text NOT NULL,
   CONSTRAINT pk_note_identifier PRIMARY KEY (identifier)
 );
 
@@ -518,8 +520,8 @@ CREATE TABLE suggestion
   recipient text NOT NULL,
   content text NOT NULL,
   term_id text,
-  concept_id text,  
-  CONSTRAINT pk_suggestion PRIMARY KEY (identifier)  
+  concept_id text,
+  CONSTRAINT pk_suggestion PRIMARY KEY (identifier)
 );
 
 CREATE SEQUENCE suggestion_identifier_seq START WITH 1  INCREMENT BY 1 ;

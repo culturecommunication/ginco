@@ -65,45 +65,45 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.solr.ITermIndexerService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Thesaurus Term REST service for all operations on Thesauruses Terms
- * 
+ *
  */
 @Service
 @Path("/thesaurustermservice")
 @Produces({MediaType.APPLICATION_JSON})
 @PreAuthorize("isAuthenticated()")
-public class ThesaurusTermRestService {	
-	
+public class ThesaurusTermRestService {
+
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
-	
+
     @Inject
     @Named("termViewConverter")
     private TermViewConverter termViewConverter;
-    
+
     @Inject
-    @Named("indexerService")
-    private IIndexerService indexerService;
-    
+	@Named("termIndexerService")
+	private ITermIndexerService termIndexerService;
+
     @Inject
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
-    
+
 	private Logger logger  = LoggerFactory.getLogger(ThesaurusTermRestService.class);
 
 
 	/**
 	 * Public method used to get list of all existing Thesaurus terms objects in
 	 * database.
-	 * 
+	 *
 	 * @return list of ThesaurusTermView, if not found - {@code null}
 	 */
 	@GET
@@ -117,18 +117,18 @@ public class ThesaurusTermRestService {
 		logger.info("Getting Thesaurus Sandboxed Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit + "and a onlyValidatedTerms parameter set to " + onlyValidatedTerms);
 		List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
 		if (onlyValidatedTerms){
-			thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedValidatedTermsList(startIndex, limit, idThesaurus);	
+			thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedValidatedTermsList(startIndex, limit, idThesaurus);
 		} else {
 			thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(startIndex, limit, idThesaurus);
 		}
-		
+
 		Long total = null;
 		if (onlyValidatedTerms){
 			total = thesaurusTermService.getSandboxedValidatedTermsCount(idThesaurus);
 		} else {
 			total = thesaurusTermService.getSandboxedTermsCount(idThesaurus);
 		}
-		
+
 		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			results.add(new ThesaurusTermView(thesaurusTerm));
@@ -137,11 +137,11 @@ public class ThesaurusTermRestService {
 		extTerms.setTotal(total);
 		return extTerms;
 	}
-	
+
 	/**
 	 * Public method used to get list of all existing Thesaurus terms objects in
 	 * database.
-	 * 
+	 *
 	 * @return list of ThesaurusTermView, if not found - {@code null}
 	 */
 	@GET
@@ -153,9 +153,9 @@ public class ThesaurusTermRestService {
      @QueryParam("idThesaurus") String idThesaurus) throws BusinessException{
 		logger.info("Getting Thesaurus Preferred Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit );
 		List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
-		thesaurusTerms = thesaurusTermService.getPaginatedThesaurusPreferredTermsList(startIndex, limit, idThesaurus);	
+		thesaurusTerms = thesaurusTermService.getPaginatedThesaurusPreferredTermsList(startIndex, limit, idThesaurus);
 		Long total = thesaurusTermService.getPreferredTermsCount(idThesaurus);
-		
+
 		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			results.add(new ThesaurusTermView(thesaurusTerm));
@@ -164,12 +164,12 @@ public class ThesaurusTermRestService {
 		extTerms.setTotal(total);
 		return extTerms;
 	}
-	
+
 	/**
 	 * Public method used to get the details of a single ThesaurusTerm
-	 * 
+	 *
 	 * @return list of ThesaurusTermView, if not found - {@code null}
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getThesaurusTerm")
@@ -183,10 +183,10 @@ public class ThesaurusTermRestService {
 	 * Public method used to create or update
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} -
      * thesaurus term JSON object send by extjs
-	 * 
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} updated object
 	 *         in JSON format or {@code null} if not found
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/updateTerm")
@@ -197,9 +197,9 @@ public class ThesaurusTermRestService {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		String username = auth.getName();
-		
+
 		if (userRoleService.hasRole(username, thesaurusViewJAXBElement.getThesaurusId(), Role.EXPERT)) {
-			
+
 			try {
 				ThesaurusTerm existingTerm = thesaurusTermService.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());
 				if ( existingTerm.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
@@ -214,11 +214,11 @@ public class ThesaurusTermRestService {
 			}
 		}
 		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement, false);
-		
+
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.updateThesaurusTerm(object);
 			if (result != null) {
-				indexerService.addTerm(object);
+				termIndexerService.addTerm(object);
 				return new ThesaurusTermView(result);
 			} else {
 				logger.error("Failed to update thesaurus term");
@@ -227,7 +227,7 @@ public class ThesaurusTermRestService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Public method used to delete
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} -
@@ -235,7 +235,7 @@ public class ThesaurusTermRestService {
      *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} deleted object
 	 *         in JSON format or {@code null} if not found
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/destroyTerm")
@@ -247,16 +247,16 @@ public class ThesaurusTermRestService {
 		object.setModified(DateUtil.nowDate());
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
-			indexerService.removeTerm(object);
+			termIndexerService.removeTerm(object);
 			return new ThesaurusTermView(result);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Public method to get all term status for terms (id + label)
 	 * The types are read from a properties file
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getAllTermStatus")
@@ -266,16 +266,16 @@ public class ThesaurusTermRestService {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		try {
 			String availableStatusIds[] = LabelUtil.getResourceLabel("term-status").split(",");
-			
+
 			if ("".equals(availableStatusIds[0])) {
 				//Ids of status for terms are not set correctly
 				throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");
 			}
-			
+
 	        for (String id : availableStatusIds) {
 	        	GenericStatusView termStatusView = new GenericStatusView();
 	        	termStatusView.setStatus(Integer.valueOf(id));
-	        	
+
 	        	String label = LabelUtil.getResourceLabel("term-status["+ id +"]");
 	        	if (label.isEmpty()) {
 	        		//Labels of status are not set correctly

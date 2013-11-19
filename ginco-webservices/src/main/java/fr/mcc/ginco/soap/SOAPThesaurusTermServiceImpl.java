@@ -48,15 +48,15 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.solr.ISearcherService;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
 import fr.mcc.ginco.solr.SortCriteria;
 
 /**
  * This class is the implementation of all SOAP services related to term objects
- * 
+ *
  */
 @WebService(endpointInterface = "fr.mcc.ginco.soap.ISOAPThesaurusTermService")
 public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
@@ -66,8 +66,8 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	private IThesaurusTermService thesaurusTermService;
 
 	@Inject
-	@Named("indexerService")
-	private IIndexerService indexerService;
+	@Named("searcherService")
+	private ISearcherService searcherService;
 
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
@@ -133,7 +133,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				String requestFormat = request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(null, null);
-				SearchResultList searchResultList = indexerService.search(
+				SearchResultList searchResultList = searcherService.search(
 						requestFormat, 2, null, null, null, null, null, crit,
 						startIndex, limit);
 				if (searchResultList != null) {

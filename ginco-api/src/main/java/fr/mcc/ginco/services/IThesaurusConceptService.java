@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Set;
 
 import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -75,7 +74,7 @@ public interface IThesaurusConceptService {
 	 * @return {@code null} if not found; object otherwise.
 	 */
 	ThesaurusConcept getThesaurusConceptById(String id);
-	
+
 	/**
 	 * Get the ThesaurusConcepts which are not top term in a given thesaurus
 	 *
@@ -138,7 +137,7 @@ public interface IThesaurusConceptService {
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
 			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<ThesaurusConcept> childrenConceptToAttach, List<Alignment> alignments) throws BusinessException;
 
-	
+
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
 	 *
@@ -147,7 +146,7 @@ public interface IThesaurusConceptService {
 	 */
 	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId)
 			throws BusinessException;
-	
+
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
 	 *
@@ -184,7 +183,7 @@ public interface IThesaurusConceptService {
      * @return list of objects.
      */
     List<ThesaurusConcept> getChildrenByConceptId(String conceptId);
-    
+
     /**
      * Search children of concept with given id (orphan or not).
      * @param conceptId id of concept.
@@ -192,7 +191,7 @@ public interface IThesaurusConceptService {
      */
     List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults);
 
-    
+
     /**
      * Search concepts of thesaurus excluding given conceptId
      * with given parameter (orphan or not).
@@ -305,7 +304,7 @@ public interface IThesaurusConceptService {
 	 * @param conceptId
 	 */
 	List<ThesaurusConcept> getRecursiveChildrenByConceptId(String conceptId);
-	
+
 	/**
 	 * Returns all the concepts that are over the concept which id is given in parameter (children, children of children, etc. recursively)
 	 * @param conceptId

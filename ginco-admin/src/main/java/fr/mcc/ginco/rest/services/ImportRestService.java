@@ -83,12 +83,13 @@ import fr.mcc.ginco.extjs.view.ImportedThesaurusResponse;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.imports.IGincoImportService;
 import fr.mcc.ginco.imports.ISKOSImportService;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.solr.ITermIndexerService;
+import fr.mcc.ginco.solr.IThesaurusIndexerService;
 
 /**
  * Base REST service intended to be used for SKOS Import the @Produces({
@@ -112,8 +113,12 @@ public class ImportRestService {
 	private IGincoImportService gincoImportService;
 
 	@Inject
-	@Named("indexerService")
-	private IIndexerService indexerService;
+	@Named("thesaurusIndexerService")
+	private IThesaurusIndexerService thesaurusIndexerService;
+
+	@Inject
+	@Named("termIndexerService")
+	private ITermIndexerService termIndexerService;
 
 	@Inject
 	@Named("thesaurusConceptService")
@@ -174,7 +179,7 @@ public class ImportRestService {
 				.importSKOSFile(content, fileName, tempdir);
 		Thesaurus thesaurus = importResult.keySet().iterator().next();
 
-		indexerService.indexThesaurus(thesaurus);
+		thesaurusIndexerService.indexThesaurus(thesaurus);
 
 		ImportedThesaurusResponse response = new ImportedThesaurusResponse();
 		response.setThesaurusTitle(thesaurus.getTitle());
@@ -232,7 +237,7 @@ public class ImportRestService {
 				.importGincoXmlThesaurusFile(content, fileName, tempDir);
 		Thesaurus thesaurus = importResult.keySet().iterator().next();
 
-		indexerService.indexThesaurus(thesaurus);
+		thesaurusIndexerService.indexThesaurus(thesaurus);
 
 		ImportedThesaurusResponse response = new ImportedThesaurusResponse();
 		response.setThesaurusTitle(thesaurus.getTitle());
@@ -285,7 +290,7 @@ public class ImportRestService {
 		Map<ThesaurusConcept, Set<Alignment>> importResult = gincoImportService
 				.importGincoBranchXmlFile(content, fileName, tempDir,
 						thesaurusId);
-		indexerService.indexThesaurus(thesaurusService
+		thesaurusIndexerService.indexThesaurus(thesaurusService
 				.getThesaurusById(thesaurusId));
 		ThesaurusConcept concept = importResult.keySet().iterator().next();
 		ObjectMapper mapper = new ObjectMapper();
@@ -357,7 +362,7 @@ public class ImportRestService {
 			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
 					.importSandBoxTerms(terms, thesaurusId, defaultStatus);
 			for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
-				indexerService.addTerm(sandboxedTerm);
+				termIndexerService.addTerm(sandboxedTerm);
 			}
 			ImportedTermsResponse response = new ImportedTermsResponse();
 			response.setTermsInError(termsInError);

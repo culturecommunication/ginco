@@ -34,9 +34,13 @@
  */
 package fr.mcc.ginco.solr;
 
-public class SolrConstants {
-    public static final String SCORE = "score";
-    public static final String DESCENDING = "desc";
-    public static final String ASCENDING = "asc";
-    public static final String EDISMAX = "edismax";
+import fr.mcc.ginco.exceptions.TechnicalException;
+
+public interface IIndexerService {
+
+    /**
+     * Deletes all data from SOLR and reindex everything.
+     */
+    void forceIndexing() throws TechnicalException;
+
 }

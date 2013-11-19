@@ -32,79 +32,14 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.services;
-
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.solr.SearchResultList;
-import fr.mcc.ginco.solr.SortCriteria;
+package fr.mcc.ginco.solr;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
-public interface IIndexerService {
+import fr.mcc.ginco.exceptions.TechnicalException;
 
-    /**
-     * Deletes all data from SOLR and reindex everything.
-     */
-    void forceIndexing() throws TechnicalException;
-    
-    /**
-     * Force a thesaurus reindexation
-     */
-    void indexThesaurus(Thesaurus thesaurus) throws TechnicalException;
-    
-    /**
-     * Remove thesaurus index data
-     */
-    void removeThesaurusIndex(String thesaurusId) throws TechnicalException;
-
-
-    /**
-     * Takes an ThesaurusTerm and adds it to index.
-     *
-     * @param thesaurusTerm Updated/created thesaurusTerm to save to index.
-     * @return The number of documents added to solr.
-     * @throws TechnicalException
-     */
-    void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
-    
-    
-    /**
-     * Takes an Note and adds it to index.
-     *
-     * @param Note Updated/created Note to save to index.
-     * @throws TechnicalException
-     */
-    void addNote(Note thesaurusNote) throws TechnicalException;
-
-    /**
-     * Takes an ThesaurusConcept and adds it to index with prefLabel
-     * as lexicalValue.
-     *
-     * @param thesaurusConcept Updated/created thesaurusConcept to save to index.
-     * @return The number of documents added to solr.
-     * @throws TechnicalException
-     */
-    void addConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
-
-    /**
-     * Remove Term from search index.
-     * @param thesaurusTerm
-     * @throws TechnicalException
-     */
-    void removeTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
-
-    /**
-     * Remove Concept from search index.
-     * @param thesaurusConcept
-     * @throws TechnicalException
-     */
-    void removeConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
-
-    /**
+public interface ISearcherService {
+	/**
      * Search a term or a concept
      * @throws TechnicalException
      */

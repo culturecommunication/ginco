@@ -68,7 +68,6 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusOrganizationService;
@@ -76,6 +75,7 @@ import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusStatisticsService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
+import fr.mcc.ginco.solr.IThesaurusIndexerService;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
@@ -101,7 +101,7 @@ public class ThesaurusRestService {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
-	
+
 	@Inject
 	@Named("thesaurusStatisticsService")
 	private IThesaurusStatisticsService thesaurusStatisticsService;
@@ -118,9 +118,9 @@ public class ThesaurusRestService {
 	@Named("thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
 
-    @Inject
-    @Named("indexerService")
-    private IIndexerService indexerService;
+	@Inject
+	@Named("thesaurusIndexerService")
+	private IThesaurusIndexerService thesaurusIndexerService;
 
 	private Logger logger  = LoggerFactory.getLogger(ThesaurusRestService.class);
 
@@ -252,7 +252,7 @@ public class ThesaurusRestService {
         if (object != null) {
             thesaurusService.destroyThesaurus(object);
             try {
-            indexerService.removeThesaurusIndex(object.getIdentifier());
+            	thesaurusIndexerService.removeThesaurusIndex(object.getIdentifier());
             } catch (TechnicalException tex)
             {
             	logger.error("Problem when removing thesaurus index...",tex);
@@ -264,9 +264,9 @@ public class ThesaurusRestService {
     /**
      * Public method used to publish thesaurus
      * @throws BusinessException
-     * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonGenerationException 
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
      */
     @GET
     @Path("/publishVocabulary")
@@ -286,15 +286,15 @@ public class ThesaurusRestService {
         ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				object));
-		return StringEscapeUtils.unescapeHtml4(serialized);       
+		return StringEscapeUtils.unescapeHtml4(serialized);
     }
 
     /**
      * Public method used to archive thesaurus
      * @throws BusinessException
-     * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonGenerationException 
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
      */
     @GET
     @Path("/archiveVocabulary")
@@ -307,7 +307,7 @@ public class ThesaurusRestService {
 
         ThesaurusView view = null;
 
-        if (object != null) {         
+        if (object != null) {
 
             Thesaurus result =  thesaurusService.archiveThesaurus(object);
 
@@ -321,7 +321,7 @@ public class ThesaurusRestService {
         ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				view));
-		return StringEscapeUtils.unescapeHtml4(serialized);       
+		return StringEscapeUtils.unescapeHtml4(serialized);
     }
 
     @GET
@@ -341,7 +341,7 @@ public class ThesaurusRestService {
     	}
     	return returnedOrgs;
     }
-    
+
     @GET
     @Path("/getStatistics")
     @Produces({ MediaType.APPLICATION_JSON })

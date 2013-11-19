@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ import java.util.List;
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("noteService")
 public class NoteServiceImpl implements INoteService {
-	
+
 	@Inject
 	@Named("noteDAO")
 	private INoteDAO noteDAO;
@@ -69,7 +70,7 @@ public class NoteServiceImpl implements INoteService {
 	public List<Note> getTermNotePaginatedList(String termId, Integer startIndex, Integer limit) {
 		return noteDAO.findTermPaginatedNotes(termId, startIndex, limit);
 	}
-	
+
 	/**
      * (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#getNoteById(java.lang.String)
@@ -88,7 +89,7 @@ public class NoteServiceImpl implements INoteService {
 	public Note createOrUpdateNote(Note note) throws BusinessException {
 		return noteDAO.update(note);
 	}
-	
+
 	/**
      * (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteService#deleteNote(fr.mcc.ginco.beans.Note)
@@ -115,6 +116,24 @@ public class NoteServiceImpl implements INoteService {
 	@Override
 	public Long getTermNoteCount(String termId) {
 		return noteDAO.getTermNoteCount(termId);
+	}
+
+	/**
+     * (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteService#getAllNotes()
+	 */
+	@Override
+    public List<Note> getAllNotes() {
+        return noteDAO.findAll();
+    }
+
+	/**
+     * (non-Javadoc)
+	 * @see fr.mcc.ginco.services.INoteService#getNotesByThesaurusId(java.lang.String)
+	 */
+	@Override
+	public List<Note> getNotesByThesaurusId(String thesaurusId) {
+		return noteDAO.findNotesByThesaurusId(thesaurusId);
 	}
 
 }

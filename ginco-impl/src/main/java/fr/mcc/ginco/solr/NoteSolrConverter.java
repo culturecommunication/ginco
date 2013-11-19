@@ -34,9 +34,57 @@
  */
 package fr.mcc.ginco.solr;
 
-public class SolrConstants {
-    public static final String SCORE = "score";
-    public static final String DESCENDING = "desc";
-    public static final String ASCENDING = "asc";
-    public static final String EDISMAX = "edismax";
+import java.sql.Timestamp;
+
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+
+@Service("noteSolrConverter")
+public class NoteSolrConverter {
+
+	/**
+	 * Convert a Note into a SolrDocument
+	 *
+	 * @param Note
+	 * @return SolrInputDocument
+	 */
+
+	public SolrInputDocument convertSolrNote(Note thesaurusNote){
+		SolrInputDocument doc = new SolrInputDocument();
+
+		ThesaurusTerm term = thesaurusNote.getTerm();
+		if (term != null) {
+			doc.addField(SolrField.THESAURUSID, term.getThesaurusId());
+			doc.addField(SolrField.THESAURUSTITLE, term.getThesaurus()
+					.getTitle());
+		}
+
+		ThesaurusConcept concept = thesaurusNote.getConcept();
+		if (concept != null) {
+			doc.addField(SolrField.THESAURUSID, concept.getThesaurusId());
+			doc.addField(SolrField.THESAURUSTITLE, concept.getThesaurus()
+					.getTitle());
+		}
+
+		doc.addField(SolrField.IDENTIFIER, thesaurusNote.getIdentifier());
+
+		doc.addField(SolrField.LEXICALVALUE, thesaurusNote.getLexicalValue());
+		doc.addField(SolrField.TYPE, Note.class.getSimpleName());
+		doc.addField(SolrField.EXT_TYPE, EntityType.NOTE);
+		doc.addField(SolrField.LANGUAGE, thesaurusNote.getLanguage().getId());
+		Timestamp modifiedDate = new Timestamp(thesaurusNote.getModified()
+				.getTime());
+		doc.addField(SolrField.MODIFIED, modifiedDate);
+
+		Timestamp createdDate = new Timestamp(thesaurusNote.getCreated()
+				.getTime());
+		doc.addField(SolrField.CREATED, createdDate);
+
+		return doc;
+	}
+
 }
