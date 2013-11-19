@@ -41,15 +41,10 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.NodeLabelView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.services.ILanguagesService;
@@ -63,9 +58,6 @@ public class NodeLabelViewConverter {
     @Value("${ginco.default.language}")
     private String language;
 
-	private Logger logger  = LoggerFactory.getLogger(NodeLabelViewConverter.class);
-
-
     @Inject
     @Named("nodeLabelService")
     private INodeLabelService nodeLabelService;
@@ -77,63 +69,7 @@ public class NodeLabelViewConverter {
     @Inject
     @Named("thesaurusArrayService")
     private IThesaurusArrayService thesaurusArrayService;
-
-    private NodeLabel getNewNodeLabel() {
-        NodeLabel hibernateRes = new NodeLabel();
-        hibernateRes.setCreated(DateUtil.nowDate());
-        logger.info("Creating a new term");
-
-        return hibernateRes;
-    }
-
-    private NodeLabel getExistingNodeLabel(Integer id)
-            throws BusinessException {
-
-        NodeLabel hibernateRes = nodeLabelService
-                .getById(id);
-        logger.info("Getting an existing term with id " + id);
-        return hibernateRes;
-    }
-
-    /**
-     * Main method used to do conversion.
-     * @param source source to work with
-     * @return converted item.
-     * @throws BusinessException
-     */
-    public NodeLabel convert(NodeLabelView source, boolean fromArray) throws BusinessException{
-        NodeLabel hibernateRes;
-
-        if ("".equals(source.getIdentifier())) {
-            hibernateRes = getNewNodeLabel();
-        } else {
-            hibernateRes = getExistingNodeLabel(source.getIdentifier());
-        }
-
-        hibernateRes.setModified(DateUtil.nowDate());
-        if (StringUtils.isEmpty(source.getLanguage())) {
-            // If not filled in, the language for the term is
-            // "ginco.default.language" property in application.properties
-            hibernateRes
-                    .setLanguage(languagesService.getLanguageById(language));
-        } else {
-            hibernateRes.setLanguage(languagesService.getLanguageById(source
-                    .getLanguage()));
-        }
-
-        hibernateRes.setLexicalValue(source.getLexicalValue());
-        if (fromArray) {
-            if (StringUtils.isNotEmpty(source.getThesaurusArrayId())) {
-                ThesaurusArray array = thesaurusArrayService
-                        .getThesaurusArrayById(source.getThesaurusArrayId());
-                if (array != null) {
-                    hibernateRes.setThesaurusArray(array);
-                }
-            }
-        }
-
-        return hibernateRes;
-    }
+    
 
     public NodeLabelView convert(NodeLabel source) {
         NodeLabelView nodeLabelView = new NodeLabelView();

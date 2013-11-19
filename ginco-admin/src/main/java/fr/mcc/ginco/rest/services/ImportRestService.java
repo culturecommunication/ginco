@@ -366,8 +366,6 @@ public class ImportRestService {
 					response));
 			return serialized;
 
-		} catch (BusinessException ex) {
-			throw ex;
 		} catch (Exception re) {
 			throw new BusinessException("Error reading imported file :"
 					+ re.getMessage(), "import-unable-to-read-file", re);

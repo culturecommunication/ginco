@@ -236,10 +236,12 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	@Override
 	public int compareTo(IThesaurusListNode o) {
 		if (StringUtils.isNotEmpty(title)) {
-			if (collator!=null)
+			if (collator!=null) {
 				return collator.compare(title, o.getTitle());
-			else
+			}
+			else {
 				return title.compareToIgnoreCase(o.getTitle());
+			}
 		} 
 		return -1;
 	}

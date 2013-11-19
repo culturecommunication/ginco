@@ -97,28 +97,26 @@ public class BaseRestService {
 	@Inject
 	@Named("topTermGenerator")
 	private TopTermGenerator topTermGenerator;
-	
+
 	@Inject
 	@Named("arraysGenerator")
 	private ArraysGenerator thesaurusArrayGenerator;
-	
+
 	@Inject
 	@Named("groupsGenerator")
 	private GroupsGenerator thesaurusGroupGenerator;
 
-    @Inject
-    @Named("childrenGenerator")
-    private ChildrenGenerator childrenGenerator;    
-    
-    @Inject
-    @Named("adminUserService")
-    private IAdminUserService adminUserService; 
-    
-    @Inject
+	@Inject
+	@Named("childrenGenerator")
+	private ChildrenGenerator childrenGenerator;
+
+	@Inject
+	@Named("adminUserService")
+	private IAdminUserService adminUserService;
+
+	@Inject
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
-   
-   
 
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in
@@ -142,19 +140,18 @@ public class BaseRestService {
 					FolderGenerator.CONCEPTS_PREFIX);
 			result = topTermGenerator.generateTopTerm(vocId);
 		} else if (nodeParam.startsWith(ChildrenGenerator.ID_PREFIX)) {
-            String conceptTopTermId = getIdFromParam(nodeParam,
-                    ChildrenGenerator.ID_PREFIX);
-            result = childrenGenerator.getChildrenByConceptId(conceptTopTermId);
-        } else if (nodeParam.startsWith(ArraysGenerator.ID_PREFIX)) {
-        	String vocId = getIdFromParam(nodeParam,
-        			FolderGenerator.ARRAYS_PREFIX);
-            result = thesaurusArrayGenerator.generateArrays(vocId);
-        } else if (nodeParam.startsWith(GroupsGenerator.ID_PREFIX)) {
-        	String vocId = getIdFromParam(nodeParam,
-        			FolderGenerator.GROUPS_PREFIX);
-            result = thesaurusGroupGenerator.generateGroups(vocId);
-        } 
-		else {
+			String conceptTopTermId = getIdFromParam(nodeParam,
+					ChildrenGenerator.ID_PREFIX);
+			result = childrenGenerator.getChildrenByConceptId(conceptTopTermId);
+		} else if (nodeParam.startsWith(ArraysGenerator.ID_PREFIX)) {
+			String vocId = getIdFromParam(nodeParam,
+					FolderGenerator.ARRAYS_PREFIX);
+			result = thesaurusArrayGenerator.generateArrays(vocId);
+		} else if (nodeParam.startsWith(GroupsGenerator.ID_PREFIX)) {
+			String vocId = getIdFromParam(nodeParam,
+					FolderGenerator.GROUPS_PREFIX);
+			result = thesaurusGroupGenerator.generateGroups(vocId);
+		} else {
 			result = new ArrayList<IThesaurusListNode>();
 			for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
 				IThesaurusListNode node = new ThesaurusListBasicNode();
@@ -162,14 +159,16 @@ public class BaseRestService {
 				node.setTitle(thesaurus.getTitle());
 				node.setId(thesaurus.getIdentifier());
 				node.setType(ThesaurusListNodeType.THESAURUS);
-				if(thesaurus.getCreator() != null) {
-                    node.setOrganizationName(thesaurus.getCreator().getName());
-                }
-                node.setChildren(folderGenerator.generateFolders(thesaurus
+				if (thesaurus.getCreator() != null) {
+					node.setOrganizationName(thesaurus.getCreator().getName());
+				}
+				node.setChildren(folderGenerator.generateFolders(thesaurus
 						.getIdentifier()));
 				node.setDisplayable(true);
-				if (thesaurus.isArchived()!=null && thesaurus.isArchived()==true)
+				if (thesaurus.isArchived() != null
+						&& thesaurus.isArchived() == true) {
 					node.setIconCls("archived");
+				}
 
 				result.add(node);
 			}
@@ -180,30 +179,30 @@ public class BaseRestService {
 	private String getIdFromParam(String param, String prefix) {
 		return param.substring(param.indexOf(prefix) + prefix.length());
 	}
-	
+
 	/**
 	 * Public method used to get the name of the user currently connected
 	 * 
-	 * @return 
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
+	 * @return
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
 	 */
 	@GET
 	@Path("/getSession")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public long getSession(@Context HttpServletRequest request) {
-		
+
 		return request.getSession().getLastAccessedTime();
 	}
-	
+
 	/**
 	 * Public method used to get the name of the user currently connected
 	 * 
-	 * @return 
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
+	 * @return
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
 	 */
 	@GET
 	@Path("/getUserInfo")
@@ -212,19 +211,20 @@ public class BaseRestService {
 		UserInfo userInfos = new UserInfo();
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
-		userInfos.setUsername(auth.getName());		
+		userInfos.setUsername(auth.getName());
 		userInfos.setAdmin(adminUserService.isUserAdmin(auth.getName()));
-		
-		List<UserThesaurusRole> userThesaurusRoles  = new ArrayList<UserThesaurusRole>();
+
+		List<UserThesaurusRole> userThesaurusRoles = new ArrayList<UserThesaurusRole>();
 		List<UserRole> userRoles = userRoleService.getUserRoles(auth.getName());
-		for (UserRole userRole:userRoles) {
+		for (UserRole userRole : userRoles) {
 			UserThesaurusRole userThesaurusRole = new UserThesaurusRole();
-			userThesaurusRole.setThesaurusId(userRole.getThesaurus().getThesaurusId());
+			userThesaurusRole.setThesaurusId(userRole.getThesaurus()
+					.getThesaurusId());
 			userThesaurusRole.setRole(userRole.getRole().getIdentifier());
 			userThesaurusRoles.add(userThesaurusRole);
 		}
 		userInfos.setUserThesaurusRoles(userThesaurusRoles);
 		return new ExtJsonFormLoadData<UserInfo>(userInfos);
-	}		
-	
+	}
+
 }

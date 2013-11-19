@@ -136,7 +136,7 @@ public class JournalLine  implements Comparable<JournalLine>{
 	}
 
 	public String toString() {
-		String line = new String();
+		String line = "";
 		line += StringEscapeUtils.escapeCsv(getEventType().toString()) + COMMA;
 		line += StringEscapeUtils.escapeCsv(DateUtil.toString(getEventDate()))
 				+ COMMA;

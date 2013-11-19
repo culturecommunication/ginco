@@ -649,8 +649,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				return ConceptHierarchicalRelationsEnum.CHILD.getStatus();
 			}
 
-			else
+			else {
 				return ConceptHierarchicalRelationsEnum.NORELATIONS.getStatus();
+			}
 		} else {
 			throw new BusinessException("One or both concepts don't exist",
 					"concepts-do-not-exist");
@@ -670,11 +671,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public int getStatusByConceptId(String conceptId) throws BusinessException {
 		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
 				.getById(conceptId);
-		if (thesaurusConcept != null)
+		if (thesaurusConcept != null) {
 			return thesaurusConcept.getStatus();
-		else
+		}
+		else {
 			throw new BusinessException("Concept with identifier " + conceptId
 					+ " does not exist", "concepts-does-not-exist");
+		}
 	}
 
 	@Override
@@ -709,7 +712,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	private List<ThesaurusConcept> getRecursiveParentByConceptId(
 			ThesaurusConcept beginConcept,
-			ArrayList<ThesaurusConcept> arrayOfParent) {
+			List<ThesaurusConcept> arrayOfParent) {
 
 		Set<ThesaurusConcept> parentConcepts = beginConcept.getParentConcepts();
 		if (parentConcepts.size()>0) {

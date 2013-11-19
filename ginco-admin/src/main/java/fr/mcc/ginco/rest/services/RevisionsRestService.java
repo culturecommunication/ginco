@@ -43,6 +43,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
@@ -94,7 +95,7 @@ public class RevisionsRestService {
 	 */
 	@GET
 	@Path("/exportRevisions")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response exportRevisions(
 			@QueryParam("thesaurusId") String thesaurusId,
 			@QueryParam("timestamp") long timestamp,
@@ -134,7 +135,7 @@ public class RevisionsRestService {
 	 */
 	@GET
 	@Path("/exportAllRevisions")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response exportAllRevisions(
 			@QueryParam("timestamp") long timestamp,
 			@QueryParam("lang") String language) throws BusinessException,

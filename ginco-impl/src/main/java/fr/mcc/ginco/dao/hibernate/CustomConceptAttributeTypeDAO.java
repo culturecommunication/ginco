@@ -66,10 +66,11 @@ public class CustomConceptAttributeTypeDAO extends
                 .add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()))
                 .add(Restrictions.eq("code", code));
         List objList = criteria.list();
-        if (objList.size()>0)
+        if (objList.size()>0) {
         	return (CustomConceptAttributeType)objList.get(0);
-        else
-        	return null;
+        }
+        return null;
+        
     }
     
     @Override
@@ -79,10 +80,10 @@ public class CustomConceptAttributeTypeDAO extends
                 .add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()))
                 .add(Restrictions.eq("value", value));
         List objList = criteria.list();
-        if (objList.size()>0)
+        if (objList.size()>0) {
         	return (CustomConceptAttributeType)objList.get(0);
-        else
-        	return null;
+        }
+        return null;        
     }
     
     @Override
@@ -93,10 +94,12 @@ public class CustomConceptAttributeTypeDAO extends
     	CustomConceptAttributeType existingAttrByValue = this.getAttributeByValue(conceptAttributeType.getThesaurus(), conceptAttributeType.getValue());
     	boolean isUniqueCode = true;
     	boolean isUniqueValue = true;
-    	if (existingAttrByCode!=null && existingAttrByCode.getIdentifier()!=conceptAttributeType.getIdentifier())
+    	if (existingAttrByCode!=null && existingAttrByCode.getIdentifier()!=conceptAttributeType.getIdentifier()) {
     		isUniqueCode = false;
-    	if (existingAttrByValue!=null && existingAttrByValue.getIdentifier()!=conceptAttributeType.getIdentifier())
+    	}
+    	if (existingAttrByValue!=null && existingAttrByValue.getIdentifier()!=conceptAttributeType.getIdentifier()) {
     		isUniqueValue = false;
+    	}
     	if (isUniqueValue && isUniqueCode) {
 	    	getCurrentSession().saveOrUpdate(conceptAttributeType);
 			getCurrentSession().flush();

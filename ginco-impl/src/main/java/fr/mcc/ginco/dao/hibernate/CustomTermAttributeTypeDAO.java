@@ -34,17 +34,17 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.CustomConceptAttributeType;
-import fr.mcc.ginco.beans.CustomTermAttributeType;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.ICustomTermAttributeTypeDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.dao.ICustomTermAttributeTypeDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  *
@@ -75,10 +75,10 @@ public class CustomTermAttributeTypeDAO extends
 	                .add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()))
 	                .add(Restrictions.eq("value", value));
 	        List objList = criteria.list();
-	        if (objList.size()>0)
+	        if (objList.size()>0) {
 	        	return (CustomTermAttributeType)objList.get(0);
-	        else
-	        	return null;
+	        }
+	        return null;
 	}
 
 	@Override
@@ -90,10 +90,10 @@ public class CustomTermAttributeTypeDAO extends
 						thesaurus.getIdentifier()))
 				.add(Restrictions.eq("code", code));
 		List objList = criteria.list();
-		if (objList.size() > 0)
+		if (objList.size() > 0) {
 			return (CustomTermAttributeType) objList.get(0);
-		else
-			return null;
+		}
+		return null;
 	}
 	
 	@Override
@@ -104,10 +104,12 @@ public class CustomTermAttributeTypeDAO extends
     	CustomTermAttributeType existingAttrByValue = this.getAttributeByValue(termAttributeType.getThesaurus(), termAttributeType.getValue());
     	boolean isUniqueCode = true;
     	boolean isUniqueValue = true;
-    	if (existingAttrByCode!=null && existingAttrByCode.getIdentifier()!=termAttributeType.getIdentifier())
+    	if (existingAttrByCode!=null && existingAttrByCode.getIdentifier()!=termAttributeType.getIdentifier()) {
     		isUniqueCode = false;
-    	if (existingAttrByValue!=null && existingAttrByValue.getIdentifier()!=termAttributeType.getIdentifier())
+    	}
+    	if (existingAttrByValue!=null && existingAttrByValue.getIdentifier()!=termAttributeType.getIdentifier()) {
     		isUniqueValue = false;
+    	}
     	if (isUniqueValue && isUniqueCode) {
 	    	getCurrentSession().saveOrUpdate(termAttributeType);
 			getCurrentSession().flush();

@@ -62,23 +62,30 @@ public class UserThesaurusRole {
 	}
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj)  {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		UserThesaurusRole other = (UserThesaurusRole) obj;
 		if (role == null) {
-			if (other.role != null)
+			if (other.role != null) {
 				return false;
-		} else if (!role.equals(other.role))
+			}
+		} else if (!role.equals(other.role)) {
 			return false;
+		}
 		if (thesaurusId == null) {
-			if (other.thesaurusId != null)
+			if (other.thesaurusId != null) {
 				return false;
-		} else if (!thesaurusId.equals(other.thesaurusId))
+			}
+		} else if (!thesaurusId.equals(other.thesaurusId)) {
 			return false;
+		}
 		return true;
 	}	
 

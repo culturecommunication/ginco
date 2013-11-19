@@ -61,6 +61,7 @@ public class ThesaurusConceptDAO extends
 		GenericHibernateDAO<ThesaurusConcept, String> implements
 		IThesaurusConceptDAO {
 
+	private static final String TC_IDENTIFIER = "tc.identifier";
 	private static final String THESAURUS_IDENTIFIER = "thesaurus.identifier";
 
 	public ThesaurusConceptDAO() {
@@ -158,8 +159,9 @@ public class ThesaurusConceptDAO extends
 		}
 
 		selectOrphans(criteria, searchOrphans);
-		if (maxResults>0)
+		if (maxResults>0) {
 			criteria.setMaxResults(maxResults);
+		}
 		return criteria.list();
 	}
 
@@ -230,7 +232,7 @@ public class ThesaurusConceptDAO extends
 
 	private void excludeConcept(Criteria criteria, String excludeId) {
 		if (excludeId != null && !excludeId.isEmpty()) {
-			criteria.add(Restrictions.not(Restrictions.eq("tc.identifier",
+			criteria.add(Restrictions.not(Restrictions.eq(TC_IDENTIFIER,
 					excludeId)));
 		}
 	}
@@ -238,7 +240,9 @@ public class ThesaurusConceptDAO extends
 	private void onlyValidatedConcepts(Criteria criteria,
 			Boolean onlyValidatedConcepts) {
 
-        if(onlyValidatedConcepts == null) return;
+        if (onlyValidatedConcepts == null) {
+        	return;
+        }
 
 		if (onlyValidatedConcepts) {
 			criteria.add(Restrictions.eq("status",
@@ -254,8 +258,9 @@ public class ThesaurusConceptDAO extends
 					"empty-thesaurus");
 		}
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus, topConcept);
-		if (maxResults>0)
+		if (maxResults>0) {
 			crit.setMaxResults(maxResults);
+		}
 		return crit	.list();
 	}
 
@@ -315,8 +320,8 @@ public class ThesaurusConceptDAO extends
 
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
 				.add(Restrictions.and(
-						Subqueries.propertyIn("tc.identifier", alignmentCriteria),
-						Subqueries.propertyIn("tc.identifier", conceptCriteria)))
+						Subqueries.propertyIn(TC_IDENTIFIER, alignmentCriteria),
+						Subqueries.propertyIn(TC_IDENTIFIER, conceptCriteria)))
 						.setProjection(Projections.rowCount());
 
 		return (Long) criteria.list().get(0);
@@ -334,8 +339,8 @@ public class ThesaurusConceptDAO extends
 
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
 				.add(Restrictions.and(
-						Subqueries.propertyIn("tc.identifier", alignmentCriteria),
-						Subqueries.propertyIn("tc.identifier", conceptCriteria)))
+						Subqueries.propertyIn(TC_IDENTIFIER, alignmentCriteria),
+						Subqueries.propertyIn(TC_IDENTIFIER, conceptCriteria)))
 						.setProjection(Projections.rowCount());
 		return (Long) criteria.list().get(0);
 	}
@@ -347,7 +352,7 @@ public class ThesaurusConceptDAO extends
 				.setProjection(Projections.projectionList().add(Projections.property("al.sourceConcept.identifier")));
 
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
-				.add(Subqueries.propertyIn("tc.identifier", alignmentCriteria))
+				.add(Subqueries.propertyIn(TC_IDENTIFIER, alignmentCriteria))
 					.setProjection(Projections.rowCount());
 
 		return (Long) criteria.list().get(0);

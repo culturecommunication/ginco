@@ -58,7 +58,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
-import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.INoteDAO;
@@ -206,8 +205,9 @@ public class ConceptsBuilder extends AbstractBuilder {
 			List<ThesaurusTerm> terms = termBuilder.buildTerms(skosConcept,
 					thesaurus, concept);
 			for (ThesaurusTerm term : terms) {
-				if (term.getPrefered())
+				if (term.getPrefered()) {
 					preferredTerm = term;
+				}
 				thesaurusTermDAO.update(term);
 			}
 

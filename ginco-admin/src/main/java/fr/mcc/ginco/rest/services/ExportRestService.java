@@ -46,6 +46,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -109,7 +110,7 @@ public class ExportRestService {
 	 */
 	@GET
 	@Path("/getHierarchical")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response getHierarchical(
 			@QueryParam("thesaurusId") String thesaurusId)
 			throws BusinessException {
@@ -131,7 +132,7 @@ public class ExportRestService {
 	 */
 	@GET
 	@Path("/getSKOS")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response getSKOS(@QueryParam("thesaurusId") String thesaurusId)
 			throws BusinessException {
 		Thesaurus targetThesaurus = thesaurusService
@@ -151,7 +152,7 @@ public class ExportRestService {
 	 */
 	@GET
 	@Path("/getAlphabetical")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response getAlphabetical(
 			@QueryParam("thesaurusId") String thesaurusId)
 			throws BusinessException {
@@ -219,7 +220,7 @@ public class ExportRestService {
 	 */
 	@GET
 	@Path("/getGincoThesaurusExport")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response getGincoThesaurusExport(
 			@QueryParam("thesaurusId") String thesaurusId)
 			throws BusinessException, TechnicalException {
@@ -253,7 +254,7 @@ public class ExportRestService {
 	 */
 	@GET
 	@Path("/getGincoBranchExport")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response getGincoBranchExport(
 			@QueryParam("conceptId") String conceptId) {
 		ThesaurusConcept targetConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);

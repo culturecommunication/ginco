@@ -53,7 +53,7 @@ public abstract class AbstractExceptionMapper<E extends Throwable> implements
 
 
 	protected Response toResponse(Throwable t, String messageKey, Object[] toFormat) {
-		String msg = new String();
+		String msg = "";
 		if (toFormat != null){
 			msg = MessageFormat.format(LabelUtil.getResourceLabel(messageKey), toFormat);
 		}

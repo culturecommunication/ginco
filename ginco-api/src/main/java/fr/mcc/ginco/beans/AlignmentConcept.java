@@ -98,23 +98,30 @@ public class AlignmentConcept {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		AlignmentConcept other = (AlignmentConcept) obj;
 		if (externalTargetConcept == null) {
-			if (other.externalTargetConcept != null)
+			if (other.externalTargetConcept != null) {
 				return false;
-		} else if (!externalTargetConcept.equals(other.externalTargetConcept))
+			}
+		} else if (!externalTargetConcept.equals(other.externalTargetConcept)) {
 			return false;
+		}
 		if (internalTargetConcept == null) {
-			if (other.internalTargetConcept != null)
+			if (other.internalTargetConcept != null) {
 				return false;
-		} else if (!internalTargetConcept.equals(other.internalTargetConcept))
+			}
+		} else if (!internalTargetConcept.equals(other.internalTargetConcept)) {
 			return false;
+		}
 		return true;
 	}
 

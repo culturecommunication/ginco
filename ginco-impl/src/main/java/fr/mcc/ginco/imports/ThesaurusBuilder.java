@@ -201,11 +201,12 @@ public class ThesaurusBuilder extends AbstractBuilder {
 			Language lang = languagesDAO.getById(stmt.getString());
 			if (lang == null) {
 				lang = languagesDAO.getByPart1(stmt.getString());
-				if (lang == null)
+				if (lang == null) {
 					throw new BusinessException(
 						"Specified thesaurus language is unknown :  "
 								+ stmt.getString(),
 						"import-unknown-thesaurus-lang");
+				}
 			}
 			langs.add(lang);
 		}

@@ -58,7 +58,7 @@ public class AuditCSVWriter {
 	}
 	
 	public void writeHeader(BufferedWriter out) throws IOException {
-		String header = new String();
+		String header = "";
 		header += LabelUtil.getResourceLabel("log-journal.headers.event-type") + COMMA;
 		header += LabelUtil.getResourceLabel("log-journal.headers.date") + COMMA;
 		header += LabelUtil.getResourceLabel("log-journal.headers.author") + COMMA;

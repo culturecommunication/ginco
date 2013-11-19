@@ -91,10 +91,10 @@ public class AlignmentsBuilder extends AbstractBuilder {
 				.getAlignmentTypeList();
 
 		for (AlignmentType alignmentType : alignmentTypes) {
-			String ISOCode = alignmentType.getIsoCode();
-			if (SKOS.SKOS_ALIGNMENTS.containsKey(ISOCode)) {
+			String isoCode = alignmentType.getIsoCode();
+			if (SKOS.SKOS_ALIGNMENTS.containsKey(isoCode)) {
 				StmtIterator stmtItr = skosConcept
-						.listProperties(SKOS.SKOS_ALIGNMENTS.get(ISOCode));
+						.listProperties(SKOS.SKOS_ALIGNMENTS.get(isoCode));
 				while (stmtItr.hasNext()) {
 					Statement stmtAlignment = stmtItr.next();
 					alignments.add(alignmentBuilder.buildAlignment(stmtAlignment, alignmentType,

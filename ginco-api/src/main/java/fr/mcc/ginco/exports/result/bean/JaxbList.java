@@ -64,11 +64,6 @@ public class JaxbList<T> {
 	}
 	
 	public boolean isEmpty() {
-		if (this.list.isEmpty()) {
-			return true;
-		} else
-		{
-			return false;
-		}
+		return list.isEmpty();
 	}
 }
