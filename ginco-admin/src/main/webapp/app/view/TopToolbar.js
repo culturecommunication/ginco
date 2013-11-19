@@ -102,6 +102,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 			}, {
 				xtype : 'buttongroup',
 				title : me.xAdministrationLabel,
+				width:80,
 				columns : 1,
 				items : [ {
 					xtype : 'button',
@@ -141,8 +142,9 @@ Ext.define('GincoApp.view.TopToolbar', {
 				width : 10
 			}, {
 				xtype : 'triggerfield',
-				width : 276,
+				width : 250,
 				triggerCls: 'x-form-search-trigger',
+				labelWidth : 70,
 				fieldLabel : me.xSearchLabel,
 				emptyText : me.xSearchFieldText,
 				hideTrigger : false,
@@ -165,7 +167,9 @@ Ext.define('GincoApp.view.TopToolbar', {
 				itemId : 'username',
 				cls : 'username'
 			},
-			,
+			{
+				xtype : 'tbseparator'
+			},
 			{
 				xtype : 'button',
 				itemId : 'suggestionsBtn',
@@ -173,10 +177,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 				text : me.xSuggestionBtnLabel
 			},
 			{
-				xtype : 'tbseparator',
-				flex : 2,
-				height : 10,
-				width : 10
+				xtype : 'tbseparator'
 			},
 			{
 				xtype : 'button',
