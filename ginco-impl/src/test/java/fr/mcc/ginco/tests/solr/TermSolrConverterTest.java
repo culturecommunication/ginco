@@ -73,7 +73,7 @@ public class TermSolrConverterTest {
 	}
 
 	@Test
-	public void testConvertSolrTerm() throws SolrServerException, IOException {
+	public void testConvertSolrPrefTermWithNotes() throws SolrServerException, IOException {
 
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("http://th1");
@@ -144,5 +144,58 @@ public class TermSolrConverterTest {
 
 		Assert.assertTrue(doc
 				.getFieldValues(SolrField.NOTES).contains(fakeNote2.getLexicalValue()));
+	}
+
+	@Test
+	public void testConvertSolrNonPrefTerm() throws SolrServerException, IOException {
+
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("http://th1");
+		fakeThesaurus.setTitle("Fake thesaurus");
+
+		Language lang = new Language();
+		lang.setId("fr-FR");
+
+		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
+		fakeThesaurusTerm.setIdentifier("http://t1");
+		fakeThesaurusTerm.setThesaurus(fakeThesaurus);
+		fakeThesaurusTerm.setLexicalValue("Fake thesaurus term");
+        fakeThesaurusTerm.setCreated(DateUtil.nowDate());
+        fakeThesaurusTerm.setModified(DateUtil.nowDate());
+        fakeThesaurusTerm.setLanguage(lang);
+        fakeThesaurusTerm.setStatus(1);
+        fakeThesaurusTerm.setPrefered(false);
+
+		SolrInputDocument doc = termSolrConverter.convertSolrTerm(fakeThesaurusTerm);
+
+		Assert.assertEquals(fakeThesaurus.getIdentifier(), doc
+				.getFieldValue(SolrField.THESAURUSID));
+
+		Assert.assertEquals(fakeThesaurus.getTitle(), doc
+				.getFieldValue(SolrField.THESAURUSTITLE));
+
+		Assert.assertEquals(fakeThesaurusTerm.getIdentifier(), doc
+				.getFieldValue(SolrField.IDENTIFIER));
+
+		Assert.assertEquals(fakeThesaurusTerm.getLexicalValue(), doc
+				.getFieldValue(SolrField.LEXICALVALUE));
+
+		Assert.assertEquals(ThesaurusTerm.class.getSimpleName(), doc
+				.getFieldValue(SolrField.TYPE));
+
+		Assert.assertEquals(EntityType.TERM_NON_PREF, doc
+				.getFieldValue(SolrField.EXT_TYPE));
+
+		Assert.assertEquals(fakeThesaurusTerm.getLanguage().getId(), doc
+				.getFieldValue(SolrField.LANGUAGE));
+
+		Assert.assertEquals(fakeThesaurusTerm.getModified(), doc
+				.getFieldValue(SolrField.MODIFIED));
+
+		Assert.assertEquals(fakeThesaurusTerm.getCreated(), doc
+				.getFieldValue(SolrField.CREATED));
+
+		Assert.assertEquals(fakeThesaurusTerm.getStatus(), doc
+				.getFieldValue(SolrField.STATUS));
 	}
 }

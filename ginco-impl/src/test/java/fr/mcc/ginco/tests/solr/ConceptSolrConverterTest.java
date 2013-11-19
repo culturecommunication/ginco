@@ -79,14 +79,17 @@ public class ConceptSolrConverterTest {
 	}
 
 	@Test
-	public void testConvertSolrConcept() throws SolrServerException, IOException {
+	public void testSimpleConvertSolrConcept() throws SolrServerException, IOException {
 
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("http://th1");
 		fakeThesaurus.setTitle("Fake thesaurus");
 
-		Language lang = new Language();
-		lang.setId("fr-FR");
+		Language langFR = new Language();
+		langFR.setId("fr-FR");
+
+		Language langEN = new Language();
+		langFR.setId("en-US");
 
 		ThesaurusConcept fakeThesaurusConcept = new ThesaurusConcept();
 		fakeThesaurusConcept.setIdentifier("http://c1");
@@ -95,9 +98,15 @@ public class ConceptSolrConverterTest {
         fakeThesaurusConcept.setModified(DateUtil.nowDate());
         fakeThesaurusConcept.setStatus(1);
 
-		ThesaurusTerm fakePreferredTerm = new ThesaurusTerm();
-		fakePreferredTerm.setLexicalValue("lexicalValue");
-		fakePreferredTerm.setThesaurus(fakeThesaurus);
+		ThesaurusTerm fakeFRPrefTerm = new ThesaurusTerm();
+		fakeFRPrefTerm.setLanguage(langFR);
+
+		ThesaurusTerm fakeENPrefTerm = new ThesaurusTerm();
+		fakeENPrefTerm.setLanguage(langEN);
+
+		List<ThesaurusTerm> fakePrefTermList = new ArrayList<ThesaurusTerm>();
+		fakePrefTermList.add(fakeFRPrefTerm);
+		fakePrefTermList.add(fakeENPrefTerm);
 
 		List<Note> mockListNote = new ArrayList<Note>();
 		Note fakeNote1 = new Note();
@@ -109,10 +118,14 @@ public class ConceptSolrConverterTest {
 		mockListNote.add(fakeNote2);
 
 		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm(fakeThesaurusConcept.getIdentifier())).thenReturn(fakeFRPrefTerm);
+
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerms(fakeThesaurusConcept.getIdentifier())).thenReturn(fakePrefTermList);
+
+		Mockito.when(
 				noteService.getConceptNotePaginatedList(Mockito.anyString(), Mockito.anyInt(),
 						Mockito.anyInt())).thenReturn(mockListNote);
-		Mockito.when(
-				thesaurusConceptService.getConceptPreferredTerm(fakeThesaurusConcept.getIdentifier())).thenReturn(fakePreferredTerm);
 
 		SolrInputDocument doc = conceptSolrConverter.convertSolrConcept(fakeThesaurusConcept);
 
@@ -125,7 +138,7 @@ public class ConceptSolrConverterTest {
 		Assert.assertEquals(fakeThesaurusConcept.getIdentifier(), doc
 				.getFieldValue(SolrField.IDENTIFIER));
 
-		Assert.assertEquals(fakePreferredTerm.getLexicalValue(), doc
+		Assert.assertEquals(fakeFRPrefTerm.getLexicalValue(), doc
 				.getFieldValue(SolrField.LEXICALVALUE));
 
 		Assert.assertEquals(ThesaurusConcept.class.getSimpleName(), doc
@@ -149,5 +162,10 @@ public class ConceptSolrConverterTest {
 		Assert.assertTrue(doc
 				.getFieldValues(SolrField.NOTES).contains(fakeNote2.getLexicalValue()));
 
+		Assert.assertTrue(doc
+				.getFieldValues(SolrField.LANGUAGE).contains(fakeFRPrefTerm.getLanguage().getId()));
+
+		Assert.assertTrue(doc
+				.getFieldValues(SolrField.LANGUAGE).contains(fakeENPrefTerm.getLanguage().getId()));
 	}
 }
