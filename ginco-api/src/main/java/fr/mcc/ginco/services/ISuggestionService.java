@@ -40,65 +40,93 @@ import fr.mcc.ginco.beans.Suggestion;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
- * Service used to work with {@link Suggestion} objects, contains basic
- * methods exposed to client part.
- *
+ * Service used to work with {@link Suggestion} objects, contains basic methods
+ * exposed to client part.
+ * 
  * @see fr.mcc.ginco.beans.Suggestion
  */
 public interface ISuggestionService {
-	
+
 	/**
-     * Get list of paginated suggestions available for a concept.    
-     * @param conceptId
-     * @param startIndex
-     * @param limit
-     * @return
-     */
-    List<Suggestion> getConceptSuggestionPaginatedList(String conceptId, Integer startIndex, Integer limit);
-    
+	 * Get list of paginated suggestions available for a concept.
+	 * 
+	 * @param conceptId
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
+	List<Suggestion> getConceptSuggestionPaginatedList(String conceptId,
+			Integer startIndex, Integer limit);
+
 	/**
-     * Get list of paginated suggestions available for a term.    
-     * @param termId
-     * @param startIndex
-     * @param limit
-     * @return
-     */
-    List<Suggestion> getTermSuggestionPaginatedList(String termId, Integer startIndex, Integer limit);
+	 * Get list of paginated suggestions available for a term.
+	 * 
+	 * @param termId
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
+	List<Suggestion> getTermSuggestionPaginatedList(String termId,
+			Integer startIndex, Integer limit);
 
 	/**
 	 * Get a suggestion by its id
+	 * 
 	 * @param id
 	 * @return Suggestion
 	 */
-    Suggestion getSuggestionById(Integer id);
-	
-	
+	Suggestion getSuggestionById(Integer id);
+
 	/**
 	 * Create or update a new suggestion
+	 * 
 	 * @param suggestion
 	 * @return the created or updated suggestion
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
-    Suggestion createOrUpdateSuggestion(Suggestion suggestion) throws BusinessException;
+	Suggestion createOrUpdateSuggestion(Suggestion suggestion)
+			throws BusinessException;
 
 	/**
 	 * Delete a suggestion
+	 * 
 	 * @param suggestion
 	 * @return the deleted suggestion
 	 */
-    Suggestion deleteSuggestion(Suggestion suggestion);
+	Suggestion deleteSuggestion(Suggestion suggestion);
 
 	/**
 	 * Count the number of suggestions for a concept
+	 * 
 	 * @param conceptId
 	 * @return
 	 */
 	Long getConceptSuggestionCount(String conceptId);
-	
+
 	/**
 	 * Count the number of suggestions for a term
+	 * 
 	 * @param conceptId
 	 * @return
 	 */
 	Long getTermSuggestionCount(String termId);
+
+	/**
+	 * Get list of paginated suggestions whose recipient is the given parameter.
+	 * 
+	 * @param recipient
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
+	List<Suggestion> getSuggestionPaginatedListByRecipient(String recipient,
+			Integer startIndex, Integer limit);
+
+	/**
+	 * Count the number of suggestions whose recipient is the given parameter.
+	 * 
+	 * @param recipient
+	 * @return
+	 */
+	Long getSuggestionByRecipientCount(String recipient);
 }

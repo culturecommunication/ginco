@@ -50,5 +50,6 @@ Ext.define('GincoApp.locale.fr.view.TopToolbar', {
     xHelpLabel: "Aide",
     xAccessibilityLabel : "Accessibilité",
     xLogoutBtnLabel : "Déconnexion",
-    xSearchBtnTitle : "Lancer la recherche"
+    xSearchBtnTitle : "Lancer la recherche",
+    xSuggestionBtnLabel : "Mes suggestions"
 });

@@ -96,6 +96,24 @@ public class SuggestionDAOTest extends BaseDAOTest {
 
 	}
 	
+	@Test
+	public void testFindPaginatedSuggestionsByRecipient()
+			throws BusinessException {		
+		List<Suggestion> actualSuggestions = suggestionDAO.findPaginatedSuggestionsByRecipient("paul",0,10);
+		Assert.assertEquals(4, actualSuggestions.size());
+		
+		List<Suggestion> actualSuggestions2 = suggestionDAO.findPaginatedSuggestionsByRecipient("paul", 0,1);
+		Assert.assertEquals(1, actualSuggestions2.size());	
+		Assert.assertEquals(2, actualSuggestions2.get(0).getIdentifier().intValue());
+	}
+	
+	@Test
+	public void testGetSuggestionsByRecipientCount()
+			throws BusinessException {		
+		Long actualSuggestionsNb = suggestionDAO.getSuggestionsByRecipientCount("paul");
+		Assert.assertEquals(4, actualSuggestionsNb.intValue());	
+
+	}
 	
 	@Override
 	public String getXmlDataFileInit() {

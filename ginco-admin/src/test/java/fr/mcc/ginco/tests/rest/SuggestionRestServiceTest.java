@@ -47,17 +47,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import fr.mcc.ginco.beans.Suggestion;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.MySuggestionView;
 import fr.mcc.ginco.extjs.view.pojo.SuggestionView;
 import fr.mcc.ginco.extjs.view.utils.SuggestionViewConverter;
 import fr.mcc.ginco.rest.services.SuggestionRestService;
 import fr.mcc.ginco.services.ISuggestionService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 public class SuggestionRestServiceTest {
 
+	@Mock(name = "thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
+	
 	@Mock(name = "suggestionService")
 	private ISuggestionService suggestionService;
 
@@ -309,6 +320,62 @@ public class SuggestionRestServiceTest {
 
 		suggestionRestService.createSuggestions(suggestionViews, conceptId,
 				termId);
+
+	}
+
+	@Test
+	public void testGetUserSuggestions() {
+		
+		Thesaurus th = new Thesaurus();
+		th.setTitle("ThesaurusTitle");
+
+		ThesaurusTerm term1 = new ThesaurusTerm();
+		term1.setLexicalValue("First term");
+		term1.setThesaurus(th);
+		Suggestion suggestion1 = new Suggestion();
+		suggestion1.setTerm(term1);
+		
+		ThesaurusConcept concept1 = new ThesaurusConcept();
+		concept1.setIdentifier("http://data.culture.gouv.fr/ark:123/co1");
+		concept1.setThesaurus(th);
+		Mockito.when(thesaurusConceptService.getConceptLabel("http://data.culture.gouv.fr/ark:123/co1")).thenReturn("First concept");
+		
+		Suggestion suggestion2 = new Suggestion();
+		suggestion2.setConcept(concept1);
+		List<Suggestion> suggestions = new ArrayList<Suggestion>();
+		suggestions.add(suggestion1);
+		suggestions.add(suggestion2);
+
+		Mockito.when(
+				suggestionService.getSuggestionPaginatedListByRecipient(
+						"george", 0, 10)).thenReturn(suggestions);
+		
+		Mockito.when(
+				suggestionService.getSuggestionByRecipientCount(
+						"george")).thenReturn(new Long(10));
+
+		SuggestionView view1 = new SuggestionView();
+		SuggestionView view2 = new SuggestionView();
+
+		Mockito.when(suggestionViewConverter.convert(suggestion1)).thenReturn(
+				view1);
+		Mockito.when(suggestionViewConverter.convert(suggestion2)).thenReturn(
+				view2);
+
+		Authentication auth = new TestingAuthenticationToken("george",
+				"password");
+		Integer startIndex = 0;
+		Integer limit = 10;
+
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		ExtJsonFormLoadData<List<MySuggestionView>> views = suggestionRestService
+				.getUserSuggestions(startIndex, limit);
+
+		Assert.assertEquals(new Long(10), views.getTotal());
+		
+		Assert.assertEquals("First term", views.getData().get(0).getObjectValue());
+		Assert.assertEquals("First concept", views.getData().get(1).getObjectValue());
+		Assert.assertEquals("ThesaurusTitle", views.getData().get(0).getThesaurusTitle());
 
 	}
 

@@ -94,7 +94,8 @@ Ext.application({
         'UserRoleStore',
         'RoleStore',
         'SuggestionStore',
-        'DeclaredUserStore'
+        'DeclaredUserStore',
+        'MySuggestionStore'
     ],
     views: [
         'GincoViewPort',
@@ -128,7 +129,8 @@ Ext.application({
         'AlignmentController',
         'ThesaurusStatisticsTabPanelController',
         'UsersTabPanelController',
-        'SuggestionPanelController'
+        'SuggestionPanelController',
+        'MySuggestionsPanelController'
     ],
     init: function(){
     },

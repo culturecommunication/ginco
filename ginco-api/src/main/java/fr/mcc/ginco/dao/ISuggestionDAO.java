@@ -77,4 +77,21 @@ public interface ISuggestionDAO extends IGenericDAO<Suggestion, Integer> {
      * @return
      */
     Long getTermSuggestionCount(String termId);
+    
+    /**
+     * Gets the list of suggestions whose recipient is the given parameter
+     * @param recipient
+     * @param startIndex
+     * @param limit
+     * @return
+     */
+    List<Suggestion> findPaginatedSuggestionsByRecipient(String recipient, Integer startIndex, Integer limit);
+    
+	/**
+	 * Counts the number of suggestions for the given recipient
+	 * @param recipient
+	 * @return
+	 */
+	Long getSuggestionsByRecipientCount(String recipient);
+
 }

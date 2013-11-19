@@ -53,6 +53,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xAccessibilityLabel : "Accessibility",
 	xLogoutBtnLabel : "Logout",
 	xSearchBtnTitle : "Click here to launch search",
+	xSuggestionBtnLabel : "My suggestions",
 	height : 64,
 
 	initComponent : function() {
@@ -163,6 +164,13 @@ Ext.define('GincoApp.view.TopToolbar', {
 				xtype : 'tbtext',
 				itemId : 'username',
 				cls : 'username'
+			},
+			,
+			{
+				xtype : 'button',
+				itemId : 'suggestionsBtn',
+				iconCls : 'suggestion-icon',
+				text : me.xSuggestionBtnLabel
 			},
 			{
 				xtype : 'tbseparator',

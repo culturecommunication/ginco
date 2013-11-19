@@ -104,11 +104,7 @@ public class SuggestionDAO extends GenericHibernateDAO<Suggestion, Integer>
 				.setProjection(Projections.rowCount()).list().get(0);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see fr.mcc.ginco.dao.INoteDAO#getTermNoteCount(java.lang.String)
-	 */
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -119,6 +115,29 @@ public class SuggestionDAO extends GenericHibernateDAO<Suggestion, Integer>
 	public Long getTermSuggestionCount(String termId) {
 		return (Long) getCurrentSession().createCriteria(Suggestion.class)
 				.add(Restrictions.eq("term.identifier", termId))
+				.setProjection(Projections.rowCount()).list().get(0);
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.ISuggestionDAO#findPaginatedSuggestionsByRecipient(java.lang.String, java.lang.Integer, java.lang.Integer)
+	 */
+	@Override
+	public List<Suggestion> findPaginatedSuggestionsByRecipient(
+			String recipient, Integer startIndex, Integer limit) {
+		return getCurrentSession().createCriteria(Suggestion.class)
+				.setMaxResults(limit)
+				.add(Restrictions.eq("recipient", recipient))
+				.setFirstResult(startIndex).addOrder(Order.desc("created"))
+				.list();
+	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.ISuggestionDAO#getSuggestionsByRecipientCount(java.lang.String)
+	 */
+	@Override
+	public Long getSuggestionsByRecipientCount(String recipient) {
+		return (Long) getCurrentSession().createCriteria(Suggestion.class)
+				.add(Restrictions.eq("recipient", recipient))
 				.setProjection(Projections.rowCount()).list().get(0);
 	}
 

@@ -48,37 +48,51 @@ import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Implementation of the ISuggestionService
- *
+ * 
  */
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("suggestionService")
 public class SuggestionServiceImpl implements ISuggestionService {
-	
+
 	@Inject
 	@Named("suggestionDAO")
 	private ISuggestionDAO suggestionDAO;
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.ISuggestionService#getConceptSuggestionPaginatedList(java.lang.String, java.lang.Integer, java.lang.Integer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.services.ISuggestionService#getConceptSuggestionPaginatedList
+	 * (java.lang.String, java.lang.Integer, java.lang.Integer)
 	 */
 	@Override
 	public List<Suggestion> getConceptSuggestionPaginatedList(String conceptId,
 			Integer startIndex, Integer limit) {
-		return suggestionDAO.findConceptPaginatedSuggestions(conceptId, startIndex, limit);
+		return suggestionDAO.findConceptPaginatedSuggestions(conceptId,
+				startIndex, limit);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.ISuggestionService#getTermSuggestionPaginatedList(java.lang.String, java.lang.Integer, java.lang.Integer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.services.ISuggestionService#getTermSuggestionPaginatedList
+	 * (java.lang.String, java.lang.Integer, java.lang.Integer)
 	 */
 	@Override
 	public List<Suggestion> getTermSuggestionPaginatedList(String termId,
 			Integer startIndex, Integer limit) {
-		return suggestionDAO.findTermPaginatedSuggestions(termId, startIndex, limit);
+		return suggestionDAO.findTermPaginatedSuggestions(termId, startIndex,
+				limit);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.ISuggestionService#getSuggestionById(java.lang.Integer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.services.ISuggestionService#getSuggestionById(java.lang.
+	 * Integer)
 	 */
 	@Override
 	public Suggestion getSuggestionById(Integer id) {
@@ -86,27 +100,39 @@ public class SuggestionServiceImpl implements ISuggestionService {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.ISuggestionService#createOrUpdateSuggestion(fr.mcc.ginco.beans.Suggestion)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.services.ISuggestionService#createOrUpdateSuggestion(fr.
+	 * mcc.ginco.beans.Suggestion)
 	 */
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public Suggestion createOrUpdateSuggestion(Suggestion suggestion)
 			throws BusinessException {
 		return suggestionDAO.update(suggestion);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.ISuggestionService#deleteSuggestion(fr.mcc.ginco.beans.Suggestion)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.services.ISuggestionService#deleteSuggestion(fr.mcc.ginco
+	 * .beans.Suggestion)
 	 */
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public Suggestion deleteSuggestion(Suggestion suggestion) {
 		return suggestionDAO.delete(suggestion);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.ISuggestionService#getConceptSuggestionCount(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.services.ISuggestionService#getConceptSuggestionCount(java
+	 * .lang.String)
 	 */
 	@Override
 	public Long getConceptSuggestionCount(String conceptId) {
@@ -114,12 +140,42 @@ public class SuggestionServiceImpl implements ISuggestionService {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.mcc.ginco.services.ISuggestionService#getTermSuggestionCount(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.services.ISuggestionService#getTermSuggestionCount(java.
+	 * lang.String)
 	 */
 	@Override
 	public Long getTermSuggestionCount(String termId) {
 		return suggestionDAO.getTermSuggestionCount(termId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see fr.mcc.ginco.services.ISuggestionService#
+	 * getSuggestionPaginatedListByRecipient(java.lang.String,
+	 * java.lang.Integer, java.lang.Integer)
+	 */
+	@Override
+	public List<Suggestion> getSuggestionPaginatedListByRecipient(
+			String recipient, Integer startIndex, Integer limit) {
+		return suggestionDAO.findPaginatedSuggestionsByRecipient(recipient,
+				startIndex, limit);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.mcc.ginco.services.ISuggestionService#getSuggestionByRecipientCount
+	 * (java.lang.String)
+	 */
+	@Override
+	public Long getSuggestionByRecipientCount(String recipient) {
+		return suggestionDAO.getSuggestionsByRecipientCount(recipient);
 	}
 
 }

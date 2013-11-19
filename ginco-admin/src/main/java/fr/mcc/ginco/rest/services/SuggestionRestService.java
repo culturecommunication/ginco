@@ -51,14 +51,18 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Suggestion;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.MySuggestionView;
 import fr.mcc.ginco.extjs.view.pojo.SuggestionView;
 import fr.mcc.ginco.extjs.view.utils.SuggestionViewConverter;
 import fr.mcc.ginco.services.ISuggestionService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  * Suggestion REST service for all operation on suggestions (both term or
@@ -70,6 +74,10 @@ import fr.mcc.ginco.services.ISuggestionService;
 @Produces({ MediaType.APPLICATION_JSON })
 @PreAuthorize("isAuthenticated()")
 public class SuggestionRestService {
+
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("suggestionService")
@@ -195,6 +203,60 @@ public class SuggestionRestService {
 
 		return new ExtJsonFormLoadData<List<SuggestionView>>(resultSuggestions,
 				resultSuggestions.size());
+	}
+
+	/**
+	 * Public method used to create new suggestions
+	 * 
+	 * @throws BusinessException
+	 */
+	@GET
+	@Path("/getUserSuggestions")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<MySuggestionView>> getUserSuggestions(
+			@QueryParam("start") Integer startIndex,
+			@QueryParam("limit") Integer limit) throws BusinessException {
+
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String currentUser = auth.getName();
+
+		List<Suggestion> suggestions = suggestionService
+				.getSuggestionPaginatedListByRecipient(currentUser, startIndex,
+						limit);
+
+		List<MySuggestionView> resultSuggestions = new ArrayList<MySuggestionView>();
+
+		for (Suggestion suggestion : suggestions) {
+			SuggestionView view = suggestionViewConverter.convert(suggestion);
+
+			MySuggestionView myView = new MySuggestionView(view);
+
+			if (suggestion.getConcept() != null) {
+				myView.setObjectIdentifier(suggestion.getConcept()
+						.getIdentifier());
+				myView.setObjectValue(thesaurusConceptService
+						.getConceptLabel(suggestion.getConcept()
+								.getIdentifier()));
+				myView.setThesaurusTitle(suggestion.getConcept().getThesaurus()
+						.getTitle());
+
+			} else {
+				myView.setObjectIdentifier(suggestion.getTerm().getIdentifier());
+				myView.setObjectValue(suggestion.getTerm().getLexicalValue());
+				myView.setThesaurusTitle(suggestion.getTerm().getThesaurus()
+						.getTitle());
+
+			}
+
+			resultSuggestions.add(myView);
+		}
+
+		ExtJsonFormLoadData<List<MySuggestionView>> result = new ExtJsonFormLoadData<List<MySuggestionView>>(
+				resultSuggestions);
+		result.setTotal(suggestionService
+				.getSuggestionByRecipientCount(currentUser));
+		return result;
 	}
 
 }

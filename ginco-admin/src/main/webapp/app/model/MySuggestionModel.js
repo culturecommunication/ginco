@@ -32,97 +32,22 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
+Ext.define('GincoApp.model.MySuggestionModel', {
+    extend: 'GincoApp.model.SuggestionModel',
+    fields: [
+        {
+            name: 'thesaurusTitle',
+            type: 'string'
+        },
+        {
+            name: 'objectIdentifier',
+            type: 'string'
+        },
+        {
+            name: 'objectValue',
+            type: 'string'
+        }
+    ]
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-/**
- * View class corresponding to {@link Suggestion} bean, but fully serializable;
- * 
- * @see fr.mcc.ginco.beans
- */
-@SuppressWarnings("serial")
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class SuggestionView implements Serializable, SecuredResourceView {
-
-	private Integer identifier;
-	private String content;
-	private String creator;
-	private String recipient;
-	private String created;
-	private String conceptId;
-	private String termId;
-	private String thesaurusId;
-
-	public SuggestionView() {
-	}
-
-	public Integer getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(Integer identifier) {
-		this.identifier = identifier;
-	}
-
-	public String getCreated() {
-		return created;
-	}
-
-	public void setCreated(String created) {
-		this.created = created;
-	}
-
-
-	public String getConceptId() {
-		return conceptId;
-	}
-
-	public void setConceptId(String conceptId) {
-		this.conceptId = conceptId;
-	}
-
-	public String getTermId() {
-		return termId;
-	}
-
-	public void setTermId(String termId) {
-		this.termId = termId;
-	}
-
-	@Override
-	public String getThesaurusId() {
-		return thesaurusId;
-	}
-
-	public void setThesaurusId(String thesaurusId) {
-		this.thesaurusId = thesaurusId;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getCreator() {
-		return creator;
-	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-	public String getRecipient() {
-		return recipient;
-	}
-
-	public void setRecipient(String recipient) {
-		this.recipient = recipient;
-	}
-
-}
+});

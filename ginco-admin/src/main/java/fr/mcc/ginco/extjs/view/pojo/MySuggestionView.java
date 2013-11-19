@@ -34,9 +34,9 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import fr.mcc.ginco.beans.Suggestion;
 
 /**
  * View class corresponding to {@link Suggestion} bean, but fully serializable;
@@ -45,84 +45,45 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class SuggestionView implements Serializable, SecuredResourceView {
+public class MySuggestionView extends SuggestionView {
 
-	private Integer identifier;
-	private String content;
-	private String creator;
-	private String recipient;
-	private String created;
-	private String conceptId;
-	private String termId;
-	private String thesaurusId;
+	private String thesaurusTitle;
+	private String objectIdentifier;
+	private String objectValue;
 
-	public SuggestionView() {
+	public MySuggestionView(SuggestionView view) {
+		this.setConceptId(view.getConceptId());
+		this.setContent(view.getContent());
+		this.setCreated(view.getCreated());
+		this.setCreator(view.getCreator());
+		this.setIdentifier(view.getIdentifier());
+		this.setRecipient(view.getRecipient());
+		this.setTermId(view.getTermId());
+		this.setThesaurusId(view.getThesaurusId());
 	}
 
-	public Integer getIdentifier() {
-		return identifier;
+	public String getThesaurusTitle() {
+		return thesaurusTitle;
 	}
 
-	public void setIdentifier(Integer identifier) {
-		this.identifier = identifier;
+	public void setThesaurusTitle(String thesaurusTitle) {
+		this.thesaurusTitle = thesaurusTitle;
 	}
 
-	public String getCreated() {
-		return created;
+	public String getObjectIdentifier() {
+		return objectIdentifier;
 	}
 
-	public void setCreated(String created) {
-		this.created = created;
+	public void setObjectIdentifier(String objectIdentifier) {
+		this.objectIdentifier = objectIdentifier;
 	}
 
-
-	public String getConceptId() {
-		return conceptId;
+	public String getObjectValue() {
+		return objectValue;
 	}
 
-	public void setConceptId(String conceptId) {
-		this.conceptId = conceptId;
-	}
-
-	public String getTermId() {
-		return termId;
-	}
-
-	public void setTermId(String termId) {
-		this.termId = termId;
-	}
-
-	@Override
-	public String getThesaurusId() {
-		return thesaurusId;
-	}
-
-	public void setThesaurusId(String thesaurusId) {
-		this.thesaurusId = thesaurusId;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getCreator() {
-		return creator;
-	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-	public String getRecipient() {
-		return recipient;
-	}
-
-	public void setRecipient(String recipient) {
-		this.recipient = recipient;
+	public void setObjectValue(String objectValue) {
+		this.objectValue = objectValue;
 	}
 
 }
