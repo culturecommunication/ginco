@@ -34,6 +34,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 	xSelectBtnLabel : "Display selection",
 	xSelectBtnToolTip : "Display the selected element",
 	xRoleFilterBtnLabel : 'Display my vocabularies',
+	xRoleNoFilterBtnLabel : 'Display all vocabularies',
 	xRoleFilterBtnToolTip : 'Filter the list according to my roles',
 	xFilterLabel : 'Filter',
 	xCollapseToolTip : 'Collapse explorer',
@@ -43,6 +44,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 	width : 270,
 	collapsible : true,
 	header : true,
+	filtered : true,
 	title : '',
 	layout : {
 		type : 'vbox',
@@ -55,10 +57,15 @@ Ext.define('GincoApp.view.LeftPanel', {
 	},
 	setFilter : function(filterStatus) {
 		var me = this;
-		if (filterStatus)
+		me.filtered = filterStatus;
+		if (filterStatus) {
 			me.down('treepanel').setTitle(me.xThesaurusLabelFiltered);
-		else
+			me.down('#roleFilterBtn').setText(me.xRoleNoFilterBtnLabel);
+		}
+		else {
 			me.down('treepanel').setTitle(me.xThesaurusLabelUnfiltered);
+			me.down('#roleFilterBtn').setText(me.xRoleFilterBtnLabel);
+		}
 	},
 
 	initComponent : function() {
@@ -120,12 +127,10 @@ Ext.define('GincoApp.view.LeftPanel', {
 									items : [{
 												xtype : 'button',
 												flex : 1,
-												text : me.xRoleFilterBtnLabel,
+												text : me.xRoleNoFilterBtnLabel,
 												itemId : 'roleFilterBtn',
 												tooltip : me.xRoleFilterBtnToolTip,
 												tooltipType : 'title',
-												enableToggle : true,
-												pressed : true,
 												margin : '0 0 5 0'
 											}, {
 												fieldLabel : me.xFilterLabel,

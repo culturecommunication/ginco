@@ -214,13 +214,12 @@ Ext.define('GincoApp.controller.MainTreeController', {
  		}
  	},
  	
- 	onRoleFilterClick: function (theBtn, pressed) {
+ 	onRoleFilterClick: function (theBtn) {
        var MainTreeStore = this.getMainTreeStoreStore();
        var treePanel =theBtn.up('treepanel');
- 		if (pressed) {
+ 		if (treePanel.up().filtered == false) {
  			MainTreeStore.isRoleFiltered=true; 
  			treePanel.up().setFilter(true);
- 				
  		} else {
  			MainTreeStore.isRoleFiltered=false;
  			treePanel.up().setFilter(false);
@@ -273,7 +272,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
             	click : this.onPinBtnClic
             },            
             "#mainTreeView #roleFilterBtn": {
-            	toggle: this.onRoleFilterClick
+            	click: this.onRoleFilterClick
             }
 		});
 	}
