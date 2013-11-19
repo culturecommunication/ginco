@@ -39,7 +39,7 @@
  *
  */
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
-Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteTermPanel', 'GincoApp.view.CustomAttrForm', 'GincoApp.view.MetaDataPanel' ]);
+Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteTermPanel', 'GincoApp.view.CustomAttrForm', 'GincoApp.view.SuggestionPanel', 'GincoApp.view.MetaDataPanel' ]);
 
 Ext
 		.define(
