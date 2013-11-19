@@ -193,7 +193,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							disabled : true,
 							itemId : 'journalBtnMenu',
 							text : me.xJournal,
-							iconCls : 'exports-icon',
+							iconCls : 'icon-log',
 							menu : {
 								xtype : 'menu',
 								width : 200,
@@ -210,17 +210,17 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 							disabled : true,
 							itemId : 'importSandbox',
-							iconCls : 'exports-icon'
+							iconCls : 'imports-icon'
 						}, {
 							xtype : 'button',
 							text : me.xImportBranch,
 							requiredRoles : ['ADMIN', 'MANAGER'],
 							disabled : true,
 							itemId : 'importBranch',
-							iconCls : 'exports-icon'
+							iconCls : 'imports-icon'
 						}, {
 							xtype : 'tbspacer',
-							flex : 1,
+							flex : 1
 						}, {
             				xtype : 'triggerfield',
             				width : 200,

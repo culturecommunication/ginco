@@ -131,6 +131,10 @@ a.x-tab-close-btn:focus  {
     background: url('../images/exports.png') no-repeat 0 0 !important;
 }
 
+.imports-icon {
+    background: url('../images/imports.png') no-repeat 0 0 !important;
+}
+
 .logout-icon {
 	background-image: url(../images/door_in.png) !important;
 }
@@ -168,6 +172,50 @@ a.x-tab-close-btn:focus  {
 
 .icon-right {
     background-image: url(../images/arrow_right.png) !important;
+}
+
+.icon-group {
+    background-image: url(../images/shape_group.png) !important;
+}
+
+.icon-table {
+    background-image: url(../images/table.png) !important;
+}
+
+.icon-complex-concept {
+    background-image: url(../images/concept-complex.png) !important;
+}
+
+.icon-tree {
+    background-image: url(../images/tree.png) !important;
+}
+
+.icon-view {
+    background-image: url(../images/visualisation.png) !important;
+}
+
+.icon-top-concept {
+    background-image: url(../images/top-concept.png) !important;
+}
+
+.icon-concept {
+    background-image: url(../images/concept.png) !important;
+}
+
+.icon-term {
+    background-image: url(../images/terme.png) !important;
+}
+
+.icon-orphan-concept {
+    background-image: url(../images/concept-orphelin.png) !important;
+}
+
+.icon-candidate-concept {
+    background-image: url(../images/concept-candidat.png) !important;
+}
+
+.icon-log {
+    background-image: url(../images/newspaper.png) !important;
 }
 
 .mandatory-field {

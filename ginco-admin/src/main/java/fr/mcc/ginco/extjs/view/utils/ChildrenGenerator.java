@@ -116,6 +116,7 @@ public class ChildrenGenerator {
 			childNode.setType(ThesaurusListNodeType.CONCEPT);
 			childNode.setThesaurusId(topTerm.getThesaurusId());
 			childNode.setDisplayable(true);
+			childNode.setIconCls("icon-concept");
 
 			if (!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
 				childNode.setChildren(new ArrayList<IThesaurusListNode>());

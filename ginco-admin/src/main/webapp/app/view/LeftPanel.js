@@ -102,7 +102,7 @@ Ext.define('GincoApp.view.LeftPanel', {
 												text : me.xSelectBtnLabel,
 												disabled : true,
 												itemId : 'selectBtn',
-												iconCls : 'icon-right',
+												iconCls : 'icon-view',
 												iconAlign : 'right',
 												tooltip : me.xSelectBtnToolTip,
 												tooltipType : 'title',

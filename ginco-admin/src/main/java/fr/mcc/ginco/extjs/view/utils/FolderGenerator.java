@@ -122,6 +122,7 @@ public class FolderGenerator {
 		concepts.setTitle("Arborescence des concepts");
 		concepts.setId(CONCEPTS_PREFIX + parentId);
 		concepts.setType(ThesaurusListNodeType.FOLDER);
+		concepts.setIconCls("icon-tree");
 		concepts.setExpanded(false);
 		concepts.setDisplayable(false);
 		long nbTopConcepts = thesaurusConceptService
@@ -153,7 +154,7 @@ public class FolderGenerator {
 		sandbox.setId(ClassificationFolderType.COMPLEXCONCEPTS.toString() + "_"
 				+ parentId);
 		sandbox.setType(ThesaurusListNodeType.FOLDER);
-		sandbox.setIconCls("complex");
+		sandbox.setIconCls("icon-complex-concept");
 		sandbox.setExpanded(false);
 		sandbox.setDisplayable(true);
 		sandbox.setChildren(new ArrayList<IThesaurusListNode>());
@@ -167,6 +168,7 @@ public class FolderGenerator {
 				+ parentId);
 		arrays.setType(ThesaurusListNodeType.FOLDER);
 		arrays.setExpanded(false);
+		arrays.setIconCls("icon-table");
 		arrays.setDisplayable(false);
 		List<ThesaurusArray> realArrays = thesaurusArrayService
 				.getAllThesaurusArrayByThesaurusId(null, parentId);
@@ -204,6 +206,7 @@ public class FolderGenerator {
 				+ parentId);
 		groups.setType(ThesaurusListNodeType.FOLDER);
 		groups.setExpanded(false);
+		groups.setIconCls("icon-group");
 		groups.setChildren(new ArrayList<IThesaurusListNode>());
 		groups.setDisplayable(false);
 

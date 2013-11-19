@@ -45,6 +45,7 @@ Ext
 					alias : 'widget.conceptPanel',
 					localized : true,
 					closable : true,
+					iconCls : 'icon-concept',
 					path : [],
 					layout : {
 						type : 'vbox',

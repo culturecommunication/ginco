@@ -55,6 +55,7 @@ Ext
 						align : 'stretch'
 					},
 					trackable : true,
+					iconCls : 'icon-term',
 
 					xMetadataTitle : 'Metadata',
 

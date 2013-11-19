@@ -47,6 +47,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
@@ -108,7 +109,10 @@ public class OrphansGenerator {
 			orphanNode.setExpanded(false);
             orphanNode.setThesaurusId(orphan.getThesaurusId());
             orphanNode.setDisplayable(true);
-
+            if (orphan.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus())
+            	orphanNode.setIconCls("icon-candidate-concept");
+            else
+            	orphanNode.setIconCls("icon-orphan-concept");
             if(!thesaurusConceptService.hasChildren(orphan.getIdentifier())) {
                 orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
 			    orphanNode.setLeaf(true);
