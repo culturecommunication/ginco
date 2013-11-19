@@ -50,6 +50,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
@@ -94,9 +95,11 @@ public class OrphansGeneratorTest {
         ThesaurusConcept co1 = new ThesaurusConcept();
         co1.setIdentifier("co1");
         co1.setThesaurus(fakeThesaurus);
+        co1.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
         ThesaurusConcept co2 = new ThesaurusConcept();
         co2.setIdentifier("co2");
         co2.setThesaurus(fakeThesaurus);
+        co2.setStatus(ConceptStatusEnum.CANDIDATE.getStatus());
 		concepts.add(co2);
 		concepts.add(co1);
 
@@ -109,6 +112,8 @@ public class OrphansGeneratorTest {
 		 Assert.assertEquals(2, nodes.size());
 		 //Test alphabetical order
 		 Assert.assertEquals("CONCEPT_*co2", nodes.get(0).getId());
+		 Assert.assertEquals("icon-candidate-concept", nodes.get(0).getIconCls());
+		 Assert.assertEquals("icon-orphan-concept", nodes.get(1).getIconCls());
 
 	}
 	
