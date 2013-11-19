@@ -44,9 +44,16 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 
+/**
+ * Utility class providing methods workign with terms
+ *
+ */
 @Component("thesaurusTermUtils")
 public class ThesaurusTermUtils {
 	
+	/**
+	 * Application default language
+	 */
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 	
