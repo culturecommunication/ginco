@@ -47,9 +47,11 @@ Ext.define('GincoApp.controller.SuggestionPanelController', {
 		if (theGrid.up('conceptPanel') != null){
 			var theConceptId = theGrid.up('conceptPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
+			theGrid.getStore().getProxy().setExtraParam('termId', "");
 		} else if (theGrid.up('termPanel') != null){
 			var theTermId = theGrid.up('termPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
+			theGrid.getStore().getProxy().setExtraParam('conceptId', "");
 		}
 		theGrid.getStore().load();
 	},
