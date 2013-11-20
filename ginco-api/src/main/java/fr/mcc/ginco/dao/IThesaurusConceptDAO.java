@@ -134,6 +134,8 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	Long countConcepts(String idThesaurus) throws BusinessException;
 
 	Long countConceptsWoNotes(String idThesaurus) throws BusinessException;
+	
+	List<ThesaurusConcept> getConceptsWoNotes(String idThesaurus, int startIndex, int limit);
 
 	/**
 	 * Returns the number of concepts aligned to internal thesauruses

@@ -122,6 +122,7 @@ Ext.application({
         'ImportController',
         'ThesaurusVersionPanelController',
         'SearchPanelController',
+        'ThesaurusReportsTabPanelController',
         'ComplexConceptPanelController',
         'ComplexConceptsPanelController',
         'CustomAttributeTypesController',

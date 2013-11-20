@@ -188,8 +188,8 @@ a.x-tab-close-btn:focus  {
     background-image: url(../images/concept-complex.png) !important;
 }
 
-.icon-tree {
-    background-image: url(../images/tree.png) !important;
+.icon-tree, .x-grid-tree-node-expanded .icon-tree {
+    background-image: url(../images/tree.png);
 }
 
 .icon-view {
@@ -218,6 +218,10 @@ a.x-tab-close-btn:focus  {
 
 .icon-log {
     background-image: url(../images/newspaper.png) !important;
+}
+
+.icon-reports {
+    background-image: url(../images/report.png) !important;
 }
 
 .mandatory-field {

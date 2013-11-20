@@ -54,7 +54,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
- *
+ * 
  */
 @Repository("thesaurusConceptDAO")
 public class ThesaurusConceptDAO extends
@@ -69,35 +69,38 @@ public class ThesaurusConceptDAO extends
 	}
 
 	/*
-	 * This flush is used in a particular case for saving concepts.
-	 * We first save the concept with it relationships (parent/child), we flush (with this method) to save in DB the modifications
-	 * Then, we can save the updated role on hierarchical relationships.
-	 * If the flush is not done, when can't update the role of a relation because its not already saved in DB.
-	 *
-	 * This is a workaround to fit actual hibernate mapping and musn't not be used in other cases
-	 *
+	 * This flush is used in a particular case for saving concepts. We first
+	 * save the concept with it relationships (parent/child), we flush (with
+	 * this method) to save in DB the modifications Then, we can save the
+	 * updated role on hierarchical relationships. If the flush is not done,
+	 * when can't update the role of a relation because its not already saved in
+	 * DB.
+	 * 
+	 * This is a workaround to fit actual hibernate mapping and musn't not be
+	 * used in other cases
+	 * 
 	 * (non-Javadoc)
+	 * 
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#flush()
 	 */
-	public void flush()
-	{
+	public void flush() {
 		getCurrentSession().flush();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConcept
 	 */
 	@Override
-	public List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus, int maxResults)
-			throws BusinessException {
+	public List<ThesaurusConcept> getOrphansThesaurusConcept(
+			Thesaurus thesaurus, int maxResults) throws BusinessException {
 		return getListByThesaurusAndTopConcept(thesaurus, false, maxResults);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConceptCount
 	 * (fr.mcc.ginco.beans.Thesaurus)
@@ -110,18 +113,18 @@ public class ThesaurusConceptDAO extends
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConcept
 	 */
 	@Override
-	public List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults)
-			throws BusinessException {
+	public List<ThesaurusConcept> getTopTermThesaurusConcept(
+			Thesaurus thesaurus, int maxResults) throws BusinessException {
 		return getListByThesaurusAndTopConcept(thesaurus, true, maxResults);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConceptCount
 	 * (fr.mcc.ginco.beans.Thesaurus)
@@ -139,7 +142,8 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults) {
+	public List<ThesaurusConcept> getChildrenConcepts(String conceptId,
+			int maxResults) {
 		return getConcepts(conceptId, null, null, maxResults);
 	}
 
@@ -159,7 +163,7 @@ public class ThesaurusConceptDAO extends
 		}
 
 		selectOrphans(criteria, searchOrphans);
-		if (maxResults>0) {
+		if (maxResults > 0) {
 			criteria.setMaxResults(maxResults);
 		}
 		return criteria.list();
@@ -192,7 +196,7 @@ public class ThesaurusConceptDAO extends
 
 	/**
 	 * Selects TopTerm concepts by ThesaurusId without excluding.
-	 *
+	 * 
 	 * @param criteria
 	 * @param thesaurusId
 	 */
@@ -202,7 +206,7 @@ public class ThesaurusConceptDAO extends
 
 	/**
 	 * Selects TopTerm concepts by ThesaurusId with excluding.
-	 *
+	 * 
 	 * @param criteria
 	 * @param thesaurusId
 	 * @param excludeId
@@ -240,9 +244,9 @@ public class ThesaurusConceptDAO extends
 	private void onlyValidatedConcepts(Criteria criteria,
 			Boolean onlyValidatedConcepts) {
 
-        if (onlyValidatedConcepts == null) {
-        	return;
-        }
+		if (onlyValidatedConcepts == null) {
+			return;
+		}
 
 		if (onlyValidatedConcepts) {
 			criteria.add(Restrictions.eq("status",
@@ -251,17 +255,19 @@ public class ThesaurusConceptDAO extends
 	}
 
 	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
-			Thesaurus thesaurus, boolean topConcept, int maxResults) throws BusinessException {
+			Thesaurus thesaurus, boolean topConcept, int maxResults)
+			throws BusinessException {
 
 		if (thesaurus == null) {
 			throw new BusinessException("Object thesaurus can't be null !",
 					"empty-thesaurus");
 		}
-		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus, topConcept);
-		if (maxResults>0) {
+		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
+				topConcept);
+		if (maxResults > 0) {
 			crit.setMaxResults(maxResults);
 		}
-		return crit	.list();
+		return crit.list();
 	}
 
 	private long getListByThesaurusAndTopConceptCount(Thesaurus thesaurus,
@@ -288,72 +294,115 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public Long countConcepts(String idThesaurus)
-			throws BusinessException {
-		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusConcept.class);
+	public Long countConcepts(String idThesaurus) throws BusinessException {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConcept.class);
 		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
-		.setProjection(Projections.rowCount());
+				.setProjection(Projections.rowCount());
 		return (Long) criteria.list().get(0);
 	}
 
 	@Override
 	public Long countConceptsWoNotes(String idThesaurus)
 			throws BusinessException {
-		Query query = getCurrentSession().createSQLQuery("select count(*) "
-+"from thesaurus_concept c  "
-+"left join note n on c.identifier = n.conceptid  "
-+"where c.thesaurusid=:pthesaurusid"
-+" and n.identifier is null");
+		Query query = getCurrentSession().createSQLQuery(
+				"select count(*) " + "from thesaurus_concept c  "
+						+ "left join note n on c.identifier = n.conceptid  "
+						+ "where c.thesaurusid=:pthesaurusid"
+						+ " and n.identifier is null");
 		query.setParameter("pthesaurusid", idThesaurus);
-		return ((BigInteger)query.list().get(0)).longValue();
+		return ((BigInteger) query.list().get(0)).longValue();
 	}
 
 	@Override
-	public 	Long countConceptsAlignedToIntThes(String idThesaurus) throws BusinessException{
-		DetachedCriteria alignmentCriteria =  DetachedCriteria.forClass(Alignment.class, "al")
+	public List<ThesaurusConcept> getConceptsWoNotes(String idThesaurus, int startIndex, int limit) 
+	{
+		Query query = getCurrentSession().createSQLQuery("select c.* "
+				+"from thesaurus_concept c  "
+				+"left join note n on c.identifier = n.conceptid  "
+				+"where c.thesaurusid=:pthesaurusid"
+				+" and n.identifier is null").addEntity(ThesaurusConcept.class);
+						query.setParameter("pthesaurusid", idThesaurus);
+						query.setFirstResult(startIndex);
+						query.setFetchSize(limit);
+						query.setMaxResults(limit);
+						return (List<ThesaurusConcept>)query.list();
+	}
+
+	@Override
+	public Long countConceptsAlignedToIntThes(String idThesaurus)
+			throws BusinessException {
+		DetachedCriteria alignmentCriteria = DetachedCriteria
+				.forClass(Alignment.class, "al")
 				.add(Restrictions.isNotNull("al.internalTargetThesaurus"))
-				.setProjection(Projections.projectionList().add(Projections.property("al.sourceConcept.identifier")));
+				.setProjection(
+						Projections
+								.projectionList()
+								.add(Projections
+										.property("al.sourceConcept.identifier")));
 
-		DetachedCriteria conceptCriteria = DetachedCriteria.forClass(ThesaurusConcept.class,"stc")
+		DetachedCriteria conceptCriteria = DetachedCriteria
+				.forClass(ThesaurusConcept.class, "stc")
 				.add(Restrictions.eq("stc.thesaurus.identifier", idThesaurus))
-				.setProjection(Projections.projectionList().add(Projections.property("stc.identifier")));
+				.setProjection(
+						Projections.projectionList().add(
+								Projections.property("stc.identifier")));
 
-		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
+		Criteria criteria = getCurrentSession()
+				.createCriteria(ThesaurusConcept.class, "tc")
 				.add(Restrictions.and(
 						Subqueries.propertyIn(TC_IDENTIFIER, alignmentCriteria),
 						Subqueries.propertyIn(TC_IDENTIFIER, conceptCriteria)))
-						.setProjection(Projections.rowCount());
+				.setProjection(Projections.rowCount());
 
 		return (Long) criteria.list().get(0);
 	}
 
 	@Override
-	public Long countConceptsAlignedToExtThes(String idThesaurus) throws BusinessException{
-		DetachedCriteria alignmentCriteria =  DetachedCriteria.forClass(Alignment.class, "al")
+	public Long countConceptsAlignedToExtThes(String idThesaurus)
+			throws BusinessException {
+		DetachedCriteria alignmentCriteria = DetachedCriteria
+				.forClass(Alignment.class, "al")
 				.add(Restrictions.isNotNull("al.externalTargetThesaurus"))
-				.setProjection(Projections.projectionList().add(Projections.property("al.sourceConcept.identifier")));
+				.setProjection(
+						Projections
+								.projectionList()
+								.add(Projections
+										.property("al.sourceConcept.identifier")));
 
-		DetachedCriteria conceptCriteria = DetachedCriteria.forClass(ThesaurusConcept.class,"stc")
+		DetachedCriteria conceptCriteria = DetachedCriteria
+				.forClass(ThesaurusConcept.class, "stc")
 				.add(Restrictions.eq("stc.thesaurus.identifier", idThesaurus))
-				.setProjection(Projections.projectionList().add(Projections.property("stc.identifier")));
+				.setProjection(
+						Projections.projectionList().add(
+								Projections.property("stc.identifier")));
 
-		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
+		Criteria criteria = getCurrentSession()
+				.createCriteria(ThesaurusConcept.class, "tc")
 				.add(Restrictions.and(
 						Subqueries.propertyIn(TC_IDENTIFIER, alignmentCriteria),
 						Subqueries.propertyIn(TC_IDENTIFIER, conceptCriteria)))
-						.setProjection(Projections.rowCount());
+				.setProjection(Projections.rowCount());
 		return (Long) criteria.list().get(0);
 	}
 
 	@Override
-	public Long countConceptsAlignedToMyThes(String idThesaurus) throws BusinessException{
-		DetachedCriteria alignmentCriteria =  DetachedCriteria.forClass(Alignment.class, "al")
-				.add(Restrictions.eq("al.internalTargetThesaurus.identifier", idThesaurus))
-				.setProjection(Projections.projectionList().add(Projections.property("al.sourceConcept.identifier")));
+	public Long countConceptsAlignedToMyThes(String idThesaurus)
+			throws BusinessException {
+		DetachedCriteria alignmentCriteria = DetachedCriteria
+				.forClass(Alignment.class, "al")
+				.add(Restrictions.eq("al.internalTargetThesaurus.identifier",
+						idThesaurus))
+				.setProjection(
+						Projections
+								.projectionList()
+								.add(Projections
+										.property("al.sourceConcept.identifier")));
 
-		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc")
+		Criteria criteria = getCurrentSession()
+				.createCriteria(ThesaurusConcept.class, "tc")
 				.add(Subqueries.propertyIn(TC_IDENTIFIER, alignmentCriteria))
-					.setProjection(Projections.rowCount());
+				.setProjection(Projections.rowCount());
 
 		return (Long) criteria.list().get(0);
 	}
