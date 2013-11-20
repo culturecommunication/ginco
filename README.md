@@ -1,7 +1,7 @@
 GINCO
 =====
 
-[English version see below]
+[English version see below] (#what-is-ginco-)
 
 
 GINCO est une application multiutilisateurs dédiée à la gestion de référentiels terminologiques. Elle met en oeuvre les principes définis dans la norme ISO 25964-1:2011 Information et documentation -- Thésaurus et interopérabilité avec d'autres vocabulaires -- Partie 1: Thésaurus pour la recherche documentaire.
