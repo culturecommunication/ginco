@@ -34,38 +34,56 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.solr.IIndexerService;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.pojo.FilterCriteria;
+import fr.mcc.ginco.solr.ISearcherService;
+import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SortCriteria;
 
 /**
- * Base REST service intended to be used for Solr indexation
+ * Base REST service intended to be used for Solr search
  */
+
 @Service
-@Path("/indexerservice")
-public class IndexerRestService {
+@Path("/searcherservice")
+public class SearcherRestService {
 
 	@Inject
-    @Named("indexerService")
-    private IIndexerService indexerService;
+    @Named("searcherService")
+    private ISearcherService searcherService;
 
-    @GET
-    @Path("/reindex")
+	@POST
+    @Path("/search")
+    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({MediaType.APPLICATION_JSON})
-    public Response forceIndexation() throws BusinessException, TechnicalException {
-        indexerService.forceIndexing();
-        return Response.status(Response.Status.OK)
-                .entity("{success:true, message: 'Indexing started!'}")
-                .build();
+    public  ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
+        try {
+        	SortCriteria sort = new SortCriteria(filter.getSortfield(), filter.getSortdir());
+        	SearchResultList searchResults  = searcherService.search(filter.getQuery(), filter.getType(),
+                    filter.getThesaurus(), filter.getStatus(),
+                    filter.getCreationdate(), filter.getModificationdate(),
+                    filter.getLanguage(),sort, filter.getStart(),filter.getLimit());
+
+        	ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
+        	extSearchResults.setTotal((long) searchResults.getNumFound());
+			return extSearchResults;
+		} catch (SolrServerException e) {
+			throw new TechnicalException("Search exception" , e) ;
+		}
     }
 }

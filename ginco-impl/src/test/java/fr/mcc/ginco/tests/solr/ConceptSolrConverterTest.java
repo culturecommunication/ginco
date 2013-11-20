@@ -79,7 +79,7 @@ public class ConceptSolrConverterTest {
 	}
 
 	@Test
-	public void testSimpleConvertSolrConcept() throws SolrServerException, IOException {
+	public void testConvertSolrConcept() throws SolrServerException, IOException {
 
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("http://th1");

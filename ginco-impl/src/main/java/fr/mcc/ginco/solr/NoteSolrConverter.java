@@ -74,7 +74,22 @@ public class NoteSolrConverter {
 
 		doc.addField(SolrField.LEXICALVALUE, thesaurusNote.getLexicalValue());
 		doc.addField(SolrField.TYPE, Note.class.getSimpleName());
-		doc.addField(SolrField.EXT_TYPE, EntityType.NOTE);
+
+		String noteTypeCode = thesaurusNote.getNoteType().getCode();
+		if ("definition".equals(noteTypeCode)){
+			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_DEFINITION);
+		} else if ("editorialNote".equals(noteTypeCode)) {
+			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_EDITORIAL);
+		} else if ("example".equals(noteTypeCode)){
+			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_EXAMPLE);
+		} else if ("historyNote".equals(noteTypeCode)) {
+			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_HISTORY);
+		} else if ("scopeNote".equals(noteTypeCode)){
+			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_SCOPE);
+		} else {
+			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE);
+		}
+
 		doc.addField(SolrField.LANGUAGE, thesaurusNote.getLanguage().getId());
 		Timestamp modifiedDate = new Timestamp(thesaurusNote.getModified()
 				.getTime());

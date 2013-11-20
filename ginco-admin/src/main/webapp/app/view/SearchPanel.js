@@ -48,7 +48,8 @@ Ext.define('GincoApp.view.SearchPanel', {
 	searchThesaurus : '-1',
 	xTypeLabels : {
 		ThesaurusTerm : 'Term',
-		ThesaurusConcept : 'Concept'
+		ThesaurusConcept : 'Concept',
+		Note : 'Note'
 	},
 	layout : {
 		type : 'vbox',

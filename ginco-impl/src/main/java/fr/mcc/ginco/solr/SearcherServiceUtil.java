@@ -47,6 +47,9 @@ import fr.mcc.ginco.utils.DateUtil;
 @Service("searcherServiceUtil")
 public class SearcherServiceUtil {
 
+	private static final String CLOSE_PARENTHESIS = ")";
+	private static final String OPEN_PARENTHESIS = "(";
+	private static final String OR = " OR ";
 	private static final String SPACE = " ";
 	private static final char DOUBLE_QUOTE = '"';
 	private static final String SEMI_COL = ":";
@@ -92,7 +95,8 @@ public class SearcherServiceUtil {
 	/**
 	 * {type: 1, typeLabel:me.xConceptLabel}, {type: 2,
 	 * typeLabel:me.xTermLabel}, {type: 3, typeLabel:me.xNonPreferredTermLabel},
-	 * {type: 4, typeLabel: me.xPreferredTermLabel}
+	 * {type: 4, typeLabel: me.xPreferredTermLabel},
+	 * {type: 5, typeLabel: me.xNoteLabel}
 	 *
 	 * @param type
 	 * @return
@@ -109,13 +113,22 @@ public class SearcherServiceUtil {
 		if (type == 1) {
 			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + EntityType.CONCEPT;
 		} else if (type == 2) {
-			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + "("
-					+ EntityType.TERM_PREF + " OR " + EntityType.TERM_NON_PREF
-					+ ")";
+			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + OPEN_PARENTHESIS
+					+ EntityType.TERM_PREF + OR + EntityType.TERM_NON_PREF
+					+ CLOSE_PARENTHESIS;
 		} else if (type == 3) {
 			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + EntityType.TERM_NON_PREF;
 		} else if (type == 4) {
 			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + EntityType.TERM_PREF;
+		} else if (type == 5) {
+			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + OPEN_PARENTHESIS
+					+ EntityType.NOTE + OR
+					+ EntityType.NOTE_DEFINITION + OR
+					+ EntityType.NOTE_EDITORIAL + OR
+					+ EntityType.NOTE_EXAMPLE + OR
+					+ EntityType.NOTE_HISTORY + OR
+					+ EntityType.NOTE_SCOPE
+					+ CLOSE_PARENTHESIS;
 		}
 
 		return query;
@@ -156,8 +169,9 @@ public class SearcherServiceUtil {
 		if (doc.getFieldValue(solrField)!=null)
 		{
 			return doc.getFieldValue(solrField).toString();
-		} else
+		} else {
 			return BLANK;
+		}
 	}
 
 	private String getSolrDateField(SolrDocument doc, String solrField)
@@ -165,7 +179,8 @@ public class SearcherServiceUtil {
 		if (doc.getFieldValue(solrField)!=null)
 		{
 			return DateUtil.toString((Date)doc.getFieldValue(solrField));
-		} else
+		} else {
 			return BLANK;
+		}
 	}
 }

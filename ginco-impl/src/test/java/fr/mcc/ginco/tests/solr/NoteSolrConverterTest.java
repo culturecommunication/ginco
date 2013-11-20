@@ -46,6 +46,7 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -79,12 +80,16 @@ public class NoteSolrConverterTest {
 		Language lang = new Language();
 		lang.setId("fr-FR");
 
+		NoteType noteType = new NoteType();
+		noteType.setCode("noteType");
+
 		Note fakeConceptNote = new Note();
 		fakeConceptNote.setIdentifier("http://note1");
 		fakeConceptNote.setCreated(DateUtil.nowDate());
 		fakeConceptNote.setModified(DateUtil.nowDate());
 		fakeConceptNote.setLexicalValue("Fake concept note");
 		fakeConceptNote.setLanguage(lang);
+		fakeConceptNote.setNoteType(noteType);
 		fakeConceptNote.setConcept(fakeConcept);
 
 		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
@@ -105,8 +110,6 @@ public class NoteSolrConverterTest {
 				.getFieldValue(SolrField.MODIFIED));
 		Assert.assertEquals(Note.class.getSimpleName(), doc
 				.getFieldValue(SolrField.TYPE));
-		Assert.assertEquals(EntityType.NOTE, doc
-				.getFieldValue(SolrField.EXT_TYPE));
 	}
 
 	@Test
@@ -123,12 +126,16 @@ public class NoteSolrConverterTest {
 		Language lang = new Language();
 		lang.setId("fr-FR");
 
+		NoteType noteType = new NoteType();
+		noteType.setCode("noteType");
+
 		Note fakeTermNote = new Note();
 		fakeTermNote.setIdentifier("http://note1");
 		fakeTermNote.setCreated(DateUtil.nowDate());
 		fakeTermNote.setModified(DateUtil.nowDate());
 		fakeTermNote.setLexicalValue("Fake concept note");
 		fakeTermNote.setLanguage(lang);
+		fakeTermNote.setNoteType(noteType);
 		fakeTermNote.setTerm(fakeTerm);
 
 		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeTermNote);
@@ -149,7 +156,170 @@ public class NoteSolrConverterTest {
 				.getFieldValue(SolrField.MODIFIED));
 		Assert.assertEquals(Note.class.getSimpleName(), doc
 				.getFieldValue(SolrField.TYPE));
-		Assert.assertEquals(EntityType.NOTE, doc
+	}
+
+	@Test
+	public void testConvertSolrDefinitionNote() throws SolrServerException, IOException {
+
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("http://th1");
+		fakeThesaurus.setTitle("Fake thesaurus");
+
+		ThesaurusConcept fakeConcept = new ThesaurusConcept();
+		fakeConcept.setIdentifier("http://c1");
+		fakeConcept.setThesaurus(fakeThesaurus);
+
+		Language lang = new Language();
+		lang.setId("fr-FR");
+
+		NoteType noteType = new NoteType();
+		noteType.setCode("definition");
+
+		Note fakeConceptNote = new Note();
+		fakeConceptNote.setIdentifier("http://note1");
+		fakeConceptNote.setCreated(DateUtil.nowDate());
+		fakeConceptNote.setModified(DateUtil.nowDate());
+		fakeConceptNote.setLexicalValue("Fake concept note");
+		fakeConceptNote.setLanguage(lang);
+		fakeConceptNote.setNoteType(noteType);
+		fakeConceptNote.setConcept(fakeConcept);
+
+		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
+
+		Assert.assertEquals(EntityType.NOTE_DEFINITION, doc
 				.getFieldValue(SolrField.EXT_TYPE));
+
+	}
+
+	@Test
+	public void testConvertSolrEditorialNote() throws SolrServerException, IOException {
+
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("http://th1");
+		fakeThesaurus.setTitle("Fake thesaurus");
+
+		ThesaurusConcept fakeConcept = new ThesaurusConcept();
+		fakeConcept.setIdentifier("http://c1");
+		fakeConcept.setThesaurus(fakeThesaurus);
+
+		Language lang = new Language();
+		lang.setId("fr-FR");
+
+		NoteType noteType = new NoteType();
+		noteType.setCode("editorialNote");
+
+		Note fakeConceptNote = new Note();
+		fakeConceptNote.setIdentifier("http://note1");
+		fakeConceptNote.setCreated(DateUtil.nowDate());
+		fakeConceptNote.setModified(DateUtil.nowDate());
+		fakeConceptNote.setLexicalValue("Fake concept note");
+		fakeConceptNote.setLanguage(lang);
+		fakeConceptNote.setNoteType(noteType);
+		fakeConceptNote.setConcept(fakeConcept);
+
+		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
+
+		Assert.assertEquals(EntityType.NOTE_EDITORIAL, doc
+				.getFieldValue(SolrField.EXT_TYPE));
+
+	}
+
+	@Test
+	public void testConvertSolrExampleNote() throws SolrServerException, IOException {
+
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("http://th1");
+		fakeThesaurus.setTitle("Fake thesaurus");
+
+		ThesaurusConcept fakeConcept = new ThesaurusConcept();
+		fakeConcept.setIdentifier("http://c1");
+		fakeConcept.setThesaurus(fakeThesaurus);
+
+		Language lang = new Language();
+		lang.setId("fr-FR");
+
+		NoteType noteType = new NoteType();
+		noteType.setCode("example");
+
+		Note fakeConceptNote = new Note();
+		fakeConceptNote.setIdentifier("http://note1");
+		fakeConceptNote.setCreated(DateUtil.nowDate());
+		fakeConceptNote.setModified(DateUtil.nowDate());
+		fakeConceptNote.setLexicalValue("Fake concept note");
+		fakeConceptNote.setLanguage(lang);
+		fakeConceptNote.setNoteType(noteType);
+		fakeConceptNote.setConcept(fakeConcept);
+
+		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
+
+		Assert.assertEquals(EntityType.NOTE_EXAMPLE, doc
+				.getFieldValue(SolrField.EXT_TYPE));
+
+	}
+
+	@Test
+	public void testConvertSolrHistoryNote() throws SolrServerException, IOException {
+
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("http://th1");
+		fakeThesaurus.setTitle("Fake thesaurus");
+
+		ThesaurusConcept fakeConcept = new ThesaurusConcept();
+		fakeConcept.setIdentifier("http://c1");
+		fakeConcept.setThesaurus(fakeThesaurus);
+
+		Language lang = new Language();
+		lang.setId("fr-FR");
+
+		NoteType noteType = new NoteType();
+		noteType.setCode("historyNote");
+
+		Note fakeConceptNote = new Note();
+		fakeConceptNote.setIdentifier("http://note1");
+		fakeConceptNote.setCreated(DateUtil.nowDate());
+		fakeConceptNote.setModified(DateUtil.nowDate());
+		fakeConceptNote.setLexicalValue("Fake concept note");
+		fakeConceptNote.setLanguage(lang);
+		fakeConceptNote.setNoteType(noteType);
+		fakeConceptNote.setConcept(fakeConcept);
+
+		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
+
+		Assert.assertEquals(EntityType.NOTE_HISTORY, doc
+				.getFieldValue(SolrField.EXT_TYPE));
+
+	}
+
+	@Test
+	public void testConvertSolrScopeNote() throws SolrServerException, IOException {
+
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("http://th1");
+		fakeThesaurus.setTitle("Fake thesaurus");
+
+		ThesaurusConcept fakeConcept = new ThesaurusConcept();
+		fakeConcept.setIdentifier("http://c1");
+		fakeConcept.setThesaurus(fakeThesaurus);
+
+		Language lang = new Language();
+		lang.setId("fr-FR");
+
+		NoteType noteType = new NoteType();
+		noteType.setCode("scopeNote");
+
+		Note fakeConceptNote = new Note();
+		fakeConceptNote.setIdentifier("http://note1");
+		fakeConceptNote.setCreated(DateUtil.nowDate());
+		fakeConceptNote.setModified(DateUtil.nowDate());
+		fakeConceptNote.setLexicalValue("Fake concept note");
+		fakeConceptNote.setLanguage(lang);
+		fakeConceptNote.setNoteType(noteType);
+		fakeConceptNote.setConcept(fakeConcept);
+
+		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
+
+		Assert.assertEquals(EntityType.NOTE_SCOPE, doc
+				.getFieldValue(SolrField.EXT_TYPE));
+
 	}
 }

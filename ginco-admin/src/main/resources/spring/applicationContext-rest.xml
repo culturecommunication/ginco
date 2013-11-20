@@ -8,7 +8,7 @@
        http://cxf.apache.org/schemas/jaxrs.xsd
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd
-       http://cxf.apache.org/core 
+       http://cxf.apache.org/core
        http://cxf.apache.org/schemas/core.xsd">
 
     <!--pluging slf4j on CXF-->
@@ -24,7 +24,7 @@
 	</bean>
 
 	<bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
-	
+
 	<jaxrs:server id="uiServices" address="/ui" depends-on="loggerPrereqs">
 		<jaxrs:properties>
 	            <entry key="org.apache.cxf.propagate.exception" value="false" />
@@ -43,14 +43,15 @@
             <bean class="fr.mcc.ginco.rest.services.ExportRestService" />
             <bean class="fr.mcc.ginco.rest.services.ImportRestService" />
             <bean class="fr.mcc.ginco.rest.services.IndexerRestService" />
+            <bean class="fr.mcc.ginco.rest.services.SearcherRestService" />
             <bean class="fr.mcc.ginco.rest.services.JournalRestService" />
             <bean class="fr.mcc.ginco.rest.services.AssociationRoleRestService" />
             <bean class="fr.mcc.ginco.rest.services.RevisionsRestService" />
             <bean class="fr.mcc.ginco.rest.services.CustomAttributesRestService" />
-            <bean class="fr.mcc.ginco.rest.services.SplitNonPreferredTermRestService" />  
-            <bean class="fr.mcc.ginco.rest.services.AlignmentsRestService" />  
-            <bean class="fr.mcc.ginco.rest.services.UserRoleRestService" /> 
-            <bean class="fr.mcc.ginco.rest.services.SuggestionRestService" />  
+            <bean class="fr.mcc.ginco.rest.services.SplitNonPreferredTermRestService" />
+            <bean class="fr.mcc.ginco.rest.services.AlignmentsRestService" />
+            <bean class="fr.mcc.ginco.rest.services.UserRoleRestService" />
+            <bean class="fr.mcc.ginco.rest.services.SuggestionRestService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jsonProvider" />
@@ -66,6 +67,6 @@
 			<bean class="fr.mcc.ginco.rest.services.exceptions.GincoOutFaultInterceptor" />
 		</jaxrs:outFaultInterceptors>
 	</jaxrs:server>
-	
-	
+
+
 </beans>

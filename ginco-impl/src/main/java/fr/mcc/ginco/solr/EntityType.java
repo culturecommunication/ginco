@@ -42,4 +42,9 @@ public class EntityType {
     public static final int TERM_PREF = 2;
     public static final int TERM_NON_PREF = 3;
     public static final int NOTE = 4;
+    public static final int NOTE_DEFINITION = 5;
+    public static final int NOTE_EDITORIAL = 6;
+    public static final int NOTE_EXAMPLE = 7;
+    public static final int NOTE_HISTORY = 8;
+    public static final int NOTE_SCOPE = 9;
 }

@@ -62,14 +62,6 @@ public class NoteIndexerServiceImpl implements INoteIndexerService{
 	private NoteSolrConverter noteSolrConverter;
 
 	@Inject
-	@Named ("termIndexerService")
-	private ITermIndexerService termIndexerService;
-
-	@Inject
-	@Named ("conceptIndexerService")
-	private IConceptIndexerService conceptIndexerService;
-
-	@Inject
 	@Named("solrServer")
 	private SolrServer solrServer;
 
