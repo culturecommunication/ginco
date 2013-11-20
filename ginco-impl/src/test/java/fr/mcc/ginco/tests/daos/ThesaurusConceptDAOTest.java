@@ -253,6 +253,25 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 				.countConceptsAlignedToMyThes(thesaurusId);
 		Assert.assertEquals(1, nbConceptsAlignedToMyThes.longValue());
 	}
+	
+	@Test
+	public void testCountConceptsWoNotes() throws BusinessException {
+		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+		Long nbConceptsWoNotes = thesaurusConceptDAO
+				.countConceptsWoNotes(thesaurusId);
+		Assert.assertEquals(4, nbConceptsWoNotes.longValue());
+	}
+	
+	@Test
+	public void testGetConceptsWoNotes() throws BusinessException {
+		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+		List<ThesaurusConcept> conceptsWoNotes = thesaurusConceptDAO
+				.getConceptsWoNotes(thesaurusId, 0, 2);
+		Assert.assertEquals(2, conceptsWoNotes.size());
+		conceptsWoNotes = thesaurusConceptDAO
+				.getConceptsWoNotes(thesaurusId, 0, 100);
+		Assert.assertEquals(4, conceptsWoNotes.size());
+	}
 
 	@Override
 	public String getXmlDataFileInit() {
