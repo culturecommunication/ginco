@@ -50,7 +50,8 @@ Ext.onReady(function() {
 Ext.enableFx=false;
 
 Ext.Loader.setConfig({
-    enabled: true
+    enabled: true,
+    disableCaching: false
 });
 
 Ext.Loader.setLocale({
