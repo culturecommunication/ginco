@@ -39,7 +39,7 @@ package fr.mcc.ginco.enums;
  * translation of these items is externalized in a property file
  */
 public enum ReportTypeEnum {
-	CONCEPTSWONOTES(0);
+	CONCEPTSWONOTES(0), TERMSWONOTES(1);
 
 	private int type;
 

@@ -44,7 +44,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
@@ -56,6 +58,10 @@ public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 	@Inject
 	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO conceptDAO;
+	
+	@Inject
+	@Named("thesaurusTermDAO")
+	private IThesaurusTermDAO termDAO;
 	
 	@Inject
 	@Named("thesaurusConceptService")
@@ -85,6 +91,29 @@ public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 		} catch (BusinessException ex) {
 			result.setLexicalValue("");
 		}
+		result.setThesaurusId(thesaurus);
+		return result;
+	}
+
+	@Override
+	public SearchResultList getTermsWithoutNotes(String thesaurus,
+			int startIndex, int limit) {
+		SearchResultList resultList = new SearchResultList();
+		List<ThesaurusTerm> terms =  termDAO.getTermsWoNotes(thesaurus, startIndex, limit);
+		for (ThesaurusTerm term : terms)
+		{
+			resultList.add(getSearchResultFromTerm(term, thesaurus));
+		}
+		resultList.setNumFound(termDAO.countTermsWoNotes(thesaurus));
+		return resultList;
+	}
+
+	private SearchResult getSearchResultFromTerm(ThesaurusTerm term,
+			String thesaurus) {
+		SearchResult result = new SearchResult();
+		result.setIdentifier(term.getIdentifier());
+		result.setType("ThesaurusTerm");
+		result.setLexicalValue(term.getLexicalValue());
 		result.setThesaurusId(thesaurus);
 		return result;
 	}

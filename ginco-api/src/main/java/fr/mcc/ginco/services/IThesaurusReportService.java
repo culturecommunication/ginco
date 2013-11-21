@@ -49,10 +49,18 @@ import fr.mcc.ginco.solr.SortCriteria;
  */
 public interface IThesaurusReportService {
     /**
-     * Get a Thesaurus statistics object
+     * Get a Thesaurus report object
      * @param thesaurus
      * @return
      */
 	SearchResultList getConceptsWithoutNotes(String thesaurus,
+             int startIndex, int limit);
+	
+	/**
+     * Get a Thesaurus report object
+     * @param thesaurus
+     * @return
+     */
+	SearchResultList getTermsWithoutNotes(String thesaurus,
              int startIndex, int limit);
 }

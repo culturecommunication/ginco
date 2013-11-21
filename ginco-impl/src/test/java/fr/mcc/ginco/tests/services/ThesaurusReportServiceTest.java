@@ -49,6 +49,7 @@ import org.mockito.MockitoAnnotations;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.ThesaurusReportServiceImpl;
 import fr.mcc.ginco.solr.SearchResultList;
@@ -58,8 +59,12 @@ public class ThesaurusReportServiceTest {
 	@Mock(name = "thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 	
+	
 	@Mock(name = "thesaurusConceptDAO")
 	private IThesaurusConceptDAO conceptDAO;
+	
+	@Mock(name = "thesaurusTermDAO")
+	private IThesaurusTermDAO termDAO;
 	
 	@InjectMocks
 	private ThesaurusReportServiceImpl thesaurusReportService;	
@@ -88,6 +93,24 @@ public class ThesaurusReportServiceTest {
         Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
         Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
         Assert.assertEquals("ThesaurusConcept", resultList.get(0).getType());
-    }	
+    }
+	
+	@Test
+    public final void testGetTermssWithoutNotes() {
+		String thId = "http://th1";
+		ThesaurusTerm term1=new ThesaurusTerm();
+		term1.setIdentifier("http://t1");
+		term1.setLexicalValue("terme1");
+		List<ThesaurusTerm> listTerms=new ArrayList<ThesaurusTerm>();
+		listTerms.add(term1);
+		Mockito.when(termDAO.countTermsWoNotes(thId)).thenReturn((long) listTerms.size());
+		Mockito.when(termDAO.getTermsWoNotes(thId,0,100)).thenReturn(listTerms);
+        SearchResultList resultList = thesaurusReportService.getTermsWithoutNotes(thId, 0, 100);
+        Assert.assertEquals(1,resultList.getNumFound());
+        Assert.assertEquals("http://t1", resultList.get(0).getIdentifier());
+        Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
+        Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
+        Assert.assertEquals("ThesaurusTerm", resultList.get(0).getType());
+    }
 
 }

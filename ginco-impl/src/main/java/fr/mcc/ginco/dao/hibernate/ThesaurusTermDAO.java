@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -317,5 +318,20 @@ public class ThesaurusTermDAO extends
 	                    "Please check your database !", "no-preferred-term-found");
 	        }
 	        return list;
+	}
+
+	@Override
+	public List<ThesaurusTerm> getTermsWoNotes(String idThesaurus,
+			int startIndex, int limit) throws BusinessException {
+		Query query = getCurrentSession().createSQLQuery("select t.* "
+				+"from thesaurus_term t "
+				+"left join note n on t.identifier = n.termid " 
+				+"where t.thesaurusid=:pthesaurusid" 
+				+" and n.identifier is null").addEntity(ThesaurusTerm.class);
+		query.setParameter("pthesaurusid", idThesaurus);
+		query.setFirstResult(startIndex);
+		query.setFetchSize(limit);
+		query.setMaxResults(limit);
+		return (List<ThesaurusTerm>)query.list();
 	}
 }
