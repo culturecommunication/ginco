@@ -270,3 +270,9 @@ h1.x-panel-header {
 .x-tab.x-tab-active button {
 	font-weight: bold;
 }
+.x-action-col-cell img.detach
+{
+  background-image: url(../images/detach.png);
+  width: 16px;
+  height: 16px;
+}

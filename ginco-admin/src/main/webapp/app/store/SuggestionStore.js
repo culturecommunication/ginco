@@ -49,8 +49,8 @@ Ext.define('GincoApp.store.SuggestionStore', {
 				api : {
 					read : 'services/ui/suggestionservice/getSuggestions',
 					update : 'services/ui/suggestionservice/updateSuggestions',
-					create : 'services/ui/suggestionservice/createSuggestions'
-					//destroy : 'services/ui/thesaurusnoteservice/destroyNotes'
+					create : 'services/ui/suggestionservice/createSuggestions',
+					destroy : 'services/ui/suggestionservice/destroySuggestions'
 				},
 				writer : {
 					type : 'json',

@@ -262,6 +262,11 @@ public class ThesaurusConceptRestService {
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
 
+	/**
+	 * Gets the AssociativeRElationships for the given conceptId
+	 * @param conceptId
+	 * @return
+	 */
 	@GET
 	@Path("/getAssociations")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -274,6 +279,15 @@ public class ThesaurusConceptRestService {
 				.getAssociativeRelationshipRight();
 	}
 
+	/**
+	 * 
+	 * @param conceptId
+	 * @param thesaurusId
+	 * @param searchOrphans
+	 * @param onlyValidatedConcepts
+	 * @return
+	 * @throws BusinessException
+	 */
 	@GET
 	@Path("/getConcepts")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -305,6 +319,12 @@ public class ThesaurusConceptRestService {
 						searchOrphanParam, onlyValidated));
 	}
 
+	/**
+	 * Gets a simplified view of each concept id contained in the parameter
+	 * @param associatedConcepts
+	 * @return
+	 * @throws BusinessException
+	 */
 	@GET
 	@Path("/getSimpleConcepts")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -321,6 +341,12 @@ public class ThesaurusConceptRestService {
 				reducedConcepts);
 	}
 
+	/**
+	 * Gets a simplified view of the hildren of the concept which id is given as parameter
+	 * @param conceptId
+	 * @return
+	 * @throws BusinessException
+	 */
 	@GET
 	@Path("/getSimpleChildrenConcepts")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -336,6 +362,13 @@ public class ThesaurusConceptRestService {
 				reducedConcepts);
 	}
 
+	/**
+	 * 
+	 * @param arrayId
+	 * @param thesaurusId
+	 * @return
+	 * @throws BusinessException
+	 */
 	@GET
 	@Path("/getAvailableConceptsOfArray")
 	@Produces({ MediaType.APPLICATION_JSON })

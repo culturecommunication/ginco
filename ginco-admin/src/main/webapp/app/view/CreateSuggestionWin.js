@@ -59,7 +59,7 @@ Ext
 							callback: function (theStore, aOperation){
 								me.down("form").loadRecord(theForm.getRecord());
 							}
-						});
+						});						
 						Ext
 								.applyIf(
 										me,
@@ -125,7 +125,16 @@ Ext
 														}
 														
 
-												]
+												],												
+												listeners : {
+													render : function(myForm) {
+														if (myForm.getRecord().data.creator != "" && myForm.getRecord().data.creator != Thesaurus.ext.utils.userInfo.data.username) {
+															myForm.items.each(function(f){
+															  f.setReadOnly(true);
+															});
+														}
+													}
+												}
 											} ]
 										});
 

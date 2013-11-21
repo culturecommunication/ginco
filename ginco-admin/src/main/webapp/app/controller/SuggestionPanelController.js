@@ -47,11 +47,9 @@ Ext.define('GincoApp.controller.SuggestionPanelController', {
 		if (theGrid.up('conceptPanel') != null){
 			var theConceptId = theGrid.up('conceptPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
-			theGrid.getStore().getProxy().setExtraParam('termId', "");
 		} else if (theGrid.up('termPanel') != null){
 			var theTermId = theGrid.up('termPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
-			theGrid.getStore().getProxy().setExtraParam('conceptId', "");
 		}
 		theGrid.getStore().load();
 	},
@@ -126,6 +124,19 @@ Ext.define('GincoApp.controller.SuggestionPanelController', {
 		theForm.loadRecord(record);
 		win.show();
     },
+    
+    removeSuggestion : function(gridview, el, rowIndex, colIndex, e, rec,
+			rowEl) {
+    	if (rec.data.recipient == Thesaurus.ext.utils.userInfo.data.username
+	        		|| rec.data.creator == Thesaurus.ext.utils.userInfo.data.username) {
+    		var theGrid = gridview.up('#suggestiongrid');
+    		var theStore = theGrid.getStore();
+    		theStore.remove(rec);
+    		theGrid.up('panel').down('button[itemId=saveSuggestion]').setDisabled(false);
+    		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+    		thesaurusTabs.fireEvent('refreshmysuggestions',thesaurusTabs);    	
+    	 }
+	},
 	
 	init : function() {
 		this.control({
@@ -138,6 +149,9 @@ Ext.define('GincoApp.controller.SuggestionPanelController', {
  			},
  			'suggestionPanel #saveSuggestion' : {
  				click : this.saveSuggestionBtn
+ 			}, 			
+ 			'suggestionPanel #suggestionActionColumn' : {
+ 				click : this.removeSuggestion
  			}
 		});
 	}

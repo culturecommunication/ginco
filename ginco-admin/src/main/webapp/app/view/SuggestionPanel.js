@@ -50,11 +50,11 @@ Ext.define('GincoApp.view.SuggestionPanel', {
 	xSuggestionListGridTitle: 'Suggestions list',
 	xAddSuggestion: 'Add a suggestion',
 
-	suggestionStore : Ext.create('GincoApp.store.SuggestionStore'),
-
+	suggestionStore : null,	
+	
 	initComponent : function() {
 		var me = this;
-
+		me.suggestionStore = Ext.create('GincoApp.store.SuggestionStore'); 
 		Ext.applyIf(me, {
 			items : [ {
 				xtype : 'form',
@@ -115,6 +115,20 @@ Ext.define('GincoApp.view.SuggestionPanel', {
 					}, {
 						dataIndex : 'created',
 						text : me.xCreatedDateLabel					
+					}, {
+						xtype : 'actioncolumn',
+						itemId : 'suggestionActionColumn',
+						header : me.xActions,
+						getClass: function (val, meta, rec) {							
+					        if (rec.data.recipient == Thesaurus.ext.utils.userInfo.data.username
+					        		|| rec.data.creator == Thesaurus.ext.utils.userInfo.data.username) {
+					            this.tooltip =  me.xDetach;
+					            return 'detach';
+					        }
+					        else {
+					        	return "";
+					        }
+						}
 					}]
 				} ]
 			} ]

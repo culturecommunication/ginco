@@ -56,8 +56,7 @@ Ext.define('GincoApp.controller.MySuggestionsPanelController', {
 			'mySuggestionsPanel #mysuggestionsgrid' : {
  				render : this.onRenderSuggestionGrid,
  				itemdblclick : this.onNodeDblClick
- 			},
- 		
+ 			} 		
 		});
 	}
 });

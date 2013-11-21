@@ -55,14 +55,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Suggestion;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.MySuggestionView;
 import fr.mcc.ginco.extjs.view.pojo.SuggestionView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
+import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.SuggestionViewConverter;
 import fr.mcc.ginco.services.ISuggestionService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Suggestion REST service for all operation on suggestions (both term or
@@ -257,6 +262,22 @@ public class SuggestionRestService {
 		result.setTotal(suggestionService
 				.getSuggestionByRecipientCount(currentUser));
 		return result;
+	}
+	
+	/**
+	 * Public method used to destroy suggestions
+	 * @throws BusinessException 
+	 */
+	@POST
+	@Path("/destroySuggestions")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@PreAuthorize("hasPermission(#suggestionViews, '0') or hasPermission(#suggestionViews, '1')")
+	public void destroySuggestions(List<SuggestionView> suggestionViews) throws BusinessException {
+		for (SuggestionView suggestionView:suggestionViews) {
+			Suggestion suggestion  = suggestionViewConverter.convert(suggestionView); 
+			suggestionService.deleteSuggestion(suggestion);
+		}
+	
 	}
 
 }
