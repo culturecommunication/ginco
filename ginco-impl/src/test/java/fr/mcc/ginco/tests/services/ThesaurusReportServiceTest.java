@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.tests.services;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,91 +54,102 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.ThesaurusReportServiceImpl;
 import fr.mcc.ginco.solr.SearchResultList;
 
-public class ThesaurusReportServiceTest {	
-	
+public class ThesaurusReportServiceTest {
+
 	@Mock(name = "thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
-	
+
 	@Mock(name = "thesaurusConceptDAO")
 	private IThesaurusConceptDAO conceptDAO;
-	
+
 	@Mock(name = "thesaurusTermDAO")
 	private IThesaurusTermDAO termDAO;
-	
+
 	@InjectMocks
-	private ThesaurusReportServiceImpl thesaurusReportService;	
-	
+	private ThesaurusReportServiceImpl thesaurusReportService;
+
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
-    public final void testGetConceptsWithoutNotes() {
+	public final void testGetConceptsWithoutNotes() {
 		String thId = "http://th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thId);
-		ThesaurusConcept concept1=new ThesaurusConcept();
+		ThesaurusConcept concept1 = new ThesaurusConcept();
 		concept1.setIdentifier("http://c1");
 		concept1.setThesaurus(th);
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		term1.setIdentifier("http://t1");
 		term1.setLexicalValue("terme1");
-		List<ThesaurusConcept> listConcepts=new ArrayList<ThesaurusConcept>();
+		List<ThesaurusConcept> listConcepts = new ArrayList<ThesaurusConcept>();
 		listConcepts.add(concept1);
-		Mockito.when(conceptDAO.countConceptsWoNotes(thId)).thenReturn((long) listConcepts.size());
-		Mockito.when(conceptDAO.getConceptsWoNotes(thId,0,100)).thenReturn(listConcepts);
-		Mockito.when(thesaurusConceptService.getConceptPreferredTerm("http://c1")).thenReturn(term1);
-        SearchResultList resultList = thesaurusReportService.getConceptsWithoutNotes(thId, 0, 100);
-        Assert.assertEquals(1,resultList.getNumFound());
-        Assert.assertEquals("http://c1", resultList.get(0).getIdentifier());
-        Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
-        Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
-        Assert.assertEquals("ThesaurusConcept", resultList.get(0).getType());
-    }
-	
+		Mockito.when(conceptDAO.countConceptsWoNotes(thId)).thenReturn(
+				(long) listConcepts.size());
+		Mockito.when(conceptDAO.getConceptsWoNotes(thId, 0, 100)).thenReturn(
+				listConcepts);
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm("http://c1"))
+				.thenReturn(term1);
+		SearchResultList resultList = thesaurusReportService
+				.getConceptsWithoutNotes(thId, 0, 100);
+		Assert.assertEquals(1, resultList.getNumFound());
+		Assert.assertEquals("http://c1", resultList.get(0).getIdentifier());
+		Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
+		Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
+		Assert.assertEquals("ThesaurusConcept", resultList.get(0).getType());
+	}
+
 	@Test
-    public final void testGetTermssWithoutNotes() {
+	public final void testGetTermssWithoutNotes() {
 		String thId = "http://th1";
-		ThesaurusTerm term1=new ThesaurusTerm();
+		ThesaurusTerm term1 = new ThesaurusTerm();
 		term1.setIdentifier("http://t1");
 		term1.setLexicalValue("terme1");
-		List<ThesaurusTerm> listTerms=new ArrayList<ThesaurusTerm>();
+		List<ThesaurusTerm> listTerms = new ArrayList<ThesaurusTerm>();
 		listTerms.add(term1);
-		Mockito.when(termDAO.countTermsWoNotes(thId)).thenReturn((long) listTerms.size());
-		Mockito.when(termDAO.getTermsWoNotes(thId,0,100)).thenReturn(listTerms);
-        SearchResultList resultList = thesaurusReportService.getTermsWithoutNotes(thId, 0, 100);
-        Assert.assertEquals(1,resultList.getNumFound());
-        Assert.assertEquals("http://t1", resultList.get(0).getIdentifier());
-        Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
-        Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
-        Assert.assertEquals("ThesaurusTerm", resultList.get(0).getType());
-    }
-	
-	@Test 
-	public final void testGetConceptsAlignedToMyThes()
-	{
+		Mockito.when(termDAO.countTermsWoNotes(thId)).thenReturn(
+				(long) listTerms.size());
+		Mockito.when(termDAO.getTermsWoNotes(thId, 0, 100)).thenReturn(
+				listTerms);
+		SearchResultList resultList = thesaurusReportService
+				.getTermsWithoutNotes(thId, 0, 100);
+		Assert.assertEquals(1, resultList.getNumFound());
+		Assert.assertEquals("http://t1", resultList.get(0).getIdentifier());
+		Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
+		Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
+		Assert.assertEquals("ThesaurusTerm", resultList.get(0).getType());
+	}
+
+	@Test
+	public final void testGetConceptsAlignedToMyThes() {
 		String thId = "http://th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thId);
-		ThesaurusConcept concept1=new ThesaurusConcept();
+		ThesaurusConcept concept1 = new ThesaurusConcept();
 		concept1.setIdentifier("http://c1");
 		concept1.setThesaurus(th);
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		term1.setIdentifier("http://t1");
 		term1.setLexicalValue("terme1");
-		List<ThesaurusConcept> listConcepts=new ArrayList<ThesaurusConcept>();
+		List<ThesaurusConcept> listConcepts = new ArrayList<ThesaurusConcept>();
 		listConcepts.add(concept1);
-		Mockito.when(conceptDAO.countConceptsAlignedToMyThes(thId)).thenReturn((long) listConcepts.size());
-		Mockito.when(conceptDAO.getConceptsAlignedToMyThes(thId,0,100)).thenReturn(listConcepts);
-		Mockito.when(thesaurusConceptService.getConceptPreferredTerm("http://c1")).thenReturn(term1);
-        SearchResultList resultList = thesaurusReportService.getConceptsAlignedToMyThes(thId, 0, 100);
-        Assert.assertEquals(1,resultList.getNumFound());
-        Assert.assertEquals("http://c1", resultList.get(0).getIdentifier());
-        Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
-        Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
-        Assert.assertEquals("ThesaurusConcept", resultList.get(0).getType());
+		Mockito.when(conceptDAO.countConceptsAlignedToMyThes(thId)).thenReturn(
+				(long) listConcepts.size());
+		Mockito.when(conceptDAO.getConceptsAlignedToMyThes(thId, 0, 100))
+				.thenReturn(listConcepts);
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm("http://c1"))
+				.thenReturn(term1);
+		SearchResultList resultList = thesaurusReportService
+				.getConceptsAlignedToMyThes(thId, 0, 100);
+		Assert.assertEquals(1, resultList.getNumFound());
+		Assert.assertEquals("http://c1", resultList.get(0).getIdentifier());
+		Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
+		Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
+		Assert.assertEquals("ThesaurusConcept", resultList.get(0).getType());
 	}
 
 }
