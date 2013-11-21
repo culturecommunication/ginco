@@ -94,7 +94,7 @@ public class ThesaurusConceptDAO extends
 	 */
 	@Override
 	public List<ThesaurusConcept> getOrphansThesaurusConcept(
-			Thesaurus thesaurus, int maxResults) throws BusinessException {
+			Thesaurus thesaurus, int maxResults) {
 		return getListByThesaurusAndTopConcept(thesaurus, false, maxResults);
 	}
 
@@ -106,8 +106,7 @@ public class ThesaurusConceptDAO extends
 	 * (fr.mcc.ginco.beans.Thesaurus)
 	 */
 	@Override
-	public long getOrphansThesaurusConceptCount(Thesaurus thesaurus)
-			throws BusinessException {
+	public long getOrphansThesaurusConceptCount(Thesaurus thesaurus) {
 		return getListByThesaurusAndTopConceptCount(thesaurus, false);
 	}
 
@@ -118,7 +117,7 @@ public class ThesaurusConceptDAO extends
 	 */
 	@Override
 	public List<ThesaurusConcept> getTopTermThesaurusConcept(
-			Thesaurus thesaurus, int maxResults) throws BusinessException {
+			Thesaurus thesaurus, int maxResults) {
 		return getListByThesaurusAndTopConcept(thesaurus, true, maxResults);
 	}
 
@@ -130,8 +129,7 @@ public class ThesaurusConceptDAO extends
 	 * (fr.mcc.ginco.beans.Thesaurus)
 	 */
 	@Override
-	public long getTopTermThesaurusConceptCount(Thesaurus thesaurus)
-			throws BusinessException {
+	public long getTopTermThesaurusConceptCount(Thesaurus thesaurus){
 		return getListByThesaurusAndTopConceptCount(thesaurus, true);
 	}
 
@@ -255,8 +253,7 @@ public class ThesaurusConceptDAO extends
 	}
 
 	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
-			Thesaurus thesaurus, boolean topConcept, int maxResults)
-			throws BusinessException {
+			Thesaurus thesaurus, boolean topConcept, int maxResults){
 
 		if (thesaurus == null) {
 			throw new BusinessException("Object thesaurus can't be null !",
@@ -271,7 +268,7 @@ public class ThesaurusConceptDAO extends
 	}
 
 	private long getListByThesaurusAndTopConceptCount(Thesaurus thesaurus,
-			boolean topConcept) throws BusinessException {
+			boolean topConcept) {
 
 		if (thesaurus == null) {
 			throw new BusinessException("Object thesaurus can't be null !",
@@ -294,7 +291,7 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public Long countConcepts(String idThesaurus) throws BusinessException {
+	public Long countConcepts(String idThesaurus) {
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConcept.class);
 		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
@@ -303,8 +300,7 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public Long countConceptsWoNotes(String idThesaurus)
-			throws BusinessException {
+	public Long countConceptsWoNotes(String idThesaurus) {
 		Query query = getCurrentSession().createSQLQuery(
 				"select count(*) " + "from thesaurus_concept c  "
 						+ "left join note n on c.identifier = n.conceptid  "
@@ -330,8 +326,7 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public Long countConceptsAlignedToIntThes(String idThesaurus)
-			throws BusinessException {
+	public Long countConceptsAlignedToIntThes(String idThesaurus){
 		DetachedCriteria alignmentCriteria = DetachedCriteria
 				.forClass(Alignment.class, "al")
 				.add(Restrictions.isNotNull("al.internalTargetThesaurus"))
@@ -359,8 +354,7 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public Long countConceptsAlignedToExtThes(String idThesaurus)
-			throws BusinessException {
+	public Long countConceptsAlignedToExtThes(String idThesaurus){
 		DetachedCriteria alignmentCriteria = DetachedCriteria
 				.forClass(Alignment.class, "al")
 				.add(Restrictions.isNotNull("al.externalTargetThesaurus"))
@@ -387,8 +381,7 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public Long countConceptsAlignedToMyThes(String idThesaurus)
-			throws BusinessException {
+	public Long countConceptsAlignedToMyThes(String idThesaurus){
 		DetachedCriteria alignmentCriteria = DetachedCriteria
 				.forClass(Alignment.class, "al")
 				.add(Restrictions.eq("al.internalTargetThesaurus.identifier",

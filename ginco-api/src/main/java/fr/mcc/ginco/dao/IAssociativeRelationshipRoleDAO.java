@@ -44,9 +44,8 @@ public interface IAssociativeRelationshipRoleDAO extends IGenericDAO<Associative
 	/**
 	 * Returns the default associative relationship role
 	 * @return
-	 * @throws BusinessException if there is no default role defined
 	 */
-	AssociativeRelationshipRole getDefaultAssociativeRelationshipRole() throws BusinessException;
+	AssociativeRelationshipRole getDefaultAssociativeRelationshipRole();
 	
 	/**
 	 * Return an AssociativeRelationshipRole by it's skosLabel

@@ -52,13 +52,19 @@ import java.util.List;
 public class CustomConceptAttributeTypeDAO extends
         GenericHibernateDAO<CustomConceptAttributeType, Integer> implements ICustomConceptAttributeTypeDAO {
 
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.dao.generic.IGenericCustomAttributeType#getAttributesByThesaurus(fr.mcc.ginco.beans.Thesaurus)
+     */
     @Override
-    public List<CustomConceptAttributeType> getAttributesByThesaurus(Thesaurus thesaurus) throws BusinessException {
+    public List<CustomConceptAttributeType> getAttributesByThesaurus(Thesaurus thesaurus) {
         Criteria criteria = getCurrentSession().createCriteria(CustomConceptAttributeType.class)
                 .add(Restrictions.eq("thesaurus.identifier", thesaurus.getIdentifier()));
         return (List <CustomConceptAttributeType>) criteria.list();
     }
     
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.dao.generic.IGenericCustomAttributeType#getAttributeByCode(fr.mcc.ginco.beans.Thesaurus, java.lang.String)
+     */
     @Override
     public CustomConceptAttributeType getAttributeByCode(Thesaurus thesaurus, String code)
     {
@@ -73,6 +79,9 @@ public class CustomConceptAttributeTypeDAO extends
         
     }
     
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.dao.generic.IGenericCustomAttributeType#getAttributeByValue(fr.mcc.ginco.beans.Thesaurus, java.lang.String)
+     */
     @Override
     public CustomConceptAttributeType getAttributeByValue(Thesaurus thesaurus, String value)
     {
@@ -86,6 +95,9 @@ public class CustomConceptAttributeTypeDAO extends
         return null;        
     }
     
+    /* (non-Javadoc)
+     * @see fr.mcc.ginco.dao.hibernate.GenericHibernateDAO#update(java.lang.Object)
+     */
     @Override
     public CustomConceptAttributeType update(CustomConceptAttributeType conceptAttributeType)
     {

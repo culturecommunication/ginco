@@ -34,10 +34,7 @@
  */
 package fr.mcc.ginco.dao;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 import java.util.List;
 
@@ -68,7 +65,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 *            of a Thesaurus
 	 * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
 	 */
-	Long countSandboxedTerms(String idThesaurus) throws BusinessException;
+	Long countSandboxedTerms(String idThesaurus);
 	
 	/**
 	 * Get number of Thesaurus Preferred Terms
@@ -77,7 +74,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 *            of a Thesaurus
 	 * @return number of Thesaurus Preferred Terms for a given Thesaurus
 	 */
-	Long countPreferredTerms(String idThesaurus) throws BusinessException;
+	Long countPreferredTerms(String idThesaurus);
 	
 	/**
 	 * Get number of Thesaurus Sandboxed Validated Terms
@@ -86,7 +83,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 *            of a Thesaurus
 	 * @return number of Thesaurus Sandboxed Validated Terms for a given Thesaurus
 	 */
-	Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException;
+	Long countSandboxedValidatedTerms(String idThesaurus);
 
 	/**
 	 * Returns the preferred ThesaurusTerm of a concept in the default application language
@@ -94,8 +91,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @param conceptId
 	 * @return
 	 */
-	ThesaurusTerm getConceptPreferredTerm(String conceptId)
-			throws BusinessException;
+	ThesaurusTerm getConceptPreferredTerm(String conceptId);
 	
 	/**
 	 * Returns the list of preferred ThesaurusTerm of a concept
@@ -103,15 +99,13 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @param conceptId
 	 * @return
 	 */
-	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
-			throws BusinessException;
+	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId);
 	
 	/**
 	 * Gets the preferred term of the given concept in the given language, null if none is found
 	 * @param conceptId
 	 * @param languageId
 	 * @return
-	 * @throws BusinessException
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId);     
 
@@ -122,13 +116,10 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * 
 	 * @param conceptId
 	 * @return List of ThesaurusTerm
-	 * @throws BusinessException
 	 */
-	List<ThesaurusTerm> findTermsByConceptId(String conceptId)
-			throws BusinessException;
+	List<ThesaurusTerm> findTermsByConceptId(String conceptId);
 	
-	List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId)
-			throws BusinessException;
+	List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId);
 
 	/**
 	 * Returns a number of similar Thesaurus Terms that fit to the parameter's lexical value
@@ -188,14 +179,35 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @param conceptId
 	 * @return list of not preferred terms
 	 */
-	List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
-			throws BusinessException;
+	List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId);
 
-	Long countTerms(String idThesaurus) throws BusinessException;
+	/**
+	 * Counts the number of terms in the given thesaurus
+	 * @param idThesaurus
+	 * @return
+	 */
+	Long countTerms(String idThesaurus);
 
-	Long countNonPreferredTerms(String idThesaurus) throws BusinessException;
+	/**
+	 * Counts the number of terms which are not preferred term of any concept
+	 * @param idThesaurus
+	 * @return
+	 */
+	Long countNonPreferredTerms(String idThesaurus);
 
-	Long countTermsWoNotes(String idThesaurus) throws BusinessException;
+	/**
+	 * Counts the number of terms without notes
+	 * @param idThesaurus
+	 * @return
+	 */
+	Long countTermsWoNotes(String idThesaurus);
 	
-	List<ThesaurusTerm> getTermsWoNotes(String idThesaurus, int startIndex, int limit) throws BusinessException;
+	/**
+	 * Gets the terms with without notes
+	 * @param idThesaurus
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
+	List<ThesaurusTerm> getTermsWoNotes(String idThesaurus, int startIndex, int limit);
 }

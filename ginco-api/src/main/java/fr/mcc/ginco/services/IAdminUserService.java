@@ -58,7 +58,7 @@ public interface IAdminUserService {
 	 * Gets the list of all admins
 	 * @return
 	 */
-	public List<AdminUser> getAllAdmin();
+	List<AdminUser> getAllAdmin();
 
 
 }

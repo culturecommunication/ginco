@@ -56,7 +56,7 @@ public class CustomTermAttributeTypeDAO extends
 
 	@Override
 	public List<CustomTermAttributeType> getAttributesByThesaurus(
-			Thesaurus thesaurus) throws BusinessException {
+			Thesaurus thesaurus) {
 		Criteria criteria = getCurrentSession().createCriteria(
 				CustomTermAttributeType.class).add(
 				Restrictions.eq("thesaurus.identifier",

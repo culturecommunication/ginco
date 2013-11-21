@@ -34,11 +34,8 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.enums.TermStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.math.BigInteger;
+import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
@@ -49,8 +46,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigInteger;
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.enums.TermStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -98,16 +97,21 @@ public class ThesaurusTermDAO extends
 		return criteria.list();
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#countSandboxedTerms(java.lang.String)
+	 */
 	@Override
-	public Long countSandboxedTerms(String idThesaurus) throws BusinessException {
+	public Long countSandboxedTerms(String idThesaurus) {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		countAllSandboxedTerms(criteria, idThesaurus);
 		return (Long) criteria.list().get(0);
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#countPreferredTerms(java.lang.String)
+	 */
 	@Override
-	public Long countPreferredTerms(String idThesaurus)
-			throws BusinessException {
+	public Long countPreferredTerms(String idThesaurus) {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
 		.add(Restrictions.isNotNull(CONCEPT))
@@ -116,9 +120,11 @@ public class ThesaurusTermDAO extends
 		return (Long) criteria.list().get(0);
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#countNonPreferredTerms(java.lang.String)
+	 */
 	@Override
-	public Long countNonPreferredTerms(String idThesaurus)
-			throws BusinessException {
+	public Long countNonPreferredTerms(String idThesaurus) {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
 		.add(Restrictions.isNotNull(CONCEPT))
@@ -127,37 +133,47 @@ public class ThesaurusTermDAO extends
 		return (Long) criteria.list().get(0);
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#countTerms(java.lang.String)
+	 */
 	@Override
-	public Long countTerms(String idThesaurus)
-			throws BusinessException {
+	public Long countTerms(String idThesaurus) {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
 		.setProjection(Projections.rowCount());
 		return (Long) criteria.list().get(0);
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#countTermsWoNotes(java.lang.String)
+	 */
 	@Override
-	public Long countTermsWoNotes(String idThesaurus)
-			throws BusinessException {
-		Query query = getCurrentSession().createSQLQuery("select count(*) "
-+"from thesaurus_term t "
-+"left join note n on t.identifier = n.termid " 
-+"where t.thesaurusid=:pthesaurusid" 
-+" and n.identifier is null");
+	public Long countTermsWoNotes(String idThesaurus) {
+		Query query = getCurrentSession().createSQLQuery(
+				"select count(*) " + "from thesaurus_term t "
+						+ "left join note n on t.identifier = n.termid "
+						+ "where t.thesaurusid=:pthesaurusid"
+						+ " and n.identifier is null");
 		query.setParameter("pthesaurusid", idThesaurus);
-		return ((BigInteger)query.list().get(0)).longValue();
+		return ((BigInteger) query.list().get(0)).longValue();
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#countSandboxedValidatedTerms(java.lang.String)
+	 */
 	@Override
-	public Long countSandboxedValidatedTerms(String idThesaurus) throws BusinessException {
+	public Long countSandboxedValidatedTerms(String idThesaurus) {
 		Criteria criteria =  getCurrentSession().createCriteria(ThesaurusTerm.class);
 		countAllSandboxedTerms(criteria, idThesaurus);
 		criteria.add(Restrictions.eq(STATUS, TermStatusEnum.VALIDATED.getStatus()));
 		return (Long) criteria.list().get(0);
 	}	
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#getConceptPreferredTerm(java.lang.String)
+	 */
 	@Override
-	public ThesaurusTerm getConceptPreferredTerm(String conceptId) throws BusinessException {
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId) {
         List<ThesaurusTerm> list = getConceptPreferredTerms(conceptId);      
         if (list.size() > 0) {
         	for (ThesaurusTerm term:list) {
@@ -170,6 +186,9 @@ public class ThesaurusTermDAO extends
         return list.get(0);
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#getConceptPreferredTerm(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId, String languageId){       
         List<ThesaurusTerm> list = getCurrentSession()
@@ -186,8 +205,11 @@ public class ThesaurusTermDAO extends
         return list.get(0);
     }
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findTermsByConceptId(java.lang.String)
+	 */
 	@Override
-	public List<ThesaurusTerm> findTermsByConceptId(String conceptId) throws BusinessException {
+	public List<ThesaurusTerm> findTermsByConceptId(String conceptId) {
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq(CONCEPT_IDENTIFIER, conceptId))
@@ -199,8 +221,11 @@ public class ThesaurusTermDAO extends
 		return list;
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findTermsByThesaurusId(java.lang.String)
+	 */
 	@Override
-	public List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId) throws BusinessException {
+	public List<ThesaurusTerm> findTermsByThesaurusId(String thesaurusId) {
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq(THESAURUS_IDENTIFIER, thesaurusId))
@@ -208,6 +233,9 @@ public class ThesaurusTermDAO extends
 		return list;
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#countSimilarTermsByLexicalValueAndLanguage(fr.mcc.ginco.beans.ThesaurusTerm)
+	 */
 	@Override
 	public Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) {
 		return (Long) getCurrentSession()
@@ -220,9 +248,11 @@ public class ThesaurusTermDAO extends
                 .list().get(0);
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.hibernate.GenericHibernateDAO#update(java.lang.Object)
+	 */
 	@Override
-	public ThesaurusTerm update(ThesaurusTerm termToUpdate)
-			throws BusinessException {
+	public ThesaurusTerm update(ThesaurusTerm termToUpdate) {
 		getCurrentSession().setFlushMode(FlushMode.COMMIT);
 		// Verifying if there is no a similar term (lexicalValue + lang)
 		Long numberOfExistingTerms = countSimilarTermsByLexicalValueAndLanguage(termToUpdate);
@@ -248,6 +278,9 @@ public class ThesaurusTermDAO extends
 		return termToUpdate;
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#getTermByLexicalValueThesaurusIdLanguageId(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public ThesaurusTerm getTermByLexicalValueThesaurusIdLanguageId(String lexicalValue, String thesaurusId, String languageId){
 		return (ThesaurusTerm) getCurrentSession().createCriteria(ThesaurusTerm.class)
@@ -270,6 +303,9 @@ public class ThesaurusTermDAO extends
 		.setFirstResult(startIndex).addOrder(Order.asc(LEXICAL_VALUE));
     }
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#findPaginatedPreferredItems(java.lang.Integer, java.lang.Integer, java.lang.String)
+	 */
 	@Override
 	public List<ThesaurusTerm> findPaginatedPreferredItems(Integer startIndex,
 			Integer limit, String idThesaurus) {
@@ -287,15 +323,21 @@ public class ThesaurusTermDAO extends
 	 * @param criteria
 	 * @param idThesaurus
 	 */
+	/**
+	 * @param criteria
+	 * @param idThesaurus
+	 */
 	private void countAllSandboxedTerms(Criteria criteria, String idThesaurus) {
 		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
 		.add(Restrictions.isNull(CONCEPT))
 		.setProjection(Projections.rowCount());
 	}
 	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#getConceptNotPreferredTerms(java.lang.String)
+	 */
 	@Override
-	public List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
-			throws BusinessException{
+	public List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId) {
 		List<ThesaurusTerm> list = getCurrentSession()
                 .createCriteria(ThesaurusTerm.class)
                 .add(Restrictions.eq(CONCEPT_IDENTIFIER, conceptId))
@@ -304,9 +346,11 @@ public class ThesaurusTermDAO extends
       	return list;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#getConceptPreferredTerms(java.lang.String)
+	 */
 	@Override
-	public List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
-			throws BusinessException {
+	public List<ThesaurusTerm> getConceptPreferredTerms(String conceptId) {
 		  List<ThesaurusTerm> list = getCurrentSession()
 	                .createCriteria(ThesaurusTerm.class)
 	                .add(Restrictions.eq(CONCEPT_IDENTIFIER, conceptId))
@@ -320,9 +364,12 @@ public class ThesaurusTermDAO extends
 	        return list;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.dao.IThesaurusTermDAO#getTermsWoNotes(java.lang.String, int, int)
+	 */
 	@Override
 	public List<ThesaurusTerm> getTermsWoNotes(String idThesaurus,
-			int startIndex, int limit) throws BusinessException {
+			int startIndex, int limit) {
 		Query query = getCurrentSession().createSQLQuery("select t.* "
 				+"from thesaurus_term t "
 				+"left join note n on t.identifier = n.termid " 

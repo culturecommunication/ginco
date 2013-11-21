@@ -155,8 +155,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	 * (java.util.List)
 	 */
 	@Override
-	public Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids)
-			throws BusinessException {
+	public Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids){
 		Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
 		for (String id : ids) {
 			ThesaurusConcept concept = thesaurusConceptDAO.getById(id);
@@ -185,21 +184,18 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId, int maxResults)
-			throws BusinessException {
+	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId, int maxResults){
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
 		return thesaurusConceptDAO.getOrphansThesaurusConcept(thesaurus, maxResults);
 	}
 	
 	@Override
-	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId)
-			throws BusinessException {
+	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId){
 		return getOrphanThesaurusConcepts(thesaurusId,0);
 	}
 
 	@Override
-	public long getOrphanThesaurusConceptsCount(String thesaurusId)
-			throws BusinessException {
+	public long getOrphanThesaurusConceptsCount(String thesaurusId){
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
 		return thesaurusConceptDAO.getOrphansThesaurusConceptCount(thesaurus);
 	}
@@ -212,21 +208,18 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	 * .lang.String)
 	 */
 	@Override
-	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, int maxResults)
-			throws BusinessException {
+	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, int maxResults) {
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
 		return thesaurusConceptDAO.getTopTermThesaurusConcept(thesaurus, maxResults);
 	}
 	
 	@Override
-	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId)
-			throws BusinessException {
+	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId) {
 		return getTopTermThesaurusConcepts(thesaurusId ,0);
 	}
 
 	@Override
-	public long getTopTermThesaurusConceptsCount(String thesaurusId)
-			throws BusinessException {
+	public long getTopTermThesaurusConceptsCount(String thesaurusId) {
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
 		return thesaurusConceptDAO.getTopTermThesaurusConceptCount(thesaurus);
 	}
@@ -282,8 +275,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public ThesaurusTerm getConceptPreferredTerm(String conceptId)
-			throws BusinessException {
+	public ThesaurusTerm getConceptPreferredTerm(String conceptId) {
 
 		logger.debug("ConceptId : " + conceptId);
 
@@ -314,7 +306,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public String getConceptLabel(String conceptId) throws BusinessException {
+	public String getConceptLabel(String conceptId) {
 		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
 		return LabelUtil.getLocalizedLabel(term.getLexicalValue(),
 				term.getLanguage(), defaultLang);
@@ -328,8 +320,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			List<ConceptHierarchicalRelationship> hierarchicalRelationships,
 			List<ThesaurusConcept> childrenConceptToDetach,
 			List<ThesaurusConcept> childrenConceptToAttach,
-			List<Alignment> alignments)
-			throws BusinessException {
+			List<Alignment> alignments) {
 
 		thesaurusTermUtils.checkTerms(terms);
 		alignmentService.saveExternalThesauruses(alignments);
@@ -400,8 +391,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	private ThesaurusConcept saveAssociativeRelationship(
 			ThesaurusConcept concept,
-			List<AssociativeRelationship> associatedConcepts)
-			throws BusinessException {
+			List<AssociativeRelationship> associatedConcepts) {
 		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
 		if (concept.getAssociativeRelationshipLeft() == null) {
 			concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
@@ -467,8 +457,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Transactional(readOnly = false)
 	@Override
-	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object)
-			throws BusinessException {
+	public ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object) {
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()
 				|| object.getStatus() == ConceptStatusEnum.REJECTED.getStatus()) {
 			List<ThesaurusTerm> terms = thesaurusTermDAO
@@ -511,7 +500,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	private void updateConceptTerms(ThesaurusConcept concept,
-			List<ThesaurusTerm> terms) throws BusinessException {
+			List<ThesaurusTerm> terms) {
 		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm thesaurusTerm : terms) {
 
@@ -524,8 +513,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		}
 	}
 
-	private Thesaurus checkThesaurusId(String thesaurusId)
-			throws BusinessException {
+	private Thesaurus checkThesaurusId(String thesaurusId) {
 		Thesaurus thesaurus = thesaurusDAO.getById(thesaurusId);
 		if (thesaurus == null) {
 			throw new BusinessException("Invalid thesaurusId : " + thesaurusId,
@@ -632,7 +620,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public int getConceptsHierarchicalRelations(String firstConceptId,
-			String secondConceptId) throws BusinessException {
+			String secondConceptId) {
 		ThesaurusConcept firstConcept = thesaurusConceptDAO
 				.getById(firstConceptId);
 		ThesaurusConcept secondConcept = thesaurusConceptDAO
@@ -660,15 +648,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
-			throws BusinessException {
+	public List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId) {
 		List<ThesaurusTerm> notPreferredTerms = thesaurusTermDAO
 				.getConceptNotPreferredTerms(conceptId);
 		return notPreferredTerms;
 	}
 
 	@Override
-	public int getStatusByConceptId(String conceptId) throws BusinessException {
+	public int getStatusByConceptId(String conceptId) {
 		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
 				.getById(conceptId);
 		if (thesaurusConcept != null) {
@@ -681,8 +668,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
-			throws BusinessException {
+	public List<ThesaurusTerm> getConceptPreferredTerms(String conceptId) {
 		logger.debug("ConceptId : " + conceptId);
 
 		List<ThesaurusTerm> preferredTerms = thesaurusTermDAO

@@ -35,7 +35,6 @@
 package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Data Access Object for thesaurus_term_role
@@ -44,8 +43,7 @@ public interface IThesaurusTermRoleDAO extends IGenericDAO<ThesaurusTermRole, St
 	/**
 	 * Returns the default term role
 	 * @return
-	 * @throws BusinessException if there is no default role defined
 	 */
-	ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException;
+	ThesaurusTermRole getDefaultThesaurusTermRole();
 
 }
