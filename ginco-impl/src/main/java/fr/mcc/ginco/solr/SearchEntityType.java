@@ -32,36 +32,14 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+
 package fr.mcc.ginco.solr;
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.TechnicalException;
-
-public interface INoteIndexerService {
-
-	/**
-     * Takes an {@link Note} and adds it to index
-     *
-     * @param Updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNote(Note note) throws TechnicalException;
-
-	/**
-     * Takes a list of {@link Note} and adds it to index
-     *
-     * @param List of updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNotes(List<Note> notes) throws TechnicalException;
-
-	/**
-     * Remove {@link Note} from search index
-     * @param {@link Note}
-     * @throws TechnicalException
-     */
-	void removeNote(Note note) throws TechnicalException;
-
+public class SearchEntityType {
+	public static final Integer ALL_TYPE = -1;
+	public static final Integer CONCEPT = 1;
+	public static final Integer TERM = 2;
+	public static final Integer TERM_PREF = 3;
+	public static final Integer TERM_NON_PREF = 4;
+	public static final Integer NOTE = 5;
 }

@@ -50,7 +50,7 @@ import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.solr.EntityType;
+import fr.mcc.ginco.solr.ExtEntityType;
 import fr.mcc.ginco.solr.NoteSolrConverter;
 import fr.mcc.ginco.solr.SolrField;
 import fr.mcc.ginco.utils.DateUtil;
@@ -186,7 +186,7 @@ public class NoteSolrConverterTest {
 
 		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
 
-		Assert.assertEquals(EntityType.NOTE_DEFINITION, doc
+		Assert.assertEquals(ExtEntityType.NOTE_DEFINITION, doc
 				.getFieldValue(SolrField.EXT_TYPE));
 
 	}
@@ -219,7 +219,7 @@ public class NoteSolrConverterTest {
 
 		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
 
-		Assert.assertEquals(EntityType.NOTE_EDITORIAL, doc
+		Assert.assertEquals(ExtEntityType.NOTE_EDITORIAL, doc
 				.getFieldValue(SolrField.EXT_TYPE));
 
 	}
@@ -252,7 +252,7 @@ public class NoteSolrConverterTest {
 
 		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
 
-		Assert.assertEquals(EntityType.NOTE_EXAMPLE, doc
+		Assert.assertEquals(ExtEntityType.NOTE_EXAMPLE, doc
 				.getFieldValue(SolrField.EXT_TYPE));
 
 	}
@@ -285,7 +285,7 @@ public class NoteSolrConverterTest {
 
 		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
 
-		Assert.assertEquals(EntityType.NOTE_HISTORY, doc
+		Assert.assertEquals(ExtEntityType.NOTE_HISTORY, doc
 				.getFieldValue(SolrField.EXT_TYPE));
 
 	}
@@ -318,7 +318,7 @@ public class NoteSolrConverterTest {
 
 		SolrInputDocument doc = noteSolrConverter.convertSolrNote(fakeConceptNote);
 
-		Assert.assertEquals(EntityType.NOTE_SCOPE, doc
+		Assert.assertEquals(ExtEntityType.NOTE_SCOPE, doc
 				.getFieldValue(SolrField.EXT_TYPE));
 
 	}

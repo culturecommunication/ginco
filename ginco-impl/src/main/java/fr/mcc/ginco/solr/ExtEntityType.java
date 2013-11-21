@@ -37,7 +37,7 @@ package fr.mcc.ginco.solr;
 /**
  *
  */
-public class EntityType {
+public class ExtEntityType {
     public static final int CONCEPT = 1;
     public static final int TERM_PREF = 2;
     public static final int TERM_NON_PREF = 3;

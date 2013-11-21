@@ -73,7 +73,7 @@ public class ConceptSolrConverter {
 				.getTitle());
 		doc.addField(SolrField.IDENTIFIER, thesaurusConcept.getIdentifier());
 		doc.addField(SolrField.TYPE, ThesaurusConcept.class.getSimpleName());
-		doc.addField(SolrField.EXT_TYPE, EntityType.CONCEPT);
+		doc.addField(SolrField.EXT_TYPE, ExtEntityType.CONCEPT);
 
 		Timestamp modifiedDate = new Timestamp(thesaurusConcept.getModified()
 				.getTime());
