@@ -46,6 +46,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
@@ -77,8 +78,11 @@ public class ThesaurusReportServiceTest {
 	@Test
     public final void testGetConceptsWithoutNotes() {
 		String thId = "http://th1";
+		Thesaurus th = new Thesaurus();
+		th.setIdentifier(thId);
 		ThesaurusConcept concept1=new ThesaurusConcept();
 		concept1.setIdentifier("http://c1");
+		concept1.setThesaurus(th);
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		term1.setIdentifier("http://t1");
 		term1.setLexicalValue("terme1");
@@ -112,5 +116,30 @@ public class ThesaurusReportServiceTest {
         Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
         Assert.assertEquals("ThesaurusTerm", resultList.get(0).getType());
     }
+	
+	@Test 
+	public final void testGetConceptsAlignedToMyThes()
+	{
+		String thId = "http://th1";
+		Thesaurus th = new Thesaurus();
+		th.setIdentifier(thId);
+		ThesaurusConcept concept1=new ThesaurusConcept();
+		concept1.setIdentifier("http://c1");
+		concept1.setThesaurus(th);
+		ThesaurusTerm term1 = new ThesaurusTerm();
+		term1.setIdentifier("http://t1");
+		term1.setLexicalValue("terme1");
+		List<ThesaurusConcept> listConcepts=new ArrayList<ThesaurusConcept>();
+		listConcepts.add(concept1);
+		Mockito.when(conceptDAO.countConceptsAlignedToMyThes(thId)).thenReturn((long) listConcepts.size());
+		Mockito.when(conceptDAO.getConceptsAlignedToMyThes(thId,0,100)).thenReturn(listConcepts);
+		Mockito.when(thesaurusConceptService.getConceptPreferredTerm("http://c1")).thenReturn(term1);
+        SearchResultList resultList = thesaurusReportService.getConceptsAlignedToMyThes(thId, 0, 100);
+        Assert.assertEquals(1,resultList.getNumFound());
+        Assert.assertEquals("http://c1", resultList.get(0).getIdentifier());
+        Assert.assertEquals("terme1", resultList.get(0).getLexicalValue());
+        Assert.assertEquals(thId, resultList.get(0).getThesaurusId());
+        Assert.assertEquals("ThesaurusConcept", resultList.get(0).getType());
+	}
 
 }

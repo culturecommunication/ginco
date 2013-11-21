@@ -79,6 +79,9 @@ public class ReportRestService {
 		else if (type == ReportTypeEnum.TERMSWONOTES.getType()) {
 			resultList = thesaurusReportService.getTermsWithoutNotes(thesaurusId, startIndex, limit);
 		}
+		else if (type == ReportTypeEnum.CONCEPTSALIGNED.getType()) {
+			resultList = thesaurusReportService.getConceptsAlignedToMyThes(thesaurusId, startIndex, limit);
+		}
 		else 
 		{
 			throw new BusinessException("Unknow report type "+type, "unknow-report-type");

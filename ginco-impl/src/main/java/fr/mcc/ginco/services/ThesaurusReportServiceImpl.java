@@ -80,6 +80,19 @@ public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 		return resultList;
 	}
 	
+	@Override
+	public SearchResultList getConceptsAlignedToMyThes(String thesaurus,
+			int startIndex, int limit) {
+		SearchResultList resultList = new SearchResultList();
+		List<ThesaurusConcept> concepts =  conceptDAO.getConceptsAlignedToMyThes(thesaurus, startIndex, limit);
+		for (ThesaurusConcept concept : concepts)
+		{
+			resultList.add(getSearchResultFromConcept(concept, thesaurus));
+		}
+		resultList.setNumFound(conceptDAO.countConceptsAlignedToMyThes(thesaurus));
+		return resultList;
+	}
+	
 	private SearchResult getSearchResultFromConcept(ThesaurusConcept concept, String thesaurus) {
 		SearchResult result = new SearchResult();
 		result.setIdentifier(concept.getIdentifier());
@@ -91,7 +104,7 @@ public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 		} catch (BusinessException ex) {
 			result.setLexicalValue("");
 		}
-		result.setThesaurusId(thesaurus);
+		result.setThesaurusId(concept.getThesaurusId());
 		return result;
 	}
 

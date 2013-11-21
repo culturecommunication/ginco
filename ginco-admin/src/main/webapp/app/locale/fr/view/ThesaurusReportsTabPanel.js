@@ -38,5 +38,6 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusReportsTabPanel', {
 			xLexicalValueColumnLabel : 'Valeur lexicale',
 			xConceptWoNotesLabel : 'Concepts sans notes',
 			xTermsWoNotesLabel : 'Termes sans notes',
+			xConceptAlignedWithMyThesLabel : 'Concepts alignés sur le vocabulaire',
 			xViewToolTip : "Cliquez ici pour accéder à l'élément sélectionné"
 		});

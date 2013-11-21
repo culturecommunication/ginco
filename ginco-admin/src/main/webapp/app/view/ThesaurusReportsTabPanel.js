@@ -41,6 +41,7 @@ Ext.define('GincoApp.view.ThesaurusReportsTabPanel', {
 	xLexicalValueColumnLabel : 'Lexical value',
 	xConceptWoNotesLabel : 'Concepts without notes',
 	xTermsWoNotesLabel : 'Terms without notes',
+	xConceptAlignedWithMyThesLabel : 'Concepts aligned with the thesaurus',
 	xViewToolTip : "Click here to open element",
 	reportsTypeStore : null,
 	reportStore : null,
@@ -64,6 +65,10 @@ Ext.define('GincoApp.view.ThesaurusReportsTabPanel', {
 							}, {
 								type : 1,
 								typeLabel : me.xTermsWoNotesLabel
+							},
+							{
+								type : 2,
+								typeLabel : me.xConceptAlignedWithMyThesLabel
 							}]
 				});
 		Ext.applyIf(me, {

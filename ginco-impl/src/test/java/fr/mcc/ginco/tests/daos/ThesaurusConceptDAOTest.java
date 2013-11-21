@@ -272,6 +272,15 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 				.getConceptsWoNotes(thesaurusId, 0, 100);
 		Assert.assertEquals(4, conceptsWoNotes.size());
 	}
+	
+	@Test 
+	public void testGetConceptsAlignedToMyThes()
+	{
+		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+		List<ThesaurusConcept> conceptsAligned = thesaurusConceptDAO
+				.getConceptsAlignedToMyThes(thesaurusId, 0, 100);
+		Assert.assertEquals(1, conceptsAligned.size());
+	}
 
 	@Override
 	public String getXmlDataFileInit() {

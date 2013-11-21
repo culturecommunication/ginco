@@ -161,5 +161,9 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 */
 	Long countConceptsAlignedToMyThes(String idThesaurus) throws BusinessException;
 
+	List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus,
+			int startIndex, int limit) throws BusinessException;
+
+
 
 }

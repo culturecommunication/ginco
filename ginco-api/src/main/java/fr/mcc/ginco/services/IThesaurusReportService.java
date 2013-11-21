@@ -63,4 +63,7 @@ public interface IThesaurusReportService {
      */
 	SearchResultList getTermsWithoutNotes(String thesaurus,
              int startIndex, int limit);
+
+	SearchResultList getConceptsAlignedToMyThes(String thesaurus,
+			int startIndex, int limit);
 }

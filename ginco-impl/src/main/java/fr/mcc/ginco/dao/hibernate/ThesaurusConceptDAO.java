@@ -406,5 +406,27 @@ public class ThesaurusConceptDAO extends
 
 		return (Long) criteria.list().get(0);
 	}
+	
+	@Override
+	public List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus, int startIndex, int limit)
+			throws BusinessException {
+		DetachedCriteria alignmentCriteria = DetachedCriteria
+				.forClass(Alignment.class, "al")
+				.add(Restrictions.eq("al.internalTargetThesaurus.identifier",
+						idThesaurus))
+				.setProjection(
+						Projections
+								.projectionList()
+								.add(Projections
+										.property("al.sourceConcept.identifier")));
+
+		Criteria criteria = getCurrentSession()
+				.createCriteria(ThesaurusConcept.class, "tc")
+				.add(Subqueries.propertyIn(TC_IDENTIFIER, alignmentCriteria))
+				.setFirstResult(startIndex)
+				.setMaxResults(limit);
+
+		return (List<ThesaurusConcept>)criteria.list();
+	}
 
 }
