@@ -32,19 +32,14 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+
 package fr.mcc.ginco.solr;
 
-/**
- *
- */
-public final class EntityType {
-    public static final int CONCEPT = 1;
-    public static final int TERM_PREF = 2;
-    public static final int TERM_NON_PREF = 3;
-    public static final int NOTE = 4;
-    public static final int NOTE_DEFINITION = 5;
-    public static final int NOTE_EDITORIAL = 6;
-    public static final int NOTE_EXAMPLE = 7;
-    public static final int NOTE_HISTORY = 8;
-    public static final int NOTE_SCOPE = 9;
+public class SearchEntityType {
+	public static final Integer ALL_TYPE = -1;
+	public static final Integer CONCEPT = 1;
+	public static final Integer TERM = 2;
+	public static final Integer TERM_PREF = 3;
+	public static final Integer TERM_NON_PREF = 4;
+	public static final Integer NOTE = 5;
 }

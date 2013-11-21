@@ -32,36 +32,59 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.solr;
+package fr.mcc.ginco.tests.solr;
 
-import java.util.List;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.solr.SearchEntityType;
+import fr.mcc.ginco.solr.SearcherServiceUtil;
 
-public interface INoteIndexerService {
+public class SearcherServiceUtilTest {
 
-	/**
-     * Takes an {@link Note} and adds it to index
-     *
-     * @param Updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNote(Note note) throws TechnicalException;
+	@InjectMocks
+	private SearcherServiceUtil searcherServiceUtil;
 
-	/**
-     * Takes a list of {@link Note} and adds it to index
-     *
-     * @param List of updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNotes(List<Note> notes) throws TechnicalException;
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
 
-	/**
-     * Remove {@link Note} from search index
-     * @param {@link Note}
-     * @throws TechnicalException
-     */
-	void removeNote(Note note) throws TechnicalException;
+	@Test
+	public void testGetConceptExtTypeQuery(){
+		String expectedQuery = "+ext_type:1";
+		String actualQuery = searcherServiceUtil.getExtTypeQuery(SearchEntityType.CONCEPT);
+		Assert.assertEquals(expectedQuery, actualQuery);
+	}
 
+	@Test
+	public void testGetTermExtTypeQuery(){
+		String expectedQuery = "+ext_type:(2 OR 3)";
+		String actualQuery = searcherServiceUtil.getExtTypeQuery(SearchEntityType.TERM);
+		Assert.assertEquals(expectedQuery, actualQuery);
+	}
+
+	@Test
+	public void testGetPrefTermExtTypeQuery(){
+		String expectedQuery = "+ext_type:2";
+		String actualQuery = searcherServiceUtil.getExtTypeQuery(SearchEntityType.TERM_PREF);
+		Assert.assertEquals(expectedQuery, actualQuery);
+	}
+
+	@Test
+	public void testGetNonPrefTermExtTypeQuery(){
+		String expectedQuery = "+ext_type:3";
+		String actualQuery = searcherServiceUtil.getExtTypeQuery(SearchEntityType.TERM_NON_PREF);
+		Assert.assertEquals(expectedQuery, actualQuery);
+	}
+
+	@Test
+	public void testGetNoteExtTypeQuery(){
+		String expectedQuery = "+ext_type:(4 OR 5 OR 6 OR 7 OR 8 OR 9)";
+		String actualQuery = searcherServiceUtil.getExtTypeQuery(SearchEntityType.NOTE);
+		Assert.assertEquals(expectedQuery, actualQuery);
+	}
 }

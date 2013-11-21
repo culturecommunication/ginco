@@ -34,34 +34,15 @@
  */
 package fr.mcc.ginco.solr;
 
-import java.util.List;
+public final class ExtEntityType {
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.TechnicalException;
-
-public interface INoteIndexerService {
-
-	/**
-     * Takes an {@link Note} and adds it to index
-     *
-     * @param Updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNote(Note note) throws TechnicalException;
-
-	/**
-     * Takes a list of {@link Note} and adds it to index
-     *
-     * @param List of updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNotes(List<Note> notes) throws TechnicalException;
-
-	/**
-     * Remove {@link Note} from search index
-     * @param {@link Note}
-     * @throws TechnicalException
-     */
-	void removeNote(Note note) throws TechnicalException;
-
+    public static final int CONCEPT = 1;
+    public static final int TERM_PREF = 2;
+    public static final int TERM_NON_PREF = 3;
+    public static final int NOTE = 4;
+    public static final int NOTE_DEFINITION = 5;
+    public static final int NOTE_EDITORIAL = 6;
+    public static final int NOTE_EXAMPLE = 7;
+    public static final int NOTE_HISTORY = 8;
+    public static final int NOTE_SCOPE = 9;
 }

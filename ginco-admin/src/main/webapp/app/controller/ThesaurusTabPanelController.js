@@ -85,17 +85,23 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			thePanel.down('#importBranch').setDisabled(false);
 		}
 	},
-	openConceptTab : function(tabPanel, aConceptId)
+	openConceptTab : function(tabPanel, aConceptId, openNoteTab)
 	{
-		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : aConceptId});
+		var noteTabComponent = "";
+		if (openNoteTab)
+			noteTabComponent = "noteConceptPanel";
+		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : aConceptId}, noteTabComponent);
 	},
 	openChildConceptTab : function(tabPanel, aParentConceptId)
 	{
 		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : null, parentConceptId : aParentConceptId, displayPrefTermCreation: true});
 	},
-	openTermTab : function(tabPanel, aTermId)
+	openTermTab : function(tabPanel, aTermId, openNoteTab)
 	{
-		this.openGenericTab(tabPanel, "termPanel","GincoApp.view.TermPanel", {gincoId : aTermId});
+		var noteTabComponent = "";
+		if (openNoteTab)
+			noteTabComponent = "noteTermPanel";
+		this.openGenericTab(tabPanel, "termPanel","GincoApp.view.TermPanel", {gincoId : aTermId}, noteTabComponent);
 	},
 	openSandboxTab : function (tabPanel)
 	{
@@ -117,10 +123,10 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	{
 		this.openGenericTab(tabPanel, "complexconceptPanel","GincoApp.view.ComplexConceptPanel", {gincoId : aConceptId});
 	},
-	openGenericTab : function (tabPanel, aXtype, aClass, panelOptions)
+	openGenericTab : function (tabPanel, aXtype, aClass, panelOptions, noteTabComponent)
 	{
 		var existingTabs = tabPanel.query(aXtype);
-		var tabExists = false;
+		var tab = null, tabExists = false;
 		var itemTabPanel = tabPanel.down('#thesaurusItemsTabPanel');
 		if (panelOptions['gincoId']!=null) {
 			Ext.Array.each(existingTabs, function(element, index, array) {
@@ -139,11 +145,19 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			var newPanel = Ext.create(
 					aClass, panelOptions
 					);
-			var tab = itemTabPanel.add(newPanel);
+			tab = itemTabPanel.add(newPanel);
 			itemTabPanel.setActiveTab(tab);
 			tab.show();
 		} else {
 			itemTabPanel.setActiveTab(tabExists);
+			tab = tabExists;
+		}
+		if (noteTabComponent)
+		{
+			Ext.defer (function () {
+				var noteTab = tab.down(noteTabComponent);
+				noteTab.up('tabpanel').setActiveTab(noteTab);
+			},3);
 		}
 	},
 	onNewConceptAndTermBtnClick : function(theButton, e, options) {

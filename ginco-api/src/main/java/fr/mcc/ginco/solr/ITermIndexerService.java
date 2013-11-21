@@ -46,7 +46,7 @@ public interface ITermIndexerService {
      * @param Updated/created {@link ThesaurusTerm} to save to index
      * @throws TechnicalException
      */
-	public void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
+	void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
 
 	/**
      * Takes a list of {@link ThesaurusTerm} and adds it to index
@@ -54,12 +54,12 @@ public interface ITermIndexerService {
      * @param List of updated/created (@link Note) to save to index
      * @throws TechnicalException
      */
-	public void addTerms(List<ThesaurusTerm> thesaurusTerms) throws TechnicalException;
+	void addTerms(List<ThesaurusTerm> thesaurusTerms) throws TechnicalException;
 
 	/**
      * Remove {@link ThesaurusTerm} from search index
      * @param {@link ThesaurusTerm}
      * @throws TechnicalException
      */
-	public void removeTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
+	void removeTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
 }

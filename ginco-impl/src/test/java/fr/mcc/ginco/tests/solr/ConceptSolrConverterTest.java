@@ -58,7 +58,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.solr.ConceptSolrConverter;
-import fr.mcc.ginco.solr.EntityType;
+import fr.mcc.ginco.solr.ExtEntityType;
 import fr.mcc.ginco.solr.SolrField;
 import fr.mcc.ginco.utils.DateUtil;
 
@@ -144,7 +144,7 @@ public class ConceptSolrConverterTest {
 		Assert.assertEquals(ThesaurusConcept.class.getSimpleName(), doc
 				.getFieldValue(SolrField.TYPE));
 
-		Assert.assertEquals(EntityType.CONCEPT, doc
+		Assert.assertEquals(ExtEntityType.CONCEPT, doc
 				.getFieldValue(SolrField.EXT_TYPE));
 
 		Assert.assertEquals(fakeThesaurusConcept.getModified(), doc

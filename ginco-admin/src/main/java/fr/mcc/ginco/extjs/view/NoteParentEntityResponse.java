@@ -32,36 +32,30 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.solr;
+package fr.mcc.ginco.extjs.view;
 
-import java.util.List;
+/**
+ * Class for JSON representation of a data object for extjs.
+ */
+public class NoteParentEntityResponse {
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.TechnicalException;
+	private String parentEntityId;
+	private boolean isConcept;
 
-public interface INoteIndexerService {
+	public String getParentEntityId() {
+		return parentEntityId;
+	}
 
-	/**
-     * Takes an {@link Note} and adds it to index
-     *
-     * @param Updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNote(Note note) throws TechnicalException;
+	public void setParentEntityId(String parentEntityId) {
+		this.parentEntityId = parentEntityId;
+	}
 
-	/**
-     * Takes a list of {@link Note} and adds it to index
-     *
-     * @param List of updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNotes(List<Note> notes) throws TechnicalException;
+	public boolean getIsConcept() {
+		return isConcept;
+	}
 
-	/**
-     * Remove {@link Note} from search index
-     * @param {@link Note}
-     * @throws TechnicalException
-     */
-	void removeNote(Note note) throws TechnicalException;
+	public void setIsConcept(boolean isConcept) {
+		this.isConcept = isConcept;
+	}
 
 }
