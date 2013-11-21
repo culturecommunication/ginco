@@ -34,14 +34,24 @@
  */
 package fr.mcc.ginco.tests.solr;
 
+import javax.persistence.metamodel.EntityType;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.solr.ExtEntityType;
 import fr.mcc.ginco.solr.SearchEntityType;
+import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
 import fr.mcc.ginco.solr.SearcherServiceUtil;
+import fr.mcc.ginco.solr.SolrField;
+import fr.mcc.ginco.utils.DateUtil;
 
 public class SearcherServiceUtilTest {
 
@@ -86,5 +96,39 @@ public class SearcherServiceUtilTest {
 		String expectedQuery = "+ext_type:(4 OR 5 OR 6 OR 7 OR 8 OR 9)";
 		String actualQuery = searcherServiceUtil.getExtTypeQuery(SearchEntityType.NOTE);
 		Assert.assertEquals(expectedQuery, actualQuery);
+	}
+
+	@Test
+	public void testGetSearchResultList(){
+		SolrDocumentList fakeDocList = new SolrDocumentList();
+		SolrDocument fakeDoc = new SolrDocument();
+		fakeDoc.addField(SolrField.IDENTIFIER, "id1");
+		fakeDoc.addField(SolrField.LEXICALVALUE, "lex1");
+		fakeDoc.addField(SolrField.THESAURUSID, "th1");
+		fakeDoc.addField(SolrField.THESAURUSTITLE, "title1");
+		fakeDoc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
+        fakeDoc.addField(SolrField.EXT_TYPE, ExtEntityType.TERM_NON_PREF);
+        fakeDoc.addField(SolrField.MODIFIED, DateUtil.dateFromString("2013-11-21 18:19:47"));
+        fakeDoc.addField(SolrField.CREATED, DateUtil.dateFromString("2013-11-21 15:51:00"));
+        fakeDoc.addField(SolrField.STATUS, 0);
+        fakeDoc.addField(SolrField.LANGUAGE, "lang1");
+		fakeDocList.add(fakeDoc);
+		fakeDocList.setNumFound(1);
+
+		SearchResultList searchResultList = searcherServiceUtil.getSearchResultList(fakeDocList);
+		Assert.assertEquals(1, searchResultList.getNumFound());
+
+		SearchResult searchResult = searchResultList.get(0);
+		Assert.assertEquals(searchResult.getIdentifier(), "id1");
+		Assert.assertEquals(searchResult.getLexicalValue(), "lex1");
+		Assert.assertEquals(searchResult.getThesaurusId(), "th1");
+		Assert.assertEquals(searchResult.getThesaurusTitle(), "title1");
+		Assert.assertEquals(searchResult.getType(), ThesaurusTerm.class.getSimpleName());
+		Assert.assertEquals(searchResult.getTypeExt(), String.valueOf(ExtEntityType.TERM_NON_PREF));
+		Assert.assertEquals(searchResult.getModified(), "2013-11-21 18:19:47");
+		Assert.assertEquals(searchResult.getCreated(), "2013-11-21 15:51:00");
+		Assert.assertEquals(searchResult.getStatus(), "0");
+		Assert.assertEquals(searchResult.getLanguages().get(0), "lang1");
+
 	}
 }

@@ -48,8 +48,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -281,7 +279,7 @@ public class ThesaurusNoteRestService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public String getNoteParentEntity(
 			@QueryParam("noteId") String noteId)
-					throws JsonGenerationException, JsonMappingException, IOException {
+					throws IOException {
 
 		NoteParentEntityResponse response = new NoteParentEntityResponse();
 		Note note = noteService.getNoteById(noteId);
