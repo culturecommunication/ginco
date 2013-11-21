@@ -13,25 +13,25 @@ public class LockoutService {
 	private Map<String, LockoutData> lockMap = new HashMap<String, LockoutData>();
 	 
 	private static class LockoutData {
-		int attempts;
-		long lastMillis;
+		private int attempts;
+		private long lastMillis;
 	}
 	
 	@Value("${login.max.attempts}")
-	private int DEFAULT_MAX_ATTEMPTS;
+	private int defaultMaxAttemps;
 	
 	public int getMaxAttemps() {
-		return DEFAULT_MAX_ATTEMPTS;
+		return defaultMaxAttemps;
 	}
 
 	@Value("${login.lockout.seconds}")
-	private long DEFAULT_LOCKOUT_SECONDS;
+	private long defaultLockoutSeconds;
 
 	public boolean isLockedOut(String username) {
 		LockoutData data = getData(username);
-		if (data.attempts >= DEFAULT_MAX_ATTEMPTS) {
+		if (data.attempts >= defaultMaxAttemps) {
 			long last = System.currentTimeMillis() - data.lastMillis;
-			if (last < 1000 * DEFAULT_LOCKOUT_SECONDS) {
+			if (last < 1000 * defaultLockoutSeconds) {
 				return true;
 			}
 		}

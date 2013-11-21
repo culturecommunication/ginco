@@ -53,7 +53,7 @@ public class FileResponse {
 	public FileResponse(File file, String extension, String title) {
 		this.file = file;
 		this.extension = extension;
-		this.title = StringEscapeUtils.unescapeHtml4(title).replaceAll("[^a-zA-Z0-9\\._]+", "_");;
+		this.title = StringEscapeUtils.unescapeHtml4(title).replaceAll("[^a-zA-Z0-9\\._]+", "_");
 	
 	}
 

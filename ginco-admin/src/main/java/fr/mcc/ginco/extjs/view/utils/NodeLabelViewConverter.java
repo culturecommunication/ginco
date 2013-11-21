@@ -41,7 +41,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.NodeLabel;
@@ -49,14 +48,14 @@ import fr.mcc.ginco.extjs.view.pojo.NodeLabelView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.utils.DateUtil;
 
+/**
+ * Utility ton convert {@link NodeLabel} to {@link NodeLabelView} and vice versa
+ *
+ */
 @Component("nodeLabelViewConverter")
-public class NodeLabelViewConverter {
-
-    @Value("${ginco.default.language}")
-    private String language;
+public class NodeLabelViewConverter {   
 
     @Inject
     @Named("nodeLabelService")
@@ -64,13 +63,14 @@ public class NodeLabelViewConverter {
 
     @Inject
     @Named("languagesService")
-    private ILanguagesService languagesService;
-
-    @Inject
-    @Named("thesaurusArrayService")
-    private IThesaurusArrayService thesaurusArrayService;
+    private ILanguagesService languagesService;    
     
 
+    /**
+     * Converts a {@link NodeLabel} into a {@link NodeLabelView}
+     * @param source
+     * @return
+     */
     public NodeLabelView convert(NodeLabel source) {
         NodeLabelView nodeLabelView = new NodeLabelView();
         nodeLabelView.setIdentifier(source.getIdentifier());
@@ -82,6 +82,11 @@ public class NodeLabelViewConverter {
         return nodeLabelView;
     }
 
+    /**
+     * Converts a set of {@link NodeLabel} to a list of {@link NodeLabelView}
+     * @param source
+     * @return
+     */
     public List<NodeLabelView> convert(Set<NodeLabel> source) {
         List<NodeLabelView> result = new ArrayList<NodeLabelView>();
         for(NodeLabel nodeLabel : source) {
@@ -91,6 +96,11 @@ public class NodeLabelViewConverter {
         return result;
     }
 
+    /**
+     * Gets the NodeLabel of a {@link ThesaurusArrayView}
+     * @param thesaurusConceptViewJAXBElement
+     * @return
+     */
     public NodeLabel convert(ThesaurusArrayView thesaurusConceptViewJAXBElement) {
         NodeLabel label;
         if(thesaurusConceptViewJAXBElement.getNodeLabelId() == null || thesaurusConceptViewJAXBElement.getNodeLabelId() ==0) {

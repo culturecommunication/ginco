@@ -34,7 +34,7 @@
  */
 package fr.mcc.ginco.solr;
 
-public class SolrConstants {
+public final class SolrConstants {
     public static final String SCORE = "score";
     public static final String DESCENDING = "desc";
     public static final String ASCENDING = "asc";

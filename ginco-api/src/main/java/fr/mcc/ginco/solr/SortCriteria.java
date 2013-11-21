@@ -61,7 +61,7 @@ public class SortCriteria {
 		if (sortField != null  && sortDir!=null)
 		{
 			return sortField + " "+ sortDir+" ,"+ defaultSortString;
-		} else
+		}
 		return defaultSortString;
 	}
 

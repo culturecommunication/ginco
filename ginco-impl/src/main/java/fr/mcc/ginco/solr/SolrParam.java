@@ -37,7 +37,7 @@ package fr.mcc.ginco.solr;
 /**
  *
  */
-public class SolrParam {
+public final class SolrParam {
     public static final String DEF_TYPE = "defType";
     public static final String QUERY_FIELDS = "qf";
     public static final String FILTER = "fl";

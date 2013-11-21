@@ -43,7 +43,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * ISOTHES vocabulary class for namespace http://purl.org/iso25964/skos-thes#
  */
 
-public class ISOTHES {
+public final class ISOTHES {
 	private static final String uri = "http://purl.org/iso25964/skos-thes#";
 
 	/**

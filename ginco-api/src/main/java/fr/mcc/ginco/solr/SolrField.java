@@ -37,7 +37,7 @@ package fr.mcc.ginco.solr;
 
 import java.lang.reflect.Field;
 
-public class SolrField {
+public final class SolrField {
 	public static final String LEXICALVALUE = "lexicalValue";
 	public static final String IDENTIFIER = "identifier";
 	public static final String THESAURUSID = "thesaurusId";

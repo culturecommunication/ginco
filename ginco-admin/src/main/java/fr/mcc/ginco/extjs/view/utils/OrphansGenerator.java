@@ -68,7 +68,7 @@ public class OrphansGenerator {
   	
 	@Inject
 	@Named("thesaurusListNodeFactory")
-	ThesaurusListNodeFactory thesaurusListNodeFactory;
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	private Logger logger  = LoggerFactory.getLogger(OrphansGenerator.class);
 
@@ -109,10 +109,12 @@ public class OrphansGenerator {
 			orphanNode.setExpanded(false);
             orphanNode.setThesaurusId(orphan.getThesaurusId());
             orphanNode.setDisplayable(true);
-            if (orphan.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus())
+            if (orphan.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
             	orphanNode.setIconCls("icon-candidate-concept");
-            else
+            }
+            else {
             	orphanNode.setIconCls("icon-orphan-concept");
+            }
             if(!thesaurusConceptService.hasChildren(orphan.getIdentifier())) {
                 orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
 			    orphanNode.setLeaf(true);

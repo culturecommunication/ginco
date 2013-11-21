@@ -75,7 +75,7 @@ public class ArraysGenerator {
 	
 	@Inject
 	@Named("thesaurusListNodeFactory")
-	ThesaurusListNodeFactory thesaurusListNodeFactory;
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	private Logger logger  = LoggerFactory.getLogger(ArraysGenerator.class);
 

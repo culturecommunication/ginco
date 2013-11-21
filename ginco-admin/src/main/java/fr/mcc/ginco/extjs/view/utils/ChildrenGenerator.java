@@ -78,7 +78,7 @@ public class ChildrenGenerator {
 
 	@Inject
 	@Named("thesaurusListNodeFactory")
-	ThesaurusListNodeFactory thesaurusListNodeFactory;
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	private Logger logger  = LoggerFactory.getLogger(ChildrenGenerator.class);
 

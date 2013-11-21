@@ -42,7 +42,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * GINCO vocabulary class for namespace http://data.culture.fr/thesaurus/ginco/ns/
  */
 
-public class GINCO {
+public final class GINCO {
 
 	private static final String uri = "http://data.culture.fr/thesaurus/ginco/ns/";
 

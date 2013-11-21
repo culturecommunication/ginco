@@ -43,6 +43,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -148,10 +149,12 @@ public class ThesaurusConceptViewConverter {
 			parentIdPath.add(parentPath.get(i).getIdentifier());
 		}
 		parentIdPath.add(concept.getIdentifier());
-		if (parentPath.size()>0)
+		if (parentPath.size()>0) {
 			view.setTopistopterm(parentPath.get(0).getTopConcept());
-		else
+		}
+		else  {
 			view.setTopistopterm(concept.getTopConcept());
+		}
 		view.setConceptsPath(parentIdPath);
 		List<HierarchicalRelationshipView> childrenConcepts = hierarchicalRelationshipViewConverter.getChildrenViews(concept);
 		view.setChildConcepts(childrenConcepts);
@@ -210,7 +213,7 @@ public class ThesaurusConceptViewConverter {
 
 		// Test if ThesaurusConcept already exists. If yes we get it, if no we
 		// create a new one
-		if ("".equals(source.getIdentifier())) {
+		if (StringUtils.isEmpty(source.getIdentifier())) {
 			thesaurusConcept = new ThesaurusConcept();
 			thesaurusConcept.setCreated(DateUtil.nowDate());
 			logger.info("Creating a new concept");
@@ -220,7 +223,7 @@ public class ThesaurusConceptViewConverter {
 			logger.info("Getting an existing concept");
 		}
 
-		if ("".equals(source.getThesaurusId())) {
+		if (StringUtils.isEmpty(source.getThesaurusId())) {
 			throw new BusinessException(
 					"ThesaurusId is mandatory to save a concept",
 					"mandatory-thesaurus");

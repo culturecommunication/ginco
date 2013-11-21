@@ -34,30 +34,24 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.enums.ReportTypeEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.FilterCriteria;
-import fr.mcc.ginco.services.IThesaurusReportService;
-import fr.mcc.ginco.solr.IIndexerService;
-import fr.mcc.ginco.solr.ISearcherService;
-import fr.mcc.ginco.solr.SearchResult;
-import fr.mcc.ginco.solr.SearchResultList;
-import fr.mcc.ginco.solr.SortCriteria;
-
-import org.apache.solr.client.solrj.SolrServerException;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.enums.ReportTypeEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.services.IThesaurusReportService;
+import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
 
 /**
  * Base REST service for getting report search results
@@ -68,7 +62,7 @@ public class ReportRestService {
 	
 	@Inject
 	@Named("thesaurusReportService")
-	IThesaurusReportService thesaurusReportService;
+	private IThesaurusReportService thesaurusReportService;
 
 	@GET
 	@Path("/search")

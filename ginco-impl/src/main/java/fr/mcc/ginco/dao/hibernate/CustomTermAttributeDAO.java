@@ -73,9 +73,9 @@ public class CustomTermAttributeDAO extends
 						entity.getIdentifier()))
 				.add(Restrictions.eq("type.identifier", type.getIdentifier()));
 		List<CustomTermAttribute> list = criteria.list();
-		if (list.size() > 0)
+		if (list.size() > 0) {
 			return list.get(0);
-		else
-			return null;
+		}
+		return null;
 	}
 }

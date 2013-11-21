@@ -67,7 +67,7 @@ public class TopTermGenerator {
 	
 	@Inject
 	@Named("thesaurusListNodeFactory")
-	ThesaurusListNodeFactory thesaurusListNodeFactory;
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	private Logger logger  = LoggerFactory.getLogger(TopTermGenerator.class);
 

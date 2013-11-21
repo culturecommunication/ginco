@@ -43,7 +43,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * SKOS vocabulary class for namespace http://www.w3.org/2008/05/skos-xl#
  */
 
-public class SKOSXL {
+public final class SKOSXL {
 
 	private static final String uri = "http://www.w3.org/2008/05/skos-xl#";
 

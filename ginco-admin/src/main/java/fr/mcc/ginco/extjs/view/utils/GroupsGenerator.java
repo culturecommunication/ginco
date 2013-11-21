@@ -75,7 +75,7 @@ public class GroupsGenerator {
 	
 	@Inject
 	@Named("thesaurusListNodeFactory")
-	ThesaurusListNodeFactory thesaurusListNodeFactory;
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	@Value("${ginco.default.language}") private String defaultLanguage;
 

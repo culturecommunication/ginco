@@ -96,8 +96,9 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
 			List<ThesaurusTerm> thesaurusTerms = thesaurusConceptService.getConceptPreferredTerms(conceptId);
 			
-			for (ThesaurusTerm thesaurusTerm : thesaurusTerms)
-				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));	
+			for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
+				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));
+			}
 			return results;
 		}
 		else 

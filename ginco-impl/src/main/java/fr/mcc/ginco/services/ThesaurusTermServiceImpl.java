@@ -203,8 +203,8 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 							"concept-does-not-exist");
 				}
 			}
-		} else
-			return null;
+		} 
+		return null;
 	}
 
 	@Override

@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class JaxbList<T> {
-	protected List<T> list = new ArrayList<T>();
+	private List<T> list = new ArrayList<T>();
 
 	public JaxbList() {
 	}

@@ -46,7 +46,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * SKOS vocabulary class for namespace http://www.w3.org/2004/02/skos/core#
  */
 
-public class SKOS {
+public final class SKOS {
 
 	private static final String uri = "http://www.w3.org/2004/02/skos/core#";
 
