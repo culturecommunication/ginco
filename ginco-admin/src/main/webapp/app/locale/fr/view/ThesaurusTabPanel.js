@@ -40,8 +40,6 @@
  */
 Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
 	    xNewLabel : 'Nouveau',
-	    xNewMenu_TermLabel : 'Terme',
-	    xNewMenu_ConceptLabel: 'Concept',
 	    xNewMenu_GroupLabel: 'Groupe de concepts',
 	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
 		xNewMenu_ComplexConceptLabel: "Concept complexe",
@@ -63,9 +61,8 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
         xArchive: 'Archiver',
         xPolyHierarchical: 'Polyhierarchique',
         xImportBranch: 'Importer une branche',
-        xCustomAttributeTypes: "Types d'atrributes posonalisé",
         xImportSandbox: 'Importer des termes',
         xCustomAttributeTypes: "Attributs personnalisés",
         xSearchFieldText : "Rechercher dans le vocabulaire",
-    	xSearchBtnTitle : "Lancer la recherche dans le ",
+    	xSearchBtnTitle : "Lancer la recherche dans le "
 });

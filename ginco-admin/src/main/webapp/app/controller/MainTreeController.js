@@ -208,8 +208,9 @@ Ext.define('GincoApp.controller.MainTreeController', {
  			if (activeTab!=null)
  			{
  				activeTab = activeTab.down('#thesaurusItemsTabPanel').getActiveTab();
- 				if (activeTab!=null)
+ 				if (activeTab!=null) {
  					this.onTabChange(activeTab);
+ 				}
  			}
  		}
  	},

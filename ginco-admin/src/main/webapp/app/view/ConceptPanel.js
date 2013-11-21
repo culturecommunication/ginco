@@ -95,7 +95,7 @@ Ext
 					xAlignments: 'Alignments',
 					xAddAlignment : 'Add an alignment',
 					xAlignmentType : 'Type',
-					xAlignmentAndRelation : 'Relation',
+					xAlignmentAndRelationHeader : 'Relation',
 					xAlignmentConcepts: 'Concepts',
 					xAlignmentRemove: 'Remove alignment',
 					xAlignmentAndRelation: 'AND',
@@ -649,22 +649,23 @@ Ext
 																						renderer : function(value, meta, record, rowIndex, colIndex, store, view)
 																						{
 																							var record = me.alignmentTypeStore.findRecord( 'identifier', value);
-																							if (record != null)
+																							if (record != null) {
 																								return record.data.label;
+																							}
 																						}
 
 																					},{
 																						dataIndex : 'andRelation',
-																						header : me.xAlignmentAndRelation,
+																						header : me.xAlignmentAndRelationHeader,
 																						renderer: function(value, meta, record, rowIndex, colIndex, store, view){
 																							var alignmentType = record.data.alignmentType;
 																							var typeRecord = me.alignmentTypeStore.findRecord('identifier', alignmentType);
 																							if (typeRecord && typeRecord.data.multiConcept) {
 																								if (value){
 																									return me.xAlignmentAndRelation;
-																								}else  {
-																									return me.xAlignmentOrRelation;
 																								}
+																								return me.xAlignmentOrRelation;
+																								
 																							}
 																							return '';
 																						}

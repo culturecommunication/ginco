@@ -88,7 +88,7 @@ Ext.define('GincoApp.controller.AlignmentController',
 		            	if (cpt > 0) {
 		            		form.remove(field);
 		            	}
-		            	cpt ++;				           
+		            	cpt++;				           
 		            }
 		        }
 			},

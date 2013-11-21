@@ -48,8 +48,6 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
     xProblemSaveMsg : 'Impossible to save attributes !',
 
     loadConceptData : function(theGrid, thesaurusId) {
-        var me = this;
-
         var conceptsGridStore = theGrid.getStore();
         conceptsGridStore.getProxy().extraParams = {
             thesaurusId: thesaurusId
@@ -92,7 +90,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
-        		if (theCallback && typeof(theCallback) == "function") {
+        		if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}
         	},
@@ -112,7 +110,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
-        		if (theCallback && typeof(theCallback) == "function") {
+        		if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}
         	},

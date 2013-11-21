@@ -130,7 +130,7 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 			},			
             'usersTabPanel gridpanel #userRoleActionColumn' : {
                 click : this.onDeleteUserRole
-            },
+            }
 		});
 	}
 });

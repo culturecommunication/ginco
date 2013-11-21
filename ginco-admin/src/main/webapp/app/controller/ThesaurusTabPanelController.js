@@ -131,8 +131,9 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			});
 		} else
 		{
-			if (existingTabs.length>0 && !existingTabs[0].multiInstance)
+			if (existingTabs.length>0 && !existingTabs[0].multiInstance) {
 				tabExists = existingTabs[0];
+			}
 		}
 		if (!tabExists) {
 			var newPanel = Ext.create(

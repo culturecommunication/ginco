@@ -47,10 +47,7 @@ Ext.define('GincoApp.store.MySuggestionStore', {
 			proxy : {
 				type : 'ajax',
 				api : {
-					read : 'services/ui/suggestionservice/getUserSuggestions',
-					//update : 'services/ui/suggestionservice/updateSuggestions',
-					//create : 'services/ui/suggestionservice/createSuggestions'
-					//destroy : 'services/ui/thesaurusnoteservice/destroyNotes'
+					read : 'services/ui/suggestionservice/getUserSuggestions'					
 				},
 				writer : {
 					type : 'json',

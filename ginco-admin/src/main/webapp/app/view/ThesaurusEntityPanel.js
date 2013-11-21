@@ -45,10 +45,9 @@ Ext
 						if (me.thesaurusData != '' && me.thesaurusData != null)
 						{
 							return me.thesaurusData;
-						} else 
-						{
-							return me.up().up().getThesaurusData();
-						}
+						} 
+						return me.up().up().getThesaurusData();
+						
 					},
 					multiInstance : true,
 					trackable : false,

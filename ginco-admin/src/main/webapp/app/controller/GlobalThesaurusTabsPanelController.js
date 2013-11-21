@@ -57,8 +57,9 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 					var tab = tabPanel.add(ThesaurusPanel);
 					tabPanel.setActiveTab(tab);
 					tab.show();
-					if (openThesaurusForm == true)
+					if (openThesaurusForm == true) {
 						tab.fireEvent('openthesaurusform', tab);
+					}
 					else {
 						tab.fireEvent(aEventName, tab, aItemId);
 					}
@@ -66,10 +67,12 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 			});
 		} else {
 			tabPanel.setActiveTab(tabExists);
-			if (openThesaurusForm == true)
+			if (openThesaurusForm == true) {
 				tabExists.fireEvent('openthesaurusform', tabExists);
-			else
+			}
+			else {
 				tabExists.fireEvent(aEventName, tabExists, aItemId);
+			}
 		}
 	},
 	openConceptTab : function(tabPanel, aThesaurusId, aConceptId) {
@@ -122,7 +125,7 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 		if (mySuggestionPanel)  {
 			var mySuggestionGrid= mySuggestionPanel.down("gridpanel");
 			mySuggestionGrid.getStore().load();
-		};		
+		}		
 	},
 	
 	onTabChange : function ( tabPanel, tab, oldCard, eOpts )

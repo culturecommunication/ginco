@@ -100,7 +100,6 @@ Ext
 												disabled : false,
 												iconCls : 'icon-add',
 												itemId : 'addInternalConceptId',
-												disabled : true,
 												cls: 'addInternalConcept'
 											},{
 												xtype : 'button',
@@ -108,7 +107,6 @@ Ext
 												disabled : false,
 												iconCls : 'icon-add',
 												itemId : 'addExternalConceptId',
-												disabled : true,
 												cls: 'addExternalConcept'
 											}]
 										} ],

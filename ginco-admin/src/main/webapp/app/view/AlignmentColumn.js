@@ -50,7 +50,7 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 								text : me.btnLbl,
 								iconCls : 'icon-display',
 								handler : function(btn) {
-									me.onBtnClick(btn)
+									me.onBtnClick(btn);
 								},
 								conceptId : targetConcept
 										.get('internalTargetConcept'),
@@ -68,7 +68,7 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 								text : me.btnLbl,
 								iconCls : 'icon-display',
 								handler : function(btn) {
-									me.onBtnClick(btn)
+									me.onBtnClick(btn);
 								},
 								conceptId : targetConcept
 										.get('externalTargetConcept'),
@@ -117,9 +117,9 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 	 */
 	beforeViewRefresh : function() {
 		if (Ext.isIE) {
-			var ids = this.compIds, index = 0, len = ids.length, item, el, parentEl;
+			var ids = this.compIds, len = ids.length, item, el, parentEl, index;
 
-			for (; index < len; index++) {
+			for (index=0; index < len; index++) {
 				if ((item = Ext.getCmp(ids[index])) && (el = item.getEl())
 						&& (el = el.dom) && (parentEl = el.parentNode)) {
 					parentEl.removeChild(el);

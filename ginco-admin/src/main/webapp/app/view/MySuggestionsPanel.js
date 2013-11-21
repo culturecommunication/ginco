@@ -44,9 +44,8 @@ Ext.define('GincoApp.view.MySuggestionsPanel', {
 	typeRenderer :function(value, meta, record, rowIndex, colIndex, store, view) {
 		if (record.data.conceptId != "") {
 			return this.ownerCt.xTypeLabelsThesaurusConcept;
-		} else {
-			return this.ownerCt.xTypeLabelsThesaurusTerm;
-		}
+		} 
+		return this.ownerCt.xTypeLabelsThesaurusTerm;		
 	},	
 	
 	layout : {

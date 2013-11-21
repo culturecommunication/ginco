@@ -36,7 +36,7 @@ Ext
 					config : {
 						thesaurusData : null,
 						suggestionId : null,
-						declaredUserStore: null,
+						declaredUserStore: null
 					},
 
 					xSave : 'Add the suggestion',

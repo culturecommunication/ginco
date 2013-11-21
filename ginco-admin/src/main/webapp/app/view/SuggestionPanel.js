@@ -104,7 +104,7 @@ Ext.define('GincoApp.view.SuggestionPanel', {
 						hidden : true
 					},{
 						dataIndex : 'creator',
-						text : me.xCreatorLabel,
+						text : me.xCreatorLabel
 					}, {
 						dataIndex : 'recipient',
 						text : me.xRecipientLabel
@@ -124,10 +124,8 @@ Ext.define('GincoApp.view.SuggestionPanel', {
 					        		|| rec.data.creator == Thesaurus.ext.utils.userInfo.data.username) {
 					            this.tooltip =  me.xDetach;
 					            return 'detach';
-					        }
-					        else {
-					        	return "";
-					        }
+					        }					        
+					        return "";					        
 						}
 					}]
 				} ]

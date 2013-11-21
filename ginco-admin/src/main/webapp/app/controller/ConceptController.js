@@ -812,7 +812,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 						if (!Ext.isEmpty(thePanel.parentConceptId)) {
 							me.reloadParentConceptWindow(thePanel.parentConceptId);
 						}
-						if (theCallback && typeof(theCallback) == "function") {
+						if (theCallback && typeof theCallback == "function") {
 							theCallback();
 						}
 					},

@@ -111,7 +111,7 @@ Ext.define('GincoApp.view.ThesaurusReportsTabPanel', {
 											items : [{
 														tooltip : me.xViewToolTip,
 														iconCls : 'icon-view',
-														icon : 'images/visualisation.png',
+														icon : 'images/visualisation.png'
 													}]
 										}]
 

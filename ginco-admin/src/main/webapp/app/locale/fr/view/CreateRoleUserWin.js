@@ -39,6 +39,5 @@ Ext.define('GincoApp.locale.fr.view.CreateRoleUserWin',
 	xSave : 'Ajouter l\'utilisateur',
 	xCreateVersionWinTitle : 'Nouvel utilisateur',
 	xRoleLabel : 'Rôle',
-	xUsernameLabel : 'Identifiant',
-
+	xUsernameLabel : 'Identifiant'
 });
