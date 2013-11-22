@@ -27,7 +27,7 @@ L'application est développée selon la méthodologie agile SCRUM. Le « backlog
 
 GINCO est mis à la disposition des utilisateurs et des développeurs. Pour faciliter la découverte et la prise en main des fonctionnalités, une machine virtuelle (VM) a été proposée.
 La V1 du projet est totalement opérationnelle et peut être déployée et utilisée pour gérer au quotidien des vocabulaires et faire des exports simples.
-Le version 2 en cours de développement s'appuie sur la démarche de repprochement entre ISO 25964 et SKOS pour proposer des exports SKOS enrichis (statut des concepts, groupes de concepts, comcepts complexes ...).
+La version 2 en cours de développement s'appuie sur la démarche de rapprochement entre ISO 25964 et SKOS pour proposer des exports SKOS enrichis (statut des concepts, groupes de concepts, concepts complexes ...).
 
 Le "[backlog] (https://www.pivotaltracker.com/s/projects/926794)" du projet suggère à la communauté des évolutions possibles de l'application.
 
