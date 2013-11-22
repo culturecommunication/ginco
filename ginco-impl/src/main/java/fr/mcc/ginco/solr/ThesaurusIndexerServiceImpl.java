@@ -49,11 +49,12 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
 @Service("thesaurusIndexerService")
-public class ThesaurusIndexerServiceImpl implements IThesaurusIndexerService{
+public class ThesaurusIndexerServiceImpl implements IThesaurusIndexerService {
 
 	@Inject
 	@Named("thesaurusConceptService")
@@ -68,16 +69,24 @@ public class ThesaurusIndexerServiceImpl implements IThesaurusIndexerService{
 	private INoteService noteService;
 
 	@Inject
-	@Named ("termIndexerService")
+	@Named("splitNonPreferredTermService")
+	private ISplitNonPreferredTermService splitNonPreferredTermService;
+
+	@Inject
+	@Named("termIndexerService")
 	private ITermIndexerService termIndexerService;
 
 	@Inject
-	@Named ("conceptIndexerService")
+	@Named("conceptIndexerService")
 	private IConceptIndexerService conceptIndexerService;
 
 	@Inject
-	@Named ("noteIndexerService")
+	@Named("noteIndexerService")
 	private INoteIndexerService noteIndexerService;
+
+	@Inject
+	@Named("complexConceptIndexerService")
+	private IComplexConceptIndexerService complexConceptIndexerService;
 
 	@Inject
 	@Named("solrServer")
@@ -94,6 +103,10 @@ public class ThesaurusIndexerServiceImpl implements IThesaurusIndexerService{
 						null, false));
 		noteIndexerService.addNotes(noteService.getNotesByThesaurusId(thesaurus
 				.getIdentifier()));
+		complexConceptIndexerService
+				.addComplexConcepts(splitNonPreferredTermService
+						.getSplitNonPreferredTermList(0, 0,
+								thesaurus.getIdentifier()));
 
 	}
 

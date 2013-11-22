@@ -52,7 +52,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
-@Service("conceptSolrConverter")
+@Service
 public class ConceptSolrConverter {
 
 	private static Logger logger = LoggerFactory.getLogger(ConceptSolrConverter.class);

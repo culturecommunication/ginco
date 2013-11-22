@@ -103,4 +103,9 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
         }
 	}
 
+	@Override
+	public List<SplitNonPreferredTerm> getAllSplitNonPreferredTerms(){
+		return splitNonPreferredTermDAO.findAll();
+	}
+
 }

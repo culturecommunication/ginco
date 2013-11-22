@@ -32,65 +32,34 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.solr;
+package fr.mcc.ginco.solr;
 
-import static org.mockito.Mockito.verify;
+import java.util.List;
 
-import java.io.IOException;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrInputDocument;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+public interface IComplexConceptIndexerService {
+	/**
+     * Takes an {@link SplitNonPreferredTerm} and adds it to index
+     *
+     * @param Updated/created {@link SplitNonPreferredTerm} to save to index
+     * @throws TechnicalException
+     */
+	void addComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.solr.NoteIndexerServiceImpl;
-import fr.mcc.ginco.solr.NoteSolrConverter;
+	/**
+     * Takes a list of {@link SplitNonPreferredTerm} and adds it to index
+     *
+     * @param List of updated/created (@link Note) to save to index
+     * @throws TechnicalException
+     */
+	void addComplexConcepts(List<SplitNonPreferredTerm> complexConcepts) throws TechnicalException;
 
-public class NoteIndexerServiceTest {
-
-	@InjectMocks
-	private  NoteIndexerServiceImpl noteIndexerService;
-
-	@Mock
-	private NoteSolrConverter noteSolrConverter;
-
-	@Mock(name = "solrServer")
-	private SolrServer solrServer;
-
-	@Before
-	public void init() {
-		MockitoAnnotations.initMocks(this);
-	}
-
-	@Test
-	public void testAddNote() throws SolrServerException, IOException {
-
-		Note fakeConceptNote = new Note();
-		fakeConceptNote.setIdentifier("http://note1");
-
-		SolrInputDocument doc = new SolrInputDocument();
-		Mockito.when(noteSolrConverter.convertSolrNote(fakeConceptNote)).thenReturn(doc);
-
-		noteIndexerService.addNote(fakeConceptNote);
-
-		verify(solrServer).add(doc);
-		verify(solrServer).commit();
-	}
-
-	@Test
-	public void testRemoveNote() throws SolrServerException, IOException {
-		Note fakeConceptNote = new Note();
-		fakeConceptNote.setIdentifier("http://note1");
-
-		noteIndexerService.removeNote(fakeConceptNote);
-
-		verify(solrServer).deleteById("http://note1");
-		verify(solrServer).commit();
-	}
+	/**
+     * Remove {@link SplitNonPreferredTerm} from search index
+     * @param {@link SplitNonPreferredTerm}
+     * @throws TechnicalException
+     */
+	void removeComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException;
 }

@@ -32,65 +32,47 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.tests.solr;
+package fr.mcc.ginco.solr;
 
-import static org.mockito.Mockito.verify;
+import java.sql.Timestamp;
 
-import java.io.IOException;
-
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.solr.NoteIndexerServiceImpl;
-import fr.mcc.ginco.solr.NoteSolrConverter;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 
-public class NoteIndexerServiceTest {
+@Service
+public class ComplexConceptSolrConverter {
 
-	@InjectMocks
-	private  NoteIndexerServiceImpl noteIndexerService;
+	/**
+	 * Convert a complex concept into a SolrDocument
+	 *
+	 * @param complexConcept
+	 * @return SolrInputDocument
+	 */
 
-	@Mock
-	private NoteSolrConverter noteSolrConverter;
-
-	@Mock(name = "solrServer")
-	private SolrServer solrServer;
-
-	@Before
-	public void init() {
-		MockitoAnnotations.initMocks(this);
-	}
-
-	@Test
-	public void testAddNote() throws SolrServerException, IOException {
-
-		Note fakeConceptNote = new Note();
-		fakeConceptNote.setIdentifier("http://note1");
+	public SolrInputDocument convertSolrComplexConcept(SplitNonPreferredTerm complexConcept) {
 
 		SolrInputDocument doc = new SolrInputDocument();
-		Mockito.when(noteSolrConverter.convertSolrNote(fakeConceptNote)).thenReturn(doc);
+		doc.addField(SolrField.THESAURUSID, complexConcept.getThesaurusId());
+		doc.addField(SolrField.THESAURUSTITLE, complexConcept.getThesaurus()
+				.getTitle());
+		doc.addField(SolrField.IDENTIFIER, complexConcept.getIdentifier());
+		doc.addField(SolrField.TYPE, SplitNonPreferredTerm.class.getSimpleName());
+		doc.addField(SolrField.EXT_TYPE, ExtEntityType.COMPLEX_CONCEPT);
 
-		noteIndexerService.addNote(fakeConceptNote);
+		Timestamp modifiedDate = new Timestamp(complexConcept.getModified()
+				.getTime());
+		doc.addField(SolrField.MODIFIED, modifiedDate);
 
-		verify(solrServer).add(doc);
-		verify(solrServer).commit();
-	}
+		Timestamp createdDate = new Timestamp(complexConcept.getCreated()
+				.getTime());
+		doc.addField(SolrField.CREATED, createdDate);
 
-	@Test
-	public void testRemoveNote() throws SolrServerException, IOException {
-		Note fakeConceptNote = new Note();
-		fakeConceptNote.setIdentifier("http://note1");
+		doc.addField(SolrField.STATUS, complexConcept.getStatus());
+		doc.addField(SolrField.LANGUAGE, complexConcept.getLanguage().getId());
 
-		noteIndexerService.removeNote(fakeConceptNote);
-
-		verify(solrServer).deleteById("http://note1");
-		verify(solrServer).commit();
+		doc.addField(SolrField.LEXICALVALUE, complexConcept.getLexicalValue());
+		return doc;
 	}
 }

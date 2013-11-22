@@ -43,7 +43,7 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
-@Service("noteSolrConverter")
+@Service
 public class NoteSolrConverter {
 
 	/**

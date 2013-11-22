@@ -44,7 +44,7 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.utils.DateUtil;
 
-@Service("searcherServiceUtil")
+@Service
 public class SearcherServiceUtil {
 
 	private static final String CLOSE_PARENTHESIS = ")";

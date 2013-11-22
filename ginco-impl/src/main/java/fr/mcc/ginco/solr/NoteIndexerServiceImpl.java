@@ -58,7 +58,6 @@ public class NoteIndexerServiceImpl implements INoteIndexerService{
 	private static Logger logger = LoggerFactory.getLogger(NoteIndexerServiceImpl.class);
 
 	@Inject
-	@Named ("noteSolrConverter")
 	private NoteSolrConverter noteSolrConverter;
 
 	@Inject

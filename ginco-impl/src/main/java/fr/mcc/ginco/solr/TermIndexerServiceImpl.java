@@ -62,7 +62,6 @@ public class TermIndexerServiceImpl implements ITermIndexerService{
 	private SolrServer solrServer;
 
 	@Inject
-	@Named("termSolrConverter")
 	private TermSolrConverter termSolrConverter;
 
 	@Override

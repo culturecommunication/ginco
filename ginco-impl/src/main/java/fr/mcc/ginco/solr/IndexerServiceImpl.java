@@ -46,6 +46,7 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 
@@ -65,16 +66,24 @@ public class IndexerServiceImpl implements IIndexerService {
 	private INoteService noteService;
 
 	@Inject
-	@Named ("termIndexerService")
+	@Named("splitNonPreferredTermService")
+	private ISplitNonPreferredTermService splitNonPreferredTermService;
+
+	@Inject
+	@Named("termIndexerService")
 	private ITermIndexerService termIndexerService;
 
 	@Inject
-	@Named ("conceptIndexerService")
+	@Named("conceptIndexerService")
 	private IConceptIndexerService conceptIndexerService;
 
 	@Inject
-	@Named ("noteIndexerService")
+	@Named("noteIndexerService")
 	private INoteIndexerService noteIndexerService;
+
+	@Inject
+	@Named("complexConceptIndexerService")
+	private IComplexConceptIndexerService complexConceptIndexerService;
 
 	@Inject
 	@Named("solrServer")
@@ -100,9 +109,13 @@ public class IndexerServiceImpl implements IIndexerService {
 	@Override
 	public void forceIndexing() throws TechnicalException {
 		removeAllIndex();
-		conceptIndexerService.addConcepts(thesaurusConceptService.getAllConcepts());
+		conceptIndexerService.addConcepts(thesaurusConceptService
+				.getAllConcepts());
 		termIndexerService.addTerms(thesaurusTermService.getAllTerms());
 		noteIndexerService.addNotes(noteService.getAllNotes());
+		complexConceptIndexerService
+				.addComplexConcepts(splitNonPreferredTermService
+						.getAllSplitNonPreferredTerms());
 
 		try {
 			solrServer.optimize();

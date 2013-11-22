@@ -48,7 +48,6 @@ import org.springframework.stereotype.Service;
 public class SearcherServiceImpl implements ISearcherService{
 
 	@Inject
-	@Named ("searcherServiceUtil")
 	private SearcherServiceUtil searcherServiceUtil;
 
 	@Inject
