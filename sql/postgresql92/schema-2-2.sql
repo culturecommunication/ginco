@@ -27,3 +27,10 @@ CREATE SEQUENCE suggestion_identifier_seq
     START 1
     CACHE 1;
 ALTER SEQUENCE suggestion_identifier_seq OWNED BY suggestion.identifier;
+
+ALTER TABLE compound_equivalence DROP CONSTRAINT fk_split_nonpreferredterm;
+ALTER TABLE compound_equivalence 
+    ADD CONSTRAINT fk_split_nonpreferredterm 
+    FOREIGN KEY(id_split_nonpreferredterm) 
+    REFERENCES split_nonpreferredterm (identifier) 
+    MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE;
