@@ -79,13 +79,11 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
 	@Override
 	public List<SplitNonPreferredTerm> getSplitNonPreferredTermList(
 			Integer startIndex, Integer limit, String idThesaurus) {
-		// TODO Auto-generated method stub
 		return splitNonPreferredTermDAO.findItems(startIndex, limit, idThesaurus);
 	}
 
 	@Override
 	public Long getSplitNonPreferredTermCount(String idThesaurus) {
-		// TODO Auto-generated method stub
 		return splitNonPreferredTermDAO.countItems(idThesaurus);
 	}
 
