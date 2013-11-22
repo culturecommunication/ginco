@@ -35,6 +35,7 @@
 package fr.mcc.ginco.extjs.view.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -64,36 +65,11 @@ public class ThesaurusTermView implements Serializable, SecuredResourceView {
 	private String thesaurusId;
 	private String language;
 	private String role;
+	private Boolean topistopterm;
+	private List<String> conceptsPath;
 
 
     public ThesaurusTermView() {}
-
-	public ThesaurusTermView(ThesaurusTerm source) {
-		if (source != null) {
-			this.identifier = source.getIdentifier();
-			this.lexicalValue = source.getLexicalValue();
-			if(source != null) {
-				this.created = DateUtil.toString(source.getCreated());
-				this.modified = DateUtil.toString(source.getModified());
-			}
-            this.source = source.getSource();
-            this.prefered = source.getPrefered();
-            this.hidden = source.getHidden();
-            this.status = source.getStatus();
-            
-            if(source.getConcept() != null) {
-                this.conceptId = source.getConcept().getIdentifier();
-            }
-
-    		this.thesaurusId = source.getThesaurus().getIdentifier();
-    		if(source.getLanguage() != null) {
-    		this.language = source.getLanguage().getId();
-    		if (source.getRole() != null) {
-    			this.role = source.getRole().getCode();
-    		}
-    		}
-		}
-	}
 
 	public String getIdentifier() {
 		return identifier;
@@ -189,6 +165,22 @@ public class ThesaurusTermView implements Serializable, SecuredResourceView {
 
 	public void setHidden(Boolean hidden) {
 		this.hidden = hidden;
+	}
+
+	public Boolean getTopistopterm() {
+		return topistopterm;
+	}
+
+	public void setTopistopterm(Boolean topistopterm) {
+		this.topistopterm = topistopterm;
+	}
+
+	public List<String> getConceptsPath() {
+		return conceptsPath;
+	}
+
+	public void setConceptsPath(List<String> conceptsPath) {
+		this.conceptsPath = conceptsPath;
 	}
 	
 }

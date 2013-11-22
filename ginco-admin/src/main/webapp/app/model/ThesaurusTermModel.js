@@ -84,6 +84,15 @@ Ext.define('GincoApp.model.ThesaurusTermModel', {
         {
             name: 'role',
             type: 'string'
+        },
+        {
+            name: 'topistopterm',
+            type: 'boolean'
+        },
+        {
+            name : 'conceptsPath',
+            type : 'array_of_string', 
+            defaultValue : []
         }
     ],
     idProperty : 'identifier',

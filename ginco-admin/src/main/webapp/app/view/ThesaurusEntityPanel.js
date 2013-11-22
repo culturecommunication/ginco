@@ -59,6 +59,7 @@ Ext
 				        this.callParent(arguments);
 				    },
 					addNodePath : function (aNode) {
+						console.log(aNode);
 						this.nodesPath.push(aNode);
 					},
 					getNodesPath : function() {

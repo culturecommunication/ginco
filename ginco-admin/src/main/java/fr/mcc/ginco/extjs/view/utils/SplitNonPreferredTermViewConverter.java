@@ -92,6 +92,34 @@ public class SplitNonPreferredTermViewConverter {
 	private String language;
 
 	
+	public SplitNonPreferredTermView convert(SplitNonPreferredTerm source)
+			throws BusinessException {
+		SplitNonPreferredTermView view = new SplitNonPreferredTermView();
+		if (source != null) {
+			view.setIdentifier(source.getIdentifier());
+			view.setLexicalValue(source.getLexicalValue());
+			if(source != null) {
+				view.setCreated(DateUtil.toString(source.getCreated()));
+				view.setModified(DateUtil.toString(source.getModified()));
+			}
+			view.setSource(source.getSource());
+    
+			view.setStatus(source.getStatus());
+			List<ThesaurusTermView> preferredList = new ArrayList<ThesaurusTermView>();
+			view.setPreferredTerms(new ArrayList<ThesaurusTermView>());
+            for (ThesaurusTerm preferredTerm : source.getPreferredTerms())
+            {
+            	preferredList.add(termViewConverter.convert(preferredTerm));
+            }
+            view.setPreferredTerms(preferredList);
+
+            view.setThesaurusId(source.getThesaurus().getIdentifier());
+    		if(source.getLanguage() != null) {
+    			view.setLanguage(source.getLanguage().getId());
+    		}
+		}
+		return view;
+	}
 
 	/**
 	 * Main method used to do conversion.

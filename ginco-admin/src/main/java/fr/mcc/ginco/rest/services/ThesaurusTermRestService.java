@@ -131,7 +131,7 @@ public class ThesaurusTermRestService {
 
 		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
-			results.add(new ThesaurusTermView(thesaurusTerm));
+			results.add(termViewConverter.convert(thesaurusTerm));
 		}
 		ExtJsonFormLoadData<List<ThesaurusTermView> > extTerms = new  ExtJsonFormLoadData<List<ThesaurusTermView> > (results);
 		extTerms.setTotal(total);
@@ -155,10 +155,9 @@ public class ThesaurusTermRestService {
 		List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
 		thesaurusTerms = thesaurusTermService.getPaginatedThesaurusPreferredTermsList(startIndex, limit, idThesaurus);
 		Long total = thesaurusTermService.getPreferredTermsCount(idThesaurus);
-
 		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
-			results.add(new ThesaurusTermView(thesaurusTerm));
+			results.add(termViewConverter.convert(thesaurusTerm));
 		}
 		ExtJsonFormLoadData<List<ThesaurusTermView> > extTerms = new  ExtJsonFormLoadData<List<ThesaurusTermView> > (results);
 		extTerms.setTotal(total);
@@ -176,7 +175,7 @@ public class ThesaurusTermRestService {
 	@Produces({MediaType.APPLICATION_JSON})
 	public ThesaurusTermView getThesaurusTerm(@QueryParam("id") String idTerm) throws BusinessException {
 		ThesaurusTerm thesaurusTerm = thesaurusTermService.getThesaurusTermById(idTerm);
-        return new ThesaurusTermView(thesaurusTerm);
+        return termViewConverter.convert(thesaurusTerm, true);
 	}
 
 	/**
@@ -219,7 +218,7 @@ public class ThesaurusTermRestService {
 			ThesaurusTerm result = thesaurusTermService.updateThesaurusTerm(object);
 			if (result != null) {
 				termIndexerService.addTerm(object);
-				return new ThesaurusTermView(result);
+				return termViewConverter.convert(result);
 			} else {
 				logger.error("Failed to update thesaurus term");
 				return null;
@@ -248,7 +247,7 @@ public class ThesaurusTermRestService {
 		if (object != null) {
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
 			termIndexerService.removeTerm(object);
-			return new ThesaurusTermView(result);
+			return termViewConverter.convert(result);
 		}
 		return null;
 	}

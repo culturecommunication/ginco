@@ -93,7 +93,7 @@ public class SplitNonPreferredTermRestService {
 	@Produces({MediaType.APPLICATION_JSON})
 	public SplitNonPreferredTermView getTerm(@QueryParam("id") String idTerm) throws BusinessException {
 		SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermService.getSplitNonPreferredTermById(idTerm);
-        return new SplitNonPreferredTermView(thesaurusTerm);
+        return splitNonPreferredTermViewConverter.convert(thesaurusTerm);
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public class SplitNonPreferredTermRestService {
 		if (object != null) {
 			SplitNonPreferredTerm result = splitNonPreferredTermService.updateSplitNonPreferredTerm(object);
 			if (result != null) {
-				return new SplitNonPreferredTermView(result);
+				return splitNonPreferredTermViewConverter.convert(result);
 			} else {
 				logger.error("Failed to update thesaurus term");
 				return null;
@@ -145,7 +145,7 @@ public class SplitNonPreferredTermRestService {
 
 		List<SplitNonPreferredTermView>results = new ArrayList<SplitNonPreferredTermView>();
 		for (SplitNonPreferredTerm thesaurusTerm : thesaurusTerms) {
-			results.add(new SplitNonPreferredTermView(thesaurusTerm));
+			results.add(splitNonPreferredTermViewConverter.convert(thesaurusTerm));
 		}
 		ExtJsonFormLoadData<List<SplitNonPreferredTermView> > extTerms = new  ExtJsonFormLoadData<List<SplitNonPreferredTermView> > (results);
 		extTerms.setTotal(total);

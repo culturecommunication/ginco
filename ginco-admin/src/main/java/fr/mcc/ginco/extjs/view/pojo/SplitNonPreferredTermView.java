@@ -67,30 +67,6 @@ public class SplitNonPreferredTermView implements Serializable, SecuredResourceV
 
     public SplitNonPreferredTermView() {}
 
-	public SplitNonPreferredTermView(SplitNonPreferredTerm source) {
-		if (source != null) {
-			this.identifier = source.getIdentifier();
-			this.lexicalValue = source.getLexicalValue();
-			if(source != null) {
-				this.created = DateUtil.toString(source.getCreated());
-				this.modified = DateUtil.toString(source.getModified());
-			}
-            this.source = source.getSource();
-    
-            this.status = source.getStatus();
-            this.preferredTerms = new ArrayList<ThesaurusTermView>();
-            for (ThesaurusTerm preferredTerm : source.getPreferredTerms())
-            {
-            	this.preferredTerms.add(new ThesaurusTermView(preferredTerm));
-            }
-
-    		this.thesaurusId = source.getThesaurus().getIdentifier();
-    		if(source.getLanguage() != null) {
-    		this.language = source.getLanguage().getId();
-    		}
-		}
-	}
-
 	public String getIdentifier() {
 		return identifier;
 	}

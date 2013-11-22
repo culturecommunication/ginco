@@ -97,6 +97,11 @@ public class ThesaurusConceptViewConverter {
     private AlignmentViewConverter alignmentViewConverter;
 
     @Inject
+    @Named("termViewConverter")
+    private TermViewConverter termViewConverter;
+
+    
+    @Inject
 	@Named("alignmentService")
 	private IAlignmentService alignmentService;
 
@@ -162,7 +167,7 @@ public class ThesaurusConceptViewConverter {
 		view.setRootConcepts(getIdsFromConceptList(concept.getRootConcepts()));
 		List<ThesaurusTermView> terms = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
-			terms.add(new ThesaurusTermView(thesaurusTerm));
+			terms.add(termViewConverter.convert(thesaurusTerm));
 		}
 		view.setTerms(terms);
 

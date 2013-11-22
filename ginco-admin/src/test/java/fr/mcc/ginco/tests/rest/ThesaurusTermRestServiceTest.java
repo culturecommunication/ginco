@@ -57,6 +57,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -100,7 +101,7 @@ public class ThesaurusTermRestServiceTest{
 		//Generating mocked Thesauruses in a single list "allThesaurus"
 		ThesaurusTerm fakeThesaurusTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("mock1");
 		ThesaurusTerm fakeThesaurusTerm2 = getFakeThesaurusTermWithNonMandatoryEmptyFields("mock2");
-		ThesaurusTermView mockedThesaurusTermView1 = new ThesaurusTermView(fakeThesaurusTerm1);
+		ThesaurusTermView mockedThesaurusTermView1 = new TermViewConverter().convert(fakeThesaurusTerm1);
 
 		List<ThesaurusTerm> fakeTerms = new ArrayList<ThesaurusTerm>();
 		fakeTerms.add(fakeThesaurusTerm1);
@@ -109,7 +110,7 @@ public class ThesaurusTermRestServiceTest{
 		//Mocking the service
 		Mockito.when(termService.getPaginatedThesaurusSandoxedTermsList(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString())).thenReturn(fakeTerms);
 		Mockito.when(termService.getSandboxedTermsCount(Mockito.anyString())).thenReturn((long)fakeTerms.size());
-
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTerm.class))).thenReturn(mockedThesaurusTermView1);
 		//Getting thesauruses from rest webservice method and testing
 		ExtJsonFormLoadData<List<ThesaurusTermView>> actualResponse = thesaurusTermRestService.getSandboxedThesaurusTerms(1, 2, "1", false);
 
@@ -177,6 +178,7 @@ public class ThesaurusTermRestServiceTest{
 
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
 		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class), Mockito.anyBoolean())).thenReturn(fakeThesaurusTerm1);
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTerm.class))).thenReturn(fakeThesaurusTermView);
 
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusTerm1);
 
@@ -216,7 +218,7 @@ public class ThesaurusTermRestServiceTest{
 
 		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm1);
 		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTermView.class), Mockito.anyBoolean())).thenReturn(fakeThesaurusTerm1);
-
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTerm.class))).thenReturn(fakeThesaurusTermView);
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusCreationReturn);
 
 		ThesaurusTermView actualResponse = thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
@@ -236,7 +238,10 @@ public class ThesaurusTermRestServiceTest{
 	@Test
 	public void testGetThesaurusTerm() throws BusinessException {
 		ThesaurusTerm term =getFakeThesaurusTermWithNonMandatoryEmptyFields("fake-id");
+		ThesaurusTermView view = new ThesaurusTermView();
+		view.setLexicalValue(term.getLexicalValue());
 		when(termService.getThesaurusTermById(anyString())).thenReturn(term);
+		Mockito.when(termViewConverter.convert(Mockito.any(ThesaurusTerm.class),Mockito.anyBoolean())).thenReturn(view);
         ThesaurusTermView actualResponse = thesaurusTermRestService.getThesaurusTerm("fake-id");
 		Assert.assertEquals("lexicale value", actualResponse.getLexicalValue());
 	}

@@ -129,8 +129,8 @@ public class ThesaurusConceptRestServiceTest {
 		fakeTerm2.setPrefered(false);
 		fakeTerm1.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		fakeTerm2.setStatus(TermStatusEnum.VALIDATED.getStatus());
-		ThesaurusTermView fakeTermView1 = new ThesaurusTermView(fakeTerm1);
-		ThesaurusTermView fakeTermView2 = new ThesaurusTermView(fakeTerm2);
+		ThesaurusTermView fakeTermView1 = new TermViewConverter().convert(fakeTerm1);
+		ThesaurusTermView fakeTermView2 = new TermViewConverter().convert(fakeTerm2);
 
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 		terms.add(fakeTerm1);

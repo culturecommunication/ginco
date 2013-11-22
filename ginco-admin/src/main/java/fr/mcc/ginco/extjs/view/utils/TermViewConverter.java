@@ -112,6 +112,54 @@ public class TermViewConverter {
 		logger.info("Getting an existing term with identifier " + identifier);
 		return hibernateRes;
 	}
+	
+	public ThesaurusTermView convert(ThesaurusTerm source){
+		return convert(source, false);
+	}
+	
+	public ThesaurusTermView convert(ThesaurusTerm source, boolean includeConceptInfo){
+		ThesaurusTermView view = new ThesaurusTermView();
+		if (source != null) {
+			view.setIdentifier(source.getIdentifier());
+			view.setLexicalValue(source.getLexicalValue());
+			if(source != null) {
+				view.setCreated(DateUtil.toString(source.getCreated()));
+				view.setModified(DateUtil.toString(source.getModified()));
+			}
+			view.setSource(source.getSource());
+			view.setPrefered(source.getPrefered());
+			view.setHidden(source.getHidden());
+			view.setStatus(source.getStatus());
+            
+            if(includeConceptInfo && source.getConcept() != null) {
+            	view.setConceptId(source.getConcept().getIdentifier());
+            	ArrayList<String> parentIdPath = new ArrayList<String>();
+        		List<ThesaurusConcept> parentPath = thesaurusConceptService.getRecursiveParentsByConceptId(source.getConcept().getIdentifier());
+        		for (int i = parentPath.size() - 1; i >= 0; i--)
+        		{
+        			parentIdPath.add(parentPath.get(i).getIdentifier());
+        		}
+        		parentIdPath.add(source.getConcept().getIdentifier());
+        		if (parentPath.size()>0) {
+        			view.setTopistopterm(parentPath.get(0).getTopConcept());
+        		}
+        		else  {
+        			view.setTopistopterm(source.getConcept().getTopConcept());
+        		}
+        		view.setConceptsPath(parentIdPath);
+            }
+
+            view.setThesaurusId(source.getThesaurus().getIdentifier());
+    		if(source.getLanguage() != null) {
+    			view.setLanguage(source.getLanguage().getId());
+    		if (source.getRole() != null) {
+    			view.setRole(source.getRole().getCode());
+    		}
+    		}
+		}
+		
+		return view;
+	}
 
 	/**
 	 * Main method used to do conversion.
