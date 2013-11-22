@@ -105,7 +105,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 						success : function(record, operation) {
 							Thesaurus.ext.utils.msg(me.xSucessLabel,
 									me.xSucessRemovedMsg);
-							me.application.fireEvent('termdeleted',thePanel.up('thesaurusTabPanel').thesaurusData);
+							me.application.fireEvent('complexconceptdeleted',thePanel.up('thesaurusTabPanel').thesaurusData);
 							globalTabs.remove(thePanel);
 						},
 						failure : function(record, operation) {
@@ -175,7 +175,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils
 							.msg(me.xSucessLabel, me.xSucessSavedMsg);
-					me.application.fireEvent('termupdated',thesPanel.thesaurusData);
+					me.application.fireEvent('complexconceptupdated',thesPanel.thesaurusData);
 					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}

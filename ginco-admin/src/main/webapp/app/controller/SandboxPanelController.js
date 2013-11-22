@@ -60,14 +60,16 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 				topTabs.fireEvent('opentermtab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
 			},
 			refreshSandBoxList : function(thesaurusData)
-			{
-				var sandBoxTabs = Ext.ComponentQuery.query('sandboxPanel');
+			{	
+				var sandBoxTabs = Ext.ComponentQuery.query('thesaurusTabs sandboxPanel');
 				Ext.Array.each(sandBoxTabs, function(sandBox, index, array) {
-					if (sandBox.getThesaurusData().id ==  thesaurusData.id) {
+					if (sandBox.up('thesaurusTabPanel').thesaurusData.id ==  thesaurusData.id) {
 						var sandBoxGrid= sandBox.down("gridpanel");
 						sandBoxGrid.getStore().load();
 					}
-				});
+				});	
+				
+				this.application.fireEvent('refreshtree', thesaurusData);
 			},
 
 			init : function() {

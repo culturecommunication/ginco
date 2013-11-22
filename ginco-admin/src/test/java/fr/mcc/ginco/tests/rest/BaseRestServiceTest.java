@@ -57,7 +57,7 @@ import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.pojo.UserThesaurusRole;
-import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.extjs.view.utils.FoldersGenerator;
 import fr.mcc.ginco.rest.services.BaseRestService;
 import fr.mcc.ginco.services.IAdminUserService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -68,8 +68,8 @@ public class BaseRestServiceTest {
 	@Mock(name = "thesaurusService")
 	private IThesaurusService thesaurusService;
 
-	@Mock(name = "folderGenerator")
-	private FolderGenerator folderGenerator;
+	@Mock(name = "foldersGenerator")
+	private FoldersGenerator foldersGenerator;
 
 	@Mock(name = "adminUserService")
 	private IAdminUserService adminUserService;
@@ -126,7 +126,7 @@ public class BaseRestServiceTest {
 		Mockito.when(thesaurusService.getThesaurusList()).thenReturn(
 				mockedThesauruses);
 
-		Mockito.when(folderGenerator.generateFolders(Mockito.anyString()))
+		Mockito.when(foldersGenerator.generateFolders(Mockito.anyString()))
 				.thenReturn(null);
 
 		return thesaurusService;
