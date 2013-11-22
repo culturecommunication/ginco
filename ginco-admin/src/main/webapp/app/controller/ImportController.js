@@ -120,7 +120,7 @@ Ext.define('GincoApp.controller.ImportController', {
 										succLabel += missingConcept;
 									});
 								}
-								Ext.MsgBox
+								Ext.Msg
 								.show({
 									title : me.xSucessLabelTitle,
 									msg : succLabel,
