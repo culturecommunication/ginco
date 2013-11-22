@@ -10,23 +10,26 @@ GINCO est une application multiutilisateurs dédiée à la gestion de référent
 Les principales fonctionnalités d'ores et déjà développées permettent :
 * la conception et la gestion de multiples listes d'autorités, taxonomies, thésaurus ;
 * la gestion des termes : statut, langue, identifiant unique de type URI, notes typées associées aux termes, affectation des termes à des concepts, équivalences entre termes ... ;
-* la gestion des concepts : statut, identifiant unique de type URI, notes typées associées aux concepts, relations hiérarchiques et associatives entre concepts …
+* la gestion des concepts : statut, identifiant unique de type URI, notes typées associées aux concepts, relations hiérarchiques et associatives entre concepts ... ;
 * la gestion des tableaux de concepts (relais virtuels, facettes) et leur exploitation dans les éditions ;
-* la gestion des groupes de concepts (microthésaurus, thématique, domaine …) ; 
+* la gestion des groupes de concepts (microthésaurus, thématique, domaine ...) ; 
 * les éditions alphabétiques et hiérarchiques ;
 * les imports et les exports de thésaurus au format SKOS/RDF ; 
+* les alignements entre vocabulaires ou vers des ressources externes ;
+* des fonctions collaboratives simples ;
 * la consultation par des web services.
 
 # Méthode de développement
 
-La première version de l'application a été développée selon la méthodologie agile SCRUM. Le « backlog » présente la liste priorisée des fonctionnalités développées ou prévues. Il est mis à la disposition de la communauté, qui peut nous faire part de ses suggestions et propositions.
+L'application est développée selon la méthodologie agile SCRUM. Le « backlog » présente la liste priorisée des fonctionnalités développées ou prévues. Il est mis à la disposition de la communauté, qui peut nous faire part de ses suggestions et propositions.
 
 # Perspectives
 
-Les développements prévus dans la version 2 de l'application portent principalement sur :
-* les fonctions collaboratives ;
-* les alignements entre vocabulaires ou vers des ressources externes ;
-* la mise en place d'un référentiel terminologique, en vue de mettre à la disposition des usagers un accès unifié à l'ensemble des vocabulaires (serveur de terminologies)
+GINCO est mis à la disposition des utilisateurs et des développeurs. Pour faciliter la découverte et la prise en main des fonctionnalités, une machine virtuelle (VM) a été proposée.
+La V1 du projet est totalement opérationnelle et peut être déployée et utilisée pour gérer au quotidien des vocabulaires et faire des exports simples.
+Le version 2 en cours de développement s'appuie sur la démarche de repprochement entre ISO 25964 et SKOS pour proposer des exports SKOS enrichis (statut des concepts, groupes de concepts, comcepts complexes ...).
+
+Le "[backlog] (https://www.pivotaltracker.com/s/projects/926794)" du projet suggère à la communauté des évolutions possibles de l'application.
 
 
 

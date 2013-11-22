@@ -29,7 +29,6 @@ Ext.define('GincoApp.controller.ThesaurusReportsTabPanelController', {
 
 			onTypeChange : function(theCombo, records) {
 				if (records.length > 0) {
-					console.log();
 					var theGrid = theCombo.up("thesaurusReportsTabPanel")
 							.down("gridpanel");
 					var thesaurusData = theCombo.up('thesaurusPanel')

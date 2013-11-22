@@ -34,13 +34,10 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusStatistics;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-
-import java.util.List;
 
 /**
  * Service used to work with {@link Thesaurus} objects, contains basic
@@ -74,10 +71,9 @@ public interface IThesaurusService {
 
     /**
      * Update a single ThesaurusObject
-     * @throws BusinessException
      */
 
-    Thesaurus updateThesaurus(Thesaurus object) throws BusinessException;
+    Thesaurus updateThesaurus(Thesaurus object);
 
 
     /**
@@ -86,28 +82,28 @@ public interface IThesaurusService {
      * @param thesaurusId
      * @return
      */
-    List<Language> getThesaurusLanguages(String thesaurusId) throws BusinessException;
+    List<Language> getThesaurusLanguages(String thesaurusId);
 
     /**
      * Delete a Thesaurus object
      * @param object
      * @return
      */
-    Thesaurus destroyThesaurus(Thesaurus object) throws BusinessException;
+    Thesaurus destroyThesaurus(Thesaurus object);
 
     /**
      * Publish a Thesaurus object
      * @param object
      * @return
      */
-    void publishThesaurus(Thesaurus object) throws BusinessException, TechnicalException;
+    void publishThesaurus(Thesaurus object);
 
     /**
      * Archive a Thesaurus object
      * @param thesaurus
      * @return
      */
-    Thesaurus archiveThesaurus(Thesaurus thesaurus) throws BusinessException, TechnicalException;
+    Thesaurus archiveThesaurus(Thesaurus thesaurus);
 
 
 }

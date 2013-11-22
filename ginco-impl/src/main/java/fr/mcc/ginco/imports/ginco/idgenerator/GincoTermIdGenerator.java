@@ -60,7 +60,6 @@ public class GincoTermIdGenerator {
 	private IIDGeneratorService generatorService;	
 
 	@Inject
-	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;	
 
 	private Logger logger  = LoggerFactory.getLogger(GincoTermIdGenerator.class);

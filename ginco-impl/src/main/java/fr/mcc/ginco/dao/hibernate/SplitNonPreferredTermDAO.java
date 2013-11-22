@@ -50,7 +50,7 @@ import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
  * Preferred term associated with 2 Preferred Terms or more)
  * 
  */
-@Repository("splitNonPreferredTermDAO")
+@Repository
 public class SplitNonPreferredTermDAO extends
 		GenericHibernateDAO<SplitNonPreferredTerm, String> implements
 		ISplitNonPreferredTermDAO {

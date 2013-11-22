@@ -72,7 +72,6 @@ public class GincoConceptExporter {
 	private IAlignmentService alignmentService;
 
 	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
 	/**

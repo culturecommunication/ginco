@@ -57,7 +57,7 @@ public class ConceptIndexerServiceTest {
 	@InjectMocks
 	private  ConceptIndexerServiceImpl conceptIndexerService;
 
-	@Mock(name = "conceptSolrConverter")
+	@Mock
 	private ConceptSolrConverter conceptSolrConverter;
 
 	@Mock(name = "solrServer")

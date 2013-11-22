@@ -34,44 +34,52 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusTermService;
 
 public class FolderGeneratorTest {
-	@Mock(name = "thesaurusConceptService")
+	@Mock
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Mock
+	private IThesaurusTermService thesaurusTermService;
 
-	@Mock(name = "thesaurusArrayService")
+	@Mock
 	private IThesaurusArrayService thesaurusArrayService;
 
-    @Mock(name = "thesaurusListNodeFactory")
-    private ThesaurusListNodeFactory thesaurusListNodeFactory;
+	@Mock
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
+	
+	@Mock
+	private IThesaurusConceptGroupService thesaurusConceptGroupService;
 
+	@Mock
+	private ISplitNonPreferredTermService splitNonPreferredTermService;
+	
 	@InjectMocks
 	private FolderGenerator folderGenerator = new FolderGenerator();
 
-	@Mock(name = "thesaurusConceptGroupService")
-	private IThesaurusConceptGroupService thesaurusConceptGroupService;
+	
 
 	@Before
 	public final void setUp() {
@@ -79,95 +87,176 @@ public class FolderGeneratorTest {
 	}
 
 	@Test
-	public final void testRootFolderCreation() throws BusinessException {
+	public final void testGetConceptsWithChildren() {
 		Mockito.when(
 				thesaurusConceptService
-						.getOrphanThesaurusConceptsCount(Matchers.anyString()))
-				.thenReturn((long) 0);
+						.getTopTermThesaurusConceptsCount("fake1")).thenReturn(
+				(long) 3);
 
-        Mockito.when(
-        		thesaurusListNodeFactory.getListBasicNode())
-                .thenAnswer(new Answer<ThesaurusListBasicNode>() {
-                		public ThesaurusListBasicNode answer(
-							InvocationOnMock invocation) throws Throwable {
-						return new ThesaurusListBasicNode();
-					}
-                   });
-
-		Mockito.when(
-				thesaurusConceptService
-						.getTopTermThesaurusConceptsCount(Matchers.anyString()))
-				.thenReturn((long) 0);
-		List<IThesaurusListNode> nodes = folderGenerator
-				.generateFolders("fake");
-
-		Assert.assertEquals("Invalid number of nodes", 6, nodes.size());
-
-		// tests of the top concepts node
-		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(0)
-				.getType());
-		Assert.assertEquals("CONCEPTS_fake", nodes.get(0).getId());
-		Assert.assertEquals("Arborescence des concepts", nodes.get(0)
-				.getTitle());
-		Assert.assertEquals(false, nodes.get(0).isExpanded());
-		Assert.assertNotNull(nodes.get(0).getChildren());
-
-		// tests of the complex concepts node
-		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(1)
-				.getType());
-		Assert.assertEquals("COMPLEXCONCEPTS_fake", nodes.get(1).getId());
-		Assert.assertEquals("Concepts complexes", nodes.get(1).getTitle());
-		Assert.assertEquals(false, nodes.get(1).isExpanded());
-		Assert.assertNotNull(nodes.get(1).getChildren());
-
-		// tests of the groups node
-		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(2)
-				.getType());
-		Assert.assertEquals("GROUPS_fake", nodes.get(2).getId());
-		Assert.assertEquals("Groupes", nodes.get(2).getTitle());
-		Assert.assertEquals(false, nodes.get(2).isExpanded());
-		Assert.assertNotNull(nodes.get(2).getChildren());
-
-		// tests of the concept arrays node
-		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(3)
-				.getType());
-		Assert.assertEquals("ARRAYS_fake", nodes.get(3).getId());
-		Assert.assertEquals("Tableaux", nodes.get(3).getTitle());
-		Assert.assertEquals(false, nodes.get(3).isExpanded());
-		Assert.assertNotNull(nodes.get(3).getChildren());
-
-		// tests of the orphan concepts node
-		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(4)
-				.getType());
-		Assert.assertEquals("ORPHANS_fake", nodes.get(4).getId());
-		Assert.assertEquals("Concepts orphelins", nodes.get(4).getTitle());
-		Assert.assertEquals(false, nodes.get(4).isExpanded());
-		Assert.assertNotNull(nodes.get(4).getChildren());
-
-		// tests of sandboxed terms
-		Assert.assertEquals(ThesaurusListNodeType.FOLDER, nodes.get(5)
-				.getType());
-		Assert.assertEquals("SANDBOX_fake", nodes.get(5).getId());
-		Assert.assertEquals("Termes orphelins", nodes.get(5).getTitle());
-		Assert.assertEquals(false, nodes.get(5).isExpanded());
-		Assert.assertNotNull(nodes.get(5).getChildren());
-
+		IThesaurusListNode actualNode = folderGenerator.getConcepts("fake1");
+		Assert.assertEquals(ThesaurusListNodeType.FOLDER, actualNode.getType());
+		Assert.assertEquals("CONCEPTS_fake1", actualNode.getId());
+		Assert.assertEquals("Arborescence des concepts", actualNode.getTitle());
+		Assert.assertEquals(false, actualNode.isExpanded());
+		Assert.assertEquals(false, actualNode.isDisplayable());
+		Assert.assertEquals("icon-tree", actualNode.getIconCls());
+		Assert.assertNull(actualNode.getChildren());
 	}
+
 	@Test
-	public final void testRootFolderCreationWithOrphansAndTopConcepts() throws BusinessException {
+	public final void testGetConceptsWithNoChildren() {
 		Mockito.when(
 				thesaurusConceptService
-						.getOrphanThesaurusConceptsCount(Matchers.anyString()))
-				.thenReturn((long) 3);
-		Mockito.when(
-				thesaurusConceptService
-						.getTopTermThesaurusConceptsCount(Matchers.anyString()))
-				.thenReturn((long) 3);
-		List<IThesaurusListNode> nodes = folderGenerator
-				.generateFolders("fake");
-
-		Assert.assertNull(nodes.get(0).getChildren());
-		Assert.assertNull(nodes.get(4).getChildren());
+						.getTopTermThesaurusConceptsCount("fake1")).thenReturn(
+				(long) 0);
+		IThesaurusListNode actualNode = folderGenerator.getConcepts("fake1");
+		Assert.assertNotNull(actualNode.getChildren());
 	}
 
+	@Test
+	public final void testGetArraysWithChildren() {
+		List<ThesaurusArray> realArrays = new ArrayList<ThesaurusArray>();
+		ThesaurusArray array1 = new ThesaurusArray();
+		realArrays.add(array1);
+
+		Mockito.when(
+				thesaurusArrayService.getAllThesaurusArrayByThesaurusId(null,
+						"fake1")).thenReturn(realArrays);
+
+		IThesaurusListNode actualNode = folderGenerator.getArrays("fake1");
+		Assert.assertEquals(ThesaurusListNodeType.FOLDER, actualNode.getType());
+		Assert.assertEquals("ARRAYS_fake1", actualNode.getId());
+		Assert.assertEquals("Tableaux", actualNode.getTitle());
+		Assert.assertEquals(false, actualNode.isExpanded());
+		Assert.assertEquals(false, actualNode.isDisplayable());
+		Assert.assertEquals("icon-table", actualNode.getIconCls());
+		Assert.assertNull(actualNode.getChildren());
+	}
+
+	@Test
+	public final void testGetArraysWithNoChildren() {
+		List<ThesaurusArray> realArrays = new ArrayList<ThesaurusArray>();
+
+		Mockito.when(
+				thesaurusArrayService.getAllThesaurusArrayByThesaurusId(null,
+						"fake1")).thenReturn(realArrays);
+
+		IThesaurusListNode actualNode = folderGenerator.getArrays("fake1");
+		Assert.assertNull(actualNode);
+	}
+
+	@Test
+	public final void testGetGroupsWithChildren() {
+		List<ThesaurusConceptGroup> realGroups = new ArrayList<ThesaurusConceptGroup>();
+		ThesaurusConceptGroup group = new ThesaurusConceptGroup();
+		realGroups.add(group);
+
+		Mockito.when(
+				thesaurusConceptGroupService
+						.getAllThesaurusConceptGroupsByThesaurusId(null,
+								"fake1")).thenReturn(realGroups);
+
+		IThesaurusListNode actualNode = folderGenerator.getGroups("fake1");
+		Assert.assertEquals(ThesaurusListNodeType.FOLDER, actualNode.getType());
+		Assert.assertEquals("GROUPS_fake1", actualNode.getId());
+		Assert.assertEquals("Groupes", actualNode.getTitle());
+		Assert.assertEquals(false, actualNode.isExpanded());
+		Assert.assertEquals(false, actualNode.isDisplayable());
+		Assert.assertEquals("icon-group", actualNode.getIconCls());
+
+		Assert.assertNull(actualNode.getChildren());
+	}
+
+	@Test
+	public final void testGetGroupsWithNoChildren() {
+		Mockito.when(
+				thesaurusConceptGroupService
+						.getAllThesaurusConceptGroupsByThesaurusId(null,
+								"fake1")).thenReturn(null);
+		IThesaurusListNode actualNode = folderGenerator.getGroups("fake1");
+		Assert.assertNull(actualNode);
+	}
+
+	@Test
+	public final void testGetOrphansWithChildren() {
+
+		Mockito.when(
+				thesaurusConceptService
+						.getOrphanThesaurusConceptsCount("fake1")).thenReturn(
+				(long) 2);
+
+		IThesaurusListNode actualNode = folderGenerator.getOrphans("fake1");
+
+		Assert.assertEquals(ThesaurusListNodeType.FOLDER, actualNode.getType());
+		Assert.assertEquals("ORPHANS_fake1", actualNode.getId());
+		Assert.assertEquals("Concepts orphelins", actualNode.getTitle());
+		Assert.assertEquals(false, actualNode.isExpanded());
+		Assert.assertEquals(false, actualNode.isDisplayable());
+		Assert.assertEquals("sandbox", actualNode.getIconCls());
+		Assert.assertNull(actualNode.getChildren());
+	}
+
+	@Test
+	public final void testGetOrphansWithNoChildren() {
+		Mockito.when(
+				thesaurusConceptService
+						.getOrphanThesaurusConceptsCount("fake1")).thenReturn(
+				(long) 0);
+
+		IThesaurusListNode actualNode = folderGenerator.getOrphans("fake1");
+
+		Assert.assertNull(actualNode);
+	}
+
+	@Test
+	public final void testGetSandboxWithChildren() {
+		Mockito.when(thesaurusTermService.getSandboxedTermsCount("fake1")).thenReturn((long)1);
+
+		IThesaurusListNode actualNode = folderGenerator.getSandbox("fake1");
+
+		Assert.assertEquals(ThesaurusListNodeType.FOLDER, actualNode.getType());
+		Assert.assertEquals("SANDBOX_fake1", actualNode.getId());
+		Assert.assertEquals("Termes orphelins", actualNode.getTitle());
+		Assert.assertEquals(false, actualNode.isExpanded());
+		Assert.assertEquals(true, actualNode.isDisplayable());
+		Assert.assertEquals("sandbox", actualNode.getIconCls());
+
+		Assert.assertNotNull(actualNode.getChildren());
+	}
+	
+	@Test
+	public final void testGetSandboxWithNoChildren() {
+		
+		Mockito.when(thesaurusTermService.getSandboxedTermsCount("fake1")).thenReturn((long)0);
+
+		IThesaurusListNode actualNode = folderGenerator.getSandbox("fake1");
+		Assert.assertNull(actualNode);
+	}
+
+	@Test
+	public final void testGetSplitNonPreferredTermsWithChildren() {
+		
+		Mockito.when(splitNonPreferredTermService.getSplitNonPreferredTermCount("fake1")).thenReturn((long)2);
+		IThesaurusListNode actualNode = folderGenerator
+				.getSplitNonPreferredTerms("fake1");
+
+		Assert.assertEquals(ThesaurusListNodeType.FOLDER, actualNode.getType());
+		Assert.assertEquals("COMPLEXCONCEPTS_fake1", actualNode.getId());
+		Assert.assertEquals("Concepts complexes", actualNode.getTitle());
+		Assert.assertEquals(false, actualNode.isExpanded());
+		Assert.assertEquals(true, actualNode.isDisplayable());
+		Assert.assertEquals("icon-complex-concept", actualNode.getIconCls());
+		Assert.assertNotNull(actualNode.getChildren());
+	}
+	
+	@Test
+	public final void testGetSplitNonPreferredTermsWithNoChildren() {
+		
+		Mockito.when(splitNonPreferredTermService.getSplitNonPreferredTermCount("fake1")).thenReturn((long)0);
+
+		IThesaurusListNode actualNode = folderGenerator
+				.getSplitNonPreferredTerms("fake1");
+		
+		Assert.assertNull(actualNode);
+	}
 }

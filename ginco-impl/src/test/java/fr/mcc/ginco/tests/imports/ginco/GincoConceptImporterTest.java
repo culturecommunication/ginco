@@ -37,9 +37,6 @@ package fr.mcc.ginco.tests.imports.ginco;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -60,14 +57,14 @@ import fr.mcc.ginco.imports.ginco.GincoConceptImporter;
 
 public class GincoConceptImporterTest {
 
-	@Mock(name = "thesaurusDAO")
+	@Mock
 	private IThesaurusDAO thesaurusDAO;
 
-	@Mock(name = "thesaurusConceptDAO")
+	@Mock
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 
-	@Mock(name = "splitNonPreferredTermDAO")
+	@Mock
 	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 
 	@InjectMocks

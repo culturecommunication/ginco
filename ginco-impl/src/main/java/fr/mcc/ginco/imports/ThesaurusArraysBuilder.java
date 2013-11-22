@@ -34,12 +34,7 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,20 +43,13 @@ import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.utils.ConceptHierarchyUtil;
 
 /**
  * builder in charge of building thesaurus arrays
@@ -78,11 +66,9 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 	private NodeLabelBuilder nodeLabelBuilder;
 	
 	@Inject
-	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
 	@Inject
-	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
 	
 	@Inject

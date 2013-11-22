@@ -59,34 +59,38 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView;
 import fr.mcc.ginco.extjs.view.utils.SplitNonPreferredTermViewConverter;
 import fr.mcc.ginco.services.ISplitNonPreferredTermService;
+import fr.mcc.ginco.solr.IComplexConceptIndexerService;
 
 /**
  * Thesaurus Term REST service for all operations on complex concepts
- * 
+ *
  */
 @Service
 @Path("/splitnonpreferredtermservice")
 @Produces({MediaType.APPLICATION_JSON})
 @PreAuthorize("isAuthenticated()")
-public class SplitNonPreferredTermRestService {	
-	
+public class SplitNonPreferredTermRestService {
+
 	@Inject
 	@Named("splitNonPreferredTermService")
 	private ISplitNonPreferredTermService splitNonPreferredTermService;
-	
+
     @Inject
     @Named("splitNonPreferredTermViewConverter")
     private SplitNonPreferredTermViewConverter splitNonPreferredTermViewConverter;
-   
-    
+
+    @Inject
+	private IComplexConceptIndexerService complexConceptIndexerService;
+
+
 	private Logger logger  = LoggerFactory.getLogger(SplitNonPreferredTermRestService.class);
 
 
 	/**
 	 * Public method used to get the details of a single {@link SplitNonPreferredTerm}
-	 * 
+	 *
 	 * @return list of ThesaurusTermView, if not found - {@code null}
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getTerm")
@@ -95,15 +99,15 @@ public class SplitNonPreferredTermRestService {
 		SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermService.getSplitNonPreferredTermById(idTerm);
         return splitNonPreferredTermViewConverter.convert(thesaurusTerm);
 	}
-	
+
 	/**
 	 * Public method used to create or update
 	 * {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} -
      * thesaurus term JSON object send by extjs
-	 * 
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} updated object
 	 *         in JSON format or {@code null} if not found
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/updateTerm")
@@ -113,10 +117,11 @@ public class SplitNonPreferredTermRestService {
             throws BusinessException, TechnicalException {
 
 		SplitNonPreferredTerm object = splitNonPreferredTermViewConverter.convert(splitTermView);
-		
+
 		if (object != null) {
 			SplitNonPreferredTerm result = splitNonPreferredTermService.updateSplitNonPreferredTerm(object);
 			if (result != null) {
+				complexConceptIndexerService.addComplexConcept(object);
 				return splitNonPreferredTermViewConverter.convert(result);
 			} else {
 				logger.error("Failed to update thesaurus term");
@@ -125,11 +130,11 @@ public class SplitNonPreferredTermRestService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Public method used to get list of all existing Thesaurus terms objects in
 	 * database.
-	 * 
+	 *
 	 * @return list of ThesaurusTermView, if not found - {@code null}
 	 */
 	@GET
@@ -140,7 +145,7 @@ public class SplitNonPreferredTermRestService {
      @QueryParam("limit") Integer limit,
      @QueryParam("idThesaurus") String idThesaurus) throws BusinessException{
 		logger.info("Getting Thesaurus SplitNonPreferred Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit );
-		List<SplitNonPreferredTerm> thesaurusTerms = splitNonPreferredTermService.getSplitNonPreferredTermList(startIndex, limit, idThesaurus);	
+		List<SplitNonPreferredTerm> thesaurusTerms = splitNonPreferredTermService.getSplitNonPreferredTermList(startIndex, limit, idThesaurus);
 		Long total = splitNonPreferredTermService.getSplitNonPreferredTermCount(idThesaurus);
 
 		List<SplitNonPreferredTermView>results = new ArrayList<SplitNonPreferredTermView>();
@@ -151,7 +156,7 @@ public class SplitNonPreferredTermRestService {
 		extTerms.setTotal(total);
 		return extTerms;
 	}
-	
+
 	/**
 	 * Public method used to delete
 	 * {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} -
@@ -159,7 +164,7 @@ public class SplitNonPreferredTermRestService {
      *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} deleted object
 	 *         in JSON format or {@code null} if not found
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/destroyTerm")
@@ -167,11 +172,12 @@ public class SplitNonPreferredTermRestService {
 	@PreAuthorize("hasPermission(#element, '0')")
 	public void destroyTerm(SplitNonPreferredTermView element) throws BusinessException {
 		SplitNonPreferredTerm object = splitNonPreferredTermViewConverter.convert(element);
-	
+
 		if (object != null) {
+			complexConceptIndexerService.removeComplexConcept(object);
 			splitNonPreferredTermService.destroySplitNonPreferredTerm(object);
 		}
 	}
-	
-	
+
+
 }

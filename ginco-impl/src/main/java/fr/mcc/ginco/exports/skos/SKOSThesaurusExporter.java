@@ -35,7 +35,6 @@
 package fr.mcc.ginco.exports.skos;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
@@ -60,7 +59,6 @@ import fr.mcc.ginco.utils.DateUtil;
 public class SKOSThesaurusExporter {
 
 	@Inject
-	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	private static final String SEPARATOR = "\\r?\\n";

@@ -161,6 +161,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var me = this;
 		var theForm = theButton.up('form');
 		var thePanel = theForm.up('termPanel');
+		var thesPanel = theForm.up('thesaurusTabPanel');
 		if (theForm.getForm().isValid()) {
 			theForm.getEl().mask(me.xLoading);
 			theForm.getForm().updateRecord();
@@ -171,8 +172,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 					me.loadData(theForm, record);
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils
-							.msg(me.xSucessLabel, me.xSucessSavedMsg);
-					me.application.fireEvent('termupdated',thePanel.thesaurusData);
+							.msg(me.xSucessLabel, me.xSucessSavedMsg);		
+					me.application.fireEvent('termupdated',thesPanel.thesaurusData);
 					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}

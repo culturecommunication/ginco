@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link Note} objects, contains basic
@@ -71,9 +70,8 @@ public interface INoteService {
 	 * Create or update a new note
 	 * @param note
 	 * @return the created or updated note
-	 * @throws BusinessException
 	 */
-	Note createOrUpdateNote(Note note) throws BusinessException;
+	Note createOrUpdateNote(Note note);
 
 	/**
 	 * Delete a note

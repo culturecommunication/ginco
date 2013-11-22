@@ -48,7 +48,7 @@ import fr.mcc.ginco.dao.IExternalThesaurusDAO;
  * table
  * 
  */
-@Repository("externalThesaurusDAO")
+@Repository
 public class ExternalThesaurusDAO extends
 		GenericHibernateDAO<ExternalThesaurus, Integer> implements
 		IExternalThesaurusDAO {

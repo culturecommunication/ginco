@@ -57,10 +57,10 @@ import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 
 public class ThesaurusArrayHelperTest {
-	@Mock(name = "thesaurusArrayConceptDAO")
+	@Mock
 	private IThesaurusArrayConceptDAO thesaurusArrayConceptDAO;
 
-	@Mock(name = "thesaurusConceptDAO")
+	@Mock
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@InjectMocks

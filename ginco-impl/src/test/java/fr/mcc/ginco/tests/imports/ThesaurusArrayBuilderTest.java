@@ -57,7 +57,7 @@ import fr.mcc.ginco.imports.ThesaurusArrayBuilder;
 public class ThesaurusArrayBuilderTest {	
 
 	
-	@Mock(name = "thesaurusConceptDAO")
+	@Mock
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 	@InjectMocks

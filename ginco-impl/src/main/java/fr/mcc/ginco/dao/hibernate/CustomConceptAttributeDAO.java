@@ -48,7 +48,7 @@ import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
 /**
  * DAO to access custom_conpt_attribute table
  */
-@Repository("customConceptAttributeDAO")
+@Repository
 public class CustomConceptAttributeDAO extends GenericHibernateDAO<CustomConceptAttribute, String> implements ICustomConceptAttributeDAO {
     public CustomConceptAttributeDAO() {
         super(CustomConceptAttribute.class);

@@ -58,7 +58,6 @@ public class ConceptIndexerServiceImpl implements IConceptIndexerService{
 	private static Logger logger = LoggerFactory.getLogger(ConceptIndexerServiceImpl.class);
 
 	@Inject
-	@Named("conceptSolrConverter")
 	private ConceptSolrConverter conceptSolrConverter;
 
 	@Inject

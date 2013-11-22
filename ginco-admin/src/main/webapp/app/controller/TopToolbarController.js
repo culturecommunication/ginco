@@ -90,7 +90,6 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	},
 	
 	onSuggestionBtn : function(theButton) {
-		var me = this;
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		thesaurusTabs.fireEvent('opensuggestions',thesaurusTabs);
 	},

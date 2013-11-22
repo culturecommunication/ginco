@@ -53,7 +53,7 @@ import fr.mcc.ginco.imports.ginco.GincoGroupImporter;
 
 public class GincoGroupImporterTest {
 
-	@Mock(name = "thesaurusConceptGroupDAO")
+	@Mock
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 
 	@InjectMocks

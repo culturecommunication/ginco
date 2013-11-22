@@ -135,9 +135,8 @@ public class SKOSImportUtils {
 	 *
 	 * @param skosDate
 	 * @return
-	 * @throws BusinessException
 	 */
-	public Date getSkosDate(String skosDate) throws BusinessException {
+	public Date getSkosDate(String skosDate) {
 		if (StringUtils.isEmpty(skosDate))
 		{
 			return new Date();

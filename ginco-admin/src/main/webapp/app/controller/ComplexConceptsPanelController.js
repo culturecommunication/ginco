@@ -61,6 +61,7 @@ Ext.define('GincoApp.controller.ComplexConceptsPanelController',
 			},
 			refreshComplexConceptList : function(thesaurusData)
 			{
+				var me = this;
 				var complexConceptListTabs = Ext.ComponentQuery.query('thesaurusTabs complexconceptsPanel');
 				Ext.Array.each(complexConceptListTabs, function(complexConceptList, index, array) {
 					if (complexConceptList.up('thesaurusTabPanel').thesaurusData.id ==  thesaurusData.id) {
@@ -68,12 +69,13 @@ Ext.define('GincoApp.controller.ComplexConceptsPanelController',
 						complexConceptGrid.getStore().load();
 					}
 				});
+				me.fireEvent('refreshtree',thesaurusData);
 			},
 
 			init : function() {
-				this.application.on({
-					termupdated : this.refreshComplexConceptList,
-					termdeleted : this.refreshComplexConceptList
+				 this.application.on({
+					complexconceptupdated : this.refreshComplexConceptList,
+					complexconceptdeleted : this.refreshComplexConceptList
 				});
 				this.control({
 					'complexconceptsPanel gridpanel' : {

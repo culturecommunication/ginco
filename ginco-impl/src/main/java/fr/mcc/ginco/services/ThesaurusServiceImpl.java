@@ -86,7 +86,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     private String archivePath;
 
 	@Inject
-	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
     @Inject
@@ -94,7 +93,6 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     private ISKOSExportService exportService;
 
 	@Inject
-	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Inject
@@ -156,7 +154,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 */
 	@Transactional(readOnly=false)
 	@Override
-	public Thesaurus updateThesaurus(Thesaurus object) throws BusinessException {
+	public Thesaurus updateThesaurus(Thesaurus object) {
 		 Thesaurus result = thesaurusDAO.update(object);
 
 		 //We get the versions of the thesaurus we are creating/updating
@@ -178,8 +176,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 * fr.mcc.ginco.IThesaurusService#getThesaurusLanguages(java.lang.String)
 	 */
 	@Override
-	public List<Language> getThesaurusLanguages(String thesaurusId)
-			throws BusinessException {
+	public List<Language> getThesaurusLanguages(String thesaurusId)	{
 		Thesaurus th = thesaurusDAO.getById(thesaurusId);
 		if (th == null) {
 			throw new BusinessException("Invalid thesaurusId : " + thesaurusId, "invalid-thesaurus-id");
@@ -194,8 +191,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
     @Transactional(readOnly=false)
     @Override
-    public Thesaurus archiveThesaurus(Thesaurus thesaurus)
-            throws BusinessException, TechnicalException {
+    public Thesaurus archiveThesaurus(Thesaurus thesaurus) {
 
         String fileContent = gincoThesaurusExportService.getThesaurusExport(thesaurus);
         File ready = new File(archivePath + thesaurus.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + "_"
@@ -220,7 +216,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     }
 
     @Override
-    public void publishThesaurus(Thesaurus object) throws BusinessException {
+    public void publishThesaurus(Thesaurus object) {
         File export = exportService.getSKOSExport(object);
         File ready = new File(publishPath + object.getTitle() + " "
                 + DateUtil.toString(DateUtil.nowDate())
@@ -238,7 +234,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
     @Transactional(readOnly=false)
     @Override
-    public Thesaurus destroyThesaurus(Thesaurus object) throws BusinessException {
+    public Thesaurus destroyThesaurus(Thesaurus object) {
         try {
             return thesaurusDAO.delete(object);
         } catch (HibernateException ex) {

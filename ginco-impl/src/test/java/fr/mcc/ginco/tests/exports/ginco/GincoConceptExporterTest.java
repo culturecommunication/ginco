@@ -67,7 +67,7 @@ public class GincoConceptExporterTest {
 	@Mock(name="noteService")
 	private INoteService noteService;
 	
-    @Mock(name = "conceptHierarchicalRelationshipDAO")
+    @Mock
     private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 	
 	@Mock(name="associativeRelationshipService")

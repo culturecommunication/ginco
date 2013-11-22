@@ -43,7 +43,7 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 
-@Service("noteSolrConverter")
+@Service
 public class NoteSolrConverter {
 
 	/**
@@ -77,17 +77,17 @@ public class NoteSolrConverter {
 
 		String noteTypeCode = thesaurusNote.getNoteType().getCode();
 		if ("definition".equals(noteTypeCode)){
-			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_DEFINITION);
+			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_DEFINITION);
 		} else if ("editorialNote".equals(noteTypeCode)) {
-			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_EDITORIAL);
+			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_EDITORIAL);
 		} else if ("example".equals(noteTypeCode)){
-			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_EXAMPLE);
+			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_EXAMPLE);
 		} else if ("historyNote".equals(noteTypeCode)) {
-			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_HISTORY);
+			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_HISTORY);
 		} else if ("scopeNote".equals(noteTypeCode)){
-			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE_SCOPE);
+			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_SCOPE);
 		} else {
-			doc.addField(SolrField.EXT_TYPE, EntityType.NOTE);
+			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE);
 		}
 
 		doc.addField(SolrField.LANGUAGE, thesaurusNote.getLanguage().getId());

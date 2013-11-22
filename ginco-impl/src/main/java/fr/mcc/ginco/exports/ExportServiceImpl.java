@@ -108,8 +108,7 @@ public class ExportServiceImpl implements IExportService {
 	private ArrayNaturalComparator arrayNaturalComparator;	
 
 	@Override
-	public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)
-			throws BusinessException {
+	public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus) {
 		List<ThesaurusConcept> listTT = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
 		Collections.sort(listTT, thesaurusConceptComparator);
@@ -146,8 +145,7 @@ public class ExportServiceImpl implements IExportService {
 	}
 
 	@Override
-	public List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus)
-			throws BusinessException {
+	public List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus) {
 		String thesaurusId = thesaurus.getThesaurusId();
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
 
@@ -201,7 +199,7 @@ public class ExportServiceImpl implements IExportService {
 	}
 
 	private List<FormattedLine> getHierarchicalText(Integer base,
-			ThesaurusConcept concept) throws BusinessException {
+			ThesaurusConcept concept) {
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
 
 		Set<ThesaurusConcept> thesaurusArrayConcepts = new HashSet<ThesaurusConcept>();
@@ -244,7 +242,7 @@ public class ExportServiceImpl implements IExportService {
 	}
 
 	private void addThesaurusArray(List<FormattedLine> result,
-			ThesaurusArray subOrdArray, Integer base) throws BusinessException {
+			ThesaurusArray subOrdArray, Integer base) {
 		NodeLabel nodeLabel = nodeLabelService.getByThesaurusArray(subOrdArray
 				.getIdentifier());
 		result.add(new FormattedLine(base + 1, "<"

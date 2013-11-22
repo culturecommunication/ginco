@@ -42,8 +42,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.cxf.common.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -72,20 +70,16 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class ThesaurusBuilder extends AbstractBuilder {
 
 	@Inject
-	@Named("thesaurusFormatDAO")
 	private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
 
 	@Inject
-	@Named("thesaurusTypeDAO")
 	private IThesaurusTypeDAO thesaurusTypeDAO;
-
 	
 	@Inject
 	@Named("skosThesaurusOrganizationBuilder")
 	private ThesaurusOrganizationBuilder thesaurusOrganizationBuilder;
 
 	@Inject
-	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
 	@Value("${import.default.top.concept}")
@@ -111,10 +105,8 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	 * @param skosThesaurus
 	 * @param model
 	 * @return
-	 * @throws BusinessException
 	 */
-	public Thesaurus buildThesaurus(Resource skosThesaurus, Model model)
-			throws BusinessException {
+	public Thesaurus buildThesaurus(Resource skosThesaurus, Model model){
 		Thesaurus thesaurus = new Thesaurus();
 		thesaurus.setIdentifier(skosThesaurus.getURI());
 		String title = getSimpleStringInfo(skosThesaurus, DC.title, DCTerms.title);
@@ -189,11 +181,8 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	 *
 	 * @param skosThesaurus
 	 * @return
-	 * @throws BusinessException
-	 *             if the one of the language is unknown
 	 */
-	private Set<Language> getLanguages(Resource skosThesaurus, Property prop)
-			throws BusinessException {
+	private Set<Language> getLanguages(Resource skosThesaurus, Property prop) {
 		Set<Language> langs = new HashSet<Language>();
 		StmtIterator stmtIterator = skosThesaurus.listProperties(prop);
 		while (stmtIterator.hasNext()) {

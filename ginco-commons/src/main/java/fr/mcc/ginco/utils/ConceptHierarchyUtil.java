@@ -54,10 +54,7 @@ public final class ConceptHierarchyUtil {
 	 * Calculates the common parent of a list of ThesaurusConcept
 	 * 
 	 * @param membersConcepts
-	 * @return
-	 * @throws BusinessException
-	 *             if more than one parent is found, or if no parent is found
-	 *             and the concepts are not root concepts
+	 * @return	
 	 */
 	public static ThesaurusConcept getSuperOrdinate(
 			Set<ThesaurusConcept> membersConcepts) {

@@ -43,7 +43,7 @@ import fr.mcc.ginco.dao.IThesaurusConceptGroupTypeDAO;
 /**
  * Implementation of {@link INoteTypeDAO}; basic class for DAO-related work.
  */
-@Repository("thesaurusConceptGroupTypeDAO")
+@Repository
 public class ThesaurusConceptGroupTypeDAO extends GenericHibernateDAO<ThesaurusConceptGroupType, String>
 		implements IThesaurusConceptGroupTypeDAO {
 

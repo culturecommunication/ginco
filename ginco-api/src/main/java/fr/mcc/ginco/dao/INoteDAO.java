@@ -37,7 +37,6 @@ package fr.mcc.ginco.dao;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Data Access Object for note

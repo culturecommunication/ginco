@@ -37,16 +37,13 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.IThesaurusFormatService;
 
 /**
  *
@@ -56,7 +53,6 @@ import fr.mcc.ginco.services.IThesaurusFormatService;
 public class ThesaurusFormatServiceImpl implements IThesaurusFormatService {
 	
 	@Inject
-	@Named("thesaurusFormatDAO")
     private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
 	
 	/* (non-Javadoc)

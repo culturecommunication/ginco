@@ -41,7 +41,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 
 @Transactional(readOnly=true,rollbackFor = BusinessException.class)
@@ -49,7 +48,6 @@ import java.util.List;
 public class AssociativeRelationshipRoleServiceImpl implements IAssociativeRelationshipRoleService {
 
     @Inject
-    @Named("associativeRelationshipRoleDAO")
     private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
 
     @Override
@@ -58,13 +56,12 @@ public class AssociativeRelationshipRoleServiceImpl implements IAssociativeRelat
     }
 
     @Override
-    public AssociativeRelationshipRole getRoleById(String id) throws BusinessException {
+    public AssociativeRelationshipRole getRoleById(String id) {
         return associativeRelationshipRoleDAO.getById(id);
     }
 
     @Override
-	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRoleRole()
-			throws BusinessException {
+	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRoleRole() {
 		return associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole();
 	}
     

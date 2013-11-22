@@ -38,7 +38,6 @@ import java.util.List;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Data Access Object for thesaurus_concept
@@ -61,35 +60,31 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 * a thesaurusID
 	 * @param thesaurus object Thesaurus
 	 * @return
-     * @throws BusinessException in case of error.
 	 */
-	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus, int maxResults) throws BusinessException ;
+	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus, int maxResults);
 
     /**
      * Gets the list of ThesaurusConcept which are top term given
      * a thesaurusID
      * @param thesaurus object Thesaurus
      * @return
-     * @throws BusinessException in case of error.
      */
-	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults) throws BusinessException;
+	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults);
 
 
 	/**
 	 * Gets the number of orphan concepts for a given thesaurus
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
-	long getOrphansThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+	long getOrphansThesaurusConceptCount(Thesaurus thesaurus);
 
 	/**
 	 * Gets the number of top concept for a given thesaurus
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
-	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+	long getTopTermThesaurusConceptCount(Thesaurus thesaurus);
 
 
     /**
@@ -129,40 +124,48 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	/**
 	 * @param idThesaurus
 	 * @return Number of concept in a thesaurus
-	 * @throws BusinessException
 	 */
-	Long countConcepts(String idThesaurus) throws BusinessException;
+	Long countConcepts(String idThesaurus);
 
-	Long countConceptsWoNotes(String idThesaurus) throws BusinessException;
+	/**
+	 * Counts the number of concepts without notes
+	 * @param idThesaurus
+	 * @return
+	 */
+	Long countConceptsWoNotes(String idThesaurus);
 	
+	/**
+	 * Gets a list a of the concepts whithout notes
+	 * @param idThesaurus
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
 	List<ThesaurusConcept> getConceptsWoNotes(String idThesaurus, int startIndex, int limit);
 
 	/**
 	 * Returns the number of concepts aligned to internal thesauruses
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
-	Long countConceptsAlignedToIntThes(String idThesaurus) throws BusinessException;
+	Long countConceptsAlignedToIntThes(String idThesaurus);
 
 	/**
 	 * Returns the number of concepts aligned to external thesauruses
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
-	Long countConceptsAlignedToExtThes(String idThesaurus) throws BusinessException;
+	Long countConceptsAlignedToExtThes(String idThesaurus);
 
 	/**
 	 * Returns the number of concepts aligned to my thesaurus
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
-	Long countConceptsAlignedToMyThes(String idThesaurus) throws BusinessException;
+	Long countConceptsAlignedToMyThes(String idThesaurus);
 
 	List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus,
-			int startIndex, int limit) throws BusinessException;
+			int startIndex, int limit);
 
 
 

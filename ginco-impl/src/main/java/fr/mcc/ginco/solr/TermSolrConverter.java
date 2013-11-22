@@ -48,7 +48,7 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.INoteService;
 
-@Service("termSolrConverter")
+@Service
 public class TermSolrConverter {
 
 	@Inject
@@ -80,8 +80,8 @@ public class TermSolrConverter {
 			preferred = thesaurusTerm.getPrefered();
 		}
 
-		doc.addField(SolrField.EXT_TYPE, (preferred) ? EntityType.TERM_PREF
-				: EntityType.TERM_NON_PREF);
+		doc.addField(SolrField.EXT_TYPE, (preferred) ? ExtEntityType.TERM_PREF
+				: ExtEntityType.TERM_NON_PREF);
 
 		Timestamp modifiedDate = new Timestamp(thesaurusTerm.getModified()
 				.getTime());

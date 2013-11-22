@@ -60,7 +60,7 @@ import fr.mcc.ginco.services.ThesaurusArrayServiceImpl;
 
 public class ThesaurusArrayServiceTest {
 
-    @Mock(name = "thesaurusArrayDAO")
+    @Mock
     private IThesaurusArrayDAO thesaurusArrayDAO;
 
     @Mock(name = "nodeLabelService")

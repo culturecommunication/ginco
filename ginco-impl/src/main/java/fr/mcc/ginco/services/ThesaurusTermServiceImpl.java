@@ -54,7 +54,6 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
@@ -62,11 +61,9 @@ import fr.mcc.ginco.utils.DateUtil;
 public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Inject
-	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@Inject
-	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
@@ -74,8 +71,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	private IIDGeneratorService customGeneratorService;
 
 	@Override
-	public ThesaurusTerm getThesaurusTermById(String id)
-			throws BusinessException {
+	public ThesaurusTerm getThesaurusTermById(String id) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(id);
 		if (thesaurusTerm != null) {
 			return thesaurusTerm;
@@ -93,27 +89,23 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
 
 	@Override
-	public List<ThesaurusTerm> getTermsByConceptId(String idConcept)
-			throws BusinessException {
+	public List<ThesaurusTerm> getTermsByConceptId(String idConcept){
 		return thesaurusTermDAO.findTermsByConceptId(idConcept);
 	}
 
 	@Override
-	public Long getSandboxedTermsCount(String idThesaurus)
-			throws BusinessException {
+	public Long getSandboxedTermsCount(String idThesaurus) {
 		return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
 	}
 
 	@Override
-	public Long getSandboxedValidatedTermsCount(String idThesaurus)
-			throws BusinessException {
+	public Long getSandboxedValidatedTermsCount(String idThesaurus)	 {
 		return thesaurusTermDAO.countSandboxedValidatedTerms(idThesaurus);
 	}
 
 	@Transactional(readOnly = false)
 	@Override
-	public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object)
-			throws BusinessException {
+	public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) {
 		if (object.getStatus() != TermStatusEnum.VALIDATED.getStatus()
 				&& object.getConcept() != null) {
 			throw new BusinessException(
@@ -125,8 +117,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Transactional(readOnly = false)
 	@Override
-	public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object)
-			throws BusinessException {
+	public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object){
 		if (object.getConcept() == null
 				&& (object.getStatus() == TermStatusEnum.CANDIDATE.getStatus() || object
 						.getStatus() == TermStatusEnum.REJECTED.getStatus())) {
@@ -151,14 +142,13 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
 
 	@Override
-	public Long getPreferredTermsCount(String idThesaurus)
-			throws BusinessException {
+	public Long getPreferredTermsCount(String idThesaurus) {
 		return thesaurusTermDAO.countPreferredTerms(idThesaurus);
 	}
 
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
-			String languageId) throws BusinessException {
+			String languageId) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
 				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
 						thesaurusId, languageId);
@@ -179,7 +169,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Override
 	public ThesaurusTerm getPreferredTermByTerm(String lexicalValue,
-			String thesaurusId, String languageId) throws BusinessException {
+			String thesaurusId, String languageId) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
 				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
 						thesaurusId, languageId);
@@ -209,7 +199,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Override
 	public Boolean isPreferred(String lexicalValue, String thesaurusId,
-			String languageId) throws BusinessException {
+			String languageId) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
 				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
 						thesaurusId, languageId);
@@ -238,7 +228,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	@Override
 	public List<ThesaurusTerm> importSandBoxTerms(
 			Map<String, Language> termLexicalValues, String thesaurusId,
-			int defaultStatus) throws TechnicalException, BusinessException {
+			int defaultStatus) {
 		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
 		if (targetedThesaurus != null) {

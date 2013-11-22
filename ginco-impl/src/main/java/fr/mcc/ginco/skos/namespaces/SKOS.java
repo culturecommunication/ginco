@@ -47,8 +47,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 
 public final class SKOS {
+	
+	private SKOS() {};
 
-	private static final String uri = "http://www.w3.org/2004/02/skos/core#";
+	private static final String URI = "http://www.w3.org/2004/02/skos/core#";
 
 	/**
 	 * returns the URI for this schema
@@ -56,7 +58,7 @@ public final class SKOS {
 	 * @return the URI for this schema
 	 */
 	public static String getURI() {
-		return uri;
+		return URI;
 	}
 
 	private static Model m = ModelFactory.createDefaultModel();
@@ -64,90 +66,90 @@ public final class SKOS {
 	/**
 	 * Resource for a conceptScheme
 	 */
-	public static final Resource CONCEPTSCHEME = m.createResource(uri
+	public static final Resource CONCEPTSCHEME = m.createResource(URI
 			+ "ConceptScheme");
 	/**
 	 * Resource for a Concept
 	 */
-	public static final Resource CONCEPT = m.createResource(uri + "Concept");
+	public static final Resource CONCEPT = m.createResource(URI + "Concept");
 
 	/**
 	 * prefLabel property
 	 */
-	public static final Property PREF_LABEL = m.createProperty(uri
+	public static final Property PREF_LABEL = m.createProperty(URI
 			+ "prefLabel");
 
 	/**
 	 * altLabel property
 	 */
-	public static final Property ALT_LABEL = m.createProperty(uri + "altLabel");
+	public static final Property ALT_LABEL = m.createProperty(URI + "altLabel");
 
 	/**
 	 * hiddenLabel property
 	 */
-	public static final Property HIDDEN_LABEL = m.createProperty(uri
+	public static final Property HIDDEN_LABEL = m.createProperty(URI
 			+ "hiddenLabel");
 
 	/**
 	 * broader property
 	 */
-	public static final Property BROADER = m.createProperty(uri + "broader");
+	public static final Property BROADER = m.createProperty(URI + "broader");
 
 	/**
 	 * narrower property
 	 */
-	public static final Property NARROWER = m.createProperty(uri + "narrower");
+	public static final Property NARROWER = m.createProperty(URI + "narrower");
 
 	/**
 	 * related property
 	 */
-	public static final Property RELATED = m.createProperty(uri + "related");
+	public static final Property RELATED = m.createProperty(URI + "related");
 
     /**
      * resource for Collection
      */
-    public static final Resource COLLECTION = m.createResource(uri
+    public static final Resource COLLECTION = m.createResource(URI
             + "Collection");
 
     /**
      * member property
      */
-    public static final Property MEMBER = m.createProperty(uri + "member");
+    public static final Property MEMBER = m.createProperty(URI + "member");
 
     /**
      * inScheme property
      */
-    public static final Property IN_SCHEME = m.createProperty(uri + "inScheme");
+    public static final Property IN_SCHEME = m.createProperty(URI + "inScheme");
 
 	/**
 	 * scopeNote property
 	 */
-	public static final Property SCOPE_NOTE = m.createProperty(uri + "scopeNote");
+	public static final Property SCOPE_NOTE = m.createProperty(URI + "scopeNote");
 
 	/**
 	 * changeNote property
 	 */
-	public static final Property CHANGE_NOTE = m.createProperty(uri + "changeNote");
+	public static final Property CHANGE_NOTE = m.createProperty(URI + "changeNote");
 
 	/**
 	 * definition property
 	 */
-	public static final Property DEFINITION = m.createProperty(uri + "definition");
+	public static final Property DEFINITION = m.createProperty(URI + "definition");
 
 	/**
 	 * editorialNote property
 	 */
-	public static final Property EDITORIAL_NOTE = m.createProperty(uri + "editorialNote");
+	public static final Property EDITORIAL_NOTE = m.createProperty(URI + "editorialNote");
 
 	/**
 	 * example property
 	 */
-	public static final Property EXAMPLE = m.createProperty(uri + "example");
+	public static final Property EXAMPLE = m.createProperty(URI + "example");
 
 	/**
 	 * historyNote property
 	 */
-	public static final Property HISTORY_NOTE = m.createProperty(uri + "historyNote");
+	public static final Property HISTORY_NOTE = m.createProperty(URI + "historyNote");
 
 	/**
 	 * MAP of all notes types
@@ -164,38 +166,38 @@ public final class SKOS {
 	/**
 	 * notation property
 	 */
-	public static final Property NOTATION = m.createProperty(uri + "notation");
+	public static final Property NOTATION = m.createProperty(URI + "notation");
 
 	/**
 	 * exactMatch property
 	 */
-	public static final Property EXACT_MATCH = m.createProperty(uri + "exactMatch");
+	public static final Property EXACT_MATCH = m.createProperty(URI + "exactMatch");
 
 	/**
 	 * closeMatch property
 	 */
-	public static final Property CLOSE_MATCH = m.createProperty(uri + "closeMatch");
+	public static final Property CLOSE_MATCH = m.createProperty(URI + "closeMatch");
 
 	/**
 	 * narrowMatch property
 	 */
-	public static final Property NARROW_MATCH = m.createProperty(uri + "narrowMatch");
+	public static final Property NARROW_MATCH = m.createProperty(URI + "narrowMatch");
 
 	/**
 	 * broadMatch property
 	 */
-	public static final Property BROAD_MATCH = m.createProperty(uri + "broadMatch");
+	public static final Property BROAD_MATCH = m.createProperty(URI + "broadMatch");
 
 	/**
 	 * relatedMatch property
 	 */
-	public static final Property RELATED_MATCH = m.createProperty(uri + "relatedMatch");
+	public static final Property RELATED_MATCH = m.createProperty(URI + "relatedMatch");
 	
 	
 	/**
 	 * hasTopConcept
 	 */
-	public static final Property HAS_TOP_CONCEPT = m.createProperty(uri + "hasTopConcept");
+	public static final Property HAS_TOP_CONCEPT = m.createProperty(URI + "hasTopConcept");
 
 	/**
 	 * MAP of all alignment types

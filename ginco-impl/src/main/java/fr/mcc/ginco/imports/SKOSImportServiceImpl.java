@@ -85,11 +85,9 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private static Logger logger = LoggerFactory.getLogger(SKOSImportServiceImpl.class);
 
 	@Inject
-	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
-	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Inject
@@ -122,7 +120,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	 */
 	@Override
 	public Map<Thesaurus, Set<Alignment>> importSKOSFile(String fileContent,
-			String fileName, File tempDir) throws BusinessException {
+			String fileName, File tempDir) {
 
 		Map<Thesaurus, Set<Alignment>> res = new HashMap<Thesaurus, Set<Alignment>>();
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
@@ -218,8 +216,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		f.delete();
 	}
 
-	private URI writeTempFile(String fileContent, String fileName, File tempDir)
-			throws BusinessException {
+	private URI writeTempFile(String fileContent, String fileName, File tempDir) {
 		logger.debug("Writing temporary file for import");
 
 		File file;

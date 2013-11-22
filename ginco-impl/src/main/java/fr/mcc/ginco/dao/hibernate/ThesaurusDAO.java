@@ -39,7 +39,7 @@ import org.springframework.stereotype.Repository;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 
-@Repository("thesaurusDAO")
+@Repository
 public class ThesaurusDAO extends GenericHibernateDAO<Thesaurus, String> implements IThesaurusDAO  {
 
 	public ThesaurusDAO() {

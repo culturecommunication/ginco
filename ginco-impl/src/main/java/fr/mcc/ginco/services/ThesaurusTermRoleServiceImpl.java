@@ -37,22 +37,18 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.IThesaurusTermRoleService;
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("thesaurusTermRoleService")
 public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
 
     @Inject
-    @Named("thesaurusTermRoleDAO")
     private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
     
     
@@ -60,7 +56,7 @@ public class ThesaurusTermRoleServiceImpl implements IThesaurusTermRoleService {
      * @see fr.mcc.ginco.IThesaurusTermRoleService#getDefaultThesaurusTermRole()
      */
     @Override
-    public ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException {
+    public ThesaurusTermRole getDefaultThesaurusTermRole() {
         return thesaurusTermRoleDAO.getDefaultThesaurusTermRole();
     }
 

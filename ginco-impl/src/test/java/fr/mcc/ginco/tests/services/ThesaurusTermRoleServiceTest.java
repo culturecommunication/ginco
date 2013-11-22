@@ -50,7 +50,7 @@ import fr.mcc.ginco.services.ThesaurusTermRoleServiceImpl;
 
 public class ThesaurusTermRoleServiceTest {
 
-	@Mock(name = "thesaurusTermRoleDAO")
+	@Mock
 	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
 
 	@InjectMocks	

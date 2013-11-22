@@ -51,7 +51,7 @@ import fr.mcc.ginco.services.ThesaurusTypeServiceImpl;
 
 public class ThesaurusTypeServiceTest {	
 	
-	@Mock(name = "thesaurusTypeDAO")
+	@Mock
     private IThesaurusTypeDAO thesaurusTypeDAO;
 	
 	@InjectMocks

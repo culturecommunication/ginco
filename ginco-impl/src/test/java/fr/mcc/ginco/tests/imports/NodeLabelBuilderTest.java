@@ -61,7 +61,7 @@ import fr.mcc.ginco.imports.NodeLabelBuilder;
 
 public class NodeLabelBuilderTest {
 	@Inject
-	@Mock(name = "languagesDAO")
+	@Mock
 	private ILanguageDAO languagesDAO;
 
 	@InjectMocks

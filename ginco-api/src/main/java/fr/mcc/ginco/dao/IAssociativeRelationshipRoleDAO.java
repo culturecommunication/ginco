@@ -35,7 +35,6 @@
 package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Data Access Object for associative_relationship_role
@@ -44,9 +43,8 @@ public interface IAssociativeRelationshipRoleDAO extends IGenericDAO<Associative
 	/**
 	 * Returns the default associative relationship role
 	 * @return
-	 * @throws BusinessException if there is no default role defined
 	 */
-	AssociativeRelationshipRole getDefaultAssociativeRelationshipRole() throws BusinessException;
+	AssociativeRelationshipRole getDefaultAssociativeRelationshipRole();
 	
 	/**
 	 * Return an AssociativeRelationshipRole by it's skosLabel

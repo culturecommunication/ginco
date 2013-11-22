@@ -49,14 +49,14 @@ import fr.mcc.ginco.exceptions.BusinessException;
 /**
  *
  */
-@Repository("customTermAttributeTypeDAO")
+@Repository
 public class CustomTermAttributeTypeDAO extends
 		GenericHibernateDAO<CustomTermAttributeType, Integer> implements
 		ICustomTermAttributeTypeDAO {
 
 	@Override
 	public List<CustomTermAttributeType> getAttributesByThesaurus(
-			Thesaurus thesaurus) throws BusinessException {
+			Thesaurus thesaurus) {
 		Criteria criteria = getCurrentSession().createCriteria(
 				CustomTermAttributeType.class).add(
 				Restrictions.eq("thesaurus.identifier",

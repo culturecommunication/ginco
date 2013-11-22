@@ -51,7 +51,7 @@ import fr.mcc.ginco.services.LanguagesServiceImpl;
 
 public class LanguagesServiceTest {
 
-	@Mock(name = "languagesDAO")
+	@Mock
 	private ILanguageDAO languagesDAO;
 
 	@InjectMocks

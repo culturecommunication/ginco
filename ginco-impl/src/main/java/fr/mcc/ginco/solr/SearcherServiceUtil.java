@@ -44,7 +44,7 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.utils.DateUtil;
 
-@Service("searcherServiceUtil")
+@Service
 public class SearcherServiceUtil {
 
 	private static final String CLOSE_PARENTHESIS = ")";
@@ -92,42 +92,33 @@ public class SearcherServiceUtil {
 		return result;
 	}
 
-	/**
-	 * {type: 1, typeLabel:me.xConceptLabel}, {type: 2,
-	 * typeLabel:me.xTermLabel}, {type: 3, typeLabel:me.xNonPreferredTermLabel},
-	 * {type: 4, typeLabel: me.xPreferredTermLabel},
-	 * {type: 5, typeLabel: me.xNoteLabel}
-	 *
-	 * @param type
-	 * @return
-	 */
 	public String getExtTypeQuery(Integer type) {
 		if (type == null) {
 			return BLANK;
 		}
-		if (type == -1) {
+		if (type == SearchEntityType.ALL_TYPE) {
 			return BLANK;
 		}
 
 		String query = BLANK;
-		if (type == 1) {
-			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + EntityType.CONCEPT;
-		} else if (type == 2) {
+		if (type == SearchEntityType.CONCEPT) {
+			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + ExtEntityType.CONCEPT;
+		} else if (type == SearchEntityType.TERM) {
 			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + OPEN_PARENTHESIS
-					+ EntityType.TERM_PREF + OR + EntityType.TERM_NON_PREF
+					+ ExtEntityType.TERM_PREF + OR + ExtEntityType.TERM_NON_PREF
 					+ CLOSE_PARENTHESIS;
-		} else if (type == 3) {
-			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + EntityType.TERM_NON_PREF;
-		} else if (type == 4) {
-			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + EntityType.TERM_PREF;
-		} else if (type == 5) {
+		} else if (type == SearchEntityType.TERM_NON_PREF) {
+			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + ExtEntityType.TERM_NON_PREF;
+		} else if (type == SearchEntityType.TERM_PREF) {
+			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + ExtEntityType.TERM_PREF;
+		} else if (type == SearchEntityType.NOTE) {
 			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + OPEN_PARENTHESIS
-					+ EntityType.NOTE + OR
-					+ EntityType.NOTE_DEFINITION + OR
-					+ EntityType.NOTE_EDITORIAL + OR
-					+ EntityType.NOTE_EXAMPLE + OR
-					+ EntityType.NOTE_HISTORY + OR
-					+ EntityType.NOTE_SCOPE
+					+ ExtEntityType.NOTE + OR
+					+ ExtEntityType.NOTE_DEFINITION + OR
+					+ ExtEntityType.NOTE_EDITORIAL + OR
+					+ ExtEntityType.NOTE_EXAMPLE + OR
+					+ ExtEntityType.NOTE_HISTORY + OR
+					+ ExtEntityType.NOTE_SCOPE
 					+ CLOSE_PARENTHESIS;
 		}
 

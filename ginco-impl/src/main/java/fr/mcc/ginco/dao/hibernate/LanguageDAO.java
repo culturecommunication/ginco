@@ -48,7 +48,7 @@ import fr.mcc.ginco.dao.ILanguageDAO;
 /**
  * Implementation of {@link ILanguageDAO}; basic class for DAO-related work.
  */
-@Repository("languagesDAO")
+@Repository
 public class LanguageDAO extends GenericHibernateDAO<Language, String>
 		implements ILanguageDAO {
 	

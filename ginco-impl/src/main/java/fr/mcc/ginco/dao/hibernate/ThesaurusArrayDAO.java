@@ -47,7 +47,7 @@ import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 /**
  * Implementation of {@link IThesaurusArrayDAO}
  */
-@Repository("thesaurusArrayDAO")
+@Repository
 public class ThesaurusArrayDAO extends GenericHibernateDAO<ThesaurusArray, String> implements IThesaurusArrayDAO  {
 
 	public ThesaurusArrayDAO() {

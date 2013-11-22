@@ -48,7 +48,7 @@ import fr.mcc.ginco.dao.ICustomTermAttributeDAO;
 /**
  *
  */
-@Repository("customTermAttributeDAO")
+@Repository
 public class CustomTermAttributeDAO extends
 		GenericHibernateDAO<CustomTermAttribute, String> implements
 		ICustomTermAttributeDAO {

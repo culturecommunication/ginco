@@ -35,7 +35,6 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link NodeLabel} objects, contains basic methods
@@ -44,6 +43,12 @@ import fr.mcc.ginco.exceptions.BusinessException;
  * @see fr.mcc.ginco.beans.NodeLabel
  */
 public interface INodeLabelService {
+	
+	/**
+	 * Gets a node label by its ID
+	 * @param id
+	 * @return
+	 */
 	NodeLabel getById(Integer id);
 
 	/**
@@ -54,7 +59,12 @@ public interface INodeLabelService {
 	 */
 	NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId);
 
-	NodeLabel updateOrCreate(NodeLabel nodeLabel) throws BusinessException;
+	/**
+	 * Update a node label
+	 * @param nodeLabel
+	 * @return
+	 */
+	NodeLabel updateOrCreate(NodeLabel nodeLabel);
 
 	/**
 	 * Gets a node label by thesaurus array id

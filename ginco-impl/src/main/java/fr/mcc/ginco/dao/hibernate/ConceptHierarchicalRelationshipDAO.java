@@ -43,7 +43,7 @@ import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
  * Implementation of the data access object to the hierarchical_relationship database table
  * 
  */
-@Repository("conceptHierarchicalRelationshipDAO")
+@Repository
 public class ConceptHierarchicalRelationshipDAO extends
 		GenericHibernateDAO<ConceptHierarchicalRelationship, ConceptHierarchicalRelationship.Id> implements
 		IConceptHierarchicalRelationshipDAO {

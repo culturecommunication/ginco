@@ -77,11 +77,9 @@ public class TermBuilder extends AbstractBuilder {
 	private IIDGeneratorService generatorService;
 
 	@Inject
-	@Named("thesaurusTermRoleDAO")
 	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
 
 	@Inject
-	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
 	@Value("${ginco.default.language}")
@@ -92,8 +90,7 @@ public class TermBuilder extends AbstractBuilder {
 	}
 
 	private ThesaurusTerm buildTerm(Statement stmt,
-			Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred, boolean hidden)
-			throws BusinessException {
+			Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred, boolean hidden) {
 		logger.debug("building term " + stmt.getString());
 		ThesaurusTerm term = new ThesaurusTerm();
 		term.setConcept(concept);
@@ -135,11 +132,9 @@ public class TermBuilder extends AbstractBuilder {
 	 * @param thesaurus
 	 * @param concept
 	 * @return
-	 * @throws BusinessException
 	 */
 	public List<ThesaurusTerm> buildTerms(Resource skosConcept,
-			Thesaurus thesaurus, ThesaurusConcept concept)
-			throws BusinessException {
+			Thesaurus thesaurus, ThesaurusConcept concept) {
 		
 		logger.debug("building terms for concept " + concept.getIdentifier());
 

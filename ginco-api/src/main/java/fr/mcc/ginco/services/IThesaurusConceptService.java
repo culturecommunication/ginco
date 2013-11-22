@@ -42,7 +42,6 @@ import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusConcept} objects, contains basic
@@ -64,7 +63,7 @@ public interface IThesaurusConceptService {
      * @param ids : List of ids
      * @return
      */
-    Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids) throws BusinessException;
+    Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids);
 
 	/**
 	 * Get single ThesaurusConcept by its id.
@@ -81,8 +80,7 @@ public interface IThesaurusConceptService {
 	 * @param thesaurusId
 	 * @return
 	 */
-	List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId, int maxResults)
-			throws BusinessException;
+	List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId, int maxResults);
 
 	/**
 	 * Get the ThesaurusConcepts which are not top term in a given thesaurus
@@ -90,37 +88,31 @@ public interface IThesaurusConceptService {
 	 * @param thesaurusId
 	 * @return
 	 */
-	List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId)
-			throws BusinessException;
+	List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId);
 
 	/**
 	 * Gets the preferred term of a concept
 	 *
 	 * @param conceptId
 	 * @return
-	 * @throws BusinessException
 	 */
-	ThesaurusTerm getConceptPreferredTerm(String conceptId)
-			throws BusinessException;
+	ThesaurusTerm getConceptPreferredTerm(String conceptId);
 
 	/**
 	 * Gets the list of the preferred terms of a concept
 	 *
 	 * @param conceptId
 	 * @return
-	 * @throws BusinessException
 	 */
-	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId)
-			throws BusinessException;
+	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId);
 
 	/**
 	 * Gets the label of a concept with title@lang notation
 	 *
 	 * @param conceptId
 	 * @return
-	 * @throws BusinessException
 	 */
-	String getConceptLabel(String conceptId) throws BusinessException;
+	String getConceptLabel(String conceptId);
 
 	/**
 	 * Update a single Thesaurus Concept Object
@@ -132,10 +124,9 @@ public interface IThesaurusConceptService {
 	 * @param The list of children concepts we must detach (must not be still children of our concept)
 	 * @param The list of alignemnts where this concept is the source
 	 * @return The updated concept
-	 * @throws BusinessException
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<ThesaurusConcept> childrenConceptToAttach, List<Alignment> alignments) throws BusinessException;
+			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<ThesaurusConcept> childrenConceptToAttach, List<Alignment> alignments);
 
 
 	/**
@@ -144,8 +135,7 @@ public interface IThesaurusConceptService {
 	 * @param thesaurusId
 	 * @return
 	 */
-	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId)
-			throws BusinessException;
+	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId);
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
@@ -154,28 +144,23 @@ public interface IThesaurusConceptService {
 	 * @param maxResults
 	 * @return
 	 */
-	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, int maxResults)
-			throws BusinessException;
+	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, int maxResults);
 
 	/**
 	 * Get the number of orphan thesaurus concept for a given thesaurusId
 	 *
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 */
-	long getOrphanThesaurusConceptsCount(String thesaurusId)
-			throws BusinessException;
+	long getOrphanThesaurusConceptsCount(String thesaurusId);
 
 	/**
 	 * Get the number of top concept for a given thesaurus
 	 *
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 */
-	long getTopTermThesaurusConceptsCount(String thesaurusId)
-			throws BusinessException;
+	long getTopTermThesaurusConceptsCount(String thesaurusId);
 
     /**
      * Search children of concept with given id (orphan or not).
@@ -216,7 +201,7 @@ public interface IThesaurusConceptService {
 	 * @param object
 	 * @return
 	 */
-	ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object) throws BusinessException;
+	ThesaurusConcept destroyThesaurusConcept(ThesaurusConcept object);
 
 
 	/**
@@ -270,8 +255,7 @@ public interface IThesaurusConceptService {
      * @return 2 if first concept is child of second concept
      */
 
-    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId)
-    		throws BusinessException;
+    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId);
 
     /**
 	 * Returns the list of not preferred ThesaurusTerms by a concept
@@ -279,8 +263,7 @@ public interface IThesaurusConceptService {
 	 * @param conceptId
 	 * @return list of not preferred terms
 	 */
-	List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId)
-			throws BusinessException;
+	List<ThesaurusTerm> getConceptNotPreferredTerms(String conceptId);
 
 	/**
 	 * Returns the status of a concept
@@ -288,7 +271,7 @@ public interface IThesaurusConceptService {
 	 * @param conceptId
 	 * @return the status of a concept
 	 */
-	int getStatusByConceptId(String conceptId) throws BusinessException;
+	int getStatusByConceptId(String conceptId);
 
 
 	/**

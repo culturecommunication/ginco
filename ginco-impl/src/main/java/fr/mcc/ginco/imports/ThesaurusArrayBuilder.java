@@ -68,7 +68,6 @@ import fr.mcc.ginco.utils.ConceptHierarchyUtil;
 public class ThesaurusArrayBuilder extends AbstractBuilder {	
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	
@@ -85,10 +84,9 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	 * @param model
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
 	public ThesaurusArray buildArray(Resource skosCollection, Model model,
-			Thesaurus thesaurus) throws BusinessException {
+			Thesaurus thesaurus) {
 
 		ThesaurusArray array = new ThesaurusArray();
 		array.setIdentifier(skosCollection.getURI());
@@ -136,10 +134,9 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	 * @param skosCollection
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
 	public List<ThesaurusArray> getChildrenArrays(Resource skosCollection,
-			Thesaurus thesaurus) throws BusinessException {
+			Thesaurus thesaurus) {
 
 		StmtIterator stmtMembersItr = skosCollection
 				.listProperties(SKOS.MEMBER);

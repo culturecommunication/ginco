@@ -72,19 +72,15 @@ import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 @Service("skosConceptsBuilder")
 public class ConceptsBuilder extends AbstractBuilder {
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
-	@Named("associativeRelationshipDAO")
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
 
 	@Inject
-	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@Inject
-	@Named("noteDAO")
 	private INoteDAO noteDAO;
 
 	@Inject
@@ -96,15 +92,12 @@ public class ConceptsBuilder extends AbstractBuilder {
 	private ConceptNoteBuilder conceptNoteBuilder;
 
 	@Inject
-	@Named("alignmentDAO")
 	private IAlignmentDAO alignmentDAO;
 
 	@Inject
-	@Named("alignmentConceptDAO")
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
 
 	@Inject
-	@Named("externalThesaurusDAO")
 	private IExternalThesaurusDAO externalThesaurusDAO;
 	
 	@Inject

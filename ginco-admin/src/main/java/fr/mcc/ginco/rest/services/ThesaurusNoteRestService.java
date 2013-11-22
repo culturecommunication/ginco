@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,6 +58,7 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.extjs.view.NoteParentEntityResponse;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusNoteViewConverter;
 import fr.mcc.ginco.services.INoteService;
@@ -196,10 +199,12 @@ public class ThesaurusNoteRestService {
 			if (!note.getLexicalValue().isEmpty() && note.getLanguage() != null && note.getNoteType() != null) {
 				resultNotes.add(noteService.createOrUpdateNote(note));
 				noteIndexerService.addNote(note);
-				if (note.getTerm() != null)
+				if (note.getTerm() != null){
 					termIndexerService.addTerm(note.getTerm());
-				if (note.getConcept() != null)
+				}
+				if (note.getConcept() != null){
 					conceptIndexerService.addConcept(note.getConcept());
+				}
 			} else {
 				throw new BusinessException("Failed to update the note : fields required not filled in", "note-update-failed-empty-fields");
 			}
@@ -227,10 +232,12 @@ public class ThesaurusNoteRestService {
 			if (note.getLexicalValue() != null && note.getLanguage() != null && note.getNoteType() != null) {
 				resultNotes.add(noteService.createOrUpdateNote(note));
 				noteIndexerService.addNote(note);
-				if (note.getTerm() != null)
+				if (note.getTerm() != null){
 					termIndexerService.addTerm(note.getTerm());
-				if (note.getConcept() != null)
+				}
+				if (note.getConcept() != null){
 					conceptIndexerService.addConcept(note.getConcept());
+				}
 			} else
 			{
 				throw new BusinessException("Failed to update the note : fields required not filled in", "note-update-failed-empty-fields");
@@ -256,13 +263,39 @@ public class ThesaurusNoteRestService {
 		for (Note note : notes) {
 				resultNotes.add(noteService.deleteNote(note));
 				noteIndexerService.removeNote(note);
-				if (note.getTerm() != null)
+				if (note.getTerm() != null){
 					termIndexerService.addTerm(note.getTerm());
-				if (note.getConcept() != null)
+				}
+				if (note.getConcept() != null){
 					conceptIndexerService.addConcept(note.getConcept());
+				}
 		}
 
 		return new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(resultNotes));
+	}
+
+	@GET
+	@Path("/getNoteParentEntity")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String getNoteParentEntity(
+			@QueryParam("noteId") String noteId)
+					throws IOException {
+
+		NoteParentEntityResponse response = new NoteParentEntityResponse();
+		Note note = noteService.getNoteById(noteId);
+		if (note.getTerm() != null){
+			response.setParentEntityId(note.getTerm().getIdentifier());
+			response.setIsConcept(false);
+		}
+		if (note.getConcept() != null){
+			response.setParentEntityId(note.getConcept().getIdentifier());
+			response.setIsConcept(true);
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+				response));
+		return serialized;
 	}
 
 }

@@ -44,7 +44,7 @@ import java.util.List;
 /**
  * Implementation of {@link INoteTypeDAO}; basic class for DAO-related work.
  */
-@Repository("noteTypeDAO")
+@Repository
 public class NoteTypeDAO extends GenericHibernateDAO<NoteType, String>
 		implements INoteTypeDAO {
 

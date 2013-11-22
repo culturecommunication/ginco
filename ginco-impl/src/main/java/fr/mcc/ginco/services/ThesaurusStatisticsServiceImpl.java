@@ -35,7 +35,6 @@
 package fr.mcc.ginco.services;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,32 +58,25 @@ public class ThesaurusStatisticsServiceImpl implements IThesaurusStatisticsServi
 
 
 	@Inject
-	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
-	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO termDAO;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO conceptDAO;
 
 	@Inject
-	@Named("splitNonPreferredTermDAO")
 	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 
 	@Inject
-	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
 	@Inject
-	@Named("thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 
 	@Override
 	public ThesaurusStatistics getStatistics(String thesaurusId) {
-		// TODO Auto-generated method stub
 		Thesaurus th = thesaurusDAO.getById(thesaurusId);
 		if (th == null) {
 			throw new BusinessException("Invalid thesaurusId : " + thesaurusId, "invalid-thesaurus-id");

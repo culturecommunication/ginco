@@ -57,7 +57,7 @@ public class NoteIndexerServiceTest {
 	@InjectMocks
 	private  NoteIndexerServiceImpl noteIndexerService;
 
-	@Mock(name = "noteSolrConverter")
+	@Mock
 	private NoteSolrConverter noteSolrConverter;
 
 	@Mock(name = "solrServer")

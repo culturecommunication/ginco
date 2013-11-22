@@ -38,7 +38,6 @@ import java.util.List;
 
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.UserRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link UserRole} objects, contains basic methods
@@ -78,7 +77,7 @@ public interface IUserRoleService {
 	 * @param userRole
 	 * @return The created or updated object
 	 */
-	UserRole updateUserRole(UserRole userRole) throws BusinessException;
+	UserRole updateUserRole(UserRole userRole);
 	
 	/**
 	 * removes a UserRole

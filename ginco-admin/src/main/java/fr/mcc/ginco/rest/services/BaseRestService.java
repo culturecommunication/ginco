@@ -67,6 +67,7 @@ import fr.mcc.ginco.extjs.view.pojo.UserThesaurusRole;
 import fr.mcc.ginco.extjs.view.utils.ArraysGenerator;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.FolderGenerator;
+import fr.mcc.ginco.extjs.view.utils.FoldersGenerator;
 import fr.mcc.ginco.extjs.view.utils.GroupsGenerator;
 import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
 import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
@@ -87,8 +88,8 @@ public class BaseRestService {
 	private IThesaurusService thesaurusService;
 
 	@Inject
-	@Named("folderGenerator")
-	private FolderGenerator folderGenerator;
+	@Named("foldersGenerator")
+	private FoldersGenerator foldersGenerator;
 
 	@Inject
 	@Named("orphansGenerator")
@@ -162,7 +163,7 @@ public class BaseRestService {
 				if (thesaurus.getCreator() != null) {
 					node.setOrganizationName(thesaurus.getCreator().getName());
 				}
-				node.setChildren(folderGenerator.generateFolders(thesaurus
+				node.setChildren(foldersGenerator.generateFolders(thesaurus
 						.getIdentifier()));
 				node.setDisplayable(true);
 				if (thesaurus.isArchived() != null

@@ -62,7 +62,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.enums.ConceptHierarchicalRelationshipRoleEnum;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.skos.namespaces.ISOTHES;
@@ -86,7 +85,6 @@ public class ConceptBuilder extends AbstractBuilder {
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
 
 	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 	
 	@Inject
@@ -107,10 +105,9 @@ public class ConceptBuilder extends AbstractBuilder {
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
 	public ThesaurusConcept buildConcept(Resource skosConcept,
-			Thesaurus thesaurus) throws BusinessException {
+			Thesaurus thesaurus) {
 		logger.debug("Building concept with uri : " + skosConcept.getURI());
 		ThesaurusConcept concept = new ThesaurusConcept();
 		concept.setIdentifier(skosConcept.getURI());
@@ -174,11 +171,10 @@ public class ConceptBuilder extends AbstractBuilder {
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
 	public Set<AssociativeRelationship> buildConceptAssociativerelationship(
 			Resource skosConcept, Thesaurus thesaurus,
-			List<ObjectProperty> relatedTypes) throws BusinessException {
+			List<ObjectProperty> relatedTypes) {
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());
 		StmtIterator stmtRelatedtItr = skosConcept.listProperties(SKOS.RELATED);
 		Set<AssociativeRelationship> relationshipsLeft = new HashSet<AssociativeRelationship>();
@@ -224,11 +220,10 @@ public class ConceptBuilder extends AbstractBuilder {
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
 	public Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> buildConceptHierarchicalRelationships(
 			Resource skosConcept, Thesaurus thesaurus,
-			List<ObjectProperty> broaderTypes) throws BusinessException {
+			List<ObjectProperty> broaderTypes) {
 		logger.debug("Building relationships for concept : "
 				+ skosConcept.getURI());
 		Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> res = new HashMap<ThesaurusConcept, List<ConceptHierarchicalRelationship>>();
@@ -295,10 +290,9 @@ public class ConceptBuilder extends AbstractBuilder {
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
 	public ThesaurusConcept buildConceptRoot(Resource skosConcept,
-			Thesaurus thesaurus) throws BusinessException {
+			Thesaurus thesaurus) {
 		logger.debug("Building root concepts for concept : "
 				+ skosConcept.getURI());
 		ThesaurusConcept concept = builtConcepts.get(skosConcept.getURI());

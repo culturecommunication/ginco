@@ -34,22 +34,20 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.dao.INodeLabelDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
+import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.dao.INodeLabelDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("nodeLabelService")
 public class NodeLabelServiceImpl implements INodeLabelService {
 	
 	@Inject
-	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
 
 
@@ -70,7 +68,7 @@ public class NodeLabelServiceImpl implements INodeLabelService {
 
 	@Transactional(readOnly=false)
     @Override
-    public NodeLabel updateOrCreate(NodeLabel nodeLabel) throws BusinessException {
+    public NodeLabel updateOrCreate(NodeLabel nodeLabel) {
         return nodeLabelDAO.update(nodeLabel);
     }
 }

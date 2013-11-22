@@ -120,7 +120,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 
 
 	@Override
-	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {
+	public File getSKOSExport(Thesaurus thesaurus){
 
 		List<ThesaurusConcept> tt = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());

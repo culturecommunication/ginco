@@ -34,17 +34,32 @@
  */
 package fr.mcc.ginco.solr;
 
-/**
- *
- */
-public final class EntityType {
-    public static final int CONCEPT = 1;
-    public static final int TERM_PREF = 2;
-    public static final int TERM_NON_PREF = 3;
-    public static final int NOTE = 4;
-    public static final int NOTE_DEFINITION = 5;
-    public static final int NOTE_EDITORIAL = 6;
-    public static final int NOTE_EXAMPLE = 7;
-    public static final int NOTE_HISTORY = 8;
-    public static final int NOTE_SCOPE = 9;
+import java.util.List;
+
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.exceptions.TechnicalException;
+
+public interface IComplexConceptIndexerService {
+	/**
+     * Takes an {@link SplitNonPreferredTerm} and adds it to index
+     *
+     * @param Updated/created {@link SplitNonPreferredTerm} to save to index
+     * @throws TechnicalException
+     */
+	void addComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException;
+
+	/**
+     * Takes a list of {@link SplitNonPreferredTerm} and adds it to index
+     *
+     * @param List of updated/created (@link Note) to save to index
+     * @throws TechnicalException
+     */
+	void addComplexConcepts(List<SplitNonPreferredTerm> complexConcepts) throws TechnicalException;
+
+	/**
+     * Remove {@link SplitNonPreferredTerm} from search index
+     * @param {@link SplitNonPreferredTerm}
+     * @throws TechnicalException
+     */
+	void removeComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException;
 }

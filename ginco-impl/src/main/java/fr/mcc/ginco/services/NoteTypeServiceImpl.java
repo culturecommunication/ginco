@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +50,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class NoteTypeServiceImpl implements INoteTypeService {
 	
 	@Inject
-	@Named("noteTypeDAO")
 	private INoteTypeDAO noteTypeDAO;
 
 	/* (non-Javadoc)

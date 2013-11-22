@@ -37,7 +37,6 @@ package fr.mcc.ginco.exports;
 import java.io.File;
 
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service provides function to use for SKOS export
@@ -49,7 +48,7 @@ public interface ISKOSExportService {
      * Get RDF-based export for given thesaurus.
      * @param thesaurus
      */
-    File getSKOSExport(Thesaurus thesaurus) throws BusinessException;
+    File getSKOSExport(Thesaurus thesaurus);
 
    
 }

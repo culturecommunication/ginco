@@ -44,7 +44,7 @@ import org.springframework.stereotype.Repository;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 
-@Repository("thesaurusConceptGroupDAO")
+@Repository
 public class ThesaurusConceptGroupDAO extends GenericHibernateDAO<ThesaurusConceptGroup, String> implements IThesaurusConceptGroupDAO  {
 
 	public ThesaurusConceptGroupDAO() {

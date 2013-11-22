@@ -67,7 +67,7 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 	 * @return the list of all existing thesaurus
 	 */
 	@Override
-	final public List<ReducedThesaurus> getAllThesaurus() {
+	public final List<ReducedThesaurus> getAllThesaurus() {
 		List<ReducedThesaurus> results = new ArrayList<ReducedThesaurus>();
 
 		for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
@@ -88,7 +88,7 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 	 * @return full thesaurus informations
 	 */
 	@Override
-	final public FullThesaurus getThesaurusById(String id) {
+	public final FullThesaurus getThesaurusById(String id) {
 		Thesaurus thesaurus = thesaurusService.getThesaurusById(id);
 		FullThesaurus fullThesaurus = new FullThesaurus();
 		fullThesaurus.setContributor(thesaurus.getContributor());
@@ -128,7 +128,7 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 		return fullThesaurus;
 	}	
 
-	final public void setThesaurusService(IThesaurusService thesaurusService) {
+	public final void setThesaurusService(IThesaurusService thesaurusService) {
 		this.thesaurusService = thesaurusService;
 	}
 

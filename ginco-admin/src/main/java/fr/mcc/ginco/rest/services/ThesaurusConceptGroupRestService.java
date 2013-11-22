@@ -47,6 +47,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -129,7 +130,8 @@ public class ThesaurusConceptGroupRestService {
 	public ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> getAllConceptGroupsByThesaurusId(
 			@QueryParam("excludedConceptGroupId") String excludedConceptGroupId,
 			@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
-		if ("".equals(excludedConceptGroupId)) {
+		
+		if (StringUtils.isEmpty(excludedConceptGroupId)) {
 			excludedConceptGroupId = null;
 		}
 		List<ThesaurusConceptGroup> allGroups =  thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(excludedConceptGroupId, thesaurusId);

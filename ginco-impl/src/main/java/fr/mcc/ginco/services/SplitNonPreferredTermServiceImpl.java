@@ -38,7 +38,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,11 +52,10 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermService {
 
     @Inject
-    @Named("splitNonPreferredTermDAO")
     private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 
     @Override
-    public SplitNonPreferredTerm getSplitNonPreferredTermById(String id) throws BusinessException {
+    public SplitNonPreferredTerm getSplitNonPreferredTermById(String id){
     	SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermDAO.getById(id);
         if (thesaurusTerm != null) {
             return thesaurusTerm;
@@ -69,7 +67,7 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
     @Transactional(readOnly=false)
 	@Override
 	public SplitNonPreferredTerm updateSplitNonPreferredTerm(
-			SplitNonPreferredTerm object) throws BusinessException {
+			SplitNonPreferredTerm object) {
     	if (object.getPreferredTerms().size()<2)
     	{
     		throw new BusinessException("A complex term must have at least 2 preferred term", "invalid-complex-term");
@@ -81,13 +79,11 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
 	@Override
 	public List<SplitNonPreferredTerm> getSplitNonPreferredTermList(
 			Integer startIndex, Integer limit, String idThesaurus) {
-		// TODO Auto-generated method stub
 		return splitNonPreferredTermDAO.findItems(startIndex, limit, idThesaurus);
 	}
 
 	@Override
 	public Long getSplitNonPreferredTermCount(String idThesaurus) {
-		// TODO Auto-generated method stub
 		return splitNonPreferredTermDAO.countItems(idThesaurus);
 	}
 
@@ -101,6 +97,11 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
         } else {
             throw new BusinessException("It's not possible to delete a complex concept  with a status different from candidate or rejected", "delete-complex-concept");
         }
+	}
+
+	@Override
+	public List<SplitNonPreferredTerm> getAllSplitNonPreferredTerms(){
+		return splitNonPreferredTermDAO.findAll();
 	}
 
 }

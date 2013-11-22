@@ -43,7 +43,7 @@ import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Repository("thesaurusTermRoleDAO")
+@Repository
 public class ThesaurusTermRoleDAO extends GenericHibernateDAO<ThesaurusTermRole, String> implements IThesaurusTermRoleDAO  {
 
 	public ThesaurusTermRoleDAO() {
@@ -53,7 +53,7 @@ public class ThesaurusTermRoleDAO extends GenericHibernateDAO<ThesaurusTermRole,
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.IThesaurusTermRoleDAO#getDefaultThesaurusTermRole()
 	 */
-	public ThesaurusTermRole getDefaultThesaurusTermRole() throws BusinessException {
+	public ThesaurusTermRole getDefaultThesaurusTermRole() {
 		List<ThesaurusTermRole> defaultRoles = getCurrentSession().createCriteria(ThesaurusTermRole.class)
 				.setMaxResults(1)
 				.add(Restrictions.eq("defaultRole", Boolean.TRUE))				

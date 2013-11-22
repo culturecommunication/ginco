@@ -67,10 +67,10 @@ import fr.mcc.ginco.imports.ThesaurusBuilder;
 
 
 public class SKOSImportServiceTest {
-	@Mock(name = "thesaurusDAO")
+	@Mock
 	private IThesaurusDAO thesaurusDAO;
 
-	@Mock(name = "thesaurusVersionHistoryDAO")
+	@Mock
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Mock(name = "thesaurusHelper")

@@ -55,7 +55,7 @@ public class GincoTermIdGeneratorTest {
 	@Mock(name = "generatorService")
 	private IIDGeneratorService generatorService;	
 	
-	@Mock(name = "thesaurusTermDAO")
+	@Mock
 	private IThesaurusTermDAO thesaurusTermDAO;	
 	
 	@InjectMocks

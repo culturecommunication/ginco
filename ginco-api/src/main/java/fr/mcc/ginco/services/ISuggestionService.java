@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Suggestion;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link Suggestion} objects, contains basic methods
@@ -82,10 +81,8 @@ public interface ISuggestionService {
 	 * 
 	 * @param suggestion
 	 * @return the created or updated suggestion
-	 * @throws BusinessException
 	 */
-	Suggestion createOrUpdateSuggestion(Suggestion suggestion)
-			throws BusinessException;
+	Suggestion createOrUpdateSuggestion(Suggestion suggestion);
 
 	/**
 	 * Delete a suggestion

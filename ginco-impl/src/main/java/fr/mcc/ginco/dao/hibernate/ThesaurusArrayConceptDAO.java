@@ -50,7 +50,7 @@ import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
  * Implementation of the data access object to the thesaurus_term database table
  * 
  */
-@Repository("thesaurusArrayConceptDAO")
+@Repository
 public class ThesaurusArrayConceptDAO extends
 		GenericHibernateDAO<ThesaurusArrayConcept, ThesaurusArrayConcept.Id> implements
 		IThesaurusArrayConceptDAO {

@@ -47,7 +47,7 @@ import fr.mcc.ginco.dao.IAlignmentDAO;
  * Implementation of the data access object to the alignment database table
  *
  */
-@Repository("alignmentDAO")
+@Repository
 public class AlignmentDAO extends
 		GenericHibernateDAO<Alignment, String> implements IAlignmentDAO {
 

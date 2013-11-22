@@ -44,7 +44,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 
 public final class ISOTHES {
-	private static final String uri = "http://purl.org/iso25964/skos-thes#";
+	
+	private ISOTHES() {}
+	
+	private static final String URI = "http://purl.org/iso25964/skos-thes#";
 
 	/**
 	 * returns the URI for this schema
@@ -52,7 +55,7 @@ public final class ISOTHES {
 	 * @return the URI for this schema
 	 */
 	public static String getURI() {
-		return uri;
+		return URI;
 	}
 
 	private static Model m = ModelFactory.createDefaultModel();
@@ -60,60 +63,60 @@ public final class ISOTHES {
 	/**
 	 * status property
 	 */
-	public static final Property STATUS = m.createProperty(uri
+	public static final Property STATUS = m.createProperty(URI
 			+ "status");
 
 	/**
 	 * super group property
 	 */
-	public static final Property SUPER_GROUP = m.createProperty(uri
+	public static final Property SUPER_GROUP = m.createProperty(URI
 			+ "superGroup");
 
 	/**
 	 * sub group property
 	 */
-	public static final Property SUB_GROUP = m.createProperty(uri
+	public static final Property SUB_GROUP = m.createProperty(URI
 			+ "subGroup");
 
 	/**
 	 * conceptGroup resource
 	 */
-	public static final Resource CONCEPT_GROUP = m.createResource(uri
+	public static final Resource CONCEPT_GROUP = m.createResource(URI
 			+ "ConceptGroup");
 
 	/**
 	 * PreferredTerm resource
 	 */
-	public static final Resource PREFERRED_TERM = m.createResource(uri
+	public static final Resource PREFERRED_TERM = m.createResource(URI
 			+ "PreferredTerm");
 
 	/**
 	 * SimpleNonPreferredTerm resource
 	 */
-	public static final Resource SIMPLE_NON_PREFERRED_TERM = m.createResource(uri
+	public static final Resource SIMPLE_NON_PREFERRED_TERM = m.createResource(URI
 			+ "SimpleNonPreferredTerm");
 
 	/**
 	 * SplitNonPreferredTerm resource
 	 */
-	public static final Resource SPLIT_NON_PREFERRED_TERM = m.createResource(uri
+	public static final Resource SPLIT_NON_PREFERRED_TERM = m.createResource(URI
 			+ "SplitNonPreferredTerm");
 
 	/**
 	 * CompoundEquivalence resource
 	 */
-	public static final Resource COMPOUND_EQUIVALENCE = m.createResource(uri
+	public static final Resource COMPOUND_EQUIVALENCE = m.createResource(URI
 			+ "CompoundEquivalence");
 
 	/**
 	 * plusUF property
 	 */
-	public static final Property PLUS_UF = m.createProperty(uri
+	public static final Property PLUS_UF = m.createProperty(URI
 			+ "plusUF");
 
 	/**
 	 * plusUse property
 	 */
-	public static final Property PLUS_USE = m.createProperty(uri
+	public static final Property PLUS_USE = m.createProperty(URI
 			+ "plusUse");
 }

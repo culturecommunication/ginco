@@ -93,11 +93,9 @@ public class GincoThesaurusBuilder {
 	private GincoAlignmentImporter gincoAlignmentImporter;
 	
 	@Inject
-	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
-	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;	
 	
 	

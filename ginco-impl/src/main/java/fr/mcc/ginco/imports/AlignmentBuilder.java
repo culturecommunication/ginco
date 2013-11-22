@@ -55,7 +55,6 @@ import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AlignmentType;
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -87,8 +86,7 @@ public class AlignmentBuilder extends AbstractBuilder {
 	
 
 	public Alignment buildAlignment(Statement stmt,
-			AlignmentType alignmentType, ThesaurusConcept concept)
-			throws BusinessException {
+			AlignmentType alignmentType, ThesaurusConcept concept){
 		logger.debug("Building alignment " + stmt.getObject().toString());		
 		
 		

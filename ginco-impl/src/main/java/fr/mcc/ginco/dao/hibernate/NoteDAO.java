@@ -52,7 +52,7 @@ import java.util.List;
 /**
  * Implementation of {@link INoteDAO}; basic class for DAO-related work.
  */
-@Repository("noteDAO")
+@Repository
 public class NoteDAO extends GenericHibernateDAO<Note, String>
 		implements INoteDAO {
 

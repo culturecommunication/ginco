@@ -59,10 +59,10 @@ public class ThesaurusReportServiceTest {
 	@Mock(name = "thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-	@Mock(name = "thesaurusConceptDAO")
+	@Mock
 	private IThesaurusConceptDAO conceptDAO;
 
-	@Mock(name = "thesaurusTermDAO")
+	@Mock
 	private IThesaurusTermDAO termDAO;
 
 	@InjectMocks

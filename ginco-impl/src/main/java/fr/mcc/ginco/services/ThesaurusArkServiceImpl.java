@@ -34,14 +34,14 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.ThesaurusArk;
-import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import fr.mcc.ginco.beans.ThesaurusArk;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  *
@@ -51,7 +51,6 @@ import javax.inject.Named;
 public class ThesaurusArkServiceImpl implements IThesaurusArkService {
 	
 	@Inject
-	@Named("thesaurusArkDAO")
     private IGenericDAO<ThesaurusArk, Integer> thesaurusArkDAO;
 
     @Override
