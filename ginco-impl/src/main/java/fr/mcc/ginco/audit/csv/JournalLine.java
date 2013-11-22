@@ -45,8 +45,8 @@ import fr.mcc.ginco.utils.LabelUtil;
 
 public class JournalLine  implements Comparable<JournalLine>{
 
-	private final static String COMMA = ",";
-	private final static String PIPE = "|";
+	private static final String COMMA = ",";
+	private static final String PIPE = "|";
 
 	private String authorId;
 	private String termId;

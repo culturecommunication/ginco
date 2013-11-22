@@ -157,11 +157,9 @@ public class GincoRelationshipImporter {
 	 * @param concept
 	 * @param associatedConceptIds
 	 * @return The updated {@link ThesaurusConcept}
-	 * @throws BusinessException
 	 */
 	private ThesaurusConcept saveAssociativeRelationship(
-			ThesaurusConcept concept, List<String> associatedConceptIds)
-			throws BusinessException {
+			ThesaurusConcept concept, List<String> associatedConceptIds) {
 		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
 		concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
 		concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());

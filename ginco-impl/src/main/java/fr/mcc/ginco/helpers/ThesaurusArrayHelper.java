@@ -71,10 +71,9 @@ public class ThesaurusArrayHelper {
 	 * @param array
 	 * @param concepts
 	 * @return
-	 * @throws BusinessException
 	 */
 	public ThesaurusArray saveArrayConcepts(ThesaurusArray array,
-			List<ThesaurusArrayConcept> concepts) throws BusinessException {
+			List<ThesaurusArrayConcept> concepts) {
 
 		Set<ThesaurusArrayConcept> relations = new HashSet<ThesaurusArrayConcept>();
 		if (array.getConcepts() == null) {

@@ -34,12 +34,10 @@
  */
 package fr.mcc.ginco.exports;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.result.bean.FormattedLine;
-
-import java.io.File;
 import java.util.List;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.exports.result.bean.FormattedLine;
 
 /**
  * Service provides function to use for export
@@ -50,18 +48,14 @@ public interface IExportService {
      * Get the list of all concepts in thesaurus, with formatting.
      * @param thesaurus
      * @return list with formatting.
-     * @throws BusinessException
      */
-    List<FormattedLine> getHierarchicalText(Thesaurus thesaurus)
-        throws BusinessException;
+    List<FormattedLine> getHierarchicalText(Thesaurus thesaurus);
     
 
     /**
      * Get the list of all concepts in thesaurus, with formatting.
      * @param thesaurus
      * @return list with formatting.
-     * @throws BusinessException
      */
-    List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus)
-            throws BusinessException;;
+    List<FormattedLine> getAlphabeticalText(Thesaurus thesaurus);
 }

@@ -123,8 +123,7 @@ public class GincoImportServiceImpl implements IGincoImportService {
 		return gincoConceptBranchBuilder.storeGincoExportedBranch(unmarshalledExportedThesaurus, thesaurusId);
 	}
 
-	private URI writeTempFile(String fileContent, String fileName, File tempDir)
-			throws BusinessException {
+	private URI writeTempFile(String fileContent, String fileName, File tempDir) {
 		logger.debug("Writing temporary file for import");
 		String prefix = fileName.substring(0, fileName.lastIndexOf("."));
 		logger.debug("Filename : " + prefix);

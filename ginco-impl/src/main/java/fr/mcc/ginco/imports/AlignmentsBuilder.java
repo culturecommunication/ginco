@@ -52,7 +52,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentType;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IAlignmentTypeService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 
@@ -84,7 +83,7 @@ public class AlignmentsBuilder extends AbstractBuilder {
 	 */
 
 	public List<Alignment> buildAlignments(Resource skosConcept,
-			ThesaurusConcept concept) throws BusinessException {
+			ThesaurusConcept concept) {
 		logger.debug("Building alignments for concept " + skosConcept.getURI());
 		List<Alignment> alignments = new ArrayList<Alignment>();
 		List<AlignmentType> alignmentTypes = alignmentTypeService

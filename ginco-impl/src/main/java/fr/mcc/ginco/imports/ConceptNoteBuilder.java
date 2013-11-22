@@ -120,11 +120,9 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 	 * @param concept
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
 	public List<Note> buildConceptNotes(Resource skosConcept,
-			ThesaurusConcept concept,ThesaurusTerm preferredTerm, Thesaurus thesaurus)
-			throws BusinessException {
+			ThesaurusConcept concept,ThesaurusTerm preferredTerm, Thesaurus thesaurus) {
 		logger.debug("Building notes for concept " +skosConcept.getURI());
 		List<Note> allConceptNotes = new ArrayList<Note>();
 		List<NoteType> conceptNoteTypes = noteTypeService

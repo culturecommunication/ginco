@@ -41,7 +41,6 @@ import java.util.Set;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
 
@@ -59,10 +58,9 @@ public interface IGincoImportService {
 	 * @param tempDir
 	 * @return a map containing the imported Thesaurus and the banned alignments 
 	 * @throws TechnicalException
-	 * @throws BusinessException
 	 */
 	Map<Thesaurus,Set<Alignment>> importGincoXmlThesaurusFile(String content, String fileName,
-			File tempDir) throws TechnicalException, BusinessException ;
+			File tempDir);
 
 	/**
 	 * This method import a concept branch from a Ginco custom format
@@ -72,9 +70,8 @@ public interface IGincoImportService {
 	 * @param thesaurusId
 	 * @return
 	 * @throws TechnicalException
-	 * @throws BusinessException
 	 */
 	Map<ThesaurusConcept,Set<Alignment>> importGincoBranchXmlFile(String content, String fileName,
-			File tempDir, String thesaurusId) throws TechnicalException, BusinessException;
+			File tempDir, String thesaurusId);
 
 }

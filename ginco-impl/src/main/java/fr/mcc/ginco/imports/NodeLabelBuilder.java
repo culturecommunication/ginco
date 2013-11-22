@@ -84,10 +84,8 @@ public class NodeLabelBuilder extends AbstractBuilder {
 	 * @param skosCollection
 	 * @param array
 	 * @return
-	 * @throws BusinessException
 	 */
-	public NodeLabel buildNodeLabel(Resource skosCollection, Thesaurus thesaurus, ThesaurusArray array)
-			throws BusinessException {
+	public NodeLabel buildNodeLabel(Resource skosCollection, Thesaurus thesaurus, ThesaurusArray array){
 		logger.debug("Building node label for thesaurus array " + array.getIdentifier());
 		NodeLabel nodeLabel = new NodeLabel();
 

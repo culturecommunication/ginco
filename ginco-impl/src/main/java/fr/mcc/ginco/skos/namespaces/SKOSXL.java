@@ -45,7 +45,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public final class SKOSXL {
 
-	private static final String uri = "http://www.w3.org/2008/05/skos-xl#";
+	private  SKOSXL() {}
+
+	private static final String URI = "http://www.w3.org/2008/05/skos-xl#";
 
 	/**
 	 * returns the URI for this schema
@@ -53,7 +55,7 @@ public final class SKOSXL {
 	 * @return the URI for this schema
 	 */
 	public static String getURI() {
-		return uri;
+		return URI;
 	}
 
 	private static Model m = ModelFactory.createDefaultModel();
@@ -61,7 +63,7 @@ public final class SKOSXL {
 	/**
 	 * prefLabel property
 	 */
-	public static final Property PREF_LABEL = m.createProperty(uri
+	public static final Property PREF_LABEL = m.createProperty(URI
 			+ "prefLabel");
 
 
@@ -69,20 +71,20 @@ public final class SKOSXL {
 	 * custom concept attribute resource
 	 */
 	public static final Resource PREF_LABEL_RES = m
-			.createResource(uri + "prefLabel");
+			.createResource(URI + "prefLabel");
 
 	/**
 	 * altLabel property
 	 */
-	public static final Property ALT_LABEL = m.createProperty(uri + "altLabel");
+	public static final Property ALT_LABEL = m.createProperty(URI + "altLabel");
 
 	/**
 	 * hiddenLabel property
 	 */
-	public static final Property HIDDEN_LABEL = m.createProperty(uri
+	public static final Property HIDDEN_LABEL = m.createProperty(URI
 			+ "hiddenLabel");
 
-	public static final Property LITERAL_FORM = m.createProperty(uri
+	public static final Property LITERAL_FORM = m.createProperty(URI
 			+ "literalForm");
 
 

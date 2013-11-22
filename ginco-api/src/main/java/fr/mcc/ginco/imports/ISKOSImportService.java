@@ -40,9 +40,8 @@ import java.util.Set;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 public interface ISKOSImportService {
 
-	Map<Thesaurus,Set<Alignment>> importSKOSFile(String fileContent,String fileName, File tempDir) throws BusinessException;
+	Map<Thesaurus,Set<Alignment>> importSKOSFile(String fileContent,String fileName, File tempDir);
 }

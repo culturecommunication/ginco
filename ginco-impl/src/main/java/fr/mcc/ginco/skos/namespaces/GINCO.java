@@ -43,8 +43,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 
 public final class GINCO {
+	
+	private  GINCO() {}
 
-	private static final String uri = "http://data.culture.fr/thesaurus/ginco/ns/";
+	private static final String URI = "http://data.culture.fr/thesaurus/ginco/ns/";
 
 	/**
 	 * returns the URI for this schema
@@ -52,7 +54,7 @@ public final class GINCO {
 	 * @return the URI for this schema
 	 */
 	public static String getURI() {
-		return uri;
+		return URI;
 	}
 
 	private static Model m = ModelFactory.createDefaultModel();
@@ -61,20 +63,20 @@ public final class GINCO {
 	 * Get GINCO resource URIs
 	 */
 	public static String getResourceURI(String type){
-		return uri + type;
+		return URI + type;
 	}
 
 	/**
 	 * Get GINCO resource
 	 */
 	public static Resource getResource(String type){
-		return m.createResource(uri + type);
+		return m.createResource(URI + type);
 	}
 
 	/**
 	 * custom concept attribute resource
 	 */
 	public static final Resource CUSTOM_CONCEPT_ATTRIBUTE = m
-			.createResource(uri + "CustomConceptAttribute");
+			.createResource(URI + "CustomConceptAttribute");
 
 }
