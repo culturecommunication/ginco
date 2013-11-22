@@ -114,10 +114,16 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 	},
 
 	onSuggestionsRequest: function(tabPanel) {
-		var suggestionPanel = Ext.create("GincoApp.view.MySuggestionsPanel");
-		var tab = tabPanel.add(suggestionPanel);
-		tabPanel.setActiveTab(tab);
-		tab.show();
+		var suggestionTab = tabPanel.down('mySuggestionsPanel');
+		if (suggestionTab) {
+			tabPanel.setActiveTab(suggestionTab);
+		}
+		else {
+			var suggestionPanel = Ext.create("GincoApp.view.MySuggestionsPanel");
+			var tab = tabPanel.add(suggestionPanel);
+			tabPanel.setActiveTab(tab);
+			tab.show();
+		}
 	},
 
 	refreshMySuggestions: function(tabPanel) {
