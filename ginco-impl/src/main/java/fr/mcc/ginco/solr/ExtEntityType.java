@@ -45,5 +45,5 @@ public final class ExtEntityType {
     public static final int NOTE_EXAMPLE = 7;
     public static final int NOTE_HISTORY = 8;
     public static final int NOTE_SCOPE = 9;
-    public static final int COMPLEX_CONCEPT = 9;
+    public static final int COMPLEX_CONCEPT = 10;
 }

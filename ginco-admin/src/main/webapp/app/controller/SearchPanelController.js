@@ -75,6 +75,9 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 					}
 				});
 			}
+			if (item.data.type=="SplitNonPreferredTerm") {
+				topTabs.fireEvent('opencomplexconcepttab',topTabs, item.data.thesaurusId,item.data.identifier);
+			}
 		}
 	},
 

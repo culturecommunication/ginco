@@ -44,6 +44,7 @@ Ext.define('GincoApp.store.SearchTypeStore', {
     xNonPreferredTermLabel : 'Non preferred term',
     xPreferredTermLabel : 'Preferred term',
     xNoteLabel : 'Note',
+    xComplexConceptLabel : 'Complex concept',
     localized : true,
     constructor: function(cfg) {
         var me = this;
@@ -57,7 +58,8 @@ Ext.define('GincoApp.store.SearchTypeStore', {
                     {type: 2, typeLabel:me.xTermLabel},
                     {type: 3, typeLabel:me.xNonPreferredTermLabel},
                     {type: 4, typeLabel: me.xPreferredTermLabel},
-                    {type: 5, typeLabel: me.xNoteLabel}
+                    {type: 5, typeLabel: me.xNoteLabel},
+                    {type: 6, typeLabel: me.xComplexConceptLabel},
                 ],
             fields: [
                 {

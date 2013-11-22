@@ -97,6 +97,13 @@ public class SearcherServiceUtilTest {
 	}
 
 	@Test
+	public void testGetComplexConceptExtTypeQuery(){
+		String expectedQuery = "+ext_type:10";
+		String actualQuery = searcherServiceUtil.getExtTypeQuery(SearchEntityType.COMPLEX_CONCEPT);
+		Assert.assertEquals(expectedQuery, actualQuery);
+	}
+
+	@Test
 	public void testGetSearchResultList(){
 		SolrDocumentList fakeDocList = new SolrDocumentList();
 		SolrDocument fakeDoc = new SolrDocument();

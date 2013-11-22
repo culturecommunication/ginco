@@ -120,6 +120,8 @@ public class SearcherServiceUtil {
 					+ ExtEntityType.NOTE_HISTORY + OR
 					+ ExtEntityType.NOTE_SCOPE
 					+ CLOSE_PARENTHESIS;
+		} else if (type == SearchEntityType.COMPLEX_CONCEPT) {
+			query += PLUS + SolrField.EXT_TYPE + SEMI_COL + ExtEntityType.COMPLEX_CONCEPT;
 		}
 
 		return query;

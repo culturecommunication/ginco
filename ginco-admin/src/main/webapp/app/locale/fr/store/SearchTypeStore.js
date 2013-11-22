@@ -3,5 +3,6 @@ Ext.define('GincoApp.locale.fr.store.SearchTypeStore', {
 	    xTermLabel : 'Terme',
 	    xNonPreferredTermLabel : 'Terme non préférentiel',
 	    xPreferredTermLabel : 'Terme préférentiel',
-	    xNoteLabel : 'Note'
+	    xNoteLabel : 'Note',
+	    xComplexConceptLabel : 'Concept complexe'
 });
