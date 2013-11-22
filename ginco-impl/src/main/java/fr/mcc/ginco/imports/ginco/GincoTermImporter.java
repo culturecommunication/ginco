@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -60,11 +59,9 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 public class GincoTermImporter {
 	
 	@Inject
-	@Named("noteDAO")
 	private INoteDAO noteDAO;
 	
 	@Inject
-	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;	
 	
 	

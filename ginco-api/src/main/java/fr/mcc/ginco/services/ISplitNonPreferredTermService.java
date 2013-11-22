@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link SplitNonPreferredTerm} objects, contains basic
@@ -54,13 +53,12 @@ public interface ISplitNonPreferredTermService {
      * @param id to search
      * @return {@code null} if not found
      */
-	SplitNonPreferredTerm getSplitNonPreferredTermById(String id) throws BusinessException;
+	SplitNonPreferredTerm getSplitNonPreferredTermById(String id);
 	
 	 /**
      * Update a single singleSplitNonPreferredTerm Object
-     * @throws BusinessException 
      */
-	SplitNonPreferredTerm updateSplitNonPreferredTerm(SplitNonPreferredTerm object) throws BusinessException;
+	SplitNonPreferredTerm updateSplitNonPreferredTerm(SplitNonPreferredTerm object);
     
 	
 	List<SplitNonPreferredTerm> getSplitNonPreferredTermList(Integer startIndex, Integer limit, String idThesaurus);

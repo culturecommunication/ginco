@@ -80,11 +80,9 @@ public class GincoConceptBranchBuilder {
 	private GincoTermImporter gincoTermImporter;
 
 	@Inject
-	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 	
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 	@Inject

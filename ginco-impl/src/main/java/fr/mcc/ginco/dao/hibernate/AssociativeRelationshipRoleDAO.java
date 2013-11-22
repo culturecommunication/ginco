@@ -44,7 +44,7 @@ import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Repository("associativeRelationshipRoleDAO")
+@Repository
 public class AssociativeRelationshipRoleDAO extends GenericHibernateDAO<AssociativeRelationshipRole, String> implements IAssociativeRelationshipRoleDAO  {
 
 	public AssociativeRelationshipRoleDAO() {

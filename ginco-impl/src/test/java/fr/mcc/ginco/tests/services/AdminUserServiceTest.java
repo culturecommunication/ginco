@@ -49,7 +49,7 @@ import fr.mcc.ginco.services.AdminUserServiceImpl;
 
 public class AdminUserServiceTest {
 
-	@Mock(name = "adminUserDAO")
+	@Mock
 	private IGenericDAO<AdminUser, String> adminUserDAO;
 
 	@InjectMocks

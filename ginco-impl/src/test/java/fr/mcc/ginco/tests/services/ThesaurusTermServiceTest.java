@@ -34,16 +34,16 @@ import fr.mcc.ginco.services.ThesaurusTermServiceImpl;
 public class ThesaurusTermServiceTest {
 
 
-	@Mock(name = "thesaurusTermDAO")
+	@Mock
 	private IThesaurusTermDAO thesaurusTermDAO;
 	
-	@Mock(name = "thesaurusDAO")
+	@Mock
 	private IThesaurusDAO thesaurusDAO;
 	
-	@Mock(name = "generatorService")
+	@Mock
     private IIDGeneratorService customGeneratorService;
 	
-	@Mock(name = "languageDAO")
+	@Mock
     private ILanguageDAO languageDAO;
 
 	@InjectMocks	

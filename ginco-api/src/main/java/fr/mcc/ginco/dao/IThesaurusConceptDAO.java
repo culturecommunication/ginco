@@ -38,7 +38,6 @@ import java.util.List;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Data Access Object for thesaurus_concept
@@ -166,7 +165,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	Long countConceptsAlignedToMyThes(String idThesaurus);
 
 	List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus,
-			int startIndex, int limit) throws BusinessException;
+			int startIndex, int limit);
 
 
 

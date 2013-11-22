@@ -85,11 +85,9 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	private static Logger logger = LoggerFactory.getLogger(SKOSImportServiceImpl.class);
 
 	@Inject
-	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
-	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Inject

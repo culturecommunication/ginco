@@ -34,15 +34,17 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.ThesaurusOrganization;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.dao.IGenericDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exceptions.TechnicalException;
 
 /**
  *
@@ -52,8 +54,7 @@ import java.util.List;
 public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationService {
 
     @Inject
-    @Named("thesaurusOrganizationDAO")
-    private fr.mcc.ginco.dao.hibernate.GenericHibernateDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
+    private IGenericDAO<ThesaurusOrganization, Integer> thesaurusOrganizationDAO;
 
     @Override
     public List<ThesaurusOrganization> getOrganizations() throws TechnicalException {

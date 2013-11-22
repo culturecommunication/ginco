@@ -38,7 +38,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,15 +55,12 @@ import fr.mcc.ginco.solr.SearchResultList;
 public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO conceptDAO;
 	
 	@Inject
-	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO termDAO;
 	
 	@Inject
-	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 	
 	@Override
@@ -74,7 +70,7 @@ public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 		List<ThesaurusConcept> concepts =  conceptDAO.getConceptsWoNotes(thesaurus, startIndex, limit);
 		for (ThesaurusConcept concept : concepts)
 		{
-			resultList.add(getSearchResultFromConcept(concept, thesaurus));
+			resultList.add(getSearchResultFromConcept(concept));
 		}
 		resultList.setNumFound(conceptDAO.countConceptsWoNotes(thesaurus));
 		return resultList;
@@ -87,13 +83,13 @@ public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 		List<ThesaurusConcept> concepts =  conceptDAO.getConceptsAlignedToMyThes(thesaurus, startIndex, limit);
 		for (ThesaurusConcept concept : concepts)
 		{
-			resultList.add(getSearchResultFromConcept(concept, thesaurus));
+			resultList.add(getSearchResultFromConcept(concept));
 		}
 		resultList.setNumFound(conceptDAO.countConceptsAlignedToMyThes(thesaurus));
 		return resultList;
 	}
 	
-	private SearchResult getSearchResultFromConcept(ThesaurusConcept concept, String thesaurus) {
+	private SearchResult getSearchResultFromConcept(ThesaurusConcept concept) {
 		SearchResult result = new SearchResult();
 		result.setIdentifier(concept.getIdentifier());
 		result.setType("ThesaurusConcept");

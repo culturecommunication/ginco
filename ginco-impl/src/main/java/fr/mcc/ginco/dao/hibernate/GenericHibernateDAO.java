@@ -46,7 +46,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 
 import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Implementation of {@link IGenericDAO}; basic class for DAO-related work.

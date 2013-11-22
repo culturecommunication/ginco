@@ -39,7 +39,6 @@ import java.util.Map;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
 /**
@@ -57,7 +56,7 @@ public interface IThesaurusTermService {
      * @param id to search
      * @return {@code null} if not found
      */
-	ThesaurusTerm getThesaurusTermById(String id) throws BusinessException;
+	ThesaurusTerm getThesaurusTermById(String id);
 	
     /**
      * Get list of paginated Thesaurus Terms.
@@ -77,7 +76,7 @@ public interface IThesaurusTermService {
      * @param idThesaurus of a Thesaurus
      * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
      */
-    Long getPreferredTermsCount(String idThesaurus) throws BusinessException;
+    Long getPreferredTermsCount(String idThesaurus);
     
     
     /**
@@ -85,36 +84,33 @@ public interface IThesaurusTermService {
      * @param idThesaurus of a Thesaurus
      * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
      */
-    Long getSandboxedTermsCount(String idThesaurus) throws BusinessException;
+    Long getSandboxedTermsCount(String idThesaurus);
     
     /**
      * Get number of Thesaurus Sandboxed Validated Terms
      * @param idThesaurus of a Thesaurus
      * @return number of Thesaurus Validated Sandboxed Terms for a given Thesaurus
      */
-    Long getSandboxedValidatedTermsCount(String idThesaurus) throws BusinessException;
+    Long getSandboxedValidatedTermsCount(String idThesaurus);
    
     
     /**
      * Update a single Thesaurus Term Object
-     * @throws BusinessException 
      */
-    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException;
+    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object);
     
     /**
      * Delete a single Thesaurus Term Object
-     * @throws BusinessException 
      */
-    ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException;
+    ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object);
     
     
     /**
      * @param idConcept
      * @return
      * This method returns all the terms that belong to a concept
-     * @throws BusinessException 
      */
-    List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;   
+    List<ThesaurusTerm> getTermsByConceptId(String idConcept);   
     
 
     /**
@@ -161,7 +157,7 @@ public interface IThesaurusTermService {
 	 * @return preferred term
 	 */
 
-	 ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
+	 ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId);
 	 
 	 /**
 	 * This service returns true if the term is preferred, 
@@ -173,7 +169,7 @@ public interface IThesaurusTermService {
 	 * 
 	 * @return preferred or not preferred
 	 */
-	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException; 
+	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId); 
 	
 	/**
 	 * This method imports sandboxed terms 
@@ -183,7 +179,6 @@ public interface IThesaurusTermService {
 	 * 
 	 * @return
 	 * @throws TechnicalException
-	 * @throws BusinessException
 	 */
-	List<ThesaurusTerm> importSandBoxTerms(Map<String, Language> termLexicalValues, String thesaurusId, int defaultStatus) throws TechnicalException, BusinessException;
+	List<ThesaurusTerm> importSandBoxTerms(Map<String, Language> termLexicalValues, String thesaurusId, int defaultStatus);
 }

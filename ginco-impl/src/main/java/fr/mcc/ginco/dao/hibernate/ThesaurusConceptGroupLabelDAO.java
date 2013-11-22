@@ -44,7 +44,7 @@ import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 /**
  * Implementation of {@link IThesaurusConceptGroupLabelDAO}; basic class for DAO-related work.
  */
-@Repository("thesaurusConceptGroupLabelDAO")
+@Repository
 public class ThesaurusConceptGroupLabelDAO extends GenericHibernateDAO<ThesaurusConceptGroupLabel, Integer>
 		implements IThesaurusConceptGroupLabelDAO {
 

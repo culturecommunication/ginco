@@ -47,7 +47,7 @@ import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 /**
  * Implementation of {@link INodeLabelDAO}; basic class for DAO-related work.
  */
-@Repository("thesaurusTypeDAO")
+@Repository
 public class ThesaurusTypeDAO extends GenericHibernateDAO<ThesaurusType, Integer>
 		implements IThesaurusTypeDAO {
 

@@ -81,7 +81,6 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 	private IIDGeneratorService generatorService;
 
 	@Inject
-	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
 	@Value("${ginco.default.language}")

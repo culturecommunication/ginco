@@ -77,11 +77,9 @@ public class TermBuilder extends AbstractBuilder {
 	private IIDGeneratorService generatorService;
 
 	@Inject
-	@Named("thesaurusTermRoleDAO")
 	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
 
 	@Inject
-	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
 	@Value("${ginco.default.language}")

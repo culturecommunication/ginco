@@ -88,10 +88,10 @@ public class ConceptBuilderTest {
 	@Mock(name = "associativeRelationshipRoleService")
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
 
-	@Mock(name = "thesaurusConceptDAO")
+	@Mock
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
-	@Mock(name = "conceptHierarchicalRelationshipDAO")
+	@Mock
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 	
 	@Mock(name = "skosImportUtils")

@@ -48,7 +48,7 @@ import java.util.List;
 /**
  *
  */
-@Repository("customConceptAttributeTypeDAO")
+@Repository
 public class CustomConceptAttributeTypeDAO extends
         GenericHibernateDAO<CustomConceptAttributeType, Integer> implements ICustomConceptAttributeTypeDAO {
 

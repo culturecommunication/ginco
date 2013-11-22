@@ -51,7 +51,7 @@ import fr.mcc.ginco.services.UserRoleServiceImpl;
 
 public class UserRoleServiceTest {
 
-	@Mock(name = "userRoleDAO")
+	@Mock
 	private IUserRoleDAO userRoleDAO;
 
 	@InjectMocks

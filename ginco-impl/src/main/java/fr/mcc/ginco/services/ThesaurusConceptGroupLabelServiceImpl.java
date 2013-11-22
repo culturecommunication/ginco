@@ -35,7 +35,6 @@
 package fr.mcc.ginco.services;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +48,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class ThesaurusConceptGroupLabelServiceImpl implements IThesaurusConceptGroupLabelService {
 	
 	@Inject
-	@Named("thesaurusConceptGroupLabelDAO")
 	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
 
 	@Override
@@ -71,7 +69,7 @@ public class ThesaurusConceptGroupLabelServiceImpl implements IThesaurusConceptG
 	@Transactional(readOnly=false)
 	@Override
 	public ThesaurusConceptGroupLabel updateOrCreate(
-			ThesaurusConceptGroupLabel conceptGroupLabel) throws BusinessException {
+			ThesaurusConceptGroupLabel conceptGroupLabel) {
 		return thesaurusConceptGroupLabelDAO.update(conceptGroupLabel);
 	}	
 }

@@ -35,7 +35,6 @@
 package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Data Access Object for associative_relationship_role

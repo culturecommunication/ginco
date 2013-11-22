@@ -47,7 +47,7 @@ import fr.mcc.ginco.dao.IUserRoleDAO;
  * Implementation of the data access object to the user_role table
  * 
  */
-@Repository("userRoleDAO")
+@Repository
 public class UserRoleDAO extends GenericHibernateDAO<UserRole, Integer>
 		implements IUserRoleDAO {
 

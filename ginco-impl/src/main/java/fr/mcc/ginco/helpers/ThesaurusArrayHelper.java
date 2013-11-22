@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -60,11 +59,9 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class ThesaurusArrayHelper {
 
 	@Inject
-	@Named("thesaurusArrayConceptDAO")
 	private IThesaurusArrayConceptDAO thesaurusArrayConceptDAO;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	/**

@@ -68,7 +68,6 @@ import fr.mcc.ginco.utils.ConceptHierarchyUtil;
 public class ThesaurusArrayBuilder extends AbstractBuilder {	
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	

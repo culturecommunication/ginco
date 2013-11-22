@@ -39,7 +39,6 @@ import java.util.List;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusConceptGroup} objects, contains basic
@@ -61,11 +60,10 @@ public interface IThesaurusConceptGroupService {
 	 * @param convertedConceptGroup
 	 * @param conceptGroupLabel
 	 * @return The {@link ThesaurusConceptGroup} object updated
-	 * @throws BusinessException
 	 */
 	ThesaurusConceptGroup updateThesaurusConceptGroup(
 			ThesaurusConceptGroup convertedConceptGroup,
-			ThesaurusConceptGroupLabel conceptGroupLabel) throws BusinessException;
+			ThesaurusConceptGroupLabel conceptGroupLabel);
 
 	/**
 	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}, excluding the group which id is given in parameter (optional, set null for no exclusion)

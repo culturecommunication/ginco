@@ -86,7 +86,6 @@ public class ConceptBuilder extends AbstractBuilder {
 	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
 
 	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 	
 	@Inject

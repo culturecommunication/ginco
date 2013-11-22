@@ -37,14 +37,12 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
-import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
@@ -52,7 +50,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class ExternalThesaurusServiceImpl implements IExternalThesaurusService {
 
 	@Inject
-	@Named("externalThesaurusDAO")
 	private IExternalThesaurusDAO externalThesaurusDAO;
 
 	@Override

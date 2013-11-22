@@ -51,7 +51,7 @@ import fr.mcc.ginco.services.ThesaurusFormatServiceImpl;
 
 public class ThesaurusFormatServiceTest {	
 	
-	@Mock(name = "thesaurusFormatDAO")
+	@Mock
 	private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
 
 	@InjectMocks

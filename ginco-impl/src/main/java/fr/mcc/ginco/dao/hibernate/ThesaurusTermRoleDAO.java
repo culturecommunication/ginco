@@ -43,7 +43,7 @@ import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Repository("thesaurusTermRoleDAO")
+@Repository
 public class ThesaurusTermRoleDAO extends GenericHibernateDAO<ThesaurusTermRole, String> implements IThesaurusTermRoleDAO  {
 
 	public ThesaurusTermRoleDAO() {

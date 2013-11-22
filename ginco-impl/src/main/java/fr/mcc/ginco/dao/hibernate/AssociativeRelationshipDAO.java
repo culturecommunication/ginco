@@ -50,7 +50,7 @@ import java.util.List;
  * Implementation of the data access object to the thesaurus_term database table
  * 
  */
-@Repository("associativeRelationshipDAO")
+@Repository
 public class AssociativeRelationshipDAO extends
 		GenericHibernateDAO<AssociativeRelationship, String> implements
 		IAssociativeRelationshipDAO {

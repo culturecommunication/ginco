@@ -49,7 +49,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 /**
  *
  */
-@Repository("customTermAttributeTypeDAO")
+@Repository
 public class CustomTermAttributeTypeDAO extends
 		GenericHibernateDAO<CustomTermAttributeType, Integer> implements
 		ICustomTermAttributeTypeDAO {

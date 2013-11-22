@@ -53,7 +53,7 @@ import fr.mcc.ginco.imports.ginco.GincoArrayImporter;
 
 public class GincoArrayImporterTest {
 
-	@Mock(name = "thesaurusArrayDAO")
+	@Mock
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
 	@InjectMocks

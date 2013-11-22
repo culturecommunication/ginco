@@ -42,7 +42,6 @@ import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusConcept} objects, contains basic
@@ -96,7 +95,6 @@ public interface IThesaurusConceptService {
 	 *
 	 * @param conceptId
 	 * @return
-	 * @throws BusinessException
 	 */
 	ThesaurusTerm getConceptPreferredTerm(String conceptId);
 
@@ -105,7 +103,6 @@ public interface IThesaurusConceptService {
 	 *
 	 * @param conceptId
 	 * @return
-	 * @throws BusinessException
 	 */
 	List<ThesaurusTerm> getConceptPreferredTerms(String conceptId);
 
@@ -114,7 +111,6 @@ public interface IThesaurusConceptService {
 	 *
 	 * @param conceptId
 	 * @return
-	 * @throws BusinessException
 	 */
 	String getConceptLabel(String conceptId);
 
@@ -128,7 +124,6 @@ public interface IThesaurusConceptService {
 	 * @param The list of children concepts we must detach (must not be still children of our concept)
 	 * @param The list of alignemnts where this concept is the source
 	 * @return The updated concept
-	 * @throws BusinessException
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
 			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<ThesaurusConcept> childrenConceptToAttach, List<Alignment> alignments);
@@ -156,7 +151,6 @@ public interface IThesaurusConceptService {
 	 *
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 */
 	long getOrphanThesaurusConceptsCount(String thesaurusId);
 
@@ -165,7 +159,6 @@ public interface IThesaurusConceptService {
 	 *
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 */
 	long getTopTermThesaurusConceptsCount(String thesaurusId);
 

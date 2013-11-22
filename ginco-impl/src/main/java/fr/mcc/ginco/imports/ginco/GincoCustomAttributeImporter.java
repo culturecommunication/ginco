@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -58,11 +57,9 @@ import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 public class GincoCustomAttributeImporter {
 
 	@Inject
-	@Named("customTermAttributeTypeDAO")
 	private ICustomTermAttributeTypeDAO customTermAttributeTypeDAO;
 
 	@Inject
-	@Named("customConceptAttributeTypeDAO")
 	private ICustomConceptAttributeTypeDAO customConceptAttributeTypeDAO;
 
 	/**

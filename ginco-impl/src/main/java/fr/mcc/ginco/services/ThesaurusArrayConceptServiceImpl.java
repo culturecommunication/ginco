@@ -35,7 +35,6 @@
 package fr.mcc.ginco.services;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,12 +48,11 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class ThesaurusArrayConceptServiceImpl implements IThesaurusArrayConceptService {
 
     @Inject
-    @Named("thesaurusArrayConceptDAO")
     private IGenericDAO<ThesaurusArrayConcept, ThesaurusArrayConcept.Id> thesaurusArrayConceptDAO;
 
 	@Override
 	public ThesaurusArrayConcept geThesaurusArrayConcept(
-			String thesaurusArrayId, String conceptId) throws BusinessException {
+			String thesaurusArrayId, String conceptId) {
 		ThesaurusArrayConcept.Id id = new ThesaurusArrayConcept.Id();
 		id.setConceptId(conceptId);
 		id.setThesaurusArrayId(thesaurusArrayId);

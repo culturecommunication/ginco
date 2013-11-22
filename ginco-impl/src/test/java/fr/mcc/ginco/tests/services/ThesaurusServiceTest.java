@@ -64,10 +64,10 @@ import fr.mcc.ginco.services.ThesaurusServiceImpl;
 
 public class ThesaurusServiceTest {
 
-	@Mock(name = "thesaurusDAO")
+	@Mock
 	private IThesaurusDAO thesaurusDAO;
 
-	@Mock(name = "thesaurusVersionHistoryDAO")
+	@Mock
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Mock(name = "generatorService")

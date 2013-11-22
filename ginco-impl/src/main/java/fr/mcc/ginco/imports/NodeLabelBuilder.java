@@ -66,7 +66,6 @@ public class NodeLabelBuilder extends AbstractBuilder {
 	private static Logger logger = LoggerFactory.getLogger(NodeLabelBuilder.class);
 
 	@Inject
-	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
 	@Value("${ginco.default.language}")

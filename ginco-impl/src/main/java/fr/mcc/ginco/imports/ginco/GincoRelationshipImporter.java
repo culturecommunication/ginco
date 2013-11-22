@@ -68,15 +68,12 @@ import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 public class GincoRelationshipImporter {
 	
 	@Inject
-	@Named("associativeRelationshipDAO")
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
 	
 	@Inject
-	@Named("associativeRelationshipRoleDAO")
 	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
 	
 	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 	
 	
@@ -85,7 +82,6 @@ public class GincoRelationshipImporter {
 	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 	
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 	private static Logger logger = LoggerFactory.getLogger(GincoRelationshipImporter.class);

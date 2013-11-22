@@ -58,7 +58,6 @@ import fr.mcc.ginco.utils.DateUtil;
 public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHistoryService {
 
     @Inject
-    @Named("thesaurusVersionHistoryDAO")
     private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
     @Inject

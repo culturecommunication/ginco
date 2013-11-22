@@ -67,14 +67,13 @@ import fr.mcc.ginco.utils.DateUtil;
 
 public class ThesaurusBuilderTest {
 
-
-	@Mock(name = "thesaurusFormatDAO")
+	@Mock
 	private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
 
-	@Mock(name = "thesaurusTypeDAO")
+	@Mock
 	private IThesaurusTypeDAO thesaurusTypeDAO;
 
-	@Mock(name = "languagesDAO")
+	@Mock
 	private ILanguageDAO languagesDAO;
 	
 	@Mock(name = "skosThesaurusOrganizationBuilder")

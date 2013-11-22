@@ -72,20 +72,16 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class ThesaurusBuilder extends AbstractBuilder {
 
 	@Inject
-	@Named("thesaurusFormatDAO")
 	private IGenericDAO<ThesaurusFormat, Integer> thesaurusFormatDAO;
 
 	@Inject
-	@Named("thesaurusTypeDAO")
 	private IThesaurusTypeDAO thesaurusTypeDAO;
-
 	
 	@Inject
 	@Named("skosThesaurusOrganizationBuilder")
 	private ThesaurusOrganizationBuilder thesaurusOrganizationBuilder;
 
 	@Inject
-	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
 	@Value("${import.default.top.concept}")

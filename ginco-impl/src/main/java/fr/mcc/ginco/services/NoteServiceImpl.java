@@ -34,23 +34,22 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.INoteDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.dao.INoteDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional(readOnly=true, rollbackFor = BusinessException.class)
 @Service("noteService")
 public class NoteServiceImpl implements INoteService {
 
 	@Inject
-	@Named("noteDAO")
 	private INoteDAO noteDAO;
 
 	/**
@@ -86,7 +85,7 @@ public class NoteServiceImpl implements INoteService {
 	 */
 	@Transactional(readOnly=false)
 	@Override
-	public Note createOrUpdateNote(Note note) throws BusinessException {
+	public Note createOrUpdateNote(Note note) {
 		return noteDAO.update(note);
 	}
 

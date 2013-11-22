@@ -70,7 +70,6 @@ public class GincoRevServiceImpl implements IGincoRevService {
 	private static Logger logger = LoggerFactory.getLogger(GincoRevServiceImpl.class);
 
 	@Inject
-	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Inject

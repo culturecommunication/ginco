@@ -56,11 +56,12 @@ import fr.mcc.ginco.exceptions.BusinessException;
  * Implementation of the data access object to the thesaurus_term database table
  * 
  */
-@Repository("thesaurusConceptDAO")
+@Repository
 public class ThesaurusConceptDAO extends
 		GenericHibernateDAO<ThesaurusConcept, String> implements
 		IThesaurusConceptDAO {
 
+	private static final String AL_SOURCE_CONCEPT_IDENTIFIER = "al.sourceConcept.identifier";
 	private static final String TC_IDENTIFIER = "tc.identifier";
 	private static final String THESAURUS_IDENTIFIER = "thesaurus.identifier";
 
@@ -334,7 +335,7 @@ public class ThesaurusConceptDAO extends
 						Projections
 								.projectionList()
 								.add(Projections
-										.property("al.sourceConcept.identifier")));
+										.property(AL_SOURCE_CONCEPT_IDENTIFIER)));
 
 		DetachedCriteria conceptCriteria = DetachedCriteria
 				.forClass(ThesaurusConcept.class, "stc")
@@ -362,7 +363,7 @@ public class ThesaurusConceptDAO extends
 						Projections
 								.projectionList()
 								.add(Projections
-										.property("al.sourceConcept.identifier")));
+										.property(AL_SOURCE_CONCEPT_IDENTIFIER)));
 
 		DetachedCriteria conceptCriteria = DetachedCriteria
 				.forClass(ThesaurusConcept.class, "stc")
@@ -390,7 +391,7 @@ public class ThesaurusConceptDAO extends
 						Projections
 								.projectionList()
 								.add(Projections
-										.property("al.sourceConcept.identifier")));
+										.property(AL_SOURCE_CONCEPT_IDENTIFIER)));
 
 		Criteria criteria = getCurrentSession()
 				.createCriteria(ThesaurusConcept.class, "tc")
@@ -401,8 +402,7 @@ public class ThesaurusConceptDAO extends
 	}
 	
 	@Override
-	public List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus, int startIndex, int limit)
-			throws BusinessException {
+	public List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus, int startIndex, int limit) {
 		DetachedCriteria alignmentCriteria = DetachedCriteria
 				.forClass(Alignment.class, "al")
 				.add(Restrictions.eq("al.internalTargetThesaurus.identifier",
@@ -411,7 +411,7 @@ public class ThesaurusConceptDAO extends
 						Projections
 								.projectionList()
 								.add(Projections
-										.property("al.sourceConcept.identifier")));
+										.property(AL_SOURCE_CONCEPT_IDENTIFIER)));
 
 		Criteria criteria = getCurrentSession()
 				.createCriteria(ThesaurusConcept.class, "tc")

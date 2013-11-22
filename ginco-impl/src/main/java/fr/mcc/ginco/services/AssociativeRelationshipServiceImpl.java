@@ -34,23 +34,23 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
 
 @Transactional(readOnly=true,rollbackFor = BusinessException.class)
 @Service("associativeRelationshipService")
 public class AssociativeRelationshipServiceImpl implements IAssociativeRelationshipService {
 
     @Inject
-    @Named("associativeRelationshipDAO")
     private IAssociativeRelationshipDAO associativeRelationshipDAO;
 
     @Override
@@ -59,8 +59,7 @@ public class AssociativeRelationshipServiceImpl implements IAssociativeRelations
     }
 
     @Override
-    public List<String> getAssociatedConceptsId(ThesaurusConcept concept)
-            throws BusinessException {
+    public List<String> getAssociatedConceptsId(ThesaurusConcept concept) {
         return associativeRelationshipDAO.getAssociatedConcepts(concept);
     }
 

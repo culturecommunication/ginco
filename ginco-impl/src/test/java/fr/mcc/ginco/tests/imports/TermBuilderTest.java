@@ -66,10 +66,10 @@ public class TermBuilderTest {
 	@Mock(name = "generatorService")
 	private IIDGeneratorService generatorService;
 
-	@Mock(name = "thesaurusTermRoleDAO")
+	@Mock
 	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
 
-	@Mock(name = "languagesDAO")
+	@Mock
 	private ILanguageDAO languagesDAO;
 
 	

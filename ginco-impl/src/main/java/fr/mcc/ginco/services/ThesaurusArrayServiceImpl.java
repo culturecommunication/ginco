@@ -62,15 +62,12 @@ import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 
 	@Inject
-	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
 	@Inject
-	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
@@ -90,16 +87,14 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray)
-			throws BusinessException {
+	public ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray) {
 		return thesaurusArrayDAO.update(thesaurusArray);
 	}
 
 	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray,
-			NodeLabel nodeLabel, List<ThesaurusArrayConcept> arrayConcepts)
-			throws BusinessException {
+			NodeLabel nodeLabel, List<ThesaurusArrayConcept> arrayConcepts) {
 
 		if (thesaurusArray.getSuperOrdinateConcept() != null) {
 			if (thesaurusArray.getSuperOrdinateConcept().getStatus() != ConceptStatusEnum.VALIDATED

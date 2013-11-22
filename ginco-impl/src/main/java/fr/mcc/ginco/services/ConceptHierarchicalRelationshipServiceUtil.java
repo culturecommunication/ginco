@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
@@ -68,19 +67,15 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	private static Logger logger = LoggerFactory.getLogger(ConceptHierarchicalRelationshipServiceUtil.class);
 	
 	@Inject
-	@Named("thesaurusArrayConceptDAO")
 	private IThesaurusArrayConceptDAO thesaurusArrayConceptDAO;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 	@Inject
-	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
 	@Override
@@ -391,7 +386,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	}
 
 	private void removeParents(ThesaurusConcept concept,
-			List<ThesaurusConcept> parents) throws BusinessException {
+			List<ThesaurusConcept> parents) {
 		boolean isDefaultTopConcept = concept.getThesaurus()
 				.isDefaultTopConcept();
 		if (concept.getParentConcepts().size() == 1) {

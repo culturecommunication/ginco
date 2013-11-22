@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -59,11 +58,9 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 public class GincoArrayImporter {
 	
 	@Inject
-	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
 	
 	@Inject
-	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;	
 
 	

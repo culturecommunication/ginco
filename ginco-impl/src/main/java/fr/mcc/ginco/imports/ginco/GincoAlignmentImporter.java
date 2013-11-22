@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -63,19 +62,15 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 public class GincoAlignmentImporter {
 
 	@Inject
-	@Named("alignmentDAO")
 	private IAlignmentDAO alignmentDAO;
 
 	@Inject
-	@Named("alignmentConceptDAO")
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
-	@Named("externalThesaurusDAO")
 	private IExternalThesaurusDAO externalThesaurusDAO;	
 
 	/**

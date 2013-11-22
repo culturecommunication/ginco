@@ -55,10 +55,10 @@ import fr.mcc.ginco.imports.ginco.GincoTermImporter;
 
 public class GincoTermImporterTest {
 
-	@Mock(name = "thesaurusDAO")
+	@Mock
 	private IThesaurusDAO thesaurusDAO;
 
-	@Mock(name = "thesaurusTermDAO")
+	@Mock
 	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@InjectMocks

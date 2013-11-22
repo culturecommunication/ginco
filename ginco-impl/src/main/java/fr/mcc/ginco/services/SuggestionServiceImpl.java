@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class SuggestionServiceImpl implements ISuggestionService {
 
 	@Inject
-	@Named("suggestionDAO")
 	private ISuggestionDAO suggestionDAO;
 
 	/*
@@ -109,8 +107,7 @@ public class SuggestionServiceImpl implements ISuggestionService {
 	 */
 	@Transactional(readOnly = false)
 	@Override
-	public Suggestion createOrUpdateSuggestion(Suggestion suggestion)
-			throws BusinessException {
+	public Suggestion createOrUpdateSuggestion(Suggestion suggestion) {
 		return suggestionDAO.update(suggestion);
 	}
 

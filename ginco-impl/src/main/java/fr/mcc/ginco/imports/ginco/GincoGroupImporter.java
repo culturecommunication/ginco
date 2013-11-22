@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -59,11 +58,9 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 public class GincoGroupImporter {
 
 	@Inject
-	@Named("thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 
 	@Inject
-	@Named("thesaurusConceptGroupLabelDAO")
 	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
 	
 

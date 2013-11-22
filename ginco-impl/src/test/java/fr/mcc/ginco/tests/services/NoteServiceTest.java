@@ -53,7 +53,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 
 public class NoteServiceTest {
-    @Mock(name = "noteDAO")
+    @Mock
     private INoteDAO noteDAO;
 
     @InjectMocks

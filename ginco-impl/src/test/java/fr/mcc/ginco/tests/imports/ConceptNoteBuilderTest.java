@@ -77,7 +77,7 @@ public class ConceptNoteBuilderTest {
 	private IIDGeneratorService generatorService;
 
 	@Inject
-	@Mock(name = "languagesDAO")
+	@Mock
 	private ILanguageDAO languagesDAO;
 
 	@InjectMocks

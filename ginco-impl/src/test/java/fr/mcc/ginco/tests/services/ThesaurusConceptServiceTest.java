@@ -76,25 +76,25 @@ import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
 
 public class ThesaurusConceptServiceTest {
 
-	@Mock(name = "thesaurusConceptDAO")
+	@Mock
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
-	@Mock(name = "thesaurusDAO")
+	@Mock
 	private IThesaurusDAO thesaurusDAO;
 
-	@Mock(name = "thesaurusTermDAO")
+	@Mock
 	private IThesaurusTermDAO thesaurusTermDAO;
 
-	@Mock(name = "associativeRelationshipDAO")
+	@Mock
 	private IGenericDAO<AssociativeRelationship, Class<?>> associativeRelationshipDAO;
 
-	@Mock(name = "thesaurusArrayDAO")
+	@Mock
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
-	@Mock(name = "thesaurusConceptGroupDAO")
+	@Mock
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 
-	@Mock(name = "alignmentDAO")
+	@Mock
 	private IAlignmentDAO alignmentDAO;
 
 

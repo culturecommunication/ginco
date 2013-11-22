@@ -56,10 +56,10 @@ import fr.mcc.ginco.imports.ginco.GincoCustomAttributeImporter;
 
 public class GincoCustomAttributeImporterTest {
 
-	@Mock(name = "customTermAttributeTypeDAO")
+	@Mock
 	private ICustomTermAttributeTypeDAO customTermAttributeTypeDAO;
 
-	@Mock(name = "thesauruscustomConceptAttributeTypeDAOTermDAO")
+	@Mock
 	private ICustomConceptAttributeTypeDAO customConceptAttributeTypeDAO;
 
 	@InjectMocks

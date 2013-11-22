@@ -60,15 +60,12 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class AlignmentServiceImpl implements IAlignmentService {
 
 	@Inject
-	@Named("alignmentDAO")
 	private IAlignmentDAO alignmentDAO;
 
 	@Inject
-	@Named("alignmentConceptDAO")
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
 
 	@Inject
-	@Named("externalThesaurusDAO")
 	private IExternalThesaurusDAO externalThesaurusDAO;
 
 	@Inject

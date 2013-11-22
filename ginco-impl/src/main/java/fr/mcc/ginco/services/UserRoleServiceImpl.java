@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +51,6 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class UserRoleServiceImpl implements IUserRoleService {
 
 	@Inject
-	@Named("userRoleDAO")
 	private IUserRoleDAO userRoleDAO;	
 
 	@Override
@@ -78,7 +76,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public UserRole updateUserRole(UserRole userRole) throws BusinessException {
+	public UserRole updateUserRole(UserRole userRole) {
 		UserRole existingUserRole = userRoleDAO
 				.getUserRoleOnThesaurus(userRole.getUsername(), userRole
 						.getThesaurus().getIdentifier());

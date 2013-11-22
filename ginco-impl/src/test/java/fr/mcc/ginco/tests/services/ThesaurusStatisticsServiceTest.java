@@ -54,27 +54,23 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.services.ThesaurusStatisticsServiceImpl;
 
 public class ThesaurusStatisticsServiceTest {	
-	
-	/*@Mock(name = "thesaurusTypeDAO")
-    private IThesaurusTypeDAO thesaurusTypeDAO;
-	*/
-	
-	@Mock(name = "thesaurusDAO")
+		
+	@Mock
 	private IThesaurusDAO thesaurusDAO; 
 	
-	@Mock(name = "thesaurusTermDAO")
+	@Mock
 	private IThesaurusTermDAO termDAO; 
 	
-	@Mock(name = "thesaurusConceptDAO")
+	@Mock
 	private IThesaurusConceptDAO conceptDAO;
 	
-	@Mock(name = "splitNonPreferredTermDAO")
+	@Mock
 	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 	
-	@Mock(name = "thesaurusArrayDAO")
+	@Mock
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 	
-	@Mock(name = "thesaurusConceptGroupDAO")
+	@Mock
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 	
 	@InjectMocks

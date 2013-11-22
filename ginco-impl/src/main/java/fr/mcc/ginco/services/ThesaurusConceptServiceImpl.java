@@ -87,30 +87,24 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	private static Logger logger = LoggerFactory.getLogger(ThesaurusConceptServiceImpl.class);
 
 	@Inject
-	@Named("thesaurusDAO")
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
-	@Named("thesaurusTermDAO")
 	private IThesaurusTermDAO thesaurusTermDAO;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
-	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
 	@Inject
-	@Named("thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
 	@Inject
-	@Named("associativeRelationshipDAO")
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
 
 	@Inject
@@ -118,7 +112,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
 
 	@Inject
-	@Named("associativeRelationshipRoleDAO")
 	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
 
 	@Inject
@@ -134,7 +127,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	private IAlignmentService alignmentService;
 	
 	@Inject
-	@Named("alignmentDAO")
 	private IAlignmentDAO alignmentDAO;
 
 	/*

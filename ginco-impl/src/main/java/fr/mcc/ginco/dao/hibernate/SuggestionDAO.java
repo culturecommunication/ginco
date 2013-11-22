@@ -48,7 +48,7 @@ import fr.mcc.ginco.dao.ISuggestionDAO;
  * Implementation of the data access object to the suggestion database table
  * 
  */
-@Repository("suggestionDAO")
+@Repository
 public class SuggestionDAO extends GenericHibernateDAO<Suggestion, Integer>
 		implements ISuggestionDAO {
 

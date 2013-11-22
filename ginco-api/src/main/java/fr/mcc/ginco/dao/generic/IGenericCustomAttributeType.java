@@ -34,14 +34,13 @@
  */
 package fr.mcc.ginco.dao.generic;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-
 import java.util.List;
 
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.dao.IGenericDAO;
+
 public interface IGenericCustomAttributeType<T> extends IGenericDAO<T, Integer> {
-    List<T> getAttributesByThesaurus(Thesaurus thesaurus) throws BusinessException;
+    List<T> getAttributesByThesaurus(Thesaurus thesaurus);
     T getAttributeByValue(Thesaurus thesaurus, String value);
     T getAttributeByCode (Thesaurus thesaurus, String code);
 }

@@ -55,7 +55,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
  * Implementation of the data access object to the thesaurus_term database table
  *
  */
-@Repository("thesaurusTermDAO")
+@Repository
 public class ThesaurusTermDAO extends
 		GenericHibernateDAO<ThesaurusTerm, String> implements IThesaurusTermDAO {
 	
