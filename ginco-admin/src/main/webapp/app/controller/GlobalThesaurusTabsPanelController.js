@@ -37,7 +37,7 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 	},
 
 	openThesaurusTab : function(tabPanel, aThesaurusId, aItemId,
-			openThesaurusForm, aEventName) {
+			openThesaurusForm, aEventName, aSubPanel) {
 		var thesaurusTabs = Ext.ComponentQuery
 				.query('thesaurusTabs thesaurusTabPanel');
 		var tabExists = false;
@@ -61,7 +61,7 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 						tab.fireEvent('openthesaurusform', tab);
 					}
 					else {
-						tab.fireEvent(aEventName, tab, aItemId);
+						tab.fireEvent(aEventName, tab, aItemId, aSubPanel);
 					}
 				}
 			});
@@ -71,21 +71,21 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 				tabExists.fireEvent('openthesaurusform', tabExists);
 			}
 			else {
-				tabExists.fireEvent(aEventName, tabExists, aItemId);
+				tabExists.fireEvent(aEventName, tabExists, aItemId, aSubPanel);
 			}
 		}
 	},
-	openConceptTab : function(tabPanel, aThesaurusId, aConceptId) {
+	openConceptTab : function(tabPanel, aThesaurusId, aConceptId, aSubPanel) {
 		this.openThesaurusTab(tabPanel, aThesaurusId, aConceptId, false,
-				"openconcepttab");
+				"openconcepttab", aSubPanel);
 	},
 	openSandboxTab : function(tabPanel, aThesaurusId) {
 		this.openThesaurusTab(tabPanel, aThesaurusId, null, false,
 				"opensandboxtab");
 	},
-	openTermTab : function(tabPanel, aThesaurusId, aTermId) {
+	openTermTab : function(tabPanel, aThesaurusId, aTermId, aSubPanel) {
 		this.openThesaurusTab(tabPanel, aThesaurusId, aTermId, false,
-				"opentermtab");
+				"opentermtab", aSubPanel);
 	},
 	openGroupTab : function(tabPanel, aThesaurusId, aGroupId) {
 		this.openThesaurusTab(tabPanel, aThesaurusId, aGroupId, false,

@@ -64,10 +64,10 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 						if (jsonData.success) {
 							if (jsonData.data.isConcept){
 								topTabs.fireEvent('openconcepttab', topTabs,
-										item.data.thesaurusId, jsonData.data.parentEntityId, true);
+										item.data.thesaurusId, jsonData.data.parentEntityId, "noteConceptPanel");
 							} else {
 								topTabs.fireEvent('opentermtab', topTabs,
-										item.data.thesaurusId, jsonData.data.parentEntityId, true);
+										item.data.thesaurusId, jsonData.data.parentEntityId, "noteTermPanel");
 							}
 						} else	{
 							Thesaurus.ext.utils.msg(me.xProblemLabel,"");

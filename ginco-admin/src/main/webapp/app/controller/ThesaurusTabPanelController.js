@@ -85,23 +85,17 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			thePanel.down('#importBranch').setDisabled(false);
 		}
 	},
-	openConceptTab : function(tabPanel, aConceptId, openNoteTab)
+	openConceptTab : function(tabPanel, aConceptId, aSubTab)
 	{
-		var noteTabComponent = "";
-		if (openNoteTab)
-			noteTabComponent = "noteConceptPanel";
-		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : aConceptId}, noteTabComponent);
+		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : aConceptId}, aSubTab);
 	},
 	openChildConceptTab : function(tabPanel, aParentConceptId)
 	{
 		this.openGenericTab(tabPanel, "conceptPanel","GincoApp.view.ConceptPanel", {gincoId : null, parentConceptId : aParentConceptId, displayPrefTermCreation: true});
 	},
-	openTermTab : function(tabPanel, aTermId, openNoteTab)
+	openTermTab : function(tabPanel, aTermId, aSubTab)
 	{
-		var noteTabComponent = "";
-		if (openNoteTab)
-			noteTabComponent = "noteTermPanel";
-		this.openGenericTab(tabPanel, "termPanel","GincoApp.view.TermPanel", {gincoId : aTermId}, noteTabComponent);
+		this.openGenericTab(tabPanel, "termPanel","GincoApp.view.TermPanel", {gincoId : aTermId}, aSubTab);
 	},
 	openSandboxTab : function (tabPanel)
 	{
@@ -123,7 +117,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 	{
 		this.openGenericTab(tabPanel, "complexconceptPanel","GincoApp.view.ComplexConceptPanel", {gincoId : aConceptId});
 	},
-	openGenericTab : function (tabPanel, aXtype, aClass, panelOptions, noteTabComponent)
+	openGenericTab : function (tabPanel, aXtype, aClass, panelOptions, aSubTab)
 	{
 		var existingTabs = tabPanel.query(aXtype);
 		var tab = null, tabExists = false;
@@ -152,10 +146,9 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			itemTabPanel.setActiveTab(tabExists);
 			tab = tabExists;
 		}
-		if (noteTabComponent)
-		{
+		if (Ext.isString(aSubTab) && aSubTab != "") {
 			Ext.defer (function () {
-				var noteTab = tab.down(noteTabComponent);
+				var noteTab = tab.down(aSubTab);
 				noteTab.up('tabpanel').setActiveTab(noteTab);
 			},3);
 		}
