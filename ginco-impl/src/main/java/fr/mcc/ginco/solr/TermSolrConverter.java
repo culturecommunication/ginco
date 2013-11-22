@@ -48,7 +48,7 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.INoteService;
 
-@Service("termSolrConverter")
+@Service
 public class TermSolrConverter {
 
 	@Inject

@@ -34,8 +34,6 @@
  */
 package fr.mcc.ginco.tests.solr;
 
-import javax.persistence.metamodel.EntityType;
-
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.junit.Assert;

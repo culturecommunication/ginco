@@ -46,25 +46,32 @@ import fr.mcc.ginco.beans.SplitNonPreferredTerm;
  * @see fr.mcc.ginco.beans
  */
 public interface ISplitNonPreferredTermService {
-	
+
 	/**
      * Get a singleSplitNonPreferredTerm by its id
      *
      * @param id to search
      * @return {@code null} if not found
      */
+
 	SplitNonPreferredTerm getSplitNonPreferredTermById(String id);
-	
+
 	 /**
      * Update a single singleSplitNonPreferredTerm Object
      */
 	SplitNonPreferredTerm updateSplitNonPreferredTerm(SplitNonPreferredTerm object);
-    
-	
+
+
 	List<SplitNonPreferredTerm> getSplitNonPreferredTermList(Integer startIndex, Integer limit, String idThesaurus);
-   
+
 	Long getSplitNonPreferredTermCount(String idThesaurus);
-	
+
 	SplitNonPreferredTerm destroySplitNonPreferredTerm(SplitNonPreferredTerm splitNonPreferredTerm);
-	
+
+	/**
+     * For indexing purposes.
+      * @return list of all existing {@link SplitNonPreferredTerm}
+     */
+    List<SplitNonPreferredTerm> getAllSplitNonPreferredTerms();
+
 }

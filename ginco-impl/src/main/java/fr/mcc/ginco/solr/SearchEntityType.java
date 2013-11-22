@@ -42,4 +42,5 @@ public final class SearchEntityType {
 	public static final Integer TERM_PREF = 3;
 	public static final Integer TERM_NON_PREF = 4;
 	public static final Integer NOTE = 5;
+	public static final Integer COMPLEX_CONCEPT = 5;
 }

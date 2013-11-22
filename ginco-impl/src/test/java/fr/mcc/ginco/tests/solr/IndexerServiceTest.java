@@ -45,12 +45,15 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.ISplitNonPreferredTermService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.solr.IComplexConceptIndexerService;
 import fr.mcc.ginco.solr.IConceptIndexerService;
 import fr.mcc.ginco.solr.INoteIndexerService;
 import fr.mcc.ginco.solr.ITermIndexerService;
@@ -70,6 +73,9 @@ public class IndexerServiceTest {
 	@Mock(name = "noteService")
 	private INoteService noteService;
 
+	@Mock(name = "splitNonPreferredTermService")
+	private ISplitNonPreferredTermService splitNonPreferredTermService;
+
 	@Mock(name = "termIndexerService")
 	private ITermIndexerService termIndexerService;
 
@@ -78,6 +84,9 @@ public class IndexerServiceTest {
 
 	@Mock(name = "noteIndexerService")
 	private INoteIndexerService noteIndexerService;
+
+	@Mock(name = "complexConceptIndexerService")
+	private IComplexConceptIndexerService complexConceptIndexerService;
 
 	@Mock(name = "solrServer")
 	private SolrServer solrServer;
@@ -95,6 +104,7 @@ public class IndexerServiceTest {
 		verify(termIndexerService).addTerms(Mockito.anyListOf(ThesaurusTerm.class));
 		verify(conceptIndexerService).addConcepts(Mockito.anyListOf(ThesaurusConcept.class));
 		verify(noteIndexerService).addNotes(Mockito.anyListOf(Note.class));
+		verify(complexConceptIndexerService).addComplexConcepts(Mockito.anyListOf(SplitNonPreferredTerm.class));
 	}
 
 }

@@ -48,17 +48,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.solr.NoteIndexerServiceImpl;
-import fr.mcc.ginco.solr.NoteSolrConverter;
+import fr.mcc.ginco.beans.SplitNonPreferredTerm;
+import fr.mcc.ginco.solr.ComplexConceptIndexerServiceImpl;
+import fr.mcc.ginco.solr.ComplexConceptSolrConverter;
 
-public class NoteIndexerServiceTest {
+public class ComplexConceptIndexerServiceTest {
 
 	@InjectMocks
-	private  NoteIndexerServiceImpl noteIndexerService;
+	private ComplexConceptIndexerServiceImpl complexConceptIndexerService;
 
 	@Mock
-	private NoteSolrConverter noteSolrConverter;
+	private ComplexConceptSolrConverter complexConceptSolrConverter;
 
 	@Mock(name = "solrServer")
 	private SolrServer solrServer;
@@ -69,28 +69,29 @@ public class NoteIndexerServiceTest {
 	}
 
 	@Test
-	public void testAddNote() throws SolrServerException, IOException {
+	public void testAddComplexConcept() throws SolrServerException, IOException {
 
-		Note fakeConceptNote = new Note();
-		fakeConceptNote.setIdentifier("http://note1");
+		SplitNonPreferredTerm fakeComplexConcept = new SplitNonPreferredTerm();
+		fakeComplexConcept.setIdentifier("http://cc1");
 
 		SolrInputDocument doc = new SolrInputDocument();
-		Mockito.when(noteSolrConverter.convertSolrNote(fakeConceptNote)).thenReturn(doc);
+		Mockito.when(complexConceptSolrConverter.convertSolrComplexConcept(fakeComplexConcept)).thenReturn(doc);
 
-		noteIndexerService.addNote(fakeConceptNote);
+		complexConceptIndexerService.addComplexConcept(fakeComplexConcept);
 
 		verify(solrServer).add(doc);
 		verify(solrServer).commit();
 	}
 
 	@Test
-	public void testRemoveNote() throws SolrServerException, IOException {
-		Note fakeConceptNote = new Note();
-		fakeConceptNote.setIdentifier("http://note1");
+	public void testRemoveComplexConcept() throws SolrServerException, IOException {
+		SplitNonPreferredTerm fakeComplexConcept = new SplitNonPreferredTerm();
+		fakeComplexConcept.setIdentifier("http://cc1");
 
-		noteIndexerService.removeNote(fakeConceptNote);
+		complexConceptIndexerService.removeComplexConcept(fakeComplexConcept);
 
-		verify(solrServer).deleteById("http://note1");
+		verify(solrServer).deleteById("http://cc1");
 		verify(solrServer).commit();
 	}
 }
+
