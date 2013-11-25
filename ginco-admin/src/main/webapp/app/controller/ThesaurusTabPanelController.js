@@ -275,7 +275,7 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 					if (thesData) {
 						var userRoles = Thesaurus.ext.utils.getUserRoles(thesData.id);
 						if (theForm.checkRoles(userRoles) == true) {
-							return false;
+							return true;
 						}
 					}
 				}
