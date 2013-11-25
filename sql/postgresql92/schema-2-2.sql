@@ -10,7 +10,7 @@ CREATE TABLE suggestion
   recipient text NOT NULL,
   content text NOT NULL,
   term_id text,
-  concept_id text,  
+  concept_id text,
   CONSTRAINT pk_suggestion PRIMARY KEY (identifier),
   CONSTRAINT fk_suggestion_term_id FOREIGN KEY (term_id)
       REFERENCES thesaurus_term (identifier) MATCH SIMPLE
@@ -29,8 +29,11 @@ CREATE SEQUENCE suggestion_identifier_seq
 ALTER SEQUENCE suggestion_identifier_seq OWNED BY suggestion.identifier;
 
 ALTER TABLE compound_equivalence DROP CONSTRAINT fk_split_nonpreferredterm;
-ALTER TABLE compound_equivalence 
-    ADD CONSTRAINT fk_split_nonpreferredterm 
-    FOREIGN KEY(id_split_nonpreferredterm) 
-    REFERENCES split_nonpreferredterm (identifier) 
+ALTER TABLE compound_equivalence
+    ADD CONSTRAINT fk_split_nonpreferredterm
+    FOREIGN KEY(id_split_nonpreferredterm)
+    REFERENCES split_nonpreferredterm (identifier)
     MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE;
+
+
+ALTER TABLE concept_group ALTER COLUMN isdynamic SET DEFAULT false;
