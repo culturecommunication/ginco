@@ -44,6 +44,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.CustomTermAttributeType;
@@ -64,7 +66,7 @@ import fr.mcc.ginco.beans.ThesaurusVersionHistory;
  */
 @SuppressWarnings("serial")
 @XmlRootElement
-@XmlSeeAlso({Note.class, NodeLabel.class, ThesaurusConceptGroupLabel.class, ConceptHierarchicalRelationship.class, Alignment.class})
+@XmlSeeAlso({Note.class, NodeLabel.class, ThesaurusConceptGroupLabel.class, ConceptHierarchicalRelationship.class, Alignment.class, AssociativeRelationship.class})
 public class GincoExportedThesaurus implements Serializable {
 	
 	//Thesaurus, concepts and terms are read by Jaxb and automatically added to the XML structure
@@ -84,7 +86,7 @@ public class GincoExportedThesaurus implements Serializable {
     private Map<String, JaxbList<ThesaurusConceptGroupLabel>> conceptGroupLabels = new Hashtable<String, JaxbList<ThesaurusConceptGroupLabel>>();
     private List<ThesaurusVersionHistory> thesaurusVersions;
     private Map<String, JaxbList<ConceptHierarchicalRelationship>> hierarchicalRelationship = new Hashtable<String, JaxbList<ConceptHierarchicalRelationship>>();
-    private Map<String, JaxbList<String>> associativeRelationship = new Hashtable<String, JaxbList<String>>();
+    private Map<String, JaxbList<AssociativeRelationship>> associativeRelationship = new Hashtable<String, JaxbList<AssociativeRelationship>>();
     private Map<String, JaxbList<Note>> termNotes = new Hashtable<String, JaxbList<Note>>();
     private Map<String, JaxbList<Note>> conceptNotes = new Hashtable<String, JaxbList<Note>>();
     private Map<String, JaxbList<Alignment>> alignments = new Hashtable<String, JaxbList<Alignment>>();
@@ -122,11 +124,11 @@ public class GincoExportedThesaurus implements Serializable {
 		this.hierarchicalRelationship = parentConceptRelationship;
 	}
 
-	public Map<String, JaxbList<String>> getAssociativeRelationship() {
+	public Map<String, JaxbList<AssociativeRelationship>> getAssociativeRelationship() {
 		return associativeRelationship;
 	}
 
-	public void setAssociativeRelationship(Map<String, JaxbList<String>> associativeRelationship) {
+	public void setAssociativeRelationship(Map<String, JaxbList<AssociativeRelationship>> associativeRelationship) {
 		this.associativeRelationship = associativeRelationship;
 	}
 

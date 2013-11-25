@@ -43,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
@@ -200,7 +201,7 @@ public class GincoThesaurusExportServiceImpl implements
 			}
 
 			// Exporting associative relationship
-			JaxbList<String> associations = gincoConceptExporter
+			JaxbList<AssociativeRelationship> associations = gincoConceptExporter
 					.getExportAssociativeRelationShip(thesaurusConcept);
 			if (associations != null && !associations.isEmpty()) {
 				thesaurusToExport.getAssociativeRelationship().put(

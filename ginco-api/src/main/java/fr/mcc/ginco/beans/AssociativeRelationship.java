@@ -34,17 +34,24 @@
  */
 package fr.mcc.ginco.beans;
 
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
-
-import java.io.Serializable;
 
 /**
  * Bean represents relation between two {@link ThesaurusConcept}
  */
 @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AssociativeRelationship implements Serializable {
 	
+	@XmlType(namespace="associativeRelationship")
 	public static class Id implements Serializable {
 		private String concept1;
 		private String concept2;
@@ -86,38 +93,21 @@ public class AssociativeRelationship implements Serializable {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-            }
-			if (obj == null) {
-				return false;
-            }
-			if (getClass() != obj.getClass()) {
-				return false;
-            }
 			Id other = (Id) obj;
-			if (concept1 == null) {
-				if (other.concept1 != null) {
-					return false;
-                }
-			} else if (!concept1.equals(other.concept1)) {
-				return false;
-            }
-			if (concept2 == null) {
-				if (other.concept2 != null) {
-					return false;
-                }
-			} else if (!concept2.equals(other.concept2)) {
-				return false;
-            }
-			return true;
+			if ((concept1.equals(other.concept1) && concept2.equals(other.concept2))
+					||concept1.equals(other.concept2) && concept2.equals(other.concept1)) {
+				return true;
+			}
+			return false;
 		}
 		
     }
 
 	private Id identifier;
 	private AssociativeRelationshipRole relationshipRole;
+	@XmlTransient
 	private ThesaurusConcept conceptLeft;
+	@XmlTransient
 	private ThesaurusConcept conceptRight;
 	
 	public Id getIdentifier() {
@@ -151,6 +141,5 @@ public class AssociativeRelationship implements Serializable {
 	public void setConceptRight(ThesaurusConcept conceptRight) {
 		this.conceptRight = conceptRight;
 	}
-	
 
 }

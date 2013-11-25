@@ -42,6 +42,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -119,14 +120,14 @@ public class GincoConceptExporter {
 	 * JaxbList object
 	 * 
 	 * @param thesaurusConcept
-	 * @return JaxbList<String> associatedConceptsIds : A JaxbList that contains
+	 * @return JaxbList<AssociativeRelationship> associatedConceptsIds : A JaxbList that contains
 	 *         the ids of associated concepts
 	 */
-	public JaxbList<String> getExportAssociativeRelationShip(
+	public JaxbList<AssociativeRelationship> getExportAssociativeRelationShip(
 			ThesaurusConcept thesaurusConcept) {
-		List<String> associations = associativeRelationshipService
-				.getAssociatedConceptsId(thesaurusConcept);
-		return new JaxbList<String>(associations);		
+		List<AssociativeRelationship> associations = associativeRelationshipService
+				.getAssociatedConceptsRelationships(thesaurusConcept);
+		return new JaxbList<AssociativeRelationship>(associations);		
 	}
 	
 	public JaxbList<Alignment> getExportAlignments(ThesaurusConcept thesaurusConcept) {

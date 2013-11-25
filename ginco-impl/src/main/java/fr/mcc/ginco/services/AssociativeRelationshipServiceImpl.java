@@ -61,6 +61,11 @@ public class AssociativeRelationshipServiceImpl implements IAssociativeRelations
     @Override
     public List<String> getAssociatedConceptsId(ThesaurusConcept concept) {
         return associativeRelationshipDAO.getAssociatedConcepts(concept);
-    }
+    } 
+    
 
+    @Override
+    public List<AssociativeRelationship> getAssociatedConceptsRelationships(ThesaurusConcept concept) {
+        return associativeRelationshipDAO.getAssociationsForConcept(concept);
+    } 
 }

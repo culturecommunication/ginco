@@ -61,4 +61,7 @@ public interface IAssociativeRelationshipService {
      * @return
      */
     AssociativeRelationship getAssociativeRelationshipById(String id1, String id2);
+    
+    List<AssociativeRelationship> getAssociatedConceptsRelationships(ThesaurusConcept concept);
+
 }

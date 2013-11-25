@@ -34,9 +34,8 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -44,7 +43,9 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -78,6 +79,17 @@ public class AssociativeRelationshipDAO extends
 				.setProjection(Projections.property("tc.identifier"));		
 
         return criteria.list();
+    }      
+   
+    
+    @Override
+    public List<AssociativeRelationship> getAssociationsForConcept(ThesaurusConcept concept) {
+    
+    	Criteria criteria = getCurrentSession().createCriteria(AssociativeRelationship.class)
+                .add(Restrictions.or(
+                Restrictions.eq("conceptLeft.identifier", concept.getIdentifier()),
+                Restrictions.eq("conceptRight.identifier",concept.getIdentifier())));
+        return criteria.list();
     }   
 
     @Override
@@ -86,7 +98,10 @@ public class AssociativeRelationshipDAO extends
                 .add(Restrictions.or(
                  Restrictions.and(Restrictions.eq("conceptLeft.identifier", id1), Restrictions.eq("conceptRight.identifier", id2)),
                  Restrictions.and(Restrictions.eq("conceptRight.identifier",id1),Restrictions.eq("conceptLeft.identifier",id2))));
-
-        return (AssociativeRelationship) criteria.uniqueResult();
+        List<AssociativeRelationship> res = criteria.list();
+        if (res != null && !res.isEmpty()) {
+        	return res.get(0);
+        }
+        return null;
     }
 }
