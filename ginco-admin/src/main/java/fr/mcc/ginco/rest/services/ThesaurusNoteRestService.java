@@ -61,6 +61,7 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.NoteParentEntityResponse;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusNoteViewConverter;
+import fr.mcc.ginco.rest.services.utils.ThesaurusNoteRestServiceUtils;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.INoteTypeService;
 import fr.mcc.ginco.solr.IConceptIndexerService;
@@ -99,6 +100,9 @@ public class ThesaurusNoteRestService {
     @Inject
 	@Named("conceptIndexerService")
 	private IConceptIndexerService conceptIndexerService;
+
+    @Inject
+    private ThesaurusNoteRestServiceUtils thesaurusNoteRestServiceUtils;
 
 	private Logger logger  = LoggerFactory.getLogger(ThesaurusNoteRestService.class);
 
@@ -173,14 +177,15 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/createNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasPermission(#noteViews, '0')")
+	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> createNotes(List<ThesaurusNoteView> noteViews, @QueryParam("conceptId") String conceptId, @QueryParam("termId") String termId) {
+
 		//We set for each note if it belongs to a concept or a term
 		for (ThesaurusNoteView view : noteViews) {
 			if(conceptId != null) {
 				logger.info("Updating notes for conceptid : " + conceptId);
 				view.setConceptId(conceptId);
-			} else if (termId != null){
+			} else if (termId != null) {
 				logger.info("Updating notes for termid : " + termId);
 				view.setTermId(termId);
 			} else {
@@ -193,6 +198,7 @@ public class ThesaurusNoteRestService {
 		List<Note> resultNotes = new ArrayList<Note>() ;
 		for (Note note : notes) {
 			if (!note.getLexicalValue().isEmpty() && note.getLanguage() != null && note.getNoteType() != null) {
+				thesaurusNoteRestServiceUtils.checkExpertAccessToNote(note);
 				resultNotes.add(noteService.createOrUpdateNote(note));
 				noteIndexerService.addNote(note);
 				if (note.getTerm() != null){
@@ -217,7 +223,7 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/updateNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasPermission(#noteViews, '0')")
+	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> updateNotes(List<ThesaurusNoteView> noteViews) {
 
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
@@ -225,13 +231,14 @@ public class ThesaurusNoteRestService {
 
 		for (Note note : notes) {
 			if (note.getLexicalValue() != null && note.getLanguage() != null && note.getNoteType() != null) {
+				thesaurusNoteRestServiceUtils.checkExpertAccessToNote(note);
 				resultNotes.add(noteService.createOrUpdateNote(note));
 				noteIndexerService.addNote(note);
-				if (note.getTerm() != null){
-					termIndexerService.addTerm(note.getTerm());
-				}
 				if (note.getConcept() != null){
 					conceptIndexerService.addConcept(note.getConcept());
+				}
+				if (note.getTerm() != null){
+					termIndexerService.addTerm(note.getTerm());
 				}
 			} else
 			{
@@ -248,21 +255,22 @@ public class ThesaurusNoteRestService {
 	@POST
 	@Path("/destroyNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasPermission(#noteViews, '0')")
+	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews){
 
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
 		List<Note> resultNotes = new ArrayList<Note>() ;
 
 		for (Note note : notes) {
-				resultNotes.add(noteService.deleteNote(note));
-				noteIndexerService.removeNote(note);
-				if (note.getTerm() != null){
-					termIndexerService.addTerm(note.getTerm());
-				}
-				if (note.getConcept() != null){
-					conceptIndexerService.addConcept(note.getConcept());
-				}
+			thesaurusNoteRestServiceUtils.checkExpertAccessToNote(note);
+			resultNotes.add(noteService.deleteNote(note));
+			noteIndexerService.removeNote(note);
+			if (note.getTerm() != null){
+				termIndexerService.addTerm(note.getTerm());
+			}
+			if (note.getConcept() != null){
+				conceptIndexerService.addConcept(note.getConcept());
+			}
 		}
 
 		return new ExtJsonFormLoadData<List<ThesaurusNoteView>>(thesaurusNoteViewConverter.convert(resultNotes));
