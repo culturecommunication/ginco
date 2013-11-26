@@ -188,7 +188,10 @@ public class ThesaurusTermRestServiceTest{
 	 */
 	@Test
 	public final void testCreateTerm(){
-
+		Authentication authent = Mockito.mock(Authentication.class);
+		SecurityContextHolder.getContext()
+				.setAuthentication(authent);
+		
 		//Generating mocked objects
 		ThesaurusTerm fakeThesaurusTerm1 = new ThesaurusTerm();
 		fakeThesaurusTerm1.setIdentifier("");
