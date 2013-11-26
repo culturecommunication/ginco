@@ -100,6 +100,8 @@ import fr.mcc.ginco.solr.IThesaurusIndexerService;
 @Path("/importservice")
 @Produces({ MediaType.TEXT_HTML })
 public class ImportRestService {
+	private static final String ATTACHMENT_NAME = "import-file-path";
+
 	@Inject
 	@Context
 	private javax.servlet.ServletContext servletContext;
@@ -156,7 +158,6 @@ public class ImportRestService {
 	 * @param request
 	 * @return The imported thesaurus in JSOn string representig a
 	 *         ExtJsonFormLoadData
-	 * @throws BusinessException
 	 * @throws JsonGenerationException
 	 * @throws JsonMappingException
 	 * @throws IOException
@@ -167,9 +168,9 @@ public class ImportRestService {
 	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String uploadFile(MultipartBody body,
-			@Context HttpServletRequest request) throws BusinessException,
+			@Context HttpServletRequest request) throws 
 			JsonGenerationException, JsonMappingException, IOException {
-		Attachment file = body.getAttachment("import-file-path");
+		Attachment file = body.getAttachment(ATTACHMENT_NAME);
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
 		File tempdir = (File) servletContext
@@ -214,9 +215,7 @@ public class ImportRestService {
 	 *         ExtJsonFormLoadData
 	 * @throws IOException
 	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
-	 * @throws TechnicalException
-	 * @throws BusinessException
+	 * @throws JsonGenerationException	
 	 */
 	@POST
 	@Path("/importGincoXml")
@@ -225,9 +224,8 @@ public class ImportRestService {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String uploadGincoXmlThesaurusFile(MultipartBody body,
 			@Context HttpServletRequest request)
-			throws JsonGenerationException, JsonMappingException, IOException,
-			TechnicalException, BusinessException {
-		Attachment file = body.getAttachment("import-file-path");
+			throws JsonGenerationException, JsonMappingException, IOException {
+		Attachment file = body.getAttachment(ATTACHMENT_NAME);
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
 		File tempDir = (File) servletContext
@@ -266,9 +264,7 @@ public class ImportRestService {
 	 *         ExtJsonFormLoadData
 	 * @throws IOException
 	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
-	 * @throws TechnicalException
-	 * @throws BusinessException
+	 * @throws JsonGenerationException	 
 	 */
 	@POST
 	@Path("/importGincoBranchXml")
@@ -278,9 +274,8 @@ public class ImportRestService {
 	public String uploadGincoBranchXmlFile(MultipartBody body,
 			@QueryParam("thesaurusId") String thesaurusId,
 			@Context HttpServletRequest request)
-			throws JsonGenerationException, JsonMappingException, IOException,
-			TechnicalException, BusinessException {
-		Attachment file = body.getAttachment("import-file-path");
+			throws JsonGenerationException, JsonMappingException, IOException {
+		Attachment file = body.getAttachment(ATTACHMENT_NAME);
 
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
@@ -318,7 +313,7 @@ public class ImportRestService {
 			throws JsonGenerationException, JsonMappingException, IOException,
 			TechnicalException, BusinessException {
 		try {
-			Attachment file = body.getAttachment("import-file-path");
+			Attachment file = body.getAttachment(ATTACHMENT_NAME);
 			String content = file.getObject(String.class);
 
 			String[] termsSplit = content.split("\n|\r\n");

@@ -67,7 +67,7 @@ public class FoldersGeneratorTest {
 	}
 
 	@Test
-	public final void testConceptFolderOnly() throws BusinessException {
+	public final void testConceptFolderOnly() {
 
 		IThesaurusListNode concepts = new ThesaurusListBasicNode();
 		concepts.setTitle("Arborescence des concepts");
@@ -88,7 +88,7 @@ public class FoldersGeneratorTest {
 	}
 
 	@Test
-	public final void testComplexConceptsFolder() throws BusinessException {
+	public final void testComplexConceptsFolder() {
 		IThesaurusListNode concepts = new ThesaurusListBasicNode();
 		concepts.setTitle("Arborescence des concepts");
 		concepts.setId("CONCEPTS_fake");
@@ -135,7 +135,7 @@ public class FoldersGeneratorTest {
 	}
 
 	@Test
-	public final void testGroupsFolder() throws BusinessException {
+	public final void testGroupsFolder() {
 
 		IThesaurusListNode concepts = new ThesaurusListBasicNode();
 
@@ -169,7 +169,7 @@ public class FoldersGeneratorTest {
 	}
 
 	@Test
-	public final void testArraysFolder() throws BusinessException {
+	public final void testArraysFolder() {
 
 		IThesaurusListNode concepts = new ThesaurusListBasicNode();
 
@@ -202,7 +202,7 @@ public class FoldersGeneratorTest {
 	}
 
 	@Test
-	public final void testOrphansFolder() throws BusinessException {
+	public final void testOrphansFolder(){
 
 		IThesaurusListNode concepts = new ThesaurusListBasicNode();
 
@@ -234,7 +234,7 @@ public class FoldersGeneratorTest {
 	}
 
 	@Test
-	public final void testSandboxFolder() throws BusinessException {
+	public final void testSandboxFolder() {
 
 		IThesaurusListNode concepts = new ThesaurusListBasicNode();
 

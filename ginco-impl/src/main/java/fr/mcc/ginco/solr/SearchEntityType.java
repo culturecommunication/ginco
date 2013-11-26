@@ -36,6 +36,9 @@
 package fr.mcc.ginco.solr;
 
 public final class SearchEntityType {
+	private SearchEntityType() {
+	};
+
 	public static final Integer ALL_TYPE = -1;
 	public static final Integer CONCEPT = 1;
 	public static final Integer TERM = 2;

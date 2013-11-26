@@ -71,7 +71,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
-			String languageId) throws BusinessException {
+			String languageId){
 		if (StringUtils.isNotEmpty(lexicalValue)
 				&& StringUtils.isNotEmpty(thesaurusId)
 				&& StringUtils.isNotEmpty(languageId)) {
@@ -85,7 +85,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue,
-			String thesaurusId, String languageId) throws BusinessException {
+			String thesaurusId, String languageId){
 		if (StringUtils.isNotEmpty(lexicalValue)
 				&& StringUtils.isNotEmpty(thesaurusId)
 				&& StringUtils.isNotEmpty(languageId)) {
@@ -113,7 +113,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public Boolean isPreferred(String lexicalValue, String thesaurusId,
-			String languageId) throws BusinessException {
+			String languageId) {
 		if (StringUtils.isNotEmpty(lexicalValue)
 				&& StringUtils.isNotEmpty(thesaurusId)
 				&& StringUtils.isNotEmpty(languageId)) {
@@ -127,7 +127,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request,
-			int startIndex, int limit) throws BusinessException {
+			int startIndex, int limit){
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
 				String requestFormat = request + "*";

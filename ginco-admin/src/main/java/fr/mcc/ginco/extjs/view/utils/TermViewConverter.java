@@ -50,7 +50,6 @@ import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -105,8 +104,7 @@ public class TermViewConverter {
 		return hibernateRes;
 	}
 
-	private ThesaurusTerm getExistingThesaurusTerm(String identifier)
-			throws BusinessException {
+	private ThesaurusTerm getExistingThesaurusTerm(String identifier) {
 		ThesaurusTerm hibernateRes = thesaurusTermService
 				.getThesaurusTermById(identifier);
 		logger.info("Getting an existing term with identifier " + identifier);
@@ -168,10 +166,8 @@ public class TermViewConverter {
 	 *            source to work with
 	 * @param fromConcept
 	 * @return converted item.
-	 * @throws BusinessException
 	 */
-	public ThesaurusTerm convert(ThesaurusTermView source, boolean fromConcept)
-			throws BusinessException {
+	public ThesaurusTerm convert(ThesaurusTermView source, boolean fromConcept) {
 		ThesaurusTerm hibernateRes;
 
 		if (StringUtils.isEmpty(source.getIdentifier())) {
@@ -236,11 +232,9 @@ public class TermViewConverter {
 	 * @param fromConcept
 	 * 
 	 * @return {@code List<ThesaurusTerm>}
-	 * @throws BusinessException
 	 */
 	public List<ThesaurusTerm> convertTermViewsInTerms(
-			List<ThesaurusTermView> termViews, boolean fromConcept)
-			throws BusinessException {
+			List<ThesaurusTermView> termViews, boolean fromConcept) {
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 
 		for (ThesaurusTermView thesaurusTermView : termViews) {

@@ -114,13 +114,11 @@ public class UserRoleRestService {
 	/**
 	 * Public method to get available roles
 	 * 
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getAllRoles")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<RoleView>> getAvailableRoles()
-			throws BusinessException {
+	public ExtJsonFormLoadData<List<RoleView>> getAvailableRoles() {
 		List<RoleView> roleViews = new ArrayList<RoleView>();
 
 		for (Role role : Role.values()) {
@@ -141,7 +139,7 @@ public class UserRoleRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#userRoleViews, '0')")
 	public ExtJsonFormLoadData<List<UserRoleView>> updateThesaurusUsers(
-			List<UserRoleView> userRoleViews) throws BusinessException {
+			List<UserRoleView> userRoleViews) {
 
 		Map<String, UserRole> userRoles = new HashMap<String, UserRole>();
 		List<UserRoleView> updatedUserRoleViews = new ArrayList<UserRoleView>();
@@ -175,8 +173,7 @@ public class UserRoleRestService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@PreAuthorize("hasPermission(#userRoleViews, '0')")
 	public void deleteThesaurusUsers(
-			List<UserRoleView> userRoleViews)
-			throws BusinessException {
+			List<UserRoleView> userRoleViews) {
 		for (UserRoleView userRoleView : userRoleViews) {
 			UserRole userRole = userRoleViewConverter.convert(userRoleView);
 			userRoleService
@@ -187,8 +184,7 @@ public class UserRoleRestService {
 	@GET
 	@Path("/getDeclaredUsers")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<Set<String>> getDeclaredUsers(@QueryParam("idThesaurus") String idThesaurus)
-			throws BusinessException {
+	public ExtJsonFormLoadData<Set<String>> getDeclaredUsers(@QueryParam("idThesaurus") String idThesaurus) {
 		
 		Set<String> allUsers = new HashSet<String>();
 		List<UserRole> thesaurusUsers = userRoleService.getThesaurusUsers(idThesaurus);

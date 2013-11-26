@@ -47,7 +47,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
@@ -82,8 +81,7 @@ public class TopTermGenerator {
 	 *            id of top node.
 	 * @return created list of leafs.
 	 */
-	public List<IThesaurusListNode> generateTopTerm(String thesaurusId)
-			throws BusinessException {
+	public List<IThesaurusListNode> generateTopTerm(String thesaurusId) {
 		logger.debug("Generating top term concepts list for thesaurusId : "
 				+ thesaurusId);
 		List<ThesaurusConcept> topTerms = thesaurusConceptService

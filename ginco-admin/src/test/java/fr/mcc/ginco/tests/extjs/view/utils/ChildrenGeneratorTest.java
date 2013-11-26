@@ -78,7 +78,7 @@ public class ChildrenGeneratorTest {
     }
 
     @Test
-    public final void testChildrenLeafsCreation() throws BusinessException {
+    public final void testChildrenLeafsCreation(){
 
         Thesaurus thesaurus = new Thesaurus();
         thesaurus.setIdentifier("th1");
@@ -133,7 +133,7 @@ public class ChildrenGeneratorTest {
     }
 
     @Test
-    public final void testChildrenBranchesCreation() throws BusinessException {
+    public final void testChildrenBranchesCreation() {
 
         Thesaurus thesaurus = new Thesaurus();
         thesaurus.setIdentifier("th1");

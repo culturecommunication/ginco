@@ -60,7 +60,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetOrphansThesaurusConcept() throws BusinessException {
+	public void testGetOrphansThesaurusConcept() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
@@ -70,7 +70,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetOrphansThesaurusConceptCount() throws BusinessException {
+	public void testGetOrphansThesaurusConceptCount() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
@@ -80,7 +80,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetTopTermThesaurusConcept() throws BusinessException {
+	public void testGetTopTermThesaurusConcept() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
@@ -90,7 +90,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetTopTermThesaurusConceptCount() throws BusinessException {
+	public void testGetTopTermThesaurusConceptCount() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
@@ -100,7 +100,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetThesaurusFromConcept() throws BusinessException {
+	public void testGetThesaurusFromConcept() {
 		String thesaurusConceptId = "http://www.culturecommunication.gouv.fr/co1";
 		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
 				.getById(thesaurusConceptId);
@@ -121,7 +121,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}*/
 
 	@Test
-	public void testGetTopTermByThesaurus() throws BusinessException {
+	public void testGetTopTermByThesaurus() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
@@ -134,7 +134,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetChildrenByConcept() throws BusinessException {
+	public void testGetChildrenByConcept() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
@@ -155,7 +155,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetRootByThesaurusId() throws BusinessException {
+	public void testGetRootByThesaurusId() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Thesaurus th = new Thesaurus();
 		th.setIdentifier(thesaurusId);
@@ -194,7 +194,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetAllConceptsByThesaurusId() throws BusinessException {
+	public void testGetAllConceptsByThesaurusId() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 
 		List<ThesaurusConcept> list = thesaurusConceptDAO
@@ -233,21 +233,21 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}*/
 
 	@Test
-	public void testCountConceptsAlignedToIntThes() throws BusinessException {
+	public void testCountConceptsAlignedToIntThes() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Long nbConceptsAlignedToIntThes = thesaurusConceptDAO
 				.countConceptsAlignedToIntThes(thesaurusId);
 		Assert.assertEquals(2, nbConceptsAlignedToIntThes.longValue());
 	}
 	@Test
-	public void testCountConceptsAlignedToExtThes() throws BusinessException {
+	public void testCountConceptsAlignedToExtThes(){
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Long nbConceptsAlignedToExtThes = thesaurusConceptDAO
 				.countConceptsAlignedToExtThes(thesaurusId);
 		Assert.assertEquals(2, nbConceptsAlignedToExtThes.longValue());
 	}
 	@Test
-	public void testCountConceptsAlignedToMyThes() throws BusinessException {
+	public void testCountConceptsAlignedToMyThes() {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Long nbConceptsAlignedToMyThes = thesaurusConceptDAO
 				.countConceptsAlignedToMyThes(thesaurusId);
@@ -255,7 +255,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 	
 	@Test
-	public void testCountConceptsWoNotes() throws BusinessException {
+	public void testCountConceptsWoNotes(){
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		Long nbConceptsWoNotes = thesaurusConceptDAO
 				.countConceptsWoNotes(thesaurusId);
@@ -263,7 +263,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	}
 	
 	@Test
-	public void testGetConceptsWoNotes() throws BusinessException {
+	public void testGetConceptsWoNotes(){
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		List<ThesaurusConcept> conceptsWoNotes = thesaurusConceptDAO
 				.getConceptsWoNotes(thesaurusId, 0, 2);

@@ -107,7 +107,7 @@ public class ExportServiceTest {
 	}
 
 	@Test
-	public void testGetHierarchicalText() throws BusinessException {
+	public void testGetHierarchicalText() {
 		final Thesaurus th1 = new Thesaurus();
 		th1.setTitle("Test thesaurus");
 		th1.setIdentifier("th1");

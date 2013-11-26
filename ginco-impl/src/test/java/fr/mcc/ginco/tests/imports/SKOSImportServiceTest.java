@@ -98,7 +98,7 @@ public class SKOSImportServiceTest {
 	}
 
     @Test
-    public void testImportSKOSFile() throws BusinessException, IOException {
+    public void testImportSKOSFile() throws IOException {
     	Thesaurus returnedThesaurus = new Thesaurus();
     	returnedThesaurus.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");
     	Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(null);
@@ -116,7 +116,7 @@ public class SKOSImportServiceTest {
     }
 
     @Test(expected=BusinessException.class)
-    public void testImportSKOSFileExistingThesaurus() throws BusinessException, IOException {
+    public void testImportSKOSFileExistingThesaurus() throws IOException {
     	Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(new Thesaurus());
 
       String fileName = "concept_collections_temp.rdf";

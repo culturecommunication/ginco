@@ -81,16 +81,14 @@ public class RevisionsRestServiceTest {
 	}
 
 	@Test(expected = BusinessException.class)
-	public final void testExportRevisionsInvalidThesaurusId()
-			throws BusinessException, IOException {
+	public final void testExportRevisionsInvalidThesaurusId() throws IOException {
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString()))
 				.thenReturn(null);
 		revisionsRestService.exportRevisions("fakeid", 0, "fr-FR");
 	}
 
 	@Test
-	public final void testExportRevisionsInvalidLanguage()
-			throws BusinessException, IOException {
+	public final void testExportRevisionsInvalidLanguage() throws IOException {
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setTitle("fake title");
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString()))
@@ -101,8 +99,7 @@ public class RevisionsRestServiceTest {
 	}
 
 	@Test
-	public final void testExportRevisions() throws BusinessException,
-			IOException {
+	public final void testExportRevisions() throws IOException {
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setTitle("fake title");
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString()))

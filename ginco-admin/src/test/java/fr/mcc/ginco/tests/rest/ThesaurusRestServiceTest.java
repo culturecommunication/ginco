@@ -51,7 +51,6 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
@@ -96,11 +95,10 @@ public class ThesaurusRestServiceTest {
 
 	/**
 	 * Test the putVocabularyById method with a mock vocabulary
-	 * @throws BusinessException
 	 *
 	 */
 	@Test
-	public final void testCreateThesaurus() throws BusinessException {
+	public final void testCreateThesaurus() {
 		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn( new Thesaurus());
 		when(thesaurusService.updateThesaurus(any(Thesaurus.class))).thenReturn(new Thesaurus());
 		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
@@ -113,7 +111,7 @@ public class ThesaurusRestServiceTest {
 	}
 
 	@Test
-	public final void testUpdateThesaurus() throws BusinessException {
+	public final void testUpdateThesaurus() {
 		Thesaurus existingTh = new Thesaurus();
 		existingTh.setIdentifier("any-id");
 		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn(existingTh);
@@ -130,10 +128,9 @@ public class ThesaurusRestServiceTest {
 
 	/**
 	 * Gets all top languages
-	 * @throws BusinessException
 	 */
 	@Test
-	public final void testGetTopLanguagesAll() throws BusinessException {
+	public final void testGetTopLanguagesAll() {
 		List<Language> langs = getFakeLanguages();
 		when(languagesService.getTopLanguagesList()).thenReturn(langs);
 		ExtJsonFormLoadData<List<Language>> allLanguages = thesaurusRestService
@@ -145,7 +142,7 @@ public class ThesaurusRestServiceTest {
 	 * Gets the languages relative to a thesaurus
 	 */
 	@Test
-	public final void testGetTopLanguagesByThesaurus() throws BusinessException{
+	public final void testGetTopLanguagesByThesaurus(){
 		List<Language> langs = getFakeLanguages();
 		when(thesaurusService.getThesaurusLanguages(anyString())).thenReturn(
 				langs);

@@ -38,6 +38,8 @@ package fr.mcc.ginco.solr;
 import java.lang.reflect.Field;
 
 public final class SolrField {
+	private SolrField() {}
+	
 	public static final String LEXICALVALUE = "lexicalValue";
 	public static final String IDENTIFIER = "identifier";
 	public static final String THESAURUSID = "thesaurusId";

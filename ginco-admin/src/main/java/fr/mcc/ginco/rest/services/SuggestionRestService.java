@@ -55,19 +55,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Suggestion;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.MySuggestionView;
 import fr.mcc.ginco.extjs.view.pojo.SuggestionView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
-import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.SuggestionViewConverter;
 import fr.mcc.ginco.services.ISuggestionService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * Suggestion REST service for all operation on suggestions (both term or
@@ -142,14 +137,13 @@ public class SuggestionRestService {
 	/**
 	 * Public method used to create new suggestions
 	 * 
-	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/updateSuggestions")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#suggestionViews, '0') or hasPermission(#suggestionViews, '1')")
 	public ExtJsonFormLoadData<List<SuggestionView>> updateSuggestions(
-			List<SuggestionView> suggestionViews) throws BusinessException {
+			List<SuggestionView> suggestionViews) {
 
 		List<Suggestion> suggestions = new ArrayList<Suggestion>();
 		List<SuggestionView> resultSuggestions = new ArrayList<SuggestionView>();
@@ -170,7 +164,6 @@ public class SuggestionRestService {
 	/**
 	 * Public method used to create new suggestions
 	 * 
-	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/createSuggestions")
@@ -179,7 +172,7 @@ public class SuggestionRestService {
 	public ExtJsonFormLoadData<List<SuggestionView>> createSuggestions(
 			List<SuggestionView> suggestionViews,
 			@QueryParam("conceptId") String conceptId,
-			@QueryParam("termId") String termId) throws BusinessException {
+			@QueryParam("termId") String termId){
 		for (SuggestionView view : suggestionViews) {
 			if (StringUtils.isNotEmpty(conceptId)) {
 				logger.info("Updating suggestions for conceptid : " + conceptId);
@@ -213,14 +206,13 @@ public class SuggestionRestService {
 	/**
 	 * Public method used to create new suggestions
 	 * 
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getUserSuggestions")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<MySuggestionView>> getUserSuggestions(
 			@QueryParam("start") Integer startIndex,
-			@QueryParam("limit") Integer limit) throws BusinessException {
+			@QueryParam("limit") Integer limit) {
 
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -266,13 +258,12 @@ public class SuggestionRestService {
 	
 	/**
 	 * Public method used to destroy suggestions
-	 * @throws BusinessException 
 	 */
 	@POST
 	@Path("/destroySuggestions")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#suggestionViews, '0') or hasPermission(#suggestionViews, '1')")
-	public void destroySuggestions(List<SuggestionView> suggestionViews) throws BusinessException {
+	public void destroySuggestions(List<SuggestionView> suggestionViews) {
 		for (SuggestionView suggestionView:suggestionViews) {
 			Suggestion suggestion  = suggestionViewConverter.convert(suggestionView); 
 			suggestionService.deleteSuggestion(suggestion);

@@ -63,7 +63,7 @@ public class UserRoleServiceTest {
 	}
 
 	@Test
-	public final void testHasRole() throws BusinessException {
+	public final void testHasRole() {
 		UserRole userRole = new UserRole();
 		userRole.setIdentifier(1);
 		userRole.setRole(Role.EXPERT);
@@ -83,7 +83,7 @@ public class UserRoleServiceTest {
 	}
 
 	@Test
-	public final void testUpdateNewUserRole() throws BusinessException {
+	public final void testUpdateNewUserRole() {
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("thesaurus2");
 		UserRole userRole = new UserRole();
@@ -102,7 +102,7 @@ public class UserRoleServiceTest {
 	}
 
 	@Test(expected = BusinessException.class)
-	public final void testUpdateExistingUserRole() throws BusinessException {
+	public final void testUpdateExistingUserRole() {
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("thesaurus2");
 		UserRole userRole = new UserRole();

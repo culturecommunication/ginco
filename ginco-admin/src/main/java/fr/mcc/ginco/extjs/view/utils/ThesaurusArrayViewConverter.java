@@ -79,8 +79,7 @@ public class ThesaurusArrayViewConverter {
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;	
 
-	public ThesaurusArray convert(ThesaurusArrayView source)
-			throws BusinessException {
+	public ThesaurusArray convert(ThesaurusArrayView source) {
 		ThesaurusArray hibernateRes;
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusArray();
@@ -118,8 +117,7 @@ public class ThesaurusArrayViewConverter {
 		return hibernateRes;
 	}
 
-	public ThesaurusArrayView convert(final ThesaurusArray source)
-			throws BusinessException {
+	public ThesaurusArrayView convert(final ThesaurusArray source) {
 		ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
 
 		thesaurusArrayView.setIdentifier(source.getIdentifier());

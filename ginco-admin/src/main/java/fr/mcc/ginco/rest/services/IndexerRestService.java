@@ -44,8 +44,6 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.solr.IIndexerService;
 
 /**
@@ -62,7 +60,7 @@ public class IndexerRestService {
     @GET
     @Path("/reindex")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response forceIndexation() throws BusinessException, TechnicalException {
+    public Response forceIndexation() {
         indexerService.forceIndexing();
         return Response.status(Response.Status.OK)
                 .entity("{success:true, message: 'Indexing started!'}")

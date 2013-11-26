@@ -43,7 +43,6 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.UserRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.UserRoleView;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IUserRoleService;
@@ -73,9 +72,8 @@ public class UserRoleViewConverter {
 	 * @param source
 	 *            source to work with
 	 * @return converted item.
-	 * @throws BusinessException
 	 */
-	public UserRoleView convert(UserRole userRole) throws BusinessException {
+	public UserRoleView convert(UserRole userRole){
 		logger.debug("Converting UserRole " + userRole.getIdentifier()
 				+ " to UserRoleView");
 		UserRoleView userRoleView = new UserRoleView();

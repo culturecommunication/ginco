@@ -104,7 +104,7 @@ public class ThesaurusServiceTest {
 	}
 
 	@Test
-	public final void testCreateThesaurus() throws BusinessException {
+	public final void testCreateThesaurus() {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);
@@ -115,7 +115,7 @@ public class ThesaurusServiceTest {
 	}
 
 	@Test
-	public final void testUpdateThesaurus() throws BusinessException {
+	public final void testUpdateThesaurus() {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);

@@ -34,17 +34,18 @@
  */
 package fr.mcc.ginco.tests.daos;
 
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.hibernate.AssociativeRelationshipDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.tests.BaseDAOTest;
+import java.util.List;
+
 import junit.framework.Assert;
 import junitx.framework.ListAssert;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.hibernate.AssociativeRelationshipDAO;
+import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class AssociativeRelationshipDAOTest extends BaseDAOTest {
 
@@ -57,8 +58,7 @@ public class AssociativeRelationshipDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetDefaultAssociativeRelationshipRole()
-			throws BusinessException {
+	public void testGetDefaultAssociativeRelationshipRole() {
 		ThesaurusConcept concept1 = new ThesaurusConcept();
 		concept1.setIdentifier("http://www.culturecommunication.gouv.fr/co1");
 		List<String> associatedConcepts =  associativeRelationshipDAO.getAssociatedConcepts(concept1);
@@ -70,8 +70,7 @@ public class AssociativeRelationshipDAOTest extends BaseDAOTest {
 	}
 
     @Test
-    public void testGetRelationshipRole()
-            throws BusinessException {
+    public void testGetRelationshipRole() {
         AssociativeRelationship associativeRelationship =
                 associativeRelationshipDAO.getAssociativeRelationship(
                         "http://www.culturecommunication.gouv.fr/co1",

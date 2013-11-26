@@ -47,13 +47,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
@@ -97,13 +97,12 @@ public class ThesaurusArrayRestService {
 	 * 
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} object in
 	 *         JSON format or {@code null} if not found
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getArray")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusArrayView getThesaurusArrayById(
-			@QueryParam("id") String thesaurusArrayId) throws BusinessException {
+			@QueryParam("id") String thesaurusArrayId) {
 		return thesaurusArrayViewConverter.convert(thesaurusArrayService
 				.getThesaurusArrayById(thesaurusArrayId));
 	}
@@ -120,9 +119,8 @@ public class ThesaurusArrayRestService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusArrayView>> getAllConceptArraysByThesaurusId(
 			@QueryParam("excludedConceptArrayId") String excludedConceptArrayId,
-			@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException {
-		if ("".equals(excludedConceptArrayId)) {
+			@QueryParam("thesaurusId") String thesaurusId) {
+		if (StringUtils.isEmpty(excludedConceptArrayId)) {
 			excludedConceptArrayId = null;
 		}
 		List<ThesaurusArray> allArrays = thesaurusArrayService
@@ -140,17 +138,13 @@ public class ThesaurusArrayRestService {
 	 * @param thesaurusArrayViewJAXBElement
 	 *            element to create/update.
 	 * @return newly created object.
-	 * @throws BusinessException
-	 *             in case of error.
 	 */
 	@POST
 	@Path("/updateArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusArrayViewJAXBElement, '0')")
 	public ThesaurusArrayView updateThesaurusArray(
-			ThesaurusArrayView thesaurusArrayViewJAXBElement)
-
-	throws BusinessException {
+			ThesaurusArrayView thesaurusArrayViewJAXBElement) {
 
 		NodeLabel nodeLabel = nodeLabelViewConverter
 				.convert(thesaurusArrayViewJAXBElement);
@@ -176,15 +170,13 @@ public class ThesaurusArrayRestService {
 	 * JSON object send by extjs
 	 * 
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView} deleted
-	 *         object in JSON format or {@code null} if not found
-	 * @throws BusinessException
+	 *         object in JSON format or {@code null} if not found	
 	 */
 	@POST
 	@Path("/destroyArray")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusArrayViewJAXBElement, '0')")
-	public void destroyArray(ThesaurusArrayView thesaurusArrayViewJAXBElement)
-			throws BusinessException {
+	public void destroyArray(ThesaurusArrayView thesaurusArrayViewJAXBElement) {
 		ThesaurusArray object = thesaurusArrayViewConverter
 				.convert(thesaurusArrayViewJAXBElement);
 

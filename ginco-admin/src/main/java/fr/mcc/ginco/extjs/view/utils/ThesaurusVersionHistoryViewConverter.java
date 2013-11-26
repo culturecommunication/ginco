@@ -47,7 +47,6 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusVersionHistoryView;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
@@ -81,10 +80,8 @@ public class ThesaurusVersionHistoryViewConverter {
 	 * @param source
 	 *            source to work with
 	 * @return converted item.
-	 * @throws BusinessException
 	 */
-	public ThesaurusVersionHistoryView convert(ThesaurusVersionHistory source)
-			throws BusinessException {
+	public ThesaurusVersionHistoryView convert(ThesaurusVersionHistory source) {
 		ThesaurusVersionHistoryView convertedItem = new ThesaurusVersionHistoryView();
 		convertedItem.setIdentifier(source.getIdentifier());
 		if (source.getDate() != null) {
@@ -124,7 +121,6 @@ public class ThesaurusVersionHistoryViewConverter {
 	 * 
 	 * @param A {@link ThesaurusVersionHistory} list.
 	 * @return A {@link ThesaurusVersionHistoryView} list
-	 * @throws BusinessException
 	 */
 	public List<ThesaurusVersionHistoryView> convertList(List<ThesaurusVersionHistory> thesaurusHistoryList) {
 		List<ThesaurusVersionHistoryView> result = new ArrayList<ThesaurusVersionHistoryView>();
@@ -156,8 +152,7 @@ public class ThesaurusVersionHistoryViewConverter {
 		return hibernateRes;
 	}
 	
-	private ThesaurusVersionHistory getExistingThesaurusVersionHistory(String identifier)
-			throws BusinessException {
+	private ThesaurusVersionHistory getExistingThesaurusVersionHistory(String identifier) {
 		ThesaurusVersionHistory hibernateRes = thesaurusVersionHistoryService.getThesaurusVersionHistoryById(identifier);
 		logger.info("Getting an existing ThesaurusVersionHistory with identifier " + identifier);
 		return hibernateRes;

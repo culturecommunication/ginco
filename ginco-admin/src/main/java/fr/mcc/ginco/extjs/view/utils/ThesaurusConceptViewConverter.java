@@ -110,7 +110,7 @@ public class ThesaurusConceptViewConverter {
 	private IAssociativeRelationshipService associativeRelationshipService;
 
 	public List<ThesaurusConceptReducedView> convert(
-			List<ThesaurusConcept> conceptList) throws BusinessException {
+			List<ThesaurusConcept> conceptList) {
 
 		List<ThesaurusConceptReducedView> result = new ArrayList<ThesaurusConceptReducedView>();
 
@@ -125,8 +125,7 @@ public class ThesaurusConceptViewConverter {
 		return result;
 	}
 
-	public ThesaurusConceptReducedView convert(ThesaurusConcept concept)
-			throws BusinessException {
+	public ThesaurusConceptReducedView convert(ThesaurusConcept concept) {
 		ThesaurusConceptReducedView view = new ThesaurusConceptReducedView();
 		view.setIdentifier(concept.getIdentifier());
 		view.setLabel(thesaurusConceptService.getConceptLabel(concept
@@ -208,12 +207,10 @@ public class ThesaurusConceptViewConverter {
 	 * @param source
 	 *            source to work with
 	 * @return ThesaurusConcept
-	 * @throws BusinessException
 	 *             This method extracts a ThesaurusConcept from a
 	 *             ThesaurusConceptView given in argument
 	 */
-	public ThesaurusConcept convert(ThesaurusConceptView source)
-			throws BusinessException {
+	public ThesaurusConcept convert(ThesaurusConceptView source) {
 		ThesaurusConcept thesaurusConcept;
 
 		// Test if ThesaurusConcept already exists. If yes we get it, if no we

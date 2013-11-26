@@ -68,7 +68,7 @@ public class UserRoleViewConverterTest {
 	}
 
 	@Test
-	public void testConvertExistingUserRoleView() throws BusinessException {
+	public void testConvertExistingUserRoleView() {
 		UserRoleView userRoleView = new UserRoleView();
 		userRoleView.setIdentifier(1);
 		userRoleView.setUsername("john");
@@ -97,7 +97,7 @@ public class UserRoleViewConverterTest {
 	}
 
 	@Test
-	public void testConvertNewUserRoleView() throws BusinessException {
+	public void testConvertNewUserRoleView() {
 		UserRoleView userRoleView = new UserRoleView();
 		userRoleView.setIdentifier(0);
 		userRoleView.setUsername("john");
@@ -120,7 +120,7 @@ public class UserRoleViewConverterTest {
 	}
 
 	@Test
-	public void testConvertUserRole() throws BusinessException {
+	public void testConvertUserRole() {
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("http://thesaurus1");
 

@@ -107,12 +107,11 @@ public class ThesaurusNoteRestService {
 	 * Public method used to get the list of all concept note types in the database.
 	 *
 	 * @return list of NoteType objects for a concept, if not found - {@code null}
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getConceptNoteTypes")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<NoteType>> getConceptNoteTypes() throws BusinessException {
+	public ExtJsonFormLoadData<List<NoteType>> getConceptNoteTypes() {
 		List<NoteType> noteTypes = new ArrayList<NoteType>();
 		noteTypes = noteTypeService.getConceptNoteTypeList();
 		ExtJsonFormLoadData<List<NoteType>> types = new ExtJsonFormLoadData<List<NoteType>>(noteTypes);
@@ -124,12 +123,11 @@ public class ThesaurusNoteRestService {
 	 * Public method used to get the list of all term note types in the database.
 	 *
 	 * @return list of NoteType objects for a term, if not found - {@code null}
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getTermNoteTypes")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<NoteType>> getTermNoteTypes() throws BusinessException {
+	public ExtJsonFormLoadData<List<NoteType>> getTermNoteTypes(){
 		List<NoteType> noteTypes = new ArrayList<NoteType>();
 		noteTypes = noteTypeService.getTermNoteTypeList();
 		ExtJsonFormLoadData<List<NoteType>> types = new ExtJsonFormLoadData<List<NoteType>>(noteTypes);
@@ -141,7 +139,6 @@ public class ThesaurusNoteRestService {
 	 * Public method used to get the list of all notes for a concept or a term.
 	 *
 	 * @return list of Note objects for a term, if not found - {@code null}
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getNotes")
@@ -150,7 +147,7 @@ public class ThesaurusNoteRestService {
 			@QueryParam("conceptId") String conceptId,
 			@QueryParam("termId") String termId,
 			@QueryParam("start") Integer startIndex,
-		     @QueryParam("limit") Integer limit) throws BusinessException {
+		     @QueryParam("limit") Integer limit) {
 
 		logger.info("Getting Notes for a concept or a term with following parameters : " + "conceptId " +conceptId + " and termId " + termId + " and startIndex " + startIndex + " with a limit of " + limit);
 
@@ -172,13 +169,12 @@ public class ThesaurusNoteRestService {
 
 	/**
 	 * Public method used to create new notes
-	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/createNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#noteViews, '0')")
-	public ExtJsonFormLoadData<List<ThesaurusNoteView>> createNotes(List<ThesaurusNoteView> noteViews, @QueryParam("conceptId") String conceptId, @QueryParam("termId") String termId) throws BusinessException {
+	public ExtJsonFormLoadData<List<ThesaurusNoteView>> createNotes(List<ThesaurusNoteView> noteViews, @QueryParam("conceptId") String conceptId, @QueryParam("termId") String termId) {
 		//We set for each note if it belongs to a concept or a term
 		for (ThesaurusNoteView view : noteViews) {
 			if(conceptId != null) {
@@ -217,13 +213,12 @@ public class ThesaurusNoteRestService {
 
 	/**
 	 * Public method used to create new notes
-	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/updateNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#noteViews, '0')")
-	public ExtJsonFormLoadData<List<ThesaurusNoteView>> updateNotes(List<ThesaurusNoteView> noteViews) throws BusinessException {
+	public ExtJsonFormLoadData<List<ThesaurusNoteView>> updateNotes(List<ThesaurusNoteView> noteViews) {
 
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
 		List<Note> resultNotes = new ArrayList<Note>() ;
@@ -249,13 +244,12 @@ public class ThesaurusNoteRestService {
 
 	/**
 	 * Public method used to create new notes
-	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/destroyNotes")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#noteViews, '0')")
-	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews) throws BusinessException {
+	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews){
 
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
 		List<Note> resultNotes = new ArrayList<Note>() ;

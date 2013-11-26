@@ -40,7 +40,6 @@ import org.junit.Test;
 
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.hibernate.ThesaurusVersionHistoryDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class ThesaurusVersionHistoryDAOTest extends BaseDAOTest {
@@ -54,7 +53,7 @@ public class ThesaurusVersionHistoryDAOTest extends BaseDAOTest {
 	}
     
     @Test
-    public final void testGetLastPublishedVersionByThesaurusId() throws BusinessException {
+    public final void testGetLastPublishedVersionByThesaurusId(){
     	String thesaurusId1 = "thesaurus1";
     	ThesaurusVersionHistory versionHistory1 = thesaurusVersionHistoryDAO.getLastPublishedVersionByThesaurusId(thesaurusId1);
     	

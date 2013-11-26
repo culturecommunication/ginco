@@ -90,7 +90,7 @@ public class BaseRestServiceTest {
 	 * fields in Thesauruses objects
 	 */
 	@Test
-	public final void testGetVocabularies() throws BusinessException {
+	public final void testGetVocabularies() {
 		// Generating mocked Thesauruses in a single list "allThesaurus"
 
 		ThesaurusOrganization org = new ThesaurusOrganization();
@@ -115,7 +115,7 @@ public class BaseRestServiceTest {
 	}
 
 	private IThesaurusService initServicesForGetVocabulariesTest(
-			List<Thesaurus> mockedThesauruses) throws BusinessException {
+			List<Thesaurus> mockedThesauruses) {
 		for (int i = 0; i < mockedThesauruses.size(); i++) {
 			Mockito.when(
 					thesaurusService.getThesaurusById(mockedThesauruses.get(i)
@@ -133,7 +133,7 @@ public class BaseRestServiceTest {
 	}
 
 	@Test
-	public final void testGetUsername() throws BusinessException {
+	public final void testGetUsername() {
 		Authentication auth = new TestingAuthenticationToken("username",
 				"password");
 		SecurityContextHolder.getContext().setAuthentication(auth);
@@ -143,7 +143,7 @@ public class BaseRestServiceTest {
 	}
 
 	@Test
-	public final void testGetUserRoles() throws BusinessException {
+	public final void testGetUserRoles() {
 		Authentication auth = new TestingAuthenticationToken("username",
 				"password");
 		SecurityContextHolder.getContext().setAuthentication(auth);

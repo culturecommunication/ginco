@@ -57,7 +57,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -93,10 +92,9 @@ public class ThesaurusTermRestServiceTest{
 	}
 	/**
 	 * Test to get all Thesaurus Sandboxed Items method
-	 * @throws BusinessException
 	 */
 	@Test
-	public final void getAllThesaurusSandboxedTerms() throws BusinessException {
+	public final void getAllThesaurusSandboxedTerms() {
 
 		//Generating mocked Thesauruses in a single list "allThesaurus"
 		ThesaurusTerm fakeThesaurusTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("mock1");
@@ -120,7 +118,6 @@ public class ThesaurusTermRestServiceTest{
 	}
 	/**
 	 * Test the updateTerm method
-	 * @throws BusinessException
 	 */
 	@Test(expected=AccessDeniedException.class)
 	public final void testUpdateTermWithExpertRole1() {
@@ -153,10 +150,9 @@ public class ThesaurusTermRestServiceTest{
 	}
 	/**
 	 * Test the updateTerm method
-	 * @throws BusinessException
 	 */
 	@Test
-	public final void testUpdateTerm() throws BusinessException {
+	public final void testUpdateTerm() {
 		Authentication authent = Mockito.mock(Authentication.class);
 		SecurityContextHolder.getContext()
 				.setAuthentication(authent);
@@ -189,10 +185,9 @@ public class ThesaurusTermRestServiceTest{
 	}
 	/**
 	 * Test the createTerm method
-	 * @throws BusinessException
 	 */
 	@Test
-	public final void testCreateTerm() throws BusinessException {
+	public final void testCreateTerm(){
 
 		//Generating mocked objects
 		ThesaurusTerm fakeThesaurusTerm1 = new ThesaurusTerm();
@@ -236,7 +231,7 @@ public class ThesaurusTermRestServiceTest{
 		return fakeThesaurusTerm;
 	}
 	@Test
-	public void testGetThesaurusTerm() throws BusinessException {
+	public void testGetThesaurusTerm() {
 		ThesaurusTerm term =getFakeThesaurusTermWithNonMandatoryEmptyFields("fake-id");
 		ThesaurusTermView view = new ThesaurusTermView();
 		view.setLexicalValue(term.getLexicalValue());
@@ -246,7 +241,7 @@ public class ThesaurusTermRestServiceTest{
 		Assert.assertEquals("lexicale value", actualResponse.getLexicalValue());
 	}
 	@Test(expected=BusinessException.class)
-	public void testGetThesaurusTermWithWrongId() throws BusinessException {
+	public void testGetThesaurusTermWithWrongId() {
 		when(termService.getThesaurusTermById(anyString())).thenThrow(BusinessException.class);
 		thesaurusTermRestService.getThesaurusTerm("fake-id");
 	}

@@ -50,7 +50,6 @@ import org.springframework.stereotype.Component;
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.services.ILanguagesService;
@@ -92,8 +91,7 @@ public class SplitNonPreferredTermViewConverter {
 	private String language;
 
 	
-	public SplitNonPreferredTermView convert(SplitNonPreferredTerm source)
-			throws BusinessException {
+	public SplitNonPreferredTermView convert(SplitNonPreferredTerm source) {
 		SplitNonPreferredTermView view = new SplitNonPreferredTermView();
 		if (source != null) {
 			view.setIdentifier(source.getIdentifier());
@@ -128,10 +126,8 @@ public class SplitNonPreferredTermViewConverter {
 	 *            source to work with
 	 * @param fromConcept
 	 * @return converted item.
-	 * @throws BusinessException
 	 */
-	public SplitNonPreferredTerm convert(SplitNonPreferredTermView source)
-			throws BusinessException {
+	public SplitNonPreferredTerm convert(SplitNonPreferredTermView source) {
 		SplitNonPreferredTerm hibernateRes;
 
 		if (StringUtils.isEmpty(source.getIdentifier())) {
@@ -201,8 +197,7 @@ public class SplitNonPreferredTermViewConverter {
 		return hibernateRes;
 	}
 	
-	private SplitNonPreferredTerm getExistingSplitNonPreferredTerm(String identifier)
-			throws BusinessException {
+	private SplitNonPreferredTerm getExistingSplitNonPreferredTerm(String identifier) {
 		SplitNonPreferredTerm hibernateRes = splitNonPreferredTermService.getSplitNonPreferredTermById(identifier);
 		logger.info("Getting an existing SplitNonPreferredTerm with identifier " + identifier);
 		return hibernateRes;

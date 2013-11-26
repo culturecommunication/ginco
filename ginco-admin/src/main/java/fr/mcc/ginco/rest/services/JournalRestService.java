@@ -50,7 +50,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.FileResponse;
 import fr.mcc.ginco.services.IGincoRevService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -76,7 +75,6 @@ public class JournalRestService {
 	 * 
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 * @throws IOException
 	 */
 	@GET
@@ -84,7 +82,7 @@ public class JournalRestService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response exportLogJournal(
 			@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException, IOException {
+			throws IOException {
 		Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
 
 		File resFile = gincoRevService.getLogJournal(thesaurus);		

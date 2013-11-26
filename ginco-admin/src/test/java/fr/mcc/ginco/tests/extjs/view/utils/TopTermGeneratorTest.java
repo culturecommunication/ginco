@@ -50,7 +50,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
@@ -76,7 +75,7 @@ public class TopTermGeneratorTest {
     }
 
     @Test
-    public void testGenerateTopTerms() throws BusinessException {
+    public void testGenerateTopTerms(){
         List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
         
         Mockito.when(

@@ -57,7 +57,6 @@ import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.UserRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
@@ -129,7 +128,7 @@ public class BaseRestService {
 	@Path("/getTreeContent")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<IThesaurusListNode> getTreeContent(
-			@QueryParam("id") String nodeParam) throws BusinessException {
+			@QueryParam("id") String nodeParam) {
 		List<IThesaurusListNode> result;
 
 		if (nodeParam.startsWith(FolderGenerator.ORPHANS_PREFIX)) {

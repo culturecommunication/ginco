@@ -79,7 +79,7 @@ public class ThesaurusViewConverterTest {
 	}
 
 	@Test
-	public void testConvertExistingThesaurusView() throws BusinessException {
+	public void testConvertExistingThesaurusView() {
 
 		ThesaurusView view = buildThesaurusView("view1");
 		Thesaurus emptyThes = new Thesaurus();

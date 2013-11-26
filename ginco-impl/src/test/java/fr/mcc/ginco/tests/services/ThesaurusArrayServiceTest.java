@@ -78,7 +78,7 @@ public class ThesaurusArrayServiceTest {
 	}
 
     @Test
-    public final void testUpdateArray() throws BusinessException {
+    public final void testUpdateArray() {
         ThesaurusArray mockArray = new ThesaurusArray();
         NodeLabel mockLabel = new NodeLabel();
         mockLabel.setIdentifier(1);

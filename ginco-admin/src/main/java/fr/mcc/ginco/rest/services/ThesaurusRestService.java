@@ -63,7 +63,6 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
@@ -141,13 +140,12 @@ public class ThesaurusRestService {
 	 * Public method used to get list of existing top Languages in the database.
 	 *
 	 * @return list of objects, if not found - {@code null}
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getTopLanguages")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<Language>> getTopLanguages(
-			@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+			@QueryParam("thesaurusId") String thesaurusId) {
 		logger.info("Getting Top Languages");
 		logger.info("thesaurusId = " + thesaurusId);
 
@@ -222,7 +220,7 @@ public class ThesaurusRestService {
 	@Path("/updateVocabulary")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
-	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
+	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
 		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 
 		ThesaurusView view = null;
@@ -240,13 +238,12 @@ public class ThesaurusRestService {
 
     /**
      * Public method used to delete thesaurus
-     * @throws BusinessException
      */
     @POST
     @Path("/destroyVocabulary")
     @Consumes({ MediaType.APPLICATION_JSON })
     @PreAuthorize("hasRole('ROLE_ADMIN') && hasPermission(#thesaurusViewJAXBElement, 'DELETION')")
-    public void destroyVocabulary(ThesaurusView thesaurusViewJAXBElement) throws BusinessException {
+    public void destroyVocabulary(ThesaurusView thesaurusViewJAXBElement) {
         Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 
         if (object != null) {
@@ -263,7 +260,6 @@ public class ThesaurusRestService {
 
     /**
      * Public method used to publish thesaurus
-     * @throws BusinessException
      * @throws IOException
      * @throws JsonMappingException
      * @throws JsonGenerationException
@@ -275,7 +271,7 @@ public class ThesaurusRestService {
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
     public String publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
                                                  @QueryParam("userId") String userId)
-            throws BusinessException, JsonGenerationException, JsonMappingException, IOException {
+            throws JsonGenerationException, JsonMappingException, IOException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
         if (object != null) {
@@ -291,7 +287,6 @@ public class ThesaurusRestService {
 
     /**
      * Public method used to archive thesaurus
-     * @throws BusinessException
      * @throws IOException
      * @throws JsonMappingException
      * @throws JsonGenerationException
@@ -302,7 +297,7 @@ public class ThesaurusRestService {
     @Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
     public String archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
-            throws BusinessException, JsonGenerationException, JsonMappingException, IOException {
+            throws JsonGenerationException, JsonMappingException, IOException {
         Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
         ThesaurusView view = null;
@@ -327,7 +322,7 @@ public class ThesaurusRestService {
     @GET
     @Path("/getAllAuthors")
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<ThesaurusOrganization> getAllAuthors() throws BusinessException {
+    public List<ThesaurusOrganization> getAllAuthors() {
     	List<ThesaurusOrganization> allOrgs = thesaurusOrganizationService.getOrganizations();
     	List<String> returnedAuthorNames = new ArrayList<String>();
     	List<ThesaurusOrganization> returnedOrgs = new ArrayList<ThesaurusOrganization>();
@@ -345,7 +340,7 @@ public class ThesaurusRestService {
     @GET
     @Path("/getStatistics")
     @Produces({ MediaType.APPLICATION_JSON })
-    public ExtJsonFormLoadData getStatistics(@QueryParam("id") String thesaurusId) throws BusinessException {
+    public ExtJsonFormLoadData getStatistics(@QueryParam("id") String thesaurusId) {
     	return new ExtJsonFormLoadData(thesaurusStatisticsService.getStatistics(thesaurusId));
     }
 }

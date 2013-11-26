@@ -77,7 +77,7 @@ public class OrphansGeneratorTest {
 	}
 	
 	@Test
-	public void testGenerateOrphans() throws BusinessException {
+	public void testGenerateOrphans(){
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
 
         Mockito.when(

@@ -48,7 +48,6 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
@@ -88,8 +87,7 @@ public class GroupsGenerator {
 	 *            id of the thesaurus.
 	 * @return created list of leafs.
 	 */
-	public List<IThesaurusListNode> generateGroups(String thesaurusId)
-			throws BusinessException {
+	public List<IThesaurusListNode> generateGroups(String thesaurusId) {
 		logger.debug("Generating thesaurus groups list for vocabularyId : " + thesaurusId);
 		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(null, thesaurusId);
 		logger.debug(groups.size() + " groups found");

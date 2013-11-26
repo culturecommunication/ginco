@@ -61,7 +61,7 @@ public class ThesaurusTermRoleServiceTest {
 		MockitoAnnotations.initMocks(this);
 	}
     @Test
-    public final void testGetDefaultThesaurusTermRole() throws BusinessException {
+    public final void testGetDefaultThesaurusTermRole() {
     	ThesaurusTermRole role = new ThesaurusTermRole();
     	role.setCode("CODE-ROLE");
     	role.setDefaultRole(true);

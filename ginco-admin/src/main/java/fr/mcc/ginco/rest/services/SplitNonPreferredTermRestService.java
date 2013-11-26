@@ -53,8 +53,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView;
 import fr.mcc.ginco.extjs.view.utils.SplitNonPreferredTermViewConverter;
@@ -90,12 +88,11 @@ public class SplitNonPreferredTermRestService {
 	 * Public method used to get the details of a single {@link SplitNonPreferredTerm}
 	 *
 	 * @return list of ThesaurusTermView, if not found - {@code null}
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getTerm")
 	@Produces({MediaType.APPLICATION_JSON})
-	public SplitNonPreferredTermView getTerm(@QueryParam("id") String idTerm) throws BusinessException {
+	public SplitNonPreferredTermView getTerm(@QueryParam("id") String idTerm) {
 		SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermService.getSplitNonPreferredTermById(idTerm);
         return splitNonPreferredTermViewConverter.convert(thesaurusTerm);
 	}
@@ -107,14 +104,12 @@ public class SplitNonPreferredTermRestService {
 	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} updated object
 	 *         in JSON format or {@code null} if not found
-	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/updateTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#splitTermView, '0')")
-	public SplitNonPreferredTermView updateTerm(SplitNonPreferredTermView splitTermView)
-            throws BusinessException, TechnicalException {
+	public SplitNonPreferredTermView updateTerm(SplitNonPreferredTermView splitTermView) {
 
 		SplitNonPreferredTerm object = splitNonPreferredTermViewConverter.convert(splitTermView);
 
@@ -143,7 +138,7 @@ public class SplitNonPreferredTermRestService {
 	public ExtJsonFormLoadData<List<SplitNonPreferredTermView> > getList
     (@QueryParam("start") Integer startIndex,
      @QueryParam("limit") Integer limit,
-     @QueryParam("idThesaurus") String idThesaurus) throws BusinessException{
+     @QueryParam("idThesaurus") String idThesaurus) {
 		logger.info("Getting Thesaurus SplitNonPreferred Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit );
 		List<SplitNonPreferredTerm> thesaurusTerms = splitNonPreferredTermService.getSplitNonPreferredTermList(startIndex, limit, idThesaurus);
 		Long total = splitNonPreferredTermService.getSplitNonPreferredTermCount(idThesaurus);
@@ -164,13 +159,12 @@ public class SplitNonPreferredTermRestService {
      *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} deleted object
 	 *         in JSON format or {@code null} if not found
-	 * @throws BusinessException
 	 */
 	@POST
 	@Path("/destroyTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#element, '0')")
-	public void destroyTerm(SplitNonPreferredTermView element) throws BusinessException {
+	public void destroyTerm(SplitNonPreferredTermView element) {
 		SplitNonPreferredTerm object = splitNonPreferredTermViewConverter.convert(element);
 
 		if (object != null) {

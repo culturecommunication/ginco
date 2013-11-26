@@ -43,7 +43,6 @@ import org.junit.Test;
 
 import fr.mcc.ginco.beans.Suggestion;
 import fr.mcc.ginco.dao.hibernate.SuggestionDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class SuggestionDAOTest extends BaseDAOTest {
@@ -57,8 +56,7 @@ public class SuggestionDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testFindTermPaginatedSuggestions()
-			throws BusinessException {		
+	public void testFindTermPaginatedSuggestions() {		
 		List<Suggestion> actualSuggestions = suggestionDAO.findTermPaginatedSuggestions("http://www.culturecommunication.gouv.fr/ter1", 0,10);
 		Assert.assertEquals(2, actualSuggestions.size());	
 		
@@ -69,8 +67,7 @@ public class SuggestionDAOTest extends BaseDAOTest {
 	}
 	
 	@Test
-	public void testFindConceptPaginatedSuggestions()
-			throws BusinessException {		
+	public void testFindConceptPaginatedSuggestions() {		
 		List<Suggestion> actualSuggestions = suggestionDAO.findConceptPaginatedSuggestions("http://www.culturecommunication.gouv.fr/co1", 0,10);
 		Assert.assertEquals(2, actualSuggestions.size());	
 		
@@ -81,24 +78,21 @@ public class SuggestionDAOTest extends BaseDAOTest {
 	}
 	
 	@Test
-	public void testGetConceptSuggestionCount()
-			throws BusinessException {		
+	public void testGetConceptSuggestionCount() {		
 		Long actualSuggestionsNb = suggestionDAO.getConceptSuggestionCount("http://www.culturecommunication.gouv.fr/co1");
 		Assert.assertEquals(2, actualSuggestionsNb.intValue());	
 
 	}
 	
 	@Test
-	public void testGetTermSuggestionCount()
-			throws BusinessException {		
+	public void testGetTermSuggestionCount() {		
 		Long actualSuggestionsNb = suggestionDAO.getTermSuggestionCount("http://www.culturecommunication.gouv.fr/ter1");
 		Assert.assertEquals(2, actualSuggestionsNb.intValue());	
 
 	}
 	
 	@Test
-	public void testFindPaginatedSuggestionsByRecipient()
-			throws BusinessException {		
+	public void testFindPaginatedSuggestionsByRecipient() {		
 		List<Suggestion> actualSuggestions = suggestionDAO.findPaginatedSuggestionsByRecipient("paul",0,10);
 		Assert.assertEquals(4, actualSuggestions.size());
 		
@@ -108,8 +102,7 @@ public class SuggestionDAOTest extends BaseDAOTest {
 	}
 	
 	@Test
-	public void testGetSuggestionsByRecipientCount()
-			throws BusinessException {		
+	public void testGetSuggestionsByRecipientCount() {		
 		Long actualSuggestionsNb = suggestionDAO.getSuggestionsByRecipientCount("paul");
 		Assert.assertEquals(4, actualSuggestionsNb.intValue());	
 

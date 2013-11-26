@@ -40,6 +40,7 @@ import java.util.List;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 
 public final class ThesaurusConceptUtils {
+	
 
 	/**
 	 * This method return the ids of the concept included in the list given in

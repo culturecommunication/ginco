@@ -114,10 +114,9 @@ public class ThesaurusConceptRestServiceTest {
 
 	/**
 	 * Test to put a concept with two terms (which one is prefered)
-	 * @throws BusinessException
 	 */
 	@Test
-	public final void putNewTopConceptWithTwoTermsAndOnlyOneWhichIsPrefered() throws BusinessException {
+	public final void putNewTopConceptWithTwoTermsAndOnlyOneWhichIsPrefered() {
 		Authentication authent = Mockito.mock(Authentication.class);
 		SecurityContextHolder.getContext()
 				.setAuthentication(authent);

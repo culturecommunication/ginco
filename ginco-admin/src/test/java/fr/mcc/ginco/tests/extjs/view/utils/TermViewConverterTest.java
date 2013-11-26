@@ -87,7 +87,7 @@ public class TermViewConverterTest {
 	}
 
 	@Test
-	public void testConvertExistingThesaurusTermViewNoLanguage() throws BusinessException {
+	public void testConvertExistingThesaurusTermViewNoLanguage() {
 
 		ThesaurusConcept fakeConcept = new ThesaurusConcept();
 		fakeConcept.setIdentifier("fakeConcept");
@@ -117,7 +117,7 @@ public class TermViewConverterTest {
 	}
 	
 	@Test
-	public void testConvertExistingThesaurusTermNoConcept() throws BusinessException {		
+	public void testConvertExistingThesaurusTermNoConcept() {		
 		ThesaurusTermView view = buildThesaurusTermView("view1");		
 		
 		ThesaurusTerm termFromDB = new ThesaurusTerm();		

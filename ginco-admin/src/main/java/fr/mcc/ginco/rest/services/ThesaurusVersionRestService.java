@@ -48,6 +48,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.cxf.common.util.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -83,13 +84,12 @@ public class ThesaurusVersionRestService {
 	 * Public method used to get the list of all versions of a thesaurus
 	 * 
 	 * @return list of ThesaurusVersionHistoryView objects for a thesaurus
-	 * @throws BusinessException 
 	 */
 	@GET
 	@Path("/getVersions")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> getVersions(
-			@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+			@QueryParam("thesaurusId") String thesaurusId) {
 		List<ThesaurusVersionHistory> thesaurusVersions = new ArrayList<ThesaurusVersionHistory>();
 		thesaurusVersions = thesaurusVersionHistoryService.getVersionsByThesaurusId(thesaurusId);
 		ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> result = new ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>>(thesaurusVersionHistoryViewConverter.convertList(thesaurusVersions));
@@ -100,18 +100,17 @@ public class ThesaurusVersionRestService {
 	/**
 	 * Public method to get all status for concept (id + label)
 	 * The types are read from a properties file
-	 * @throws BusinessException 
 	 */
 	@GET
 	@Path("/getAllVersionStatus")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<GenericStatusView>> getAllVersionStatus() throws BusinessException {
+	public ExtJsonFormLoadData<List<GenericStatusView>> getAllVersionStatus() {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		
 		try {
 			String availableStatusIds[] = LabelUtil.getResourceLabel("version-status").split(",");
 			
-			if ("".equals(availableStatusIds[0])) {
+			if (StringUtils.isEmpty(availableStatusIds[0])) {
 				//Ids of status for concepts are not set correctly
 				throw new BusinessException("Error with property file - check values of identifier version status", "check-values-of-version-status");
 			}
@@ -139,13 +138,12 @@ public class ThesaurusVersionRestService {
 	
 	/**
 	 * Public method used to create new thesaurus versions
-	 * @throws BusinessException 
 	 */
 	@POST
 	@Path("/updateVersions")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#versionViews, '0')")
-	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> updateVersions(List<ThesaurusVersionHistoryView> versionViews) throws BusinessException {
+	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> updateVersions(List<ThesaurusVersionHistoryView> versionViews) {
 	
 		List<ThesaurusVersionHistory> versions = thesaurusVersionHistoryViewConverter.convertViewList(versionViews);
 		List<ThesaurusVersionHistory> resultVersions = new ArrayList<ThesaurusVersionHistory>() ;

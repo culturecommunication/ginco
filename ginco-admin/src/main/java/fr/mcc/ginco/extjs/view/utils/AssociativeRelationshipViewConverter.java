@@ -41,6 +41,8 @@ import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
 import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -102,7 +104,7 @@ public class AssociativeRelationshipViewConverter {
         }
         
         AssociativeRelationshipRole role = null;
-        if (associativeRelationshipView.getRoleCode() != null && !"".equals(associativeRelationshipView.getRoleCode())) {
+        if (StringUtils.isNotEmpty(associativeRelationshipView.getRoleCode())) {
         	role = associativeRelationshipRoleService.getRoleById(associativeRelationshipView.getRoleCode());
         } else {
         	role = associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole();

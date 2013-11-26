@@ -54,7 +54,6 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupLabelViewConverter;
@@ -114,7 +113,7 @@ public class ThesaurusConceptGroupRestService {
 	@Path("/getConceptGroup")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusConceptGroupView getConceptGroupById(
-			@QueryParam("id") String conceptGroupId) throws BusinessException {
+			@QueryParam("id") String conceptGroupId){
 		return thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupService
 				.getConceptGroupById(conceptGroupId));
 	}
@@ -129,7 +128,7 @@ public class ThesaurusConceptGroupRestService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> getAllConceptGroupsByThesaurusId(
 			@QueryParam("excludedConceptGroupId") String excludedConceptGroupId,
-			@QueryParam("thesaurusId") String thesaurusId) throws BusinessException {
+			@QueryParam("thesaurusId") String thesaurusId) {
 		
 		if (StringUtils.isEmpty(excludedConceptGroupId)) {
 			excludedConceptGroupId = null;
@@ -145,16 +144,13 @@ public class ThesaurusConceptGroupRestService {
      * Public method used to create or update a concept group.
      * @param thesaurusConceptGroupViewJAXBElement element to create/update.
      * @return newly created object.
-     * @throws BusinessException in case of error.
      */
 	@POST
 	@Path("/updateConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusConceptGroupViewJAXBElement, '0')")
 	public ThesaurusConceptGroupView updateThesaurusConceptGroup(
-			ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement)
-	
-			throws BusinessException {
+			ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) {
 
 		ThesaurusConceptGroupLabel conceptGroupLabel = thesaurusConceptGroupLabelViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
 		
@@ -170,13 +166,12 @@ public class ThesaurusConceptGroupRestService {
 	/**
      * Public method used to delete a concept group.
      * @param thesaurusConceptGroupViewJAXBElement element to delete
-     * @throws BusinessException in case of error.
      */
 	@POST
 	@Path("/destroyConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusConceptGroupViewJAXBElement, '0')")
-	public void destroyConceptGroup(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) throws BusinessException {
+	public void destroyConceptGroup(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) {
 		ThesaurusConceptGroup object = thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
 		if (object != null) {
 			thesaurusConceptGroupService.destroyThesaurusConceptGroup(object);

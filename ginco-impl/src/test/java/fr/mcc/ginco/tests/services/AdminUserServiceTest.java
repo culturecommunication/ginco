@@ -44,7 +44,6 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.AdminUser;
 import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.AdminUserServiceImpl;
 
 public class AdminUserServiceTest {
@@ -61,7 +60,7 @@ public class AdminUserServiceTest {
 	}
 
 	@Test
-	public final void testIsUserAdmin() throws BusinessException {
+	public final void testIsUserAdmin() {
 		String userId1 = "user1.culture.gouv.fr";
 		String userId2 = "user2.culture.gouv.fr";
 		AdminUser user1 = new AdminUser();

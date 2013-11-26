@@ -77,8 +77,7 @@ public class ThesaurusConceptGroupViewConverter {
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
 
-	public ThesaurusConceptGroup convert(ThesaurusConceptGroupView source)
-			throws BusinessException {
+	public ThesaurusConceptGroup convert(ThesaurusConceptGroupView source) {
 		ThesaurusConceptGroup hibernateRes;
 
 		if (StringUtils.isEmpty(source.getIdentifier())) {
@@ -88,7 +87,7 @@ public class ThesaurusConceptGroupViewConverter {
 		} else {
 			hibernateRes = thesaurusConceptGroupService.getConceptGroupById(source.getIdentifier());
 		}
-		if ("".equals(source.getThesaurusId())) {
+		if (StringUtils.isEmpty(source.getThesaurusId())) {
 			throw new BusinessException(
 					"ThesaurusId is mandatory to save a concept group",
 					"mandatory-thesaurus");
@@ -113,7 +112,7 @@ public class ThesaurusConceptGroupViewConverter {
 			hibernateRes.getConcepts().add(concept);
 		}
 
-		if ("".equals(source.getType())) {
+		if (StringUtils.isEmpty(source.getType())) {
 			throw new BusinessException(
 					"Type is mandatory to save a concept group",
 					"mandatory-type");
@@ -145,8 +144,7 @@ public class ThesaurusConceptGroupViewConverter {
 		return hibernateRes;
 	}
 
-	public ThesaurusConceptGroupView convert(final ThesaurusConceptGroup source)
-			throws BusinessException {
+	public ThesaurusConceptGroupView convert(final ThesaurusConceptGroup source) {
 		ThesaurusConceptGroupView thesaurusConceptGroupView = new ThesaurusConceptGroupView();
 
 		if (source != null) {

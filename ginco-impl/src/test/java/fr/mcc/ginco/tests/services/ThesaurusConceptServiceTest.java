@@ -110,7 +110,7 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test
-	public final void testGetOrphanThesaurusConcepts() throws BusinessException {
+	public final void testGetOrphanThesaurusConcepts() {
 		when(thesaurusDAO.getById(anyString())).thenReturn(new Thesaurus());
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
 		when(
@@ -125,8 +125,7 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test(expected = BusinessException.class)
-	public final void testGetOrphanThesaurusConceptsWithWrongThesaurusId()
-			throws BusinessException {
+	public final void testGetOrphanThesaurusConceptsWithWrongThesaurusId() {
 		when(thesaurusDAO.getById(anyString())).thenReturn(null);
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
 		when(
@@ -138,8 +137,7 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test
-	public final void testGetTopTermThesaurusConceptsCount()
-			throws BusinessException {
+	public final void testGetTopTermThesaurusConceptsCount() {
 		List<ThesaurusConcept> list = new ArrayList<ThesaurusConcept>();
 		ThesaurusConcept co1 = new ThesaurusConcept();
 		co1.setIdentifier("co1");
@@ -154,8 +152,7 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test
-	public final void testGetTopTermThesaurusConcepts()
-			throws BusinessException {
+	public final void testGetTopTermThesaurusConcepts() {
 		List<ThesaurusConcept> list = new ArrayList<ThesaurusConcept>();
 		ThesaurusConcept co1 = new ThesaurusConcept();
 		co1.setIdentifier("co1");
@@ -176,7 +173,7 @@ public class ThesaurusConceptServiceTest {
 	// \ / / \ / \ |
 	// !!leaf1_1!!---- leaf1_2 leaf1_3<-|
 	@Test
-	public final void testGetRootsWithCycling() throws BusinessException {
+	public final void testGetRootsWithCycling() {
 		ThesaurusConcept leaf1_1 = new ThesaurusConcept();
 		leaf1_1.setIdentifier("leaf1_1");
 		ThesaurusConcept leaf1_2 = new ThesaurusConcept();
@@ -257,7 +254,7 @@ public class ThesaurusConceptServiceTest {
 	// node2<--node3
 	//
 	@Test
-	public final void testGetRootsWithNoEvidentRoot() throws BusinessException {
+	public final void testGetRootsWithNoEvidentRoot() {
 		final ThesaurusConcept node1 = new ThesaurusConcept();
 		node1.setIdentifier("node1");
 		final ThesaurusConcept node2 = new ThesaurusConcept();
@@ -357,7 +354,7 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test
-	public final void testGetOrphanThesaurusConceptsCount() throws BusinessException {
+	public final void testGetOrphanThesaurusConceptsCount() {
 		when(thesaurusDAO.getById(anyString())).thenReturn(new Thesaurus());
 		when(thesaurusConceptDAO.getOrphansThesaurusConceptCount(any(Thesaurus.class))).thenReturn((long)2);
 		long conceptNb = thesaurusConceptService
@@ -367,7 +364,7 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test(expected = BusinessException.class)
-	public final void testGetOrphanThesaurusConceptsCountWithNotExistingThesaurus() throws BusinessException {
+	public final void testGetOrphanThesaurusConceptsCountWithNotExistingThesaurus() {
 		when(thesaurusDAO.getById(anyString())).thenReturn(null);
 		when(thesaurusConceptDAO.getOrphansThesaurusConceptCount(any(Thesaurus.class))).thenReturn((long)2);
 		thesaurusConceptService
@@ -375,7 +372,7 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test
-	public final void testDestroyThesaurusConcept() throws BusinessException {
+	public final void testDestroyThesaurusConcept() {
 		final ThesaurusConcept node1 = new ThesaurusConcept();
 		node1.setIdentifier("concept1");
 		node1.setStatus(ConceptStatusEnum.CANDIDATE.getStatus());
@@ -405,8 +402,7 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test
-	public void testGetConceptPreferredTerm()
-			throws BusinessException {
+	public void testGetConceptPreferredTerm(){
 		ThesaurusTerm term1 = new ThesaurusTerm();
 		term1.setIdentifier("term1");
 		when(thesaurusTermDAO.getConceptPreferredTerm(anyString())).thenReturn(term1);
@@ -415,15 +411,13 @@ public class ThesaurusConceptServiceTest {
 	}
 
 	@Test(expected = BusinessException.class)
-	public void testGetConceptPreferredTermWithNoPreferredTerm()
-			throws BusinessException {
+	public void testGetConceptPreferredTermWithNoPreferredTerm() {
 		when(thesaurusTermDAO.getConceptPreferredTerm(anyString())).thenReturn(null);
 		thesaurusConceptService.getConceptPreferredTerm("anyString");
 	}
 
 	@Test
-	public void testGetAssociatedConcepts()
-			throws BusinessException {
+	public void testGetAssociatedConcepts() {
 		final ThesaurusConcept node1 = new ThesaurusConcept();
 		node1.setIdentifier("concept1");
 

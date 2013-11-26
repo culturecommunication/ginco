@@ -48,7 +48,6 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
@@ -83,8 +82,7 @@ public class OrphansGenerator {
 	 *            id of the thesaurus.
 	 * @return created list of leafs.
 	 */
-	public List<IThesaurusListNode> generateOrphans(String parentId)
-			throws BusinessException {
+	public List<IThesaurusListNode> generateOrphans(String parentId) {
 		logger.debug("Generating orphans concepts list for vocabularyId : " + parentId);
 		List<ThesaurusConcept> orphans = thesaurusConceptService
 				.getOrphanThesaurusConcepts(parentId, maxResults + 1);

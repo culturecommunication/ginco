@@ -55,7 +55,6 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.IExportService;
 import fr.mcc.ginco.exports.IGincoBranchExportService;
 import fr.mcc.ginco.exports.IGincoThesaurusExportService;
@@ -73,6 +72,10 @@ import fr.mcc.ginco.utils.LabelUtil;
 @Path("/exportservice")
 @PreAuthorize("isAuthenticated()")
 public class ExportRestService {
+
+	private static final String THESAURUS_ID_PARAMETER = "thesaurusId";
+
+	private static final String XML_EXTENSION = ".xml";
 
 	@Inject
 	@Named("exportService")
@@ -106,14 +109,12 @@ public class ExportRestService {
 	 * 
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getHierarchical")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getHierarchical(
-			@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException {
+			@QueryParam(THESAURUS_ID_PARAMETER) String thesaurusId) {
 
 		Thesaurus targetThesaurus = thesaurusService
 				.getThesaurusById(thesaurusId);
@@ -128,13 +129,11 @@ public class ExportRestService {
 	 * Get a SKOS export of a thesaurus
 	 * @param thesaurusId
 	 * @return A RDF file that contains the thesaurus in SKOS format
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getSKOS")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response getSKOS(@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException {
+	public Response getSKOS(@QueryParam(THESAURUS_ID_PARAMETER) String thesaurusId) {
 		Thesaurus targetThesaurus = thesaurusService
 				.getThesaurusById(thesaurusId);
 		File results = skosExportService.getSKOSExport(targetThesaurus);
@@ -148,14 +147,12 @@ public class ExportRestService {
 	 * 
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getAlphabetical")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getAlphabetical(
-			@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException {
+			@QueryParam(THESAURUS_ID_PARAMETER) String thesaurusId) {
 		Thesaurus targetThesaurus = thesaurusService
 				.getThesaurusById(thesaurusId);
 
@@ -165,8 +162,7 @@ public class ExportRestService {
 				.toResponse();
 	}
 
-	private File writeExportFile(Thesaurus targetThesaurus, boolean alphabetical)
-			throws BusinessException {
+	private File writeExportFile(Thesaurus targetThesaurus, boolean alphabetical) {
 
 		File temp;
 		BufferedWriter out = null;
@@ -215,21 +211,19 @@ public class ExportRestService {
 	/**
 	 * Returns a XML file that contains exported thesaurus and all related objects, in Ginco export format
 	 * @param thesaurusId
-	 * @return
-	 * @throws BusinessException
+	 * @return	
 	 */
 	@GET
 	@Path("/getGincoThesaurusExport")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getGincoThesaurusExport(
-			@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException, TechnicalException {
+			@QueryParam(THESAURUS_ID_PARAMETER) String thesaurusId) {
 		Thesaurus targetThesaurus = thesaurusService
 				.getThesaurusById(thesaurusId);
 		File temp;
 		BufferedWriter out = null;
 		try {
-			temp = File.createTempFile("GINCO ", ".xml");
+			temp = File.createTempFile("GINCO ", XML_EXTENSION);
 			temp.deleteOnExit();
 			out = new BufferedWriter(new FileWriter(temp));
 			String result = gincoThesaurusExportService
@@ -242,7 +236,7 @@ public class ExportRestService {
 					"cannot-create-file", e);
 		}
 
-		return new FileResponse(temp, ".xml", "GINCO "
+		return new FileResponse(temp, XML_EXTENSION, "GINCO "
 				+ targetThesaurus.getTitle()).toResponse();
 	}
 	
@@ -250,7 +244,6 @@ public class ExportRestService {
 	 * Returns a XML file that contains exported branch (the concept given in parameter + all its children), in Ginco export format
 	 * @param conceptId
 	 * @return
-	 * @throws BusinessException
 	 */
 	@GET
 	@Path("/getGincoBranchExport")
@@ -261,7 +254,7 @@ public class ExportRestService {
 		File temp;
 		BufferedWriter out = null;
 		try {
-			temp = File.createTempFile("GINCO ", ".xml");
+			temp = File.createTempFile("GINCO ", XML_EXTENSION);
 			temp.deleteOnExit();
 			out = new BufferedWriter(new FileWriter(temp));
 			String result = gincoBranchExportService.getBranchExport(targetConcept);
@@ -272,7 +265,7 @@ public class ExportRestService {
 			throw new BusinessException("Cannot create temp file!",
 					"cannot-create-file", e);
 		}
-		return new FileResponse(temp, ".xml", "GINCO Branch "
+		return new FileResponse(temp, XML_EXTENSION, "GINCO Branch "
 				+ thesaurusConceptService.getConceptTitle(targetConcept)).toResponse();
 	}
 }

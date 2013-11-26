@@ -42,7 +42,6 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Suggestion;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.SuggestionView;
 import fr.mcc.ginco.services.ISuggestionService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -101,9 +100,8 @@ public class SuggestionViewConverter {
 	 * @param source
 	 *            (a {@link SuggestionView} object)
 	 * @return result (a {@link Suggestion} object)
-	 * @throws BusinessException
 	 */
-	public Suggestion convert(SuggestionView source) throws BusinessException {
+	public Suggestion convert(SuggestionView source) {
 		Suggestion hibernateRes;
 		if (source.getIdentifier() == null) {
 			hibernateRes = new Suggestion();

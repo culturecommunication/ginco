@@ -42,7 +42,6 @@ import org.junit.Test;
 
 import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.dao.hibernate.NoteTypeDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class NoteTypeDAOTest extends BaseDAOTest {
@@ -55,13 +54,13 @@ public class NoteTypeDAOTest extends BaseDAOTest {
 		noteTypeDAO.setSessionFactory(getSessionFactory());
 	}
     @Test
-    public final void testFindConceptNoteTypes() throws BusinessException {
+    public final void testFindConceptNoteTypes() {
     	List<NoteType> conceptNoteTypes =  noteTypeDAO.findConceptNoteTypes();
 		Assert.assertEquals(4, conceptNoteTypes.size());
     }
     
     @Test
-    public final void testFindTermNoteTypes() throws BusinessException {
+    public final void testFindTermNoteTypes() {
     	List<NoteType> termtNoteTypes =  noteTypeDAO.findTermNoteTypes();
 		Assert.assertEquals(3, termtNoteTypes.size());
     }

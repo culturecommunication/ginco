@@ -40,10 +40,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.hibernate.ThesaurusTermDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class ThesaurusTermDAOTest extends BaseDAOTest {
@@ -80,7 +78,7 @@ public class ThesaurusTermDAOTest extends BaseDAOTest {
     }   
     
 	@Test
-	public void testGetTermsWoNotes() throws BusinessException {
+	public void testGetTermsWoNotes(){
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 		List<ThesaurusTerm> conceptsWoNotes = thesaurusTermDAO
 				.getTermsWoNotes(thesaurusId, 0, 2);

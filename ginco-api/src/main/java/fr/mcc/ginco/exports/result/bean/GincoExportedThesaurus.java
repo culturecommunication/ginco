@@ -45,7 +45,6 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.CustomTermAttributeType;

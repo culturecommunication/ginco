@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junitx.framework.ListAssert;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +56,7 @@ public class ThesaurusTermServiceTest {
 	 * @return Test getting a Thesaurus Term by its Id
 	 */
 	@Test
-    public final void testGetThesaurusTermById() throws BusinessException{
+    public final void testGetThesaurusTermById(){
     	ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
     	fakeThesaurusTerm.setLexicalValue("lexicalValue");
 		when(thesaurusTermDAO.getById(anyString())).thenReturn(fakeThesaurusTerm);
@@ -69,7 +67,7 @@ public class ThesaurusTermServiceTest {
     }
 	
 	@Test(expected=BusinessException.class)
-    public final void testGetThesaurusTermByIdInvalid() throws BusinessException{
+    public final void testGetThesaurusTermByIdInvalid(){
 		when(thesaurusTermDAO.getById(anyString())).thenReturn(null);
          thesaurusTermService.getThesaurusTermById("fake-id").getLexicalValue();
     }

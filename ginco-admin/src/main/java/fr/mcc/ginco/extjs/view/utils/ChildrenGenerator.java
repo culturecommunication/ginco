@@ -47,7 +47,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
@@ -87,7 +86,7 @@ public class ChildrenGenerator {
 	private int maxResults;
 
 	public List<IThesaurusListNode> getChildrenByConceptId(
-			String conceptTopTermId) throws BusinessException {
+			String conceptTopTermId) {
 		logger.debug("Generating children concepts list for conceptTopTermId : "
 				+ conceptTopTermId);
 

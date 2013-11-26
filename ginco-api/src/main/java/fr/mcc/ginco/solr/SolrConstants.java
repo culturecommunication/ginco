@@ -35,8 +35,11 @@
 package fr.mcc.ginco.solr;
 
 public final class SolrConstants {
-    public static final String SCORE = "score";
-    public static final String DESCENDING = "desc";
-    public static final String ASCENDING = "asc";
-    public static final String EDISMAX = "edismax";
+	private SolrConstants() {
+	}
+
+	public static final String SCORE = "score";
+	public static final String DESCENDING = "desc";
+	public static final String ASCENDING = "asc";
+	public static final String EDISMAX = "edismax";
 }

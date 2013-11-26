@@ -90,7 +90,6 @@ public class RevisionsRestService {
 	 * 
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 * @throws IOException
 	 */
 	@GET
@@ -99,8 +98,7 @@ public class RevisionsRestService {
 	public Response exportRevisions(
 			@QueryParam("thesaurusId") String thesaurusId,
 			@QueryParam("timestamp") long timestamp,
-			@QueryParam("lang") String language) throws BusinessException,
-			IOException {
+			@QueryParam("lang") String language) throws IOException {
 		Thesaurus thesaurus = null;
 		if (StringUtils.isNotEmpty(thesaurusId)) {
 			thesaurus = thesaurusService.getThesaurusById(thesaurusId);
@@ -130,7 +128,6 @@ public class RevisionsRestService {
 	 * 
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 * @throws IOException
 	 */
 	@GET
@@ -138,8 +135,7 @@ public class RevisionsRestService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response exportAllRevisions(
 			@QueryParam("timestamp") long timestamp,
-			@QueryParam("lang") String language) throws BusinessException,
-			IOException {
+			@QueryParam("lang") String language) throws IOException {
 		Language lang = null;
 		if (StringUtils.isNotEmpty(language)) {	
 			lang = languagesService.getLanguageById(language);

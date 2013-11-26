@@ -40,7 +40,6 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 @WebService
 public interface ISOAPThesaurusTermService {
@@ -96,8 +95,7 @@ public interface ISOAPThesaurusTermService {
 	 */
 	Boolean isPreferred(@WebParam(name = "lexicalValue") String lexicalValue,
 			@WebParam(name = "thesaurusId") String thesaurusId,
-			@WebParam(name = "languageId") String languageId)
-			throws BusinessException;
+			@WebParam(name = "languageId") String languageId);
 
 	/**
 	 * This service returns list of reduced terms that begin with input string
@@ -112,5 +110,5 @@ public interface ISOAPThesaurusTermService {
 	List<ReducedThesaurusTerm> getTermsBeginWithSomeString(
 			@WebParam(name = "request") String request,
 			@WebParam(name = "startIndex") int startIndex,
-			@WebParam(name = "limit") int limit) throws BusinessException;
+			@WebParam(name = "limit") int limit);
 }

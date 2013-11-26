@@ -81,7 +81,7 @@ public class ThesaurusNoteRestServiceTest {
 	 * 
 	 */
 	@Test
-	public final void getAllConceptNoteTypes() throws BusinessException {
+	public final void getAllConceptNoteTypes() {
 		NoteType fakeNoteType1 = getFakeNoteTypeWithCodeAndEmptyValues("fakeType1");
 		NoteType fakeNoteType2 = getFakeNoteTypeWithCodeAndEmptyValues("fakeType2");
 		
@@ -99,7 +99,7 @@ public class ThesaurusNoteRestServiceTest {
 	 * 
 	 */
 	@Test
-	public final void getAllTermNoteTypes() throws BusinessException {
+	public final void getAllTermNoteTypes() {
 		NoteType fakeNoteType1 = getFakeNoteTypeWithCodeAndEmptyValues("fakeType1");
 		NoteType fakeNoteType2 = getFakeNoteTypeWithCodeAndEmptyValues("fakeType2");
 		
@@ -117,7 +117,7 @@ public class ThesaurusNoteRestServiceTest {
 	 * 
 	 */
 	@Test
-	public final void getAllNotesOfAConcept() throws BusinessException {
+	public final void getAllNotesOfAConcept(){
 		
 		
 		Note fakeNote1 = getFakeNoteWithIdAndEmptyValues("fakeNote1");
