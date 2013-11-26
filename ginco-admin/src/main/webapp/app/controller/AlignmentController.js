@@ -155,7 +155,8 @@ Ext.define('GincoApp.controller.AlignmentController',
 						fieldLabel: me.xExternalThesaurusId,
 						store : me.storeExternalThesaurus,
 						allowBlank : false,
-						editable: true
+						editable: true,
+						vtype : 'url'
 					});
 					alignmentForm.add(tf1);	
 					
@@ -183,7 +184,8 @@ Ext.define('GincoApp.controller.AlignmentController',
 				
 				var tf3 = Ext.create('Ext.form.field.Text', {
 	                   name: 'external_concept',
-	                   fieldLabel: me.xExternalConceptId
+	                   fieldLabel: me.xExternalConceptId,
+	                   vtype : 'url'
 				});
 				alignmentForm.add(tf3);	
 				
