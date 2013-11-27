@@ -38,5 +38,7 @@ Ext.define('GincoApp.locale.fr.controller.UsersTabPanelController',
 	xLoading : 'Chargement',
 	xSucessLabel : 'Succès !',
 	xSucessSavedMsg : 'Utilisateurs enregistrés avec succès',
-	xProblemLabel : 'Erreur !'
+	xProblemLabel : 'Erreur !',
+	xRemovingUserWarningMsgTitle : 'Attention',
+	xRemovingUserWarningMsg : 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?'
 });

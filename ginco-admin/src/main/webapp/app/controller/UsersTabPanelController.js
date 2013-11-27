@@ -42,6 +42,8 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Users saved successfully',
 	xProblemLabel : 'Error !',
+	xRemovingUserWarningMsgTitle : 'Warning',
+	xRemovingUserWarningMsg : 'Are you sur you want to remove this user?',	
 
     onGridRender : function(theGrid) {
 		
@@ -108,10 +110,28 @@ Ext.define('GincoApp.controller.UsersTabPanelController', {
 	},
 	
 	onDeleteUserRole : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
-	    var theGrid = gridview.up('gridpanel');
-	    var theStore = theGrid.getStore();
-	    theStore.remove(rec); 
-	    theGrid.up('form').down('button[itemId=saveUsers]').setDisabled(false);	
+		var me = this;
+		Ext.MessageBox.show({
+			title : me.xRemovingUserWarningMsgTitle,
+			msg : me.xRemovingUserWarningMsg,
+			buttons : Ext.MessageBox.YESNO,
+			fn : function(buttonId) {
+				switch (buttonId) {
+				case 'no':
+					break; // manually removes tab from tab panel
+					case 'yes':
+						 var theGrid = gridview.up('gridpanel');
+						 var theStore = theGrid.getStore();
+						  theStore.remove(rec); 
+						  theGrid.up('form').down('button[itemId=saveUsers]').setDisabled(false);	
+					break;
+					case 'cancel':
+					break; 
+				}
+			},
+			scope : this
+		});
+	   
 	},	
 
 	init : function() {
