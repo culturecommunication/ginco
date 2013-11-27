@@ -94,6 +94,7 @@ public class RevisionsRestServiceTest {
 	public final void testExportRevisionsInvalidLanguage()
 			throws BusinessException, IOException {
 		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setTitle("fakeThesaurus");
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString()))
 				.thenReturn(fakeThesaurus);
 		Mockito.when(languagesService.getLanguageById("fakeid")).thenReturn(
@@ -105,6 +106,7 @@ public class RevisionsRestServiceTest {
 	public final void testExportRevisionse() throws BusinessException,
 			IOException {
 		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setTitle("fakeThesaurus");
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString()))
 				.thenReturn(fakeThesaurus);
 		Language lang = new Language();
