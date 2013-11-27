@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +47,8 @@ import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.CustomTermAttribute;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -63,24 +64,22 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 public class GincoConceptBranchIdGenerator {
 
 	@Inject
-	@Named("gincoTermIdGenerator")
 	private GincoTermIdGenerator gincoTermIdGenerator;
 
 	@Inject
-	@Named("gincoConceptIdGenerator")
 	private GincoConceptIdGenerator gincoConceptIdGenerator;
 
 	@Inject
-	@Named("gincoNoteIdGenerator")
 	private GincoNoteIdGenerator gincoNoteIdGenerator;
 
 	@Inject
-	@Named("gincoRelationshipIdGenerator")
 	private GincoRelationshipIdGenerator gincoRelationshipIdGenerator;
 	
 	@Inject
-	@Named("gincoAlignmentIdGenerator")
-	private GincoAlignmentIdGenerator gincoAlignmentIdGenerator;
+	private GincoAlignmentIdGenerator gincoAlignmentIdGenerator;	
+	
+	@Inject
+	private GincoCustomAttributesIdGenerator gincoCustomAttrIdGenerator;
 
 	private Map<String, String> idMapping = new HashMap<String, String>();
 
@@ -137,7 +136,15 @@ public class GincoConceptBranchIdGenerator {
 		Map<String, JaxbList<Alignment>> updateAlignments = gincoAlignmentIdGenerator.getIdsForAlignments(branchToUpdate.getAlignments(), idMapping);
 		branchToUpdate.getAlignments().clear();
 		branchToUpdate.getAlignments().putAll(updateAlignments);
-
-	
+		
+		logger.debug("Branch import : generating new ids for custom concept attributes");
+		Map<String, JaxbList<CustomConceptAttribute>> updateConceptAttr = gincoCustomAttrIdGenerator.getIdsForCustomConceptAttributes(branchToUpdate.getConceptAttributes(), idMapping);
+		branchToUpdate.getConceptAttributes().clear();
+		branchToUpdate.getConceptAttributes().putAll(updateConceptAttr);
+		
+		logger.debug("Branch import : generating new ids for custom term attributes");
+		Map<String, JaxbList<CustomTermAttribute>> updateTermAttr = gincoCustomAttrIdGenerator.getIdsForCustomTermAttributes(branchToUpdate.getTermAttributes(), idMapping);
+		branchToUpdate.getTermAttributes().clear();
+		branchToUpdate.getTermAttributes().putAll(updateTermAttr);
 	}
 }

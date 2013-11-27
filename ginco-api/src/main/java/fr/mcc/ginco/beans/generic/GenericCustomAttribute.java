@@ -34,13 +34,18 @@
  */
 package fr.mcc.ginco.beans.generic;
 
-import fr.mcc.ginco.beans.Language;
-
 import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
+import fr.mcc.ginco.beans.Language;
 
 /**
  *
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class GenericCustomAttribute<E extends GenericCustomAttributeType,T> implements Serializable {
     private String identifier;
     private String lexicalValue;

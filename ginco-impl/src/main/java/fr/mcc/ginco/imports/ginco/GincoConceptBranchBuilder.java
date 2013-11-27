@@ -42,11 +42,12 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
@@ -64,19 +65,15 @@ import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptBranchIdGenerator;
 public class GincoConceptBranchBuilder {
 
 	@Inject
-	@Named("gincoConceptBranchIdGenerator")
 	private GincoConceptBranchIdGenerator gincoConceptBranchIdGenerator;
 	
 	@Inject
-	@Named("gincoConceptImporter")
 	private GincoConceptImporter gincoConceptImporter;
 
 	@Inject
-	@Named("gincoRelationshipImporter")
 	private GincoRelationshipImporter gincoRelationshipImporter;
 
 	@Inject
-	@Named("gincoTermImporter")
 	private GincoTermImporter gincoTermImporter;
 
 	@Inject
@@ -86,8 +83,10 @@ public class GincoConceptBranchBuilder {
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 	@Inject
-	@Named("gincoAlignmentImporter")
 	private GincoAlignmentImporter gincoAlignmentImporter;
+	
+	@Inject
+	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
 	
 
 	/**
@@ -118,25 +117,27 @@ public class GincoConceptBranchBuilder {
 					"unknown-thesaurus");
 		} else {
 
+			
 			// We replace all existing ids by new generated ids
 			gincoConceptBranchIdGenerator
 					.resetIdsForExportedBranch(exportedBranch);
 
+			Map<String, CustomTermAttributeType> customTermAttributeTypes = gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedBranch.getTermAttributeTypes(), targetedThesaurus);
+			Map<String, CustomConceptAttributeType> customConceptAttributeTypes = gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedBranch.getConceptAttributeTypes(), targetedThesaurus);
+			
 			// We import the concept branch in specified thesaurus
 			List<ThesaurusConcept> rootConcept = new ArrayList<ThesaurusConcept>();
 			exportedBranch.getRootConcept().setTopConcept(false);
-			rootConcept.add(exportedBranch.getRootConcept());
+			rootConcept.add(exportedBranch.getRootConcept());	
 
-			List<ThesaurusConcept> resultOfStore = gincoConceptImporter
-					.storeConcepts(rootConcept, targetedThesaurus);
-			if (resultOfStore != null && !resultOfStore.isEmpty()) {
-				result = resultOfStore.get(0);
+			ThesaurusConcept resultOfStore = gincoConceptImporter
+					.storeConcept(exportedBranch.getRootConcept(), exportedBranch, targetedThesaurus, customConceptAttributeTypes);
+			if (resultOfStore != null) {
+				result = resultOfStore;
 			}
 
-			gincoConceptImporter.storeConcepts(exportedBranch.getConcepts(),
-					targetedThesaurus);
-			gincoTermImporter.storeTerms(exportedBranch.getTerms(),
-					targetedThesaurus);
+			gincoConceptImporter.storeConcepts(exportedBranch, targetedThesaurus, customConceptAttributeTypes);
+			gincoTermImporter.storeTerms(exportedBranch, targetedThesaurus, customTermAttributeTypes);
 			gincoConceptImporter.storeConceptNotes(exportedBranch
 					.getConceptNotes());
 			gincoTermImporter.storeTermNotes(exportedBranch.getTermNotes());

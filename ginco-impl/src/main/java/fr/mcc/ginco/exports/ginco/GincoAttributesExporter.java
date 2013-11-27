@@ -40,59 +40,50 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.CustomTermAttribute;
-import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exports.result.bean.GincoExportedEntity;
-import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.ICustomConceptAttributeService;
+import fr.mcc.ginco.services.ICustomTermAttributeService;
 
 /**
- * This component gives methods to export terms and its related objects (notes
- * for example) to Ginco Custom Export Format
+ * This component exposes methods to export concept and terms custom attributes
+ * to Ginco Custom Export Format
  * 
  */
 @Component
-public class GincoTermExporter {
+public class GincoAttributesExporter {
 
 	@Inject
-	private INoteService noteService;
-
+	private ICustomConceptAttributeService conceptAttributeService;
+	
 	@Inject
-	private GincoAttributesExporter gincoAttributesExporter;
-
+	private ICustomTermAttributeService termAttributeService;
+	
 	/**
-	 * This method gets all the notes of a term in a JaxbList object
-	 * 
+	 * Exports all the custom attributes of a given concept
+	 * @param thesaurusConcept
+	 * @return JaxbList<CustomConceptAttribute> : A JaxbList of concept custom attributes
+	 */
+	public JaxbList<CustomConceptAttribute> getExportedConceptAttributes(
+			ThesaurusConcept thesaurusConcept) {
+		List<CustomConceptAttribute> conceptAttributes = conceptAttributeService.getAttributesByEntity(thesaurusConcept);
+		return new JaxbList<CustomConceptAttribute>(conceptAttributes);
+	}
+	
+	/**
+	 * Exports all the custom attributes of a given term
 	 * @param thesaurusTerm
-	 * @return JaxbList<Note> termNotes : A JaxbList of notes
+	 * @return JaxbList<CustomTermAttribute> : A JaxbList of term custom attributes
 	 */
-	public JaxbList<Note> getExportTermNotes(ThesaurusTerm thesaurusTerm) {
-		List<Note> notes = noteService.getTermNotePaginatedList(thesaurusTerm
-				.getIdentifier(), 0,
-				noteService.getTermNoteCount(thesaurusTerm.getIdentifier())
-						.intValue());
-		return new JaxbList<Note>(notes);
+	public JaxbList<CustomTermAttribute> getExportedTermAttributes(
+			ThesaurusTerm thesaurusTerm) {
+		List<CustomTermAttribute> termAttributes = termAttributeService.getAttributesByEntity(thesaurusTerm);
+		return new JaxbList<CustomTermAttribute>(termAttributes);
 	}
 
-	/**
-	 * Adds the term and the related custom attributes to the thesaurus to export
-	 * @param thesaurusToExport
-	 * @param term
-	 * @return
-	 */
-	public GincoExportedEntity addExportedTerms(
-			GincoExportedEntity thesaurusToExport, ThesaurusTerm term) {
-
-		thesaurusToExport.getTerms().add(term);
-		JaxbList<CustomTermAttribute> termAttributes = gincoAttributesExporter
-				.getExportedTermAttributes(term);
-		if (termAttributes != null && !termAttributes.isEmpty()) {
-			thesaurusToExport.getTermAttributes().put(term.getIdentifier(),
-					termAttributes);
-		}
-		return thesaurusToExport;
-	}
+	
 
 }

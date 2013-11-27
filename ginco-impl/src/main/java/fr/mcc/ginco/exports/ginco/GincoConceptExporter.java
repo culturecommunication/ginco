@@ -37,7 +37,6 @@ package fr.mcc.ginco.exports.ginco;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -57,19 +56,16 @@ import fr.mcc.ginco.services.INoteService;
  * (notes, associations, etc.) to Ginco Custom Export Format
  * 
  */
-@Component("gincoConceptExporter")
+@Component
 public class GincoConceptExporter {
 
 	@Inject
-	@Named("noteService")
 	private INoteService noteService;
 
 	@Inject
-	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
 	
 	@Inject
-	@Named("alignmentService")
 	private IAlignmentService alignmentService;
 
 	@Inject
@@ -130,6 +126,12 @@ public class GincoConceptExporter {
 		return new JaxbList<AssociativeRelationship>(associations);		
 	}
 	
+	/**
+	 * This method gets all the alignments relations for a concept in a
+	 * JaxbList object
+	 * @param thesaurusConcept
+	 * @return
+	 */
 	public JaxbList<Alignment> getExportAlignments(ThesaurusConcept thesaurusConcept) {
 		List<Alignment> alignments = alignmentService.getAlignmentsBySourceConceptId(thesaurusConcept.getIdentifier());
 		return new JaxbList<Alignment>(alignments);

@@ -36,6 +36,7 @@ package fr.mcc.ginco.tests.imports.ginco;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -63,7 +64,7 @@ public class GincoCustomAttributeImporterTest {
 	private ICustomConceptAttributeTypeDAO customConceptAttributeTypeDAO;
 
 	@InjectMocks
-	GincoCustomAttributeImporter gincoCustomAttributeImporter;
+	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
 
 	@Before
 	public void init() {
@@ -71,7 +72,7 @@ public class GincoCustomAttributeImporterTest {
 	}
 
 	@Test
-	public void storeCustomTermAttributeTypes() {
+	public void testStoreCustomTermAttributeTypes() {
 
 		Thesaurus th1 = new Thesaurus();
 		th1.setIdentifier("http://th1");
@@ -79,19 +80,21 @@ public class GincoCustomAttributeImporterTest {
 		CustomTermAttributeType t1 = new CustomTermAttributeType();
 		t1.setIdentifier(1);
 		t1.setThesaurus(th1);
+		t1.setCode("ty1");
 		t1.setValue("fakeType1");
 
 		CustomTermAttributeType t2 = new CustomTermAttributeType();
-		t2.setIdentifier(1);
+		t2.setIdentifier(2);
 		t2.setThesaurus(th1);
+		t2.setCode("ty2");
 		t2.setValue("fakeType2");
 
 		CustomTermAttributeType t3 = new CustomTermAttributeType();
-		t3.setIdentifier(1);
+		t3.setIdentifier(3);
 		t3.setThesaurus(th1);
+		t3.setCode("ty3");
 		t3.setValue("fakeType3");
 
-		List<CustomTermAttributeType> resultedAttributeTypes = new ArrayList<CustomTermAttributeType>();
 		List<CustomTermAttributeType> types = new ArrayList<CustomTermAttributeType>();
 		types.add(t1);
 		types.add(t2);
@@ -102,40 +105,55 @@ public class GincoCustomAttributeImporterTest {
 		exportedThesaurus.setTermAttributeTypes(types);
 
 		Mockito.when(
-				customTermAttributeTypeDAO.update(Mockito
-						.any(CustomTermAttributeType.class))).thenReturn(t1);
-		resultedAttributeTypes = gincoCustomAttributeImporter
+				customTermAttributeTypeDAO.update(t1)).thenReturn(t1);
+
+		Mockito.when(
+				customTermAttributeTypeDAO.update(t2)).thenReturn(t2);
+
+		Mockito.when(
+				customTermAttributeTypeDAO.update(t3)).thenReturn(t3);
+		Map<String, CustomTermAttributeType> resultedAttributeTypes = gincoCustomAttributeImporter
 				.storeCustomTermAttributeTypes(
 						exportedThesaurus.getTermAttributeTypes(),
 						exportedThesaurus.getThesaurus());
 
-		Assert.assertEquals(resultedAttributeTypes.size(), types.size());
-		Assert.assertEquals(resultedAttributeTypes.get(0).getIdentifier(),
-				types.get(0).getIdentifier());
+		
+		Assert.assertEquals(3, resultedAttributeTypes.size());
+		Assert.assertTrue(resultedAttributeTypes.containsKey("ty1"));
+		Assert.assertEquals("fakeType1", resultedAttributeTypes.get("ty1").getValue());
+
+		Assert.assertTrue(resultedAttributeTypes.containsKey("ty2"));
+		Assert.assertEquals("fakeType2", resultedAttributeTypes.get("ty2").getValue());
+
+		Assert.assertTrue(resultedAttributeTypes.containsKey("ty3"));
+		Assert.assertEquals("fakeType3", resultedAttributeTypes.get("ty3").getValue());
+
 	}
 
 	@Test
-	public void storeCustomConceptAttributeTypes() {
+	public void testStoreCustomConceptAttributeTypes() {
 
 		Thesaurus th1 = new Thesaurus();
 		th1.setIdentifier("http://th1");
 
 		CustomConceptAttributeType t1 = new CustomConceptAttributeType();
 		t1.setIdentifier(1);
+		t1.setCode("ty1");
 		t1.setThesaurus(th1);
 		t1.setValue("fakeType1");
 
 		CustomConceptAttributeType t2 = new CustomConceptAttributeType();
-		t2.setIdentifier(1);
+		t2.setIdentifier(2);
+		t2.setCode("ty2");
 		t2.setThesaurus(th1);
 		t2.setValue("fakeType2");
 
 		CustomConceptAttributeType t3 = new CustomConceptAttributeType();
-		t3.setIdentifier(1);
+		t3.setIdentifier(3);
+		t3.setCode("ty3");
 		t3.setThesaurus(th1);
 		t3.setValue("fakeType3");
 
-		List<CustomConceptAttributeType> resultedAttributeTypes = new ArrayList<CustomConceptAttributeType>();
 		List<CustomConceptAttributeType> types = new ArrayList<CustomConceptAttributeType>();
 		types.add(t1);
 		types.add(t2);
@@ -146,15 +164,25 @@ public class GincoCustomAttributeImporterTest {
 		exportedThesaurus.setConceptAttributeTypes(types);
 
 		Mockito.when(
-				customConceptAttributeTypeDAO.update(Mockito
-						.any(CustomConceptAttributeType.class))).thenReturn(t1);
-		resultedAttributeTypes = gincoCustomAttributeImporter
+				customConceptAttributeTypeDAO.update(t1)).thenReturn(t1);
+		Mockito.when(
+				customConceptAttributeTypeDAO.update(t2)).thenReturn(t2);
+		Mockito.when(
+				customConceptAttributeTypeDAO.update(t3)).thenReturn(t3);
+			
+		Map<String, CustomConceptAttributeType> resultedAttributeTypes = gincoCustomAttributeImporter
 				.storeCustomConceptAttributeTypes(
 						exportedThesaurus.getConceptAttributeTypes(),
 						exportedThesaurus.getThesaurus());
 
-		Assert.assertEquals(resultedAttributeTypes.size(), types.size());
-		Assert.assertEquals(resultedAttributeTypes.get(0).getIdentifier(),
-				types.get(0).getIdentifier());
+		Assert.assertEquals(3, resultedAttributeTypes.size());
+		Assert.assertTrue(resultedAttributeTypes.containsKey("ty1"));
+		Assert.assertEquals("fakeType1", resultedAttributeTypes.get("ty1").getValue());
+
+		Assert.assertTrue(resultedAttributeTypes.containsKey("ty2"));
+		Assert.assertEquals("fakeType2", resultedAttributeTypes.get("ty2").getValue());
+
+		Assert.assertTrue(resultedAttributeTypes.containsKey("ty3"));
+		Assert.assertEquals("fakeType3", resultedAttributeTypes.get("ty3").getValue());;
 	}
 }

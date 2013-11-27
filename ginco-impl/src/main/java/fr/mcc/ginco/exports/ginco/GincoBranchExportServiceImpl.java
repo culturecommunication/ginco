@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -55,6 +55,8 @@ import fr.mcc.ginco.exports.IGincoBranchExportService;
 import fr.mcc.ginco.exports.IGincoExportServiceUtil;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
+import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.ThesaurusConceptUtils;
@@ -67,26 +69,30 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 
 	
 	@Inject
-	@Named("gincoConceptExporter")
 	private GincoConceptExporter gincoConceptExporter;
 	
 	@Inject
-	@Named("gincoExportServiceUtil")
 	private IGincoExportServiceUtil gincoExportServiceUtil;
 
 	@Inject
-	@Named("gincoTermExporter")
 	private GincoTermExporter gincoTermExporter;
 
 	@Inject
-	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 	
 	@Inject
-	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
 
+	@Inject
+	private ICustomTermAttributeTypeService customTermAttributeTypeService;
+	
+	@Inject
+	private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
+	
+	@Inject
+	private GincoAttributesExporter gincoAttributesExporter;
 
+	
 	@Override
 	public String getBranchExport(ThesaurusConcept conceptBranchToExport)
 			throws TechnicalException {
@@ -105,9 +111,11 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 		
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusConcept concept : allConcepts) {
-			terms.addAll(thesaurusTermService.getTermsByConceptId(concept.getIdentifier()));
-		}
-		branchToExport.setTerms(terms);
+			for (ThesaurusTerm term : thesaurusTermService.getTermsByConceptId(concept.getIdentifier())) {
+				gincoTermExporter.addExportedTerms(branchToExport, term);
+			}
+		}	
+		
 		
 		for (ThesaurusTerm term : terms) {
 			JaxbList<Note> termNotes = gincoTermExporter
@@ -125,6 +133,9 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 				branchToExport.getConceptNotes().put(
 						concept.getIdentifier(), conceptNotes);
 			}
+			JaxbList<CustomConceptAttribute> conceptAttributes = gincoAttributesExporter
+					.getExportedConceptAttributes(concept);
+			branchToExport.getConceptAttributes().put(concept.getIdentifier(), conceptAttributes);
 		}
 		
 		//Exporting hierarchical relationships only for children with parents in the branch
@@ -150,10 +161,16 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 		// Exporting alignments
 		JaxbList<Alignment> alignments = gincoConceptExporter.getExportAlignments(conceptBranchToExport);
 		if (alignments != null && !alignments.isEmpty()) {
-						branchToExport.getAlignments().put(
-						
+						branchToExport.getAlignments().put(						
 								conceptBranchToExport.getIdentifier(), alignments);
 		}
+		
+		branchToExport.setTermAttributeTypes(customTermAttributeTypeService
+				.getAttributeTypesByThesaurus(conceptBranchToExport.getThesaurus()));
+		branchToExport
+				.setConceptAttributeTypes(customConceptAttributeTypeService
+						.getAttributeTypesByThesaurus(conceptBranchToExport.getThesaurus()));
+		
 		return gincoExportServiceUtil.serializeBranchToXmlWithJaxb(branchToExport);
 	}
 }

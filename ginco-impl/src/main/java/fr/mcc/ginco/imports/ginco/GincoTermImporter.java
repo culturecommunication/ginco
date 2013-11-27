@@ -43,63 +43,87 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.CustomTermAttribute;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.exports.result.bean.GincoExportedEntity;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 
 /**
  * This class gives methods to import terms and terms notes
- *
+ * 
  */
 @Component("gincoTermImporter")
 public class GincoTermImporter {
-	
+
 	@Inject
 	private INoteDAO noteDAO;
-	
+
 	@Inject
-	private IThesaurusTermDAO thesaurusTermDAO;	
-	
-	
+	private IThesaurusTermDAO thesaurusTermDAO;
+
+	@Inject
+	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
+
 	/**
-	 * This method stores all the terms of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 * This method stores all the terms of the thesaurus included in the
+	 * {@link GincoExportedThesaurus} object given in parameter
+	 * 
 	 * @param exportedThesaurus
 	 * @return The list of stored terms
 	 */
-	public List<ThesaurusTerm> storeTerms(List<ThesaurusTerm> termsToImport, Thesaurus targetedThesaurus) {
+	public List<ThesaurusTerm> storeTerms(
+			GincoExportedEntity exportedThesaurus, Thesaurus targetThesaurus, Map<String, CustomTermAttributeType> savedTypes) {
+		List<ThesaurusTerm> termsToImport = exportedThesaurus.getTerms();
+
 		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm term : termsToImport) {
-			term.setThesaurus(targetedThesaurus);
+			term.setThesaurus(targetThesaurus);
 			updatedTerms.add(thesaurusTermDAO.update(term));
+			if (exportedThesaurus.getTermAttributes() != null
+					&& exportedThesaurus.getTermAttributes().containsKey(
+							term.getIdentifier())) {
+				List<CustomTermAttribute> termAttributes = exportedThesaurus
+						.getTermAttributes().get(term.getIdentifier())
+						.getList();
+				if (termAttributes != null)
+					gincoCustomAttributeImporter.storeCustomTermAttribute(
+							termAttributes, term, savedTypes);
+			}
 		}
 		return updatedTerms;
 	}
 
 	/**
-	 * This method stores all the term notes of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
-	 * @param exportedThesaurus
+	 * This method stores all the term notes of the thesaurus included in the
+	 * {@link GincoExportedThesaurus} object given in parameter
+	 * 
+	 * @param termNotesToImport
 	 * @return The list of stored notes
 	 */
-	public List<Note> storeTermNotes(Map<String, JaxbList<Note>> termNotesToImport) {
+	public List<Note> storeTermNotes(
+			Map<String, JaxbList<Note>> termNotesToImport) {
 		List<Note> result = new ArrayList<Note>();
 		if (termNotesToImport != null && !termNotesToImport.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<Note>>> entries = termNotesToImport.entrySet().iterator();
+			Iterator<Map.Entry<String, JaxbList<Note>>> entries = termNotesToImport
+					.entrySet().iterator();
 			String termId = null;
 			List<Note> notes = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<Note>> entry = entries.next();
-				//Getting the id of the term
+			while (entries.hasNext()) {
+				Map.Entry<String, JaxbList<Note>> entry = entries.next();
+				// Getting the id of the term
 				termId = entry.getKey();
-				
-				//Getting the ids of the notes
+
+				// Getting the ids of the notes
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
 					notes = entry.getValue().getList();
 				}
-				
+
 				for (Note note : notes) {
 					note.setTerm(thesaurusTermDAO.getById(termId));
 					result.add(noteDAO.update(note));

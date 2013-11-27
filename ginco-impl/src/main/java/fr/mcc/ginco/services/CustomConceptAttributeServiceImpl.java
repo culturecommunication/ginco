@@ -48,7 +48,7 @@ import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
- *
+ * Implementation of the ICustomConceptAttributeService service
  */
 @Transactional(readOnly = false, rollbackFor = BusinessException.class)
 @Service("customConceptAttributeService")
@@ -74,7 +74,6 @@ public class CustomConceptAttributeServiceImpl implements ICustomConceptAttribut
 	@Override
 	public CustomConceptAttribute getAttributeByType(ThesaurusConcept entity,
 			CustomConceptAttributeType type) {
-		// TODO Auto-generated method stub
 		return customConceptAttributeDAO.getAttributeByType(entity, type);
 	}
 

@@ -47,6 +47,8 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusDAO;
@@ -115,14 +117,20 @@ public class GincoThesaurusBuilder {
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 
 		if (exportedThesaurus.getThesaurus() != null) {
+			
+			
 			if (thesaurusDAO.getById(exportedThesaurus.getThesaurus().getIdentifier()) == null) {
 				thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
 			} else {
 				throw new BusinessException(
 						"Trying to import an existing thesaurus", "import-already-existing-thesaurus");
 			}
-			gincoConceptImporter.storeConcepts(exportedThesaurus.getConcepts(), exportedThesaurus.getThesaurus());
-			gincoTermImporter.storeTerms(exportedThesaurus.getTerms(), exportedThesaurus.getThesaurus());
+			
+			Map<String, CustomTermAttributeType> customTermAttributeTypes = gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedThesaurus.getTermAttributeTypes(), exportedThesaurus.getThesaurus());
+			Map<String, CustomConceptAttributeType> customConceptAttributeTypes = gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedThesaurus.getConceptAttributeTypes(), exportedThesaurus.getThesaurus());
+				
+			gincoConceptImporter.storeConcepts(exportedThesaurus, exportedThesaurus.getThesaurus(), customConceptAttributeTypes);
+			gincoTermImporter.storeTerms(exportedThesaurus, exportedThesaurus.getThesaurus(), customTermAttributeTypes);
 			gincoConceptImporter.storeComplexConcepts(exportedThesaurus.getComplexConcepts(), exportedThesaurus.getThesaurus());
 			
 			gincoArrayImporter.storeArrays(exportedThesaurus);
@@ -139,8 +147,6 @@ public class GincoThesaurusBuilder {
 			gincoTermImporter.storeTermNotes(exportedThesaurus.getTermNotes());
 			gincoConceptImporter.storeConceptNotes(exportedThesaurus.getConceptNotes());
 			
-			gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedThesaurus.getTermAttributeTypes(), exportedThesaurus.getThesaurus());
-			gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedThesaurus.getConceptAttributeTypes(), exportedThesaurus.getThesaurus());
 			
 			bannedAlignments = gincoAlignmentImporter.storeAlignments(exportedThesaurus.getAlignments());
 			gincoAlignmentImporter.storeExternalThesauruses(exportedThesaurus.getAlignments(), bannedAlignments);

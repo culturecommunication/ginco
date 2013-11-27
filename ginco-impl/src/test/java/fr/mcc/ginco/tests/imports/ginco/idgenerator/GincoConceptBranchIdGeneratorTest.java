@@ -57,26 +57,30 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoAlignmentIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptBranchIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptIdGenerator;
+import fr.mcc.ginco.imports.ginco.idgenerator.GincoCustomAttributesIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoNoteIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoRelationshipIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoTermIdGenerator;
 
 public class GincoConceptBranchIdGeneratorTest {	
 	
-	@Mock(name = "gincoTermIdGenerator")
+	@Mock
 	private GincoTermIdGenerator gincoTermIdGenerator;
 
-	@Mock(name = "gincoConceptIdGenerator")
+	@Mock
 	private GincoConceptIdGenerator gincoConceptIdGenerator;
 
-	@Mock(name = "gincoNoteIdGenerator")
+	@Mock
 	private GincoNoteIdGenerator gincoNoteIdGenerator;
 
-	@Mock(name = "gincoRelationshipIdGenerator")
+	@Mock
 	private GincoRelationshipIdGenerator gincoRelationshipIdGenerator;
 	
-	@Mock(name = "gincoAlignmentIdGenerator")
+	@Mock
 	private GincoAlignmentIdGenerator gincoAlignmentIdGenerator;
+	
+	@Mock
+	private GincoCustomAttributesIdGenerator gincoCustomAttrIdGenerator;
 	
 	@InjectMocks
 	private GincoConceptBranchIdGenerator gincoConceptBranchIdGenerator;

@@ -35,7 +35,9 @@
 package fr.mcc.ginco.tests.imports.ginco;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -46,11 +48,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
+import fr.mcc.ginco.imports.ginco.GincoCustomAttributeImporter;
 import fr.mcc.ginco.imports.ginco.GincoTermImporter;
 
 public class GincoTermImporterTest {
@@ -60,6 +64,10 @@ public class GincoTermImporterTest {
 
 	@Mock
 	private IThesaurusTermDAO thesaurusTermDAO;
+	
+	@Mock
+	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
+
 
 	@InjectMocks
 	GincoTermImporter gincoTermImporter;
@@ -89,7 +97,11 @@ public class GincoTermImporterTest {
 		
 		Mockito.when(thesaurusTermDAO.update(Mockito.any(ThesaurusTerm.class))).thenReturn(t1);
 		Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(th1);
-		resultedTerms = gincoTermImporter.storeTerms(exportedThesaurus.getTerms(), exportedThesaurus.getThesaurus());
+		
+		Map<String, CustomTermAttributeType> savedTypes = new HashMap<String, CustomTermAttributeType>();
+
+		
+		resultedTerms = gincoTermImporter.storeTerms(exportedThesaurus, exportedThesaurus.getThesaurus(), savedTypes);
 		
 		Assert.assertEquals(resultedTerms.size(), terms.size());
 		Assert.assertEquals(resultedTerms.get(0).getIdentifier(), terms.get(0).getIdentifier());
