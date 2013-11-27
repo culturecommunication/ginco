@@ -82,7 +82,7 @@
             <id>integration</id>
             <properties>
                 <!-- cargo deployment -->
-                <tomcat.base>http://hadoc-int.eqx.intranet:80/</tomcat.base>
+                <tomcat.base>http://hadoc-int.eqx.intranet:8080/</tomcat.base>
                 <cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
                 <cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
                 <ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
