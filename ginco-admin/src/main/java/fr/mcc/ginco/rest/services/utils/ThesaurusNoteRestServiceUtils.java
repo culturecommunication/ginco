@@ -72,32 +72,28 @@ public class ThesaurusNoteRestServiceUtils {
 				.getAuthentication();
 		String username = auth.getName();
 
-		if (note.getConcept() != null){
-			if (userRoleService.hasRole(username, note.getConcept().getThesaurusId(),
+		if (note.getConcept() != null
+				&& userRoleService.hasRole(username, note.getConcept().getThesaurusId(),
 					Role.EXPERT)){
-				ThesaurusConcept concept = thesaurusConceptService
-						.getThesaurusConceptById(note.getConcept().getIdentifier());
-				if (concept != null){
-					if (concept.getStatus() != ConceptStatusEnum.CANDIDATE
-							.getStatus() || concept.getTopConcept()) {
-						throw new AccessDeniedException(
-								"you-can-save-only-candidate-and-non-top-terms-concepts");
-					}
-				}
+			ThesaurusConcept concept = thesaurusConceptService
+					.getThesaurusConceptById(note.getConcept().getIdentifier());
+			if (concept != null
+					&& concept.getStatus() != ConceptStatusEnum.CANDIDATE
+						.getStatus() || concept.getTopConcept()) {
+					throw new AccessDeniedException(
+							"you-can-save-only-candidate-and-non-top-terms-concepts");
 			}
 		}
-		if (note.getTerm() != null){
-			if (userRoleService.hasRole(username, note.getTerm().getThesaurusId(),
+		if (note.getTerm() != null
+			&& userRoleService.hasRole(username, note.getTerm().getThesaurusId(),
 					Role.EXPERT)){
-				ThesaurusTerm term = thesaurusTermService
-						.getThesaurusTermById(note.getTerm().getIdentifier());
-				if (term != null){
-					if (term.getStatus() != ConceptStatusEnum.CANDIDATE
-							.getStatus()) {
-						throw new AccessDeniedException(
-								"you-can-save-only-candidate-terms");
-					}
-				}
+			ThesaurusTerm term = thesaurusTermService
+					.getThesaurusTermById(note.getTerm().getIdentifier());
+			if (term != null
+				&& term.getStatus() != ConceptStatusEnum.CANDIDATE
+						.getStatus()) {
+					throw new AccessDeniedException(
+							"you-can-save-only-candidate-terms");
 			}
 		}
 	}
