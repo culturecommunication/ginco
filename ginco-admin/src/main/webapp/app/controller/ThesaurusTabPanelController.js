@@ -147,10 +147,9 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			tab = tabExists;
 		}
 		if (Ext.isString(aSubTab) && aSubTab != "") {
-			Ext.defer (function () {
-				var noteTab = tab.down(aSubTab);
-				noteTab.up('tabpanel').setActiveTab(noteTab);
-			},3);
+			var noteTab = tab.down(aSubTab);
+			noteTab.setDisabled(false);
+			noteTab.up('tabpanel').setActiveTab(noteTab);
 		}
 	},
 	onNewConceptAndTermBtnClick : function(theButton, e, options) {
