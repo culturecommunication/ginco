@@ -55,7 +55,7 @@ Ext
 
 					// Labels
 					xConceptGroupTitle : 'Concept Group',
-					xConceptsGrid : 'Concepts',
+					xConceptsPanel : 'Concepts',
 					xSave : 'Save',
 					xDelete : 'Delete',
 					xMetadataTitle : 'Metadata',
@@ -236,87 +236,94 @@ Ext
 																	}]
 														},
 														{
-															xtype : 'hidden',
-															name : 'parentConceptId',
-															hidden : true
-														},
-														{
-															xtype : 'container',
-															itemId : 'parentConceptContainer',
-															hidden : true,
-															layout : 'column',
-															defaults : {
-																margin : '0 0 5 0',
-																layout : 'anchor'
-															},
+															xtype : 'panel',
+															title : me.xConceptsPanel,
 															items : [
 																	{
-																		xtype : 'textfield',
-																		name : 'parentConceptLabel',
-																		fieldLabel : me.xParentConceptLabel,
-																		allowBlank : true,
-																		readOnly : true
+																		xtype : 'hidden',
+																		name : 'parentConceptId',
+																		hidden : true
 																	},
 																	{
-																		xtype : 'button',
-																		text : me.xSelectParentConcept,
-																		disabled : false,
-																		requiredRoles : ['ADMIN', 'MANAGER'],
-																		itemId : 'selectParentConcept',
-																		cls : 'add',
-																		iconCls : 'icon-add'
-																	} ,
+																		xtype : 'container',
+																		itemId : 'parentConceptContainer',
+																		hidden : true,
+																		layout : 'column',
+																		defaults : {
+																			margin : '5 0 5 0'
+																		},
+																		items : [
+																				{
+																					xtype : 'textfield',
+																					name : 'parentConceptLabel',
+																					fieldLabel : me.xParentConceptLabel,
+																					allowBlank : true,
+																					readOnly : true,
+																					margin : '1 0 1 0',
+																				},
+																				{
+																					xtype : 'button',
+																					text : me.xSelectParentConcept,
+																					disabled : false,
+																					requiredRoles : ['ADMIN', 'MANAGER'],
+																					itemId : 'selectParentConcept',
+																					cls : 'add',
+																					iconCls : 'icon-add'
+																				} ,
+																				{
+																					xtype : 'button',
+																					text : me.xRemoveParentConcept,
+																					disabled : true,
+																					requiredRoles : ['ADMIN', 'MANAGER'],
+																					itemId : 'removeParentConcept',
+																					iconCls : 'icon-delete'
+																				}]
+																	},
 																	{
-																		xtype : 'button',
-																		text : me.xRemoveParentConcept,
-																		disabled : true,
-																		requiredRoles : ['ADMIN', 'MANAGER'],
-																		itemId : 'removeParentConcept',
-																		iconCls : 'icon-delete'
-																	}]
-														},
-														{
-															xtype : 'gridpanel',
-															itemId : 'gridConceptGroupPanelConcepts',
-															title : me.xConceptsGrid,
-															store : me.associatedConceptToGroupStore,
-															hidden : true,
+																		xtype : 'gridpanel',
+																		itemId : 'gridConceptGroupPanelConcepts',
+																		store : me.associatedConceptToGroupStore,
+																		hidden : true,
+																		border : false,
 
-															dockedItems : [ {
-																xtype : 'toolbar',
-																dock : 'top',
-																items : [ {
-																	xtype : 'button',
-																	requiredRoles : ['ADMIN', 'MANAGER'],
-																	text : me.xAddConceptToGroupArray,
-																	disabled : false,
-																	itemId : 'addConceptToGroupArray',
-																	cls : 'add',
-																	iconCls : 'icon-add'
-																} ]
-															} ],
+																		dockedItems : [ {
+																			xtype : 'toolbar',
+																			dock : 'top',
+																			items : [ {
+																				xtype : 'button',
+																				requiredRoles : ['ADMIN', 'MANAGER'],
+																				text : me.xAddConceptToGroupArray,
+																				disabled : false,
+																				itemId : 'addConceptToGroupArray',
+																				cls : 'add',
+																				iconCls : 'icon-add'
+																			} ]
+																		} ],
 
-															columns : [
-																	{
-																		dataIndex : 'identifier',
-																		text : me.xIdentifierLabel
-																	},
-																	{
-																		dataIndex : 'label',
-																		text : me.xLexicalValueLabel,
-																		flex : 1
-																	},
-																	{
-																		xtype : 'actioncolumn',
-																		itemId : 'conceptToGroupActionColumn',
-																		header : me.xActions,
-																		items : [ {
-																			icon : 'images/detach.png',
-																			requiredRoles : ['ADMIN', 'MANAGER'],
-																			tooltip : me.xAssociationRemove
-																		} ]
-																	} ]
-														} ]
+																		columns : [
+																				{
+																					dataIndex : 'identifier',
+																					text : me.xIdentifierLabel
+																				},
+																				{
+																					dataIndex : 'label',
+																					text : me.xLexicalValueLabel,
+																					flex : 1
+																				},
+																				{
+																					xtype : 'actioncolumn',
+																					itemId : 'conceptToGroupActionColumn',
+																					header : me.xActions,
+																					items : [ {
+																						icon : 'images/detach.png',
+																						requiredRoles : ['ADMIN', 'MANAGER'],
+																						tooltip : me.xAssociationRemove
+																					} ]
+																				} ]
+																	}
+															]
+
+														}]
 											} ]
 										});
 
