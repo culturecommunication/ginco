@@ -35,10 +35,12 @@
 package fr.mcc.ginco.tests.imports.ginco;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
+import junitx.framework.ListAssert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,10 +49,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
+import fr.mcc.ginco.beans.CustomTermAttribute;
 import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
 import fr.mcc.ginco.dao.ICustomConceptAttributeTypeDAO;
+import fr.mcc.ginco.dao.ICustomTermAttributeDAO;
 import fr.mcc.ginco.dao.ICustomTermAttributeTypeDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.imports.ginco.GincoCustomAttributeImporter;
@@ -62,6 +70,12 @@ public class GincoCustomAttributeImporterTest {
 
 	@Mock
 	private ICustomConceptAttributeTypeDAO customConceptAttributeTypeDAO;
+	
+	@Mock
+	private ICustomConceptAttributeDAO customConceptAttributeDAO;
+	
+	@Mock
+	private ICustomTermAttributeDAO customTermAttributeDAO;
 
 	@InjectMocks
 	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
@@ -185,4 +199,78 @@ public class GincoCustomAttributeImporterTest {
 		Assert.assertTrue(resultedAttributeTypes.containsKey("ty3"));
 		Assert.assertEquals("fakeType3", resultedAttributeTypes.get("ty3").getValue());;
 	}
+	
+	@Test
+	public void testStoreCustomConceptAttribute() {		
+		
+		List<CustomConceptAttribute> conceptAttributes = new ArrayList<CustomConceptAttribute>();
+		ThesaurusConcept concept = new ThesaurusConcept();
+		CustomConceptAttribute attr1 = new CustomConceptAttribute();
+		CustomConceptAttributeType fakeType1 = new CustomConceptAttributeType();
+		fakeType1.setCode("code1");
+		attr1.setType(fakeType1);
+		
+		CustomConceptAttribute attr2 = new CustomConceptAttribute();
+		CustomConceptAttributeType fakeType2 = new CustomConceptAttributeType();
+		fakeType2.setCode("code2");
+		attr2.setType(fakeType2);
+		
+		conceptAttributes.add(attr1);
+		conceptAttributes.add(attr2);
+		
+		Map<String , CustomConceptAttributeType> savedTypes = new HashMap<String , CustomConceptAttributeType> ();
+		CustomConceptAttributeType type1 = new CustomConceptAttributeType();
+		savedTypes.put("code1", type1);
+		CustomConceptAttributeType type2 = new CustomConceptAttributeType();
+		savedTypes.put("code2", type2);		
+		
+		gincoCustomAttributeImporter.storeCustomConceptAttribute(conceptAttributes, concept, savedTypes);
+		
+		ListAssert.assertContains(conceptAttributes, attr1);
+		Assert.assertEquals(concept,  attr1.getEntity());
+		Assert.assertEquals(type1,  attr1.getType());
+		
+		ListAssert.assertContains(conceptAttributes, attr2);
+		Assert.assertEquals(concept,  attr2.getEntity());
+		Assert.assertEquals(type2,  attr2.getType());
+		
+	}
+	
+	@Test
+	public void testStoreCustomTermAttribute() {		
+		
+		List<CustomTermAttribute> termAttributes = new ArrayList<CustomTermAttribute>();
+		ThesaurusTerm concept = new ThesaurusTerm();
+		CustomTermAttribute attr1 = new CustomTermAttribute();
+		CustomTermAttributeType fakeType1 = new CustomTermAttributeType();
+		fakeType1.setCode("code1");
+		attr1.setType(fakeType1);
+		
+		CustomTermAttribute attr2 = new CustomTermAttribute();
+		CustomTermAttributeType fakeType2 = new CustomTermAttributeType();
+		fakeType2.setCode("code2");
+		attr2.setType(fakeType2);
+		
+		termAttributes.add(attr1);
+		termAttributes.add(attr2);
+		
+		Map<String , CustomTermAttributeType> savedTypes = new HashMap<String , CustomTermAttributeType> ();
+		CustomTermAttributeType type1 = new CustomTermAttributeType();
+		savedTypes.put("code1", type1);
+		CustomTermAttributeType type2 = new CustomTermAttributeType();
+		savedTypes.put("code2", type2);		
+		
+		gincoCustomAttributeImporter.storeCustomTermAttribute(termAttributes, concept, savedTypes);
+		
+		ListAssert.assertContains(termAttributes, attr1);
+		Assert.assertEquals(concept,  attr1.getEntity());
+		Assert.assertEquals(type1,  attr1.getType());
+		
+		ListAssert.assertContains(termAttributes, attr2);
+		Assert.assertEquals(concept,  attr2.getEntity());
+		Assert.assertEquals(type2,  attr2.getType());
+		
+	}
+	
+	
 }

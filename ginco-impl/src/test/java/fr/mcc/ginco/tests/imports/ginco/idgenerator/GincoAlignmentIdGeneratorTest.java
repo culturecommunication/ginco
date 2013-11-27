@@ -34,11 +34,12 @@
  */
 package fr.mcc.ginco.tests.imports.ginco.idgenerator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -46,42 +47,73 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptIdGenerator;
+import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.imports.ginco.idgenerator.GincoAlignmentIdGenerator;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoIdMapParser;
 
-public class GincoConceptIdGeneratorTest {		
-	@Mock(name = "generatorService")
-	private IIDGeneratorService generatorService;
+public class GincoAlignmentIdGeneratorTest {	
 	
-	@Mock(name = "gincoIdMapParser")
+	@Mock
 	private GincoIdMapParser gincoIdMapParser;	
 	
 	@InjectMocks
-	private GincoConceptIdGenerator gincoConceptIdGenerator;	
+	private GincoAlignmentIdGenerator gincoAlignmentIdGenerator;
 
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-	}	
-	
-	@Test
-	public void testGetIdForConcept() {
-		
-		String oldId2 = "veryOldId2";
-		String oldId3 = "oldId3";
+	}
 
-		Map<String, String> idMapping = new HashMap<String, String>();	
+	@Test
+	public void testGetIdsForAlignments() {		
 		
-		Mockito.when(generatorService.generate(ThesaurusConcept.class)).thenReturn("newId2");
-		Mockito.when(gincoIdMapParser.getNewId(oldId2, idMapping)).thenReturn("oldId2");
+		Map<String, JaxbList<Alignment>> alignments = new HashMap<String, JaxbList<Alignment>>();
 		
-		String actualId3 = gincoConceptIdGenerator.getIdForConcept(oldId3, idMapping);
-		Assert.assertEquals("newId2", actualId3);
+		ThesaurusConcept concept1 = new ThesaurusConcept();
+		concept1.setIdentifier("oldId1");
+		Alignment alignment1 = new Alignment();
+		alignment1.setSourceConcept(concept1);
+		Alignment alignment2 = new Alignment();
+		alignment2.setSourceConcept(concept1);
+		List<Alignment> alignments1 = new ArrayList<Alignment>();
+		alignments1.add(alignment1);
+		alignments1.add(alignment2);
 		
-		String actualId2 = gincoConceptIdGenerator.getIdForConcept(oldId2, idMapping);
-		Assert.assertEquals("oldId2", actualId2);		
+		alignments.put("oldId1", new JaxbList<Alignment>(alignments1));
+		
+		ThesaurusConcept concept2 = new ThesaurusConcept();
+		concept2.setIdentifier("oldId2");
+		Alignment alignment3 = new Alignment();
+		alignment3.setSourceConcept(concept2);	
+		List<Alignment> alignments2 = new ArrayList<Alignment>();
+		alignments2.add(alignment3);
+		
+		alignments.put("oldId2", new JaxbList<Alignment>(alignments2));
+		
+		Map<String, String> idMapping = new HashMap<String, String>();
+
+		
+		Mockito.when(gincoIdMapParser.getNewId("oldId1", idMapping)).thenReturn("id1");
+		Mockito.when(gincoIdMapParser.getNewId("oldId2", idMapping)).thenReturn("id2");
+		
+		
+		
+		Map<String, JaxbList<Alignment>> result = gincoAlignmentIdGenerator.getIdsForAlignments(alignments, idMapping);
+		
+
+		Assert.assertEquals(2, result.size());
+		
+		Assert.assertNotNull(result.get("id1"));
+		Assert.assertEquals(2, result.get("id1").getList().size());
+		Assert.assertEquals("id1", result.get("id1").getList().get(0).getSourceConcept().getIdentifier());
+		Assert.assertEquals("id1", result.get("id1").getList().get(1).getSourceConcept().getIdentifier());
+
+		
+		Assert.assertNotNull(result.get("id2"));
+		Assert.assertEquals(1, result.get("id2").getList().size());	
+		Assert.assertEquals("id2", result.get("id2").getList().get(0).getSourceConcept().getIdentifier());	
 	}
 	
 }
