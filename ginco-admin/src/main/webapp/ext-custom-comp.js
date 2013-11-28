@@ -495,3 +495,6 @@ Ext.define('Thesaurus.form.field.Text', {
     }
 });
 
+Ext.String.addCharacterEntities({
+'&apos;' : "'"});
+
