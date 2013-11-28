@@ -39,6 +39,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -92,7 +93,7 @@ public class SKOSArrayExporter {
 				model.add(collectionRes, SKOS.IN_SCHEME, inScheme);
 
 				collectionRes
-						.addProperty(SKOS.PREF_LABEL, label.getLexicalValue(),
+						.addProperty(SKOS.PREF_LABEL, StringEscapeUtils.unescapeXml(label.getLexicalValue()),
 								label.getLanguage().getId());
 
 				for (ThesaurusArrayConcept arrayConcept : array.getConcepts()) {
@@ -107,7 +108,7 @@ public class SKOSArrayExporter {
 				model.add(collectionRes, DCTerms.created, DateUtil.toISO8601String(label.getCreated()));
 				model.add(collectionRes, DCTerms.modified, DateUtil.toISO8601String(label.getModified()));
 			}
-			
+
 		}
 
 		return model;

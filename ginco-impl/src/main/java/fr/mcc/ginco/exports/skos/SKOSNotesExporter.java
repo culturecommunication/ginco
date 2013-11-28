@@ -39,6 +39,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -56,12 +57,12 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
  */
 @Component("skosNotesExporter")
 public class SKOSNotesExporter {
-	
+
 	@Inject
 	@Named("noteService")
 	private INoteService noteService;
-	
-	
+
+
 	/**
 	 * Export concept notes to SKOS using the skos API
 	 * @param thesaurus
@@ -69,28 +70,28 @@ public class SKOSNotesExporter {
 	 */
 	public Model exportNotes(Model model, List<ThesaurusTerm> prefTerms, ThesaurusConcept concept) {
 
-		Resource conceptRes= model.createResource(concept.getIdentifier()); 
-		
+		Resource conceptRes= model.createResource(concept.getIdentifier());
+
 		List<Note> notes = noteService.getConceptNotePaginatedList(
 				concept.getIdentifier(), 0, 0);
 		for (ThesaurusTerm prefTerm : prefTerms) {
 			List<Note> termNotes = noteService.getTermNotePaginatedList(prefTerm.getIdentifier(), 0, 0);
 			notes.addAll(termNotes);
 		}
-		
+
 		for (Note note : notes) {
-			String lexicalValue = note.getLexicalValue();
+			String lexicalValue = StringEscapeUtils.unescapeXml(note.getLexicalValue());
 			String lang = note.getLanguage().getId();
 			if ("historyNote".equals(note.getNoteType().getCode())) {
 				model.add(conceptRes, SKOS.HISTORY_NOTE, lexicalValue, lang);
 			} else if ("scopeNote".equals(note.getNoteType().getCode())) {
 				model.add(conceptRes, SKOS.SCOPE_NOTE, lexicalValue, lang);
 			} else if ("example".equals(note.getNoteType().getCode())) {
-				model.add(conceptRes, SKOS.EXAMPLE, lexicalValue, lang);					
+				model.add(conceptRes, SKOS.EXAMPLE, lexicalValue, lang);
 			} else if ("definition".equals(note.getNoteType().getCode())) {
-				model.add(conceptRes, SKOS.DEFINITION, lexicalValue, lang);	
+				model.add(conceptRes, SKOS.DEFINITION, lexicalValue, lang);
 			}
 		}
 		return model;
-	}	
+	}
 }

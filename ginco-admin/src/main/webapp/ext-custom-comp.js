@@ -136,11 +136,11 @@ Ext.define('Thesaurus.ext.utils', {
 		}
 	},
 	getUserRoles : function (thesaurusId) {
-		var userRoles = [];			
+		var userRoles = [];
 		if (thesaurusId) {
 			var userThesaurusRole = Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById(thesaurusId);
-			if (userThesaurusRole != null && Thesaurus.ext.utils.userInfo.data.admin == false) {			
-				
+			if (userThesaurusRole != null && Thesaurus.ext.utils.userInfo.data.admin == false) {
+
 				if (userThesaurusRole.data.role==0) {
 					userRoles.push('MANAGER');
 				} else if ((userThesaurusRole.data.role==1)){
@@ -153,7 +153,7 @@ Ext.define('Thesaurus.ext.utils', {
 		}
 		return userRoles;
 	}
-	
+
 });
 
 
@@ -234,8 +234,8 @@ Ext.define("Thesaurus.form.field.Trigger", {
 Ext.define('Thesaurus.container.Container', {
 	override : 'Ext.container.Container',
 	restrictUI : function (userRoles)
-	{			
-		if (!Ext.Array.contains(userRoles, 'ADMIN')) {				 
+	{
+		if (!Ext.Array.contains(userRoles, 'ADMIN')) {
 			var items = this.query("component");
 			for (var i = 0; i < items.length; i++) {
 				var item = items[i];
@@ -269,11 +269,11 @@ Ext.define('Thesaurus.Component', {
 	checkRoles : function (userRoles) {
 		if (this.requiredRoles.length == 0)
 			return false;
-		
-		for (var i = 0; i < userRoles.length; i++) {			
+
+		for (var i = 0; i < userRoles.length; i++) {
 		    if (Ext.Array.contains(this.requiredRoles, userRoles[i]))
-		    { 
-		    	return false;	    	
+		    {
+		    	return false;
 		    }
 		}
 		return true;
@@ -452,7 +452,7 @@ Ext.define('Secure.data.writer.Writer', {
 						record.setDirty();
 					}
 				}, me);
-			} 
+			}
 		}
 
         return data;
@@ -496,5 +496,6 @@ Ext.define('Thesaurus.form.field.Text', {
 });
 
 Ext.String.addCharacterEntities({
-'&apos;' : "'"});
+'&apos;' : "'",
+'&quot;' : '"' });
 

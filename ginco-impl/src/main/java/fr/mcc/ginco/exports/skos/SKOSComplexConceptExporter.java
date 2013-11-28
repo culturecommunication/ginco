@@ -39,6 +39,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -86,7 +87,7 @@ public class SKOSComplexConceptExporter {
 				model.add(complexConceptRes, SKOS.IN_SCHEME, inScheme);
 
 				model.add(complexConceptRes, SKOSXL.LITERAL_FORM,
-						complexConcept.getLexicalValue(), complexConcept
+						StringEscapeUtils.unescapeXml(complexConcept.getLexicalValue()), complexConcept
 								.getLanguage().getId());
 				model.add(complexConceptRes, DCTerms.created,
 						DateUtil.toISO8601String(complexConcept.getCreated()));
@@ -110,7 +111,7 @@ public class SKOSComplexConceptExporter {
 					model.add(compoundEquivalenceRes, ISOTHES.PLUS_USE, term.getIdentifier());
 				}
 			}
-			
+
 		}
 		return model;
 	}

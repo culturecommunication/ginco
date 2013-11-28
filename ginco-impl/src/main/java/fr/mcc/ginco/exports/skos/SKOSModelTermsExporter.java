@@ -35,6 +35,7 @@
 
 package fr.mcc.ginco.exports.skos;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting concept terms to SKOS jena model
- * 
+ *
  */
 
 @Component("skosModelTermsExporter")
@@ -63,8 +64,8 @@ public class SKOSModelTermsExporter {
 
 	public Model exportConceptPreferredTerm(ThesaurusTerm term, Model model ) {
 		logger.debug("Start generating model for preferred term "
-				+ term.getLexicalValue());	
-		
+				+ term.getLexicalValue());
+
 		Resource prefTermRes = model.createResource(term.getIdentifier(),
 				ISOTHES.PREFERRED_TERM);
 
@@ -72,19 +73,19 @@ public class SKOSModelTermsExporter {
 				DateUtil.toISO8601String(term.getCreated()));
 		model.add(prefTermRes, DCTerms.modified,
 				DateUtil.toISO8601String(term.getModified()));
-		model.add(prefTermRes, SKOSXL.LITERAL_FORM, term.getLexicalValue(),
+		model.add(prefTermRes, SKOSXL.LITERAL_FORM, StringEscapeUtils.unescapeXml(term.getLexicalValue()),
 				term.getLanguage().getId());
-		model.add(prefTermRes, ISOTHES.STATUS, term.getStatus().toString());	
+		model.add(prefTermRes, ISOTHES.STATUS, term.getStatus().toString());
 		if (StringUtils.isNotEmpty(term.getSource())) {
-			model.add(prefTermRes, DC.source, term.getSource());
+			model.add(prefTermRes, DC.source, StringEscapeUtils.unescapeXml(term.getSource()));
 		}
 		return model;
 	}
-	
+
 	public Model exportConceptNotPreferredTerm(ThesaurusTerm term, Model model,
 			Resource conceptResource, boolean hidden) {
 		logger.debug("Start generating model for non preferred term "
-				+ term.getLexicalValue() + "(hidden = " + hidden +")");		
+				+ term.getLexicalValue() + "(hidden = " + hidden +")");
 
 		Resource prefTermRes = model.createResource(term.getIdentifier(),
 				ISOTHES.SIMPLE_NON_PREFERRED_TERM);
@@ -93,18 +94,18 @@ public class SKOSModelTermsExporter {
 				DateUtil.toISO8601String(term.getCreated()));
 		model.add(prefTermRes, DCTerms.modified,
 				DateUtil.toISO8601String(term.getModified()));
-		model.add(prefTermRes, SKOSXL.LITERAL_FORM, term.getLexicalValue(),
+		model.add(prefTermRes, SKOSXL.LITERAL_FORM, StringEscapeUtils.unescapeXml(term.getLexicalValue()),
 				term.getLanguage().getId());
 		model.add(prefTermRes, ISOTHES.STATUS, term.getStatus().toString());
-		
+
 		if (hidden) {
 			conceptResource.addProperty(SKOSXL.HIDDEN_LABEL, prefTermRes);
 		} else {
 			conceptResource.addProperty(SKOSXL.ALT_LABEL, prefTermRes);
 		}
-		
+
 		if (StringUtils.isNotEmpty(term.getSource())) {
-			model.add(prefTermRes, DC.source, term.getSource());
+			model.add(prefTermRes, DC.source, StringEscapeUtils.unescapeXml(term.getSource()));
 		}
 
 		return model;

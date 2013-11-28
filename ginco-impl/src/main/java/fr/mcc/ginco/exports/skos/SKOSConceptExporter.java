@@ -39,6 +39,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.ontology.DatatypeProperty;
@@ -57,7 +58,7 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting concept to SKOS
- * 
+ *
  */
 @Component("skosConceptExporter")
 public class SKOSConceptExporter {
@@ -92,7 +93,7 @@ public class SKOSConceptExporter {
 
 	/**
 	 * Export a concept to SKOS using the skos API
-	 * 
+	 *
 	 * @param concept
 	 * @param parent
 	 * @param scheme
@@ -144,7 +145,7 @@ public class SKOSConceptExporter {
 
 	/**
 	 * Export minimal concept information
-	 * 
+	 *
 	 * @param concept
 	 * @param parent
 	 * @param scheme
@@ -166,7 +167,7 @@ public class SKOSConceptExporter {
 
 		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
 
-			model.add(conceptResource, SKOS.NOTATION, concept.getNotation());
+			model.add(conceptResource, SKOS.NOTATION, StringEscapeUtils.unescapeXml(concept.getNotation()));
 
 		}
 

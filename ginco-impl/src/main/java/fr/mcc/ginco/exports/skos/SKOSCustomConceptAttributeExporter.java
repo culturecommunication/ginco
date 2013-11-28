@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -45,10 +46,10 @@ public class SKOSCustomConceptAttributeExporter {
 				Resource customAttrRes = model.createResource(GINCO.getURI()
 						+ attribute.getType().getCode(),
 						GINCO.CUSTOM_CONCEPT_ATTRIBUTE);
-				model.add(customAttrRes, RDFS.label, attribute.getType()
-						.getCode());
-				
-				
+				model.add(customAttrRes, RDFS.label, StringEscapeUtils.unescapeXml(attribute.getType()
+						.getCode()));
+
+
 				if (StringUtils.isNotEmpty(attribute.getLexicalValue())) {
 					Property customAttributeProperty = model.createProperty(GINCO
 						.getURI() + attribute.getType().getCode());

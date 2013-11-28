@@ -36,6 +36,7 @@ package fr.mcc.ginco.exports.skos;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -53,7 +54,7 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting a thesaurus data SKOS
- * 
+ *
  */
 @Component("skosThesaurusExporter")
 public class SKOSThesaurusExporter {
@@ -65,7 +66,7 @@ public class SKOSThesaurusExporter {
 
 	/**
 	 * Export the thesaurus data skos API
-	 * 
+	 *
 	 * @param thesaurus
 	 * @return
 	 */
@@ -79,7 +80,8 @@ public class SKOSThesaurusExporter {
 		model.add(thesaurusResource, DCTerms.modified,
 				DateUtil.toISO8601String(thesaurus.getDate()));
 
-		model.add(thesaurusResource, DC.title, thesaurus.getTitle());
+		model.add(thesaurusResource, DC.title,
+				StringEscapeUtils.unescapeXml(thesaurus.getTitle()));
 
 		if (thesaurus.getCreator() != null) {
 
@@ -90,7 +92,7 @@ public class SKOSThesaurusExporter {
 			String creatorEmail = thesaurus.getCreator().getEmail();
 
 			if (creatorName != null && !creatorName.isEmpty()) {
-				foafOrgResource.addProperty(FOAF.name, creatorName);
+				foafOrgResource.addProperty(FOAF.name, StringEscapeUtils.unescapeXml(creatorName));
 			}
 			if (creatorHomepage != null && !creatorHomepage.isEmpty()) {
 				foafOrgResource.addProperty(FOAF.homepage, creatorHomepage);
@@ -102,15 +104,15 @@ public class SKOSThesaurusExporter {
 
 		}
 
-		model.add(thesaurusResource, DC.rights, thesaurus.getRights());
+		model.add(thesaurusResource, DC.rights, StringEscapeUtils.unescapeXml(thesaurus.getRights()));
 
-		model.add(thesaurusResource, DC.description, thesaurus.getDescription());
+		model.add(thesaurusResource, DC.description, StringEscapeUtils.unescapeXml(thesaurus.getDescription()));
 
-		model.add(thesaurusResource, DC.relation, thesaurus.getRelation());
+		model.add(thesaurusResource, DC.relation, StringEscapeUtils.unescapeXml(thesaurus.getRelation()));
 
-		model.add(thesaurusResource, DC.source, thesaurus.getSource());
+		model.add(thesaurusResource, DC.source, StringEscapeUtils.unescapeXml(thesaurus.getSource()));
 
-		model.add(thesaurusResource, DC.publisher, thesaurus.getPublisher());
+		model.add(thesaurusResource, DC.publisher, StringEscapeUtils.unescapeXml(thesaurus.getPublisher()));
 
 		if (thesaurus.getType() != null) {
 			model.add(thesaurusResource, DC.type, thesaurus.getType()
@@ -119,17 +121,17 @@ public class SKOSThesaurusExporter {
 
 		String[] contributors = thesaurus.getContributor().split(SEPARATOR);
 		for (String contributor : contributors) {
-			model.add(thesaurusResource, DC.contributor, contributor);
+			model.add(thesaurusResource, DC.contributor, StringEscapeUtils.unescapeXml(contributor));
 		}
 
 		String[] coverages = thesaurus.getCoverage().split(SEPARATOR);
 		for (String coverage : coverages) {
-			model.add(thesaurusResource, DC.coverage, coverage);
+			model.add(thesaurusResource, DC.coverage, StringEscapeUtils.unescapeXml(coverage));
 		}
 
 		String[] subjects = thesaurus.getSubject().split(SEPARATOR);
 		for (String subject : subjects) {
-			model.add(thesaurusResource, DC.subject, subject);
+			model.add(thesaurusResource, DC.subject, StringEscapeUtils.unescapeXml(subject));
 		}
 
 		for (Language lang : thesaurus.getLang()) {
@@ -141,7 +143,7 @@ public class SKOSThesaurusExporter {
 				.findThisVersionByThesaurusId(thesaurus.getIdentifier())
 				.getVersionNote();
 		if (StringUtils.isNotEmpty(currentVersionValue)) {
-			model.add(thesaurusResource, DCTerms.issued, currentVersionValue);
+			model.add(thesaurusResource, DCTerms.issued, StringEscapeUtils.unescapeXml(currentVersionValue));
 		}
 
 		return model;

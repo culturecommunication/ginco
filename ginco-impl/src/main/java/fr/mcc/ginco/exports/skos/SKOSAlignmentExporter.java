@@ -51,7 +51,7 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * This component is in charge of exporting concept alignments to SKOS
- * 
+ *
  */
 
 @Component("skosAlignmentExporter")
@@ -63,18 +63,18 @@ public class SKOSAlignmentExporter {
 
 	/**
 	 * Export concept alignments model
-	 * 
+	 *
 	 * @param conceptId
 	 * @param factory
 	 * @param conceptSKOS
 	 * @param vocab
-	 * 
+	 *
 	 * @return
 	 */
-	public Model exportAlignments(String conceptId, 
+	public Model exportAlignments(String conceptId,
 			Model defaultModel) {
 		Resource conceptResource = defaultModel.createResource(
-				conceptId, SKOS.CONCEPT);		
+				conceptId, SKOS.CONCEPT);
 		List<Alignment> alignments = alignmentService
 				.getAlignmentsBySourceConceptId(conceptId);
 		for (Alignment alignment : alignments) {

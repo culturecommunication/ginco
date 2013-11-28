@@ -40,6 +40,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -79,8 +80,8 @@ public class SKOSGroupExporter {
 
 	@Inject
 	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;	
-	
+	private IThesaurusConceptService thesaurusConceptService;
+
 
 	public void exportGroup(Thesaurus thesaurus, ThesaurusConceptGroup group,
 			Model model) {
@@ -100,12 +101,12 @@ public class SKOSGroupExporter {
 		model.add(groupRes, DCTerms.modified,
 				DateUtil.toISO8601String(label.getModified()));
 
-		model.add(groupRes, RDFS.label, label.getLexicalValue(), label
+		model.add(groupRes, RDFS.label, StringEscapeUtils.unescapeXml(label.getLexicalValue()), label
 				.getLanguage().getId());
 
 		String notation = group.getNotation();
 		if (StringUtils.isNotEmpty(notation)) {
-			model.add(groupRes, SKOS.NOTATION, group.getNotation());
+			model.add(groupRes, SKOS.NOTATION, StringEscapeUtils.unescapeXml(group.getNotation()));
 		}
 
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
