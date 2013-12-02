@@ -918,7 +918,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'conceptPanel  button[cls=addParent]' : {
 				click : this.addParent
 			},
-			'conceptPanel  button[cls=addChild]' : {
+			'conceptPanel  #addChild' : {
 				click : this.addChild
 			},
 			'conceptPanel  #addExistingChild' : {
