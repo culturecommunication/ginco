@@ -50,5 +50,5 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusStatisticsTabPanel', {
 	xnbOfConceptsWoNotes : 'Nombre de concepts sans note',
 	xnbOfConceptsAlignedToIntThes : 'Nombre de concepts alignés vers des vocabulaires internes',
 	xnbOfConceptsAlignedToExtThes : 'Nombre de concepts alignés vers des vocabulaires externes',
-	xnbOfConceptsAlignedToMyThes : 'Nombre de concepts qui pointent vers mon vocabulaire'
+	xnbOfConceptsAlignedToMyThes : 'Nombre de concepts pointant vers ce vocabulaire'
 });

@@ -45,7 +45,7 @@ Ext.define('GincoApp.view.ThesaurusStatisticsTabPanel', {
 			xnbOfConceptsWoNotes : 'Number of concepts without notes',
 			xnbOfConceptsAlignedToIntThes : 'Number of concepts aligned to internal thesauruses',
 			xnbOfConceptsAlignedToExtThes : 'Number of concepts aligned to external thesauruses',
-			xnbOfConceptsAlignedToMyThes : 'Number of concepts aligned to my thesaurus',
+			xnbOfConceptsAlignedToMyThes : 'Number of concepts aligned to this thesaurus',
 
 			initComponent : function() {
 				var me = this;
