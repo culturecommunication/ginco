@@ -53,7 +53,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xAccessibilityLabel : "Accessibility",
 	xLogoutBtnLabel : "Logout",
 	xSearchBtnTitle : "Click here to launch search",
-	xSuggestionBtnLabel : "My suggestions",
+	xSuggestionBtnLabel : "Suggestions",
 	height : 64,
 
 	initComponent : function() {
