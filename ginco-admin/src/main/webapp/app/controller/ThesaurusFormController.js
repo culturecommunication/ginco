@@ -56,6 +56,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xWarningChangedLanguages : "There may be terms in this language. Do it on your own risk!",
     xArchiveSuccess: "Thesaurus has been archived!",
     xPublishSuccess: 'thesaurus has been published!',
+    xPublishInProgress: "Publishing in progress",
 
 
 	loadPanel : function(theForm) {
@@ -152,6 +153,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     publishThesaurus : function(theButton) {
         var me = this;
         var theForm = theButton.up('form');
+        theForm.getEl().mask(me.xPublishInProgress);
         var url = "services/ui/thesaurusservice/publishVocabulary?thesaurusId="
             + encodeURIComponent(theForm.up('thesaurusTabPanel').thesaurusData.id)
             + "&userId=" + encodeURIComponent(Thesaurus.ext.utils.userInfo.data.username);
@@ -160,9 +162,10 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             url: url,
             method: 'GET',
             success: function(response) {
+            	theForm.getEl().unmask();
             	var jsonData = Ext.JSON.decode(response.responseText);            	
             	if (jsonData.success) {
-            		Thesaurus.ext.utils.msg(m.xSucessLabel,
+            		Thesaurus.ext.utils.msg(me.xSucessLabel,
                  		   me.xPublishSuccess);
                      me.application.fireEvent('thesaurusupdated');
             	}else {

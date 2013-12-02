@@ -50,5 +50,6 @@ Ext.define('GincoApp.locale.fr.controller.ThesaurusFormController', {
     xImportBranchTitle : "Importer une branche",
     xArchiveSuccess: "Le thesaurus a été archivé!",
     xPublishSuccess: "Le thesaurus a été publié!",
-    xProblemArchiveMsg: "Erreur lors de l'archivage du thésaurus"
+    xProblemArchiveMsg: "Erreur lors de l'archivage du thésaurus",
+    xPublishInProgress: "Publication en cours..."
 });
