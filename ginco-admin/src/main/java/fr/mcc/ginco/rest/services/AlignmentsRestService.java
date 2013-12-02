@@ -42,6 +42,7 @@ import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -110,9 +111,10 @@ public class AlignmentsRestService {
 	@GET
 	@Path("/getExternalThesauruses")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<ExternalThesaurusView> getExternalThesauruses() {       
+	public List<ExternalThesaurusView> getExternalThesauruses(
+			@QueryParam("query") String query) {       
 		 List<ExternalThesaurusView> views = new ArrayList<ExternalThesaurusView>();
-		 for (ExternalThesaurus externalThesaurus: externalThesaurusService.getExternalThesaurusList()) {
+		 for (ExternalThesaurus externalThesaurus: externalThesaurusService.getExternalThesaurusList(query)) {
 			 views.add(externalThesaurusViewConverter.convertExternalThesaurus(externalThesaurus));
 		 }
 		return views;

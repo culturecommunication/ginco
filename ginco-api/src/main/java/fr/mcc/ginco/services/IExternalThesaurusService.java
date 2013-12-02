@@ -49,7 +49,7 @@ public interface IExternalThesaurusService {
      * Get list of all {@link ExternalThesaurus} already existing
      * @return
      */
-    List<ExternalThesaurus> getExternalThesaurusList();
+    List<ExternalThesaurus> getExternalThesaurusList(String externalIdQuery);
 
 
     /**

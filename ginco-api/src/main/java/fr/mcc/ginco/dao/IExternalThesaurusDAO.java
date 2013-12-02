@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.dao;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ExternalThesaurus;
 
 /**
@@ -47,6 +49,8 @@ public interface IExternalThesaurusDAO extends IGenericDAO<ExternalThesaurus, In
 	 * @return
 	 */
 	ExternalThesaurus findBySourceExternalId(String externalId);
+	
+	List<ExternalThesaurus> findAllByExternalIdQuery(String query);
 }
 
 

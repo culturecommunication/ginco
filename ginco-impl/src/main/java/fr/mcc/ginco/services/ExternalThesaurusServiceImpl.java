@@ -53,11 +53,6 @@ public class ExternalThesaurusServiceImpl implements IExternalThesaurusService {
 	private IExternalThesaurusDAO externalThesaurusDAO;
 
 	@Override
-	public List<ExternalThesaurus> getExternalThesaurusList() {
-		return externalThesaurusDAO.findAll();
-	}
-
-	@Override
 	public ExternalThesaurus getExternalThesaurusById(Integer identifier) {
 		return externalThesaurusDAO.getById(identifier);
 	}
@@ -65,6 +60,12 @@ public class ExternalThesaurusServiceImpl implements IExternalThesaurusService {
 	@Override
 	public ExternalThesaurus getThesaurusByExternalId(String externalId) {
 		return externalThesaurusDAO.findBySourceExternalId(externalId);
+	}
+
+	@Override
+	public List<ExternalThesaurus> getExternalThesaurusList(
+			String externalIdQuery) {
+		return externalThesaurusDAO.findAllByExternalIdQuery(externalIdQuery);
 	}
 
 }

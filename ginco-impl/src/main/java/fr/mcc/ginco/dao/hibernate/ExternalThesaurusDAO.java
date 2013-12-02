@@ -56,6 +56,15 @@ public class ExternalThesaurusDAO extends
 	public ExternalThesaurusDAO() {
 		super(ExternalThesaurus.class);
 	}
+	
+	public List<ExternalThesaurus> findAllByExternalIdQuery(String query)
+	{
+		Criteria criteria = getCurrentSession().createCriteria(ExternalThesaurus.class);
+		if (! query.equals("")) {
+			criteria.add( Restrictions.like("externalId", query+"%") );
+		}
+		return criteria.list();
+	}
 
 	/*
 	 * (non-Javadoc)
