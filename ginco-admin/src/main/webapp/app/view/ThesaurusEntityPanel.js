@@ -38,6 +38,7 @@ Ext
 				'GincoApp.view.ThesaurusEntityPanel', {
 					extend : 'Ext.panel.Panel',
 					gincoId : '',
+					forceClose : false,
 					treeNodeId : '',
 					thesaurusData : '',
 					getThesaurusData : function() {

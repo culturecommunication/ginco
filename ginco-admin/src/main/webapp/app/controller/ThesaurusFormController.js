@@ -130,6 +130,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
                                     Thesaurus.ext.utils.msg(me.xSucessLabel,
                                         me.xSucessRemovedMsg);
                                     me.application.fireEvent('thesaurusdeleted',thePanel.thesaurusData);
+                                    thePanel.forceClose = true;
                                     globalTabs.items.each(function(item){
                                         if(item.thesaurusData.id == record.data.id) {
                                             item.close();

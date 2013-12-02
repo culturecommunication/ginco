@@ -235,6 +235,8 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 
 	onPanelBeforeClose : function(thePanel) {
 		var me = this;
+		if (thePanel.forceClose && thePanel.forceClose==true)
+			return true;
 		var theForm = thePanel.down('form');
 		var globalTabs = thePanel.up('#thesaurusItemsTabPanel');
 		if (theForm) {
