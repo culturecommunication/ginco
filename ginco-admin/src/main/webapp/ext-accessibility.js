@@ -364,7 +364,7 @@ Ext.define('Thesaurus.Ext.view.Table', {
 			refresh : function() {
 				var me = this;
 				me.callParent();
-				me.focus();
+				//me.focus();
 			}
 		});
 
