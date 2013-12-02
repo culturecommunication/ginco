@@ -55,7 +55,7 @@ import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly = true, rollbackFor = BusinessException.class)
+//@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("alignmentService")
 public class AlignmentServiceImpl implements IAlignmentService {
 
@@ -133,8 +133,14 @@ public class AlignmentServiceImpl implements IAlignmentService {
 		for (Alignment alignment:alignments) {
 			ExternalThesaurus externalThesaurus = alignment.getExternalTargetThesaurus();
 
-			if (externalThesaurus != null && ! externalThesaurusesToSave.contains(externalThesaurus)) {
-				externalThesaurusesToSave.add(externalThesaurus);
+			if (externalThesaurus != null) {
+				if (! externalThesaurusesToSave.contains(externalThesaurus)) {
+					externalThesaurusesToSave.add(externalThesaurus);
+				} else 
+				{
+					ExternalThesaurus existingExternalThes = externalThesaurusesToSave.get(externalThesaurusesToSave.indexOf(externalThesaurus));
+					alignment.setExternalTargetThesaurus(existingExternalThes);
+				}
 			}
 		}
 		for (ExternalThesaurus extThesaurus:externalThesaurusesToSave) {

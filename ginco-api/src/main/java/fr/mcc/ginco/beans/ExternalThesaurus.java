@@ -96,6 +96,12 @@ public class ExternalThesaurus {
 			if (other.identifier != null) {
 				return false;
 			}
+			if (externalId!=null && other.externalId!=null)
+			{
+				if (!externalId.equals(other.externalId)) {
+					return false;
+				}
+			}
 		} else if (!identifier.equals(other.identifier)) {
 			return false;
 		}
