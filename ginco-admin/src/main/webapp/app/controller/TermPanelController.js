@@ -229,7 +229,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		var thePanel = theCombo.up('termPanel');
 		var theStore = theCombo.getStore();
 		theStore.getProxy().setExtraParam('thesaurusId',
-				thePanel.thesaurusData.id);
+				thePanel.getThesaurusData().id);
 		theStore.load();
 	},
 
