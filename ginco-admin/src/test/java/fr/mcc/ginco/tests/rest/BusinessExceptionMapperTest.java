@@ -66,7 +66,7 @@ public class BusinessExceptionMapperTest {
 		Assert.assertEquals(200, response.getStatus());
 		String responseEntity = (String) response.getEntity();
 		Assert.assertEquals(
-				"{success:false, message: 'Impossible de stocker temporairement le fichier'}",
+				"{\"success\":false, \"message\": \"Impossible de stocker temporairement le fichier\"}",
 				responseEntity);
 
 	}
