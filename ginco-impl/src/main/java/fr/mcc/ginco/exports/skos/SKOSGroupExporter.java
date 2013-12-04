@@ -110,7 +110,7 @@ public class SKOSGroupExporter {
 		}
 
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
-		if (group.getIsDynamic()) {
+		if (group.getIsDynamic()!=null && group.getIsDynamic()==true) {
 			if (group.getParentConcept() != null) {
 				concepts = thesaurusConceptService
 						.getRecursiveChildrenByConceptId(group
