@@ -64,6 +64,6 @@ public abstract class AbstractExceptionMapper<E extends Throwable> implements
 		logger.debug("Exception in REST services : " + msg);
 		msg = StringEscapeUtils.escapeEcmaScript(msg);
 		return Response.status(Status.OK)
-				.entity("{success:false, message: '" + msg + "'}").build();
+				.entity("{\"success\":false, \"message\": \"" + msg + "\"}").build();
 	}
 }
