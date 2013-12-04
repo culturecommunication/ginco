@@ -137,16 +137,19 @@ public class GincoAlignmentImporter {
 				if (!bannedAlignments.contains(ali)) {
 					ExternalThesaurus externalThesaurus = ali
 							.getExternalTargetThesaurus();
-					if (externalThesaurus != null
-							&& !externalThesaurusesToSave
-									.contains(externalThesaurus)) {
+					if (externalThesaurus != null) {
 						ExternalThesaurus existingThesaurus = externalThesaurusDAO
 								.findBySourceExternalId(externalThesaurus
 										.getExternalId());
 						if (existingThesaurus != null) {
 							ali.setExternalTargetThesaurus(existingThesaurus);
 						} else {
-							externalThesaurusesToSave.add(externalThesaurus);
+							if (! externalThesaurusesToSave.contains(externalThesaurus)) {
+								externalThesaurusesToSave.add(externalThesaurus);
+							} else 
+							{
+								ali.setExternalTargetThesaurus(externalThesaurusesToSave.get(externalThesaurusesToSave.indexOf(externalThesaurus)));
+							}
 						}
 					}
 				}
