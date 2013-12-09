@@ -94,6 +94,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xImportBranch: 'Import a branch',
     xMetadataTitle : 'Metadata',
     xStatisticsTabTile : 'Statistics',
+    xCloseAllBtn : 'Close all tabs',
     xMetadataTooltip : 'Click here to expand/collapse metadatas of this thesaurus',
 
 

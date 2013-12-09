@@ -64,5 +64,6 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
         xImportSandbox: 'Importer des termes',
         xCustomAttributeTypes: "Attributs personnalisés",
         xSearchFieldText : "Rechercher dans le vocabulaire",
-    	xSearchBtnTitle : "Lancer la recherche dans le "
+    	xSearchBtnTitle : "Lancer la recherche dans le ",
+    	xCloseAllBtn : 'Fermer tous les onglets'
 });

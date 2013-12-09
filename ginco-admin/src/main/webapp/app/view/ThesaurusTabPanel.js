@@ -90,6 +90,7 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 	xNewMenu_ConceptLabel : "Concept only",
 	xNewMenu_DynamicGroupLabel : "Dynamic group",
 	xSearchFieldText : "Search in thesaurus",
+	xCloseAllBtn : 'Close all tabs',
 	xSearchBtnTitle : "Click here to launch search in thesaurus",
 
 	getThesaurusData : function() {
@@ -216,7 +217,13 @@ Ext.define('GincoApp.view.ThesaurusTabPanel', {
 							disabled : true,
 							itemId : 'importBranch',
 							iconCls : 'imports-icon'
-						}, {
+						},{
+							xtype : 'button',
+							text : me.xCloseAllBtn,
+							disabled : true,
+							itemId : 'closeAllBtn',
+							iconCls : 'close-icon'
+						},{
 							xtype : 'tbspacer',
 							flex : 1
 						}, {
