@@ -37,7 +37,7 @@ package fr.mcc.ginco.tests.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import junit.framework.Assert;
 import junitx.framework.ListAssert;
@@ -206,20 +206,20 @@ public class UserRoleRestServiceTest {
 		String thesaurusId = "http://data/culture.gouv.fr/123/th1";
 	
 		UserRole userRole1 = new UserRole();
-		userRole1.setUsername("john");
+		userRole1.setUsername("paul");
 		
 		UserRole userRole2 = new UserRole();
-		userRole2.setUsername("paul");
+		userRole2.setUsername("john");
 		
 		List<UserRole> userRoles = new ArrayList<UserRole>();
 		userRoles.add(userRole1);
 		userRoles.add(userRole2);
 
 		AdminUser adminUser1 = new AdminUser();
-		adminUser1.setUserId("paul");
+		adminUser1.setUserId("ringo");
 		
 		AdminUser adminUser2 = new AdminUser();
-		adminUser2.setUserId("ringo");
+		adminUser2.setUserId("paul");
 		
 		AdminUser adminUser3 = new AdminUser();
 		adminUser3.setUserId("george");
@@ -237,12 +237,14 @@ public class UserRoleRestServiceTest {
 		Mockito.when(userRoleService.getThesaurusUsers("http://data/culture.gouv.fr/123/th1")).thenReturn(userRoles);
 		Mockito.when(adminUserService.getAllAdmin()).thenReturn(adminUsers);		
 		
-		ExtJsonFormLoadData<Set<String>>  actualUsers = userRoleRestService.getDeclaredUsers(thesaurusId);
+		ExtJsonFormLoadData<SortedSet<String>>  actualUsers = userRoleRestService.getDeclaredUsers(thesaurusId);
 		
 		Assert.assertEquals(3, actualUsers.getData().size());
+		Assert.assertEquals("john", actualUsers.getData().first());
 		Assert.assertTrue(actualUsers.getData().contains("john"));
 		Assert.assertTrue(actualUsers.getData().contains("paul"));
 		Assert.assertTrue(actualUsers.getData().contains("ringo"));
+		Assert.assertEquals("ringo", actualUsers.getData().last());
 		
 	}
 

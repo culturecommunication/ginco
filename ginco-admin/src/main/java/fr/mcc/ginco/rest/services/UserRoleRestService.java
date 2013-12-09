@@ -36,10 +36,10 @@ package fr.mcc.ginco.rest.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -184,9 +184,9 @@ public class UserRoleRestService {
 	@GET
 	@Path("/getDeclaredUsers")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<Set<String>> getDeclaredUsers(@QueryParam("idThesaurus") String idThesaurus) {
+	public ExtJsonFormLoadData<SortedSet<String>> getDeclaredUsers(@QueryParam("idThesaurus") String idThesaurus) {
 		
-		Set<String> allUsers = new HashSet<String>();
+		SortedSet<String> allUsers = new TreeSet<String>();
 		List<UserRole> thesaurusUsers = userRoleService.getThesaurusUsers(idThesaurus);
 		List<AdminUser> admins = adminUserService.getAllAdmin();
 		
