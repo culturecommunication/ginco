@@ -92,14 +92,14 @@ public class TermViewConverterTest {
 		ThesaurusConcept fakeConcept = new ThesaurusConcept();
 		fakeConcept.setIdentifier("fakeConcept");
 		when(thesaurusConceptService
-				.getThesaurusConceptById(Mockito.anyString())).thenReturn(fakeConcept);
+				.getThesaurusConceptById("fakeConceptId")).thenReturn(fakeConcept);
 		
 		ThesaurusTermView view = buildThesaurusTermView("view1");		
-		view.setRole("any-role");
+		view.setRole("TA");
 		ThesaurusTermRole fakeRole = new ThesaurusTermRole();
 		fakeRole.setCode("TA");
 		when(thesaurusTermRoleService
-		.getTermRole(Mockito.anyString())).thenReturn(fakeRole);
+		.getTermRole("TA")).thenReturn(fakeRole);
 		
 		ThesaurusTerm termFromDB = new ThesaurusTerm();		
 		when(thesaurusTermService

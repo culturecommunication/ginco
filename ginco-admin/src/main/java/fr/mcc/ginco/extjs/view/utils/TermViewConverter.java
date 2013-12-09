@@ -191,22 +191,23 @@ public class TermViewConverter {
 						.getThesaurusConceptById(source.getConceptId());
 				if (concept != null) {
 					hibernateRes.setConcept(concept);
-					if (!source.getPrefered()) {
-						if (StringUtils.isNotBlank(source.getRole())) {
-							ThesaurusTermRole role = thesaurusTermRoleService
-									.getTermRole(source.getRole());
-							hibernateRes.setRole(role);
-						} else {
-							hibernateRes.setRole(thesaurusTermRoleService
-									.getDefaultThesaurusTermRole());
-						}
-					} else {
-						hibernateRes.setRole(null);
-					}
+					
 				}
 			}
-
+			if (!source.getPrefered()) {
+				if (StringUtils.isNotBlank(source.getRole())) {
+					ThesaurusTermRole role = thesaurusTermRoleService
+							.getTermRole(source.getRole());
+					hibernateRes.setRole(role);
+				} else {
+					hibernateRes.setRole(thesaurusTermRoleService
+							.getDefaultThesaurusTermRole());
+				}
+			} else {
+				hibernateRes.setRole(null);
+			}
 		}
+		
 
 		hibernateRes.setThesaurus(thesaurusService.getThesaurusById(source
 				.getThesaurusId()));
