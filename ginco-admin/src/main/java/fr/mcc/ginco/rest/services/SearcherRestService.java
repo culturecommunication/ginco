@@ -44,6 +44,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +75,7 @@ public class SearcherRestService {
     public  ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
         try {
         	SortCriteria sort = new SortCriteria(filter.getSortfield(), filter.getSortdir());
-        	SearchResultList searchResults  = searcherService.search(filter.getQuery(), filter.getType(),
+        	SearchResultList searchResults  = searcherService.search(StringEscapeUtils.unescapeHtml4(filter.getQuery()), filter.getType(),
                     filter.getThesaurus(), filter.getStatus(),
                     filter.getCreationdate(), filter.getModificationdate(),
                     filter.getLanguage(),sort, filter.getStart(),filter.getLimit());
