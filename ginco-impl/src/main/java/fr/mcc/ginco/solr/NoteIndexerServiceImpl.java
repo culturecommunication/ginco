@@ -81,8 +81,10 @@ public class NoteIndexerServiceImpl implements INoteIndexerService{
 			for (Note note : notes) {
 
 				logger.info("Indexing note :" + note.getIdentifier());
-				SolrInputDocument doc = noteSolrConverter.convertSolrNote(note);
-				solrServer.add(doc);
+				if (note.getTerm() != null || note.getConcept() != null) {
+					SolrInputDocument doc = noteSolrConverter.convertSolrNote(note);
+					solrServer.add(doc);
+				}
 			}
 			solrServer.commit();
 		} catch (SolrServerException e) {

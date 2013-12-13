@@ -49,6 +49,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.solr.NoteIndexerServiceImpl;
 import fr.mcc.ginco.solr.NoteSolrConverter;
 
@@ -73,7 +74,7 @@ public class NoteIndexerServiceTest {
 
 		Note fakeConceptNote = new Note();
 		fakeConceptNote.setIdentifier("http://note1");
-
+		fakeConceptNote.setTerm(new ThesaurusTerm());
 		SolrInputDocument doc = new SolrInputDocument();
 		Mockito.when(noteSolrConverter.convertSolrNote(fakeConceptNote)).thenReturn(doc);
 
