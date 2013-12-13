@@ -58,7 +58,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -198,15 +200,30 @@ public class ThesaurusTermRestService {
 
 			try {
 				ThesaurusTerm existingTerm = thesaurusTermService.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());
-				if ( existingTerm.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
-					throw new AccessDeniedException("You can save only candidate terms");
+				if (existingTerm !=null) {
+					ThesaurusConcept attachedConcept = existingTerm.getConcept(); 
+					if (attachedConcept == null) {
+						if (thesaurusViewJAXBElement.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
+							throw new AccessDeniedException("You can save only candidate terms");
+						}
+						if ( existingTerm.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
+							throw new AccessDeniedException("You can save only candidate terms");
+						}
+					} else 
+					{
+						if (attachedConcept.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()) {
+							throw new AccessDeniedException("You can save only terms attached to candidate concepts");
+						}
+					}
+				} else 
+				{
+					if (thesaurusViewJAXBElement.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
+						throw new AccessDeniedException("You can save only candidate terms");
+					}
 				}
 			} catch (BusinessException be) {
 				//Do nothing, term just doen't exist
 				logger.debug("Case of term creation detected");
-			}
-			if (thesaurusViewJAXBElement.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
-				throw new AccessDeniedException("You can save only candidate terms");
 			}
 		}
 		ThesaurusTerm object = termViewConverter.convert(thesaurusViewJAXBElement, false);

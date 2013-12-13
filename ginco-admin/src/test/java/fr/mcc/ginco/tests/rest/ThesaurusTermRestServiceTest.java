@@ -57,7 +57,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -148,6 +150,25 @@ public class ThesaurusTermRestServiceTest{
 		fakeThesaurusTermView.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
 	}
+	
+	@Test
+	public final void testUpdateTermWithExpertRole3() {
+		Authentication authent = Mockito.mock(Authentication.class);
+		SecurityContextHolder.getContext()
+				.setAuthentication(authent);
+		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(true);
+		ThesaurusConcept fakeThesaurusConcept = new ThesaurusConcept();
+		fakeThesaurusConcept.setStatus(ConceptStatusEnum.CANDIDATE.getStatus());
+		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
+		fakeThesaurusTerm.setStatus(TermStatusEnum.VALIDATED.getStatus());
+		fakeThesaurusTerm.setConcept(fakeThesaurusConcept);
+		Mockito.when(termService.getThesaurusTermById(Mockito.anyString())).thenReturn(fakeThesaurusTerm);
+
+		ThesaurusTermView fakeThesaurusTermView = new ThesaurusTermView();
+		fakeThesaurusTermView.setStatus(TermStatusEnum.VALIDATED.getStatus());
+		thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
+	}
+	
 	/**
 	 * Test the updateTerm method
 	 */
