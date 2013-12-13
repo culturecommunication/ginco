@@ -221,13 +221,26 @@ public class ThesaurusRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
 	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
+		Thesaurus existingThes = thesaurusService.getThesaurusById(thesaurusViewJAXBElement.getId());
+		Boolean shouldReindex = false;
+		if (existingThes!=null)
+		{
+			if (!existingThes.getTitle().equals(thesaurusViewJAXBElement.getTitle()))
+			{
+				shouldReindex = true;
+			}
+		}
 		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
-
+		
 		ThesaurusView view = null;
         if (object != null) {
+        	
 			Thesaurus result = thesaurusService.updateThesaurus(object);
-
-            if (result != null) {
+            if (result != null) {            	
+            	if (shouldReindex) {
+            			logger.warn("Thesaurus title has changed... reindexing thesaurus");
+            			thesaurusIndexerService.indexThesaurus(object);
+            	}
                 view = thesaurusViewConverter.convert(result);
 			} else {
 				logger.error("Failed to update thesaurus");

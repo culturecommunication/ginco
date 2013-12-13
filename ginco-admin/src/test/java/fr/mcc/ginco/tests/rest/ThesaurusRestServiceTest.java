@@ -37,6 +37,7 @@ package fr.mcc.ginco.tests.rest;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -59,6 +60,7 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
+import fr.mcc.ginco.solr.IThesaurusIndexerService;
 
 public class ThesaurusRestServiceTest {
 
@@ -77,6 +79,10 @@ public class ThesaurusRestServiceTest {
 	@Mock(name = "thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
 
+	@Mock(name = "thesaurusIndexerService")
+	private IThesaurusIndexerService thesaurusIndexerService;
+
+	
 	@InjectMocks
 	private ThesaurusRestService thesaurusRestService = new ThesaurusRestService();
 
@@ -113,15 +119,17 @@ public class ThesaurusRestServiceTest {
 	@Test
 	public final void testUpdateThesaurus() {
 		Thesaurus existingTh = new Thesaurus();
+		existingTh.setTitle("title-updated");
 		existingTh.setIdentifier("any-id");
 		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn(existingTh);
 		when(thesaurusService.updateThesaurus(any(Thesaurus.class))).thenReturn(new Thesaurus());
+		when(thesaurusService.getThesaurusById(anyString())).thenReturn(existingTh);
 		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
-
+		
 		// Testing putVocabularyById method
 		ThesaurusView view = thesaurusRestService
 				.updateVocabulary(new ThesaurusView());
-
+		verify(thesaurusIndexerService).indexThesaurus(any(Thesaurus.class));
 		Assert.assertNotNull(view);
 	}
 
