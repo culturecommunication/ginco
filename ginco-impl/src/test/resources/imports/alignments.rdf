@@ -238,6 +238,7 @@ indiscrets</skos:hiddenLabel>
 		<skos:broader rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-285"/>
 		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1942"/>
 		<skos:exactMatch>http://data.bnf.fr/ark:/12148/cb13318807v</skos:exactMatch>
+		<skos:closeMatch>http://dbpedia.org/resources/bidule</skos:closeMatch>
 	</skos:Concept>
 	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-413">
 		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>

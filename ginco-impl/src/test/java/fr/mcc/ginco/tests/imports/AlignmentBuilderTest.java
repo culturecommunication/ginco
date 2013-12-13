@@ -89,7 +89,7 @@ public class AlignmentBuilderTest {
 
 		ThesaurusConcept concept = new ThesaurusConcept();
 		concept.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-411");
-
+		
 		Model model = ModelFactory.createDefaultModel();
 		InputStream is = TermBuilderTest.class
 				.getResourceAsStream("/imports/alignments.rdf");
@@ -99,9 +99,12 @@ public class AlignmentBuilderTest {
 				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-411");
 
 		Statement stmt = skosConcept.getProperty(SKOS.SKOS_ALIGNMENTS.get("=EQ"));
+		Statement stmt2 = skosConcept.getProperty(SKOS.SKOS_ALIGNMENTS.get("~EQ"));
 
 		AlignmentType exact = new AlignmentType();
 		exact.setIsoCode("=EQ");
+		AlignmentType close = new AlignmentType();
+		exact.setIsoCode("~EQ");
 
 		List<ExternalThesaurusType> externalThesaurusTypes = new ArrayList<ExternalThesaurusType>();
 		ExternalThesaurusType exType = new ExternalThesaurusType();
@@ -112,6 +115,9 @@ public class AlignmentBuilderTest {
 		Mockito.when(externalThesaurusTypeService.getExternalThesaurusTypeList()).thenReturn(externalThesaurusTypes);
 
 		Alignment alignement = alignmentBuilder.buildAlignment(stmt, exact, concept);
+		Alignment alignement2 = alignmentBuilder.buildAlignment(stmt2, close, concept);
 		Assert.assertEquals(alignement.getExternalTargetThesaurus().getExternalId(), "http://data.bnf.fr/ark:/12148/");
+		
+		Assert.assertEquals(alignement2.getExternalTargetThesaurus().getExternalId(), "http://dbpedia.org/resources/");
 	}
 }

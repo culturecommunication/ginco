@@ -84,6 +84,12 @@ public class AlignmentBuilder extends AbstractBuilder {
 	@Named("externalThesaurusService")
 	private IExternalThesaurusService externalThesaurusService;
 	
+	private Pattern arkPt = Pattern
+			.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/ark\\:\\/(\\S*)\\/");
+	
+	private Pattern urlPt = Pattern
+			.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/(\\S*)\\/");
+	
 
 	public Alignment buildAlignment(Statement stmt,
 			AlignmentType alignmentType, ThesaurusConcept concept){
@@ -111,28 +117,36 @@ public class AlignmentBuilder extends AbstractBuilder {
 			alignment.setInternalTargetThesaurus(internalTargetConcept
 					.getThesaurus());
 		} else {
-			Pattern pt = Pattern
-					.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/ark\\:\\/(\\S*)\\/");
-			Matcher mt = pt.matcher(targetConceptId);
+			// Check if the concept has an ark indentifier.
+			
+			Matcher arkMt = arkPt.matcher(targetConceptId);
+			Matcher urlMt = urlPt.matcher(targetConceptId);
 
-			if (mt.find()) {
-				ExternalThesaurus existingExternalThes = externalThesaurusService
-						.getThesaurusByExternalId(mt.group());
-				if (existingExternalThes == null) {
-					ExternalThesaurus externalThesaurus = new ExternalThesaurus();
-					externalThesaurus.setExternalId(mt.group());
-					externalThesaurus
-							.setExternalThesaurusType(externalThesaurusTypeService
-									.getExternalThesaurusTypeList().get(0));
-					alignment.setExternalTargetThesaurus(externalThesaurus);
-				} else {
-					alignment.setExternalTargetThesaurus(existingExternalThes);
-				}
+			if (arkMt.find()) {
+				setExternalThesaurus(alignment,arkMt.group());
+			} else if (urlMt.find()) 
+			{
+				setExternalThesaurus(alignment,urlMt.group());
 			}
 			targetConcept.setExternalTargetConcept(targetConceptId);
 		}
 		targetConcepts.add(targetConcept);
 		alignment.setTargetConcepts(targetConcepts);
 		return alignment;
+	}
+	
+	private void setExternalThesaurus(Alignment alignment, String extThesaurusId) { 
+		ExternalThesaurus existingExternalThes = externalThesaurusService
+				.getThesaurusByExternalId(extThesaurusId);
+		if (existingExternalThes == null) {
+			ExternalThesaurus externalThesaurus = new ExternalThesaurus();
+			externalThesaurus.setExternalId(extThesaurusId);
+			externalThesaurus
+					.setExternalThesaurusType(externalThesaurusTypeService
+							.getExternalThesaurusTypeList().get(0));
+			alignment.setExternalTargetThesaurus(externalThesaurus);
+		} else {
+			alignment.setExternalTargetThesaurus(existingExternalThes);
+		}
 	}
 }
