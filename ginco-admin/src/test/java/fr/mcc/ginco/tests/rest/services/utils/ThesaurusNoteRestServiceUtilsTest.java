@@ -134,5 +134,38 @@ public class ThesaurusNoteRestServiceUtilsTest {
 
 		thesaurusNoteRestServiceUtil.checkExpertAccessToNote(fakeNote);
 	}
+	
+	@Test
+	public final void testCheckExpertAccessToTermWithConceptNote(){
+
+		Authentication auth = new TestingAuthenticationToken("username",
+				"password");
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+		Thesaurus thesaurus = new Thesaurus();
+		thesaurus.setIdentifier("http://thesaurus");
+		
+		ThesaurusConcept concept = new ThesaurusConcept();
+		concept.setStatus(ConceptStatusEnum.CANDIDATE.getStatus());
+		
+		ThesaurusTerm term = new ThesaurusTerm();
+		term.setIdentifier("http://term");
+		term.setThesaurus(thesaurus);
+		term.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
+		term.setConcept(concept);
+			
+		Note fakeNote = new Note();
+		fakeNote.setTerm(term);
+
+		Mockito.when(
+				userRoleService.hasRole("username",
+						"http://thesaurus",
+						Role.EXPERT)).thenReturn(true);
+
+		Mockito.when(thesaurusTermService
+				.getThesaurusTermById("http://term")).thenReturn(term);
+
+		thesaurusNoteRestServiceUtil.checkExpertAccessToNote(fakeNote);
+	}
 }
 

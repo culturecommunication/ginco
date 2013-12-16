@@ -47,6 +47,7 @@ import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
@@ -90,8 +91,15 @@ public class ThesaurusNoteRestServiceUtils {
 			ThesaurusTerm term = thesaurusTermService
 					.getThesaurusTermById(note.getTerm().getIdentifier());
 			if (term != null
-				&& term.getStatus() != ConceptStatusEnum.CANDIDATE
+				&& term.getStatus() != TermStatusEnum.CANDIDATE
 						.getStatus()) {
+				if (term.getConcept() != null)
+				{
+					if (term.getConcept().getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()) {
+						throw new AccessDeniedException(
+								"you-can-save-only-terms-associated-to-candidate-concept");
+					}
+				} else
 					throw new AccessDeniedException(
 							"you-can-save-only-candidate-terms");
 			}
