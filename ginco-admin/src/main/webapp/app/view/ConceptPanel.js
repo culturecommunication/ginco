@@ -224,6 +224,7 @@ Ext.define('GincoApp.view.ConceptPanel', {
 											}, {
 												xtype : 'checkbox',
 												name : 'topconcept',
+												itemId : 'topconceptcb',
 												fieldLabel : me.xTopTermConceptLabel
 											}, {
 												xtype : 'combobox',

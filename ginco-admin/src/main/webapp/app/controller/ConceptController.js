@@ -623,12 +623,16 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var addparent = aForm.down('#addParent');
 		var addChild = aForm.down('#addChild');
 		var addAlignment = aForm.down('#addAlignment');
+		var topconceptcb = aForm.down('#topconceptcb');
 		if (aModel.data.status == 1) {
 			addAssociationBtn.setDisabled(false);
 			addparent.setDisabled(false);
 			addChild.setDisabled(false);
 			aForm.down('#addExistingChild').setDisabled(false);
 			addAlignment.setDisabled(false);
+		}
+		if (aModel.data.status == 0) {
+			topconceptcb.setDisabled(true);
 		}
 		conceptPanel.addNodePath(thesaurusData.id);
 		if (aModel.data.topistopterm == true)
@@ -650,6 +654,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		theForm = theCombobox.up('#conceptForm');
 		var addAssociationBtn = theForm.down('#addAssociativeRelationship');
 		var addparent = theForm.down('#addParent');
+		var topconceptcb = theForm.down('#topconceptcb');
 
 		if (theRecord[0].data.status == 1) {
 			// We enable the button for creating associations
@@ -657,10 +662,17 @@ Ext.define('GincoApp.controller.ConceptController', {
 			// hierachical and associative)
 			addAssociationBtn.setDisabled(false);
 			addparent.setDisabled(false);
+			topconceptcb.setDisabled(false);
 
 		} else {
 			addAssociationBtn.setDisabled(true);
 			addparent.setDisabled(true);
+			if (theRecord[0].data.status == 0) {
+				topconceptcb.setDisabled(true);
+			} else 
+			{
+				topconceptcb.setDisabled(false);
+			}
 		}
 	},
 
