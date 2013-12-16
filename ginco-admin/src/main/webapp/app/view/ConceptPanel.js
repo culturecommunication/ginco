@@ -435,6 +435,7 @@ Ext.define('GincoApp.view.ConceptPanel', {
 											xtype : 'button',
 											text : me.xAddChildMenu,
 											itemId : 'addChildMenu',
+											disabled : true,
 											iconCls : 'icon-add-parent',
 											requiredRoles : ['ADMIN', 'MANAGER'],
 											menu : {
@@ -442,14 +443,12 @@ Ext.define('GincoApp.view.ConceptPanel', {
 												items : [{
 													xtype : 'menuitem',
 													text : me.xAddChild,
-													disabled : true,
 													itemId : 'addChild',
 													requiredRoles : ['ADMIN',
 															'MANAGER']
 												}, {
 													xtype : 'menuitem',
 													text : me.xAddExistingChild,
-													disabled : true,
 													itemId : 'addExistingChild',
 													requiredRoles : ['ADMIN',
 															'MANAGER']
