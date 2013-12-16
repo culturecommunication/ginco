@@ -154,4 +154,35 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 					"empty-parameters");
 		}
 	}
+	
+	@Override
+	public List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(String request, String thesaurusId,
+			int startIndex, int limit){
+		if (StringUtils.isNotEmpty(request) && limit != 0) {
+			try {
+				String requestFormat = request + "*";
+				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
+				SortCriteria crit = new SortCriteria(null, null);
+				SearchResultList searchResultList = searcherService.search(
+						requestFormat, 2, thesaurusId, null, null, null, null, crit,
+						startIndex, limit);
+				if (searchResultList != null) {
+					for (SearchResult searchResult : searchResultList) {
+						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+						reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
+						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
+						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
+						reducedThesaurusTermList.add(reducedThesaurusTerm);
+					}
+				}
+				return reducedThesaurusTermList;
+			} catch (SolrServerException e) {
+				throw new TechnicalException("Search exception", e);
+			}
+		} else {
+			throw new BusinessException("One or more parameters are empty",
+					"empty-parameters");
+		}
+	}
+
 }

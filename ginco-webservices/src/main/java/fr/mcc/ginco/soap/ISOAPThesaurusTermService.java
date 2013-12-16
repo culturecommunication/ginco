@@ -111,4 +111,21 @@ public interface ISOAPThesaurusTermService {
 			@WebParam(name = "request") String request,
 			@WebParam(name = "startIndex") int startIndex,
 			@WebParam(name = "limit") int limit);
+			
+				/**
+	 * This service returns list of reduced terms that begin with input string
+	 * 
+	 * @param beginning string,
+	 * @param start index of search,
+	 * @param limit of result rows,
+	 * 
+	 * @return list of reduced terms
+	 */
+
+	List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(
+			@WebParam(name = "request") String request,
+			@WebParam(name = "thesaurusId") String thesaurusId,
+			@WebParam(name = "startIndex") int startIndex,
+			@WebParam(name = "limit") int limit);
+
 }
