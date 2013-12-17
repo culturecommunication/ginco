@@ -297,6 +297,8 @@ $ psql < ./sql/postgresql92/schema_data.sql
 
 ```
 
+
+
 ### Configuring GINCO ###
 
 To override default Ginco configuration.
@@ -399,3 +401,17 @@ insert into admin_user_id values ('admin');
 ### Running GINCO ###
 
 * Open a web browser and point to : ```http://<server-url>:8080/ginco-admin```
+ 
+Upgrading from V1
+------------------
+
+#### Run SQL Scripts ####
+
+If you have a V1 database, there's upgrade scripts to migrate to V2.
+Data will be migrated automatically, and nothing will be lost.
+You just have to run 
+
+```bash
+$ psql < ./sql/postgresql92/upgrade/V2.sql
+
+```
