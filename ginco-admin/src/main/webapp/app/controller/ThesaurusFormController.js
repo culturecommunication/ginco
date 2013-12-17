@@ -57,6 +57,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xArchiveSuccess: "Thesaurus has been archived!",
     xPublishSuccess: 'thesaurus has been published!',
     xPublishInProgress: "Publishing in progress",
+    xArchiveInProgress: "Archiving in progress",
 
 
 	loadPanel : function(theForm) {
@@ -182,15 +183,17 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
         var theForm = theButton.up('form');
         var url = "services/ui/thesaurusservice/archiveVocabulary?thesaurusId="
             + encodeURIComponent(theForm.up('thesaurusTabPanel').thesaurusData.id);
-
+		theForm.getEl().mask(me.xArchiveInProgress);
         Ext.Ajax.request({
             url: url,
             method: 'GET',
             success: function(response) {
+            	theForm.getEl().unmask();
             	var jsonData = Ext.JSON.decode(response.responseText);            	
             	if (jsonData.success) {
             		 var record = theForm.getForm().getRecord();
                      record.set("archived",true);
+                     theButton.up('thesaurusTabPanel').fireEvent('thesaurusupdated',theButton.up('thesaurusTabPanel'),record.data);
                      me.loadData(theForm, record);
                      Thesaurus.ext.utils.msg(me.xSucessLabel,
                          me.xArchiveSuccess);
