@@ -69,6 +69,7 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.solr.IConceptIndexerService;
 import fr.mcc.ginco.solr.ITermIndexerService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
@@ -94,6 +95,10 @@ public class ThesaurusTermRestService {
     @Inject
 	@Named("termIndexerService")
 	private ITermIndexerService termIndexerService;
+    
+    @Inject
+	@Named("conceptIndexerService")
+	private IConceptIndexerService conceptIndexerService;
 
     @Inject
 	@Named("userRoleService")
@@ -232,6 +237,10 @@ public class ThesaurusTermRestService {
 			ThesaurusTerm result = thesaurusTermService.updateThesaurusTerm(object);
 			if (result != null) {
 				termIndexerService.addTerm(object);
+				if (result.getConcept()!=null && result.getPrefered()==true)
+				{
+					conceptIndexerService.addConcept(result.getConcept());
+				}
 				return termViewConverter.convert(result);
 			} else {
 				logger.error("Failed to update thesaurus term");

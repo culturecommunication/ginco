@@ -50,6 +50,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.verification.AtLeast;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -68,6 +69,7 @@ import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusTermRestService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.solr.IConceptIndexerService;
 import fr.mcc.ginco.solr.ITermIndexerService;
 
 public class ThesaurusTermRestServiceTest{
@@ -81,6 +83,9 @@ public class ThesaurusTermRestServiceTest{
 
     @Mock(name="termIndexerService")
     private ITermIndexerService termIndexerService;
+    
+    @Mock(name="conceptIndexerService")
+    private IConceptIndexerService conceptIndexerService;
 
     @Mock(name="userRoleService")
   	private IUserRoleService userRoleService;
@@ -179,11 +184,14 @@ public class ThesaurusTermRestServiceTest{
 				.setAuthentication(authent);
 		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(false);
 
+		
 		//Generating fake objects
 		ThesaurusTerm fakeThesaurusTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fake1");
 		Thesaurus fakeThesaurus1 =  new Thesaurus();
 		fakeThesaurus1.setIdentifier("fakeTh1");
-
+		fakeThesaurusTerm1.setPrefered(true);
+		ThesaurusConcept fakeThesaurusConcept = new ThesaurusConcept();
+		fakeThesaurusTerm1.setConcept(fakeThesaurusConcept);
 		Language fakeLanguage1 = new Language();
 		fakeLanguage1.setId("fra");
 		fakeLanguage1.setRefname("fra");
@@ -200,7 +208,7 @@ public class ThesaurusTermRestServiceTest{
 		Mockito.when(termService.updateThesaurusTerm(any(ThesaurusTerm.class))).thenReturn(fakeThesaurusTerm1);
 
 		ThesaurusTermView actualResponse = thesaurusTermRestService.updateTerm(fakeThesaurusTermView);
-
+		Mockito.verify(conceptIndexerService, Mockito.atLeastOnce()).addConcept(fakeThesaurusConcept);
 		//Assert
 		Assert.assertEquals("fake1", actualResponse.getIdentifier());
 	}
