@@ -20,9 +20,27 @@
         <appender-ref ref="FILE" />
     </logger>
 
-     <logger name="fr.mcc.ginco" level="WARN" additivity="false">
+    <logger name="fr.mcc.ginco" level="INFO" additivity="false">
         <appender-ref ref="FILE" />
         <appender-ref ref="CONSOLE" />        
+    </logger>
+    <logger name="net.sf.ehcache" level="ALL" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <logger name="fr.mcc.ginco.import" level="INFO" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />        
+    </logger>
+    
+    <logger name="fr.mcc.ginco.security.CSRFGuardLogger" level="WARN" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />        
+    </logger>
+    
+    <logger name="org.apache.cxf.interceptor" level="WARN" additivity="false">
+    	<appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" /> 
     </logger>
 
     <root level="INFO" >

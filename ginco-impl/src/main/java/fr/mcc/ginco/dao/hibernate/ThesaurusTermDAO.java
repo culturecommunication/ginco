@@ -274,7 +274,7 @@ public class ThesaurusTermDAO extends
 
 		// Update an existing term
 		getCurrentSession().saveOrUpdate(termToUpdate);
-		getCurrentSession().flush();
+		//getCurrentSession().flush();
 		return termToUpdate;
 	}
 	

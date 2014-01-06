@@ -65,6 +65,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.JenaException;
 import com.hp.hpl.jena.util.FileManager;
 
+import fr.mcc.ginco.audit.utils.AuditContext;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
@@ -121,7 +122,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Override
 	public Map<Thesaurus, Set<Alignment>> importSKOSFile(String fileContent,
 			String fileName, File tempDir) {
-
+		AuditContext.disableAudit();
 		Map<Thesaurus, Set<Alignment>> res = new HashMap<Thesaurus, Set<Alignment>>();
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 		Thesaurus thesaurus = null;
@@ -179,6 +180,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		} finally {
 			deleteTempFile(fileURI);
 		}
+		AuditContext.enableAudit();
 		return res;
 	}
 

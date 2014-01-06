@@ -43,6 +43,8 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.hp.hpl.jena.ontology.ObjectProperty;
@@ -71,6 +73,8 @@ import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
  */
 @Service("skosConceptsBuilder")
 public class ConceptsBuilder extends AbstractBuilder {
+	
+	private static Logger logger = LoggerFactory.getLogger(ConceptsBuilder.class);
 	@Inject
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
@@ -137,8 +141,12 @@ public class ConceptsBuilder extends AbstractBuilder {
 	public void buildConceptsAssociations(Thesaurus thesaurus,
 			List<Resource> skosConcepts, List<ObjectProperty> broaderTypes, List<ObjectProperty> associationTypes) {
 		List<AssociativeRelationship> allRelations = new ArrayList<AssociativeRelationship>();
+		int counter = 1;
 		for (Resource skosConcept : skosConcepts) {
-
+			if (counter % 100 == 0)
+			{
+				logger.info("Processed "+skosConcepts.size()+"/"+counter+" relationships");
+			}
 			Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> relationsThesaurusConcept = conceptBuilder
 					.buildConceptHierarchicalRelationships(skosConcept,
 							thesaurus, broaderTypes);
@@ -174,7 +182,9 @@ public class ConceptsBuilder extends AbstractBuilder {
 					associativeRelationshipDAO.update(relation);
 				}
 			}
+			counter++;
 		}
+		
 	}
 
 	/**
@@ -186,11 +196,17 @@ public class ConceptsBuilder extends AbstractBuilder {
 	public Set<Alignment> buildConcepts(Thesaurus thesaurus,
 			List<Resource> skosConcepts) {
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
+		int counter = 1;
+		logger.info("Beginning importing "+skosConcepts.size()+" concepts");
 		for (Resource skosConcept : skosConcepts) {
+			if (counter % 100 == 0)
+			{
+				logger.info("Imported "+skosConcepts.size()+"/"+counter+" concepts");
+			}
 			// Minimal concept informations
 			ThesaurusConcept concept = conceptBuilder.buildConcept(skosConcept,
 					thesaurus);
-
+			
 			thesaurusConceptDAO.update(concept);
 			ThesaurusTerm preferredTerm = null;
 
@@ -231,6 +247,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 				}
 
 			}
+			counter++;
 		}
 		return bannedAlignments;
 	}
