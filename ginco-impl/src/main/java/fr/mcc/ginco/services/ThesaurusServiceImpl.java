@@ -195,7 +195,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
         String fileContent = gincoThesaurusExportService.getThesaurusExport(thesaurus);
         File ready = new File(archivePath + thesaurus.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + "_"
-                + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_")
+                + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_").replaceAll(":","_")
                 + ".xml");
         try {
             File checkPath = new File(archivePath);
@@ -218,8 +218,8 @@ public class ThesaurusServiceImpl implements IThesaurusService {
     @Override
     public void publishThesaurus(Thesaurus object) {
         File export = exportService.getSKOSExport(object);
-        File ready = new File(publishPath + object.getTitle() + " "
-                + DateUtil.toString(DateUtil.nowDate())
+        File ready = new File(publishPath + object.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + " "
+                + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_").replaceAll(":","_")
                 + ".rdf");
         try {
             File checkPath = new File(publishPath);
