@@ -67,6 +67,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.audit.utils.AuditContext;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Role;
@@ -220,6 +221,7 @@ public class ImportRestService {
 	public String uploadGincoXmlThesaurusFile(MultipartBody body,
 			@Context HttpServletRequest request)
 			throws IOException {
+		AuditContext.disableAudit();
 		Attachment file = body.getAttachment(ATTACHMENT_NAME);
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
@@ -243,6 +245,7 @@ public class ImportRestService {
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				response));
+		AuditContext.enableAudit();
 		return serialized;
 	}
 

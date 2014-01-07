@@ -88,7 +88,7 @@ public class GincoImportServiceImpl implements IGincoImportService {
 	 */
 	@Override
 	public Map<Thesaurus,Set<Alignment>> importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws TechnicalException, BusinessException {
-		AuditContext.disableAudit();
+		
 		URI fileURI = writeTempFile(content, fileName, tempDir);
 		InputStream in = FileManager.get().open(fileURI.toString());
 		GincoExportedThesaurus unmarshalledExportedThesaurus = new GincoExportedThesaurus();
@@ -104,7 +104,6 @@ public class GincoImportServiceImpl implements IGincoImportService {
 			
 		} 
 		Map<Thesaurus,Set<Alignment>> returnValue = gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
-		AuditContext.enableAudit();
 		return returnValue;
 	}
 	
