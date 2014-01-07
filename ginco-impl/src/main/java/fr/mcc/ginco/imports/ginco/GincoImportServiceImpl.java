@@ -55,6 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hp.hpl.jena.util.FileManager;
 
+import fr.mcc.ginco.audit.utils.AuditContext;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -87,6 +88,7 @@ public class GincoImportServiceImpl implements IGincoImportService {
 	 */
 	@Override
 	public Map<Thesaurus,Set<Alignment>> importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws TechnicalException, BusinessException {
+		AuditContext.disableAudit();
 		URI fileURI = writeTempFile(content, fileName, tempDir);
 		InputStream in = FileManager.get().open(fileURI.toString());
 		GincoExportedThesaurus unmarshalledExportedThesaurus = new GincoExportedThesaurus();
@@ -96,11 +98,14 @@ public class GincoImportServiceImpl implements IGincoImportService {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshalledExportedThesaurus = (GincoExportedThesaurus) unmarshaller.unmarshal(in);
 		} catch (JAXBException e) {
+			AuditContext.enableAudit();
 			throw new BusinessException("Error when trying to deserialize the thesaurus from XML with JAXB :"+e.getMessage(),
 					"import-unable-to-read-file", e);
-		}
-		
-		return gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
+			
+		} 
+		Map<Thesaurus,Set<Alignment>> returnValue = gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
+		AuditContext.enableAudit();
+		return returnValue;
 	}
 	
 	/* (non-Javadoc)

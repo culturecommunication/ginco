@@ -44,6 +44,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+
 
 /**
  * Bean represents <b>thesaurus</b> table, main container containing
@@ -60,7 +62,7 @@ public class Thesaurus implements Serializable, IAuditableBean {
     private String publisher;
     private String relation;
     private String rights;
-    private String source;
+    private String source = "";
     private String subject;
     private String title;
     private Date created;
