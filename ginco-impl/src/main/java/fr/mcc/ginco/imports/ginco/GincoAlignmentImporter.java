@@ -110,6 +110,7 @@ public class GincoAlignmentImporter {
 							existingInternalConcepts.add(existingTarget);
 							alignmentConcept
 									.setInternalTargetConcept(existingTarget);
+							ali.setInternalTargetThesaurus(existingTarget.getThesaurus());
 							alignmentConcept.setAlignment(ali);
 							alignmentConceptDAO.update(alignmentConcept);
 						}
