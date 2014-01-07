@@ -210,4 +210,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * @return
 	 */
 	List<ThesaurusTerm> getTermsWoNotes(String idThesaurus, int startIndex, int limit);
+
+	ThesaurusTerm update(ThesaurusTerm term, boolean checkExisting);
+	
 }

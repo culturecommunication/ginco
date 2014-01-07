@@ -116,4 +116,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 */
 	List<T> findAll(String sortColumn, SortingTypes order);
 
+
+	void flush();
+
 }

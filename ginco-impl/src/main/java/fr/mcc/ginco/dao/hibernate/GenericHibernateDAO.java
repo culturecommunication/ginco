@@ -110,6 +110,11 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 		return entity;
 	}
 	
+	@Override 
+	public void flush() {
+		this.getCurrentSession().flush();
+	}
+	
 	public final Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();	
 	}

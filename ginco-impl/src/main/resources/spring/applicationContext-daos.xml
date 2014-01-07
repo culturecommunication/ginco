@@ -68,6 +68,7 @@
                 <!-- Reset to true due to this : https://hibernate.onjira.com/browse/HHH-6542?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel -->
                 <prop key="org.hibernate.envers.revision_on_collection_change">true</prop>
                 <prop key="org.hibernate.envers.modified_flag_suffix">_mod</prop>
+                <prop key="hibernate.listeners.envers.autoRegister">false</prop>
             </props>
         </property>
 	</bean>

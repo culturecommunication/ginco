@@ -265,6 +265,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public boolean hasChildren(String conceptId) {
 		return (thesaurusConceptDAO.getChildrenConcepts(conceptId ,1).size() > 0);
 	}
+	
+	@Override
+	public Set<String> getConceptWithChildrenIdentifers(String thesaurusId)
+	{
+		return new HashSet<String>(thesaurusConceptDAO.getIdentifiersOfConceptsWithChildren(thesaurusId));
+	}
 
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId) {

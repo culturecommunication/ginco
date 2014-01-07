@@ -248,20 +248,26 @@ public class ThesaurusTermDAO extends
                 .list().get(0);
 	}
 	
+	@Override
+	public ThesaurusTerm update(ThesaurusTerm entity) {
+		return  update(entity, true);
+	};
+	
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.hibernate.GenericHibernateDAO#update(java.lang.Object)
 	 */
 	@Override
-	public ThesaurusTerm update(ThesaurusTerm termToUpdate) {
+	public ThesaurusTerm update(ThesaurusTerm termToUpdate, boolean checkExisting) {
 		getCurrentSession().setFlushMode(FlushMode.COMMIT);
 		// Verifying if there is no a similar term (lexicalValue + lang)
-		Long numberOfExistingTerms = countSimilarTermsByLexicalValueAndLanguage(termToUpdate);
-		if (numberOfExistingTerms > 0) {
-			throw new BusinessException("Already existing term : "
-					+ termToUpdate.getLexicalValue(), "already-existing-term",
-					new Object[] { termToUpdate.getLexicalValue() });
+		if (checkExisting) {
+			Long numberOfExistingTerms = countSimilarTermsByLexicalValueAndLanguage(termToUpdate);
+			if (numberOfExistingTerms > 0) {
+				throw new BusinessException("Already existing term : "
+						+ termToUpdate.getLexicalValue(), "already-existing-term",
+						new Object[] { termToUpdate.getLexicalValue() });
+			}
 		}
-
 		if (termToUpdate.getHidden() == null) {
 			//By default, hidden is false if not set
 			termToUpdate.setHidden(false);

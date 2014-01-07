@@ -37,6 +37,7 @@ package fr.mcc.ginco.extjs.view.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -94,6 +95,7 @@ public class TopTermGenerator {
 			topTerms.remove(topTerms.size() - 1);
 		}
 		List<IThesaurusListNode> topConcepts = new ArrayList<IThesaurusListNode>();
+		Set<String> conceptsWithChildren = thesaurusConceptService.getConceptWithChildrenIdentifers(thesaurusId);
 		for (ThesaurusConcept topTerm : topTerms) {
 				ThesaurusListBasicNode topTermNode = thesaurusListNodeFactory.getListBasicNode();
 				topTermNode.setTitle(thesaurusConceptService
@@ -106,8 +108,9 @@ public class TopTermGenerator {
 	            topTermNode.setThesaurusId(topTerm.getThesaurusId());
 	            topTermNode.setDisplayable(true);
 	            topTermNode.setIconCls("icon-top-concept");
-	            if(!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
-	                topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
+	            //if(!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
+	            if (!conceptsWithChildren.contains(topTerm.getIdentifier())) { 
+	            	topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
 	                topTermNode.setLeaf(true);
 	            } else {
 	                topTermNode.setChildren(null);

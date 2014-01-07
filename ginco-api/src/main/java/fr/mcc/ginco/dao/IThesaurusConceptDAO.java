@@ -167,6 +167,8 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus,
 			int startIndex, int limit);
 
+	List<String> getIdentifiersOfConceptsWithChildren(String thesaurusId);
+
 
 
 }

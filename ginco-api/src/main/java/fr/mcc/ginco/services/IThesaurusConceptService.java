@@ -293,4 +293,6 @@ public interface IThesaurusConceptService {
 	 * @param conceptId
 	 */
 	List<ThesaurusConcept> getRecursiveParentsByConceptId(String conceptId);
+
+	Set<String> getConceptWithChildrenIdentifers(String thesaurusId);
 }

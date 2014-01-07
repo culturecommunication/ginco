@@ -54,17 +54,20 @@ import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship.Id;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 
 /**
@@ -80,6 +83,9 @@ public class ConceptsBuilder extends AbstractBuilder {
 
 	@Inject
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
+	
+	@Inject 
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
 	@Inject
 	private IThesaurusTermDAO thesaurusTermDAO;
@@ -142,6 +148,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 			List<Resource> skosConcepts, List<ObjectProperty> broaderTypes, List<ObjectProperty> associationTypes) {
 		List<AssociativeRelationship> allRelations = new ArrayList<AssociativeRelationship>();
 		int counter = 1;
+		Set<String> alreadyImported = new HashSet<String>();
 		for (Resource skosConcept : skosConcepts) {
 			if (counter % 100 == 0)
 			{
@@ -153,15 +160,14 @@ public class ConceptsBuilder extends AbstractBuilder {
 			if (relationsThesaurusConcept.keySet().iterator().hasNext()) {
 				ThesaurusConcept concept = relationsThesaurusConcept.keySet()
 						.iterator().next();
-				conceptHierarchicalRelationshipServiceUtil
-						.saveHierarchicalRelationship(concept,
-								relationsThesaurusConcept.get(concept),
-								new ArrayList<ThesaurusConcept>(),
-								new ArrayList<ThesaurusConcept>(),
-								new ArrayList<ThesaurusConcept>(),
-								new ArrayList<ThesaurusConcept>());
-
-				thesaurusConceptDAO.update(concept);
+				for (ConceptHierarchicalRelationship relation : relationsThesaurusConcept.get(concept))
+				{
+					String parentChildId = relation.getIdentifier().getParentconceptid()+relation.getIdentifier().getChildconceptid();
+					if (alreadyImported.contains(parentChildId)) {
+						conceptHierarchicalRelationshipDAO.update(relation);
+						alreadyImported.add(parentChildId);
+					}
+				}
 			}
 
 			Set<AssociativeRelationship> associativeRelationships = conceptBuilder
@@ -184,6 +190,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 			}
 			counter++;
 		}
+		thesaurusConceptDAO.flush();
 		
 	}
 
@@ -196,6 +203,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 	public Set<Alignment> buildConcepts(Thesaurus thesaurus,
 			List<Resource> skosConcepts) {
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
+		Set<String> importedLexicalValues = new HashSet<String>();
 		int counter = 1;
 		logger.info("Beginning importing "+skosConcepts.size()+" concepts");
 		for (Resource skosConcept : skosConcepts) {
@@ -214,10 +222,21 @@ public class ConceptsBuilder extends AbstractBuilder {
 			List<ThesaurusTerm> terms = termBuilder.buildTerms(skosConcept,
 					thesaurus, concept);
 			for (ThesaurusTerm term : terms) {
+				String langLexicalValue = term.getLexicalValue()+term.getLanguage().getId();
 				if (term.getPrefered()) {
 					preferredTerm = term;
 				}
-				thesaurusTermDAO.update(term);
+				if (!importedLexicalValues.contains(langLexicalValue)) {
+					thesaurusTermDAO.update(term, false);
+					importedLexicalValues.add(langLexicalValue);
+				} else
+				{
+					throw new BusinessException("Already existing term : "
+							+ term.getLexicalValue(), "already-existing-term",
+							new Object[] { term.getLexicalValue() });
+				}
+				
+				
 			}
 
 			// Concept notes
@@ -249,6 +268,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 			}
 			counter++;
 		}
+		thesaurusTermDAO.flush();
 		return bannedAlignments;
 	}
 

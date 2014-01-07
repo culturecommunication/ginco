@@ -70,25 +70,6 @@ public class ThesaurusConceptDAO extends
 	}
 
 	/*
-	 * This flush is used in a particular case for saving concepts. We first
-	 * save the concept with it relationships (parent/child), we flush (with
-	 * this method) to save in DB the modifications Then, we can save the
-	 * updated role on hierarchical relationships. If the flush is not done,
-	 * when can't update the role of a relation because its not already saved in
-	 * DB.
-	 * 
-	 * This is a workaround to fit actual hibernate mapping and musn't not be
-	 * used in other cases
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#flush()
-	 */
-	public void flush() {
-		getCurrentSession().flush();
-	}
-
-	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConcept
@@ -138,6 +119,18 @@ public class ThesaurusConceptDAO extends
 	public List<ThesaurusConcept> getRootConcepts(String thesaurusId,
 			Boolean searchOrphans) {
 		return getConcepts(null, thesaurusId, searchOrphans, 0);
+	}
+	
+	@Override
+	public List<String> getIdentifiersOfConceptsWithChildren(String thesaurusId)
+	{
+		Query query = getCurrentSession().createSQLQuery("select tc.identifier"+
+ " from thesaurus_concept tc, hierarchical_relationship hr where"+ 
+ " hr.parentconceptid = tc.identifier and"+
+ " tc.thesaurusId = :pthesaurusid"+ 
+ " group by tc.identifier");
+		query.setParameter("pthesaurusid", thesaurusId);
+		return (List<String>)query.list();
 	}
 
 	@Override

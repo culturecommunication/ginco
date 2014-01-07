@@ -60,7 +60,7 @@ public class ExternalThesaurusDAO extends
 	public List<ExternalThesaurus> findAllByExternalIdQuery(String query)
 	{
 		Criteria criteria = getCurrentSession().createCriteria(ExternalThesaurus.class);
-		if (! query.equals("")) {
+		if (query!=null && ! query.equals("")) {
 			criteria.add( Restrictions.like("externalId", query+"%") );
 		}
 		return criteria.list();
