@@ -112,7 +112,7 @@ Ext.define('GincoApp.controller.ImportController', {
 							else if (theWin.importType == 'gincoxml') {
 								var succLabel = me.xSucessLabel + o.result.data.thesaurusTitle;
 								if ( !Ext.isEmpty(o.result.data.conceptsMissingAlignments)) {
-									succLabel = me.xSucessLabelWithMissingAlignmentsPart1 + o.result.data.title;
+									succLabel = me.xSucessLabelWithMissingAlignmentsPart1 + o.result.data.thesaurusTitle;
 									succLabel += '<br>';
 									succLabel += me.xSucessLabelWithMissingAlignmentsPart2;
 									Ext.Array.each(o.result.data.conceptsMissingAlignments, function(missingConcept) {
