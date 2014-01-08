@@ -41,6 +41,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -60,6 +65,8 @@ public class UserRoleServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
+		Authentication auth = new UsernamePasswordAuthenticationToken("test","test");
+		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
 
 	@Test
