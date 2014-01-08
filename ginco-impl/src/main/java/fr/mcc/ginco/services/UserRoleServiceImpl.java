@@ -38,6 +38,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +54,8 @@ import fr.mcc.ginco.exceptions.BusinessException;
 @Service("userRoleService")
 public class UserRoleServiceImpl implements IUserRoleService {
 
+	private static Logger logger = LoggerFactory.getLogger(UserRoleServiceImpl.class);
+	
 	@Inject
 	private IUserRoleDAO userRoleDAO;	
 
@@ -81,6 +87,10 @@ public class UserRoleServiceImpl implements IUserRoleService {
 				.getUserRoleOnThesaurus(userRole.getUsername(), userRole
 						.getThesaurus().getIdentifier());
 		if (existingUserRole == null || existingUserRole.equals(userRole)) {
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			String userName = auth.getName();
+			logger.info("[updateUserRole] "+userName+" - User "+userRole.getUsername()+" has now role "+userRole.getRole()+" on thesaurus "+userRole.getThesaurus().getIdentifier()+" ("+userRole.getThesaurus().getTitle()+")");
 			return userRoleDAO.update(userRole);
 		} else {
 			throw new BusinessException(
@@ -94,6 +104,10 @@ public class UserRoleServiceImpl implements IUserRoleService {
 	@Override
 	@Transactional(readOnly = false)
 	public void deleteUserRole(UserRole userRole) {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		String userName = auth.getName();
+		logger.info("[deleteUserRole] "+userName+" - User "+userRole.getUsername()+" has no more role "+userRole.getRole()+" on thesaurus "+userRole.getThesaurus().getIdentifier()+" ("+userRole.getThesaurus().getTitle()+")");
 		userRoleDAO.delete(userRole);
 	}
 

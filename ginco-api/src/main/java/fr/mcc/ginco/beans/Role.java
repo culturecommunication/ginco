@@ -49,5 +49,19 @@ public enum Role {
 
 	public void setIdentifier(Integer identifier) {
 		this.identifier = identifier;
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		if (identifier==MANAGER.getIdentifier())
+		{
+			return "MANAGER";
+		}
+		if (identifier==EXPERT.getIdentifier())
+		{
+			return "EXPERT";
+		}
+		return "UNKNOWN";
+	}
 }

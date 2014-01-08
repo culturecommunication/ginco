@@ -59,6 +59,7 @@
         <postgresql.jdbc.version>9.1-901.jdbc4</postgresql.jdbc.version>
         <maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
         <ginco.log.file>${catalina.base}/logs/ginco.log</ginco.log.file>
+        <ginco.roles.log.file>${catalina.base}/logs/ginco-roles.log</ginco.roles.log.file>
         <ginco.webservice.log.file>${catalina.base}/logs/ginco-webservices.log</ginco.webservice.log.file>
         <ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
         <servlet.api.version>2.5</servlet.api.version>
