@@ -193,6 +193,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
             	if (jsonData.success) {
             		 var record = theForm.getForm().getRecord();
                      record.set("archived",true);
+                     record.set("canBeDeleted",true);
                      theButton.up('thesaurusTabPanel').fireEvent('thesaurusupdated',theButton.up('thesaurusTabPanel'),record.data);
                      me.loadData(theForm, record);
                      Thesaurus.ext.utils.msg(me.xSucessLabel,
