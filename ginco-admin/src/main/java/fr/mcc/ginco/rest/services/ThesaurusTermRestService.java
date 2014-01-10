@@ -57,7 +57,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
@@ -67,6 +69,8 @@ import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
+import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.solr.IConceptIndexerService;
@@ -87,6 +91,14 @@ public class ThesaurusTermRestService {
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
+	
+	@Inject
+	@Named("languagesService")
+	private ILanguagesService languagesService;
+
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
     @Inject
     @Named("termViewConverter")
@@ -311,5 +323,31 @@ public class ThesaurusTermRestService {
 		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
         result.setTotal((long) listOfStatus.size());
 		return result;
+	}
+	
+	@GET
+	@Path("/checkTermUnicity")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Boolean checkTermUnicity(@QueryParam("idThesaurus") String idThesaurus,
+			@QueryParam("lexicalValue") String lexicalValue,
+			@QueryParam("lang") String lang)
+	{
+		Thesaurus thesaurus = thesaurusService.getThesaurusById(idThesaurus);
+		if (thesaurus != null) {
+			Language language = languagesService.getLanguageById(lang);
+			if (language != null) {
+				ThesaurusTerm term = new ThesaurusTerm();
+				term.setThesaurus(thesaurus);
+				term.setLanguage(language);
+				term.setLexicalValue(lexicalValue);
+				return !thesaurusTermService.isTermExist(term);
+			} else 
+			{
+				throw new BusinessException("Unable to find Language", "unknown-language");
+			}
+		} else 
+		{
+			throw new BusinessException("Unable to find thesaurus", "unknown-thesaurus");
+		}
 	}
 }

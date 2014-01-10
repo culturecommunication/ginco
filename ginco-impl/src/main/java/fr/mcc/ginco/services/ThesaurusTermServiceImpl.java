@@ -196,6 +196,17 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 		} 
 		return null;
 	}
+	
+	@Override
+	public Boolean isTermExist(ThesaurusTerm term) 
+	{
+		if (thesaurusTermDAO.countSimilarTermsByLexicalValueAndLanguage(term) > 0)
+		{ 
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	@Override
 	public Boolean isPreferred(String lexicalValue, String thesaurusId,

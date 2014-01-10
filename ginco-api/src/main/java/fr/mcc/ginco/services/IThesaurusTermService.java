@@ -181,4 +181,11 @@ public interface IThesaurusTermService {
 	 * @throws TechnicalException
 	 */
 	List<ThesaurusTerm> importSandBoxTerms(Map<String, Language> termLexicalValues, String thesaurusId, int defaultStatus);
+
+	/**
+	 * This method returns true if a similar term exist
+	 * @param term
+	 * @return 
+	 */
+	Boolean isTermExist(ThesaurusTerm term);
 }

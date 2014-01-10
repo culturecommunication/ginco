@@ -44,6 +44,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 	xLoading : 'Loading',
 	xDeleteMsgLabel : 'Are you sure to delete this concept?',
 	xDeleteMsgTitle : 'Delete this concept?',
+	xAlreadyExistingTerm : 'This term already exists...',
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Concept saved successfully',
 	xSucessRemovedMsg : 'Concept removed successfully',
@@ -680,12 +681,32 @@ Ext.define('GincoApp.controller.ConceptController', {
 	},
 
 	saveTermFromConceptBtn : function(theButton) {
+		var me = this;
 		var theForm = theButton.up('form');
 		var theWin = theButton.up('createTermWin');
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
-		theWin.store.add(updatedModel);
-		theWin.close();
+		
+		Ext.Ajax.request({
+							url : 'services/ui/thesaurustermservice/checkTermUnicity',
+							params : {
+								idThesaurus : updatedModel.get('thesaurusId'),
+								lang : updatedModel.get('language'),
+								lexicalValue : updatedModel.get('lexicalValue')
+							},
+							method: 'GET',
+							success : function(response) {
+								var jsonData = Ext.JSON.decode(response.responseText);
+								if (jsonData === true) {
+									theWin.store.add(updatedModel);
+									theWin.close();
+								} else 
+								{
+									Thesaurus.ext.utils.msg(me.xProblemLabel, me.xAlreadyExistingTerm);
+								}
+							}
+		});
+		
 	},
 
 	deleteConcept : function(theButton) {
