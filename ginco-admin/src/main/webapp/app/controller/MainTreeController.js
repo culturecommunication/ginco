@@ -230,12 +230,21 @@ Ext.define('GincoApp.controller.MainTreeController', {
  	},
  	
  	onTabChange : function (theChangedPanel) {
+ 		var me = this;
  		if (this.trackTabs == true && theChangedPanel.trackable==true)
  		{
- 			this.trackTreeSelection(theChangedPanel);
+ 			if (theChangedPanel.isReady == true){
+ 				this.trackTreeSelection(theChangedPanel);
+ 			} else 
+ 			{
+ 				theChangedPanel.isReadyCallback = function() {
+ 					me.trackTreeSelection(theChangedPanel);
+ 				}
+ 			}
  		}
  	},
  	trackTreeSelection : function (theChangedPanel) {
+ 		console.log("Tracking tree selection..."+theChangedPanel.getNodesPath());
  		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
  		theTree.selectPath(theChangedPanel.getNodesPath(),'id', '|');
  	},

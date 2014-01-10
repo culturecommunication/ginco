@@ -649,6 +649,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 				nodeId = "*" + aModel.raw.conceptsPath[i];
 			conceptPanel.addNodePath("CONCEPT_" + nodeId);
 		}
+		conceptPanel.setReady();
 	},
 
 	checkValidatedSelected : function(theCombobox, theRecord, eOpts) {

@@ -118,6 +118,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         thePanel.addNodePath(aModel.data.thesaurusId);
         thePanel.addNodePath("ARRAYS_"+aModel.data.thesaurusId);
         thePanel.addNodePath(aModel.data.identifier);
+        thePanel.setReady();
 	},
 	
 	loadLanguages : function(theCombo) {

@@ -52,6 +52,16 @@ Ext
 					},
 					multiInstance : true,
 					trackable : false,
+					isReady : false,
+					isReadyCallback : null,
+					setReady : function ()
+					{
+						this.isReady = true;
+						if (Ext.isFunction(this.isReadyCallback))
+						{
+							this.isReadyCallback();
+						}
+					},
 					setGincoId : function (aGincoId) {
 						this.gincoId = aGincoId;
 					},
@@ -60,7 +70,6 @@ Ext
 				        this.callParent(arguments);
 				    },
 					addNodePath : function (aNode) {
-						console.log(aNode);
 						this.nodesPath.push(aNode);
 					},
 					getNodesPath : function() {

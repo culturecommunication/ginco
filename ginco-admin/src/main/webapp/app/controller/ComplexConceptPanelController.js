@@ -140,6 +140,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		} else	{
 			deleteBtn.setDisabled(true);
 		}
+		termPanel.setReady(true);
 	},
 	loadLanguages : function(theCombo) {
 		var thePanel = theCombo.up('complexconceptPanel');

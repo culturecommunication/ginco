@@ -119,6 +119,7 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		theConceptGroupPanel.addNodePath(aModel.data.thesaurusId);
 		theConceptGroupPanel.addNodePath("GROUPS_"+aModel.data.thesaurusId);
 		theConceptGroupPanel.addNodePath(aModel.data.identifier);
+		theConceptGroupPanel.setReady();
 	},
 
 	loadLanguages : function(theCombo) {
