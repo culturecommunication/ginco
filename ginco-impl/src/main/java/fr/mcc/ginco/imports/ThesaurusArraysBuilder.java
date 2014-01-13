@@ -35,6 +35,7 @@
 package fr.mcc.ginco.imports;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -81,12 +82,12 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 	 * @param thesaurus
 	 * @param model
 	 */
-	public void buildArrays(Thesaurus thesaurus, Model model) {
+	public void buildArrays(Thesaurus thesaurus, Model model, Map<String, ThesaurusArray> builtArrays) {
 		List<Resource> skosCollections = skosImportUtils.getSKOSRessources(model,
 				SKOS.COLLECTION);
 		for (Resource skosCollection : skosCollections) {
 			ThesaurusArray array = arrayBuilder.buildArray(skosCollection,
-					model, thesaurus);
+					model, thesaurus, builtArrays);
 			thesaurusArrayDAO.update(array);
 			NodeLabel nodeLabel = nodeLabelBuilder.buildNodeLabel(
 					skosCollection, thesaurus, array);
@@ -101,12 +102,22 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 	 * @param model
 	 */
 
-	public void buildChildrenArrays(Thesaurus thesaurus, Model model) {
+	public void buildChildrenArrays(Thesaurus thesaurus, Model model, Map<String, ThesaurusArray> builtArrays) {
 		List<Resource> skosCollections = skosImportUtils.getSKOSRessources(model,
 				SKOS.COLLECTION);
 		for (Resource skosCollection : skosCollections) {
 			List<ThesaurusArray> childrenArrays = arrayBuilder
-					.getChildrenArrays(skosCollection, thesaurus);
+					.getChildrenArrays(skosCollection, thesaurus, builtArrays);
+			ThesaurusArray array = thesaurusArrayDAO.getById(skosCollection.getURI());
+			if (array.getConcepts().size() == 0 && childrenArrays.size() > 0)
+			{
+				for (ThesaurusArray childrenArray : childrenArrays) {
+					if (childrenArray.getSuperOrdinateConcept() !=null)
+					{
+						array.setSuperOrdinateConcept(childrenArray.getSuperOrdinateConcept());
+					}
+				}
+			}
 			for (ThesaurusArray childrenArray : childrenArrays) {
 				thesaurusArrayDAO.update(childrenArray);
 			}

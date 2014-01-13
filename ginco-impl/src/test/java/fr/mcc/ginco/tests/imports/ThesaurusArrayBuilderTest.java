@@ -35,6 +35,8 @@
 package fr.mcc.ginco.tests.imports;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -95,9 +97,10 @@ public class ThesaurusArrayBuilderTest {
 		memberConcept3.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1956");
 		Mockito.when(thesaurusConceptDAO
 				.getById("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1956")).thenReturn(memberConcept3);		
-		
-		ThesaurusArray actualArray = thesaurusArrayBuilder.buildArray(skosCollection, model, fakeThesaurus);	
-		Assert.assertEquals(3, actualArray.getConcepts().size());			
+		Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
+		ThesaurusArray actualArray = thesaurusArrayBuilder.buildArray(skosCollection, model, fakeThesaurus, builtArrays);	
+		Assert.assertEquals(3, actualArray.getConcepts().size());
+		Assert.assertEquals(builtArrays.get("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-C3"), actualArray);
 	}
 
 	

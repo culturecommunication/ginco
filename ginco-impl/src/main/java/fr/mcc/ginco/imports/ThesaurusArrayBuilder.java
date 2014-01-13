@@ -71,7 +71,7 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	
-	private static Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
+	//private static Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
 
 	public ThesaurusArrayBuilder() {
 		super();
@@ -86,7 +86,7 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	 * @return
 	 */
 	public ThesaurusArray buildArray(Resource skosCollection, Model model,
-			Thesaurus thesaurus) {
+			Thesaurus thesaurus, Map<String, ThesaurusArray> builtArrays) {
 
 		ThesaurusArray array = new ThesaurusArray();
 		array.setIdentifier(skosCollection.getURI());
@@ -136,7 +136,7 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	 * @return
 	 */
 	public List<ThesaurusArray> getChildrenArrays(Resource skosCollection,
-			Thesaurus thesaurus) {
+			Thesaurus thesaurus, Map<String, ThesaurusArray> builtArrays) {
 
 		StmtIterator stmtMembersItr = skosCollection
 				.listProperties(SKOS.MEMBER);

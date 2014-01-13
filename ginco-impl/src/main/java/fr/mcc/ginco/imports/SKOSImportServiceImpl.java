@@ -68,6 +68,7 @@ import com.hp.hpl.jena.util.FileManager;
 import fr.mcc.ginco.audit.utils.AuditContext;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
@@ -168,8 +169,9 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 					skosConcepts);
 			conceptsBuilder.buildConceptsAssociations(thesaurus, skosConcepts, skosImportUtils.getBroaderTypeProperty(ontModel), skosImportUtils.getRelatedTypeProperty(ontModel));
 			conceptsBuilder.buildConceptsRoot(thesaurus, skosConcepts);
-			arraysBuilder.buildArrays(thesaurus, model);
-			arraysBuilder.buildChildrenArrays(thesaurus, model);
+			Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
+			arraysBuilder.buildArrays(thesaurus, model, builtArrays);
+			arraysBuilder.buildChildrenArrays(thesaurus, model, builtArrays);
 
 			res.put(thesaurus, bannedAlignments);
 
