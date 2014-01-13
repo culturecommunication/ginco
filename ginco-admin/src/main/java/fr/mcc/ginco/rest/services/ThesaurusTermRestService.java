@@ -273,7 +273,7 @@ public class ThesaurusTermRestService {
 	@POST
 	@Path("/destroyTerm")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
+	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
 	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement){
 		ThesaurusTerm object =thesaurusTermService
 				.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());

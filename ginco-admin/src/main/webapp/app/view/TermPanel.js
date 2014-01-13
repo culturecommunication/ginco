@@ -122,7 +122,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Supprimer',
-																			requiredRoles : ['ADMIN', 'MANAGER'],
+																			requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 																			disabled : true,
 																			itemId : 'delete',
 																			cls : 'delete',
