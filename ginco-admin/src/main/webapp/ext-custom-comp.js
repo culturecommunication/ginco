@@ -495,7 +495,17 @@ Ext.define('Thesaurus.form.field.Text', {
     }
 });
 
+Ext.define('Thesaurus.form.field.ComboBox', {
+	override : 'Ext.form.field.ComboBox',
+	getDisplayValue: function() {
+        var displayValue = this.displayTpl.apply(this.displayTplData);
+        return Ext.String.htmlDecode(displayValue);
+    }
+});
+
 Ext.String.addCharacterEntities({
 '&apos;' : "'",
-'&quot;' : '"' });
+'&quot;' : '"',
+'&lt;' : '<',
+'&gt;' : '>'});
 

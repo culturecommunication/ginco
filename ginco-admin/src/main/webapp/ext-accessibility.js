@@ -174,6 +174,9 @@ Ext.define('Thesaurus.view.BoundList', {
 		me.callParent(arguments);
 		me.pickerField.focusItem(item);
 	},
+	getInnerTpl: function(displayField) {
+        return '{ '+displayField+':htmlEncode }';
+    },
 	onItemSelect : function(record) {
 		var me = this;
 		var node = this.getNode(record);
@@ -194,7 +197,6 @@ Ext.define('Thesaurus.view.BoundList', {
 		}
 		me.callParent(arguments);
 	}
-	,
 });
 
 /*
