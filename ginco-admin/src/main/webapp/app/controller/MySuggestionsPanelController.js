@@ -44,9 +44,9 @@ Ext.define('GincoApp.controller.MySuggestionsPanelController', {
 	onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {		
 		var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		if (record.data.conceptId != "") {
-			topTabs.fireEvent('openconcepttab',topTabs, record.data.thesaurusId,record.data.conceptId);
+			topTabs.fireEvent('openconcepttab',topTabs, record.data.thesaurusId,record.data.conceptId,"suggestionPanel");
 		} else {
-			topTabs.fireEvent('opentermtab',topTabs, record.data.thesaurusId, record.data.termId);
+			topTabs.fireEvent('opentermtab',topTabs, record.data.thesaurusId, record.data.termId,"suggestionPanel");
 		}
 	},
 
