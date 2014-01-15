@@ -276,3 +276,9 @@ h1.x-panel-header {
   width: 16px;
   height: 16px;
 }
+
+abbr {
+ border-bottom: 0.1em dotted;
+ cursor: help;
+}
+
