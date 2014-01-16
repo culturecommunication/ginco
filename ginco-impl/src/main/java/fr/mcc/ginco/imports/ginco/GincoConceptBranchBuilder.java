@@ -55,8 +55,6 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptBranchIdGenerator;
-import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
-import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 
 /**
  * This class : - extracts data from a {@link GincoExportedBranch} object, -
@@ -89,13 +87,6 @@ public class GincoConceptBranchBuilder {
 
 	@Inject
 	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
-
-	@Inject
-	private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
-
-	@Inject
-	private ICustomTermAttributeTypeService customTermAttributeTypeService;
-
 
 	/**
 	 * This method stores a Ginco Concept branch with all its objects (concept

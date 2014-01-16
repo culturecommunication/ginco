@@ -109,6 +109,7 @@ public class GincoCustomAttributeImporter {
 	 * in parameter and don't already exist in the thesaurus
 	 *
 	 * @param customAttributeTypesToImport
+	 * @param targetedThesaurus
 	 * @return The list of the updated ginco custom attribute types
 	 */
 	public Map<String, CustomTermAttributeType> storeBranchCustomTermAttributeTypes(
@@ -120,7 +121,7 @@ public class GincoCustomAttributeImporter {
 					targetedThesaurus, customTermAttributeType.getCode());
 			CustomTermAttributeType existingTypeByValue = customTermAttributeTypeDAO.getAttributeByValue(
 					targetedThesaurus, customTermAttributeType.getValue());
-			if (existingTypeByCode != null && existingTypeByValue != null){
+			if (existingTypeByCode != null && existingTypeByValue != null) {
 				updatedTypes.put(existingTypeByCode.getCode(), existingTypeByCode);
 			} else {
 				customTermAttributeType.setThesaurus(targetedThesaurus);
@@ -158,6 +159,7 @@ public class GincoCustomAttributeImporter {
 	 * object given in parameter and don't already exist in the thesaurus.
 	 *
 	 * @param customAttributeTypesToImport
+	 * @param targetedThesaurus
 	 * @return The list of the updated ginco custom attribute types
 	 */
 	public Map<String, CustomConceptAttributeType> storeBranchCustomConceptAttributeTypes(
@@ -169,7 +171,7 @@ public class GincoCustomAttributeImporter {
 					targetedThesaurus, customConceptAttributeType.getCode());
 			CustomConceptAttributeType existingTypeByValue = customConceptAttributeTypeDAO.getAttributeByValue(
 					targetedThesaurus, customConceptAttributeType.getValue());
-			if (existingTypeByCode != null && existingTypeByValue != null){
+			if (existingTypeByCode != null && existingTypeByValue != null) {
 				updatedTypes.put(existingTypeByCode.getCode(), existingTypeByCode);
 			} else {
 				customConceptAttributeType.setThesaurus(targetedThesaurus);
