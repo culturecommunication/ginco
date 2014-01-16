@@ -58,8 +58,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -76,7 +74,6 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.ImportedBranchResponse;
 import fr.mcc.ginco.extjs.view.ImportedTermsResponse;
@@ -158,7 +155,7 @@ public class ImportRestService {
 	 * @param body
 	 * @param request
 	 * @return The imported thesaurus in JSOn string representig a
-	 *         ExtJsonFormLoadData	
+	 *         ExtJsonFormLoadData
 	 * @throws IOException
 	 */
 	@POST
@@ -211,7 +208,7 @@ public class ImportRestService {
 	 * @param request
 	 * @return The imported thesaurus in JSOn string representing a
 	 *         ExtJsonFormLoadData
-	 * @throws IOException	
+	 * @throws IOException
 	 */
 	@POST
 	@Path("/importGincoXml")
@@ -260,7 +257,7 @@ public class ImportRestService {
 	 * @param request
 	 * @return The imported concept branch in JSOn string representing a
 	 *         ExtJsonFormLoadData
-	 * @throws IOException	
+	 * @throws IOException
 	 */
 	@POST
 	@Path("/importGincoBranchXml")
@@ -304,7 +301,7 @@ public class ImportRestService {
 	 * @param thesaurusId
 	 * @param request
 	 * @return
-	 * @throws IOException	
+	 * @throws IOException
 	 */
 	@POST
 	@Path("/importSandBoxTerms")

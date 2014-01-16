@@ -55,18 +55,20 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptBranchIdGenerator;
+import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
+import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 
 /**
  * This class : - extracts data from a {@link GincoExportedBranch} object, -
  * stores it in beans - persists beans
- * 
+ *
  */
 @Component("gincoConceptBranchBuilder")
 public class GincoConceptBranchBuilder {
 
 	@Inject
 	private GincoConceptBranchIdGenerator gincoConceptBranchIdGenerator;
-	
+
 	@Inject
 	private GincoConceptImporter gincoConceptImporter;
 
@@ -78,34 +80,40 @@ public class GincoConceptBranchBuilder {
 
 	@Inject
 	private IThesaurusDAO thesaurusDAO;
-	
+
 	@Inject
 	private IThesaurusConceptDAO thesaurusConceptDAO;
-	
+
 	@Inject
 	private GincoAlignmentImporter gincoAlignmentImporter;
-	
+
 	@Inject
 	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
-	
+
+	@Inject
+	private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
+
+	@Inject
+	private ICustomTermAttributeTypeService customTermAttributeTypeService;
+
 
 	/**
 	 * This method stores a Ginco Concept branch with all its objects (concept
 	 * children, terms, notes) but not arrays / groups.
-	 * 
+	 *
 	 * @param {@GincoExportedBranch} : the previously
 	 *        exported branch we want to import
 	 * @return The imported {@link ThesaurusConcept} root
 	 */
 	public Map<ThesaurusConcept,Set<Alignment>> storeGincoExportedBranch(
 			GincoExportedBranch exportedBranch, String thesaurusId) {
-		
+
 		Map<ThesaurusConcept,Set<Alignment>> res = new HashMap<ThesaurusConcept,Set<Alignment>>();
-		Set<Alignment> bannedAlignments = new HashSet<Alignment>();		
-		
+		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
+
 		ThesaurusConcept result = new ThesaurusConcept();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
-		
+
 		ThesaurusConcept existingConceptRoot = thesaurusConceptDAO.getById(exportedBranch.getRootConcept().getIdentifier());
 		if (existingConceptRoot != null && existingConceptRoot.getThesaurus() != null &&  existingConceptRoot.getThesaurus().getIdentifier().equals(targetedThesaurus.getIdentifier())) {
 			throw new BusinessException("Not possible to import a branch where root concept already exists in target thesaurus",
@@ -117,18 +125,18 @@ public class GincoConceptBranchBuilder {
 					"unknown-thesaurus");
 		} else {
 
-			
+
 			// We replace all existing ids by new generated ids
 			gincoConceptBranchIdGenerator
 					.resetIdsForExportedBranch(exportedBranch);
 
-			Map<String, CustomTermAttributeType> customTermAttributeTypes = gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedBranch.getTermAttributeTypes(), targetedThesaurus);
-			Map<String, CustomConceptAttributeType> customConceptAttributeTypes = gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedBranch.getConceptAttributeTypes(), targetedThesaurus);
-			
+			Map<String, CustomTermAttributeType> customTermAttributeTypes = gincoCustomAttributeImporter.storeBranchCustomTermAttributeTypes(exportedBranch.getTermAttributeTypes(), targetedThesaurus);
+			Map<String, CustomConceptAttributeType> customConceptAttributeTypes = gincoCustomAttributeImporter.storeBranchCustomConceptAttributeTypes(exportedBranch.getConceptAttributeTypes(), targetedThesaurus);
+
 			// We import the concept branch in specified thesaurus
 			List<ThesaurusConcept> rootConcept = new ArrayList<ThesaurusConcept>();
 			exportedBranch.getRootConcept().setTopConcept(false);
-			rootConcept.add(exportedBranch.getRootConcept());	
+			rootConcept.add(exportedBranch.getRootConcept());
 
 			ThesaurusConcept resultOfStore = gincoConceptImporter
 					.storeConcept(exportedBranch.getRootConcept(), exportedBranch, targetedThesaurus, customConceptAttributeTypes);
@@ -144,7 +152,7 @@ public class GincoConceptBranchBuilder {
 			gincoRelationshipImporter
 					.storeHierarchicalRelationship(exportedBranch
 							.getHierarchicalRelationship());
-			
+
 			bannedAlignments = gincoAlignmentImporter.storeAlignments(exportedBranch.getAlignments());
 			gincoAlignmentImporter.storeExternalThesauruses(exportedBranch.getAlignments(), bannedAlignments);
 
