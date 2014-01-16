@@ -34,10 +34,5 @@ Ext.define('GincoApp.view.MetaDataPanel', {
 			collapseTooltip : 'Click here to expand panel',
 			iconCls : 'icon-gear',
 			cls : 'metadatapanel',
-			anchor : '100%',
-				addTools : function () {
-			var me = this;
-				me.collapseTool.tooltipType= 'title';
-				me.collapseTool.tooltip=me.collapseTooltip;
-			}
+			anchor : '100%'
 		});

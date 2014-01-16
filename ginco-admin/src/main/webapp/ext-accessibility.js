@@ -404,6 +404,49 @@ Ext.define('Thesaurus.Ext.tree.View', {
 	}
 });
 
+Ext.define('Thesaurus.panel.Panel', {
+	override : 'Ext.panel.Panel',
+	collapseTooltip : 'Click here to expand panel',
+	expandTooltip : 'Click here to collapse panel',
+	addTools : function () {
+		var me = this;
+		 if (me.collapseTool) {
+			me.collapseTool.tooltipType= 'title';
+			if (me.collapsed) {
+				me.collapseTool.tooltip=me.collapseTooltip;
+			} else 
+			{
+				me.collapseTool.tooltip=me.expandTooltip;
+			}
+			//me.collapseTool.el.dom.setAttribute("aria-expanded", me.collapsed);
+		}
+	},
+	afterExpand: function() {
+		var me = this;
+		me.callParent(arguments);
+		 if (me.collapseTool) {
+             me.collapseTool.el.dom.setAttribute("aria-expanded", "true");
+             me.collapseTool.tooltip=me.expandTooltip;
+        }
+	},
+	afterCollapse : function() {
+		var me = this;
+		me.callParent(arguments);
+		 if (me.collapseTool) {
+             me.collapseTool.el.dom.setAttribute("aria-expanded", "false");
+             me.collapseTool.tooltip=me.collapseTooltip;
+        }
+	},
+	afterRender : function() {
+		var me = this;
+		me.callParent(arguments);
+		if (me.collapseTool) {
+			me.collapseTool.el.dom.setAttribute("aria-expanded", !me.collapsed);
+			me.collapseTool.el.dom.setAttribute("aria-controls", me.getTargetEl().id);
+		}
+	}
+})
+
 /*
  * Override panel tool to add 'alt' attribute to img in the tree.
  */

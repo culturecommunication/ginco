@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.smile.mcc.ginco</groupId>
     <artifactId>ginco</artifactId>
@@ -76,6 +76,8 @@
         <folder.conf>${basedir}/conf/local</folder.conf>
         <deploy.plugin.skip>true</deploy.plugin.skip>
         <solr.folder.conf>${basedir}/solr</solr.folder.conf>
+        <postgresql.scope>provided</postgresql.scope>
+        <dbcp.scope>provided</dbcp.scope>
     </properties>
 
     <profiles>
@@ -291,7 +293,7 @@
                 <artifactId>dbcp</artifactId>
                 <version>${dbcp.version}</version>
                 <type>jar</type>
-                <scope>provided</scope>
+                <scope>${dbcp.scope}</scope>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
@@ -341,7 +343,7 @@
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.jdbc.version}</version>
-                <scope>provided</scope>
+                <scope>${postgresql.scope}</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
@@ -628,7 +630,8 @@
         <module>ginco-admin</module>
         <module>ginco-webservices</module>
         <module>ginco-solr-conf</module>
-    </modules>
+    <module>ginco-cli</module>
+  </modules>
 
     <dependencies>
         <dependency>
