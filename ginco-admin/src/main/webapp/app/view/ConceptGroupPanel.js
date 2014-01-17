@@ -259,7 +259,7 @@ Ext
 																					fieldLabel : me.xParentConceptLabel,
 																					allowBlank : true,
 																					readOnly : true,
-																					margin : '1 0 1 0',
+																					margin : '1 0 1 0'
 																				},
 																				{
 																					xtype : 'button',

@@ -26,7 +26,7 @@
 
 /**
  * @docauthor Hubert FONGARNAND
- * 
+ *
  * This files contains extends or override to implement missing accessibility
  * functions to ExtJS WARNING this file is made for EXTJS-4.1-GPL only
  */
@@ -414,7 +414,7 @@ Ext.define('Thesaurus.panel.Panel', {
 			me.collapseTool.tooltipType= 'title';
 			if (me.collapsed) {
 				me.collapseTool.tooltip=me.collapseTooltip;
-			} else 
+			} else
 			{
 				me.collapseTool.tooltip=me.expandTooltip;
 			}
@@ -780,7 +780,6 @@ Ext.define('Thesaurus.Ext.form.field.Trigger', {
 							role : 'button',
 							tabindex : 0,
 							title : me.triggerTitle
-							,
 						}
 					});
 		}
@@ -827,7 +826,6 @@ Ext.define('Thesaurus.Ext.window.MessageBox', {
 				}
 
 			}
-			,
 		});
 
 /*

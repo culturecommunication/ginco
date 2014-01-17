@@ -44,7 +44,7 @@ Ext.define('GincoApp.view.CustomAttrForm', {
 			    				name : 'customattr_'+record.get('identifier'),
 			    				columnWidth: 1,
 			    				listeners: {
-			    					change : me.onTextChange,
+			    					change : me.onTextChange
 			    				}
 		    			    },{
 		    			        xtype: 'button',
@@ -108,7 +108,7 @@ Ext.define('GincoApp.view.CustomAttrForm', {
 			var recordLexicalValue = record.get('lexicalValue');
 			var data = {
 					id : 'customattr_' + recordTypeId,
-					value : recordLexicalValue,
+					value : recordLexicalValue
 
 			};
 			arrayOfAttribute.push(data);
