@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="extjs/resources/css/ext-all.css">
     <link rel="stylesheet" href="css/ginco.css">
     <link rel="stylesheet" href="css/ux/CheckHeader.css">
+    <link rel="icon" href="images/ginco-favicon.ico">
     <script type="text/javascript" src="ext-locale-loader.js"></script>
     <script type="text/javascript" src="ext-accessibility.js"></script>
     <script type="text/javascript" src="ext-custom-comp.js"></script>
