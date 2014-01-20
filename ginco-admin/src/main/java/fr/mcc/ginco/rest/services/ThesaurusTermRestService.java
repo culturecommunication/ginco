@@ -58,6 +58,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -70,10 +71,12 @@ import fr.mcc.ginco.extjs.view.pojo.GenericStatusView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.solr.IConceptIndexerService;
+import fr.mcc.ginco.solr.INoteIndexerService;
 import fr.mcc.ginco.solr.ITermIndexerService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
@@ -115,6 +118,14 @@ public class ThesaurusTermRestService {
     @Inject
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
+    
+	@Inject
+	@Named("noteService")
+	private INoteService noteService;
+	
+	@Inject
+	@Named("noteIndexerService")
+	private INoteIndexerService noteIndexerService;
 
 	private Logger logger  = LoggerFactory.getLogger(ThesaurusTermRestService.class);
 
@@ -278,6 +289,10 @@ public class ThesaurusTermRestService {
 		ThesaurusTerm object =thesaurusTermService
 				.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());
 		if (object != null) {
+			List <Note> notes = noteService.getTermNotePaginatedList(object.getIdentifier(), 0, 1000);
+			for (Note note : notes) {
+				noteIndexerService.removeNote(note);
+			}
 			object.setModified(DateUtil.nowDate());
 			ThesaurusTerm result = thesaurusTermService.destroyThesaurusTerm(object);
 			termIndexerService.removeTerm(object);

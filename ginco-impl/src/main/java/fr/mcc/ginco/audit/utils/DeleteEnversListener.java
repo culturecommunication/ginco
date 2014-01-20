@@ -15,9 +15,6 @@ public class DeleteEnversListener extends EnversPostDeleteEventListenerImpl {
 	
 	@Override
     public void onPostDelete(PostDeleteEvent event) {
-		if (AuditContext.getAuditStatus()) {
-			super.onPostDelete(event);
-		}
     }   
 
 }

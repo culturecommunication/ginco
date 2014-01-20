@@ -61,6 +61,7 @@ import org.springframework.stereotype.Service;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -80,10 +81,12 @@ import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.HierarchicalRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
+import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.solr.IConceptIndexerService;
+import fr.mcc.ginco.solr.INoteIndexerService;
 import fr.mcc.ginco.solr.ITermIndexerService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
@@ -135,8 +138,17 @@ public class ThesaurusConceptRestService {
 	private IConceptIndexerService conceptIndexerService;
 
 	@Inject
+	@Named("noteIndexerService")
+	private INoteIndexerService noteIndexerService;
+
+	
+	@Inject
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
+	
+	@Inject
+	@Named("noteService")
+	private INoteService noteService;
 
 	private Logger logger  = LoggerFactory.getLogger(ThesaurusConceptRestService.class);
 
@@ -412,6 +424,11 @@ public class ThesaurusConceptRestService {
 						.getIdentifier());
 		object.setModified(DateUtil.nowDate());
 		if (object != null) {
+			List <Note> notes = noteService.getConceptNotePaginatedList(object.getIdentifier(), 0, 1000);
+			for (Note note : notes) {
+				noteIndexerService.removeNote(note);
+			}
+			object.setModified(DateUtil.nowDate());
 			thesaurusConceptService.destroyThesaurusConcept(object);
 			conceptIndexerService.removeConcept(object);
 		}
