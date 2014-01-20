@@ -193,7 +193,7 @@ Ext.define('GincoApp.view.ConceptPanel', {
 									}, {
 										xtype : 'button',
 										text : me.xDelete,
-										requiredRoles : ['ADMIN', 'MANAGER'],
+										requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 										disabled : true,
 										itemId : 'deleteConcept',
 										cls : 'delete',

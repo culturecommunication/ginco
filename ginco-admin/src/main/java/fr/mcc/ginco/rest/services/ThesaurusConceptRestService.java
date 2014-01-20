@@ -417,7 +417,7 @@ public class ThesaurusConceptRestService {
 	@POST
 	@Path("/destroyConcept")
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
+	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
 	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) {
 		ThesaurusConcept object = thesaurusConceptService
 				.getThesaurusConceptById(thesaurusViewJAXBElement
