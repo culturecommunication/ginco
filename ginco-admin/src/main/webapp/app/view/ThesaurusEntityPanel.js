@@ -72,6 +72,9 @@ Ext
 					addNodePath : function (aNode) {
 						this.nodesPath.push(aNode);
 					},
+					resetNodePath : function () {
+						this.nodesPath.length = 0;
+					},
 					getNodesPath : function() {
 						return "|root|"+this.nodesPath.join('|');
 					}

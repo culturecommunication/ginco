@@ -114,6 +114,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 		termPanel.setTitle("Terme : "+aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
 		termPanel.gincoId = aModel.data.identifier;
+		termPanel.resetNodePath();
 		termPanel.addNodePath(termPanel.getThesaurusData().id);
 		if (Ext.isEmpty(aModel.data.conceptId)){
 			aForm.down("#statusCombo").setReadOnly(false);

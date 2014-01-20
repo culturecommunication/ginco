@@ -253,7 +253,7 @@ public class ThesaurusTermRestService {
 				{
 					conceptIndexerService.addConcept(result.getConcept());
 				}
-				return termViewConverter.convert(result);
+				return termViewConverter.convert(result,true);
 			} else {
 				logger.error("Failed to update thesaurus term");
 				return null;
