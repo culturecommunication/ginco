@@ -49,6 +49,7 @@ import com.hp.hpl.jena.vocabulary.DCTerms;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.utils.DateUtil;
 
@@ -103,8 +104,12 @@ public class SKOSThesaurusExporter {
 			thesaurusResource.addProperty(DC.creator, foafOrgResource);
 
 		}
-
-		model.add(thesaurusResource, DC.rights, StringEscapeUtils.unescapeXml(thesaurus.getRights()));
+		if (thesaurus.getRights() != null && !thesaurus.getRights().equals("")) { 
+			model.add(thesaurusResource, DC.rights, StringEscapeUtils.unescapeXml(thesaurus.getRights()));
+		} else 
+		{
+			throw new BusinessException("Some mandatory metadata are not present", "metadata-not-present");
+		}
 
 		model.add(thesaurusResource, DC.description, StringEscapeUtils.unescapeXml(thesaurus.getDescription()));
 
