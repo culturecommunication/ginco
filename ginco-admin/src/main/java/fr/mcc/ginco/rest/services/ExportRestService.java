@@ -49,6 +49,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -194,7 +195,7 @@ public class ExportRestService {
 				for (int i = 0; i < results.getTabs(); i++) {
 					out.write(TABULATION_DELIMITER);
 				}
-				out.write(results.getText().replaceAll("<br>", ""));
+				out.write(StringEscapeUtils.unescapeHtml4(results.getText().replace("&apos;", "'")).replaceAll("<br>", ""));
 				out.newLine();
 				out.flush();
 			}
