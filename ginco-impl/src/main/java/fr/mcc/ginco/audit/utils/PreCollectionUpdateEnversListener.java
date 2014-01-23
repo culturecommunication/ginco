@@ -1,12 +1,13 @@
 package fr.mcc.ginco.audit.utils;
 
 import org.hibernate.envers.configuration.AuditConfiguration;
+import org.hibernate.envers.event.EnversListener;
 import org.hibernate.envers.event.EnversPreCollectionUpdateEventListenerImpl;
 import org.hibernate.event.spi.PreCollectionUpdateEvent;
 
 @SuppressWarnings("serial")
 public class PreCollectionUpdateEnversListener extends
-		EnversPreCollectionUpdateEventListenerImpl {
+		EnversPreCollectionUpdateEventListenerImpl implements EnversListener {
 
 	public PreCollectionUpdateEnversListener(
 			AuditConfiguration enversConfiguration) {
