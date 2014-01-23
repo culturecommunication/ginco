@@ -43,6 +43,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -78,7 +79,7 @@ public class TermCommandBuilder {
 			if (!newLexicalvalues.containsKey(oldTerm.getLexicalValue())) {
 				CommandLine deletionLine = new CommandLine();
 				deletionLine.setValue(CommandLine.REMOVED
-						+ oldTerm.getLexicalValue());
+						+ StringEscapeUtils.unescapeXml(oldTerm.getLexicalValue()));
 				termsOperations.add(deletionLine);
 			}
 		}
@@ -109,18 +110,18 @@ public class TermCommandBuilder {
 					if (!oldTerm.getPrefered()) {
 						CommandLine preferredLine = new CommandLine();
 						if (newNotPreferredTermsByTerm.get(oldTerm.getLexicalValue()).isEmpty()){
-							preferredLine.setValue(oldTerm.getLexicalValue());
+							preferredLine.setValue(StringEscapeUtils.unescapeXml(oldTerm.getLexicalValue()));
 						}
 						else {
 							preferredLine.setValue(CommandLine.STARS
-									+ oldTerm.getLexicalValue());
+									+ StringEscapeUtils.unescapeXml(oldTerm.getLexicalValue()));
 						}
 						termsOperations.add(preferredLine);
 
 					} else{
 						CommandLine unpreferredLine = new CommandLine();
 						unpreferredLine.setValue(CommandLine.UNPREFERRERD
-								+ oldTerm.getLexicalValue());
+								+ StringEscapeUtils.unescapeXml(oldTerm.getLexicalValue()));
 						termsOperations.add(unpreferredLine);
 					}
 				}
@@ -151,7 +152,7 @@ public class TermCommandBuilder {
 					&& currentTerm.getPrefered()) {
 				CommandLine additionLine = new CommandLine();
 				if (!newNotPreferredTermsByTerm.get(currentTerm.getLexicalValue()).isEmpty()){
-					additionLine.setValue(CommandLine.STARS	+ currentTerm.getLexicalValue());
+					additionLine.setValue(CommandLine.STARS	+ StringEscapeUtils.unescapeXml(currentTerm.getLexicalValue()));
 					termsOperations.add(additionLine);
 				} else{
 					Set<ThesaurusConcept> allParents = new HashSet<ThesaurusConcept>();
@@ -160,7 +161,7 @@ public class TermCommandBuilder {
 					}
 					if (currentTerm.getConcept().getParentConcepts().isEmpty()
 							&& !allParents.contains(currentTerm.getConcept())){
-						additionLine.setValue(currentTerm.getLexicalValue());
+						additionLine.setValue(StringEscapeUtils.unescapeXml(currentTerm.getLexicalValue()));
 						termsOperations.add(additionLine);
 					}
 				}

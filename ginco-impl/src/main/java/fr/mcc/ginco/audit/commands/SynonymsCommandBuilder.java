@@ -42,17 +42,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 
 /**
  * Component in charge of building CommandLine relatives to synonyms changes
- * 
+ *
  */
 @Service("synonymsCommandBuilder")
 public class SynonymsCommandBuilder {
-	
+
 	@Inject
 	@Named("mistralStructuresBuilder")
 	private MistralStructuresBuilder mistralStructuresBuilder;
@@ -93,7 +94,7 @@ public class SynonymsCommandBuilder {
 							// Synonym has been removed from list
 							CommandLine synonymRemovedLine = new CommandLine();
 							synonymRemovedLine.setValue(CommandLine.SEPARATE
-									+ termValue);
+									+ StringEscapeUtils.unescapeXml(termValue));
 							termsOperations.add(synonymRemovedLine);
 						}
 					}
@@ -103,8 +104,8 @@ public class SynonymsCommandBuilder {
 								termValue)) {
 							// Synonym has been added to list
 							CommandLine synonymAddedLine = new CommandLine();
-							synonymAddedLine.setValue(previousSynonym
-									+ CommandLine.SYNONYM + termValue);
+							synonymAddedLine.setValue(StringEscapeUtils.unescapeXml(previousSynonym)
+									+ CommandLine.SYNONYM + StringEscapeUtils.unescapeXml(termValue));
 							termsOperations.add(synonymAddedLine);
 						}
 					}
@@ -115,7 +116,7 @@ public class SynonymsCommandBuilder {
 						.get(previousSynonym)) {
 					CommandLine synonymRemovedLine = new CommandLine();
 					synonymRemovedLine.setValue(CommandLine.SEPARATE
-							+ prevSynonymValue);
+							+ StringEscapeUtils.unescapeXml(prevSynonymValue));
 					termsOperations.add(synonymRemovedLine);
 				}
 			}
@@ -126,9 +127,9 @@ public class SynonymsCommandBuilder {
 			if (!previousSynonyms.containsKey(currentSynonym)
 					&& currentSynonyms.get(currentSynonym).size() > 0) {
 				CommandLine synonymsAddedLine = new CommandLine();
-				String lineValue = currentSynonym;
+				String lineValue = StringEscapeUtils.unescapeXml(currentSynonym);
 				for (String synonym : currentSynonyms.get(currentSynonym)) {
-					lineValue += CommandLine.SYNONYM + synonym;
+					lineValue += CommandLine.SYNONYM + StringEscapeUtils.unescapeXml(synonym);
 				}
 				synonymsAddedLine.setValue(lineValue);
 				termsOperations.add(synonymsAddedLine);
