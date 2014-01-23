@@ -42,13 +42,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
 
 /**
  * Component in charge of building CommandLine relatives to hierarchy changes
- * 
+ *
  */
 @Service("hierarchyCommandBuilder")
 public class HierarchyCommandBuilder {
@@ -60,7 +61,7 @@ public class HierarchyCommandBuilder {
 	/**
 	 * Builds the list of command lines for hierarchy changes between two
 	 * revisions
-	 * 
+	 *
 	 * @param previousConcepts
 	 * @param currentConcepts
 	 * @param oldRevision
@@ -93,8 +94,8 @@ public class HierarchyCommandBuilder {
 							CommandLine childRemovedLine = new CommandLine();
 							childRemovedLine
 									.setValue(CommandLine.HIERARCHY_REMOVED
-											+ oldChild + CommandLine.HIERARCHY
-											+ previousParentConceptId);
+											+ StringEscapeUtils.unescapeXml(oldChild) + CommandLine.HIERARCHY
+											+ StringEscapeUtils.unescapeXml(previousParentConceptId));
 							termsOperations.add(childRemovedLine);
 						}
 					}
@@ -104,9 +105,9 @@ public class HierarchyCommandBuilder {
 								.contains(newChild)) {
 							// child added
 							CommandLine childAddedLine = new CommandLine();
-							childAddedLine.setValue(newChild
+							childAddedLine.setValue(StringEscapeUtils.unescapeXml(newChild)
 									+ CommandLine.HIERARCHY
-									+ previousParentConceptId);
+									+ StringEscapeUtils.unescapeXml(previousParentConceptId));
 							termsOperations.add(childAddedLine);
 						}
 					}
@@ -117,8 +118,8 @@ public class HierarchyCommandBuilder {
 						.get(previousParentConceptId)) {
 					CommandLine childRemovedLine = new CommandLine();
 					childRemovedLine.setValue(CommandLine.HIERARCHY_REMOVED
-							+ oldChild + CommandLine.HIERARCHY
-							+ previousParentConceptId);
+							+ StringEscapeUtils.unescapeXml(oldChild) + CommandLine.HIERARCHY
+							+ StringEscapeUtils.unescapeXml(previousParentConceptId));
 					termsOperations.add(childRemovedLine);
 				}
 			}
@@ -130,8 +131,8 @@ public class HierarchyCommandBuilder {
 				for (String child : currentHierarchies
 						.get(currentParentConceptId)) {
 					CommandLine hierarchyAddedLine = new CommandLine();
-					hierarchyAddedLine.setValue(child + CommandLine.HIERARCHY
-							+ currentParentConceptId);
+					hierarchyAddedLine.setValue(StringEscapeUtils.unescapeXml(child) + CommandLine.HIERARCHY
+							+ StringEscapeUtils.unescapeXml(currentParentConceptId));
 					termsOperations.add(hierarchyAddedLine);
 				}
 			}
