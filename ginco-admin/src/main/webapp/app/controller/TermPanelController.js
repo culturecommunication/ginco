@@ -153,7 +153,7 @@ Ext.define('GincoApp.controller.TermPanelController', {
 
 		var noteTab= aForm.up('tabpanel').down('noteTermPanel');
 		noteTab.setDisabled(false);
-		
+
 		var suggestionTab = aForm.up('tabpanel').down('suggestionPanel');
 		suggestionTab.setDisabled(false);
 		termPanel.setReady(true);
@@ -174,8 +174,8 @@ Ext.define('GincoApp.controller.TermPanelController', {
 					me.loadData(theForm, record);
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils
-							.msg(me.xSucessLabel, me.xSucessSavedMsg);		
-					me.application.fireEvent('termupdated',thesPanel.thesaurusData);
+							.msg(me.xSucessLabel, me.xSucessSavedMsg);
+					me.application.fireEvent('termupdated', thesPanel.thesaurusData, record.data.conceptId);
 					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}

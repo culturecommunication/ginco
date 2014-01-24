@@ -294,7 +294,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		parentModel.set('identifier', parentId);
 		theStore.add(parentModel);
 	},
-	
+
 	addExistingChild : function (theButton) {
 		var me = this;
 		var thePanel = me.getActivePanel(theButton);
@@ -404,7 +404,7 @@ Ext.define('GincoApp.controller.ConceptController', {
             	var alignmentConceptModel = Ext.create('GincoApp.model.AlignmentTargetConceptModel');
             	alignmentConceptModel.set('internalTargetConcept',field.value);
 				model.targetConcepts().add(alignmentConceptModel);
-            }		
+            }
             if(field.getName() == 'external_concept' && field.value  && Ext.String.trim(field.value) != '') {
             	var alignmentConceptModel = Ext.create('GincoApp.model.AlignmentTargetConceptModel');
             	alignmentConceptModel.set('externalTargetConcept',field.value);
@@ -479,7 +479,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 
 	/**
 	 * User clicks on button "Select as parent"
-	 * 
+	 *
 	 * @param selectedRow
 	 */
 	selectConceptAsParent : function(selectedRow, theGrid) {
@@ -494,7 +494,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 
 		theStore.add(parentModel);
 	},
-	
+
 	selectAssociativeConcept : function(selectedRow, theGrid) {
 		var theStore = theGrid.getStore();
 		var selectedItem = selectedRow[0];
@@ -607,7 +607,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 
 		var noteTab = aForm.up('tabpanel').down('noteConceptPanel');
 		noteTab.setDisabled(false);
-		
+
 		var suggestionTab = aForm.up('tabpanel').down('suggestionPanel');
 		suggestionTab.setDisabled(false);
 
@@ -674,7 +674,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			addChildMenu.setDisabled(true);
 			if (theRecord[0].data.status == 0) {
 				topconceptcb.setDisabled(true);
-			} else 
+			} else
 			{
 				topconceptcb.setDisabled(false);
 			}
@@ -687,7 +687,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var theWin = theButton.up('createTermWin');
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
-		
+
 		Ext.Ajax.request({
 							url : 'services/ui/thesaurustermservice/checkTermUnicity',
 							params : {
@@ -701,13 +701,13 @@ Ext.define('GincoApp.controller.ConceptController', {
 								if (jsonData === true) {
 									theWin.store.add(updatedModel);
 									theWin.close();
-								} else 
+								} else
 								{
 									Thesaurus.ext.utils.msg(me.xProblemLabel, me.xAlreadyExistingTerm);
 								}
 							}
 		});
-		
+
 	},
 
 	deleteConcept : function(theButton) {
@@ -847,7 +847,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 								thePanel.getThesaurusData(),resultRecord
 										.get("identifier"));
 						if (!Ext.isEmpty(thePanel.parentConceptId)) {
-							me.reloadParentConceptWindow(thePanel.parentConceptId);
+							me.reloadConceptWindow(resultRecord.parentConceptId);
 						}
 						if (theCallback && typeof theCallback == "function") {
 							theCallback();
@@ -861,10 +861,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 				});
 
 	},
-	reloadParentConceptWindow : function (parentConceptId) {
+	reloadConceptWindow : function (conceptId) {
 		var me = this;
 		var thesTabs = me.getTopTabs();
-		var parentTab =thesTabs.down('conceptPanel[gincoId="'+parentConceptId+'"]');
+		var parentTab =thesTabs.down('conceptPanel[gincoId="'+conceptId+'"]');
 		if (parentTab != null) {
 			me.onConceptFormRender(parentTab.down('#conceptForm'));
 		}
@@ -920,7 +920,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 									var thesTabs = me.getTopTabs();
 									thesTabs.fireEvent('openconcepttab', thesTabs, jsonData.data,
 									conceptId);
-								} else 
+								} else
 								{
 									Thesaurus.ext.utils.msg(me.xProblemLabel,"");
 								}
@@ -934,6 +934,12 @@ Ext.define('GincoApp.controller.ConceptController', {
 	},
 
 	init : function() {
+		this.application.on({
+			'termupdated' : function(thesaurusData, conceptId){
+				this.reloadConceptWindow(conceptId);
+			},
+	        scope: this
+		});
 		this.control({
 			'conceptPanel #conceptForm' : {
 				afterrender : this.onConceptFormRender,
