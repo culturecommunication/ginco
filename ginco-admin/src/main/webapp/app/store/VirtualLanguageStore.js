@@ -34,7 +34,7 @@
  */
 
 /*
- * Thesaurus Language Store 
+ * Thesaurus Language Store
  * This file contains all Thesaurus languages displayed in dropdown lists
  */
 Ext.define('GincoApp.store.VirtualLanguageStore', {
@@ -64,7 +64,12 @@ Ext.define('GincoApp.store.VirtualLanguageStore', {
                     name: 'refname',
                     type: 'string'
                 }
-            ]
+            ],
+            sorters: [
+                {
+                	property: 'refname',
+                	direction: 'ASC'
+                }]
         }, cfg)]);
     }
 });
