@@ -42,6 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -316,58 +318,63 @@ public class ImportRestService {
 			Attachment file = body.getAttachment(ATTACHMENT_NAME);
 			String content = file.getObject(String.class);
 
-			String[] termsSplit = content.split("\n|\r\n");
-			List<String> termsLines = Arrays.asList(termsSplit);
-			Map<String, Language> terms = new HashMap<String, Language>();
-			List<String> termsInError = new ArrayList<String>();
-			for (String termLine:termsLines) {
-				String[] termSplitted = termLine.split("@");
-				if (termSplitted.length==2) {
-					String lexValue = termSplitted[0];
-					if (StringUtils.isNotEmpty(lexValue)){
-						Language lang = languageService.getLanguageById(termSplitted[1]);
-						if (lang == null) {
-							lang = languageService.getLanguageByPart1(termSplitted[1]);
-						}
-						if (lang != null) {
-							terms.put(lexValue, lang);
+			if (content.trim().startsWith("<?xml")){
+				throw new BusinessException("Unable to import XML file as sandbox terms",
+						"import-unable-to-read-file");
+			} else {
+				String[] termsSplit = content.split("\n|\r\n");
+				List<String> termsLines = Arrays.asList(termsSplit);
+				Map<String, Language> terms = new HashMap<String, Language>();
+				List<String> termsInError = new ArrayList<String>();
+				for (String termLine:termsLines) {
+					String[] termSplitted = termLine.split("@");
+					if (termSplitted.length==2) {
+						String lexValue = termSplitted[0];
+						if (StringUtils.isNotEmpty(lexValue)){
+							Language lang = languageService.getLanguageById(termSplitted[1]);
+							if (lang == null) {
+								lang = languageService.getLanguageByPart1(termSplitted[1]);
+							}
+							if (lang != null) {
+								terms.put(lexValue, lang);
+							} else {
+								termsInError.add(termLine);
+							}
 						} else {
 							termsInError.add(termLine);
 						}
 					} else {
-						termsInError.add(termLine);
+						String lexValue = termLine;
+						Language lang = languageService.getLanguageById(defaultLang);
+						terms.put(lexValue, lang);
 					}
-				} else {
-					String lexValue = termLine;
-					Language lang = languageService.getLanguageById(defaultLang);
-					terms.put(lexValue, lang);
 				}
+
+				int defaultStatus = TermStatusEnum.VALIDATED.getStatus();
+				Authentication auth = SecurityContextHolder.getContext()
+						.getAuthentication();
+				String username = auth.getName();
+
+				if (userRoleService.hasRole(username, thesaurusId, Role.EXPERT)) {
+					defaultStatus = TermStatusEnum.CANDIDATE.getStatus();
+				}
+
+
+				List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
+						.importSandBoxTerms(terms, thesaurusId, defaultStatus);
+				for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
+					termIndexerService.addTerm(sandboxedTerm);
+				}
+				ImportedTermsResponse response = new ImportedTermsResponse();
+				response.setTermsInError(termsInError);
+				ObjectMapper mapper = new ObjectMapper();
+				String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+						response));
+				return serialized;
 			}
-
-			int defaultStatus = TermStatusEnum.VALIDATED.getStatus();
-			Authentication auth = SecurityContextHolder.getContext()
-					.getAuthentication();
-			String username = auth.getName();
-
-			if (userRoleService.hasRole(username, thesaurusId, Role.EXPERT)) {
-				defaultStatus = TermStatusEnum.CANDIDATE.getStatus();
-			}
-
-
-			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
-					.importSandBoxTerms(terms, thesaurusId, defaultStatus);
-			for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
-				termIndexerService.addTerm(sandboxedTerm);
-			}
-			ImportedTermsResponse response = new ImportedTermsResponse();
-			response.setTermsInError(termsInError);
-			ObjectMapper mapper = new ObjectMapper();
-			String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-					response));
-			return serialized;
 
 		} catch (Exception re) {
-			throw new BusinessException("Error reading imported file :"
+			throw new BusinessException("Error reading imported file : "
 					+ re.getMessage(), "import-unable-to-read-file", re);
 		}
 	}

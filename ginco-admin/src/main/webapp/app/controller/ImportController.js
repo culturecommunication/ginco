@@ -49,9 +49,9 @@ Ext.define('GincoApp.controller.ImportController', {
 	xSucessLabelWithMissingExternalThesaurusPart1: 'Alignement import of concept "',
 	xSucessLabelWithMissingExternalThesaurusPart2: '" was ignored, unable to find thesaurus identifier of external concept : ',
 
-	xPartialSucessSandboxLabel :'Elements partially imported', 
+	xPartialSucessSandboxLabel :'Elements partially imported',
 	xSandboxErrorsLabel: 'The following terms were not imported due to language not found : ',
-	
+
 	xFailureLabelTitle: 'Error',
 
 	importSaveClick : function(theButton){
@@ -108,6 +108,7 @@ Ext.define('GincoApp.controller.ImportController', {
 									icon : Ext.Msg.INFO,
 									buttons : Ext.Msg.OK
 								});
+								me.application.fireEvent('thesaurusupdated');
 							}
 							else if (theWin.importType == 'gincoxml') {
 								var succLabel = me.xSucessLabel + o.result.data.thesaurusTitle;
