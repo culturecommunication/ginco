@@ -38,9 +38,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 
     stores : [ 'ConceptReducedStore' ],
 	models : [ 'ConceptArrayModel', 'ThesaurusConceptReducedModel', 'ThesaurusModel', 'ArrayConceptModel'],
-	
+
 	localized : true,
-	
+
 	xProblemLabel : 'Error!',
 	xProblemLoadMsg : 'Unable to load data',
 	xErrorDoubleRecord: 'Record already present',
@@ -52,15 +52,15 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	xChangingParentWarningMsgLabel : 'Changing the parent concept will erase the children, please confirm',
 	xDeleteMsgLabel : 'Are you sure you want to delete this concept array?',
 	xDeleteMsgTitle : 'Delete this concept array?',
-	
-	
+
+
 	loadConceptArrayPanel : function(theForm){
         var me = this;
 		var thePanel = theForm.up('conceptArrayPanel');
         var model = this.getConceptArrayModelModel();
         var conceptArrayId = thePanel.gincoId;
 		var deleteConceptArrayBtn = thePanel.down('#deleteConceptArray');
-        if (conceptArrayId != '' && conceptArrayId != null ) {    		
+        if (conceptArrayId != '' && conceptArrayId != null ) {
     		theForm.getEl().mask("Chargement");
 			model.load(conceptArrayId, {
 				success : function(model) {
@@ -73,7 +73,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 					var globalTabs = theForm.up('thesaurusTabPanel');
 					globalTabs.remove(thePanel);
 				}
-			});			
+			});
 			deleteConceptArrayBtn.setDisabled(false);
 		} else {
 			thePanel.setTitle(thePanel.title);
@@ -81,14 +81,14 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			model.data.thesaurusId = thePanel.up('thesaurusTabPanel').thesaurusData.id;
 			model.data.language=thePanel.up('thesaurusTabPanel').thesaurusData.languages[0];
 			model.data.identifier = "";
-			theForm.loadRecord(model);			
+			theForm.loadRecord(model);
 		}
 	},
-	
+
 	loadData : function(aForm, aModel) {
-		var me = this;		
+		var me = this;
 		aForm.loadRecord(aModel);
-		var thePanel = me.getActivePanel(aForm);		
+		var thePanel = me.getActivePanel(aForm);
 		thePanel.setTitle("Tableau de concepts : "+aModel.data.label);
 		thePanel.gincoId = aModel.data.identifier;
 		if (aModel.get('superOrdinateId')!="")
@@ -99,7 +99,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		{
 			aForm.down('#removeParentArray').setDisabled(false);
 		}
-		//We get all the concepts included in this concept array		
+		//We get all the concepts included in this concept array
 		var arrayConcepts = aModel.concepts().getRange();
         var conceptsGrid = aForm
             .down('#gridPanelConceptArray');
@@ -112,7 +112,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         } else {
         	conceptsGridStore.sort('order', 'ASC');
         }
-       
+
         var deleteConceptArrayBtn = aForm.down('#deleteConceptArray');
         deleteConceptArrayBtn.setDisabled(false);
         thePanel.addNodePath(aModel.data.thesaurusId);
@@ -120,31 +120,31 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         thePanel.addNodePath(aModel.data.identifier);
         thePanel.setReady();
 	},
-	
+
 	loadLanguages : function(theCombo) {
 		var theConceptArrayPanel = theCombo.up('conceptArrayPanel');
 		var theConceptArrayStore = theCombo.getStore();
 		theConceptArrayStore.getProxy().setExtraParam('thesaurusId',
-				theConceptArrayPanel.thesaurusData.id);
+				theConceptArrayPanel.getThesaurusData().id);
 		theConceptArrayStore.load();
 	},
-	
+
 	saveConceptArray : function(theButton, theCallback){
 		var me = this;
 		var theForm = theButton.up('#conceptArrayForm');
 		var theGrid = theForm.down('#gridPanelConceptArray');
 		theForm.getEl().mask(me.xLoading);
-		
+
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
 		//We update the model with the concepts added to the grid
         var conceptsGridStore = theGrid.getStore();
-    	
+
     	var associatedConcepts = conceptsGridStore.getRange();
-        
+
         updatedModel.concepts().removeAll();
         updatedModel.concepts().add(associatedConcepts);
-		
+
 		updatedModel.save({
 			success : function(record, operation) {
 				var resultRecord = operation.getResultSet().records[0];
@@ -161,17 +161,17 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 				theForm.getEl().unmask();
 			}
 		});
-		
+
 	},
-	
+
 	deleteConceptArray: function(theButton){
 		var me = this;
 		var theForm = theButton.up('form');
 		var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 		var thePanel = me.getActivePanel(theButton);
-		
-		var updatedModel = theForm.getForm().getRecord();      
-        
+
+		var updatedModel = theForm.getForm().getRecord();
+
         Ext.MessageBox.show({
     			title : me.xDeleteMsgTitle,
     			msg : me.xDeleteMsgLabel,
@@ -193,23 +193,23 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
     									operation.error);
     						}
     					});
-    					break;    				
+    					break;
     				}
     			},
     			scope : this
-    		}); 
-	},	
-	
-	getActivePanel : function(child) { 
+    		});
+	},
+
+	getActivePanel : function(child) {
 		return child.up('conceptArrayPanel');
 	},
 
-    
+
 	selectParentConcept : function(theButton){
 		var me = this;
 		var theForm = theButton.up('form');
 	    var thePanel = me.getActivePanel(theButton);
-	    
+
 	 	Ext.MessageBox.show({
 			title : me.xChangingParentWarningMsgTitle,
 			msg : me.xChangingParentWarningMsgLabel,
@@ -240,9 +240,9 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			},
 			scope : this
 		});
-		
+
 	},
-	
+
 	removeParentConcept : function (theButton){
 		var me = this;
 		var theForm = theButton.up('form');
@@ -250,12 +250,12 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		theForm.down('hidden[name="superOrdinateId"]').setValue("");
 		theForm.down('#removeParentConcept').setDisabled(true);
 	},
-	
+
 	selectParentArray : function(theButton){
 		var me = this;
 		var theForm = theButton.up('form');
 	    var thePanel =theButton.up('conceptArrayPanel');
-	    
+
 	    var win = Ext.create('GincoApp.view.SelectArrayWin', {
 			thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
 			excludedConceptArrayId : thePanel.gincoId,
@@ -270,13 +270,13 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 	    });
 	    win.show();
 	},
-	
+
 	selectArrayAsParent : function(selectedRow, theForm){
 		theForm.down('textfield[name="parentArrayLabel"]').setValue(selectedRow[0].data.label);
 		theForm.down('hidden[name="parentArrayId"]').setValue(selectedRow[0].data.identifier);
 		theForm.down('#removeParentArray').setDisabled(false);
 	},
-	
+
 	removeParentArray : function (theButton) {
 		var me = this;
 		var theForm = theButton.up('form');
@@ -285,7 +285,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 		theButton.setDisabled(true);
 	},
 
-	
+
 	selectConceptToArray : function(theButton){
 		//This method opens a popup to add concepts to the concept array
 		var me = this;
@@ -296,7 +296,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 
         var getArrayConcepts = true;
         var arrayId = theConceptArrayPanel.gincoId ;
-        
+
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
             thesaurusData : theConceptArrayPanel.up('thesaurusTabPanel').thesaurusData,
             conceptId : theConceptArrayForm.down('hidden[name="superOrdinateId"]').value,
@@ -314,17 +314,17 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
         });
 		win.show();
 	},
-	
+
 	addConceptToArray : function(selectedRow, theConceptArrayForm){
 		var theConceptArrayGrid = theConceptArrayForm.down('#gridPanelConceptArray');
 		var theConceptArrayGridStore = theConceptArrayGrid.getStore();
-		
+
 		//Test if already present in the grid
 		if (theConceptArrayGridStore.findRecord('identifier', selectedRow[0].data.identifier) !== null ){
 			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
 		} else {
 			selectedRow[0].setDirty();
-			
+
 			var maxOrder = -1;
 			if (theConceptArrayGridStore.getCount() > 0) {
 				 maxOrder =	theConceptArrayGridStore.max( "order") +1;
@@ -335,13 +335,13 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			conceptModel.set('label',selectedRow[0].get('label'));
 			conceptModel.set('identifier',selectedRow[0].get('identifier'));
 			conceptModel.set('order', maxOrder);
-             
-			theConceptArrayGridStore.add(conceptModel);			
-		}		
+
+			theConceptArrayGridStore.add(conceptModel);
+		}
 	},
-	
+
 	selectConceptAsParent : function(selectedRow, theForm){
-		var me = this;		
+		var me = this;
 		var oldSuperOrdinate = theForm.down('hidden[name="superOrdinateId"]').getValue();
 
 		theForm.down('textfield[name="superOrdinateLabel"]').setValue(selectedRow[0].data.label);
@@ -353,31 +353,31 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			theGridStore.removeAll();
 		}
 	},
-	
+
 	onRemoveConceptClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
 	        var theGrid = gridview.up('#gridPanelConceptArray');
 	        var theStore = theGrid.getStore();
 	        var removedOrder = rec.data.order;
 	        theStore.remove(rec);
-	        
+
 	        //recalculate order
 	        var arrayConcepts = theStore.getRange();
 			Ext.Array.each(arrayConcepts, function(arrayConcept) {
 	        	if(parseInt(arrayConcept.data.order) > parseInt(removedOrder)) {
 	        		arrayConcept.data.order = arrayConcept.data.order -1;
 	        	}
-			});	       
+			});
 	},
-	
+
 	onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
 	    	var me = this;
 	        var thePanel = me.getActivePanel(theGrid);
 	        var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 			topTabs.fireEvent('openconcepttab',topTabs, thePanel.up('thesaurusTabPanel').thesaurusData.id ,record.data.identifier);
-	},	
-	
-	
-    init:function(){    	  	 
+	},
+
+
+    init:function(){
          this.control({
         	'conceptArrayPanel form' : {
  				afterrender : this.loadConceptArrayPanel
@@ -388,7 +388,7 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
             'conceptArrayPanel  #selectParentArray' : {
                 click : this.selectParentArray
             },
-            'conceptArrayPanel  #selectParentConcept' : { 
+            'conceptArrayPanel  #selectParentConcept' : {
             	click : this.selectParentConcept
             },
             'conceptArrayPanel  #removeParentArray' : {
@@ -412,6 +412,6 @@ Ext.define('GincoApp.controller.ConceptArrayController', {
 			'conceptArrayPanel #conceptArrayLanguages' : {
 				render : this.loadLanguages
 			}
-         });    
+         });
     }
 });

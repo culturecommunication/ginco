@@ -146,7 +146,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		var thePanel = theCombo.up('complexconceptPanel');
 		var theStore = theCombo.getStore();
 		theStore.getProxy().setExtraParam('thesaurusId',
-				thePanel.thesaurusData.id);
+				thePanel.getThesaurusData().id);
 		theStore.load();
 	},
 
