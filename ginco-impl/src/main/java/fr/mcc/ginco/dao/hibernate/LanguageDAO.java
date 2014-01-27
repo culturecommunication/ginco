@@ -51,10 +51,10 @@ import fr.mcc.ginco.dao.ILanguageDAO;
 @Repository
 public class LanguageDAO extends GenericHibernateDAO<Language, String>
 		implements ILanguageDAO {
-	
+
 	private Logger logger  = LoggerFactory.getLogger(LanguageDAO.class);
 
-	
+
 	public LanguageDAO() {
 		super(Language.class);
 	}
@@ -78,10 +78,11 @@ public class LanguageDAO extends GenericHibernateDAO<Language, String>
 	@Override
 	public List<Language> findTopLanguages() {
 		return getCurrentSession().createCriteria(Language.class)
-				.add(Restrictions.eq("topLanguage", true)).list();
+				.add(Restrictions.eq("topLanguage", true))
+				.addOrder(Order.asc("refname")).list();
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.ILanguageDAO#getByPart1(java.lang.String)
 	 */

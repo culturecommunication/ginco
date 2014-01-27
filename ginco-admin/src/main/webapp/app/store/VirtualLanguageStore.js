@@ -64,12 +64,7 @@ Ext.define('GincoApp.store.VirtualLanguageStore', {
                     name: 'refname',
                     type: 'string'
                 }
-            ],
-            sorters: [
-                {
-                	property: 'refname',
-                	direction: 'ASC'
-                }]
+            ]
         }, cfg)]);
     }
 });
