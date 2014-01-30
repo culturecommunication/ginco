@@ -40,6 +40,8 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 
 	xImportSkosTitle : 'Import SKOS',
 	xImportGincoXmlTitle : 'Import XML Ginco',
+	xLogoutMsgLabel : 'You will exit the application. Are you sure you have saved your work?',
+	xLogoutMsgTitle : 'Logout',
 
 	views : [ 'TopToolbar' ],
 
@@ -71,9 +73,23 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		Thesaurus.ext.utils.restrictRoles(topToolBar);
 	},
 
-
 	onLogoutBtn : function () {
-		window.location.href = "logout";
+		var me = this;
+		Ext.MessageBox.show({
+			title : me.xLogoutMsgTitle,
+			msg : me.xLogoutMsgLabel,
+			buttons : Ext.MessageBox.OKCANCEL,
+			fn : function(buttonId) {
+				switch (buttonId) {
+				case 'ok':
+					window.location.href = "logout";
+					break;
+				case 'cancel':
+					break;
+				}
+			},
+			scope : this
+		});
 	},
 
 	onSearchTrigger : function(theTrigger) {
@@ -81,14 +97,14 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		thesaurusTabs.fireEvent('searchquery',thesaurusTabs,theTrigger.getValue(), thesaurusId);
 	},
-	
+
 	onSearchTriggerKey : function (theTrigger,e )
 	{
 		if (e.getKey() == e.ENTER) {
 			this.onSearchTrigger(theTrigger);
         }
 	},
-	
+
 	onSuggestionBtn : function(theButton) {
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 		thesaurusTabs.fireEvent('opensuggestions',thesaurusTabs);

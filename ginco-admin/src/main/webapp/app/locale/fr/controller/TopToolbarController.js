@@ -35,5 +35,7 @@
 
 Ext.define('GincoApp.locale.fr.controller.TopToolbarController', {
 	xImportSkosTitle : 'Import SKOS',
-	xImportGincoXmlTitle : 'Import XML Ginco'
+	xImportGincoXmlTitle : 'Import XML Ginco',
+	xLogoutMsgLabel : 'Vous allez quitter l\'application. Êtes-vous sûr d\'avoir enregistré votre travail?',
+	xLogoutMsgTitle : 'Déconnexion'
 });
