@@ -107,7 +107,7 @@ Ext.define('Thesaurus.ext.utils', {
 	userInfo : null,
 	msgCt : null,
 	renderTpl: ['<div class="msg" role="alert">',
-	            	'<h3>{title}</h3>',
+	            	'<h1>{title}</h1>',
 	            	'<p>{text}</p>',
 	            '</div>'],
 	msg : function (title, format) {
