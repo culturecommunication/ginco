@@ -200,6 +200,26 @@ Ext.define('Thesaurus.view.BoundList', {
 });
 
 /*
+ * Define a menu item
+ */
+
+Ext.define('Thesaurus.Ext.menu.Item', {
+	override : 'Ext.menu.Item',
+    renderTpl: [
+                '<tpl if="plain">',
+                    '{text}',
+                '<tpl else>',
+                    '<a id="{id}-itemEl" class="' + Ext.baseCSSPrefix + 'menu-item-link" href="{href}" <tpl if="hrefTarget">target="{hrefTarget}"</tpl> hidefocus="true" unselectable="on">',
+                        '<img id="{id}-iconEl" src="{icon}" class="' + Ext.baseCSSPrefix + 'menu-item-icon {iconCls}" alt=""/>',
+                        '<span id="{id}-textEl" class="' + Ext.baseCSSPrefix + 'menu-item-text" <tpl if="arrowCls">style="margin-right: 17px;"</tpl> >{text}</span>',
+                        '<img id="{id}-arrowEl" src="{blank}" class="{arrowCls}" alt=""/>',
+                    '</a>',
+                '</tpl>'
+            ]
+});
+
+
+/*
  * Define a menu item with an accesskey
  */
 
@@ -223,7 +243,7 @@ Ext.define('Thesaurus.ext.KeyMenuItem', {
 					+ 'menu-item-text keymenuitem-cmdTxt" <tpl if="menu">style="margin-right: 17px;"</tpl> >{cmdTxt}</span>',
 			'<tpl if="menu">',
 			'<img id="{id}-arrowEl" src="{blank}" class="' + Ext.baseCSSPrefix
-					+ 'menu-item-arrow"/>', '</tpl>', '</a>', '</tpl>'],
+					+ 'menu-item-arrow" alt="" />', '</tpl>', '</a>', '</tpl>'],
 	beforeRender : function(ct, pos) {
 		// Intercept the call to onRender so we can add the
 		// keyboard shortcut text to the render data which
