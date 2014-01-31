@@ -26,7 +26,7 @@
 
 /*
  * File: app/view/ConceptPanel.js Concept Creation/Edition Form + Notes
- * 
+ *
  */
 
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
@@ -629,10 +629,12 @@ Ext.define('GincoApp.view.ConceptPanel', {
 												header : me.xActions,
 												items : [{
 													icon : 'images/pencil.png',
+													altText: me.xAlignmentEdit,
 													tooltip : me.xAlignmentEdit,
 													iconCls : 'icon-edit'
 												}, {
 													icon : 'images/detach.png',
+													altText: me.xAlignmentRemove,
 													tooltip : me.xAlignmentRemove,
 													iconCls : 'icon-delete-alignment'
 												}]
