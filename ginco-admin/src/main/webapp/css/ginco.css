@@ -282,3 +282,7 @@ abbr {
  cursor: help;
 }
 
+.x-btn-group-header-text-default-framed {
+	color: #355A91;
+}
+
