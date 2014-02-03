@@ -11,6 +11,12 @@
 	<packaging>jar</packaging>
 	<name>ginco-impl</name>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources/services</directory>
+				<targetPath>META-INF/services</targetPath> 
+			</resource>
+		</resources>
 		<finalName>ginco-impl</finalName>
 		<pluginManagement>
 			<plugins>
