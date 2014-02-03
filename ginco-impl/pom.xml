@@ -16,6 +16,12 @@
 				<directory>src/main/resources/services</directory>
 				<targetPath>META-INF/services</targetPath> 
 			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>service</exclude>
+				</excludes>
+			</resource>
 		</resources>
 		<finalName>ginco-impl</finalName>
 		<pluginManagement>
