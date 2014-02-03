@@ -19,59 +19,75 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Hello world!
  *
  */
-public class App 
+public class App
 {
-	
+
 	private static Logger log = LoggerFactory.getLogger(App.class);
 	private static ApplicationContext ctx;
-	
+
 	private static Options getOptions() {
 		Option skosExport = OptionBuilder.withArgName("thesaurusid> <outputFile").hasArgs(2).withValueSeparator(' ').withDescription("Export a thesaurus in skos format").create("e");
 		Option skosImport = OptionBuilder.withArgName("inputFile").hasArgs().withDescription("Import a thesaurus in skos format").create("i");
+		Option revisionsExport = OptionBuilder.withArgName("thesaurusid> <outputFile> <[timestamp]").hasArgs(3).withValueSeparator(' ').withDescription("Export (Mistral) revisions of a thesaurus").create("r");
     	Options options = new Options();
-    	
+
     	OptionGroup group = new OptionGroup();
     	// Ajout des options exclusives
     	group.addOption(skosExport) ;
     	group.addOption(skosImport);
+    	group.addOption(revisionsExport);
     	group.setRequired(true);
     	options.addOptionGroup(group);
     	return options;
 	}
-	
+
 	private static void exportSkos(String thesaurusId, String outputFile)
 	{
 		log.info("Exporting "+thesaurusId+" to "+outputFile);
 		CliExporter exporter = (CliExporter) ctx.getBean("cliExporter");
-		exporter.export(thesaurusId, outputFile);
+		exporter.exportSKOS(thesaurusId, outputFile);
 	}
-	
+
 	private static void importSkos(String inputFile) {
 		log.info("Importing "+inputFile);
 		CliImporter exporter = (CliImporter) ctx.getBean("cliImporter");
 		exporter.importSkos(inputFile);
-		
+
 	}
-	
+
+	private static void exportRevisions(String thesaurusId, String outputFile, long timestamp){
+		log.info("Exporting "+thesaurusId+" to "+outputFile);
+		CliExporter exporter = (CliExporter) ctx.getBean("cliExporter");
+		exporter.exportRevisions(thesaurusId, outputFile, timestamp);
+	}
+
     public static void main( String[] args )
     {
-    	
-
     	CommandLineParser parser = new GnuParser();
     	Options options =  getOptions();
     	try {
 			CommandLine cmd = parser.parse(options , args);
 			 ctx = new ClassPathXmlApplicationContext( new String[] {
 		    	        "classpath:applicationContext-cli.xml","classpath*:spring/applicationContext-*.xml"});
-			if (cmd.hasOption("e"))
-			{
+			if (cmd.hasOption("e")) {
 				exportSkos(cmd.getOptionValues("e")[0],cmd.getOptionValues("e")[1]);
-			} else if (cmd.hasOption("i"))
-			{
+			} else if (cmd.hasOption("r")){
+				if (cmd.getOptionValues("r").length == 3){
+					try {
+						exportRevisions(cmd.getOptionValues("r")[0], cmd.getOptionValues("r")[1], Long.parseLong(cmd.getOptionValues("r")[2]));
+					} catch (NumberFormatException nex){
+						System.err.println( "NumberFormatException: " + nex.getMessage() );
+						HelpFormatter formatter = new HelpFormatter();
+						formatter.printHelp( "ginco-cli", options );
+					}
+				} else {
+					exportRevisions(cmd.getOptionValues("r")[0], cmd.getOptionValues("r")[1], 0);
+				}
+
+			} else if (cmd.hasOption("i"))	{
 				importSkos(cmd.getOptionValues("i")[0]);
 			}
-			
-			
+
 		} catch (ParseException exp) {
 			// TODO Auto-generated catch block
 			System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
@@ -80,6 +96,4 @@ public class App
 
 		}
     }
-
-
 }
