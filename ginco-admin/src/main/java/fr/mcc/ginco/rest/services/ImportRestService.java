@@ -42,8 +42,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -318,7 +316,7 @@ public class ImportRestService {
 			Attachment file = body.getAttachment(ATTACHMENT_NAME);
 			String content = file.getObject(String.class);
 
-			if (content.trim().startsWith("<?xml")){
+			if (content.contains("<?xml")){
 				throw new BusinessException("Unable to import XML file as sandbox terms",
 						"import-unable-to-read-file");
 			} else {
