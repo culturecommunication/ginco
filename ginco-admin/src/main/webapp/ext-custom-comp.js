@@ -503,9 +503,42 @@ Ext.define('Thesaurus.form.field.ComboBox', {
     }
 });
 
+/*
+ *  Fix IE encoding problem
+ */
+
+if (Ext.isIE) {
+
+	Ext.define('Thesaurus.Ext.dom.Element', {
+		override : 'Ext.dom.Element',
+		update : function(html, loadScripts, callback) {
+			var me = this;
+			arguments[0] = arguments[0].replace(/&apos;/g, "&#39;");
+			return me.callParent(arguments);
+		}
+	});
+
+	Ext.define('Thesaurus.Ext.dom.Helper', {
+		override : 'Ext.dom.Helper',
+		insertHtml : function(where, el, html) {
+			var me = this;
+			arguments[2] = arguments[2].replace(/&apos;/g, "&#39;");
+			return me.callParent(arguments);
+		},
+		overwrite : function(el, html, returnElement) {
+			var me = this;
+			arguments[1] = arguments[1].replace(/&apos;/g, "&#39;");
+			return me.callParent(arguments);
+		}
+	});
+}
+
 Ext.String.addCharacterEntities({
-'&apos;' : "'",
-'&quot;' : '"',
-'&lt;' : '<',
-'&gt;' : '>'});
+	'&apos;' : "'",
+	'&quot;' : '"',
+	'&lt;' : '<',
+	'&gt;' : '>'
+});
+
+
 
