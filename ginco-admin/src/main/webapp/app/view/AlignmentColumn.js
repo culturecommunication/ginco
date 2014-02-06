@@ -117,12 +117,14 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 	 */
 	beforeViewRefresh : function() {
 		if (Ext.isIE) {
-			var ids = this.compIds, len = ids.length, item, el, parentEl, index;
+			if (this.compIds){
+				var ids = this.compIds, len = ids.length, item, el, parentEl, index;
 
-			for (index=0; index < len; index++) {
-				if ((item = Ext.getCmp(ids[index])) && (el = item.getEl())
-						&& (el = el.dom) && (parentEl = el.parentNode)) {
-					parentEl.removeChild(el);
+				for (index=0; index < len; index++) {
+					if ((item = Ext.getCmp(ids[index])) && (el = item.getEl())
+							&& (el = el.dom) && (parentEl = el.parentNode)) {
+						parentEl.removeChild(el);
+					}
 				}
 			}
 		}
