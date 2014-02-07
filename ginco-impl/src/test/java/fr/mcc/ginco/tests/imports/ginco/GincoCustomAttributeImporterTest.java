@@ -153,7 +153,7 @@ public class GincoCustomAttributeImporterTest {
 	}
 
 	@Test
-	public void testStoreBranchCustomTermAttributeTypes() {
+	public void testGetBranchCustomTermAttributeTypes() {
 
 		Thesaurus th1 = new Thesaurus();
 		th1.setIdentifier("http://th1");
@@ -164,6 +164,12 @@ public class GincoCustomAttributeImporterTest {
 		existingType1.setCode("ty1");
 		existingType1.setValue("fakeType1");
 
+		CustomTermAttributeType existingType2 = new CustomTermAttributeType();
+		existingType2.setIdentifier(2);
+		existingType2.setThesaurus(th1);
+		existingType2.setCode("ty2");
+		existingType2.setValue("fakeType2");
+
 		CustomTermAttributeType t1 = new CustomTermAttributeType();
 		t1.setIdentifier(1);
 		t1.setCode("ty1");
@@ -172,37 +178,40 @@ public class GincoCustomAttributeImporterTest {
 		CustomTermAttributeType t2 = new CustomTermAttributeType();
 		t2.setIdentifier(2);
 		t2.setCode("ty2");
-		t2.setValue("fakeType2");
+		t2.setValue("otherValue");
+
+		CustomTermAttributeType t3 = new CustomTermAttributeType();
+		t2.setIdentifier(3);
+		t2.setCode("otherCode");
+		t2.setValue("otherValue");
 
 		List<CustomTermAttributeType> types = new ArrayList<CustomTermAttributeType>();
 		types.add(t1);
 		types.add(t2);
+		types.add(t3);
 
 		Mockito.when(customTermAttributeTypeDAO.getAttributeByCode(
 				th1, t1.getCode())).thenReturn(existingType1);
 		Mockito.when(customTermAttributeTypeDAO.getAttributeByValue(
-				th1, t1.getValue())).thenReturn(existingType1);
-
-		Mockito.when(customTermAttributeTypeDAO.update(t2)).thenReturn(t2);
+				th1, t2.getCode())).thenReturn(existingType2);
+		Mockito.when(customTermAttributeTypeDAO.getAttributeByValue(
+				th1, t3.getCode())).thenReturn(null);
 
 		GincoExportedBranch exportedBranch = new GincoExportedBranch();
 		exportedBranch.setTermAttributeTypes(types);
 
 		Map<String, CustomTermAttributeType> resultedAttributeTypes = gincoCustomAttributeImporter
-				.storeBranchCustomTermAttributeTypes(
+				.getBranchCustomTermAttributeTypes(
 						exportedBranch.getTermAttributeTypes(), th1);
 
-		Mockito.verify(customTermAttributeTypeDAO, Mockito.times(0)).update(t1);
-		Mockito.verify(customTermAttributeTypeDAO, Mockito.times(1)).update(t2);
-
-		Assert.assertEquals(2, resultedAttributeTypes.size());
+		Assert.assertEquals(1, resultedAttributeTypes.size());
 		Assert.assertTrue(resultedAttributeTypes.containsKey("ty1"));
 		Assert.assertEquals("fakeType1", resultedAttributeTypes.get("ty1")
 				.getValue());
 
-		Assert.assertTrue(resultedAttributeTypes.containsKey("ty2"));
-		Assert.assertEquals("fakeType2", resultedAttributeTypes.get("ty2")
-				.getValue());
+		Assert.assertTrue(!resultedAttributeTypes.containsKey("ty2"));
+		Assert.assertTrue(!resultedAttributeTypes.containsKey("ty3"));
+
 	}
 
 	@Test
@@ -263,7 +272,7 @@ public class GincoCustomAttributeImporterTest {
 	}
 
 	@Test
-	public void testStoreBranchCustomConceptAttributeTypes() {
+	public void testGetBranchCustomConceptAttributeTypes() {
 		Thesaurus th1 = new Thesaurus();
 		th1.setIdentifier("http://th1");
 
@@ -273,6 +282,12 @@ public class GincoCustomAttributeImporterTest {
 		existingType1.setCode("ty1");
 		existingType1.setValue("fakeType1");
 
+		CustomConceptAttributeType existingType2 = new CustomConceptAttributeType();
+		existingType2.setIdentifier(2);
+		existingType2.setThesaurus(th1);
+		existingType2.setCode("ty2");
+		existingType2.setValue("fakeType2");
+
 		CustomConceptAttributeType t1 = new CustomConceptAttributeType();
 		t1.setIdentifier(1);
 		t1.setCode("ty1");
@@ -281,37 +296,42 @@ public class GincoCustomAttributeImporterTest {
 		CustomConceptAttributeType t2 = new CustomConceptAttributeType();
 		t2.setIdentifier(2);
 		t2.setCode("ty2");
-		t2.setValue("fakeType2");
+		t2.setValue("otherValue");
+
+		CustomConceptAttributeType t3 = new CustomConceptAttributeType();
+		t2.setIdentifier(3);
+		t2.setCode("otherCode");
+		t2.setValue("otherValue");
 
 		List<CustomConceptAttributeType> types = new ArrayList<CustomConceptAttributeType>();
 		types.add(t1);
 		types.add(t2);
+		types.add(t3);
 
 		Mockito.when(customConceptAttributeTypeDAO.getAttributeByCode(
 				th1, t1.getCode())).thenReturn(existingType1);
-		Mockito.when(customConceptAttributeTypeDAO.getAttributeByValue(
-				th1, t1.getValue())).thenReturn(existingType1);
 
-		Mockito.when(customConceptAttributeTypeDAO.update(t2)).thenReturn(t2);
+		Mockito.when(customConceptAttributeTypeDAO.getAttributeByCode(
+				th1, t2.getCode())).thenReturn(existingType2);
+
+		Mockito.when(customConceptAttributeTypeDAO.getAttributeByCode(
+				th1, t3.getCode())).thenReturn(null);
 
 		GincoExportedBranch exportedBranch = new GincoExportedBranch();
 		exportedBranch.setConceptAttributeTypes(types);
 
 		Map<String, CustomConceptAttributeType> resultedAttributeTypes = gincoCustomAttributeImporter
-				.storeBranchCustomConceptAttributeTypes(
+				.getBranchCustomConceptAttributeTypes(
 						exportedBranch.getConceptAttributeTypes(), th1);
 
-		Mockito.verify(customConceptAttributeTypeDAO, Mockito.times(0)).update(t1);
-		Mockito.verify(customConceptAttributeTypeDAO, Mockito.times(1)).update(t2);
-
-		Assert.assertEquals(2, resultedAttributeTypes.size());
+		Assert.assertEquals(1, resultedAttributeTypes.size());
 		Assert.assertTrue(resultedAttributeTypes.containsKey("ty1"));
 		Assert.assertEquals("fakeType1", resultedAttributeTypes.get("ty1")
 				.getValue());
 
-		Assert.assertTrue(resultedAttributeTypes.containsKey("ty2"));
-		Assert.assertEquals("fakeType2", resultedAttributeTypes.get("ty2")
-				.getValue());
+		Assert.assertTrue(!resultedAttributeTypes.containsKey("ty2"));
+		Assert.assertTrue(!resultedAttributeTypes.containsKey("ty3"));
+
 	}
 
 	@Test

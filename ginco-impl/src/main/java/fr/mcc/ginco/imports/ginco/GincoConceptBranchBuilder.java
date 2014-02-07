@@ -121,8 +121,10 @@ public class GincoConceptBranchBuilder {
 			gincoConceptBranchIdGenerator
 					.resetIdsForExportedBranch(exportedBranch);
 
-			Map<String, CustomTermAttributeType> customTermAttributeTypes = gincoCustomAttributeImporter.storeBranchCustomTermAttributeTypes(exportedBranch.getTermAttributeTypes(), targetedThesaurus);
-			Map<String, CustomConceptAttributeType> customConceptAttributeTypes = gincoCustomAttributeImporter.storeBranchCustomConceptAttributeTypes(exportedBranch.getConceptAttributeTypes(), targetedThesaurus);
+
+
+			Map<String, CustomTermAttributeType> customTermAttributeTypes = gincoCustomAttributeImporter.getBranchCustomTermAttributeTypes(exportedBranch.getTermAttributeTypes(), targetedThesaurus);
+			Map<String, CustomConceptAttributeType> customConceptAttributeTypes = gincoCustomAttributeImporter.getBranchCustomConceptAttributeTypes(exportedBranch.getConceptAttributeTypes(), targetedThesaurus);
 
 			// We import the concept branch in specified thesaurus
 			List<ThesaurusConcept> rootConcept = new ArrayList<ThesaurusConcept>();
