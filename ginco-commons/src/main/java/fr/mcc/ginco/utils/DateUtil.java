@@ -43,14 +43,13 @@ import java.util.GregorianCalendar;
  * Util desined to deal with Date/String/Timestamp convertions.
  */
 public final class DateUtil {
-	
-    //DateUtil is an utility class => declaring its constructor as private 
+
+    //DateUtil is an utility class => declaring its constructor as private
 	private DateUtil() {
 	}
 
 	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private static SimpleDateFormat iso8601formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ");
-
+	private static SimpleDateFormat iso8601formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     /**
      * Converts Date to String.
@@ -63,7 +62,7 @@ public final class DateUtil {
         }
         return null;
     }
-    
+
     public static String toISO8601String(Date date) {
         if(date != null) {
             return iso8601formatter.format(date);
