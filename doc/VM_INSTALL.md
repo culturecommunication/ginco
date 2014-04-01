@@ -1,7 +1,7 @@
 Instuctions for installation of GINCO-DEMO :
 
 * Download and install virtualisation VirtualBox tool (version 4.2.X) : https://www.virtualbox.org/wiki/Downloads
-* Download GINCO-DEMO file : http://data.culture.fr/ginco-vm/GINCO-DEMO-1.0.ova 
+* Download GINCO-DEMO file : http://data.culture.fr/ginco-vm/GINCOV2-DEMO.ova 
 * start the virtual Box : 
       * File-> Parameters -> network -> Button "Add virtual Box Network" (vboxnet0) -> OK
       * File-> Import virtual application -> Select GINCO-DEMO-1.0.ova downloaded before.
