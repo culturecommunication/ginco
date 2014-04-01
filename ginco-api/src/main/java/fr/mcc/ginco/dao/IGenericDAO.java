@@ -39,8 +39,6 @@
  */
 package fr.mcc.ginco.dao;
 
-import fr.mcc.ginco.exceptions.BusinessException;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -96,7 +94,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @param entity
 	 * @return Object
 	 */
-	T update(T entity) throws BusinessException;
+	T update(T entity);
 	
 	/**
 	 * Delete an object of type T

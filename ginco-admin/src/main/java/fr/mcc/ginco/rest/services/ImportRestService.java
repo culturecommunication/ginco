@@ -96,7 +96,7 @@ import fr.mcc.ginco.solr.IThesaurusIndexerService;
  */
 @Service
 @Path("/importservice")
-@Produces({ MediaType.TEXT_HTML })
+@Produces({MediaType.TEXT_HTML})
 public class ImportRestService {
 	private static final String ATTACHMENT_NAME = "import-file-path";
 
@@ -155,7 +155,7 @@ public class ImportRestService {
 	 * @param body
 	 * @param request
 	 * @return The imported thesaurus in JSOn string representig a
-	 *         ExtJsonFormLoadData
+	 * ExtJsonFormLoadData
 	 * @throws IOException
 	 */
 	@POST
@@ -164,7 +164,7 @@ public class ImportRestService {
 	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String uploadFile(MultipartBody body,
-			@Context HttpServletRequest request) throws IOException  {
+	                         @Context HttpServletRequest request) throws IOException {
 		Attachment file = body.getAttachment(ATTACHMENT_NAME);
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
@@ -200,15 +200,14 @@ public class ImportRestService {
 	/**
 	 * This method is called to import a Ginco XML thesaurus. The
 	 *
-	 * @Produces({MediaType.TEXT_HTML ) is not a mistake : this rest service is
-	 *                                used by an ajax call and IE cannot display
-	 *                                result if JSOn is returned
-	 *
 	 * @param body
 	 * @param request
 	 * @return The imported thesaurus in JSOn string representing a
-	 *         ExtJsonFormLoadData
+	 * ExtJsonFormLoadData
 	 * @throws IOException
+	 * @Produces({MediaType.TEXT_HTML ) is not a mistake : this rest service is
+	 * used by an ajax call and IE cannot display
+	 * result if JSOn is returned
 	 */
 	@POST
 	@Path("/importGincoXml")
@@ -216,7 +215,7 @@ public class ImportRestService {
 	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String uploadGincoXmlThesaurusFile(MultipartBody body,
-			@Context HttpServletRequest request)
+	                                          @Context HttpServletRequest request)
 			throws IOException {
 		AuditContext.disableAudit();
 		Attachment file = body.getAttachment(ATTACHMENT_NAME);
@@ -249,15 +248,14 @@ public class ImportRestService {
 	/**
 	 * This method is called to import a Ginco XML concept branch. The
 	 *
-	 * @Produces({MediaType.TEXT_HTML ) is not a mistake : this rest service is
-	 *                                used by an ajax call and IE cannot display
-	 *                                result if JSOn is returned
-	 *
 	 * @param body
 	 * @param request
 	 * @return The imported concept branch in JSOn string representing a
-	 *         ExtJsonFormLoadData
+	 * ExtJsonFormLoadData
 	 * @throws IOException
+	 * @Produces({MediaType.TEXT_HTML ) is not a mistake : this rest service is
+	 * used by an ajax call and IE cannot display
+	 * result if JSOn is returned
 	 */
 	@POST
 	@Path("/importGincoBranchXml")
@@ -265,8 +263,8 @@ public class ImportRestService {
 	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
 	public String uploadGincoBranchXmlFile(MultipartBody body,
-			@QueryParam("thesaurusId") String thesaurusId,
-			@Context HttpServletRequest request)
+	                                       @QueryParam("thesaurusId") String thesaurusId,
+	                                       @Context HttpServletRequest request)
 			throws IOException {
 		Attachment file = body.getAttachment(ATTACHMENT_NAME);
 
@@ -297,6 +295,7 @@ public class ImportRestService {
 
 	/**
 	 * Imports a list of terms
+	 *
 	 * @param body
 	 * @param thesaurusId
 	 * @param request
@@ -309,71 +308,68 @@ public class ImportRestService {
 	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0') or hasPermission(#thesaurusId, '1')")
 	public String importSandBoxTerms(MultipartBody body,
-			@QueryParam("thesaurusId") String thesaurusId,
-			@Context HttpServletRequest request)
+	                                 @QueryParam("thesaurusId") String thesaurusId,
+	                                 @Context HttpServletRequest request)
 			throws IOException {
-		try {
-			Attachment file = body.getAttachment(ATTACHMENT_NAME);
-			String content = file.getObject(String.class);
 
-			if (content.contains("<?xml")){
-				throw new BusinessException("Unable to import XML file as sandbox terms",
-						"import-unable-to-read-file");
-			} else {
-				String[] termsSplit = content.split("\n|\r\n");
-				List<String> termsLines = Arrays.asList(termsSplit);
-				Map<String, Language> terms = new HashMap<String, Language>();
-				List<String> termsInError = new ArrayList<String>();
-				for (String termLine : termsLines) {
-					String[] termSplitted = termLine.split("@");
-					if (termSplitted.length == 2) {
-						String lexValue = termSplitted[0];
-						if (StringUtils.isNotEmpty(lexValue)) {
-							Language lang = languageService.getLanguageById(termSplitted[1]);
-							if (lang == null) {
-								lang = languageService.getLanguageByPart1(termSplitted[1]);
-							}
-							if (lang != null) {
-								terms.put(lexValue, lang);
-							} else {
-								termsInError.add(termLine);
-							}
+		Attachment file = body.getAttachment(ATTACHMENT_NAME);
+		String content = file.getObject(String.class);
+
+		if (content.contains("<?xml")) {
+			throw new BusinessException("Unable to import XML file as sandbox terms",
+					"import-unable-to-read-file");
+		} else {
+
+			String[] termsSplit = content.split("\n|\r\n");
+			List<String> termsLines = Arrays.asList(termsSplit);
+			Map<String, Language> terms = new HashMap<String, Language>();
+			List<String> termsInError = new ArrayList<String>();
+
+			for (String termLine : termsLines) {
+				String[] termSplitted = termLine.split("@");
+				if (termSplitted.length == 2) {
+					String lexValue = termSplitted[0];
+					if (StringUtils.isNotEmpty(lexValue)) {
+						Language lang = languageService.getLanguageById(termSplitted[1]);
+						if (lang == null) {
+							lang = languageService.getLanguageByPart1(termSplitted[1]);
+						}
+						if (lang != null) {
+							terms.put(lexValue, lang);
 						} else {
 							termsInError.add(termLine);
 						}
 					} else {
-						String lexValue = termLine;
-						Language lang = languageService.getLanguageById(defaultLang);
-						terms.put(lexValue, lang);
+						termsInError.add(termLine);
 					}
+				} else {
+					String lexValue = termLine;
+					Language lang = languageService.getLanguageById(defaultLang);
+					terms.put(lexValue, lang);
 				}
-
-				int defaultStatus = TermStatusEnum.VALIDATED.getStatus();
-				Authentication auth = SecurityContextHolder.getContext()
-						.getAuthentication();
-				String username = auth.getName();
-
-				if (userRoleService.hasRole(username, thesaurusId, Role.EXPERT)) {
-					defaultStatus = TermStatusEnum.CANDIDATE.getStatus();
-				}
-
-
-				List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
-						.importSandBoxTerms(terms, thesaurusId, defaultStatus);
-				for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
-					termIndexerService.addTerm(sandboxedTerm);
-				}
-				ImportedTermsResponse response = new ImportedTermsResponse();
-				response.setTermsInError(termsInError);
-				ObjectMapper mapper = new ObjectMapper();
-				String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-						response));
-				return serialized;
 			}
 
-		} catch (Exception re) {
-			throw new BusinessException("Error reading imported file : "
-					+ re.getMessage(), "import-unable-to-read-file", re);
+			int defaultStatus = TermStatusEnum.VALIDATED.getStatus();
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			String username = auth.getName();
+
+			if (userRoleService.hasRole(username, thesaurusId, Role.EXPERT)) {
+				defaultStatus = TermStatusEnum.CANDIDATE.getStatus();
+			}
+
+			List<ThesaurusTerm> sandboxedTerms = thesaurusTermService
+					.importSandBoxTerms(terms, thesaurusId, defaultStatus);
+			for (ThesaurusTerm sandboxedTerm : sandboxedTerms) {
+				termIndexerService.addTerm(sandboxedTerm);
+			}
+
+			ImportedTermsResponse response = new ImportedTermsResponse();
+			response.setTermsInError(termsInError);
+			ObjectMapper mapper = new ObjectMapper();
+			String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
+					response));
+			return serialized;
 		}
 	}
 }

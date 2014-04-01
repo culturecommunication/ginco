@@ -97,7 +97,7 @@ public class CustomTermAttributeTypeDAO extends
 	}
 	
 	@Override
-    public CustomTermAttributeType update(CustomTermAttributeType termAttributeType) throws BusinessException
+    public CustomTermAttributeType update(CustomTermAttributeType termAttributeType)
     {
     	getCurrentSession().setFlushMode(FlushMode.MANUAL);
     	CustomTermAttributeType existingAttrByCode = this.getAttributeByCode(termAttributeType.getThesaurus(), termAttributeType.getCode());
