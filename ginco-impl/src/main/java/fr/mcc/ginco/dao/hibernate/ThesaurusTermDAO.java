@@ -249,15 +249,17 @@ public class ThesaurusTermDAO extends
 	}
 	
 	@Override
-	public ThesaurusTerm update(ThesaurusTerm entity) {
-		return  update(entity, true);
-	};
+	public ThesaurusTerm update(ThesaurusTerm entity)
+			throws BusinessException {
+		return update(entity, true);
+	}
 	
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.hibernate.GenericHibernateDAO#update(java.lang.Object)
 	 */
 	@Override
-	public ThesaurusTerm update(ThesaurusTerm termToUpdate, boolean checkExisting) {
+	public ThesaurusTerm update(ThesaurusTerm termToUpdate, boolean checkExisting)
+			throws BusinessException {
 		getCurrentSession().setFlushMode(FlushMode.COMMIT);
 		// Verifying if there is no a similar term (lexicalValue + lang)
 		if (checkExisting) {

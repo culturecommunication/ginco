@@ -125,7 +125,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * Returns a number of similar Thesaurus Terms that fit to the parameter's lexical value
 	 * and language 
 	 * 
-	 * @param ThesaurusTerm
+	 * @param term
 	 * @return Number of similar terms (based on lexical value + language comparison)
 	 */
 	Long countSimilarTermsByLexicalValueAndLanguage(ThesaurusTerm term) ;
@@ -136,7 +136,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * a starting index and a limit of items to be returned, and
 	 * with a status validated
 	 * 
-	 * @param start
+	 * @param startIndex
 	 *            Beginning index
 	 * @param limit
 	 *            Number of items
@@ -152,7 +152,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * a starting index and a limit of items to be returned, and
 	 * with a status validated
 	 * 
-	 * @param start
+	 * @param startIndex
 	 *            Beginning index
 	 * @param limit
 	 *            Number of items
@@ -165,9 +165,9 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	/**
 	 * Returns the identifier of a concept by the term
 	 * 
-	 * @param  lexical value of the term,
-	 * @param  thesaurus identifier of the term,
-	 * @param  language identifier of the term
+	 * @param lexicalValue lexical value of the term,
+	 * @param thesaurusId thesaurus identifier of the term,
+	 * @param languageId language identifier of the term
 	 * 
 	 * @return identifier of a concept
 	 */

@@ -133,8 +133,8 @@ public class ImportRestService {
 	private IThesaurusTermService thesaurusTermService;
 
 	@Inject
-    @Named("userRoleService")
-  	private IUserRoleService userRoleService;
+	@Named("userRoleService")
+	private IUserRoleService userRoleService;
 
 	@Inject
 	@Named("thesaurusService")
@@ -308,7 +308,7 @@ public class ImportRestService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0') or hasPermission(#thesaurusId, '1')")
-    public String importSandBoxTerms(MultipartBody body,
+	public String importSandBoxTerms(MultipartBody body,
 			@QueryParam("thesaurusId") String thesaurusId,
 			@Context HttpServletRequest request)
 			throws IOException {
@@ -324,11 +324,11 @@ public class ImportRestService {
 				List<String> termsLines = Arrays.asList(termsSplit);
 				Map<String, Language> terms = new HashMap<String, Language>();
 				List<String> termsInError = new ArrayList<String>();
-				for (String termLine:termsLines) {
+				for (String termLine : termsLines) {
 					String[] termSplitted = termLine.split("@");
-					if (termSplitted.length==2) {
+					if (termSplitted.length == 2) {
 						String lexValue = termSplitted[0];
-						if (StringUtils.isNotEmpty(lexValue)){
+						if (StringUtils.isNotEmpty(lexValue)) {
 							Language lang = languageService.getLanguageById(termSplitted[1]);
 							if (lang == null) {
 								lang = languageService.getLanguageByPart1(termSplitted[1]);
