@@ -846,6 +846,12 @@ Ext.define('GincoApp.controller.ConceptController', {
 						me.application.fireEvent('conceptupdated',
 								thePanel.getThesaurusData(),resultRecord
 										.get("identifier"));
+
+                        Ext.Array.forEach(resultRecord.raw.parentConcepts, function (parent) {
+                            me.application.fireEvent('conceptupdated',
+                            thePanel.getThesaurusData(), parent.identifier);
+                        });
+
 						if (!Ext.isEmpty(thePanel.parentConceptId)) {
 							me.reloadConceptWindow(resultRecord.parentConceptId);
 						}
@@ -935,11 +941,18 @@ Ext.define('GincoApp.controller.ConceptController', {
 
 	init : function() {
 		this.application.on({
-			'termupdated' : function(thesaurusData, conceptId){
+			'termupdated' : function(thesaurusData, conceptId) {
 				this.reloadConceptWindow(conceptId);
 			},
 	        scope: this
 		});
+
+        this.application.on({
+            'conceptupdated' : function(thesaurusData, conceptId) {
+                this.reloadConceptWindow(conceptId);
+            },
+            scope: this
+        });
 		this.control({
 			'conceptPanel #conceptForm' : {
 				afterrender : this.onConceptFormRender,
