@@ -68,7 +68,7 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
         xExport_Skos : "Export SKOS",
         xExport_Hierarchical : "Export texte hiérarchique",
         xExport_Alphabetic : "Export texte alphabétique",
-        xExport_Ginco : "Export XML Hadoc GINCO",
+        xExport_Ginco : "Export XML GINCO",
 
         xSave : "Enregistrer",
         xDelete : "Supprimer",
