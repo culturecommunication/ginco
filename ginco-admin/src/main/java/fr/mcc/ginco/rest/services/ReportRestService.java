@@ -59,14 +59,14 @@ import fr.mcc.ginco.solr.SearchResultList;
 @Service
 @Path("/reportservice")
 public class ReportRestService {
-	
+
 	@Inject
 	@Named("thesaurusReportService")
 	private IThesaurusReportService thesaurusReportService;
 
 	@GET
 	@Path("/search")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<SearchResult>> search(
 			@QueryParam("thesaurusId") String thesaurusId,
 			@QueryParam("type") int type,
@@ -75,16 +75,12 @@ public class ReportRestService {
 		SearchResultList resultList = null;
 		if (type == ReportTypeEnum.CONCEPTSWONOTES.getType()) {
 			resultList = thesaurusReportService.getConceptsWithoutNotes(thesaurusId, startIndex, limit);
-		}
-		else if (type == ReportTypeEnum.TERMSWONOTES.getType()) {
+		} else if (type == ReportTypeEnum.TERMSWONOTES.getType()) {
 			resultList = thesaurusReportService.getTermsWithoutNotes(thesaurusId, startIndex, limit);
-		}
-		else if (type == ReportTypeEnum.CONCEPTSALIGNED.getType()) {
+		} else if (type == ReportTypeEnum.CONCEPTSALIGNED.getType()) {
 			resultList = thesaurusReportService.getConceptsAlignedToMyThes(thesaurusId, startIndex, limit);
-		}
-		else 
-		{
-			throw new BusinessException("Unknow report type "+type, "unknow-report-type");
+		} else {
+			throw new BusinessException("Unknow report type " + type, "unknow-report-type");
 		}
 		ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(
 				resultList);

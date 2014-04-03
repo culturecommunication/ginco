@@ -63,40 +63,39 @@ import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Thesaurus Version REST service for all operation on thesauruses versions
- * 
  */
 @Service
 @Path("/thesaurusversionservice")
-@Produces({ MediaType.APPLICATION_JSON })
+@Produces({MediaType.APPLICATION_JSON})
 @PreAuthorize("isAuthenticated()")
-public class ThesaurusVersionRestService {	
-	
+public class ThesaurusVersionRestService {
+
 	@Inject
 	@Named("thesaurusVersionHistoryService")
 	private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
-	
+
 	@Inject
 	@Named("thesaurusVersionHistoryViewConverter")
-    private ThesaurusVersionHistoryViewConverter thesaurusVersionHistoryViewConverter;	
-	
-	
+	private ThesaurusVersionHistoryViewConverter thesaurusVersionHistoryViewConverter;
+
+
 	/**
 	 * Public method used to get the list of all versions of a thesaurus
-	 * 
+	 *
 	 * @return list of ThesaurusVersionHistoryView objects for a thesaurus
 	 */
 	@GET
 	@Path("/getVersions")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> getVersions(
 			@QueryParam("thesaurusId") String thesaurusId) {
 		List<ThesaurusVersionHistory> thesaurusVersions = new ArrayList<ThesaurusVersionHistory>();
 		thesaurusVersions = thesaurusVersionHistoryService.getVersionsByThesaurusId(thesaurusId);
 		ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> result = new ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>>(thesaurusVersionHistoryViewConverter.convertList(thesaurusVersions));
-		result.setTotal((long)thesaurusVersions.size());
+		result.setTotal((long) thesaurusVersions.size());
 		return result;
 	}
-	
+
 	/**
 	 * Public method to get all status for concept (id + label)
 	 * The types are read from a properties file
@@ -106,52 +105,52 @@ public class ThesaurusVersionRestService {
 	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<GenericStatusView>> getAllVersionStatus() {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
-		
+
 		try {
-			String availableStatusIds[] = LabelUtil.getResourceLabel("version-status").split(",");
-			
+			String[] availableStatusIds = LabelUtil.getResourceLabel("version-status").split(",");
+
 			if (StringUtils.isEmpty(availableStatusIds[0])) {
 				//Ids of status for concepts are not set correctly
 				throw new BusinessException("Error with property file - check values of identifier version status", "check-values-of-version-status");
 			}
-			
-	        for (String id : availableStatusIds) {
-	        	GenericStatusView versionStatusView = new GenericStatusView();
-	        	versionStatusView.setStatus(Integer.valueOf(id));
-	        	
-	        	String label = LabelUtil.getResourceLabel("version-status["+ id +"]");
-	        	if (label.isEmpty()) {
-	        		//Labels of status are not set correctly
-	        		throw new BusinessException("Error with property file - check values of identifier version status", "check-values-of-version-status");
+
+			for (String id : availableStatusIds) {
+				GenericStatusView versionStatusView = new GenericStatusView();
+				versionStatusView.setStatus(Integer.valueOf(id));
+
+				String label = LabelUtil.getResourceLabel("version-status[" + id + "]");
+				if (label.isEmpty()) {
+					//Labels of status are not set correctly
+					throw new BusinessException("Error with property file - check values of identifier version status", "check-values-of-version-status");
 				} else {
 					versionStatusView.setStatusLabel(label);
 				}
-	        	listOfStatus.add(versionStatusView);
+				listOfStatus.add(versionStatusView);
 			}
 		} catch (MissingResourceException e) {
 			throw new BusinessException("Error with property file - check values of version status", "check-values-of-version-status", e);
 		}
 		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
-        result.setTotal((long) listOfStatus.size());
+		result.setTotal((long) listOfStatus.size());
 		return result;
 	}
-	
+
 	/**
 	 * Public method used to create new thesaurus versions
 	 */
 	@POST
 	@Path("/updateVersions")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON})
 	@PreAuthorize("hasPermission(#versionViews, '0')")
 	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> updateVersions(List<ThesaurusVersionHistoryView> versionViews) {
-	
+
 		List<ThesaurusVersionHistory> versions = thesaurusVersionHistoryViewConverter.convertViewList(versionViews);
-		List<ThesaurusVersionHistory> resultVersions = new ArrayList<ThesaurusVersionHistory>() ;
-		
+		List<ThesaurusVersionHistory> resultVersions = new ArrayList<ThesaurusVersionHistory>();
+
 		for (ThesaurusVersionHistory thesaurusVersionHistory : versions) {
 			resultVersions.add(thesaurusVersionHistoryService.createOrUpdateVersion(thesaurusVersionHistory));
 		}
-		return new ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>>(thesaurusVersionHistoryViewConverter.convertList(resultVersions));		
+		return new ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>>(thesaurusVersionHistoryViewConverter.convertList(resultVersions));
 	}
 
 }

@@ -55,15 +55,15 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class UserRoleServiceImpl implements IUserRoleService {
 
 	private static Logger logger = LoggerFactory.getLogger(UserRoleServiceImpl.class);
-	
+
 	@Inject
-	private IUserRoleDAO userRoleDAO;	
+	private IUserRoleDAO userRoleDAO;
 
 	@Override
 	public boolean hasRole(String username, String thesaurusId, Role role) {
 		UserRole userRole = userRoleDAO.getUserRoleOnThesaurus(username,
 				thesaurusId);
-		if (userRole == null) {			
+		if (userRole == null) {
 			return false;
 		} else {
 			return userRole.getRole().equals(role);
@@ -90,14 +90,17 @@ public class UserRoleServiceImpl implements IUserRoleService {
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
 			String userName = auth.getName();
-			logger.info("[updateUserRole] "+userName+" - User "+userRole.getUsername()+" has now role "+userRole.getRole()+" on thesaurus "+userRole.getThesaurus().getIdentifier()+" ("+userRole.getThesaurus().getTitle()+")");
+			logger.info("[updateUserRole] " + userName + " - User " + userRole.getUsername()
+					+ " has now role " + userRole.getRole() + " on thesaurus "
+					+ userRole.getThesaurus().getIdentifier() + " (" + userRole.getThesaurus().getTitle() + ")");
 			return userRoleDAO.update(userRole);
 		} else {
 			throw new BusinessException(
 					"Duplicate username on the same thesaurus : "
 							+ userRole.getUsername() + " - "
 							+ userRole.getThesaurus().getIdentifier(),
-					"duplicate-username-on-thesaurus");
+					"duplicate-username-on-thesaurus"
+			);
 		}
 	}
 
@@ -107,7 +110,9 @@ public class UserRoleServiceImpl implements IUserRoleService {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		String userName = auth.getName();
-		logger.info("[deleteUserRole] "+userName+" - User "+userRole.getUsername()+" has no more role "+userRole.getRole()+" on thesaurus "+userRole.getThesaurus().getIdentifier()+" ("+userRole.getThesaurus().getTitle()+")");
+		logger.info("[deleteUserRole] " + userName + " - User " + userRole.getUsername()
+				+ " has no more role " + userRole.getRole() + " on thesaurus "
+				+ userRole.getThesaurus().getIdentifier() + " (" + userRole.getThesaurus().getTitle() + ")");
 		userRoleDAO.delete(userRole);
 	}
 

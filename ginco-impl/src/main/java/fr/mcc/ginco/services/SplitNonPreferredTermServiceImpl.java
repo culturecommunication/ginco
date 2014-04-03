@@ -47,33 +47,32 @@ import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("splitNonPreferredTermService")
 public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermService {
 
-    @Inject
-    private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
+	@Inject
+	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 
-    @Override
-    public SplitNonPreferredTerm getSplitNonPreferredTermById(String id){
-    	SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermDAO.getById(id);
-        if (thesaurusTerm != null) {
-            return thesaurusTerm;
-        } else {
-            throw new BusinessException("Invalid termId requested : " + id, "invalid-term-id");
-        }
-    }
+	@Override
+	public SplitNonPreferredTerm getSplitNonPreferredTermById(String id) {
+		SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermDAO.getById(id);
+		if (thesaurusTerm != null) {
+			return thesaurusTerm;
+		} else {
+			throw new BusinessException("Invalid termId requested : " + id, "invalid-term-id");
+		}
+	}
 
-    @Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public SplitNonPreferredTerm updateSplitNonPreferredTerm(
 			SplitNonPreferredTerm object) {
-    	if (object.getPreferredTerms().size()<2)
-    	{
-    		throw new BusinessException("A complex term must have at least 2 preferred term", "invalid-complex-term");
-    	} else {
-    		return splitNonPreferredTermDAO.update(object);
-    	}
+		if (object.getPreferredTerms().size() < 2) {
+			throw new BusinessException("A complex term must have at least 2 preferred term", "invalid-complex-term");
+		} else {
+			return splitNonPreferredTermDAO.update(object);
+		}
 	}
 
 	@Override
@@ -87,20 +86,20 @@ public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermS
 		return splitNonPreferredTermDAO.countItems(idThesaurus);
 	}
 
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public SplitNonPreferredTerm destroySplitNonPreferredTerm(
 			SplitNonPreferredTerm splitNonPreferredTerm) {
-		if (splitNonPreferredTerm.getStatus()==TermStatusEnum.CANDIDATE.getStatus()
-				|| splitNonPreferredTerm.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
-            return splitNonPreferredTermDAO.delete(splitNonPreferredTerm);
-        } else {
-            throw new BusinessException("It's not possible to delete a complex concept  with a status different from candidate or rejected", "delete-complex-concept");
-        }
+		if (splitNonPreferredTerm.getStatus() == TermStatusEnum.CANDIDATE.getStatus()
+				|| splitNonPreferredTerm.getStatus() == TermStatusEnum.REJECTED.getStatus()) {
+			return splitNonPreferredTermDAO.delete(splitNonPreferredTerm);
+		} else {
+			throw new BusinessException("It's not possible to delete a complex concept  with a status different from candidate or rejected", "delete-complex-concept");
+		}
 	}
 
 	@Override
-	public List<SplitNonPreferredTerm> getAllSplitNonPreferredTerms(){
+	public List<SplitNonPreferredTerm> getAllSplitNonPreferredTerms() {
 		return splitNonPreferredTermDAO.findAll();
 	}
 

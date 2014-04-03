@@ -78,11 +78,10 @@ import fr.mcc.ginco.solr.IThesaurusIndexerService;
 
 /**
  * Thesaurus REST service for all operation on a unique thesaurus
- *
  */
 @Service
 @Path("/thesaurusservice")
-@Produces({ MediaType.APPLICATION_JSON })
+@Produces({MediaType.APPLICATION_JSON})
 @PreAuthorize("isAuthenticated()")
 public class ThesaurusRestService {
 	@Inject
@@ -105,13 +104,13 @@ public class ThesaurusRestService {
 	@Named("thesaurusStatisticsService")
 	private IThesaurusStatisticsService thesaurusStatisticsService;
 
-    @Inject
-    @Named("thesaurusOrganizationService")
-    private IThesaurusOrganizationService thesaurusOrganizationService;
+	@Inject
+	@Named("thesaurusOrganizationService")
+	private IThesaurusOrganizationService thesaurusOrganizationService;
 
-    @Inject
-    @Named("thesaurusVersionHistoryService")
-    private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
+	@Inject
+	@Named("thesaurusVersionHistoryService")
+	private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 
 	@Inject
 	@Named("thesaurusViewConverter")
@@ -121,7 +120,7 @@ public class ThesaurusRestService {
 	@Named("thesaurusIndexerService")
 	private IThesaurusIndexerService thesaurusIndexerService;
 
-	private Logger logger  = LoggerFactory.getLogger(ThesaurusRestService.class);
+	private Logger logger = LoggerFactory.getLogger(ThesaurusRestService.class);
 
 
 	/**
@@ -143,7 +142,7 @@ public class ThesaurusRestService {
 	 */
 	@GET
 	@Path("/getTopLanguages")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<Language>> getTopLanguages(
 			@QueryParam("thesaurusId") String thesaurusId) {
 		logger.info("Getting Top Languages");
@@ -176,27 +175,24 @@ public class ThesaurusRestService {
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object by providing
 	 * its id.
 	 *
-	 * @param id
-	 *            {@link String} identifier to try with
-	 *
+	 * @param id {@link String} identifier to try with
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} object in JSON
-	 *         format or {@code null} if not found
+	 * format or {@code null} if not found
 	 */
 	@GET
 	@Path("/getVocabulary")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public ThesaurusView getVocabularyById(@QueryParam("id") String id) {
-			if (!id.isEmpty()){
-				return thesaurusViewConverter.convert(thesaurusService.getThesaurusById(id));
-			}
-			else{
-				return thesaurusViewConverter.convert(thesaurusService.getDefaultThesaurus());
-			}
+		if (!id.isEmpty()) {
+			return thesaurusViewConverter.convert(thesaurusService.getThesaurusById(id));
+		} else {
+			return thesaurusViewConverter.convert(thesaurusService.getDefaultThesaurus());
+		}
 	}
 
 	@GET
 	@Path("/getVocabularies")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<ThesaurusView>> getVocabularies() {
 		List<ThesaurusView> listOfThesaurusView = new ArrayList<ThesaurusView>();
 		List<Thesaurus> thesList = thesaurusService.getThesaurusList();
@@ -204,44 +200,42 @@ public class ThesaurusRestService {
 			listOfThesaurusView.add(thesaurusViewConverter.convert(thes));
 		}
 		ExtJsonFormLoadData<List<ThesaurusView>> result = new ExtJsonFormLoadData<List<ThesaurusView>>(listOfThesaurusView);
-        result.setTotal((long) listOfThesaurusView.size());
+		result.setTotal((long) listOfThesaurusView.size());
 		return result;
 	}
 
 	/**
 	 * Public method used to create or update
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView}
-     * thesaurus JSON object send by extjs.
-     *
+	 * thesaurus JSON object send by extjs.
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} updated object
-	 *         in JSON format or {@code null} if not found
+	 * in JSON format or {@code null} if not found
 	 */
 	@POST
 	@Path("/updateVocabulary")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON})
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
 	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
 		Thesaurus existingThes = thesaurusService.getThesaurusById(thesaurusViewJAXBElement.getId());
 		Boolean shouldReindex = false;
-		if (existingThes!=null)
-		{
-			if (!existingThes.getTitle().equals(thesaurusViewJAXBElement.getTitle()))
-			{
+		if (existingThes != null) {
+			if (!existingThes.getTitle().equals(thesaurusViewJAXBElement.getTitle())) {
 				shouldReindex = true;
 			}
 		}
 		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
-		
+
 		ThesaurusView view = null;
-        if (object != null) {
-        	
+		if (object != null) {
+
 			Thesaurus result = thesaurusService.updateThesaurus(object);
-            if (result != null) {            	
-            	if (shouldReindex) {
-            			logger.warn("Thesaurus title has changed... reindexing thesaurus");
-            			thesaurusIndexerService.indexThesaurus(object);
-            	}
-                view = thesaurusViewConverter.convert(result);
+			if (result != null) {
+				if (shouldReindex) {
+					logger.warn("Thesaurus title has changed... reindexing thesaurus");
+					thesaurusIndexerService.indexThesaurus(object);
+				}
+				view = thesaurusViewConverter.convert(result);
 			} else {
 				logger.error("Failed to update thesaurus");
 			}
@@ -249,111 +243,108 @@ public class ThesaurusRestService {
 		return view;
 	}
 
-    /**
-     * Public method used to delete thesaurus
-     */
-    @POST
-    @Path("/destroyVocabulary")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasRole('ROLE_ADMIN') && hasPermission(#thesaurusViewJAXBElement, 'DELETION')")
-    public void destroyVocabulary(ThesaurusView thesaurusViewJAXBElement) {
-        Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
+	/**
+	 * Public method used to delete thesaurus
+	 */
+	@POST
+	@Path("/destroyVocabulary")
+	@Consumes({MediaType.APPLICATION_JSON})
+	@PreAuthorize("hasRole('ROLE_ADMIN') && hasPermission(#thesaurusViewJAXBElement, 'DELETION')")
+	public void destroyVocabulary(ThesaurusView thesaurusViewJAXBElement) {
+		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
 
-        if (object != null) {
-            thesaurusService.destroyThesaurus(object);
-            try {
-            	thesaurusIndexerService.removeThesaurusIndex(object.getIdentifier());
-            } catch (TechnicalException tex)
-            {
-            	logger.error("Problem when removing thesaurus index...",tex);
-            }
-        }
-    }
+		if (object != null) {
+			thesaurusService.destroyThesaurus(object);
+			try {
+				thesaurusIndexerService.removeThesaurusIndex(object.getIdentifier());
+			} catch (TechnicalException tex) {
+				logger.error("Problem when removing thesaurus index...", tex);
+			}
+		}
+	}
 
 
-    /**
-     * Public method used to publish thesaurus
-     * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
-     */
-    @GET
-    @Path("/publishVocabulary")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces(MediaType.TEXT_HTML)
+	/**
+	 * Public method used to publish thesaurus
+	 *
+	 * @throws IOException
+	 */
+	@GET
+	@Path("/publishVocabulary")
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
-    public String publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
-                                                 @QueryParam("userId") String userId)
-            throws JsonGenerationException, JsonMappingException, IOException {
-        Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
+	public String publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
+	                                @QueryParam("userId") String userId)
+			throws IOException {
+		Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
-        if (object != null) {
-            thesaurusService.publishThesaurus(object);
-            thesaurusVersionHistoryService.publishThesaurus(object, userId);
-        }
+		if (object != null) {
+			thesaurusService.publishThesaurus(object);
+			thesaurusVersionHistoryService.publishThesaurus(object, userId);
+		}
 
-        ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				object));
 		return StringEscapeUtils.unescapeHtml4(serialized);
-    }
+	}
 
-    /**
-     * Public method used to archive thesaurus
-     * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonGenerationException
-     */
-    @GET
-    @Path("/archiveVocabulary")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces(MediaType.TEXT_HTML)
+	/**
+	 * Public method used to archive thesaurus
+	 *
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
+	 */
+	@GET
+	@Path("/archiveVocabulary")
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
-    public String archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
-            throws JsonGenerationException, JsonMappingException, IOException {
-        Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
+	public String archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
+			throws IOException {
+		Thesaurus object = thesaurusService.getThesaurusById(thesaurusId);
 
-        ThesaurusView view = null;
+		ThesaurusView view = null;
 
-        if (object != null) {
+		if (object != null) {
 
-            Thesaurus result =  thesaurusService.archiveThesaurus(object);
+			Thesaurus result = thesaurusService.archiveThesaurus(object);
 
-            if (result != null) {
-                view = thesaurusViewConverter.convert(result);
-            } else {
-                logger.error("Failed to archive thesaurus");
-            }
-        }
+			if (result != null) {
+				view = thesaurusViewConverter.convert(result);
+			} else {
+				logger.error("Failed to archive thesaurus");
+			}
+		}
 
-        ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				view));
 		return StringEscapeUtils.unescapeHtml4(serialized);
-    }
+	}
 
-    @GET
-    @Path("/getAllAuthors")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public List<ThesaurusOrganization> getAllAuthors() {
-    	List<ThesaurusOrganization> allOrgs = thesaurusOrganizationService.getOrganizations();
-    	List<String> returnedAuthorNames = new ArrayList<String>();
-    	List<ThesaurusOrganization> returnedOrgs = new ArrayList<ThesaurusOrganization>();
-    	for (ThesaurusOrganization aOrg : allOrgs)
-    	{
-    		if (!StringUtils.isEmpty(aOrg.getName()) && !returnedAuthorNames.contains(aOrg.getName()))
-    		{
-    			returnedOrgs.add(aOrg);
-    			returnedAuthorNames.add(aOrg.getName());
-    		}
-    	}
-    	return returnedOrgs;
-    }
+	@GET
+	@Path("/getAllAuthors")
+	@Produces({MediaType.APPLICATION_JSON})
+	public List<ThesaurusOrganization> getAllAuthors() {
+		List<ThesaurusOrganization> allOrgs = thesaurusOrganizationService.getOrganizations();
+		List<String> returnedAuthorNames = new ArrayList<String>();
+		List<ThesaurusOrganization> returnedOrgs = new ArrayList<ThesaurusOrganization>();
+		for (ThesaurusOrganization aOrg : allOrgs) {
+			if (!StringUtils.isEmpty(aOrg.getName()) && !returnedAuthorNames.contains(aOrg.getName())) {
+				returnedOrgs.add(aOrg);
+				returnedAuthorNames.add(aOrg.getName());
+			}
+		}
+		return returnedOrgs;
+	}
 
-    @GET
-    @Path("/getStatistics")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public ExtJsonFormLoadData getStatistics(@QueryParam("id") String thesaurusId) {
-    	return new ExtJsonFormLoadData(thesaurusStatisticsService.getStatistics(thesaurusId));
-    }
+	@GET
+	@Path("/getStatistics")
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData getStatistics(@QueryParam("id") String thesaurusId) {
+		return new ExtJsonFormLoadData(thesaurusStatisticsService.getStatistics(thesaurusId));
+	}
 }

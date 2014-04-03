@@ -121,12 +121,12 @@ public class BaseRestService {
 	/**
 	 * Public method used to get list of all existing Thesaurus objects in
 	 * database.
-	 * 
+	 *
 	 * @return list of objects, if not found - {@code null}
 	 */
 	@GET
 	@Path("/getTreeContent")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public List<IThesaurusListNode> getTreeContent(
 			@QueryParam("id") String nodeParam) {
 		List<IThesaurusListNode> result;
@@ -166,7 +166,7 @@ public class BaseRestService {
 						.getIdentifier()));
 				node.setDisplayable(true);
 				if (thesaurus.isArchived() != null
-						&& thesaurus.isArchived() == true) {
+						&& thesaurus.isArchived()) {
 					node.setIconCls("archived");
 				}
 
@@ -182,7 +182,7 @@ public class BaseRestService {
 
 	/**
 	 * Public method used to get the name of the user currently connected
-	 * 
+	 *
 	 * @return
 	 * @throws IOException
 	 * @throws JsonMappingException
@@ -190,15 +190,14 @@ public class BaseRestService {
 	 */
 	@GET
 	@Path("/getSession")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public long getSession(@Context HttpServletRequest request) {
-
 		return request.getSession().getLastAccessedTime();
 	}
 
 	/**
 	 * Public method used to get the name of the user currently connected
-	 * 
+	 *
 	 * @return
 	 * @throws IOException
 	 * @throws JsonMappingException
@@ -206,7 +205,7 @@ public class BaseRestService {
 	 */
 	@GET
 	@Path("/getUserInfo")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<UserInfo> getUserInfo() {
 		UserInfo userInfos = new UserInfo();
 		Authentication auth = SecurityContextHolder.getContext()

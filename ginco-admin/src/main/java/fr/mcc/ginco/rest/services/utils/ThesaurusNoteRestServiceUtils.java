@@ -55,19 +55,19 @@ import fr.mcc.ginco.services.IUserRoleService;
 @Component
 public class ThesaurusNoteRestServiceUtils {
 
-    @Inject
+	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-    @Inject
+	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
 
-    @Inject
+	@Inject
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
 
-	public void checkExpertAccessToNote(Note note){
+	public void checkExpertAccessToNote(Note note) {
 
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -75,33 +75,33 @@ public class ThesaurusNoteRestServiceUtils {
 
 		if (note.getConcept() != null
 				&& userRoleService.hasRole(username, note.getConcept().getThesaurusId(),
-					Role.EXPERT)){
+				Role.EXPERT)) {
 			ThesaurusConcept concept = thesaurusConceptService
 					.getThesaurusConceptById(note.getConcept().getIdentifier());
 			if (concept != null
 					&& concept.getStatus() != ConceptStatusEnum.CANDIDATE
-						.getStatus() || concept.getTopConcept()) {
-					throw new AccessDeniedException(
-							"you-can-save-only-candidate-and-non-top-terms-concepts");
+					.getStatus() || concept.getTopConcept()) {
+				throw new AccessDeniedException(
+						"you-can-save-only-candidate-and-non-top-terms-concepts");
 			}
 		}
 		if (note.getTerm() != null
-			&& userRoleService.hasRole(username, note.getTerm().getThesaurusId(),
-					Role.EXPERT)){
+				&& userRoleService.hasRole(username, note.getTerm().getThesaurusId(),
+				Role.EXPERT)) {
 			ThesaurusTerm term = thesaurusTermService
 					.getThesaurusTermById(note.getTerm().getIdentifier());
 			if (term != null
-				&& term.getStatus() != TermStatusEnum.CANDIDATE
-						.getStatus()) {
-				if (term.getConcept() != null)
-				{
+					&& term.getStatus() != TermStatusEnum.CANDIDATE
+					.getStatus()) {
+				if (term.getConcept() != null) {
 					if (term.getConcept().getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()) {
 						throw new AccessDeniedException(
 								"you-can-save-only-terms-associated-to-candidate-concept");
 					}
-				} else
+				} else {
 					throw new AccessDeniedException(
 							"you-can-save-only-candidate-terms");
+				}
 			}
 		}
 	}

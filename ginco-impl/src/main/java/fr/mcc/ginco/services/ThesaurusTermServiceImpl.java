@@ -89,7 +89,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
 
 	@Override
-	public List<ThesaurusTerm> getTermsByConceptId(String idConcept){
+	public List<ThesaurusTerm> getTermsByConceptId(String idConcept) {
 		return thesaurusTermDAO.findTermsByConceptId(idConcept);
 	}
 
@@ -99,7 +99,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	}
 
 	@Override
-	public Long getSandboxedValidatedTermsCount(String idThesaurus)	 {
+	public Long getSandboxedValidatedTermsCount(String idThesaurus) {
 		return thesaurusTermDAO.countSandboxedValidatedTerms(idThesaurus);
 	}
 
@@ -117,10 +117,10 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Transactional(readOnly = false)
 	@Override
-	public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object){
+	public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) {
 		if (object.getConcept() == null
 				&& (object.getStatus() == TermStatusEnum.CANDIDATE.getStatus() || object
-						.getStatus() == TermStatusEnum.REJECTED.getStatus())) {
+				.getStatus() == TermStatusEnum.REJECTED.getStatus())) {
 			return thesaurusTermDAO.delete(object);
 		} else {
 			throw new BusinessException(
@@ -148,7 +148,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
-			String languageId) {
+	                                 String languageId) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
 				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
 						thesaurusId, languageId);
@@ -169,7 +169,7 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Override
 	public ThesaurusTerm getPreferredTermByTerm(String lexicalValue,
-			String thesaurusId, String languageId) {
+	                                            String thesaurusId, String languageId) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
 				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
 						thesaurusId, languageId);
@@ -193,24 +193,18 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 							"concept-does-not-exist");
 				}
 			}
-		} 
+		}
 		return null;
 	}
-	
+
 	@Override
-	public Boolean isTermExist(ThesaurusTerm term) 
-	{
-		if (thesaurusTermDAO.countSimilarTermsByLexicalValueAndLanguage(term) > 0)
-		{ 
-			return true;
-		} else {
-			return false;
-		}
+	public Boolean isTermExist(ThesaurusTerm term) {
+		return thesaurusTermDAO.countSimilarTermsByLexicalValueAndLanguage(term) > 0;
 	}
 
 	@Override
 	public Boolean isPreferred(String lexicalValue, String thesaurusId,
-			String languageId) {
+	                           String languageId) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
 				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
 						thesaurusId, languageId);

@@ -55,7 +55,6 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting a thesaurus data SKOS
- *
  */
 @Component("skosThesaurusExporter")
 public class SKOSThesaurusExporter {
@@ -104,10 +103,9 @@ public class SKOSThesaurusExporter {
 			thesaurusResource.addProperty(DC.creator, foafOrgResource);
 
 		}
-		if (thesaurus.getRights() != null && !thesaurus.getRights().equals("")) { 
+		if (thesaurus.getRights() != null && !thesaurus.getRights().isEmpty()) {
 			model.add(thesaurusResource, DC.rights, StringEscapeUtils.unescapeXml(thesaurus.getRights()));
-		} else 
-		{
+		} else {
 			throw new BusinessException("Some mandatory metadata are not present", "metadata-not-present");
 		}
 
@@ -154,5 +152,4 @@ public class SKOSThesaurusExporter {
 		return model;
 
 	}
-
 }

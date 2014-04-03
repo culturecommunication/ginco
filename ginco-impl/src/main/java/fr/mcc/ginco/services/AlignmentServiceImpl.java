@@ -70,7 +70,7 @@ public class AlignmentServiceImpl implements IAlignmentService {
 
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	private IIDGeneratorService generatorService;
 
 	@Override
 	public Alignment getAlignmentById(String identifier) {
@@ -98,14 +98,14 @@ public class AlignmentServiceImpl implements IAlignmentService {
 	 * .ThesaurusConcept, java.util.List)
 	 */
 	public ThesaurusConcept saveAlignments(ThesaurusConcept concept,
-			List<Alignment> alignments) {
+	                                       List<Alignment> alignments) {
 
-		List<Alignment> existingAlignments  = alignmentDAO.findBySourceConceptId(concept.getIdentifier());
+		List<Alignment> existingAlignments = alignmentDAO.findBySourceConceptId(concept.getIdentifier());
 
-		for (Alignment existingAlignment:existingAlignments) {
+		for (Alignment existingAlignment : existingAlignments) {
 			if (!alignments.contains(existingAlignment)) {
-				Set<AlignmentConcept> concepts  = existingAlignment.getTargetConcepts();
-				for (AlignmentConcept alignmentConcept: concepts) {
+				Set<AlignmentConcept> concepts = existingAlignment.getTargetConcepts();
+				for (AlignmentConcept alignmentConcept : concepts) {
 					alignmentConceptDAO.delete(alignmentConcept);
 				}
 				alignmentDAO.delete(existingAlignment);
@@ -116,8 +116,8 @@ public class AlignmentServiceImpl implements IAlignmentService {
 				alignment.setIdentifier(generatorService
 						.generate(Alignment.class));
 			}
-			Set<AlignmentConcept> concepts  = alignment.getTargetConcepts();
-			for (AlignmentConcept alignmentConcept: concepts) {
+			Set<AlignmentConcept> concepts = alignment.getTargetConcepts();
+			for (AlignmentConcept alignmentConcept : concepts) {
 				alignmentConceptDAO.update(alignmentConcept);
 			}
 
@@ -130,20 +130,19 @@ public class AlignmentServiceImpl implements IAlignmentService {
 	public void saveExternalThesauruses(List<Alignment> alignments) {
 		List<ExternalThesaurus> externalThesaurusesToSave = new ArrayList<ExternalThesaurus>();
 
-		for (Alignment alignment:alignments) {
+		for (Alignment alignment : alignments) {
 			ExternalThesaurus externalThesaurus = alignment.getExternalTargetThesaurus();
 
 			if (externalThesaurus != null) {
-				if (! externalThesaurusesToSave.contains(externalThesaurus)) {
+				if (!externalThesaurusesToSave.contains(externalThesaurus)) {
 					externalThesaurusesToSave.add(externalThesaurus);
-				} else 
-				{
+				} else {
 					ExternalThesaurus existingExternalThes = externalThesaurusesToSave.get(externalThesaurusesToSave.indexOf(externalThesaurus));
 					alignment.setExternalTargetThesaurus(existingExternalThes);
 				}
 			}
 		}
-		for (ExternalThesaurus extThesaurus:externalThesaurusesToSave) {
+		for (ExternalThesaurus extThesaurus : externalThesaurusesToSave) {
 			externalThesaurusDAO.update(extThesaurus);
 		}
 	}

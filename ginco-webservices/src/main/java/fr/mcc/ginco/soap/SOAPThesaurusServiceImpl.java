@@ -104,14 +104,14 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 		fullThesaurus.setDescription(thesaurus.getDescription());
 		
 		if (thesaurus.getFormat() != null){
-			ArrayList<String> formatList = new ArrayList<String>();
+			List<String> formatList = new ArrayList<String>();
 			for (ThesaurusFormat format : thesaurus.getFormat()) {
 				formatList.add(format.getLabel());
 			}
 			fullThesaurus.setFormats(formatList);
 		}
 		fullThesaurus.setIdentifier(thesaurus.getIdentifier());
-		ArrayList<String> langList = new ArrayList<String>();
+		List<String> langList = new ArrayList<String>();
 		for (Language lang : thesaurus.getLang()) {
 			langList.add(lang.getId());
 		}

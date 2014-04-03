@@ -35,10 +35,18 @@
 package fr.mcc.ginco.extjs.view.utils;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
-import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.services.IThesaurusConceptGroupService;
+import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.utils.DateUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
@@ -136,8 +144,7 @@ public class ThesaurusConceptGroupViewConverter {
 		if (StringUtils.isNotEmpty(source.getParentConceptId())) {
 			hibernateRes.setParentConcept(thesaurusConceptService
 					.getThesaurusConceptById(source.getParentConceptId()));
-		} else
-		{
+		} else {
 			hibernateRes.setParentConcept(null);
 		}
 
@@ -164,7 +171,7 @@ public class ThesaurusConceptGroupViewConverter {
 			thesaurusConceptGroupView.setIsDynamic(source.getIsDynamic());
 
 			List<String> conceptsIds = new ArrayList<String>();
-			for (ThesaurusConcept concept: source.getConcepts()) {
+			for (ThesaurusConcept concept : source.getConcepts()) {
 				conceptsIds.add(concept.getIdentifier());
 			}
 			thesaurusConceptGroupView.setConcepts(conceptsIds);
@@ -190,6 +197,7 @@ public class ThesaurusConceptGroupViewConverter {
 
 	/**
 	 * This method converts a list of {@link ThesaurusConceptGroup} into a list of {@link ThesaurusConceptGroupView}
+	 *
 	 * @param {@link ThesaurusConceptGroup} groups
 	 * @return {@link ThesaurusConceptGroupView} group views
 	 */

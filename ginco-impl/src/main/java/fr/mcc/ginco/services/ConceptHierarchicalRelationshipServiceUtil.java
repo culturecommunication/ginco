@@ -65,13 +65,13 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		IConceptHierarchicalRelationshipServiceUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(ConceptHierarchicalRelationshipServiceUtil.class);
-	
+
 	@Inject
 	private IThesaurusArrayConceptDAO thesaurusArrayConceptDAO;
 
 	@Inject
 	private IThesaurusConceptDAO thesaurusConceptDAO;
-	
+
 	@Inject
 	private IThesaurusTermDAO thesaurusTermDAO;
 
@@ -86,7 +86,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 			List<ThesaurusConcept> allRecursiveChilds,
 			List<ThesaurusConcept> childrenConceptToDetach,
 			List<ThesaurusConcept> childrenConceptToAttach) {
-				
+
 		// We update the modified relations, and we delete the relations that
 		// have been removed
 		List<String> oldParentConceptIds = new ArrayList<String>();
@@ -95,82 +95,78 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 					.getIdsFromConceptList(new ArrayList<ThesaurusConcept>(
 							conceptToUpdate.getParentConcepts()));
 		}
-		
+
 		List<String> newParentConceptIds = new ArrayList<String>();
 		for (ConceptHierarchicalRelationship relation : hierarchicalRelationships) {
 			newParentConceptIds.add(relation.getIdentifier().getParentconceptid());
 		}
-		
+
 		List<String> newChildConceptIds = new ArrayList<String>();
 		for (ThesaurusConcept newChild : childrenConceptToAttach) {
 			newChildConceptIds.add(newChild.getIdentifier());
 		}
 		// Check loops
-		for (ThesaurusConcept childConcept : allRecursiveChilds)
-		{
-			if (newParentConceptIds.contains(childConcept.getIdentifier()))
-			{
+		for (ThesaurusConcept childConcept : allRecursiveChilds) {
+			if (newParentConceptIds.contains(childConcept.getIdentifier())) {
 				throw new BusinessException(
 						"A parent concept cannot be the child of the same concept",
 						"hierarchical-loop-violation");
 			}
 		}
 		// Check loops
-		for (ThesaurusConcept parentConcept : allRecursiveParents)
-		{
-			if (newChildConceptIds.contains(parentConcept.getIdentifier()))
-			{
+		for (ThesaurusConcept parentConcept : allRecursiveParents) {
+			if (newChildConceptIds.contains(parentConcept.getIdentifier())) {
 				throw new BusinessException(
 						"A child concept cannot be the parent of the same concept",
 						"hierarchical-loop-violation");
 			}
 		}
 
-		
+
 		// Verify if the concept doesn't have one of its brothers as parent
-		for (String currentParentId : newParentConceptIds){
+		for (String currentParentId : newParentConceptIds) {
 			List<String> childrenOfCurrentParentIds = ThesaurusConceptUtils
 					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId, 0));
 			List<String> commonIds = new ArrayList<String>(newParentConceptIds);
 			// Compare both lists and see which elements are in common. 
 			// Those elements are both parents and brothers to the considered concept.
 			commonIds.retainAll(childrenOfCurrentParentIds);
-			
-			if( !commonIds.isEmpty() ){
+
+			if (!commonIds.isEmpty()) {
 				String commonPreferedTerms = "";
-				for(String conceptId : commonIds){
-					if( commonIds.indexOf(conceptId) != 0){
+				for (String conceptId : commonIds) {
+					if (commonIds.indexOf(conceptId) != 0) {
 						commonPreferedTerms += ", ";
 					}
 					commonPreferedTerms += thesaurusTermDAO.getConceptPreferredTerm(conceptId).getLexicalValue();
 				}
 				throw new BusinessException(
-						"A concept cannot have one of its brother ("+ commonPreferedTerms +") as a parent",
-						"hierarchical-brotherIsParent-violation", new Object[] {commonPreferedTerms});
+						"A concept cannot have one of its brother (" + commonPreferedTerms + ") as a parent",
+						"hierarchical-brotherIsParent-violation", new Object[]{commonPreferedTerms});
 			}
 		}
 		List<String> brotherIds = new ArrayList<String>();
-		for (ThesaurusConcept parentConcept : conceptToUpdate.getParentConcepts()){
+		for (ThesaurusConcept parentConcept : conceptToUpdate.getParentConcepts()) {
 			brotherIds.addAll(ThesaurusConceptUtils
 					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(parentConcept.getIdentifier(), 0)));
 		}
 		// Verify if the concept doesn't have one of its brothers as child
-		for (String currentChildId : newChildConceptIds){
+		for (String currentChildId : newChildConceptIds) {
 			if (brotherIds.contains(currentChildId)) {
 				List<String> commonIds = new ArrayList<String>(newChildConceptIds);
 				String commonPreferedTerms = "";
-				for(String conceptId : commonIds){
-					if( commonIds.indexOf(conceptId) != 0){
+				for (String conceptId : commonIds) {
+					if (commonIds.indexOf(conceptId) != 0) {
 						commonPreferedTerms += ", ";
 					}
 					commonPreferedTerms += thesaurusTermDAO.getConceptPreferredTerm(conceptId).getLexicalValue();
 				}
 				throw new BusinessException(
-						"A concept cannot have one of its brother ("+ commonPreferedTerms +") as a parent",
-						"hierarchical-brotherIsParent-violation", new Object[] {commonPreferedTerms});
+						"A concept cannot have one of its brother (" + commonPreferedTerms + ") as a parent",
+						"hierarchical-brotherIsParent-violation", new Object[]{commonPreferedTerms});
 			}
 		}
-		
+
 		List<String> addedParentConceptIds = ListUtils.subtract(
 				newParentConceptIds, oldParentConceptIds);
 		List<String> removedParentConceptIds = ListUtils.subtract(
@@ -188,13 +184,13 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 		if (!addedParentConcepts.isEmpty() || !removedParentConcepts.isEmpty()) {
 			// Treatment in case of modified hierarchy (both add or remove)
-			
+
 			// We remove this concept in all array it belongs
 			List<ThesaurusArrayConcept> arrays = thesaurusArrayConceptDAO.getArraysOfConcept(conceptToUpdate);
 			for (ThesaurusArrayConcept thesaurusArrayConcept : arrays) {
 				thesaurusArrayConceptDAO.delete(thesaurusArrayConcept);
 			}
-			
+
 			// We remove all removed parents
 			if (!removedParentConcepts.isEmpty()) {
 				removeParents(conceptToUpdate, removedParentConcepts);
@@ -207,17 +203,16 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 			}
 
 			if (!addedParentConcepts.isEmpty()) {
-					conceptToUpdate.getParentConcepts().addAll(addedParentsSet);
-					conceptToUpdate.setTopConcept(false);
+				conceptToUpdate.getParentConcepts().addAll(addedParentsSet);
+				conceptToUpdate.setTopConcept(false);
 			}
-			
+
 			if (!conceptToUpdate.getThesaurus().isPolyHierarchical()
 					&& conceptToUpdate.getParentConcepts().size() > 1) {
 				throw new BusinessException(
 						"Thesaurus is monohierarchical, but some concepts have multiple parents!",
 						"monohierarchical-violation");
 			}
-			
 
 			// We calculate the rootconcepts for the concept to update
 			conceptToUpdate.setRootConcepts(new HashSet<ThesaurusConcept>(
@@ -232,7 +227,6 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		// We process children delete
 		addChildren(conceptToUpdate, childrenConceptToAttach);
 		removeChildren(conceptToUpdate, childrenConceptToDetach);
-		
 
 		thesaurusConceptDAO.update(conceptToUpdate);
 		thesaurusConceptDAO.flush();
@@ -242,7 +236,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	}
 
 	private void addChildren(ThesaurusConcept conceptToUpdate,
-			List<ThesaurusConcept> childrenConceptToAttach) {
+	                         List<ThesaurusConcept> childrenConceptToAttach) {
 		for (ThesaurusConcept childConcept : childrenConceptToAttach) {
 			if (!conceptToUpdate.getThesaurus().isPolyHierarchical()
 					&& childConcept.getParentConcepts().size() > 0) {
@@ -261,7 +255,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 	public void calculateChildrenRoots(String parentId, String originalParentId) {
 		List<ThesaurusConcept> childrenConcepts = thesaurusConceptDAO
-				.getChildrenConcepts(parentId,0);
+				.getChildrenConcepts(parentId, 0);
 		for (ThesaurusConcept concept : childrenConcepts) {
 			if (concept.getIdentifier() != originalParentId) {
 				logger.info("calculating root concept for chiled with concept Id : "
@@ -278,7 +272,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	@Override
 	public List<ThesaurusConcept> getRootConcepts(ThesaurusConcept concept) {
 		ThesaurusConcept start;
-		HashMap<String, Integer> path = new HashMap<String, Integer>();
+		Map<String, Integer> path = new HashMap<String, Integer>();
 		Set<ThesaurusConcept> roots = new HashSet<ThesaurusConcept>();
 		path.clear();
 		roots.clear();
@@ -289,8 +283,8 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	}
 
 	private void getRoot(ThesaurusConcept concept, Integer iteration,
-			ThesaurusConcept start, Map<String, Integer> path,
-			Set<ThesaurusConcept> roots) {
+	                     ThesaurusConcept start, Map<String, Integer> path,
+	                     Set<ThesaurusConcept> roots) {
 		iteration++;
 		Set<ThesaurusConcept> directParents = concept.getParentConcepts();
 		if (directParents.isEmpty()) {
@@ -328,7 +322,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 	/**
 	 * This method saves the role of a hierarchical relationship
-	 * 
+	 *
 	 * @param hierarchicalRelationships
 	 * @return
 	 */
@@ -349,12 +343,12 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 	/**
 	 * This method detach children concept from concept given in parameter
-	 * 
+	 *
 	 * @param conceptToUpdate
 	 * @param childrenConceptToDetach
 	 */
 	private void removeChildren(ThesaurusConcept conceptToUpdate,
-			List<ThesaurusConcept> childrenConceptToDetach) {
+	                            List<ThesaurusConcept> childrenConceptToDetach) {
 		Set<ThesaurusConcept> parentRootConcepts = conceptToUpdate
 				.getRootConcepts();
 		List<ThesaurusConcept> parentToRemove = new ArrayList<ThesaurusConcept>();
@@ -386,7 +380,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 	}
 
 	private void removeParents(ThesaurusConcept concept,
-			List<ThesaurusConcept> parents) {
+	                           List<ThesaurusConcept> parents) {
 		boolean isDefaultTopConcept = concept.getThesaurus()
 				.isDefaultTopConcept();
 		if (concept.getParentConcepts().size() == 1) {

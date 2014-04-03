@@ -53,19 +53,19 @@ import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.utils.DateUtil;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusVersionHistoryService")
 public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHistoryService {
 
-    @Inject
-    private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
+	@Inject
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
-    @Inject
-    @Named("generatorService")
-    private IIDGeneratorService generatorService;
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService generatorService;
 
-    @Value("${publish.version.note}")
-    private String publishNote;  
+	@Value("${publish.version.note}")
+	private String publishNote;
 
 	@Override
 	public List<ThesaurusVersionHistory> getVersionsByThesaurusId(
@@ -78,45 +78,47 @@ public class ThesaurusVersionHistoryServiceImpl implements IThesaurusVersionHist
 		return thesaurusVersionHistoryDAO.getById(id);
 	}
 
-    @Override
-    public Boolean hasPublishedVersion(Thesaurus thesaurus) {
-        for(ThesaurusVersionHistory version : thesaurusVersionHistoryDAO.findVersionsByThesaurusId(thesaurus.getIdentifier())) {
-            if(version.getStatus() == ThesaurusVersionStatusEnum.PUBLISHED.getStatus()) {
-                return true;
-            }
-        }
-        return false;
-    }
+	@Override
+	public Boolean hasPublishedVersion(Thesaurus thesaurus) {
+		for (ThesaurusVersionHistory version : thesaurusVersionHistoryDAO.findVersionsByThesaurusId(thesaurus.getIdentifier())) {
+			if (version.getStatus() == ThesaurusVersionStatusEnum.PUBLISHED.getStatus()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    @Override
-    @Transactional(readOnly=false)
-    public ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus, String userId) {
-        ThesaurusVersionHistory newVersion = new ThesaurusVersionHistory();
-        newVersion.setThesaurus(thesaurus);
-        newVersion.setThisVersion(true);
-        newVersion.setDate(DateUtil.nowDate());
-        newVersion.setStatus(ThesaurusVersionStatusEnum.PUBLISHED.getStatus());
-        newVersion.setUserId(userId);
-        newVersion.setVersionNote(publishNote);
-        newVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
-        return createOrUpdateVersion(newVersion);
-    }
+	@Override
+	@Transactional(readOnly = false)
+	public ThesaurusVersionHistory publishThesaurus(Thesaurus thesaurus, String userId) {
+		ThesaurusVersionHistory newVersion = new ThesaurusVersionHistory();
+		newVersion.setThesaurus(thesaurus);
+		newVersion.setThisVersion(true);
+		newVersion.setDate(DateUtil.nowDate());
+		newVersion.setStatus(ThesaurusVersionStatusEnum.PUBLISHED.getStatus());
+		newVersion.setUserId(userId);
+		newVersion.setVersionNote(publishNote);
+		newVersion.setIdentifier(generatorService.generate(ThesaurusVersionHistory.class));
+		return createOrUpdateVersion(newVersion);
+	}
 
-    @Override
-	@Transactional(readOnly=false)
+	@Override
+	@Transactional(readOnly = false)
 	public ThesaurusVersionHistory createOrUpdateVersion(ThesaurusVersionHistory version) {
-		if (version.getThisVersion() == true) {
+		if (version.getThisVersion()) {
 			//We set attribute thisVersion for all versions to false
 			List<ThesaurusVersionHistory> allOtherVersions = new ArrayList<ThesaurusVersionHistory>();
 			if (version.getThesaurus() != null) {
-				allOtherVersions = thesaurusVersionHistoryDAO.findAllOtherThisVersionTrueByThesaurusId(version.getThesaurus().getIdentifier(), version.getIdentifier());				
+				allOtherVersions =
+						thesaurusVersionHistoryDAO.findAllOtherThisVersionTrueByThesaurusId(version.getThesaurus().getIdentifier(),
+								version.getIdentifier());
 			}
 			for (ThesaurusVersionHistory thesaurusVersionHistory : allOtherVersions) {
 				thesaurusVersionHistory.setThisVersion(false);
 			}
 		} else {
 			//We verify there is at least one version to true for the flag thisVersion (thisVersion)
-			if ( thesaurusVersionHistoryDAO.findThisVersionByThesaurusId(version.getThesaurus().getIdentifier()) == null) {
+			if (thesaurusVersionHistoryDAO.findThisVersionByThesaurusId(version.getThesaurus().getIdentifier()) == null) {
 				throw new BusinessException("A version must be set as the current version", "no-current-version");
 			}
 		}

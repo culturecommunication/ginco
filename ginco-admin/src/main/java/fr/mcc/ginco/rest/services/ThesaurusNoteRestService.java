@@ -70,11 +70,10 @@ import fr.mcc.ginco.solr.ITermIndexerService;
 
 /**
  * Thesaurus Note REST service for all operation on notes (both term or concept notes)
- *
  */
 @Service
 @Path("/thesaurusnoteservice")
-@Produces({ MediaType.APPLICATION_JSON })
+@Produces({MediaType.APPLICATION_JSON})
 @PreAuthorize("isAuthenticated()")
 public class ThesaurusNoteRestService {
 	@Inject
@@ -85,26 +84,26 @@ public class ThesaurusNoteRestService {
 	@Named("noteService")
 	private INoteService noteService;
 
-    @Inject
-    @Named("thesaurusNoteViewConverter")
-    private ThesaurusNoteViewConverter thesaurusNoteViewConverter;
+	@Inject
+	@Named("thesaurusNoteViewConverter")
+	private ThesaurusNoteViewConverter thesaurusNoteViewConverter;
 
-    @Inject
+	@Inject
 	@Named("noteIndexerService")
 	private INoteIndexerService noteIndexerService;
 
-    @Inject
+	@Inject
 	@Named("termIndexerService")
 	private ITermIndexerService termIndexerService;
 
-    @Inject
+	@Inject
 	@Named("conceptIndexerService")
 	private IConceptIndexerService conceptIndexerService;
 
-    @Inject
-    private ThesaurusNoteRestServiceUtils thesaurusNoteRestServiceUtils;
+	@Inject
+	private ThesaurusNoteRestServiceUtils thesaurusNoteRestServiceUtils;
 
-	private Logger logger  = LoggerFactory.getLogger(ThesaurusNoteRestService.class);
+	private Logger logger = LoggerFactory.getLogger(ThesaurusNoteRestService.class);
 
 
 	/**
@@ -114,7 +113,7 @@ public class ThesaurusNoteRestService {
 	 */
 	@GET
 	@Path("/getConceptNoteTypes")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<NoteType>> getConceptNoteTypes() {
 		List<NoteType> noteTypes = new ArrayList<NoteType>();
 		noteTypes = noteTypeService.getConceptNoteTypeList();
@@ -130,8 +129,8 @@ public class ThesaurusNoteRestService {
 	 */
 	@GET
 	@Path("/getTermNoteTypes")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<NoteType>> getTermNoteTypes(){
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<NoteType>> getTermNoteTypes() {
 		List<NoteType> noteTypes = new ArrayList<NoteType>();
 		noteTypes = noteTypeService.getTermNoteTypeList();
 		ExtJsonFormLoadData<List<NoteType>> types = new ExtJsonFormLoadData<List<NoteType>>(noteTypes);
@@ -146,14 +145,14 @@ public class ThesaurusNoteRestService {
 	 */
 	@GET
 	@Path("/getNotes")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> getNotes(
 			@QueryParam("conceptId") String conceptId,
 			@QueryParam("termId") String termId,
 			@QueryParam("start") Integer startIndex,
-		     @QueryParam("limit") Integer limit) {
+			@QueryParam("limit") Integer limit) {
 
-		logger.info("Getting Notes for a concept or a term with following parameters : " + "conceptId " +conceptId + " and termId " + termId + " and startIndex " + startIndex + " with a limit of " + limit);
+		logger.info("Getting Notes for a concept or a term with following parameters : " + "conceptId " + conceptId + " and termId " + termId + " and startIndex " + startIndex + " with a limit of " + limit);
 
 		List<Note> notes = new ArrayList<Note>();
 		Long total;
@@ -176,13 +175,13 @@ public class ThesaurusNoteRestService {
 	 */
 	@POST
 	@Path("/createNotes")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON})
 	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> createNotes(List<ThesaurusNoteView> noteViews, @QueryParam("conceptId") String conceptId, @QueryParam("termId") String termId) {
 
 		//We set for each note if it belongs to a concept or a term
 		for (ThesaurusNoteView view : noteViews) {
-			if(conceptId != null) {
+			if (conceptId != null) {
 				logger.info("Updating notes for conceptid : " + conceptId);
 				view.setConceptId(conceptId);
 			} else if (termId != null) {
@@ -195,16 +194,16 @@ public class ThesaurusNoteRestService {
 
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
 
-		List<Note> resultNotes = new ArrayList<Note>() ;
+		List<Note> resultNotes = new ArrayList<Note>();
 		for (Note note : notes) {
 			if (!note.getLexicalValue().isEmpty() && note.getLanguage() != null && note.getNoteType() != null) {
 				thesaurusNoteRestServiceUtils.checkExpertAccessToNote(note);
 				resultNotes.add(noteService.createOrUpdateNote(note));
 				noteIndexerService.addNote(note);
-				if (note.getTerm() != null){
+				if (note.getTerm() != null) {
 					termIndexerService.addTerm(note.getTerm());
 				}
-				if (note.getConcept() != null){
+				if (note.getConcept() != null) {
 					conceptIndexerService.addConcept(note.getConcept());
 				}
 			} else {
@@ -222,26 +221,25 @@ public class ThesaurusNoteRestService {
 	 */
 	@POST
 	@Path("/updateNotes")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON})
 	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> updateNotes(List<ThesaurusNoteView> noteViews) {
 
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
-		List<Note> resultNotes = new ArrayList<Note>() ;
+		List<Note> resultNotes = new ArrayList<Note>();
 
 		for (Note note : notes) {
 			if (note.getLexicalValue() != null && note.getLanguage() != null && note.getNoteType() != null) {
 				thesaurusNoteRestServiceUtils.checkExpertAccessToNote(note);
 				resultNotes.add(noteService.createOrUpdateNote(note));
 				noteIndexerService.addNote(note);
-				if (note.getConcept() != null){
+				if (note.getConcept() != null) {
 					conceptIndexerService.addConcept(note.getConcept());
 				}
-				if (note.getTerm() != null){
+				if (note.getTerm() != null) {
 					termIndexerService.addTerm(note.getTerm());
 				}
-			} else
-			{
+			} else {
 				throw new BusinessException("Failed to update the note : fields required not filled in", "note-update-failed-empty-fields");
 			}
 		}
@@ -254,21 +252,21 @@ public class ThesaurusNoteRestService {
 	 */
 	@POST
 	@Path("/destroyNotes")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON})
 	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
-	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews){
+	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews) {
 
 		List<Note> notes = thesaurusNoteViewConverter.convertToNote(noteViews);
-		List<Note> resultNotes = new ArrayList<Note>() ;
+		List<Note> resultNotes = new ArrayList<Note>();
 
 		for (Note note : notes) {
 			thesaurusNoteRestServiceUtils.checkExpertAccessToNote(note);
 			resultNotes.add(noteService.deleteNote(note));
 			noteIndexerService.removeNote(note);
-			if (note.getTerm() != null){
+			if (note.getTerm() != null) {
 				termIndexerService.addTerm(note.getTerm());
 			}
-			if (note.getConcept() != null){
+			if (note.getConcept() != null) {
 				conceptIndexerService.addConcept(note.getConcept());
 			}
 		}
@@ -278,18 +276,18 @@ public class ThesaurusNoteRestService {
 
 	@GET
 	@Path("/getNoteParentEntity")
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Produces({MediaType.APPLICATION_JSON})
 	public String getNoteParentEntity(
 			@QueryParam("noteId") String noteId)
-					throws IOException {
+			throws IOException {
 
 		NoteParentEntityResponse response = new NoteParentEntityResponse();
 		Note note = noteService.getNoteById(noteId);
-		if (note.getTerm() != null){
+		if (note.getTerm() != null) {
 			response.setParentEntityId(note.getTerm().getIdentifier());
 			response.setIsConcept(false);
 		}
-		if (note.getConcept() != null){
+		if (note.getConcept() != null) {
 			response.setParentEntityId(note.getConcept().getIdentifier());
 			response.setIsConcept(true);
 		}

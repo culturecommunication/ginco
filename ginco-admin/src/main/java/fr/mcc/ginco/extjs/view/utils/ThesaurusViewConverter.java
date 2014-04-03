@@ -88,18 +88,20 @@ public class ThesaurusViewConverter {
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
 
-    @Inject
-    @Named("thesaurusVersionHistoryService")
-    private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
+	@Inject
+	@Named("thesaurusVersionHistoryService")
+	private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 
 
-	@Value("${ginco.default.language}") private String defaultLanguage;
+	@Value("${ginco.default.language}")
+	private String defaultLanguage;
 
-    /**
-     * Main method for conversion from view to object.
-     * @param source view to get data from.
-     * @return real object.
-     */
+	/**
+	 * Main method for conversion from view to object.
+	 *
+	 * @param source view to get data from.
+	 * @return real object.
+	 */
 	public Thesaurus convert(ThesaurusView source) {
 		Thesaurus hibernateRes;
 
@@ -122,7 +124,7 @@ public class ThesaurusViewConverter {
 		hibernateRes.setSubject(source.getSubject());
 		hibernateRes.setTitle(source.getTitle());
 		hibernateRes.setDefaultTopConcept(source.getDefaultTopConcept());
-        hibernateRes.setPolyHierarchical(source.getPolyHierarchical());
+		hibernateRes.setPolyHierarchical(source.getPolyHierarchical());
 		hibernateRes.setType(thesaurusTypeService.getThesaurusTypeById(source
 				.getType()));
 		ThesaurusOrganization thesaurusOrganization;
@@ -148,7 +150,7 @@ public class ThesaurusViewConverter {
 		Set<ThesaurusFormat> realFormat = new HashSet<ThesaurusFormat>();
 
 		for (Integer format : formats) {
-			ThesaurusFormat thesaurusFormat  = thesaurusFormatService
+			ThesaurusFormat thesaurusFormat = thesaurusFormatService
 					.getThesaurusFormatById(format);
 			if (thesaurusFormat != null) {
 				realFormat.add(thesaurusFormat);
@@ -168,16 +170,17 @@ public class ThesaurusViewConverter {
 		}
 
 		hibernateRes.setLang(realLanguages);
-        hibernateRes.setArchived(source.getArchived());
+		hibernateRes.setArchived(source.getArchived());
 
 		return hibernateRes;
 	}
 
-    /**
-     * Main method for conversion from object to view.
-     * @param source object to get data from.
-     * @return view object.
-     */
+	/**
+	 * Main method for conversion from object to view.
+	 *
+	 * @param source object to get data from.
+	 * @return view object.
+	 */
 	public ThesaurusView convert(Thesaurus source) {
 		ThesaurusView view = new ThesaurusView();
 		if (source != null) {
@@ -185,17 +188,17 @@ public class ThesaurusViewConverter {
 			view.setContributor(source.getContributor());
 			view.setCoverage(source.getCoverage());
 
-            if(source.getDate() != null) {
-            	view.setDate (DateUtil.toString(source.getDate()));
-            }
-            view.setDescription (source.getDescription());
-            view.setPublisher(source.getPublisher());
-            view.setRelation (source.getRelation());
-            view.setRights(source.getRights());
-            view.setSource(source.getSource());
-            view.setSubject(source.getSubject());
-            view.setTitle(source.getTitle());
-            view.setCreated(DateUtil.toString(source.getCreated()));
+			if (source.getDate() != null) {
+				view.setDate(DateUtil.toString(source.getDate()));
+			}
+			view.setDescription(source.getDescription());
+			view.setPublisher(source.getPublisher());
+			view.setRelation(source.getRelation());
+			view.setRights(source.getRights());
+			view.setSource(source.getSource());
+			view.setSubject(source.getSubject());
+			view.setTitle(source.getTitle());
+			view.setCreated(DateUtil.toString(source.getCreated()));
 
 			if (source.getCreator() != null) {
 				view.setCreatorName(source.getCreator().getName());
@@ -209,9 +212,9 @@ public class ThesaurusViewConverter {
 				view.setDefaultTopConcept(false);
 			}
 
-            view.setArchived(source.isArchived());
+			view.setArchived(source.isArchived());
 
-            ArrayList<Integer> formatList = new ArrayList<Integer>();
+			List<Integer> formatList = new ArrayList<Integer>();
 			for (ThesaurusFormat format : source.getFormat()) {
 				formatList.add(format.getIdentifier());
 			}
@@ -221,26 +224,26 @@ public class ThesaurusViewConverter {
 				view.setType(source.getType().getIdentifier());
 			}
 
-			ArrayList<Language> langList = new ArrayList<Language>();
+			List<Language> langList = new ArrayList<Language>();
 			for (Language lang : source.getLang()) {
 				langList.add(lang);
 			}
 			Collections.sort(langList, new LanguageComparator(defaultLanguage));
 			Collections.reverse(langList);
-			ArrayList<String> langLabels = new ArrayList<String>();
-			for (Language lang:langList) {
+			List<String> langLabels = new ArrayList<String>();
+			for (Language lang : langList) {
 				langLabels.add(lang.getId());
 			}
 			view.setLanguages(langLabels);
-			
-			boolean isArchived = source.isArchived()!= null? source.isArchived():false ;
 
-            if(thesaurusVersionHistoryService.hasPublishedVersion(source) && !isArchived) {
-                view.setCanBeDeleted(false);
-            } else {
-                view.setCanBeDeleted(true);
-            }
-            view.setPolyHierarchical(source.isPolyHierarchical());
+			boolean isArchived = source.isArchived() != null ? source.isArchived() : false;
+
+			if (thesaurusVersionHistoryService.hasPublishedVersion(source) && !isArchived) {
+				view.setCanBeDeleted(false);
+			} else {
+				view.setCanBeDeleted(true);
+			}
+			view.setPolyHierarchical(source.isPolyHierarchical());
 		}
 		return view;
 	}

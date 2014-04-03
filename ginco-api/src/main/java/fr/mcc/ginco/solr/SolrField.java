@@ -35,37 +35,39 @@
 
 package fr.mcc.ginco.solr;
 
+import fr.mcc.ginco.exceptions.TechnicalException;
+
 import java.lang.reflect.Field;
 
 public final class SolrField {
-	private SolrField() {}
-	
+	private SolrField() {
+	}
+
 	public static final String LEXICALVALUE = "lexicalValue";
 	public static final String IDENTIFIER = "identifier";
 	public static final String THESAURUSID = "thesaurusId";
 	public static final String THESAURUSTITLE = "thesaurusTitle";
 	public static final String TYPE = "type";
 	public static final String NOTES = "notes";
-    public static final String CREATED = "created";
-    public static final String MODIFIED = "modified";
-    public static final String STATUS = "status";
-    public static final String EXT_TYPE = "ext_type";
-    public static final String LANGUAGE = "language";
-    public static final String TEXT = "text";
-    
-    public static String getCheckedValue(String fieldName)
-    {
-    	for (Field f : SolrField.class.getFields())
-    	{
-    		try {
-				if (fieldName.equals(f.get(null)))
-				{
+	public static final String CREATED = "created";
+	public static final String MODIFIED = "modified";
+	public static final String STATUS = "status";
+	public static final String EXT_TYPE = "ext_type";
+	public static final String LANGUAGE = "language";
+	public static final String TEXT = "text";
+
+	public static String getCheckedValue(String fieldName) {
+		for (Field f : SolrField.class.getFields()) {
+			try {
+				if (fieldName.equals(f.get(null))) {
 					return fieldName;
 				}
 			} catch (IllegalArgumentException e) {
+				throw new TechnicalException("Wrong argument", e);
 			} catch (IllegalAccessException e) {
+				throw new TechnicalException("Access violation during argument access", e);
 			}
-    	}
-    	return null;
-    }
+		}
+		return null;
+	}
 }

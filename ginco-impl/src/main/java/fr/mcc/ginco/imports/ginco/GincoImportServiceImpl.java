@@ -67,31 +67,31 @@ import fr.mcc.ginco.imports.IGincoImportService;
 
 /**
  * This class gives methods to import a thesaurus from a XML file (custom Ginco format)
- *
  */
 @Transactional
 @Service("gincoImportService")
 public class GincoImportServiceImpl implements IGincoImportService {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(GincoImportServiceImpl.class);
-	
+
 	@Inject
 	@Named("gincoConceptBranchBuilder")
 	private GincoConceptBranchBuilder gincoConceptBranchBuilder;
-	
+
 	@Inject
 	@Named("gincoThesaurusBuilder")
 	private GincoThesaurusBuilder gincoThesaurusBuilder;
-	
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.imports.IGincoImportService#importGincoXmlThesaurusFile(java.lang.String, java.lang.String, java.io.File)
 	 */
 	@Override
-	public Map<Thesaurus,Set<Alignment>> importGincoXmlThesaurusFile(String content, String fileName, File tempDir) throws TechnicalException, BusinessException {
-		
+	public Map<Thesaurus, Set<Alignment>> importGincoXmlThesaurusFile(String content, String fileName, File tempDir)
+			throws TechnicalException, BusinessException {
+
 		URI fileURI = writeTempFile(content, fileName, tempDir);
 		InputStream in = FileManager.get().open(fileURI.toString());
-		GincoExportedThesaurus unmarshalledExportedThesaurus = new GincoExportedThesaurus();
+		GincoExportedThesaurus unmarshalledExportedThesaurus;
 		JAXBContext context;
 		try {
 			context = JAXBContext.newInstance(GincoExportedThesaurus.class);
@@ -99,29 +99,31 @@ public class GincoImportServiceImpl implements IGincoImportService {
 			unmarshalledExportedThesaurus = (GincoExportedThesaurus) unmarshaller.unmarshal(in);
 		} catch (JAXBException e) {
 			AuditContext.enableAudit();
-			throw new BusinessException("Error when trying to deserialize the thesaurus from XML with JAXB :"+e.getMessage(),
+			throw new BusinessException("Error when trying to deserialize the thesaurus from XML with JAXB :" + e.getMessage(),
 					"import-unable-to-read-file", e);
-			
-		} 
-		Map<Thesaurus,Set<Alignment>> returnValue = gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
+
+		}
+		Map<Thesaurus, Set<Alignment>> returnValue = gincoThesaurusBuilder.storeGincoExportedThesaurus(unmarshalledExportedThesaurus);
 		return returnValue;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.imports.IGincoImportService#importGincoXmlThesaurusFile(java.lang.String, java.lang.String, java.io.File)
 	 */
 	@Override
-	public Map<ThesaurusConcept,Set<Alignment>> importGincoBranchXmlFile(String content, String fileName, File tempDir, String thesaurusId) throws TechnicalException, BusinessException {
+	public Map<ThesaurusConcept, Set<Alignment>> importGincoBranchXmlFile(String content, String fileName,
+	                                                                      File tempDir, String thesaurusId)
+			throws TechnicalException, BusinessException {
 		URI fileURI = writeTempFile(content, fileName, tempDir);
 		InputStream in = FileManager.get().open(fileURI.toString());
-		GincoExportedBranch unmarshalledExportedThesaurus = new GincoExportedBranch();
+		GincoExportedBranch unmarshalledExportedThesaurus;
 		JAXBContext context;
 		try {
 			context = JAXBContext.newInstance(GincoExportedBranch.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshalledExportedThesaurus = (GincoExportedBranch) unmarshaller.unmarshal(in);
 		} catch (JAXBException e) {
-			throw new BusinessException("Error when trying to deserialize the concept branch from XML with JAXB :"+e.getMessage(),
+			throw new BusinessException("Error when trying to deserialize the concept branch from XML with JAXB :" + e.getMessage(),
 					"import-unable-to-read-file", e);
 		}
 		return gincoConceptBranchBuilder.storeGincoExportedBranch(unmarshalledExportedThesaurus, thesaurusId);

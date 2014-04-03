@@ -56,7 +56,6 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 
 /**
  * This class gives methods to import terms and terms notes
- * 
  */
 @Component("gincoTermImporter")
 public class GincoTermImporter {
@@ -73,7 +72,7 @@ public class GincoTermImporter {
 	/**
 	 * This method stores all the terms of the thesaurus included in the
 	 * {@link GincoExportedThesaurus} object given in parameter
-	 * 
+	 *
 	 * @param exportedThesaurus
 	 * @return The list of stored terms
 	 */
@@ -87,13 +86,14 @@ public class GincoTermImporter {
 			updatedTerms.add(thesaurusTermDAO.update(term));
 			if (exportedThesaurus.getTermAttributes() != null
 					&& exportedThesaurus.getTermAttributes().containsKey(
-							term.getIdentifier())) {
+					term.getIdentifier())) {
 				List<CustomTermAttribute> termAttributes = exportedThesaurus
 						.getTermAttributes().get(term.getIdentifier())
 						.getList();
-				if (termAttributes != null)
+				if (termAttributes != null) {
 					gincoCustomAttributeImporter.storeCustomTermAttribute(
 							termAttributes, term, savedTypes);
+				}
 			}
 		}
 		return updatedTerms;
@@ -102,7 +102,7 @@ public class GincoTermImporter {
 	/**
 	 * This method stores all the term notes of the thesaurus included in the
 	 * {@link GincoExportedThesaurus} object given in parameter
-	 * 
+	 *
 	 * @param termNotesToImport
 	 * @return The list of stored notes
 	 */

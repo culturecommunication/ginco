@@ -65,26 +65,26 @@ import fr.mcc.ginco.solr.SortCriteria;
 public class SearcherRestService {
 
 	@Inject
-    @Named("searcherService")
-    private ISearcherService searcherService;
+	@Named("searcherService")
+	private ISearcherService searcherService;
 
 	@POST
-    @Path("/search")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({MediaType.APPLICATION_JSON})
-    public  ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
-        try {
-        	SortCriteria sort = new SortCriteria(filter.getSortfield(), filter.getSortdir());
-        	SearchResultList searchResults  = searcherService.search(StringEscapeUtils.unescapeHtml4(filter.getQuery()), filter.getType(),
-                    filter.getThesaurus(), filter.getStatus(),
-                    filter.getCreationdate(), filter.getModificationdate(),
-                    filter.getLanguage(),sort, filter.getStart(),filter.getLimit());
+	@Path("/search")
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_JSON})
+	public ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
+		try {
+			SortCriteria sort = new SortCriteria(filter.getSortfield(), filter.getSortdir());
+			SearchResultList searchResults = searcherService.search(StringEscapeUtils.unescapeHtml4(filter.getQuery()), filter.getType(),
+					filter.getThesaurus(), filter.getStatus(),
+					filter.getCreationdate(), filter.getModificationdate(),
+					filter.getLanguage(), sort, filter.getStart(), filter.getLimit());
 
-        	ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
-        	extSearchResults.setTotal((long) searchResults.getNumFound());
+			ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
+			extSearchResults.setTotal(searchResults.getNumFound());
 			return extSearchResults;
 		} catch (SolrServerException e) {
-			throw new TechnicalException("Search exception" , e) ;
+			throw new TechnicalException("Search exception", e);
 		}
-    }
+	}
 }

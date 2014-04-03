@@ -73,8 +73,8 @@ import fr.mcc.ginco.utils.DateUtil;
  */
 @Component("thesaurusConceptViewConverter")
 public class ThesaurusConceptViewConverter {
-	
-	private Logger logger  = LoggerFactory.getLogger(ThesaurusConceptViewConverter.class);
+
+	private Logger logger = LoggerFactory.getLogger(ThesaurusConceptViewConverter.class);
 
 	@Inject
 	@Named("thesaurusService")
@@ -84,24 +84,24 @@ public class ThesaurusConceptViewConverter {
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-    @Inject
-    @Named("associativeRelationshipViewConverter")
-    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
+	@Inject
+	@Named("associativeRelationshipViewConverter")
+	private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
 
-    @Inject
-    @Named("hierarchicalRelationshipViewConverter")
-    private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
+	@Inject
+	@Named("hierarchicalRelationshipViewConverter")
+	private HierarchicalRelationshipViewConverter hierarchicalRelationshipViewConverter;
 
-    @Inject
-    @Named("alignmentViewConverter")
-    private AlignmentViewConverter alignmentViewConverter;
+	@Inject
+	@Named("alignmentViewConverter")
+	private AlignmentViewConverter alignmentViewConverter;
 
-    @Inject
-    @Named("termViewConverter")
-    private TermViewConverter termViewConverter;
+	@Inject
+	@Named("termViewConverter")
+	private TermViewConverter termViewConverter;
 
-    
-    @Inject
+
+	@Inject
 	@Named("alignmentService")
 	private IAlignmentService alignmentService;
 
@@ -134,7 +134,7 @@ public class ThesaurusConceptViewConverter {
 	}
 
 	public ThesaurusConceptView convert(ThesaurusConcept concept,
-			List<ThesaurusTerm> thesaurusTerms) {
+	                                    List<ThesaurusTerm> thesaurusTerms) {
 		ThesaurusConceptView view = new ThesaurusConceptView();
 		view.setIdentifier(concept.getIdentifier());
 		view.setCreated(DateUtil.toString(concept.getCreated()));
@@ -146,17 +146,15 @@ public class ThesaurusConceptViewConverter {
 
 		List<HierarchicalRelationshipView> parentConcepts = hierarchicalRelationshipViewConverter.getParentViews(concept);
 		view.setParentConcepts(parentConcepts);
-		ArrayList<String> parentIdPath = new ArrayList<String>();
+		List<String> parentIdPath = new ArrayList<String>();
 		List<ThesaurusConcept> parentPath = thesaurusConceptService.getRecursiveParentsByConceptId(concept.getIdentifier());
-		for (int i = parentPath.size() - 1; i >= 0; i--)
-		{
+		for (int i = parentPath.size() - 1; i >= 0; i--) {
 			parentIdPath.add(parentPath.get(i).getIdentifier());
 		}
 		parentIdPath.add(concept.getIdentifier());
-		if (parentPath.size()>0) {
+		if (parentPath.size() > 0) {
 			view.setTopistopterm(parentPath.get(0).getTopConcept());
-		}
-		else  {
+		} else {
 			view.setTopistopterm(concept.getTopConcept());
 		}
 		view.setConceptsPath(parentIdPath);
@@ -172,27 +170,27 @@ public class ThesaurusConceptViewConverter {
 
 		List<AssociativeRelationshipView> associatedConcepts = new ArrayList<AssociativeRelationshipView>();
 
-        List<String> ids = associativeRelationshipService.getAssociatedConceptsId(concept);
+		List<String> ids = associativeRelationshipService.getAssociatedConceptsId(concept);
 
-        for (String conceptAssociated : ids) {
-            AssociativeRelationship associativeRelationship =
-                    associativeRelationshipService.getAssociativeRelationshipById(conceptAssociated, concept.getIdentifier());
+		for (String conceptAssociated : ids) {
+			AssociativeRelationship associativeRelationship =
+					associativeRelationshipService.getAssociativeRelationshipById(conceptAssociated, concept.getIdentifier());
 
-            associatedConcepts.add(associativeRelationshipViewConverter.convert(associativeRelationship, concept));
+			associatedConcepts.add(associativeRelationshipViewConverter.convert(associativeRelationship, concept));
 			logger.info("Found associated concept : "
 					+ conceptAssociated);
 		}
 
-        view.setAssociatedConcepts(associatedConcepts);
+		view.setAssociatedConcepts(associatedConcepts);
 
-        List<AlignmentView> alignmentViews = new ArrayList<AlignmentView>();
-        List<Alignment> alignments  = alignmentService.getAlignmentsBySourceConceptId(concept.getIdentifier());
-        for (Alignment alignment: alignments) {
-        	alignmentViews.add(alignmentViewConverter.convertAlignment(alignment));
-        }
-        view.setAlignments(alignmentViews);
+		List<AlignmentView> alignmentViews = new ArrayList<AlignmentView>();
+		List<Alignment> alignments = alignmentService.getAlignmentsBySourceConceptId(concept.getIdentifier());
+		for (Alignment alignment : alignments) {
+			alignmentViews.add(alignmentViewConverter.convertAlignment(alignment));
+		}
+		view.setAlignments(alignmentViews);
 
-        return view;
+		return view;
 	}
 
 	private List<String> getIdsFromConceptList(Set<ThesaurusConcept> list) {
@@ -204,11 +202,10 @@ public class ThesaurusConceptViewConverter {
 	}
 
 	/**
-	 * @param source
-	 *            source to work with
+	 * @param source source to work with
 	 * @return ThesaurusConcept
-	 *             This method extracts a ThesaurusConcept from a
-	 *             ThesaurusConceptView given in argument
+	 * This method extracts a ThesaurusConcept from a
+	 * ThesaurusConceptView given in argument
 	 */
 	public ThesaurusConcept convert(ThesaurusConceptView source) {
 		ThesaurusConcept thesaurusConcept;
@@ -238,7 +235,7 @@ public class ThesaurusConceptViewConverter {
 		thesaurusConcept.setModified(DateUtil.nowDate());
 		thesaurusConcept.setStatus(source.getStatus());
 		if (source.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()
-				|| source.getStatus() == ConceptStatusEnum.REJECTED.getStatus()){
+				|| source.getStatus() == ConceptStatusEnum.REJECTED.getStatus()) {
 			thesaurusConcept.setTopConcept(false);
 		} else {
 			thesaurusConcept.setTopConcept(source.getTopconcept());
@@ -249,38 +246,40 @@ public class ThesaurusConceptViewConverter {
 		}
 		return thesaurusConcept;
 	}
-	
-	
+
+
 	/**
 	 * This method generates a list of children concept we have to attach to the concept we are updating
+	 *
 	 * @param conceptView
 	 */
 	public List<ThesaurusConcept> convertAddedChildren(ThesaurusConceptView conceptView) {
 		List<ThesaurusConcept> addedChildren = new ArrayList<ThesaurusConcept>();
 		Set<ThesaurusConcept> oldChildren = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(conceptView.getIdentifier()));
 		List<String> oldChildrenIds = getIdsFromConceptList(oldChildren);
-		
+
 		List<String> newChildrenIds = new ArrayList<String>();
 		for (HierarchicalRelationshipView viewOfChild : conceptView.getChildConcepts()) {
 			newChildrenIds.add(viewOfChild.getIdentifier());
 		}
-		
+
 		List<String> addedChildrenIds = new ArrayList<String>();
 		if (conceptView.getChildConcepts() != null) {
 			addedChildrenIds = ListUtils.subtract(newChildrenIds, oldChildrenIds);
 		} else {
 			addedChildrenIds = oldChildrenIds;
 		}
-		
+
 		for (String addedChildId : addedChildrenIds) {
 			addedChildren.add(thesaurusConceptService.getThesaurusConceptById(addedChildId));
 		}
-		
+
 		return addedChildren;
 	}
 
 	/**
 	 * This method generates a list of children concept we have to detach from the concept we are updating
+	 *
 	 * @param conceptView
 	 */
 	public List<ThesaurusConcept> convertRemovedChildren(ThesaurusConceptView conceptView) {

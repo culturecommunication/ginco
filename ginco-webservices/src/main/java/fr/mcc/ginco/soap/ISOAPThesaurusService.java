@@ -44,28 +44,25 @@ import fr.mcc.ginco.data.ReducedThesaurus;
 
 /**
  * This class exposes all SOAP services related to thesaurus objects
- * 
  */
 @WebService
-public interface ISOAPThesaurusService {	
+public interface ISOAPThesaurusService {
 
 
 	/**
 	 * This service returns a list of all existing thesaurus in a simplified
 	 * format (id and title)
-	 * 
+	 *
 	 * @return the list of all existing thesaurus
 	 */
-	List<ReducedThesaurus> getAllThesaurus() ;
+	List<ReducedThesaurus> getAllThesaurus();
 
 	/**
 	 * This service returns the details of a thesaurus
-	 * 
-	 * @param id
-	 *            {@link String} identifier of the thesaurus to get - mandatory
-	 * 
+	 *
+	 * @param id {@link String} identifier of the thesaurus to get - mandatory
 	 * @return full thesaurus informations
 	 */
-	FullThesaurus getThesaurusById(@WebParam(name="thesaurusId") String id) ;
+	FullThesaurus getThesaurusById(@WebParam(name = "thesaurusId") String id);
 
 }

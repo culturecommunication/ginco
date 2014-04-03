@@ -64,7 +64,6 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting groups to SKOS
- *
  */
 @Component("skosGroupExporter")
 public class SKOSGroupExporter {
@@ -84,7 +83,7 @@ public class SKOSGroupExporter {
 
 
 	public void exportGroup(Thesaurus thesaurus, ThesaurusConceptGroup group,
-			Model model) {
+	                        Model model) {
 		ThesaurusConceptGroupLabel label = thesaurusConceptGroupLabelService
 				.getByThesaurusConceptGroup(group.getIdentifier());
 
@@ -110,7 +109,7 @@ public class SKOSGroupExporter {
 		}
 
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
-		if (group.getIsDynamic()!=null && group.getIsDynamic()==true) {
+		if (group.getIsDynamic() != null && group.getIsDynamic()) {
 			if (group.getParentConcept() != null) {
 				concepts = thesaurusConceptService
 						.getRecursiveChildrenByConceptId(group

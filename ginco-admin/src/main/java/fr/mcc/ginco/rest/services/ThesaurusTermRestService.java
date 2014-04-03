@@ -83,7 +83,6 @@ import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Thesaurus Term REST service for all operations on Thesauruses Terms
- *
  */
 @Service
 @Path("/thesaurustermservice")
@@ -94,7 +93,7 @@ public class ThesaurusTermRestService {
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
-	
+
 	@Inject
 	@Named("languagesService")
 	private ILanguagesService languagesService;
@@ -103,31 +102,31 @@ public class ThesaurusTermRestService {
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
 
-    @Inject
-    @Named("termViewConverter")
-    private TermViewConverter termViewConverter;
+	@Inject
+	@Named("termViewConverter")
+	private TermViewConverter termViewConverter;
 
-    @Inject
+	@Inject
 	@Named("termIndexerService")
 	private ITermIndexerService termIndexerService;
-    
-    @Inject
+
+	@Inject
 	@Named("conceptIndexerService")
 	private IConceptIndexerService conceptIndexerService;
 
-    @Inject
+	@Inject
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
-    
+
 	@Inject
 	@Named("noteService")
 	private INoteService noteService;
-	
+
 	@Inject
 	@Named("noteIndexerService")
 	private INoteIndexerService noteIndexerService;
 
-	private Logger logger  = LoggerFactory.getLogger(ThesaurusTermRestService.class);
+	private Logger logger = LoggerFactory.getLogger(ThesaurusTermRestService.class);
 
 
 	/**
@@ -139,31 +138,35 @@ public class ThesaurusTermRestService {
 	@GET
 	@Path("/getSandboxedThesaurusTerms")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<ThesaurusTermView> > getSandboxedThesaurusTerms
-    (@QueryParam("start") Integer startIndex,
-     @QueryParam("limit") Integer limit,
-     @QueryParam("idThesaurus") String idThesaurus,
-     @QueryParam("onlyValidatedTerms") Boolean onlyValidatedTerms) {
-		logger.info("Getting Thesaurus Sandboxed Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit + "and a onlyValidatedTerms parameter set to " + onlyValidatedTerms);
-		List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
-		if (onlyValidatedTerms){
+	public ExtJsonFormLoadData<List<ThesaurusTermView>>
+	getSandboxedThesaurusTerms(@QueryParam("start") Integer startIndex,
+	                           @QueryParam("limit") Integer limit,
+	                           @QueryParam("idThesaurus") String idThesaurus,
+	                           @QueryParam("onlyValidatedTerms") Boolean onlyValidatedTerms) {
+
+		logger.info("Getting Thesaurus Sandboxed Terms with following parameters : "
+				+ "index start " + startIndex + " with a limit of " + limit
+				+ "and a onlyValidatedTerms parameter set to " + onlyValidatedTerms);
+
+		List<ThesaurusTerm> thesaurusTerms;
+		if (onlyValidatedTerms) {
 			thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedValidatedTermsList(startIndex, limit, idThesaurus);
 		} else {
 			thesaurusTerms = thesaurusTermService.getPaginatedThesaurusSandoxedTermsList(startIndex, limit, idThesaurus);
 		}
 
-		Long total = null;
-		if (onlyValidatedTerms){
+		Long total;
+		if (onlyValidatedTerms) {
 			total = thesaurusTermService.getSandboxedValidatedTermsCount(idThesaurus);
 		} else {
 			total = thesaurusTermService.getSandboxedTermsCount(idThesaurus);
 		}
 
-		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
+		List<ThesaurusTermView> results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			results.add(termViewConverter.convert(thesaurusTerm));
 		}
-		ExtJsonFormLoadData<List<ThesaurusTermView> > extTerms = new  ExtJsonFormLoadData<List<ThesaurusTermView> > (results);
+		ExtJsonFormLoadData<List<ThesaurusTermView>> extTerms = new ExtJsonFormLoadData<List<ThesaurusTermView>>(results);
 		extTerms.setTotal(total);
 		return extTerms;
 	}
@@ -177,19 +180,22 @@ public class ThesaurusTermRestService {
 	@GET
 	@Path("/getPreferredThesaurusTerms")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<ThesaurusTermView> > getPreferredThesaurusTerms
-    (@QueryParam("start") Integer startIndex,
-     @QueryParam("limit") Integer limit,
-     @QueryParam("idThesaurus") String idThesaurus) {
-		logger.info("Getting Thesaurus Preferred Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit );
-		List<ThesaurusTerm> thesaurusTerms = new ArrayList<ThesaurusTerm>();
+	public ExtJsonFormLoadData<List<ThesaurusTermView>>
+	getPreferredThesaurusTerms(@QueryParam("start") Integer startIndex,
+	                           @QueryParam("limit") Integer limit,
+	                           @QueryParam("idThesaurus") String idThesaurus) {
+
+		logger.info("Getting Thesaurus Preferred Terms with following parameters : "
+				+ "index start " + startIndex + " with a limit of " + limit);
+
+		List<ThesaurusTerm> thesaurusTerms;
 		thesaurusTerms = thesaurusTermService.getPaginatedThesaurusPreferredTermsList(startIndex, limit, idThesaurus);
 		Long total = thesaurusTermService.getPreferredTermsCount(idThesaurus);
-		List<ThesaurusTermView>results = new ArrayList<ThesaurusTermView>();
+		List<ThesaurusTermView> results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 			results.add(termViewConverter.convert(thesaurusTerm));
 		}
-		ExtJsonFormLoadData<List<ThesaurusTermView> > extTerms = new  ExtJsonFormLoadData<List<ThesaurusTermView> > (results);
+		ExtJsonFormLoadData<List<ThesaurusTermView>> extTerms = new ExtJsonFormLoadData<List<ThesaurusTermView>>(results);
 		extTerms.setTotal(total);
 		return extTerms;
 	}
@@ -204,20 +210,20 @@ public class ThesaurusTermRestService {
 	@Produces({MediaType.APPLICATION_JSON})
 	public ThesaurusTermView getThesaurusTerm(@QueryParam("id") String idTerm) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermService.getThesaurusTermById(idTerm);
-        return termViewConverter.convert(thesaurusTerm, true);
+		return termViewConverter.convert(thesaurusTerm, true);
 	}
 
 	/**
 	 * Public method used to create or update
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} -
-     * thesaurus term JSON object send by extjs
+	 * thesaurus term JSON object send by extjs
 	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} updated object
-	 *         in JSON format or {@code null} if not found
+	 * in JSON format or {@code null} if not found
 	 */
 	@POST
 	@Path("/updateTerm")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON})
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
 	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement) {
 		Authentication auth = SecurityContextHolder.getContext()
@@ -228,23 +234,21 @@ public class ThesaurusTermRestService {
 
 			try {
 				ThesaurusTerm existingTerm = thesaurusTermService.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());
-				if (existingTerm !=null) {
-					ThesaurusConcept attachedConcept = existingTerm.getConcept(); 
+				if (existingTerm != null) {
+					ThesaurusConcept attachedConcept = existingTerm.getConcept();
 					if (attachedConcept == null) {
 						if (thesaurusViewJAXBElement.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
 							throw new AccessDeniedException("You can save only candidate terms");
 						}
-						if ( existingTerm.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
+						if (existingTerm.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
 							throw new AccessDeniedException("You can save only candidate terms");
 						}
-					} else 
-					{
+					} else {
 						if (attachedConcept.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()) {
 							throw new AccessDeniedException("You can save only terms attached to candidate concepts");
 						}
 					}
-				} else 
-				{
+				} else {
 					if (thesaurusViewJAXBElement.getStatus() != TermStatusEnum.CANDIDATE.getStatus()) {
 						throw new AccessDeniedException("You can save only candidate terms");
 					}
@@ -260,11 +264,10 @@ public class ThesaurusTermRestService {
 			ThesaurusTerm result = thesaurusTermService.updateThesaurusTerm(object);
 			if (result != null) {
 				termIndexerService.addTerm(object);
-				if (result.getConcept()!=null && result.getPrefered()==true)
-				{
+				if (result.getConcept() != null && result.getPrefered()) {
 					conceptIndexerService.addConcept(result.getConcept());
 				}
-				return termViewConverter.convert(result,true);
+				return termViewConverter.convert(result, true);
 			} else {
 				logger.error("Failed to update thesaurus term");
 				return null;
@@ -276,20 +279,20 @@ public class ThesaurusTermRestService {
 	/**
 	 * Public method used to delete
 	 * {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} -
-     * thesaurus term JSON object send by extjs
-     *
+	 * thesaurus term JSON object send by extjs
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView} deleted object
-	 *         in JSON format or {@code null} if not found
+	 * in JSON format or {@code null} if not found
 	 */
 	@POST
 	@Path("/destroyTerm")
-	@Consumes({ MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON})
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
-	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement){
-		ThesaurusTerm object =thesaurusTermService
+	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) {
+		ThesaurusTerm object = thesaurusTermService
 				.getThesaurusTermById(thesaurusViewJAXBElement.getIdentifier());
 		if (object != null) {
-			List <Note> notes = noteService.getTermNotePaginatedList(object.getIdentifier(), 0, 1000);
+			List<Note> notes = noteService.getTermNotePaginatedList(object.getIdentifier(), 0, 1000);
 			for (Note note : notes) {
 				noteIndexerService.removeNote(note);
 			}
@@ -312,41 +315,40 @@ public class ThesaurusTermRestService {
 
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 		try {
-			String availableStatusIds[] = LabelUtil.getResourceLabel("term-status").split(",");
+			String[] availableStatusIds = LabelUtil.getResourceLabel("term-status").split(",");
 
 			if (StringUtils.isEmpty(availableStatusIds[0])) {
 				//Ids of status for terms are not set correctly
 				throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");
 			}
 
-	        for (String id : availableStatusIds) {
-	        	GenericStatusView termStatusView = new GenericStatusView();
-	        	termStatusView.setStatus(Integer.valueOf(id));
+			for (String id : availableStatusIds) {
+				GenericStatusView termStatusView = new GenericStatusView();
+				termStatusView.setStatus(Integer.valueOf(id));
 
-	        	String label = LabelUtil.getResourceLabel("term-status["+ id +"]");
-	        	if (label.isEmpty()) {
-	        		//Labels of status are not set correctly
-	        		throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");
+				String label = LabelUtil.getResourceLabel("term-status[" + id + "]");
+				if (label.isEmpty()) {
+					//Labels of status are not set correctly
+					throw new BusinessException("Error with property file - check values of identifier term status", "check-values-of-term-status");
 				} else {
 					termStatusView.setStatusLabel(label);
 				}
-	        	listOfStatus.add(termStatusView);
+				listOfStatus.add(termStatusView);
 			}
 		} catch (MissingResourceException e) {
 			throw new BusinessException("Error with property file - check values of term status", "check-values-of-term-status", e);
 		}
 		ExtJsonFormLoadData<List<GenericStatusView>> result = new ExtJsonFormLoadData<List<GenericStatusView>>(listOfStatus);
-        result.setTotal((long) listOfStatus.size());
+		result.setTotal((long) listOfStatus.size());
 		return result;
 	}
-	
+
 	@GET
 	@Path("/checkTermUnicity")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Boolean checkTermUnicity(@QueryParam("idThesaurus") String idThesaurus,
-			@QueryParam("lexicalValue") String lexicalValue,
-			@QueryParam("lang") String lang)
-	{
+	                                @QueryParam("lexicalValue") String lexicalValue,
+	                                @QueryParam("lang") String lang) {
 		Thesaurus thesaurus = thesaurusService.getThesaurusById(idThesaurus);
 		if (thesaurus != null) {
 			Language language = languagesService.getLanguageById(lang);
@@ -356,12 +358,10 @@ public class ThesaurusTermRestService {
 				term.setLanguage(language);
 				term.setLexicalValue(lexicalValue);
 				return !thesaurusTermService.isTermExist(term);
-			} else 
-			{
+			} else {
 				throw new BusinessException("Unable to find Language", "unknown-language");
 			}
-		} else 
-		{
+		} else {
 			throw new BusinessException("Unable to find thesaurus", "unknown-thesaurus");
 		}
 	}

@@ -46,7 +46,6 @@ import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 /**
  * Implementation of the data access object to the external_thesaurus database
  * table
- * 
  */
 @Repository
 public class ExternalThesaurusDAO extends
@@ -56,12 +55,11 @@ public class ExternalThesaurusDAO extends
 	public ExternalThesaurusDAO() {
 		super(ExternalThesaurus.class);
 	}
-	
-	public List<ExternalThesaurus> findAllByExternalIdQuery(String query)
-	{
+
+	public List<ExternalThesaurus> findAllByExternalIdQuery(String query) {
 		Criteria criteria = getCurrentSession().createCriteria(ExternalThesaurus.class);
-		if (query!=null && ! query.equals("")) {
-			criteria.add( Restrictions.like("externalId", query+"%") );
+		if (query != null && !query.isEmpty()) {
+			criteria.add(Restrictions.like("externalId", query + "%"));
 		}
 		return criteria.list();
 	}
@@ -75,11 +73,11 @@ public class ExternalThesaurusDAO extends
 	 */
 	@Override
 	public ExternalThesaurus findBySourceExternalId(String externalId) {
-		Criteria criteria =  getCurrentSession().createCriteria(ExternalThesaurus.class);
+		Criteria criteria = getCurrentSession().createCriteria(ExternalThesaurus.class);
 		criteria.add(Restrictions.eq("externalId", externalId));
 		List<ExternalThesaurus> externalThesauruses = criteria.list();
-		if (externalThesauruses != null && externalThesauruses.size()>0) {
-		return externalThesauruses.get(0);
+		if (externalThesauruses != null && externalThesauruses.size() > 0) {
+			return externalThesauruses.get(0);
 		} else {
 			return null;
 		}

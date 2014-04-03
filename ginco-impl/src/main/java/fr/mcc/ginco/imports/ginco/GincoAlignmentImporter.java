@@ -56,7 +56,6 @@ import fr.mcc.ginco.exports.result.bean.JaxbList;
 
 /**
  * This class gives methods to import alignments
- * 
  */
 @Component("gincoAlignmentImporter")
 public class GincoAlignmentImporter {
@@ -71,11 +70,11 @@ public class GincoAlignmentImporter {
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
-	private IExternalThesaurusDAO externalThesaurusDAO;	
+	private IExternalThesaurusDAO externalThesaurusDAO;
 
 	/**
 	 * This method stores all the alignments
-	 * 
+	 *
 	 * @param alignments
 	 */
 	public Set<Alignment> storeAlignments(
@@ -119,7 +118,7 @@ public class GincoAlignmentImporter {
 						alignmentConceptDAO.update(alignmentConcept);
 					}
 				}
-				if (!missingInternalconcepts.containsKey(ali)) {					
+				if (!missingInternalconcepts.containsKey(ali)) {
 					alignmentDAO.update(ali);
 				}
 			}
@@ -145,10 +144,9 @@ public class GincoAlignmentImporter {
 						if (existingThesaurus != null) {
 							ali.setExternalTargetThesaurus(existingThesaurus);
 						} else {
-							if (! externalThesaurusesToSave.contains(externalThesaurus)) {
+							if (!externalThesaurusesToSave.contains(externalThesaurus)) {
 								externalThesaurusesToSave.add(externalThesaurus);
-							} else 
-							{
+							} else {
 								ali.setExternalTargetThesaurus(externalThesaurusesToSave.get(externalThesaurusesToSave.indexOf(externalThesaurus)));
 							}
 						}

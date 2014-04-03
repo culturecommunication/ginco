@@ -125,7 +125,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Inject
 	@Named("alignmentService")
 	private IAlignmentService alignmentService;
-	
+
 	@Inject
 	private IAlignmentDAO alignmentDAO;
 
@@ -147,7 +147,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	 * (java.util.List)
 	 */
 	@Override
-	public Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids){
+	public Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids) {
 		Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
 		for (String id : ids) {
 			ThesaurusConcept concept = thesaurusConceptDAO.getById(id);
@@ -176,18 +176,18 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId, int maxResults){
+	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId, int maxResults) {
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
 		return thesaurusConceptDAO.getOrphansThesaurusConcept(thesaurus, maxResults);
 	}
-	
+
 	@Override
-	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId){
-		return getOrphanThesaurusConcepts(thesaurusId,0);
+	public List<ThesaurusConcept> getOrphanThesaurusConcepts(String thesaurusId) {
+		return getOrphanThesaurusConcepts(thesaurusId, 0);
 	}
 
 	@Override
-	public long getOrphanThesaurusConceptsCount(String thesaurusId){
+	public long getOrphanThesaurusConceptsCount(String thesaurusId) {
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
 		return thesaurusConceptDAO.getOrphansThesaurusConceptCount(thesaurus);
 	}
@@ -204,10 +204,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
 		return thesaurusConceptDAO.getTopTermThesaurusConcept(thesaurus, maxResults);
 	}
-	
+
 	@Override
 	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId) {
-		return getTopTermThesaurusConcepts(thesaurusId ,0);
+		return getTopTermThesaurusConcepts(thesaurusId, 0);
 	}
 
 	@Override
@@ -217,10 +217,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int  maxResults) {
+	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults) {
 		return thesaurusConceptDAO.getChildrenConcepts(conceptId, maxResults);
 	}
-	
+
 	@Override
 	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId) {
 		return getChildrenByConceptId(conceptId, 0);
@@ -263,12 +263,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public boolean hasChildren(String conceptId) {
-		return (thesaurusConceptDAO.getChildrenConcepts(conceptId ,1).size() > 0);
+		return (thesaurusConceptDAO.getChildrenConcepts(conceptId, 1).size() > 0);
 	}
-	
+
 	@Override
-	public Set<String> getConceptWithChildrenIdentifers(String thesaurusId)
-	{
+	public Set<String> getConceptWithChildrenIdentifers(String thesaurusId) {
 		return new HashSet<String>(thesaurusConceptDAO.getIdentifiersOfConceptsWithChildren(thesaurusId));
 	}
 
@@ -282,7 +281,8 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		if (preferredTerm == null) {
 			throw new BusinessException("The concept " + conceptId
 					+ "has no preferred term",
-					"concept-does-not-have-a-preferred-term");
+					"concept-does-not-have-a-preferred-term"
+			);
 		}
 		return preferredTerm;
 	}
@@ -296,7 +296,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	 */
 	@Override
 	public ThesaurusTerm getConceptPreferredTerm(String conceptId,
-			String languageId) {
+	                                             String languageId) {
 		logger.debug("ConceptId : " + conceptId);
 		ThesaurusTerm preferredTerm = thesaurusTermDAO.getConceptPreferredTerm(
 				conceptId, languageId);
@@ -308,17 +308,17 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
 		return LabelUtil.getLocalizedLabel(term.getLexicalValue(),
 				term.getLanguage(), defaultLang);
-	}	
+	}
 
 	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms,
-			List<AssociativeRelationship> associatedConcepts,
-			List<ConceptHierarchicalRelationship> hierarchicalRelationships,
-			List<ThesaurusConcept> childrenConceptToDetach,
-			List<ThesaurusConcept> childrenConceptToAttach,
-			List<Alignment> alignments) {
+	                                               List<ThesaurusTerm> terms,
+	                                               List<AssociativeRelationship> associatedConcepts,
+	                                               List<ConceptHierarchicalRelationship> hierarchicalRelationships,
+	                                               List<ThesaurusConcept> childrenConceptToDetach,
+	                                               List<ThesaurusConcept> childrenConceptToAttach,
+	                                               List<Alignment> alignments) {
 
 		thesaurusTermUtils.checkTerms(terms);
 		alignmentService.saveExternalThesauruses(alignments);
@@ -335,14 +335,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					logger.info("Marking Term with ID "
 							+ existingTerm.getIdentifier() + " as SandBoxed.");
 				}
-			}			
+			}
 		} else {
 			object.setIdentifier(generatorService
 					.generate(ThesaurusConcept.class));
-			for (ConceptHierarchicalRelationship hierarchicalRelationship : hierarchicalRelationships){
+			for (ConceptHierarchicalRelationship hierarchicalRelationship : hierarchicalRelationships) {
 				hierarchicalRelationship.getIdentifier().setChildconceptid(object.getIdentifier());
 			}
-			for (AssociativeRelationship relation : associatedConcepts){
+			for (AssociativeRelationship relation : associatedConcepts) {
 				relation.getIdentifier().setConcept1(object.getIdentifier());
 			}
 		}
@@ -351,7 +351,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		object = conceptHierarchicalRelationshipServiceUtil
 				.saveHierarchicalRelationship(object,
-						hierarchicalRelationships,allRecursiveParents ,allRecursiveChild, childrenConceptToDetach, childrenConceptToAttach);
+						hierarchicalRelationships, allRecursiveParents, allRecursiveChild, childrenConceptToDetach, childrenConceptToAttach);
 
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
 			// We can set status = candidate only if concept has not relation
@@ -441,7 +441,8 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					association.getRelationshipRole().setCode(
 							associativeRelationshipRoleDAO
 									.getDefaultAssociativeRelationshipRole()
-									.getCode());
+									.getCode()
+					);
 				}
 			}
 			associativeRelationshipDAO.update(association);
@@ -450,7 +451,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		return concept;
 	}
-
 
 
 	@Transactional(readOnly = false)
@@ -486,19 +486,19 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 			List<Alignment> alignments = alignmentDAO.findByTargetConceptId(object.getIdentifier());
 			for (Alignment alignment : alignments) {
-				if (alignment.getTargetConcepts().size()<=1) {
+				if (alignment.getTargetConcepts().size() <= 1) {
 					alignmentDAO.delete(alignment);
 				}
 			}
-			
+
 			return thesaurusConceptDAO.delete(object);
-			} else {
-		           throw new BusinessException("It's not possible to delete a concept with a status different from candidate or rejected", "delete-concept");
-			}
+		} else {
+			throw new BusinessException("It's not possible to delete a concept with a status different from candidate or rejected", "delete-concept");
+		}
 	}
 
 	private void updateConceptTerms(ThesaurusConcept concept,
-			List<ThesaurusTerm> terms) {
+	                                List<ThesaurusTerm> terms) {
 		List<ThesaurusTerm> returnTerms = new ArrayList<ThesaurusTerm>();
 		for (ThesaurusTerm thesaurusTerm : terms) {
 
@@ -540,7 +540,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId,
-			String thesaurusId) {
+	                                                          String thesaurusId) {
 		ThesaurusArray currentArray = new ThesaurusArray();
 		List<ThesaurusConcept> returnAvailableConcepts = new ArrayList<ThesaurusConcept>();
 
@@ -554,11 +554,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			// concept from the list
 			List<ThesaurusArray> arrayWithSameSuperOrdinate = thesaurusArrayDAO
 					.getConceptSuperOrdinateArrays(currentArray
-							.getSuperOrdinateConcept().getIdentifier(),
-							currentArray.getIdentifier());
+									.getSuperOrdinateConcept().getIdentifier(),
+							currentArray.getIdentifier()
+					);
 			returnAvailableConcepts = thesaurusConceptDAO
 					.getChildrenConcepts(currentArray.getSuperOrdinateConcept()
-							.getIdentifier(),0);
+							.getIdentifier(), 0);
 
 			for (ThesaurusArray thesaurusArray : arrayWithSameSuperOrdinate) {
 				Set<ThesaurusArrayConcept> conceptOfEachArray = thesaurusArray
@@ -575,7 +576,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					.getConceptSuperOrdinateArrays(null);
 			returnAvailableConcepts = thesaurusConceptDAO
 					.getTopTermThesaurusConcept(thesaurusDAO
-							.getById(thesaurusId),0);
+							.getById(thesaurusId), 0);
 			for (ThesaurusArray thesaurusArray : arrayWithNoSuperOrdinate) {
 				Set<ThesaurusArrayConcept> conceptOfEachArrayWithoutSuperordinate = thesaurusArray
 						.getConcepts();
@@ -590,14 +591,14 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public 	List<ThesaurusConcept> getAvailableConceptsOfGroup (String groupId, String thesaurusId){
+	public List<ThesaurusConcept> getAvailableConceptsOfGroup(String groupId, String thesaurusId) {
 		ThesaurusConceptGroup currentGroup = new ThesaurusConceptGroup();
 		List<ThesaurusConcept> availableConcepts = thesaurusConceptDAO
 				.getAllConceptsByThesaurusId(null, thesaurusId, null, false);
 		if (StringUtils.isNotEmpty(groupId)) {
 			currentGroup = thesaurusConceptGroupDAO.getById(groupId);
 			Set<ThesaurusConcept> existedConcepts = currentGroup.getConcepts();
-			for (ThesaurusConcept concept : existedConcepts){
+			for (ThesaurusConcept concept : existedConcepts) {
 				availableConcepts.remove(concept);
 			}
 		}
@@ -618,24 +619,22 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public int getConceptsHierarchicalRelations(String firstConceptId,
-			String secondConceptId) {
+	                                            String secondConceptId) {
 		ThesaurusConcept firstConcept = thesaurusConceptDAO
 				.getById(firstConceptId);
 		ThesaurusConcept secondConcept = thesaurusConceptDAO
 				.getById(secondConceptId);
 
 		if (firstConcept != null && secondConcept != null) {
-			if (thesaurusConceptDAO.getChildrenConcepts(firstConceptId,0)
+			if (thesaurusConceptDAO.getChildrenConcepts(firstConceptId, 0)
 					.contains(secondConcept)) {
 				return ConceptHierarchicalRelationsEnum.PARENT.getStatus();
 			}
 
-			if (thesaurusConceptDAO.getChildrenConcepts(secondConceptId,0)
+			if (thesaurusConceptDAO.getChildrenConcepts(secondConceptId, 0)
 					.contains(firstConcept)) {
 				return ConceptHierarchicalRelationsEnum.CHILD.getStatus();
-			}
-
-			else {
+			} else {
 				return ConceptHierarchicalRelationsEnum.NORELATIONS.getStatus();
 			}
 		} else {
@@ -658,8 +657,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				.getById(conceptId);
 		if (thesaurusConcept != null) {
 			return thesaurusConcept.getStatus();
-		}
-		else {
+		} else {
 			throw new BusinessException("Concept with identifier " + conceptId
 					+ " does not exist", "concepts-does-not-exist");
 		}
@@ -674,7 +672,8 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		if (preferredTerms == null || preferredTerms.size() == 0) {
 			throw new BusinessException("The concept " + conceptId
 					+ "has no preferred term",
-					"concept-does-not-have-a-preferred-term");
+					"concept-does-not-have-a-preferred-term"
+			);
 		}
 		return preferredTerms;
 	}
@@ -685,11 +684,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		ThesaurusConcept thesaurusConcept = thesaurusConceptDAO
 				.getById(conceptId);
 		if (thesaurusConcept != null) {
-		return getRecursiveParentByConceptId(
-				thesaurusConcept,
-				new ArrayList<ThesaurusConcept>());
-		} else 
-		{
+			return getRecursiveParentByConceptId(
+					thesaurusConcept,
+					new ArrayList<ThesaurusConcept>());
+		} else {
 			return new ArrayList<ThesaurusConcept>();
 		}
 	}
@@ -699,10 +697,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			List<ThesaurusConcept> arrayOfParent) {
 
 		Set<ThesaurusConcept> parentConcepts = beginConcept.getParentConcepts();
-		if (parentConcepts.size()>0) {
+		if (parentConcepts.size() > 0) {
 			ThesaurusConcept parent = parentConcepts.iterator().next();
 			arrayOfParent.add(parent);
-			getRecursiveParentByConceptId(parent,arrayOfParent);
+			getRecursiveParentByConceptId(parent, arrayOfParent);
 		}
 		return arrayOfParent;
 	}
