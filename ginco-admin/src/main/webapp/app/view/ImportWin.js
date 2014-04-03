@@ -34,7 +34,7 @@ Ext
 					autoShow : true,
 					height : 250,
 					width : 500,
-					title : '<h2>Import</h2>',
+					title : '<h2>Importer</h2>',
 					titleAlign : 'center',
 					modal : true,
 					

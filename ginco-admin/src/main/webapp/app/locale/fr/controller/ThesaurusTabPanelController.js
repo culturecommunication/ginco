@@ -36,5 +36,7 @@
 Ext.define('GincoApp.locale.fr.controller.ThesaurusTabPanelController',
     {
         xSaveMsgLabel: "Voulez vous enregistrer les changements?",
-        xSaveMsgTitle: 'Enregistrer les changements?'
+        xSaveMsgTitle: 'Enregistrer les changements?',
+        xImportTermsTitle : "Importer des termes",
+        xImportBranchTitle : "Importer une branche"
 });

@@ -62,6 +62,7 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusTabPanel', {
         xPolyHierarchical: 'Polyhierarchique',
         xImportBranch: 'Importer une branche',
         xImportSandbox: 'Importer des termes',
+        xThesaurusTitle : 'Nouveau vocabulaire',
         xCustomAttributeTypes: "Attributs personnalisés",
         xSearchFieldText : "Rechercher dans le vocabulaire",
     	xSearchBtnTitle : "Lancer la recherche dans le ",
