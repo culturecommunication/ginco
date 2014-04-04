@@ -116,11 +116,14 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	loadTreeView : function(theTree) {
 		var me = this;
 		theTree.setLoading(true);
-		var treeState,scrollPosition,me = this;
+		var treeState,focusedRecord,scrollPosition,me = this;
 		if (theTree)
 		{
 		    scrollPosition = theTree.getEl().down('.x-grid-view').getScroll();
 			treeState = theTree.getState();
+            if (theTree.getSelectionModel().hasSelection()) {
+                focusedRecord = theTree.store.getNodeById(theTree.getSelectionModel().getSelection()[0].data.id);
+            }
 		}
 		var theFilterCombo = theTree.down('#authorFilter');
 		theFilterCombo.getStore().load();	
@@ -143,7 +146,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 						{
 							theTree.applyState(treeState, function(){
 								var task = new Ext.util.DelayedTask(function() {
-								theTree.getEl().down('.x-grid-view').scrollTo('top', scrollPosition.top, false);
+								    theTree.getEl().down('.x-grid-view').scrollTo('top', scrollPosition.top, false);
 								});
 								task.delay(50);
 							});
@@ -153,7 +156,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 					theTree.getView().focus();
 					try {
 						var selectModel = theTree.getSelectionModel();
-						selectModel.select(0);
+                        selectModel.select(focusedRecord);
 					} catch(e) {} 
 			    }
 			});
