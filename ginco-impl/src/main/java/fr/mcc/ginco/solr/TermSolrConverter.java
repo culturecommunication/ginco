@@ -35,18 +35,16 @@
 
 package fr.mcc.ginco.solr;
 
-import java.sql.Timestamp;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.stereotype.Service;
-
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.INoteService;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public class TermSolrConverter {
@@ -80,8 +78,11 @@ public class TermSolrConverter {
 			preferred = thesaurusTerm.getPrefered();
 		}
 
-		doc.addField(SolrField.EXT_TYPE, (preferred) ? ExtEntityType.TERM_PREF
-				: ExtEntityType.TERM_NON_PREF);
+		if (preferred) {
+			doc.addField(SolrField.EXT_TYPE, ExtEntityType.TERM_PREF);
+		} else {
+			doc.addField(SolrField.EXT_TYPE, ExtEntityType.TERM_NON_PREF);
+		}
 
 		Timestamp modifiedDate = new Timestamp(thesaurusTerm.getModified()
 				.getTime());

@@ -62,7 +62,7 @@ public class UserInfo {
 		return isAdmin;
 	}
 
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
+	public void setAdmin(boolean admin) {
+		this.isAdmin = admin;
 	}
 }

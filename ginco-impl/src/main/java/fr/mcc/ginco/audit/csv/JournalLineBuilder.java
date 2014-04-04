@@ -34,40 +34,36 @@
  */
 package fr.mcc.ginco.audit.csv;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Implementation of {@link RevisionLineBuilder} for CSV export
- * 
+ * CSV export
  */
 @Service("journalLineBuilder")
-public class JournalLineBuilder{
-	
+public class JournalLineBuilder {
+
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
 	/**
 	 * Builds the basic common informations of a revision line
-	 * 
+	 *
 	 * @param event
 	 * @param gincoRevEntity
 	 * @return
 	 */
 	public JournalLine buildLineBase(JournalEventsEnum event,
-			GincoRevEntity gincoRevEntity) {
+	                                 GincoRevEntity gincoRevEntity) {
 		JournalLine journal = new JournalLine();
 		journal.setEventType(event);
 		journal.setEventDate(gincoRevEntity.getRevisionDate());
@@ -76,9 +72,10 @@ public class JournalLineBuilder{
 		return journal;
 	}
 
-	
+
 	/**
 	 * Builds the revision line for the event of term creation
+	 *
 	 * @param term
 	 * @param revision
 	 * @return
@@ -96,10 +93,10 @@ public class JournalLineBuilder{
 		return journalLine;
 	}
 
-	/***
+	/**
 	 * Builds the revision line for the event of term role change (preferred/non
 	 * preferred)
-	 * 
+	 *
 	 * @param term
 	 * @param revision
 	 * @return
@@ -109,7 +106,11 @@ public class JournalLineBuilder{
 				JournalEventsEnum.THESAURUSTERM_ROLE_UPDATE,
 				revision);
 		journal.setTermId(term.getIdentifier());
-		journal.setTermRole(term.getPrefered() ? "TP" : "TNP");
+		if (term.getPrefered()) {
+			journal.setTermRole("TP");
+		} else {
+			journal.setTermRole("TNP");
+		}
 		journal.setConceptId(term.getConcept().getIdentifier());
 		return journal;
 	}
@@ -117,7 +118,7 @@ public class JournalLineBuilder{
 	/**
 	 * Builds the list of revision lines for the event of term lexical value
 	 * change
-	 * 
+	 *
 	 * @param term
 	 * @param revision
 	 * @param oldLexicalValue
@@ -134,14 +135,14 @@ public class JournalLineBuilder{
 		}
 		journal.setNewLexicalValue(term.getLexicalValue());
 		journal.setOldLexicalValue(oldLexicalValue);
-		
+
 		return journal;
 	}
 
 	/**
 	 * Builds the list of revision lines for the event of term attachment to a
 	 * concept change
-	 * 
+	 *
 	 * @param term
 	 * @param revision
 	 * @param preferredTerm preferred term of the term concept in the previous version
@@ -149,24 +150,24 @@ public class JournalLineBuilder{
 	 */
 	public JournalLine buildTermAttachmentChangedLine(
 			ThesaurusTerm term, GincoRevEntity revision, ThesaurusTerm preferredTerm) {
-			JournalLine journal = buildLineBase(
-					JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT,
-					revision);
-			journal.setTermId(term.getIdentifier());
-			journal.setConceptId(term.getConcept().getIdentifier());
-			journal.setNewLexicalValue(term.getLexicalValue());
-			journal.setOldLexicalValue(term.getLexicalValue());
-			return journal;
+		JournalLine journal = buildLineBase(
+				JournalEventsEnum.THESAURUSTERM_LINKED_TO_CONCEPT,
+				revision);
+		journal.setTermId(term.getIdentifier());
+		journal.setConceptId(term.getConcept().getIdentifier());
+		journal.setNewLexicalValue(term.getLexicalValue());
+		journal.setOldLexicalValue(term.getLexicalValue());
+		return journal;
 	}
 
 	/**
 	 * Builds the list of revision lines for the event of a concept hierarchy
 	 * change
-	 * 
-	 * @param revisionData
-	 * @param oldGenericConceptIds
-	 * @param actualConceptIds
-	 * @param languageId
+	 *
+	 * @param conceptAtRevision
+	 * @param revision
+	 * @param oldGenericConcept
+	 * @param currentGenericConcept
 	 * @return
 	 */
 	public JournalLine buildConceptHierarchyChanged(
@@ -177,12 +178,12 @@ public class JournalLineBuilder{
 				revision);
 		journal.setConceptId(conceptAtRevision.getIdentifier());
 		journal.setNewGenericTerm(getConceptLabel(currentGenericConcept));
-		
+
 		journal.setOldGenericTerm(getConceptLabel(oldGenericConcept));
 
 		return journal;
 	}
-	
+
 	private Set<String> getConceptLabel(Set<ThesaurusConcept> concepts) {
 		Set<String> conceptLabels = new HashSet<String>();
 		for (ThesaurusConcept concept : concepts) {

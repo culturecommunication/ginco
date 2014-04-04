@@ -34,14 +34,13 @@
  */
 package fr.mcc.ginco.beans;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Beans represents <b>thesaurus_array</b> table and is a sub-container for
@@ -51,87 +50,113 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Alignment implements Serializable {
 
-    private String identifier;
-    private Date created;
-    private Date modified;
-    private String author;
-    private ThesaurusConcept  sourceConcept;
-    private Set<AlignmentConcept> targetConcepts = new HashSet<AlignmentConcept>();
-    private AlignmentType alignmentType;
-    private ExternalThesaurus externalTargetThesaurus;
-    
-    @XmlTransient
-    private Thesaurus internalTargetThesaurus;
-    private boolean andRelation;
-    
+	private String identifier;
+	private Date created;
+	private Date modified;
+	private String author;
+	private ThesaurusConcept sourceConcept;
+	private Set<AlignmentConcept> targetConcepts = new HashSet<AlignmentConcept>();
+	private AlignmentType alignmentType;
+	private ExternalThesaurus externalTargetThesaurus;
+
+	@XmlTransient
+	private Thesaurus internalTargetThesaurus;
+	private boolean andRelation;
+
 	public String getIdentifier() {
 		return identifier;
 	}
+
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+
 	public Date getCreated() {
 		return created;
 	}
+
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+
 	public Date getModified() {
 		return modified;
 	}
+
 	public void setModified(Date modified) {
 		this.modified = modified;
 	}
+
 	public String getAuthor() {
 		return author;
 	}
+
 	public void setAuthor(String author) {
 		this.author = author;
 	}
+
 	public ThesaurusConcept getSourceConcept() {
 		return sourceConcept;
 	}
+
 	public void setSourceConcept(ThesaurusConcept sourceConcept) {
 		this.sourceConcept = sourceConcept;
 	}
+
 	public Set<AlignmentConcept> getTargetConcepts() {
 		return targetConcepts;
 	}
+
 	public void setTargetConcepts(Set<AlignmentConcept> targetConcepts) {
 		this.targetConcepts = targetConcepts;
-	}	
+	}
+
 	public AlignmentType getAlignmentType() {
 		return alignmentType;
 	}
+
 	public void setAlignmentType(AlignmentType alignmentType) {
 		this.alignmentType = alignmentType;
 	}
+
 	public ExternalThesaurus getExternalTargetThesaurus() {
 		return externalTargetThesaurus;
 	}
+
 	public void setExternalTargetThesaurus(ExternalThesaurus externalTargetThesaurus) {
 		this.externalTargetThesaurus = externalTargetThesaurus;
 	}
+
 	public Thesaurus getInternalTargetThesaurus() {
 		return internalTargetThesaurus;
 	}
+
 	public void setInternalTargetThesaurus(Thesaurus internalTargetThesaurus) {
 		this.internalTargetThesaurus = internalTargetThesaurus;
 	}
+
 	public boolean isAndRelation() {
 		return andRelation;
 	}
+
 	public void setAndRelation(boolean andRelation) {
 		this.andRelation = andRelation;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((identifier == null) ? 0 : identifier.hashCode());
+		if (identifier == null) {
+			result = prime * result
+					+ 0;
+		} else {
+			result = prime * result
+					+ identifier.hashCode();
+		}
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -153,6 +178,6 @@ public class Alignment implements Serializable {
 		}
 		return true;
 	}
-	
+
 
 }
