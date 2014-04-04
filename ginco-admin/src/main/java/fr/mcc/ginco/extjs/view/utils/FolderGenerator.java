@@ -58,7 +58,7 @@ import fr.mcc.ginco.services.IThesaurusTermService;
  */
 @Component
 public class FolderGenerator {
-	
+
 	private static final String UNDERSCORE = "_";
 
 	public static final String ORPHANS_PREFIX = ClassificationFolderType.ORPHANS
@@ -75,11 +75,11 @@ public class FolderGenerator {
 
 	public static final String COMPLEXCONCEPTS_PREFIX = ClassificationFolderType.COMPLEXCONCEPTS
 			.toString() + UNDERSCORE;
-	
+
 
 	@Inject
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Inject
 	private IThesaurusTermService thesaurusTermService;
 
@@ -88,15 +88,15 @@ public class FolderGenerator {
 
 	@Inject
 	private IThesaurusConceptGroupService thesaurusConceptGroupService;
-	
+
 	@Inject
 	private ISplitNonPreferredTermService splitNonPreferredTermService;
 
 
 	/**
 	 * Builds the main concept node of the left tree
-	 * @param parentId
-	 * 			the identifier of the thesaurus
+	 *
+	 * @param parentId the identifier of the thesaurus
 	 * @return
 	 */
 	public IThesaurusListNode getConcepts(String parentId) {
@@ -119,10 +119,9 @@ public class FolderGenerator {
 
 	/**
 	 * Builds the sandbox node of the left tree.
-	 * @param parentId
-	 * 			the identifier of the thesaurus
+	 *
+	 * @param parentId the identifier of the thesaurus
 	 * @return the node, null if there are no terms in sandbox
-	 * 		
 	 */
 	public IThesaurusListNode getSandbox(String parentId) {
 		IThesaurusListNode sandbox = new ThesaurusListBasicNode();
@@ -132,10 +131,10 @@ public class FolderGenerator {
 		sandbox.setIconCls("sandbox");
 		sandbox.setExpanded(false);
 		sandbox.setDisplayable(true);
-		
+
 		long nbSandbox = thesaurusTermService.getSandboxedTermsCount(parentId);
-		if (nbSandbox>0) {
-				sandbox.setChildren(new ArrayList<IThesaurusListNode>());
+		if (nbSandbox > 0) {
+			sandbox.setChildren(new ArrayList<IThesaurusListNode>());
 		} else {
 			return null;
 		}
@@ -144,8 +143,8 @@ public class FolderGenerator {
 
 	/**
 	 * Builds the complex concepts node of the tree
-	 * @param parentId
-	 * 			the identifier of the thesaurus
+	 *
+	 * @param parentId the identifier of the thesaurus
 	 * @return the node, null if there are no complex concepts
 	 */
 	public IThesaurusListNode getSplitNonPreferredTerms(String parentId) {
@@ -156,9 +155,9 @@ public class FolderGenerator {
 		complexConceptNode.setIconCls("icon-complex-concept");
 		complexConceptNode.setExpanded(false);
 		complexConceptNode.setDisplayable(true);
-		
+
 		long nbComplex = splitNonPreferredTermService.getSplitNonPreferredTermCount(parentId);
-		if (nbComplex >0) {
+		if (nbComplex > 0) {
 			complexConceptNode.setChildren(new ArrayList<IThesaurusListNode>());
 		} else {
 			return null;
@@ -168,8 +167,8 @@ public class FolderGenerator {
 
 	/**
 	 * Builds the array node of the left tree
-	 * @param parentId
-	 * 			the identifier of the thesaurus
+	 *
+	 * @param parentId the identifier of the thesaurus
 	 * @return the node, null if there are no arrays
 	 */
 	public IThesaurusListNode getArrays(String parentId) {
@@ -192,11 +191,11 @@ public class FolderGenerator {
 
 	/**
 	 * Builds the orphan concepts node of the left tree
-	 * @param parentId
-	 * 			the identifier of the thesaurus
+	 *
+	 * @param parentId the identifier of the thesaurus
 	 * @return the node, null if there are no orphan concepts
 	 */
-	public IThesaurusListNode getOrphans(String parentId){
+	public IThesaurusListNode getOrphans(String parentId) {
 		IThesaurusListNode orphans = new ThesaurusListBasicNode();
 		orphans.setTitle("Concepts orphelins");
 		orphans.setId(ORPHANS_PREFIX + parentId);
@@ -216,8 +215,8 @@ public class FolderGenerator {
 
 	/**
 	 * Builds the group node of the left tree
-	 * @param parentId
-	 * 			the identifier of the thesaurus
+	 *
+	 * @param parentId the identifier of the thesaurus
 	 * @return the node, null if there are no groups concepts
 	 */
 	public IThesaurusListNode getGroups(String parentId) {

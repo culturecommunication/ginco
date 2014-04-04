@@ -65,7 +65,6 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * Builder in charge of building ThesaurusTerm
- *
  */
 @Service("skosTermBuilder")
 public class TermBuilder extends AbstractBuilder {
@@ -90,7 +89,7 @@ public class TermBuilder extends AbstractBuilder {
 	}
 
 	private ThesaurusTerm buildTerm(Statement stmt,
-			Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred, boolean hidden) {
+	                                Thesaurus thesaurus, ThesaurusConcept concept, boolean preferred, boolean hidden) {
 		logger.debug("building term " + stmt.getString());
 		ThesaurusTerm term = new ThesaurusTerm();
 		term.setConcept(concept);
@@ -99,7 +98,7 @@ public class TermBuilder extends AbstractBuilder {
 		term.setLexicalValue(StringEscapeUtils.escapeXml(stmt.getString().trim()));
 		term.setModified(thesaurus.getDate());
 		term.setPrefered(preferred);
-        term.setHidden(hidden);
+		term.setHidden(hidden);
 		term.setRole(thesaurusTermRoleDAO.getDefaultThesaurusTermRole());
 		term.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		term.setThesaurus(thesaurus);
@@ -111,16 +110,17 @@ public class TermBuilder extends AbstractBuilder {
 			term.setLanguage(defaultLangL);
 		} else {
 			Language language = languagesDAO.getByPart1(lang);
-			if (language == null){
+			if (language == null) {
 				language = languagesDAO.getById(lang);
 			}
 
 			if (language != null) {
-				term.setLanguage(language);			
+				term.setLanguage(language);
 			} else {
-				throw new BusinessException("Specified language " + lang + " is unknown : "  
+				throw new BusinessException("Specified language " + lang + " is unknown : "
 						+ stmt.getString(),
-						"import-unknown-term-lang", new Object[] {lang, stmt.getString()});
+						"import-unknown-term-lang", new Object[]{ lang, stmt.getString() }
+				);
 			}
 		}
 		return term;
@@ -128,30 +128,30 @@ public class TermBuilder extends AbstractBuilder {
 
 	/**
 	 * Builds the list of ThesaurusTerm for a given SKOS resource concept
+	 *
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @param concept
 	 * @return
 	 */
 	public List<ThesaurusTerm> buildTerms(Resource skosConcept,
-			Thesaurus thesaurus, ThesaurusConcept concept) {
-		
+	                                      Thesaurus thesaurus, ThesaurusConcept concept) {
+
 		logger.debug("building terms for concept " + concept.getIdentifier());
 
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 
 		// Preferred term
 		Statement stmtPreferred = skosConcept.getProperty(SKOS.PREF_LABEL);
-		if (stmtPreferred==null)
-		{
-			throw new BusinessException("No preferred label for concept : "+concept.getIdentifier(),
-					"import-no-prefferedlabelterm", new Object[] {concept.getIdentifier()});
+		if (stmtPreferred == null) {
+			throw new BusinessException("No preferred label for concept : " + concept.getIdentifier(),
+					"import-no-prefferedlabelterm", new Object[]{ concept.getIdentifier() });
 		} else {
 			StmtIterator stmtPrefItr = skosConcept.listProperties(SKOS.PREF_LABEL);
 			while (stmtPrefItr.hasNext()) {
 				Statement stmtPref = stmtPrefItr.next();
-				terms.add(buildTerm(stmtPref,  thesaurus, concept, true, false));
-	
+				terms.add(buildTerm(stmtPref, thesaurus, concept, true, false));
+
 			}
 		}
 
@@ -159,7 +159,7 @@ public class TermBuilder extends AbstractBuilder {
 		StmtIterator stmtAltItr = skosConcept.listProperties(SKOS.ALT_LABEL);
 		while (stmtAltItr.hasNext()) {
 			Statement stmtAlt = stmtAltItr.next();
-			terms.add(buildTerm(stmtAlt,  thesaurus, concept, false, false));
+			terms.add(buildTerm(stmtAlt, thesaurus, concept, false, false));
 
 		}
 		// Hidden terms
@@ -167,7 +167,7 @@ public class TermBuilder extends AbstractBuilder {
 				.listProperties(SKOS.HIDDEN_LABEL);
 		while (stmtHiddenItr.hasNext()) {
 			Statement stmtHidden = stmtHiddenItr.next();
-			terms.add(buildTerm(stmtHidden,  thesaurus, concept, false, true));
+			terms.add(buildTerm(stmtHidden, thesaurus, concept, false, true));
 		}
 
 		return terms;

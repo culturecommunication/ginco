@@ -65,12 +65,12 @@ public class ExportServiceImpl implements IExportService {
 	@Inject
 	@Named("alphabeticConceptExporter")
 	private AlphabeticConceptExporter alphabeticConceptExporter;
-	
+
 
 	@Inject
 	@Named("alphabeticComplexConceptExporter")
 	private AlphabeticComplexConceptExporter alphabeticComplexConceptExporter;
-	
+
 	@Inject
 	@Named("alphabeticalExportedItemComparator")
 	private AlphabeticalExportedItemComparator alphabeticalExportedItemComparator;
@@ -93,7 +93,7 @@ public class ExportServiceImpl implements IExportService {
 
 	@Inject
 	@Named("thesaurusConceptService")
-	private IThesaurusConceptService thesaurusConceptService;	
+	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
 	@Named("thesaurusConceptComparator")
@@ -105,21 +105,21 @@ public class ExportServiceImpl implements IExportService {
 
 	@Inject
 	@Named("arrayNaturalComparator")
-	private ArrayNaturalComparator arrayNaturalComparator;	
+	private ArrayNaturalComparator arrayNaturalComparator;
 
 	@Override
 	public List<FormattedLine> getHierarchicalText(Thesaurus thesaurus) {
 		List<ThesaurusConcept> listTT = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
 		Collections.sort(listTT, thesaurusConceptComparator);
-		
+
 		List<ThesaurusArray> orphanArrays = thesaurusArrayService
 				.getArraysWithoutParentConcept(thesaurus.getIdentifier());
 		Collections.sort(orphanArrays, nodeLabelComparator);
-		
+
 		List<ThesaurusArray> arraysWithoutParentArray = thesaurusArrayService.getArraysWithoutParentArray(thesaurus.getIdentifier());
 		Collections.sort(arraysWithoutParentArray, nodeLabelComparator);
-		
+
 		Set<ThesaurusConcept> exclude = new HashSet<ThesaurusConcept>();
 
 		for (ThesaurusArray array : orphanArrays) {
@@ -136,7 +136,7 @@ public class ExportServiceImpl implements IExportService {
 		}
 
 		for (ThesaurusArray array : arraysWithoutParentArray) {
-			if (orphanArrays.contains(array)){
+			if (orphanArrays.contains(array)) {
 				addThesaurusArray(result, array, -1);
 			}
 		}
@@ -163,8 +163,9 @@ public class ExportServiceImpl implements IExportService {
 
 		List<SplitNonPreferredTerm> complexConcepts = splitNonPreferredTermService
 				.getSplitNonPreferredTermList(0, splitNonPreferredTermService
-						.getSplitNonPreferredTermCount(thesaurusId).intValue(),
-						thesaurusId);
+								.getSplitNonPreferredTermCount(thesaurusId).intValue(),
+						thesaurusId
+				);
 		for (SplitNonPreferredTerm complexConcept : complexConcepts) {
 			AlphabeticalExportedItem item = new AlphabeticalExportedItem();
 			item.setLexicalValue(complexConcept.getLexicalValue());
@@ -199,7 +200,7 @@ public class ExportServiceImpl implements IExportService {
 	}
 
 	private List<FormattedLine> getHierarchicalText(Integer base,
-			ThesaurusConcept concept) {
+	                                                ThesaurusConcept concept) {
 		List<FormattedLine> result = new ArrayList<FormattedLine>();
 
 		Set<ThesaurusConcept> thesaurusArrayConcepts = new HashSet<ThesaurusConcept>();
@@ -217,7 +218,8 @@ public class ExportServiceImpl implements IExportService {
 
 		List<ThesaurusConcept> children = new ArrayList<ThesaurusConcept>(
 				thesaurusConceptService.getChildrenByConceptId(concept
-						.getIdentifier()));
+						.getIdentifier())
+		);
 		Collections.sort(children, thesaurusConceptComparator);
 
 		for (ThesaurusConcept child : children) {
@@ -227,29 +229,29 @@ public class ExportServiceImpl implements IExportService {
 		}
 
 		for (ThesaurusArray subOrdArray : subOrdArrays) {
-			if (subOrdArray.getParent()==null) {
+			if (subOrdArray.getParent() == null) {
 				addThesaurusArray(result, subOrdArray, base);
 			}
 		}
 
 		return result;
 	}
-	
+
 	private void addConceptTitle(Integer base, List<FormattedLine> result,
-			ThesaurusConcept concept) {
+	                             ThesaurusConcept concept) {
 		result.add(new FormattedLine(base, thesaurusConceptService
 				.getConceptTitle(concept)));
 	}
 
 	private void addThesaurusArray(List<FormattedLine> result,
-			ThesaurusArray subOrdArray, Integer base) {
+	                               ThesaurusArray subOrdArray, Integer base) {
 		NodeLabel nodeLabel = nodeLabelService.getByThesaurusArray(subOrdArray
 				.getIdentifier());
 		result.add(new FormattedLine(base + 1, "<"
 				+ nodeLabel.getLexicalValue() + ">"));
 		List<ThesaurusArray> childrenArray = thesaurusArrayService.getChildrenArrays(subOrdArray.getIdentifier());
 		Collections.sort(childrenArray, nodeLabelComparator);
-		
+
 
 		if (subOrdArray.getOrdered()) {
 			List<ThesaurusConcept> conceptsInArray = thesaurusArrayHelper
@@ -266,13 +268,14 @@ public class ExportServiceImpl implements IExportService {
 				result.addAll(getHierarchicalText(base + 1,
 						thesaurusConceptService
 								.getThesaurusConceptById(conceptInArray
-										.getIdentifier().getConceptId())));
+										.getIdentifier().getConceptId())
+				));
 			}
 		}
 		for (ThesaurusArray children : childrenArray) {
 			addThesaurusArray(result, children, base + 1);
 		}
-		
-		
+
+
 	}
 }

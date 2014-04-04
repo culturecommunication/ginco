@@ -49,11 +49,11 @@ public class NoteSolrConverter {
 	/**
 	 * Convert a Note into a SolrDocument
 	 *
-	 * @param Note
+	 * @param thesaurusNote
 	 * @return SolrInputDocument
 	 */
 
-	public SolrInputDocument convertSolrNote(Note thesaurusNote){
+	public SolrInputDocument convertSolrNote(Note thesaurusNote) {
 		SolrInputDocument doc = new SolrInputDocument();
 
 		ThesaurusTerm term = thesaurusNote.getTerm();
@@ -76,15 +76,15 @@ public class NoteSolrConverter {
 		doc.addField(SolrField.TYPE, Note.class.getSimpleName());
 
 		String noteTypeCode = thesaurusNote.getNoteType().getCode();
-		if ("definition".equals(noteTypeCode)){
+		if ("definition".equals(noteTypeCode)) {
 			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_DEFINITION);
 		} else if ("editorialNote".equals(noteTypeCode)) {
 			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_EDITORIAL);
-		} else if ("example".equals(noteTypeCode)){
+		} else if ("example".equals(noteTypeCode)) {
 			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_EXAMPLE);
 		} else if ("historyNote".equals(noteTypeCode)) {
 			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_HISTORY);
-		} else if ("scopeNote".equals(noteTypeCode)){
+		} else if ("scopeNote".equals(noteTypeCode)) {
 			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE_SCOPE);
 		} else {
 			doc.addField(SolrField.EXT_TYPE, ExtEntityType.NOTE);

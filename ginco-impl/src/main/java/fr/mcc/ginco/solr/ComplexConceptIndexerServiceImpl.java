@@ -19,7 +19,7 @@ import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
 @Service("complexConceptIndexerService")
-public class ComplexConceptIndexerServiceImpl implements IComplexConceptIndexerService{
+public class ComplexConceptIndexerServiceImpl implements IComplexConceptIndexerService {
 
 	private static Logger logger = LoggerFactory.getLogger(ComplexConceptIndexerServiceImpl.class);
 
@@ -32,7 +32,7 @@ public class ComplexConceptIndexerServiceImpl implements IComplexConceptIndexerS
 
 	@Override
 	@Async
-	public void addComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException{
+	public void addComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException {
 		try {
 			addComplexConcepts(Arrays.asList(complexConcept));
 		} catch (TechnicalException ex) {
@@ -42,7 +42,7 @@ public class ComplexConceptIndexerServiceImpl implements IComplexConceptIndexerS
 	}
 
 	@Override
-	public void addComplexConcepts(List<SplitNonPreferredTerm> complexConcepts) throws TechnicalException{
+	public void addComplexConcepts(List<SplitNonPreferredTerm> complexConcepts) throws TechnicalException {
 		for (SplitNonPreferredTerm complexConcept : complexConcepts) {
 			SolrInputDocument doc = complexConceptSolrConverter.convertSolrComplexConcept(complexConcept);
 			if (doc != null) {
@@ -68,7 +68,7 @@ public class ComplexConceptIndexerServiceImpl implements IComplexConceptIndexerS
 
 	@Override
 	@Async
-	public void removeComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException{
+	public void removeComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException {
 		try {
 			solrServer.deleteById(complexConcept.getIdentifier());
 			solrServer.commit();

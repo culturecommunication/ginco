@@ -43,32 +43,32 @@ import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("nodeLabelService")
 public class NodeLabelServiceImpl implements INodeLabelService {
-	
+
 	@Inject
 	private INodeLabelDAO nodeLabelDAO;
 
 
-    @Override
-    public NodeLabel getById(Integer id) {
-        return nodeLabelDAO.getById(id);
-    }
-	
-    @Override
-    public NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId) {
-        return nodeLabelDAO.getByThesaurusArray(thesaurusArrayId);
-    }
+	@Override
+	public NodeLabel getById(Integer id) {
+		return nodeLabelDAO.getById(id);
+	}
 
-    @Override
-    public NodeLabel getByThesaurusArray(String thesaurusArrayId) {
-        return nodeLabelDAO.getByThesaurusArray(thesaurusArrayId);
-    }
+	@Override
+	public NodeLabel getByThesaurusArrayAndLanguage(String thesaurusArrayId) {
+		return nodeLabelDAO.getByThesaurusArray(thesaurusArrayId);
+	}
 
-	@Transactional(readOnly=false)
-    @Override
-    public NodeLabel updateOrCreate(NodeLabel nodeLabel) {
-        return nodeLabelDAO.update(nodeLabel);
-    }
+	@Override
+	public NodeLabel getByThesaurusArray(String thesaurusArrayId) {
+		return nodeLabelDAO.getByThesaurusArray(thesaurusArrayId);
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public NodeLabel updateOrCreate(NodeLabel nodeLabel) {
+		return nodeLabelDAO.update(nodeLabel);
+	}
 }

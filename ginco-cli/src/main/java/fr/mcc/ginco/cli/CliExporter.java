@@ -1,4 +1,5 @@
 package fr.mcc.ginco.cli;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ import fr.mcc.ginco.services.IMistralRevService;
 import fr.mcc.ginco.services.IThesaurusService;
 
 @Service
-public class CliExporter  {
+public class CliExporter {
 
 	private static Logger log = LoggerFactory.getLogger(App.class);
 
@@ -43,12 +44,11 @@ public class CliExporter  {
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
-	public void exportSKOS(String thesaurusId, String outputFile)
-	{
+	public void exportSKOS(String thesaurusId, String outputFile) {
 		Thesaurus targetThesaurus = thesaurusService
 				.getThesaurusById(thesaurusId);
-		if (targetThesaurus!=null) {
-			log.info("Skos exporting : "+targetThesaurus.getTitle());
+		if (targetThesaurus != null) {
+			log.info("Skos exporting : " + targetThesaurus.getTitle());
 			File skosFile = skosExportService.getSKOSExport(targetThesaurus);
 
 			File dest = new File(outputFile);
@@ -59,18 +59,17 @@ public class CliExporter  {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else
-		{
-			throw new BusinessException("Unable to find thesaurus id "+thesaurusId, "unable-to-find-thesaurus");
+		} else {
+			throw new BusinessException("Unable to find thesaurus id " + thesaurusId, "unable-to-find-thesaurus");
 		}
 
 	}
 
-	public void exportRevisions(String thesaurusId, String outputFile, long timestamp){
+	public void exportRevisions(String thesaurusId, String outputFile, long timestamp) {
 		Thesaurus targetThesaurus = thesaurusService
 				.getThesaurusById(thesaurusId);
 		if (targetThesaurus != null) {
-			log.info("Revisions exporting : "+targetThesaurus.getTitle());
+			log.info("Revisions exporting : " + targetThesaurus.getTitle());
 			Language lang = languagesService.getLanguageById(defaultLang);
 
 			File dest = new File(outputFile);
@@ -82,9 +81,8 @@ public class CliExporter  {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else
-		{
-			throw new BusinessException("Unable to find thesaurus id "+thesaurusId, "unable-to-find-thesaurus");
+		} else {
+			throw new BusinessException("Unable to find thesaurus id " + thesaurusId, "unable-to-find-thesaurus");
 		}
 	}
 

@@ -34,33 +34,40 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import java.io.Serializable;
 
 public class RoleView implements Serializable {
-    private Integer role;
-    private String roleLabel;
-    
+	private Integer role;
+	private String roleLabel;
+
 	public Integer getRole() {
 		return role;
 	}
+
 	public void setRole(Integer role) {
 		this.role = role;
 	}
+
 	public String getRoleLabel() {
 		return roleLabel;
 	}
+
 	public void setRoleLabel(String roleLabel) {
 		this.roleLabel = roleLabel;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		if (role == null) {
+			result = prime * result + 0;
+		} else {
+			result = prime * result + role.hashCode();
+		}
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -81,6 +88,6 @@ public class RoleView implements Serializable {
 			return false;
 		}
 		return true;
-	}   
-	
+	}
+
 }

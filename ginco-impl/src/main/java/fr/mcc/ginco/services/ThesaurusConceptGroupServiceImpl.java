@@ -47,7 +47,7 @@ import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusConceptGroupService")
 public class ThesaurusConceptGroupServiceImpl implements
 		IThesaurusConceptGroupService {
@@ -80,12 +80,12 @@ public class ThesaurusConceptGroupServiceImpl implements
 
 	@Override
 	public List<ThesaurusConceptGroup> getAllThesaurusConceptGroupsByThesaurusId(String excludedConceptGroupId,
-			String thesaurusId) {
+	                                                                             String thesaurusId) {
 		return thesaurusConceptGroupDAO
 				.findThesaurusConceptGroupsByThesaurusId(excludedConceptGroupId, thesaurusId);
 	}
 
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConceptGroup destroyThesaurusConceptGroup(
 			ThesaurusConceptGroup object) {

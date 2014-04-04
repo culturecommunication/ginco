@@ -34,21 +34,19 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.utils.DateUtil;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * View class corresponding to {@link ThesaurusTerm} bean, but fully serializable;
  * contains all links to other business-objects (full beans
  * {@link Thesaurus} and {@link Language}).
- * 
+ *
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -69,7 +67,8 @@ public class ThesaurusTermView implements Serializable, SecuredResourceView {
 	private List<String> conceptsPath;
 
 
-    public ThesaurusTermView() {}
+	public ThesaurusTermView() {
+	}
 
 	public String getIdentifier() {
 		return identifier;
@@ -182,5 +181,5 @@ public class ThesaurusTermView implements Serializable, SecuredResourceView {
 	public void setConceptsPath(List<String> conceptsPath) {
 		this.conceptsPath = conceptsPath;
 	}
-	
+
 }

@@ -47,8 +47,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 
 public final class SKOS {
-	
-	private SKOS() {};
+
+	private SKOS() {
+	}
 
 	private static final String URI = "http://www.w3.org/2004/02/skos/core#";
 
@@ -66,8 +67,7 @@ public final class SKOS {
 	/**
 	 * Resource for a conceptScheme
 	 */
-	public static final Resource CONCEPTSCHEME = m.createResource(URI
-			+ "ConceptScheme");
+	public static final Resource CONCEPTSCHEME = m.createResource(URI + "ConceptScheme");
 	/**
 	 * Resource for a Concept
 	 */
@@ -76,8 +76,7 @@ public final class SKOS {
 	/**
 	 * prefLabel property
 	 */
-	public static final Property PREF_LABEL = m.createProperty(URI
-			+ "prefLabel");
+	public static final Property PREF_LABEL = m.createProperty(URI + "prefLabel");
 
 	/**
 	 * altLabel property
@@ -87,8 +86,7 @@ public final class SKOS {
 	/**
 	 * hiddenLabel property
 	 */
-	public static final Property HIDDEN_LABEL = m.createProperty(URI
-			+ "hiddenLabel");
+	public static final Property HIDDEN_LABEL = m.createProperty(URI + "hiddenLabel");
 
 	/**
 	 * broader property
@@ -105,21 +103,20 @@ public final class SKOS {
 	 */
 	public static final Property RELATED = m.createProperty(URI + "related");
 
-    /**
-     * resource for Collection
-     */
-    public static final Resource COLLECTION = m.createResource(URI
-            + "Collection");
+	/**
+	 * resource for Collection
+	 */
+	public static final Resource COLLECTION = m.createResource(URI + "Collection");
 
-    /**
-     * member property
-     */
-    public static final Property MEMBER = m.createProperty(URI + "member");
+	/**
+	 * member property
+	 */
+	public static final Property MEMBER = m.createProperty(URI + "member");
 
-    /**
-     * inScheme property
-     */
-    public static final Property IN_SCHEME = m.createProperty(URI + "inScheme");
+	/**
+	 * inScheme property
+	 */
+	public static final Property IN_SCHEME = m.createProperty(URI + "inScheme");
 
 	/**
 	 * scopeNote property
@@ -156,11 +153,11 @@ public final class SKOS {
 	 */
 	public static final Map<String, Property> SKOS_NOTES = new HashMap<String, Property>() {{
 		put(SCOPE_NOTE.getLocalName(), SCOPE_NOTE);
-		put(CHANGE_NOTE.getLocalName(),CHANGE_NOTE);
-		put(DEFINITION.getLocalName(),DEFINITION);
-		put(EDITORIAL_NOTE.getLocalName(),EDITORIAL_NOTE);
-		put(EXAMPLE.getLocalName(),EXAMPLE);
-		put(HISTORY_NOTE.getLocalName(),HISTORY_NOTE);
+		put(CHANGE_NOTE.getLocalName(), CHANGE_NOTE);
+		put(DEFINITION.getLocalName(), DEFINITION);
+		put(EDITORIAL_NOTE.getLocalName(), EDITORIAL_NOTE);
+		put(EXAMPLE.getLocalName(), EXAMPLE);
+		put(HISTORY_NOTE.getLocalName(), HISTORY_NOTE);
 	}};
 
 	/**
@@ -192,8 +189,8 @@ public final class SKOS {
 	 * relatedMatch property
 	 */
 	public static final Property RELATED_MATCH = m.createProperty(URI + "relatedMatch");
-	
-	
+
+
 	/**
 	 * hasTopConcept
 	 */
@@ -204,9 +201,9 @@ public final class SKOS {
 	 */
 	public static final Map<String, Property> SKOS_ALIGNMENTS = new HashMap<String, Property>() {{
 		put("=EQ", EXACT_MATCH);
-		put("~EQ",CLOSE_MATCH);
-		put("BM",BROAD_MATCH);
-		put("NM",NARROW_MATCH);
-		put("RM",RELATED_MATCH);
+		put("~EQ", CLOSE_MATCH);
+		put("BM", BROAD_MATCH);
+		put("NM", NARROW_MATCH);
+		put("RM", RELATED_MATCH);
 	}};
 }

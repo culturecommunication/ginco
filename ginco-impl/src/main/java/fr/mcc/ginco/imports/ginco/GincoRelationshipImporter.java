@@ -61,68 +61,70 @@ import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 
 /**
  * This class gives methods to import relationships (both hierarchical or associative)
- *
  */
 @Component("gincoRelationshipImporter")
 public class GincoRelationshipImporter {
-	
+
 	@Inject
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
-	
+
 	@Inject
 	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
-	
+
 	@Inject
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
-	
-	
+
+
 	@Inject
 	@Named("conceptHierarchicalRelationshipServiceUtil")
 	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
-	
+
 	@Inject
 	private IThesaurusConceptDAO thesaurusConceptDAO;
-	
+
 	private static Logger logger = LoggerFactory.getLogger(GincoRelationshipImporter.class);
 
-	
+
 	/**
 	 * This method stores all the hierarchical relationships
+	 *
 	 * @param relationsToImport
 	 * @return The list of the updated parent concepts
 	 */
-	public List<ThesaurusConcept> storeHierarchicalRelationship(Map<String, JaxbList<ConceptHierarchicalRelationship>> relationsToImport) {
+	public List<ThesaurusConcept> storeHierarchicalRelationship(Map<String,
+			JaxbList<ConceptHierarchicalRelationship>> relationsToImport) {
 		List<ThesaurusConcept> updatedChildrenConcepts = new ArrayList<ThesaurusConcept>();
-		String childId = null;
+		String childId;
 		if (relationsToImport != null && !relationsToImport.isEmpty()) {
 			Iterator<Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>>> entries = relationsToImport.entrySet().iterator();
 			List<ConceptHierarchicalRelationship> parents = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<ConceptHierarchicalRelationship>> entry = entries.next();
+			while (entries.hasNext()) {
+				Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>> entry = entries.next();
 				childId = entry.getKey();
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
 					parents = entry.getValue().getList();
 				}
-				
+
 				for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : parents) {
 					conceptHierarchicalRelationshipDAO.update(conceptHierarchicalRelationship);
 					updatedChildrenConcepts.add(thesaurusConceptDAO.getById(childId));
 				}
 			}
 		}
-		
+
 		//Processing and setting for all children concepts their root concept
 		for (ThesaurusConcept thesaurusConcept : updatedChildrenConcepts) {
 			List<ThesaurusConcept> roots = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
 			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(roots));
 			thesaurusConceptDAO.update(thesaurusConcept);
 		}
-		
+
 		return updatedChildrenConcepts;
 	}
-	
+
 	/**
 	 * This method stores all the associative relationships of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 *
 	 * @param exportedThesaurus
 	 * @return The list of the concepts which associations were updated
 	 */
@@ -131,15 +133,15 @@ public class GincoRelationshipImporter {
 		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
 		List<AssociativeRelationship.Id> ids = new ArrayList<AssociativeRelationship.Id>();
 		if (associativeRelations != null && !associativeRelations.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<AssociativeRelationship>>> entries = associativeRelations.entrySet().iterator();
-			String conceptId = null;
+			Iterator<Map.Entry<String, JaxbList<AssociativeRelationship>>> entries = associativeRelations.entrySet().iterator();
+			String conceptId;
 			List<AssociativeRelationship> associatedConcepts = null;
-			
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<AssociativeRelationship>> entry = entries.next();
+
+			while (entries.hasNext()) {
+				Map.Entry<String, JaxbList<AssociativeRelationship>> entry = entries.next();
 				//Getting the id of the current concept
 				conceptId = entry.getKey();
-				
+
 				//Getting the ids of its associated concepts
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
 					associatedConcepts = entry.getValue().getList();
@@ -150,34 +152,35 @@ public class GincoRelationshipImporter {
 		}
 		return updatedConcepts;
 	}
-	
+
 	/**
 	 * Private method to save associative relationships
+	 *
 	 * @param concept
 	 * @param associatedConceptIds
 	 * @return The updated {@link ThesaurusConcept}
 	 */
 	private ThesaurusConcept saveAssociativeRelationship(List<AssociativeRelationship.Id> alreadyStoredIds,
-			ThesaurusConcept concept, List<AssociativeRelationship> associatedConceptIds) {
+	                                                     ThesaurusConcept concept, List<AssociativeRelationship> associatedConceptIds) {
 		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
 		concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
 		concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());
-		
+
 		for (AssociativeRelationship association : associatedConceptIds) {
 			logger.debug("Settings associated concept " + association.getIdentifier().getConcept1() + "||" + association.getIdentifier().getConcept2());
 			String linkedId = association.getIdentifier().getConcept1();
 			if (linkedId.equals(concept.getIdentifier())) {
-				linkedId= association.getIdentifier().getConcept2();
+				linkedId = association.getIdentifier().getConcept2();
 			}
-			
+
 			AssociativeRelationship alreadyExistingRelation = associativeRelationshipDAO.getAssociativeRelationship(concept.getIdentifier(), linkedId);
-		
+
 			if (alreadyExistingRelation == null) {
 				AssociativeRelationship relationship = new AssociativeRelationship();
 				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
 				relationshipId.setConcept1(concept.getIdentifier());
 				relationshipId.setConcept2(linkedId);
-				if (!alreadyStoredIds.contains(relationshipId)) {					
+				if (!alreadyStoredIds.contains(relationshipId)) {
 					relationship.setIdentifier(relationshipId);
 					relationship.setConceptLeft(concept);
 					relationship.setConceptRight(thesaurusConceptDAO

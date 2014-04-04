@@ -72,36 +72,36 @@ import fr.mcc.ginco.utils.LanguageComparator;
  * Implementation of the thesaurus service Contains methods relatives to the
  * Thesaurus object
  */
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusService")
 public class ThesaurusServiceImpl implements IThesaurusService {
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
-    @Value("${publish.path}")
-    private String publishPath;
+	@Value("${publish.path}")
+	private String publishPath;
 
-    @Value("${archive.path}")
-    private String archivePath;
+	@Value("${archive.path}")
+	private String archivePath;
 
 	@Inject
 	private IThesaurusDAO thesaurusDAO;
 
-    @Inject
-    @Named("skosExportService")
-    private ISKOSExportService exportService;
+	@Inject
+	@Named("skosExportService")
+	private ISKOSExportService exportService;
 
 	@Inject
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Inject
 	@Named("thesaurusHelper")
-	private ThesaurusHelper	thesaurusHelper;
+	private ThesaurusHelper thesaurusHelper;
 
-    @Inject
-    @Named("gincoThesaurusExportService")
-    private IGincoThesaurusExportService gincoThesaurusExportService;
+	@Inject
+	@Named("gincoThesaurusExportService")
+	private IGincoThesaurusExportService gincoThesaurusExportService;
 
 
 	/*
@@ -109,31 +109,31 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 *
 	 * @see fr.mcc.ginco.IThesaurusService#getThesaurusById(java.lang.String)
 	 */
-    @Override
+	@Override
 	public Thesaurus getThesaurusById(String id) {
 		return thesaurusDAO.getById(id);
 	}
 
-    @Override
-    public Thesaurus getDefaultThesaurus(){
-    	Thesaurus defaultThesaurus = new Thesaurus();
-    	defaultThesaurus.setTitle(LabelUtil.getDefaultLabel("default.thesaurus.title"));
+	@Override
+	public Thesaurus getDefaultThesaurus() {
+		Thesaurus defaultThesaurus = new Thesaurus();
+		defaultThesaurus.setTitle(LabelUtil.getDefaultLabel("default.thesaurus.title"));
 
-    	ThesaurusOrganization defaultOrganisation = new ThesaurusOrganization();
-    	defaultOrganisation.setHomepage(LabelUtil.getDefaultLabel("default.thesaurus.creator.homepage"));
-    	defaultOrganisation.setEmail(LabelUtil.getDefaultLabel("default.thesaurus.creator.email"));
-    	defaultOrganisation.setName(LabelUtil.getDefaultLabel("default.thesaurus.creator.name"));
-    	defaultThesaurus.setCreator(defaultOrganisation);
+		ThesaurusOrganization defaultOrganisation = new ThesaurusOrganization();
+		defaultOrganisation.setHomepage(LabelUtil.getDefaultLabel("default.thesaurus.creator.homepage"));
+		defaultOrganisation.setEmail(LabelUtil.getDefaultLabel("default.thesaurus.creator.email"));
+		defaultOrganisation.setName(LabelUtil.getDefaultLabel("default.thesaurus.creator.name"));
+		defaultThesaurus.setCreator(defaultOrganisation);
 
-    	defaultThesaurus.setContributor(LabelUtil.getDefaultLabel("default.thesaurus.creator.contributor"));
-    	defaultThesaurus.setRights(LabelUtil.getDefaultLabel("default.thesaurus.rights"));
-    	defaultThesaurus.setDescription(LabelUtil.getDefaultLabel("default.thesaurus.description"));
-    	defaultThesaurus.setCoverage(LabelUtil.getDefaultLabel("default.thesaurus.coverage"));
-    	defaultThesaurus.setSubject(LabelUtil.getDefaultLabel("default.thesaurus.subject"));
-    	defaultThesaurus.setPublisher(LabelUtil.getDefaultLabel("default.thesaurus.publisher"));
+		defaultThesaurus.setContributor(LabelUtil.getDefaultLabel("default.thesaurus.creator.contributor"));
+		defaultThesaurus.setRights(LabelUtil.getDefaultLabel("default.thesaurus.rights"));
+		defaultThesaurus.setDescription(LabelUtil.getDefaultLabel("default.thesaurus.description"));
+		defaultThesaurus.setCoverage(LabelUtil.getDefaultLabel("default.thesaurus.coverage"));
+		defaultThesaurus.setSubject(LabelUtil.getDefaultLabel("default.thesaurus.subject"));
+		defaultThesaurus.setPublisher(LabelUtil.getDefaultLabel("default.thesaurus.publisher"));
 
-    	return defaultThesaurus;
-    }
+		return defaultThesaurus;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -152,15 +152,16 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 * fr.mcc.ginco.IThesaurusService#updateThesaurus(fr.mcc.ginco.beans.Thesaurus
 	 * , fr.mcc.ginco.beans.users.IUser)
 	 */
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public Thesaurus updateThesaurus(Thesaurus object) {
-		 Thesaurus result = thesaurusDAO.update(object);
+		Thesaurus result = thesaurusDAO.update(object);
 
-		 //We get the versions of the thesaurus we are creating/updating
-		 //If no version, we initialize one with status PROJECT
-		 List<ThesaurusVersionHistory> versionsOfCurrentThesaurus = thesaurusVersionHistoryDAO.findVersionsByThesaurusId(result.getIdentifier());
-		 if (versionsOfCurrentThesaurus == null || versionsOfCurrentThesaurus.isEmpty()) {
+		//We get the versions of the thesaurus we are creating/updating
+		//If no version, we initialize one with status PROJECT
+		List<ThesaurusVersionHistory> versionsOfCurrentThesaurus =
+				thesaurusVersionHistoryDAO.findVersionsByThesaurusId(result.getIdentifier());
+		if (versionsOfCurrentThesaurus == null || versionsOfCurrentThesaurus.isEmpty()) {
 			ThesaurusVersionHistory defaultVersion = thesaurusHelper.buildDefaultVersion(result);
 			Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
 			versions.add(defaultVersion);
@@ -176,7 +177,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 * fr.mcc.ginco.IThesaurusService#getThesaurusLanguages(java.lang.String)
 	 */
 	@Override
-	public List<Language> getThesaurusLanguages(String thesaurusId)	{
+	public List<Language> getThesaurusLanguages(String thesaurusId) {
 		Thesaurus th = thesaurusDAO.getById(thesaurusId);
 		if (th == null) {
 			throw new BusinessException("Invalid thesaurusId : " + thesaurusId, "invalid-thesaurus-id");
@@ -189,59 +190,58 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 		return orderedLangs;
 	}
 
-    @Transactional(readOnly=false)
-    @Override
-    public Thesaurus archiveThesaurus(Thesaurus thesaurus) {
+	@Transactional(readOnly = false)
+	@Override
+	public Thesaurus archiveThesaurus(Thesaurus thesaurus) {
 
-        String fileContent = gincoThesaurusExportService.getThesaurusExport(thesaurus);
-        File ready = new File(archivePath + thesaurus.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + "_"
-                + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_").replaceAll(":","_")
-                + ".xml");
-        try {
-            File checkPath = new File(archivePath);
-            if(!checkPath.exists()) {
-                FileUtils.forceMkdir(checkPath);
-            }
-            FileWriter writer = new FileWriter(ready);
-            writer.write(fileContent);
-            writer.flush();
-            writer.close();
+		String fileContent = gincoThesaurusExportService.getThesaurusExport(thesaurus);
+		File ready = new File(archivePath + thesaurus.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + "_"
+				+ DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_").replaceAll(":", "_")
+				+ ".xml");
+		try {
+			File checkPath = new File(archivePath);
+			if (!checkPath.exists()) {
+				FileUtils.forceMkdir(checkPath);
+			}
+			FileWriter writer = new FileWriter(ready);
+			writer.write(fileContent);
+			writer.flush();
+			writer.close();
 
-        } catch (IOException e) {
-            throw new TechnicalException("Error writing file to path : " + publishPath, e);
-        }
+		} catch (IOException e) {
+			throw new TechnicalException("Error writing file to path : " + publishPath, e);
+		}
 
-        thesaurus.setArchived(Boolean.TRUE);
-        return thesaurusDAO.update(thesaurus);
-    }
+		thesaurus.setArchived(Boolean.TRUE);
+		return thesaurusDAO.update(thesaurus);
+	}
 
-    @Override
-    public void publishThesaurus(Thesaurus object) {
-        File export = exportService.getSKOSExport(object);
-        File ready = new File(publishPath + object.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + " "
-                + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_").replaceAll(":","_")
-                + ".rdf");
-        try {
-            File checkPath = new File(publishPath);
-            if(!checkPath.exists()) {
-                FileUtils.forceMkdir(checkPath);
-            }
-            FileUtils.copyFile(export, ready);
-        } catch (IOException e) {
-            throw new TechnicalException("Error copying file to path : " + publishPath, e);
-        }
-    }
+	@Override
+	public void publishThesaurus(Thesaurus object) {
+		File export = exportService.getSKOSExport(object);
+		File ready = new File(publishPath + object.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + " "
+				+ DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_").replaceAll(":", "_")
+				+ ".rdf");
+		try {
+			File checkPath = new File(publishPath);
+			if (!checkPath.exists()) {
+				FileUtils.forceMkdir(checkPath);
+			}
+			FileUtils.copyFile(export, ready);
+		} catch (IOException e) {
+			throw new TechnicalException("Error copying file to path : " + publishPath, e);
+		}
+	}
 
-    @Transactional(readOnly=false)
-    @Override
-    public Thesaurus destroyThesaurus(Thesaurus object) {
-        try {
-            return thesaurusDAO.delete(object);
-        } catch (HibernateException ex) {
-            throw new BusinessException("Error deleting thesaurus!","error-deleting-thesaurus",ex);
-        }
-    }
-
+	@Transactional(readOnly = false)
+	@Override
+	public Thesaurus destroyThesaurus(Thesaurus object) {
+		try {
+			return thesaurusDAO.delete(object);
+		} catch (HibernateException ex) {
+			throw new BusinessException("Error deleting thesaurus!", "error-deleting-thesaurus", ex);
+		}
+	}
 
 
 }

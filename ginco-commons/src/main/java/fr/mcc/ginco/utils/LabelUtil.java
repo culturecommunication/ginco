@@ -44,7 +44,6 @@ import fr.mcc.ginco.beans.Language;
 
 /**
  * utility class to get objects labels
- *
  */
 public final class LabelUtil {
 
@@ -59,15 +58,14 @@ public final class LabelUtil {
 	 * Return a standard label depending on the language value and the default
 	 * language defined
 	 *
-	 * @param lexical
-	 *            value
-	 * @parma language
+	 * @param lexicalValue lexical value
 	 * @param defaultLang
 	 * @return the term lexical value + @ language if the language is not the
-	 *         specified default language
+	 * specified default language
+	 * @parma language
 	 */
 	public static String getLocalizedLabel(String lexicalValue,
-			Language language, String defaultLang) {
+	                                       Language language, String defaultLang) {
 		String resultLabel = lexicalValue;
 		if (!defaultLang.equals(language.getId())) {
 			resultLabel += LANGUAGE_SEPARATOR + language.getId();
@@ -76,9 +74,9 @@ public final class LabelUtil {
 	}
 
 	public static String getResourceLabel(String key) {
-		try{
+		try {
 			ResourceBundle res = ResourceBundle.getBundle("labels",
-				new EncodedControl("UTF-8"));
+					new EncodedControl("UTF-8"));
 			return res.getString(key);
 		} catch (MissingResourceException me) {
 			logger.warn("Unable to find ResourceBUndle", me);
@@ -87,9 +85,9 @@ public final class LabelUtil {
 	}
 
 	public static String getDefaultLabel(String key) {
-		try{
+		try {
 			ResourceBundle res = ResourceBundle.getBundle("default",
-				new EncodedControl("UTF-8"));
+					new EncodedControl("UTF-8"));
 			return res.getString(key);
 		} catch (MissingResourceException me) {
 			logger.warn("Unable to find ResourceBUndle", me);

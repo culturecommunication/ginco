@@ -64,59 +64,58 @@ public class TopTermGenerator {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Inject
 	@Named("thesaurusListNodeFactory")
 	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
-	private Logger logger  = LoggerFactory.getLogger(TopTermGenerator.class);
+	private Logger logger = LoggerFactory.getLogger(TopTermGenerator.class);
 
-	
+
 	@Value("${conceptstree.maxresults}")
 	private int maxResults;
 
 	/**
 	 * Creates the list of top concepts for a given thesaurusId
-	 * 
-	 * @param thesaurusId
-	 *            id of top node.
+	 *
+	 * @param thesaurusId id of top node.
 	 * @return created list of leafs.
 	 */
 	public List<IThesaurusListNode> generateTopTerm(String thesaurusId) {
 		logger.debug("Generating top term concepts list for thesaurusId : "
 				+ thesaurusId);
 		List<ThesaurusConcept> topTerms = thesaurusConceptService
-				.getTopTermThesaurusConcepts(thesaurusId, maxResults +1);
+				.getTopTermThesaurusConcepts(thesaurusId, maxResults + 1);
 		logger.debug(topTerms.size() + " top terms found");
 		Boolean hasTooMany = false;
 		if (topTerms.size() > maxResults) {
-			logger.warn("Limit : "+maxResults+" exceeded");
+			logger.warn("Limit : " + maxResults + " exceeded");
 			hasTooMany = true;
 			topTerms.remove(topTerms.size() - 1);
 		}
 		List<IThesaurusListNode> topConcepts = new ArrayList<IThesaurusListNode>();
 		Set<String> conceptsWithChildren = thesaurusConceptService.getConceptWithChildrenIdentifers(thesaurusId);
 		for (ThesaurusConcept topTerm : topTerms) {
-				ThesaurusListBasicNode topTermNode = thesaurusListNodeFactory.getListBasicNode();
-				topTermNode.setTitle(thesaurusConceptService
-						.getConceptLabel(topTerm.getIdentifier()));
-				topTermNode
-	                    .setId(ChildrenGenerator.ID_PREFIX
-	                            + ChildrenGenerator.PARENT_SEPARATOR
-	                            + topTerm.getIdentifier());
-				topTermNode.setType(ThesaurusListNodeType.CONCEPT);
-	            topTermNode.setThesaurusId(topTerm.getThesaurusId());
-	            topTermNode.setDisplayable(true);
-	            topTermNode.setIconCls("icon-top-concept");
-	            //if(!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
-	            if (!conceptsWithChildren.contains(topTerm.getIdentifier())) { 
-	            	topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
-	                topTermNode.setLeaf(true);
-	            } else {
-	                topTermNode.setChildren(null);
-	                topTermNode.setLeaf(false);
-	            }
-	            topConcepts.add(topTermNode);			
+			ThesaurusListBasicNode topTermNode = thesaurusListNodeFactory.getListBasicNode();
+			topTermNode.setTitle(thesaurusConceptService
+					.getConceptLabel(topTerm.getIdentifier()));
+			topTermNode
+					.setId(ChildrenGenerator.ID_PREFIX
+							+ ChildrenGenerator.PARENT_SEPARATOR
+							+ topTerm.getIdentifier());
+			topTermNode.setType(ThesaurusListNodeType.CONCEPT);
+			topTermNode.setThesaurusId(topTerm.getThesaurusId());
+			topTermNode.setDisplayable(true);
+			topTermNode.setIconCls("icon-top-concept");
+			//if(!thesaurusConceptService.hasChildren(topTerm.getIdentifier())) {
+			if (!conceptsWithChildren.contains(topTerm.getIdentifier())) {
+				topTermNode.setChildren(new ArrayList<IThesaurusListNode>());
+				topTermNode.setLeaf(true);
+			} else {
+				topTermNode.setChildren(null);
+				topTermNode.setLeaf(false);
+			}
+			topConcepts.add(topTermNode);
 		}
 		Collections.sort(topConcepts);
 		if (hasTooMany) {

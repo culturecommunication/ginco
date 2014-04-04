@@ -126,7 +126,7 @@ public class BaseRestService {
 	 */
 	@GET
 	@Path("/getTreeContent")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public List<IThesaurusListNode> getTreeContent(
 			@QueryParam("id") String nodeParam) {
 		List<IThesaurusListNode> result;
@@ -190,7 +190,7 @@ public class BaseRestService {
 	 */
 	@GET
 	@Path("/getSession")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public long getSession(@Context HttpServletRequest request) {
 		return request.getSession().getLastAccessedTime();
 	}
@@ -205,7 +205,7 @@ public class BaseRestService {
 	 */
 	@GET
 	@Path("/getUserInfo")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<UserInfo> getUserInfo() {
 		UserInfo userInfos = new UserInfo();
 		Authentication auth = SecurityContextHolder.getContext()

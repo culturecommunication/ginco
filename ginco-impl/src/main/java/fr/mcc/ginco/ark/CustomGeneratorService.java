@@ -51,31 +51,31 @@ import java.util.UUID;
  * should be changed in later revisions to generate real
  * ARK-based ids.
  */
-@Transactional(readOnly=false, rollbackFor = TechnicalException.class)
+@Transactional(readOnly = false, rollbackFor = TechnicalException.class)
 @Service("generatorService")
 public class CustomGeneratorService implements IIDGeneratorService {
 
 	@Value("${application.ark.nma}")
-    private String nma;
+	private String nma;
 	@Value("${application.ark.naan}")
-    private String naan;
+	private String naan;
 
-    @Inject
-    @Named("thesaurusArkService")
-    private IThesaurusArkService thesaurusArkService;
+	@Inject
+	@Named("thesaurusArkService")
+	private IThesaurusArkService thesaurusArkService;
 
-    @Override
-    public String generate(Class entity) {
-        String arkId;
-        UUID nq = UUID.randomUUID();
-        arkId = nma + "/ark:/"+ naan + "/" + nq.toString();
+	@Override
+	public String generate(Class entity) {
+		String arkId;
+		UUID nq = UUID.randomUUID();
+		arkId = nma + "/ark:/" + naan + "/" + nq.toString();
 
-        ThesaurusArk arkHistory = new ThesaurusArk();
-        arkHistory.setCreated(DateUtil.nowDate());
-        arkHistory.setEntity(entity.getSimpleName());
-        arkHistory.setIdentifier(arkId);
-        thesaurusArkService.createThesaurusArk(arkHistory);
+		ThesaurusArk arkHistory = new ThesaurusArk();
+		arkHistory.setCreated(DateUtil.nowDate());
+		arkHistory.setEntity(entity.getSimpleName());
+		arkHistory.setIdentifier(arkId);
+		thesaurusArkService.createThesaurusArk(arkHistory);
 
-        return arkId;
-    }    
+		return arkId;
+	}
 }

@@ -34,15 +34,14 @@
  */
 package fr.mcc.ginco.solr;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import fr.mcc.ginco.utils.DateUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.utils.DateUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class SearcherServiceUtil {
@@ -58,7 +57,7 @@ public class SearcherServiceUtil {
 
 
 	public String addAndQuery(String field, Object value, Boolean from,
-			boolean string) {
+	                          boolean string) {
 		if (value == null) {
 			return BLANK;
 		}
@@ -136,42 +135,36 @@ public class SearcherServiceUtil {
 		return results;
 	}
 
-	private SearchResult getSearchResult(SolrDocument doc)
-    {
-    	SearchResult result = new SearchResult();
-    	result.setIdentifier(getSolrField(doc,SolrField.IDENTIFIER));
-    	result.setLexicalValue(getSolrField(doc,SolrField.LEXICALVALUE));
-    	result.setType(getSolrField(doc,SolrField.TYPE));
-    	result.setThesaurusId(getSolrField(doc,SolrField.THESAURUSID));
-    	result.setThesaurusTitle(getSolrField(doc,SolrField.THESAURUSTITLE));
-        result.setCreated(getSolrDateField(doc,SolrField.CREATED));
-        result.setModified(getSolrDateField(doc,SolrField.MODIFIED));
-        result.setStatus(getSolrField(doc,SolrField.STATUS));
-        result.setTypeExt(getSolrField(doc,SolrField.EXT_TYPE));
-        List<String> languages = new ArrayList<String>();
-        for (Object lang : doc.getFieldValues(SolrField.LANGUAGE))
-        {
-        	languages.add(lang.toString());
-        }
-        result.setLanguages(languages);
-    	return result;
-    }
+	private SearchResult getSearchResult(SolrDocument doc) {
+		SearchResult result = new SearchResult();
+		result.setIdentifier(getSolrField(doc, SolrField.IDENTIFIER));
+		result.setLexicalValue(getSolrField(doc, SolrField.LEXICALVALUE));
+		result.setType(getSolrField(doc, SolrField.TYPE));
+		result.setThesaurusId(getSolrField(doc, SolrField.THESAURUSID));
+		result.setThesaurusTitle(getSolrField(doc, SolrField.THESAURUSTITLE));
+		result.setCreated(getSolrDateField(doc, SolrField.CREATED));
+		result.setModified(getSolrDateField(doc, SolrField.MODIFIED));
+		result.setStatus(getSolrField(doc, SolrField.STATUS));
+		result.setTypeExt(getSolrField(doc, SolrField.EXT_TYPE));
+		List<String> languages = new ArrayList<String>();
+		for (Object lang : doc.getFieldValues(SolrField.LANGUAGE)) {
+			languages.add(lang.toString());
+		}
+		result.setLanguages(languages);
+		return result;
+	}
 
-	private String getSolrField(SolrDocument doc, String solrField)
-	{
-		if (doc.getFieldValue(solrField)!=null)
-		{
+	private String getSolrField(SolrDocument doc, String solrField) {
+		if (doc.getFieldValue(solrField) != null) {
 			return doc.getFieldValue(solrField).toString();
 		} else {
 			return BLANK;
 		}
 	}
 
-	private String getSolrDateField(SolrDocument doc, String solrField)
-	{
-		if (doc.getFieldValue(solrField)!=null)
-		{
-			return DateUtil.toString((Date)doc.getFieldValue(solrField));
+	private String getSolrDateField(SolrDocument doc, String solrField) {
+		if (doc.getFieldValue(solrField) != null) {
+			return DateUtil.toString((Date) doc.getFieldValue(solrField));
 		} else {
 			return BLANK;
 		}

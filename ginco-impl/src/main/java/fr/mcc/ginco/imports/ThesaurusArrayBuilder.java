@@ -62,15 +62,14 @@ import fr.mcc.ginco.utils.ConceptHierarchyUtil;
 
 /**
  * builder in charge of building thesaurus arrays
- * 
  */
 @Service("skosArrayBuilder")
-public class ThesaurusArrayBuilder extends AbstractBuilder {	
+public class ThesaurusArrayBuilder extends AbstractBuilder {
 
 	@Inject
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
-	
+
 	//private static Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
 
 	public ThesaurusArrayBuilder() {
@@ -79,14 +78,14 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 
 	/**
 	 * Builds a ThesaurusArray from the given resource
-	 * 
+	 *
 	 * @param skosCollection
 	 * @param model
 	 * @param thesaurus
 	 * @return
 	 */
 	public ThesaurusArray buildArray(Resource skosCollection, Model model,
-			Thesaurus thesaurus, Map<String, ThesaurusArray> builtArrays) {
+	                                 Thesaurus thesaurus, Map<String, ThesaurusArray> builtArrays) {
 
 		ThesaurusArray array = new ThesaurusArray();
 		array.setIdentifier(skosCollection.getURI());
@@ -99,14 +98,14 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 			Statement stmt = stmtMembersItr.next();
 			Resource memberRes = stmt.getObject().asResource();
 			String relatedURI = memberRes.getURI();
-			if (thesaurusConceptDAO.getById(relatedURI) != null){
+			if (thesaurusConceptDAO.getById(relatedURI) != null) {
 				ThesaurusConcept memberConcept = thesaurusConceptDAO
 						.getById(relatedURI);
 				membersConcepts.add(memberConcept);
 			}
 		}
 		Set<ThesaurusArrayConcept> thesaurusArrayConcepts = new HashSet<ThesaurusArrayConcept>();
-		int i=0;
+		int i = 0;
 		for (ThesaurusConcept concept : membersConcepts) {
 			ThesaurusArrayConcept arrayConcept = new ThesaurusArrayConcept();
 			ThesaurusArrayConcept.Id arrayConceptId = new ThesaurusArrayConcept.Id();
@@ -114,7 +113,7 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 			arrayConceptId.setThesaurusArrayId(skosCollection.getURI());
 			arrayConcept.setIdentifier(arrayConceptId);
 			arrayConcept.setConcepts(concept);
-			arrayConcept.setArrayOrder(i);			
+			arrayConcept.setArrayOrder(i);
 			i++;
 			thesaurusArrayConcepts.add(arrayConcept);
 		}
@@ -127,16 +126,16 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 		builtArrays.put(skosCollection.getURI(), array);
 		return array;
 	}
-	
+
 	/**
 	 * Builds children of ThesaurusArray from the given resource
-	 * 
+	 *
 	 * @param skosCollection
 	 * @param thesaurus
 	 * @return
 	 */
 	public List<ThesaurusArray> getChildrenArrays(Resource skosCollection,
-			Thesaurus thesaurus, Map<String, ThesaurusArray> builtArrays) {
+	                                              Thesaurus thesaurus, Map<String, ThesaurusArray> builtArrays) {
 
 		StmtIterator stmtMembersItr = skosCollection
 				.listProperties(SKOS.MEMBER);
@@ -145,12 +144,12 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 			Statement stmt = stmtMembersItr.next();
 			Resource memberRes = stmt.getObject().asResource();
 			String relatedURI = memberRes.getURI();
-			if (builtArrays.get(relatedURI) != null){
+			if (builtArrays.get(relatedURI) != null) {
 				ThesaurusArray memberArray = builtArrays.get(relatedURI);
 				memberArray.setParent(builtArrays.get(skosCollection.getURI()));
 				membersArrays.add(memberArray);
 			}
-		}	
+		}
 		return membersArrays;
 	}
 

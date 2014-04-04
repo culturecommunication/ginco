@@ -42,10 +42,11 @@ import javax.xml.bind.annotation.XmlTransient;
 public class ExternalThesaurus {
 	@XmlTransient
 	private Integer identifier;
-	
+
 	private String externalId;
-	private ExternalThesaurusType externalThesaurusType;	
-	
+
+	private ExternalThesaurusType externalThesaurusType;
+
 
 	public Integer getIdentifier() {
 		return identifier;
@@ -70,7 +71,7 @@ public class ExternalThesaurus {
 	public void setExternalThesaurusType(ExternalThesaurusType externalThesaurusType) {
 		this.externalThesaurusType = externalThesaurusType;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -96,8 +97,7 @@ public class ExternalThesaurus {
 			if (other.identifier != null) {
 				return false;
 			}
-			if (externalId!=null && other.externalId!=null)
-			{
+			if (externalId != null && other.externalId != null) {
 				if (!externalId.equals(other.externalId)) {
 					return false;
 				}

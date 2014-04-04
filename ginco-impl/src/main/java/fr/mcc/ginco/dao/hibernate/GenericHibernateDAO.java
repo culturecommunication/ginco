@@ -49,47 +49,48 @@ import fr.mcc.ginco.dao.IGenericDAO;
 
 /**
  * Implementation of {@link IGenericDAO}; basic class for DAO-related work.
- * @param <T> type of object.
+ *
+ * @param <T>  type of object.
  * @param <ID> primary key.
  */
 public class GenericHibernateDAO<T, ID extends Serializable> implements IGenericDAO<T, ID> {
 
 	private final Class<T> persistentClass;
-	
+
 	@Inject
 	@Named("gincoSessionFactory")
 	private SessionFactory sessionFactory;
-		
+
 	public GenericHibernateDAO(Class<T> clazz) {
 		this.persistentClass = clazz;
 	}
-	
+
 	@Override
 	public final T loadById(ID id) {
 		return (T) getCurrentSession().load(persistentClass, id);
-	}	
+	}
 
 	@Override
 	public final T getById(ID id) {
 		return (T) getCurrentSession().get(persistentClass, id);
-	}	
+	}
 
 	@Override
 	public final List<T> findAll() {
 		return getCurrentSession().createCriteria(persistentClass).list();
-	}	
-	
+	}
+
 	@Override
 	public final List<T> findAll(String sortColumn, SortingTypes order) {
-		if (order.asc.equals(order)){
+		if (order.asc.equals(order)) {
 			return getCurrentSession().createCriteria(persistentClass).addOrder(Order.asc(sortColumn)).list();
-		}else {
+		} else {
 			return getCurrentSession().createCriteria(persistentClass).addOrder(Order.desc(sortColumn)).list();
 		}
 	}
-	
+
 	@Override
-	public final Long count(){
+	public final Long count() {
 		return (Long) getCurrentSession().createCriteria(persistentClass).setProjection(Projections.rowCount()).list().get(0);
 	}
 
@@ -103,20 +104,20 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	public T update(T entity) {
 		return makePersistent(entity);
 	}
-	
+
 	@Override
 	public final T delete(T entity) {
 		this.getCurrentSession().delete(entity);
 		return entity;
 	}
-	
-	@Override 
+
+	@Override
 	public void flush() {
 		this.getCurrentSession().flush();
 	}
-	
+
 	public final Session getCurrentSession() {
-		return sessionFactory.getCurrentSession();	
+		return sessionFactory.getCurrentSession();
 	}
 
 	public final SessionFactory getSessionFactory() {

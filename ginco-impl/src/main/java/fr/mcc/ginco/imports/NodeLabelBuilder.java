@@ -58,7 +58,6 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * Builder in charge of building the thesaurus arrays node labels
- *
  */
 @Service("skosNodeLabelBuilder")
 public class NodeLabelBuilder extends AbstractBuilder {
@@ -70,7 +69,7 @@ public class NodeLabelBuilder extends AbstractBuilder {
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
-	
+
 	@Inject
 	@Named("skosImportUtils")
 	private SKOSImportUtils skosImportUtils;
@@ -81,23 +80,24 @@ public class NodeLabelBuilder extends AbstractBuilder {
 
 	/**
 	 * Builds a NodeLabel object for the given array
+	 *
 	 * @param skosCollection
 	 * @param array
 	 * @return
 	 */
-	public NodeLabel buildNodeLabel(Resource skosCollection, Thesaurus thesaurus, ThesaurusArray array){
+	public NodeLabel buildNodeLabel(Resource skosCollection, Thesaurus thesaurus, ThesaurusArray array) {
 		logger.debug("Building node label for thesaurus array " + array.getIdentifier());
 		NodeLabel nodeLabel = new NodeLabel();
 
 		Statement stmtCreated = skosCollection.getProperty(DCTerms.created);
-		if (stmtCreated != null){
+		if (stmtCreated != null) {
 			nodeLabel.setCreated(skosImportUtils.getSkosDate(stmtCreated.getString()));
 		} else {
 			nodeLabel.setCreated(thesaurus.getCreated());
 		}
 
 		Statement stmtModified = skosCollection.getProperty(DCTerms.modified);
-		if (stmtModified != null){
+		if (stmtModified != null) {
 			nodeLabel.setModified(skosImportUtils.getSkosDate(stmtModified.getString()));
 		} else {
 			nodeLabel.setModified(thesaurus.getDate());
@@ -112,7 +112,7 @@ public class NodeLabelBuilder extends AbstractBuilder {
 			nodeLabel.setLanguage(defaultLangL);
 		} else {
 			Language language = languagesDAO.getByPart1(lang);
-			if (language == null){
+			if (language == null) {
 				language = languagesDAO.getById(lang);
 			}
 
@@ -121,7 +121,8 @@ public class NodeLabelBuilder extends AbstractBuilder {
 			} else {
 				throw new BusinessException("Specified language " + lang + " is unknown : "
 						+ stmtLabel.getString(),
-						"import-unknown-term-lang", new Object[] {lang, stmtLabel.getString()});
+						"import-unknown-term-lang", new Object[]{ lang, stmtLabel.getString() }
+				);
 			}
 		}
 

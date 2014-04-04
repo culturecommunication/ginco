@@ -45,7 +45,7 @@ import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 @Repository
-public class AssociativeRelationshipRoleDAO extends GenericHibernateDAO<AssociativeRelationshipRole, String> implements IAssociativeRelationshipRoleDAO  {
+public class AssociativeRelationshipRoleDAO extends GenericHibernateDAO<AssociativeRelationshipRole, String> implements IAssociativeRelationshipRoleDAO {
 
 	public AssociativeRelationshipRoleDAO() {
 		super(AssociativeRelationshipRole.class);
@@ -58,29 +58,29 @@ public class AssociativeRelationshipRoleDAO extends GenericHibernateDAO<Associat
 	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRole() {
 		List<AssociativeRelationshipRole> defaultRoles = getCurrentSession().createCriteria(AssociativeRelationshipRole.class)
 				.setMaxResults(1)
-				.add(Restrictions.eq("defaultRole", Boolean.TRUE))				
+				.add(Restrictions.eq("defaultRole", Boolean.TRUE))
 				.list();
-		if (defaultRoles != null && defaultRoles.size()==1) {
+		if (defaultRoles != null && defaultRoles.size() == 1) {
 			return defaultRoles.get(0);
 		} else {
 			throw new BusinessException("No defaultRole defined", "no-default-role-defined");
 		}
-	}	
-	
+	}
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO#getBySkosLabel(java.lang.String)
 	 */
 	@Override
 	public AssociativeRelationshipRole getBySkosLabel(String skosLabel) {
-		 Criteria criteria = getCurrentSession().createCriteria(
-				 AssociativeRelationshipRole.class);
-	       criteria.add(Restrictions.eq("skosLabel", skosLabel));
-	    List<AssociativeRelationshipRole>  foundroles = criteria.list();
-	    if (foundroles.size()>0) {
-	    	return foundroles.get(0);
-	    }
-	    return null;
+		Criteria criteria = getCurrentSession().createCriteria(
+				AssociativeRelationshipRole.class);
+		criteria.add(Restrictions.eq("skosLabel", skosLabel));
+		List<AssociativeRelationshipRole> foundroles = criteria.list();
+		if (foundroles.size() > 0) {
+			return foundroles.get(0);
+		}
+		return null;
 	}
-	
-	
+
+
 }

@@ -34,36 +34,39 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
+import java.io.Serializable;
 
 /**
  * Bean represents relation between two {@link ThesaurusConcept}
  */
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class ThesaurusArrayConcept implements Serializable {
-	
+
 	@XmlType(name = "ThesaurusArrayConceptId")
 	public static class Id implements Serializable {
 		private String thesaurusArrayId;
 		private String conceptId;
-    
-        public Id() {}  
+
+		public Id() {
+		}
 
 		public String getThesaurusArrayId() {
 			return thesaurusArrayId;
 		}
+
 		public void setThesaurusArrayId(String thesaurusArrayId) {
 			this.thesaurusArrayId = thesaurusArrayId;
 		}
+
 		public String getConceptId() {
 			return conceptId;
 		}
+
 		public void setConceptId(String conceptId) {
 			this.conceptId = conceptId;
 		}
@@ -72,10 +75,20 @@ public class ThesaurusArrayConcept implements Serializable {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result
-					+ ((conceptId == null) ? 0 : conceptId.hashCode());
-			result = prime * result
-					+ ((thesaurusArrayId == null) ? 0 : thesaurusArrayId.hashCode());
+			if (conceptId == null) {
+				result = prime * result
+						+ 0;
+			} else {
+				result = prime * result
+						+ conceptId.hashCode();
+			}
+			if (thesaurusArrayId == null) {
+				result = prime * result
+						+ 0;
+			} else {
+				result = prime * result
+						+ thesaurusArrayId.hashCode();
+			}
 			return result;
 		}
 
@@ -84,45 +97,45 @@ public class ThesaurusArrayConcept implements Serializable {
 		public boolean equals(Object obj) {
 			if (this == obj) {
 				return true;
-            }
+			}
 			if (obj == null) {
 				return false;
-            }
+			}
 			if (getClass() != obj.getClass()) {
 				return false;
-            }
+			}
 			Id other = (Id) obj;
 			if (conceptId == null) {
 				if (other.conceptId != null) {
 					return false;
-                }
+				}
 			} else if (!conceptId.equals(other.conceptId)) {
 				return false;
-            }
+			}
 			if (thesaurusArrayId == null) {
 				if (other.thesaurusArrayId != null) {
 					return false;
-                }
+				}
 			} else if (!thesaurusArrayId.equals(other.thesaurusArrayId)) {
 				return false;
-            }
+			}
 			return true;
 		}
-		
-    }
+
+	}
 
 	private Id identifier;
 	private Integer arrayOrder;
 	@XmlTransient
 	private ThesaurusConcept concepts;
-	
+
 	public Id getIdentifier() {
 		return identifier;
 	}
 
 	public void setIdentifier(Id identifier) {
 		this.identifier = identifier;
-	}	
+	}
 
 	public Integer getArrayOrder() {
 		return arrayOrder;
@@ -138,6 +151,6 @@ public class ThesaurusArrayConcept implements Serializable {
 
 	public void setConcepts(ThesaurusConcept concept) {
 		this.concepts = concept;
-	}	
+	}
 
 }

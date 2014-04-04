@@ -11,22 +11,20 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-	
-	private Logger logger  = LoggerFactory.getLogger(AuthenticationFilter.class);
 
+	private Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
 
 	private LockoutService lockoutService;
-	
+
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request,
-			HttpServletResponse response) throws AuthenticationException {
-		
+	                                            HttpServletResponse response) throws AuthenticationException {
+
 		logger.warn("Attempting authentication");
 		String username = obtainUsername(request);
-		logger.warn("Locked "+username+" : "+this.lockoutService.isLockedOut(username));
-		if (this.lockoutService.isLockedOut(username))
-		{
-			throw new LockedException("Too many authentication failures, account is locked"); 
+		logger.warn("Locked " + username + " : " + this.lockoutService.isLockedOut(username));
+		if (this.lockoutService.isLockedOut(username)) {
+			throw new LockedException("Too many authentication failures, account is locked");
 		}
 		return super.attemptAuthentication(request, response);
 	}
@@ -38,5 +36,5 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	public void setLockoutService(LockoutService lockoutService) {
 		this.lockoutService = lockoutService;
 	}
-	
+
 }

@@ -35,22 +35,19 @@
 package fr.mcc.ginco.extjs.view.pojo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * View class corresponding to {@link ThesaurusTerm} bean, but fully serializable;
  * contains all links to other business-objects (full beans
  * {@link Thesaurus} and {@link Language}).
- * 
+ *
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -65,7 +62,8 @@ public class SplitNonPreferredTermView implements Serializable, SecuredResourceV
 	private String language;
 	private List<ThesaurusTermView> preferredTerms;
 
-    public SplitNonPreferredTermView() {}
+	public SplitNonPreferredTermView() {
+	}
 
 	public String getIdentifier() {
 		return identifier;
@@ -139,5 +137,5 @@ public class SplitNonPreferredTermView implements Serializable, SecuredResourceV
 	public void setPreferredTerms(List<ThesaurusTermView> preferredTerms) {
 		this.preferredTerms = preferredTerms;
 	}
-	
+
 }

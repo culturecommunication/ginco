@@ -34,10 +34,10 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusArray} bean,
@@ -78,14 +78,6 @@ public class ThesaurusArrayView implements Serializable, SecuredResourceView {
 
 	public void setSuperOrdinateId(String superOrdinateConceptId) {
 		this.superOrdinateId = superOrdinateConceptId;
-	}
-
-	public String getSuperOrdinateLabel() {
-		return superOrdinateConceptLabel;
-	}
-
-	public void setSuperOrdinateLabel(String superOrdinateConceptLabel) {
-		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
 	}
 
 	public String getSuperOrdinateConceptLabel() {

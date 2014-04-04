@@ -37,28 +37,32 @@ package fr.mcc.ginco.extjs.view.pojo;
 import java.util.List;
 
 public class UserInfo {
-	
+
 	private String username;
 	private boolean isAdmin;
 	private List<UserThesaurusRole> userThesaurusRoles;
-	
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public boolean isAdmin() {
-		return isAdmin;
-	}
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
+
 	public List<UserThesaurusRole> getUserThesaurusRoles() {
 		return userThesaurusRoles;
 	}
+
 	public void setUserThesaurusRoles(List<UserThesaurusRole> userThesaurusRole) {
 		this.userThesaurusRoles = userThesaurusRole;
-	}	
+	}
 
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
 }

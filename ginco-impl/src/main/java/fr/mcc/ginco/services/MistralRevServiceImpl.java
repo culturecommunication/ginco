@@ -71,7 +71,7 @@ import fr.mcc.ginco.utils.DateUtil;
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("mistralRevService")
 public class MistralRevServiceImpl implements IMistralRevService {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(MistralRevServiceImpl.class);
 
 	@Inject
@@ -104,7 +104,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 
 	@Override
 	public File getRevisions(Thesaurus thesaurus, long timestamp,
-			Language language) throws IOException {
+	                         Language language) throws IOException {
 		File res;
 		try {
 			res = File.createTempFile("pattern", ".suffix");
@@ -112,7 +112,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			res.deleteOnExit();
 			BufferedWriter out = new BufferedWriter(new FileWriter(res));
 
-			for (CommandLine line : getEventsByThesaurus(thesaurus.getIdentifier(), timestamp, language)){
+			for (CommandLine line : getEventsByThesaurus(thesaurus.getIdentifier(), timestamp, language)) {
 				out.write(line.toString());
 				out.newLine();
 			}
@@ -127,7 +127,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 
 	@Override
 	public File getAllRevisions(long timestamp,
-			Language language) throws IOException {
+	                            Language language) throws IOException {
 		File res;
 
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("SELECT DISTINCT THESAURUSID FROM REVINFO WHERE REVTSTMP > :pdate");
@@ -140,11 +140,11 @@ public class MistralRevServiceImpl implements IMistralRevService {
 			res.deleteOnExit();
 			BufferedWriter out = new BufferedWriter(new FileWriter(res));
 
-			for (String thesaurusId : allThesaurusId){
+			for (String thesaurusId : allThesaurusId) {
 				if (thesaurusId != null && thesaurusService.getThesaurusList()
-						.contains(thesaurusService.getThesaurusById(thesaurusId))){
+						.contains(thesaurusService.getThesaurusById(thesaurusId))) {
 					List<CommandLine> eventsByThesaurus = getEventsByThesaurus(thesaurusId, timestamp, language);
-					if (!eventsByThesaurus.isEmpty()){
+					if (!eventsByThesaurus.isEmpty()) {
 						out.write("-----------------------------------------");
 						out.newLine();
 						out.write(thesaurusService.getThesaurusById(thesaurusId).getTitle());
@@ -153,7 +153,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 						out.newLine();
 						out.write("-----------------------------------------");
 						out.newLine();
-						for (CommandLine line : eventsByThesaurus){
+						for (CommandLine line : eventsByThesaurus) {
 							out.write(line.toString());
 							out.newLine();
 						}
@@ -170,7 +170,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 	}
 
 	private List<CommandLine> getEventsByThesaurus(String thesaurusId, long timestamp,
-			Language language) throws IOException{
+	                                               Language language) throws IOException {
 		Date startDate;
 		if (timestamp != 0) {
 			startDate = new Date(timestamp);
@@ -207,8 +207,8 @@ public class MistralRevServiceImpl implements IMistralRevService {
 
 		List<ThesaurusTerm> oldTerms = startTermsQuery.getResultList();
 		List<ThesaurusTerm> oldTermsWithValidatedConcept = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusTerm term : oldTerms){
-			if (term.getConcept() != null && term.getConcept().getStatus() == ConceptStatusEnum.VALIDATED.getStatus()){
+		for (ThesaurusTerm term : oldTerms) {
+			if (term.getConcept() != null && term.getConcept().getStatus() == ConceptStatusEnum.VALIDATED.getStatus()) {
 				oldTermsWithValidatedConcept.add(term);
 			}
 		}
@@ -220,8 +220,8 @@ public class MistralRevServiceImpl implements IMistralRevService {
 
 		List<ThesaurusTerm> newTerms = endTermsQuery.getResultList();
 		List<ThesaurusTerm> newTermsWithValidatedConcept = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusTerm term : newTerms){
-			if (term.getConcept() != null && term.getConcept().getStatus() == ConceptStatusEnum.VALIDATED.getStatus()){
+		for (ThesaurusTerm term : newTerms) {
+			if (term.getConcept() != null && term.getConcept().getStatus() == ConceptStatusEnum.VALIDATED.getStatus()) {
 				newTermsWithValidatedConcept.add(term);
 			}
 		}

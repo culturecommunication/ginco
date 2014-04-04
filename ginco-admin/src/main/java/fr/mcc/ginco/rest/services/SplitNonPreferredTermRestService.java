@@ -61,11 +61,10 @@ import fr.mcc.ginco.solr.IComplexConceptIndexerService;
 
 /**
  * Thesaurus Term REST service for all operations on complex concepts
- *
  */
 @Service
 @Path("/splitnonpreferredtermservice")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
 @PreAuthorize("isAuthenticated()")
 public class SplitNonPreferredTermRestService {
 
@@ -73,15 +72,15 @@ public class SplitNonPreferredTermRestService {
 	@Named("splitNonPreferredTermService")
 	private ISplitNonPreferredTermService splitNonPreferredTermService;
 
-    @Inject
-    @Named("splitNonPreferredTermViewConverter")
-    private SplitNonPreferredTermViewConverter splitNonPreferredTermViewConverter;
+	@Inject
+	@Named("splitNonPreferredTermViewConverter")
+	private SplitNonPreferredTermViewConverter splitNonPreferredTermViewConverter;
 
-    @Inject
+	@Inject
 	private IComplexConceptIndexerService complexConceptIndexerService;
 
 
-	private Logger logger  = LoggerFactory.getLogger(SplitNonPreferredTermRestService.class);
+	private Logger logger = LoggerFactory.getLogger(SplitNonPreferredTermRestService.class);
 
 
 	/**
@@ -91,19 +90,19 @@ public class SplitNonPreferredTermRestService {
 	 */
 	@GET
 	@Path("/getTerm")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public SplitNonPreferredTermView getTerm(@QueryParam("id") String idTerm) {
 		SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermService.getSplitNonPreferredTermById(idTerm);
-        return splitNonPreferredTermViewConverter.convert(thesaurusTerm);
+		return splitNonPreferredTermViewConverter.convert(thesaurusTerm);
 	}
 
 	/**
 	 * Public method used to create or update
 	 * {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} -
-     * thesaurus term JSON object send by extjs
+	 * thesaurus term JSON object send by extjs
 	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} updated object
-	 *         in JSON format or {@code null} if not found
+	 * in JSON format or {@code null} if not found
 	 */
 	@POST
 	@Path("/updateTerm")
@@ -134,20 +133,20 @@ public class SplitNonPreferredTermRestService {
 	 */
 	@GET
 	@Path("/getList")
-	@Produces({MediaType.APPLICATION_JSON})
-	public ExtJsonFormLoadData<List<SplitNonPreferredTermView> > getList
-    (@QueryParam("start") Integer startIndex,
-     @QueryParam("limit") Integer limit,
-     @QueryParam("idThesaurus") String idThesaurus) {
-		logger.info("Getting Thesaurus SplitNonPreferred Terms with following parameters : " + "index start " +startIndex + " with a limit of " + limit );
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<List<SplitNonPreferredTermView>> getList
+	(@QueryParam("start") Integer startIndex,
+	 @QueryParam("limit") Integer limit,
+	 @QueryParam("idThesaurus") String idThesaurus) {
+		logger.info("Getting Thesaurus SplitNonPreferred Terms with following parameters : " + "index start " + startIndex + " with a limit of " + limit);
 		List<SplitNonPreferredTerm> thesaurusTerms = splitNonPreferredTermService.getSplitNonPreferredTermList(startIndex, limit, idThesaurus);
 		Long total = splitNonPreferredTermService.getSplitNonPreferredTermCount(idThesaurus);
 
-		List<SplitNonPreferredTermView>results = new ArrayList<SplitNonPreferredTermView>();
+		List<SplitNonPreferredTermView> results = new ArrayList<SplitNonPreferredTermView>();
 		for (SplitNonPreferredTerm thesaurusTerm : thesaurusTerms) {
 			results.add(splitNonPreferredTermViewConverter.convert(thesaurusTerm));
 		}
-		ExtJsonFormLoadData<List<SplitNonPreferredTermView> > extTerms = new  ExtJsonFormLoadData<List<SplitNonPreferredTermView> > (results);
+		ExtJsonFormLoadData<List<SplitNonPreferredTermView>> extTerms = new ExtJsonFormLoadData<List<SplitNonPreferredTermView>>(results);
 		extTerms.setTotal(total);
 		return extTerms;
 	}
@@ -155,10 +154,10 @@ public class SplitNonPreferredTermRestService {
 	/**
 	 * Public method used to delete
 	 * {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} -
-     * thesaurus term JSON object send by extjs
-     *
+	 * thesaurus term JSON object send by extjs
+	 *
 	 * @return {@link fr.mcc.ginco.extjs.view.pojo.SplitNonPreferredTermView} deleted object
-	 *         in JSON format or {@code null} if not found
+	 * in JSON format or {@code null} if not found
 	 */
 	@POST
 	@Path("/destroyTerm")

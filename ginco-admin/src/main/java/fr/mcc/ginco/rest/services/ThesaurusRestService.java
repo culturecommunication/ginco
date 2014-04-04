@@ -81,7 +81,7 @@ import fr.mcc.ginco.solr.IThesaurusIndexerService;
  */
 @Service
 @Path("/thesaurusservice")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
 @PreAuthorize("isAuthenticated()")
 public class ThesaurusRestService {
 	@Inject
@@ -142,7 +142,7 @@ public class ThesaurusRestService {
 	 */
 	@GET
 	@Path("/getTopLanguages")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<Language>> getTopLanguages(
 			@QueryParam("thesaurusId") String thesaurusId) {
 		logger.info("Getting Top Languages");
@@ -181,7 +181,7 @@ public class ThesaurusRestService {
 	 */
 	@GET
 	@Path("/getVocabulary")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusView getVocabularyById(@QueryParam("id") String id) {
 		if (!id.isEmpty()) {
 			return thesaurusViewConverter.convert(thesaurusService.getThesaurusById(id));
@@ -192,7 +192,7 @@ public class ThesaurusRestService {
 
 	@GET
 	@Path("/getVocabularies")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusView>> getVocabularies() {
 		List<ThesaurusView> listOfThesaurusView = new ArrayList<ThesaurusView>();
 		List<Thesaurus> thesList = thesaurusService.getThesaurusList();
@@ -214,7 +214,7 @@ public class ThesaurusRestService {
 	 */
 	@POST
 	@Path("/updateVocabulary")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0')")
 	public ThesaurusView updateVocabulary(ThesaurusView thesaurusViewJAXBElement) {
 		Thesaurus existingThes = thesaurusService.getThesaurusById(thesaurusViewJAXBElement.getId());
@@ -248,7 +248,7 @@ public class ThesaurusRestService {
 	 */
 	@POST
 	@Path("/destroyVocabulary")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasRole('ROLE_ADMIN') && hasPermission(#thesaurusViewJAXBElement, 'DELETION')")
 	public void destroyVocabulary(ThesaurusView thesaurusViewJAXBElement) {
 		Thesaurus object = thesaurusViewConverter.convert(thesaurusViewJAXBElement);
@@ -271,7 +271,7 @@ public class ThesaurusRestService {
 	 */
 	@GET
 	@Path("/publishVocabulary")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
 	public String publishVocabulary(@QueryParam("thesaurusId") String thesaurusId,
@@ -299,7 +299,7 @@ public class ThesaurusRestService {
 	 */
 	@GET
 	@Path("/archiveVocabulary")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces(MediaType.TEXT_HTML)
 	@PreAuthorize("hasPermission(#thesaurusId, '0')")
 	public String archiveVocabulary(@QueryParam("thesaurusId") String thesaurusId)
@@ -327,7 +327,7 @@ public class ThesaurusRestService {
 
 	@GET
 	@Path("/getAllAuthors")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public List<ThesaurusOrganization> getAllAuthors() {
 		List<ThesaurusOrganization> allOrgs = thesaurusOrganizationService.getOrganizations();
 		List<String> returnedAuthorNames = new ArrayList<String>();
@@ -343,7 +343,7 @@ public class ThesaurusRestService {
 
 	@GET
 	@Path("/getStatistics")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData getStatistics(@QueryParam("id") String thesaurusId) {
 		return new ExtJsonFormLoadData(thesaurusStatisticsService.getStatistics(thesaurusId));
 	}

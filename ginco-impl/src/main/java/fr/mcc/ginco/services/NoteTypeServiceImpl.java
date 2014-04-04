@@ -45,10 +45,10 @@ import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.dao.INoteTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("noteTypeService")
 public class NoteTypeServiceImpl implements INoteTypeService {
-	
+
 	@Inject
 	private INoteTypeDAO noteTypeDAO;
 
@@ -67,12 +67,12 @@ public class NoteTypeServiceImpl implements INoteTypeService {
 	public List<NoteType> getTermNoteTypeList() {
 		return noteTypeDAO.findTermNoteTypes();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.INoteTypeService#getNoteTypeById(java.lang.String)
 	 */
 	@Override
-	public NoteType getNoteTypeById(String typeId){
+	public NoteType getNoteTypeById(String typeId) {
 		return noteTypeDAO.getById(typeId);
 	}
 }

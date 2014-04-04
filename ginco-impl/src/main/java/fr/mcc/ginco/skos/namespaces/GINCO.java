@@ -43,8 +43,9 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 
 public final class GINCO {
-	
-	private  GINCO() {}
+
+	private GINCO() {
+	}
 
 	private static final String URI = "http://data.culture.fr/thesaurus/ginco/ns/";
 
@@ -62,14 +63,14 @@ public final class GINCO {
 	/**
 	 * Get GINCO resource URIs
 	 */
-	public static String getResourceURI(String type){
+	public static String getResourceURI(String type) {
 		return URI + type;
 	}
 
 	/**
 	 * Get GINCO resource
 	 */
-	public static Resource getResource(String type){
+	public static Resource getResource(String type) {
 		return m.createResource(URI + type);
 	}
 

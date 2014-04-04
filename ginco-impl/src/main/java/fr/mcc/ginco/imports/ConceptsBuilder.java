@@ -34,27 +34,12 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.rdf.model.Resource;
-
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
-import fr.mcc.ginco.beans.ConceptHierarchicalRelationship.Id;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -69,22 +54,32 @@ import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Builder in charge of building ThesaurusConcept
- * 
  */
 @Service("skosConceptsBuilder")
 public class ConceptsBuilder extends AbstractBuilder {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(ConceptsBuilder.class);
 	@Inject
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
-	
-	@Inject 
+
+	@Inject
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
 	@Inject
@@ -109,7 +104,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 
 	@Inject
 	private IExternalThesaurusDAO externalThesaurusDAO;
-	
+
 	@Inject
 	@Named("skosAlignmentsBuilder")
 	private AlignmentsBuilder alignmentsBuilder;
@@ -124,12 +119,12 @@ public class ConceptsBuilder extends AbstractBuilder {
 
 	/**
 	 * Launch the calculation of the root concepts and set it
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
 	public void buildConceptsRoot(Thesaurus thesaurus,
-			List<Resource> skosConcepts) {
+	                              List<Resource> skosConcepts) {
 		for (Resource skosConcept : skosConcepts) {
 			// Root calculation
 			ThesaurusConcept concept = conceptBuilder.buildConceptRoot(
@@ -140,19 +135,18 @@ public class ConceptsBuilder extends AbstractBuilder {
 
 	/**
 	 * Builds the parent/child and relationship associations
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
 	public void buildConceptsAssociations(Thesaurus thesaurus,
-			List<Resource> skosConcepts, List<ObjectProperty> broaderTypes, List<ObjectProperty> associationTypes) {
+	                                      List<Resource> skosConcepts, List<ObjectProperty> broaderTypes, List<ObjectProperty> associationTypes) {
 		List<AssociativeRelationship> allRelations = new ArrayList<AssociativeRelationship>();
 		int counter = 1;
 		Set<String> alreadyImported = new HashSet<String>();
 		for (Resource skosConcept : skosConcepts) {
-			if (counter % 100 == 0)
-			{
-				logger.info("Processed "+skosConcepts.size()+"/"+counter+" relationships");
+			if (counter % 100 == 0) {
+				logger.info("Processed " + skosConcepts.size() + "/" + counter + " relationships");
 			}
 			Map<ThesaurusConcept, List<ConceptHierarchicalRelationship>> relationsThesaurusConcept = conceptBuilder
 					.buildConceptHierarchicalRelationships(skosConcept,
@@ -160,9 +154,8 @@ public class ConceptsBuilder extends AbstractBuilder {
 			if (relationsThesaurusConcept.keySet().iterator().hasNext()) {
 				ThesaurusConcept concept = relationsThesaurusConcept.keySet()
 						.iterator().next();
-				for (ConceptHierarchicalRelationship relation : relationsThesaurusConcept.get(concept))
-				{
-					String parentChildId = relation.getIdentifier().getParentconceptid()+relation.getIdentifier().getChildconceptid();
+				for (ConceptHierarchicalRelationship relation : relationsThesaurusConcept.get(concept)) {
+					String parentChildId = relation.getIdentifier().getParentconceptid() + relation.getIdentifier().getChildconceptid();
 					if (alreadyImported.contains(parentChildId)) {
 						conceptHierarchicalRelationshipDAO.update(relation);
 						alreadyImported.add(parentChildId);
@@ -178,7 +171,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 					if (existedRelation.getConceptLeft().equals(
 							relation.getConceptRight())
 							&& existedRelation.getConceptRight().equals(
-									relation.getConceptLeft())
+							relation.getConceptLeft())
 							|| existedRelation.equals(relation)) {
 						isRelationAdded = true;
 					}
@@ -191,30 +184,29 @@ public class ConceptsBuilder extends AbstractBuilder {
 			counter++;
 		}
 		thesaurusConceptDAO.flush();
-		
+
 	}
 
 	/**
 	 * Builds the concept with minimal informations and it's terms and notes
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param skosConcepts
 	 */
 	public Set<Alignment> buildConcepts(Thesaurus thesaurus,
-			List<Resource> skosConcepts) {
+	                                    List<Resource> skosConcepts) {
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 		Set<String> importedLexicalValues = new HashSet<String>();
 		int counter = 1;
-		logger.info("Beginning importing "+skosConcepts.size()+" concepts");
+		logger.info("Beginning importing " + skosConcepts.size() + " concepts");
 		for (Resource skosConcept : skosConcepts) {
-			if (counter % 100 == 0)
-			{
-				logger.info("Imported "+skosConcepts.size()+"/"+counter+" concepts");
+			if (counter % 100 == 0) {
+				logger.info("Imported " + skosConcepts.size() + "/" + counter + " concepts");
 			}
 			// Minimal concept informations
 			ThesaurusConcept concept = conceptBuilder.buildConcept(skosConcept,
 					thesaurus);
-			
+
 			thesaurusConceptDAO.update(concept);
 			ThesaurusTerm preferredTerm = null;
 
@@ -222,21 +214,21 @@ public class ConceptsBuilder extends AbstractBuilder {
 			List<ThesaurusTerm> terms = termBuilder.buildTerms(skosConcept,
 					thesaurus, concept);
 			for (ThesaurusTerm term : terms) {
-				String langLexicalValue = term.getLexicalValue()+term.getLanguage().getId();
+				String langLexicalValue = term.getLexicalValue() + term.getLanguage().getId();
 				if (term.getPrefered()) {
 					preferredTerm = term;
 				}
 				if (!importedLexicalValues.contains(langLexicalValue)) {
 					thesaurusTermDAO.update(term, false);
 					importedLexicalValues.add(langLexicalValue);
-				} else
-				{
+				} else {
 					throw new BusinessException("Already existing term : "
 							+ term.getLexicalValue(), "already-existing-term",
-							new Object[] { term.getLexicalValue() });
+							new Object[]{ term.getLexicalValue() }
+					);
 				}
-				
-				
+
+
 			}
 
 			// Concept notes

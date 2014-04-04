@@ -129,13 +129,14 @@ public class CustomAttributesRestService {
 		return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
 				customAttributesTypeConverter
 						.convertList(customConceptAttributeTypeService
-								.getAttributeTypesByThesaurus(thesaurus), true));
+								.getAttributeTypesByThesaurus(thesaurus), true)
+		);
 	}
 
 	/**
 	 * Updates a list of concept's type attributes.
 	 *
-	 * @param list	
+	 * @param list
 	 */
 	@POST
 	@Path("/updateConceptAttributeTypes")
@@ -143,14 +144,14 @@ public class CustomAttributesRestService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@PreAuthorize("hasPermission(#list, '0')")
 	public List<GenericCustomAttributeTypeView> updateConceptAttributeTypes(
-			List<GenericCustomAttributeTypeView> list){
+			List<GenericCustomAttributeTypeView> list) {
 		List<CustomConceptAttributeType> newList = new ArrayList<CustomConceptAttributeType>();
 		for (GenericCustomAttributeTypeView customConceptAttributeType : list) {
 			CustomConceptAttributeType conceptAttributeType = (CustomConceptAttributeType) customAttributesTypeConverter
 					.convert(customConceptAttributeType, true);
-				customConceptAttributeTypeService
-						.saveOrUpdate(conceptAttributeType);
-				newList.add(conceptAttributeType);
+			customConceptAttributeTypeService
+					.saveOrUpdate(conceptAttributeType);
+			newList.add(conceptAttributeType);
 
 		}
 		return customAttributesTypeConverter.convertList(newList, true);
@@ -159,7 +160,7 @@ public class CustomAttributesRestService {
 	/**
 	 * Removes a list of concept's type attributes.
 	 *
-	 * @param list	
+	 * @param list
 	 */
 	@POST
 	@Path("/deleteConceptAttributeTypes")
@@ -192,13 +193,14 @@ public class CustomAttributesRestService {
 		return new ExtJsonFormLoadData<List<GenericCustomAttributeTypeView>>(
 				customAttributesTypeConverter
 						.convertList(customTermAttributeTypeService
-								.getAttributeTypesByThesaurus(thesaurus), false));
+								.getAttributeTypesByThesaurus(thesaurus), false)
+		);
 	}
 
 	/**
 	 * Updates a list of term type attributes.
 	 *
-	 * @param list	
+	 * @param list
 	 */
 	@POST
 	@Path("/updateTermAttributeTypes")
@@ -211,8 +213,8 @@ public class CustomAttributesRestService {
 		for (GenericCustomAttributeTypeView customConceptAttributeType : list) {
 			CustomTermAttributeType termAttributeType = (CustomTermAttributeType) customAttributesTypeConverter
 					.convert(customConceptAttributeType, false);
-				customTermAttributeTypeService.saveOrUpdate(termAttributeType);
-				newList.add(termAttributeType);
+			customTermAttributeTypeService.saveOrUpdate(termAttributeType);
+			newList.add(termAttributeType);
 		}
 		return customAttributesTypeConverter.convertList(newList, false);
 	}
@@ -220,14 +222,14 @@ public class CustomAttributesRestService {
 	/**
 	 * Removes a list of term's type attributes.
 	 *
-	 * @param list	 
+	 * @param list
 	 */
 	@POST
 	@Path("/deleteTermAttributeTypes")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@PreAuthorize("hasPermission(#list, '0')")
 	public void deleteTermAttributeTypes(
-			List<GenericCustomAttributeTypeView> list){
+			List<GenericCustomAttributeTypeView> list) {
 		for (GenericCustomAttributeTypeView customConceptAttributeType : list) {
 			CustomTermAttributeType conceptAttributeType = (CustomTermAttributeType) customAttributesTypeConverter
 					.convert(customConceptAttributeType, false);
@@ -240,7 +242,7 @@ public class CustomAttributesRestService {
 	/**
 	 * Updates a list of term type attributes.
 	 *
-	 * @param list	
+	 * @param list
 	 */
 	@POST
 	@Path("/updateTermAttribute")
@@ -260,13 +262,13 @@ public class CustomAttributesRestService {
 	 * Return list of all custom attribute for term
 	 *
 	 * @param thesaurusId
-	 * @return	
+	 * @return
 	 */
 	@GET
 	@Path("/getTermAttribute")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ExtJsonFormLoadData<List<GenericCustomAttributeView>> getTermAttribute(
-			@QueryParam("entityId") String entityId){
+			@QueryParam("entityId") String entityId) {
 
 		ThesaurusTerm entity = thesaurusTermService
 				.getThesaurusTermById(entityId);
@@ -280,7 +282,7 @@ public class CustomAttributesRestService {
 	 * Return list of all custom attribute for concept
 	 *
 	 * @param thesaurusId
-	 * @return	
+	 * @return
 	 */
 	@GET
 	@Path("/getConceptAttribute")
@@ -299,7 +301,7 @@ public class CustomAttributesRestService {
 	/**
 	 * Updates a list of term type attributes.
 	 *
-	 * @param list	
+	 * @param list
 	 */
 	@POST
 	@Path("/updateConceptAttribute")

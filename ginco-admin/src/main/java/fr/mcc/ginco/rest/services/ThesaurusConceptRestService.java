@@ -96,7 +96,7 @@ import fr.mcc.ginco.utils.LabelUtil;
  */
 @Service
 @Path("/thesaurusconceptservice")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
 @PreAuthorize("isAuthenticated()")
 public class ThesaurusConceptRestService {
 
@@ -163,11 +163,10 @@ public class ThesaurusConceptRestService {
 	 */
 	@GET
 	@Path("/getConcept")
-	@Produces({MediaType.APPLICATION_JSON})
-	public ThesaurusConceptView getConceptById(
-			@QueryParam("id") String conceptId) {
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ThesaurusConceptView getConceptById(@QueryParam("id") String conceptId) {
 
-		String resultId = "";
+		String resultId;
 
 		if (conceptId.startsWith(ChildrenGenerator.ID_PREFIX)) {
 			resultId = conceptId.substring(conceptId
@@ -177,7 +176,7 @@ public class ThesaurusConceptRestService {
 			resultId = conceptId;
 		}
 
-		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+		List<ThesaurusTerm> terms;
 		logger.debug("Trying to load concept with id = " + resultId);
 
 		terms = thesaurusTermService.getTermsByConceptId(resultId);
@@ -191,10 +190,9 @@ public class ThesaurusConceptRestService {
 	 */
 	@POST
 	@Path("/updateConcept")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#conceptView, '0') or hasPermission(#conceptView, '1')")
-	public ThesaurusConceptView updateConcept(
-			ThesaurusConceptView conceptView) {
+	public ThesaurusConceptView updateConcept(ThesaurusConceptView conceptView) {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		String username = auth.getName();
@@ -203,9 +201,9 @@ public class ThesaurusConceptRestService {
 				Role.EXPERT)) {
 			ThesaurusConcept existingConcept = thesaurusConceptService
 					.getThesaurusConceptById(conceptView.getIdentifier());
-			if ((existingConcept != null && (existingConcept.getStatus() != ConceptStatusEnum.CANDIDATE
-					.getStatus()
-					|| existingConcept.getTopConcept()))
+			if ((existingConcept != null &&
+					(existingConcept.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()
+							|| existingConcept.getTopConcept()))
 					|| conceptView.getStatus() != ConceptStatusEnum.CANDIDATE
 					.getStatus() || conceptView.getTopconcept()) {
 				throw new AccessDeniedException(
@@ -275,7 +273,7 @@ public class ThesaurusConceptRestService {
 	 */
 	@GET
 	@Path("/getAssociations")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public List<AssociativeRelationship> getAssociativeRelationshipsByConceptId(
 			@QueryParam("conceptId") String conceptId) {
 
@@ -294,7 +292,7 @@ public class ThesaurusConceptRestService {
 	 */
 	@GET
 	@Path("/getConcepts")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public List<ThesaurusConceptReducedView> getConceptsByThesaurusId(
 			@QueryParam("id") String conceptId,
 			@QueryParam("thesaurusId") String thesaurusId,
@@ -330,7 +328,7 @@ public class ThesaurusConceptRestService {
 	 */
 	@GET
 	@Path("/getSimpleConcepts")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getSimpleConcepts(
 			@QueryParam("conceptIds") List<String> associatedConcepts) {
 		List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
@@ -351,7 +349,7 @@ public class ThesaurusConceptRestService {
 	 */
 	@GET
 	@Path("/getSimpleChildrenConcepts")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getSimpleChildrenConcepts(
 			@QueryParam("conceptId") String conceptId) {
 		List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
@@ -371,7 +369,7 @@ public class ThesaurusConceptRestService {
 	 */
 	@GET
 	@Path("/getAvailableConceptsOfArray")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getAvailableConceptsOfArray(
 			@QueryParam("arrayId") String arrayId,
 			@QueryParam("thesaurusId") String thesaurusId) {
@@ -388,7 +386,7 @@ public class ThesaurusConceptRestService {
 
 	@GET
 	@Path("/getAvailableConceptsOfGroup")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getAvailableConceptsOfGroup(
 			@QueryParam("groupId") String groupId,
 			@QueryParam("thesaurusId") String thesaurusId) {
@@ -413,7 +411,7 @@ public class ThesaurusConceptRestService {
 	 */
 	@POST
 	@Path("/destroyConcept")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
 	public void destroyConcept(ThesaurusConceptView thesaurusViewJAXBElement) {
 		ThesaurusConcept object = thesaurusConceptService
@@ -437,7 +435,7 @@ public class ThesaurusConceptRestService {
 	 */
 	@GET
 	@Path("/getAllConceptStatus")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<GenericStatusView>> getAllConceptStatus() {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 
@@ -485,7 +483,7 @@ public class ThesaurusConceptRestService {
 	 */
 	@GET
 	@Path("/getAllHierarchicalRelationRoles")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<GenericRoleView>> getAllHierarchicalRelationRoles() {
 		List<GenericRoleView> listOfRoles = new ArrayList<GenericRoleView>();
 
@@ -530,7 +528,7 @@ public class ThesaurusConceptRestService {
 
 	@GET
 	@Path("/getConceptThesaurusId")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<String> getConceptThesaurusId(
 			@QueryParam("id") String conceptId) {
 		return new ExtJsonFormLoadData<String>(thesaurusConceptService

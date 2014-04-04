@@ -15,28 +15,25 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 
 public class ApplicationEventListener implements ApplicationListener<ApplicationEvent> {
 
-	private Logger logger  = LoggerFactory.getLogger(ApplicationEventListener.class);
-	 
+	private Logger logger = LoggerFactory.getLogger(ApplicationEventListener.class);
+
 	@Inject
 	@Named("lockoutService")
 	private LockoutService lockoutService;
-	
-	
-	private void handleFailureEvent(String username, long timestamp)
-	{
+
+
+	private void handleFailureEvent(String username, long timestamp) {
 		if (!lockoutService.isLockedOut(username)) {
 			lockoutService.notifyLoginFailure(username, timestamp);
-		} else 
-		{
-			logger.warn("Account "+username+" is locked...");
+		} else {
+			logger.warn("Account " + username + " is locked...");
 		}
 	}
-	
-	private void registerSuccessLogin(String username)
-	{
+
+	private void registerSuccessLogin(String username) {
 		this.lockoutService.notifyLoginSuccess(username);
 	}
-	 
+
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (event instanceof AuthenticationSuccessEvent) {
@@ -47,7 +44,7 @@ public class ApplicationEventListener implements ApplicationListener<Application
 			String cause = ((AbstractAuthenticationFailureEvent) event).getException().toString();
 			logger.warn("Failed authentication for user '" + username + " caused by " + cause);
 			if (event instanceof AuthenticationFailureBadCredentialsEvent) {
-				this.handleFailureEvent(username, event.getTimestamp()); 
+				this.handleFailureEvent(username, event.getTimestamp());
 			}
 		}
 	}

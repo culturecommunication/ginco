@@ -73,7 +73,7 @@ import fr.mcc.ginco.solr.ITermIndexerService;
  */
 @Service
 @Path("/thesaurusnoteservice")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
 @PreAuthorize("isAuthenticated()")
 public class ThesaurusNoteRestService {
 	@Inject
@@ -113,7 +113,7 @@ public class ThesaurusNoteRestService {
 	 */
 	@GET
 	@Path("/getConceptNoteTypes")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<NoteType>> getConceptNoteTypes() {
 		List<NoteType> noteTypes = new ArrayList<NoteType>();
 		noteTypes = noteTypeService.getConceptNoteTypeList();
@@ -129,7 +129,7 @@ public class ThesaurusNoteRestService {
 	 */
 	@GET
 	@Path("/getTermNoteTypes")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<NoteType>> getTermNoteTypes() {
 		List<NoteType> noteTypes = new ArrayList<NoteType>();
 		noteTypes = noteTypeService.getTermNoteTypeList();
@@ -145,7 +145,7 @@ public class ThesaurusNoteRestService {
 	 */
 	@GET
 	@Path("/getNotes")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> getNotes(
 			@QueryParam("conceptId") String conceptId,
 			@QueryParam("termId") String termId,
@@ -175,7 +175,7 @@ public class ThesaurusNoteRestService {
 	 */
 	@POST
 	@Path("/createNotes")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> createNotes(List<ThesaurusNoteView> noteViews, @QueryParam("conceptId") String conceptId, @QueryParam("termId") String termId) {
 
@@ -221,7 +221,7 @@ public class ThesaurusNoteRestService {
 	 */
 	@POST
 	@Path("/updateNotes")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> updateNotes(List<ThesaurusNoteView> noteViews) {
 
@@ -252,7 +252,7 @@ public class ThesaurusNoteRestService {
 	 */
 	@POST
 	@Path("/destroyNotes")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#noteViews, '0') or hasPermission(#noteViews, '1')")
 	public ExtJsonFormLoadData<List<ThesaurusNoteView>> destroyNotes(List<ThesaurusNoteView> noteViews) {
 
@@ -276,7 +276,7 @@ public class ThesaurusNoteRestService {
 
 	@GET
 	@Path("/getNoteParentEntity")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public String getNoteParentEntity(
 			@QueryParam("noteId") String noteId)
 			throws IOException {

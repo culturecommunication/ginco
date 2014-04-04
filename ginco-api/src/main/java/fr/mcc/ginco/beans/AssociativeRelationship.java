@@ -34,45 +34,41 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
+import java.io.Serializable;
 
 /**
  * Bean represents relation between two {@link ThesaurusConcept}
  */
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AssociativeRelationship implements Serializable {
-	
-	@XmlType(namespace="associativeRelationship")
+
+	@XmlType(namespace = "associativeRelationship")
 	public static class Id implements Serializable {
 		private String concept1;
 		private String concept2;
-    
-        public Id() {}
 
-     
-        public String getConcept1() {
-			return concept1;
+		public Id() {
 		}
 
+		public String getConcept1() {
+			return concept1;
+		}
 
 		public void setConcept1(String concept1) {
 			this.concept1 = concept1;
 		}
 
-
 		public String getConcept2() {
 			return concept2;
 		}
-
 
 		public void setConcept2(String concept2) {
 			this.concept2 = concept2;
@@ -83,10 +79,20 @@ public class AssociativeRelationship implements Serializable {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result
-					+ ((concept1 == null) ? 0 : concept1.hashCode());
-			result = prime * result
-					+ ((concept2 == null) ? 0 : concept2.hashCode());
+			if (concept1 == null) {
+				result = prime * result
+						+ 0;
+			} else {
+				result = prime * result
+						+ concept1.hashCode();
+			}
+			if (concept2 == null) {
+				result = prime * result
+						+ 0;
+			} else {
+				result = prime * result
+						+ concept2.hashCode();
+			}
 			return result;
 		}
 
@@ -95,13 +101,13 @@ public class AssociativeRelationship implements Serializable {
 		public boolean equals(Object obj) {
 			Id other = (Id) obj;
 			if ((concept1.equals(other.concept1) && concept2.equals(other.concept2))
-					||concept1.equals(other.concept2) && concept2.equals(other.concept1)) {
+					|| concept1.equals(other.concept2) && concept2.equals(other.concept1)) {
 				return true;
 			}
 			return false;
 		}
-		
-    }
+
+	}
 
 	private Id identifier;
 	private AssociativeRelationshipRole relationshipRole;
@@ -109,7 +115,7 @@ public class AssociativeRelationship implements Serializable {
 	private ThesaurusConcept conceptLeft;
 	@XmlTransient
 	private ThesaurusConcept conceptRight;
-	
+
 	public Id getIdentifier() {
 		return identifier;
 	}

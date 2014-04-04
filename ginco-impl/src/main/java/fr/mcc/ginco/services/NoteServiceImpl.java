@@ -45,7 +45,7 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("noteService")
 public class NoteServiceImpl implements INoteService {
 
@@ -53,7 +53,8 @@ public class NoteServiceImpl implements INoteService {
 	private INoteDAO noteDAO;
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getConceptNotePaginatedList(java.lang.String, Integer, Integer)
 	 */
 	@Override
@@ -62,8 +63,9 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	/**
-     * (non-Javadoc)
-	 * @see fr.mcc.ginco.services.INoteService#getTermNotePaginatedList(java.lang.String,Integer,Integer)
+	 * (non-Javadoc)
+	 *
+	 * @see fr.mcc.ginco.services.INoteService#getTermNotePaginatedList(java.lang.String, Integer, Integer)
 	 */
 	@Override
 	public List<Note> getTermNotePaginatedList(String termId, Integer startIndex, Integer limit) {
@@ -71,7 +73,8 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getNoteById(java.lang.String)
 	 */
 	@Override
@@ -80,27 +83,30 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#createOrUpdateNote(fr.mcc.ginco.beans.Note)
 	 */
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public Note createOrUpdateNote(Note note) {
 		return noteDAO.update(note);
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#deleteNote(fr.mcc.ginco.beans.Note)
 	 */
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public Note deleteNote(Note note) {
 		return noteDAO.delete(note);
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getConceptNoteCount(java.lang.String)
 	 */
 	@Override
@@ -109,7 +115,8 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getTermNoteCount(java.lang.String)
 	 */
 	@Override
@@ -118,16 +125,18 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getAllNotes()
 	 */
 	@Override
-    public List<Note> getAllNotes() {
-        return noteDAO.findAll();
-    }
+	public List<Note> getAllNotes() {
+		return noteDAO.findAll();
+	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getNotesByThesaurusId(java.lang.String)
 	 */
 	@Override

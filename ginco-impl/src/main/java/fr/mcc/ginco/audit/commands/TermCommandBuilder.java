@@ -51,7 +51,6 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
  * Component in charge of building CommandLine relatives to terms changes
- *
  */
 @Service("termCommandBuilder")
 public class TermCommandBuilder {
@@ -68,7 +67,7 @@ public class TermCommandBuilder {
 	 * @return
 	 */
 	public List<CommandLine> buildDeletedTermsLines(List<ThesaurusTerm> previousTerms,
-			List<ThesaurusTerm> currentTerms) {
+	                                                List<ThesaurusTerm> currentTerms) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
 		Map<String, ThesaurusTerm> newLexicalvalues = mistralStructuresBuilder
@@ -94,7 +93,7 @@ public class TermCommandBuilder {
 	 * @return
 	 */
 	public List<CommandLine> buildChangedTermsLines(List<ThesaurusTerm> previousTerms,
-			List<ThesaurusTerm> currentTerms){
+	                                                List<ThesaurusTerm> currentTerms) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
 		Map<String, ThesaurusTerm> newLexicalvalues = mistralStructuresBuilder
@@ -109,16 +108,15 @@ public class TermCommandBuilder {
 						oldTerm.getLexicalValue()).getPrefered()) {
 					if (!oldTerm.getPrefered()) {
 						CommandLine preferredLine = new CommandLine();
-						if (newNotPreferredTermsByTerm.get(oldTerm.getLexicalValue()).isEmpty()){
+						if (newNotPreferredTermsByTerm.get(oldTerm.getLexicalValue()).isEmpty()) {
 							preferredLine.setValue(StringEscapeUtils.unescapeXml(oldTerm.getLexicalValue()));
-						}
-						else {
+						} else {
 							preferredLine.setValue(CommandLine.STARS
 									+ StringEscapeUtils.unescapeXml(oldTerm.getLexicalValue()));
 						}
 						termsOperations.add(preferredLine);
 
-					} else{
+					} else {
 						CommandLine unpreferredLine = new CommandLine();
 						unpreferredLine.setValue(CommandLine.UNPREFERRERD
 								+ StringEscapeUtils.unescapeXml(oldTerm.getLexicalValue()));
@@ -138,7 +136,7 @@ public class TermCommandBuilder {
 	 * @return
 	 */
 	public List<CommandLine> buildAddedPrefTermsLines(List<ThesaurusTerm> previousTerms,
-			List<ThesaurusTerm> currentTerms) {
+	                                                  List<ThesaurusTerm> currentTerms) {
 		List<CommandLine> termsOperations = new ArrayList<CommandLine>();
 
 		Map<String, ThesaurusTerm> oldLexicalValues = mistralStructuresBuilder
@@ -151,16 +149,16 @@ public class TermCommandBuilder {
 			if (!oldLexicalValues.containsKey(currentTerm.getLexicalValue())
 					&& currentTerm.getPrefered()) {
 				CommandLine additionLine = new CommandLine();
-				if (!newNotPreferredTermsByTerm.get(currentTerm.getLexicalValue()).isEmpty()){
-					additionLine.setValue(CommandLine.STARS	+ StringEscapeUtils.unescapeXml(currentTerm.getLexicalValue()));
+				if (!newNotPreferredTermsByTerm.get(currentTerm.getLexicalValue()).isEmpty()) {
+					additionLine.setValue(CommandLine.STARS + StringEscapeUtils.unescapeXml(currentTerm.getLexicalValue()));
 					termsOperations.add(additionLine);
-				} else{
+				} else {
 					Set<ThesaurusConcept> allParents = new HashSet<ThesaurusConcept>();
 					for (ThesaurusTerm cuttentChildTerm : currentTerms) {
 						allParents.addAll(cuttentChildTerm.getConcept().getParentConcepts());
 					}
 					if (currentTerm.getConcept().getParentConcepts().isEmpty()
-							&& !allParents.contains(currentTerm.getConcept())){
+							&& !allParents.contains(currentTerm.getConcept())) {
 						additionLine.setValue(StringEscapeUtils.unescapeXml(currentTerm.getLexicalValue()));
 						termsOperations.add(additionLine);
 					}

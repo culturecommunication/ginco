@@ -35,10 +35,8 @@
 package fr.mcc.ginco.services;
 
 
-import fr.mcc.ginco.beans.ThesaurusStatistics;
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.solr.SearchResultList;
-import fr.mcc.ginco.solr.SortCriteria;
 
 /**
  * Service used to work with {@link ThesaurusType} objects, contains basic
@@ -48,22 +46,24 @@ import fr.mcc.ginco.solr.SortCriteria;
  * @see fr.mcc.ginco.beans
  */
 public interface IThesaurusReportService {
-    /**
-     * Get a Thesaurus report object
-     * @param thesaurus
-     * @return
-     */
-	SearchResultList getConceptsWithoutNotes(String thesaurus,
-             int startIndex, int limit);
-	
 	/**
-     * Get a Thesaurus report object
-     * @param thesaurus
-     * @return
-     */
+	 * Get a Thesaurus report object
+	 *
+	 * @param thesaurus
+	 * @return
+	 */
+	SearchResultList getConceptsWithoutNotes(String thesaurus,
+	                                         int startIndex, int limit);
+
+	/**
+	 * Get a Thesaurus report object
+	 *
+	 * @param thesaurus
+	 * @return
+	 */
 	SearchResultList getTermsWithoutNotes(String thesaurus,
-             int startIndex, int limit);
+	                                      int startIndex, int limit);
 
 	SearchResultList getConceptsAlignedToMyThes(String thesaurus,
-			int startIndex, int limit);
+	                                            int startIndex, int limit);
 }

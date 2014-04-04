@@ -34,32 +34,26 @@
  */
 package fr.mcc.ginco.exports.result.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.CustomConceptAttribute;
-import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.CustomTermAttribute;
-import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Small utility class for representing an exported Thesaurus With
@@ -94,7 +88,7 @@ public class GincoExportedThesaurus extends GincoExportedEntity {
 	private Map<String, JaxbList<Note>> termNotes = new Hashtable<String, JaxbList<Note>>();
 	private Map<String, JaxbList<Note>> conceptNotes = new Hashtable<String, JaxbList<Note>>();
 	private Map<String, JaxbList<Alignment>> alignments = new Hashtable<String, JaxbList<Alignment>>();
-	
+
 	public Thesaurus getThesaurus() {
 		return thesaurus;
 	}
@@ -151,7 +145,7 @@ public class GincoExportedThesaurus extends GincoExportedEntity {
 
 	public void setConceptArrays(List<ThesaurusArray> conceptArrays) {
 		this.conceptArrays = conceptArrays;
-	}	
+	}
 
 	public Map<String, JaxbList<NodeLabel>> getConceptArrayLabels() {
 		return conceptArrayLabels;
@@ -186,7 +180,7 @@ public class GincoExportedThesaurus extends GincoExportedEntity {
 	public void setComplexConcepts(List<SplitNonPreferredTerm> complexConcepts) {
 		this.complexConcepts = complexConcepts;
 	}
-	
+
 
 	public Map<String, JaxbList<Alignment>> getAlignments() {
 		return alignments;
@@ -194,6 +188,6 @@ public class GincoExportedThesaurus extends GincoExportedEntity {
 
 	public void setAlignments(Map<String, JaxbList<Alignment>> alignments) {
 		this.alignments = alignments;
-	}	
+	}
 
 }

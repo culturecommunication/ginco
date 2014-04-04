@@ -52,10 +52,9 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This class is the implementation of all SOAP services related to thesaurus objects
- * 
  */
-@WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusService")
-public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{	
+@WebService(endpointInterface = "fr.mcc.ginco.soap.ISOAPThesaurusService")
+public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -63,7 +62,7 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 	/**
 	 * This service returns a list of all existing thesaurus in a simplified
 	 * format (id and title)
-	 * 
+	 *
 	 * @return the list of all existing thesaurus
 	 */
 	@Override
@@ -81,10 +80,8 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 
 	/**
 	 * This service returns the details of a thesaurus
-	 * 
-	 * @param id
-	 *            {@link String} identifier of the thesaurus to get - mandatory
-	 * 
+	 *
+	 * @param id {@link String} identifier of the thesaurus to get - mandatory
 	 * @return full thesaurus informations
 	 */
 	@Override
@@ -102,8 +99,8 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 		}
 		fullThesaurus.setModified(DateUtil.toString(thesaurus.getDate()));
 		fullThesaurus.setDescription(thesaurus.getDescription());
-		
-		if (thesaurus.getFormat() != null){
+
+		if (thesaurus.getFormat() != null) {
 			List<String> formatList = new ArrayList<String>();
 			for (ThesaurusFormat format : thesaurus.getFormat()) {
 				formatList.add(format.getLabel());
@@ -126,7 +123,7 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 			fullThesaurus.setType(thesaurus.getType().getLabel());
 		}
 		return fullThesaurus;
-	}	
+	}
 
 	public final void setThesaurusService(IThesaurusService thesaurusService) {
 		this.thesaurusService = thesaurusService;

@@ -41,14 +41,15 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class ConceptHierarchicalRelationship implements Serializable {
-	
+
 	public static class Id implements Serializable {
 		private String childconceptid;
 		private String parentconceptid;
-    
-        public Id() {}
-     
-        public String getChildconceptid() {
+
+		public Id() {
+		}
+
+		public String getChildconceptid() {
 			return childconceptid;
 		}
 
@@ -68,10 +69,20 @@ public class ConceptHierarchicalRelationship implements Serializable {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result
-					+ ((childconceptid == null) ? 0 : childconceptid.hashCode());
-			result = prime * result
-					+ ((parentconceptid == null) ? 0 : parentconceptid.hashCode());
+			if (childconceptid == null) {
+				result = prime * result
+						+ 0;
+			} else {
+				result = prime * result
+						+ childconceptid.hashCode();
+			}
+			if (parentconceptid == null) {
+				result = prime * result
+						+ 0;
+			} else {
+				result = prime * result
+						+ parentconceptid.hashCode();
+			}
 			return result;
 		}
 
@@ -80,36 +91,36 @@ public class ConceptHierarchicalRelationship implements Serializable {
 		public boolean equals(Object obj) {
 			if (this == obj) {
 				return true;
-            }
+			}
 			if (obj == null) {
 				return false;
-            }
+			}
 			if (getClass() != obj.getClass()) {
 				return false;
-            }
+			}
 			Id other = (Id) obj;
 			if (childconceptid == null) {
 				if (other.childconceptid != null) {
 					return false;
-                }
+				}
 			} else if (!childconceptid.equals(other.childconceptid)) {
 				return false;
-            }
+			}
 			if (parentconceptid == null) {
 				if (other.parentconceptid != null) {
 					return false;
-                }
+				}
 			} else if (!parentconceptid.equals(other.parentconceptid)) {
 				return false;
-            }
+			}
 			return true;
 		}
-		
-    }
+
+	}
 
 	private Id identifier;
 	private Integer role;
-	
+
 	public Id getIdentifier() {
 		return identifier;
 	}

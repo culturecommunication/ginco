@@ -50,22 +50,27 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 @Component("thesaurusArrayConceptViewConverter")
 public class ThesaurusArrayConceptViewConverter {
 
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
-   
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-    public ThesaurusArrayConcept convert(ThesaurusArrayConceptView thesaurusArrayConceptView,
-                                           ThesaurusArray array) {
-    	ThesaurusArrayConcept.Id id = new ThesaurusArrayConcept.Id();
-        id.setConceptId(thesaurusArrayConceptView.getIdentifier());
-        id.setThesaurusArrayId(array.getIdentifier());
 
-        ThesaurusArrayConcept thesaurusArrayConcept = new ThesaurusArrayConcept();
-        thesaurusArrayConcept.setIdentifier(id);
-        thesaurusArrayConcept.setConcepts(thesaurusConceptService.getThesaurusConceptById(thesaurusArrayConceptView.getIdentifier()));
-        thesaurusArrayConcept.setArrayOrder(thesaurusArrayConceptView.getOrder() != null?thesaurusArrayConceptView.getOrder() :0);       
-       
-        return thesaurusArrayConcept;
-    }
+	public ThesaurusArrayConcept convert(ThesaurusArrayConceptView thesaurusArrayConceptView,
+	                                     ThesaurusArray array) {
+		ThesaurusArrayConcept.Id id = new ThesaurusArrayConcept.Id();
+		id.setConceptId(thesaurusArrayConceptView.getIdentifier());
+		id.setThesaurusArrayId(array.getIdentifier());
+
+		ThesaurusArrayConcept thesaurusArrayConcept = new ThesaurusArrayConcept();
+		thesaurusArrayConcept.setIdentifier(id);
+		thesaurusArrayConcept.setConcepts(thesaurusConceptService.getThesaurusConceptById(
+				thesaurusArrayConceptView.getIdentifier()));
+		if (thesaurusArrayConceptView.getOrder() != null) {
+			thesaurusArrayConcept.setArrayOrder(thesaurusArrayConceptView.getOrder());
+		} else {
+			thesaurusArrayConcept.setArrayOrder(0);
+		}
+
+		return thesaurusArrayConcept;
+	}
 }

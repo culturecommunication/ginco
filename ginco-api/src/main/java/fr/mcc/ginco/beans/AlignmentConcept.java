@@ -85,14 +85,26 @@ public class AlignmentConcept {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime
-				* result
-				+ ((externalTargetConcept == null) ? 0 : externalTargetConcept
-						.hashCode());
-		result = prime
-				* result
-				+ ((internalTargetConcept == null) ? 0 : internalTargetConcept
-						.hashCode());
+		if (externalTargetConcept == null) {
+			result = prime
+					* result
+					+ 0;
+		} else {
+			result = prime
+					* result
+					+ externalTargetConcept
+					.hashCode();
+		}
+		if (internalTargetConcept == null) {
+			result = prime
+					* result
+					+ 0;
+		} else {
+			result = prime
+					* result
+					+ internalTargetConcept
+					.hashCode();
+		}
 		return result;
 	}
 
@@ -124,7 +136,6 @@ public class AlignmentConcept {
 		}
 		return true;
 	}
-
 
 
 }

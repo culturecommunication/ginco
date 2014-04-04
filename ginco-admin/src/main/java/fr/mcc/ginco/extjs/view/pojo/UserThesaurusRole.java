@@ -35,34 +35,48 @@
 package fr.mcc.ginco.extjs.view.pojo;
 
 public class UserThesaurusRole {
-	
+
 	private String thesaurusId;
 	private Integer role;
-	
+
 	public String getThesaurusId() {
 		return thesaurusId;
 	}
+
 	public void setThesaurusId(String thesaurusId) {
 		this.thesaurusId = thesaurusId;
 	}
+
 	public Integer getRole() {
 		return role;
 	}
+
 	public void setRole(Integer role) {
 		this.role = role;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result
-				+ ((thesaurusId == null) ? 0 : thesaurusId.hashCode());
+		if (role == null) {
+			result = prime * result + 0;
+		} else {
+			result = prime * result + role.hashCode();
+		}
+		if (thesaurusId == null) {
+			result = prime * result
+					+ 0;
+		} else {
+			result = prime * result
+					+ thesaurusId.hashCode();
+		}
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)  {
+		if (this == obj) {
 			return true;
 		}
 		if (obj == null) {
@@ -87,6 +101,6 @@ public class UserThesaurusRole {
 			return false;
 		}
 		return true;
-	}	
+	}
 
 }

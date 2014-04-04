@@ -86,7 +86,7 @@ import fr.mcc.ginco.utils.LabelUtil;
  */
 @Service
 @Path("/thesaurustermservice")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
 @PreAuthorize("isAuthenticated()")
 public class ThesaurusTermRestService {
 
@@ -137,7 +137,7 @@ public class ThesaurusTermRestService {
 	 */
 	@GET
 	@Path("/getSandboxedThesaurusTerms")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusTermView>>
 	getSandboxedThesaurusTerms(@QueryParam("start") Integer startIndex,
 	                           @QueryParam("limit") Integer limit,
@@ -179,7 +179,7 @@ public class ThesaurusTermRestService {
 	 */
 	@GET
 	@Path("/getPreferredThesaurusTerms")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusTermView>>
 	getPreferredThesaurusTerms(@QueryParam("start") Integer startIndex,
 	                           @QueryParam("limit") Integer limit,
@@ -207,7 +207,7 @@ public class ThesaurusTermRestService {
 	 */
 	@GET
 	@Path("/getThesaurusTerm")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusTermView getThesaurusTerm(@QueryParam("id") String idTerm) {
 		ThesaurusTerm thesaurusTerm = thesaurusTermService.getThesaurusTermById(idTerm);
 		return termViewConverter.convert(thesaurusTerm, true);
@@ -223,7 +223,7 @@ public class ThesaurusTermRestService {
 	 */
 	@POST
 	@Path("/updateTerm")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
 	public ThesaurusTermView updateTerm(ThesaurusTermView thesaurusViewJAXBElement) {
 		Authentication auth = SecurityContextHolder.getContext()
@@ -286,7 +286,7 @@ public class ThesaurusTermRestService {
 	 */
 	@POST
 	@Path("/destroyTerm")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#thesaurusViewJAXBElement, '0') or hasPermission(#thesaurusViewJAXBElement, '1')")
 	public ThesaurusTermView destroyTerm(ThesaurusTermView thesaurusViewJAXBElement) {
 		ThesaurusTerm object = thesaurusTermService
@@ -310,7 +310,7 @@ public class ThesaurusTermRestService {
 	 */
 	@GET
 	@Path("/getAllTermStatus")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<GenericStatusView>> getAllTermStatus() {
 
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
@@ -345,7 +345,7 @@ public class ThesaurusTermRestService {
 
 	@GET
 	@Path("/checkTermUnicity")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public Boolean checkTermUnicity(@QueryParam("idThesaurus") String idThesaurus,
 	                                @QueryParam("lexicalValue") String lexicalValue,
 	                                @QueryParam("lang") String lang) {

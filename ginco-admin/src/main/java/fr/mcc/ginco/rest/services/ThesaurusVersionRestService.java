@@ -66,7 +66,7 @@ import fr.mcc.ginco.utils.LabelUtil;
  */
 @Service
 @Path("/thesaurusversionservice")
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({ MediaType.APPLICATION_JSON })
 @PreAuthorize("isAuthenticated()")
 public class ThesaurusVersionRestService {
 
@@ -86,7 +86,7 @@ public class ThesaurusVersionRestService {
 	 */
 	@GET
 	@Path("/getVersions")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> getVersions(
 			@QueryParam("thesaurusId") String thesaurusId) {
 		List<ThesaurusVersionHistory> thesaurusVersions = new ArrayList<ThesaurusVersionHistory>();
@@ -102,7 +102,7 @@ public class ThesaurusVersionRestService {
 	 */
 	@GET
 	@Path("/getAllVersionStatus")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<GenericStatusView>> getAllVersionStatus() {
 		List<GenericStatusView> listOfStatus = new ArrayList<GenericStatusView>();
 
@@ -140,7 +140,7 @@ public class ThesaurusVersionRestService {
 	 */
 	@POST
 	@Path("/updateVersions")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#versionViews, '0')")
 	public ExtJsonFormLoadData<List<ThesaurusVersionHistoryView>> updateVersions(List<ThesaurusVersionHistoryView> versionViews) {
 

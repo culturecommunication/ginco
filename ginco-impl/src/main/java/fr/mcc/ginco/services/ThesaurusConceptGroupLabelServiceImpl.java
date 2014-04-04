@@ -43,10 +43,10 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusConceptGroupLabelService")
 public class ThesaurusConceptGroupLabelServiceImpl implements IThesaurusConceptGroupLabelService {
-	
+
 	@Inject
 	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
 
@@ -56,20 +56,20 @@ public class ThesaurusConceptGroupLabelServiceImpl implements IThesaurusConceptG
 		return thesaurusConceptGroupLabelDAO.findByThesaurusConceptGroupAndLanguage(identifier);
 	}
 
-    @Override
-    public ThesaurusConceptGroupLabel getByThesaurusConceptGroup(String thesaurusConceptGroupId) {
-        return thesaurusConceptGroupLabelDAO.findByThesaurusConceptGroup(thesaurusConceptGroupId);
-    }
+	@Override
+	public ThesaurusConceptGroupLabel getByThesaurusConceptGroup(String thesaurusConceptGroupId) {
+		return thesaurusConceptGroupLabelDAO.findByThesaurusConceptGroup(thesaurusConceptGroupId);
+	}
 
 	@Override
 	public ThesaurusConceptGroupLabel getById(Integer id) {
 		return thesaurusConceptGroupLabelDAO.getById(id);
 	}
 
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusConceptGroupLabel updateOrCreate(
 			ThesaurusConceptGroupLabel conceptGroupLabel) {
 		return thesaurusConceptGroupLabelDAO.update(conceptGroupLabel);
-	}	
+	}
 }

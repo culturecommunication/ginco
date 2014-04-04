@@ -45,14 +45,14 @@ import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("languagesService")
 public class LanguagesServiceImpl implements ILanguagesService {
-	
+
 	@Inject
-    private ILanguageDAO languagesDAO;
-	
-	
+	private ILanguageDAO languagesDAO;
+
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.ILanguagesService#getLanguagesList()
 	 */
@@ -60,7 +60,7 @@ public class LanguagesServiceImpl implements ILanguagesService {
 	public List<Language> getLanguagesList(Integer startIndex, Integer limit) {
 		return languagesDAO.findPaginatedItems(startIndex, limit);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.ILanguagesService#getTopLanguagesList()
 	 */
@@ -68,27 +68,27 @@ public class LanguagesServiceImpl implements ILanguagesService {
 	public List<Language> getTopLanguagesList() {
 		return languagesDAO.findTopLanguages();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.ILanguagesService#getLanguageCount()
 	 */
-	public Long getLanguageCount(){
+	public Long getLanguageCount() {
 		return languagesDAO.count();
 	}
 
-    /* (non-Javadoc)
+	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.ILanguagesService#getLanguageById()
 	 */
-    @Override
-    public Language getLanguageById(String id) {
-        return languagesDAO.getById(id);
-    }
-    
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.services.ILanguagesService#getLanguageByPart1(java.lang.String)
-     */
-    @Override
-    public Language getLanguageByPart1(String part1) {
-        return languagesDAO.getByPart1(part1);
-    }
+	@Override
+	public Language getLanguageById(String id) {
+		return languagesDAO.getById(id);
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.ILanguagesService#getLanguageByPart1(java.lang.String)
+	 */
+	@Override
+	public Language getLanguageByPart1(String part1) {
+		return languagesDAO.getByPart1(part1);
+	}
 }

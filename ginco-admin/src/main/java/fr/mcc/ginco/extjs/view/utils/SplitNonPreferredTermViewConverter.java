@@ -79,51 +79,49 @@ public class SplitNonPreferredTermViewConverter {
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
-	
+
 	@Inject
 	@Named("termViewConverter")
 	private TermViewConverter termViewConverter;
 
-	private Logger logger  = LoggerFactory.getLogger(SplitNonPreferredTermViewConverter.class);
+	private Logger logger = LoggerFactory.getLogger(SplitNonPreferredTermViewConverter.class);
 
 
 	@Value("${ginco.default.language}")
 	private String language;
 
-	
+
 	public SplitNonPreferredTermView convert(SplitNonPreferredTerm source) {
 		SplitNonPreferredTermView view = new SplitNonPreferredTermView();
 		if (source != null) {
 			view.setIdentifier(source.getIdentifier());
 			view.setLexicalValue(source.getLexicalValue());
-			if(source != null) {
+			if (source != null) {
 				view.setCreated(DateUtil.toString(source.getCreated()));
 				view.setModified(DateUtil.toString(source.getModified()));
 			}
 			view.setSource(source.getSource());
-    
+
 			view.setStatus(source.getStatus());
 			List<ThesaurusTermView> preferredList = new ArrayList<ThesaurusTermView>();
 			view.setPreferredTerms(new ArrayList<ThesaurusTermView>());
-            for (ThesaurusTerm preferredTerm : source.getPreferredTerms())
-            {
-            	preferredList.add(termViewConverter.convert(preferredTerm));
-            }
-            view.setPreferredTerms(preferredList);
+			for (ThesaurusTerm preferredTerm : source.getPreferredTerms()) {
+				preferredList.add(termViewConverter.convert(preferredTerm));
+			}
+			view.setPreferredTerms(preferredList);
 
-            view.setThesaurusId(source.getThesaurus().getIdentifier());
-    		if(source.getLanguage() != null) {
-    			view.setLanguage(source.getLanguage().getId());
-    		}
+			view.setThesaurusId(source.getThesaurus().getIdentifier());
+			if (source.getLanguage() != null) {
+				view.setLanguage(source.getLanguage().getId());
+			}
 		}
 		return view;
 	}
 
 	/**
 	 * Main method used to do conversion.
-	 * 
-	 * @param source
-	 *            source to work with
+	 *
+	 * @param source      source to work with
 	 * @param fromConcept
 	 * @return converted item.
 	 */
@@ -138,25 +136,20 @@ public class SplitNonPreferredTermViewConverter {
 		Set<ThesaurusTerm> existingTerms = hibernateRes.getPreferredTerms();
 		List<ThesaurusTermView> prefTermsView = source.getPreferredTerms();
 		// Handling adding new terms
-		if (prefTermsView!=null)
-		{
-			for (ThesaurusTermView prefTermView : prefTermsView)
-			{
-				ThesaurusTerm convertedTerm = termViewConverter.convert(prefTermView,false);
-				if (!existingTerms.contains(convertedTerm))
-				{
+		if (prefTermsView != null) {
+			for (ThesaurusTermView prefTermView : prefTermsView) {
+				ThesaurusTerm convertedTerm = termViewConverter.convert(prefTermView, false);
+				if (!existingTerms.contains(convertedTerm)) {
 					existingTerms.add(convertedTerm);
 				}
 			}
 		}
 		// Handling removing terms
 		List<ThesaurusTerm> termsToRemove = new ArrayList<ThesaurusTerm>();
-		for (ThesaurusTerm existingTerm : existingTerms)
-		{
+		for (ThesaurusTerm existingTerm : existingTerms) {
 			Boolean found = false;
-			for (ThesaurusTermView prefTermView : prefTermsView)
-			{
-				if (prefTermView.getIdentifier().equals(existingTerm.getIdentifier())){
+			for (ThesaurusTermView prefTermView : prefTermsView) {
+				if (prefTermView.getIdentifier().equals(existingTerm.getIdentifier())) {
 					found = true;
 				}
 			}
@@ -164,8 +157,7 @@ public class SplitNonPreferredTermViewConverter {
 				termsToRemove.add(existingTerm);
 			}
 		}
-		for (ThesaurusTerm termToRemove : termsToRemove) 
-		{
+		for (ThesaurusTerm termToRemove : termsToRemove) {
 			existingTerms.remove(termToRemove);
 		}
 		hibernateRes.setLexicalValue(source.getLexicalValue().trim());
@@ -196,7 +188,7 @@ public class SplitNonPreferredTermViewConverter {
 
 		return hibernateRes;
 	}
-	
+
 	private SplitNonPreferredTerm getExistingSplitNonPreferredTerm(String identifier) {
 		SplitNonPreferredTerm hibernateRes = splitNonPreferredTermService.getSplitNonPreferredTermById(identifier);
 		logger.info("Getting an existing SplitNonPreferredTerm with identifier " + identifier);
