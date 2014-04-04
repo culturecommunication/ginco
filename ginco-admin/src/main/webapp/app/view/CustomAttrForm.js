@@ -29,6 +29,7 @@ Ext.define('GincoApp.view.CustomAttrForm', {
 			scope: this,
 		    callback: function(records, operation, success) {
 		    	if (success == true) {
+                    me.removeAll();
 		    		for (var i=0;i<records.length;i++)
 		    		{
 		    			var record = records[i];
