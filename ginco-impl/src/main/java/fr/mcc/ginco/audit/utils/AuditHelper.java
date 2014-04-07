@@ -86,10 +86,10 @@ public class AuditHelper {
 	/**
 	 * Gets the list of ThesaurusConcept revisions where parent id is the conceptId
 	 *
-	 * @param revisionNumber
-	 * @param concept
-	 * @param allThesaurusConcepts
-	 * @return
+	 * @param revisionNumber revision number
+	 * @param concept concept to work with
+	 * @param allThesaurusConcepts all concepts for thesaurus
+	 * @return list of concepts
 	 */
 	public List<ThesaurusConcept> getConceptChildrenAtRevision(Number revisionNumber,
 	                                                           ThesaurusConcept concept,
@@ -114,9 +114,9 @@ public class AuditHelper {
 	/**
 	 * Gets concept with previous revision
 	 *
-	 * @param revision
-	 * @param conceptId
-	 * @return
+	 * @param revision revision to start with
+	 * @param conceptId id of concept
+	 * @return concept with revision BEFORE given
 	 */
 	public ThesaurusConcept getConceptPreviousVersion(GincoRevEntity revision, String conceptId) {
 		AuditQuery previousElementQuery = auditQueryBuilder

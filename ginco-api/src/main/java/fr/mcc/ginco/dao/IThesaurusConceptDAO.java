@@ -34,10 +34,10 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+
+import java.util.List;
 
 /**
  * Data Access Object for thesaurus_concept
@@ -145,28 +145,42 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 
 	/**
 	 * Returns the number of concepts aligned to internal thesauruses
-	 * @param thesaurus
+	 * @param idThesaurus
 	 * @return
 	 */
 	Long countConceptsAlignedToIntThes(String idThesaurus);
 
 	/**
 	 * Returns the number of concepts aligned to external thesauruses
-	 * @param thesaurus
+	 * @param idThesaurus
 	 * @return
 	 */
 	Long countConceptsAlignedToExtThes(String idThesaurus);
 
 	/**
 	 * Returns the number of concepts aligned to my thesaurus
-	 * @param thesaurus
+	 * @param idThesaurus
 	 * @return
 	 */
 	Long countConceptsAlignedToMyThes(String idThesaurus);
 
+	/**
+	 * Returns list of aligned concepts for thesaurus given
+	 *
+	 * @param idThesaurus id of thesaurus to work with
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
 	List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus,
 			int startIndex, int limit);
 
+	/**
+	 * Return list of concept's ids with children
+	 *
+	 * @param thesaurusId
+	 * @return
+	 */
 	List<String> getIdentifiersOfConceptsWithChildren(String thesaurusId);
 
 

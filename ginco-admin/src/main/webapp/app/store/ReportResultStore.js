@@ -62,7 +62,6 @@ Ext.define('GincoApp.store.ReportResultStore', {
         cfg = cfg || {};
         me.callParent([Ext.apply({
             storeId: 'JsonReportResultStoree',
-            remoteSort: true,
             proxy: {
                 type: 'ajax',
                 url: 'services/ui/reportservice/search',

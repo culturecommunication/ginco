@@ -108,8 +108,7 @@ Ext.define('GincoApp.view.ThesaurusReportsTabPanel', {
 										}, {
 											dataIndex : 'lexicalValue',
 											text : me.xLexicalValueColumnLabel,
-											flex : 1,
-											sortable : true
+											flex : 1
 										}, {
 											xtype : 'actioncolumn',
 											itemId : 'reportActionColumn',

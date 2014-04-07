@@ -34,9 +34,12 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.math.BigInteger;
-import java.util.List;
-
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
@@ -45,12 +48,8 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.math.BigInteger;
+import java.util.List;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
