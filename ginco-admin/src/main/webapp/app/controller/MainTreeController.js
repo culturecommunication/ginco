@@ -43,6 +43,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	xProblemLoadMsg : 'Unable to load thesaurus tree',
 	trackTabs : false,
 	treeViewLoaded: false,
+    treeViewLoading: false,
     userInfoLoaded: false,
 	onNodeDblClick : function(tree, aRecord, item, index, e, eOpts) {
 		if (aRecord.data.type == "THESAURUS") {
@@ -115,14 +116,20 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	
 	loadTreeView : function(theTree) {
 		var me = this;
+
+        if (me.treeViewLoading) return;
+
 		theTree.setLoading(true);
-		var treeState,focusedRecord,scrollPosition,me = this;
+        me.treeViewLoaded = false;
+        me.treeViewLoading = true;
+
+		var treeState,focusedRecordId,scrollPosition = this;
 		if (theTree)
 		{
 		    scrollPosition = theTree.getEl().down('.x-grid-view').getScroll();
 			treeState = theTree.getState();
             if (theTree.getSelectionModel().hasSelection()) {
-                focusedRecord = theTree.store.getNodeById(theTree.getSelectionModel().getSelection()[0].data.id);
+                focusedRecordId = theTree.getSelectionModel().getSelection()[0].data.id;
             }
 		}
 		var theFilterCombo = theTree.down('#authorFilter');
@@ -131,33 +138,29 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		if (MainTreeStore.isLoading()==false) {
 			MainTreeStore.load({
 				callback: function (theStore, aOperation){
-					me.treeViewLoaded = true;
-					theTree.setLoading(false);
 					if (aOperation.success==false)
 					{
 						Thesaurus.ext.utils.msg(me.xProblemLabel,
 								me.xProblemLoadMsg+ " : "+ aOperation.error.statusText);
 					} else{
+                        theTree.setLoading(false);
 						if (me.userInfoLoaded) {
 							MainTreeStore.filter();
 						}
 						this.getRootNode().expand();
 						if (treeState)
 						{
-							theTree.applyState(treeState, function(){
-								var task = new Ext.util.DelayedTask(function() {
-								    theTree.getEl().down('.x-grid-view').scrollTo('top', scrollPosition.top, false);
-								});
-								task.delay(50);
-							});
-						}
+							theTree.applyState(treeState, function() {
+                                theTree.getEl().down('.x-grid-view').scrollTo('top', scrollPosition.top, false);
+                                var selectModel = theTree.getSelectionModel();
+                                selectModel.select(theTree.store.getNodeById(focusedRecordId));
+                                focusedRecordId = null;
+                            });
+                        }
+
+                        me.treeViewLoaded = true;
+                        me.treeViewLoading = false;
 					}
-					
-					theTree.getView().focus();
-					try {
-						var selectModel = theTree.getSelectionModel();
-                        selectModel.select(focusedRecord);
-					} catch(e) {} 
 			    }
 			});
 		}
