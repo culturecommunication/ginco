@@ -34,26 +34,22 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.springframework.stereotype.Component;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
-
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * This component is in charge of exporting concept notes to SKOS
- *
  */
 @Component("skosNotesExporter")
 public class SKOSNotesExporter {
@@ -65,12 +61,12 @@ public class SKOSNotesExporter {
 
 	/**
 	 * Export concept notes to SKOS using the skos API
-	 * @param thesaurus
+	 *
 	 * @return
 	 */
 	public Model exportNotes(Model model, List<ThesaurusTerm> prefTerms, ThesaurusConcept concept) {
 
-		Resource conceptRes= model.createResource(concept.getIdentifier());
+		Resource conceptRes = model.createResource(concept.getIdentifier());
 
 		List<Note> notes = noteService.getConceptNotePaginatedList(
 				concept.getIdentifier(), 0, 0);

@@ -34,22 +34,6 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -61,7 +45,6 @@ import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
@@ -74,10 +57,24 @@ import fr.mcc.ginco.skos.namespaces.ISOTHES;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.skos.namespaces.SKOSXL;
 import fr.mcc.ginco.utils.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("skosExportService")
 public class SKOSExportServiceImpl implements ISKOSExportService {
-	
+
 	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
 	@Inject
@@ -99,11 +96,11 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Inject
 	@Named("skosGroupsExporter")
 	private SKOSGroupsExporter skosGroupsExporter;
-	
+
 	@Inject
 	@Named("skosAssociativeRelationshipRolesExporter")
 	private SKOSAssociativeRelationshipRolesExporter skosAssociativeRelationshipRolesExporter;
-	
+
 	@Inject
 	@Named("skosHierarchicalRelationshipRolesExporter")
 	private SKOSHierarchicalRelationshipRolesExporter skosHierarshicalRelationshipRolesExporter;
@@ -111,16 +108,16 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 	@Inject
 	@Named("thesaurusConceptGroupTypeService")
 	private IThesaurusConceptGroupTypeService thesaurusConceptGroupTypeService;
-	
+
 	@Inject
 	@Named("skosComplexConceptExporter")
 	private SKOSComplexConceptExporter skosComplexConceptExporter;
 
-	private Logger logger  = LoggerFactory.getLogger(SKOSExportServiceImpl.class);
+	private Logger logger = LoggerFactory.getLogger(SKOSExportServiceImpl.class);
 
 
 	@Override
-	public File getSKOSExport(Thesaurus thesaurus){
+	public File getSKOSExport(Thesaurus thesaurus) {
 
 		List<ThesaurusConcept> tt = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
@@ -131,22 +128,22 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 		skosThesaurusExporter.exportThesaurusSKOS(thesaurus, model);
 
 		for (ThesaurusConcept conceptTT : tt) {
-			skosConceptExporter.exportConceptSKOS(conceptTT, null, model, ontModel);			
-			
+			skosConceptExporter.exportConceptSKOS(conceptTT, null, model, ontModel);
+
 		}
 		skosArrayExporter.exportCollections(thesaurus, model);
 		skosGroupsExporter.exportGroups(thesaurus, model, ontModel);
 		skosAssociativeRelationshipRolesExporter.exportAssociativeRelationshipRoles(model, ontModel);
 		skosHierarshicalRelationshipRolesExporter.exportHierarchicalRelationshipRoles(model, ontModel);
 		skosComplexConceptExporter.exportComplexConcept(thesaurus, model);
-		
+
 		model.setNsPrefix("skos", SKOS.getURI());
 		model.setNsPrefix("dct", DCTerms.getURI());
 		model.setNsPrefix("iso-thes", ISOTHES.getURI());
-		model.setNsPrefix("ginco", GINCO.getURI() );
+		model.setNsPrefix("ginco", GINCO.getURI());
 		model.setNsPrefix("xl", SKOSXL.getURI());
 		model.setNsPrefix("foaf", FOAF.getURI());
-		
+
 		List<Resource> rootTypes = new ArrayList<Resource>();
 		rootTypes.add(OWL.Ontology);
 		rootTypes.add(RDFS.Datatype);
@@ -164,43 +161,43 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 		rootTypes.add(ISOTHES.PREFERRED_TERM);
 		rootTypes.add(ISOTHES.SIMPLE_NON_PREFERRED_TERM);
 		rootTypes.add(SKOS.COLLECTION);
-		
-		for (ThesaurusConceptGroupType groupType:thesaurusConceptGroupTypeService.getConceptGroupTypeList()) {
+
+		for (ThesaurusConceptGroupType groupType : thesaurusConceptGroupTypeService.getConceptGroupTypeList()) {
 			rootTypes.add(GINCO.getResource(groupType.getSkosLabel()));
 		}
 
 
-		RDFWriter w =  model.getWriter("RDF/XML-ABBREV");
+		RDFWriter w = model.getWriter("RDF/XML-ABBREV");
 		w.setProperty("tab", 4);
-		w.setProperty("prettyTypes",rootTypes.toArray(new Resource[rootTypes.size()]));		
+		w.setProperty("prettyTypes", rootTypes.toArray(new Resource[rootTypes.size()]));
 		StringWriter sw = new StringWriter();
 		sw.write(XML_HEADER);
-		w.write(model, sw, null);		
-		String res =sw.toString();
-		
+		w.write(model, sw, null);
+		String res = sw.toString();
+
 		logger.debug("termModels = " + res);
 
-		try {			
+		try {
 
 			File temp = File.createTempFile("skosExport"
 					+ DateUtil.nowDate().getTime(), ".rdf");
 			temp.deleteOnExit();
-			
+
 			FileInputStream fis = new FileInputStream(temp);
 
 			fis.close();
 
 			BufferedOutputStream bos;
-			
+
 			FileOutputStream fos = new FileOutputStream(temp);
 
 			bos = new BufferedOutputStream(fos);
 			bos.write(res.getBytes());
-			bos.flush();			
+			bos.flush();
 			fos.close();
 
 			return temp;
-		
+
 		} catch (IOException e) {
 			throw new BusinessException(
 					"Error storing temporarty file for export SKOS",

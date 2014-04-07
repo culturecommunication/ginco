@@ -34,20 +34,10 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
-
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -56,10 +46,16 @@ import fr.mcc.ginco.skos.namespaces.ISOTHES;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.skos.namespaces.SKOSXL;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * This component is in charge of exporting complex concept to SKOS
- *
  */
 @Component("skosComplexConceptExporter")
 public class SKOSComplexConceptExporter {
@@ -68,6 +64,13 @@ public class SKOSComplexConceptExporter {
 	@Named("splitNonPreferredTermService")
 	private ISplitNonPreferredTermService splitNonPreferredTermService;
 
+	/**
+	 * Exports complex concept
+	 *
+	 * @param thesaurus
+	 * @param model
+	 * @return
+	 */
 	public Model exportComplexConcept(Thesaurus thesaurus, Model model) {
 		List<SplitNonPreferredTerm> complexConcepts = splitNonPreferredTermService
 				.getSplitNonPreferredTermList(0, -1,
@@ -88,7 +91,8 @@ public class SKOSComplexConceptExporter {
 
 				model.add(complexConceptRes, SKOSXL.LITERAL_FORM,
 						StringEscapeUtils.unescapeXml(complexConcept.getLexicalValue()), complexConcept
-								.getLanguage().getId());
+								.getLanguage().getId()
+				);
 				model.add(complexConceptRes, DCTerms.created,
 						DateUtil.toISO8601String(complexConcept.getCreated()));
 				model.add(complexConceptRes, DCTerms.modified,
@@ -107,7 +111,7 @@ public class SKOSComplexConceptExporter {
 						.createResource(ISOTHES.COMPOUND_EQUIVALENCE);
 				model.add(compoundEquivalenceRes, SKOS.IN_SCHEME, inScheme);
 				model.add(compoundEquivalenceRes, ISOTHES.PLUS_UF, complexConcept.getIdentifier());
-				for (ThesaurusTerm term : complexConcept.getPreferredTerms()){
+				for (ThesaurusTerm term : complexConcept.getPreferredTerms()) {
 					model.add(compoundEquivalenceRes, ISOTHES.PLUS_USE, term.getIdentifier());
 				}
 			}

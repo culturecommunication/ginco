@@ -96,7 +96,7 @@ import fr.mcc.ginco.solr.IThesaurusIndexerService;
  */
 @Service
 @Path("/importservice")
-@Produces({MediaType.TEXT_HTML})
+@Produces({ MediaType.TEXT_HTML })
 public class ImportRestService {
 	private static final String ATTACHMENT_NAME = "import-file-path";
 

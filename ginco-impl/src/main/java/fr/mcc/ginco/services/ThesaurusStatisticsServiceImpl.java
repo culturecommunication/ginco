@@ -34,11 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusStatistics;
 import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
@@ -48,11 +43,15 @@ import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
 
 /**
  *
  */
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusStatisticsService")
 public class ThesaurusStatisticsServiceImpl implements IThesaurusStatisticsService {
 

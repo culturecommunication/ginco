@@ -34,7 +34,13 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.util.List;
+import fr.mcc.ginco.enums.ReportTypeEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.services.IThesaurusReportService;
+import fr.mcc.ginco.solr.SearchResult;
+import fr.mcc.ginco.solr.SearchResultList;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,15 +49,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.enums.ReportTypeEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.services.IThesaurusReportService;
-import fr.mcc.ginco.solr.SearchResult;
-import fr.mcc.ginco.solr.SearchResultList;
+import java.util.List;
 
 /**
  * Base REST service for getting report search results
@@ -66,13 +64,13 @@ public class ReportRestService {
 
 	@GET
 	@Path("/search")
-	@Produces({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<SearchResult>> search(
 			@QueryParam("thesaurusId") String thesaurusId,
 			@QueryParam("type") int type,
 			@QueryParam("start") int startIndex,
 			@QueryParam("limit") int limit) {
-		SearchResultList resultList = null;
+		SearchResultList resultList;
 		if (type == ReportTypeEnum.CONCEPTSWONOTES.getType()) {
 			resultList = thesaurusReportService.getConceptsWithoutNotes(thesaurusId, startIndex, limit);
 		} else if (type == ReportTypeEnum.TERMSWONOTES.getType()) {
@@ -84,7 +82,7 @@ public class ReportRestService {
 		}
 		ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(
 				resultList);
-		extSearchResults.setTotal((long) resultList.getNumFound());
+		extSearchResults.setTotal(resultList.getNumFound());
 		return extSearchResults;
 	}
 }

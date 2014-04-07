@@ -34,18 +34,9 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.springframework.stereotype.Component;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
-
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
@@ -54,10 +45,15 @@ import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * This component is in charge of exporting collections to SKOS
- *
  */
 @Component("skosArrayExporter")
 public class SKOSArrayExporter {
@@ -72,6 +68,7 @@ public class SKOSArrayExporter {
 
 	/**
 	 * Export thesaurus arrays from the given thesaurus in SKOS format
+	 *
 	 * @param thesaurus
 	 * @return
 	 */
@@ -97,10 +94,10 @@ public class SKOSArrayExporter {
 								label.getLanguage().getId());
 
 				for (ThesaurusArrayConcept arrayConcept : array.getConcepts()) {
-						Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());
-						model.add(collectionRes, SKOS.MEMBER, y);
+					Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());
+					model.add(collectionRes, SKOS.MEMBER, y);
 				}
-				for (ThesaurusArray childrenArray : thesaurusArrayService.getChildrenArrays(array.getIdentifier())){
+				for (ThesaurusArray childrenArray : thesaurusArrayService.getChildrenArrays(array.getIdentifier())) {
 					Resource arrayMember = model.createResource(childrenArray.getIdentifier());
 					model.add(collectionRes, SKOS.MEMBER, arrayMember);
 				}

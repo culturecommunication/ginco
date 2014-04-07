@@ -52,8 +52,8 @@ import java.util.List;
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 
-public class ThesaurusView implements Serializable, SecuredResourceView {	
-	
+public class ThesaurusView implements Serializable, SecuredResourceView {
+
 	private String id;
 	private String contributor;
 	private String coverage;
@@ -67,18 +67,19 @@ public class ThesaurusView implements Serializable, SecuredResourceView {
 	private String title;
 	private String created;
 	private Boolean defaultTopConcept;
-    private Boolean archived;
-    private Boolean canBeDeleted;
+	private Boolean archived;
+	private Boolean canBeDeleted;
 	private Integer type;
 	private String creatorName;
 	private String creatorHomepage;
 	private String creatorEmail;
-    private Boolean polyHierarchical;
+	private Boolean polyHierarchical;
 
 	private List<String> languages = new ArrayList<String>();
 	private List<Integer> formats = new ArrayList<Integer>();
 
-    public ThesaurusView() {}
+	public ThesaurusView() {
+	}
 
 	public String getId() {
 		return id;
@@ -224,29 +225,29 @@ public class ThesaurusView implements Serializable, SecuredResourceView {
 		this.defaultTopConcept = defaulttopconcept;
 	}
 
-    public Boolean getArchived() {
-        return archived;
-    }
+	public Boolean getArchived() {
+		return archived;
+	}
 
-    public void setArchived(Boolean archived) {
-        this.archived = archived;
-    }
+	public void setArchived(Boolean archived) {
+		this.archived = archived;
+	}
 
-    public Boolean getCanBeDeleted() {
-        return canBeDeleted;
-    }
+	public Boolean getCanBeDeleted() {
+		return canBeDeleted;
+	}
 
-    public void setCanBeDeleted(Boolean canBeDeleted) {
-        this.canBeDeleted = canBeDeleted;
-    }
+	public void setCanBeDeleted(Boolean canBeDeleted) {
+		this.canBeDeleted = canBeDeleted;
+	}
 
-    public Boolean getPolyHierarchical() {
-        return polyHierarchical;
-    }
+	public Boolean getPolyHierarchical() {
+		return polyHierarchical;
+	}
 
-    public void setPolyHierarchical(Boolean polyHierarchical) {
-        this.polyHierarchical = polyHierarchical;
-    }
+	public void setPolyHierarchical(Boolean polyHierarchical) {
+		this.polyHierarchical = polyHierarchical;
+	}
 
 	public List<Integer> getFormats() {
 		return formats;
@@ -257,7 +258,7 @@ public class ThesaurusView implements Serializable, SecuredResourceView {
 	}
 
 	@Override
-	public String getThesaurusId() {		
+	public String getThesaurusId() {
 		return id;
 	}
 }

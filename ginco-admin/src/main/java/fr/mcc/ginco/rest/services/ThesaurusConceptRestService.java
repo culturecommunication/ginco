@@ -201,8 +201,8 @@ public class ThesaurusConceptRestService {
 				Role.EXPERT)) {
 			ThesaurusConcept existingConcept = thesaurusConceptService
 					.getThesaurusConceptById(conceptView.getIdentifier());
-			if ((existingConcept != null &&
-					(existingConcept.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()
+			if ((existingConcept != null
+					&& (existingConcept.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()
 							|| existingConcept.getTopConcept()))
 					|| conceptView.getStatus() != ConceptStatusEnum.CANDIDATE
 					.getStatus() || conceptView.getTopconcept()) {

@@ -63,65 +63,64 @@ import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
 
 /**
  * Thesaurus Concept Group REST service for all operation on concept groups
- * 
  */
 @Service
 @Path("/thesaurusconceptgroupservice")
 @Produces({ MediaType.APPLICATION_JSON })
 @PreAuthorize("isAuthenticated()")
-public class ThesaurusConceptGroupRestService {	
-	
+public class ThesaurusConceptGroupRestService {
+
 	@Inject
 	@Named("thesaurusConceptGroupService")
 	private IThesaurusConceptGroupService thesaurusConceptGroupService;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupTypeService")
 	private IThesaurusConceptGroupTypeService thesaurusConceptGroupTypeService;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupViewConverter")
 	private ThesaurusConceptGroupViewConverter thesaurusConceptGroupViewConverter;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupLabelViewConverter")
 	private ThesaurusConceptGroupLabelViewConverter thesaurusConceptGroupLabelViewConverter;
 
-	
+
 	/**
 	 * Public method used to get the list of all concept groups types in the database.
-	 * 
-	 * @return list of ThesaurusConceptGroupType objects for a concept, if not found - {@code null} 
+	 *
+	 * @return list of ThesaurusConceptGroupType objects for a concept, if not found - {@code null}
 	 */
 	@GET
 	@Path("/getConceptGroupTypes")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptGroupType>> getConceptGroupTypes() {
-		List<ThesaurusConceptGroupType> conceptGroupTypes = new ArrayList<ThesaurusConceptGroupType>();
+		List<ThesaurusConceptGroupType> conceptGroupTypes;
 		conceptGroupTypes = thesaurusConceptGroupTypeService.getConceptGroupTypeList();
 		ExtJsonFormLoadData<List<ThesaurusConceptGroupType>> types = new ExtJsonFormLoadData<List<ThesaurusConceptGroupType>>(conceptGroupTypes);
 		types.setTotal((long) conceptGroupTypes.size());
 		return types;
 	}
-	
+
 	/**
 	 * Public method used to get a concept group.
-	 * 
-	 * @return a concept group related to the id given in parameter 
+	 *
+	 * @return a concept group related to the id given in parameter
 	 */
 	@GET
 	@Path("/getConceptGroup")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ThesaurusConceptGroupView getConceptGroupById(
-			@QueryParam("id") String conceptGroupId){
+			@QueryParam("id") String conceptGroupId) {
 		return thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupService
 				.getConceptGroupById(conceptGroupId));
 	}
 
 	/**
 	 * Public method used to get all concept groups of a thesaurus without the ConceptGroup which Id is given in parameter (can be null).
-	 * 
-	 * @return a list of concept groups related to the ids of the thesaurus and excluded concept group given in parameter 
+	 *
+	 * @return a list of concept groups related to the ids of the thesaurus and excluded concept group given in parameter
 	 */
 	@GET
 	@Path("/getAllConceptGroups")
@@ -129,22 +128,25 @@ public class ThesaurusConceptGroupRestService {
 	public ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> getAllConceptGroupsByThesaurusId(
 			@QueryParam("excludedConceptGroupId") String excludedConceptGroupId,
 			@QueryParam("thesaurusId") String thesaurusId) {
-		
+
 		if (StringUtils.isEmpty(excludedConceptGroupId)) {
 			excludedConceptGroupId = null;
 		}
-		List<ThesaurusConceptGroup> allGroups =  thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(excludedConceptGroupId, thesaurusId);
-		ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> groupViews = new ExtJsonFormLoadData<List<ThesaurusConceptGroupView>>(thesaurusConceptGroupViewConverter.convert(allGroups));
-		groupViews.setTotal((long)allGroups.size());
+		List<ThesaurusConceptGroup> allGroups =
+				thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(excludedConceptGroupId, thesaurusId);
+		ExtJsonFormLoadData<List<ThesaurusConceptGroupView>> groupViews =
+				new ExtJsonFormLoadData<List<ThesaurusConceptGroupView>>(thesaurusConceptGroupViewConverter.convert(allGroups));
+		groupViews.setTotal((long) allGroups.size());
 		return groupViews;
 	}
 
-	
-    /**
-     * Public method used to create or update a concept group.
-     * @param thesaurusConceptGroupViewJAXBElement element to create/update.
-     * @return newly created object.
-     */
+
+	/**
+	 * Public method used to create or update a concept group.
+	 *
+	 * @param thesaurusConceptGroupViewJAXBElement element to create/update.
+	 * @return newly created object.
+	 */
 	@POST
 	@Path("/updateConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -152,21 +154,23 @@ public class ThesaurusConceptGroupRestService {
 	public ThesaurusConceptGroupView updateThesaurusConceptGroup(
 			ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) {
 
-		ThesaurusConceptGroupLabel conceptGroupLabel = thesaurusConceptGroupLabelViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
-		
+		ThesaurusConceptGroupLabel conceptGroupLabel =
+				thesaurusConceptGroupLabelViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
+
 		ThesaurusConceptGroup convertedConceptGroup = thesaurusConceptGroupViewConverter
 				.convert(thesaurusConceptGroupViewJAXBElement);
-		
+
 		ThesaurusConceptGroup updated = thesaurusConceptGroupService.updateThesaurusConceptGroup(
 				convertedConceptGroup, conceptGroupLabel);
-		
+
 		return thesaurusConceptGroupViewConverter.convert(updated);
 	}
-	
+
 	/**
-     * Public method used to delete a concept group.
-     * @param thesaurusConceptGroupViewJAXBElement element to delete
-     */
+	 * Public method used to delete a concept group.
+	 *
+	 * @param thesaurusConceptGroupViewJAXBElement element to delete
+	 */
 	@POST
 	@Path("/destroyConceptGroup")
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -177,5 +181,5 @@ public class ThesaurusConceptGroupRestService {
 			thesaurusConceptGroupService.destroyThesaurusConceptGroup(object);
 		}
 	}
-	
+
 }

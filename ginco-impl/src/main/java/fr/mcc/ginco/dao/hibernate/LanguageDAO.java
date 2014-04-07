@@ -34,16 +34,15 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.dao.ILanguageDAO;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.dao.ILanguageDAO;
+import java.util.List;
 
 /**
  * Implementation of {@link ILanguageDAO}; basic class for DAO-related work.
@@ -52,7 +51,7 @@ import fr.mcc.ginco.dao.ILanguageDAO;
 public class LanguageDAO extends GenericHibernateDAO<Language, String>
 		implements ILanguageDAO {
 
-	private Logger logger  = LoggerFactory.getLogger(LanguageDAO.class);
+	private Logger logger = LoggerFactory.getLogger(LanguageDAO.class);
 
 
 	public LanguageDAO() {
@@ -61,8 +60,8 @@ public class LanguageDAO extends GenericHibernateDAO<Language, String>
 
 	/**
 	 * @return List of Language with favorites Language first, and the other
-	 *         elements sorted alphabetically with a starting index and a limit
-	 *         of items to be returned
+	 * elements sorted alphabetically with a starting index and a limit
+	 * of items to be returned
 	 */
 	@Override
 	public List<Language> findPaginatedItems(Integer start, Integer limit) {
@@ -93,7 +92,7 @@ public class LanguageDAO extends GenericHibernateDAO<Language, String>
 				.add(Restrictions.eq("part1", part1))
 				.add(Restrictions.eq("principalLanguage", true)).list();
 		if (languages != null && languages.size() > 0) {
-			if(languages.size() > 01) {
+			if (languages.size() > 01) {
 				logger.warn("Multiple principal languages found for the same part1 " + part1);
 			}
 			return languages.get(0);

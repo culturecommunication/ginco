@@ -53,16 +53,15 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting concept terms to SKOS jena model
- *
  */
 
 @Component("skosModelTermsExporter")
 public class SKOSModelTermsExporter {
 
-	private Logger logger  = LoggerFactory.getLogger(SKOSModelTermsExporter.class);
+	private Logger logger = LoggerFactory.getLogger(SKOSModelTermsExporter.class);
 
 
-	public Model exportConceptPreferredTerm(ThesaurusTerm term, Model model ) {
+	public Model exportConceptPreferredTerm(ThesaurusTerm term, Model model) {
 		logger.debug("Start generating model for preferred term "
 				+ term.getLexicalValue());
 
@@ -83,9 +82,9 @@ public class SKOSModelTermsExporter {
 	}
 
 	public Model exportConceptNotPreferredTerm(ThesaurusTerm term, Model model,
-			Resource conceptResource, boolean hidden) {
+	                                           Resource conceptResource, boolean hidden) {
 		logger.debug("Start generating model for non preferred term "
-				+ term.getLexicalValue() + "(hidden = " + hidden +")");
+				+ term.getLexicalValue() + "(hidden = " + hidden + ")");
 
 		Resource prefTermRes = model.createResource(term.getIdentifier(),
 				ISOTHES.SIMPLE_NON_PREFERRED_TERM);

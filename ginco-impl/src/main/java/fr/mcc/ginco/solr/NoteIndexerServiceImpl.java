@@ -53,7 +53,7 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
 @Service("noteIndexerService")
-public class NoteIndexerServiceImpl implements INoteIndexerService{
+public class NoteIndexerServiceImpl implements INoteIndexerService {
 
 	private static Logger logger = LoggerFactory.getLogger(NoteIndexerServiceImpl.class);
 
@@ -76,7 +76,7 @@ public class NoteIndexerServiceImpl implements INoteIndexerService{
 	}
 
 	@Override
-	public void addNotes(List<Note> notes){
+	public void addNotes(List<Note> notes) {
 		try {
 			for (Note note : notes) {
 

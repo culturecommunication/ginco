@@ -35,16 +35,16 @@
 
 package fr.mcc.ginco.solr;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.TechnicalException;
+
+import java.util.List;
 
 public interface IConceptIndexerService {
 	/**
      * Takes an {@link ThesaurusConcept} and adds it to index
      *
-     * @param Updated/created {@link ThesaurusConcept} to save to index
+     * @param thesaurusConcept Updated/created {@link ThesaurusConcept} to save to index
      * @throws TechnicalException
      */
 	void addConcept(ThesaurusConcept thesaurusConcept) throws TechnicalException;
@@ -52,7 +52,7 @@ public interface IConceptIndexerService {
 	/**
      * Takes a list of {@link ThesaurusConcept} and adds it to index
      *
-     * @param List of updated/created (@link Note) to save to index
+     * @param thesaurusConcepts List of updated/created (@link Note) to save to index
      * @throws TechnicalException
      */
 	void addConcepts(List<ThesaurusConcept> thesaurusConcepts) throws TechnicalException;

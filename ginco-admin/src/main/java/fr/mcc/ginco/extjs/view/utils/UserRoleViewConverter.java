@@ -34,18 +34,17 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.Role;
 import fr.mcc.ginco.beans.UserRole;
 import fr.mcc.ginco.extjs.view.pojo.UserRoleView;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IUserRoleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Small class responsible for converting real {@link UserRole} object into its
@@ -62,18 +61,16 @@ public class UserRoleViewConverter {
 	@Named("userRoleService")
 	private IUserRoleService userRoleService;
 
-	private Logger logger  = LoggerFactory.getLogger(UserRoleViewConverter.class);
+	private Logger logger = LoggerFactory.getLogger(UserRoleViewConverter.class);
 
 
 	/**
 	 * Main method used to convert from {@link UserRole} to {@link UserRoleView}
-	 * .
-	 * 
-	 * @param source
-	 *            source to work with
+	 *
+	 * @param userRole user role to work with
 	 * @return converted item.
 	 */
-	public UserRoleView convert(UserRole userRole){
+	public UserRoleView convert(UserRole userRole) {
 		logger.debug("Converting UserRole " + userRole.getIdentifier()
 				+ " to UserRoleView");
 		UserRoleView userRoleView = new UserRoleView();
@@ -87,7 +84,7 @@ public class UserRoleViewConverter {
 	/**
 	 * Main method used to convert from {@link UserRoleView} to {@link UserRole}
 	 * .
-	 * 
+	 *
 	 * @param userRoleView
 	 * @return
 	 */

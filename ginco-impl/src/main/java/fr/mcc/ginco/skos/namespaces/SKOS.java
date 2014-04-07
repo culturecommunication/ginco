@@ -34,13 +34,13 @@
  */
 package fr.mcc.ginco.skos.namespaces;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SKOS vocabulary class for namespace http://www.w3.org/2004/02/skos/core#
@@ -151,14 +151,14 @@ public final class SKOS {
 	/**
 	 * MAP of all notes types
 	 */
-	public static final Map<String, Property> SKOS_NOTES = new HashMap<String, Property>() {{
+	public static final Map<String, Property> SKOS_NOTES = new HashMap<String, Property>() { {
 		put(SCOPE_NOTE.getLocalName(), SCOPE_NOTE);
 		put(CHANGE_NOTE.getLocalName(), CHANGE_NOTE);
 		put(DEFINITION.getLocalName(), DEFINITION);
 		put(EDITORIAL_NOTE.getLocalName(), EDITORIAL_NOTE);
 		put(EXAMPLE.getLocalName(), EXAMPLE);
 		put(HISTORY_NOTE.getLocalName(), HISTORY_NOTE);
-	}};
+	} };
 
 	/**
 	 * notation property
@@ -199,11 +199,11 @@ public final class SKOS {
 	/**
 	 * MAP of all alignment types
 	 */
-	public static final Map<String, Property> SKOS_ALIGNMENTS = new HashMap<String, Property>() {{
+	public static final Map<String, Property> SKOS_ALIGNMENTS = new HashMap<String, Property>() { {
 		put("=EQ", EXACT_MATCH);
 		put("~EQ", CLOSE_MATCH);
 		put("BM", BROAD_MATCH);
 		put("NM", NARROW_MATCH);
 		put("RM", RELATED_MATCH);
-	}};
+	} };
 }

@@ -36,17 +36,15 @@ package fr.mcc.ginco.rest.services.exceptions;
 
 import javax.ws.rs.core.Response;
 
-import org.springframework.security.access.AccessDeniedException;
-
 /**
  * Exception mapper for spring security access denied
- *
  */
-public class ThesaurusArchivedAccessDeniedExceptionMapper  extends AbstractExceptionMapper<ThesaurusArchivedAccessDeniedException>{
-	
+public class ThesaurusArchivedAccessDeniedExceptionMapper
+		extends AbstractExceptionMapper<ThesaurusArchivedAccessDeniedException> {
+
 	@Override
 	public Response toResponse(Throwable exception) {
 		return super.toResponse(exception, "thesaurs-archived-only-deletion-supported", null);
-	}	
-	
+	}
+
 }

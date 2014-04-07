@@ -34,15 +34,6 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
@@ -52,6 +43,13 @@ import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of the thesaurus array service contains methods relatives to
@@ -82,7 +80,7 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 	@Override
 	public List<ThesaurusArray> getAllThesaurusArrayByThesaurusId(String excludedConceptArrayId, String thesaurusId) {
 		return thesaurusArrayDAO
-				.getThesaurusArrayListByThesaurusId(excludedConceptArrayId,thesaurusId);
+				.getThesaurusArrayListByThesaurusId(excludedConceptArrayId, thesaurusId);
 	}
 
 	@Override
@@ -94,7 +92,7 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 	@Transactional(readOnly = false)
 	@Override
 	public ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray,
-			NodeLabel nodeLabel, List<ThesaurusArrayConcept> arrayConcepts) {
+	                                           NodeLabel nodeLabel, List<ThesaurusArrayConcept> arrayConcepts) {
 
 		if (thesaurusArray.getSuperOrdinateConcept() != null) {
 			if (thesaurusArray.getSuperOrdinateConcept().getStatus() != ConceptStatusEnum.VALIDATED
@@ -112,8 +110,9 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 			// concept from the list
 			List<ThesaurusArray> arrayWithSameSuperOrdinate = thesaurusArrayDAO
 					.getConceptSuperOrdinateArrays(thesaurusArray
-							.getSuperOrdinateConcept().getIdentifier(),
-							thesaurusArray.getIdentifier());
+									.getSuperOrdinateConcept().getIdentifier(),
+							thesaurusArray.getIdentifier()
+					);
 
 			for (ThesaurusArray currentArray : arrayWithSameSuperOrdinate) {
 				Set<ThesaurusArrayConcept> conceptOfEachArray = currentArray
@@ -134,7 +133,8 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 				Set<ThesaurusConcept> parentsOfChild = thesaurusConceptDAO
 						.getById(
 								thesaurusArrayConcept.getIdentifier()
-										.getConceptId()).getParentConcepts();
+										.getConceptId()
+						).getParentConcepts();
 				if (!parentsOfChild.contains(thesaurusArray
 						.getSuperOrdinateConcept())) {
 					throw new BusinessException(
@@ -169,15 +169,15 @@ public class ThesaurusArrayServiceImpl implements IThesaurusArrayService {
 		return thesaurusArrayDAO
 				.getArraysWithoutSuperordinatedConcept(thesaurusId);
 	}
-	
+
 	@Override
-	public List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId){
+	public List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId) {
 		return thesaurusArrayDAO.
 				getArraysWithoutParentArray(thesaurusId);
 	}
-	
+
 	@Override
-	public List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId){
+	public List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId) {
 		return thesaurusArrayDAO.getChildrenArrays(thesaurusArrayId);
 	}
 

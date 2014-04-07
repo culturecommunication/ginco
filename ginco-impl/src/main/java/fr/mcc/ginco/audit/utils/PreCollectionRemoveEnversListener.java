@@ -7,14 +7,14 @@ import org.hibernate.event.spi.PreCollectionRemoveEvent;
 
 @SuppressWarnings("serial")
 public class PreCollectionRemoveEnversListener extends
-		EnversPreCollectionRemoveEventListenerImpl implements EnversListener{
+		EnversPreCollectionRemoveEventListenerImpl implements EnversListener {
 
 	public PreCollectionRemoveEnversListener(
 			AuditConfiguration enversConfiguration) {
 		super(enversConfiguration);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public void onPreRemoveCollection(PreCollectionRemoveEvent event) {
 		// TODO Auto-generated method stub

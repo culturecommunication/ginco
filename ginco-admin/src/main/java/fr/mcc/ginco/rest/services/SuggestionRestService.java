@@ -67,7 +67,6 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 /**
  * Suggestion REST service for all operation on suggestions (both term or
  * concept suggestions)
- * 
  */
 @Service
 @Path("/suggestionservice")
@@ -92,7 +91,7 @@ public class SuggestionRestService {
 
 	/**
 	 * Gets the list of all concept or term suggestions
-	 * 
+	 *
 	 * @param conceptId
 	 * @param termId
 	 * @param startIndex
@@ -108,7 +107,7 @@ public class SuggestionRestService {
 			@QueryParam("start") Integer startIndex,
 			@QueryParam("limit") Integer limit) {
 
-		List<Suggestion> suggestions = new ArrayList<Suggestion>();
+		List<Suggestion> suggestions;
 		Long total;
 		if (StringUtils.isNotEmpty(conceptId)) {
 			suggestions = suggestionService.getConceptSuggestionPaginatedList(
@@ -136,7 +135,6 @@ public class SuggestionRestService {
 
 	/**
 	 * Public method used to create new suggestions
-	 * 
 	 */
 	@POST
 	@Path("/updateSuggestions")
@@ -163,7 +161,6 @@ public class SuggestionRestService {
 
 	/**
 	 * Public method used to create new suggestions
-	 * 
 	 */
 	@POST
 	@Path("/createSuggestions")
@@ -172,7 +169,7 @@ public class SuggestionRestService {
 	public ExtJsonFormLoadData<List<SuggestionView>> createSuggestions(
 			List<SuggestionView> suggestionViews,
 			@QueryParam("conceptId") String conceptId,
-			@QueryParam("termId") String termId){
+			@QueryParam("termId") String termId) {
 		for (SuggestionView view : suggestionViews) {
 			if (StringUtils.isNotEmpty(conceptId)) {
 				logger.info("Updating suggestions for conceptid : " + conceptId);
@@ -205,7 +202,6 @@ public class SuggestionRestService {
 
 	/**
 	 * Public method used to create new suggestions
-	 * 
 	 */
 	@GET
 	@Path("/getUserSuggestions")
@@ -255,7 +251,7 @@ public class SuggestionRestService {
 				.getSuggestionByRecipientCount(currentUser));
 		return result;
 	}
-	
+
 	/**
 	 * Public method used to destroy suggestions
 	 */
@@ -264,11 +260,11 @@ public class SuggestionRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#suggestionViews, '0') or hasPermission(#suggestionViews, '1')")
 	public void destroySuggestions(List<SuggestionView> suggestionViews) {
-		for (SuggestionView suggestionView:suggestionViews) {
-			Suggestion suggestion  = suggestionViewConverter.convert(suggestionView); 
+		for (SuggestionView suggestionView : suggestionViews) {
+			Suggestion suggestion = suggestionViewConverter.convert(suggestionView);
 			suggestionService.deleteSuggestion(suggestion);
 		}
-	
+
 	}
 
 }

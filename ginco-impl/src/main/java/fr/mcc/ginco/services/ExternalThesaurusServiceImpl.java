@@ -34,18 +34,16 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+import javax.inject.Inject;
+import java.util.List;
+
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("externalThesaurusService")
 public class ExternalThesaurusServiceImpl implements IExternalThesaurusService {
 

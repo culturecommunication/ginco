@@ -53,7 +53,7 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
 @Service("conceptIndexerService")
-public class ConceptIndexerServiceImpl implements IConceptIndexerService{
+public class ConceptIndexerServiceImpl implements IConceptIndexerService {
 
 	private static Logger logger = LoggerFactory.getLogger(ConceptIndexerServiceImpl.class);
 

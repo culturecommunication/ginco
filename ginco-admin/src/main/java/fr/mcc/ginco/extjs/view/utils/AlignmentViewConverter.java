@@ -63,7 +63,7 @@ import fr.mcc.ginco.utils.DateUtil;
  *
  */
 @Component("alignmentViewConverter")
-public class AlignmentViewConverter {	
+public class AlignmentViewConverter {
 
 	@Inject
 	@Named("alignmentService")
@@ -81,11 +81,11 @@ public class AlignmentViewConverter {
 	@Named("externalThesaurusViewConverter")
 	private ExternalThesaurusViewConverter externalThesaurusViewConverter;
 
-	private Logger logger  = LoggerFactory.getLogger(AlignmentViewConverter.class);
+	private Logger logger = LoggerFactory.getLogger(AlignmentViewConverter.class);
 
 	/**
 	 * convert an Alignment object to an AlignmentView suitable for display
-	 * 
+	 *
 	 * @param alignment
 	 * @return
 	 */
@@ -97,7 +97,7 @@ public class AlignmentViewConverter {
 		if (alignment.getExternalTargetThesaurus() != null) {
 			List<ExternalThesaurusView> externalThesauruses = new ArrayList<ExternalThesaurusView>();
 			externalThesauruses.add(externalThesaurusViewConverter.convertExternalThesaurus(alignment.getExternalTargetThesaurus()));
-		    view.setExternalThesaurus(externalThesauruses);
+			view.setExternalThesaurus(externalThesauruses);
 		}
 		view.setIdentifier(alignment.getIdentifier());
 		if (alignment.getInternalTargetThesaurus() != null) {
@@ -128,13 +128,13 @@ public class AlignmentViewConverter {
 	/**
 	 * This method convert the view of an alignment to the {@link Alignment}
 	 * object
-	 * 
+	 *
 	 * @param alignmentView
 	 * @param convertedConcept
 	 * @return
 	 */
 	public Alignment convertAlignmentView(AlignmentView alignmentView,
-			ThesaurusConcept convertedConcept) {
+	                                      ThesaurusConcept convertedConcept) {
 		Alignment alignment;
 
 		if (StringUtils.isEmpty(alignmentView.getIdentifier())) {
@@ -152,9 +152,9 @@ public class AlignmentViewConverter {
 		alignment.setAndRelation(alignmentView.getAndRelation());
 
 		if (alignmentView.getExternalThesaurus() != null
-				&& alignmentView.getExternalThesaurus().size()>0
-				&& StringUtils.isNotEmpty(alignmentView.getExternalThesaurus().get(0).getExternalId())) {			
-		
+				&& alignmentView.getExternalThesaurus().size() > 0
+				&& StringUtils.isNotEmpty(alignmentView.getExternalThesaurus().get(0).getExternalId())) {
+
 			alignment.setExternalTargetThesaurus(externalThesaurusViewConverter
 					.convertExternalThesaurusView(alignmentView
 							.getExternalThesaurus().get(0)));
@@ -183,7 +183,7 @@ public class AlignmentViewConverter {
 							.getInternalTargetConcept().getThesaurusId();
 				} else if (target.getInternalTargetConcept() != null
 						&& !targetInternalThesaurusId.equals(target
-								.getInternalTargetConcept().getThesaurusId())) {
+						.getInternalTargetConcept().getThesaurusId())) {
 					throw new BusinessException(
 							"Internal target concepts not in the same thesaurus",
 							"no-unique-thesaurus-for-internal-target-concepts");

@@ -35,13 +35,6 @@
 
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
@@ -49,46 +42,49 @@ import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+import javax.inject.Inject;
+import java.util.List;
+
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusReportService")
 public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 
 	@Inject
 	private IThesaurusConceptDAO conceptDAO;
-	
+
 	@Inject
 	private IThesaurusTermDAO termDAO;
-	
+
 	@Inject
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Override
 	public SearchResultList getConceptsWithoutNotes(String thesaurus,
-			int startIndex, int limit) {
+	                                                int startIndex, int limit) {
 		SearchResultList resultList = new SearchResultList();
-		List<ThesaurusConcept> concepts =  conceptDAO.getConceptsWoNotes(thesaurus, startIndex, limit);
-		for (ThesaurusConcept concept : concepts)
-		{
+		List<ThesaurusConcept> concepts = conceptDAO.getConceptsWoNotes(thesaurus, startIndex, limit);
+		for (ThesaurusConcept concept : concepts) {
 			resultList.add(getSearchResultFromConcept(concept));
 		}
 		resultList.setNumFound(conceptDAO.countConceptsWoNotes(thesaurus));
 		return resultList;
 	}
-	
+
 	@Override
 	public SearchResultList getConceptsAlignedToMyThes(String thesaurus,
-			int startIndex, int limit) {
+	                                                   int startIndex, int limit) {
 		SearchResultList resultList = new SearchResultList();
-		List<ThesaurusConcept> concepts =  conceptDAO.getConceptsAlignedToMyThes(thesaurus, startIndex, limit);
-		for (ThesaurusConcept concept : concepts)
-		{
+		List<ThesaurusConcept> concepts = conceptDAO.getConceptsAlignedToMyThes(thesaurus, startIndex, limit);
+		for (ThesaurusConcept concept : concepts) {
 			resultList.add(getSearchResultFromConcept(concept));
 		}
 		resultList.setNumFound(conceptDAO.countConceptsAlignedToMyThes(thesaurus));
 		return resultList;
 	}
-	
+
 	private SearchResult getSearchResultFromConcept(ThesaurusConcept concept) {
 		SearchResult result = new SearchResult();
 		result.setIdentifier(concept.getIdentifier());
@@ -106,11 +102,10 @@ public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 
 	@Override
 	public SearchResultList getTermsWithoutNotes(String thesaurus,
-			int startIndex, int limit) {
+	                                             int startIndex, int limit) {
 		SearchResultList resultList = new SearchResultList();
-		List<ThesaurusTerm> terms =  termDAO.getTermsWoNotes(thesaurus, startIndex, limit);
-		for (ThesaurusTerm term : terms)
-		{
+		List<ThesaurusTerm> terms = termDAO.getTermsWoNotes(thesaurus, startIndex, limit);
+		for (ThesaurusTerm term : terms) {
 			resultList.add(getSearchResultFromTerm(term, thesaurus));
 		}
 		resultList.setNumFound(termDAO.countTermsWoNotes(thesaurus));
@@ -118,7 +113,7 @@ public class ThesaurusReportServiceImpl implements IThesaurusReportService {
 	}
 
 	private SearchResult getSearchResultFromTerm(ThesaurusTerm term,
-			String thesaurus) {
+	                                             String thesaurus) {
 		SearchResult result = new SearchResult();
 		result.setIdentifier(term.getIdentifier());
 		result.setType("ThesaurusTerm");

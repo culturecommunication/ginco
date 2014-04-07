@@ -41,117 +41,129 @@ import java.util.List;
 /**
  * Interface for generic node in list of nodes.
  */
-public interface IThesaurusListNode extends Comparable<IThesaurusListNode>{	
-	
-    /**
-     * @return true if the node should be expanded by default.
-     */
-    boolean isExpanded();
-   
-    /**
-     * sets whether the node should be expanded by default
-     * @param expanded
-     */
-    void setExpanded(boolean expanded);
+public interface IThesaurusListNode extends Comparable<IThesaurusListNode> {
 
-    /**
-     * @return the list of all node children
-     */
-    List<IThesaurusListNode> getChildren();
+	/**
+	 * @return true if the node should be expanded by default.
+	 */
+	boolean isExpanded();
 
-    /**
-     * sets the list of all node children
-     * @param children
-     */
-    void setChildren(List<IThesaurusListNode> children);
+	/**
+	 * sets whether the node should be expanded by default
+	 *
+	 * @param expanded
+	 */
+	void setExpanded(boolean expanded);
 
-    /**
-     * @return the node title displayed to the user
-     */
-    String getTitle();
+	/**
+	 * @return the list of all node children
+	 */
+	List<IThesaurusListNode> getChildren();
 
-    /**
-     * sets the node title displayed to the user
-     * @param title
-     */
-    void setTitle(String title);
+	/**
+	 * sets the list of all node children
+	 *
+	 * @param children
+	 */
+	void setChildren(List<IThesaurusListNode> children);
 
-    /**
-     * @return  the node type
-     */
-    ThesaurusListNodeType getType();
+	/**
+	 * @return the node title displayed to the user
+	 */
+	String getTitle();
 
-    /**
-     * Sets the node type
-     * @param type
-     */
-    void setType(ThesaurusListNodeType type);
+	/**
+	 * sets the node title displayed to the user
+	 *
+	 * @param title
+	 */
+	void setTitle(String title);
 
-    /**
-     * @return the service tag (not visible in UI)
-     */
-    String getId();
+	/**
+	 * @return the node type
+	 */
+	ThesaurusListNodeType getType();
 
-    /**
-     * Sets the service tag (not visible in UI.)
-     * @param id
-     */
-    void setId(String id);
-    
-    /**
-     * @return true if the current node is a leaf
-     */
-    boolean isLeaf();
+	/**
+	 * Sets the node type
+	 *
+	 * @param type
+	 */
+	void setType(ThesaurusListNodeType type);
+
+	/**
+	 * @return the service tag (not visible in UI)
+	 */
+	String getId();
+
+	/**
+	 * Sets the service tag (not visible in UI.)
+	 *
+	 * @param id
+	 */
+	void setId(String id);
+
+	/**
+	 * @return true if the current node is a leaf
+	 */
+	boolean isLeaf();
 
 	/**
 	 * Sets whether the currentnode is a leaf
+	 *
 	 * @param leaf
 	 */
 	void setLeaf(boolean leaf);
-	
-	 /**
-     * @return the css class of the icon node
-     */
-    String getIconCls();
+
+	/**
+	 * @return the css class of the icon node
+	 */
+	String getIconCls();
 
 	/**
 	 * Set the css class of the icon node
+	 *
 	 * @param cls
 	 */
 	void setIconCls(String cls);
 
-    /**
-     * Get the parent ThesaurusId
-     * @return
-     */
-    String getThesaurusId();
+	/**
+	 * Get the parent ThesaurusId
+	 *
+	 * @return
+	 */
+	String getThesaurusId();
 
-    /**
-     * Set the parent ThesaurusId
-     * @param thesaurusId
-     */
-    void setThesaurusId(String thesaurusId);
-    
-    /**
-     * @return true if the current node is displayable
-     */
-    boolean isDisplayable();
+	/**
+	 * Set the parent ThesaurusId
+	 *
+	 * @param thesaurusId
+	 */
+	void setThesaurusId(String thesaurusId);
+
+	/**
+	 * @return true if the current node is displayable
+	 */
+	boolean isDisplayable();
 
 	/**
 	 * Sets whether the current node is displayable
+	 *
 	 * @param displayable
 	 */
 	void setDisplayable(boolean displayable);
 
-    /**
-     * Service tag to filter by organization.
-     * @return
-     */
-    String getOrganizationName();
+	/**
+	 * Service tag to filter by organization.
+	 *
+	 * @return
+	 */
+	String getOrganizationName();
 
-    /**
-     * Sets organization name.
-     * @param organizationName
-     */
-    void setOrganizationName(String organizationName);
+	/**
+	 * Sets organization name.
+	 *
+	 * @param organizationName
+	 */
+	void setOrganizationName(String organizationName);
 }

@@ -34,24 +34,21 @@
  */
 package fr.mcc.ginco.audit.commands;
 
+import fr.mcc.ginco.audit.utils.AuditHelper;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.audit.utils.AuditHelper;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-
 /**
  * Component in charge of building utility structures for CommandLine builders
- * 
  */
 @Service("mistralStructuresBuilder")
 public class MistralStructuresBuilder {
@@ -64,7 +61,7 @@ public class MistralStructuresBuilder {
 	 * Builds a Map of hierarchy where the key is the lexical value of the
 	 * preferred term of the parent concept and the value is the list of lexical
 	 * values of the children concept preferred terms
-	 * 
+	 *
 	 * @param conceptsAtRevision
 	 * @param revision
 	 * @param lang
@@ -80,7 +77,7 @@ public class MistralStructuresBuilder {
 					.getPreferredTermAtRevision(revision,
 							previousConcept.getIdentifier(), lang);
 
-			if (previousPrefTerm != null){
+			if (previousPrefTerm != null) {
 				List<ThesaurusConcept> children = auditHelper
 						.getConceptChildrenAtRevision(revision, previousConcept, allConcepts);
 
@@ -90,15 +87,15 @@ public class MistralStructuresBuilder {
 					ThesaurusTerm childPrefTerm = auditHelper
 							.getPreferredTermAtRevision(revision,
 									child.getIdentifier(), lang);
-					if (childPrefTerm != null){
+					if (childPrefTerm != null) {
 						childrenLexicalValues.add(childPrefTerm.getLexicalValue());
-					}	
+					}
 				}
 				Collections.sort(childrenLexicalValues);
 
 				hierarchies.put(previousPrefTerm.getLexicalValue(),
 						childrenLexicalValues);
-			}	
+			}
 		}
 		return hierarchies;
 	}
@@ -107,7 +104,7 @@ public class MistralStructuresBuilder {
 	 * Builds a Map of synonyms where the key is the lexical value of the
 	 * preferred term of the concept and the value is the list of lexical values
 	 * of the alternatives terms
-	 * 
+	 *
 	 * @param conceptsAtRevision
 	 * @param revision
 	 * @param lang
@@ -121,7 +118,7 @@ public class MistralStructuresBuilder {
 			ThesaurusTerm previousPrefTerm = auditHelper
 					.getPreferredTermAtRevision(revision,
 							previousConcept.getIdentifier(), lang);
-			if (previousPrefTerm != null){
+			if (previousPrefTerm != null) {
 				List<String> synonymsLexicalvalues = new ArrayList<String>();
 				List<ThesaurusTerm> previousConceptTerms = auditHelper
 						.getConceptTermsAtRevision(previousConcept, revision, lang);
@@ -144,7 +141,7 @@ public class MistralStructuresBuilder {
 	/**
 	 * Builds a Map of terms where the key is the lexical value of the term and
 	 * the value is the ThesaurusTerm object values of the alternatives terms
-	 * 
+	 *
 	 * @param currentTerms
 	 * @return
 	 */
@@ -156,21 +153,21 @@ public class MistralStructuresBuilder {
 		}
 		return newLexicalvalues;
 	}
-	
+
 	public Map<String, List<ThesaurusTerm>> getNotPreferredTermsByTerm(
 			List<ThesaurusTerm> currentTerms) {
 		Map<String, List<ThesaurusTerm>> nonPreferredTerms = new HashMap<String, List<ThesaurusTerm>>();
 		for (ThesaurusTerm currentTerm : currentTerms) {
-			if (currentTerm.getPrefered()){
-				
-				List<ThesaurusTerm> notPreferredTerms = new ArrayList<ThesaurusTerm>();				
-				for (ThesaurusTerm term : currentTerms){
+			if (currentTerm.getPrefered()) {
+
+				List<ThesaurusTerm> notPreferredTerms = new ArrayList<ThesaurusTerm>();
+				for (ThesaurusTerm term : currentTerms) {
 					if (term.getConcept().getIdentifier().equals(currentTerm.getConcept().getIdentifier())
-							&& !term.getPrefered()){
+							&& !term.getPrefered()) {
 						notPreferredTerms.add(term);
 					}
-				}		
-				nonPreferredTerms.put(currentTerm.getLexicalValue(), notPreferredTerms);	
+				}
+				nonPreferredTerms.put(currentTerm.getLexicalValue(), notPreferredTerms);
 			}
 		}
 		return nonPreferredTerms;

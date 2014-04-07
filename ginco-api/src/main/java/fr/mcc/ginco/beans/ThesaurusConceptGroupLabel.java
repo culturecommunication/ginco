@@ -34,61 +34,71 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Bean represents concept_group_label table
  */
 @SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ThesaurusConceptGroupLabel implements Serializable{
+public class ThesaurusConceptGroupLabel implements Serializable {
 	@XmlTransient
-    private Integer identifier;
-    private String lexicalValue;
-    private Date created;
-    private Date modified;
-    private Language language;
-    @XmlTransient
-    private ThesaurusConceptGroup conceptGroup;
+	private Integer identifier;
+	private String lexicalValue;
+	private Date created;
+	private Date modified;
+	private Language language;
+	@XmlTransient
+	private ThesaurusConceptGroup conceptGroup;
 
 	public Integer getIdentifier() {
 		return identifier;
 	}
+
 	public void setIdentifier(Integer identifier) {
 		this.identifier = identifier;
 	}
+
 	public String getLexicalValue() {
 		return lexicalValue;
 	}
+
 	public void setLexicalValue(String lexicalValue) {
 		this.lexicalValue = lexicalValue;
 	}
+
 	public Date getCreated() {
 		return created;
 	}
+
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+
 	public Date getModified() {
 		return modified;
 	}
+
 	public void setModified(Date modified) {
 		this.modified = modified;
 	}
+
 	public Language getLanguage() {
 		return language;
 	}
+
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
+
 	public ThesaurusConceptGroup getConceptGroup() {
 		return conceptGroup;
 	}
+
 	public void setConceptGroup(ThesaurusConceptGroup conceptGroup) {
 		this.conceptGroup = conceptGroup;
 	}

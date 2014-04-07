@@ -61,25 +61,24 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 @Component(value = "orphansGenerator")
 public class OrphansGenerator {
 
-  	@Inject
+	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-  	
+
 	@Inject
 	@Named("thesaurusListNodeFactory")
 	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
-	private Logger logger  = LoggerFactory.getLogger(OrphansGenerator.class);
+	private Logger logger = LoggerFactory.getLogger(OrphansGenerator.class);
 
-	
+
 	@Value("${conceptstree.maxresults}")
 	private int maxResults;
 
 	/**
 	 * Creates a list of orphan concepts for a given thesaurus
-	 * 
-	 * @param parentId
-	 *            id of the thesaurus.
+	 *
+	 * @param parentId id of the thesaurus.
 	 * @return created list of leafs.
 	 */
 	public List<IThesaurusListNode> generateOrphans(String parentId) {
@@ -100,26 +99,25 @@ public class OrphansGenerator {
 			orphanNode.setTitle(thesaurusConceptService.getConceptLabel(orphan
 					.getIdentifier()));
 			orphanNode
-                    .setId(ChildrenGenerator.ID_PREFIX
-                            + ChildrenGenerator.PARENT_SEPARATOR
-                            + orphan.getIdentifier());
+					.setId(ChildrenGenerator.ID_PREFIX
+							+ ChildrenGenerator.PARENT_SEPARATOR
+							+ orphan.getIdentifier());
 			orphanNode.setType(ThesaurusListNodeType.CONCEPT);
 			orphanNode.setExpanded(false);
-            orphanNode.setThesaurusId(orphan.getThesaurusId());
-            orphanNode.setDisplayable(true);
-            if (orphan.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
-            	orphanNode.setIconCls("icon-candidate-concept");
-            }
-            else {
-            	orphanNode.setIconCls("icon-orphan-concept");
-            }
-            if(!thesaurusConceptService.hasChildren(orphan.getIdentifier())) {
-                orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
-			    orphanNode.setLeaf(true);
-            } else {
-                orphanNode.setChildren(null);
-                orphanNode.setLeaf(false);
-            }
+			orphanNode.setThesaurusId(orphan.getThesaurusId());
+			orphanNode.setDisplayable(true);
+			if (orphan.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
+				orphanNode.setIconCls("icon-candidate-concept");
+			} else {
+				orphanNode.setIconCls("icon-orphan-concept");
+			}
+			if (!thesaurusConceptService.hasChildren(orphan.getIdentifier())) {
+				orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
+				orphanNode.setLeaf(true);
+			} else {
+				orphanNode.setChildren(null);
+				orphanNode.setLeaf(false);
+			}
 
 			newOrphans.add(orphanNode);
 		}

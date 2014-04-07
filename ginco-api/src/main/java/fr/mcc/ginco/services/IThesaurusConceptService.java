@@ -58,18 +58,18 @@ public interface IThesaurusConceptService {
 	 */
 	List<ThesaurusConcept> getThesaurusConceptList();
 
-    /**
-     * Get list of ThesaurusConcept by list of id.
-     * @param ids : List of ids
-     * @return
-     */
-    Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids);
+	/**
+	 * Get list of ThesaurusConcept by list of id.
+	 *
+	 * @param ids : List of ids
+	 * @return
+	 */
+	Set<ThesaurusConcept> getThesaurusConceptList(List<String> ids);
 
 	/**
 	 * Get single ThesaurusConcept by its id.
 	 *
-	 * @param id
-	 *            of object
+	 * @param id of object
 	 * @return {@code null} if not found; object otherwise.
 	 */
 	ThesaurusConcept getThesaurusConceptById(String id);
@@ -116,6 +116,7 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Update a single Thesaurus Concept Object
+	 *
 	 * @param The concept to update
 	 * @param The list of the concept's terms
 	 * @param The ids of associated concepts
@@ -126,7 +127,7 @@ public interface IThesaurusConceptService {
 	 * @return The updated concept
 	 */
 	ThesaurusConcept updateThesaurusConcept(ThesaurusConcept object,
-			List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<ThesaurusConcept> childrenConceptToAttach, List<Alignment> alignments);
+	                                        List<ThesaurusTerm> terms, List<AssociativeRelationship> associatedConceptIds, List<ConceptHierarchicalRelationship> hierarchicalRelationships, List<ThesaurusConcept> childrenConceptToDetach, List<ThesaurusConcept> childrenConceptToAttach, List<Alignment> alignments);
 
 
 	/**
@@ -162,42 +163,47 @@ public interface IThesaurusConceptService {
 	 */
 	long getTopTermThesaurusConceptsCount(String thesaurusId);
 
-    /**
-     * Search children of concept with given id (orphan or not).
-     * @param conceptId id of concept.
-     * @return list of objects.
-     */
-    List<ThesaurusConcept> getChildrenByConceptId(String conceptId);
+	/**
+	 * Search children of concept with given id (orphan or not).
+	 *
+	 * @param conceptId id of concept.
+	 * @return list of objects.
+	 */
+	List<ThesaurusConcept> getChildrenByConceptId(String conceptId);
 
-    /**
-     * Search children of concept with given id (orphan or not).
-     * @param conceptId id of concept.
-     * @return list of objects.
-     */
-    List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults);
+	/**
+	 * Search children of concept with given id (orphan or not).
+	 *
+	 * @param conceptId id of concept.
+	 * @return list of objects.
+	 */
+	List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults);
 
 
-    /**
-     * Search concepts of thesaurus excluding given conceptId
-     * with given parameter (orphan or not).
-     * @param excludeConceptId id of concept to exclude.
-     * @param thesaurusId id of thesaurus.
-     * @param searchOrphans indicates if concepts with topConcept==false should be
-     *                      included in result. Could be null if doesn't matters.
-     * @param onlyValidatedConcepts indicates if returned concepts will be filtered on status = VALIDATED.
-     * @return list of objects.
-     */
-    List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
+	/**
+	 * Search concepts of thesaurus excluding given conceptId
+	 * with given parameter (orphan or not).
+	 *
+	 * @param excludeConceptId      id of concept to exclude.
+	 * @param thesaurusId           id of thesaurus.
+	 * @param searchOrphans         indicates if concepts with topConcept==false should be
+	 *                              included in result. Could be null if doesn't matters.
+	 * @param onlyValidatedConcepts indicates if returned concepts will be filtered on status = VALIDATED.
+	 * @return list of objects.
+	 */
+	List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
 
-    /**
-     * Indicates whether concept has children.
-     * @param conceptId
-     * @return
-     */
-    boolean hasChildren(String conceptId);
+	/**
+	 * Indicates whether concept has children.
+	 *
+	 * @param conceptId
+	 * @return
+	 */
+	boolean hasChildren(String conceptId);
 
 	/**
 	 * Delete a ThesaurusConcept object
+	 *
 	 * @param object
 	 * @return
 	 */
@@ -206,58 +212,64 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Asynchronous method to recalculate root for all the node childrens
+	 *
 	 * @param parentId
 	 */
 	void calculateChildrenRoot(String parentId);
 
-	/**Get all concepts eligible for an array
+	/**
+	 * Get all concepts eligible for an array
+	 *
 	 * @param arrayId
 	 * @param thesaurusId
 	 * @return List of concepts eligible for an array
 	 */
-	List<ThesaurusConcept> getAvailableConceptsOfArray (String arrayId, String thesaurusId);
+	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId, String thesaurusId);
 
-	/**Get all concepts eligible for a group
+	/**
+	 * Get all concepts eligible for a group
+	 *
 	 * @param groupId
 	 * @param thesaurusId
 	 * @return List of concepts eligible for a group
 	 */
-	List<ThesaurusConcept> getAvailableConceptsOfGroup (String groupId, String thesaurusId);
+	List<ThesaurusConcept> getAvailableConceptsOfGroup(String groupId, String thesaurusId);
 
-    /**
-     * For indexing purposes.
-     * @return list of all existing concepts.
-     */
-    List<ThesaurusConcept> getAllConcepts();
+	/**
+	 * For indexing purposes.
+	 *
+	 * @return list of all existing concepts.
+	 */
+	List<ThesaurusConcept> getAllConcepts();
 
-    /**
-     * Return the lexical value of this concept preferred term
-     * @param concept
-     * @return
-     */
-    String getConceptTitle(ThesaurusConcept concept);
+	/**
+	 * Return the lexical value of this concept preferred term
+	 *
+	 * @param concept
+	 * @return
+	 */
+	String getConceptTitle(ThesaurusConcept concept);
 
 
-    /**
-     * return the language of this concept preferred term
-     * @param concept
-     * @return
-     */
-    String getConceptTitleLanguage(ThesaurusConcept concept);
+	/**
+	 * return the language of this concept preferred term
+	 *
+	 * @param concept
+	 * @return
+	 */
+	String getConceptTitleLanguage(ThesaurusConcept concept);
 
-    /**
-     * Get hierarchical relations between two concepts
-     * @param identifier of first concept
-     * @param identifier of second concept
-     *
-     * @return 0 if relations between concepts don't exist
-     * @return 1 if first concept is parent of second concept
-     * @return 2 if first concept is child of second concept
-     */
+	/**
+	 * Get hierarchical relations between two concepts
+	 *
+	 * @param identifier of first concept
+	 * @param identifier of second concept
+	 * @return 2 if first concept is child of second concept
+	 */
 
-    int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId);
+	int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId);
 
-    /**
+	/**
 	 * Returns the list of not preferred ThesaurusTerms by a concept
 	 *
 	 * @param conceptId
@@ -276,6 +288,7 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Returns this concept preferred term in the given language, null if none is found
+	 *
 	 * @param conceptId
 	 * @param languageId
 	 * @return
@@ -284,12 +297,14 @@ public interface IThesaurusConceptService {
 
 	/**
 	 * Returns all the concepts that are under the concept which id is given in parameter (children, children of children, etc. recursively)
+	 *
 	 * @param conceptId
 	 */
 	List<ThesaurusConcept> getRecursiveChildrenByConceptId(String conceptId);
 
 	/**
 	 * Returns all the concepts that are over the concept which id is given in parameter (children, children of children, etc. recursively)
+	 *
 	 * @param conceptId
 	 */
 	List<ThesaurusConcept> getRecursiveParentsByConceptId(String conceptId);

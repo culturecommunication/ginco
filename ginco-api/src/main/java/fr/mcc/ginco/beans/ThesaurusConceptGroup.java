@@ -34,78 +34,92 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Bean represents concept_group table
  */
 @SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ThesaurusConceptGroup implements Serializable{
+public class ThesaurusConceptGroup implements Serializable {
 
-    private String identifier;
+	private String identifier;
 
-    @XmlTransient
-    private Thesaurus thesaurus;
-    private ThesaurusConceptGroupType conceptGroupType;
-    private String notation;
-    private Boolean isDynamic;
-    private ThesaurusConcept parentConcept;
-    private Set<ThesaurusConcept> concepts;
+	@XmlTransient
+	private Thesaurus thesaurus;
+	private ThesaurusConceptGroupType conceptGroupType;
+	private String notation;
+	private Boolean isDynamic;
+	private ThesaurusConcept parentConcept;
+	private Set<ThesaurusConcept> concepts;
 
-    @XmlTransient
-    private ThesaurusConceptGroup parent;
+	@XmlTransient
+	private ThesaurusConceptGroup parent;
 
 	public String getIdentifier() {
 		return identifier;
 	}
+
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+
 	public Thesaurus getThesaurus() {
 		return thesaurus;
 	}
+
 	public void setThesaurus(Thesaurus thesaurus) {
 		this.thesaurus = thesaurus;
 	}
+
 	public ThesaurusConceptGroupType getConceptGroupType() {
 		return conceptGroupType;
 	}
+
 	public void setConceptGroupType(ThesaurusConceptGroupType conceptGroupType) {
 		this.conceptGroupType = conceptGroupType;
 	}
+
 	public String getNotation() {
 		return notation;
 	}
+
 	public void setNotation(String notation) {
 		this.notation = notation;
 	}
+
 	public Boolean getIsDynamic() {
 		return isDynamic;
 	}
+
 	public void setIsDynamic(Boolean isDynamic) {
 		this.isDynamic = isDynamic;
 	}
+
 	public ThesaurusConcept getParentConcept() {
 		return parentConcept;
 	}
+
 	public void setParentConcept(ThesaurusConcept parentConcept) {
 		this.parentConcept = parentConcept;
 	}
+
 	public Set<ThesaurusConcept> getConcepts() {
 		return concepts;
 	}
+
 	public void setConcepts(Set<ThesaurusConcept> concepts) {
 		this.concepts = concepts;
 	}
+
 	public ThesaurusConceptGroup getParent() {
 		return parent;
 	}
+
 	public void setParent(ThesaurusConceptGroup parent) {
 		this.parent = parent;
 	}

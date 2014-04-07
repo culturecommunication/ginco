@@ -34,18 +34,15 @@
  */
 package fr.mcc.ginco.extjs.view;
 
-import java.util.List;
-
-
 /**
  * Class for JSON representation of a data object for extjs.
  */
-public  class ExtJsonFormLoadData<T>  {
-   
+public class ExtJsonFormLoadData<T> {
+
 	private boolean success;
 	private T data;
-	private Long total; 
-	
+	private Long total;
+
 	public boolean isSuccess() {
 		return success;
 	}
@@ -60,7 +57,8 @@ public  class ExtJsonFormLoadData<T>  {
 
 	public void setData(T data) {
 		this.data = data;
-	}	
+	}
+
 	public Long getTotal() {
 		return total;
 	}
@@ -69,16 +67,14 @@ public  class ExtJsonFormLoadData<T>  {
 		this.total = total;
 	}
 
-	public ExtJsonFormLoadData (T aData)
-	{
+	public ExtJsonFormLoadData(T aData) {
 		success = true;
-		data = aData;		
+		data = aData;
 	}
-	
-	public ExtJsonFormLoadData (T aData, long aTotal)
-	{
+
+	public ExtJsonFormLoadData(T aData, long aTotal) {
 		success = true;
-		data = aData;	
+		data = aData;
 		total = aTotal;
 	}
 }

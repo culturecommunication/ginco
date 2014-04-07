@@ -45,7 +45,7 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.springframework.stereotype.Service;
 
 @Service("searcherService")
-public class SearcherServiceImpl implements ISearcherService{
+public class SearcherServiceImpl implements ISearcherService {
 
 	@Inject
 	private SearcherServiceUtil searcherServiceUtil;
@@ -56,8 +56,8 @@ public class SearcherServiceImpl implements ISearcherService{
 
 	@Override
 	public SearchResultList search(String request, Integer type,
-			String thesaurus, Integer status, String createdFrom,
-			String modifiedFrom, String language, SortCriteria sort, int startIndex, int limit)
+	                               String thesaurus, Integer status, String createdFrom,
+	                               String modifiedFrom, String language, SortCriteria sort, int startIndex, int limit)
 			throws SolrServerException {
 
 		ModifiableSolrParams params = new ModifiableSolrParams();
@@ -73,13 +73,12 @@ public class SearcherServiceImpl implements ISearcherService{
 		params.set(
 				SolrParam.FILTER_QUERY,
 				searcherServiceUtil.addAndQuery(SolrField.CREATED, createdFrom, true, false)
-						+ searcherServiceUtil.addAndQuery(SolrField.MODIFIED, modifiedFrom, true,
-								false)
-						+ searcherServiceUtil.addAndQuery(SolrField.THESAURUSID, thesaurus, null,
-								true)
+						+ searcherServiceUtil.addAndQuery(SolrField.MODIFIED, modifiedFrom, true, false)
+						+ searcherServiceUtil.addAndQuery(SolrField.THESAURUSID, thesaurus, null, true)
 						+ searcherServiceUtil.addAndQuery(SolrField.STATUS, status, null, false)
 						+ searcherServiceUtil.addAndQuery(SolrField.LANGUAGE, language, null, false)
-						+ searcherServiceUtil.getExtTypeQuery(type));
+						+ searcherServiceUtil.getExtTypeQuery(type)
+		);
 
 		QueryResponse response = solrServer.query(params);
 		SolrDocumentList solrresults = response.getResults();

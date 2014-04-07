@@ -34,21 +34,20 @@
  */
 package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+import javax.inject.Inject;
+
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("conceptHierarchicalRelationshipService")
 public class ConceptHierarchicalRelationshipServiceImpl implements IConceptHierarchicalRelationshipService {
 
-    @Inject
-    private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+	@Inject
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.services.IConceptHierarchicalRelationshipService#getByChildAndParentIds(java.lang.String, java.lang.String)

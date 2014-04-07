@@ -60,6 +60,8 @@ import java.util.Set;
 @WebService(endpointInterface = "fr.mcc.ginco.soap.ISOAPThesaurusConceptService")
 public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptService {
 
+	public static final String CONCEPT_IDENTIFIER_IS_EMPTY = "Concept identifier is empty";
+	public static final String EMPTY_PARAMETER = "empty-parameter";
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
@@ -81,7 +83,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		if (StringUtils.isNotEmpty(firstConceptId) && StringUtils.isNotEmpty(secondConceptId)) {
 			return thesaurusConceptService.getConceptsHierarchicalRelations(firstConceptId, secondConceptId);
 		} else {
-			throw new BusinessException("One or more parameters are empty", "empty-parameters");
+			throw new BusinessException("One or more parameters are empty", EMPTY_PARAMETER);
 		}
 	}
 
@@ -96,7 +98,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			}
 			return results;
 		} else {
-			throw new BusinessException("Concept identifier is empty", "empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
 
@@ -110,7 +112,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			}
 			return results;
 		} else {
-			throw new BusinessException("Concept identifier is empty", "empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
 
@@ -127,7 +129,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		if (StringUtils.isNotEmpty(conceptId)) {
 			return thesaurusConceptService.getStatusByConceptId(conceptId);
 		} else {
-			throw new BusinessException("Concept identifier is empty", "empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
 
@@ -146,7 +148,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
 		} else {
-			throw new BusinessException("Concept identifier is empty", "empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
 
@@ -165,7 +167,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
 		} else {
-			throw new BusinessException("Concept identifier is empty", "empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
 
@@ -184,7 +186,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
 		} else {
-			throw new BusinessException("Concept identifier is empty", "empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
 
@@ -198,7 +200,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
 		} else {
-			throw new BusinessException("Concept identifier is empty", "empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
 
@@ -216,7 +218,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 				throw new BusinessException("Thesaurus with identifier " + thesaurusId + " does not exist", "thesaurus-does-not-exist");
 			}
 		} else {
-			throw new BusinessException("Thesaurus identifier is empty", "empty-parameter");
+			throw new BusinessException("Thesaurus identifier is empty", EMPTY_PARAMETER);
 		}
 	}
 }

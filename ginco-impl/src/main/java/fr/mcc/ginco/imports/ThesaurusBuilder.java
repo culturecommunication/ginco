@@ -34,17 +34,6 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.cxf.common.util.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -52,7 +41,6 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
-
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
@@ -61,10 +49,18 @@ import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.apache.cxf.common.util.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Builder in charge of building a thesaurus
- *
  */
 @Service("skosThesaurusBuilder")
 public class ThesaurusBuilder extends AbstractBuilder {
@@ -74,7 +70,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 	@Inject
 	private IThesaurusTypeDAO thesaurusTypeDAO;
-	
+
 	@Inject
 	@Named("skosThesaurusOrganizationBuilder")
 	private ThesaurusOrganizationBuilder thesaurusOrganizationBuilder;
@@ -88,12 +84,12 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	@Value("${import.skos.default.format}")
 	private Integer defaultThesaurusFormat;
 
-    @Value("${import.skos.default.type}")
-    private Integer defaultThesaurusType;
-    
-    @Inject
+	@Value("${import.skos.default.type}")
+	private Integer defaultThesaurusType;
+
+	@Inject
 	@Named("skosImportUtils")
-    private SKOSImportUtils skosImportUtils;
+	private SKOSImportUtils skosImportUtils;
 
 	public ThesaurusBuilder() {
 		super();
@@ -106,7 +102,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	 * @param model
 	 * @return
 	 */
-	public Thesaurus buildThesaurus(Resource skosThesaurus, Model model){
+	public Thesaurus buildThesaurus(Resource skosThesaurus, Model model) {
 		Thesaurus thesaurus = new Thesaurus();
 		thesaurus.setIdentifier(skosThesaurus.getURI());
 		String title = getSimpleStringInfo(skosThesaurus, DC.title, DCTerms.title);
@@ -119,40 +115,38 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		thesaurus.setSubject(getMultipleLineStringInfo(skosThesaurus,
 				DC.subject, DCTerms.subject));
 		thesaurus.setContributor(getMultipleLineStringInfo(skosThesaurus,
-				DC.contributor,DCTerms.contributor));
+				DC.contributor, DCTerms.contributor));
 		thesaurus.setCoverage(getMultipleLineStringInfo(skosThesaurus,
-				DC.coverage,DCTerms.coverage));
+				DC.coverage, DCTerms.coverage));
 		thesaurus.setDescription(getMultipleLineStringInfo(skosThesaurus,
-				DC.description,DCTerms.description));
+				DC.description, DCTerms.description));
 		thesaurus
-				.setPublisher(getSimpleStringInfo(skosThesaurus, DC.publisher,DCTerms.publisher));
+				.setPublisher(getSimpleStringInfo(skosThesaurus, DC.publisher, DCTerms.publisher));
 		thesaurus
 				.setRights(getMultipleLineStringInfo(skosThesaurus, DC.rights));
 		ThesaurusType thesaurusType = thesaurusTypeDAO
 				.getByLabel(getSimpleStringInfo(skosThesaurus, DC.type, DCTerms.type));
-        if (thesaurusType == null) {
-            thesaurusType = thesaurusTypeDAO.getById(defaultThesaurusType);
+		if (thesaurusType == null) {
+			thesaurusType = thesaurusTypeDAO.getById(defaultThesaurusType);
 		}
 		thesaurus.setType(thesaurusType);
 		thesaurus.setRelation(getMultipleLineStringInfo(skosThesaurus,
-				DC.relation,DCTerms.relation));
-		thesaurus.setSource(getSimpleStringInfo(skosThesaurus, DC.source,DCTerms.source));
-        thesaurus.setPolyHierarchical(true);
+				DC.relation, DCTerms.relation));
+		thesaurus.setSource(getSimpleStringInfo(skosThesaurus, DC.source, DCTerms.source));
+		thesaurus.setPolyHierarchical(true);
 
 		String thesaurusCreated = getSimpleStringInfo(skosThesaurus,
 				DCTerms.created);
-		if (thesaurusCreated!=null) {
+		if (thesaurusCreated != null) {
 			thesaurus.setCreated(skosImportUtils.getSkosDate(thesaurusCreated));
-		} else
-		{
+		} else {
 			thesaurus.setCreated(new Date());
 		}
 		thesaurus.setDate(skosImportUtils.getSkosDate(getSimpleStringInfo(skosThesaurus,
-				DCTerms.modified,DCTerms.date)));
+				DCTerms.modified, DCTerms.date)));
 
-		thesaurus.setLang(getLanguages(skosThesaurus,DC.language));
-		if (thesaurus.getLang().isEmpty())
-		{
+		thesaurus.setLang(getLanguages(skosThesaurus, DC.language));
+		if (thesaurus.getLang().isEmpty()) {
 			throw new BusinessException("Missing language for imported thesaurus ",
 					"import-missing-lang-thesaurus");
 		}
@@ -163,7 +157,8 @@ public class ThesaurusBuilder extends AbstractBuilder {
 			throw new BusinessException(
 					"Configuration problem : the default import format "
 							+ defaultThesaurusFormat + " is unknown",
-					"import-unknown-default-format");
+					"import-unknown-default-format"
+			);
 		}
 		thesaurus.addFormat(format);
 
@@ -175,7 +170,7 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		return thesaurus;
 	}
 
-	
+
 	/**
 	 * Gets the list of defined languages for the given thesaurus
 	 *
@@ -192,9 +187,10 @@ public class ThesaurusBuilder extends AbstractBuilder {
 				lang = languagesDAO.getByPart1(stmt.getString());
 				if (lang == null) {
 					throw new BusinessException(
-						"Specified thesaurus language is unknown :  "
-								+ stmt.getString(),
-						"import-unknown-thesaurus-lang");
+							"Specified thesaurus language is unknown :  "
+									+ stmt.getString(),
+							"import-unknown-thesaurus-lang"
+					);
 				}
 			}
 			langs.add(lang);
@@ -203,5 +199,5 @@ public class ThesaurusBuilder extends AbstractBuilder {
 		return langs;
 	}
 
-	
+
 }

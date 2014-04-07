@@ -53,7 +53,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
 @Service("termIndexerService")
-public class TermIndexerServiceImpl implements ITermIndexerService{
+public class TermIndexerServiceImpl implements ITermIndexerService {
 
 	private static Logger logger = LoggerFactory.getLogger(TermIndexerServiceImpl.class);
 

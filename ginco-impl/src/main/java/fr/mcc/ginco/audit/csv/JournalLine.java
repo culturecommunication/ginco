@@ -34,16 +34,15 @@
  */
 package fr.mcc.ginco.audit.csv;
 
+import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LabelUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
-import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.LabelUtil;
-
-public class JournalLine  implements Comparable<JournalLine>{
+public class JournalLine implements Comparable<JournalLine> {
 
 	private static final String COMMA = ",";
 	private static final String PIPE = "|";

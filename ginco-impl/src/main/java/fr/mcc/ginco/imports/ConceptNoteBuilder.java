@@ -34,23 +34,10 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Note;
@@ -62,10 +49,19 @@ import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.INoteTypeService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 	Builder in charge of buidlding concept notes
- *  
+ * Builder in charge of buidlding concept notes
  */
 @Service("skosConceptNoteBuilder")
 public class ConceptNoteBuilder extends AbstractBuilder {
@@ -89,41 +85,42 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 	public ConceptNoteBuilder() {
 		super();
 	}
-	
-	private Language getNoteLanguage (String skosLang)
-	{
-		Language lang = null;
+
+	private Language getNoteLanguage(String skosLang) {
+		Language lang;
 		if (StringUtils.isEmpty(skosLang)) {
 			lang = languagesDAO
 					.getById(defaultLang);
 			return lang;
 		} else {
 			lang = languagesDAO.getByPart1(skosLang);
-			if (lang == null){
+			if (lang == null) {
 				lang = languagesDAO.getById(skosLang);
 			}
-			
+
 			if (lang != null) {
 				return lang;
 			} else {
 				throw new BusinessException("Note "
 						+ skosLang
 						+ " is missing it's language",
-						"import-note-with-no-lang");
+						"import-note-with-no-lang"
+				);
 			}
 		}
 	}
 
 	/**
 	 * Returns the list of notes for the given concept
+	 *
 	 * @param skosConcept
 	 * @param concept
 	 * @param thesaurus
 	 * @return
 	 */
 	public List<Note> buildConceptNotes(Resource skosConcept,
-			ThesaurusConcept concept,ThesaurusTerm preferredTerm, Thesaurus thesaurus) {
-		logger.debug("Building notes for concept " +skosConcept.getURI());
+	                                    ThesaurusConcept concept, ThesaurusTerm preferredTerm, Thesaurus thesaurus) {
+		logger.debug("Building notes for concept " + skosConcept.getURI());
 		List<Note> allConceptNotes = new ArrayList<Note>();
 		List<NoteType> conceptNoteTypes = noteTypeService
 				.getConceptNoteTypeList();
@@ -149,7 +146,7 @@ public class ConceptNoteBuilder extends AbstractBuilder {
 					allConceptNotes.add(newNote);
 				}
 			}
-		} 
+		}
 		// Add definition notes to the prefered term...
 		StmtIterator stmtNotesItr = skosConcept
 				.listProperties(SKOS.SKOS_NOTES.get("definition"));

@@ -40,27 +40,32 @@ import java.io.Serializable;
  * Bean represents concept_group_type table
  */
 @SuppressWarnings("serial")
-public class ThesaurusConceptGroupType implements Serializable{
+public class ThesaurusConceptGroupType implements Serializable {
 
-    private String code;
-    private String label;
-    private String skosLabel;
+	private String code;
+	private String label;
+	private String skosLabel;
 
 	public String getCode() {
 		return code;
 	}
+
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 	public String getLabel() {
 		return label;
 	}
+
 	public void setLabel(String label) {
 		this.label = label;
 	}
+
 	public String getSkosLabel() {
 		return skosLabel;
 	}
+
 	public void setSkosLabel(String skosLabel) {
 		this.skosLabel = skosLabel;
 	}

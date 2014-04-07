@@ -35,20 +35,7 @@
 
 package fr.mcc.ginco.imports;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import com.hp.hpl.jena.rdf.model.Statement;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
@@ -58,10 +45,19 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Builder in charge of building concept alignments
- *
  */
 @Service("skosAlignmentBuilder")
 public class AlignmentBuilder extends AbstractBuilder {
@@ -70,7 +66,7 @@ public class AlignmentBuilder extends AbstractBuilder {
 
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	private IIDGeneratorService generatorService;
 
 	@Inject
 	@Named("thesaurusConceptService")
@@ -83,19 +79,19 @@ public class AlignmentBuilder extends AbstractBuilder {
 	@Inject
 	@Named("externalThesaurusService")
 	private IExternalThesaurusService externalThesaurusService;
-	
+
 	private Pattern arkPt = Pattern
 			.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/ark\\:\\/(\\S*)\\/");
-	
+
 	private Pattern urlPt = Pattern
 			.compile("(http|https)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}[\\/(\\S*)\\/]*\\/(\\S*)\\/");
-	
+
 
 	public Alignment buildAlignment(Statement stmt,
-			AlignmentType alignmentType, ThesaurusConcept concept){
-		logger.debug("Building alignment " + stmt.getObject().toString());		
-		
-		
+	                                AlignmentType alignmentType, ThesaurusConcept concept) {
+		logger.debug("Building alignment " + stmt.getObject().toString());
+
+
 		Alignment alignment = new Alignment();
 		alignment.setIdentifier(generatorService.generate(Alignment.class));
 		alignment.setAlignmentType(alignmentType);
@@ -118,15 +114,14 @@ public class AlignmentBuilder extends AbstractBuilder {
 					.getThesaurus());
 		} else {
 			// Check if the concept has an ark indentifier.
-			
+
 			Matcher arkMt = arkPt.matcher(targetConceptId);
 			Matcher urlMt = urlPt.matcher(targetConceptId);
 
 			if (arkMt.find()) {
-				setExternalThesaurus(alignment,arkMt.group());
-			} else if (urlMt.find()) 
-			{
-				setExternalThesaurus(alignment,urlMt.group());
+				setExternalThesaurus(alignment, arkMt.group());
+			} else if (urlMt.find()) {
+				setExternalThesaurus(alignment, urlMt.group());
 			}
 			targetConcept.setExternalTargetConcept(targetConceptId);
 		}
@@ -134,8 +129,8 @@ public class AlignmentBuilder extends AbstractBuilder {
 		alignment.setTargetConcepts(targetConcepts);
 		return alignment;
 	}
-	
-	private void setExternalThesaurus(Alignment alignment, String extThesaurusId) { 
+
+	private void setExternalThesaurus(Alignment alignment, String extThesaurusId) {
 		ExternalThesaurus existingExternalThes = externalThesaurusService
 				.getThesaurusByExternalId(extThesaurusId);
 		if (existingExternalThes == null) {

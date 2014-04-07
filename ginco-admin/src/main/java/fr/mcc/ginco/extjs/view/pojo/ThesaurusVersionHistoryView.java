@@ -34,34 +34,34 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-
+import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import java.io.Serializable;
 
 /**
  * View class corresponding to {@link ThesaurusVersionHistory} bean, but fully serializable;
- * 
+ *
  * @see fr.mcc.ginco.beans
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusVersionHistoryView implements Serializable, SecuredResourceView {
-	
-	private String identifier;
-    private String date;
-    private String versionNote;
-    private Integer status;
-    private Boolean thisVersion;
-    private String thesaurusId;
 
-    public ThesaurusVersionHistoryView() {}
+	private String identifier;
+	private String date;
+	private String versionNote;
+	private Integer status;
+	private Boolean thisVersion;
+	private String thesaurusId;
+
+	public ThesaurusVersionHistoryView() {
+	}
 
 	public String getIdentifier() {
 		return identifier;
 	}
-	
+
 	public String getDate() {
 		return date;
 	}

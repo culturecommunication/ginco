@@ -34,21 +34,20 @@
  */
 package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+import javax.inject.Inject;
+
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusArrayConceptService")
 public class ThesaurusArrayConceptServiceImpl implements IThesaurusArrayConceptService {
 
-    @Inject
-    private IGenericDAO<ThesaurusArrayConcept, ThesaurusArrayConcept.Id> thesaurusArrayConceptDAO;
+	@Inject
+	private IGenericDAO<ThesaurusArrayConcept, ThesaurusArrayConcept.Id> thesaurusArrayConceptDAO;
 
 	@Override
 	public ThesaurusArrayConcept geThesaurusArrayConcept(
@@ -59,5 +58,5 @@ public class ThesaurusArrayConceptServiceImpl implements IThesaurusArrayConceptS
 		return thesaurusArrayConceptDAO.getById(id);
 	}
 
-   
+
 }

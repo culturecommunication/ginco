@@ -44,9 +44,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 
 public final class ISOTHES {
-	
-	private ISOTHES() {}
-	
+
+	private ISOTHES() {
+	}
+
 	private static final String URI = "http://purl.org/iso25964/skos-thes#";
 
 	/**

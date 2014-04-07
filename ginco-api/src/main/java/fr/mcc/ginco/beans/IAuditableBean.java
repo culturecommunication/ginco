@@ -40,10 +40,9 @@ import java.io.Serializable;
  * All hibernate beans should implement this interface
  * in order to be able to log events in the dedicated
  * logjournal table
- *
  */
-public interface IAuditableBean extends Serializable{
-	
+public interface IAuditableBean extends Serializable {
+
 	/**
 	 * @return the database identifier of the object
 	 */

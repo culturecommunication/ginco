@@ -34,20 +34,19 @@
  */
 package fr.mcc.ginco.utils;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-
 public final class ThesaurusConceptUtils {
-	
+
 
 	/**
 	 * This method return the ids of the concept included in the list given in
 	 * parameter
-	 * 
-	 * @param ThesaurusConcept
-	 *            list
+	 *
+	 * @param list list of concepts
 	 * @return List<String> list of concept ids
 	 */
 	public static List<String> getIdsFromConceptList(List<ThesaurusConcept> list) {
@@ -56,5 +55,8 @@ public final class ThesaurusConceptUtils {
 			result.add(concept.getIdentifier());
 		}
 		return result;
+	}
+
+	private ThesaurusConceptUtils() {
 	}
 }

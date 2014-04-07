@@ -38,33 +38,34 @@ package fr.mcc.ginco.extjs.view.pojo;
  *
  */
 public class AssociativeRelationshipView {
-    private String roleCode;
-    private String identifier;
-    private String label;
+	private String roleCode;
+	private String identifier;
+	private String label;
 
-    public AssociativeRelationshipView() {}
+	public AssociativeRelationshipView() {
+	}
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public String getLabel() {
-        return label;
-    }
+	public String getLabel() {
+		return label;
+	}
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
-    public String getRoleCode() {
-        return roleCode;
-    }
+	public String getRoleCode() {
+		return roleCode;
+	}
 
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
+	}
 }

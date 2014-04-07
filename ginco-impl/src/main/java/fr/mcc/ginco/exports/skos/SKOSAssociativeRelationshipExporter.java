@@ -35,24 +35,21 @@
 
 package fr.mcc.ginco.exports.skos;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.skos.namespaces.GINCO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * This component is in charge of exporting concept associative relationships to SKOS
- *
  */
 
 @Component("skosAssociativeRelationshipExporter")
@@ -68,38 +65,38 @@ public class SKOSAssociativeRelationshipExporter {
 
 	/**
 	 * Export concept associative relationships to SKOS using the skos API
+	 *
 	 * @param concept
 	 * @param factory
 	 * @param conceptSKOS
 	 * @param vocab
-	 *
 	 * @return list of concept associative relationships for skos
 	 */
 	public Model exportAssociativeRelationships(ThesaurusConcept concept,
-			Model defaultModel){
+	                                            Model defaultModel) {
 		Resource conceptResource = defaultModel.createResource(
-				concept.getIdentifier(), SKOS.CONCEPT);		
-		
+				concept.getIdentifier(), SKOS.CONCEPT);
+
 		for (ThesaurusConcept related : thesaurusConceptService
 				.getThesaurusConceptList(associativeRelationshipService
-						.getAssociatedConceptsId(concept))) {		
+						.getAssociatedConceptsId(concept))) {
 
 			Resource relatedConcept = defaultModel.createResource(related
-					.getIdentifier());	
+					.getIdentifier());
 
 			defaultModel.add(conceptResource, SKOS.RELATED, relatedConcept);
 
-			
+
 			String roleSkosLabel = associativeRelationshipService
 					.getAssociativeRelationshipById(concept.getIdentifier(),
 							related.getIdentifier()).getRelationshipRole()
 					.getSkosLabel();
-			
-			Property customAttributeProperty = 
+
+			Property customAttributeProperty =
 					defaultModel.createProperty(GINCO.getURI() + roleSkosLabel);
 
-			defaultModel.add(conceptResource, customAttributeProperty, relatedConcept);			
-			
+			defaultModel.add(conceptResource, customAttributeProperty, relatedConcept);
+
 		}
 		return defaultModel;
 	}

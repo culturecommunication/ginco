@@ -34,51 +34,47 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
-
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.skos.namespaces.SKOS;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+import java.util.Map;
 
 /**
  * builder in charge of building thesaurus arrays
- * 
  */
 @Service("skosArraysBuilder")
-public class ThesaurusArraysBuilder extends AbstractBuilder {	
+public class ThesaurusArraysBuilder extends AbstractBuilder {
 	@Inject
 	@Named("skosArrayBuilder")
 	private ThesaurusArrayBuilder arrayBuilder;
-	
+
 	@Inject
 	@Named("skosNodeLabelBuilder")
 	private NodeLabelBuilder nodeLabelBuilder;
-	
+
 	@Inject
 	private IThesaurusArrayDAO thesaurusArrayDAO;
 
 	@Inject
 	private INodeLabelDAO nodeLabelDAO;
-	
+
 	@Inject
 	@Named("skosImportUtils")
 	private SKOSImportUtils skosImportUtils;
-	
+
 	/**
 	 * Builds the thesaurus arrays from the model
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param model
 	 */
@@ -97,7 +93,7 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 
 	/**
 	 * Builds thesaurus array relations from the model
-	 * 
+	 *
 	 * @param thesaurus
 	 * @param model
 	 */
@@ -109,11 +105,9 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 			List<ThesaurusArray> childrenArrays = arrayBuilder
 					.getChildrenArrays(skosCollection, thesaurus, builtArrays);
 			ThesaurusArray array = thesaurusArrayDAO.getById(skosCollection.getURI());
-			if (array.getConcepts().size() == 0 && childrenArrays.size() > 0)
-			{
+			if (array.getConcepts().size() == 0 && childrenArrays.size() > 0) {
 				for (ThesaurusArray childrenArray : childrenArrays) {
-					if (childrenArray.getSuperOrdinateConcept() !=null)
-					{
+					if (childrenArray.getSuperOrdinateConcept() != null) {
 						array.setSuperOrdinateConcept(childrenArray.getSuperOrdinateConcept());
 					}
 				}

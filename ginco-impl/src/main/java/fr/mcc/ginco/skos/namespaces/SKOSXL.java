@@ -45,7 +45,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public final class SKOSXL {
 
-	private  SKOSXL() {}
+	private SKOSXL() {
+	}
 
 	private static final String URI = "http://www.w3.org/2008/05/skos-xl#";
 

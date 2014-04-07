@@ -63,7 +63,7 @@ public class BasePermissionEvaluator implements PermissionEvaluator {
 	@Inject
 	@Named("adminUserService")
 	private IAdminUserService adminUserService;
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -72,7 +72,7 @@ public class BasePermissionEvaluator implements PermissionEvaluator {
 
 	@Override
 	public boolean hasPermission(Authentication authentication,
-			Object targetDomainObject, Object permission) {
+	                             Object targetDomainObject, Object permission) {
 		if (targetDomainObject instanceof List) {
 			List targetObjects = (List) targetDomainObject;
 			if (targetObjects != null && !targetObjects.isEmpty()) {
@@ -100,17 +100,17 @@ public class BasePermissionEvaluator implements PermissionEvaluator {
 		} else {
 			scopeThesaurus = (String) targetDomainObject;
 		}
-		
+
 		Thesaurus thesaurusObject = thesaurusService.getThesaurusById(scopeThesaurus);
-		if (thesaurusObject!= null && thesaurusObject.isArchived() != null && thesaurusObject.isArchived().booleanValue()) {
+		if (thesaurusObject != null && thesaurusObject.isArchived() != null && thesaurusObject.isArchived().booleanValue()) {
 			if (!"DELETION".equals((String) permission)) {
-					log.error("Permission denied : thesaurus is archived");
-					throw new ThesaurusArchivedAccessDeniedException("Thesaurus is archived, only deletion is authorized");
+				log.error("Permission denied : thesaurus is archived");
+				throw new ThesaurusArchivedAccessDeniedException("Thesaurus is archived, only deletion is authorized");
 			} else {
 				return true;
 			}
 		}
-		
+
 		User curUser = (User) authentication.getPrincipal();
 
 		log.debug("Checking permission " + permission + " on thesaurus "
@@ -144,7 +144,7 @@ public class BasePermissionEvaluator implements PermissionEvaluator {
 
 	@Override
 	public boolean hasPermission(Authentication authentication,
-			Serializable targetId, String targetType, Object permission) {
+	                             Serializable targetId, String targetType, Object permission) {
 		log.error("Permission exception - not implemented : trying to apply the wrong haspermission method");
 		return false;
 	}

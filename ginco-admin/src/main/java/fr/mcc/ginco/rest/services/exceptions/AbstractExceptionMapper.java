@@ -34,30 +34,27 @@
  */
 package fr.mcc.ginco.rest.services.exceptions;
 
-import java.text.MessageFormat;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.ext.ExceptionMapper;
-
+import fr.mcc.ginco.utils.LabelUtil;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.mcc.ginco.utils.LabelUtil;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.ext.ExceptionMapper;
+import java.text.MessageFormat;
 
 public abstract class AbstractExceptionMapper<E extends Throwable> implements
 		ExceptionMapper {
-	
-	private Logger logger  = LoggerFactory.getLogger(AbstractExceptionMapper.class);
+
+	private Logger logger = LoggerFactory.getLogger(AbstractExceptionMapper.class);
 
 
 	protected Response toResponse(Throwable t, String messageKey, Object[] toFormat) {
-		String msg = "";
-		if (toFormat != null){
+		String msg;
+		if (toFormat != null) {
 			msg = MessageFormat.format(LabelUtil.getResourceLabel(messageKey), toFormat);
-		}
-		else {
+		} else {
 			msg = LabelUtil.getResourceLabel(messageKey);
 		}
 		logger.error("Exception in REST services : " + t.getMessage());

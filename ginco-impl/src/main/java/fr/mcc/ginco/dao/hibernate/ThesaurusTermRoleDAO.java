@@ -34,31 +34,30 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Repository;
-
 import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.IThesaurusTermRoleDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
-public class ThesaurusTermRoleDAO extends GenericHibernateDAO<ThesaurusTermRole, String> implements IThesaurusTermRoleDAO  {
+public class ThesaurusTermRoleDAO extends GenericHibernateDAO<ThesaurusTermRole, String> implements IThesaurusTermRoleDAO {
 
 	public ThesaurusTermRoleDAO() {
 		super(ThesaurusTermRole.class);
-	}	
-	
+	}
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.IThesaurusTermRoleDAO#getDefaultThesaurusTermRole()
 	 */
 	public ThesaurusTermRole getDefaultThesaurusTermRole() {
 		List<ThesaurusTermRole> defaultRoles = getCurrentSession().createCriteria(ThesaurusTermRole.class)
 				.setMaxResults(1)
-				.add(Restrictions.eq("defaultRole", Boolean.TRUE))				
+				.add(Restrictions.eq("defaultRole", Boolean.TRUE))
 				.list();
-		if (defaultRoles != null && defaultRoles.size()==1) {
+		if (defaultRoles != null && defaultRoles.size() == 1) {
 			return defaultRoles.get(0);
 		} else {
 			throw new BusinessException("No defaultRole defined", "no-default-role-defined");

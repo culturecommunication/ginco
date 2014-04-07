@@ -34,19 +34,18 @@
  */
 package fr.mcc.ginco.rest.services.exceptions;
 
-import javax.ws.rs.core.Response;
-
 import org.springframework.security.access.AccessDeniedException;
+
+import javax.ws.rs.core.Response;
 
 /**
  * Exception mapper for spring security access denied
- *
  */
-public class AccessDeniedExceptionMapper  extends AbstractExceptionMapper<AccessDeniedException>{
-	
+public class AccessDeniedExceptionMapper extends AbstractExceptionMapper<AccessDeniedException> {
+
 	@Override
 	public Response toResponse(Throwable exception) {
 		return super.toResponse(exception, "access-denied-exception-text", null);
-	}	
-	
+	}
+
 }

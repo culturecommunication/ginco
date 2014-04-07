@@ -34,41 +34,42 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @Component("thesaurusConceptGroupLabelViewConverter")
-public class ThesaurusConceptGroupLabelViewConverter {   
+public class ThesaurusConceptGroupLabelViewConverter {
 
-    @Inject
-    @Named("thesaurusConceptGroupLabelService")
-    private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
+	@Inject
+	@Named("thesaurusConceptGroupLabelService")
+	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
 
-    @Inject
-    @Named("languagesService")
-    private ILanguagesService languagesService;    
+	@Inject
+	@Named("languagesService")
+	private ILanguagesService languagesService;
 
-    
-    public ThesaurusConceptGroupLabel convert(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) {
-    	ThesaurusConceptGroupLabel label;
-        if(thesaurusConceptGroupViewJAXBElement.getGroupConceptLabelId() == null || thesaurusConceptGroupViewJAXBElement.getGroupConceptLabelId() ==0) {
-            label = new ThesaurusConceptGroupLabel();
-            label.setCreated(DateUtil.nowDate());
-        } else {
-            label = thesaurusConceptGroupLabelService.getById(thesaurusConceptGroupViewJAXBElement.getGroupConceptLabelId());
-        }
-        label.setLexicalValue(thesaurusConceptGroupViewJAXBElement.getLabel());
-        label.setLanguage(languagesService.getLanguageById(thesaurusConceptGroupViewJAXBElement.getLanguage()));
-        label.setModified(DateUtil.nowDate());
 
-        return label;
-    }
+	public ThesaurusConceptGroupLabel convert(ThesaurusConceptGroupView thesaurusConceptGroupViewJAXBElement) {
+		ThesaurusConceptGroupLabel label;
+		if (thesaurusConceptGroupViewJAXBElement.getGroupConceptLabelId() == null
+				|| thesaurusConceptGroupViewJAXBElement.getGroupConceptLabelId() == 0) {
+			
+			label = new ThesaurusConceptGroupLabel();
+			label.setCreated(DateUtil.nowDate());
+		} else {
+			label = thesaurusConceptGroupLabelService.getById(thesaurusConceptGroupViewJAXBElement.getGroupConceptLabelId());
+		}
+		label.setLexicalValue(thesaurusConceptGroupViewJAXBElement.getLabel());
+		label.setLanguage(languagesService.getLanguageById(thesaurusConceptGroupViewJAXBElement.getLanguage()));
+		label.setModified(DateUtil.nowDate());
+
+		return label;
+	}
 }

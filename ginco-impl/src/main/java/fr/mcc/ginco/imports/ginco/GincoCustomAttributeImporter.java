@@ -34,14 +34,6 @@
  */
 package fr.mcc.ginco.imports.ginco;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.CustomTermAttribute;
@@ -56,11 +48,16 @@ import fr.mcc.ginco.dao.ICustomTermAttributeTypeDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class gives methods to import ginco custom attribute and custom
  * attribute types (both for terms or concepts)
- *
  */
 @Component("gincoCustomAttributeImporter")
 public class GincoCustomAttributeImporter {
@@ -141,7 +138,8 @@ public class GincoCustomAttributeImporter {
 			customConceptAttributeType.setThesaurus(targetedThesaurus);
 			updatedTypes.put(customConceptAttributeType.getCode(),
 					customConceptAttributeTypeDAO
-							.update(customConceptAttributeType));
+							.update(customConceptAttributeType)
+			);
 		}
 		return updatedTypes;
 	}
@@ -180,7 +178,7 @@ public class GincoCustomAttributeImporter {
 		for (CustomConceptAttribute customConceptAttribute : customAttributeToImport) {
 			customConceptAttribute.setEntity(concept);
 			String typeCode = customConceptAttribute.getType().getCode();
-			if (savedTypes.get(typeCode) != null){
+			if (savedTypes.get(typeCode) != null) {
 				customConceptAttribute.setType(savedTypes.get(typeCode));
 				customConceptAttributeDAO.update(customConceptAttribute);
 			}
@@ -194,11 +192,11 @@ public class GincoCustomAttributeImporter {
 	 */
 	public void storeCustomTermAttribute(
 			List<CustomTermAttribute> customAttributeToImport,
-			ThesaurusTerm term,  Map<String, CustomTermAttributeType> savedTypes) {
+			ThesaurusTerm term, Map<String, CustomTermAttributeType> savedTypes) {
 		for (CustomTermAttribute customTermAttribute : customAttributeToImport) {
 			customTermAttribute.setEntity(term);
 			String typeCode = customTermAttribute.getType().getCode();
-			if (savedTypes.get(typeCode) != null){
+			if (savedTypes.get(typeCode) != null) {
 				customTermAttribute.setType(savedTypes.get(typeCode));
 				customTermAttributeDAO.update(customTermAttribute);
 			}

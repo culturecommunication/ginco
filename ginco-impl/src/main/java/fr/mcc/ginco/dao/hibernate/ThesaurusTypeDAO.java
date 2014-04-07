@@ -34,15 +34,14 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
+import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.dao.INodeLabelDAO;
+import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.dao.INodeLabelDAO;
-import fr.mcc.ginco.dao.IThesaurusTypeDAO;
+import java.util.List;
 
 /**
  * Implementation of {@link INodeLabelDAO}; basic class for DAO-related work.
@@ -57,13 +56,13 @@ public class ThesaurusTypeDAO extends GenericHibernateDAO<ThesaurusType, Integer
 
 	@Override
 	public ThesaurusType getByLabel(String label) {
-		 Criteria criteria = getCurrentSession().createCriteria(
-	                ThesaurusType.class);
-	       criteria.add(Restrictions.eq("label", label));
-	    List<ThesaurusType>  foundTypes = criteria.list();
-	    if (foundTypes.size()>0) {
-	    	return foundTypes.get(0);
-	    }
-	    return null;
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusType.class);
+		criteria.add(Restrictions.eq("label", label));
+		List<ThesaurusType> foundTypes = criteria.list();
+		if (foundTypes.size() > 0) {
+			return foundTypes.get(0);
+		}
+		return null;
 	}
 }

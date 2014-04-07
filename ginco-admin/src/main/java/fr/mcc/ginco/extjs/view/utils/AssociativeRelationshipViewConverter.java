@@ -54,62 +54,64 @@ import javax.inject.Named;
 @Component("associativeRelationshipViewConverter")
 public class AssociativeRelationshipViewConverter {
 
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-    @Inject
-    @Named("associativeRelationshipService")
-    private IAssociativeRelationshipService associativeRelationshipService;
+	@Inject
+	@Named("associativeRelationshipService")
+	private IAssociativeRelationshipService associativeRelationshipService;
 
-    @Inject
-    @Named("associativeRelationshipRoleService")
-    private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
+	@Inject
+	@Named("associativeRelationshipRoleService")
+	private IAssociativeRelationshipRoleService associativeRelationshipRoleService;
 
 
-    public AssociativeRelationshipView convert(AssociativeRelationship associativeRelationship, ThesaurusConcept concept) {
-        AssociativeRelationshipView view = new AssociativeRelationshipView();
+	public AssociativeRelationshipView convert(AssociativeRelationship associativeRelationship,
+	                                           ThesaurusConcept concept) {
+		AssociativeRelationshipView view = new AssociativeRelationshipView();
 
-        String leftId = associativeRelationship.getConceptRight().getIdentifier();
-        if(leftId.equals(concept.getIdentifier())) {
-            leftId = associativeRelationship.getConceptLeft().getIdentifier();
-        }
-        view.setIdentifier(leftId);
-        view.setLabel(thesaurusConceptService.getConceptLabel(leftId));
-        if(associativeRelationship.getRelationshipRole() == null) {
-            view.setRoleCode(associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole().getCode());
-        } else {
-            view.setRoleCode(associativeRelationship.getRelationshipRole().getCode());
-        }
-        return view;
-    }
+		String leftId = associativeRelationship.getConceptRight().getIdentifier();
+		if (leftId.equals(concept.getIdentifier())) {
+			leftId = associativeRelationship.getConceptLeft().getIdentifier();
+		}
+		view.setIdentifier(leftId);
+		view.setLabel(thesaurusConceptService.getConceptLabel(leftId));
+		if (associativeRelationship.getRelationshipRole() == null) {
+			view.setRoleCode(associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole().getCode());
+		} else {
+			view.setRoleCode(associativeRelationship.getRelationshipRole().getCode());
+		}
+		return view;
+	}
 
-    public AssociativeRelationship convert(AssociativeRelationshipView associativeRelationshipView,
-                                           ThesaurusConcept concept) {
+	public AssociativeRelationship convert(AssociativeRelationshipView associativeRelationshipView,
+	                                       ThesaurusConcept concept) {
 
-        AssociativeRelationship associativeRelationship =
-                associativeRelationshipService.getAssociativeRelationshipById(concept.getIdentifier(), associativeRelationshipView.getIdentifier());
+		AssociativeRelationship associativeRelationship =
+				associativeRelationshipService.getAssociativeRelationshipById(concept.getIdentifier(),
+						associativeRelationshipView.getIdentifier());
 
-        if(associativeRelationship == null) {
-            associativeRelationship = new AssociativeRelationship();
+		if (associativeRelationship == null) {
+			associativeRelationship = new AssociativeRelationship();
 
-            AssociativeRelationship.Id id = new AssociativeRelationship.Id();
-            id.setConcept1(concept.getIdentifier());
-            id.setConcept2(associativeRelationshipView.getIdentifier());
+			AssociativeRelationship.Id id = new AssociativeRelationship.Id();
+			id.setConcept1(concept.getIdentifier());
+			id.setConcept2(associativeRelationshipView.getIdentifier());
 
-            associativeRelationship.setConceptLeft(concept);
-            associativeRelationship.setConceptRight(
-                    thesaurusConceptService.getThesaurusConceptById(associativeRelationshipView.getIdentifier()));
-            associativeRelationship.setIdentifier(id);
-        }
-        
-        AssociativeRelationshipRole role = null;
-        if (StringUtils.isNotEmpty(associativeRelationshipView.getRoleCode())) {
-        	role = associativeRelationshipRoleService.getRoleById(associativeRelationshipView.getRoleCode());
-        } else {
-        	role = associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole();
-        }
-        associativeRelationship.setRelationshipRole(role);
-        return associativeRelationship;
-    }
+			associativeRelationship.setConceptLeft(concept);
+			associativeRelationship.setConceptRight(
+					thesaurusConceptService.getThesaurusConceptById(associativeRelationshipView.getIdentifier()));
+			associativeRelationship.setIdentifier(id);
+		}
+
+		AssociativeRelationshipRole role = null;
+		if (StringUtils.isNotEmpty(associativeRelationshipView.getRoleCode())) {
+			role = associativeRelationshipRoleService.getRoleById(associativeRelationshipView.getRoleCode());
+		} else {
+			role = associativeRelationshipRoleService.getDefaultAssociativeRelationshipRoleRole();
+		}
+		associativeRelationship.setRelationshipRole(role);
+		return associativeRelationship;
+	}
 }
