@@ -34,16 +34,16 @@
  */
 package fr.mcc.ginco.solr;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
+
+import java.util.List;
 
 public interface ITermIndexerService {
 	/**
      * Takes an {@link ThesaurusTerm} and adds it to index
      *
-     * @param Updated/created {@link ThesaurusTerm} to save to index
+     * @param thesaurusTerm Updated/created {@link ThesaurusTerm} to save to index
      * @throws TechnicalException
      */
 	void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
@@ -51,7 +51,7 @@ public interface ITermIndexerService {
 	/**
      * Takes a list of {@link ThesaurusTerm} and adds it to index
      *
-     * @param List of updated/created (@link Note) to save to index
+     * @param thesaurusTerms List of updated/created (@link Note) to save to index
      * @throws TechnicalException
      */
 	void addTerms(List<ThesaurusTerm> thesaurusTerms) throws TechnicalException;
