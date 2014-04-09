@@ -325,20 +325,18 @@ public class ThesaurusRestService {
 		return StringEscapeUtils.unescapeHtml4(serialized);
 	}
 
+	/**
+	 * Public method used to get authors that could be used to filter thesauruses
+	 * (so at lease one thesaurus has link to creator).
+	 *
+	 * @return
+	 */
 	@GET
 	@Path("/getAllAuthors")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<ThesaurusOrganization> getAllAuthors() {
-		List<ThesaurusOrganization> allOrgs = thesaurusOrganizationService.getOrganizations();
-		List<String> returnedAuthorNames = new ArrayList<String>();
-		List<ThesaurusOrganization> returnedOrgs = new ArrayList<ThesaurusOrganization>();
-		for (ThesaurusOrganization aOrg : allOrgs) {
-			if (!StringUtils.isEmpty(aOrg.getName()) && !returnedAuthorNames.contains(aOrg.getName())) {
-				returnedOrgs.add(aOrg);
-				returnedAuthorNames.add(aOrg.getName());
-			}
-		}
-		return returnedOrgs;
+		List<ThesaurusOrganization> allOrgs = thesaurusOrganizationService.getOrganizationsWithData();
+		return allOrgs;
 	}
 
 	@GET

@@ -98,6 +98,13 @@
         <row>
             <value>0</value>
             <value>Smile</value>
+            <value>http://smile.fr</value>
+            <value>contact@smile.fr</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>Not shown</value>
+            <value>http://smile.fr</value>
             <value>contact@smile.fr</value>
         </row>
     </table>
@@ -183,4 +190,6 @@
             <value>0</value>
         </row>
     </table>
+
+
 </dataset>

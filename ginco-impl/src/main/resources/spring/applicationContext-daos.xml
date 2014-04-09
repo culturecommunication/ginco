@@ -86,10 +86,6 @@
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
 	</bean>
 
-	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
-		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusOrganization" />
-	</bean>
-
 	<bean id="adminUserDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
         <constructor-arg value="fr.mcc.ginco.beans.AdminUser" />
     </bean>

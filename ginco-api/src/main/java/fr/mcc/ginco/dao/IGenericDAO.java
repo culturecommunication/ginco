@@ -48,7 +48,7 @@ import java.util.List;
  * @param <ID> primary key.
  */
 public interface IGenericDAO<T, ID extends Serializable> {
-	
+
 	public enum SortingTypes {
 		asc,
 		desc
