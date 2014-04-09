@@ -48,6 +48,9 @@ import org.springframework.security.ldap.userdetails.LdapUserDetailsMapper;
 
 import fr.mcc.ginco.services.IAdminUserService;
 
+/**
+ * Ginco user mapper.
+ */
 public class GincoUserDetailsContextMapper extends LdapUserDetailsMapper {
 
 	@Inject
@@ -56,14 +59,14 @@ public class GincoUserDetailsContextMapper extends LdapUserDetailsMapper {
 
 	@Override
 	public UserDetails mapUserFromContext(DirContextOperations ctx,
-			String username, Collection<? extends GrantedAuthority> authorities) {
+	                                      String username, Collection<? extends GrantedAuthority> authorities) {
 
 		UserDetails originalUser = super.mapUserFromContext(ctx, username,
 				authorities);
 		if (adminUserService.isUserAdmin(username)) {
 			SimpleGrantedAuthority adminAuthority = new SimpleGrantedAuthority(
-					"ROLE_ADMIN");			
-			((Collection<SimpleGrantedAuthority>)authorities).add(adminAuthority);
+					"ROLE_ADMIN");
+			((Collection<SimpleGrantedAuthority>) authorities).add(adminAuthority);
 		}
 		User newUser = new User(originalUser.getUsername(),
 				originalUser.getPassword(), originalUser.isEnabled(),

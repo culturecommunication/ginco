@@ -45,7 +45,6 @@ import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
 import fr.mcc.ginco.dao.ICustomConceptAttributeTypeDAO;
 import fr.mcc.ginco.dao.ICustomTermAttributeDAO;
 import fr.mcc.ginco.dao.ICustomTermAttributeTypeDAO;
-import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import org.springframework.stereotype.Component;
@@ -82,8 +81,8 @@ public class GincoCustomAttributeImporter {
 
 	/**
 	 * This method stores all the ginco custom attribute types for the terms of
-	 * the thesaurus included in the {@link GincoExportedThesaurus} object given
-	 * in parameter
+	 * the thesaurus included in the {@link fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus}
+	 * object given in parameter
 	 *
 	 * @param customAttributeTypesToImport
 	 * @return The list of the updated ginco custom attribute types
@@ -124,8 +123,8 @@ public class GincoCustomAttributeImporter {
 
 	/**
 	 * This method stores all the ginco custom attribute types for the concepts
-	 * of the thesaurus included in the {@link GincoExportedThesaurus} object
-	 * given in parameter
+	 * of the thesaurus included in the {@link fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus}
+	 * object given in parameter
 	 *
 	 * @param customAttributeTypesToImport
 	 * @return The list of the updated ginco custom attribute types

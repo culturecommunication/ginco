@@ -34,15 +34,6 @@
  */
 package fr.mcc.ginco.imports.ginco;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.Note;
@@ -55,10 +46,16 @@ import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedEntity;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class gives methods to import concepts and concepts notes
- * 
  */
 @Component("gincoConceptImporter")
 public class GincoConceptImporter {
@@ -78,7 +75,7 @@ public class GincoConceptImporter {
 	/**
 	 * This method stores all the concepts of the thesaurus included in the
 	 * {@link GincoExportedThesaurus} object given in parameter
-	 * 
+	 *
 	 * @param exportedThesaurus
 	 * @return The list of stored concepts
 	 */
@@ -90,16 +87,17 @@ public class GincoConceptImporter {
 		if (conceptsToImport != null && !conceptsToImport.isEmpty()) {
 			for (ThesaurusConcept concept : conceptsToImport) {
 				ThesaurusConcept updatedConcept = storeConcept(
-						concept,  exportedThesaurus, targetedThesaurus,  savedTypes);
-				updatedConcepts.add(updatedConcept);				
+						concept, exportedThesaurus, targetedThesaurus, savedTypes);
+				updatedConcepts.add(updatedConcept);
 			}
 		}
 		thesaurusConceptDAO.flush();
 		return updatedConcepts;
 	}
-	
+
 	/**
 	 * Store a single concept and its custom attributes
+	 *
 	 * @param concept
 	 * @param exportedThesaurus
 	 * @param targetedThesaurus
@@ -107,19 +105,19 @@ public class GincoConceptImporter {
 	 * @return
 	 */
 	public ThesaurusConcept storeConcept(
-			ThesaurusConcept concept, GincoExportedEntity exportedThesaurus,Thesaurus targetedThesaurus, Map<String, CustomConceptAttributeType> savedTypes) {
+			ThesaurusConcept concept, GincoExportedEntity exportedThesaurus, Thesaurus targetedThesaurus, Map<String, CustomConceptAttributeType> savedTypes) {
 		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
 		concept.setThesaurus(targetedThesaurus);
 		updatedConcepts.add(thesaurusConceptDAO.update(concept));
 		if (exportedThesaurus.getConceptAttributes() != null && exportedThesaurus.getConceptAttributes().containsKey((concept.getIdentifier()))) {
 			List<CustomConceptAttribute> conceptAttributes = exportedThesaurus.getConceptAttributes()
 					.get(concept.getIdentifier()).getList();
-					
+
 			gincoCustomAttributeImporter.storeCustomConceptAttribute(
 					conceptAttributes,
 					concept, savedTypes);
 		}
-		
+
 		thesaurusConceptDAO.flush();
 		return concept;
 	}
@@ -128,10 +126,10 @@ public class GincoConceptImporter {
 	/**
 	 * This method stores all the complex concepts of the thesaurus included in
 	 * the {@link GincoExportedThesaurus} object given in parameter
-	 * 
+	 *
 	 * @param complexConceptsToImport
 	 * @param targetedThesaurus
-	 */	
+	 */
 	public List<SplitNonPreferredTerm> storeComplexConcepts(
 			List<SplitNonPreferredTerm> complexConceptsToImport,
 			Thesaurus targetedThesaurus) {
@@ -150,10 +148,10 @@ public class GincoConceptImporter {
 	/**
 	 * This method stores all the concept notes of the thesaurus included in the
 	 * {@link GincoExportedThesaurus} object given in parameter
-	 * 
+	 *
 	 * @param conceptNotesToImport
 	 * @return The list of stored notes
-	 */	
+	 */
 	public List<Note> storeConceptNotes(
 			Map<String, JaxbList<Note>> conceptNotesToImport) {
 		List<Note> result = new ArrayList<Note>();

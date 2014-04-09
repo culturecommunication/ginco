@@ -44,6 +44,10 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+/**
+ * Small class responsible for converting real {@link ThesaurusConceptGroupLabel} object
+ * into its view {@link ThesaurusConceptGroupView}.
+ */
 @Component("thesaurusConceptGroupLabelViewConverter")
 public class ThesaurusConceptGroupLabelViewConverter {
 

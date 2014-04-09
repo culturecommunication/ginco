@@ -34,22 +34,19 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.ThesaurusStatistics;
 import fr.mcc.ginco.beans.ThesaurusType;
 
 /**
  * Service used to work with {@link ThesaurusType} objects, contains basic
- * methods exposed to client part. For example, to get all
- * ThesaurusType objects, use {@link #getThesaurusTypeList()}
+ * methods exposed to client part.
  *
  * @see fr.mcc.ginco.beans
  */
 public interface IThesaurusStatisticsService {
     /**
      * Get a Thesaurus statistics object
-     * @param thesaurus
+     * @param thesaurusId id of thesaurus
      * @return
      */
 	ThesaurusStatistics getStatistics(String thesaurusId);

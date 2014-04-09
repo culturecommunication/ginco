@@ -34,14 +34,11 @@
  */
 package fr.mcc.ginco.services;
 
-
-import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.solr.SearchResultList;
 
 /**
- * Service used to work with {@link ThesaurusType} objects, contains basic
- * methods exposed to client part. For example, to get all
- * ThesaurusType objects, use {@link #getThesaurusTypeList()}
+ * Service used to work with {@link fr.mcc.ginco.beans.ThesaurusType} objects, contains basic
+ * methods exposed to client part.
  *
  * @see fr.mcc.ginco.beans
  */
@@ -49,21 +46,33 @@ public interface IThesaurusReportService {
 	/**
 	 * Get a Thesaurus report object
 	 *
-	 * @param thesaurus
+	 * @param thesaurusId id of thesaurus
+	 * @param startIndex
+	 * @param limit
 	 * @return
 	 */
-	SearchResultList getConceptsWithoutNotes(String thesaurus,
+	SearchResultList getConceptsWithoutNotes(String thesaurusId,
 	                                         int startIndex, int limit);
 
 	/**
 	 * Get a Thesaurus report object
 	 *
-	 * @param thesaurus
+	 * @param thesaurusId id of thesaurus
+	 * @param startIndex
+	 * @param limit
 	 * @return
 	 */
-	SearchResultList getTermsWithoutNotes(String thesaurus,
+	SearchResultList getTermsWithoutNotes(String thesaurusId,
 	                                      int startIndex, int limit);
 
-	SearchResultList getConceptsAlignedToMyThes(String thesaurus,
+	/**
+	 * Gets a Thesaurus report object.
+	 *
+	 * @param thesaurusId
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
+	SearchResultList getConceptsAlignedToMyThes(String thesaurusId,
 	                                            int startIndex, int limit);
 }

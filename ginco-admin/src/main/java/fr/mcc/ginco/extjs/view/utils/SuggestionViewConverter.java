@@ -34,12 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.Suggestion;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.extjs.view.pojo.SuggestionView;
@@ -47,7 +41,16 @@ import fr.mcc.ginco.services.ISuggestionService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+/**
+ * Small class responsible for converting real {@link } object
+ * into its view {@link }.
+ */
 @Component("suggestionViewConverter")
 public class SuggestionViewConverter {
 
@@ -67,8 +70,8 @@ public class SuggestionViewConverter {
 	 * This method converts a single {@link Suggestion} into a
 	 * {@link SuggestionView}
 	 * 
-	 * @param source
-	 *            (a {@link Suggestion} object)
+	 * @param suggestion
+	 *            a {@link Suggestion} object
 	 * @return result (a {@link SuggestionView} object)
 	 */
 	public SuggestionView convert(Suggestion suggestion) {

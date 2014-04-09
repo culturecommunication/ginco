@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -42,7 +41,8 @@ import java.util.List;
 
 
 /**
- * View class corresponding to {@link ThesaurusConcept} bean, but fully serializable
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusConcept} bean,
+ * but fully serializable
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })

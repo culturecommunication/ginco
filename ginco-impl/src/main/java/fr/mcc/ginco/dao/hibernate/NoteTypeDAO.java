@@ -57,15 +57,15 @@ public class NoteTypeDAO extends GenericHibernateDAO<NoteType, String>
 	 */
 	@Override
 	public List<NoteType> findConceptNoteTypes() {
-		return getCurrentSession().createCriteria(NoteType.class).add(Restrictions.eq("isConcept",true)).list();
+		return getCurrentSession().createCriteria(NoteType.class).add(Restrictions.eq("isConcept", true)).list();
 	}
-	
+
 
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.dao.INoteTypeDAO#findTermNoteTypes()
 	 */
 	@Override
 	public List<NoteType> findTermNoteTypes() {
-		return getCurrentSession().createCriteria(NoteType.class).add(Restrictions.eq("isTerm",true)).list();
+		return getCurrentSession().createCriteria(NoteType.class).add(Restrictions.eq("isTerm", true)).list();
 	}
 }

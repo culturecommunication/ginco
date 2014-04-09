@@ -34,15 +34,6 @@
  */
 package fr.mcc.ginco.imports.ginco;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.CustomTermAttribute;
 import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Note;
@@ -51,8 +42,14 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.INoteDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedEntity;
-import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class gives methods to import terms and terms notes
@@ -71,7 +68,7 @@ public class GincoTermImporter {
 
 	/**
 	 * This method stores all the terms of the thesaurus included in the
-	 * {@link GincoExportedThesaurus} object given in parameter
+	 * {@link fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus} object given in parameter
 	 *
 	 * @param exportedThesaurus
 	 * @return The list of stored terms
@@ -101,7 +98,7 @@ public class GincoTermImporter {
 
 	/**
 	 * This method stores all the term notes of the thesaurus included in the
-	 * {@link GincoExportedThesaurus} object given in parameter
+	 * {@link fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus} object given in parameter
 	 *
 	 * @param termNotesToImport
 	 * @return The list of stored notes

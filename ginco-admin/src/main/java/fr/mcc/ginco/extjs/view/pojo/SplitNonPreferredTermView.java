@@ -34,19 +34,15 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-
 /**
- * View class corresponding to {@link ThesaurusTerm} bean, but fully serializable;
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusTerm} bean, but fully serializable;
  * contains all links to other business-objects (full beans
- * {@link Thesaurus} and {@link Language}).
+ * {@link fr.mcc.ginco.beans.Thesaurus} and {@link fr.mcc.ginco.beans.Language}).
  *
  * @see fr.mcc.ginco.beans
  */
@@ -112,7 +108,6 @@ public class SplitNonPreferredTermView implements Serializable, SecuredResourceV
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-
 
 	public String getThesaurusId() {
 		return thesaurusId;

@@ -34,18 +34,6 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.cxf.common.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -57,37 +45,50 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
-
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.skos.namespaces.SKOS;
+import org.apache.cxf.common.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Utils used for SKOS import
+ */
 @Service("skosImportUtils")
 public class SKOSImportUtils {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(SKOSImportUtils.class);
 
 
 	@Value("#{'${import.skos.date.formats}'.split(',')}")
 	private List<String> skosDefaultDateFormats;
-	
+
 	/**
 	 * Gets the list of resources from the given model
-	 * 
+	 *
 	 * @param model
 	 * @param resource
-	 * @return
+	 * @return list of resources.
 	 */
 	public List<Resource> getSKOSRessources(Model model,
-			final Resource resource) {
+	                                        final Resource resource) {
 		SimpleSelector schemeSelector = new SimpleSelector(null, null,
 				(RDFNode) null) {
 			public boolean selects(Statement s) {
 				if (s.getObject().isResource()
 						&& !s.getSubject().hasProperty(RDF.type, OWL.Class)
 						&& !s.getSubject().hasProperty(RDF.type,
-								OWL.ObjectProperty)
+						OWL.ObjectProperty)
 						&& !s.getSubject().hasProperty(RDF.type,
-								OWL.DatatypeProperty)) {
+						OWL.DatatypeProperty)) {
 					return s.getObject().asResource().equals(resource);
 				} else {
 					return false;
@@ -103,7 +104,13 @@ public class SKOSImportUtils {
 		}
 		return skosRessources;
 	}
-	
+
+	/**
+	 * Get broader type property.
+	 *
+	 * @param model
+	 * @return
+	 */
 	public static List<ObjectProperty> getBroaderTypeProperty(OntModel model) {
 		List<ObjectProperty> skosRessources = new ArrayList<ObjectProperty>();
 		ExtendedIterator<ObjectProperty> properties = model.listObjectProperties();
@@ -114,9 +121,15 @@ public class SKOSImportUtils {
 			}
 		}
 		return skosRessources;
-		
+
 	}
-	
+
+	/**
+	 * Get related type property.
+	 *
+	 * @param model
+	 * @return
+	 */
 	public List<ObjectProperty> getRelatedTypeProperty(OntModel model) {
 		List<ObjectProperty> skosRessources = new ArrayList<ObjectProperty>();
 		ExtendedIterator<ObjectProperty> properties = model.listObjectProperties();
@@ -127,18 +140,17 @@ public class SKOSImportUtils {
 			}
 		}
 		return skosRessources;
-		
+
 	}
-	
+
 	/**
-	 * Parse the given date
+	 * Parse the given date.
 	 *
 	 * @param skosDate
 	 * @return
 	 */
 	public Date getSkosDate(String skosDate) {
-		if (StringUtils.isEmpty(skosDate))
-		{
+		if (StringUtils.isEmpty(skosDate)) {
 			return new Date();
 		}
 		for (String skosDefaultDateFormat : skosDefaultDateFormats) {
@@ -152,5 +164,5 @@ public class SKOSImportUtils {
 		throw new BusinessException("InvalidDateFormat for input string "
 				+ skosDate, "import-invalid-date-format");
 	}
-	
+
 }

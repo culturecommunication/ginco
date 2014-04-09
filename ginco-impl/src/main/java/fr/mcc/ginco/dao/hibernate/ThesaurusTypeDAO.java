@@ -35,7 +35,6 @@
 package fr.mcc.ginco.dao.hibernate;
 
 import fr.mcc.ginco.beans.ThesaurusType;
-import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -44,7 +43,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Implementation of {@link INodeLabelDAO}; basic class for DAO-related work.
+ * Implementation of {@link fr.mcc.ginco.dao.INodeLabelDAO}; basic class for DAO-related work.
  */
 @Repository
 public class ThesaurusTypeDAO extends GenericHibernateDAO<ThesaurusType, Integer>

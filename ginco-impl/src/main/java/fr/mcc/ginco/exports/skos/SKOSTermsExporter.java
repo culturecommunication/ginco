@@ -35,28 +35,22 @@
 
 package fr.mcc.ginco.exports.skos;
 
-import java.net.URISyntaxException;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.springframework.stereotype.Component;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
-
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.skos.namespaces.SKOSXL;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * This component is in charge of exporting concept terms to SKOS
- * 
  */
-
 @Component("skosTermsExporter")
 public class SKOSTermsExporter {
 
@@ -68,29 +62,24 @@ public class SKOSTermsExporter {
 	@Named("skosModelTermsExporter")
 	private SKOSModelTermsExporter skosModelTermsExporter;
 
-
 	/**
-	 * Export concept preferred terms to SKOS using the skos API
-	 * 
+	 * Export concept preferred terms to SKOS using the skos API.
+	 *
 	 * @param prefTerms
-	 * @param conceptSKOS
-	 * @param factory
-	 * @param vocab
-	 * 
+	 * @param model
+	 * @param conceptResource
 	 * @return list of concept preferred terms for skos
-	 * @throws URISyntaxException
 	 */
-
 	public Model exportConceptPreferredTerms(List<ThesaurusTerm> prefTerms,
-			Model model, Resource conceptResource) {
+	                                         Model model, Resource conceptResource) {
 
 		for (ThesaurusTerm prefTerm : prefTerms) {
 			model.add(conceptResource, SKOS.PREF_LABEL,
 					StringEscapeUtils.unescapeXml(prefTerm.getLexicalValue()),
-					prefTerm.getLanguage().getId());			
+					prefTerm.getLanguage().getId());
 
 			model.add(conceptResource, SKOSXL.PREF_LABEL,
-					model.createResource(prefTerm.getIdentifier()));		
+					model.createResource(prefTerm.getIdentifier()));
 			skosModelTermsExporter.exportConceptPreferredTerm(prefTerm, model);
 
 		}
@@ -100,17 +89,14 @@ public class SKOSTermsExporter {
 
 	/**
 	 * Export concept not preferred terms to SKOS using the skos API
-	 * 
+	 *
 	 * @param conceptId
-	 * @param conceptSKOS
-	 * @param factory
-	 * @param vocab
-	 * 
+	 * @param model
+	 * @param conceptResource
 	 * @return list of concept not preferred terms for skos
 	 */
-
 	public Model exportConceptNotPreferredTerms(String conceptId, Model model,
-			Resource conceptResource) {
+	                                            Resource conceptResource) {
 
 		for (ThesaurusTerm altLabel : thesaurusTermService
 				.getTermsByConceptId(conceptId)) {
@@ -132,7 +118,7 @@ public class SKOSTermsExporter {
 			skosModelTermsExporter.exportConceptNotPreferredTerm(altLabel, model,
 					conceptResource, altLabel.getHidden());
 		}
-		
+
 		return model;
 	}
 }

@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.utils.GitInfo;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,7 +47,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * Base REST service intended to be used for getting tree of {@link Thesaurus},
+ * Base REST service intended to be used for getting tree of {@link fr.mcc.ginco.beans.Thesaurus},
  * and its children.
  */
 @Service

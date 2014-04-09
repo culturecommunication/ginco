@@ -34,61 +34,66 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Suggestion;
+
+import java.util.List;
 
 /**
  * Data Access Object for suggestion
  */
 public interface ISuggestionDAO extends IGenericDAO<Suggestion, Integer> {
-    
-    /**
+
+	/**
 	 * Gets the list of suggestions attached to a given concept
+	 *
 	 * @param conceptId
 	 * @param startIndex
 	 * @param limit
-	 * @return  List<Note> List of paginated suggestions for a term
+	 * @return List<Note> List of paginated suggestions for a term
 	 */
 	List<Suggestion> findConceptPaginatedSuggestions(String conceptId, Integer startIndex, Integer limit);
-	
-	
+
+
 	/**
 	 * Gets the list of suggestions attached to a given term
+	 *
 	 * @param termId
 	 * @param startIndex
 	 * @param limit
-	 * @return  List<Note> List of paginated suggestions for a term
+	 * @return List<Note> List of paginated suggestions for a term
 	 */
 	List<Suggestion> findTermPaginatedSuggestions(String termId, Integer startIndex, Integer limit);
-    
-    
-    /**
-     * Counts the number of suggestions of the given concept
-     * @param conceptId
-     * @return
-     */
-    Long getConceptSuggestionCount(String conceptId);
-    
-    /**
-     * Counts the number of suggestions of the given term
-     * @param termId
-     * @return
-     */
-    Long getTermSuggestionCount(String termId);
-    
-    /**
-     * Gets the list of suggestions whose recipient is the given parameter
-     * @param recipient
-     * @param startIndex
-     * @param limit
-     * @return
-     */
-    List<Suggestion> findPaginatedSuggestionsByRecipient(String recipient, Integer startIndex, Integer limit);
-    
+
+
+	/**
+	 * Counts the number of suggestions of the given concept
+	 *
+	 * @param conceptId
+	 * @return
+	 */
+	Long getConceptSuggestionCount(String conceptId);
+
+	/**
+	 * Counts the number of suggestions of the given term
+	 *
+	 * @param termId
+	 * @return
+	 */
+	Long getTermSuggestionCount(String termId);
+
+	/**
+	 * Gets the list of suggestions whose recipient is the given parameter
+	 *
+	 * @param recipient
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
+	List<Suggestion> findPaginatedSuggestionsByRecipient(String recipient, Integer startIndex, Integer limit);
+
 	/**
 	 * Counts the number of suggestions for the given recipient
+	 *
 	 * @param recipient
 	 * @return
 	 */

@@ -34,14 +34,12 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
+import fr.mcc.ginco.dao.IThesaurusConceptGroupTypeDAO;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
-import fr.mcc.ginco.dao.INoteTypeDAO;
-import fr.mcc.ginco.dao.IThesaurusConceptGroupTypeDAO;
-
 /**
- * Implementation of {@link INoteTypeDAO}; basic class for DAO-related work.
+ * Implementation of {@link fr.mcc.ginco.dao.INoteTypeDAO}; basic class for DAO-related work.
  */
 @Repository
 public class ThesaurusConceptGroupTypeDAO extends GenericHibernateDAO<ThesaurusConceptGroupType, String>

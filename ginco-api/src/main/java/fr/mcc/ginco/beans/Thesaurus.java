@@ -44,8 +44,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlElement;
-
 
 /**
  * Bean represents <b>thesaurus</b> table, main container containing

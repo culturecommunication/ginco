@@ -11,16 +11,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 
+/**
+ * Ginco session initializer.
+ */
 @Service
 public class SessionInitier {
 
 	@Inject
 	@Named("gincoSessionFactory")
 	private SessionFactory sessionFactory;
-	
+
+	/**
+	 * Init session.
+	 */
 	@PostConstruct
-	public void init()
-	{
+	public void init() {
 		Session session = sessionFactory.openSession();
 		TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
 	}

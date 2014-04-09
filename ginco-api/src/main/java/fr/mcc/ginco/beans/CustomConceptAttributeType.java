@@ -34,12 +34,10 @@
  */
 package fr.mcc.ginco.beans;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 
 /**
- *
+ * Custom attribute's type bean.
  */
 public class CustomConceptAttributeType extends GenericCustomAttributeType {
 

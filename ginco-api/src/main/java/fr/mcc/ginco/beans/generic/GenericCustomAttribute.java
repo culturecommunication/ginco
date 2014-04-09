@@ -34,64 +34,65 @@
  */
 package fr.mcc.ginco.beans.generic;
 
-import java.io.Serializable;
+import fr.mcc.ginco.beans.Language;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
-
-import fr.mcc.ginco.beans.Language;
+import java.io.Serializable;
 
 /**
+ * Custom attribute.
  *
+ * @param <T> entity to add attribute for.
+ * @param <E> subclass of {@link fr.mcc.ginco.beans.generic.GenericCustomAttribute}
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class GenericCustomAttribute<E extends GenericCustomAttributeType,T> implements Serializable {
-    private String identifier;
-    private String lexicalValue;
+public class GenericCustomAttribute<E extends GenericCustomAttributeType, T> implements Serializable {
+	private String identifier;
+	private String lexicalValue;
 
-    private E type;
-    private Language language;
+	private E type;
+	private Language language;
 
-    private T entity;
+	private T entity;
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public String getLexicalValue() {
-        return lexicalValue;
-    }
+	public String getLexicalValue() {
+		return lexicalValue;
+	}
 
-    public void setLexicalValue(String lexicalValue) {
-        this.lexicalValue = lexicalValue;
-    }
+	public void setLexicalValue(String lexicalValue) {
+		this.lexicalValue = lexicalValue;
+	}
 
-    public E getType() {
-        return type;
-    }
+	public E getType() {
+		return type;
+	}
 
-    public void setType(E type) {
-        this.type = type;
-    }
+	public void setType(E type) {
+		this.type = type;
+	}
 
-    public Language getLanguage() {
-        return language;
-    }
+	public Language getLanguage() {
+		return language;
+	}
 
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
 
-    public T getEntity() {
-        return entity;
-    }
+	public T getEntity() {
+		return entity;
+	}
 
-    public void setEntity(T entity) {
-        this.entity = entity;
-    }
+	public void setEntity(T entity) {
+		this.entity = entity;
+	}
 }

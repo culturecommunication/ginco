@@ -50,8 +50,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -294,8 +292,6 @@ public class ThesaurusRestService {
 	 * Public method used to archive thesaurus
 	 *
 	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
 	 */
 	@GET
 	@Path("/archiveVocabulary")
@@ -339,6 +335,12 @@ public class ThesaurusRestService {
 		return allOrgs;
 	}
 
+	/**
+	 * Gets statistics for given thesaurus.
+	 *
+	 * @param thesaurusId id of thesaurus
+	 * @return
+	 */
 	@GET
 	@Path("/getStatistics")
 	@Produces({ MediaType.APPLICATION_JSON })

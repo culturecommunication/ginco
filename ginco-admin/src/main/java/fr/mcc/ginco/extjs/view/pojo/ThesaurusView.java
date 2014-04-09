@@ -34,9 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -44,9 +41,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * View class corresponding to {@link Thesaurus} bean, but fully serializable;
+ * View class corresponding to {@link fr.mcc.ginco.beans.Thesaurus} bean, but fully serializable;
  * contains all links to other business-objects (full beans
- * {@link ThesaurusType} and {@link ThesaurusFormat}).
+ * {@link fr.mcc.ginco.beans.ThesaurusType} and {@link fr.mcc.ginco.beans.ThesaurusFormat}).
  *
  * @see fr.mcc.ginco.beans
  */

@@ -50,7 +50,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Small class responsible for converting real {@link GenericCustomAttributeType} object
+ * into its view {@link GenericCustomAttributeTypeView}.
  */
 @Component(value = "customAttributesTypesConverter")
 public class CustomAttributesTypesConverter {

@@ -34,14 +34,14 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 
+import java.util.List;
+
 /**
- * Service used to work with {@link ThesaurusConceptGroup} objects, contains basic
+ * Service used to work with {@link fr.mcc.ginco.beans.ThesaurusConceptGroup} objects, contains basic
  * methods exposed to client part.
  *
  * @see fr.mcc.ginco.beans.ThesaurusConceptGroup
@@ -49,14 +49,16 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 public interface IThesaurusConceptGroupService {
 
 	/**
-	 * This method gets a {@link ThesaurusConceptGroup} by its identifier
+	 * This method gets a {@link ThesaurusConceptGroup} by its identifier.
+	 *
 	 * @param conceptGroupId
 	 * @return A {@link ThesaurusConceptGroup} object
 	 */
 	ThesaurusConceptGroup getConceptGroupById(String conceptGroupId);
 
 	/**
-	 * This method updates a concept group with its associated label
+	 * This method updates a concept group with its associated label.
+	 *
 	 * @param convertedConceptGroup
 	 * @param conceptGroupLabel
 	 * @return The {@link ThesaurusConceptGroup} object updated
@@ -66,7 +68,9 @@ public interface IThesaurusConceptGroupService {
 			ThesaurusConceptGroupLabel conceptGroupLabel);
 
 	/**
-	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}, excluding the group which id is given in parameter (optional, set null for no exclusion)
+	 * Get all the {@link ThesaurusConceptGroup} of a {@link fr.mcc.ginco.beans.Thesaurus},
+	 * excluding the group which id is given in parameter (optional, set null for no exclusion)
+	 *
 	 * @param thesaurusId
 	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter
 	 */
@@ -74,14 +78,16 @@ public interface IThesaurusConceptGroupService {
 			String thesaurusId);
 
 	/**
-	 * Destroy a ThesaurusConceptGroup
-	 * @param The {@link ThesaurusConceptGroup} to delete
-	 * @return The deleted {@link ThesaurusConceptGroup}
+	 * Destroy a ThesaurusConceptGroup.
+	 *
+	 * @param object the {@link ThesaurusConceptGroup} to delete
+	 * @return the deleted {@link ThesaurusConceptGroup}
 	 */
 	ThesaurusConceptGroup destroyThesaurusConceptGroup(ThesaurusConceptGroup object);
 
 	/**
-	 * Get all child {@link ThesaurusConceptGroup} of a group by its identifier
+	 * Get all child {@link ThesaurusConceptGroup} of a group by its identifier.
+	 *
 	 * @param conceptGroupId
 	 * @return A list of all child {@link ThesaurusConceptGroup} of a group
 	 */

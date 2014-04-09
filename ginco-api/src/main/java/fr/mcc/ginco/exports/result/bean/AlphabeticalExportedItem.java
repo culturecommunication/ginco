@@ -34,17 +34,15 @@
  */
 package fr.mcc.ginco.exports.result.bean;
 
-import fr.mcc.ginco.beans.SplitNonPreferredTerm;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-
 /**
  * Small utility class for representing an object ready to be exported
  * alphabetically.
  * The type -Object- for the objectToExport is because
- *  alphabetical export sorts alphabetically different
- * object types ( {@link ThesaurusConcept} and {@link SplitNonPreferredTerm} )
+ * alphabetical export sorts alphabetically different
+ * object types ( {@link fr.mcc.ginco.beans.ThesaurusConcept} and {@link fr.mcc.ginco.beans.SplitNonPreferredTerm} )
  */
 public class AlphabeticalExportedItem {
+	
 	private String lexicalValue;
 	private Object objectToExport;
 

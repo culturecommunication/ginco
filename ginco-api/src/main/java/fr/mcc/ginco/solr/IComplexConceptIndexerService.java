@@ -34,32 +34,33 @@
  */
 package fr.mcc.ginco.solr;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
+import java.util.List;
+
 public interface IComplexConceptIndexerService {
 	/**
-     * Takes an {@link SplitNonPreferredTerm} and adds it to index
-     *
-     * @param Updated/created {@link SplitNonPreferredTerm} to save to index
-     * @throws TechnicalException
-     */
+	 * Takes an {@link SplitNonPreferredTerm} and adds it to index
+	 *
+	 * @param complexConcept updated/created {@link SplitNonPreferredTerm} to save to index
+	 * @throws TechnicalException
+	 */
 	void addComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException;
 
 	/**
-     * Takes a list of {@link SplitNonPreferredTerm} and adds it to index
-     *
-     * @param List of updated/created (@link Note) to save to index
-     * @throws TechnicalException
-     */
+	 * Takes a list of {@link SplitNonPreferredTerm} and adds it to index
+	 *
+	 * @param complexConcepts list of updated/created (@link Note) to save to index
+	 * @throws TechnicalException
+	 */
 	void addComplexConcepts(List<SplitNonPreferredTerm> complexConcepts) throws TechnicalException;
 
 	/**
-     * Remove {@link SplitNonPreferredTerm} from search index
-     * @param {@link SplitNonPreferredTerm}
-     * @throws TechnicalException
-     */
+	 * Remove {@link SplitNonPreferredTerm} from search index
+	 *
+	 * @param complexConcept {@link SplitNonPreferredTerm}
+	 * @throws TechnicalException
+	 */
 	void removeComplexConcept(SplitNonPreferredTerm complexConcept) throws TechnicalException;
 }

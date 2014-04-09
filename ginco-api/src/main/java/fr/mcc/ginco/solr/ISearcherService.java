@@ -36,15 +36,25 @@ package fr.mcc.ginco.solr;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
-import fr.mcc.ginco.exceptions.TechnicalException;
-
 public interface ISearcherService {
 	/**
-     * Search a term or a concept
-     * @throws TechnicalException
-     */
-    SearchResultList search(String request, Integer type,
-                            String thesaurus, Integer status,
-                            String createdFrom, String modifiedFrom,
-                            String language, SortCriteria sort, int startIndex, int limit) throws SolrServerException;
+	 * Search a term or a concept.
+	 *
+	 * @param request
+	 * @param type
+	 * @param thesaurus
+	 * @param status
+	 * @param createdFrom
+	 * @param modifiedFrom
+	 * @param language
+	 * @param sort
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 * @throws SolrServerException
+	 */
+	SearchResultList search(String request, Integer type,
+	                        String thesaurus, Integer status,
+	                        String createdFrom, String modifiedFrom,
+	                        String language, SortCriteria sort, int startIndex, int limit) throws SolrServerException;
 }

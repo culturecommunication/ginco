@@ -34,14 +34,25 @@
  */
 package fr.mcc.ginco.imports;
 
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.Thesaurus;
+
 import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.Thesaurus;
-
+/**
+ * Service for SKOS Import
+ */
 public interface ISKOSImportService {
 
-	Map<Thesaurus,Set<Alignment>> importSKOSFile(String fileContent,String fileName, File tempDir);
+	/**
+	 * Import SKOS file.
+	 *
+	 * @param fileContent
+	 * @param fileName
+	 * @param tempDir
+	 * @return
+	 */
+	Map<Thesaurus, Set<Alignment>> importSKOSFile(String fileContent, String fileName, File tempDir);
 }

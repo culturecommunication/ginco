@@ -34,18 +34,18 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
- *
+ * Small class responsible for converting real {@link ThesaurusArrayConcept} object
+ * into its view {@link ThesaurusArrayConceptView}.
  */
 @Component("thesaurusArrayConceptViewConverter")
 public class ThesaurusArrayConceptViewConverter {
@@ -54,7 +54,13 @@ public class ThesaurusArrayConceptViewConverter {
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-
+	/**
+	 * Convert from real object to POJO
+	 *
+	 * @param thesaurusArrayConceptView
+	 * @param array
+	 * @return
+	 */
 	public ThesaurusArrayConcept convert(ThesaurusArrayConceptView thesaurusArrayConceptView,
 	                                     ThesaurusArray array) {
 		ThesaurusArrayConcept.Id id = new ThesaurusArrayConcept.Id();

@@ -34,23 +34,20 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.dao.IAlignmentDAO;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.dao.IAlignmentDAO;
+import java.util.List;
 
 /**
  * Implementation of the data access object to the alignment database table
- *
  */
 @Repository
 public class AlignmentDAO extends
 		GenericHibernateDAO<Alignment, String> implements IAlignmentDAO {
-
 
 	public AlignmentDAO() {
 		super(Alignment.class);
@@ -62,15 +59,15 @@ public class AlignmentDAO extends
 	 */
 	@Override
 	public List<Alignment> findBySourceConceptId(String sourceConceptId) {
-		Criteria criteria =  getCurrentSession().createCriteria(Alignment.class);
+		Criteria criteria = getCurrentSession().createCriteria(Alignment.class);
 		criteria.add(Restrictions.eq("sourceConcept.identifier", sourceConceptId));
 		return criteria.list();
 	}
-	
+
 	@Override
 	public List<Alignment> findByTargetConceptId(String targetConceptId) {
-		Criteria criteria =  getCurrentSession().createCriteria(Alignment.class);
-		criteria.createAlias("targetConcepts","tc");
+		Criteria criteria = getCurrentSession().createCriteria(Alignment.class);
+		criteria.createAlias("targetConcepts", "tc");
 		criteria.add(Restrictions.eq("tc.internalTargetConcept.identifier", targetConceptId));
 		return criteria.list();
 	}

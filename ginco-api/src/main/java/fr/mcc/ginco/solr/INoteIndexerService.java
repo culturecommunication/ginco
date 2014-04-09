@@ -34,34 +34,35 @@
  */
 package fr.mcc.ginco.solr;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.exceptions.TechnicalException;
+
+import java.util.List;
 
 public interface INoteIndexerService {
 
 	/**
-     * Takes an {@link Note} and adds it to index
-     *
-     * @param Updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNote(Note note) throws TechnicalException;
+	 * Takes an {@link Note} and adds it to index
+	 *
+	 * @param note updated/created {@link Note} to save to index
+	 * @throws TechnicalException
+	 */
+	void addNote(Note note);
 
 	/**
-     * Takes a list of {@link Note} and adds it to index
-     *
-     * @param List of updated/created {@link Note} to save to index
-     * @throws TechnicalException
-     */
-	void addNotes(List<Note> notes) throws TechnicalException;
+	 * Takes a list of {@link Note} and adds it to index
+	 *
+	 * @param notes list of updated/created {@link Note} to save to index
+	 * @throws TechnicalException
+	 */
+	void addNotes(List<Note> notes);
 
 	/**
-     * Remove {@link Note} from search index
-     * @param {@link Note}
-     * @throws TechnicalException
-     */
-	void removeNote(Note note) throws TechnicalException;
+	 * Remove {@link Note} from search index
+	 *
+	 * @param {@link Note}
+	 * @throws TechnicalException
+	 */
+	void removeNote(Note note);
 
 }

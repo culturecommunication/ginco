@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +47,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -184,9 +181,6 @@ public class BaseRestService {
 	 * Public method used to get the name of the user currently connected
 	 *
 	 * @return
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
 	 */
 	@GET
 	@Path("/getSession")
@@ -199,9 +193,6 @@ public class BaseRestService {
 	 * Public method used to get the name of the user currently connected
 	 *
 	 * @return
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
 	 */
 	@GET
 	@Path("/getUserInfo")

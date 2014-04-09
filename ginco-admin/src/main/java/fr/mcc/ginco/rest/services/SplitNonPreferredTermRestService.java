@@ -134,12 +134,18 @@ public class SplitNonPreferredTermRestService {
 	@GET
 	@Path("/getList")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<List<SplitNonPreferredTermView>> getList
-	(@QueryParam("start") Integer startIndex,
-	 @QueryParam("limit") Integer limit,
-	 @QueryParam("idThesaurus") String idThesaurus) {
-		logger.info("Getting Thesaurus SplitNonPreferred Terms with following parameters : " + "index start " + startIndex + " with a limit of " + limit);
-		List<SplitNonPreferredTerm> thesaurusTerms = splitNonPreferredTermService.getSplitNonPreferredTermList(startIndex, limit, idThesaurus);
+	public ExtJsonFormLoadData<List<SplitNonPreferredTermView>> getList(@QueryParam("start") Integer startIndex,
+	                                                                    @QueryParam("limit") Integer limit,
+	                                                                    @QueryParam("idThesaurus") String idThesaurus) {
+		logger.info("Getting Thesaurus SplitNonPreferred Terms with following parameters : "
+				+ "index start "
+				+ startIndex
+				+ " with a limit of "
+				+ limit);
+
+		List<SplitNonPreferredTerm> thesaurusTerms =
+				splitNonPreferredTermService.getSplitNonPreferredTermList(startIndex, limit, idThesaurus);
+
 		Long total = splitNonPreferredTermService.getSplitNonPreferredTermCount(idThesaurus);
 
 		List<SplitNonPreferredTermView> results = new ArrayList<SplitNonPreferredTermView>();

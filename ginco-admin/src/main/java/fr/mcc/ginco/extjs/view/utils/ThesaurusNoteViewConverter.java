@@ -52,6 +52,10 @@ import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Small class responsible for converting real {@link Note} object
+ * into its view {@link ThesaurusNoteView}.
+ */
 @Component("thesaurusNoteViewConverter")
 public class ThesaurusNoteViewConverter {
 

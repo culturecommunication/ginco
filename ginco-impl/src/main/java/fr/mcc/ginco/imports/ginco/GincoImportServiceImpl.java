@@ -34,27 +34,7 @@
  */
 package fr.mcc.ginco.imports.ginco;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.hp.hpl.jena.util.FileManager;
-
 import fr.mcc.ginco.audit.utils.AuditContext;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -64,6 +44,23 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.imports.IGincoImportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class gives methods to import a thesaurus from a XML file (custom Ginco format)
@@ -123,8 +120,8 @@ public class GincoImportServiceImpl implements IGincoImportService {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshalledExportedThesaurus = (GincoExportedBranch) unmarshaller.unmarshal(in);
 		} catch (JAXBException e) {
-			throw new BusinessException("Error when trying to deserialize the concept branch from XML with JAXB :" + e.getMessage(),
-					"import-unable-to-read-file", e);
+			throw new BusinessException("Error when trying to deserialize the concept branch from XML with JAXB :"
+					+ e.getMessage(), "import-unable-to-read-file", e);
 		}
 		return gincoConceptBranchBuilder.storeGincoExportedBranch(unmarshalledExportedThesaurus, thesaurusId);
 	}

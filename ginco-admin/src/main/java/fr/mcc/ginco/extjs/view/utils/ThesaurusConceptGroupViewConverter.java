@@ -57,7 +57,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-
+/**
+ * Small class responsible for converting real {@link ThesaurusConceptGroup} object
+ * into its view {@link ThesaurusConceptGroupView}.
+ */
 @Component("thesaurusConceptGroupViewConverter")
 public class ThesaurusConceptGroupViewConverter {
 
@@ -85,6 +88,12 @@ public class ThesaurusConceptGroupViewConverter {
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
 
+	/**
+	 * Convert from view to real object.
+	 *
+	 * @param source
+	 * @return
+	 */
 	public ThesaurusConceptGroup convert(ThesaurusConceptGroupView source) {
 		ThesaurusConceptGroup hibernateRes;
 
@@ -151,6 +160,12 @@ public class ThesaurusConceptGroupViewConverter {
 		return hibernateRes;
 	}
 
+	/**
+	 * Convert from real object to view.
+	 *
+	 * @param source
+	 * @return
+	 */
 	public ThesaurusConceptGroupView convert(final ThesaurusConceptGroup source) {
 		ThesaurusConceptGroupView thesaurusConceptGroupView = new ThesaurusConceptGroupView();
 
@@ -196,7 +211,8 @@ public class ThesaurusConceptGroupViewConverter {
 	}
 
 	/**
-	 * This method converts a list of {@link ThesaurusConceptGroup} into a list of {@link ThesaurusConceptGroupView}
+	 * This method converts a list of {@link ThesaurusConceptGroup}
+	 * into a list of {@link ThesaurusConceptGroupView}
 	 *
 	 * @param {@link ThesaurusConceptGroup} groups
 	 * @return {@link ThesaurusConceptGroupView} group views

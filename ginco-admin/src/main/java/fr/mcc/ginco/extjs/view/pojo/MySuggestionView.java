@@ -36,11 +36,9 @@ package fr.mcc.ginco.extjs.view.pojo;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import fr.mcc.ginco.beans.Suggestion;
-
 /**
- * View class corresponding to {@link Suggestion} bean, but fully serializable;
- * 
+ * View class corresponding to {@link fr.mcc.ginco.beans.Suggestion} bean, but fully serializable;
+ *
  * @see fr.mcc.ginco.beans
  */
 @SuppressWarnings("serial")

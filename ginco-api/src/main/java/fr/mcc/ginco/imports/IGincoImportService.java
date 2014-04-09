@@ -34,14 +34,14 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.io.File;
-import java.util.Map;
-import java.util.Set;
-
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.exceptions.TechnicalException;
+
+import java.io.File;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -52,26 +52,26 @@ public interface IGincoImportService {
 
 	/**
 	 * This method import a Thesaurus from a Ginco custom format
-	 * 
+	 *
 	 * @param content
 	 * @param fileName
 	 * @param tempDir
-	 * @return a map containing the imported Thesaurus and the banned alignments 
+	 * @return a map containing the imported Thesaurus and the banned alignments
 	 * @throws TechnicalException
 	 */
-	Map<Thesaurus,Set<Alignment>> importGincoXmlThesaurusFile(String content, String fileName,
-			File tempDir);
+	Map<Thesaurus, Set<Alignment>> importGincoXmlThesaurusFile(String content, String fileName,
+	                                                           File tempDir);
 
 	/**
 	 * This method import a concept branch from a Ginco custom format
+	 *
 	 * @param content
 	 * @param fileName
 	 * @param tempDir
 	 * @param thesaurusId
 	 * @return
-	 * @throws TechnicalException
 	 */
-	Map<ThesaurusConcept,Set<Alignment>> importGincoBranchXmlFile(String content, String fileName,
-			File tempDir, String thesaurusId);
+	Map<ThesaurusConcept, Set<Alignment>> importGincoBranchXmlFile(String content, String fileName,
+	                                                               File tempDir, String thesaurusId);
 
 }

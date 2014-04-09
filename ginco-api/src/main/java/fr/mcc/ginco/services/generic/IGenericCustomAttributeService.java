@@ -35,15 +35,38 @@
 package fr.mcc.ginco.services.generic;
 
 import fr.mcc.ginco.beans.generic.GenericCustomAttribute;
-import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 
 import java.util.List;
 
 /**
+ * Service used to work with {@link fr.mcc.ginco.beans.generic.GenericCustomAttribute},
+ * contains basic methods exposed to client part.
  *
+ * @param <E> entity to apply attributes for
+ * @param <T> subclass of {@link fr.mcc.ginco.beans.generic.GenericCustomAttribute}
+ * @see fr.mcc.ginco.beans
  */
 public interface IGenericCustomAttributeService<E, T extends GenericCustomAttribute> {
-    List<T> getAttributesByEntity(E entity);
-    T saveOrUpdate(T attribute);
-    void deleteAttribute(T attribute);
+	/**
+	 * Get all attributes for given entity.
+	 *
+	 * @param entity
+	 * @return
+	 */
+	List<T> getAttributesByEntity(E entity);
+
+	/**
+	 * Save or update attribute.
+	 *
+	 * @param attribute
+	 * @return
+	 */
+	T saveOrUpdate(T attribute);
+
+	/**
+	 * Deletes attribute.
+	 *
+	 * @param attribute
+	 */
+	void deleteAttribute(T attribute);
 }

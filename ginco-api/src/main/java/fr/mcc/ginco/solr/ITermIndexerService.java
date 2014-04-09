@@ -41,25 +41,26 @@ import java.util.List;
 
 public interface ITermIndexerService {
 	/**
-     * Takes an {@link ThesaurusTerm} and adds it to index
-     *
-     * @param thesaurusTerm Updated/created {@link ThesaurusTerm} to save to index
-     * @throws TechnicalException
-     */
-	void addTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
+	 * Takes an {@link ThesaurusTerm} and adds it to index
+	 *
+	 * @param thesaurusTerm updated/created {@link ThesaurusTerm} to save to index
+	 * @throws TechnicalException
+	 */
+	void addTerm(ThesaurusTerm thesaurusTerm);
 
 	/**
-     * Takes a list of {@link ThesaurusTerm} and adds it to index
-     *
-     * @param thesaurusTerms List of updated/created (@link Note) to save to index
-     * @throws TechnicalException
-     */
+	 * Takes a list of {@link ThesaurusTerm} and adds it to index
+	 *
+	 * @param thesaurusTerms list of updated/created (@link Note) to save to index
+	 * @throws TechnicalException
+	 */
 	void addTerms(List<ThesaurusTerm> thesaurusTerms) throws TechnicalException;
 
 	/**
-     * Remove {@link ThesaurusTerm} from search index
-     * @param {@link ThesaurusTerm}
-     * @throws TechnicalException
-     */
+	 * Remove {@link ThesaurusTerm} from search index
+	 *
+	 * @param {@link ThesaurusTerm}
+	 * @throws TechnicalException
+	 */
 	void removeTerm(ThesaurusTerm thesaurusTerm) throws TechnicalException;
 }

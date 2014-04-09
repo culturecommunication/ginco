@@ -34,15 +34,13 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-import fr.mcc.ginco.beans.ThesaurusConceptGroup;
-
 /**
- * View class corresponding to {@link ThesaurusConceptGroup} bean, but fully serializable
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusConceptGroup} bean, but fully serializable
  *
  * @see fr.mcc.ginco.beans
  */

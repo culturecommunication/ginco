@@ -40,11 +40,40 @@ import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 import java.util.List;
 
 /**
+ * Service used to work with {@link fr.mcc.ginco.beans.generic.GenericCustomAttributeType},
+ * contains basic methods exposed to client part.
  *
+ * @param <T> subclass of {@link fr.mcc.ginco.beans.generic.GenericCustomAttributeType}
+ * @see fr.mcc.ginco.beans
  */
 public interface IGenericCustomAttributeTypeService<T extends GenericCustomAttributeType> {
-    List<T> getAttributeTypesByThesaurus(Thesaurus thesaurus);
-    T getAttributeTypeById(int id);
-    T saveOrUpdate(T attribute);
-    void deleteAttribute(T attribute);
+	/**
+	 * Get attribute type for given {@link fr.mcc.ginco.beans.Thesaurus}
+	 *
+	 * @param thesaurus object
+	 * @return
+	 */
+	List<T> getAttributeTypesByThesaurus(Thesaurus thesaurus);
+
+	/**
+	 * Get attribute type by its id.
+	 *
+	 * @param id of attribute type
+	 * @return
+	 */
+	T getAttributeTypeById(int id);
+
+	/**
+	 * Save or update attribute type.
+	 *
+	 * @param attribute
+	 * @return
+	 */
+	T saveOrUpdate(T attribute);
+
+	/**
+	 * Remove attribute
+	 * @param attribute
+	 */
+	void deleteAttribute(T attribute);
 }

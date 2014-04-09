@@ -34,17 +34,6 @@
  */
 package fr.mcc.ginco.imports.ginco;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.CustomTermAttributeType;
@@ -55,11 +44,19 @@ import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.imports.ginco.idgenerator.GincoConceptBranchIdGenerator;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class : - extracts data from a {@link GincoExportedBranch} object, -
  * stores it in beans - persists beans
- *
  */
 @Component("gincoConceptBranchBuilder")
 public class GincoConceptBranchBuilder {
@@ -93,20 +90,20 @@ public class GincoConceptBranchBuilder {
 	 * children, terms, notes) but not arrays / groups.
 	 *
 	 * @param {@GincoExportedBranch} : the previously
-	 *        exported branch we want to import
+	 *                               exported branch we want to import
 	 * @return The imported {@link ThesaurusConcept} root
 	 */
-	public Map<ThesaurusConcept,Set<Alignment>> storeGincoExportedBranch(
+	public Map<ThesaurusConcept, Set<Alignment>> storeGincoExportedBranch(
 			GincoExportedBranch exportedBranch, String thesaurusId) {
 
-		Map<ThesaurusConcept,Set<Alignment>> res = new HashMap<ThesaurusConcept,Set<Alignment>>();
+		Map<ThesaurusConcept, Set<Alignment>> res = new HashMap<ThesaurusConcept, Set<Alignment>>();
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 
 		ThesaurusConcept result = new ThesaurusConcept();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
 
 		ThesaurusConcept existingConceptRoot = thesaurusConceptDAO.getById(exportedBranch.getRootConcept().getIdentifier());
-		if (existingConceptRoot != null && existingConceptRoot.getThesaurus() != null &&  existingConceptRoot.getThesaurus().getIdentifier().equals(targetedThesaurus.getIdentifier())) {
+		if (existingConceptRoot != null && existingConceptRoot.getThesaurus() != null && existingConceptRoot.getThesaurus().getIdentifier().equals(targetedThesaurus.getIdentifier())) {
 			throw new BusinessException("Not possible to import a branch where root concept already exists in target thesaurus",
 					"root-concept-exist-in-target-thesaurus");
 		}
@@ -120,7 +117,6 @@ public class GincoConceptBranchBuilder {
 			// We replace all existing ids by new generated ids
 			gincoConceptBranchIdGenerator
 					.resetIdsForExportedBranch(exportedBranch);
-
 
 
 			Map<String, CustomTermAttributeType> customTermAttributeTypes = gincoCustomAttributeImporter.getBranchCustomTermAttributeTypes(exportedBranch.getTermAttributeTypes(), targetedThesaurus);
