@@ -90,6 +90,9 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
+
+                me.application.fireEvent('customattributeupdated',theGrid.up('thesaurusTabPanel').thesaurusData);
+
         		if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}
@@ -110,6 +113,9 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
+
+                me.application.fireEvent('customattributeupdated',theGrid.up('thesaurusTabPanel').thesaurusData);
+
         		if (theCallback && typeof theCallback == "function") {
 					theCallback();
 				}

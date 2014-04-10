@@ -875,7 +875,19 @@ Ext.define('GincoApp.controller.ConceptController', {
 			me.onConceptFormRender(parentTab.down('#conceptForm'));
 		}
 	},
+    customAttributesUpdated : function (thesaurusdata) {
+        var me = this;
+        var thesTabs = me.getTopTabs();
 
+        thesTabs.items.each(function(item) {
+            if (item.getThesaurusData().id == thesaurusdata.id) {
+
+                Ext.each(item.query('conceptPanel'), function(concept){
+                    me.reloadConceptWindow(concept.gincoId);
+                });
+            }
+        });
+    },
 	exportBranch : function(theButton, theCallback) {
 		var theForm = theButton.up('form');
 		var url = "services/ui/exportservice/getGincoBranchExport?conceptId="
@@ -953,6 +965,14 @@ Ext.define('GincoApp.controller.ConceptController', {
             },
             scope: this
         });
+
+        this.application.on({
+            'customattributeupdated' : function(thesaurusData) {
+                this.customAttributesUpdated(thesaurusData);
+            },
+            scope: this
+        });
+
 		this.control({
 			'conceptPanel #conceptForm' : {
 				afterrender : this.onConceptFormRender,
