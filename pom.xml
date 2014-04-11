@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.smile.mcc.ginco</groupId>
     <artifactId>ginco</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>2.0.1</version>
     <name>Ginco</name>
     <packaging>pom</packaging>
 
@@ -481,7 +481,7 @@
                         <configuration>
                             <type>runtime</type>
                             <properties>
-                                <cargo.datasource.datasource/>
+                                <cargo.datasource.datasource />
                                 <cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
                                 <cargo.remote.username>${cargo.tomcat.manager.login}</cargo.remote.username>
                                 <cargo.remote.password>${cargo.tomcat.manager.password}</cargo.remote.password>
