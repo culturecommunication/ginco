@@ -140,7 +140,7 @@ public class ThesaurusArrayViewConverter {
 		if (source.getSuperOrdinateConcept() != null) {
 			thesaurusArrayView.setSuperOrdinateId(source
 					.getSuperOrdinateConcept().getIdentifier());
-			thesaurusArrayView.setSuperOrdinateConceptLabel(thesaurusConceptService
+			thesaurusArrayView.setSuperOrdinateLabel(thesaurusConceptService
 					.getConceptLabel(source.getSuperOrdinateConcept()
 							.getIdentifier()));
 

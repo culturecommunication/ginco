@@ -48,7 +48,7 @@ import java.util.List;
 public class ThesaurusArrayView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String superOrdinateId;
-	private String superOrdinateConceptLabel;
+	private String superOrdinateLabel;
 	private String created;
 	private String modified;
 	private String parentArrayId;
@@ -80,12 +80,12 @@ public class ThesaurusArrayView implements Serializable, SecuredResourceView {
 		this.superOrdinateId = superOrdinateConceptId;
 	}
 
-	public String getSuperOrdinateConceptLabel() {
-		return superOrdinateConceptLabel;
+	public String getSuperOrdinateLabel() {
+		return superOrdinateLabel;
 	}
 
-	public void setSuperOrdinateConceptLabel(String superOrdinateConceptLabel) {
-		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
+	public void setSuperOrdinateLabel(String superOrdinateLabel) {
+		this.superOrdinateLabel = superOrdinateLabel;
 	}
 
 	public List<ThesaurusArrayConceptView> getConcepts() {
