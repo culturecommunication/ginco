@@ -69,12 +69,13 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * Builder in charge of building ThesaurusConcept
- * 
+ *
  */
 @Service("skosConceptBuilder")
 public class ConceptBuilder extends AbstractBuilder {
 
-	private static Logger logger = LoggerFactory.getLogger(ConceptBuilder.class);
+	private static Logger logger = LoggerFactory
+			.getLogger(ConceptBuilder.class);
 
 	@Inject
 	@Named("conceptHierarchicalRelationshipServiceUtil")
@@ -86,12 +87,10 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	@Inject
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
-	
+
 	@Inject
 	@Named("skosImportUtils")
 	private SKOSImportUtils skosImportUtils;
-
-	
 
 	private static Map<String, ThesaurusConcept> builtConcepts = new HashMap<String, ThesaurusConcept>();
 
@@ -101,7 +100,7 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	/**
 	 * Sets the basic attributes of a concept
-	 * 
+	 *
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
@@ -116,7 +115,8 @@ public class ConceptBuilder extends AbstractBuilder {
 
 		Statement stmtCreated = skosConcept.getProperty(DCTerms.created);
 		if (stmtCreated != null) {
-			concept.setCreated(skosImportUtils.getSkosDate(stmtCreated.getString()));
+			concept.setCreated(skosImportUtils.getSkosDate(stmtCreated
+					.getString()));
 		} else {
 			concept.setCreated(thesaurus.getCreated());
 		}
@@ -167,7 +167,7 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	/**
 	 * Build associative relationships between concepts
-	 * 
+	 *
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
@@ -186,37 +186,44 @@ public class ConceptBuilder extends AbstractBuilder {
 			ThesaurusConcept relatedConcept = builtConcepts
 					.get(relatedConceptRes.getURI());
 
-			AssociativeRelationship relationshipLeft = new AssociativeRelationship();
-			AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
-			relationshipId.setConcept1(concept.getIdentifier());
-			relationshipId.setConcept2(relatedConcept.getIdentifier());
-			relationshipLeft.setIdentifier(relationshipId);
-			relationshipLeft.setConceptLeft(concept);
-			relationshipLeft.setConceptRight(relatedConcept);
-			AssociativeRelationshipRole role = associativeRelationshipRoleService
-					.getDefaultAssociativeRelationshipRoleRole();
-			for (ObjectProperty relatedType : relatedTypes) {
-				if (skosConcept.hasProperty(relatedType, relatedConceptRes)) {
-					String[] labels = relatedType.getURI().split("/");
-					String label = labels[labels.length - 1];
-					AssociativeRelationshipRole tmpRole = associativeRelationshipRoleService
-							.getRoleBySkosLabel(label);
-					if (tmpRole != null) {
-						role = tmpRole;
-						break;
+			if (relatedConcept != null) {
+				AssociativeRelationship relationshipLeft = new AssociativeRelationship();
+				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
+				relationshipId.setConcept1(concept.getIdentifier());
+				relationshipId.setConcept2(relatedConcept.getIdentifier());
+				relationshipLeft.setIdentifier(relationshipId);
+				relationshipLeft.setConceptLeft(concept);
+				relationshipLeft.setConceptRight(relatedConcept);
+				AssociativeRelationshipRole role = associativeRelationshipRoleService
+						.getDefaultAssociativeRelationshipRoleRole();
+				for (ObjectProperty relatedType : relatedTypes) {
+					if (skosConcept.hasProperty(relatedType, relatedConceptRes)) {
+						String[] labels = relatedType.getURI().split("/");
+						String label = labels[labels.length - 1];
+						AssociativeRelationshipRole tmpRole = associativeRelationshipRoleService
+								.getRoleBySkosLabel(label);
+						if (tmpRole != null) {
+							role = tmpRole;
+							break;
+						}
 					}
 				}
+				relationshipLeft.setRelationshipRole(role);
+				relationshipsLeft.add(relationshipLeft);
+			} else {
+				logger.warn("Unable to get associative relationship for concept:"
+						+ skosConcept.getURI()
+						+ ". Concept with id "
+						+ relatedConceptRes.getURI()
+						+ " does not exist in the schema");
 			}
-
-			relationshipLeft.setRelationshipRole(role);
-			relationshipsLeft.add(relationshipLeft);
 		}
 		return relationshipsLeft;
 	}
 
 	/**
 	 * Build direct hierarchical and associative relationships between concepts
-	 * 
+	 *
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
@@ -286,7 +293,7 @@ public class ConceptBuilder extends AbstractBuilder {
 
 	/**
 	 * Launch the calculation and set the root concepts of the given concept
-	 * 
+	 *
 	 * @param skosConcept
 	 * @param thesaurus
 	 * @return
