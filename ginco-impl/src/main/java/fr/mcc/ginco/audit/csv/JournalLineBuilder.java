@@ -38,6 +38,8 @@ import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -86,7 +88,7 @@ public class JournalLineBuilder {
 				JournalEventsEnum.THESAURUSTERM_CREATED,
 				revision);
 		journalLine.setTermId(term.getIdentifier());
-		journalLine.setNewLexicalValue(term.getLexicalValue());
+		journalLine.setNewLexicalValue(StringEscapeUtils.unescapeXml(term.getLexicalValue()));
 		if (term.getConcept() != null) {
 			journalLine.setConceptId(term.getConcept().getIdentifier());
 		}
@@ -133,8 +135,8 @@ public class JournalLineBuilder {
 		if (term.getConcept() != null) {
 			journal.setConceptId(term.getConcept().getIdentifier());
 		}
-		journal.setNewLexicalValue(term.getLexicalValue());
-		journal.setOldLexicalValue(oldLexicalValue);
+		journal.setNewLexicalValue(StringEscapeUtils.unescapeXml(term.getLexicalValue()));
+		journal.setOldLexicalValue(StringEscapeUtils.unescapeXml(oldLexicalValue));
 
 		return journal;
 	}
@@ -155,8 +157,8 @@ public class JournalLineBuilder {
 				revision);
 		journal.setTermId(term.getIdentifier());
 		journal.setConceptId(term.getConcept().getIdentifier());
-		journal.setNewLexicalValue(term.getLexicalValue());
-		journal.setOldLexicalValue(term.getLexicalValue());
+		journal.setNewLexicalValue(StringEscapeUtils.unescapeXml(term.getLexicalValue()));
+		journal.setOldLexicalValue(StringEscapeUtils.unescapeXml(term.getLexicalValue()));
 		return journal;
 	}
 
@@ -188,7 +190,7 @@ public class JournalLineBuilder {
 		Set<String> conceptLabels = new HashSet<String>();
 		for (ThesaurusConcept concept : concepts) {
 			String conceptId = concept.getIdentifier();
-			String conceptLexicalValue = thesaurusConceptService.getConceptLabel(concept.getIdentifier());
+			String conceptLexicalValue = StringEscapeUtils.unescapeXml(thesaurusConceptService.getConceptLabel(concept.getIdentifier()));
 			conceptLabels.add(conceptLexicalValue + " (" + conceptId + ")");
 		}
 		return conceptLabels;
