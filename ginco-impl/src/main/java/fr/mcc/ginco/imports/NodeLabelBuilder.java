@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.imports;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -90,16 +92,18 @@ public class NodeLabelBuilder extends AbstractBuilder {
 		NodeLabel nodeLabel = new NodeLabel();
 
 		Statement stmtCreated = skosCollection.getProperty(DCTerms.created);
+		Statement stmtModified = skosCollection.getProperty(DCTerms.modified);
+
 		if (stmtCreated != null) {
-			nodeLabel.setCreated(skosImportUtils.getSkosDate(stmtCreated.getString()));
+			Date nodeLabelCreatedDate = skosImportUtils.getSkosDate(stmtCreated.getString());
+			nodeLabel.setCreated(nodeLabelCreatedDate);
+			if (stmtModified != null) {
+				nodeLabel.setModified(skosImportUtils.getSkosDate(stmtModified.getString()));
+			} else {
+				nodeLabel.setModified(nodeLabelCreatedDate);
+			}
 		} else {
 			nodeLabel.setCreated(thesaurus.getCreated());
-		}
-
-		Statement stmtModified = skosCollection.getProperty(DCTerms.modified);
-		if (stmtModified != null) {
-			nodeLabel.setModified(skosImportUtils.getSkosDate(stmtModified.getString()));
-		} else {
 			nodeLabel.setModified(thesaurus.getDate());
 		}
 

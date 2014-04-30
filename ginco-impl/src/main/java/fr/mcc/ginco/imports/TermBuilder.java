@@ -94,9 +94,9 @@ public class TermBuilder extends AbstractBuilder {
 		ThesaurusTerm term = new ThesaurusTerm();
 		term.setConcept(concept);
 		term.setCreated(thesaurus.getCreated());
+		term.setModified(thesaurus.getCreated());
 		term.setIdentifier(generatorService.generate(ThesaurusTerm.class));
 		term.setLexicalValue(StringEscapeUtils.escapeXml(stmt.getString().trim()));
-		term.setModified(thesaurus.getDate());
 		term.setPrefered(preferred);
 		term.setHidden(hidden);
 		term.setRole(thesaurusTermRoleDAO.getDefaultThesaurusTermRole());

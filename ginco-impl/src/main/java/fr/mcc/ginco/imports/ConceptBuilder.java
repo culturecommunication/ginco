@@ -35,6 +35,7 @@
 package fr.mcc.ginco.imports;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -114,18 +115,20 @@ public class ConceptBuilder extends AbstractBuilder {
 		concept.setTopConcept(thesaurus.isDefaultTopConcept());
 
 		Statement stmtCreated = skosConcept.getProperty(DCTerms.created);
+		Statement stmtModified = skosConcept.getProperty(DCTerms.modified);
+
 		if (stmtCreated != null) {
-			concept.setCreated(skosImportUtils.getSkosDate(stmtCreated
-					.getString()));
+			Date conceptCreatedDate = skosImportUtils.getSkosDate(stmtCreated
+					.getString());
+			concept.setCreated(conceptCreatedDate);
+			if (stmtModified != null) {
+				concept.setModified(skosImportUtils.getSkosDate(stmtModified
+						.getString()));
+			} else {
+				concept.setModified(conceptCreatedDate);
+			}
 		} else {
 			concept.setCreated(thesaurus.getCreated());
-		}
-
-		Statement stmtModified = skosConcept.getProperty(DCTerms.modified);
-		if (stmtModified != null) {
-			concept.setModified(skosImportUtils.getSkosDate(stmtModified
-					.getString()));
-		} else {
 			concept.setModified(thesaurus.getDate());
 		}
 

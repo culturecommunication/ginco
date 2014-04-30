@@ -137,13 +137,21 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 		String thesaurusCreated = getSimpleStringInfo(skosThesaurus,
 				DCTerms.created);
+		String thesaurusModified = getSimpleStringInfo(skosThesaurus,
+				DCTerms.modified, DCTerms.date);
+
 		if (thesaurusCreated != null) {
-			thesaurus.setCreated(skosImportUtils.getSkosDate(thesaurusCreated));
+			Date thesaurusCreatedDate = skosImportUtils.getSkosDate(thesaurusCreated);
+			thesaurus.setCreated(thesaurusCreatedDate);
+			if (thesaurusModified != null) {
+				thesaurus.setDate(skosImportUtils.getSkosDate(thesaurusModified));
+			} else {
+				thesaurus.setDate(thesaurusCreatedDate);
+			}
 		} else {
 			thesaurus.setCreated(new Date());
+			thesaurus.setDate(new Date());
 		}
-		thesaurus.setDate(skosImportUtils.getSkosDate(getSimpleStringInfo(skosThesaurus,
-				DCTerms.modified, DCTerms.date)));
 
 		thesaurus.setLang(getLanguages(skosThesaurus, DC.language));
 		if (thesaurus.getLang().isEmpty()) {

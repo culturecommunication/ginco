@@ -93,7 +93,7 @@ public class ConceptBuilderTest {
 
 	@Mock
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
-	
+
 	@Mock(name = "skosImportUtils")
 	private SKOSImportUtils skosImportUtils;
 
@@ -121,15 +121,15 @@ public class ConceptBuilderTest {
 		Resource skosConcept = model.createResource("new-uri", SKOS.CONCEPT);
 		skosConcept.addProperty(DCTerms.created, "2013-11-06T21:33:09.00+0100");
 		skosConcept.addProperty(SKOS.NOTATION, "concept-notation");
-		
+
 		Calendar cal = new GregorianCalendar();
 		cal.set(2013,  10,6,21,33,9);
 		cal.set(Calendar.MILLISECOND, 0);
 		Mockito.when(skosImportUtils.getSkosDate("2013-11-06T21:33:09.00+0100")).thenReturn(cal.getTime());
-		
+
 		ThesaurusConcept actualConcept = conceptBuilder.buildConcept(
 				skosConcept, fakeThesaurus);
-		
+
 		Assert.assertEquals("new-uri", actualConcept.getIdentifier());
 		Assert.assertEquals("thesaurus-uri", actualConcept.getThesaurus()
 				.getIdentifier());
@@ -137,7 +137,7 @@ public class ConceptBuilderTest {
 
 		Assert.assertEquals(cal.getTime(),
 				actualConcept.getCreated());
-		Assert.assertEquals(DateUtil.dateFromString("2013-05-02 02:10:13"),
+		Assert.assertEquals(DateUtil.dateFromString("2013-11-06 21:33:09"),
 				actualConcept.getModified());
 
 		Assert.assertEquals("concept-notation", actualConcept.getNotation());
@@ -167,7 +167,7 @@ public class ConceptBuilderTest {
 
 		skosConcept.addProperty(SKOS.BROADER, model
 				.createResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2423"));
-		
+
 		ThesaurusConcept currentConcept = new ThesaurusConcept();
 		currentConcept
 				.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2428");
