@@ -21,7 +21,7 @@ Les principales fonctionnalités d'ores et déjà développées permettent :
 
 # De la production à la diffusion
 
-GINCO est un outil dédié à la gestion des vocabulaires. La plate-forme de diffusion GINCO-DIFF est également disponible ici. Elle permet le chargement de vocabulaires SKOS et leur mise à disposition conformément aux recommandations du web sémantique.
+GINCO est un outil dédié à la gestion des vocabulaires. La plate-forme de diffusion GINCO-DIFF est également disponible "[ici] (https://github.com/culturecommunication/ginco-diff)". Elle permet le chargement de vocabulaires SKOS et leur mise à disposition conformément aux recommandations du web sémantique.
 
 # Méthode de développement
 
@@ -62,7 +62,7 @@ The main features already developed allow :
 From production to diffusion
 ----------------------------
 
-GINCO is a tool dedicated to the management of vocabularies. The delivery platform GINCO-DIFF is also available here. It allows to upload SKOS vocabularies and make them available according to the recommendations of the semantic web.
+GINCO is a tool dedicated to the management of vocabularies. The delivery platform GINCO-DIFF is also available "[here] (https://github.com/culturecommunication/ginco-diff)". It allows to upload SKOS vocabularies and make them available according to the recommendations of the semantic web.
 
 Installation
 ------------
