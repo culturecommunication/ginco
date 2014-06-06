@@ -19,6 +19,10 @@ Les principales fonctionnalités d'ores et déjà développées permettent :
 * des fonctions collaboratives simples ;
 * la consultation par des web services.
 
+# De la production à la diffusion
+
+GINCO est un outil dédié à la gestion des vocabulaires. La plate-forme de diffusion GINCO-DIFF est également disponible ici. Elle permet le chargement de vocabulaires SKOS et leur mise à disposition conformément aux recommandations du web sémantique.
+
 # Méthode de développement
 
 L'application a été développée selon la méthodologie agile SCRUM.
@@ -49,16 +53,16 @@ The main features already developed allow :
 - the management of concepts: status, unique identifier of type URI, notes of different types associated with concepts, hierarchical ans associative relationships between concepts ;
 - the management of thesaurus arrays (virtual relays, facets) and their exploitation in hierarchical editions ;
 - the management of groups of concepts (microthesaurus, theme, domain);
-- the alphabetical and hierarchical editions ;
+- alphabetical and hierarchical editions ;
 - the import and export of thesaurus in SKOS / RDF format ;
+- alignments between vocabularies and to external ressources ;
 - the consultation through web services.
+- collaborative features.
 
-The first version of the software is under development according to the SCRUM agile methodology. The "[backlog] (https://www.pivotaltracker.com/s/projects/926794)" presents the prioritized list of developed or planned features. It is made available to the community, which can provide us with suggestions and proposals.
+From production to diffusion
+----------------------------
 
-The developments envisaged in version 2 of the application focus on :
-- collaborative features ;
-- alignments between vocabularies and to external ressources ;
-- the implementation of a reference terminology, in order to provide users with unified access to all vocabularies (terminologies server) 
+GINCO is a tool dedicated to the management of vocabularies. The delivery platform GINCO-DIFF is also available here. It allows to upload SKOS vocabularies and make them available according to the recommendations of the semantic web.
 
 Installation
 ------------
