@@ -42,15 +42,17 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
-import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.extjs.view.node.WarningNode;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
@@ -59,30 +61,37 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 @Component(value = "orphansGenerator")
 public class OrphansGenerator {
 
-  	@Inject
+	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-  	
+
 	@Inject
 	@Named("thesaurusListNodeFactory")
-	ThesaurusListNodeFactory thesaurusListNodeFactory;
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
-	@Log
-	private Logger logger;
+	private Logger logger = LoggerFactory.getLogger(OrphansGenerator.class);
+
+
+	@Value("${conceptstree.maxresults}")
+	private int maxResults;
 
 	/**
 	 * Creates a list of orphan concepts for a given thesaurus
-	 * 
-	 * @param parentId
-	 *            id of the thesaurus.
+	 *
+	 * @param parentId id of the thesaurus.
 	 * @return created list of leafs.
 	 */
-	public List<IThesaurusListNode> generateOrphans(String parentId)
-			throws BusinessException {
+	public List<IThesaurusListNode> generateOrphans(String parentId) {
 		logger.debug("Generating orphans concepts list for vocabularyId : " + parentId);
 		List<ThesaurusConcept> orphans = thesaurusConceptService
-				.getOrphanThesaurusConcepts(parentId);
+				.getOrphanThesaurusConcepts(parentId, maxResults + 1);
 		logger.debug(orphans.size() + " orphans found");
+		Boolean hasTooMany = false;
+		if (orphans.size() > maxResults) {
+			logger.warn("Limit : " + maxResults + " exceeded");
+			hasTooMany = true;
+			orphans.remove(orphans.size() - 1);
+		}
 
 		List<IThesaurusListNode> newOrphans = new ArrayList<IThesaurusListNode>();
 		for (ThesaurusConcept orphan : orphans) {
@@ -90,25 +99,33 @@ public class OrphansGenerator {
 			orphanNode.setTitle(thesaurusConceptService.getConceptLabel(orphan
 					.getIdentifier()));
 			orphanNode
-                    .setId(ChildrenGenerator.ID_PREFIX
-                            + ChildrenGenerator.PARENT_SEPARATOR
-                            + orphan.getIdentifier());
+					.setId(ChildrenGenerator.ID_PREFIX
+							+ ChildrenGenerator.PARENT_SEPARATOR
+							+ orphan.getIdentifier());
 			orphanNode.setType(ThesaurusListNodeType.CONCEPT);
 			orphanNode.setExpanded(false);
-            orphanNode.setThesaurusId(orphan.getThesaurusId());
-            orphanNode.setDisplayable(true);
-
-            if(!thesaurusConceptService.hasChildren(orphan.getIdentifier())) {
-                orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
-			    orphanNode.setLeaf(true);
-            } else {
-                orphanNode.setChildren(null);
-                orphanNode.setLeaf(false);
-            }
+			orphanNode.setThesaurusId(orphan.getThesaurusId());
+			orphanNode.setDisplayable(true);
+			if (orphan.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
+				orphanNode.setIconCls("icon-candidate-concept");
+			} else {
+				orphanNode.setIconCls("icon-orphan-concept");
+			}
+			if (!thesaurusConceptService.hasChildren(orphan.getIdentifier())) {
+				orphanNode.setChildren(new ArrayList<IThesaurusListNode>());
+				orphanNode.setLeaf(true);
+			} else {
+				orphanNode.setChildren(null);
+				orphanNode.setLeaf(false);
+			}
 
 			newOrphans.add(orphanNode);
 		}
 		Collections.sort(newOrphans);
+		if (hasTooMany) {
+			WarningNode tooManyNode = new WarningNode(maxResults);
+			newOrphans.add(tooManyNode);
+		}
 		return newOrphans;
 	}
 

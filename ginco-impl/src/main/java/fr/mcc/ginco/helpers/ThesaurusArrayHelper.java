@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -49,7 +48,6 @@ import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IThesaurusArrayConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * This class is a helper to thesaurus array relative operations
@@ -60,11 +58,9 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public class ThesaurusArrayHelper {
 
 	@Inject
-	@Named("thesaurusArrayConceptDAO")
 	private IThesaurusArrayConceptDAO thesaurusArrayConceptDAO;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	/**
@@ -74,10 +70,9 @@ public class ThesaurusArrayHelper {
 	 * @param array
 	 * @param concepts
 	 * @return
-	 * @throws BusinessException
 	 */
 	public ThesaurusArray saveArrayConcepts(ThesaurusArray array,
-			List<ThesaurusArrayConcept> concepts) throws BusinessException {
+			List<ThesaurusArrayConcept> concepts) {
 
 		Set<ThesaurusArrayConcept> relations = new HashSet<ThesaurusArrayConcept>();
 		if (array.getConcepts() == null) {

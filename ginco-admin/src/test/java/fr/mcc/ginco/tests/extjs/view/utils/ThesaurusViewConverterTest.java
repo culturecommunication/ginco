@@ -46,7 +46,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusType;
@@ -57,7 +56,6 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusViewConverterTest {
 	@Mock(name = "thesaurusService")
@@ -78,25 +76,24 @@ public class ThesaurusViewConverterTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(converter);
 	}
 
 	@Test
-	public void testConvertExistingThesaurusView() throws BusinessException {
+	public void testConvertExistingThesaurusView() {
 
 		ThesaurusView view = buildThesaurusView("view1");
 		Thesaurus emptyThes = new Thesaurus();
 		emptyThes.setIdentifier("view1");
 		when(thesaurusService.getThesaurusById("view1")).thenReturn(emptyThes);
-		
+
 		ThesaurusFormat format1 = new ThesaurusFormat();
 		format1.setLabel("CSV");
 		when(thesaurusFormatService.getThesaurusFormatById(1)).thenReturn(format1);
-		
+
 		ThesaurusFormat format2 = new ThesaurusFormat();
 		format2.setLabel("PDF 1.7");
 		when(thesaurusFormatService.getThesaurusFormatById(2)).thenReturn(format2);
-		
+
 		ThesaurusType type = new ThesaurusType();
 		type.setLabel("TYPE");
 		when(thesaurusTypeService.getThesaurusTypeById(1)).thenReturn(type);
@@ -106,6 +103,7 @@ public class ThesaurusViewConverterTest {
 		Assert.assertEquals("Fake Contributor", th.getContributor());
 		Assert.assertEquals("Fake Coverage", th.getCoverage());
 
+		Assert.assertEquals("contact@fakeurl.com", th.getCreator().getEmail());
 		Assert.assertEquals("http://fakeurl.com", th.getCreator().getHomepage());
 		Assert.assertEquals("Creator", th.getCreator().getName());
 
@@ -117,7 +115,7 @@ public class ThesaurusViewConverterTest {
 		Assert.assertEquals("Fake Source", th.getSource());
 		Assert.assertEquals("Fake Subject", th.getSubject());
 		Assert.assertEquals("Fake Title", th.getTitle());
-		
+
 		List<String> formatList = new ArrayList<String>();
 		for (ThesaurusFormat format : th.getFormat()){
 			formatList.add(format.getLabel());
@@ -125,7 +123,7 @@ public class ThesaurusViewConverterTest {
 
 		Assert.assertTrue(formatList.contains("CSV"));
 		Assert.assertTrue(formatList.contains("PDF 1.7"));
-		
+
 		Assert.assertEquals("TYPE", th.getType().getLabel());
 
 	}
@@ -148,15 +146,16 @@ public class ThesaurusViewConverterTest {
 		expectedThesaurusView.setSubject("Fake Subject");
 		expectedThesaurusView.setCreated("2013-02-15 02:02:02");
 		expectedThesaurusView.setDefaultTopConcept(false);
-		
+
 		List<Integer> fakeFormats = new ArrayList<Integer>();
 		fakeFormats.add(1);
 		fakeFormats.add(2);
 		expectedThesaurusView.setFormats(fakeFormats);
-		
+
 		expectedThesaurusView.setType(1);
 		expectedThesaurusView.setCreatorName("Creator");
 		expectedThesaurusView.setCreatorHomepage("http://fakeurl.com");
+		expectedThesaurusView.setCreatorEmail("contact@fakeurl.com");
 
 		List<String> expectedLanguages = new ArrayList<String>();
 		String expectedLanguage1 = "fra";

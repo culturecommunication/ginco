@@ -34,12 +34,12 @@
  */
 package fr.mcc.ginco.services;
 
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
-import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service used to work with {@link ThesaurusTerm} objects, contains basic
@@ -49,139 +49,148 @@ import java.util.List;
  * @see fr.mcc.ginco.beans
  */
 public interface IThesaurusTermService {
-	
+
 	/**
-     * Get a single Thesaurus Term by its id
-     *
-     * @param id to search
-     * @return {@code null} if not found
-     */
-	ThesaurusTerm getThesaurusTermById(String id) throws BusinessException;
-	
-    /**
-     * Get list of paginated Thesaurus Terms.
-     * @return List of Thesaurus Terms (the number given in argument), from the start index
-     */
-    List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex, Integer limit, String idThesaurus);
-    
-    /**
-     * Get list of paginated Thesaurus Preferred Terms.
-     * @return List of Thesaurus Terms (the number given in argument), from the start index
-     */
-    List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(Integer startIndex, Integer limit, String idThesaurus);
+	 * Get a single Thesaurus Term by its id
+	 *
+	 * @param id to search
+	 * @return {@code null} if not found
+	 */
+	ThesaurusTerm getThesaurusTermById(String id);
+
+	/**
+	 * Get list of paginated Thesaurus Terms.
+	 *
+	 * @return List of Thesaurus Terms (the number given in argument), from the start index
+	 */
+	List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex, Integer limit, String idThesaurus);
+
+	/**
+	 * Get list of paginated Thesaurus Preferred Terms.
+	 *
+	 * @return List of Thesaurus Terms (the number given in argument), from the start index
+	 */
+	List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(Integer startIndex, Integer limit, String idThesaurus);
 
 
-    /**
-     * Get number of Thesaurus Preferred Terms
-     * @param idThesaurus of a Thesaurus
-     * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
-     */
-    Long getPreferredTermsCount(String idThesaurus) throws BusinessException;
-    
-    
-    /**
-     * Get number of Thesaurus Sandboxed Terms
-     * @param idThesaurus of a Thesaurus
-     * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
-     */
-    Long getSandboxedTermsCount(String idThesaurus) throws BusinessException;
-    
-    /**
-     * Get number of Thesaurus Sandboxed Validated Terms
-     * @param idThesaurus of a Thesaurus
-     * @return number of Thesaurus Validated Sandboxed Terms for a given Thesaurus
-     */
-    Long getSandboxedValidatedTermsCount(String idThesaurus) throws BusinessException;
-   
-    
-    /**
-     * Update a single Thesaurus Term Object
-     * @throws BusinessException 
-     */
-    ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException;
-    
-    /**
-     * Delete a single Thesaurus Term Object
-     * @throws BusinessException 
-     */
-    ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException;
-    
-    
-    /**
-     * @param idConcept
-     * @return
-     * This method returns all the terms that belong to a concept
-     * @throws BusinessException 
-     */
-    List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException;   
-    
+	/**
+	 * Get number of Thesaurus Preferred Terms
+	 *
+	 * @param idThesaurus of a Thesaurus
+	 * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
+	 */
+	Long getPreferredTermsCount(String idThesaurus);
 
-    /**
-     * Get list of paginated Thesaurus Validated Terms.
-     * @return List of Thesaurus Terms with status validated (the number given in argument), from the start index
-     */
-    List<ThesaurusTerm> getPaginatedThesaurusSandoxedValidatedTermsList(
+
+	/**
+	 * Get number of Thesaurus Sandboxed Terms
+	 *
+	 * @param idThesaurus of a Thesaurus
+	 * @return number of Thesaurus Sandboxed Terms for a given Thesaurus
+	 */
+	Long getSandboxedTermsCount(String idThesaurus);
+
+	/**
+	 * Get number of Thesaurus Sandboxed Validated Terms
+	 *
+	 * @param idThesaurus of a Thesaurus
+	 * @return number of Thesaurus Validated Sandboxed Terms for a given Thesaurus
+	 */
+	Long getSandboxedValidatedTermsCount(String idThesaurus);
+
+
+	/**
+	 * Update a single Thesaurus Term Object
+	 */
+	ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object);
+
+	/**
+	 * Delete a single Thesaurus Term Object
+	 */
+	ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object);
+
+
+	/**
+	 * @param idConcept
+	 * @return This method returns all the terms that belong to a concept
+	 */
+	List<ThesaurusTerm> getTermsByConceptId(String idConcept);
+
+
+	/**
+	 * Get list of paginated Thesaurus Validated Terms.
+	 *
+	 * @return List of Thesaurus Terms with status validated (the number given in argument), from the start index
+	 */
+	List<ThesaurusTerm> getPaginatedThesaurusSandoxedValidatedTermsList(
 			Integer startIndex, Integer limit, String idThesaurus);
 
-    /**
-     * For indexing purposes.
-      * @return list of all existing terms.
-     */
-    List<ThesaurusTerm> getAllTerms();
-    
-    /**
-     * For indexing purposes.
-      * @return list of all existing terms.
-     */
-    List<ThesaurusTerm> getAllTerms(String thesaurusId);
-    
-    /**
+	/**
+	 * For indexing purposes.
+	 *
+	 * @return list of all existing terms.
+	 */
+	List<ThesaurusTerm> getAllTerms();
+
+	/**
+	 * For indexing purposes.
+	 *
+	 * @return list of all existing terms.
+	 */
+	List<ThesaurusTerm> getAllTerms(String thesaurusId);
+
+	/**
 	 * This service returns the identifier of a concept by the term
-	 * 
-	 * @param  lexical value of the term,@param
-	 * @param  thesaurus identifier of the term,
-	 * @param  language identifier of the term
-	 * 
+	 *
+	 * @param lexicalValue lexical value of the term,@param
+	 * @param thesaurusId  thesaurus identifier of the term,
+	 * @param languageId   language identifier of the term
 	 * @return identifier of a concept
 	 */
-    
-    String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId);
-    
-    /**
+
+	String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId);
+
+	/**
 	 * This service returns:
 	 * lexical value if the term is preferred,
 	 * lexical value of preferred term if current term isn't preferred,
-	 * null if the term doesn't exist 
-	 * 
-	 * @param  lexical value of the term,
-	 * @param  thesaurus identifier of the term,
-	 * @param  language identifier of the term
-	 * 
+	 * null if the term doesn't exist
+	 *
+	 * @param lexicalValue lexical value of the term,
+	 * @param thesaurusId  thesaurus identifier of the term,
+	 * @param languageId   language identifier of the term
 	 * @return preferred term
 	 */
 
-	 ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException;
-	 
-	 /**
-	 * This service returns true if the term is preferred, 
-	 * 					   false if the term isn't preferred
-	 * 
-	 * @param  lexical value of the term,
-	 * @param  thesaurus identifier of the term,
-	 * @param  language identifier of the term
-	 * 
+	ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId, String languageId);
+
+	/**
+	 * This service returns true if the term is preferred,
+	 * false if the term isn't preferred
+	 *
+	 * @param lexicalValue lexical value of the term,
+	 * @param thesaurusId  thesaurus identifier of the term,
+	 * @param languageId   language identifier of the term
 	 * @return preferred or not preferred
 	 */
-	Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException; 
-	
+	Boolean isPreferred(String lexicalValue, String thesaurusId, String languageId);
+
 	/**
-	 * This method imports sandboxed terms 
-	 * @param list of term lexical values
-	 * @param thesaurus identifier
-	 * 
+	 * This method imports sandboxed terms
+	 *
+	 * @param termLexicalValues list of term lexical values with language
+	 * @param thesaurusId       thesaurus identifier
+	 * @param defaultStatus
 	 * @return
 	 * @throws TechnicalException
-	 * @throws BusinessException
 	 */
-	List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId) throws TechnicalException, BusinessException;
+	List<ThesaurusTerm> importSandBoxTerms(Map<String, Language> termLexicalValues, String thesaurusId, int defaultStatus);
+
+	/**
+	 * This method returns true if a similar term exist
+	 *
+	 * @param term
+	 * @return
+	 */
+	Boolean isTermExist(ThesaurusTerm term);
 }

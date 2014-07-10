@@ -4,36 +4,52 @@
 
 <web-app>
 	<display-name>Ginco administration</display-name>
-
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:applicationContext.xml,classpath*:spring/applicationContext-*.xml</param-value>
 	</context-param>
-
+	<context-param>
+		<param-name>Owasp.CsrfGuard.Config</param-name>
+		<param-value>WEB-INF/Owasp.CsrfGuard.properties</param-value>
+	</context-param>
+	<context-param>
+		<param-name>Owasp.CsrfGuard.Config.Print</param-name>
+		<param-value>true</param-value>
+	</context-param>	
 	<filter>
-		<filter-name>HibernateFilter</filter-name>
-		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
-		<init-param>
-			<param-name>sessionFactoryBeanName</param-name>
-			<param-value>gincoSessionFactory</param-value>
-		</init-param>
-	</filter>
-	
-	<filter>
+        <filter-name>HibernateFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+        <init-param>
+            <param-name>sessionFactoryBeanName</param-name>
+            <param-value>gincoSessionFactory</param-value>
+        </init-param>
+    </filter>
+    <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
-    
-	<filter-mapping>
-		<filter-name>HibernateFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>	
-
+    <filter>
+        <filter-name>CSRFGuard</filter-name>
+        <filter-class>org.owasp.csrfguard.CsrfGuardFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CSRFGuard</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>HibernateFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
-      <url-pattern>/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+	<listener>
+		<listener-class>org.owasp.csrfguard.CsrfGuardServletContextListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.owasp.csrfguard.CsrfGuardHttpSessionListener</listener-class>
+	</listener>
 	<listener>
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener
@@ -43,9 +59,41 @@
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 	<servlet>
-		<servlet-name>cxf</servlet-name>
-		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+		<servlet-name>JavaScriptServlet</servlet-name>
+		<servlet-class>org.owasp.csrfguard.servlet.JavaScriptServlet</servlet-class>
+		<init-param>
+			<param-name>source-file</param-name>
+			<param-value>WEB-INF/Owasp.CsrfGuard.js</param-value>
+		</init-param>
+		<init-param>
+			<param-name>inject-into-forms</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>inject-into-attributes</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>domain-strict</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>referer-pattern</param-name>
+			<param-value>.*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>x-requested-with</param-name>
+			<param-value>OWASP CSRFGuard Project</param-value>
+		</init-param>
 	</servlet>
+	<servlet>
+        <servlet-name>cxf</servlet-name>
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+    </servlet>
+	<servlet-mapping>
+		<servlet-name>JavaScriptServlet</servlet-name>
+		<url-pattern>/JavaScriptServlet</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>cxf</servlet-name>
 		<url-pattern>/services/*</url-pattern>

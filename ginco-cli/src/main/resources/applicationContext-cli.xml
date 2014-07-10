@@ -1,0 +1,52 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="fr.mcc.ginco" />
+	
+	<bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource"
+		lazy-init="true" destroy-method="close" scope="singleton">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url"
+			value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="50" />
+		<property name="maxIdle" value="20" />
+		<property name="maxWait" value="60000" />
+		<property name="initialSize" value="25" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="300" />
+	</bean>
+	
+	 <bean id="solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+     	<constructor-arg index="0" value="${solr.url}" />
+	</bean>
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+
+		<property name="locations">
+			<list>
+				<value>classpath:hibernate.properties</value>
+				<value>classpath:application.properties</value>
+				<value>classpath:git.properties</value>
+				<value>classpath:labels.properties</value>
+				<value>classpath:db.properties</value>
+				<value>file:ginco-cli.properties</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

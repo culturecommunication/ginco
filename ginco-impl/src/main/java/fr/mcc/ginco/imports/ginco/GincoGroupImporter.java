@@ -40,19 +40,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class gives methods to import groups and groups labels
@@ -62,19 +58,11 @@ import fr.mcc.ginco.log.Log;
 public class GincoGroupImporter {
 
 	@Inject
-	@Named("nodeLabelDAO")
-	private INodeLabelDAO nodeLabelDAO;
-
-	@Inject
-	@Named("thesaurusConceptGroupDAO")
 	private IThesaurusConceptGroupDAO thesaurusConceptGroupDAO;
 
 	@Inject
-	@Named("thesaurusConceptGroupLabelDAO")
 	private IThesaurusConceptGroupLabelDAO thesaurusConceptGroupLabelDAO;
-
-	@Log
-	private Logger logger;
+	
 
 	/**
 	 * This method stores all the groups of the thesaurus included in the

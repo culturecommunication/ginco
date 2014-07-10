@@ -38,9 +38,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.LabelUtil;
 
 @Service("auditCSVWriter")
@@ -48,8 +48,8 @@ public class AuditCSVWriter {
 
 	private static final String COMMA = ",";
 	
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(AuditCSVWriter.class);
+
 	
 	public void writeJournalLine(JournalLine line, BufferedWriter out) throws IOException {
 		logger.debug(line.toString());
@@ -58,7 +58,7 @@ public class AuditCSVWriter {
 	}
 	
 	public void writeHeader(BufferedWriter out) throws IOException {
-		String header = new String();
+		String header = "";
 		header += LabelUtil.getResourceLabel("log-journal.headers.event-type") + COMMA;
 		header += LabelUtil.getResourceLabel("log-journal.headers.date") + COMMA;
 		header += LabelUtil.getResourceLabel("log-journal.headers.author") + COMMA;

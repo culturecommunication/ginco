@@ -35,15 +35,19 @@
 package fr.mcc.ginco.solr;
 
 /**
- *
+ * Class of constants for Solr query parameters
  */
-public class SolrParam {
-    public static final String DEF_TYPE = "defType";
-    public static final String QUERY_FIELDS = "qf";
-    public static final String FILTER = "fl";
-    public static final String SORT = "sort";
-    public static final String QUERY = "q";
-    public static final String START = "start";
-    public static final String ROWS = "rows";
-    public static final String FILTER_QUERY = "fq";
+public final class SolrParam {
+
+	private SolrParam() {
+	}
+
+	public static final String DEF_TYPE = "defType";
+	public static final String QUERY_FIELDS = "qf";
+	public static final String FILTER = "fl";
+	public static final String SORT = "sort";
+	public static final String QUERY = "q";
+	public static final String START = "start";
+	public static final String ROWS = "rows";
+	public static final String FILTER_QUERY = "fq";
 }

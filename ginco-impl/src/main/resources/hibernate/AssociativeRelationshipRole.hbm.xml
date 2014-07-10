@@ -6,5 +6,6 @@
 		<id name="code" />
 		<property name="label" />
         <property name="defaultRole" column="defaultrole" />
+        <property name="skosLabel" column="skoslabel" />
 	</class>
 </hibernate-mapping>

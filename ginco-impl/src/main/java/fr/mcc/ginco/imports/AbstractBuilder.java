@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.imports;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -41,63 +43,63 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 /**
  * Abstract builder used to share useful methods
- *  
  */
 public abstract class AbstractBuilder {
-	
+
 	public final String getSimpleStringInfo(Resource skosResource, Property prop) {
 		return getSimpleStringInfo(skosResource, prop, null);
 	}
-	
+
 	/**
 	 * Returns the value of the given property for the given resource
+	 *
 	 * @param skosResource
 	 * @param prop
-	 * @param altProp if prop is not found, try altProp
+	 * @param altProp      if prop is not found, try altProp
 	 * @return
 	 */
 	public final String getSimpleStringInfo(Resource skosResource, Property prop, Property altProp) {
 		Statement stmt = skosResource.getProperty(prop);
-		if (stmt!= null) {
+		if (stmt != null) {
 			String toReturn = stmt.getString();
 			if (toReturn != null) {
-				return toReturn.trim();
+				return StringEscapeUtils.escapeXml(toReturn.trim());
 			}
 		} else {
-			if (altProp != null)
-			{
+			if (altProp != null) {
 				return getSimpleStringInfo(skosResource, altProp);
 			}
 		}
 		return null;
 	}
-	
+
 	public final String getMultipleLineStringInfo(Resource skosResource,
-			Property prop) {
-		return getMultipleLineStringInfo(skosResource,prop,null);
+	                                              Property prop) {
+		return getMultipleLineStringInfo(skosResource, prop, null);
 	}
-	
-	
+
+
 	/**
 	 * Returns the concatenation of the given property values in the given resource, separated by line breaks
+	 *
 	 * @param skosResource
 	 * @param prop
 	 * @param altProp
 	 * @return
 	 */
 	public final String getMultipleLineStringInfo(Resource skosResource,
-			Property prop, Property altProp) {
+	                                              Property prop, Property altProp) {
 		String lines = "";
 		StmtIterator stmtIterator = skosResource.listProperties(prop);
 		while (stmtIterator.hasNext()) {
 			Statement stmt = stmtIterator.next();
-			lines += stmt.getString();
+			lines += StringEscapeUtils.escapeXml(stmt.getString());
 			if (stmtIterator.hasNext()) {
 				lines += "\n";
 			}
 		}
-		if (lines.isEmpty() && altProp!=null){
-			return getMultipleLineStringInfo(skosResource,altProp,null);
+		if (lines.isEmpty() && altProp != null) {
+			return getMultipleLineStringInfo(skosResource, altProp, null);
 		}
 		return lines;
 	}

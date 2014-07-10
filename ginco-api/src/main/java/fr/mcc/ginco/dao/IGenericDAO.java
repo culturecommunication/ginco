@@ -42,15 +42,13 @@ package fr.mcc.ginco.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import fr.mcc.ginco.exceptions.BusinessException;
-
 /**
  * Data Access Object - generic type.
  * @param <T> type of object.
  * @param <ID> primary key.
  */
 public interface IGenericDAO<T, ID extends Serializable> {
-	
+
 	public enum SortingTypes {
 		asc,
 		desc
@@ -96,7 +94,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @param entity
 	 * @return Object
 	 */
-	T update(T entity) throws BusinessException;
+	T update(T entity);
 	
 	/**
 	 * Delete an object of type T
@@ -117,5 +115,8 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @return A list of all the objects of type T
 	 */
 	List<T> findAll(String sortColumn, SortingTypes order);
+
+
+	void flush();
 
 }

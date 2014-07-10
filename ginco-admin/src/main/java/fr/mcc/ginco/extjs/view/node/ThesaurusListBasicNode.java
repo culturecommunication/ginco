@@ -46,148 +46,147 @@ import java.util.List;
  */
 @Component
 public class ThesaurusListBasicNode implements IThesaurusListNode {
-    /**
-     * Indicates if node should be expanded by default.
-     */
-    private boolean expanded;
-    /**
-     * List of all children, now only String lines.
-     */
-    private List<IThesaurusListNode> children;
-    /**
-     * Title to display for user.
-     */
-    private String title;
-    /**
-     * Service tag - not visible in UI.
-     */
-    private String id;
-    /**
-     * Type of visual node.
-     */
-    private ThesaurusListNodeType nodeType;
-    /**
-     * Hidden tag to filter by author.
-     */
-    private String organizationName;
-    /**
-     * if the node is a leaf.
-     */
-    private boolean leaf;
-    
-    /**
-     * if the node is displayable.
-     */
-    private boolean displayable;
-    
-    /**
-     * Css class of the node
-     */
-    private String iconcls;
+	/**
+	 * Indicates if node should be expanded by default.
+	 */
+	private boolean expanded;
+	/**
+	 * List of all children, now only String lines.
+	 */
+	private List<IThesaurusListNode> children;
+	/**
+	 * Title to display for user.
+	 */
+	private String title;
+	/**
+	 * Service tag - not visible in UI.
+	 */
+	private String id;
+	/**
+	 * Type of visual node.
+	 */
+	private ThesaurusListNodeType nodeType;
+	/**
+	 * Hidden tag to filter by author.
+	 */
+	private String organizationName;
+	/**
+	 * if the node is a leaf.
+	 */
+	private boolean leaf;
 
-    /**
-     * Parent Thesaurus of the node
-     */
-    private String thesaurusId;
-    
+	/**
+	 * if the node is displayable.
+	 */
+	private boolean displayable;
+
+	/**
+	 * Css class of the node
+	 */
+	private String iconcls;
+
+	/**
+	 * Parent Thesaurus of the node
+	 */
+	private String thesaurusId;
+
 	private Collator collator;
-    
-    
+
+
 	public ThesaurusListBasicNode() {
-		
-    }
 
-    public ThesaurusListBasicNode(Collator collator) {
-    	this.collator = collator;
-    }
-    
-   
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#isExpanded()
-     */
-    @Override
-    public boolean isExpanded() {
-        return expanded;
-    }
+	public ThesaurusListBasicNode(Collator collator) {
+		this.collator = collator;
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setExpanded(boolean)
-     */
-    @Override
-    public void setExpanded(boolean expanded) {
-        this.expanded = expanded;
-    }
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getChildren()
-     */
-    @Override
-    public List<IThesaurusListNode> getChildren() {
-        return children;
-    }
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#isExpanded()
+	 */
+	@Override
+	public boolean isExpanded() {
+		return expanded;
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setChildren(java.util.List)
-     */
-    @Override
-    public void setChildren(List<IThesaurusListNode> children) {
-        this.children = children;
-    }
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setExpanded(boolean)
+	 */
+	@Override
+	public void setExpanded(boolean expanded) {
+		this.expanded = expanded;
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getTitle()
-     */
-    @Override
-    public String getTitle() {
-        return title;
-    }
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getChildren()
+	 */
+	@Override
+	public List<IThesaurusListNode> getChildren() {
+		return children;
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setTitle(java.lang.String)
-     */
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setChildren(java.util.List)
+	 */
+	@Override
+	public void setChildren(List<IThesaurusListNode> children) {
+		this.children = children;
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getType()
-     */
-    @Override
-    public ThesaurusListNodeType getType() {
-        return nodeType;
-    }
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return title;
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setType(fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType)
-     */
-    @Override
-    public void setType(ThesaurusListNodeType type) {
-        this.nodeType = type;
-    }
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setTitle(java.lang.String)
+	 */
+	@Override
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getId()
-     */
-    @Override
-    public String getId() {
-        return id;
-    }
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getType()
+	 */
+	@Override
+	public ThesaurusListNodeType getType() {
+		return nodeType;
+	}
 
-    /* (non-Javadoc)
-     * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setId(java.lang.String)
-     */
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setType(fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType)
+	 */
+	@Override
+	public void setType(ThesaurusListNodeType type) {
+		this.nodeType = type;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getId()
+	 */
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setId(java.lang.String)
+	 */
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
 
 
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#isLeaf()
 	 */
-    @Override
+	@Override
 	public boolean isLeaf() {
 		return leaf;
 	}
@@ -195,7 +194,7 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setLeaf(boolean)
 	 */
-    @Override
+	@Override
 	public void setLeaf(boolean leaf) {
 		this.leaf = leaf;
 	}
@@ -204,7 +203,7 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getCls()
 	 */
-    @Override
+	@Override
 	public String getIconCls() {
 		return iconcls;
 	}
@@ -212,35 +211,36 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setCls(string)
 	 */
-    @Override
-	public void setIconCls(String iconcls) {
-		this.iconcls = iconcls;
+	@Override
+	public void setIconCls(String iconCls) {
+		this.iconcls = iconCls;
 	}
 
-    /* (non-Javadoc)
+	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#getThesaurusId
 	 */
-    @Override
-    public String getThesaurusId() {
-        return thesaurusId;
-    }
+	@Override
+	public String getThesaurusId() {
+		return thesaurusId;
+	}
 
-    /* (non-Javadoc)
+	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.extjs.view.node.IThesaurusListNode#setThesaurusId(string)
 	 */
-    @Override
-    public void setThesaurusId(String thesaurusId) {
-        this.thesaurusId = thesaurusId;
-    }
+	@Override
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
+	}
 
 	@Override
 	public int compareTo(IThesaurusListNode o) {
 		if (StringUtils.isNotEmpty(title)) {
-			if (collator!=null)
+			if (collator != null) {
 				return collator.compare(title, o.getTitle());
-			else
+			} else {
 				return title.compareToIgnoreCase(o.getTitle());
-		} 
+			}
+		}
 		return -1;
 	}
 
@@ -254,13 +254,13 @@ public class ThesaurusListBasicNode implements IThesaurusListNode {
 		this.displayable = displayable;
 	}
 
-    @Override
-    public String getOrganizationName() {
-        return organizationName;
-    }
+	@Override
+	public String getOrganizationName() {
+		return organizationName;
+	}
 
-    @Override
-    public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
-    }
+	@Override
+	public void setOrganizationName(String organizationName) {
+		this.organizationName = organizationName;
+	}
 }

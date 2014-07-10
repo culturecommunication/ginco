@@ -26,19 +26,24 @@
 
 /*
  * File: app/view/ThesaurusPanel.js Thesaurus Creation Form
- * 
+ *
  */
 
 Ext.require([ 'GincoApp.view.ThesaurusVersionPanel',
-              'GincoApp.view.CustomAttributeTypesPanel']);
+              'GincoApp.view.CustomAttributeTypesPanel',
+              'GincoApp.view.ThesaurusStatisticsTabPanel',
+              'GincoApp.view.ThesaurusReportsTabPanel',
+              'GincoApp.view.UsersTabPanel',
+              'GincoApp.view.MetaDataPanel']);
 Ext.define('GincoApp.view.ThesaurusPanel', {
-	extend : 'Ext.panel.Panel',
+	extend : 'GincoApp.view.ThesaurusEntityPanel',
 
 	thesaurusData : null,
 
 	alias : 'widget.thesaurusPanel',
 	localized : true,
 	closable : true,
+	trackable : true,
 	layout : {
 		type : 'vbox',
 		align : 'stretch'
@@ -52,6 +57,7 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xTitleLabel : 'Title',
 	xServiceLabel : 'Service',
 	xUrlLabel : 'URL',
+	xEmailLabel : 'Email',
 	xContributorLabel : 'Contributor',
 	xPublisherLabel : 'Publisher',
 	xPublisherValue : 'Ministère chargé de la culture',
@@ -65,10 +71,9 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 	xdefaultTopConceptLabel : 'TopTerm by default',
 	xRelationLabel : 'Relation',
 	xSourceLabel : 'Source',
-	xThesaurusTitle : 'New Thesaurus',
+	xThesaurusTitle : 'Thesaurus data',
+	xThesaurusTabTitle: 'Metadata',
 	xNewLabel : 'New',
-	xNewMenu_TermLabel : "Term",
-	xNewMenu_ConceptLabel : "Concept",
 	xNewMenu_GroupLabel : "Group of Concepts",
 	xNewMenu_ConceptArrayLabel : "Array of concepts",
 	xNewMenu_ComplexConceptLabel: "Complex Concept",
@@ -87,7 +92,12 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
     xCustomAttributeTypes: 'Custom atrribute types',
     xImportSandbox: 'Import sandbox terms',
     xImportBranch: 'Import a branch',
-	
+    xMetadataTitle : 'Metadata',
+    xStatisticsTabTile : 'Statistics',
+    xCloseAllBtn : 'Close all tabs',
+    xMetadataTooltip : 'Click here to expand/collapse metadatas of this thesaurus',
+
+
 	initComponent : function() {
 		var me = this;
 
@@ -96,14 +106,15 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 										me,
 										{
 											title : me.xThesaurusTitle,
-											
+
 											items : [ {
 												xtype : 'tabpanel',
 												itemId: 'thesaurusTabPanel',
-											flex : 1,
+												tabPosition: 'bottom',
+												flex : 1,
 											items : [ {
 												xtype : 'form',
-												requiredRoles : ['ADMIN'],
+												requiredRoles : [ 'ADMIN', 'MANAGER'],
 												title : me.xThesaurusTabTitle,
 												flex : 1,
 												autoScroll : true,
@@ -117,109 +128,26 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 													xtype : 'toolbar',
 													dock : 'top',
 													items : [{
-													xtype : 'button',
-													disabled : true,
-													requiredRoles : ['ADMIN'],
-													cls : 'newBtnMenu',
-													text : me.xNewLabel,
-													menu : {
-															xtype : 'menu',
-															width : 200,
-															items : [ {
-																xtype : 'keymenuitem',
-																text : me.xNewMenu_TermLabel,
-																itemId : 'newTermBtn',
-																cmdTxt : 'Ctrl+2'
-													},{
-																xtype : 'keymenuitem',
-																text : me.xNewMenu_ConceptLabel,
-																itemId : 'newConceptBtn',
-																cmdTxt : 'Ctrl+3'
-													},{
-																xtype : 'keymenuitem',
-																text : me.xNewMenu_ComplexConceptLabel,
-																itemId : 'newComplexConceptBtn',
-																cmdTxt : 'Ctrl+4'
-													},{
-																xtype : 'keymenuitem',
-																text : me.xNewMenu_ConceptArrayLabel,
-																itemId : 'newConceptArrayBtn',
-																cmdTxt : 'Ctrl+5'
-													},{
-																xtype : 'keymenuitem',
-																text : me.xNewMenu_GroupLabel,
-																itemId : 'newConceptGroupBtn',
-																cmdTxt : 'Ctrl+6'
-													}]
-												}
-												},{
 														xtype : 'button',
 														text : me.xSave,
 														disabled : true,
 														formBind : true,
-														requiredRoles : ['ADMIN'],
+														requiredRoles : [ 'ADMIN', 'MANAGER'],
 														cls : 'save',
 														itemId : 'saveThesaurus',
 														iconCls : 'icon-save'
 												},{
 							                            xtype : 'button',
 							                            text : me.xDelete,
-							                            requiredRoles : ['ADMIN'],
+							                            requiredRoles : [ 'ADMIN', 'MANAGER'],
 							                            disabled : true,
 							                            cls : 'delete',
 							                            itemId : 'deleteThesaurus',
 							                            iconCls : 'icon-delete'
 							                    },{
-							                            xtype : 'button',
-							                            disabled : true,
-							                            cls : 'exportsBtnMenu',
-							                            text : 'Exports',
-							                            iconCls : 'exports-icon',
-							                            menu : {
-							                                 xtype : 'menu',
-							                                 width : 200,
-							                                 items : [ {
-							                                     xtype : 'keymenuitem',
-							                                     text : me.xExport_Skos,
-							                                     disabled : true,
-							                                     itemId : 'exportSKOS'
-							                                 },{
-							                                	 xtype : 'keymenuitem',
-							                                	 text : me.xExport_Hierarchical,
-							                                	 disabled : true,
-							                                	 itemId : 'exportHierarchical'
-							                                 },{
-							                                	 xtype : 'keymenuitem',
-							                                	 text : me.xExport_Alphabetic,
-							                                	 disabled : true,
-							                                	 itemId : 'exportAlphabetical'
-							                                 },{
-							                                	 xtype : 'keymenuitem',
-							                                	 text : me.xExport_Ginco,
-							                                	 disabled : true,
-							                                	 itemId : 'exportGinco'
-							                                 }]
-							                            }
-							                    },{
-						                            xtype : 'button',
-						                            disabled : true,
-						                            cls : 'journalBtnMenu',
-						                            text : me.xJournal,
-						                            iconCls : 'exports-icon',
-						                            menu : {
-						                                 xtype : 'menu',
-						                                 width : 200,
-						                                 items : [ {
-						                                     xtype : 'keymenuitem',
-						                                     text : me.xEditJournal,
-						                                     disabled : true,
-						                                     itemId : 'editJournal'
-						                                 }]
-						                            }
-						                    },{
                                                         xtype : 'button',
                                                         text : me.xPublish,
-                                                        requiredRoles : ['ADMIN'],
+                                                        requiredRoles : [ 'ADMIN', 'MANAGER'],
                                                         disabled : true,
                                                         cls : 'publish',
                                                         itemId : 'publishThesaurus',
@@ -227,47 +155,45 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
                                             },{
                                                         xtype : 'button',
                                                         text : me.xArchive,
-                                                        requiredRoles : ['ADMIN'],
+                                                        requiredRoles : [ 'ADMIN', 'MANAGER'],
                                                         disabled : true,
                                                         cls : 'archive',
                                                         itemId : 'archiveThesaurus',
                                                         iconCls : 'icon-archive'
-                                            },{
-		                                            	xtype : 'button',
-		                                                text : me.xImportSandbox,
-		                                                requiredRoles : ['ADMIN'],
-		                                                disabled : true,
-		                                                itemId : 'importSandbox',
-		                                                iconCls : 'exports-icon'
-                                            },{
-                                                xtype : 'button',
-                                                text : me.xImportBranch,
-                                                requiredRoles : ['ADMIN'],
-                                                disabled : false,
-                                                itemId : 'importBranch',
-                                                iconCls : 'exports-icon'
                                             } ]
 									} ],
 										items : [ {
                                             xtype : 'hiddenfield',
                                             name : 'archived'
                                         },{
-											xtype : 'displayfield',
-											name : 'id',
-											fieldLabel : me.xIdentifierLabel
-										},{
-											xtype : 'displayfield',
-											name : 'created',
-											fieldLabel : me.xCreatedDateLabel
-										},{
-											xtype : 'displayfield',
-											name : 'date',
-											fieldLabel : me.xDateLabel
-										},{
+                                        	xtype : 'metaDataPanel',
+											title : me.xMetadataTitle,
+											collapseTooltip : me.xMetadataTooltip,
+											items : [
+													{
+														xtype : 'displayfield',
+														name : 'id',
+														fieldLabel : me.xIdentifierLabel
+													},{
+														xtype : 'displayfield',
+														name : 'created',
+														fieldLabel : me.xCreatedDateLabel
+													},{
+														xtype : 'displayfield',
+														name : 'date',
+														fieldLabel : me.xDateLabel
+													}
+											        ]
+                                        },{
 											xtype : 'textfield',
 											name : 'title',
 											fieldLabel : me.xTitleLabel,
-											allowBlank : false
+											allowBlank : false,
+											padding : '5 0 0 0'
+										},{
+											xtype : 'textfield',
+											name : 'creatorName',
+											fieldLabel : me.xServiceLabel
 										},{
 											xtype : 'container',
 											layout : 'column',
@@ -277,17 +203,19 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 											},
 											items : [{
 												xtype : 'textfield',
-												name : 'creatorName',
-												columnWidth : 0.50,
-												fieldLabel : me.xServiceLabel
-											},{
-												xtype : 'textfield',
 												name : 'creatorHomepage',
 												columnWidth : 0.50,
 												margin : '0 0 5 0',
 												fieldLabel : me.xUrlLabel,
-												labelWidth : 50,
 												vtype : 'url'
+											},{
+												xtype : 'textfield',
+												name : 'creatorEmail',
+												columnWidth : 0.50,
+												fieldLabel : me.xEmailLabel,
+												margin : '0 0 5 10',
+												labelWidth : 50,
+												vtype : 'email'
 											} ]
 										},{
 												xtype : 'textareafield',
@@ -398,14 +326,31 @@ Ext.define('GincoApp.view.ThesaurusPanel', {
 												closable : false,
 												disabled :  true
 											},
-
-                                                {
-                                                    title : me.xCustomAttributeTypes,
-                                                    itemId : 'customAttributeTypesTab',
-                                                    xtype : 'customAttributeTypesPanel',
-                                                    closable : false,
-                                                    disabled :  false
-                                                }]
+                                            {
+                                                title : me.xCustomAttributeTypes,
+                                                itemId : 'customAttributeTypesTab',
+                                                xtype : 'customAttributeTypesPanel',
+                                                closable : false,
+                                                disabled :  true
+                                            },
+                                            {
+                                                itemId : 'statisticsTab',
+                                                xtype : 'thesaurusStatisticsTabPanel',
+                                                closable : false,
+                                                disabled :  true
+                                            },
+                                            {
+                                                itemId : 'reportsTab',
+                                                xtype : 'thesaurusReportsTabPanel',
+                                                closable : false,
+                                                disabled :  true
+                                            },
+                                            {
+                                                itemId : 'usersTab',
+                                                xtype : 'usersTabPanel',
+                                                closable : false,
+                                                disabled :  true
+                                            }]
 										}]
 									});
 

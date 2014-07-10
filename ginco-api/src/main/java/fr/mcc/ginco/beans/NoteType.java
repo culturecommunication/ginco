@@ -41,13 +41,13 @@ import java.io.Serializable;
  * on object connected to.
  */
 @SuppressWarnings("serial")
-public class NoteType  implements Serializable{
+public class NoteType implements Serializable {
 
-    private String code;
-    private String label;
-    private boolean isTerm;
-    private boolean isConcept;
-    
+	private String code;
+	private String label;
+	private boolean isTerm;
+	private boolean isConcept;
+
 	public String getCode() {
 		return code;
 	}

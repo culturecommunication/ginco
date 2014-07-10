@@ -64,6 +64,9 @@ Ext.define('GincoApp.store.ThesaurusOrganizationStore', {
                 },{
                     name: 'homepage',
                     type: 'string'
+                },{
+                    name: 'email',
+                    type: 'string'
                 }
             ]
         }, cfg)]);

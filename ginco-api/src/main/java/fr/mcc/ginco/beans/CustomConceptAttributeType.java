@@ -37,7 +37,17 @@ package fr.mcc.ginco.beans;
 import fr.mcc.ginco.beans.generic.GenericCustomAttributeType;
 
 /**
- *
+ * Custom attribute's type bean.
  */
 public class CustomConceptAttributeType extends GenericCustomAttributeType {
+
+	private Boolean exportable;
+
+	public Boolean getExportable() {
+		return exportable;
+	}
+
+	public void setExportable(Boolean exportable) {
+		this.exportable = exportable;
+	}
 }

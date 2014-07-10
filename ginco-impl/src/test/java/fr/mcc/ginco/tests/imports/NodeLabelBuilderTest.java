@@ -51,7 +51,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.NodeLabel;
@@ -59,34 +58,31 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.imports.NodeLabelBuilder;
-import fr.mcc.ginco.imports.SKOS;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
-public class NodeLabelBuilderTest {	
+public class NodeLabelBuilderTest {
 	@Inject
-	@Mock(name = "languagesDAO")
+	@Mock
 	private ILanguageDAO languagesDAO;
-	
+
 	@InjectMocks
 	private NodeLabelBuilder nodeLabelBuilder;
 
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		ReflectionTestUtils.setField(nodeLabelBuilder, "defaultLang", "fr-FR");	
-		LoggerTestUtil.initLogger(nodeLabelBuilder);
+		ReflectionTestUtils.setField(nodeLabelBuilder, "defaultLang", "fr-FR");
 	}
 
 	@Test
 	public void testBuildNodeLabel() {
 		Thesaurus fakeThesaurus = new Thesaurus();
 		fakeThesaurus.setIdentifier("thesaurus-uri");
-		
+
 		Language french = new Language();
 		french.setId("fr-FR");
 		Mockito.when(languagesDAO.getByPart1("fr")).thenReturn(french);
 
-		
+
 		Model model = ModelFactory.createDefaultModel();
 		InputStream is = ConceptBuilderTest.class
 				.getResourceAsStream("/imports/concept_collections.rdf");
@@ -94,14 +90,12 @@ public class NodeLabelBuilderTest {
 
 		Resource skosArray = model
 				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-C5");
-		Statement stmt = skosArray.getProperty(SKOS.PREF_LABEL);
 		ThesaurusArray array = new ThesaurusArray();
+		NodeLabel actualNodeLabel = nodeLabelBuilder.buildNodeLabel(skosArray, fakeThesaurus, array);
 
-		NodeLabel actualNodeLabel = nodeLabelBuilder.buildNodeLabel(stmt, model, fakeThesaurus, array);
-		
 		Assert.assertEquals("récipients pour le service et la consommation des aliments", actualNodeLabel.getLexicalValue());
-		
-		
+
+
 
 	}
 

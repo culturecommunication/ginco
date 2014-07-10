@@ -65,7 +65,6 @@ import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ExportServiceTest {
 	
@@ -105,11 +104,10 @@ public class ExportServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(exportService);
 	}
 
 	@Test
-	public void testGetHierarchicalText() throws BusinessException {
+	public void testGetHierarchicalText() {
 		final Thesaurus th1 = new Thesaurus();
 		th1.setTitle("Test thesaurus");
 		th1.setIdentifier("th1");
@@ -424,24 +422,24 @@ public class ExportServiceTest {
 				"<ar1>", results.get(1).getText());
 
 		Assert.assertEquals("Number of tabulations is wrong!", 1,
-				(long) results.get(5).getTabs());
-		Assert.assertEquals("Line does not correspond to needed format",
-				"co1_1", results.get(5).getText());
-
-		Assert.assertEquals("Number of tabulations is wrong!", 2,
 				(long) results.get(2).getTabs());
-		Assert.assertEquals("Line does not correspond to needed format", "<ar2>",
-				results.get(2).getText());
+		Assert.assertEquals("Line does not correspond to needed format",
+				"co1_1", results.get(2).getText());
 
 		Assert.assertEquals("Number of tabulations is wrong!", 2,
 				(long) results.get(3).getTabs());
-		Assert.assertEquals("Line does not correspond to needed format",
-				"co2", results.get(3).getText());
+		Assert.assertEquals("Line does not correspond to needed format", "<ar2>",
+				results.get(3).getText());
 
-		Assert.assertEquals("Number of tabulations is wrong!", 3,
+		Assert.assertEquals("Number of tabulations is wrong!", 2,
 				(long) results.get(4).getTabs());
 		Assert.assertEquals("Line does not correspond to needed format",
-				"co2_1", results.get(4).getText());
+				"co2", results.get(4).getText());
+
+		Assert.assertEquals("Number of tabulations is wrong!", 3,
+				(long) results.get(5).getTabs());
+		Assert.assertEquals("Line does not correspond to needed format",
+				"co2_1", results.get(5).getText());
 
 		Assert.assertEquals("Number of tabulations is wrong!", 0,
 				(long) results.get(6).getTabs());

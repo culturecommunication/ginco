@@ -48,36 +48,38 @@ Ext.define('GincoApp.store.MainTreeStore', {
 			}
 		}, cfg) ]);
 	},
-	hasFilter : false,
 
 	filter : function() {
-		var me = this;
-		if (me.currentFilter!=null) {
+		var me = this;				
+		if (me.currentFilter!=null || me.isRoleFiltered) {
 			Ext.Object.each(me.tree.nodeHash, function(key, node) {
 				if (node.data.type && node.data.type == "THESAURUS") {
-					if (node.data[me.currentFilter.property] != me.currentFilter.value)
+					var removed = false;
+					if (me.isRoleFiltered) {
+						if (Thesaurus.ext.utils.userInfo.data.admin==false && Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.data.length > 0 && Thesaurus.ext.utils.userInfo.userThesaurusRolesStore.getById(node.data.id) == null) {
+							node.remove();
+							removed=true;
+						}
+
+					}
+					if (!removed && me.currentFilter!=null && node.data[me.currentFilter.property] != me.currentFilter.value) {	
 						node.remove();
-				}
+					}
+				}			
 			});
-		me.hasFilter = true;
 		}
-	},
+		
+	},	
+	
 	setFilter: function(property, value) {
 		this.currentFilter = {
 				'property' : property,
 				'value' : value
-		}
+		};
 	},
+	
 	currentFilter : null,
-
-	clearFilter : function() {
-		var me = this;
-		me.hasFilter = false;
-		me.currentFilter = null;
-		me.load();
-	},
-
-	isFiltered : function() {
-		return this.hasFilter;
-	}
+	
+	isRoleFiltered: true	
+	
 });

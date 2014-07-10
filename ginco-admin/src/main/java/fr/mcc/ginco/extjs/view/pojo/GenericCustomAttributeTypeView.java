@@ -37,41 +37,50 @@ package fr.mcc.ginco.extjs.view.pojo;
 /**
  *
  */
-public class GenericCustomAttributeTypeView {
-    private int identifier;
-    private String code;
-    private String value;
-    private String thesaurusId;
+public class GenericCustomAttributeTypeView implements SecuredResourceView {
+	private int identifier;
+	private String code;
+	private String value;
+	private String thesaurusId;
+	private Boolean exportable;
 
-    public int getIdentifier() {
-        return identifier;
-    }
+	public int getIdentifier() {
+		return identifier;
+	}
 
-    public void setIdentifier(int identifier) {
-        this.identifier = identifier;
-    }
+	public void setIdentifier(int identifier) {
+		this.identifier = identifier;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-    public String getThesaurusId() {
-        return thesaurusId;
-    }
+	public String getThesaurusId() {
+		return thesaurusId;
+	}
 
-    public void setThesaurusId(String thesaurusId) {
-        this.thesaurusId = thesaurusId;
-    }
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
+	}
+
+	public Boolean getExportable() {
+		return exportable;
+	}
+
+	public void setExportable(Boolean exportable) {
+		this.exportable = exportable;
+	}
 }

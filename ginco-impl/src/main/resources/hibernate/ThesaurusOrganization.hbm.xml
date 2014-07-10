@@ -10,6 +10,7 @@
 		</id>
 		<property name="name" not-null="true" />
 		<property name="homepage" />
+		<property name="email" />
 
 	</class>
 </hibernate-mapping>

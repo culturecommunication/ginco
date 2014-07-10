@@ -41,47 +41,43 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 
 			onGridRender : function(theGrid) {
 				var thePanel = theGrid.up('sandboxPanel');
+				var thesPanel = theGrid.up('thesaurusTabPanel');
 				var theStore = theGrid.getStore();
 				theStore.getProxy().setExtraParam('idThesaurus',
-						thePanel.thesaurusData.id);
+						thesPanel.thesaurusData.id);
 				theStore.load();
-				thePanel.setTitle(thePanel.title + ' : '
-						+ thePanel.thesaurusData.title);
-				
-				var thesaurusId= thePanel.thesaurusData.id;
-				var thesaurusModel= this.getThesaurusModelModel();
-				thesaurusModel.load(thesaurusId, {
-					success : function(model) {
-						thePanel.thesaurusData = model.data;
-					}
-				});
+				thePanel.setTitle(thePanel.title);
+				thePanel.addNodePath(thesPanel.thesaurusData.id);
+				thePanel.addNodePath("SANDBOX_"+thesPanel.thesaurusData.id);
 			},
 
 			onNodeDblClick : function(theGrid, record, item, index, e, eOpts) {
-				var thePanel = theGrid.up('sandboxPanel');
-				this.openThesaurusTermTab(record,thePanel.thesaurusData);
+				var thesPanel = theGrid.up('thesaurusTabPanel');
+				this.openThesaurusTermTab(record,thesPanel.thesaurusData);
 			},
 			openThesaurusTermTab : function(aRecord, aThesaurusData) {
-				var topTabs = Ext.ComponentQuery.query('topTabs')[0];
+				var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
 				topTabs.fireEvent('opentermtab',topTabs,aThesaurusData.id, aRecord.data.identifier);				
 			},
 			refreshSandBoxList : function(thesaurusData)
-			{
-				var sandBoxTabs = Ext.ComponentQuery.query('topTabs sandboxPanel');
+			{	
+				var sandBoxTabs = Ext.ComponentQuery.query('thesaurusTabs sandboxPanel');
 				Ext.Array.each(sandBoxTabs, function(sandBox, index, array) {
-					if (sandBox.thesaurusData.id ==  thesaurusData.id) {
+					if (sandBox.up('thesaurusTabPanel').thesaurusData.id ==  thesaurusData.id) {
 						var sandBoxGrid= sandBox.down("gridpanel");
 						sandBoxGrid.getStore().load();
 					}
-				});
+				});	
+				
+				this.application.fireEvent('refreshtree', thesaurusData);
 			},
 
 			init : function() {
 				this.application.on({
-					termdeleted : this.refreshSandBoxList,
-					termupdated : this.refreshSandBoxList,
-                    conceptupdated : this.refreshSandBoxList,
-                    conceptdeleted : this.refreshSandBoxList,
+					'termdeleted' : this.refreshSandBoxList,
+					'termupdated' : this.refreshSandBoxList,
+                    'conceptupdated' : this.refreshSandBoxList,
+                    'conceptdeleted' : this.refreshSandBoxList,
 			        scope: this
 				});
 				this.control({

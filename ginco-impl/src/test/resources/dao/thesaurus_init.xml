@@ -94,12 +94,20 @@
         <column>identifier</column>
         <column>name</column>
         <column>homepage</column>
+        <column>email</column>
         <row>
             <value>0</value>
             <value>Smile</value>
             <value>http://smile.fr</value>
+            <value>contact@smile.fr</value>
         </row>
-    </table> 
+        <row>
+            <value>1</value>
+            <value>Not shown</value>
+            <value>http://smile.fr</value>
+            <value>contact@smile.fr</value>
+        </row>
+    </table>
 	<table name="thesaurus_term">
    		<column>identifier</column>
 		<column>lexicalvalue</column>
@@ -139,37 +147,37 @@
 			<value>aaa</value>
 		</row>
    	</table>
-   	
+
    	<table name="languages_iso639">
 		<column>id</column>
-		<column>part1</column>		
+		<column>part1</column>
 		<column>ref_name</column>
-		<column>toplanguage</column>		
+		<column>toplanguage</column>
 		<row>
 			<value>aaa</value>
-			<value>I</value>			
+			<value>I</value>
 			<value>Ghotuo</value>
 			<value>false</value>
 		</row>
 	</table>
-	
+
 	<table name="thesaurus_format">
 		<column>identifier</column>
-		<column>label</column>		
+		<column>label</column>
 		<row>
 			<value>0</value>
-			<value>PDF 1.7</value>			
+			<value>PDF 1.7</value>
 		</row>
 		<row>
 			<value>1</value>
-			<value>CSV</value>			
+			<value>CSV</value>
 		</row>
 		<row>
 			<value>2</value>
-			<value>XML/SKOS</value>			
+			<value>XML/SKOS</value>
 		</row>
 	</table>
-	
+
 	 <table name="thesaurus_formats">
         <column>format_identifier</column>
         <column>thesaurus_identifier</column>
@@ -182,4 +190,6 @@
             <value>0</value>
         </row>
     </table>
+
+
 </dataset>

@@ -189,6 +189,128 @@
             <value>http://www.culturecommunication.gouv.fr/co3</value>
             <value>TA</value>
         </row>
-    </table>   
+    </table>
+    <table name="alignment">
+    	<column>identifier</column>
+    	<column>created</column>
+    	<column>modified</column>
+		<column>source_concept_id</column>
+		<column>internal_target_thesaurus_id</column>
+		<column>external_target_thesaurus_id</column>
+		<column>and_relation</column>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/al1</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value>http://www.culturecommunication.gouv.fr/th2</value>
+            <value></value>
+            <value>false</value>
+        </row>
+        <row>
+        	<value>http://www.culturecommunication.gouv.fr/al2</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value>http://www.culturecommunication.gouv.fr/th2</value>
+            <value></value>
+            <value>false</value>
+        </row>
+        <row>
+        	<value>http://www.culturecommunication.gouv.fr/al3</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value></value>
+            <value>http://www.culturecommunication.gouv.fr/ark:/external_th/</value>
+            <value>false</value>
+        </row>
+        <row>
+        	<value>http://www.culturecommunication.gouv.fr/al4</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+            <value>http://www.culturecommunication.gouv.fr/co1</value>
+            <value></value>
+            <value>http://www.culturecommunication.gouv.fr/ark:/external_th/</value>
+            <value>false</value>
+        </row>
+        <row>
+        	<value>http://www.culturecommunication.gouv.fr/al5</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value>http://www.culturecommunication.gouv.fr/th2</value>
+            <value></value>
+            <value>false</value>
+        </row>
+        <row>
+        	<value>http://www.culturecommunication.gouv.fr/al6</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+            <value>http://www.culturecommunication.gouv.fr/co2</value>
+            <value></value>
+            <value>http://www.culturecommunication.gouv.fr/ark:/external_th</value>
+            <value>false</value>
+        </row>
+        <row>
+        	<value>http://www.culturecommunication.gouv.fr/al7</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+            <value>http://www.culturecommunication.gouv.fr/co5</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value></value>
+            <value>false</value>
+        </row>
+        <row>
+        	<value>http://www.culturecommunication.gouv.fr/al8</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+            <value>http://www.culturecommunication.gouv.fr/co5</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+            <value></value>
+            <value>false</value>
+        </row>
+    </table>
+    <table name="note_type">
+		<column>code</column>
+		<column>label</column>
+		<column>isterm</column>
+		<column>isconcept</column>
+		<row>
+			<value>scopeNote</value>
+			<value>Note d'application</value>
+			<value>true</value>
+			<value>true</value>
+		</row>
+	</table>
+	<table name="note">
+		<column>identifier</column>
+		<column>lexicalvalue</column>
+		<column>lang</column>
+		<column>created</column>
+		<column>modified</column>
+		<column>notetypecode</column>
+		<column>conceptid</column>
+		<column>termid</column>
+		<row>
+			<value>http://n1</value>
+			<value>Concept note</value>
+			<value>en-US</value>
+			<value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+			<value>scopeNote</value>
+			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<null />
+		</row>
+		<row>
+			<value>http://n2</value>
+			<value>Term note</value>
+			<value>en-US</value>
+			<value>2013-02-04 15:29:59.66325</value>
+            <value>2013-02-04 15:29:59.66325</value>
+			<value>scopeNote</value>
+			<null />
+			<value>http://t1</value>
+		</row>
+	</table>
 </dataset>
-  

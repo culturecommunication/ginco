@@ -36,177 +36,185 @@ package fr.mcc.ginco.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.DateUtil;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusTermService")
 public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
-    @Inject
-    @Named("thesaurusTermDAO")
-    private IThesaurusTermDAO thesaurusTermDAO;
-    
-    @Inject
-    @Named("thesaurusDAO")
-    private IThesaurusDAO thesaurusDAO;
-    
-    @Inject
-    @Named("languagesDAO")
-    private ILanguageDAO languageDAO;
-    
-    @Inject
-    @Named("generatorService")
-    private IIDGeneratorService customGeneratorService;
-    
-	@Value("${ginco.default.language}")
-	private String defaultLang;
-	
-    @Log
-    private Logger logger;
+	@Inject
+	private IThesaurusTermDAO thesaurusTermDAO;
 
-    @Override
-    public ThesaurusTerm getThesaurusTermById(String id) throws BusinessException {
-        ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(id);
-        if (thesaurusTerm != null) {
-            return thesaurusTerm;
-        } else {
-            throw new BusinessException("Invalid termId requested : " + id, "invalid-term-id");
-        }
-    }
+	@Inject
+	private IThesaurusDAO thesaurusDAO;
 
-    @Override
-    public List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(Integer startIndex,
-                                                                      Integer limit, String idThesaurus) {
-        return thesaurusTermDAO.findPaginatedSandboxedItems(startIndex, limit, idThesaurus);
-    }
-
+	@Inject
+	@Named("generatorService")
+	private IIDGeneratorService customGeneratorService;
 
 	@Override
-    public List<ThesaurusTerm> getTermsByConceptId(String idConcept) throws BusinessException {
-        return thesaurusTermDAO.findTermsByConceptId(idConcept);
-    }  
+	public ThesaurusTerm getThesaurusTermById(String id) {
+		ThesaurusTerm thesaurusTerm = thesaurusTermDAO.getById(id);
+		if (thesaurusTerm != null) {
+			return thesaurusTerm;
+		} else {
+			throw new BusinessException("Invalid termId requested : " + id,
+					"invalid-term-id");
+		}
+	}
 
 	@Override
-    public Long getSandboxedTermsCount(String idThesaurus) throws BusinessException {
-        return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
-    }
-    
+	public List<ThesaurusTerm> getPaginatedThesaurusSandoxedTermsList(
+			Integer startIndex, Integer limit, String idThesaurus) {
+		return thesaurusTermDAO.findPaginatedSandboxedItems(startIndex, limit,
+				idThesaurus);
+	}
+
 	@Override
-	public Long getSandboxedValidatedTermsCount(String idThesaurus)
-			throws BusinessException {
+	public List<ThesaurusTerm> getTermsByConceptId(String idConcept) {
+		return thesaurusTermDAO.findTermsByConceptId(idConcept);
+	}
+
+	@Override
+	public Long getSandboxedTermsCount(String idThesaurus) {
+		return thesaurusTermDAO.countSandboxedTerms(idThesaurus);
+	}
+
+	@Override
+	public Long getSandboxedValidatedTermsCount(String idThesaurus) {
 		return thesaurusTermDAO.countSandboxedValidatedTerms(idThesaurus);
 	}
-    
-	@Transactional(readOnly=false)
-    @Override
-    public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) throws BusinessException {
-    	if (object.getStatus() != TermStatusEnum.VALIDATED.getStatus() && object.getConcept() != null){
-    		throw new BusinessException("The term is associated to a concept. The status must be set to validated", "term-selected-must-have-validated-status");
-    	}
-    	ThesaurusTerm updatedThesaurus = thesaurusTermDAO.update(object);
-    	return updatedThesaurus;
-    }
 
-	@Transactional(readOnly=false)
-    @Override
-    public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) throws BusinessException {
-        if (object.getConcept() == null && object.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
-            return thesaurusTermDAO.delete(object);
-        } else {
-            throw new BusinessException("It's not possible to delete a term attached to a concept or with a status different from rejected", "delete-attached-term");
-        }
-    }	
+	@Transactional(readOnly = false)
+	@Override
+	public ThesaurusTerm updateThesaurusTerm(ThesaurusTerm object) {
+		if (object.getStatus() != TermStatusEnum.VALIDATED.getStatus()
+				&& object.getConcept() != null) {
+			throw new BusinessException(
+					"The term is associated to a concept. The status must be set to validated",
+					"term-selected-must-have-validated-status");
+		}
+		return thesaurusTermDAO.update(object);
+	}
 
-    @Override
-    public List<ThesaurusTerm> getAllTerms() {
-        return thesaurusTermDAO.findAll();
-    }
+	@Transactional(readOnly = false)
+	@Override
+	public ThesaurusTerm destroyThesaurusTerm(ThesaurusTerm object) {
+		if (object.getConcept() == null
+				&& (object.getStatus() == TermStatusEnum.CANDIDATE.getStatus() || object
+				.getStatus() == TermStatusEnum.REJECTED.getStatus())) {
+			return thesaurusTermDAO.delete(object);
+		} else {
+			throw new BusinessException(
+					"It's not possible to delete a term attached to a concept or with a status different from rejected",
+					"delete-attached-term");
+		}
+	}
 
-    @Override
+	@Override
+	public List<ThesaurusTerm> getAllTerms() {
+		return thesaurusTermDAO.findAll();
+	}
+
+	@Override
 	public List<ThesaurusTerm> getPaginatedThesaurusSandoxedValidatedTermsList(
 			Integer startIndex, Integer limit, String idThesaurus) {
-		return thesaurusTermDAO.findPaginatedSandboxedValidatedItems(startIndex, limit, idThesaurus);
+		return thesaurusTermDAO.findPaginatedSandboxedValidatedItems(
+				startIndex, limit, idThesaurus);
 	}
-    
+
 	@Override
-	public Long getPreferredTermsCount(String idThesaurus)
-			throws BusinessException {
+	public Long getPreferredTermsCount(String idThesaurus) {
 		return thesaurusTermDAO.countPreferredTerms(idThesaurus);
 	}
-    
-    @Override
-    public String getConceptIdByTerm(String lexicalValue, String thesaurusId, String languageId) throws BusinessException{
-    	ThesaurusTerm thesaurusTerm = thesaurusTermDAO
-    			.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId);
-    	if (thesaurusTerm != null){
-    		ThesaurusConcept thesaurusConcept = thesaurusTerm.getConcept();
-    		if (thesaurusConcept != null){
-    			return thesaurusConcept.getIdentifier();
-    		}
-    		else{
-    			throw new BusinessException("The concept does not exist", "concept-does-not-exist");
-    		}
-    	}
-    	else{
-    		throw new BusinessException("The term does not exist", "term-does-not-exist");
-    	}
-    		
-    }
-    @Override
-    public ThesaurusTerm getPreferredTermByTerm(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
-    	ThesaurusTerm thesaurusTerm = thesaurusTermDAO.
-    			getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId);
-    	if (thesaurusTerm != null){
-    		if (thesaurusTerm.getPrefered())
-    			return thesaurusTerm;
-    		else{
-    			ThesaurusConcept thesaurusConcept = thesaurusTerm.getConcept();
-    			if (thesaurusConcept != null){
-    				ThesaurusTerm preferredTerm = thesaurusTermDAO.getConceptPreferredTerm(thesaurusConcept.getIdentifier());
-    				if (preferredTerm.getLanguage().getId() == thesaurusTerm.getLanguage().getId())
-    					return preferredTerm;
-    				else return null;
-    			}
-    			else{
-    				throw new BusinessException("The concept does not exist", "concept-does-not-exist");
-    			}
-    		}		
-    	}
-    	else return null;
-    }
-    
-    @Override
-	public Boolean isPreferred(String lexicalValue, String thesaurusId,  String languageId) throws BusinessException{
-		ThesaurusTerm thesaurusTerm = thesaurusTermDAO.
-    			getTermByLexicalValueThesaurusIdLanguageId(lexicalValue, thesaurusId, languageId);
-    	if (thesaurusTerm != null){
-    		return thesaurusTerm.getPrefered();
-    	}
-    	else{
-    		throw new BusinessException("The term does not exist", "term-does-not-exist");
-    	}
-    		
-    	
+
+	@Override
+	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
+	                                 String languageId) {
+		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
+				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
+						thesaurusId, languageId);
+		if (thesaurusTerm != null) {
+			ThesaurusConcept thesaurusConcept = thesaurusTerm.getConcept();
+			if (thesaurusConcept != null) {
+				return thesaurusConcept.getIdentifier();
+			} else {
+				throw new BusinessException("The concept does not exist",
+						"concept-does-not-exist");
+			}
+		} else {
+			throw new BusinessException("The term does not exist",
+					"term-does-not-exist");
+		}
+
+	}
+
+	@Override
+	public ThesaurusTerm getPreferredTermByTerm(String lexicalValue,
+	                                            String thesaurusId, String languageId) {
+		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
+				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
+						thesaurusId, languageId);
+		if (thesaurusTerm != null) {
+			if (thesaurusTerm.getPrefered()) {
+				return thesaurusTerm;
+			} else {
+				ThesaurusConcept thesaurusConcept = thesaurusTerm.getConcept();
+				if (thesaurusConcept != null) {
+					ThesaurusTerm preferredTerm = thesaurusTermDAO
+							.getConceptPreferredTerm(thesaurusConcept
+									.getIdentifier());
+					if (preferredTerm.getLanguage().getId() == thesaurusTerm
+							.getLanguage().getId()) {
+						return preferredTerm;
+					} else {
+						return null;
+					}
+				} else {
+					throw new BusinessException("The concept does not exist",
+							"concept-does-not-exist");
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Boolean isTermExist(ThesaurusTerm term) {
+		return thesaurusTermDAO.countSimilarTermsByLexicalValueAndLanguage(term) > 0;
+	}
+
+	@Override
+	public Boolean isPreferred(String lexicalValue, String thesaurusId,
+	                           String languageId) {
+		ThesaurusTerm thesaurusTerm = thesaurusTermDAO
+				.getTermByLexicalValueThesaurusIdLanguageId(lexicalValue,
+						thesaurusId, languageId);
+		if (thesaurusTerm != null) {
+			return thesaurusTerm.getPrefered();
+		} else {
+			throw new BusinessException("The term does not exist",
+					"term-does-not-exist");
+		}
+
 	}
 
 	@Override
@@ -217,28 +225,31 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 	@Override
 	public List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(
 			Integer startIndex, Integer limit, String idThesaurus) {
-		 return thesaurusTermDAO.findPaginatedPreferredItems(startIndex, limit, idThesaurus);
+		return thesaurusTermDAO.findPaginatedPreferredItems(startIndex, limit,
+				idThesaurus);
 	}
-	
-	@Transactional(readOnly=false)
+
+	@Transactional(readOnly = false)
 	@Override
-	public List<ThesaurusTerm> importSandBoxTerms(List<String> termLexicalValues, String thesaurusId) throws TechnicalException, BusinessException{
+	public List<ThesaurusTerm> importSandBoxTerms(
+			Map<String, Language> termLexicalValues, String thesaurusId,
+			int defaultStatus) {
 		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
 		Thesaurus targetedThesaurus = thesaurusDAO.getById(thesaurusId);
-		if (targetedThesaurus != null){
-			for (String  termLexicalValue : termLexicalValues){
+		if (targetedThesaurus != null) {
+			for (String term : termLexicalValues.keySet()) {
 				ThesaurusTerm termToImport = new ThesaurusTerm();
-				termToImport.setIdentifier(customGeneratorService.generate(ThesaurusTerm.class));
-				termToImport.setLexicalValue(termLexicalValue);
+				termToImport.setIdentifier(customGeneratorService
+						.generate(ThesaurusTerm.class));
+				termToImport.setLexicalValue(StringEscapeUtils.escapeXml(term));
 				termToImport.setThesaurus(targetedThesaurus);
-				termToImport.setLanguage(languageDAO.getById(defaultLang));
+				termToImport.setLanguage(termLexicalValues.get(term));
 				termToImport.setModified(DateUtil.nowDate());
 				termToImport.setCreated(DateUtil.nowDate());
-				termToImport.setStatus(TermStatusEnum.CANDIDATE.getStatus());
+				termToImport.setStatus(defaultStatus);
 				updatedTerms.add(thesaurusTermDAO.update(termToImport));
 			}
-		}
-		else{
+		} else {
 			throw new BusinessException("Unknown thesaurus",
 					"unknown-thesaurus");
 		}

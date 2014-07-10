@@ -36,62 +36,78 @@
 Ext.define('GincoApp.controller.TopToolbarController', {
 	extend : 'Ext.app.Controller',
 
+	localized : true,
+
+	xImportSkosTitle : 'Import SKOS',
+	xImportGincoXmlTitle : 'Import XML Ginco',
+	xLogoutMsgLabel : 'You will exit the application. Are you sure you have saved your work?',
+	xLogoutMsgTitle : 'Logout',
+
 	views : [ 'TopToolbar' ],
-	
+
 	onAproposClick : function(button, e, options) {
 		Ext.create('GincoApp.view.AProposWin');
 	},
 
 	onNewThesaurusBtnClick : function(button, e, options) {
-		this.createPanel('GincoApp.view.ThesaurusPanel');
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('newthesaurus',thesaurusTabs);
 	},
-	createPanel : function(aType)
-	{
-		var aNewPanel = Ext.create(aType);
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var tab = topTabs.add(aNewPanel);
-		topTabs.setActiveTab(tab);
-		tab.show();
-		return aNewPanel;
-	},	
+
 	onImportBtnClick: function(theButton) {
-		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>Import SKOS</h1>'});
+		var me = this;
+		Ext.create('GincoApp.view.ImportWin', {importType: 'skos', xTitleLabel: '<h1>'+ me.xImportSkosTitle + '</h1>'});
 	},
 
 	onImportGincoXmlBtnClick: function(theButton) {
-		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoxml', xTitleLabel: '<h1>Import XML Ginco</h1>'});
+		var me = this;
+		Ext.create('GincoApp.view.ImportWin', {importType: 'gincoxml', xTitleLabel: '<h1>'+ me.xImportGincoXmlTitle + '</h1>'});
 	},
-	
+
 	onUserInfoLoaded : function(theController) {
-		
+
 		var userNameLabel = Ext.ComponentQuery.query('#username')[0];
-		userNameLabel.setText(Thesaurus.ext.utils.userInfo.data.username);	
-		
-		if  (Thesaurus.ext.utils.userInfo!=null && Thesaurus.ext.utils.userInfo.data.admin == false) { 
-			var topToolBar = Ext.ComponentQuery.query('topToolBar')[0];
-			topToolBar.restrictUI('ADMIN');
-		}
+		userNameLabel.setText(Thesaurus.ext.utils.userInfo.data.username);
+
+		var topToolBar = Ext.ComponentQuery.query('topToolBar')[0];
+		Thesaurus.ext.utils.restrictRoles(topToolBar);
 	},
-	
-	
+
 	onLogoutBtn : function () {
-		window.location.href = "logout";
+		var me = this;
+		Ext.MessageBox.show({
+			title : me.xLogoutMsgTitle,
+			msg : me.xLogoutMsgLabel,
+			buttons : Ext.MessageBox.OKCANCEL,
+			fn : function(buttonId) {
+				switch (buttonId) {
+				case 'ok':
+					window.location.href = "logout";
+					break;
+				case 'cancel':
+					break;
+				}
+			},
+			scope : this
+		});
 	},
-	
+
 	onSearchTrigger : function(theTrigger) {
-		var searchPanel = Ext.create("GincoApp.view.SearchPanel");
-		searchPanel.searchQuery = theTrigger.getValue();
-		var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-		var tab = topTabs.add(searchPanel);
-		topTabs.setActiveTab(tab);
-		tab.show();
-		
+		var thesaurusId = "-1";
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('searchquery',thesaurusTabs,theTrigger.getValue(), thesaurusId);
 	},
+
 	onSearchTriggerKey : function (theTrigger,e )
 	{
 		if (e.getKey() == e.ENTER) {
 			this.onSearchTrigger(theTrigger);
         }
+	},
+
+	onSuggestionBtn : function(theButton) {
+		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		thesaurusTabs.fireEvent('opensuggestions',thesaurusTabs);
 	},
 
 	init : function(application) {
@@ -105,7 +121,7 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			},
 			"#newThesaurusBtn" : {
 				click : this.onNewThesaurusBtnClick
-			},			
+			},
 			"#importBtn" : {
 				click: this.onImportBtnClick
 			},
@@ -118,6 +134,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 			'#searchBtn' : {
 				trigger : this.onSearchTrigger,
 				specialkey : this.onSearchTriggerKey
+			},
+			'#suggestionsBtn' : {
+				click : this.onSuggestionBtn
 			}
 		});
 	}

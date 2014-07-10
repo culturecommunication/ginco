@@ -34,41 +34,36 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
 import fr.mcc.ginco.extjs.view.pojo.HierarchicalRelationshipView;
-import fr.mcc.ginco.services.IAssociativeRelationshipRoleService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
  */
 @Component("hierarchicalRelationshipViewConverter")
 public class HierarchicalRelationshipViewConverter {
-	
 
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-    
-    @Inject
-    @Named("conceptHierarchicalRelationshipService")
-    private IConceptHierarchicalRelationshipService conceptHierarchicalRelationshipService;
-    
+
+	@Inject
+	@Named("conceptHierarchicalRelationshipService")
+	private IConceptHierarchicalRelationshipService conceptHierarchicalRelationshipService;
+
 	/**
 	 * This method returns a list of {@link HierarchicalRelationshipView} corresponding to parents of the given concept
+	 *
 	 * @param concept
 	 * @return A list of {@link HierarchicalRelationshipView} parents
 	 */
@@ -76,7 +71,7 @@ public class HierarchicalRelationshipViewConverter {
 		List<HierarchicalRelationshipView> result = new ArrayList<HierarchicalRelationshipView>();
 		if (concept != null) {
 			Set<ThesaurusConcept> parents = concept.getParentConcepts();
-			
+
 			if (parents != null) {
 				for (ThesaurusConcept thesaurusConcept : parents) {
 					HierarchicalRelationshipView item = new HierarchicalRelationshipView();
@@ -89,9 +84,10 @@ public class HierarchicalRelationshipViewConverter {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * This method returns a list of {@link HierarchicalRelationshipView} corresponding to children of the given concept
+	 *
 	 * @param concept
 	 * @return A list of {@link HierarchicalRelationshipView} children
 	 */
@@ -99,7 +95,7 @@ public class HierarchicalRelationshipViewConverter {
 		List<HierarchicalRelationshipView> result = new ArrayList<HierarchicalRelationshipView>();
 		if (concept != null) {
 			List<ThesaurusConcept> children = thesaurusConceptService.getChildrenByConceptId(concept.getIdentifier());
-			
+
 			if (children != null) {
 				for (ThesaurusConcept thesaurusConcept : children) {
 					HierarchicalRelationshipView item = new HierarchicalRelationshipView();
@@ -116,26 +112,26 @@ public class HierarchicalRelationshipViewConverter {
 
 	/**
 	 * This method convert the relation from child (concept we are saving) to its parent {@link HierarchicalRelationshipView} in {@link ConceptHierarchicalRelationship}
-	 * 
+	 *
 	 * @param hierarchicalRelationView
 	 * @param convertedConcept
 	 * @return
 	 */
 	public ConceptHierarchicalRelationship convertRelationFromChildToParent(HierarchicalRelationshipView hierarchicalRelationView, ThesaurusConcept convertedConcept) {
 		ConceptHierarchicalRelationship relation = new ConceptHierarchicalRelationship();
-		
+
 		String childConceptId = convertedConcept.getIdentifier();
 		String parentConceptId = hierarchicalRelationView.getIdentifier();
-		
-		if (conceptHierarchicalRelationshipService.getByChildAndParentIds(childConceptId,parentConceptId) != null) {
+
+		if (conceptHierarchicalRelationshipService.getByChildAndParentIds(childConceptId, parentConceptId) != null) {
 			//If relation already exists, we get it
-			relation = conceptHierarchicalRelationshipService.getByChildAndParentIds(childConceptId,parentConceptId);
+			relation = conceptHierarchicalRelationshipService.getByChildAndParentIds(childConceptId, parentConceptId);
 		} else {
 			//We create an id for the new relation
 			ConceptHierarchicalRelationship.Id id = new ConceptHierarchicalRelationship.Id();
-	        id.setChildconceptid(childConceptId);
-	        id.setParentconceptid(parentConceptId);
-	        relation.setIdentifier(id);
+			id.setChildconceptid(childConceptId);
+			id.setParentconceptid(parentConceptId);
+			relation.setIdentifier(id);
 		}
 		relation.setRole(hierarchicalRelationView.getRole());
 		return relation;

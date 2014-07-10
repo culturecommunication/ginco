@@ -34,14 +34,15 @@
  */
 package fr.mcc.ginco.rest.services.exceptions;
 
-import javax.ws.rs.core.Response;
-
 import fr.mcc.ginco.exceptions.BusinessException;
 
-public class BusinessExceptionMapper extends AbstractExceptionMapper<BusinessException> {	
+import javax.ws.rs.core.Response;
+
+public class BusinessExceptionMapper extends AbstractExceptionMapper<BusinessException> {
 
 	@Override
 	public Response toResponse(Throwable exception) {
-		return super.toResponse(exception, ((BusinessException)exception).getUserMessageKey(), ((BusinessException)exception).getToFormat());
+		return super.toResponse(exception, ((BusinessException) exception).getUserMessageKey(),
+				((BusinessException) exception).getToFormat());
 	}
 }

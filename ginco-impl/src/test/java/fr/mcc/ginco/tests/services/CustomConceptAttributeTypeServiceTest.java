@@ -51,7 +51,7 @@ import java.util.List;
 
 public class CustomConceptAttributeTypeServiceTest {
 	
-	@Mock(name = "customConceptAttributeTypeDAO")
+	@Mock
     private ICustomConceptAttributeTypeDAO customConceptAttributeTypeDAO;
 	
 	@InjectMocks

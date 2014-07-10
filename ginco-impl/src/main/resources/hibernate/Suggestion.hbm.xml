@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC  "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+    <class name="Suggestion" table="suggestion">
+        <cache usage="read-write" />
+        <id name="identifier" column="identifier">
+            <generator class="sequence">
+                <param name="sequence">suggestion_identifier_seq</param>
+            </generator>
+        </id>
+        <property name="created" not-null="true" type="timestamp" />
+        <property name="creator" not-null="true"/>
+        <property name="recipient" not-null="true"/>
+        <property name="content" not-null="true"/>
+        <many-to-one name="term" class="fr.mcc.ginco.beans.ThesaurusTerm" column="term_id" lazy="false" update="true"/>
+        <many-to-one name="concept" class="fr.mcc.ginco.beans.ThesaurusConcept" column="concept_id" lazy="false" update="true"/>
+    </class>
+</hibernate-mapping>
+

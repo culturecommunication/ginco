@@ -34,8 +34,12 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.io.File;
-import java.io.IOException;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.extjs.view.FileResponse;
+import fr.mcc.ginco.services.IGincoRevService;
+import fr.mcc.ginco.services.IThesaurusService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,17 +47,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.FileResponse;
-import fr.mcc.ginco.services.IGincoRevService;
-import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.utils.DateUtil;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * REST service to get edit the log journal.
@@ -73,22 +70,21 @@ public class JournalRestService {
 
 	/**
 	 * Return file in .txt format; name begins with current DateTime.
-	 * 
+	 *
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 * @throws IOException
 	 */
 	@GET
 	@Path("/exportLogJournal")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response exportLogJournal(
 			@QueryParam("thesaurusId") String thesaurusId)
-			throws BusinessException, IOException {
+			throws IOException {
 		Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
 
-		File resFile = gincoRevService.getLogJournal(thesaurus);		
+		File resFile = gincoRevService.getLogJournal(thesaurus);
 
-		return new FileResponse(resFile,".csv", thesaurus.getTitle()).toResponse();
+		return new FileResponse(resFile, ".csv", thesaurus.getTitle()).toResponse();
 	}
 }

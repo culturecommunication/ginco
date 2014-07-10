@@ -34,26 +34,27 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.dao.INoteDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.dao.INoteDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("noteService")
 public class NoteServiceImpl implements INoteService {
-	
+
 	@Inject
-	@Named("noteDAO")
 	private INoteDAO noteDAO;
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getConceptNotePaginatedList(java.lang.String, Integer, Integer)
 	 */
 	@Override
@@ -62,47 +63,50 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	/**
-     * (non-Javadoc)
-	 * @see fr.mcc.ginco.services.INoteService#getTermNotePaginatedList(java.lang.String,Integer,Integer)
+	 * (non-Javadoc)
+	 *
+	 * @see fr.mcc.ginco.services.INoteService#getTermNotePaginatedList(java.lang.String, Integer, Integer)
 	 */
-	@Transactional(readOnly=true)
 	@Override
 	public List<Note> getTermNotePaginatedList(String termId, Integer startIndex, Integer limit) {
 		return noteDAO.findTermPaginatedNotes(termId, startIndex, limit);
 	}
-	
+
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getNoteById(java.lang.String)
 	 */
-	@Transactional(readOnly=true)
 	@Override
 	public Note getNoteById(String id) {
 		return noteDAO.getById(id);
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#createOrUpdateNote(fr.mcc.ginco.beans.Note)
 	 */
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
-	public Note createOrUpdateNote(Note note) throws BusinessException {
+	public Note createOrUpdateNote(Note note) {
 		return noteDAO.update(note);
 	}
-	
+
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#deleteNote(fr.mcc.ginco.beans.Note)
 	 */
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public Note deleteNote(Note note) {
 		return noteDAO.delete(note);
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getConceptNoteCount(java.lang.String)
 	 */
 	@Override
@@ -111,12 +115,33 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	/**
-     * (non-Javadoc)
+	 * (non-Javadoc)
+	 *
 	 * @see fr.mcc.ginco.services.INoteService#getTermNoteCount(java.lang.String)
 	 */
 	@Override
 	public Long getTermNoteCount(String termId) {
 		return noteDAO.getTermNoteCount(termId);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see fr.mcc.ginco.services.INoteService#getAllNotes()
+	 */
+	@Override
+	public List<Note> getAllNotes() {
+		return noteDAO.findAll();
+	}
+
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see fr.mcc.ginco.services.INoteService#getNotesByThesaurusId(java.lang.String)
+	 */
+	@Override
+	public List<Note> getNotesByThesaurusId(String thesaurusId) {
+		return noteDAO.findNotesByThesaurusId(thesaurusId);
 	}
 
 }

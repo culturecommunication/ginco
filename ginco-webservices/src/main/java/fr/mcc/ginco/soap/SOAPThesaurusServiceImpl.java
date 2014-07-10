@@ -52,10 +52,9 @@ import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This class is the implementation of all SOAP services related to thesaurus objects
- * 
  */
-@WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusService")
-public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{	
+@WebService(endpointInterface = "fr.mcc.ginco.soap.ISOAPThesaurusService")
+public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService {
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -63,11 +62,11 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 	/**
 	 * This service returns a list of all existing thesaurus in a simplified
 	 * format (id and title)
-	 * 
+	 *
 	 * @return the list of all existing thesaurus
 	 */
 	@Override
-	final public List<ReducedThesaurus> getAllThesaurus() {
+	public final List<ReducedThesaurus> getAllThesaurus() {
 		List<ReducedThesaurus> results = new ArrayList<ReducedThesaurus>();
 
 		for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
@@ -81,14 +80,12 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 
 	/**
 	 * This service returns the details of a thesaurus
-	 * 
-	 * @param id
-	 *            {@link String} identifier of the thesaurus to get - mandatory
-	 * 
+	 *
+	 * @param id {@link String} identifier of the thesaurus to get - mandatory
 	 * @return full thesaurus informations
 	 */
 	@Override
-	final public FullThesaurus getThesaurusById(String id) {
+	public final FullThesaurus getThesaurusById(String id) {
 		Thesaurus thesaurus = thesaurusService.getThesaurusById(id);
 		FullThesaurus fullThesaurus = new FullThesaurus();
 		fullThesaurus.setContributor(thesaurus.getContributor());
@@ -98,19 +95,20 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 			fullThesaurus.setCreatorName(thesaurus.getCreator().getName());
 			fullThesaurus.setCreatorHomepage(thesaurus.getCreator()
 					.getHomepage());
+			fullThesaurus.setCreatorEmail(thesaurus.getCreator().getEmail());
 		}
 		fullThesaurus.setModified(DateUtil.toString(thesaurus.getDate()));
 		fullThesaurus.setDescription(thesaurus.getDescription());
-		
-		if (thesaurus.getFormat() != null){
-			ArrayList<String> formatList = new ArrayList<String>();
+
+		if (thesaurus.getFormat() != null) {
+			List<String> formatList = new ArrayList<String>();
 			for (ThesaurusFormat format : thesaurus.getFormat()) {
 				formatList.add(format.getLabel());
 			}
 			fullThesaurus.setFormats(formatList);
 		}
 		fullThesaurus.setIdentifier(thesaurus.getIdentifier());
-		ArrayList<String> langList = new ArrayList<String>();
+		List<String> langList = new ArrayList<String>();
 		for (Language lang : thesaurus.getLang()) {
 			langList.add(lang.getId());
 		}
@@ -125,9 +123,9 @@ public class SOAPThesaurusServiceImpl implements ISOAPThesaurusService{
 			fullThesaurus.setType(thesaurus.getType().getLabel());
 		}
 		return fullThesaurus;
-	}	
+	}
 
-	final public void setThesaurusService(IThesaurusService thesaurusService) {
+	public final void setThesaurusService(IThesaurusService thesaurusService) {
 		this.thesaurusService = thesaurusService;
 	}
 

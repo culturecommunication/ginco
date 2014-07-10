@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,13 +48,12 @@ import fr.mcc.ginco.dao.ICustomConceptAttributeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
- *
+ * Implementation of the ICustomConceptAttributeService service
  */
 @Transactional(readOnly = false, rollbackFor = BusinessException.class)
 @Service("customConceptAttributeService")
 public class CustomConceptAttributeServiceImpl implements ICustomConceptAttributeService {
     @Inject
-    @Named("customConceptAttributeDAO")
     private ICustomConceptAttributeDAO customConceptAttributeDAO;
 
     @Override
@@ -76,7 +74,6 @@ public class CustomConceptAttributeServiceImpl implements ICustomConceptAttribut
 	@Override
 	public CustomConceptAttribute getAttributeByType(ThesaurusConcept entity,
 			CustomConceptAttributeType type) {
-		// TODO Auto-generated method stub
 		return customConceptAttributeDAO.getAttributeByType(entity, type);
 	}
 

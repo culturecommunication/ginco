@@ -38,69 +38,65 @@ import fr.mcc.ginco.utils.LabelUtil;
 
 /**
  * Listing of all exported events history types
- *
  */
 public enum JournalEventsEnum {
 	/**
 	 * Thesaurus object created
 	 */
-	THESAURUS_CREATED("log-journal.thesaurus-created-event",0),
+	THESAURUS_CREATED("log-journal.thesaurus-created-event", 0),
 	/**
 	 * ThesaurusTerm created
 	 */
-	THESAURUSTERM_CREATED("log-journal.thesaurus-term-created-event",2),	
+	THESAURUSTERM_CREATED("log-journal.thesaurus-term-created-event", 2),
 	/**
 	 * ThesaurusTerm deleted
 	 */
-	THESAURUSTERM_DELETED("log-journal.thesaurus-term-deleted-event",7),
+	THESAURUSTERM_DELETED("log-journal.thesaurus-term-deleted-event", 7),
 	/**
 	 * ThesaurusConcept created
 	 */
-	THESAURUSCONCEPT_CREATED("log-journal.thesaurus-concept-created-event",1),
+	THESAURUSCONCEPT_CREATED("log-journal.thesaurus-concept-created-event", 1),
 	/**
 	 * Role(prefered/not prefered) of a ThesaurusTerm updated
 	 */
-	THESAURUSTERM_ROLE_UPDATE("log-journal.thesaurus-term-role-updated-event",6),
+	THESAURUSTERM_ROLE_UPDATE("log-journal.thesaurus-term-role-updated-event", 6),
 	/**
 	 * Lexical value of a ThesaurusTerm updated
 	 */
-	THESAURUSTERM_LEXICAL_VALUE_UPDATE("log-journal.thesaurus-term-lexical-value-updated-event",8),
+	THESAURUSTERM_LEXICAL_VALUE_UPDATE("log-journal.thesaurus-term-lexical-value-updated-event", 8),
 	/**
 	 * ThesaurusTerm linked to a concept
 	 */
-	THESAURUSTERM_LINKED_TO_CONCEPT("log-journal.thesaurus-term-linked-to-concept-event",3),
+	THESAURUSTERM_LINKED_TO_CONCEPT("log-journal.thesaurus-term-linked-to-concept-event", 3),
 	/**
 	 * Update of a ThesaurusConcept parent
 	 */
-	THESAURUSCONCEPT_HIERARCHY_UPDATE("log-journal.thesaurus-concept-hierarchy-update-event",4),
+	THESAURUSCONCEPT_HIERARCHY_UPDATE("log-journal.thesaurus-concept-hierarchy-update-event", 4),
 	/**
 	 * Update of a ThesaurusConcept status
 	 */
-	THESAURUSCONCEPT_STATUS_UPDATE("log-journal.thesaurus-concept-status-update-event",5);
+	THESAURUSCONCEPT_STATUS_UPDATE("log-journal.thesaurus-concept-status-update-event", 5);
 
-    
-    private String labelKey;
-    
-    /**
-     * In case of events with the same date and revision, indicates which events should be displayed first
-     */
-    private Integer priority;
-    
-    private JournalEventsEnum(String labelKey, Integer priority) {
-    	this.labelKey = labelKey;
-    	this.priority = priority;
-    }
+
+	private String labelKey;
+
+	/**
+	 * In case of events with the same date and revision, indicates which events should be displayed first
+	 */
+	private Integer priority;
+
+	private JournalEventsEnum(String labelKey, Integer priority) {
+		this.labelKey = labelKey;
+		this.priority = priority;
+	}
 
 	public Integer getPriority() {
 		return priority;
 	}
 
 
-
 	public String toString() {
 		return LabelUtil.getResourceLabel(labelKey);
-		
+
 	}
-	
-	
 }

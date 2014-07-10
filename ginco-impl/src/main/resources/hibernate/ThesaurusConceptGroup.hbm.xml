@@ -6,16 +6,20 @@
 		<id name="identifier" column="identifier">
 			<generator class="assigned" />
 		</id>
-		
+
 		<many-to-one name="thesaurus" column="thesaurusid" lazy="false"/>
 		<many-to-one name="conceptGroupType" column="conceptgrouptypecode" lazy="false"/>
-		
+
+		<property name="notation" />
+		<property name="isDynamic"/>
+
 		<set name="concepts" table="concept_group_concepts">
 			<key column="conceptgroupid" not-null="true" />
 			<many-to-many class="fr.mcc.ginco.beans.ThesaurusConcept" column="conceptid" />
 		</set>
-	
+
 		<many-to-one name="parent" class="ThesaurusConceptGroup" column="parentgroupid" unique="true" not-null="false"/>
-		
+		<many-to-one name="parentConcept" column="parentconceptid" lazy="false" />
+
 	</class>
 </hibernate-mapping>

@@ -34,54 +34,49 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.io.StringWriter;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-
+import com.hp.hpl.jena.vocabulary.DCTerms;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.imports.SKOS;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.skos.namespaces.SKOS;
+import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * This component is in charge of exporting collections to SKOS
- *
  */
 @Component("skosArrayExporter")
 public class SKOSArrayExporter {
-	
+
 	@Inject
 	@Named("thesaurusArrayService")
 	private IThesaurusArrayService thesaurusArrayService;
-	
+
 	@Inject
 	@Named("nodeLabelService")
 	private INodeLabelService nodeLabelService;
-	
+
 	/**
-	 * Export thesaurus arrays from the given thesaurus in SKOS format as a string
+	 * Export thesaurus arrays from the given thesaurus in SKOS format
+	 *
 	 * @param thesaurus
 	 * @return
 	 */
-	public String exportCollections(Thesaurus thesaurus) {
+	public Model exportCollections(Thesaurus thesaurus, Model model) {
 		List<ThesaurusArray> arrays = thesaurusArrayService
 				.getAllThesaurusArrayByThesaurusId(null, thesaurus.getIdentifier());
 
 		if (arrays.size() != 0) {
-
-			Model model = ModelFactory.createDefaultModel();
 
 			for (ThesaurusArray array : arrays) {
 				NodeLabel label = nodeLabelService.getByThesaurusArray(array
@@ -95,27 +90,24 @@ public class SKOSArrayExporter {
 				model.add(collectionRes, SKOS.IN_SCHEME, inScheme);
 
 				collectionRes
-						.addProperty(SKOS.PREF_LABEL, label.getLexicalValue(),
-								label.getLanguage().getPart1());
+						.addProperty(SKOS.PREF_LABEL, StringEscapeUtils.unescapeXml(label.getLexicalValue()),
+								label.getLanguage().getId());
 
 				for (ThesaurusArrayConcept arrayConcept : array.getConcepts()) {
-						Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());
-						model.add(collectionRes, SKOS.MEMBER, y);
-						model.add(collectionRes, SKOS.MEMBER, y);					
+					Resource y = model.createResource(arrayConcept.getIdentifier().getConceptId());
+					model.add(collectionRes, SKOS.MEMBER, y);
 				}
+				for (ThesaurusArray childrenArray : thesaurusArrayService.getChildrenArrays(array.getIdentifier())) {
+					Resource arrayMember = model.createResource(childrenArray.getIdentifier());
+					model.add(collectionRes, SKOS.MEMBER, arrayMember);
+				}
+
+				model.add(collectionRes, DCTerms.created, DateUtil.toISO8601String(label.getCreated()));
+				model.add(collectionRes, DCTerms.modified, DateUtil.toISO8601String(label.getModified()));
 			}
 
-			model.setNsPrefix("skos", SKOS.getURI());
-
-			StringWriter sw = new StringWriter();
-			model.write(sw, "RDF/XML-ABBREV");
-			String result = sw.toString();
-			int start = result.lastIndexOf("core#\">") + "core#\">".length()
-					+ 2;
-			int end = result.lastIndexOf("</rdf:RDF>");
-			return result.substring(start, end);
 		}
 
-		return "";
+		return model;
 	}
 }

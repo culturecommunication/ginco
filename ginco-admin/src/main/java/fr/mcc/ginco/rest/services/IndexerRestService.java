@@ -34,66 +34,35 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.extjs.view.pojo.FilterCriteria;
-import fr.mcc.ginco.services.IIndexerService;
-import fr.mcc.ginco.solr.SearchResult;
-import fr.mcc.ginco.solr.SearchResultList;
-import fr.mcc.ginco.solr.SortCriteria;
-
-import org.apache.solr.client.solrj.SolrServerException;
+import fr.mcc.ginco.solr.IIndexerService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 /**
- * Base REST service intended to be used for getting tree of {@link Thesaurus},
- * and its children.
+ * Base REST service intended to be used for Solr indexation
  */
 @Service
 @Path("/indexerservice")
 public class IndexerRestService {
-   
+
 	@Inject
-    @Named("indexerService")
-    private IIndexerService indexerService;
+	@Named("indexerService")
+	private IIndexerService indexerService;
 
-    @GET
-    @Path("/reindex")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response forceIndexation() throws BusinessException, TechnicalException {
-        indexerService.forceIndexing();
-        return Response.status(Response.Status.OK)
-                .entity("{success:true, message: 'Indexing started!'}")
-                .build();
-    }
-
-    @POST
-    @Path("/search")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({MediaType.APPLICATION_JSON})
-    public  ExtJsonFormLoadData<List<SearchResult>> search(FilterCriteria filter) {
-        try {
-        	SortCriteria sort = new SortCriteria(filter.getSortfield(), filter.getSortdir());
-        	SearchResultList searchResults  = indexerService.search(filter.getQuery(), filter.getType(),
-                    filter.getThesaurus(), filter.getStatus(),
-                    filter.getCreationdate(), filter.getModificationdate(),
-                    filter.getLanguage(),sort, filter.getStart(),filter.getLimit());
-
-        	ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
-        	extSearchResults.setTotal((long) searchResults.getNumFound());
-			return extSearchResults;
-		} catch (SolrServerException e) {
-			throw new TechnicalException("Search exception" , e) ;
-		}
-
-    }
+	@GET
+	@Path("/reindex")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response forceIndexation() {
+		indexerService.forceIndexing();
+		return Response.status(Response.Status.OK)
+				.entity("{success:true, message: 'Indexing started!'}")
+				.build();
+	}
 }

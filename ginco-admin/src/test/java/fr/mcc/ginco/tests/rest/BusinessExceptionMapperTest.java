@@ -44,7 +44,6 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.rest.services.exceptions.BusinessExceptionMapper;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class BusinessExceptionMapperTest {
 
@@ -53,7 +52,6 @@ public class BusinessExceptionMapperTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(businessExceptionMapper);
 	}
 
 	/**
@@ -68,7 +66,7 @@ public class BusinessExceptionMapperTest {
 		Assert.assertEquals(200, response.getStatus());
 		String responseEntity = (String) response.getEntity();
 		Assert.assertEquals(
-				"{success:false, message: 'Impossible de stocker temporairement le fichier'}",
+				"{\"success\":false, \"message\": \"Impossible de stocker temporairement le fichier\"}",
 				responseEntity);
 
 	}

@@ -35,18 +35,11 @@
 package fr.mcc.ginco.extjs.view.utils;
 
 import fr.mcc.ginco.beans.NodeLabel;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.NodeLabelView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.utils.DateUtil;
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -55,116 +48,71 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Utility ton convert {@link NodeLabel} to {@link NodeLabelView} and vice versa
+ */
 @Component("nodeLabelViewConverter")
 public class NodeLabelViewConverter {
 
-    @Value("${ginco.default.language}")
-    private String language;
+	@Inject
+	@Named("nodeLabelService")
+	private INodeLabelService nodeLabelService;
 
-    @Log
-    private Logger logger;
+	@Inject
+	@Named("languagesService")
+	private ILanguagesService languagesService;
 
-    @Inject
-    @Named("nodeLabelService")
-    private INodeLabelService nodeLabelService;
 
-    @Inject
-    @Named("languagesService")
-    private ILanguagesService languagesService;
+	/**
+	 * Converts a {@link NodeLabel} into a {@link NodeLabelView}
+	 *
+	 * @param source
+	 * @return
+	 */
+	public NodeLabelView convert(NodeLabel source) {
+		NodeLabelView nodeLabelView = new NodeLabelView();
+		nodeLabelView.setIdentifier(source.getIdentifier());
+		nodeLabelView.setCreated(DateUtil.toString(source.getCreated()));
+		nodeLabelView.setModified(DateUtil.toString(source.getModified()));
+		nodeLabelView.setLanguage(source.getLanguage().getId());
+		nodeLabelView.setThesaurusArrayId(source.getThesaurusArray().getIdentifier());
 
-    @Inject
-    @Named("thesaurusArrayService")
-    private IThesaurusArrayService thesaurusArrayService;
+		return nodeLabelView;
+	}
 
-    private NodeLabel getNewNodeLabel() {
-        NodeLabel hibernateRes = new NodeLabel();
-        hibernateRes.setCreated(DateUtil.nowDate());
-        logger.info("Creating a new term");
+	/**
+	 * Converts a set of {@link NodeLabel} to a list of {@link NodeLabelView}
+	 *
+	 * @param source
+	 * @return
+	 */
+	public List<NodeLabelView> convert(Set<NodeLabel> source) {
+		List<NodeLabelView> result = new ArrayList<NodeLabelView>();
+		for (NodeLabel nodeLabel : source) {
+			result.add(convert(nodeLabel));
+		}
 
-        return hibernateRes;
-    }
+		return result;
+	}
 
-    private NodeLabel getExistingNodeLabel(Integer id)
-            throws BusinessException {
+	/**
+	 * Gets the NodeLabel of a {@link ThesaurusArrayView}
+	 *
+	 * @param thesaurusConceptViewJAXBElement
+	 * @return
+	 */
+	public NodeLabel convert(ThesaurusArrayView thesaurusConceptViewJAXBElement) {
+		NodeLabel label;
+		if (thesaurusConceptViewJAXBElement.getNodeLabelId() == null || thesaurusConceptViewJAXBElement.getNodeLabelId() == 0) {
+			label = new NodeLabel();
+			label.setCreated(DateUtil.nowDate());
+		} else {
+			label = nodeLabelService.getById(thesaurusConceptViewJAXBElement.getNodeLabelId());
+		}
+		label.setLexicalValue(thesaurusConceptViewJAXBElement.getLabel());
+		label.setLanguage(languagesService.getLanguageById(thesaurusConceptViewJAXBElement.getLanguage()));
+		label.setModified(DateUtil.nowDate());
 
-        NodeLabel hibernateRes = nodeLabelService
-                .getById(id);
-        logger.info("Getting an existing term with id " + id);
-        return hibernateRes;
-    }
-
-    /**
-     * Main method used to do conversion.
-     * @param source source to work with
-     * @return converted item.
-     * @throws BusinessException
-     */
-    public NodeLabel convert(NodeLabelView source, boolean fromArray) throws BusinessException{
-        NodeLabel hibernateRes;
-
-        if ("".equals(source.getIdentifier())) {
-            hibernateRes = getNewNodeLabel();
-        } else {
-            hibernateRes = getExistingNodeLabel(source.getIdentifier());
-        }
-
-        hibernateRes.setModified(DateUtil.nowDate());
-        if (StringUtils.isEmpty(source.getLanguage())) {
-            // If not filled in, the language for the term is
-            // "ginco.default.language" property in application.properties
-            hibernateRes
-                    .setLanguage(languagesService.getLanguageById(language));
-        } else {
-            hibernateRes.setLanguage(languagesService.getLanguageById(source
-                    .getLanguage()));
-        }
-
-        hibernateRes.setLexicalValue(source.getLexicalValue());
-        if (fromArray) {
-            if (StringUtils.isNotEmpty(source.getThesaurusArrayId())) {
-                ThesaurusArray array = thesaurusArrayService
-                        .getThesaurusArrayById(source.getThesaurusArrayId());
-                if (array != null) {
-                    hibernateRes.setThesaurusArray(array);
-                }
-            }
-        }
-
-        return hibernateRes;
-    }
-
-    public NodeLabelView convert(NodeLabel source) {
-        NodeLabelView nodeLabelView = new NodeLabelView();
-        nodeLabelView.setIdentifier(source.getIdentifier());
-        nodeLabelView.setCreated(DateUtil.toString(source.getCreated()));
-        nodeLabelView.setModified(DateUtil.toString(source.getModified()));
-        nodeLabelView.setLanguage(source.getLanguage().getId());
-        nodeLabelView.setThesaurusArrayId(source.getThesaurusArray().getIdentifier());
-
-        return nodeLabelView;
-    }
-
-    public List<NodeLabelView> convert(Set<NodeLabel> source) {
-        List<NodeLabelView> result = new ArrayList<NodeLabelView>();
-        for(NodeLabel nodeLabel : source) {
-            result.add(convert(nodeLabel));
-        }
-
-        return result;
-    }
-
-    public NodeLabel convert(ThesaurusArrayView thesaurusConceptViewJAXBElement) {
-        NodeLabel label;
-        if(thesaurusConceptViewJAXBElement.getNodeLabelId() == null || thesaurusConceptViewJAXBElement.getNodeLabelId() ==0) {
-            label = new NodeLabel();
-            label.setCreated(DateUtil.nowDate());
-        } else {
-            label = nodeLabelService.getById(thesaurusConceptViewJAXBElement.getNodeLabelId());
-        }
-        label.setLexicalValue(thesaurusConceptViewJAXBElement.getLabel());
-        label.setLanguage(languagesService.getLanguageById(thesaurusConceptViewJAXBElement.getLanguage()));
-        label.setModified(DateUtil.nowDate());
-
-        return label;
-    }
+		return label;
+	}
 }

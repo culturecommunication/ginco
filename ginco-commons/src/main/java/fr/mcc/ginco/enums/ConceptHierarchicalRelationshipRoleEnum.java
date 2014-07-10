@@ -35,19 +35,56 @@
 package fr.mcc.ginco.enums;
 
 /**
- * This enum intended to list different available roles for thesaurus hierarchical relationships.
- * The translation of these items is externalized in a property file 
+ * This enum intended to list different available roles for thesaurus
+ * hierarchical relationships. The translation of these items is externalized in
+ * a property file
  */
 public enum ConceptHierarchicalRelationshipRoleEnum {
-    TGTS(0), TGGTSG(1), TGITSI(2), TGPTSP(3);
-    
-    private int status;
-    
-    private ConceptHierarchicalRelationshipRoleEnum(int status) {
-    	this.status = status;
-    }
-    
-    public int getStatus() {
-    	return status;
-    }
+	TGTS(0, "", ""),
+	TGGTSG(1, "broaderGeneric", "narrowerGeneric"),
+	TGITSI(2, "broaderInstantive", "narrowerInstantive"),
+	TGPTSP(3, "broaderPartitive", "narrowerPartitive");
+
+	private int status;
+	private String parentSkosLabel;
+	private String childSkosLabel;
+
+	private ConceptHierarchicalRelationshipRoleEnum(int status,
+			String parentSkosLabel, String childSkosLabel) {
+		this.status = status;
+		this.parentSkosLabel = parentSkosLabel;
+		this.childSkosLabel = childSkosLabel;
+	}
+
+	public static ConceptHierarchicalRelationshipRoleEnum getStatusByCode(int i) {
+		for (ConceptHierarchicalRelationshipRoleEnum s : values()) {
+			if (s.getStatus() == i) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	public static ConceptHierarchicalRelationshipRoleEnum getStatusByParentSKOSLabel(
+			String skosLabel) {
+		for (ConceptHierarchicalRelationshipRoleEnum s : values()) {
+			if (s.getParentSkosLabel().equals(skosLabel)) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public String getParentSkosLabel() {
+		return parentSkosLabel;
+	}
+
+	public String getChildSkosLabel() {
+		return childSkosLabel;
+	}
+
 }

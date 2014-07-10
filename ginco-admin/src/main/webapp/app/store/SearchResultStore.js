@@ -34,18 +34,18 @@
  */
 
 /*
- * Term Language Store 
+ * Term Language Store
  * This file contains all Term languages displayed in dropdown lists
  */
 Ext.define('GincoApp.store.SearchResultStore', {
     extend: 'Ext.data.Store',
-    
+
     listeners: {
         beforeload: function(store, operation,eOpts) {
         	if (store.proxy.jsonData==null) {
                store.proxy.jsonData = {"start":operation.start,
-                                      "limit":operation.limit,
-                                       };                        
+                                      "limit":operation.limit
+                                       };
             } else {
             	store.proxy.jsonData["start"] = operation.start;
             	store.proxy.jsonData["limit"] = operation.limit;
@@ -65,7 +65,7 @@ Ext.define('GincoApp.store.SearchResultStore', {
             remoteSort: true,
             proxy: {
                 type: 'ajax',
-                url: 'services/ui/indexerservice/search',
+                url: 'services/ui/searcherservice/search',
                 reader: {
                     type: 'json',
                     idProperty: 'identifier',
@@ -74,11 +74,11 @@ Ext.define('GincoApp.store.SearchResultStore', {
                 doRequest: function(operation, callback, scope) {
                     var writer  = this.getWriter(),
                         request = this.buildRequest(operation);
-                        
+
                     if (operation.allowWrite()) {
                         request = writer.write(request);
                     }
-                    
+
                     Ext.apply(request, {
                         binary        : this.binary,
                         headers       : this.headers,
@@ -89,9 +89,9 @@ Ext.define('GincoApp.store.SearchResultStore', {
                         jsonData        : this.jsonData,
                         disableCaching: false // explicitly set it to false, ServerProxy handles caching
                     });
-                    
+
                     Ext.Ajax.request(request);
-                    
+
                     return request;
                 },
                 actionMethods: {
@@ -127,7 +127,7 @@ Ext.define('GincoApp.store.SearchResultStore', {
                     name: 'modified',
                     type: 'string'
                 }
-                
+
             ]
         }, cfg)]);
     }

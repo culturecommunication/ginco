@@ -34,29 +34,31 @@
  */
 package fr.mcc.ginco.imports.ginco;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
-import fr.mcc.ginco.log.Log;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class :
  * - extracts data from a {@link GincoExportedThesaurus} object,
  * - stores it in beans
  * - persists beans
- *
  */
 @Component("gincoThesaurusBuilder")
 public class GincoThesaurusBuilder {
@@ -64,83 +66,96 @@ public class GincoThesaurusBuilder {
 	@Inject
 	@Named("gincoArrayImporter")
 	private GincoArrayImporter gincoArrayImporter;
-	
+
 	@Inject
 	@Named("gincoGroupImporter")
 	private GincoGroupImporter gincoGroupImporter;
-	
+
 	@Inject
 	@Named("gincoConceptImporter")
 	private GincoConceptImporter gincoConceptImporter;
-	
+
 	@Inject
 	@Named("gincoRelationshipImporter")
 	private GincoRelationshipImporter gincoRelationshipImporter;
-	
+
 	@Inject
 	@Named("gincoCustomAttributeImporter")
 	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
-	
+
 	@Inject
 	@Named("gincoTermImporter")
 	private GincoTermImporter gincoTermImporter;
-	
+
 	@Inject
-	@Named("thesaurusDAO")
+	@Named("gincoAlignmentImporter")
+	private GincoAlignmentImporter gincoAlignmentImporter;
+
+	@Inject
 	private IThesaurusDAO thesaurusDAO;
 
 	@Inject
-	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
-	
-	@Log
-	private Logger logger;
-	
+
+
 	/**
 	 * This method stores a Ginco Thesaurus with all its objects (concepts, terms, arrays, groups etc.).
-	 * 
+	 * <p/>
 	 * The order of the import is important :
 	 * - Thesaurus, concepts, terms, arrays, arrayslabels, groups, grouplabels, thesaurus versions,
 	 * hierarchical relationship, associative relationship, term notes and concepts notes
-	 * 
+	 *
 	 * @param {@GincoExportedThesaurus} : the previously exported thesaurus we want to import
 	 * @return The imported {@link Thesaurus}
 	 */
-	public Thesaurus storeGincoExportedThesaurus(GincoExportedThesaurus exportedThesaurus) {
+	public Map<Thesaurus, Set<Alignment>> storeGincoExportedThesaurus(GincoExportedThesaurus exportedThesaurus) {
 		Thesaurus thesaurus = new Thesaurus();
+		Map<Thesaurus, Set<Alignment>> res = new HashMap<Thesaurus, Set<Alignment>>();
+		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
+
 		if (exportedThesaurus.getThesaurus() != null) {
+
+
 			if (thesaurusDAO.getById(exportedThesaurus.getThesaurus().getIdentifier()) == null) {
 				thesaurus = thesaurusDAO.update(exportedThesaurus.getThesaurus());
 			} else {
 				throw new BusinessException(
 						"Trying to import an existing thesaurus", "import-already-existing-thesaurus");
 			}
-			gincoConceptImporter.storeConcepts(exportedThesaurus.getConcepts(), exportedThesaurus.getThesaurus());
-			gincoTermImporter.storeTerms(exportedThesaurus.getTerms(), exportedThesaurus.getThesaurus());
+
+			Map<String, CustomTermAttributeType> customTermAttributeTypes = gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedThesaurus.getTermAttributeTypes(), exportedThesaurus.getThesaurus());
+			Map<String, CustomConceptAttributeType> customConceptAttributeTypes = gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedThesaurus.getConceptAttributeTypes(), exportedThesaurus.getThesaurus());
+
+			gincoConceptImporter.storeConcepts(exportedThesaurus, exportedThesaurus.getThesaurus(), customConceptAttributeTypes);
+			gincoTermImporter.storeTerms(exportedThesaurus, exportedThesaurus.getThesaurus(), customTermAttributeTypes);
 			gincoConceptImporter.storeComplexConcepts(exportedThesaurus.getComplexConcepts(), exportedThesaurus.getThesaurus());
-			
+
 			gincoArrayImporter.storeArrays(exportedThesaurus);
 			gincoArrayImporter.storeArrayLabels(exportedThesaurus);
-			
+
 			gincoGroupImporter.storeGroups(exportedThesaurus);
 			gincoGroupImporter.storeGroupLabels(exportedThesaurus);
-			
+
 			storeVersions(exportedThesaurus);
-			
+
 			gincoRelationshipImporter.storeHierarchicalRelationship(exportedThesaurus.getHierarchicalRelationship());
 			gincoRelationshipImporter.storeAssociativeRelationship(exportedThesaurus);
-			
+
 			gincoTermImporter.storeTermNotes(exportedThesaurus.getTermNotes());
 			gincoConceptImporter.storeConceptNotes(exportedThesaurus.getConceptNotes());
-			
-			gincoCustomAttributeImporter.storeCustomTermAttributeTypes(exportedThesaurus.getTermAttributeTypes(), exportedThesaurus.getThesaurus());
-			gincoCustomAttributeImporter.storeCustomConceptAttributeTypes(exportedThesaurus.getConceptAttributeTypes(), exportedThesaurus.getThesaurus());
+
+
+			bannedAlignments = gincoAlignmentImporter.storeAlignments(exportedThesaurus.getAlignments());
+			gincoAlignmentImporter.storeExternalThesauruses(exportedThesaurus.getAlignments(), bannedAlignments);
 		}
-		return thesaurus;
+		res.put(thesaurus, bannedAlignments);
+
+		return res;
 	}
-		
+
 	/**
 	 * This method stores all the versions of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 *
 	 * @param exportedThesaurus
 	 * @return The list of stored versions
 	 */

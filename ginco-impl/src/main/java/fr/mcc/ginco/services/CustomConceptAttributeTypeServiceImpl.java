@@ -34,16 +34,17 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.ICustomConceptAttributeTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
 
 /**
  *
@@ -52,23 +53,12 @@ import java.util.List;
 @Service("customConceptAttributeTypeService")
 public class CustomConceptAttributeTypeServiceImpl implements ICustomConceptAttributeTypeService {
     @Inject
-    @Named("customConceptAttributeTypeDAO")
     private ICustomConceptAttributeTypeDAO customConceptAttributeTypeDAO;
 
     @Override
     public List<CustomConceptAttributeType> getAttributeTypesByThesaurus(Thesaurus thesaurus) {
         return customConceptAttributeTypeDAO.getAttributesByThesaurus(thesaurus);
-    }
-
-    @Override
-    public boolean isUniqueValue(Thesaurus thesaurus, String value) {
-        return customConceptAttributeTypeDAO.isUniqueValue(thesaurus, value);
-    }
-    
-    @Override
-    public boolean isUniqueCode(Thesaurus thesaurus, String code) {
-        return customConceptAttributeTypeDAO.isUniqueValue(thesaurus, code);
-    }
+    }	
 
     @Override
     public CustomConceptAttributeType saveOrUpdate(CustomConceptAttributeType attribute) {

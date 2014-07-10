@@ -34,27 +34,20 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.SplitNonPreferredTerm;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.utils.DateUtil;
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * View class corresponding to {@link ThesaurusTerm} bean, but fully serializable;
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusTerm} bean, but fully serializable;
  * contains all links to other business-objects (full beans
- * {@link Thesaurus} and {@link Language}).
- * 
+ * {@link fr.mcc.ginco.beans.Thesaurus} and {@link fr.mcc.ginco.beans.Language}).
+ *
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class SplitNonPreferredTermView implements Serializable {
+public class SplitNonPreferredTermView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String lexicalValue;
 	private String created;
@@ -65,30 +58,7 @@ public class SplitNonPreferredTermView implements Serializable {
 	private String language;
 	private List<ThesaurusTermView> preferredTerms;
 
-    public SplitNonPreferredTermView() {}
-
-	public SplitNonPreferredTermView(SplitNonPreferredTerm source) {
-		if (source != null) {
-			this.identifier = source.getIdentifier();
-			this.lexicalValue = source.getLexicalValue();
-			if(source != null) {
-				this.created = DateUtil.toString(source.getCreated());
-				this.modified = DateUtil.toString(source.getModified());
-			}
-            this.source = source.getSource();
-    
-            this.status = source.getStatus();
-            this.preferredTerms = new ArrayList<ThesaurusTermView>();
-            for (ThesaurusTerm preferredTerm : source.getPreferredTerms())
-            {
-            	this.preferredTerms.add(new ThesaurusTermView(preferredTerm));
-            }
-
-    		this.thesaurusId = source.getThesaurus().getIdentifier();
-    		if(source.getLanguage() != null) {
-    		this.language = source.getLanguage().getId();
-    		}
-		}
+	public SplitNonPreferredTermView() {
 	}
 
 	public String getIdentifier() {
@@ -139,7 +109,6 @@ public class SplitNonPreferredTermView implements Serializable {
 		this.status = status;
 	}
 
-
 	public String getThesaurusId() {
 		return thesaurusId;
 	}
@@ -163,5 +132,5 @@ public class SplitNonPreferredTermView implements Serializable {
 	public void setPreferredTerms(List<ThesaurusTermView> preferredTerms) {
 		this.preferredTerms = preferredTerms;
 	}
-	
+
 }

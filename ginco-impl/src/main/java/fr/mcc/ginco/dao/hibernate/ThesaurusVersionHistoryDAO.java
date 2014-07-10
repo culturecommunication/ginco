@@ -50,7 +50,7 @@ import fr.mcc.ginco.enums.ThesaurusVersionStatusEnum;
  * database table
  * 
  */
-@Repository("thesaurusVersionHistoryDAO")
+@Repository
 public class ThesaurusVersionHistoryDAO extends
 		GenericHibernateDAO<ThesaurusVersionHistory, String> implements
 		IThesaurusVersionHistoryDAO {

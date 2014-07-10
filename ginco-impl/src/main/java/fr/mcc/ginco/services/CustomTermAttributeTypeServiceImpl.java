@@ -34,16 +34,17 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.dao.ICustomTermAttributeTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
 
 /**
  *
@@ -52,18 +53,8 @@ import java.util.List;
 @Service("customTermAttributeTypeService")
 public class CustomTermAttributeTypeServiceImpl implements ICustomTermAttributeTypeService {
     @Inject
-    @Named("customTermAttributeTypeDAO")
     private ICustomTermAttributeTypeDAO customTermAttributeTypeDAO;
 
-    @Override
-    public boolean isUniqueValue(Thesaurus thesaurus, String value) {
-        return customTermAttributeTypeDAO.isUniqueValue(thesaurus, value);
-    }
-    
-    @Override
-    public boolean isUniqueCode(Thesaurus thesaurus, String code) {
-        return customTermAttributeTypeDAO.isUniqueValue(thesaurus, code);
-    }
 
     @Override
     public List<CustomTermAttributeType> getAttributeTypesByThesaurus(Thesaurus thesaurus) {

@@ -56,13 +56,13 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 		type : 'string'
 	}, {
 		name : 'relation',
-		type : 'string'
+		type : 'htmlstring'
 	}, {
 		name : 'rights',
 		type : 'string'
 	}, {
 		name : 'source',
-		type : 'string'
+		type : 'htmlstring'
 	}, {
 		name : 'subject',
 		type : 'string'
@@ -99,7 +99,10 @@ Ext.define('GincoApp.model.ThesaurusModel', {
 	}, {
         name : 'polyHierarchical',
         type : 'boolean'
-    } ],
+    }, {
+    	name : 'creatorEmail',
+		type : 'string'
+    }],
 
 	proxy : {
 		api : {

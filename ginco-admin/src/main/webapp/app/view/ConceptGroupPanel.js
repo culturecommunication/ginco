@@ -36,6 +36,8 @@
  * File: app/view/ConceptGroupPanel.js
  */
 
+Ext.require([ 'GincoApp.view.MetaDataPanel' ]);
+
 Ext
 		.define(
 				'GincoApp.view.ConceptGroupPanel',
@@ -45,6 +47,7 @@ Ext
 
 					localized : true,
 					closable : true,
+					trackable : true,
 					layout : {
 						type : 'vbox',
 						align : 'stretch'
@@ -52,22 +55,28 @@ Ext
 
 					// Labels
 					xConceptGroupTitle : 'Concept Group',
+					xConceptsPanel : 'Concepts',
 					xSave : 'Save',
 					xDelete : 'Delete',
+					xMetadataTitle : 'Metadata',
 					xIdentifierLabel : 'Identifier',
 					xCreatedLabel : 'Created',
 					xModifiedLabel : 'Modified',
 					xLabelLabel : 'Group Title',
 					xTypeLabel : 'Type',
 					xLanguageLabel : 'Language',
+					xNotationLabel : 'Notation',
 					xConceptGroupFormTitle : 'Concept group',
-					xConceptsGrid : 'Concepts',
+					xParentGroupLabel : 'Parent group',
+					xSelectParentGroup : 'Select a parent group',
+					xRemoveParentGroup : 'Remove parent group',
+					xParentConceptLabel : 'Parent Concept',
+					xSelectParentConcept : 'Select a parent concept',
+					xRemoveParentConcept : 'Remove parent concept',
 					xActions : 'Actions',
 					xLexicalValueLabel : 'Lexical value',
 					xAssociationRemove : 'Detach this concept',
 					xAddConceptToGroupArray : 'Add a concept',
-					xParentGroupLabel : 'Parent group',
-					xSelectParentGroup : 'Select a parent group',
 
 					initComponent : function() {
 						var me = this;
@@ -90,7 +99,7 @@ Ext
 											title : me.xConceptGroupTitle,
 											items : [ {
 												xtype : 'form',
-												requiredRoles : ['ADMIN'],
+												requiredRoles : ['ADMIN', 'MANAGER'],
 												title : me.xConceptGroupFormTitle,
 												flex : 1,
 												autoScroll : true,
@@ -106,7 +115,7 @@ Ext
 													dock : 'top',
 													items : [ {
 														xtype : 'button',
-														requiredRoles : ['ADMIN'],
+														requiredRoles : ['ADMIN', 'MANAGER'],
 														text : me.xSave,
 														disabled : true,
 														formBind : true,
@@ -116,7 +125,7 @@ Ext
 													},
                                                     {
                                                         xtype : 'button',
-                                                        requiredRoles : ['ADMIN'],
+                                                        requiredRoles : ['ADMIN', 'MANAGER'],
                                                         text : me.xDelete,
                                                         disabled : true,
                                                         cls : 'delete',
@@ -125,26 +134,33 @@ Ext
                                                     } ]
 												} ],
 												items : [
-														{
-															xtype : 'displayfield',
-															name : 'identifier',
-															fieldLabel : me.xIdentifierLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'created',
-															fieldLabel : me.xCreatedLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'modified',
-															fieldLabel : me.xModifiedLabel
-														},
+												        {
+												        	xtype : 'metaDataPanel',
+															title : me.xMetadataTitle,
+															items : [
+																	{
+																		xtype : 'displayfield',
+																		name : 'identifier',
+																		fieldLabel : me.xIdentifierLabel
+																	},
+																	{
+																		xtype : 'displayfield',
+																		name : 'created',
+																		fieldLabel : me.xCreatedLabel
+																	},
+																	{
+																		xtype : 'displayfield',
+																		name : 'modified',
+																		fieldLabel : me.xModifiedLabel
+																	}
+															        ]
+												        },
 														{
 															xtype : 'textfield',
 															name : 'label',
 															fieldLabel : me.xLabelLabel,
-															allowBlank : false
+															allowBlank : false,
+															padding : '5 0 0 0'
 														},
 														{
 															xtype : 'textfield',
@@ -178,8 +194,13 @@ Ext
 														},
 														{
 															xtype : 'textfield',
-															name : 'parentGroupId',
-															hidden : true
+															name : 'notation',
+															fieldLabel : me.xNotationLabel,
+															anchor : '70%'
+														},
+														{
+															xtype : 'hidden',
+															name : 'parentGroupId'
 														},
 														{
 															xtype : 'container',
@@ -200,53 +221,109 @@ Ext
 																		xtype : 'button',
 																		text : me.xSelectParentGroup,
 																		disabled : false,
-																		requiredRoles : ['ADMIN'],
+																		requiredRoles : ['ADMIN', 'MANAGER'],
 																		itemId : 'selectParentGroup',
 																		cls : 'add',
 																		iconCls : 'icon-add'
-																	} ]
+																	},
+																	{
+																		xtype : 'button',
+																		text : me.xRemoveParentGroup,
+																		disabled : true,
+																		requiredRoles : ['ADMIN', 'MANAGER'],
+																		itemId : 'removeParentGroup',
+																		iconCls : 'icon-delete'
+																	}]
 														},
 														{
-															xtype : 'gridpanel',
-															itemId : 'gridConceptGroupPanelConcepts',
-															title : me.xConceptsGrid,
-															store : me.associatedConceptToGroupStore,
-															
-															dockedItems : [ {
-																xtype : 'toolbar',
-																dock : 'top',
-																items : [ {
-																	xtype : 'button',
-																	requiredRoles : ['ADMIN'],
-																	text : me.xAddConceptToGroupArray,
-																	disabled : false,
-																	itemId : 'addConceptToGroupArray',
-																	cls : 'add',
-																	iconCls : 'icon-add'
-																} ]
-															} ],
-															
-															columns : [
+															xtype : 'panel',
+															title : me.xConceptsPanel,
+															items : [
 																	{
-																		dataIndex : 'identifier',
-																		text : me.xIdentifierLabel
+																		xtype : 'hidden',
+																		name : 'parentConceptId',
+																		hidden : true
 																	},
 																	{
-																		dataIndex : 'label',
-																		text : me.xLexicalValueLabel,
-																		flex : 1
+																		xtype : 'container',
+																		itemId : 'parentConceptContainer',
+																		hidden : true,
+																		layout : 'column',
+																		defaults : {
+																			margin : '5 0 5 0'
+																		},
+																		items : [
+																				{
+																					xtype : 'textfield',
+																					name : 'parentConceptLabel',
+																					fieldLabel : me.xParentConceptLabel,
+																					allowBlank : true,
+																					readOnly : true,
+																					margin : '1 0 1 0'
+																				},
+																				{
+																					xtype : 'button',
+																					text : me.xSelectParentConcept,
+																					disabled : false,
+																					requiredRoles : ['ADMIN', 'MANAGER'],
+																					itemId : 'selectParentConcept',
+																					cls : 'add',
+																					iconCls : 'icon-add'
+																				} ,
+																				{
+																					xtype : 'button',
+																					text : me.xRemoveParentConcept,
+																					disabled : true,
+																					requiredRoles : ['ADMIN', 'MANAGER'],
+																					itemId : 'removeParentConcept',
+																					iconCls : 'icon-delete'
+																				}]
 																	},
 																	{
-																		xtype : 'actioncolumn',
-																		itemId : 'conceptToGroupActionColumn',
-																		header : me.xActions,
-																		items : [ {
-																			icon : 'images/detach.png',
-																			requiredRoles : ['ADMIN'],
-																			tooltip : me.xAssociationRemove
-																		} ]
-																	} ]
-														} ]
+																		xtype : 'gridpanel',
+																		itemId : 'gridConceptGroupPanelConcepts',
+																		store : me.associatedConceptToGroupStore,
+																		hidden : true,
+																		border : false,
+
+																		dockedItems : [ {
+																			xtype : 'toolbar',
+																			dock : 'top',
+																			items : [ {
+																				xtype : 'button',
+																				requiredRoles : ['ADMIN', 'MANAGER'],
+																				text : me.xAddConceptToGroupArray,
+																				disabled : false,
+																				itemId : 'addConceptToGroupArray',
+																				cls : 'add',
+																				iconCls : 'icon-add'
+																			} ]
+																		} ],
+
+																		columns : [
+																				{
+																					dataIndex : 'identifier',
+																					text : me.xIdentifierLabel
+																				},
+																				{
+																					dataIndex : 'label',
+																					text : me.xLexicalValueLabel,
+																					flex : 1
+																				},
+																				{
+																					xtype : 'actioncolumn',
+																					itemId : 'conceptToGroupActionColumn',
+																					header : me.xActions,
+																					items : [ {
+																						icon : 'images/detach.png',
+																						requiredRoles : ['ADMIN', 'MANAGER'],
+																						tooltip : me.xAssociationRemove
+																					} ]
+																				} ]
+																	}
+															]
+
+														}]
 											} ]
 										});
 

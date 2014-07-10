@@ -38,9 +38,45 @@ Ext
 				'GincoApp.view.ThesaurusEntityPanel', {
 					extend : 'Ext.panel.Panel',
 					gincoId : '',
+					forceClose : false,
+					treeNodeId : '',
 					thesaurusData : '',
+					getThesaurusData : function() {
+						var me = this;
+						if (me.thesaurusData != '' && me.thesaurusData != null)
+						{
+							return me.thesaurusData;
+						} 
+						return me.up().up().getThesaurusData();
+						
+					},
+					multiInstance : true,
+					trackable : false,
+					isReady : false,
+					isReadyCallback : null,
+					setReady : function ()
+					{
+						this.isReady = true;
+						if (Ext.isFunction(this.isReadyCallback))
+						{
+							this.isReadyCallback();
+						}
+					},
 					setGincoId : function (aGincoId) {
 						this.gincoId = aGincoId;
+					},
+					constructor: function () {
+				        this.nodesPath = [];
+				        this.callParent(arguments);
+				    },
+					addNodePath : function (aNode) {
+						this.nodesPath.push(aNode);
+					},
+					resetNodePath : function () {
+						this.nodesPath.length = 0;
+					},
+					getNodesPath : function() {
+						return "|root|"+this.nodesPath.join('|');
 					}
 				}
 );

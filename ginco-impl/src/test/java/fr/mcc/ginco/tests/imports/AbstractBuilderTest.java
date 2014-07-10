@@ -47,7 +47,7 @@ import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.imports.AbstractBuilder;
-import fr.mcc.ginco.imports.SKOS;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 public class AbstractBuilderTest {
 	

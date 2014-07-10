@@ -55,186 +55,170 @@ import java.util.Set;
 
 /**
  * This class is the implementation of all SOAP services related to concept objects
- * 
  */
 
-@WebService(endpointInterface="fr.mcc.ginco.soap.ISOAPThesaurusConceptService")
-public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptService{
-	
+@WebService(endpointInterface = "fr.mcc.ginco.soap.ISOAPThesaurusConceptService")
+public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptService {
+
+	public static final String CONCEPT_IDENTIFIER_IS_EMPTY = "Concept identifier is empty";
+	public static final String EMPTY_PARAMETER = "empty-parameter";
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Inject
 	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
-	
+
 	@Inject
 	@Named("conceptHierarchicalRelationshipServiceUtil")
 	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
-	
+
 	@Override
-	public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) 
-			throws BusinessException{
-		if (StringUtils.isNotEmpty(firstConceptId) && StringUtils.isNotEmpty(secondConceptId)){
+	public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) {
+		if (StringUtils.isNotEmpty(firstConceptId) && StringUtils.isNotEmpty(secondConceptId)) {
 			return thesaurusConceptService.getConceptsHierarchicalRelations(firstConceptId, secondConceptId);
-		}
-		else 
-		{
-			throw new BusinessException("One or more parameters are empty","empty-parameters");
+		} else {
+			throw new BusinessException("One or more parameters are empty", EMPTY_PARAMETER);
 		}
 	}
-	
+
 	@Override
-	public List<ReducedThesaurusTerm> getPreferredTermByConceptId(String conceptId)
-			throws BusinessException{
-		if (StringUtils.isNotEmpty(conceptId)){			
+	public List<ReducedThesaurusTerm> getPreferredTermByConceptId(String conceptId) {
+		if (StringUtils.isNotEmpty(conceptId)) {
 			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
 			List<ThesaurusTerm> thesaurusTerms = thesaurusConceptService.getConceptPreferredTerms(conceptId);
-			
-			for (ThesaurusTerm thesaurusTerm : thesaurusTerms)
-				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));	
+
+			for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
+				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));
+			}
 			return results;
-		}
-		else 
-		{
-			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		} else {
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
-	
+
 	@Override
-	public List<ReducedThesaurusTerm> getConceptNotPreferredTerms (String conceptId)
-			throws BusinessException {
+	public List<ReducedThesaurusTerm> getConceptNotPreferredTerms(String conceptId) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
 			List<ThesaurusTerm> thesaurusTerms = thesaurusConceptService.getConceptNotPreferredTerms(conceptId);
 			for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
 				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));
-            }
+			}
 			return results;
 		} else {
-			throw new BusinessException("Concept identifier is empty","empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
-	
-	private ReducedThesaurusTerm conversionThesaurusTermInReduced(ThesaurusTerm thesaurusTerm){
+
+	private ReducedThesaurusTerm conversionThesaurusTermInReduced(ThesaurusTerm thesaurusTerm) {
 		ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
 		reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
 		reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
 		reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
 		return reducedThesaurusTerm;
 	}
-	
+
 	@Override
-	public int getStatusByConceptId(String conceptId) throws BusinessException {
+	public int getStatusByConceptId(String conceptId) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			return thesaurusConceptService.getStatusByConceptId(conceptId);
 		} else {
-			throw new BusinessException("Concept identifier is empty","empty-parameter");
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
-	
+
 	@Override
-	public List<String> getChildrenByConceptId(String conceptId) throws BusinessException{
-		if (StringUtils.isNotEmpty(conceptId)){
+	public List<String> getChildrenByConceptId(String conceptId) {
+		if (StringUtils.isNotEmpty(conceptId)) {
 			List<String> results = new ArrayList<String>();
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
-			if (thesaurusConcept != null){
+			if (thesaurusConcept != null) {
 				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId);
-				for (ThesaurusConcept conceptChild : thesaurusConceptList){
+				for (ThesaurusConcept conceptChild : thesaurusConceptList) {
 					results.add(conceptChild.getIdentifier());
 				}
 				return results;
-			}
-			else{
+			} else {
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
-		}
-		else 
-		{
-			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		} else {
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
-	
+
 	@Override
-	public List<String> getRootConcepts(String conceptId) throws BusinessException{
-		if (StringUtils.isNotEmpty(conceptId)){
+	public List<String> getRootConcepts(String conceptId) {
+		if (StringUtils.isNotEmpty(conceptId)) {
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
-			if (thesaurusConcept != null){
+			if (thesaurusConcept != null) {
 				List<String> results = new ArrayList<String>();
 				List<ThesaurusConcept> thesaurusConceptList = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
-				for (ThesaurusConcept conceptChild : thesaurusConceptList){
+				for (ThesaurusConcept conceptChild : thesaurusConceptList) {
 					results.add(conceptChild.getIdentifier());
 				}
 				return results;
-			}
-			else{
+			} else {
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
-		}
-		else{
-			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		} else {
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
-	
+
 	@Override
-	public List<String> getParentConcepts(String conceptId) throws BusinessException{
-		if (StringUtils.isNotEmpty(conceptId)){
+	public List<String> getParentConcepts(String conceptId) {
+		if (StringUtils.isNotEmpty(conceptId)) {
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
-			if (thesaurusConcept != null){
+			if (thesaurusConcept != null) {
 				List<String> results = new ArrayList<String>();
 				Set<ThesaurusConcept> parentConceptList = thesaurusConcept.getParentConcepts();
-				for (ThesaurusConcept parentConcept : parentConceptList){
+				for (ThesaurusConcept parentConcept : parentConceptList) {
 					results.add(parentConcept.getIdentifier());
 				}
 				return results;
-			}
-			else{
+			} else {
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
-		}
-		else{
-			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		} else {
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
-	
+
 	@Override
-	public List<String> getAssociativeConcepts(String conceptId) throws BusinessException{
-		if (StringUtils.isNotEmpty(conceptId)){
+	public List<String> getAssociativeConcepts(String conceptId) {
+		if (StringUtils.isNotEmpty(conceptId)) {
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
-			if (thesaurusConcept != null){
-				 return associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept);
-			}
-			else{
+			if (thesaurusConcept != null) {
+				return associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept);
+			} else {
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
-		}
-		else{
-			throw new BusinessException("Concept identifier is empty","empty-parameter");
+		} else {
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
-	
-	public List<String> getTopConceptsByThesaurusId(String thesaurusId) throws BusinessException{
-		if (StringUtils.isNotEmpty(thesaurusId)){
+
+	public List<String> getTopConceptsByThesaurusId(String thesaurusId) {
+		if (StringUtils.isNotEmpty(thesaurusId)) {
 			Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
-			if (thesaurus != null){
+			if (thesaurus != null) {
 				List<String> results = new ArrayList<String>();
 				List<ThesaurusConcept> topConceptList = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurusId);
-				for (ThesaurusConcept topConcept : topConceptList){
+				for (ThesaurusConcept topConcept : topConceptList) {
 					results.add(topConcept.getIdentifier());
 				}
 				return results;
-			}
-			else{
+			} else {
 				throw new BusinessException("Thesaurus with identifier " + thesaurusId + " does not exist", "thesaurus-does-not-exist");
 			}
-		}
-		else{
-			throw new BusinessException("Thesaurus identifier is empty","empty-parameter");
+		} else {
+			throw new BusinessException("Thesaurus identifier is empty", EMPTY_PARAMETER);
 		}
 	}
 }

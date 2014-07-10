@@ -34,9 +34,9 @@
  */
 package fr.mcc.ginco.dao;
 
-import fr.mcc.ginco.beans.Note;
-
 import java.util.List;
+
+import fr.mcc.ginco.beans.Note;
 
 /**
  * Data Access Object for note
@@ -46,22 +46,30 @@ public interface INoteDAO extends IGenericDAO<Note, String> {
 	 * @return List<Note> List of paginated notes for a concept
 	 */
 	List<Note> findConceptPaginatedNotes(String conceptId, Integer startIndex, Integer limit);
-	
+
 	/**
 	 * @return List<Note> List of paginated notes for a term
 	 */
 	List<Note> findTermPaginatedNotes(String termId, Integer startIndex, Integer limit);
 
 	/**
-	 * Count the number of notes for a concept 
+	 * Count the number of notes for a concept
 	 * @return
 	 */
 	Long getConceptNoteCount(String conceptId);
-	
+
 	/**
-	 * Count the number of notes for a term 
+	 * Count the number of notes for a term
 	 * @return
 	 */
 	Long getTermNoteCount(String termId);
+
+	/**
+	 * Returns a list of notes for a thesaurus
+	 *
+	 * @param thesaurusId
+	 * @return list of Note
+	 */
+	List<Note> findNotesByThesaurusId(String thesaurusId);
 
 }

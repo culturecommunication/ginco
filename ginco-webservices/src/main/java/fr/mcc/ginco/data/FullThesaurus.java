@@ -38,28 +38,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  POJO to return a full thesaurus informations when requesting for one thesaurus details
- *
+ * POJO to return a full thesaurus informations when requesting for one thesaurus details
  */
-public class FullThesaurus extends ReducedThesaurus{
+public class FullThesaurus extends ReducedThesaurus {
 
 	private String contributor;
-    private String coverage;
-    private String modified;
-    private String description;
-    private String publisher;
-    private String relation;
-    private String rights;
-    private String source;
-    private String subject;
-    private String created;
-    private String type;
-    private String creatorName;
-    private String creatorHomepage;
+	private String coverage;
+	private String modified;
+	private String description;
+	private String publisher;
+	private String relation;
+	private String rights;
+	private String source;
+	private String subject;
+	private String created;
+	private String type;
+	private String creatorName;
+	private String creatorHomepage;
+	private String creatorEmail;
 
 
-    private List<String> languages = new ArrayList<String>();
-    private List<String> formats = new ArrayList<String>();
+	private List<String> languages = new ArrayList<String>();
+	private List<String> formats = new ArrayList<String>();
 
 	public String getContributor() {
 		return contributor;
@@ -148,6 +148,7 @@ public class FullThesaurus extends ReducedThesaurus{
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public String getCreatorName() {
 		return creatorName;
 	}
@@ -164,6 +165,14 @@ public class FullThesaurus extends ReducedThesaurus{
 		this.creatorHomepage = creatorHomepage;
 	}
 
+	public String getCreatorEmail() {
+		return creatorEmail;
+	}
+
+	public void setCreatorEmail(String creatorEmail) {
+		this.creatorEmail = creatorEmail;
+	}
+
 	public List<String> getLanguages() {
 		return languages;
 	}
@@ -178,5 +187,5 @@ public class FullThesaurus extends ReducedThesaurus{
 
 	public void setFormats(List<String> formats) {
 		this.formats = formats;
-	} 	
+	}
 }

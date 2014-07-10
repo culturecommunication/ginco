@@ -51,7 +51,7 @@ Ext.define('GincoApp.store.ThesaurusStore', {
                 url: 'services/ui/thesaurusservice/getVocabularies',
                 reader: {
                     type: 'json',
-                    root : 'data',
+                    root : 'data'
                 }
             },
             fields: [

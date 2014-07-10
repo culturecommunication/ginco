@@ -34,12 +34,25 @@
  */
 package fr.mcc.ginco.imports;
 
-import java.io.File;
-
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
 
+import java.io.File;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * Service for SKOS Import
+ */
 public interface ISKOSImportService {
 
-	Thesaurus importSKOSFile(String fileContent,String fileName, File tempDir) throws BusinessException;
+	/**
+	 * Import SKOS file.
+	 *
+	 * @param fileContent
+	 * @param fileName
+	 * @param tempDir
+	 * @return
+	 */
+	Map<Thesaurus, Set<Alignment>> importSKOSFile(String fileContent, String fileName, File tempDir);
 }

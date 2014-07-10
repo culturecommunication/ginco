@@ -37,15 +37,17 @@ package fr.mcc.ginco.exports.ginco;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
+import fr.mcc.ginco.services.IAlignmentService;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
@@ -54,19 +56,19 @@ import fr.mcc.ginco.services.INoteService;
  * (notes, associations, etc.) to Ginco Custom Export Format
  * 
  */
-@Component("gincoConceptExporter")
+@Component
 public class GincoConceptExporter {
 
 	@Inject
-	@Named("noteService")
 	private INoteService noteService;
 
 	@Inject
-	@Named("associativeRelationshipService")
 	private IAssociativeRelationshipService associativeRelationshipService;
+	
+	@Inject
+	private IAlignmentService alignmentService;
 
 	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 
 	/**
@@ -81,11 +83,7 @@ public class GincoConceptExporter {
 				thesaurusConcept.getIdentifier(), 0, noteService
 						.getConceptNoteCount(thesaurusConcept.getIdentifier())
 						.intValue());
-		JaxbList<Note> conceptNotes = new JaxbList<Note>();
-		for (Note note : notes) {
-			conceptNotes.getList().add(note);
-		}
-		return conceptNotes;
+		return new JaxbList<Note>(notes);
 	}
 
 	/**
@@ -118,18 +116,25 @@ public class GincoConceptExporter {
 	 * JaxbList object
 	 * 
 	 * @param thesaurusConcept
-	 * @return JaxbList<String> associatedConceptsIds : A JaxbList that contains
+	 * @return JaxbList<AssociativeRelationship> associatedConceptsIds : A JaxbList that contains
 	 *         the ids of associated concepts
 	 */
-	public JaxbList<String> getExportAssociativeRelationShip(
+	public JaxbList<AssociativeRelationship> getExportAssociativeRelationShip(
 			ThesaurusConcept thesaurusConcept) {
-		List<String> associations = associativeRelationshipService
-				.getAssociatedConceptsId(thesaurusConcept);
-		JaxbList<String> associatedConceptsIds = new JaxbList<String>();
-		for (String associatedConceptId : associations) {
-			associatedConceptsIds.getList().add(associatedConceptId);
-		}
-		return associatedConceptsIds;
+		List<AssociativeRelationship> associations = associativeRelationshipService
+				.getAssociatedConceptsRelationships(thesaurusConcept);
+		return new JaxbList<AssociativeRelationship>(associations);		
+	}
+	
+	/**
+	 * This method gets all the alignments relations for a concept in a
+	 * JaxbList object
+	 * @param thesaurusConcept
+	 * @return
+	 */
+	public JaxbList<Alignment> getExportAlignments(ThesaurusConcept thesaurusConcept) {
+		List<Alignment> alignments = alignmentService.getAlignmentsBySourceConceptId(thesaurusConcept.getIdentifier());
+		return new JaxbList<Alignment>(alignments);
 	}
 
 }

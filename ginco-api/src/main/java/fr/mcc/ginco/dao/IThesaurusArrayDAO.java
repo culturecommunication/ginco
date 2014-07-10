@@ -75,4 +75,6 @@ public interface IThesaurusArrayDAO extends IGenericDAO<ThesaurusArray, String> 
 	
 	List<ThesaurusArray> getArraysWithoutParentArray(String thesaurusId);
 	List<ThesaurusArray> getChildrenArrays(String thesaurusArrayId);
+
+	Long countItems(String idThesaurus);
 }

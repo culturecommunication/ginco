@@ -60,10 +60,10 @@ import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.NoteType;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.imports.ConceptNoteBuilder;
 import fr.mcc.ginco.services.INoteTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 import fr.mcc.ginco.utils.DateUtil;
 
 public class ConceptNoteBuilderTest {
@@ -77,7 +77,7 @@ public class ConceptNoteBuilderTest {
 	private IIDGeneratorService generatorService;
 
 	@Inject
-	@Mock(name = "languagesDAO")
+	@Mock
 	private ILanguageDAO languagesDAO;
 
 	@InjectMocks
@@ -86,7 +86,6 @@ public class ConceptNoteBuilderTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(conceptNoteBuilder);
 	}
 
 	@Test
@@ -128,11 +127,13 @@ public class ConceptNoteBuilderTest {
 		Resource skosConcept = model
 				.getResource("http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1931");
 		ThesaurusConcept concept = new ThesaurusConcept();
+		ThesaurusTerm prefTerm = new ThesaurusTerm();
+		prefTerm.setPrefered(true);
 
 		List<Note> actualConceptNotes = conceptNoteBuilder.buildConceptNotes(
-				skosConcept, concept, fakeThesaurus);
+				skosConcept, concept, prefTerm, fakeThesaurus);
 		
-		Assert.assertEquals(3, actualConceptNotes.size());
+		Assert.assertEquals(4, actualConceptNotes.size());
 		List<String>  noteValues = new ArrayList<String>();
 		for(Note actualNote:actualConceptNotes) {
 			noteValues.add(actualNote.getLexicalValue());
@@ -140,6 +141,7 @@ public class ConceptNoteBuilderTest {
 		ListAssert.assertContains(noteValues, "Meuble de repos servant à s'asseoir. Les sièges se répartissent en différentes catégories selon le nombre de personnes pouvant s'asseoir et les parties du corps soutenues ; ils peuvent être de matériaux divers, bois, métal, osier, paille, etc.");
 		ListAssert.assertContains(noteValues, "Historique du concept");
 		ListAssert.assertContains(noteValues, "Un exemple");
+		ListAssert.assertContains(noteValues, "Définition du concept");
 
 	}
 

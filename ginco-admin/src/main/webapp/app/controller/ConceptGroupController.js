@@ -50,45 +50,62 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
     xErrorDoubleRecord: 'Record already present',
     xDeleteMsgLabel : 'Are you sure you want to delete this concept group?',
 	xDeleteMsgTitle : 'Delete this concept group?',
-	
+
 	loadConceptGroupPanel : function(theForm){
         var me = this;
         var theConceptGroupPanel = theForm.up('conceptGroupPanel');
         var model = this.getConceptGroupModelModel();
         var conceptGroupId = theConceptGroupPanel.gincoId;
-        
-        if (conceptGroupId != '') {
+
+        if (conceptGroupId != '' && conceptGroupId!=null) {
         	theForm.getEl().mask("Chargement");
         	var conceptGroupModel = this.getConceptGroupModelModel();
         	conceptGroupModel.load(conceptGroupId, {
 				success : function(model) {
 					me.loadData(theForm, model);
+					me.loadDynamicUI(theForm, model);
 					theForm.getEl().unmask();
 				},
 				failure : function(model) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
 							me.xProblemLoadMsg);
-					var globalTabs = theForm.up('topTabs');
+					var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 					globalTabs.remove(thePanel);
 				}
 			});
-        	
+
         } else {
-        	theConceptGroupPanel.setTitle(theConceptGroupPanel.title+' : '+theConceptGroupPanel.thesaurusData.title);
+        	theConceptGroupPanel.setTitle(theConceptGroupPanel.title);
         	model = Ext.create('GincoApp.model.ConceptGroupModel');
-        	model.data.thesaurusId = theConceptGroupPanel.thesaurusData.id;
-        	model.data.language=theConceptGroupPanel.thesaurusData.languages[0];
+        	model.data.thesaurusId = theConceptGroupPanel.up('thesaurusTabPanel').thesaurusData.id;
+        	model.data.language=theConceptGroupPanel.up('thesaurusTabPanel').thesaurusData.languages[0];
         	theForm.loadRecord(model);
+        	me.loadDynamicUI(theForm, model);
         }
 	},
-	
+
+	loadDynamicUI : function (aForm, aModel){
+		if (aModel.data.isDynamic || aForm.up('conceptGroupPanel').isDynamic) {
+			aForm.down('#parentConceptContainer').show();
+			aForm.down('#gridConceptGroupPanelConcepts').hide();
+			if (aModel.get('parentConceptId')!="") {
+				aForm.down('#removeParentConcept').setDisabled(false);
+			}
+		} else {
+			aForm.down('#parentConceptContainer').hide();
+			aForm.down('#gridConceptGroupPanelConcepts').show();
+		}
+	},
+
 	loadData : function(aForm, aModel) {
 		var me = this;
 		aForm.loadRecord(aModel);
-		var theConceptGroupPanel = me.getActivePanel();		
+		var theConceptGroupPanel = me.getActivePanel(aForm);
 		theConceptGroupPanel.setTitle("Groupe : "+aModel.data.label);
 		theConceptGroupPanel.gincoId = aModel.data.identifier;
-		
+		if (aModel.get('parentGroupId')!="") {
+			aForm.down('#removeParentGroup').setDisabled(false);
+		}
 		//We get all the concepts included in this concept group
 		var conceptsGrid  = aForm.down('#gridConceptGroupPanelConcepts');
 		var conceptsGridStore = conceptsGrid.getStore();
@@ -96,41 +113,52 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
             conceptIds: aModel.raw.concepts
         };
 		conceptsGridStore.load();
-		
+
 		var deleteConceptGroupBtn = aForm.down('#deleteConceptGroupBtn');
 		deleteConceptGroupBtn.setDisabled(false);
-
+		theConceptGroupPanel.addNodePath(aModel.data.thesaurusId);
+		theConceptGroupPanel.addNodePath("GROUPS_"+aModel.data.thesaurusId);
+		theConceptGroupPanel.addNodePath(aModel.data.identifier);
+		theConceptGroupPanel.setReady();
 	},
-	
+
 	loadLanguages : function(theCombo) {
 		var theConceptGroupPanel = theCombo.up('conceptGroupPanel');
 		var theConceptGroupStore = theCombo.getStore();
 		theConceptGroupStore.getProxy().setExtraParam('thesaurusId',
-				theConceptGroupPanel.thesaurusData.id);
+				theConceptGroupPanel.getThesaurusData().id);
 		theConceptGroupStore.load();
 	},
-	
-	getActivePanel : function() {
-    	var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-    	return topTabs.getActiveTab();
-    },
-	
+
+	getActivePanel : function(child) {
+		return child.up('conceptGroupPanel');
+	},
+
 	saveConceptGroup : function(theButton, theCallback){
 		var me = this;
+		var theConceptGroupPanel = theButton.up('conceptGroupPanel');
+
 		var theForm = theButton.up('#conceptGroupForm');
-		var conceptsGrid = theForm.down('#gridConceptGroupPanelConcepts');
 		theForm.getEl().mask(me.xLoading);
-		
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
-		//We update the model with the concepts added to the grid
-		var conceptsGridStore = conceptsGrid.getStore();
-		var concepts = conceptsGridStore.getRange();
-		var conceptIds = Ext.Array.map(concepts, function(concept){
-            return concept.data.identifier;
-        });
-		updatedModel.data.concepts = conceptIds;
-		
+
+		if (theConceptGroupPanel.isDynamic != '' && theConceptGroupPanel.isDynamic != null){
+			updatedModel.data.isDynamic = theConceptGroupPanel.isDynamic;
+		}
+
+		if (updatedModel.data.isDynamic){
+			updatedModel.data.concepts = new Array();
+		} else {
+			//We update the model with the concepts added to the grid
+			var conceptsGrid = theForm.down('#gridConceptGroupPanelConcepts');
+			var conceptsGridStore = conceptsGrid.getStore();
+			var concepts = conceptsGridStore.getRange();
+			var conceptIds = Ext.Array.map(concepts, function(concept){
+	            return concept.data.identifier;
+	        });
+			updatedModel.data.concepts = conceptIds;
+		}
 		updatedModel.save({
 			success : function(record, operation) {
 				var resultRecord = operation.getResultSet().records[0];
@@ -148,15 +176,15 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 			}
 		});
 	},
-	
+
 	deleteConceptGroup : function(theButton){
 		var me = this;
 		var theConceptGroupForm = theButton.up('form');
-		var globalTabs = theConceptGroupForm.up('topTabs');
-		var theConceptGroupPanel = me.getActivePanel();
-		
-		var updatedModel = theConceptGroupForm.getForm().getRecord();      
-        
+		var globalTabs = theConceptGroupForm.up('#thesaurusItemsTabPanel');
+		var theConceptGroupPanel = me.getActivePanel(theButton);
+
+		var updatedModel = theConceptGroupForm.getForm().getRecord();
+
         Ext.MessageBox.show({
     			title : me.xDeleteMsgTitle,
     			msg : me.xDeleteMsgLabel,
@@ -178,13 +206,13 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
     									operation.error);
     						}
     					});
-    					break;    				
+    					break;
     				}
     			},
     			scope : this
-    		}); 
-	},	
-	
+    		});
+	},
+
 	selectConceptToGroupArray : function(theButton){
 		//This method opens a popup to add concepts to the concept group array
 		var me = this;
@@ -192,11 +220,16 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 		var theConceptGroupForm = theButton.up('form');
 		var theConceptGroupGrid = theConceptGroupPanel.down('#gridConceptGroupPanelConcepts');
 		var theConceptGroupStore = theConceptGroupGrid.getStore();
-		
+
+		var getGroupConcepts = true;
+		var groupId = theConceptGroupPanel.gincoId ;
+
 		var win = Ext.create('GincoApp.view.SelectConceptWin', {
-			thesaurusData : theConceptGroupPanel.thesaurusData,
+			thesaurusData : theConceptGroupPanel.up('thesaurusTabPanel').thesaurusData,
 			getChildren : false,
 			showTree : false,
+			getGroupConcepts : getGroupConcepts,
+			groupId : groupId,
 			checkstore: theConceptGroupStore,
 			listeners: {
                 selectBtn: {
@@ -207,12 +240,12 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
             }
 		});
 		win.show();
-		
+
 	},
-	
+
 	addConceptToGroupArray : function(theSelectedRow,theConceptGroupForm, theConceptGroupGrid){
 		var theConceptGroupGridStore = theConceptGroupGrid.getStore();
-		
+
 		//Test if already present in the grid
 		if (theConceptGroupGridStore.findRecord('identifier', theSelectedRow[0].data.identifier) !== null ){
 			Ext.MessageBox.alert(this.xProblemLabel,this.xErrorDoubleRecord);
@@ -221,28 +254,29 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 			theConceptGroupGridStore.add(theSelectedRow[0]);
 		}
 	},
-	
+
 	onRemoveConceptFromGroupClick : function(gridview, el, rowIndex, colIndex, e, rec, rowEl) {
 		var theConceptGroupGrid = gridview.up('#gridConceptGroupPanelConcepts');
         var theConceptGroupStore = theConceptGroupGrid.getStore();
         theConceptGroupStore.remove(rec);
 	},
-	
+
 	onConceptDblClick: function(theGrid, record, item, index, e, eOpts ) {
 	        var thePanel = theGrid.up('conceptGroupPanel');
-	        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-			topTabs.fireEvent('openconcepttab',topTabs, thePanel.thesaurusData.id ,record.data.identifier);
+	        var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+			topTabs.fireEvent('openconcepttab',topTabs, thePanel.up('thesaurusTabPanel').thesaurusData.id ,record.data.identifier);
 	    },
-	    
+
     selectParentGroup : function(theButton){
 		var me = this;
 		var theForm = theButton.up('form');
 	    var thePanel =theButton.up('conceptGroupPanel');
-	    
+
 	    var win = Ext.create('GincoApp.view.SelectGroupWin', {
-			thesaurusData : thePanel.thesaurusData,
+			thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
+	    	thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
 			excludedConceptGroupId : thePanel.gincoId,
-			currentParentId : theForm.down('textfield[name="parentGroupId"]').getValue(),
+			currentParentId : theForm.down('hidden[name="parentGroupId"]').getValue(),
 			listeners: {
 				selectBtn: {
                 fn: function(selectedRow) {
@@ -253,13 +287,54 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
 	    });
 	    win.show();
 	},
-	
+
 	selectGroupAsParent : function(selectedRow, theForm){
 		theForm.down('textfield[name="parentGroupLabel"]').setValue(selectedRow[0].data.label);
-		theForm.down('textfield[name="parentGroupId"]').setValue(selectedRow[0].data.identifier);
+		theForm.down('hidden[name="parentGroupId"]').setValue(selectedRow[0].data.identifier);
+		theForm.down('#removeParentGroup').setDisabled(false);
 	},
 
-    init:function(){    	  	 
+	removeParentGroup : function(theButton) {
+		var theForm = theButton.up('form');
+		theForm.down('textfield[name="parentGroupLabel"]').setValue("");
+		theForm.down('hidden[name="parentGroupId"]').setValue("");
+		theForm.down('#removeParentGroup').setDisabled(true);
+	},
+
+	selectParentConcept : function(theButton){
+		var me = this;
+		var theForm = theButton.up('form');
+	    var thePanel = me.getActivePanel(theButton);
+
+	    var win = Ext.create('GincoApp.view.SelectConceptWin', {
+			thesaurusData : thePanel.up('thesaurusTabPanel').thesaurusData,
+			showTree : false,
+			onlyValidatedConcepts : true,
+			listeners: {
+				selectBtn: {
+                fn: function(selectedRow) {
+                        me.selectConceptAsParent(selectedRow, theForm);
+                    }
+				}
+			}
+	    });
+	    win.show();
+	},
+
+	selectConceptAsParent : function(selectedRow, theForm){
+		theForm.down('textfield[name="parentConceptLabel"]').setValue(selectedRow[0].data.label);
+		theForm.down('hidden[name="parentConceptId"]').setValue(selectedRow[0].data.identifier);
+		theForm.down('#removeParentConcept').setDisabled(false);
+	},
+
+	removeParentConcept : function (theButton){
+		var theForm = theButton.up('form');
+		theForm.down('textfield[name="parentConceptLabel"]').setValue("");
+		theForm.down('hidden[name="parentConceptId"]').setValue("");
+		theForm.down('#removeParentConcept').setDisabled(true);
+	},
+
+    init:function(){
          this.control({
         	'conceptGroupPanel form' : {
  				afterrender : this.loadConceptGroupPanel
@@ -272,6 +347,15 @@ Ext.define('GincoApp.controller.ConceptGroupController', {
  			},
             'conceptGroupPanel  #selectParentGroup' : {
                 click : this.selectParentGroup
+            },
+            'conceptGroupPanel  #removeParentGroup' : {
+                click : this.removeParentGroup
+            },
+            'conceptGroupPanel  #selectParentConcept' : {
+            	click : this.selectParentConcept
+            },
+            'conceptGroupPanel  #removeParentConcept' : {
+                click : this.removeParentConcept
             },
             'conceptGroupPanel  #addConceptToGroupArray' : {
                 click : this.selectConceptToGroupArray

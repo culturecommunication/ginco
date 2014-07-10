@@ -34,23 +34,31 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.services.IAssociativeRelationshipService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import org.semanticweb.skos.*;
-import org.springframework.stereotype.Component;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.stereotype.Component;
+
+import com.hp.hpl.jena.ontology.DatatypeProperty;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.ISOTHES;
+import fr.mcc.ginco.skos.namespaces.SKOS;
+import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting concept to SKOS
- * 
+ *
  */
 @Component("skosConceptExporter")
 public class SKOSConceptExporter {
@@ -60,123 +68,117 @@ public class SKOSConceptExporter {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@Inject
+	@Named("skosTermsExporter")
+	private SKOSTermsExporter skosTermsExporter;
+
+	@Inject
 	@Named("skosNotesExporter")
 	private SKOSNotesExporter skosNotesExporter;
 
 	@Inject
-	@Named("associativeRelationshipService")
-	private IAssociativeRelationshipService associativeRelationshipService;
+	@Named("skosAssociativeRelationshipExporter")
+	private SKOSAssociativeRelationshipExporter skosAssociativeRelationshipExporter;
 
 	@Inject
-	@Named("thesaurusTermService")
-	private IThesaurusTermService thesaurusTermService;
+	@Named("skosAlignmentExporter")
+	private SKOSAlignmentExporter skosAlignmentExporter;
 
-    /**
-     * Export a concept to SKOS using the skos API
-     * @param concept
-     * @param parent
-     * @param scheme
-     * @param factory
-     * @param vocab
-     * @return
-     */
-	public List<SKOSChange> exportConceptSKOS(ThesaurusConcept concept,
-			SKOSConcept parent, SKOSConceptScheme scheme,
-			SKOSDataFactory factory, SKOSDataset vocab) {
-		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+	@Inject
+	@Named("skosCustomConceptAttributeExporter")
+	private SKOSCustomConceptAttributeExporter skosCustomConceptAttributeExporter;
 
-		SKOSConcept conceptSKOS = factory.getSKOSConcept(URI.create(concept
-				.getIdentifier()));
-		SKOSEntityAssertion conceptAssertion = factory
-				.getSKOSEntityAssertion(conceptSKOS);
+	@Inject
+	@Named("skosHierarchicalRelationshipExporter")
+	private SKOSHierarchicalRelationshipExporter skosHierarchicalRelationshipExporter;
 
-		SKOSObjectRelationAssertion inScheme = factory
-				.getSKOSObjectRelationAssertion(conceptSKOS,
-						factory.getSKOSInSchemeProperty(), scheme);
+	/**
+	 * Export a concept to SKOS using the skos API
+	 *
+	 * @param concept
+	 * @param parent
+	 * @param scheme
+	 * @param factory
+	 * @param vocab
+	 * @return
+	 */
+	public Model exportConceptSKOS(ThesaurusConcept concept,
+			ThesaurusConcept parent, Model model, OntModel ontModel) {
 
-        List<ThesaurusTerm> prefTerms = thesaurusConceptService.getConceptPreferredTerms(concept.getIdentifier());
+		Resource conceptResource = model.createResource(
+				concept.getIdentifier(), SKOS.CONCEPT);
 
-        for (ThesaurusTerm prefTerm : prefTerms) {
-            SKOSDataRelationAssertion prefLabelInsertion = factory
-                    .getSKOSDataRelationAssertion(conceptSKOS, factory
-                            .getSKOSDataProperty(factory.getSKOSPrefLabelProperty()
-                                    .getURI()), prefTerm.getLexicalValue(), prefTerm.getLanguage().getPart1());
-            addList.add(new AddAssertion(vocab, prefLabelInsertion));
-        }
+		exportConceptInformation(concept, conceptResource, model, ontModel);
 
+		List<ThesaurusTerm> prefTerms = thesaurusConceptService
+				.getConceptPreferredTerms(concept.getIdentifier());
 
-		for (ThesaurusConcept related : thesaurusConceptService
-				.getThesaurusConceptList(associativeRelationshipService
-						.getAssociatedConceptsId(concept))) {
-			SKOSConcept relConcept = factory.getSKOSConcept(URI.create(related
-					.getIdentifier()));
+		skosTermsExporter.exportConceptPreferredTerms(prefTerms, model,
+				conceptResource);
 
-			SKOSObjectRelationAssertion relAssertion = factory
-					.getSKOSObjectRelationAssertion(conceptSKOS,
-							factory.getSKOSRelatedProperty(), relConcept);
+		skosTermsExporter.exportConceptNotPreferredTerms(
+				concept.getIdentifier(), model, conceptResource);
 
-			addList.add(new AddAssertion(vocab, relAssertion));
-		}
+		skosNotesExporter.exportNotes(model, prefTerms, concept);
 
-		for (ThesaurusTerm altLabel : thesaurusTermService
-				.getTermsByConceptId(concept.getIdentifier())) {
-			if (altLabel.getPrefered()) {
-				continue;
-            }
-
-            if(altLabel.getHidden()) {
-                SKOSDataRelationAssertion hiddenLabelInsertion = factory
-                        .getSKOSDataRelationAssertion(conceptSKOS, factory
-                                .getSKOSDataProperty(factory
-                                        .getSKOSHiddenLabelProperty().getURI()),
-                                altLabel.getLexicalValue(), altLabel.getLanguage()
-                                .getPart1());
-
-                addList.add(new AddAssertion(vocab, hiddenLabelInsertion));
-            } else {
-                SKOSDataRelationAssertion altLabelInsertion = factory
-                        .getSKOSDataRelationAssertion(conceptSKOS, factory
-                                .getSKOSDataProperty(factory
-                                        .getSKOSAltLabelProperty().getURI()),
-                                altLabel.getLexicalValue(), altLabel.getLanguage()
-                                .getPart1());
-
-                addList.add(new AddAssertion(vocab, altLabelInsertion));
-            }
-		}
-
-		addList.add(new AddAssertion(vocab, conceptAssertion));
-		addList.add(new AddAssertion(vocab, inScheme));
-
-
-		addList.addAll(skosNotesExporter.exportNotes(concept.getIdentifier(),
-				factory, conceptSKOS, vocab));
-
-		if (parent != null) {
-			SKOSObjectRelationAssertion childConnection = factory
-					.getSKOSObjectRelationAssertion(conceptSKOS,
-							factory.getSKOSBroaderProperty(), parent);
-			SKOSObjectRelationAssertion parentConnection = factory
-					.getSKOSObjectRelationAssertion(parent,
-							factory.getSKOSNarrowerProperty(), conceptSKOS);
-			addList.add(new AddAssertion(vocab, childConnection));
-			addList.add(new AddAssertion(vocab, parentConnection));
-		} else {
-			SKOSObjectRelationAssertion topConcept = factory
-					.getSKOSObjectRelationAssertion(scheme,
-							factory.getSKOSHasTopConceptProperty(), conceptSKOS);
-			addList.add(new AddAssertion(vocab, topConcept));
-		}
+		skosAssociativeRelationshipExporter.exportAssociativeRelationships(
+				concept, model);
 
 		if (thesaurusConceptService.hasChildren(concept.getIdentifier())) {
 			for (ThesaurusConcept child : thesaurusConceptService
 					.getChildrenByConceptId(concept.getIdentifier())) {
-				addList.addAll(exportConceptSKOS(child, conceptSKOS, scheme,
-						factory, vocab));
+
+				exportConceptSKOS(child, concept, model, ontModel);
 
 			}
 		}
 
-		return addList;
+		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
+				model, parent, concept);
+
+		skosAlignmentExporter.exportAlignments(concept.getIdentifier(), model);
+
+		skosCustomConceptAttributeExporter.exportCustomConceptAttributes(
+				concept, model, conceptResource, ontModel);
+
+		return model;
+	}
+
+	/**
+	 * Export minimal concept information
+	 *
+	 * @param concept
+	 * @param parent
+	 * @param scheme
+	 * @param factory
+	 * @param vocab
+	 * @return
+	 */
+	private Model exportConceptInformation(ThesaurusConcept concept,
+			Resource conceptResource, Model model, OntModel ontModel) {
+
+		Resource inScheme = model.createResource(concept.getThesaurus()
+				.getIdentifier());
+		model.add(conceptResource, SKOS.IN_SCHEME, inScheme);
+
+		model.add(conceptResource, DCTerms.created,
+				DateUtil.toISO8601String(concept.getCreated()));
+		model.add(conceptResource, DCTerms.modified,
+				DateUtil.toISO8601String(concept.getModified()));
+
+		if (concept.getNotation() != null && !concept.getNotation().isEmpty()) {
+
+			model.add(conceptResource, SKOS.NOTATION, StringEscapeUtils.unescapeXml(concept.getNotation()));
+
+		}
+
+		DatatypeProperty statusOnt = ontModel.createDatatypeProperty(ISOTHES
+				.getURI() + "status");
+		Literal l = ontModel.createLiteral("status");
+		statusOnt.addLabel(l);
+
+		model.add(conceptResource, ISOTHES.STATUS, concept.getStatus()
+				.toString());
+
+		return model;
 	}
 }

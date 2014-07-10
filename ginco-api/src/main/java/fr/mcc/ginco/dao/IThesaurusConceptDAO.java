@@ -34,58 +34,57 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
+
+import java.util.List;
 
 /**
  * Data Access Object for thesaurus_concept
  */
+/**
+ * @author hufon
+ *
+ */
 public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, String> {
-	
+
 	/**
 	 * This method flushes the Hibernate Session.
-	 * Flush must not be used manually. 
+	 * Flush must not be used manually.
 	 * Implemented here for a particular case (see comment in implementation).
 	 */
-	public void flush();
+	void flush();
 
 	/**
 	 * Gets the list of ThesaurusConcept which are not top term given
 	 * a thesaurusID
 	 * @param thesaurus object Thesaurus
 	 * @return
-     * @throws BusinessException in case of error.
 	 */
-	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus) throws BusinessException ;
+	List<ThesaurusConcept> getOrphansThesaurusConcept(Thesaurus thesaurus, int maxResults);
 
     /**
      * Gets the list of ThesaurusConcept which are top term given
      * a thesaurusID
      * @param thesaurus object Thesaurus
      * @return
-     * @throws BusinessException in case of error.
      */
-	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus) throws BusinessException;
-	
-	
+	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults);
+
+
 	/**
 	 * Gets the number of orphan concepts for a given thesaurus
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
-	long getOrphansThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+	long getOrphansThesaurusConceptCount(Thesaurus thesaurus);
 
 	/**
 	 * Gets the number of top concept for a given thesaurus
 	 * @param thesaurus
 	 * @return
-	 * @throws BusinessException
 	 */
-	long getTopTermThesaurusConceptCount(Thesaurus thesaurus) throws BusinessException;
+	long getTopTermThesaurusConceptCount(Thesaurus thesaurus);
 
 
     /**
@@ -102,7 +101,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param conceptId
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getChildrenConcepts(String conceptId);
+    List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults);
 
     /**
      * Get list of all concepts by id of Thesaurus, excluding given conceptId and
@@ -112,15 +111,78 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param searchOrphans could be null if doesn't matter.
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);   
-   
-    
+    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
+
+
     /**
      * Returns all children (recursive) from the given root
      * @param concept
      * @return
      */
-    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept); 
-    
-    
+    List<ThesaurusConcept> getAllRootChildren(ThesaurusConcept concept);
+
+	/**
+	 * @param idThesaurus
+	 * @return Number of concept in a thesaurus
+	 */
+	Long countConcepts(String idThesaurus);
+
+	/**
+	 * Counts the number of concepts without notes
+	 * @param idThesaurus
+	 * @return
+	 */
+	Long countConceptsWoNotes(String idThesaurus);
+	
+	/**
+	 * Gets a list a of the concepts whithout notes
+	 * @param idThesaurus
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
+	List<ThesaurusConcept> getConceptsWoNotes(String idThesaurus, int startIndex, int limit);
+
+	/**
+	 * Returns the number of concepts aligned to internal thesauruses
+	 * @param idThesaurus
+	 * @return
+	 */
+	Long countConceptsAlignedToIntThes(String idThesaurus);
+
+	/**
+	 * Returns the number of concepts aligned to external thesauruses
+	 * @param idThesaurus
+	 * @return
+	 */
+	Long countConceptsAlignedToExtThes(String idThesaurus);
+
+	/**
+	 * Returns the number of concepts aligned to my thesaurus
+	 * @param idThesaurus
+	 * @return
+	 */
+	Long countConceptsAlignedToMyThes(String idThesaurus);
+
+	/**
+	 * Returns list of aligned concepts for thesaurus given
+	 *
+	 * @param idThesaurus id of thesaurus to work with
+	 * @param startIndex
+	 * @param limit
+	 * @return
+	 */
+	List<ThesaurusConcept> getConceptsAlignedToMyThes(String idThesaurus,
+			int startIndex, int limit);
+
+	/**
+	 * Return list of concept's ids with children
+	 *
+	 * @param thesaurusId
+	 * @return
+	 */
+	List<String> getIdentifiersOfConceptsWithChildren(String thesaurusId);
+
+
+
 }

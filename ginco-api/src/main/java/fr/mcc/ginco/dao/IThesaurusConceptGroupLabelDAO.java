@@ -43,19 +43,20 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 public interface IThesaurusConceptGroupLabelDAO extends IGenericDAO<ThesaurusConceptGroupLabel, Integer> {
 
 	/**
-	 * Find a {@link ThesaurusConceptGroupLabel} by the id of the {@link ThesaurusConceptGroup} and its language
+	 * Find a {@link ThesaurusConceptGroupLabel} by the id of the
+	 * {@link ThesaurusConceptGroup} and its language
+	 *
 	 * @param identifier, language (to implement)
 	 * @return A {@link ThesaurusConceptGroupLabel} object
 	 */
-	ThesaurusConceptGroupLabel findByThesaurusConceptGroupAndLanguage(
-			String identifier);
+	ThesaurusConceptGroupLabel findByThesaurusConceptGroupAndLanguage(String identifier);
 
 	/**
 	 * Gets a ThesaurusConceptGroupLabel by thesaurus group concept id
-	 * 
+	 *
 	 * @param thesaurusConceptGroupId
 	 * @return
 	 */
 	ThesaurusConceptGroupLabel findByThesaurusConceptGroup(String thesaurusConceptGroupId);
-	
+
 }

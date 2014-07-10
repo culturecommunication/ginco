@@ -34,9 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusFormat;
-import fr.mcc.ginco.beans.ThesaurusType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -44,15 +41,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * View class corresponding to {@link Thesaurus} bean, but fully serializable;
+ * View class corresponding to {@link fr.mcc.ginco.beans.Thesaurus} bean, but fully serializable;
  * contains all links to other business-objects (full beans
- * {@link ThesaurusType} and {@link ThesaurusFormat}).
- * 
+ * {@link fr.mcc.ginco.beans.ThesaurusType} and {@link fr.mcc.ginco.beans.ThesaurusFormat}).
+ *
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusView implements Serializable {	
-	
+
+public class ThesaurusView implements Serializable, SecuredResourceView {
+
 	private String id;
 	private String contributor;
 	private String coverage;
@@ -66,17 +64,19 @@ public class ThesaurusView implements Serializable {
 	private String title;
 	private String created;
 	private Boolean defaultTopConcept;
-    private Boolean archived;
-    private Boolean canBeDeleted;
+	private Boolean archived;
+	private Boolean canBeDeleted;
 	private Integer type;
 	private String creatorName;
 	private String creatorHomepage;
-    private Boolean polyHierarchical;
+	private String creatorEmail;
+	private Boolean polyHierarchical;
 
 	private List<String> languages = new ArrayList<String>();
 	private List<Integer> formats = new ArrayList<Integer>();
 
-    public ThesaurusView() {}	
+	public ThesaurusView() {
+	}
 
 	public String getId() {
 		return id;
@@ -198,6 +198,14 @@ public class ThesaurusView implements Serializable {
 		this.creatorHomepage = creatorHomepage;
 	}
 
+	public String getCreatorEmail() {
+		return creatorEmail;
+	}
+
+	public void setCreatorEmail(String creatorEmail) {
+		this.creatorEmail = creatorEmail;
+	}
+
 	public List<String> getLanguages() {
 		return languages;
 	}
@@ -214,29 +222,29 @@ public class ThesaurusView implements Serializable {
 		this.defaultTopConcept = defaulttopconcept;
 	}
 
-    public Boolean getArchived() {
-        return archived;
-    }
+	public Boolean getArchived() {
+		return archived;
+	}
 
-    public void setArchived(Boolean archived) {
-        this.archived = archived;
-    }
+	public void setArchived(Boolean archived) {
+		this.archived = archived;
+	}
 
-    public Boolean getCanBeDeleted() {
-        return canBeDeleted;
-    }
+	public Boolean getCanBeDeleted() {
+		return canBeDeleted;
+	}
 
-    public void setCanBeDeleted(Boolean canBeDeleted) {
-        this.canBeDeleted = canBeDeleted;
-    }
+	public void setCanBeDeleted(Boolean canBeDeleted) {
+		this.canBeDeleted = canBeDeleted;
+	}
 
-    public Boolean getPolyHierarchical() {
-        return polyHierarchical;
-    }
+	public Boolean getPolyHierarchical() {
+		return polyHierarchical;
+	}
 
-    public void setPolyHierarchical(Boolean polyHierarchical) {
-        this.polyHierarchical = polyHierarchical;
-    }
+	public void setPolyHierarchical(Boolean polyHierarchical) {
+		this.polyHierarchical = polyHierarchical;
+	}
 
 	public List<Integer> getFormats() {
 		return formats;
@@ -244,5 +252,10 @@ public class ThesaurusView implements Serializable {
 
 	public void setFormats(List<Integer> formats) {
 		this.formats = formats;
+	}
+
+	@Override
+	public String getThesaurusId() {
+		return id;
 	}
 }

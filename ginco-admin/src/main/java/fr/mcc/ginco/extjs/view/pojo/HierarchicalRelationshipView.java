@@ -38,27 +38,29 @@ package fr.mcc.ginco.extjs.view.pojo;
  *
  */
 public class HierarchicalRelationshipView {
-    private String identifier;
-    private String label;
-    private Integer role;
 
-    public HierarchicalRelationshipView() {}
+	private String identifier;
+	private String label;
+	private Integer role;
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public HierarchicalRelationshipView() {
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public String getLabel() {
-        return label;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
 	public Integer getRole() {
 		return role;

@@ -34,10 +34,9 @@
  */
 package fr.mcc.ginco.dao;
 
-import java.util.List;
-
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+
+import java.util.List;
 
 /**
  * Data Access Object for thesaurus array
@@ -45,11 +44,30 @@ import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 public interface IThesaurusConceptGroupDAO extends IGenericDAO<ThesaurusConceptGroup, String> {
 
 	/**
-	 * Get all the {@link ThesaurusConceptGroup} of a {@link Thesaurus}
-	 * @param parentId
-	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link Thesaurus} which id is given in parameter, excluding the group which id is given in parameter (optional, set null for no exclusion)
+	 * Get all the {@link ThesaurusConceptGroup} of a {@link fr.mcc.ginco.beans.Thesaurus}
+	 *
+	 * @param thesaurusId id of thesarus
+	 * @param excludedConceptGroupId id of concept to exclude
+	 * @return A list of all {@link ThesaurusConceptGroup} belonging to the {@link fr.mcc.ginco.beans.Thesaurus}
+	 * which id is given in parameter, excluding the group which id is
+	 * given in parameter (optional, set null for no exclusion)
 	 */
 	List<ThesaurusConceptGroup> findThesaurusConceptGroupsByThesaurusId(String excludedConceptGroupId,
-			String thesaurusId);
-    
+	                                                                    String thesaurusId);
+
+	/**
+	 * Count items in thesaurus.
+	 *
+	 * @param idThesaurus id of thesaurus.
+	 * @return count of concept groups in Thesaurus.
+	 */
+	Long countItems(String idThesaurus);
+
+	/**
+	 * Get all child {@link ThesaurusConceptGroup} of a group by its identifier
+	 *
+	 * @param conceptGroupId
+	 * @return A list of all child {@link ThesaurusConceptGroup} of a group
+	 */
+	List<ThesaurusConceptGroup> getChildGroups(String conceptGroupId);
 }

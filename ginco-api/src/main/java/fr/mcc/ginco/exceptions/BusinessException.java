@@ -37,36 +37,37 @@ package fr.mcc.ginco.exceptions;
 
 /**
  * This exception  is thrown when a business exception is encountered
- *
  */
 public class BusinessException extends RuntimeException {
 
 	private String userMessageKey;
 	private Object[] toFormat;
-	
+
 	/**
 	 * Creates a new Business Exception
-	 * @param logMessage message to log
+	 *
+	 * @param logMessage     message to log
 	 * @param userMessageKey key of the message to display
 	 */
 	public BusinessException(String logMessage, String userMessageKey) {
 		super(logMessage);
-		this.userMessageKey =userMessageKey;
-	}	
-	
+		this.userMessageKey = userMessageKey;
+	}
+
 	/**
 	 * Creates a new Business Exception
-	 * @param logMessage message to log
+	 *
+	 * @param logMessage     message to log
 	 * @param userMessageKey key of the message to display
 	 */
 	public BusinessException(String logMessage, String userMessageKey, Throwable cause) {
 		super(logMessage, cause);
-		this.userMessageKey =userMessageKey;
+		this.userMessageKey = userMessageKey;
 	}
-	
+
 	public BusinessException(String logMessage, String userMessageKey, Object[] toFormat) {
 		super(logMessage);
-		this.userMessageKey =userMessageKey;
+		this.userMessageKey = userMessageKey;
 		this.toFormat = toFormat;
 	}
 
@@ -74,7 +75,7 @@ public class BusinessException extends RuntimeException {
 	public String getUserMessageKey() {
 		return userMessageKey;
 	}
-	
+
 	public Object[] getToFormat() {
 		return toFormat;
 	}

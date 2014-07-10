@@ -34,18 +34,9 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
-import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
-import fr.mcc.ginco.services.IThesaurusConceptGroupService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,9 +46,17 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
+import fr.mcc.ginco.extjs.view.utils.OrphansGenerator;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 public class OrphansGeneratorTest {
 
@@ -65,7 +64,7 @@ public class OrphansGeneratorTest {
 	private IThesaurusConceptService thesaurusConceptService;
 
 	@InjectMocks
-	private OrphansGenerator orphanGenerator = new OrphansGenerator();
+	private OrphansGenerator orphanGenerator;
 	
     @Mock(name = "thesaurusListNodeFactory")
     private ThesaurusListNodeFactory thesaurusListNodeFactory;
@@ -73,11 +72,12 @@ public class OrphansGeneratorTest {
 	@Before
 	public final void setUp() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(orphanGenerator);
+		ReflectionTestUtils.setField(orphanGenerator, "maxResults",
+				5000);
 	}
 	
 	@Test
-	public void testGenerateOrphans() throws BusinessException {
+	public void testGenerateOrphans(){
 		List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
 
         Mockito.when(
@@ -95,14 +95,16 @@ public class OrphansGeneratorTest {
         ThesaurusConcept co1 = new ThesaurusConcept();
         co1.setIdentifier("co1");
         co1.setThesaurus(fakeThesaurus);
+        co1.setStatus(ConceptStatusEnum.VALIDATED.getStatus());
         ThesaurusConcept co2 = new ThesaurusConcept();
         co2.setIdentifier("co2");
         co2.setThesaurus(fakeThesaurus);
+        co2.setStatus(ConceptStatusEnum.CANDIDATE.getStatus());
 		concepts.add(co2);
 		concepts.add(co1);
 
 		 Mockito.when(thesaurusConceptService
-			.getOrphanThesaurusConcepts(Mockito.anyString())).thenReturn(concepts);
+			.getOrphanThesaurusConcepts(Mockito.anyString(), Mockito.eq(5001))).thenReturn(concepts);
 		 Mockito.when(thesaurusConceptService.getConceptLabel("co1")).thenReturn("zzzzz");
 		 Mockito.when(thesaurusConceptService.getConceptLabel("co2")).thenReturn("aaaa");
 		 List<IThesaurusListNode> nodes = orphanGenerator.generateOrphans("anystring");
@@ -110,6 +112,8 @@ public class OrphansGeneratorTest {
 		 Assert.assertEquals(2, nodes.size());
 		 //Test alphabetical order
 		 Assert.assertEquals("CONCEPT_*co2", nodes.get(0).getId());
+		 Assert.assertEquals("icon-candidate-concept", nodes.get(0).getIconCls());
+		 Assert.assertEquals("icon-orphan-concept", nodes.get(1).getIconCls());
 
 	}
 	

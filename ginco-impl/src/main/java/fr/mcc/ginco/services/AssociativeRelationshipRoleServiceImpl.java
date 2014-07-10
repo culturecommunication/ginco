@@ -41,30 +41,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 
-@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("associativeRelationshipRoleService")
 public class AssociativeRelationshipRoleServiceImpl implements IAssociativeRelationshipRoleService {
 
-    @Inject
-    @Named("associativeRelationshipRoleDAO")
-    private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
+	@Inject
+	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
 
-    @Override
-    public List<AssociativeRelationshipRole> getAllAssociationTermRole() {
-        return associativeRelationshipRoleDAO.findAll();
-    }
+	@Override
+	public List<AssociativeRelationshipRole> getAllAssociationTermRole() {
+		return associativeRelationshipRoleDAO.findAll();
+	}
 
-    @Override
-    public AssociativeRelationshipRole getRoleById(String id) throws BusinessException {
-        return associativeRelationshipRoleDAO.getById(id);
-    }
+	@Override
+	public AssociativeRelationshipRole getRoleById(String id) {
+		return associativeRelationshipRoleDAO.getById(id);
+	}
 
-    @Override
-	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRoleRole()
-			throws BusinessException {
+	@Override
+	public AssociativeRelationshipRole getDefaultAssociativeRelationshipRoleRole() {
 		return associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole();
 	}
+
+	@Override
+	public AssociativeRelationshipRole getRoleBySkosLabel(String skosLabel) {
+		return associativeRelationshipRoleDAO.getBySkosLabel(skosLabel);
+	}
+
 }

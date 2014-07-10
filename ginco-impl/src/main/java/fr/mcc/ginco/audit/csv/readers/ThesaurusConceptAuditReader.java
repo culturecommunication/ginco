@@ -52,7 +52,6 @@ import fr.mcc.ginco.audit.csv.JournalLine;
 import fr.mcc.ginco.audit.csv.JournalLineBuilder;
 import fr.mcc.ginco.audit.utils.AuditHelper;
 import fr.mcc.ginco.audit.utils.AuditQueryBuilder;
-import fr.mcc.ginco.audit.utils.AuditReaderService;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -74,10 +73,6 @@ public class ThesaurusConceptAuditReader {
 	@Inject
 	@Named("journalLineBuilder")
 	private JournalLineBuilder journalLineBuilder;
-
-	@Inject
-	@Named("auditReaderService")
-	private AuditReaderService readerService;
 
 	@Inject
 	@Named("auditHelper")
@@ -128,23 +123,18 @@ public class ThesaurusConceptAuditReader {
 				ThesaurusConcept previousConcept = auditHelper
 						.getConceptPreviousVersion(revision,
 								concept.getIdentifier());
-
-				Set<String> oldGenericConceptIds = new HashSet<String>();
+				
+				
+				Set<ThesaurusConcept> oldGenericConcepts = new HashSet<ThesaurusConcept>();
 				if (previousConcept != null) {
-					oldGenericConceptIds = getConceptIds(previousConcept
-							.getParentConcepts());
-				}
-				Set<ThesaurusConcept> parentConcepts = concept
-						.getParentConcepts();
-				Set<String> actualConceptIds = new HashSet<String>();
-				for (ThesaurusConcept parentConcept : parentConcepts) {
-					actualConceptIds.add(parentConcept.getIdentifier());
-				}
-
+					oldGenericConcepts = previousConcept.getParentConcepts();
+			    }
+				
 				JournalLine journalLine = journalLineBuilder
 						.buildConceptHierarchyChanged(concept, revision,
-								oldGenericConceptIds, actualConceptIds);
-
+								oldGenericConcepts,
+								concept.getParentConcepts());
+				
 				allEvents.add(journalLine);
 			}
 		} catch (AuditException ae) {
@@ -180,13 +170,4 @@ public class ThesaurusConceptAuditReader {
 		}
 		return allEvents;
 	}
-
-	private Set<String> getConceptIds(Set<ThesaurusConcept> concepts) {
-		Set<String> conceptIds = new HashSet<String>();
-		for (ThesaurusConcept concept : concepts) {
-			conceptIds.add(concept.getIdentifier());
-		}
-		return conceptIds;
-	}
-
 }

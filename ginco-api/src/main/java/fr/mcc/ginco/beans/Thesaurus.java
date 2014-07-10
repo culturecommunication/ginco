@@ -49,129 +49,129 @@ import java.util.Set;
  * Bean represents <b>thesaurus</b> table, main container containing
  * all other beans.
  */
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @SuppressWarnings("serial")
 public class Thesaurus implements Serializable, IAuditableBean {
-    private String identifier;
-    private String contributor;
-    private String coverage;
-    private Date date;
-    private String description;
-    private String publisher;
-    private String relation;
-    private String rights;
-    private String source;
-    private String subject;
-    private String title;
-    private Date created;
-    private Boolean defaultTopConcept;
-    private Boolean archived;
-    private ThesaurusType type;
-    private ThesaurusOrganization creator;
-    private Boolean polyHierarchical;
-    
-    private Set<Language> lang = new HashSet<Language>();
-    private Set<ThesaurusFormat> format = new HashSet<ThesaurusFormat>();
-    private Set<ThesaurusVersionHistory> versions;
+	private String identifier;
+	private String contributor;
+	private String coverage;
+	private Date date;
+	private String description;
+	private String publisher;
+	private String relation;
+	private String rights;
+	private String source = "";
+	private String subject;
+	private String title;
+	private Date created;
+	private Boolean defaultTopConcept;
+	private Boolean archived;
+	private ThesaurusType type;
+	private ThesaurusOrganization creator;
+	private Boolean polyHierarchical;
 
-    public Thesaurus() {
-    }   
+	private Set<Language> lang = new HashSet<Language>();
+	private Set<ThesaurusFormat> format = new HashSet<ThesaurusFormat>();
+	private Set<ThesaurusVersionHistory> versions;
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public Thesaurus() {
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public String getContributor() {
-        return contributor;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public void setContributor(String contributor) {
-        this.contributor = contributor;
-    }
+	public String getContributor() {
+		return contributor;
+	}
 
-    public String getCoverage() {
-        return coverage;
-    }
+	public void setContributor(String contributor) {
+		this.contributor = contributor;
+	}
 
-    public void setCoverage(String coverage) {
-        this.coverage = coverage;
-    }
+	public String getCoverage() {
+		return coverage;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public void setCoverage(String coverage) {
+		this.coverage = coverage;
+	}
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getPublisher() {
-        return publisher;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+	public String getPublisher() {
+		return publisher;
+	}
 
-    public String getRelation() {
-        return relation;
-    }
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
 
-    public void setRelation(String relation) {
-        this.relation = relation;
-    }
+	public String getRelation() {
+		return relation;
+	}
 
-    public String getRights() {
-        return rights;
-    }
+	public void setRelation(String relation) {
+		this.relation = relation;
+	}
 
-    public void setRights(String rights) {
-        this.rights = rights;
-    }
+	public String getRights() {
+		return rights;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public void setRights(String rights) {
+		this.rights = rights;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public String getSubject() {
-        return subject;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
+	public String getSubject() {
+		return subject;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public Date getCreated() {
-        return created;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 
 	public ThesaurusType getType() {
 		return type;
@@ -187,7 +187,7 @@ public class Thesaurus implements Serializable, IAuditableBean {
 
 	public void setCreator(ThesaurusOrganization creator) {
 		this.creator = creator;
-	}		
+	}
 
 	@JsonIgnore
 	public Set<ThesaurusVersionHistory> getVersions() {
@@ -198,28 +198,22 @@ public class Thesaurus implements Serializable, IAuditableBean {
 		this.versions = versions;
 	}
 
-    /**
-     * @return All languages available for this Thesaurus
-     */
-	 @NotAudited
-    @JsonIgnore
-    public Set<Language> getLang() {
-        return lang;
-    }
+	/**
+	 * @return All languages available for this Thesaurus
+	 */
+	@NotAudited
+	@JsonIgnore
+	public Set<Language> getLang() {
+		return lang;
+	}
 
-    /**
-     * @param lang
-     */
-    public void setLang(Set<Language> lang) {
-        this.lang = lang;
-    }
-    
-    /**
-     * @param lang
-     */
-    public void addLang(Language lang) {
-        this.lang.add(lang);
-    }
+	public void setLang(Set<Language> lang) {
+		this.lang = lang;
+	}
+
+	public void addLang(Language item) {
+		this.lang.add(item);
+	}
 
 	public Boolean isDefaultTopConcept() {
 		return defaultTopConcept;
@@ -230,35 +224,35 @@ public class Thesaurus implements Serializable, IAuditableBean {
 	}
 
 	@Override
-	public String getThesaurusId() {		
+	public String getThesaurusId() {
 		return identifier;
 	}
 
-    public Boolean isArchived() {
-        return archived;
-    }
+	public Boolean isArchived() {
+		return archived;
+	}
 
-    public void setArchived(Boolean archived) {
-        this.archived = archived;
-    }
+	public void setArchived(Boolean archived) {
+		this.archived = archived;
+	}
 
-    public Boolean isPolyHierarchical() {
-        return polyHierarchical;
-    }
+	public Boolean isPolyHierarchical() {
+		return polyHierarchical;
+	}
 
-    public void setPolyHierarchical(Boolean polyHierarchical) {
-        this.polyHierarchical = polyHierarchical;
-    }
-    
-    public Set<ThesaurusFormat> getFormat() {
+	public void setPolyHierarchical(Boolean polyHierarchical) {
+		this.polyHierarchical = polyHierarchical;
+	}
+
+	public Set<ThesaurusFormat> getFormat() {
 		return format;
 	}
 
 	public void setFormat(Set<ThesaurusFormat> format) {
 		this.format = format;
 	}
-	
-	public void addFormat(ThesaurusFormat format) {
-        this.format.add(format);
-    }
+
+	public void addFormat(ThesaurusFormat item) {
+		this.format.add(item);
+	}
 }

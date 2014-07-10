@@ -55,7 +55,6 @@ import fr.mcc.ginco.extjs.view.utils.ThesaurusNoteViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusNoteRestService;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.INoteTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusNoteRestServiceTest {
 	
@@ -75,7 +74,6 @@ public class ThesaurusNoteRestServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusNoteRestService);
 	}
 	
 	/**
@@ -83,7 +81,7 @@ public class ThesaurusNoteRestServiceTest {
 	 * 
 	 */
 	@Test
-	public final void getAllConceptNoteTypes() throws BusinessException {
+	public final void getAllConceptNoteTypes() {
 		NoteType fakeNoteType1 = getFakeNoteTypeWithCodeAndEmptyValues("fakeType1");
 		NoteType fakeNoteType2 = getFakeNoteTypeWithCodeAndEmptyValues("fakeType2");
 		
@@ -101,7 +99,7 @@ public class ThesaurusNoteRestServiceTest {
 	 * 
 	 */
 	@Test
-	public final void getAllTermNoteTypes() throws BusinessException {
+	public final void getAllTermNoteTypes() {
 		NoteType fakeNoteType1 = getFakeNoteTypeWithCodeAndEmptyValues("fakeType1");
 		NoteType fakeNoteType2 = getFakeNoteTypeWithCodeAndEmptyValues("fakeType2");
 		
@@ -119,7 +117,7 @@ public class ThesaurusNoteRestServiceTest {
 	 * 
 	 */
 	@Test
-	public final void getAllNotesOfAConcept() throws BusinessException {
+	public final void getAllNotesOfAConcept(){
 		
 		
 		Note fakeNote1 = getFakeNoteWithIdAndEmptyValues("fakeNote1");

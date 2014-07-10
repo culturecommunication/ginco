@@ -40,7 +40,6 @@ import org.junit.Test;
 
 import fr.mcc.ginco.beans.ThesaurusTermRole;
 import fr.mcc.ginco.dao.hibernate.ThesaurusTermRoleDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class ThesaurusTermRoleDAOTest extends BaseDAOTest {
@@ -53,7 +52,7 @@ public class ThesaurusTermRoleDAOTest extends BaseDAOTest {
 		thesaurusTermRoleDAO.setSessionFactory(getSessionFactory());
 	}
     @Test
-    public final void testGetDefaultThesaurusTermRole() throws BusinessException {
+    public final void testGetDefaultThesaurusTermRole() {
     	ThesaurusTermRole defaultRole = thesaurusTermRoleDAO.getDefaultThesaurusTermRole();
 		Assert.assertEquals("Error while getting thessaurus terms - invalid number of results", "P", defaultRole.getCode());
 		Assert.assertEquals("Error while getting thessaurus terms - not sorted correctly", "Partitive", defaultRole.getLabel());

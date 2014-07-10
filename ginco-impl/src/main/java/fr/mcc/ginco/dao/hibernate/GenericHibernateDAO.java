@@ -46,80 +46,85 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 
 import fr.mcc.ginco.dao.IGenericDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Implementation of {@link IGenericDAO}; basic class for DAO-related work.
- * @param <T> type of object.
+ *
+ * @param <T>  type of object.
  * @param <ID> primary key.
  */
 public class GenericHibernateDAO<T, ID extends Serializable> implements IGenericDAO<T, ID> {
 
 	private final Class<T> persistentClass;
-	
+
 	@Inject
 	@Named("gincoSessionFactory")
 	private SessionFactory sessionFactory;
-		
+
 	public GenericHibernateDAO(Class<T> clazz) {
 		this.persistentClass = clazz;
 	}
-	
+
 	@Override
-	final public T loadById(ID id) {
+	public final T loadById(ID id) {
 		return (T) getCurrentSession().load(persistentClass, id);
-	}	
+	}
 
 	@Override
-	final public T getById(ID id) {
+	public final T getById(ID id) {
 		return (T) getCurrentSession().get(persistentClass, id);
-	}	
+	}
 
 	@Override
-	final public List<T> findAll() {
+	public final List<T> findAll() {
 		return getCurrentSession().createCriteria(persistentClass).list();
-	}	
-	
+	}
+
 	@Override
-	final public List<T> findAll(String sortColumn, SortingTypes order) {
-		if (order.asc.equals(order)){
+	public final List<T> findAll(String sortColumn, SortingTypes order) {
+		if (order.asc.equals(order)) {
 			return getCurrentSession().createCriteria(persistentClass).addOrder(Order.asc(sortColumn)).list();
-		}else {
+		} else {
 			return getCurrentSession().createCriteria(persistentClass).addOrder(Order.desc(sortColumn)).list();
 		}
 	}
-	
+
 	@Override
-	final public Long count(){
+	public final Long count() {
 		return (Long) getCurrentSession().createCriteria(persistentClass).setProjection(Projections.rowCount()).list().get(0);
 	}
 
 	@Override
-	final public T makePersistent(T entity) {
+	public final T makePersistent(T entity) {
 		getCurrentSession().saveOrUpdate(entity);
 		return entity;
 	}
 
 	@Override
-	public T update(T entity) throws BusinessException {
+	public T update(T entity) {
 		return makePersistent(entity);
 	}
-	
+
 	@Override
-	final public T delete(T entity) {
+	public final T delete(T entity) {
 		this.getCurrentSession().delete(entity);
 		return entity;
 	}
-	
-	final public Session getCurrentSession() {
-		return sessionFactory.getCurrentSession();	
+
+	@Override
+	public void flush() {
+		this.getCurrentSession().flush();
 	}
 
-	final public SessionFactory getSessionFactory() {
+	public final Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
+
+	public final SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
-	final public void setSessionFactory(SessionFactory sessionFactory) {
+	public final void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 }

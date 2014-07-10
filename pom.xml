@@ -1,9 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.smile.mcc.ginco</groupId>
     <artifactId>ginco</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>2.0.1</version>
     <name>Ginco</name>
     <packaging>pom</packaging>
 
@@ -58,14 +58,13 @@
         <cargo.remote.uri>${tomcat.base}manager</cargo.remote.uri>
         <postgresql.jdbc.version>9.1-901.jdbc4</postgresql.jdbc.version>
         <maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
-        <ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
-        <ginco.webservice.log.file>/var/log/tomcat6/ginco-webservices.log</ginco.webservice.log.file>
+        <ginco.log.file>${catalina.base}/logs/ginco.log</ginco.log.file>
+        <ginco.roles.log.file>${catalina.base}/logs/ginco-roles.log</ginco.roles.log.file>
+        <ginco.webservice.log.file>${catalina.base}/logs/ginco-webservices.log</ginco.webservice.log.file>
         <ginco.ext.js.file>ext-all.js</ginco.ext.js.file>
         <servlet.api.version>2.5</servlet.api.version>
         <apache.commons.lang.version>3.1</apache.commons.lang.version>
         <apache.jena.version>2.10.0</apache.jena.version>
-        <skosapi.version>3.0.0</skosapi.version>
-        <owlapi.version>3.2.4</owlapi.version>
         <org.apache.solr>4.2.0</org.apache.solr>
 
         <!-- remote configuration -->
@@ -77,6 +76,8 @@
         <folder.conf>${basedir}/conf/local</folder.conf>
         <deploy.plugin.skip>true</deploy.plugin.skip>
         <solr.folder.conf>${basedir}/solr</solr.folder.conf>
+        <postgresql.scope>provided</postgresql.scope>
+        <dbcp.scope>provided</dbcp.scope>
     </properties>
 
     <profiles>
@@ -84,7 +85,7 @@
             <id>integration</id>
             <properties>
                 <!-- cargo deployment -->
-                <tomcat.base>http://hadoc-int.eqx.intranet:80/</tomcat.base>
+                <tomcat.base>http://hadoc-int.eqx.intranet:8080/</tomcat.base>
                 <cargo.tomcat.manager.login>admin</cargo.tomcat.manager.login>
                 <cargo.tomcat.manager.password>admin</cargo.tomcat.manager.password>
                 <ginco.log.file>/var/log/tomcat6/ginco.log</ginco.log.file>
@@ -292,7 +293,7 @@
                 <artifactId>dbcp</artifactId>
                 <version>${dbcp.version}</version>
                 <type>jar</type>
-                <scope>provided</scope>
+                <scope>${dbcp.scope}</scope>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
@@ -342,7 +343,7 @@
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.jdbc.version}</version>
-                <scope>provided</scope>
+                <scope>${postgresql.scope}</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
@@ -409,7 +410,6 @@
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-web</artifactId>
                 <version>${org.springsecurity.version}</version>
-                <scope>runtime</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework</groupId>
@@ -423,16 +423,6 @@
                 <version>${org.springsecurity.version}</version>
             </dependency>
             <dependency>
-                <groupId>uk.ac.manchester.cs.skos</groupId>
-                <artifactId>skosapi</artifactId>
-                <version>${skosapi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>uk.ac.manchester.cs.owl</groupId>
-                <artifactId>owlapi</artifactId>
-                <version>${owlapi.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.jena</groupId>
                 <artifactId>apache-jena-libs</artifactId>
                 <version>${apache.jena.version}</version>
@@ -442,7 +432,12 @@
                 <groupId>org.apache.solr</groupId>
                 <artifactId>solr-solrj</artifactId>
                 <version>${org.apache.solr}</version>
-            </dependency>            
+            </dependency>  
+            <dependency>
+        		<groupId>org.owasp.csrfguard</groupId>
+        		<artifactId>Owasp.CsrfGuard</artifactId>
+        		<version>3.0.1-SNAPSHOT</version>
+        	</dependency>          
         </dependencies>
     </dependencyManagement>
     <build>
@@ -486,7 +481,7 @@
                         <configuration>
                             <type>runtime</type>
                             <properties>
-                                <cargo.datasource.datasource/>
+                                <cargo.datasource.datasource />
                                 <cargo.remote.uri>${cargo.remote.uri}</cargo.remote.uri>
                                 <cargo.remote.username>${cargo.tomcat.manager.login}</cargo.remote.username>
                                 <cargo.remote.password>${cargo.tomcat.manager.password}</cargo.remote.password>
@@ -635,7 +630,8 @@
         <module>ginco-admin</module>
         <module>ginco-webservices</module>
         <module>ginco-solr-conf</module>
-    </modules>
+    <module>ginco-cli</module>
+  </modules>
 
     <dependencies>
         <dependency>
@@ -651,6 +647,11 @@
             <id>smile-github-addon</id>
             <name>Smile Github repository</name>
             <url>http://smile-sa.github.com/maven-repository/releases-addon</url>
+        </repository>
+        <repository>
+        <id>owasp-repo</id>
+        <name>OWASP REPO</name>
+        <url>https://raw.github.com/cdaller/OWASP-CSRFGuard/master/repository</url>
         </repository>
     </repositories>
 </project>

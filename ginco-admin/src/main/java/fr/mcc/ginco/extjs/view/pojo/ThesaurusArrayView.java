@@ -34,10 +34,10 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusArray} bean,
@@ -45,10 +45,10 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusArrayView implements Serializable {
+public class ThesaurusArrayView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String superOrdinateId;
-	private String superOrdinateConceptLabel;
+	private String superOrdinateLabel;
 	private String created;
 	private String modified;
 	private String parentArrayId;
@@ -81,19 +81,11 @@ public class ThesaurusArrayView implements Serializable {
 	}
 
 	public String getSuperOrdinateLabel() {
-		return superOrdinateConceptLabel;
+		return superOrdinateLabel;
 	}
 
-	public void setSuperOrdinateLabel(String superOrdinateConceptLabel) {
-		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
-	}
-
-	public String getSuperOrdinateConceptLabel() {
-		return superOrdinateConceptLabel;
-	}
-
-	public void setSuperOrdinateConceptLabel(String superOrdinateConceptLabel) {
-		this.superOrdinateConceptLabel = superOrdinateConceptLabel;
+	public void setSuperOrdinateLabel(String superOrdinateLabel) {
+		this.superOrdinateLabel = superOrdinateLabel;
 	}
 
 	public List<ThesaurusArrayConceptView> getConcepts() {

@@ -47,6 +47,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,23 +56,20 @@ import fr.mcc.ginco.audit.csv.JournalLine;
 import fr.mcc.ginco.audit.csv.readers.ThesaurusAuditReader;
 import fr.mcc.ginco.audit.csv.readers.ThesaurusConceptAuditReader;
 import fr.mcc.ginco.audit.csv.readers.ThesaurusTermAuditReader;
-import fr.mcc.ginco.audit.utils.AuditReaderService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.utils.DateUtil;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("gincoRevService")
 public class GincoRevServiceImpl implements IGincoRevService {
-	@Log
-	private Logger logger;
+	
+	private static Logger logger = LoggerFactory.getLogger(GincoRevServiceImpl.class);
 
 	@Inject
-	@Named("thesaurusVersionHistoryDAO")
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Inject
@@ -80,20 +78,16 @@ public class GincoRevServiceImpl implements IGincoRevService {
 
 	@Inject
 	@Named("thesaurusConceptAuditReader")
-	ThesaurusConceptAuditReader conceptAuditReader;
+	private ThesaurusConceptAuditReader conceptAuditReader;
 
 	@Inject
 	@Named("thesaurusTermAuditReader")
-	ThesaurusTermAuditReader termAuditReader;
+	private ThesaurusTermAuditReader termAuditReader;
 
 	@Inject
 	@Named("thesaurusAuditReader")
-	ThesaurusAuditReader thesaurusAuditReader;
-
-	@Inject
-	@Named("auditReaderService")
-	private AuditReaderService readerService;
-
+	private ThesaurusAuditReader thesaurusAuditReader;
+	
 	/*
 	 * (non-Javadoc)
 	 * 

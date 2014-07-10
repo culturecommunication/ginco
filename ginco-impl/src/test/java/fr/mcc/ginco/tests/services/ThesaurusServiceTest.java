@@ -34,6 +34,23 @@
  */
 package fr.mcc.ginco.tests.services;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import fr.mcc.ginco.ark.CustomGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
@@ -44,30 +61,13 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.ThesaurusServiceImpl;
-import fr.mcc.ginco.tests.LoggerTestUtil;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class ThesaurusServiceTest {
 
-	@Mock(name = "thesaurusDAO")
+	@Mock
 	private IThesaurusDAO thesaurusDAO;
-	
-	@Mock(name = "thesaurusVersionHistoryDAO")
+
+	@Mock
 	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
 
 	@Mock(name = "generatorService")
@@ -78,14 +78,13 @@ public class ThesaurusServiceTest {
 
     @Mock(name = "thesaurushelper")
 	private ThesaurusHelper thesaurusHelper;
-    
+
 	@InjectMocks
 	private ThesaurusServiceImpl thesaurusService;
 
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusService);
 	}
 
 	@Test
@@ -98,7 +97,14 @@ public class ThesaurusServiceTest {
 	}
 
 	@Test
-	public final void testCreateThesaurus() throws BusinessException {
+	public final void testGetDefaultThesaurus() {
+		Thesaurus thesaurusRes = thesaurusService.getDefaultThesaurus();
+		Assert.assertNotNull("Error while getting default thesaurus",
+				thesaurusRes);
+	}
+
+	@Test
+	public final void testCreateThesaurus() {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);
@@ -109,7 +115,7 @@ public class ThesaurusServiceTest {
 	}
 
 	@Test
-	public final void testUpdateThesaurus() throws BusinessException {
+	public final void testUpdateThesaurus() {
 		Thesaurus mockThesaurus = mock(Thesaurus.class);
 		when(thesaurusDAO.update(any(Thesaurus.class))).thenReturn(
 				mockThesaurus);
@@ -142,7 +148,7 @@ public class ThesaurusServiceTest {
 				.getThesaurusLanguages("mockedThesaurus");
 		Assert.assertEquals("error while getting thesaurus language list", 3,
 				actualLanguages.size());
-		
+
 		Assert.assertEquals("fra", actualLanguages.get(0).getId());
 		Assert.assertEquals("jpn", actualLanguages.get(1).getId());
 		Assert.assertEquals("rus", actualLanguages.get(2).getId());

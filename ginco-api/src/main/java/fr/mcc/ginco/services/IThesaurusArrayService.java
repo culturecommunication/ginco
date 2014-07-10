@@ -39,7 +39,6 @@ import java.util.List;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusArray} objects, contains basic
@@ -69,14 +68,15 @@ public interface IThesaurusArrayService {
      * @param label
      * @param arrayConcepts
      * @return
-     * @throws BusinessException
      */
-    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label,  List<ThesaurusArrayConcept> arrayConcepts) throws BusinessException;
+    ThesaurusArray updateThesaurusArray(ThesaurusArray thesaurusArray, NodeLabel label,  List<ThesaurusArrayConcept> arrayConcepts);
 
-    /**
-     * Update a single Thesaurus Concept Object without NodeLabel
+     /**
+     * Updates a single Thesaurus Concept Object without NodeLabel
+     * @param thesaurusArray
+     * @return
      */
-    ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray) throws BusinessException;
+    ThesaurusArray updateOnlyThesaurusArray(ThesaurusArray thesaurusArray);
     /**
      * Delete a ThesaurusArray
      * @param thesaurusArray

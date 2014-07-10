@@ -42,8 +42,8 @@ import java.io.Serializable;
 /**
  * Bean representing and adminstrator user
  */
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
-public class AdminUser implements Serializable {	
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+public class AdminUser implements Serializable {
 
 	private String userId;
 

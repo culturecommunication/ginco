@@ -34,19 +34,20 @@
  */
 package fr.mcc.ginco.exports.result.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
+import fr.mcc.ginco.beans.CustomTermAttribute;
+import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 
 /**
  * Small utility class for representing an exported concept branch With
@@ -54,8 +55,11 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
  */
 @SuppressWarnings("serial")
 @XmlRootElement
-@XmlSeeAlso({ Note.class, ConceptHierarchicalRelationship.class })
-public class GincoExportedBranch implements Serializable {
+@XmlSeeAlso({ Note.class, ConceptHierarchicalRelationship.class,
+		Alignment.class, CustomConceptAttribute.class,
+		CustomConceptAttributeType.class, CustomTermAttribute.class,
+		CustomTermAttributeType.class })
+public class GincoExportedBranch extends GincoExportedEntity {
 
 	// Concept and terms are read by Jaxb and automatically added to the XML
 	// structure
@@ -66,19 +70,10 @@ public class GincoExportedBranch implements Serializable {
 	// The use of a JaxbList object is due to the inability of Jaxb to serialize
 	// a HashMap<String, Bean> directly
 	private ThesaurusConcept rootConcept = new ThesaurusConcept();
-	private List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
-	private List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 	private Map<String, JaxbList<ConceptHierarchicalRelationship>> hierarchicalRelationship = new Hashtable<String, JaxbList<ConceptHierarchicalRelationship>>();
 	private Map<String, JaxbList<Note>> termNotes = new Hashtable<String, JaxbList<Note>>();
 	private Map<String, JaxbList<Note>> conceptNotes = new Hashtable<String, JaxbList<Note>>();
-
-	public List<ThesaurusTerm> getTerms() {
-		return terms;
-	}
-
-	public void setTerms(List<ThesaurusTerm> terms) {
-		this.terms = terms;
-	}
+	private Map<String, JaxbList<Alignment>> alignments = new Hashtable<String, JaxbList<Alignment>>();
 
 	public Map<String, JaxbList<ConceptHierarchicalRelationship>> getHierarchicalRelationship() {
 		return hierarchicalRelationship;
@@ -105,19 +100,19 @@ public class GincoExportedBranch implements Serializable {
 		this.conceptNotes = conceptNotes;
 	}
 
-	public List<ThesaurusConcept> getConcepts() {
-		return concepts;
-	}
-
-	public void setConcepts(List<ThesaurusConcept> concepts) {
-		this.concepts = concepts;
-	}
-
 	public ThesaurusConcept getRootConcept() {
 		return rootConcept;
 	}
 
 	public void setRootConcept(ThesaurusConcept rootConcept) {
 		this.rootConcept = rootConcept;
+	}
+
+	public Map<String, JaxbList<Alignment>> getAlignments() {
+		return alignments;
+	}
+
+	public void setAlignments(Map<String, JaxbList<Alignment>> alignments) {
+		this.alignments = alignments;
 	}
 }

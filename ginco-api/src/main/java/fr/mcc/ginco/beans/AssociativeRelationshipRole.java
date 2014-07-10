@@ -36,16 +36,24 @@ package fr.mcc.ginco.beans;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Bean represents associative_relationship_role table and describes
  * the role for association between two {@link ThesaurusConcept}
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AssociativeRelationshipRole implements Serializable {
 
     private String code;
+    @XmlTransient
     private String label;
+    @XmlTransient
     private boolean defaultRole;
-  
+    @XmlTransient
+    private String skosLabel;
 
     public String getCode() {
         return code;
@@ -70,4 +78,12 @@ public class AssociativeRelationshipRole implements Serializable {
     public void setDefaultRole(boolean defaultRole) {
         this.defaultRole = defaultRole;
     }
+
+	public String getSkosLabel() {
+		return skosLabel;
+	}
+
+	public void setSkosLabel(String skosLabel) {
+		this.skosLabel = skosLabel;
+	}
 }

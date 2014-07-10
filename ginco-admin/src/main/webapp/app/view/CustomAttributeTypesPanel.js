@@ -55,6 +55,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
     xActions : 'Actions',
     xConceptsTitle : 'Concepts custom attributes',
     xTermsTitle : 'Terms custom attributes',
+    xExportableConceptColumnLabel : 'Exportable',
 
     conceptAttrStore : null,
     termAttrStore : null,
@@ -93,7 +94,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     tbar : [ {
                         xtype : 'button',
                         text : me.xSave,
-                        requiredRoles : ['ADMIN'],
+                        requiredRoles : ['ADMIN', 'MANAGER'],
                         cls : 'save',
                         iconCls : 'icon-save',
                         itemId : 'saveConceptAttributTypes',
@@ -101,7 +102,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     },{
                         xtype : 'button',
                         text : me.xAdd,
-                        requiredRoles : ['ADMIN'],
+                        requiredRoles : ['ADMIN', 'MANAGER'],
                         cls : 'add',
                         iconCls : 'icon-add',
                         itemId : 'addConceptAttributTypes',
@@ -110,14 +111,15 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     columns : [
                         {
                             dataIndex : 'code',
+                            renderer: 'htmlEncode',
                             text : me.xCode,
                             editor: {
                                 xtype: 'textfield',
                                 allowBlank: false
                             }
-                        },
-                        {
+                        },{
                             dataIndex : 'value',
+                            renderer: 'htmlEncode',
                             flex: 1,
                             text : me.xValue,
                             editor: {
@@ -125,6 +127,11 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                                 allowBlank: false
                             }
                         },{
+							xtype : 'checkcolumn',
+							dataIndex : 'exportable',
+							header : me.xExportableConceptColumnLabel,
+							stopSelection : false
+						},{
                             xtype : 'actioncolumn',
                             itemId : 'conceptActionColumn',
                             header : me.xActions,
@@ -155,7 +162,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     tbar : [ {
                         xtype : 'button',
                         text : me.xSave,
-                        requiredRoles : ['ADMIN'],
+                        requiredRoles : ['ADMIN','MANAGER'],
                         cls : 'save',
                         iconCls : 'icon-save',
                         itemId : 'saveTermAttributTypes',
@@ -163,7 +170,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                     },{
                             xtype : 'button',
                             text : me.xAdd,
-                            requiredRoles : ['ADMIN'],
+                            requiredRoles : ['ADMIN','MANAGER'],
                             cls : 'add',
                             iconCls : 'icon-add',
                             itemId : 'addTermAttributTypes',
@@ -173,6 +180,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                         {
                             dataIndex : 'code',
                             text : me.xCode,
+                            renderer: 'htmlEncode',
                             editor: {
                                 xtype: 'textfield',
                                 allowBlank: false
@@ -181,6 +189,7 @@ Ext.define('GincoApp.view.CustomAttributeTypesPanel', {
                         {
                             dataIndex : 'value',
                             flex: 1,
+                            renderer: 'htmlEncode',
                             text : me.xValue,
                             editor: {
                                 xtype: 'textfield',

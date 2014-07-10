@@ -42,27 +42,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 
-@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("associativeRelationshipService")
 public class AssociativeRelationshipServiceImpl implements IAssociativeRelationshipService {
 
-    @Inject
-    @Named("associativeRelationshipDAO")
-    private IAssociativeRelationshipDAO associativeRelationshipDAO;
+	@Inject
+	private IAssociativeRelationshipDAO associativeRelationshipDAO;
 
-    @Override
-    public AssociativeRelationship getAssociativeRelationshipById(String id1, String id2) {
-        return associativeRelationshipDAO.getAssociativeRelationship(id1,id2);
-    }
+	@Override
+	public AssociativeRelationship getAssociativeRelationshipById(String id1, String id2) {
+		return associativeRelationshipDAO.getAssociativeRelationship(id1, id2);
+	}
 
-    @Override
-    public List<String> getAssociatedConceptsId(ThesaurusConcept concept)
-            throws BusinessException {
+	@Override
+	public List<String> getAssociatedConceptsId(ThesaurusConcept concept) {
+		return associativeRelationshipDAO.getAssociatedConcepts(concept);
+	}
 
-        return associativeRelationshipDAO.getAssociatedConcepts(concept);
-    }
 
+	@Override
+	public List<AssociativeRelationship> getAssociatedConceptsRelationships(ThesaurusConcept concept) {
+		return associativeRelationshipDAO.getAssociationsForConcept(concept);
+	}
 }

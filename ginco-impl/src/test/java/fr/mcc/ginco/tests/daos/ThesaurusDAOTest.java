@@ -37,20 +37,20 @@ package fr.mcc.ginco.tests.daos;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
 import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.hibernate.ThesaurusDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 
 public class ThesaurusDAOTest extends BaseDAOTest {
@@ -110,7 +110,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
     }
     
     @Test
-    public final void testCreateNewThesaurusWithEmptyCreator() throws BusinessException {
+    public final void testCreateNewThesaurusWithEmptyCreator(){
         Thesaurus newThesaurus = new Thesaurus();
         newThesaurus.setTitle("test");
         newThesaurus.setCreator(null);
@@ -121,7 +121,7 @@ public class ThesaurusDAOTest extends BaseDAOTest {
     }   
     
     @Test
-    public final void testCreateNewThesaurusWithCreator() throws BusinessException {
+    public final void testCreateNewThesaurusWithCreator(){
         Thesaurus newThesaurus = new Thesaurus();
         ThesaurusOrganization thOrg = new ThesaurusOrganization();
         thOrg.setName("Un auteur");

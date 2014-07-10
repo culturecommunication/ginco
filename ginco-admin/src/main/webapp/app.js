@@ -50,7 +50,8 @@ Ext.onReady(function() {
 Ext.enableFx=false;
 
 Ext.Loader.setConfig({
-    enabled: true
+    enabled: true,
+    disableCaching: false
 });
 
 Ext.Loader.setLocale({
@@ -86,11 +87,20 @@ Ext.application({
         'SearchTypeStore',
         'ThesaurusStore',
         'CustomConceptAttributeTypeStore',
-        'ConceptArrayStore'
+        'ConceptArrayStore',
+        'AlignmentsStore',
+        'AlignmentTypeStore',
+        'ExternalThesaurusTypeStore',
+        'ExternalThesaurusStore',
+        'UserRoleStore',
+        'RoleStore',
+        'SuggestionStore',
+        'DeclaredUserStore',
+        'MySuggestionStore'
     ],
     views: [
         'GincoViewPort',
-        'GlobalTabPanel',
+        'GlobalThesaurusTabsPanel',
         'LeftPanel',
         'TopToolbar',
         'AProposWin',
@@ -104,7 +114,8 @@ Ext.application({
         'ThesaurusFormController',
         'SandboxPanelController',
         'TermPanelController',
-        'GlobalTabPanelController',
+        'GlobalThesaurusTabsPanelController',
+        'ThesaurusTabPanelController',
         'ConceptController',
         'NotePanelController',
         'ConceptArrayController',
@@ -112,11 +123,18 @@ Ext.application({
         'ImportController',
         'ThesaurusVersionPanelController',
         'SearchPanelController',
+        'ThesaurusReportsTabPanelController',
         'ComplexConceptPanelController',
-        'ComplexConceptsPanelController',        
-        'CustomAttributeTypesController'
+        'ComplexConceptsPanelController',
+        'CustomAttributeTypesController',
+        'RightNotePanelController',
+        'AlignmentController',
+        'ThesaurusStatisticsTabPanelController',
+        'UsersTabPanelController',
+        'SuggestionPanelController',
+        'MySuggestionsPanelController'
     ],
-    init: function(){    	
+    init: function(){
     },
     launch: function() {
     	var me = this;
@@ -136,10 +154,10 @@ Ext.application({
     	    },
     	    interval: 10000
     	});
-    	
+
     	Ext.create('GincoApp.model.UserInfoModel');
     	GincoApp.model.UserInfoModel.load('',{
-    			 success: function(record, operation) {
+    			 success: function(record, operation) {    				
     				 Thesaurus.ext.utils.userInfo=record;
     				 me.fireEvent("userinfoloaded");
     			 },
@@ -156,7 +174,7 @@ Ext.application({
                 duration: 1000,
                 remove:true
             });
-            
+
             // Fade out the icon and message
             splashscreen.next().fadeOut({
                 duration: 1000,
@@ -172,8 +190,8 @@ Ext.application({
         // Run the fade 500 milliseconds after launch.
         task.delay(500);
         Thesaurus.focus.manager.init();
-        
-        
+
+
         var map = new Ext.util.KeyMap(Ext.getBody(), [{
             key: Ext.EventObject.ONE,
             ctrl: true,

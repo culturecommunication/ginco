@@ -34,21 +34,19 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-import fr.mcc.ginco.beans.ThesaurusConceptGroup;
-
 /**
- * View class corresponding to {@link ThesaurusConceptGroup} bean, but fully serializable
- * 
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusConceptGroup} bean, but fully serializable
+ *
  * @see fr.mcc.ginco.beans
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusConceptGroupView implements Serializable {
+public class ThesaurusConceptGroupView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String created;
 	private String modified;
@@ -57,9 +55,13 @@ public class ThesaurusConceptGroupView implements Serializable {
 	private Integer groupConceptLabelId;
 	private String type;
 	private String language;
+	private String notation;
 	private List<String> concepts;
 	private String parentGroupId;
 	private String parentGroupLabel;
+	private String parentConceptId;
+	private String parentConceptLabel;
+	private Boolean isDynamic;
 
 	public String getIdentifier() {
 		return identifier;
@@ -117,6 +119,14 @@ public class ThesaurusConceptGroupView implements Serializable {
 		this.language = language;
 	}
 
+	public String getNotation() {
+		return notation;
+	}
+
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
+
 	public List<String> getConcepts() {
 		return concepts;
 	}
@@ -149,6 +159,27 @@ public class ThesaurusConceptGroupView implements Serializable {
 		this.parentGroupLabel = parentGroupLabel;
 	}
 
-	
-	
+	public String getParentConceptId() {
+		return parentConceptId;
+	}
+
+	public void setParentConceptId(String parentConceptId) {
+		this.parentConceptId = parentConceptId;
+	}
+
+	public String getParentConceptLabel() {
+		return parentConceptLabel;
+	}
+
+	public void setParentConceptLabel(String parentConceptLabel) {
+		this.parentConceptLabel = parentConceptLabel;
+	}
+
+	public Boolean getIsDynamic() {
+		return isDynamic;
+	}
+
+	public void setIsDynamic(Boolean isDynamic) {
+		this.isDynamic = isDynamic;
+	}
 }

@@ -70,6 +70,22 @@ Ext.define('GincoApp.model.ConceptGroupModel', {
             type: 'string'
         },
         {
+            name: 'notation',
+            type: 'string'
+        },
+        {
+            name: 'isDynamic',
+            type: 'boolean'
+        },
+        {
+            name: 'parentConceptId',
+            type: 'string'
+        },
+        {
+            name: 'parentConceptLabel',
+            type: 'string'
+        },
+        {
             name: 'parentGroupId',
             type: 'string'
         },
@@ -82,9 +98,9 @@ Ext.define('GincoApp.model.ConceptGroupModel', {
             type : 'array_of_string'
         }
     ],
-    
+
     idProperty : 'identifier',
-    
+
     proxy : {
 		api : {
 			create : 'services/ui/thesaurusconceptgroupservice/updateConceptGroup',

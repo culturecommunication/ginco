@@ -52,6 +52,10 @@ Ext.define('GincoApp.model.ConceptModel', {
         {
             name: 'topconcept',
             type: 'boolean'
+        },      
+        {
+            name: 'topistopterm',
+            type: 'boolean'
         },
         {
             name: 'thesaurusId',
@@ -68,13 +72,19 @@ Ext.define('GincoApp.model.ConceptModel', {
         {
             name : 'rootConcepts',
             type : 'array_of_string'
+        },
+        {
+            name : 'conceptsPath',
+            type : 'array_of_string', 
+            defaultValue : []
         }
     ],
     associations: [
                     {type: 'hasMany', model: 'GincoApp.model.ThesaurusTermModel',    name: 'terms'},
                     {type: 'hasMany', model: 'GincoApp.model.AssociationModel',    name: 'associatedConcepts'},
                     {type: 'hasMany', model: 'GincoApp.model.HierarchicalAssociationModel',    name: 'parentConcepts'},
-                    {type: 'hasMany', model: 'GincoApp.model.HierarchicalAssociationModel',    name: 'childConcepts'}
+                    {type: 'hasMany', model: 'GincoApp.model.HierarchicalAssociationModel',    name: 'childConcepts'},
+                    {type: 'hasMany', model: 'GincoApp.model.AlignmentModel',    name: 'alignments'}
    ],
    idProperty : 'identifier',
     

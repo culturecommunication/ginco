@@ -38,6 +38,8 @@ import java.io.File;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import fr.mcc.ginco.utils.DateUtil;
 
 /**
@@ -51,13 +53,14 @@ public class FileResponse {
 	public FileResponse(File file, String extension, String title) {
 		this.file = file;
 		this.extension = extension;
-		this.title = title;
+		this.title = StringEscapeUtils.unescapeHtml4(title).replaceAll("&apos", "").replaceAll("[^a-zA-Z0-9\\._]+", "_");
+	
 	}
 
 	public Response toResponse() {
 		Response.ResponseBuilder response = Response.ok(file);
 		response.header("Content-Disposition", "attachment; filename=\""
-				+ title + " " + DateUtil.toString(DateUtil.nowDate())
+				+ title + "_" + DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_")
 				+ extension + "\"");
 
 		return response.build();

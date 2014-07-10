@@ -36,15 +36,13 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
-import fr.mcc.ginco.beans.CustomTermAttribute;
-import fr.mcc.ginco.beans.CustomTermAttributeType;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.generic.IGenericCustomAttributeService;
 
 /**
  *
  */
-public interface ICustomConceptAttributeService extends IGenericCustomAttributeService<ThesaurusConcept,CustomConceptAttribute> {
+public interface ICustomConceptAttributeService
+		extends IGenericCustomAttributeService<ThesaurusConcept, CustomConceptAttribute> {
 	CustomConceptAttribute getAttributeByType(ThesaurusConcept entity, CustomConceptAttributeType type);
 }

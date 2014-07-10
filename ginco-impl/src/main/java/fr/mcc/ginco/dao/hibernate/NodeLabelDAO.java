@@ -34,35 +34,35 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import java.util.List;
-
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Implementation of {@link INodeLabelDAO}; basic class for DAO-related work.
  */
-@Repository("nodeLabelDAO")
+@Repository
 public class NodeLabelDAO extends GenericHibernateDAO<NodeLabel, Integer>
 		implements INodeLabelDAO {
 
 	public NodeLabelDAO() {
 		super(NodeLabel.class);
-	}    
-    
-    @Override
-    public NodeLabel getByThesaurusArray(String thesaurusArrayId) {
-        Criteria criteria = getCurrentSession().createCriteria(
-                NodeLabel.class);
-        criteria.add(Restrictions.eq("thesaurusArray.identifier", (String) thesaurusArrayId));
-        List<NodeLabel>foundNodeLabels = criteria.list();
+	}
 
-        if (foundNodeLabels.size()>0) {
-        	return (NodeLabel) criteria.list().get(0);
-        }
-        return null;
-    }
+	@Override
+	public NodeLabel getByThesaurusArray(String thesaurusArrayId) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				NodeLabel.class);
+		criteria.add(Restrictions.eq("thesaurusArray.identifier", thesaurusArrayId));
+		List<NodeLabel> foundNodeLabels = criteria.list();
+
+		if (foundNodeLabels.size() > 0) {
+			return (NodeLabel) criteria.list().get(0);
+		}
+		return null;
+	}
 }

@@ -26,7 +26,7 @@
 
 /*
  * File: app/view/NotePanel.js Note Creation/Edition
- * 
+ *
  */
 Ext.define('GincoApp.view.NotePanel', {
 	extend : 'Ext.panel.Panel',
@@ -53,10 +53,10 @@ Ext.define('GincoApp.view.NotePanel', {
 	xLanguageLabel : 'Language',
 	xAddNote : 'Add a note',
 	xDetach : 'Delete a note',
+	noteConceptStore : null,
 
 	initComponent : function() {
 		var me = this;
-		me.noteConceptStore = Ext.create('GincoApp.store.ThesaurusNoteStore');
 
 		Ext.applyIf(me, {
 			items : [ {
@@ -69,7 +69,7 @@ Ext.define('GincoApp.view.NotePanel', {
 					items : [ {
 						xtype : 'button',
 						text : 'Enregistrer',
-						requiredRoles : ['ADMIN'],
+						requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT'],
 						cls : 'save',
 						iconCls : 'icon-save',
 						itemId : 'saveNote',
@@ -88,7 +88,8 @@ Ext.define('GincoApp.view.NotePanel', {
 						items : [ {
 							xtype : 'button',
 							itemId : 'newNoteBtn',
-							requiredRoles : ['ADMIN'],
+							requiredRoles : [ 'ADMIN', 'MANAGER', 'EXPERT'],
+							iconCls : 'icon-add',
 							text : me.xAddNote
 						}, {
 							xtype : 'pagingtoolbar',
@@ -102,7 +103,10 @@ Ext.define('GincoApp.view.NotePanel', {
 						dataIndex : 'identifier',
 						text : me.xIdentifierLabel,
 						hidden : true
-					}, {
+					},{
+						dataIndex : 'thesaurusId',
+						hidden : true
+					},{
 						dataIndex : 'lexicalValue',
 						text : me.xLexicalValueLabel,
 						flex : 1

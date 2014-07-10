@@ -34,19 +34,20 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 /**
- * View class corresponding to {@link ThesaurusNote} bean, but fully serializable;
- * 
+ * View class corresponding to {@link fr.mcc.ginco.beans.Note} bean, but fully serializable;
+ *
  * @see fr.mcc.ginco.beans
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusNoteView implements Serializable {
-	
+public class ThesaurusNoteView implements Serializable, SecuredResourceView {
+
+
 	private String identifier;
 	private String lexicalValue;
 	private String language;
@@ -56,8 +57,11 @@ public class ThesaurusNoteView implements Serializable {
 	private String modified;
 	private String conceptId;
 	private String termId;
-	
-    public ThesaurusNoteView() {}
+	private String thesaurusId;
+
+
+	public ThesaurusNoteView() {
+	}
 
 	public String getIdentifier() {
 		return identifier;
@@ -130,4 +134,14 @@ public class ThesaurusNoteView implements Serializable {
 	public void setTermId(String termId) {
 		this.termId = termId;
 	}
+
+	@Override
+	public String getThesaurusId() {
+		return thesaurusId;
+	}
+
+	public void setThesaurusId(String thesaurusId) {
+		this.thesaurusId = thesaurusId;
+	}
+
 }

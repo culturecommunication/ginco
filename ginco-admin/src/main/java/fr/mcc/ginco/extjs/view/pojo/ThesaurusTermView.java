@@ -34,24 +34,20 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.utils.DateUtil;
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * View class corresponding to {@link ThesaurusTerm} bean, but fully serializable;
+ * View class corresponding to {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusView} bean, but fully serializable;
  * contains all links to other business-objects (full beans
- * {@link Thesaurus} and {@link Language}).
- * 
+ * {@link fr.mcc.ginco.beans.Thesaurus} and {@link fr.mcc.ginco.beans.Language}).
+ *
  * @see fr.mcc.ginco.beans
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusTermView implements Serializable {
+public class ThesaurusTermView implements Serializable, SecuredResourceView {
 	private String identifier;
 	private String lexicalValue;
 	private String created;
@@ -64,35 +60,11 @@ public class ThesaurusTermView implements Serializable {
 	private String thesaurusId;
 	private String language;
 	private String role;
+	private Boolean topistopterm;
+	private List<String> conceptsPath;
 
 
-    public ThesaurusTermView() {}
-
-	public ThesaurusTermView(ThesaurusTerm source) {
-		if (source != null) {
-			this.identifier = source.getIdentifier();
-			this.lexicalValue = source.getLexicalValue();
-			if(source != null) {
-				this.created = DateUtil.toString(source.getCreated());
-				this.modified = DateUtil.toString(source.getModified());
-			}
-            this.source = source.getSource();
-            this.prefered = source.getPrefered();
-            this.hidden = source.getHidden();
-            this.status = source.getStatus();
-            
-            if(source.getConcept() != null) {
-                this.conceptId = source.getConcept().getIdentifier();
-            }
-
-    		this.thesaurusId = source.getThesaurus().getIdentifier();
-    		if(source.getLanguage() != null) {
-    		this.language = source.getLanguage().getId();
-    		if (source.getRole() != null) {
-    			this.role = source.getRole().getCode();
-    		}
-    		}
-		}
+	public ThesaurusTermView() {
 	}
 
 	public String getIdentifier() {
@@ -190,5 +162,21 @@ public class ThesaurusTermView implements Serializable {
 	public void setHidden(Boolean hidden) {
 		this.hidden = hidden;
 	}
-	
+
+	public Boolean getTopistopterm() {
+		return topistopterm;
+	}
+
+	public void setTopistopterm(Boolean topistopterm) {
+		this.topistopterm = topistopterm;
+	}
+
+	public List<String> getConceptsPath() {
+		return conceptsPath;
+	}
+
+	public void setConceptsPath(List<String> conceptsPath) {
+		this.conceptsPath = conceptsPath;
+	}
+
 }

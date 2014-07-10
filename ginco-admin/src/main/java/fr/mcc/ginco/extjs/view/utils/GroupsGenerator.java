@@ -42,17 +42,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.utils.LabelUtil;
@@ -75,12 +74,11 @@ public class GroupsGenerator {
 	
 	@Inject
 	@Named("thesaurusListNodeFactory")
-	ThesaurusListNodeFactory thesaurusListNodeFactory;
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
 	@Value("${ginco.default.language}") private String defaultLanguage;
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(GroupsGenerator.class);
 
 	/**
 	 * Creates the list of groups for a given thesaurus
@@ -89,8 +87,7 @@ public class GroupsGenerator {
 	 *            id of the thesaurus.
 	 * @return created list of leafs.
 	 */
-	public List<IThesaurusListNode> generateGroups(String thesaurusId)
-			throws BusinessException {
+	public List<IThesaurusListNode> generateGroups(String thesaurusId) {
 		logger.debug("Generating thesaurus groups list for vocabularyId : " + thesaurusId);
 		List<ThesaurusConceptGroup> groups = thesaurusConceptGroupService.getAllThesaurusConceptGroupsByThesaurusId(null, thesaurusId);
 		logger.debug(groups.size() + " groups found");

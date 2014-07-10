@@ -94,6 +94,7 @@ Ext.apply(Ext.Loader, {
                 var url = Ext.Loader.locale.extLocalePath + "/ext-lang-" + Ext.Loader.locale.language + ".js";
                 Ext.Ajax.request({
                     async: false,
+                    disableCaching : false,
                     url: url,
                     proxy: {
                         type: 'json'
@@ -155,6 +156,7 @@ Ext.apply(Ext.Loader, {
                                 type: 'json',
                                 url: url
                             },
+                            disableCaching : false,
                             success: function (response) {
                                 eval(response.responseText);
                                 var localeClass = Ext.create(dependency);

@@ -56,7 +56,7 @@ import fr.mcc.ginco.data.ReducedThesaurus;
 
 /**
  * Unit tests class for the ThesaurusService
- * 
+ *
  */
 public class SOAPThesaurusServiceTest {
 
@@ -114,16 +114,18 @@ public class SOAPThesaurusServiceTest {
 
 		FullThesaurus fullThesaurus = thesaurusService
 				.getThesaurusById("mock1");
-		
+
 		List<String> expectedFormats = new ArrayList<String>();
 		expectedFormats.add("PDF");
 		expectedFormats.add("CSV");
 		ListAssert.assertEquals(expectedFormats, fullThesaurus.getFormats());
-		
+
 		Assert.assertEquals("Fake Type", fullThesaurus.getType());
 		Assert.assertEquals("Fake Creator Name", fullThesaurus.getCreatorName());
 		Assert.assertEquals("Fake Creator Homepage",
 				fullThesaurus.getCreatorHomepage());
+		Assert.assertEquals("Fake Creator Email",
+				fullThesaurus.getCreatorEmail());
 	}
 
 	@Test
@@ -156,7 +158,7 @@ public class SOAPThesaurusServiceTest {
 
 		return mockedLanguages;
 	}
-	
+
 	private Set<ThesaurusFormat> getMockedFormats() {
 		ThesaurusFormat mockedFormat1 = Mockito.mock(ThesaurusFormat.class);
 		Mockito.when(mockedFormat1.getLabel()).thenReturn("PDF");
@@ -231,6 +233,8 @@ public class SOAPThesaurusServiceTest {
 		Mockito.when(mockedCreator.getName()).thenReturn("Fake Creator Name");
 		Mockito.when(mockedCreator.getHomepage()).thenReturn(
 				"Fake Creator Homepage");
+		Mockito.when(mockedCreator.getEmail()).thenReturn(
+				"Fake Creator Email");
 
 		// Format, type and creator might be null (not mandatory)
 		Set<ThesaurusFormat> mockedFormats = getMockedFormats();

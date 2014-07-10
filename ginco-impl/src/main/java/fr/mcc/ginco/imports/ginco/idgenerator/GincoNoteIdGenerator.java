@@ -41,52 +41,47 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 
 /**
- * This class generate new ids for notes (both concept or term notes)
- * for importing branch in existing thesaurus
+ * This class generate new ids for notes (both concept or term notes) for
+ * importing branch in existing thesaurus
  * 
  */
 @Component("gincoNoteIdGenerator")
 public class GincoNoteIdGenerator {
 
 	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;
-	
-	@Inject
 	@Named("gincoIdMapParser")
 	private GincoIdMapParser gincoIdMapParser;
 
 	/**
-	 * This method updates ids of the concept or term notes
-	 *  
-	 * @param notes : map of notes
-	 * @param idMapping : the map where we store the mapping between old and new ids
-	 * @return Map<String, JaxbList<Note>> notes : updated concept notes with new ids
+	 * This method gets ids of the concept or term notes
+	 * 
+	 * @param notes
+	 *            : map of notes
+	 * @param idMapping
+	 *            : the map where we store the mapping between old and new ids
+	 * @return Map<String, JaxbList<Note>> new notes : updated concept notes
+	 *         with new ids
 	 */
-	public Map<String, JaxbList<Note>> checkIdsForNotes(
+	public Map<String, JaxbList<Note>> getNotesWithNewIds(
 			Map<String, JaxbList<Note>> notes, Map<String, String> idMapping) {
 		Map<String, JaxbList<Note>> updatedNotes = new HashMap<String, JaxbList<Note>>();
-		Iterator<Map.Entry<String, JaxbList<Note>>> iterator = notes.entrySet().iterator();
-		
+		Iterator<Map.Entry<String, JaxbList<Note>>> iterator = notes.entrySet()
+				.iterator();
+
 		while (iterator.hasNext()) {
 			Map.Entry<String, JaxbList<Note>> entry = iterator.next();
-			//New id for the key
+			// New id for the key
 			String newId = gincoIdMapParser.getNewId(entry.getKey(), idMapping);
 			JaxbList<Note> note = notes.get(entry.getKey());
-			
 			updatedNotes.put(newId, note);
 		}
-		notes.clear();
-		notes.putAll(updatedNotes);
-		return notes;
+
+		return updatedNotes;
 	}
 }

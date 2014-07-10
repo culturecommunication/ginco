@@ -35,7 +35,6 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusArrayConcept} objects, contains basic
@@ -50,9 +49,8 @@ public interface IThesaurusArrayConceptService {
 	 * @param thesaurusArrayId
 	 * @param conceptId
 	 * @return
-	 * @throws BusinessException
 	 */
-	ThesaurusArrayConcept geThesaurusArrayConcept(String thesaurusArrayId, String conceptId) throws BusinessException;
+	ThesaurusArrayConcept geThesaurusArrayConcept(String thesaurusArrayId, String conceptId);
 
    
 }

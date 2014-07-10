@@ -56,7 +56,6 @@ import fr.mcc.ginco.rest.services.RevisionsRestService;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IMistralRevService;
 import fr.mcc.ginco.services.IThesaurusService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class RevisionsRestServiceTest {
 
@@ -77,23 +76,21 @@ public class RevisionsRestServiceTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(revisionsRestService);
 		ReflectionTestUtils.setField(revisionsRestService, "defaultLang",
 				"fr-FR");
 	}
 
 	@Test(expected = BusinessException.class)
-	public final void testExportRevisionsInvalidThesaurusId()
-			throws BusinessException, IOException {
+	public final void testExportRevisionsInvalidThesaurusId() throws IOException {
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString()))
 				.thenReturn(null);
 		revisionsRestService.exportRevisions("fakeid", 0, "fr-FR");
 	}
 
 	@Test
-	public final void testExportRevisionsInvalidLanguage()
-			throws BusinessException, IOException {
+	public final void testExportRevisionsInvalidLanguage() throws IOException {
 		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setTitle("fake title");
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString()))
 				.thenReturn(fakeThesaurus);
 		Mockito.when(languagesService.getLanguageById("fakeid")).thenReturn(
@@ -102,9 +99,9 @@ public class RevisionsRestServiceTest {
 	}
 
 	@Test
-	public final void testExportRevisionse() throws BusinessException,
-			IOException {
+	public final void testExportRevisions() throws IOException {
 		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setTitle("fake title");
 		Mockito.when(thesaurusService.getThesaurusById(Mockito.anyString()))
 				.thenReturn(fakeThesaurus);
 		Language lang = new Language();

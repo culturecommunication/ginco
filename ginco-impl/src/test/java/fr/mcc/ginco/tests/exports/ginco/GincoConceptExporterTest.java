@@ -48,13 +48,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.exports.ginco.GincoConceptExporter;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.services.ConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.INoteService;
 
@@ -68,7 +68,7 @@ public class GincoConceptExporterTest {
 	@Mock(name="noteService")
 	private INoteService noteService;
 	
-    @Mock(name = "conceptHierarchicalRelationshipDAO")
+    @Mock
     private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
 	
 	@Mock(name="associativeRelationshipService")
@@ -129,5 +129,21 @@ public class GincoConceptExporterTest {
 		
 		JaxbList<Note> resultNotes = gincoConceptExporter.getExportConceptNotes(c1);
 		Assert.assertEquals(resultNotes.getList().size(), notes.size());
+	}
+	
+	@Test
+	public void testGetExportAssociativeRelationShip() {
+		
+			ThesaurusConcept thesaurusConcept = new ThesaurusConcept();
+			List<String> relationships  = new ArrayList<String>();
+			relationships.add("http://id1");
+			relationships.add("http://id2");
+
+			Mockito.when(associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept)).thenReturn(relationships);
+			
+			JaxbList<AssociativeRelationship> actualRes = gincoConceptExporter.getExportAssociativeRelationShip(thesaurusConcept);
+			
+			//Assert.assertEquals(2, actualRes.getList().size());
+		
 	}
 }

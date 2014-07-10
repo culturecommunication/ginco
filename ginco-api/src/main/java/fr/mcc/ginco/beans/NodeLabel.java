@@ -34,63 +34,72 @@
  */
 package fr.mcc.ginco.beans;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Bean represents node_label table to add label to {@link ThesaurusArray}
  * in different languages.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class NodeLabel implements Serializable{
+public class NodeLabel implements Serializable {
 	@XmlTransient
-    private Integer identifier;
-    private String lexicalValue;
-    private Date modified;
-    private Date created;
-    private Language language;
-    @XmlTransient
-    private ThesaurusArray thesaurusArray;
-    
+	private Integer identifier;
+	private String lexicalValue;
+	private Date modified;
+	private Date created;
+	private Language language;
+	@XmlTransient
+	private ThesaurusArray thesaurusArray;
+
 	public Integer getIdentifier() {
 		return identifier;
 	}
+
 	public void setIdentifier(Integer identifier) {
 		this.identifier = identifier;
 	}
-	
+
 	public String getLexicalValue() {
 		return lexicalValue;
 	}
+
 	public void setLexicalValue(String lexicalValue) {
 		this.lexicalValue = lexicalValue;
 	}
+
 	public Date getModified() {
 		return modified;
 	}
+
 	public void setModified(Date modified) {
 		this.modified = modified;
 	}
+
 	public Date getCreated() {
 		return created;
 	}
+
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+
 	public Language getLanguage() {
 		return language;
 	}
+
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
+
 	public ThesaurusArray getThesaurusArray() {
 		return thesaurusArray;
 	}
+
 	public void setThesaurusArray(ThesaurusArray thesaurusArray) {
 		this.thesaurusArray = thesaurusArray;
-	}    
+	}
 }

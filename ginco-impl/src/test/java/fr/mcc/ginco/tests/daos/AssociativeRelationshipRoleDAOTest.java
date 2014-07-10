@@ -40,7 +40,6 @@ import org.junit.Test;
 
 import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.dao.hibernate.AssociativeRelationshipRoleDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class AssociativeRelationshipRoleDAOTest extends BaseDAOTest {
@@ -54,11 +53,17 @@ public class AssociativeRelationshipRoleDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetDefaultAssociativeRelationshipRole()
-			throws BusinessException {
+	public void testGetDefaultAssociativeRelationshipRole() {
 		AssociativeRelationshipRole role = associativeRelationshipRoleDAO
 				.getDefaultAssociativeRelationshipRole();
 		Assert.assertEquals("P", role.getCode());
+	}
+	
+	@Test
+	public void testGetBySkosLabel() {
+		AssociativeRelationshipRole role = associativeRelationshipRoleDAO
+				.getBySkosLabel("InstanceSkos");
+		Assert.assertEquals("I", role.getCode());
 	}
 
 	@Override

@@ -37,7 +37,6 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link Note} objects, contains basic
@@ -46,13 +45,13 @@ import fr.mcc.ginco.exceptions.BusinessException;
  * @see fr.mcc.ginco.beans.Note
  */
 public interface INoteService {
-	
+
 	/**
      * Get list of paginated notes available for a concept.
      * @return
      */
     List<Note> getConceptNotePaginatedList(String conceptId, Integer startIndex, Integer limit);
-    
+
 	/**
      * Get list of paginated notes available for a term.
      * @return
@@ -65,15 +64,14 @@ public interface INoteService {
 	 * @return Note
 	 */
 	Note getNoteById(String id);
-	
-	
+
+
 	/**
 	 * Create or update a new note
 	 * @param note
 	 * @return the created or updated note
-	 * @throws BusinessException 
 	 */
-	Note createOrUpdateNote(Note note) throws BusinessException;
+	Note createOrUpdateNote(Note note);
 
 	/**
 	 * Delete a note
@@ -88,11 +86,25 @@ public interface INoteService {
 	 * @return
 	 */
 	Long getConceptNoteCount(String conceptId);
-	
+
 	/**
 	 * Count the number of notes for a term
 	 * @param conceptId
 	 * @return
 	 */
 	Long getTermNoteCount(String termId);
+
+	/**
+     * For indexing purposes
+      * @return list of all existing notes
+     */
+	List<Note> getAllNotes();
+
+	/**
+     * For indexing purposes
+     *  @param thesaurusId
+      * @return list of all notes in a given thesaurus
+     */
+	List<Note> getNotesByThesaurusId(String thesaurusId);
+
 }

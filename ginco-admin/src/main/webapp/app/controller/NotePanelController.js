@@ -36,23 +36,19 @@
 Ext.define('GincoApp.controller.NotePanelController', {
 	extend : 'Ext.app.Controller',
 	localized : true,
-	
+
 	xLoading : 'Loading',
 	xSucessLabel : 'Success!',
 	xSucessSavedMsg : 'Note saved successfully',
 	xProblemLabel : 'Error !',
 	xProblemSaveMsg : 'Unable to save this note!',
-	
-	onRenderGrid : function(theGrid) {
-		if (theGrid.up('conceptPanel') != null) {
-			var theConceptId = theGrid.up('conceptPanel').gincoId;
-			theGrid.getStore().getProxy().setExtraParam('conceptId', theConceptId);
-		} else {
+
+	onRenderTermNoteGrid : function(theGrid) {
+		if (theGrid.up('termPanel') != null){
 			var theTermId = theGrid.up('termPanel').gincoId;
 			theGrid.getStore().getProxy().setExtraParam('termId', theTermId);
+			theGrid.getStore().load();
 		}
-		theGrid.getStore().load();
-		
 	},
 
 	newNoteBtn : function(theButton){
@@ -64,7 +60,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		theForm.loadRecord(model);
 		win.show();
 	},
-	
+
 	loadLanguages : function(theCombo) {
 		var thePanel = theCombo.up('createNoteWin');
 		var theStore = theCombo.getStore();
@@ -76,24 +72,25 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			}
 		});
 	},
-	
+
 	saveNoteWin : function(theButton) {
 		var theForm = theButton.up('form');
 		var theWin = theButton.up('createNoteWin');
 		theForm.getForm().updateRecord();
 		var updatedModel = theForm.getForm().getRecord();
+		updatedModel.data.thesaurusId=theWin.thesaurusData.id;
 		if (theWin.store.findRecord('identifier', updatedModel.data.identifier) == null ){
 			theWin.store.add(updatedModel);
 		}
 	},
-	
+
 	onDeleteNote : function (gridview, el, rowIndex, colIndex, e, rec, rowEl) {
 		var theGrid = gridview.up('gridpanel');
         var theStore = theGrid.getStore();
         theStore.remove(rec);
         theGrid.up('panel').down('button[itemId=saveNote]').setDisabled(false);
 	},
-	
+
 	createNoteWindow : function (theGrid) {
 		var win = null;
 		var me=this;
@@ -101,7 +98,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			//we are editing a note for a concept
 			win = Ext.create('GincoApp.view.CreateNoteWin', {
 				storeNoteTypes : Ext.create('GincoApp.store.ConceptNoteTypeStore'),
-				thesaurusData : theGrid.up('conceptPanel').thesaurusData,
+				thesaurusData : theGrid.up('thesaurusTabPanel').thesaurusData,
 				listeners: {
 					saveNoteButton: function (theButton){
 						me.afterSavingNewNote(theGrid, theButton);
@@ -112,7 +109,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 			//we are editing a note for a term
 			win = Ext.create('GincoApp.view.CreateNoteWin', {
 				storeNoteTypes : Ext.create('GincoApp.store.TermNoteTypeStore'),
-				thesaurusData : theGrid.up('termPanel').thesaurusData,
+				thesaurusData : theGrid.up('thesaurusTabPanel').thesaurusData,
 				listeners: {
 					saveNoteButton: function (theButton){
 						me.afterSavingNewNote(theGrid, theButton);
@@ -123,7 +120,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		win.store = theGrid.getStore();
 		return win;
 	},
-	
+
 	afterSavingNewNote : function(theGrid, theButton) {
 		this.saveNoteWin(theButton);
 		theGrid.up('panel').down('button[itemId=saveNote]').setDisabled(false);
@@ -136,7 +133,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 		theForm.loadRecord(record);
 		win.show();
     },
-	
+
 	saveNoteBtn : function(theButton,theCallback) {
 		var me=this;
 		var theGrid = theButton.up('panel').down('gridpanel');
@@ -152,7 +149,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 				}
 			},
 			failure : function(model, operation) {
-				Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemSaveMsg);
+				Thesaurus.ext.utils.msg(me.xProblemLabel, model.exceptions[0].error);
 				thePanel.getEl().unmask();
 			}
 		});
@@ -161,7 +158,7 @@ Ext.define('GincoApp.controller.NotePanelController', {
 	init : function() {
 		this.control({
 			'notePanel #notegrid' : {
- 				render : this.onRenderGrid,
+ 				render : this.onRenderTermNoteGrid,
  				itemdblclick : this.onNoteDblClick
  			},
 			'notePanel #saveNote' : {

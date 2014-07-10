@@ -43,5 +43,6 @@ Ext.define('GincoLoginApp.locale.fr.view.GincoLoginForm', {
 	xUserNameLbl : "Nom d'utilisateur",
 	xPasswordLbl : "Mot de passe",
 	xLoginBtnLbl : "Valider",
-	xLoginErrorLbl : "Échec d'authentification. Veuillez réessayer. "
+	xLoginErrorLbl : "Échec d'authentification. Veuillez réessayer. ",
+	xLockErrorLbl : "Trop d'échecs d'authentification, le compte est désactivé temporairement"
 });

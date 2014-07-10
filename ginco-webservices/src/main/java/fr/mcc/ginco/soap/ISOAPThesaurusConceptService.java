@@ -40,88 +40,90 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * This class exposes all SOAP services related to concept objects
- * 
  */
 
 @WebService
 public interface ISOAPThesaurusConceptService {
-	
+
 	/**
 	 * Get hierarchical relations between two concepts
-	 * @param identifier of first concept
-	 * @param identifier of second concept
-	 * 
-	 * @return 0 if relations between concepts don't exist
-	 * @return 1 if first concept is parent of second concept
+	 *
+	 * @param firstConceptId identifier of first concept
+	 * @param secondConceptId identifier of second concept
 	 * @return 2 if first concept is child of second concept
 	 */
-	    
-	int getConceptsHierarchicalRelations(@WebParam(name="firstConceptId") String firstConceptId,@WebParam(name="secondConceptId") String secondConceptId) throws BusinessException;
-	
-	
+
+	int getConceptsHierarchicalRelations(@WebParam(name = "firstConceptId") String firstConceptId,
+	                                     @WebParam(name = "secondConceptId") String secondConceptId);
+
+
 	/**
 	 * Get preferredTerm by the identifier of a concept
-	 * @param identifier of a concept
+	 *
+	 * @param conceptId identifier of a concept
 	 * @return reduced preferred term
 	 */
-	
 
-	List<ReducedThesaurusTerm> getPreferredTermByConceptId(@WebParam(name="conceptId") String conceptId) throws BusinessException;
+
+	List<ReducedThesaurusTerm> getPreferredTermByConceptId(@WebParam(name = "conceptId") String conceptId);
 
 	/**
 	 * Returns the list of not preferred ThesaurusTerms by a concept
-	 * 
-	 * @param identifier of a concept
+	 *
+	 * @param conceptId identifier of a concept
 	 * @return list of not preferred terms
 	 */
-	List<ReducedThesaurusTerm> getConceptNotPreferredTerms(@WebParam(name="conceptId") String conceptId)
-			throws BusinessException;
-	
+	List<ReducedThesaurusTerm> getConceptNotPreferredTerms(@WebParam(name = "conceptId") String conceptId);
+
 	/**
 	 * Returns the status of a concept
-	 * 
+	 *
 	 * @param conceptId
 	 * @return the status of a concept
 	 */
-	int getStatusByConceptId(@WebParam(name="conceptId") String conceptId) throws BusinessException;
-	
+	int getStatusByConceptId(@WebParam(name = "conceptId") String conceptId);
+
 	/**
-     * Returns children of a concept
-     * @param identifier of a concept
-     * @return list of objects
-     */
-	List<String> getChildrenByConceptId(@WebParam(name="conceptId") String conceptId) throws BusinessException;
-	
+	 * Returns children of a concept
+	 *
+	 * @param conceptId identifier of a concept
+	 * @return list of objects
+	 */
+	List<String> getChildrenByConceptId(@WebParam(name = "conceptId") String conceptId);
+
 	/**
-     * Returns root concepts for given concept
-     * @param identifier of a concept
-     * @return list of root concepts
-     */
-	List<String> getRootConcepts(@WebParam(name="conceptId") String conceptId) throws BusinessException;
-	
+	 * Returns root concepts for given concept
+	 *
+	 * @param conceptId identifier of a concept
+	 * @return list of root concepts
+	 */
+	List<String> getRootConcepts(@WebParam(name = "conceptId") String conceptId);
+
 	/**
-     * Returns parent concepts for given concept
-     * @param identifier of a concept
-     * @return list of parent concepts
-     */
-	List<String> getParentConcepts(@WebParam(name="conceptId") String conceptId) throws BusinessException;
-	
+	 * Returns parent concepts for given concept
+	 *
+	 * @param conceptId identifier of a concept
+	 * @return list of parent concepts
+	 */
+	List<String> getParentConcepts(@WebParam(name = "conceptId") String conceptId);
+
 	/**
-     * Returns associative concepts for given concept
-     * @param identifier of a concept
-     * @return list of associative concepts
-     */
-	List<String> getAssociativeConcepts(@WebParam(name="conceptId") String conceptId) throws BusinessException;
-	
+	 * Returns associative concepts for given concept
+	 *
+	 * @param conceptId identifier of a concept
+	 * @return list of associative concepts
+	 */
+	List<String> getAssociativeConcepts(@WebParam(name = "conceptId") String conceptId);
+
 	/**
-     * Returns top concepts for a thesaurus
-     * @param identifier of a thesaurus
-     * @return list of top concepts
-     */
-	List<String> getTopConceptsByThesaurusId(@WebParam(name="thesaurusId") String thesaurusId) throws BusinessException;
+	 * Returns top concepts for a thesaurus
+	 *
+	 * @param thesaurusId identifier of a thesaurus
+	 * @return list of top concepts
+	 */
+	List<String> getTopConceptsByThesaurusId(@WebParam(name = "thesaurusId") String thesaurusId);
 }
 

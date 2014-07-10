@@ -56,7 +56,7 @@ public class Note implements Serializable {
     private Date created;
     private Date modified;
     private NoteType noteType;
-    
+
     @XmlTransient
     private ThesaurusConcept concept;
     @XmlTransient
@@ -106,8 +106,8 @@ public class Note implements Serializable {
 		return concept;
 	}
 
-	public void setConcept(ThesaurusConcept conceptId) {
-		this.concept = conceptId;
+	public void setConcept(ThesaurusConcept concept) {
+		this.concept = concept;
 	}
 
 	public ThesaurusTerm getTerm() {

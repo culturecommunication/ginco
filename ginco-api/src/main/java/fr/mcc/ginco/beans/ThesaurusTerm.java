@@ -49,100 +49,101 @@ import org.hibernate.envers.RelationTargetAuditMode;
  * Bean represents <b>thesaurus_term</b> table, contains some lexical
  * value that could be used in different cases.
  */
-@Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag=true)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings("serial")
 public class ThesaurusTerm implements Serializable, IAuditableBean {
 
-    private String identifier;
+	private String identifier;
 
-    private String lexicalValue;
-    private Date created;
-    private Date modified;
-    private String source;
-    private Boolean prefered;
-    private Boolean hidden;
-    private Integer status;
-    private ThesaurusTermRole role;
-    private ThesaurusConcept concept;
-    @XmlTransient
-    private Thesaurus thesaurus;
-    private Language language;
+	private String lexicalValue;
+	private Date created;
+	private Date modified;
+	private String source;
+	private Boolean prefered;
+	private Boolean hidden;
+	private Integer status;
+	private ThesaurusTermRole role;
+	private ThesaurusConcept concept;
+	@XmlTransient
+	private Thesaurus thesaurus;
+	private Language language;
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    @Field
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	@Field
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public String getLexicalValue() {
-        return lexicalValue;
-    }
+	public String getLexicalValue() {
+		return lexicalValue;
+	}
 
-    @Field
-    public void setLexicalValue(String lexicalValue) {
-        this.lexicalValue = lexicalValue;
-    }
+	@Field
+	public void setLexicalValue(String lexicalValue) {
+		this.lexicalValue = lexicalValue;
+	}
 
-    public Date getCreated() {
-        return created;
-    }
+	public Date getCreated() {
+		return created;
+	}
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 
-    public Date getModified() {
-        return modified;
-    }
+	public Date getModified() {
+		return modified;
+	}
 
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
+	public void setModified(Date modified) {
+		this.modified = modified;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public Boolean getPrefered() {
-        return prefered;
-    }
-    public void setPrefered(Boolean prefered) {
-        this.prefered = prefered;
-    }
+	public Boolean getPrefered() {
+		return prefered;
+	}
 
-    public Integer getStatus() {
-        return status;
-    }
+	public void setPrefered(Boolean prefered) {
+		this.prefered = prefered;
+	}
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+	public Integer getStatus() {
+		return status;
+	}
 
-    public ThesaurusTermRole getRole() {
-        return role;
-    }
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
-    public void setRole(ThesaurusTermRole role) {
-        this.role = role;
-    }
+	public ThesaurusTermRole getRole() {
+		return role;
+	}
 
-    public ThesaurusConcept getConcept() {
-        return concept;
-    }
+	public void setRole(ThesaurusTermRole role) {
+		this.role = role;
+	}
 
-    public void setConcept(ThesaurusConcept concept) {
-        this.concept = concept;
-    }
-   
-    public Thesaurus getThesaurus() {
+	public ThesaurusConcept getConcept() {
+		return concept;
+	}
+
+	public void setConcept(ThesaurusConcept concept) {
+		this.concept = concept;
+	}
+
+	public Thesaurus getThesaurus() {
 		return thesaurus;
 	}
 
@@ -151,15 +152,15 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
 	}
 
 	public Language getLanguage() {
-        return language;
-    }
+		return language;
+	}
 
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
 
 	@Override
-	public String getThesaurusId() {		
+	public String getThesaurusId() {
 		return thesaurus.getIdentifier();
 	}
 
@@ -169,6 +170,6 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
 
 	public void setHidden(Boolean hidden) {
 		this.hidden = hidden;
-	}   
+	}
 
 }

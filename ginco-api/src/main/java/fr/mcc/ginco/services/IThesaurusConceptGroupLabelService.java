@@ -35,7 +35,6 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
-import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Service used to work with {@link ThesaurusConceptGroupLabel} objects, contains basic
@@ -46,7 +45,10 @@ import fr.mcc.ginco.exceptions.BusinessException;
 public interface IThesaurusConceptGroupLabelService {
 
 	/**
-	 * Gets a {@link ThesaurusConceptGroupLabel} object, searched by its {@link ThesaurusConceptGroup} identifier and language
+	 * Gets a {@link ThesaurusConceptGroupLabel} object,
+	 * searched by its {@link fr.mcc.ginco.beans.ThesaurusConceptGroup}
+	 * identifier and language
+	 *
 	 * @param identifier, language (to implement)
 	 * @return A {@link ThesaurusConceptGroupLabel} object
 	 */
@@ -55,6 +57,7 @@ public interface IThesaurusConceptGroupLabelService {
 
 	/**
 	 * Get a label of a concept group by its identifier
+	 *
 	 * @param id
 	 * @return The label that fits to the id given in parameter
 	 */
@@ -62,18 +65,18 @@ public interface IThesaurusConceptGroupLabelService {
 
 	/**
 	 * Create or update of {@link ThesaurusConceptGroupLabel}
+	 *
 	 * @param conceptGroupLabel
 	 * @return The created or updated label
-	 * @throws BusinessException 
 	 */
-	ThesaurusConceptGroupLabel updateOrCreate(ThesaurusConceptGroupLabel conceptGroupLabel) throws BusinessException;
-	
+	ThesaurusConceptGroupLabel updateOrCreate(ThesaurusConceptGroupLabel conceptGroupLabel);
+
 	/**
 	 * Gets a ThesaurusConceptGroupLabel by thesaurus group concept id
-	 * 
-	 * @param thesaurusConceptGroupId
+	 *
+	 * @param thesaurusGroupConceptId
 	 * @return
 	 */
 	ThesaurusConceptGroupLabel getByThesaurusConceptGroup(String thesaurusGroupConceptId);
-	
+
 }

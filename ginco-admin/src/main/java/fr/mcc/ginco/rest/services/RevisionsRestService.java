@@ -43,19 +43,19 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.FileResponse;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IMistralRevService;
 import fr.mcc.ginco.services.IThesaurusService;
@@ -82,25 +82,23 @@ public class RevisionsRestService {
 	@Value("${ginco.default.language}")
 	private String defaultLang;
 
-	@Log
-	private Logger log;
+	private Logger logger  = LoggerFactory.getLogger(RevisionsRestService.class);
+
 
 	/**
 	 * Return revisions command file in .txt format; name begins with current DateTime.
 	 * 
 	 * @param thesaurusId
 	 * @return
-	 * @throws BusinessException
 	 * @throws IOException
 	 */
 	@GET
 	@Path("/exportRevisions")
-	@Produces("text/plain")
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response exportRevisions(
 			@QueryParam("thesaurusId") String thesaurusId,
 			@QueryParam("timestamp") long timestamp,
-			@QueryParam("lang") String language) throws BusinessException,
-			IOException {
+			@QueryParam("lang") String language) throws IOException {
 		Thesaurus thesaurus = null;
 		if (StringUtils.isNotEmpty(thesaurusId)) {
 			thesaurus = thesaurusService.getThesaurusById(thesaurusId);
@@ -114,7 +112,7 @@ public class RevisionsRestService {
 			lang = languagesService.getLanguageById(language);
 		}
 		if (lang == null) {
-			log.info("No language set in exportRevisions, defaulting to default language "
+			logger.info("No language set in exportRevisions, defaulting to default language "
 					+ defaultLang);
 			lang = languagesService.getLanguageById(defaultLang);
 		}
@@ -122,6 +120,35 @@ public class RevisionsRestService {
 		File resFile = mistralRevService.getRevisions(thesaurus, timestamp, lang);
 
 		return new FileResponse(resFile, ".txt", thesaurus.getTitle())
+				.toResponse();
+	}
+	
+	/**
+	 * Return revisions command file in .txt format of all thesauruses that have been modified
+	 * 
+	 * @param thesaurusId
+	 * @return
+	 * @throws IOException
+	 */
+	@GET
+	@Path("/exportAllRevisions")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response exportAllRevisions(
+			@QueryParam("timestamp") long timestamp,
+			@QueryParam("lang") String language) throws IOException {
+		Language lang = null;
+		if (StringUtils.isNotEmpty(language)) {	
+			lang = languagesService.getLanguageById(language);
+		}
+		if (lang == null) {
+			logger.info("No language set in exportRevisions, defaulting to default language "
+					+ defaultLang);
+			lang = languagesService.getLanguageById(defaultLang);
+		}
+
+		File resFile = mistralRevService.getAllRevisions(timestamp, lang);
+
+		return new FileResponse(resFile, ".txt", "All revisions")
 				.toResponse();
 	}
 }

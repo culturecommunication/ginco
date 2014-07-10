@@ -36,7 +36,7 @@
 /*
  * File: app/locale/fr/view/ThesaurusPanel.js
  * Thesaurus Translated Items
- * 
+ *
  */
 Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xIdentifierLabel : 'Identifiant',
@@ -45,6 +45,7 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xTitleLabel : 'Titre',
 	    xServiceLabel : 'Auteur',
 	    xUrlLabel : 'URL',
+	    xEmailLabel : 'Courriel',
 	    xContributorLabel : 'Contributeur',
 	    xPublisherLabel : 'Editeur',
 	    xPublisherValue : 'Ministère chargé de la culture',
@@ -56,20 +57,18 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
 	    xFormatLabel : 'Format(s)',
 	    xLanguagesLabel : 'Langue(s)',
 	    xdefaultTopConceptLabel : 'Concepts TT par défaut',
-	    xRelationLabel : 'Publication(s) associée(s)',
-	    xSourceLabel : 'Ressource(s) liée(s)',
-	    xThesaurusTitle : 'Nouveau Vocabulaire',
-	    xThesaurusTabTitle : 'Thesaurus',
+	    xRelationLabel : 'Ressource(s) associée(s)',
+	    xSourceLabel : 'Source(s)',
+	    xThesaurusTitle : 'Fiche vocabulaire',
+	    xThesaurusTabTitle : 'Métadonnées',
 	    xNewLabel : 'Nouveau',
-	    xNewMenu_TermLabel : 'Terme',
-	    xNewMenu_ConceptLabel: 'Concept',
 	    xNewMenu_GroupLabel: 'Groupe de concepts',
 	    xNewMenu_ConceptArrayLabel: 'Tableau de concepts',
 		xNewMenu_ComplexConceptLabel: "Concept complexe",
         xExport_Skos : "Export SKOS",
         xExport_Hierarchical : "Export texte hiérarchique",
         xExport_Alphabetic : "Export texte alphabétique",
-        xExport_Ginco : "Export XML Hadoc GINCO",
+        xExport_Ginco : "Export XML GINCO",
 
         xSave : "Enregistrer",
         xDelete : "Supprimer",
@@ -80,7 +79,8 @@ Ext.define('GincoApp.locale.fr.view.ThesaurusPanel', {
         xArchive: 'Archiver',
         xPolyHierarchical: 'Polyhierarchique',
         xImportBranch: 'Importer une branche',
-        xCustomAttributeTypes: "Types d'atrributes posonalisé",
         xImportSandbox: 'Importer des termes',
-        xCustomAttributeTypes: "Attributs personnalisés"
+        xCustomAttributeTypes: "Attributs personnalisés",
+        xMetadataTitle : 'Métadonnées',
+        xMetadataTooltip : 'Cliquez ici pour voir/cacher les métadonnées du thésaurus'
 });

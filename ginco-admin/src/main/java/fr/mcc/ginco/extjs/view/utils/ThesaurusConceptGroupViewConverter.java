@@ -35,10 +35,18 @@
 package fr.mcc.ginco.extjs.view.utils;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.*;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptGroupView;
-import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.services.IThesaurusConceptGroupService;
+import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IThesaurusConceptGroupLabelService;
 import fr.mcc.ginco.utils.DateUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
@@ -49,10 +57,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-
+/**
+ * Small class responsible for converting real {@link ThesaurusConceptGroup} object
+ * into its view {@link ThesaurusConceptGroupView}.
+ */
 @Component("thesaurusConceptGroupViewConverter")
 public class ThesaurusConceptGroupViewConverter {
-	
+
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
@@ -60,27 +71,32 @@ public class ThesaurusConceptGroupViewConverter {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupService")
 	private IThesaurusConceptGroupService thesaurusConceptGroupService;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupTypeService")
 	private IThesaurusConceptGroupTypeService thesaurusConceptGroupTypeService;
-	
+
 	@Inject
 	@Named("thesaurusConceptGroupLabelService")
 	private IThesaurusConceptGroupLabelService thesaurusConceptGroupLabelService;
-	
+
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;	
+	private IIDGeneratorService generatorService;
 
-	public ThesaurusConceptGroup convert(ThesaurusConceptGroupView source)
-			throws BusinessException {
+	/**
+	 * Convert from view to real object.
+	 *
+	 * @param source
+	 * @return
+	 */
+	public ThesaurusConceptGroup convert(ThesaurusConceptGroupView source) {
 		ThesaurusConceptGroup hibernateRes;
-		
+
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusConceptGroup();
 			hibernateRes.setIdentifier(generatorService.generate(ThesaurusConceptGroup.class));
@@ -88,7 +104,7 @@ public class ThesaurusConceptGroupViewConverter {
 		} else {
 			hibernateRes = thesaurusConceptGroupService.getConceptGroupById(source.getIdentifier());
 		}
-		if ("".equals(source.getThesaurusId())) {
+		if (StringUtils.isEmpty(source.getThesaurusId())) {
 			throw new BusinessException(
 					"ThesaurusId is mandatory to save a concept group",
 					"mandatory-thesaurus");
@@ -97,7 +113,7 @@ public class ThesaurusConceptGroupViewConverter {
 					.getThesaurusId());
 			hibernateRes.setThesaurus(thesaurus);
 		}
-		
+
 		if (hibernateRes.getConcepts() == null) {
 			hibernateRes.setConcepts(new HashSet<ThesaurusConcept>());
 		}
@@ -112,8 +128,8 @@ public class ThesaurusConceptGroupViewConverter {
 			}
 			hibernateRes.getConcepts().add(concept);
 		}
-		
-		if ("".equals(source.getType())) {
+
+		if (StringUtils.isEmpty(source.getType())) {
 			throw new BusinessException(
 					"Type is mandatory to save a concept group",
 					"mandatory-type");
@@ -121,16 +137,36 @@ public class ThesaurusConceptGroupViewConverter {
 			ThesaurusConceptGroupType conceptGroupType = thesaurusConceptGroupTypeService.getTypeById(source.getType());
 			hibernateRes.setConceptGroupType(conceptGroupType);
 		}
-		
+
+		if (source.getNotation() != null) {
+			hibernateRes.setNotation(source.getNotation());
+		}
+
 		if (source.getParentGroupId() != null) {
 			hibernateRes.setParent(thesaurusConceptGroupService.getConceptGroupById(source.getParentGroupId()));
 		}
-		
+
+		if (source.getIsDynamic() != null) {
+			hibernateRes.setIsDynamic(source.getIsDynamic());
+		}
+
+		if (StringUtils.isNotEmpty(source.getParentConceptId())) {
+			hibernateRes.setParentConcept(thesaurusConceptService
+					.getThesaurusConceptById(source.getParentConceptId()));
+		} else {
+			hibernateRes.setParentConcept(null);
+		}
+
 		return hibernateRes;
 	}
 
-	public ThesaurusConceptGroupView convert(final ThesaurusConceptGroup source)
-			throws BusinessException {
+	/**
+	 * Convert from real object to view.
+	 *
+	 * @param source
+	 * @return
+	 */
+	public ThesaurusConceptGroupView convert(final ThesaurusConceptGroup source) {
 		ThesaurusConceptGroupView thesaurusConceptGroupView = new ThesaurusConceptGroupView();
 
 		if (source != null) {
@@ -139,38 +175,50 @@ public class ThesaurusConceptGroupViewConverter {
 			thesaurusConceptGroupView.setCreated(DateUtil.toString(label.getCreated()));
 			thesaurusConceptGroupView.setModified(DateUtil.toString(label.getModified()));
 			thesaurusConceptGroupView.setLabel(label.getLexicalValue());
-			
+
 			if (source.getThesaurus() != null) {
 				thesaurusConceptGroupView.setThesaurusId(source.getThesaurus().getThesaurusId());
 			}
 			thesaurusConceptGroupView.setType(source.getConceptGroupType().getCode());
 			thesaurusConceptGroupView.setLanguage(label.getLanguage().getId());
+			thesaurusConceptGroupView.setNotation(source.getNotation());
 			thesaurusConceptGroupView.setGroupConceptLabelId(label.getIdentifier());
-			
+			thesaurusConceptGroupView.setIsDynamic(source.getIsDynamic());
+
 			List<String> conceptsIds = new ArrayList<String>();
-			for (ThesaurusConcept concept: source.getConcepts()) {
+			for (ThesaurusConcept concept : source.getConcepts()) {
 				conceptsIds.add(concept.getIdentifier());
 			}
 			thesaurusConceptGroupView.setConcepts(conceptsIds);
-			
+
 			if (source.getParent() != null) {
 				//We set id and label of parent concept group
 				thesaurusConceptGroupView.setParentGroupId(source.getParent().getIdentifier());
 				ThesaurusConceptGroupLabel labelOfParent = thesaurusConceptGroupLabelService.getByThesaurusConceptGroupAndLanguage(source.getParent().getIdentifier());
-				thesaurusConceptGroupView.setParentGroupLabel(labelOfParent.getLexicalValue());			
+				thesaurusConceptGroupView.setParentGroupLabel(labelOfParent.getLexicalValue());
+			}
+
+			if (source.getParentConcept() != null) {
+				//We set id and label of parent concept
+				thesaurusConceptGroupView.setParentConceptId(source.getParentConcept().getIdentifier());
+				thesaurusConceptGroupView.setParentConceptLabel(thesaurusConceptService
+						.getConceptLabel(source.getParentConcept()
+								.getIdentifier()));
 			}
 		}
-		
+
 		return thesaurusConceptGroupView;
 	}
-	
+
 	/**
-	 * This method converts a list of {@link ThesaurusConceptGroup} into a list of {@link ThesaurusConceptGroupView}
+	 * This method converts a list of {@link ThesaurusConceptGroup}
+	 * into a list of {@link ThesaurusConceptGroupView}
+	 *
 	 * @param {@link ThesaurusConceptGroup} groups
 	 * @return {@link ThesaurusConceptGroupView} group views
 	 */
 	public List<ThesaurusConceptGroupView> convert(List<ThesaurusConceptGroup> groups) {
-		List<ThesaurusConceptGroupView> returnedGroupViews = new ArrayList<ThesaurusConceptGroupView>(); 
+		List<ThesaurusConceptGroupView> returnedGroupViews = new ArrayList<ThesaurusConceptGroupView>();
 		for (ThesaurusConceptGroup thesaurusConceptGroup : groups) {
 			returnedGroupViews.add(convert(thesaurusConceptGroup));
 		}

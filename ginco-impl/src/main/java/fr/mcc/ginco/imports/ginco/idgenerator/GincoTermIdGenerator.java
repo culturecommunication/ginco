@@ -34,20 +34,18 @@
  */
 package fr.mcc.ginco.imports.ginco.idgenerator;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class generate new ids for terms for importing branch in existing
@@ -59,35 +57,13 @@ public class GincoTermIdGenerator {
 
 	@Inject
 	@Named("generatorService")
-	private IIDGeneratorService generatorService;
+	private IIDGeneratorService generatorService;	
 
 	@Inject
-	@Named("gincoIdMapParser")
-	private GincoIdMapParser gincoIdMapParser;
+	private IThesaurusTermDAO thesaurusTermDAO;	
 
-	@Inject
-	@Named("thesaurusTermDAO")
-	private IThesaurusTermDAO thesaurusTermDAO;
+	private Logger logger  = LoggerFactory.getLogger(GincoTermIdGenerator.class);
 
-	@Log
-	private Logger logger;
-
-	/**
-	 * This method checks if the ids of the concepts in the list are not already
-	 * present in the application, and replace them if it's the case
-	 * 
-	 * @param concepts
-	 * @param idMapping
-	 *            : the map where we store the mapping between old and new ids
-	 * @return List<ThesaurusConcept> updatedConcepts
-	 */
-	public List<ThesaurusTerm> checkIdsForTerms(List<ThesaurusTerm> terms,
-			Map<String, String> idMapping) {
-		for (ThesaurusTerm term : terms) {
-			checkIdForTerm(term, idMapping);
-		}
-		return terms;
-	}
 
 	/**
 	 * This method checks if the id of the term is not already present in the
@@ -99,24 +75,15 @@ public class GincoTermIdGenerator {
 	 *            : the map where we store the mapping between old and new ids
 	 * @return ThesaurusTerm updatedTerm
 	 */
-	private ThesaurusTerm checkIdForTerm(ThesaurusTerm term,
-			Map<String, String> idMapping) {
-		String oldId = term.getIdentifier();
+	public String getIdForTerm(String oldId, Map<String, String> idMapping) {
 		if (thesaurusTermDAO.getById(oldId) != null) {
 			String newId = generatorService.generate(ThesaurusTerm.class);
 			idMapping.put(oldId, newId);
-			term.setIdentifier(newId);
-			logger.debug("Setting a new id for the term" + oldId
+			logger.debug("Setting a new id for the ID" + oldId
 					+ "with new id " + newId);
-
-			String conceptId = term.getConcept().getIdentifier();
-			String newConceptId = gincoIdMapParser.getNewId(conceptId,
-					idMapping);
-			term.getConcept().setIdentifier(newConceptId);
-			logger.debug("Setting a new concept id for the term" + oldId
-					+ "with new concept id " + newConceptId);
+			return newId;
 		}
-		return term;
+		return oldId;
 	}
 
 }

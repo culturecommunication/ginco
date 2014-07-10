@@ -42,17 +42,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.enums.ThesaurusListNodeType;
 import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.utils.LabelUtil;
@@ -75,10 +74,10 @@ public class ArraysGenerator {
 	
 	@Inject
 	@Named("thesaurusListNodeFactory")
-	ThesaurusListNodeFactory thesaurusListNodeFactory;
+	private ThesaurusListNodeFactory thesaurusListNodeFactory;
 
-	@Log
-	private Logger logger;
+	private Logger logger  = LoggerFactory.getLogger(ArraysGenerator.class);
+
 
 	@Value("${ginco.default.language}") private String defaultLanguage;
 
@@ -89,8 +88,7 @@ public class ArraysGenerator {
 	 *            id of the thesaurus.
 	 * @return created list of leafs.
 	 */
-	public List<IThesaurusListNode> generateArrays(String thesaurusId)
-			throws BusinessException {
+	public List<IThesaurusListNode> generateArrays(String thesaurusId) {
 		logger.debug("Generating thesaurus arrays list for vocabularyId : " + thesaurusId);
 		List<ThesaurusArray> arrays = thesaurusArrayService.getAllThesaurusArrayByThesaurusId(null, thesaurusId);
 		logger.debug(arrays.size() + " arrays found");

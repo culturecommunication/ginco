@@ -34,31 +34,31 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.codehaus.plexus.util.StringUtils;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
 import fr.mcc.ginco.services.INodeLabelService;
-import fr.mcc.ginco.services.IThesaurusArrayConceptService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Small class responsible for converting real {@link fr.mcc.ginco.beans.ThesaurusArray} object
+ * into its view {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView}.
+ */
 @Component("thesaurusArrayViewConverter")
 public class ThesaurusArrayViewConverter {
 	@Inject
@@ -81,12 +81,14 @@ public class ThesaurusArrayViewConverter {
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
 
-	@Inject
-	@Named("thesaurusArrayConceptService")
-	private IThesaurusArrayConceptService thesaurusArrayConceptService;
-
-	public ThesaurusArray convert(ThesaurusArrayView source)
-			throws BusinessException {
+	/**
+	 * Convert from {@link fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView}
+	 * to {@link fr.mcc.ginco.beans.ThesaurusArray}
+	 *
+	 * @param source
+	 * @return
+	 */
+	public ThesaurusArray convert(ThesaurusArrayView source) {
 		ThesaurusArray hibernateRes;
 		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new ThesaurusArray();
@@ -110,10 +112,12 @@ public class ThesaurusArrayViewConverter {
 		if (StringUtils.isNotEmpty(source.getSuperOrdinateId())) {
 			hibernateRes.setSuperOrdinateConcept(thesaurusConceptService
 					.getThesaurusConceptById(source.getSuperOrdinateId()));
+		} else {
+			hibernateRes.setSuperOrdinateConcept(null);
 		}
 
 		hibernateRes.setOrdered(source.getOrder());
-		
+
 		if (source.getParentArrayId() != null) {
 			hibernateRes.setParent(thesaurusArrayService.getThesaurusArrayById(source.getParentArrayId()));
 		}
@@ -121,8 +125,14 @@ public class ThesaurusArrayViewConverter {
 		return hibernateRes;
 	}
 
-	public ThesaurusArrayView convert(final ThesaurusArray source)
-			throws BusinessException {
+	/**
+	 * Convert from {@link ThesaurusArray}
+	 * to {@link ThesaurusArrayView}
+	 *
+	 * @param source
+	 * @return
+	 */
+	public ThesaurusArrayView convert(final ThesaurusArray source) {
 		ThesaurusArrayView thesaurusArrayView = new ThesaurusArrayView();
 
 		thesaurusArrayView.setIdentifier(source.getIdentifier());
@@ -160,21 +170,21 @@ public class ThesaurusArrayViewConverter {
 		thesaurusArrayView.setThesaurusId(source.getThesaurus()
 				.getThesaurusId());
 		thesaurusArrayView.setOrder(source.getOrdered());
-		
+
 		if (source.getParent() != null) {
 			//We set id and label of parent array
 			thesaurusArrayView.setParentArrayId(source.getParent().getIdentifier());
 			NodeLabel labelOfParent = nodeLabelService.getByThesaurusArray(source.getParent().getIdentifier());
-			thesaurusArrayView.setParentArrayLabel(labelOfParent.getLexicalValue());			
+			thesaurusArrayView.setParentArrayLabel(labelOfParent.getLexicalValue());
 		}
-		
+
 		return thesaurusArrayView;
 	}
 
 	/**
 	 * This method converts a list of {@link ThesaurusArray} into a list of
 	 * {@link ThesaurusArrayView}
-	 * 
+	 *
 	 * @param {@link ThesaurusArray} arrays
 	 * @return {@link ThesaurusArrayView} array views
 	 */

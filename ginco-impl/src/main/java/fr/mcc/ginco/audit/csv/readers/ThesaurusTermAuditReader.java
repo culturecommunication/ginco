@@ -56,7 +56,6 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 
 /**
  * Queries the thesaurus term audit tables and build RevisionLines
- *
  */
 @Service("thesaurusTermAuditReader")
 public class ThesaurusTermAuditReader {
@@ -64,36 +63,35 @@ public class ThesaurusTermAuditReader {
 	@Inject
 	@Named("auditQueryBuilder")
 	private AuditQueryBuilder auditQueryBuilder;
-	
+
 	@Inject
 	@Named("auditReaderService")
 	private AuditReaderService readerService;
-	
+
 	@Inject
 	@Named("journalLineBuilder")
 	private JournalLineBuilder journalLineBuilder;
 
-	
+
 	/**
 	 * Builds the revision lines matching the events of term creation in a given language
-	 * @param reader
-	 * @param thesaurus the thesaurus we are searching in 
+	 *
+	 * @param thesaurus the thesaurus we are searching in
 	 * @param startDate the start date of events
 	 * @return
 	 */
-	public List<JournalLine> getTermAdded(
-			Thesaurus thesaurus, Date startDate) {
+	public List<JournalLine> getTermAdded(Thesaurus thesaurus, Date startDate) {
 
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
 		try {
 			AuditQuery termQuery = auditQueryBuilder.getEntityAddedQuery(
 					thesaurus, startDate, ThesaurusTerm.class);
-			
+
 			List<Object[]> allTermRevisions = termQuery.getResultList();
 			for (Object[] revisionData : allTermRevisions) {
 				JournalLine line = journalLineBuilder
-						.buildTermAddedLine((ThesaurusTerm)revisionData[0], (GincoRevEntity)revisionData[1]);
+						.buildTermAddedLine((ThesaurusTerm) revisionData[0], (GincoRevEntity) revisionData[1]);
 				allEvents.add(line);
 			}
 		} catch (AuditException ae) {
@@ -101,18 +99,17 @@ public class ThesaurusTermAuditReader {
 					ae);
 		}
 		return allEvents;
-	}	
+	}
 
-	
+
 	/**
 	 * Builds the revision lines matching the events of term role change for terms in the given language
-	 * @param reader
-	 * @param thesaurus the thesaurus we are searching in 
+	 *
+	 * @param thesaurus the thesaurus we are searching in
 	 * @param startDate the start date of events
 	 * @return
 	 */
-	public List<JournalLine> getTermRoleChanged(
-			Thesaurus thesaurus, Date startDate) {
+	public List<JournalLine> getTermRoleChanged(Thesaurus thesaurus, Date startDate) {
 
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
@@ -120,7 +117,7 @@ public class ThesaurusTermAuditReader {
 			AuditQuery termRoleChangedQuery = auditQueryBuilder
 					.getPropertyChangedQueryOnUpdate(thesaurus, startDate,
 							ThesaurusTerm.class, "prefered");
-			
+
 			List<Object[]> allRoleChanges = termRoleChangedQuery
 					.getResultList();
 			for (Object[] revisionData : allRoleChanges) {
@@ -128,7 +125,7 @@ public class ThesaurusTermAuditReader {
 				GincoRevEntity revision = (GincoRevEntity) revisionData[1];
 				JournalLine journal = journalLineBuilder
 						.buildTermRoleChangedLine(term, revision);
-				if( journal != null) {
+				if (journal != null) {
 					allEvents.add(journal);
 				}
 			}
@@ -138,23 +135,22 @@ public class ThesaurusTermAuditReader {
 		}
 		return allEvents;
 	}
-	
-	
+
+
 	/**
 	 * Builds the revision lines matching the events of term lexical value change for terms in the given language
-	 * @param reader
-	 * @param thesaurus the thesaurus we are searching in 
+	 *
+	 * @param thesaurus the thesaurus we are searching in
 	 * @param startDate the start date of events
 	 * @return
 	 */
-	public List<JournalLine> getTermLexicalValueChanged(
-			Thesaurus thesaurus, Date startDate) {
+	public List<JournalLine> getTermLexicalValueChanged(Thesaurus thesaurus, Date startDate) {
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
 		try {
 			AuditQuery lexicalValueChangedQuery = auditQueryBuilder
 					.getPropertyChangedQueryOnUpdate(thesaurus, startDate,
-							ThesaurusTerm.class, "lexicalValue");			
+							ThesaurusTerm.class, "lexicalValue");
 			List<Object[]> allLexicalValueChanges = lexicalValueChangedQuery
 					.getResultList();
 			for (Object[] revisionData : allLexicalValueChanges) {
@@ -186,39 +182,37 @@ public class ThesaurusTermAuditReader {
 		}
 		return allEvents;
 	}
-	
+
 	/**
 	 * Builds the revision lines matching the events of term attachment to concept change for terms in the given language
-	 * @param reader
-	 * @param thesaurus the thesaurus we are searching in 
+	 *
+	 * @param thesaurus the thesaurus we are searching in
 	 * @param startDate the start date of events
 	 * @return
 	 */
-	public List<JournalLine> getTermAttachmentChanged(
-			Thesaurus thesaurus, Date startDate) {
+	public List<JournalLine> getTermAttachmentChanged(Thesaurus thesaurus, Date startDate) {
 		List<JournalLine> allEvents = new ArrayList<JournalLine>();
 
 		try {
 			AuditQuery termAttachedQuery = auditQueryBuilder
 					.getPropertyChangedQueryOnUpdate(thesaurus, startDate,
 							ThesaurusTerm.class, "concept");
-			
-			List<Object[]> allTermAttached = termAttachedQuery.getResultList();	
-			
+
+			List<Object[]> allTermAttached = termAttachedQuery.getResultList();
+
 			for (Object[] revisionData : allTermAttached) {
 				ThesaurusTerm term = (ThesaurusTerm) revisionData[0];
-				GincoRevEntity revision  = (GincoRevEntity) revisionData[1];
-				if (term.getConcept() != null) {			
+				GincoRevEntity revision = (GincoRevEntity) revisionData[1];
+				if (term.getConcept() != null) {
 					AuditQuery previousPreferedQuery = auditQueryBuilder
 							.getPreviousPreferredTermQuery(revision.getId(),
 									term.getConcept().getIdentifier());
 					ThesaurusTerm previousPreferredTerm = null;
-						List<Object[]> previousRevision = previousPreferedQuery
-							.getResultList();
-						if (previousRevision.size()>0) {
-							previousPreferredTerm = (ThesaurusTerm) previousRevision.get(previousRevision.size()-1)[0];
-						}
-					
+					List<Object[]> previousRevision = previousPreferedQuery.getResultList();
+					if (previousRevision.size() > 0) {
+						previousPreferredTerm = (ThesaurusTerm) previousRevision.get(previousRevision.size() - 1)[0];
+					}
+
 					JournalLine journal = journalLineBuilder
 							.buildTermAttachmentChangedLine(term, revision, previousPreferredTerm);
 					allEvents.add(journal);

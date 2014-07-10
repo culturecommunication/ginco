@@ -45,38 +45,38 @@ public class CommandLine {
 	/**
 	 * Prefix to preferred terms
 	 */
-	public final static String STARS = "**";
+	public static final String STARS = "**";
 	
 	
 	/**
 	 * Prefix to unprefer terms
 	 */
-	public final static String UNPREFERRERD = "P, ";  
+	public static final String UNPREFERRERD = "P, ";  
 	
 	/**
 	 * Prefix to remove terms
 	 */
-	public final static String REMOVED = "R, ";  
+	public static final String REMOVED = "R, ";  
 	
 	/**
 	 * Separator of synonyms
 	 */
-	public final static String SYNONYM = " = ";
+	public static final String SYNONYM = " = ";
 
 	/**
 	 * Prefix of a synonym to separate 
 	 */
-	public final static String SEPARATE = "S, ";  
+	public static final String SEPARATE = "S, ";  
 	
 	/**
 	 * Operator to declare a hierarchy
 	 */
-	public final static String HIERARCHY = " < ";  
+	public static final String HIERARCHY = " < ";  
 	
 	/**
 	 * Operator to remove a hierachy
 	 */
-	public final static String HIERARCHY_REMOVED = "H, ";
+	public static final String HIERARCHY_REMOVED = "H, ";
 
 	/**
 	 * Operator to list terms

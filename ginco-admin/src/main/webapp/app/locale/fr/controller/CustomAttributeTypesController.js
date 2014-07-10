@@ -38,5 +38,5 @@ Ext.define('GincoApp.locale.fr.controller.CustomAttributeTypesController', {
     xSucessLabel : 'Succès !',
     xSucessSavedMsg : 'Les attributs personnalisés ont été enregistrés avec succès',
     xProblemLabel : 'Erreur !',
-    xProblemSaveMsg : 'Impossible de sauvegarder les attributs !',
+    xProblemSaveMsg : 'Impossible de sauvegarder les attributs !'
 });

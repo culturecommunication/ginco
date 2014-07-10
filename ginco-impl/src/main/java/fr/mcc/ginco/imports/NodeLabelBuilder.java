@@ -34,17 +34,21 @@
  */
 package fr.mcc.ginco.imports;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.NodeLabel;
@@ -52,24 +56,25 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 
 /**
  * Builder in charge of building the thesaurus arrays node labels
- *
  */
 @Service("skosNodeLabelBuilder")
 public class NodeLabelBuilder extends AbstractBuilder {
 
-	@Log
-	private Logger logger;
+	private static Logger logger = LoggerFactory.getLogger(NodeLabelBuilder.class);
 
 	@Inject
-	@Named("languagesDAO")
 	private ILanguageDAO languagesDAO;
 
 	@Value("${ginco.default.language}")
 	private String defaultLang;
+
+	@Inject
+	@Named("skosImportUtils")
+	private SKOSImportUtils skosImportUtils;
 
 	public NodeLabelBuilder() {
 		super();
@@ -77,42 +82,55 @@ public class NodeLabelBuilder extends AbstractBuilder {
 
 	/**
 	 * Builds a NodeLabel object for the given array
-	 * @param stmt
-	 * @param model
-	 * @param thesaurus
+	 *
+	 * @param skosCollection
 	 * @param array
 	 * @return
-	 * @throws BusinessException
 	 */
-	public NodeLabel buildNodeLabel(Statement stmt, Model model,
-			Thesaurus thesaurus, ThesaurusArray array) throws BusinessException {
+	public NodeLabel buildNodeLabel(Resource skosCollection, Thesaurus thesaurus, ThesaurusArray array) {
 		logger.debug("Building node label for thesaurus array " + array.getIdentifier());
 		NodeLabel nodeLabel = new NodeLabel();
-		nodeLabel.setCreated(thesaurus.getCreated());
 
-		nodeLabel.setModified(thesaurus.getDate());
+		Statement stmtCreated = skosCollection.getProperty(DCTerms.created);
+		Statement stmtModified = skosCollection.getProperty(DCTerms.modified);
 
-		RDFNode prefLabel = stmt.getObject();
+		if (stmtCreated != null) {
+			Date nodeLabelCreatedDate = skosImportUtils.getSkosDate(stmtCreated.getString());
+			nodeLabel.setCreated(nodeLabelCreatedDate);
+			if (stmtModified != null) {
+				nodeLabel.setModified(skosImportUtils.getSkosDate(stmtModified.getString()));
+			} else {
+				nodeLabel.setModified(nodeLabelCreatedDate);
+			}
+		} else {
+			nodeLabel.setCreated(thesaurus.getCreated());
+			nodeLabel.setModified(thesaurus.getDate());
+		}
+
+		Statement stmtLabel = skosCollection.getProperty(SKOS.PREF_LABEL);
+
+		RDFNode prefLabel = stmtLabel.getObject();
 		String lang = prefLabel.asLiteral().getLanguage();
 		if (StringUtils.isEmpty(lang)) {
 			Language defaultLangL = languagesDAO.getById(defaultLang);
 			nodeLabel.setLanguage(defaultLangL);
 		} else {
 			Language language = languagesDAO.getByPart1(lang);
-			if (language == null){
+			if (language == null) {
 				language = languagesDAO.getById(lang);
 			}
-			
+
 			if (language != null) {
 				nodeLabel.setLanguage(language);
 			} else {
-				throw new BusinessException("Specified language " + lang + " is unknown : "  
-						+ stmt.getString(),
-						"import-unknown-term-lang", new Object[] {lang, stmt.getString()});
+				throw new BusinessException("Specified language " + lang + " is unknown : "
+						+ stmtLabel.getString(),
+						"import-unknown-term-lang", new Object[]{ lang, stmtLabel.getString() }
+				);
 			}
 		}
 
-		nodeLabel.setLexicalValue(stmt.getString());
+		nodeLabel.setLexicalValue(stmtLabel.getString());
 
 		nodeLabel.setThesaurusArray(array);
 

@@ -10,6 +10,7 @@
         </id>
         <property name="code" />
         <property name="value" />
+        <property name="exportable" />
 
         <many-to-one name="thesaurus" column="thesaurusid" lazy="false" />
 

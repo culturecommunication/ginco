@@ -34,26 +34,22 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+import javax.inject.Inject;
+import java.util.List;
+
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusConceptGroupTypeService")
 public class ThesaurusConceptGroupTypeServiceImpl implements IThesaurusConceptGroupTypeService {
-	
+
 	@Inject
-	@Named("thesaurusConceptGroupTypeDAO")
 	private IThesaurusConceptGroupTypeDAO thesaurusConceptGroupTypeDAO;
-	
+
 	@Override
 	public List<ThesaurusConceptGroupType> getConceptGroupTypeList() {
 		return thesaurusConceptGroupTypeDAO.findAll();

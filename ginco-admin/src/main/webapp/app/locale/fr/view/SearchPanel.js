@@ -36,7 +36,7 @@
 /*
  * File: app/locale/fr/view/ThesaurusPanel.js
  * Thesaurus Translated Items
- * 
+ *
  */
 Ext.define('GincoApp.locale.fr.view.SearchPanel', {
 	xIdentifierColumnLabel : 'Identifiant',
@@ -47,7 +47,9 @@ Ext.define('GincoApp.locale.fr.view.SearchPanel', {
 	xSearchPanelTitle : 'Résultats de recherche',
 	xTypeLabels : {
 		ThesaurusTerm : 'Terme',
-		ThesaurusConcept : 'Concept'
+		ThesaurusConcept : 'Concept',
+		Note : 'Note',
+		SplitNonPreferredTerm : 'Concept complexe'
 	},
 	xAdvancedSearchPnlTitle : 'Recherche avancée',
 	xAdvancedSearchBtn : 'Rechercher',

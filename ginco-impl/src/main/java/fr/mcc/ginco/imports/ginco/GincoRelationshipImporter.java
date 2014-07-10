@@ -45,6 +45,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
@@ -54,142 +55,144 @@ import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipRoleDAO;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
 
 /**
  * This class gives methods to import relationships (both hierarchical or associative)
- *
  */
 @Component("gincoRelationshipImporter")
 public class GincoRelationshipImporter {
-	
+
 	@Inject
-	@Named("associativeRelationshipDAO")
 	private IAssociativeRelationshipDAO associativeRelationshipDAO;
-	
+
 	@Inject
-	@Named("associativeRelationshipRoleDAO")
 	private IAssociativeRelationshipRoleDAO associativeRelationshipRoleDAO;
-	
+
 	@Inject
-	@Named("conceptHierarchicalRelationshipDAO")
 	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
-	
-	
+
+
 	@Inject
 	@Named("conceptHierarchicalRelationshipServiceUtil")
 	private IConceptHierarchicalRelationshipServiceUtil conceptHierarchicalRelationshipServiceUtil;
-	
+
 	@Inject
-	@Named("thesaurusConceptDAO")
 	private IThesaurusConceptDAO thesaurusConceptDAO;
-	
-	@Log
-	private Logger logger;
-	
+
+	private static Logger logger = LoggerFactory.getLogger(GincoRelationshipImporter.class);
+
+
 	/**
 	 * This method stores all the hierarchical relationships
+	 *
 	 * @param relationsToImport
 	 * @return The list of the updated parent concepts
 	 */
-	public List<ThesaurusConcept> storeHierarchicalRelationship(Map<String, JaxbList<ConceptHierarchicalRelationship>> relationsToImport) {
+	public List<ThesaurusConcept> storeHierarchicalRelationship(Map<String,
+			JaxbList<ConceptHierarchicalRelationship>> relationsToImport) {
 		List<ThesaurusConcept> updatedChildrenConcepts = new ArrayList<ThesaurusConcept>();
-		String childId = null;
+		String childId;
 		if (relationsToImport != null && !relationsToImport.isEmpty()) {
 			Iterator<Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>>> entries = relationsToImport.entrySet().iterator();
 			List<ConceptHierarchicalRelationship> parents = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<ConceptHierarchicalRelationship>> entry = entries.next();
+			while (entries.hasNext()) {
+				Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>> entry = entries.next();
 				childId = entry.getKey();
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
 					parents = entry.getValue().getList();
 				}
-				
+
 				for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : parents) {
 					conceptHierarchicalRelationshipDAO.update(conceptHierarchicalRelationship);
 					updatedChildrenConcepts.add(thesaurusConceptDAO.getById(childId));
 				}
 			}
 		}
-		
+
 		//Processing and setting for all children concepts their root concept
 		for (ThesaurusConcept thesaurusConcept : updatedChildrenConcepts) {
 			List<ThesaurusConcept> roots = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
 			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(roots));
 			thesaurusConceptDAO.update(thesaurusConcept);
 		}
-		
+
 		return updatedChildrenConcepts;
 	}
-	
+
 	/**
 	 * This method stores all the associative relationships of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 *
 	 * @param exportedThesaurus
 	 * @return The list of the concepts which associations were updated
 	 */
 	public List<ThesaurusConcept> storeAssociativeRelationship(GincoExportedThesaurus exportedThesaurus) {
-		Map<String, JaxbList<String>> associativeRelations = exportedThesaurus.getAssociativeRelationship();
+		Map<String, JaxbList<AssociativeRelationship>> associativeRelations = exportedThesaurus.getAssociativeRelationship();
 		List<ThesaurusConcept> updatedConcepts = new ArrayList<ThesaurusConcept>();
-		
+		List<AssociativeRelationship.Id> ids = new ArrayList<AssociativeRelationship.Id>();
 		if (associativeRelations != null && !associativeRelations.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<String>>> entries = associativeRelations.entrySet().iterator();
-			String conceptId = null;
-			List<String> associatedConceptIds = null;
-			
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<String>> entry = entries.next();
+			Iterator<Map.Entry<String, JaxbList<AssociativeRelationship>>> entries = associativeRelations.entrySet().iterator();
+			String conceptId;
+			List<AssociativeRelationship> associatedConcepts = null;
+
+			while (entries.hasNext()) {
+				Map.Entry<String, JaxbList<AssociativeRelationship>> entry = entries.next();
 				//Getting the id of the current concept
 				conceptId = entry.getKey();
-				
+
 				//Getting the ids of its associated concepts
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-					associatedConceptIds = entry.getValue().getList();
+					associatedConcepts = entry.getValue().getList();
 				}
-				ThesaurusConcept updatedConcept = saveAssociativeRelationship(thesaurusConceptDAO.getById(conceptId), associatedConceptIds);
+				ThesaurusConcept updatedConcept = saveAssociativeRelationship(ids, thesaurusConceptDAO.getById(conceptId), associatedConcepts);
 				updatedConcepts.add(thesaurusConceptDAO.update(updatedConcept));
 			}
 		}
 		return updatedConcepts;
 	}
-	
+
 	/**
 	 * Private method to save associative relationships
+	 *
 	 * @param concept
 	 * @param associatedConceptIds
 	 * @return The updated {@link ThesaurusConcept}
-	 * @throws BusinessException
 	 */
-	private ThesaurusConcept saveAssociativeRelationship(
-			ThesaurusConcept concept, List<String> associatedConceptIds)
-			throws BusinessException {
+	private ThesaurusConcept saveAssociativeRelationship(List<AssociativeRelationship.Id> alreadyStoredIds,
+	                                                     ThesaurusConcept concept, List<AssociativeRelationship> associatedConceptIds) {
 		Set<AssociativeRelationship> relations = new HashSet<AssociativeRelationship>();
 		concept.setAssociativeRelationshipLeft(new HashSet<AssociativeRelationship>());
 		concept.setAssociativeRelationshipRight(new HashSet<AssociativeRelationship>());
-		
-		for (String associatedConceptsId : associatedConceptIds) {
-			logger.debug("Settings associated concept " + associatedConceptsId);
-			ThesaurusConcept linkedThesaurusConcept = thesaurusConceptDAO.getById(associatedConceptsId);
-			
-			AssociativeRelationship alreadyExistingRelation = associativeRelationshipDAO.getAssociativeRelationship(concept.getIdentifier(), linkedThesaurusConcept.getIdentifier());
-			
+
+		for (AssociativeRelationship association : associatedConceptIds) {
+			logger.debug("Settings associated concept " + association.getIdentifier().getConcept1() + "||" + association.getIdentifier().getConcept2());
+			String linkedId = association.getIdentifier().getConcept1();
+			if (linkedId.equals(concept.getIdentifier())) {
+				linkedId = association.getIdentifier().getConcept2();
+			}
+
+			AssociativeRelationship alreadyExistingRelation = associativeRelationshipDAO.getAssociativeRelationship(concept.getIdentifier(), linkedId);
+
 			if (alreadyExistingRelation == null) {
 				AssociativeRelationship relationship = new AssociativeRelationship();
 				AssociativeRelationship.Id relationshipId = new AssociativeRelationship.Id();
 				relationshipId.setConcept1(concept.getIdentifier());
-				relationshipId.setConcept2(associatedConceptsId);
-				relationship.setIdentifier(relationshipId);
-				relationship.setConceptLeft(concept);
-				relationship.setConceptRight(thesaurusConceptDAO
-						.getById(associatedConceptsId));
-				relationship
-						.setRelationshipRole(associativeRelationshipRoleDAO.getDefaultAssociativeRelationshipRole()	);
-				relations.add(relationship);
-				associativeRelationshipDAO.update(relationship);
+				relationshipId.setConcept2(linkedId);
+				if (!alreadyStoredIds.contains(relationshipId)) {
+					relationship.setIdentifier(relationshipId);
+					relationship.setConceptLeft(concept);
+					relationship.setConceptRight(thesaurusConceptDAO
+							.getById(linkedId));
+					relationship
+							.setRelationshipRole(associativeRelationshipRoleDAO
+									.getById(association.getRelationshipRole()
+											.getCode()));
+					associativeRelationshipDAO.update(relationship);
+					relations.add(relationship);
+					alreadyStoredIds.add(relationshipId);
+				}
 			}
 		}
 		concept.getAssociativeRelationshipLeft().addAll(relations);

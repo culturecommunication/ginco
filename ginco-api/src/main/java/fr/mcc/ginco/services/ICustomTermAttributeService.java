@@ -40,9 +40,19 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.generic.IGenericCustomAttributeService;
 
 /**
+ * Service used to deal with {@link fr.mcc.ginco.beans.CustomTermAttribute} objects, contains basic
+ * methods exposed to client part.
  *
+ * @see fr.mcc.ginco.beans
  */
-public interface ICustomTermAttributeService extends IGenericCustomAttributeService<ThesaurusTerm,CustomTermAttribute> {
-	
+public interface ICustomTermAttributeService extends IGenericCustomAttributeService<ThesaurusTerm, CustomTermAttribute> {
+
+	/**
+	 * Get attribute by type
+	 *
+	 * @param entity
+	 * @param type
+	 * @return
+	 */
 	CustomTermAttribute getAttributeByType(ThesaurusTerm entity, CustomTermAttributeType type);
 }

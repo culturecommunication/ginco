@@ -53,6 +53,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xAccessibilityLabel : "Accessibility",
 	xLogoutBtnLabel : "Logout",
 	xSearchBtnTitle : "Click here to launch search",
+	xSuggestionBtnLabel : "Suggestions",
 	height : 64,
 
 	initComponent : function() {
@@ -94,14 +95,14 @@ Ext.define('GincoApp.view.TopToolbar', {
 						items : [ {
 							xtype : 'keymenuitem',
 							itemId : 'newThesaurusBtn',
-							text : me.xNewMenu_ThesaurusLabel,
-							cmdTxt : 'Ctrl+1'
+							text : me.xNewMenu_ThesaurusLabel
 						} ]
 					}
 				} ]
 			}, {
 				xtype : 'buttongroup',
 				title : me.xAdministrationLabel,
+				width:80,
 				columns : 1,
 				items : [ {
 					xtype : 'button',
@@ -141,8 +142,9 @@ Ext.define('GincoApp.view.TopToolbar', {
 				width : 10
 			}, {
 				xtype : 'triggerfield',
-				width : 276,
+				width : 250,
 				triggerCls: 'x-form-search-trigger',
+				labelWidth : 70,
 				fieldLabel : me.xSearchLabel,
 				emptyText : me.xSearchFieldText,
 				hideTrigger : false,
@@ -155,21 +157,28 @@ Ext.define('GincoApp.view.TopToolbar', {
 				flex : 2,
 				height : 10,
 				width : 10
-			}, 
+			},
 			{
 				xtype : 'tbtext',
 				text : me.xConnectedAsLabel
 			},
 			{
 				xtype : 'tbtext',
-				itemId : 'username' 
+				itemId : 'username',
+				cls : 'username'
 			},
 			{
-				xtype : 'tbseparator',
-				flex : 2,
-				height : 10,
-				width : 10
-			}, 
+				xtype : 'tbseparator'
+			},
+			{
+				xtype : 'button',
+				itemId : 'suggestionsBtn',
+				iconCls : 'suggestion-icon',
+				text : me.xSuggestionBtnLabel
+			},
+			{
+				xtype : 'tbseparator'
+			},
 			{
 				xtype : 'button',
 				itemId : 'logoutbtn',

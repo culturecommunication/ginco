@@ -57,11 +57,10 @@ import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.ThesaurusArrayServiceImpl;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ThesaurusArrayServiceTest {
 
-    @Mock(name = "thesaurusArrayDAO")
+    @Mock
     private IThesaurusArrayDAO thesaurusArrayDAO;
 
     @Mock(name = "nodeLabelService")
@@ -76,11 +75,10 @@ public class ThesaurusArrayServiceTest {
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusArrayService);
 	}
 
     @Test
-    public final void testUpdateArray() throws BusinessException {
+    public final void testUpdateArray() {
         ThesaurusArray mockArray = new ThesaurusArray();
         NodeLabel mockLabel = new NodeLabel();
         mockLabel.setIdentifier(1);

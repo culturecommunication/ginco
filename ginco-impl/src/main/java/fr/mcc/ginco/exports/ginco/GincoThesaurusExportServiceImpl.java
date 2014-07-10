@@ -39,11 +39,13 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
@@ -58,7 +60,6 @@ import fr.mcc.ginco.exports.IGincoExportServiceUtil;
 import fr.mcc.ginco.exports.IGincoThesaurusExportService;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
 import fr.mcc.ginco.services.ICustomConceptAttributeTypeService;
 import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import fr.mcc.ginco.services.INodeLabelService;
@@ -75,17 +76,14 @@ import fr.mcc.ginco.services.IThesaurusVersionHistoryService;
 public class GincoThesaurusExportServiceImpl implements
 		IGincoThesaurusExportService {
 
-	@Log
-	private Logger logger;
-
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Inject
 	@Named("customTermAttributeTypeService")
 	private ICustomTermAttributeTypeService customTermAttributeTypeService;
-	
+
 	@Inject
 	@Named("customConceptAttributeTypeService")
 	private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
@@ -123,12 +121,13 @@ public class GincoThesaurusExportServiceImpl implements
 	private IThesaurusVersionHistoryService thesaurusVersionHistoryService;
 
 	@Inject
-	@Named("gincoConceptExporter")
 	private GincoConceptExporter gincoConceptExporter;
 
 	@Inject
-	@Named("gincoTermExporter")
 	private GincoTermExporter gincoTermExporter;
+
+	@Inject
+	private GincoAttributesExporter gincoAttributesExporter;
 
 	/*
 	 * (non-Javadoc)
@@ -160,7 +159,7 @@ public class GincoThesaurusExportServiceImpl implements
 						.getSandboxedTermsCount(thesaurusId).intValue(),
 						thesaurusId);
 		for (ThesaurusTerm thesaurusTerm : sandboxedTerms) {
-			thesaurusToExport.getTerms().add(thesaurusTerm);
+			gincoTermExporter.addExportedTerms(thesaurusToExport, thesaurusTerm);			
 		}
 
 		// ---Exporting the terms and the concepts of the thesaurus
@@ -172,7 +171,7 @@ public class GincoThesaurusExportServiceImpl implements
 			List<ThesaurusTerm> terms = thesaurusTermService
 					.getTermsByConceptId(thesaurusConcept.getIdentifier());
 			for (ThesaurusTerm thesaurusTerm : terms) {
-				thesaurusToExport.getTerms().add(thesaurusTerm);
+				gincoTermExporter.addExportedTerms(thesaurusToExport, thesaurusTerm);
 			}
 
 			// Exporting term notes
@@ -204,17 +203,37 @@ public class GincoThesaurusExportServiceImpl implements
 			}
 
 			// Exporting associative relationship
-			JaxbList<String> associations = gincoConceptExporter
+			JaxbList<AssociativeRelationship> associations = gincoConceptExporter
 					.getExportAssociativeRelationShip(thesaurusConcept);
 			if (associations != null && !associations.isEmpty()) {
 				thesaurusToExport.getAssociativeRelationship().put(
 						thesaurusConcept.getIdentifier(), associations);
 			}
+
+			// Exporting alignments
+			JaxbList<Alignment> alignments = gincoConceptExporter
+					.getExportAlignments(thesaurusConcept);
+			if (alignments != null && !alignments.isEmpty()) {
+				thesaurusToExport.getAlignments().put(
+						thesaurusConcept.getIdentifier(), alignments);
+			}
+
+			// Exporting concept custom attributes
+			JaxbList<CustomConceptAttribute> conceptAttributes = gincoAttributesExporter
+					.getExportedConceptAttributes(thesaurusConcept);
+			if (conceptAttributes != null && !conceptAttributes.isEmpty()) {
+				thesaurusToExport.getConceptAttributes().put(
+						thesaurusConcept.getIdentifier(), conceptAttributes);
+			}
+
 		}
-		
-		//Exporting Custom Attributes Types for concepts and terms
-		thesaurusToExport.setTermAttributeTypes(customTermAttributeTypeService.getAttributeTypesByThesaurus(thesaurus));
-		thesaurusToExport.setConceptAttributeTypes(customConceptAttributeTypeService.getAttributeTypesByThesaurus(thesaurus));
+
+		// Exporting Custom Attributes Types for concepts and terms
+		thesaurusToExport.setTermAttributeTypes(customTermAttributeTypeService
+				.getAttributeTypesByThesaurus(thesaurus));
+		thesaurusToExport
+				.setConceptAttributeTypes(customConceptAttributeTypeService
+						.getAttributeTypesByThesaurus(thesaurus));
 
 		// ---Exporting the arrays
 		List<ThesaurusArray> arrays = thesaurusArrayService

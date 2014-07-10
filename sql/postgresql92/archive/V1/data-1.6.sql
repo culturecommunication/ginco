@@ -1,0 +1,13 @@
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('cy', 'cy', 'Gallois', true, true);
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('de-CH', 'de', 'Allemand/suisse', true, false);
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('de-IT', 'de', 'Allemand/Italie', true, false);
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('el', 'el', 'Grec', true, true);
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('es', 'es', 'Espagnol', true, true);
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('fr-BE', 'fr', 'Français/Belgique', true, false); 
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('fr-CA', 'fr', 'Français/Canada', true, false); 
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('fr-CH', 'fr', 'Français/Suisse', true, false); 
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('it-CH', 'it', 'Italien/Suisse', true, false); 
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('nl-BE', 'nl', 'Néerlandais/Belgique', true, false); 
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('nl-NL', 'nl', 'Néerlandais/Pays-Bas', true, true); 
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('pt', 'pt', 'Portugais', true, false); 
+INSERT INTO languages_iso639(id, part1, ref_name, toplanguage, principallanguage) VALUES ('ru', 'ru', 'Russe', true, true); 

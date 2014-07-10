@@ -35,8 +35,10 @@
 /*
  * File: app/view/ConceptArrayPanel.js
  * Concept Array Creation/Edition Form
- * 
+ *
  */
+
+Ext.require([ 'GincoApp.view.MetaDataPanel' ]);
 
 Ext
 		.define(
@@ -47,6 +49,7 @@ Ext
 
 					localized : true,
 					closable : true,
+					trackable : true,
 					layout : {
 						type : 'vbox',
 						align : 'stretch'
@@ -67,15 +70,18 @@ Ext
 					xAddConceptToArray : 'Add a concept',
 					xParentConceptLabel : 'Parent Concept',
 					xSelectParentConcept : 'Select a parent concept',
+					xRemoveParentConcept : 'Remove parent concept',
 					xActions : 'Actions',
 					xAssociationRemove : 'Detach this concept',
 					xOrderLabel : 'Alphabetical order',
 					xConceptOrderLabel: 'Order',
 					xParentArrayLabel : 'Parent array',
 					xSelectParentArray : 'Select a parent array',
+					xRemoveParentArray : 'Remove parent array',
+					xMetadataTitle : 'Metadata',
 
 					initComponent : function() {
-						var me = this;					
+						var me = this;
 
 						Ext
 								.applyIf(
@@ -84,7 +90,7 @@ Ext
 											title : me.xConceptArrayTabTitle,
 											items : [ {
 												xtype : 'form',
-												requiredRoles : ['ADMIN'],
+												requiredRoles : ['ADMIN', 'MANAGER'],
 												title : me.xConceptArrayFormTitle,
 												flex : 1,
 												autoScroll : true,
@@ -102,7 +108,7 @@ Ext
 															{
 																xtype : 'button',
 																text : me.xSave,
-																requiredRoles : ['ADMIN'],
+																requiredRoles : ['ADMIN','MANAGER'],
 																disabled : true,
 																formBind : true,
 																itemId : 'saveConceptArray',
@@ -112,7 +118,7 @@ Ext
 															{
 																xtype : 'button',
 																text : me.xDelete,
-																requiredRoles : ['ADMIN'],
+																requiredRoles : ['ADMIN','MANAGER'],
 																disabled : true,
 																itemId : 'deleteConceptArray',
 																cls : 'delete',
@@ -120,26 +126,33 @@ Ext
 															} ]
 												} ],
 												items : [
-														{
-															xtype : 'displayfield',
-															name : 'identifier',
-															fieldLabel : me.xIdentifierLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'created',
-															fieldLabel : me.xCreatedDateLabel
-														},
-														{
-															xtype : 'displayfield',
-															name : 'modified',
-															fieldLabel : me.xModificationDateLabel
-														},
+												        {
+												        	xtype : 'metaDataPanel',
+															title : me.xMetadataTitle,
+															items : [
+																	{
+																		xtype : 'displayfield',
+																		name : 'identifier',
+																		fieldLabel : me.xIdentifierLabel
+																	},
+																	{
+																		xtype : 'displayfield',
+																		name : 'created',
+																		fieldLabel : me.xCreatedDateLabel
+																	},
+																	{
+																		xtype : 'displayfield',
+																		name : 'modified',
+																		fieldLabel : me.xModificationDateLabel
+																	}
+															        ]
+												        },
 														{
 															xtype : 'textfield',
 															name : 'label',
 															fieldLabel : me.xLabelLabel,
-															allowBlank : false
+															allowBlank : false,
+															padding : '5 0 0 0'
 														},
 														{
 															xtype : 'textfield',
@@ -166,9 +179,8 @@ Ext
 															fieldLabel : me.xOrderLabel
 														},
 														{
-															xtype : 'textfield',
-															name : 'parentArrayId',
-															hidden : true
+															xtype : 'hidden',
+															name : 'parentArrayId'
 														},
 														{
 															xtype : 'container',
@@ -189,14 +201,22 @@ Ext
 																		xtype : 'button',
 																		text : me.xSelectParentArray,
 																		disabled : false,
-																		requiredRoles : ['ADMIN'],
+																		requiredRoles : ['ADMIN','MANAGER'],
 																		itemId : 'selectParentArray',
 																		cls : 'add',
 																		iconCls : 'icon-add'
-																	} ]
+																	},
+																	{
+																		xtype : 'button',
+																		text : me.xRemoveParentArray,
+																		disabled : true,
+																		requiredRoles : ['ADMIN','MANAGER'],
+																		itemId : 'removeParentArray',
+																		iconCls : 'icon-delete'
+																	}]
 														},
 														{
-															xtype : 'textfield',
+															xtype : 'hidden',
 															name : 'superOrdinateId',
 															hidden : true
 														},
@@ -219,11 +239,20 @@ Ext
 																		xtype : 'button',
 																		text : me.xSelectParentConcept,
 																		disabled : false,
-																		requiredRoles : ['ADMIN'],
+																		requiredRoles : ['ADMIN','MANAGER'],
 																		itemId : 'selectParentConcept',
 																		cls : 'add',
 																		iconCls : 'icon-add'
-																	} ]
+																	} ,
+																	{
+																		xtype : 'button',
+																		text : me.xRemoveParentConcept,
+																		disabled : true,
+																		requiredRoles : ['ADMIN','MANAGER'],
+																		itemId : 'removeParentConcept',
+																		cls : 'add',
+																		iconCls : 'icon-delete'
+																	}]
 														},
 														{
 															xtype : 'gridpanel',
@@ -236,7 +265,7 @@ Ext
 																dock : 'top',
 																items : [ {
 																	xtype : 'button',
-																	requiredRoles : ['ADMIN'],
+																	requiredRoles : ['ADMIN','MANAGER'],
 																	text : me.xAddConceptToArray,
 																	itemId : 'addConceptToArray',
 																	cls : 'add',

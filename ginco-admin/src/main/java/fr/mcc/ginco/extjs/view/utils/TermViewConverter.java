@@ -34,24 +34,29 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusTermRole;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusTermView;
-import fr.mcc.ginco.log.Log;
-import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.IThesaurusTermRoleService;
+import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.DateUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Small class responsible for converting real {@link ThesaurusTerm} object into
@@ -84,8 +89,8 @@ public class TermViewConverter {
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
 
-	@Log
-	private Logger logger;
+	private Logger logger = LoggerFactory.getLogger(TermViewConverter.class);
+
 
 	@Value("${ginco.default.language}")
 	private String language;
@@ -99,25 +104,67 @@ public class TermViewConverter {
 		return hibernateRes;
 	}
 
-	private ThesaurusTerm getExistingThesaurusTerm(String identifier)
-			throws BusinessException {
+	private ThesaurusTerm getExistingThesaurusTerm(String identifier) {
 		ThesaurusTerm hibernateRes = thesaurusTermService
 				.getThesaurusTermById(identifier);
 		logger.info("Getting an existing term with identifier " + identifier);
 		return hibernateRes;
 	}
 
+	public ThesaurusTermView convert(ThesaurusTerm source) {
+		return convert(source, false);
+	}
+
+	public ThesaurusTermView convert(ThesaurusTerm source, boolean includeConceptInfo) {
+		ThesaurusTermView view = new ThesaurusTermView();
+		if (source != null) {
+			view.setIdentifier(source.getIdentifier());
+			view.setLexicalValue(source.getLexicalValue());
+			if (source != null) {
+				view.setCreated(DateUtil.toString(source.getCreated()));
+				view.setModified(DateUtil.toString(source.getModified()));
+			}
+			view.setSource(source.getSource());
+			view.setPrefered(source.getPrefered());
+			view.setHidden(source.getHidden());
+			view.setStatus(source.getStatus());
+
+			if (includeConceptInfo && source.getConcept() != null) {
+				view.setConceptId(source.getConcept().getIdentifier());
+				List<String> parentIdPath = new ArrayList<String>();
+				List<ThesaurusConcept> parentPath = thesaurusConceptService.getRecursiveParentsByConceptId(source.getConcept().getIdentifier());
+				for (int i = parentPath.size() - 1; i >= 0; i--) {
+					parentIdPath.add(parentPath.get(i).getIdentifier());
+				}
+				parentIdPath.add(source.getConcept().getIdentifier());
+				if (parentPath.size() > 0) {
+					view.setTopistopterm(parentPath.get(0).getTopConcept());
+				} else {
+					view.setTopistopterm(source.getConcept().getTopConcept());
+				}
+				view.setConceptsPath(parentIdPath);
+			}
+
+			view.setThesaurusId(source.getThesaurus().getIdentifier());
+			if (source.getLanguage() != null) {
+				view.setLanguage(source.getLanguage().getId());
+				if (source.getRole() != null) {
+					view.setRole(source.getRole().getCode());
+				}
+			}
+		}
+
+		return view;
+	}
+
 	/**
 	 * Main method used to do conversion.
-	 * 
-	 * @param source
-	 *            source to work with
+	 *
+	 * @param source      source to work with
 	 * @param fromConcept
 	 * @return converted item.
-	 * @throws BusinessException
 	 */
-	public ThesaurusTerm convert(ThesaurusTermView source, boolean fromConcept)
-			throws BusinessException {
+	public ThesaurusTerm convert(ThesaurusTermView source, boolean fromConcept) {
 		ThesaurusTerm hibernateRes;
 
 		if (StringUtils.isEmpty(source.getIdentifier())) {
@@ -141,22 +188,23 @@ public class TermViewConverter {
 						.getThesaurusConceptById(source.getConceptId());
 				if (concept != null) {
 					hibernateRes.setConcept(concept);
-					if (!source.getPrefered()) {
-						if (StringUtils.isNotBlank(source.getRole())) {
-							ThesaurusTermRole role = thesaurusTermRoleService
-									.getTermRole(source.getRole());
-							hibernateRes.setRole(role);
-						} else {
-							hibernateRes.setRole(thesaurusTermRoleService
-									.getDefaultThesaurusTermRole());
-						}
-					} else {
-						hibernateRes.setRole(null);
-					}
+
 				}
 			}
-
+			if (!source.getPrefered()) {
+				if (StringUtils.isNotBlank(source.getRole())) {
+					ThesaurusTermRole role = thesaurusTermRoleService
+							.getTermRole(source.getRole());
+					hibernateRes.setRole(role);
+				} else {
+					hibernateRes.setRole(thesaurusTermRoleService
+							.getDefaultThesaurusTermRole());
+				}
+			} else {
+				hibernateRes.setRole(null);
+			}
 		}
+
 
 		hibernateRes.setThesaurus(thesaurusService.getThesaurusById(source
 				.getThesaurusId()));
@@ -176,17 +224,13 @@ public class TermViewConverter {
 	/**
 	 * This method extracts a list of ThesaurusTerm from a ThesaurusConceptView
 	 * given in argument
-	 * 
-	 * @param termViews
-	 *            array of view.
+	 *
+	 * @param termViews   array of view.
 	 * @param fromConcept
-	 * 
 	 * @return {@code List<ThesaurusTerm>}
-	 * @throws BusinessException
 	 */
 	public List<ThesaurusTerm> convertTermViewsInTerms(
-			List<ThesaurusTermView> termViews, boolean fromConcept)
-			throws BusinessException {
+			List<ThesaurusTermView> termViews, boolean fromConcept) {
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 
 		for (ThesaurusTermView thesaurusTermView : termViews) {

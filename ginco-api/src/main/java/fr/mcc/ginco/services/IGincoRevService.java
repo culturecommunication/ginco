@@ -41,14 +41,14 @@ import fr.mcc.ginco.beans.Thesaurus;
 
 /**
  * Service to provide logs journal
- *
  */
 public interface IGincoRevService {
-	 
+
 	/**
-     * Returns the CSV files of events for the given thesaurus
-     * @return
-     */
-	File getLogJournal(Thesaurus thesaurus) throws IOException ;
-    
-  }
+	 * Returns the CSV files of events for the given thesaurus
+	 *
+	 * @return
+	 */
+	File getLogJournal(Thesaurus thesaurus) throws IOException;
+
+}

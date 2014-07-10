@@ -51,7 +51,7 @@ import java.util.List;
 
 public class CustomTermAttributeTypeServiceTest {
 	
-	@Mock(name = "customTermAttributeTypeDAO")
+	@Mock
     private ICustomTermAttributeTypeDAO customTermAttributeTypeDAO;
 	
 	@InjectMocks

@@ -47,6 +47,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -57,7 +58,6 @@ import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
 import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
 import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
 
 public class ChildrenGeneratorTest {
 
@@ -73,11 +73,12 @@ public class ChildrenGeneratorTest {
     @Before
     public final void setUp() {
         MockitoAnnotations.initMocks(this);
-        LoggerTestUtil.initLogger(childrenGenerator);
+		ReflectionTestUtils.setField(childrenGenerator, "maxResults",
+				5000);
     }
 
     @Test
-    public final void testChildrenLeafsCreation() throws BusinessException {
+    public final void testChildrenLeafsCreation(){
 
         Thesaurus thesaurus = new Thesaurus();
         thesaurus.setIdentifier("th1");
@@ -96,7 +97,7 @@ public class ChildrenGeneratorTest {
 
         Mockito.when(
                 thesaurusConceptService
-                        .getChildrenByConceptId(Matchers.anyString()))
+                        .getChildrenByConceptId(Matchers.anyString(), Matchers.eq(5001)))
                 .thenReturn(children);
         
         Mockito.when(
@@ -132,7 +133,7 @@ public class ChildrenGeneratorTest {
     }
 
     @Test
-    public final void testChildrenBranchesCreation() throws BusinessException {
+    public final void testChildrenBranchesCreation() {
 
         Thesaurus thesaurus = new Thesaurus();
         thesaurus.setIdentifier("th1");
@@ -151,7 +152,7 @@ public class ChildrenGeneratorTest {
 
         Mockito.when(
                 thesaurusConceptService
-                        .getChildrenByConceptId(Matchers.anyString()))
+                        .getChildrenByConceptId(Matchers.anyString(),Matchers.eq(5001)))
                 .thenReturn(children);
         
         Mockito.when(

@@ -34,45 +34,36 @@
  */
 package fr.mcc.ginco.imports.ginco;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
-import fr.mcc.ginco.log.Log;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class gives methods to import arrays and array labels
- *
  */
 @Component("gincoArrayImporter")
 public class GincoArrayImporter {
-	
+
 	@Inject
-	@Named("nodeLabelDAO")
 	private INodeLabelDAO nodeLabelDAO;
-	
+
 	@Inject
-	@Named("thesaurusArrayDAO")
 	private IThesaurusArrayDAO thesaurusArrayDAO;
-	
-	@Log
-	private Logger logger;
-	
+
+
 	/**
 	 * This method stores all the array of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 *
 	 * @param exportedThesaurus
 	 * @return The list of stored arrays
 	 */
@@ -87,27 +78,28 @@ public class GincoArrayImporter {
 
 	/**
 	 * This method stores all the array labels of the thesaurus included in the {@link GincoExportedThesaurus} object given in parameter
+	 *
 	 * @param exportedThesaurus
 	 * @return The list of stored labels
 	 */
 	public List<NodeLabel> storeArrayLabels(GincoExportedThesaurus exportedThesaurus) {
 		Map<String, JaxbList<NodeLabel>> labels = exportedThesaurus.getConceptArrayLabels();
 		List<NodeLabel> updatedLabels = new ArrayList<NodeLabel>();
-		
+
 		if (labels != null && !labels.isEmpty()) {
-			Iterator<Map.Entry<String,  JaxbList<NodeLabel>>> entries = labels.entrySet().iterator();
+			Iterator<Map.Entry<String, JaxbList<NodeLabel>>> entries = labels.entrySet().iterator();
 			String arrayId = null;
 			List<NodeLabel> nodeLabel = null;
-			while(entries.hasNext()){
-				Map.Entry<String,  JaxbList<NodeLabel>> entry = entries.next();
+			while (entries.hasNext()) {
+				Map.Entry<String, JaxbList<NodeLabel>> entry = entries.next();
 				//Getting the id of the array
 				arrayId = entry.getKey();
-				
+
 				//Getting the NodeLabels for this array
 				if (entry.getValue() != null && !entry.getValue().isEmpty()) {
 					nodeLabel = entry.getValue().getList();
 				}
-				
+
 				for (NodeLabel label : nodeLabel) {
 					label.setThesaurusArray(thesaurusArrayDAO.getById(arrayId));
 					updatedLabels.add(nodeLabelDAO.update(label));

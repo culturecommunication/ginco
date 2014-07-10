@@ -34,19 +34,18 @@
  */
 package fr.mcc.ginco.audit.csv;
 
+import fr.mcc.ginco.utils.DateUtil;
+import fr.mcc.ginco.utils.LabelUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+public class JournalLine implements Comparable<JournalLine> {
 
-import fr.mcc.ginco.utils.DateUtil;
-import fr.mcc.ginco.utils.LabelUtil;
-
-public class JournalLine  implements Comparable<JournalLine>{
-
-	private final static String COMMA = ",";
-	private final static String PIPE = "|";
+	private static final String COMMA = ",";
+	private static final String PIPE = "|";
 
 	private String authorId;
 	private String termId;
@@ -136,7 +135,7 @@ public class JournalLine  implements Comparable<JournalLine>{
 	}
 
 	public String toString() {
-		String line = new String();
+		String line = "";
 		line += StringEscapeUtils.escapeCsv(getEventType().toString()) + COMMA;
 		line += StringEscapeUtils.escapeCsv(DateUtil.toString(getEventDate()))
 				+ COMMA;

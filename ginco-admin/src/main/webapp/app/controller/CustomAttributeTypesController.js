@@ -48,8 +48,6 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
     xProblemSaveMsg : 'Impossible to save attributes !',
 
     loadConceptData : function(theGrid, thesaurusId) {
-        var me = this;
-
         var conceptsGridStore = theGrid.getStore();
         conceptsGridStore.getProxy().extraParams = {
             thesaurusId: thesaurusId
@@ -65,14 +63,9 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         termsGridStore.load();
     },
 
-    getActivePanel : function() {
-        var topTabs = Ext.ComponentQuery.query('topTabs')[0];
-        return topTabs.getActiveTab();
-    },
-
     onConceptGridRender : function(theGrid) {
         var me = this;
-        var thesaurusData = theGrid.up('thesaurusPanel').thesaurusData;
+        var thesaurusData = theGrid.up('thesaurusTabPanel').thesaurusData;
 
         if (thesaurusData != null) {
             me.loadConceptData(theGrid, thesaurusData.id);
@@ -81,14 +74,14 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
 
     onTermGridRender : function(theGrid) {
         var me = this;
-        var thesaurusData = theGrid.up('thesaurusPanel').thesaurusData;
+        var thesaurusData = theGrid.up('thesaurusTabPanel').thesaurusData;
 
         if (thesaurusData != null) {
             me.loadTermData(theGrid, thesaurusData.id);
         }
     },
 
-    saveConceptTypes : function(theButton) {
+    saveConceptTypes : function(theButton, theCallback) {
         var me = this;
         var theGrid = theButton.up('#conceptAttributTypesGrid');
         var conceptsGridStore = theGrid.getStore();
@@ -97,16 +90,21 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
+
+                me.application.fireEvent('customattributeupdated',theGrid.up('thesaurusTabPanel').thesaurusData);
+
+        		if (theCallback && typeof theCallback == "function") {
+					theCallback();
+				}
         	},
 			failure : function(batch) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel,
 						me.xProblemSaveMsg + " " + batch.operations[0].request.scope.reader.jsonData["message"]);
-				console.log(batch);
 			}
         });
     },
 
-    saveTermTypes : function(theButton) {
+    saveTermTypes : function(theButton, theCallback) {
         var me = this;
         var theGrid = theButton.up('#termAttributTypesGrid');
         var termsGridStore = theGrid.getStore();
@@ -115,6 +113,12 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         		Thesaurus.ext.utils.msg(
 						me.xSucessLabel,
 						me.xSucessSavedMsg);
+
+                me.application.fireEvent('customattributeupdated',theGrid.up('thesaurusTabPanel').thesaurusData);
+
+        		if (theCallback && typeof theCallback == "function") {
+					theCallback();
+				}
         	},
         	failure : function(batch) {
 				Thesaurus.ext.utils.msg(me.xProblemLabel,
@@ -127,9 +131,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         var theGrid = theButton.up('#termAttributTypesGrid');
         var termsGridStore = theGrid.getStore();
         var model = Ext.create('GincoApp.model.CustomAttributeTypeModel');
-
-        var thesaurusData = theButton.up('thesaurusPanel').thesaurusData;
-
+        var thesaurusData = theButton.up('thesaurusTabPanel').thesaurusData;
         model.set('thesaurusId',thesaurusData.id);
         model.set('value','Nouvel attribut');
         model.set('code','code');
@@ -140,7 +142,7 @@ Ext.define('GincoApp.controller.CustomAttributeTypesController', {
         var theGrid = theButton.up('#conceptAttributTypesGrid');
         var conceptsGridStore = theGrid.getStore();
         var model = Ext.create('GincoApp.model.CustomAttributeTypeModel');
-        var thesaurusData = theButton.up('thesaurusPanel').thesaurusData;
+        var thesaurusData = theButton.up('thesaurusTabPanel').thesaurusData;
         model.set('thesaurusId',thesaurusData.id);
         model.set('value','Nouvel attribut');
         model.set('code','code');

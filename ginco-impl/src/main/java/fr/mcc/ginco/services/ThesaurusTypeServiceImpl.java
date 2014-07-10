@@ -34,29 +34,25 @@
  */
 package fr.mcc.ginco.services;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.ThesaurusType;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *
  */
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusTypeService")
 public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
-	    
+
 	@Inject
-	@Named("thesaurusTypeDAO")
-    private IThesaurusTypeDAO thesaurusTypeDAO;
-	
+	private IThesaurusTypeDAO thesaurusTypeDAO;
+
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.IThesaurusTypeService#getThesaurusTypeList()
 	 */
@@ -68,9 +64,9 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 	/* (non-Javadoc)
 	 * @see fr.mcc.ginco.IThesaurusTypeService#getThesaurusTypeById()
 	 */
-    @Override
-    public ThesaurusType getThesaurusTypeById(Integer id) {
-        return thesaurusTypeDAO.getById(id);
-    }   
+	@Override
+	public ThesaurusType getThesaurusTypeById(Integer id) {
+		return thesaurusTypeDAO.getById(id);
+	}
 
 }

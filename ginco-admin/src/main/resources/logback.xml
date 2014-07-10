@@ -16,13 +16,45 @@
         </layout>
     </appender>  
     
+    <appender name="ROLEFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${ginco.roles.log.file}</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>logFile.%d{yyyy-MM-dd}.log</FileNamePattern>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern>
+        </layout>
+    </appender> 
+    
     <logger name="org.springframework" level="WARN" additivity="false">
         <appender-ref ref="FILE" />
     </logger>
+    
+    <logger name="fr.mcc.ginco.services.UserRoleServiceImpl" level="INFO" additivity="false">
+        <appender-ref ref="ROLEFILE" />        
+    </logger>
 
-     <logger name="fr.mcc.ginco" level="WARN" additivity="false">
+    <logger name="fr.mcc.ginco" level="INFO" additivity="false">
         <appender-ref ref="FILE" />
         <appender-ref ref="CONSOLE" />        
+    </logger>
+    <logger name="net.sf.ehcache" level="ALL" >
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <logger name="fr.mcc.ginco.import" level="INFO" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />        
+    </logger>
+    
+    <logger name="fr.mcc.ginco.security.CSRFGuardLogger" level="WARN" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />        
+    </logger>
+    
+    <logger name="org.apache.cxf.interceptor" level="WARN" additivity="false">
+    	<appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" /> 
     </logger>
 
     <root level="INFO" >

@@ -34,13 +34,6 @@
  */
 package fr.mcc.ginco.exports;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
@@ -52,10 +45,14 @@ import fr.mcc.ginco.services.IThesaurusTermRoleService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.LabelUtil;
 import fr.mcc.ginco.utils.ThesaurusTermUtils;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * This component gives methods to export concepts alphabetically
- * 
  */
 @Component("alphabeticConceptExporter")
 public class AlphabeticConceptExporter {
@@ -86,14 +83,14 @@ public class AlphabeticConceptExporter {
 
 	/**
 	 * For alphabetic export.
-	 * 
+	 * <p/>
 	 * banquette NA: Siège à plusieurs places, peu profond, garni, comportant
 	 * éventuellement soit un dossier, soit des accotoirs, soit les deux. EP:
 	 * banquette à accotoirs banquette à dossier TG: siège banquette à accotoirs
 	 * EM: banquette banquette à dossier EM: banquette
 	 */
 	public void addConceptInfo(Integer base, List<FormattedLine> result,
-			ThesaurusConcept concept) {
+	                           ThesaurusConcept concept) {
 		List<Note> notes = noteService.getConceptNotePaginatedList(
 				concept.getIdentifier(), 0, 0);
 
@@ -109,6 +106,20 @@ public class AlphabeticConceptExporter {
 			if ("scopeNote".equals(note.getNoteType().getCode())) {
 				result.add(new FormattedLine(base, LabelUtil
 						.getResourceLabel("NA") + ": " + note.getLexicalValue()));
+			}
+			if ("historyNote".equals(note.getNoteType().getCode())) {
+				result.add(new FormattedLine(base, LabelUtil
+						.getResourceLabel("HN") + ": " + note.getLexicalValue()));
+			}
+		}
+
+		for (ThesaurusTerm prefTerm : prefTerms) {
+			List<Note> prefTermNotes = noteService.getTermNotePaginatedList(prefTerm.getIdentifier(), 0, 0);
+			for (Note note : prefTermNotes) {
+				if ("definition".equals(note.getNoteType().getCode())) {
+					result.add(new FormattedLine(base, LabelUtil
+							.getResourceLabel("DEF") + ": " + note.getLexicalValue()));
+				}
 			}
 		}
 
@@ -157,6 +168,13 @@ public class AlphabeticConceptExporter {
 				.getConceptNotPreferredTerms(concept.getIdentifier())) {
 			result.add(new FormattedLine(base - 1, thesaurusTermUtils
 					.generatePrefTermText(term)));
+			List<Note> nonPrefTermNotes = noteService.getTermNotePaginatedList(term.getIdentifier(), 0, 0);
+			for (Note note : nonPrefTermNotes) {
+				if ("definition".equals(note.getNoteType().getCode())) {
+					result.add(new FormattedLine(base, LabelUtil
+							.getResourceLabel("DEF") + ": " + note.getLexicalValue()));
+				}
+			}
 			if (term.getRole() == null) {
 				result.add(new FormattedLine(base, thesaurusTermRoleService
 						.getDefaultThesaurusTermRole().getCode()

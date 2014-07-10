@@ -133,9 +133,7 @@ Ext
 														var me = this;
 														var theButton = me
 																.down('#selectButton');
-														var win = me
-																.up('selectGroupWin');
-														var checkAgainstParentId = win.currentParentId;
+														var checkAgainstParentId = me.up('selectGroupWin').currentParentId;
 														if (checkAgainstParentId) {
 															if (checkAgainstParentId == record.data.identifier) {
 																theButton

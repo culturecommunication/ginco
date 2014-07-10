@@ -37,16 +37,13 @@ package fr.mcc.ginco.exceptions;
 /**
  * Exception used to indicate a technical exception, for which no detailed
  * message is displayed to the end user
- * 
  */
 public class TechnicalException extends RuntimeException {
 	/**
 	 * Creates a new Technical Exception
-	 * 
-	 * @param logMessage
-	 *            message to log
-	 * @param Throwable
-	 *            the original exception
+	 *
+	 * @param logMessage message to log
+	 * @param cause      the original exception
 	 */
 	public TechnicalException(String logMessage, Throwable cause) {
 		super(logMessage, cause);

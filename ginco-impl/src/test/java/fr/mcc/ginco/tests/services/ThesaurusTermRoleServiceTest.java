@@ -50,7 +50,7 @@ import fr.mcc.ginco.services.ThesaurusTermRoleServiceImpl;
 
 public class ThesaurusTermRoleServiceTest {
 
-	@Mock(name = "thesaurusTermRoleDAO")
+	@Mock
 	private IThesaurusTermRoleDAO thesaurusTermRoleDAO;
 
 	@InjectMocks	
@@ -61,7 +61,7 @@ public class ThesaurusTermRoleServiceTest {
 		MockitoAnnotations.initMocks(this);
 	}
     @Test
-    public final void testGetDefaultThesaurusTermRole() throws BusinessException {
+    public final void testGetDefaultThesaurusTermRole() {
     	ThesaurusTermRole role = new ThesaurusTermRole();
     	role.setCode("CODE-ROLE");
     	role.setDefaultRole(true);

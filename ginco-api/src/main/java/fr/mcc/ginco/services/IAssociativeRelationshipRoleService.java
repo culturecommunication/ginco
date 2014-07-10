@@ -34,10 +34,9 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
-import fr.mcc.ginco.exceptions.BusinessException;
-
 import java.util.List;
+
+import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 
 /**
  * Service used to work with {@link AssociativeRelationshipRole} objects, contains basic
@@ -50,20 +49,26 @@ public interface IAssociativeRelationshipRoleService {
     /**
      * Gets the default AssociativeRelationshipRole 
      * @return
-     * @throws BusinessException
      */
-	AssociativeRelationshipRole getDefaultAssociativeRelationshipRoleRole() throws BusinessException;
+	AssociativeRelationshipRole getDefaultAssociativeRelationshipRoleRole();
 
     /**
      * Returns single object by its id.
      * @return
-     * @throws BusinessException
      */
-    AssociativeRelationshipRole getRoleById(String id) throws BusinessException;
+    AssociativeRelationshipRole getRoleById(String id);
 
     /**
      * Returns list of all roles
      * @return
      */
     List<AssociativeRelationshipRole> getAllAssociationTermRole();
+    
+    /**
+     * 
+     * Return an associative rola by its skos label
+     * @param skosLabel
+     * @return
+     */
+    AssociativeRelationshipRole getRoleBySkosLabel(String skosLabel);
 }

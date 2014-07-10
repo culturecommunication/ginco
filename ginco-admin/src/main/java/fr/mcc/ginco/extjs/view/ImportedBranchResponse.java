@@ -42,6 +42,7 @@ import fr.mcc.ginco.extjs.view.pojo.ThesaurusConceptReducedView;
 public class ImportedBranchResponse {
 	private ThesaurusConceptReducedView conceptView;
 	private String title;
+	private boolean targetInternalConceptsMissing;
 
 	public String getTitle() {
 		return title;
@@ -57,6 +58,15 @@ public class ImportedBranchResponse {
 
 	public void setConceptView(ThesaurusConceptReducedView conceptView) {
 		this.conceptView = conceptView;
+	}
+
+	public boolean isTargetInternalConceptsMissing() {
+		return targetInternalConceptsMissing;
+	}
+
+	public void setTargetInternalConceptsMissing(
+			boolean targetInternalConceptsMissing) {
+		this.targetInternalConceptsMissing = targetInternalConceptsMissing;
 	}
 
 }

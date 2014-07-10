@@ -34,12 +34,12 @@
  */
 package fr.mcc.ginco.solr;
 
-/**
- *
- */
-public class SolrConstants {
-    public static final String SCORE = "score";
-    public static final String DESCENDING = "desc";
-    public static final String ASCENDING = "asc";
-    public static final String EDISMAX = "edismax";
+public final class SolrConstants {
+	private SolrConstants() {
+	}
+
+	public static final String SCORE = "score";
+	public static final String DESCENDING = "desc";
+	public static final String ASCENDING = "asc";
+	public static final String EDISMAX = "edismax";
 }

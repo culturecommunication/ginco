@@ -37,13 +37,14 @@ package fr.mcc.ginco.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.dao.IThesaurusConceptGroupDAO;
 
-@Repository("thesaurusConceptGroupDAO")
+@Repository
 public class ThesaurusConceptGroupDAO extends GenericHibernateDAO<ThesaurusConceptGroup, String> implements IThesaurusConceptGroupDAO  {
 
 	public ThesaurusConceptGroupDAO() {
@@ -59,14 +60,30 @@ public class ThesaurusConceptGroupDAO extends GenericHibernateDAO<ThesaurusConce
         excludeAGroupById(criteria, excludedConceptGroupId);
         return criteria.list();
 	}
-	
+
     private void selectThesaurus(Criteria criteria, String thesaurusId) {
         criteria.add(Restrictions.eq("ta.thesaurus.identifier", (String) thesaurusId));
     }
-    
+
     private void excludeAGroupById(Criteria criteria, String excludedConceptGroupId) {
         if (excludedConceptGroupId != null) {
         	criteria.add(Restrictions.ne("ta.identifier", (String) excludedConceptGroupId));
         }
+    }
+
+    @Override
+	public Long countItems(String idThesaurus) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConceptGroup.class);
+		criteria.add(Restrictions.eq("thesaurus.identifier", idThesaurus))
+				.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
+	}
+
+    @Override
+    public List<ThesaurusConceptGroup> getChildGroups(String conceptGroupId) {
+    	Criteria criteria = getCurrentSession().createCriteria(ThesaurusConceptGroup.class, "ta");
+    	criteria.add(Restrictions.eq("ta.parent.identifier", conceptGroupId));
+    	return criteria.list();
     }
 }

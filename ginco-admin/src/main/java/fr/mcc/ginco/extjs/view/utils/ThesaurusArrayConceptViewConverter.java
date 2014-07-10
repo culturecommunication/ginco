@@ -34,42 +34,49 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayConceptView;
-import fr.mcc.ginco.services.IThesaurusArrayConceptService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
- *
+ * Small class responsible for converting real {@link ThesaurusArrayConcept} object
+ * into its view {@link ThesaurusArrayConceptView}.
  */
 @Component("thesaurusArrayConceptViewConverter")
 public class ThesaurusArrayConceptViewConverter {
 
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
-    @Inject
-	@Named("thesaurusArrayConceptService")
-	private IThesaurusArrayConceptService thesaurusArrayConceptService;
+	/**
+	 * Convert from real object to POJO
+	 *
+	 * @param thesaurusArrayConceptView
+	 * @param array
+	 * @return
+	 */
+	public ThesaurusArrayConcept convert(ThesaurusArrayConceptView thesaurusArrayConceptView,
+	                                     ThesaurusArray array) {
+		ThesaurusArrayConcept.Id id = new ThesaurusArrayConcept.Id();
+		id.setConceptId(thesaurusArrayConceptView.getIdentifier());
+		id.setThesaurusArrayId(array.getIdentifier());
 
-    public ThesaurusArrayConcept convert(ThesaurusArrayConceptView thesaurusArrayConceptView,
-                                           ThesaurusArray array) {
-    	ThesaurusArrayConcept.Id id = new ThesaurusArrayConcept.Id();
-        id.setConceptId(thesaurusArrayConceptView.getIdentifier());
-        id.setThesaurusArrayId(array.getIdentifier());
+		ThesaurusArrayConcept thesaurusArrayConcept = new ThesaurusArrayConcept();
+		thesaurusArrayConcept.setIdentifier(id);
+		thesaurusArrayConcept.setConcepts(thesaurusConceptService.getThesaurusConceptById(
+				thesaurusArrayConceptView.getIdentifier()));
+		if (thesaurusArrayConceptView.getOrder() != null) {
+			thesaurusArrayConcept.setArrayOrder(thesaurusArrayConceptView.getOrder());
+		} else {
+			thesaurusArrayConcept.setArrayOrder(0);
+		}
 
-        ThesaurusArrayConcept thesaurusArrayConcept = new ThesaurusArrayConcept();
-        thesaurusArrayConcept.setIdentifier(id);
-        thesaurusArrayConcept.setConcepts(thesaurusConceptService.getThesaurusConceptById(thesaurusArrayConceptView.getIdentifier()));
-        thesaurusArrayConcept.setArrayOrder(thesaurusArrayConceptView.getOrder() != null?thesaurusArrayConceptView.getOrder() :0);       
-       
-        return thesaurusArrayConcept;
-    }
+		return thesaurusArrayConcept;
+	}
 }

@@ -34,26 +34,29 @@
  */
 package fr.mcc.ginco.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.mcc.ginco.beans.AdminUser;
 import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+import javax.inject.Inject;
+import java.util.List;
+
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("adminUserService")
 public class AdminUserServiceImpl implements IAdminUserService {
 	@Inject
-	@Named("adminUserDAO")
-    private IGenericDAO<AdminUser, String> adminUserDAO;
-	
+	private IGenericDAO<AdminUser, String> adminUserDAO;
+
 	@Override
 	public boolean isUserAdmin(String userId) {
 		return (adminUserDAO.getById(userId)) != null;
 	}
-  
+
+	@Override
+	public List<AdminUser> getAllAdmin() {
+		return adminUserDAO.findAll();
+	}
+
 }

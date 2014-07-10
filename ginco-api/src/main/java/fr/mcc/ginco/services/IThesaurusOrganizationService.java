@@ -40,8 +40,16 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import java.util.List;
 
 public interface IThesaurusOrganizationService {
-    /**
-     * Gets list of all orgizations.
-     */
-    List<ThesaurusOrganization> getOrganizations() throws TechnicalException;
+	/**
+	 * Gets list of all orgizations.
+	 */
+	List<ThesaurusOrganization> getOrganizations();
+
+	/**
+	 * Gets list of all organizations that have at lease one thesaurus.
+	 *
+	 * @return
+	 * @throws TechnicalException
+	 */
+	List<ThesaurusOrganization> getOrganizationsWithData();
 }

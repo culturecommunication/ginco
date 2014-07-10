@@ -36,10 +36,10 @@ package fr.mcc.ginco.enums;
 
 public enum ConceptHierarchicalRelationsEnum {
 	NORELATIONS(0), PARENT(1), CHILD(2);
-	
+
 	private int status;
-	
-	private ConceptHierarchicalRelationsEnum(int status){
+
+	private ConceptHierarchicalRelationsEnum(int status) {
 		this.status = status;
 	}
 

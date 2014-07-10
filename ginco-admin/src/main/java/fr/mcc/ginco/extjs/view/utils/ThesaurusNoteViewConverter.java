@@ -37,10 +37,14 @@ package fr.mcc.ginco.extjs.view.utils;
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusNoteView;
-import fr.mcc.ginco.services.*;
+import fr.mcc.ginco.services.ILanguagesService;
+import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.INoteTypeService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -48,6 +52,10 @@ import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Small class responsible for converting real {@link Note} object
+ * into its view {@link ThesaurusNoteView}.
+ */
 @Component("thesaurusNoteViewConverter")
 public class ThesaurusNoteViewConverter {
 
@@ -78,9 +86,8 @@ public class ThesaurusNoteViewConverter {
 	/**
 	 * This method converts a single {@link Note} into a
 	 * {@link ThesaurusNoteView}
-	 * 
-	 * @param source
-	 *            (a {@link Note} object)
+	 *
+	 * @param source (a {@link Note} object)
 	 * @return result (a {@link ThesaurusNoteView} object)
 	 */
 	public ThesaurusNoteView convert(Note source) {
@@ -90,6 +97,7 @@ public class ThesaurusNoteViewConverter {
 			view.setLexicalValue(source.getLexicalValue());
 			view.setLanguage(source.getLanguage().getId());
 			view.setType(source.getNoteType().getCode());
+
 			if (source.getSource() != null) {
 				view.setSource(source.getSource());
 			}
@@ -104,8 +112,10 @@ public class ThesaurusNoteViewConverter {
 
 			if (source.getConcept() != null) {
 				view.setConceptId(source.getConcept().getIdentifier());
+				view.setThesaurusId(source.getConcept().getThesaurusId());
 			} else if (source.getTerm() != null) {
 				view.setTermId(source.getTerm().getIdentifier());
+				view.setThesaurusId(source.getTerm().getThesaurusId());
 			}
 		}
 
@@ -115,9 +125,8 @@ public class ThesaurusNoteViewConverter {
 	/**
 	 * This method converts a list of {@link Note} objects to a list of
 	 * {@link ThesaurusNoteView}
-	 * 
-	 * @param source
-	 *            (a list of {@link Note})
+	 *
+	 * @param source (a list of {@link Note})
 	 * @return result (a list of {@link ThesaurusNoteView} )
 	 */
 	public List<ThesaurusNoteView> convert(List<Note> source) {
@@ -131,15 +140,13 @@ public class ThesaurusNoteViewConverter {
 	/**
 	 * This method converts a single {@link ThesaurusNoteView} into a
 	 * {@link Note}
-	 * 
-	 * @param source
-	 *            (a {@link ThesaurusNoteView} object)
+	 *
+	 * @param source (a {@link ThesaurusNoteView} object)
 	 * @return result (a {@link Note} object)
-	 * @throws BusinessException
 	 */
-	public Note convert(ThesaurusNoteView source) throws BusinessException {
+	public Note convert(ThesaurusNoteView source) {
 		Note hibernateRes;
-		if ("".equals(source.getIdentifier())) {
+		if (StringUtils.isEmpty(source.getIdentifier())) {
 			hibernateRes = new Note();
 			hibernateRes.setCreated(DateUtil.nowDate());
 			hibernateRes.setIdentifier(generatorService.generate(Note.class));
@@ -176,8 +183,7 @@ public class ThesaurusNoteViewConverter {
 		return hibernateRes;
 	}
 
-	public List<Note> convertToNote(List<ThesaurusNoteView> source)
-			throws BusinessException {
+	public List<Note> convertToNote(List<ThesaurusNoteView> source) {
 		List<Note> views = new ArrayList<Note>();
 		for (ThesaurusNoteView thesaurusNoteView : source) {
 			views.add(convert(thesaurusNoteView));

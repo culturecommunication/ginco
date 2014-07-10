@@ -35,30 +35,40 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.AssociativeRelationshipRole;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 
 import java.util.List;
 
 /**
- * Service used to work with {@link AssociativeRelationshipRole} objects, contains basic
+ * Service used to work with {@link fr.mcc.ginco.beans.AssociativeRelationship} objects, contains basic
  * methods exposed to client part.
  *
  * @see fr.mcc.ginco.beans
  */
 public interface IAssociativeRelationshipService {
-    /**
-     * Returns list of string of all associated concepts to given concept.
-     * @param concept
-     * @return
-     */
-    List<String> getAssociatedConceptsId(ThesaurusConcept concept);
+	/**
+	 * Returns list of string of all associated concepts to given concept.
+	 *
+	 * @param concept
+	 * @return
+	 */
+	List<String> getAssociatedConceptsId(ThesaurusConcept concept);
 
-    /**
-     * Returns the single object by its composite key (order doesn't matter).
-     * @param id1
-     * @param id2
-     * @return
-     */
-    AssociativeRelationship getAssociativeRelationshipById(String id1, String id2);
+	/**
+	 * Returns the single object by its composite key (order doesn't matter).
+	 *
+	 * @param id1
+	 * @param id2
+	 * @return
+	 */
+	AssociativeRelationship getAssociativeRelationshipById(String id1, String id2);
+
+	/**
+	 * Returns list of assoated concepts for given one.
+	 *
+	 * @param concept
+	 * @return
+	 */
+	List<AssociativeRelationship> getAssociatedConceptsRelationships(ThesaurusConcept concept);
+
 }

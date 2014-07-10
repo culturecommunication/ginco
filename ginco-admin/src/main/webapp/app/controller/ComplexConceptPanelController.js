@@ -48,15 +48,18 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 	xProblemSaveMsg : 'Impossible to save the complex concept !',
 	xProblemDeleteMsg : 'Impossible to delete the Complex concept !',
 	xProblemLoadMsg : 'Unable to load the complex concept',
-	
+
 	loadPanel : function(theForm) {
 		var me = this;
 		var thePanel = theForm.up('complexconceptPanel');
-		var thesaurusData = thePanel.thesaurusData;
-		
+		var thesPanel = theForm.up('thesaurusTabPanel');
+		var thesaurusData = thesPanel.thesaurusData;
+
 		var model = this.getSplitNonPreferredTermModelModel();
 		var termId = thePanel.gincoId;
-		if (termId != '') {
+		thePanel.addNodePath(thesaurusData.id);
+		thePanel.addNodePath("COMPLEXCONCEPTS_"+thesaurusData.id);
+		if (termId != '' && termId!=null) {
 			theForm.getEl().mask("Chargement");
 			model.load(termId, {
 				success : function(model) {
@@ -66,27 +69,27 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 				failure : function(model) {
 					Thesaurus.ext.utils.msg(me.xProblemLabel,
 							me.xProblemLoadMsg);
-					var globalTabs = theForm.up('topTabs');
+					var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 					globalTabs.remove(thePanel);
 				}
 			});
 		} else {
 			model = Ext.create('GincoApp.model.SplitNonPreferredTermModel');
-			model.data.thesaurusId = thePanel.thesaurusData.id;
+			model.data.thesaurusId = thesaurusData.id;
 			model.data.identifier = "";
 			model.data.language=thesaurusData.languages[0];
-			//0 is the status to set by default for a new term, meaning "candidate"
-			model.data.status=0;
+			//1 is the status to set by default for a new term, meaning "validated"
+			model.data.status=1;
 			theForm.down("#statusCombo").setReadOnly(false);
 			theForm.loadRecord(model);
 		}
 	},
-	
+
 	deleteForm : function(theButton) {
 		var me = this;
 		var theForm = theButton.up('form');
 		var updatedModel = theForm.getForm().getRecord();
-		var globalTabs = theForm.up('topTabs');
+		var globalTabs = theForm.up('#thesaurusItemsTabPanel');
 		var thePanel = theForm.up('complexconceptPanel');
 
 		Ext.MessageBox.show({
@@ -102,7 +105,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 						success : function(record, operation) {
 							Thesaurus.ext.utils.msg(me.xSucessLabel,
 									me.xSucessRemovedMsg);
-							//me.application.fireEvent('termdeleted',thePanel.thesaurusData);
+							me.application.fireEvent('complexconceptdeleted',thePanel.up('thesaurusTabPanel').thesaurusData);
 							globalTabs.remove(thePanel);
 						},
 						failure : function(record, operation) {
@@ -119,32 +122,34 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			scope : this
 		});
 	},
-	
+
 	loadData : function(aForm, aModel) {
 		var termPanel = aForm.up('complexconceptPanel');
 		var deleteBtn = aForm.down('#delete');
 		termPanel.setTitle("Concept complexe : "+aModel.data.lexicalValue);
-		aForm.setTitle(aModel.data.lexicalValue);
 		aForm.loadRecord(aModel);
 		termPanel.gincoId = aModel.data.identifier;
 		var preferredTerms = aModel.preferredTerms().getRange();
 		var theGridStore = aForm.down('#gridPanelPreferredTerms').getStore();
 		theGridStore.removeAll();
 		theGridStore.add(preferredTerms);
-		if (Ext.isEmpty(aModel.data.conceptId) && aModel.data.status == 2){
-			//The term isn't attached to any concept and its status is rejected
-			//We can delete it
+		if ( aModel.data.status == 0 || aModel.data.status == 2){
+			// The concept has status = candidate or rejected, so we can
+			// delete it
 			deleteBtn.setDisabled(false);
+		} else	{
+			deleteBtn.setDisabled(true);
 		}
+		termPanel.setReady(true);
 	},
 	loadLanguages : function(theCombo) {
 		var thePanel = theCombo.up('complexconceptPanel');
 		var theStore = theCombo.getStore();
 		theStore.getProxy().setExtraParam('thesaurusId',
-				thePanel.thesaurusData.id);
+				thePanel.getThesaurusData().id);
 		theStore.load();
 	},
-	
+
 	loadStatus : function(theCombo) {
 		var theStore = theCombo.getStore();
 		theStore.load();
@@ -154,7 +159,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 	{
 		var me = this;
 		var theForm = theButton.up('form');
-		var thePanel = theForm.up('complexconceptPanel');
+		var thesPanel = theForm.up('thesaurusTabPanel');
 		if (theForm.getForm().isValid()) {
 			theForm.getEl().mask(me.xLoading);
 			theForm.getForm().updateRecord();
@@ -171,6 +176,7 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 					theForm.getEl().unmask();
 					Thesaurus.ext.utils
 							.msg(me.xSucessLabel, me.xSucessSavedMsg);
+					me.application.fireEvent('complexconceptupdated',thesPanel.thesaurusData);
 					if (theCallback && typeof theCallback == "function") {
 						theCallback();
 					}
@@ -185,7 +191,6 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 	},
 	addPreferredTerm :function(theButton)
 	{
-		var me = this;
 		var thePanel = theButton.up('complexconceptPanel');
 		var win = Ext.create('GincoApp.view.SelectTermWin', {
 			onlyValidatedTerms : true,
@@ -194,17 +199,25 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		var theGrid = theButton.up('#gridPanelPreferredTerms');
 		win.conceptGrid = theGrid;
 		win.store = theGrid.getStore();
-		win.thesaurusData = thePanel.thesaurusData;
+		win.thesaurusData = thePanel.up('thesaurusTabPanel').thesaurusData;
 		win.prefered = true;
 		win.show();
 	},
-	
+
 	preferredTermDeleteAction : function(gridview, el, rowIndex,
 			colIndex, e, rec, rowEl) {
 		var theStore = gridview.up('#gridPanelPreferredTerms').getStore();
 		theStore.remove(rec);
 	},
-	
+
+	onPreferredTermDblClick : function(theGrid, record, item, index, e,
+			eOpts) {
+		var thePanel = theGrid.up('complexconceptPanel');
+		var topTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
+		topTabs.fireEvent('opentermtab', topTabs, thePanel.up('thesaurusTabPanel').thesaurusData.id,
+				record.data.identifier);
+	},
+
 	init : function() {
 		this.control({
 			'complexconceptPanel #termForm' : {
@@ -227,6 +240,9 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 			},
 			'complexconceptPanel #preferredTermDeleteAction' : {
 				click : this.preferredTermDeleteAction
+			},
+			'complexconceptPanel #gridPanelPreferredTerms' : {
+				itemdblclick : this.onPreferredTermDblClick
 			}
 		});
 	}

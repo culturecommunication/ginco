@@ -161,4 +161,31 @@ public class ThesaurusTermUtilsTest {
 		boolean check = thesaurusTermUtils.checkTerms(listOfTerms);
 		Assert.assertTrue(check);
 	}   
+	@Test
+	public void testGeneratePrefTermsText() {
+		
+		List<ThesaurusTerm> listOfTerms = new ArrayList<ThesaurusTerm>();
+		
+		ThesaurusTerm term1 = new ThesaurusTerm();
+		term1.setLexicalValue("lexicalvalue");		
+		Language lang = new Language();
+		lang.setId("lang1");
+		term1.setLanguage(lang);
+		
+		listOfTerms.add(term1);
+		
+		ThesaurusTerm term2 = new ThesaurusTerm();
+		term2.setLexicalValue("lexicalvalue2");		
+		Language lang2 = new Language();
+		lang2.setId("lang2");
+		term2.setLanguage(lang2);		
+		
+		listOfTerms.add(term2);
+		
+		String prefTermsText = thesaurusTermUtils.generatePrefTermsText(listOfTerms);
+		
+		Assert.assertEquals("lexicalvalue (lang1), lexicalvalue2 (lang2)", prefTermsText);
+	}
+		
+	
 }

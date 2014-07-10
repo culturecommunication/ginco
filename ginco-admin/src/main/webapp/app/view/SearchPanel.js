@@ -45,9 +45,12 @@ Ext.define('GincoApp.view.SearchPanel', {
 	closable : true,
 	localized : true,
 	searchQuery : '*',
+	searchThesaurus : '-1',
 	xTypeLabels : {
 		ThesaurusTerm : 'Term',
-		ThesaurusConcept : 'Concept'
+		ThesaurusConcept : 'Concept',
+		Note : 'Note',
+		SplitNonPreferredTerm : 'Complex concept'
 	},
 	layout : {
 		type : 'vbox',
@@ -74,7 +77,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				}
 			}
 		});
-		
+
 		me.langStore = Ext.create('GincoApp.store.ThesaurusLanguageStore',
 		{
 			listeners : {
@@ -90,8 +93,24 @@ Ext.define('GincoApp.view.SearchPanel', {
 			}
 		});
 
+		me.conceptStatusStore = Ext.create('GincoApp.store.ConceptStatusStore',
+				{
+					listeners : {
+						load : {
+							fn : function (theStore)
+							{
+								theStore.insert(0,{
+									status : "-1",
+									statusLabel : '-'
+								});
+							}
+						}
+					}
+		});
+
 		Ext.applyIf(me, {
 			title : me.xSearchPanelTitle,
+			iconCls : 'icon-display',
 			items : [ {
 				xtype : 'form',
 				itemId : 'advancedSearchForm',
@@ -99,6 +118,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				title : me.xAdvancedSearchPnlTitle,
 				collapsible : true,
 				collapsed : true,
+				titleCollapse : true,
 				tbar : [ {
 					xtype : 'button',
 					itemId : 'filterBtn',
@@ -140,7 +160,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 						displayField : 'statusLabel',
 						valueField : 'status',
 						editable : false,
-						store : 'ConceptStatusStore'
+						store : me.conceptStatusStore
 					},
 					{
 						xtype : 'ariacombo',
@@ -187,7 +207,7 @@ Ext.define('GincoApp.view.SearchPanel', {
 				columns : [ {
 					dataIndex : 'identifier',
 					text : me.xIdentifierColumnLabel,
-					sortable: false,
+					sortable: false
 				}, {
 					dataIndex : 'lexicalValue',
 					text : me.xLexicalValueColumnLabel,

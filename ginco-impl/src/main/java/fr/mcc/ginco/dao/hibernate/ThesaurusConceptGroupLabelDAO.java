@@ -44,7 +44,7 @@ import fr.mcc.ginco.dao.IThesaurusConceptGroupLabelDAO;
 /**
  * Implementation of {@link IThesaurusConceptGroupLabelDAO}; basic class for DAO-related work.
  */
-@Repository("thesaurusConceptGroupLabelDAO")
+@Repository
 public class ThesaurusConceptGroupLabelDAO extends GenericHibernateDAO<ThesaurusConceptGroupLabel, Integer>
 		implements IThesaurusConceptGroupLabelDAO {
 
@@ -58,7 +58,6 @@ public class ThesaurusConceptGroupLabelDAO extends GenericHibernateDAO<Thesaurus
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConceptGroupLabel.class);
         criteria.add(Restrictions.eq("conceptGroup.identifier", (String) identifier));
-        //criteria.add(Restrictions.eq("language.id", (String) languageId));
         return (ThesaurusConceptGroupLabel) criteria.list().get(0);
 	}
 

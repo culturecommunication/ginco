@@ -34,19 +34,17 @@
  */
 package fr.mcc.ginco.imports.ginco.idgenerator;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.log.Log;
 
 /**
  * This class generate new ids for terms for importing branch in existing
@@ -61,52 +59,30 @@ public class GincoConceptIdGenerator {
 	private IIDGeneratorService generatorService;
 
 	@Inject
-	@Named("thesaurusConceptDAO")
-	private IThesaurusConceptDAO thesaurusConceptDAO;
-
-	@Inject
 	@Named("gincoIdMapParser")
 	private GincoIdMapParser gincoIdMapParser;
-	
-	@Log
-	private Logger logger;
+
+	private Logger logger  = LoggerFactory.getLogger(GincoConceptIdGenerator.class);
+
 
 	/**
-	 * This method checks if the ids of the concepts in the list are not already
-	 * present in the application, and replace them if it's the case
+	 * This method gets the id of the concept : the existing one or a new if the
+	 * id is not already present in the application
 	 * 
-	 * @param concepts
-	 *            : the list of concepts we want to check ids
+	 * @param oldId
 	 * @param idMapping
 	 *            : the map where we store the mapping between old and new ids
-	 * @return List<ThesaurusConcept> updatedConcepts
+	 * @return String final id
 	 */
-	public List<ThesaurusConcept> checkIdsForConcepts(
-			List<ThesaurusConcept> concepts, Map<String, String> idMapping) {
-		for (ThesaurusConcept thesaurusConcept : concepts) {
-			checkIdForConcept(thesaurusConcept, idMapping);
-		}
-		return concepts;
-	}
-
-	/**
-	 * This method checks if the id of the concept is not already present in the
-	 * application, and replace it if it's the case
-	 * 
-	 * @param concept
-	 * @param idMapping
-	 *            : the map where we store the mapping between old and new ids
-	 * @return ThesaurusConcept updatedConcept
-	 */
-	public ThesaurusConcept checkIdForConcept(ThesaurusConcept concept,
-			Map<String, String> idMapping) {
-		String oldId = concept.getIdentifier();
-		if (thesaurusConceptDAO.getById(oldId) != null) {
-			String newId = generatorService.generate(ThesaurusConcept.class);
+	public String getIdForConcept(String oldId, Map<String, String> idMapping) {
+		String newId = gincoIdMapParser.getNewId(oldId, idMapping);
+		if (newId == null || newId.isEmpty() || oldId.equals(newId)) {
+			newId = generatorService.generate(ThesaurusConcept.class);
 			idMapping.put(oldId, newId);
-			logger.debug("Setting a new id for the concept" + oldId + "with new id " + newId);
-			concept.setIdentifier(newId);
 		}
-		return concept;
+
+		logger.debug("Setting a new id for the concept " + oldId
+				+ " with new id " + newId);
+		return newId;
 	}
 }

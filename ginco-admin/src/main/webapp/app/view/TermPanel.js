@@ -36,10 +36,10 @@
 /*
  * File: app/view/ThesaurusPanel.js
  * Term Creation/Edition Form
- * 
+ *
  */
 Ext.Loader.setPath('Ext.ux', 'extjs/ux');
-Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteTermPanel' ]);
+Ext.require([ 'Ext.ux.CheckColumn', 'GincoApp.view.NoteTermPanel', 'GincoApp.view.CustomAttrForm', 'GincoApp.view.SuggestionPanel', 'GincoApp.view.MetaDataPanel' ]);
 
 Ext
 		.define(
@@ -54,6 +54,10 @@ Ext
 						type : 'vbox',
 						align : 'stretch'
 					},
+					trackable : true,
+					iconCls : 'icon-term',
+
+					xMetadataTitle : 'Metadata',
 
 					/* Fields with auto generated values */
 					xIdentifierLabel : 'Identifier',
@@ -68,12 +72,16 @@ Ext
 					xTermPanelTitle : 'New Term',
 					xNotesTab : 'Notes of this term',
 					xStatusLabel : 'Status',
+					xTermTabPanelTitle : 'Term data',
 					xDisplayTheConceptOfTheTerm : 'Display the concept of this term',
+					xSuggestionsTab : 'Suggestions',
 
 					initComponent : function() {
 						var me = this;
 						me.customAttrTypeStore = Ext.create('GincoApp.store.CustomTermAttributeTypeStore');
 						me.customAttrStore = Ext.create('GincoApp.store.CustomTermAttributeStore');
+						me.noteConceptStore = Ext.create('GincoApp.store.ThesaurusNoteStore', {
+						});
 
 						Ext
 								.applyIf(
@@ -82,14 +90,15 @@ Ext
 											title : me.xTermPanelTitle,
 											items : [ {
 												xtype : 'tabpanel',
+												tabPosition: 'bottom',
 												flex:1,
 												items : [
 														{
 															xtype : 'form',
 															itemId : 'termForm',
-															title : me.xTermPanelTitle,
+															title : me.xTermTabPanelTitle,
 															flex : 1,
-															requiredRoles : ['ADMIN'],
+															requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 															autoScroll : true,
 															pollForChanges : true,
 															trackResetOnLoad : true,
@@ -103,7 +112,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Enregistrer',
-																			requiredRoles : ['ADMIN'],
+																			requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 																			disabled : true,
 																			formBind : true,
 																			cls : 'save',
@@ -113,7 +122,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Supprimer',
-																			requiredRoles : ['ADMIN'],
+																			requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 																			disabled : true,
 																			itemId : 'delete',
 																			cls : 'delete',
@@ -122,7 +131,7 @@ Ext
 																		{
 																			xtype : 'button',
 																			text : 'Créer un concept depuis ce terme',
-																			requiredRoles : ['ADMIN'],
+																			requiredRoles : ['ADMIN', 'MANAGER', 'EXPERT'],
 																			disabled : true,
 																			itemId : 'createconcept',
 																			iconCls : 'icon-add'
@@ -136,27 +145,51 @@ Ext
 																		}]
 															} ],
 															items : [
-																	{
-																		xtype : 'displayfield',
-																		name : 'identifier',
-																		fieldLabel : me.xIdentifierLabel
-																	},
-																	{
-																		xtype : 'displayfield',
-																		name : 'created',
-																		fieldLabel : me.xCreatedDateLabel
-																	},
-																	{
-																		xtype : 'displayfield',
-																		name : 'modified',
-																		fieldLabel : me.xDateLabel
-																	},
+															        {
+															        	xtype : 'metaDataPanel',
+																		title : me.xMetadataTitle,
+																		items : [
+																				{
+																					xtype : 'displayfield',
+																					name : 'identifier',
+																					fieldLabel : me.xIdentifierLabel
+																				},
+																				{
+																					xtype : 'displayfield',
+																					name : 'created',
+																					fieldLabel : me.xCreatedDateLabel
+																				},
+																				{
+																					xtype : 'displayfield',
+																					name : 'modified',
+																					fieldLabel : me.xDateLabel
+																				},
+
+																				{
+																					xtype : 'combobox',
+																					name : 'status',
+																					itemId : 'statusCombo',
+																					fieldLabel : me.xStatusLabel,
+																					editable : false,
+																					multiSelect : false,
+																					readOnly : true,
+																					displayField : 'statusLabel',
+																					valueField : 'status',
+																					forceSelection : true,
+																					store : Ext
+																							.create('GincoApp.store.TermStatusStore'),
+																					anchor : '70%',
+																					margin : '5 0 0 0'
+																				}
+																		        ]
+															        },
 																	{
 																		xtype : 'textfield',
 																		name : 'lexicalValue',
 																		fieldLabel : me.xLexicalValueLabel,
 																		allowBlank : false,
-																		anchor : '70%'
+																		anchor : '70%',
+																		padding : '5 0 0 0'
 																	},
 																	{
 																		xtype : 'htmleditor',
@@ -200,35 +233,26 @@ Ext
 																				.create('GincoApp.store.TermLanguageStore'),
 																		anchor : '70%',
 																		margin : '5 0 5 0'
-																	},
-																	{
-																		xtype : 'combobox',
-																		name : 'status',
-																		itemId : 'statusCombo',
-																		fieldLabel : me.xStatusLabel,
-																		editable : false,
-																		multiSelect : false,
-																		readOnly : true,
-																		displayField : 'statusLabel',
-																		valueField : 'status',
-																		forceSelection : true,
-																		store : Ext
-																				.create('GincoApp.store.TermStatusStore'),
-																		anchor : '70%',
-																		margin : '5 0 5 0'
 																	}, {
 																		trackResetOnLoad :true,
 																		border : false,
 																		xtype : 'customattrform',
 																		metadataStore : me.customAttrTypeStore,
 																		dataStore : me.customAttrStore,
-																		itemId : 'customAttributeForm',
+																		itemId : 'customAttributeForm'
 																	} ]
 														},
 														{
 															title : me.xNotesTab,
 															xtype : 'noteTermPanel',
+															noteConceptStore : me.noteConceptStore,
 															closable : false,
+															disabled : true
+														},
+														{
+															title : me.xSuggestionsTab,
+															xtype : 'suggestionPanel',
+															closable : false,															
 															disabled : true
 														} ]
 											} ]

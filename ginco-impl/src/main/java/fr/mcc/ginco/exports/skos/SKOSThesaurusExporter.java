@@ -34,114 +34,122 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 
-import org.semanticweb.owlapi.vocab.DublinCoreVocabulary;
-import org.semanticweb.skos.AddAssertion;
-import org.semanticweb.skos.SKOSAnnotation;
-import org.semanticweb.skos.SKOSAnnotationAssertion;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataset;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Component;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.vocabulary.DC;
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.utils.DateUtil;
 
 /**
  * This component is in charge of exporting a thesaurus data SKOS
- * 
  */
 @Component("skosThesaurusExporter")
 public class SKOSThesaurusExporter {
 
+	@Inject
+	private IThesaurusVersionHistoryDAO thesaurusVersionHistoryDAO;
+
+	private static final String SEPARATOR = "\\r?\\n";
+
 	/**
 	 * Export the thesaurus data skos API
-	 * 
+	 *
 	 * @param thesaurus
 	 * @return
 	 */
-	public List<SKOSChange> exportThesaurusSKOS(Thesaurus thesaurus,
-			SKOSDataFactory factory, SKOSDataset vocab, SKOSConceptScheme scheme) {
-		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+	public Model exportThesaurusSKOS(Thesaurus thesaurus, Model model) {
 
-		SKOSAnnotation createdAnno = factory.getSKOSAnnotation(
-				URI.create("http://purl.org/dct#created"),
-				DateUtil.toString(thesaurus.getCreated()));
-		SKOSAnnotationAssertion createdAssertion = factory
-				.getSKOSAnnotationAssertion(scheme, createdAnno);
-		addList.add(new AddAssertion(vocab, createdAssertion));
+		Resource thesaurusResource = model.createResource(
+				thesaurus.getIdentifier(), SKOS.CONCEPTSCHEME);
 
-		SKOSAnnotation modifiedAnno = factory.getSKOSAnnotation(
-				URI.create("http://purl.org/dct#modified"),
-				DateUtil.toString(thesaurus.getDate()));
-		SKOSAnnotationAssertion modifiedAssertion = factory
-				.getSKOSAnnotationAssertion(scheme, modifiedAnno);
-		addList.add(new AddAssertion(vocab, modifiedAssertion));
+		model.add(thesaurusResource, DCTerms.created,
+				DateUtil.toISO8601String(thesaurus.getCreated()));
+		model.add(thesaurusResource, DCTerms.modified,
+				DateUtil.toISO8601String(thesaurus.getDate()));
 
-		addLine(thesaurus.getTitle(), DublinCoreVocabulary.TITLE, scheme,
-				addList, factory, vocab);
+		model.add(thesaurusResource, DC.title,
+				StringEscapeUtils.unescapeXml(thesaurus.getTitle()));
 
 		if (thesaurus.getCreator() != null) {
-			addLine("_X_CREATOR_", DublinCoreVocabulary.CREATOR, scheme,
-					addList, factory, vocab);
+
+			Resource foafOrgResource = model.createResource(FOAF.Organization);
+
+			String creatorName = thesaurus.getCreator().getName();
+			String creatorHomepage = thesaurus.getCreator().getHomepage();
+			String creatorEmail = thesaurus.getCreator().getEmail();
+
+			if (creatorName != null && !creatorName.isEmpty()) {
+				foafOrgResource.addProperty(FOAF.name, StringEscapeUtils.unescapeXml(creatorName));
+			}
+			if (creatorHomepage != null && !creatorHomepage.isEmpty()) {
+				foafOrgResource.addProperty(FOAF.homepage, creatorHomepage);
+			}
+			if (creatorEmail != null && !creatorEmail.isEmpty()) {
+				foafOrgResource.addProperty(FOAF.mbox, creatorEmail);
+			}
+			thesaurusResource.addProperty(DC.creator, foafOrgResource);
+
+		}
+		if (thesaurus.getRights() != null && !thesaurus.getRights().isEmpty()) {
+			model.add(thesaurusResource, DC.rights, StringEscapeUtils.unescapeXml(thesaurus.getRights()));
+		} else {
+			throw new BusinessException("Some mandatory metadata are not present", "metadata-not-present");
 		}
 
-		addLine(thesaurus.getRights(), DublinCoreVocabulary.RIGHTS, scheme,
-				addList, factory, vocab);
-		addLine(thesaurus.getDescription(), DublinCoreVocabulary.DESCRIPTION,
-				scheme, addList, factory, vocab);
-		addLine(thesaurus.getRelation(), DublinCoreVocabulary.RELATION, scheme,
-				addList, factory, vocab);
-		addLine(thesaurus.getSource(), DublinCoreVocabulary.SOURCE, scheme,
-				addList, factory, vocab);
-		addLine(thesaurus.getPublisher(), DublinCoreVocabulary.PUBLISHER,
-				scheme, addList, factory, vocab);
+		model.add(thesaurusResource, DC.description, StringEscapeUtils.unescapeXml(thesaurus.getDescription()));
+
+		model.add(thesaurusResource, DC.relation, StringEscapeUtils.unescapeXml(thesaurus.getRelation()));
+
+		model.add(thesaurusResource, DC.source, StringEscapeUtils.unescapeXml(thesaurus.getSource()));
+
+		model.add(thesaurusResource, DC.publisher, StringEscapeUtils.unescapeXml(thesaurus.getPublisher()));
 
 		if (thesaurus.getType() != null) {
-			addLine(thesaurus.getType().getLabel(), DublinCoreVocabulary.TYPE,
-					scheme, addList, factory, vocab);
+			model.add(thesaurusResource, DC.type, thesaurus.getType()
+					.getLabel());
 		}
 
-		addLines(thesaurus.getContributor().split("\\r?\\n"),
-				DublinCoreVocabulary.CONTRIBUTOR, scheme, addList, factory,
-				vocab);
-		addLines(thesaurus.getCoverage().split("\\r?\\n"),
-				DublinCoreVocabulary.COVERAGE, scheme, addList, factory, vocab);
-		addLines(thesaurus.getSubject().split("\\r?\\n"),
-				DublinCoreVocabulary.SUBJECT, scheme, addList, factory, vocab);
+		String[] contributors = thesaurus.getContributor().split(SEPARATOR);
+		for (String contributor : contributors) {
+			model.add(thesaurusResource, DC.contributor, StringEscapeUtils.unescapeXml(contributor));
+		}
 
-		List<String> languages = new ArrayList<String>();
+		String[] coverages = thesaurus.getCoverage().split(SEPARATOR);
+		for (String coverage : coverages) {
+			model.add(thesaurusResource, DC.coverage, StringEscapeUtils.unescapeXml(coverage));
+		}
+
+		String[] subjects = thesaurus.getSubject().split(SEPARATOR);
+		for (String subject : subjects) {
+			model.add(thesaurusResource, DC.subject, StringEscapeUtils.unescapeXml(subject));
+		}
+
 		for (Language lang : thesaurus.getLang()) {
-			languages.add(lang.getId());
+
+			model.add(thesaurusResource, DC.language, lang.getId());
 		}
 
-		addLines(languages.toArray(), DublinCoreVocabulary.LANGUAGE, scheme,
-				addList, factory, vocab);
-
-		return addList;
-
-	}
-
-	private void addLines(Object[] lines, DublinCoreVocabulary type,
-			SKOSConceptScheme conceptScheme, List<SKOSChange> addList,
-			SKOSDataFactory factory, SKOSDataset vocab) {
-		for (Object line : lines) {
-			addLine((String) line, type, conceptScheme, addList, factory, vocab);
+		String currentVersionValue = thesaurusVersionHistoryDAO
+				.findThisVersionByThesaurusId(thesaurus.getIdentifier())
+				.getVersionNote();
+		if (StringUtils.isNotEmpty(currentVersionValue)) {
+			model.add(thesaurusResource, DCTerms.issued, StringEscapeUtils.unescapeXml(currentVersionValue));
 		}
-	}
 
-	private void addLine(String line, DublinCoreVocabulary type,
-			SKOSConceptScheme conceptScheme, List<SKOSChange> addList,
-			SKOSDataFactory factory, SKOSDataset vocab) {
-		SKOSAnnotation contributor = factory.getSKOSAnnotation(type.getURI(),
-				line);
-		SKOSAnnotationAssertion conAssertion = factory
-				.getSKOSAnnotationAssertion(conceptScheme, contributor);
-		addList.add(new AddAssertion(vocab, conAssertion));
+		return model;
+
 	}
 }

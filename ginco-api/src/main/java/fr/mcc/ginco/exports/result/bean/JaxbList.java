@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class JaxbList<T> {
-	protected List<T> list = new ArrayList<T>();
+	private List<T> list = new ArrayList<T>();
 
 	public JaxbList() {
 	}
@@ -64,11 +64,6 @@ public class JaxbList<T> {
 	}
 	
 	public boolean isEmpty() {
-		if (this.list.isEmpty()) {
-			return true;
-		} else
-		{
-			return false;
-		}
+		return list.isEmpty();
 	}
 }

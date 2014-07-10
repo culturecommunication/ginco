@@ -34,7 +34,28 @@
  */
 package fr.mcc.ginco.tests.rest;
 
-import fr.mcc.ginco.beans.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import junit.framework.Assert;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AssociativeRelationship;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.Language;
+import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.AssociativeRelationshipView;
@@ -44,79 +65,79 @@ import fr.mcc.ginco.extjs.view.utils.AssociativeRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusConceptRestService;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
+import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.solr.IConceptIndexerService;
+import fr.mcc.ginco.solr.ITermIndexerService;
 import fr.mcc.ginco.utils.DateUtil;
-import junit.framework.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ThesaurusConceptRestServiceTest {
-	
-	
+
+
 	@Mock(name="thesaurusService")
 	private IThesaurusService thesaurusService;
-	
+
 	@Mock(name="thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
-	
+
 	@Mock(name="thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Mock(name="termViewConverter")
     private TermViewConverter termViewConverter;
 
-    @Mock(name="indexerService")
-    private IIndexerService indexerService;
+    @Mock(name="conceptIndexerService")
+    private IConceptIndexerService conceptIndexerService;
+
+    @Mock(name="termIndexerService")
+	private ITermIndexerService termIndexerService;
 
 	@Mock(name="thesaurusConceptViewConverter")
     private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
 
     @Mock(name="associativeRelationshipViewConverter")
     private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
-	
+
+    @Mock(name="userRoleService")
+  	private IUserRoleService userRoleService;
+
 	@InjectMocks
 	private ThesaurusConceptRestService thesaurusConceptRestService = new ThesaurusConceptRestService();
-	
+
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusConceptRestService);
 	}
 
-	
+
 	/**
 	 * Test to put a concept with two terms (which one is prefered)
-	 * @throws BusinessException 
 	 */
 	@Test
-	public final void putNewTopConceptWithTwoTermsAndOnlyOneWhichIsPrefered() throws BusinessException {
+	public final void putNewTopConceptWithTwoTermsAndOnlyOneWhichIsPrefered() {
+		Authentication authent = Mockito.mock(Authentication.class);
+		SecurityContextHolder.getContext()
+				.setAuthentication(authent);
+		Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(false);
+
 		ThesaurusTerm fakeTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm1");
 		ThesaurusTerm fakeTerm2 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm2");
 		fakeTerm1.setPrefered(true);
 		fakeTerm2.setPrefered(false);
 		fakeTerm1.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		fakeTerm2.setStatus(TermStatusEnum.VALIDATED.getStatus());
-		ThesaurusTermView fakeTermView1 = new ThesaurusTermView(fakeTerm1);
-		ThesaurusTermView fakeTermView2 = new ThesaurusTermView(fakeTerm2);
-		
+		ThesaurusTermView fakeTermView1 = new TermViewConverter().convert(fakeTerm1);
+		ThesaurusTermView fakeTermView2 = new TermViewConverter().convert(fakeTerm2);
+
 		List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
 		terms.add(fakeTerm1);
 		terms.add(fakeTerm2);
-		
+
 		List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
 		preferedTerms.add(fakeTerm1);
-		
+
 		List<ThesaurusTermView> termViews = new ArrayList<ThesaurusTermView>();
 		termViews.add(fakeTermView1);
 		termViews.add(fakeTermView2);
@@ -137,18 +158,20 @@ public class ThesaurusConceptRestServiceTest {
         List<AssociativeRelationship> associatedConcepts = new ArrayList<AssociativeRelationship>();
         List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
         List<ThesaurusConcept> childToRemove = new ArrayList<ThesaurusConcept>();
-		
+        List<ThesaurusConcept> childToAdd = new ArrayList<ThesaurusConcept>();
+        List<Alignment> alignments = new ArrayList<Alignment>();
+
 		Mockito.when(thesaurusConceptViewConverter.convert(fakeConceptView)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(termViewConverter.convertTermViewsInTerms(termViews, true)).thenReturn(terms);
 
-		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts, hierarchicalRelationships, childToRemove)).thenReturn(fakeThesaurusConcept);
+		Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept, terms, associatedConcepts, hierarchicalRelationships,childToAdd, childToRemove, alignments)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(thesaurusConceptViewConverter.convert(Mockito.any(ThesaurusConcept.class), Mockito.anyListOf(ThesaurusTerm.class))).thenReturn(fakeConceptView);
-		
+
 		ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);
 		Assert.assertEquals(fakeConceptView.getTerms().get(0).getIdentifier(), actualResponse.getTerms().get(0).getIdentifier());
 		Assert.assertEquals(fakeConceptView.getTerms().get(1).getIdentifier(), actualResponse.getTerms().get(1).getIdentifier());
 	}
-	
+
 	private ThesaurusTerm getFakeThesaurusTermWithNonMandatoryEmptyFields(String id) {
 		ThesaurusTerm fakeThesaurusTerm = new ThesaurusTerm();
 		fakeThesaurusTerm.setIdentifier(id);
@@ -157,7 +180,7 @@ public class ThesaurusConceptRestServiceTest {
 		fakeThesaurusTerm.setLexicalValue("lexicale value");
 		return fakeThesaurusTerm;
 	}
-	
+
 	private ThesaurusConcept getFakeThesaurusConceptWithNonMandatoryEmptyFields(String id) {
 		ThesaurusConcept fakeThesaurusConcept = new ThesaurusConcept();
 		fakeThesaurusConcept.setIdentifier(id);

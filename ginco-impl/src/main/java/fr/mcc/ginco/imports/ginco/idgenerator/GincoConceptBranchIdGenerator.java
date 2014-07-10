@@ -34,18 +34,26 @@
  */
 package fr.mcc.ginco.imports.ginco.idgenerator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.ark.IIDGeneratorService;
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.CustomConceptAttribute;
+import fr.mcc.ginco.beans.CustomTermAttribute;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
-import fr.mcc.ginco.log.Log;
+import fr.mcc.ginco.exports.result.bean.JaxbList;
 
 /**
  * This class generate new ids for all items (concepts, terms, notes, relations,
@@ -54,41 +62,89 @@ import fr.mcc.ginco.log.Log;
  */
 @Component("gincoConceptBranchIdGenerator")
 public class GincoConceptBranchIdGenerator {
-	
-	private Map<String, String> idMapping = new HashMap<String, String>();
-	
-	@Inject
-	@Named("generatorService")
-	private IIDGeneratorService generatorService;
-	
-	@Inject
-	@Named("gincoTermIdGenerator")
-	private GincoTermIdGenerator gincoTermIdGenerator;
-	
-	@Inject
-	@Named("gincoConceptIdGenerator")
-	private GincoConceptIdGenerator gincoConceptIdGenerator;
-	
-	@Inject
-	@Named("gincoNoteIdGenerator")
-	private GincoNoteIdGenerator gincoNoteIdGenerator;
-	
-	@Inject
-	@Named("gincoRelationshipIdGenerator")
-	private GincoRelationshipIdGenerator gincoRelationshipIdGenerator;
 
-	@Log
-	private Logger logger;
+	@Inject
+	private GincoTermIdGenerator gincoTermIdGenerator;
+
+	@Inject
+	private GincoConceptIdGenerator gincoConceptIdGenerator;
+
+	@Inject
+	private GincoNoteIdGenerator gincoNoteIdGenerator;
+
+	@Inject
+	private GincoRelationshipIdGenerator gincoRelationshipIdGenerator;
 	
-	public GincoExportedBranch checkIdsForExportedBranch(GincoExportedBranch branchToUpdate) {
+	@Inject
+	private GincoAlignmentIdGenerator gincoAlignmentIdGenerator;	
+	
+	@Inject
+	private GincoCustomAttributesIdGenerator gincoCustomAttrIdGenerator;
+
+	private Map<String, String> idMapping = new HashMap<String, String>();
+
+	private Logger logger  = LoggerFactory.getLogger(GincoConceptBranchIdGenerator.class);
+
+	public void resetIdsForExportedBranch(
+			GincoExportedBranch branchToUpdate) {
 		logger.debug("Branch import : generating new ids for elements to be imported");
-		gincoConceptIdGenerator.checkIdForConcept(branchToUpdate.getRootConcept(), idMapping);
-		gincoConceptIdGenerator.checkIdsForConcepts(branchToUpdate.getConcepts(), idMapping);
-		gincoNoteIdGenerator.checkIdsForNotes(branchToUpdate.getConceptNotes(), idMapping);
-		gincoTermIdGenerator.checkIdsForTerms(branchToUpdate.getTerms(), idMapping);
-		gincoNoteIdGenerator.checkIdsForNotes(branchToUpdate.getTermNotes(), idMapping);
-		gincoRelationshipIdGenerator.checkIdsForHierarchicalRelations(branchToUpdate.getHierarchicalRelationship(), idMapping);
 		
-		return branchToUpdate;
+		logger.debug("Branch import : generating new ids for root concept");
+		String newRootConceptId = gincoConceptIdGenerator.getIdForConcept(
+				branchToUpdate.getRootConcept().getIdentifier(), idMapping);
+		branchToUpdate.getRootConcept().setIdentifier(newRootConceptId);
+
+		logger.debug("Branch import : generating new ids for all concepts");
+		for (ThesaurusConcept concept : branchToUpdate.getConcepts()) {
+			String newConceptId = gincoConceptIdGenerator.getIdForConcept(
+					concept.getIdentifier(), idMapping);
+			concept.setIdentifier(newConceptId);
+		}	
+
+		logger.debug("Branch import : generating new ids for concept notes");
+		Map<String, JaxbList<Note>> updatedConceptNotes = gincoNoteIdGenerator
+				.getNotesWithNewIds(branchToUpdate.getConceptNotes(), idMapping);
+		branchToUpdate.getConceptNotes().clear();
+		branchToUpdate.getConceptNotes().putAll(updatedConceptNotes);
+
+		logger.debug("Branch import : generating new ids for terms");
+		List<ThesaurusTerm> updatedTerms = new ArrayList<ThesaurusTerm>();
+		for (ThesaurusTerm term : branchToUpdate.getTerms()) {
+			term.setIdentifier(gincoTermIdGenerator.getIdForTerm(
+					term.getIdentifier(), idMapping));	
+			 
+			 term.getConcept().setIdentifier(
+					gincoConceptIdGenerator.getIdForConcept(term.getConcept()
+							.getIdentifier(), idMapping));
+			 updatedTerms.add(term);
+		}	
+
+		logger.debug("Branch import : generating new ids for term notes");
+		Map<String, JaxbList<Note>> updatedTermNotes = gincoNoteIdGenerator
+				.getNotesWithNewIds(branchToUpdate.getTermNotes(), idMapping);
+		branchToUpdate.getTermNotes().clear();
+		branchToUpdate.getTermNotes().putAll(updatedTermNotes);
+		
+		logger.debug("Branch import : generating new ids for hierarchical relationships");
+		Map<String, JaxbList<ConceptHierarchicalRelationship>> updatedRelations = gincoRelationshipIdGenerator
+				.getIdsForHierarchicalRelations(
+						branchToUpdate.getHierarchicalRelationship(), idMapping);
+		branchToUpdate.getHierarchicalRelationship().clear();
+		branchToUpdate.getHierarchicalRelationship().putAll(updatedRelations);
+		
+		logger.debug("Branch import : generating new ids for alignments");
+		Map<String, JaxbList<Alignment>> updateAlignments = gincoAlignmentIdGenerator.getIdsForAlignments(branchToUpdate.getAlignments(), idMapping);
+		branchToUpdate.getAlignments().clear();
+		branchToUpdate.getAlignments().putAll(updateAlignments);
+		
+		logger.debug("Branch import : generating new ids for custom concept attributes");
+		Map<String, JaxbList<CustomConceptAttribute>> updateConceptAttr = gincoCustomAttrIdGenerator.getIdsForCustomConceptAttributes(branchToUpdate.getConceptAttributes(), idMapping);
+		branchToUpdate.getConceptAttributes().clear();
+		branchToUpdate.getConceptAttributes().putAll(updateConceptAttr);
+		
+		logger.debug("Branch import : generating new ids for custom term attributes");
+		Map<String, JaxbList<CustomTermAttribute>> updateTermAttr = gincoCustomAttrIdGenerator.getIdsForCustomTermAttributes(branchToUpdate.getTermAttributes(), idMapping);
+		branchToUpdate.getTermAttributes().clear();
+		branchToUpdate.getTermAttributes().putAll(updateTermAttr);
 	}
 }

@@ -34,42 +34,63 @@
  */
 package fr.mcc.ginco.exports.ginco;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.stereotype.Component;
-
+import fr.mcc.ginco.beans.CustomTermAttribute;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exports.result.bean.GincoExportedEntity;
 import fr.mcc.ginco.exports.result.bean.JaxbList;
 import fr.mcc.ginco.services.INoteService;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
- * This component gives methods to export terms and its related objects (notes for example) to Ginco Custom Export Format
- * 
+ * This component gives methods to export terms and its related objects (notes
+ * for example) to Ginco Custom Export Format
  */
-@Component("gincoTermExporter")
+@Component
 public class GincoTermExporter {
-	
+
 	@Inject
-	@Named("noteService")
 	private INoteService noteService;
-	
+
+	@Inject
+	private GincoAttributesExporter gincoAttributesExporter;
 
 	/**
 	 * This method gets all the notes of a term in a JaxbList object
+	 *
 	 * @param thesaurusTerm
 	 * @return JaxbList<Note> termNotes : A JaxbList of notes
 	 */
 	public JaxbList<Note> getExportTermNotes(ThesaurusTerm thesaurusTerm) {
-		List<Note> notes = noteService.getTermNotePaginatedList(thesaurusTerm.getIdentifier(), 0, noteService.getTermNoteCount(thesaurusTerm.getIdentifier()).intValue());
-		JaxbList<Note> termNotes = new JaxbList<Note>();
-		for (Note note : notes) {
-			termNotes.getList().add(note);
+		List<Note> notes = noteService.getTermNotePaginatedList(thesaurusTerm
+						.getIdentifier(), 0,
+				noteService.getTermNoteCount(thesaurusTerm.getIdentifier())
+						.intValue()
+		);
+		return new JaxbList<Note>(notes);
+	}
+
+	/**
+	 * Adds the term and the related custom attributes to the thesaurus to export
+	 *
+	 * @param thesaurusToExport
+	 * @param term
+	 * @return
+	 */
+	public GincoExportedEntity addExportedTerms(
+			GincoExportedEntity thesaurusToExport, ThesaurusTerm term) {
+
+		thesaurusToExport.getTerms().add(term);
+		JaxbList<CustomTermAttribute> termAttributes = gincoAttributesExporter
+				.getExportedTermAttributes(term);
+		if (termAttributes != null && !termAttributes.isEmpty()) {
+			thesaurusToExport.getTermAttributes().put(term.getIdentifier(),
+					termAttributes);
 		}
-		return termNotes;
+		return thesaurusToExport;
 	}
 
 }

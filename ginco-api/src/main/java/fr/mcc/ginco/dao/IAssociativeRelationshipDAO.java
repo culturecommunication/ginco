@@ -58,4 +58,12 @@ public interface IAssociativeRelationshipDAO extends IGenericDAO<AssociativeRela
      * @return
      */
     AssociativeRelationship getAssociativeRelationship(String id1, String id2);
+    
+    
+    /**
+     * Gets the associations or the given concept
+     * @return
+     */
+    List<AssociativeRelationship> getAssociationsForConcept(ThesaurusConcept concept);
+
 }

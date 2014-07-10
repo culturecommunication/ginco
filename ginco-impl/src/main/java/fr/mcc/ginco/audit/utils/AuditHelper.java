@@ -34,34 +34,33 @@
  */
 package fr.mcc.ginco.audit.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Service;
 
-import fr.mcc.ginco.beans.GincoRevEntity;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("auditHelper")
 public class AuditHelper {
-	
+
 	@Inject
 	@Named("auditQueryBuilder")
 	private AuditQueryBuilder auditQueryBuilder;
-	
+
 	@Inject
 	@Named("auditReaderService")
 	private AuditReaderService reader;
-	
+
 
 	/**
 	 * Gets the preferred term of the given concept at the given revision
+	 *
 	 * @param revisionNumber
 	 * @param conceptId
 	 * @param lang
@@ -70,57 +69,78 @@ public class AuditHelper {
 	public ThesaurusTerm getPreferredTermAtRevision(Number revisionNumber, String conceptId, String lang) {
 		AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(ThesaurusTerm.class, revisionNumber)
 				.add(AuditEntity.relatedId("concept").eq(conceptId))
-				.add(AuditEntity.property("prefered").eq(true));
+				.add(AuditEntity.property("prefered").eq(true))
+				.addOrder(AuditEntity.revisionNumber().desc())
+				.setMaxResults(1);
 		if (lang != null) {
 			auditQueryBuilder.addFilterOnLanguage(query, lang);
 		}
-		if (query.getResultList().isEmpty()){
+		List results = query.getResultList();
+		if (results.isEmpty()) {
 			return null;
-		}
-		else {
-			return (ThesaurusTerm) query.getSingleResult();
+		} else {
+			return (ThesaurusTerm) results.get(0);
 		}
 	}
-	
+
 	/**
-	 * 
 	 * Gets the list of ThesaurusConcept revisions where parent id is the conceptId
-	 * @param revisionNumber
-	 * @param conceptId
-	 * @return
+	 *
+	 * @param revisionNumber revision number
+	 * @param concept concept to work with
+	 * @param allThesaurusConcepts all concepts for thesaurus
+	 * @return list of concepts
 	 */
-	public List<ThesaurusConcept> getConceptChildrenAtRevision(Number revisionNumber, ThesaurusConcept concept) {
+	public List<ThesaurusConcept> getConceptChildrenAtRevision(Number revisionNumber,
+	                                                           ThesaurusConcept concept,
+	                                                           List<ThesaurusConcept> allThesaurusConcepts) {
 		//This type of relation is not supported by Envers yet
 		//AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(ThesaurusConcept.class, revisionNumber)
 		//		.add(AuditEntity.relatedId("parentConcepts").eq(conceptId));
 		List<ThesaurusConcept> childrenConceptAtRevision = new ArrayList<ThesaurusConcept>();
-		AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(ThesaurusConcept.class, revisionNumber)
-						.add(AuditEntity.relatedId("thesaurus").eq(concept.getThesaurus().getIdentifier()));
-		List<ThesaurusConcept> allThesaurusConcepts = query.getResultList();
-		for (ThesaurusConcept curConcept:allThesaurusConcepts) {
+		if (allThesaurusConcepts.size() == 0) {
+			AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(ThesaurusConcept.class, revisionNumber)
+					.add(AuditEntity.relatedId("thesaurus").eq(concept.getThesaurus().getIdentifier()));
+			allThesaurusConcepts.addAll(query.getResultList());
+		}
+		for (ThesaurusConcept curConcept : allThesaurusConcepts) {
 			if (curConcept.getParentConcepts().contains(concept)) {
 				childrenConceptAtRevision.add(curConcept);
 			}
 		}
 		return childrenConceptAtRevision;
 	}
-	
-	public ThesaurusConcept  getConceptPreviousVersion(GincoRevEntity revision, String conceptId) {		
+
+	/**
+	 * Gets concept with previous revision
+	 *
+	 * @param revision revision to start with
+	 * @param conceptId id of concept
+	 * @return concept with revision BEFORE given
+	 */
+	public ThesaurusConcept getConceptPreviousVersion(GincoRevEntity revision, String conceptId) {
 		AuditQuery previousElementQuery = auditQueryBuilder
-			.getPreviousVersionQuery(ThesaurusConcept.class,
-					conceptId, revision.getId());
+				.getPreviousVersionQuery(ThesaurusConcept.class,
+						conceptId, revision.getId());
 		Number previousRevision = (Number) previousElementQuery
-			.getSingleResult();
+				.getSingleResult();
 		if (previousRevision != null) {
 			ThesaurusConcept previousConcept = reader.getAuditReader()
-				.find(ThesaurusConcept.class,
-						conceptId, previousRevision);
+					.find(ThesaurusConcept.class,
+							conceptId, previousRevision);
 			return previousConcept;
 		}
 		return null;
-	}	
-	
-	
+	}
+
+	/**
+	 * Gets the list of terms for specified revision
+	 *
+	 * @param conceptAtRevision
+	 * @param revision
+	 * @param lang
+	 * @return
+	 */
 	public List<ThesaurusTerm> getConceptTermsAtRevision(ThesaurusConcept conceptAtRevision, Number revision, String lang) {
 		AuditQuery query = reader.getAuditReader().createQuery().forEntitiesAtRevision(
 				ThesaurusTerm.class, revision)

@@ -38,9 +38,7 @@ package fr.mcc.ginco.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,64 +46,61 @@ import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.dao.ISplitNonPreferredTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.log.Log;
 
-@Transactional(readOnly=true, rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("splitNonPreferredTermService")
 public class SplitNonPreferredTermServiceImpl implements ISplitNonPreferredTermService {
 
-    @Inject
-    @Named("splitNonPreferredTermDAO")
-    private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
+	@Inject
+	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
 
-    @Log
-    private Logger logger;
+	@Override
+	public SplitNonPreferredTerm getSplitNonPreferredTermById(String id) {
+		SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermDAO.getById(id);
+		if (thesaurusTerm != null) {
+			return thesaurusTerm;
+		} else {
+			throw new BusinessException("Invalid termId requested : " + id, "invalid-term-id");
+		}
+	}
 
-    @Override
-    public SplitNonPreferredTerm getSplitNonPreferredTermById(String id) throws BusinessException {
-    	SplitNonPreferredTerm thesaurusTerm = splitNonPreferredTermDAO.getById(id);
-        if (thesaurusTerm != null) {
-            return thesaurusTerm;
-        } else {
-            throw new BusinessException("Invalid termId requested : " + id, "invalid-term-id");
-        }
-    }
-
-    @Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	@Override
 	public SplitNonPreferredTerm updateSplitNonPreferredTerm(
-			SplitNonPreferredTerm object) throws BusinessException {
-    	if (object.getPreferredTerms().size()<2) 
-    	{
-    		throw new BusinessException("A complex term must have at least 2 preferred term", "invalid-complex-term");
-    	} else {
-    		SplitNonPreferredTerm updatedThesaurus = splitNonPreferredTermDAO.update(object);
-    		return updatedThesaurus;
-    	}
+			SplitNonPreferredTerm object) {
+		if (object.getPreferredTerms().size() < 2) {
+			throw new BusinessException("A complex term must have at least 2 preferred term", "invalid-complex-term");
+		} else {
+			return splitNonPreferredTermDAO.update(object);
+		}
 	}
 
 	@Override
 	public List<SplitNonPreferredTerm> getSplitNonPreferredTermList(
 			Integer startIndex, Integer limit, String idThesaurus) {
-		// TODO Auto-generated method stub
 		return splitNonPreferredTermDAO.findItems(startIndex, limit, idThesaurus);
 	}
 
 	@Override
 	public Long getSplitNonPreferredTermCount(String idThesaurus) {
-		// TODO Auto-generated method stub
 		return splitNonPreferredTermDAO.countItems(idThesaurus);
 	}
-	
-	@Transactional(readOnly=false)
+
+	@Transactional(readOnly = false)
 	@Override
 	public SplitNonPreferredTerm destroySplitNonPreferredTerm(
 			SplitNonPreferredTerm splitNonPreferredTerm) {
-		if (splitNonPreferredTerm.getStatus()==TermStatusEnum.REJECTED.getStatus()) {
-            return splitNonPreferredTermDAO.delete(splitNonPreferredTerm);
-        } else {
-            throw new BusinessException("It's not possible to delete a term  with a status different from rejected", "delete-attached-term");
-        }
+		if (splitNonPreferredTerm.getStatus() == TermStatusEnum.CANDIDATE.getStatus()
+				|| splitNonPreferredTerm.getStatus() == TermStatusEnum.REJECTED.getStatus()) {
+			return splitNonPreferredTermDAO.delete(splitNonPreferredTerm);
+		} else {
+			throw new BusinessException("It's not possible to delete a complex concept  with a status different from candidate or rejected", "delete-complex-concept");
+		}
+	}
+
+	@Override
+	public List<SplitNonPreferredTerm> getAllSplitNonPreferredTerms() {
+		return splitNonPreferredTermDAO.findAll();
 	}
 
 }

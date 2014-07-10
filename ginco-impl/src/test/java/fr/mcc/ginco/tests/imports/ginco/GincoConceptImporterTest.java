@@ -35,10 +35,9 @@
 package fr.mcc.ginco.tests.imports.ginco;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -49,6 +48,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.CustomConceptAttributeType;
 import fr.mcc.ginco.beans.SplitNonPreferredTerm;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -57,18 +57,22 @@ import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.imports.ginco.GincoConceptImporter;
+import fr.mcc.ginco.imports.ginco.GincoCustomAttributeImporter;
 
 public class GincoConceptImporterTest {
 
-	@Mock(name = "thesaurusDAO")
+	@Mock
 	private IThesaurusDAO thesaurusDAO;
 
-	@Mock(name = "thesaurusConceptDAO")
+	@Mock
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 	
 
-	@Mock(name = "splitNonPreferredTermDAO")
+	@Mock
 	private ISplitNonPreferredTermDAO splitNonPreferredTermDAO;
+	
+	@Mock
+	private GincoCustomAttributeImporter gincoCustomAttributeImporter;
 
 	@InjectMocks
 	GincoConceptImporter gincoConceptImporter;
@@ -96,11 +100,12 @@ public class GincoConceptImporterTest {
 		exportedThesaurus.setThesaurus(th1);
 		exportedThesaurus.setConcepts(concepts);
 
+		Map<String, CustomConceptAttributeType> savedTypes = new HashMap<String, CustomConceptAttributeType>();
 		Mockito.when(
 				thesaurusConceptDAO.update(Mockito.any(ThesaurusConcept.class)))
 				.thenReturn(c1);
 		resultedConcepts = gincoConceptImporter
-				.storeConcepts(exportedThesaurus.getConcepts(), exportedThesaurus.getThesaurus());
+				.storeConcepts(exportedThesaurus, exportedThesaurus.getThesaurus(),savedTypes );
 
 		Assert.assertEquals(resultedConcepts.size(), concepts.size());
 		Assert.assertEquals(resultedConcepts.get(0).getIdentifier(), concepts

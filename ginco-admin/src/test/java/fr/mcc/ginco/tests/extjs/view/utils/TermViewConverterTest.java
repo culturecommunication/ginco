@@ -36,10 +36,6 @@ package fr.mcc.ginco.tests.extjs.view.utils;
 
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +45,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.beans.ThesaurusTermRole;
@@ -61,8 +56,6 @@ import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermRoleService;
 import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
-import fr.mcc.ginco.utils.DateUtil;
 
 public class TermViewConverterTest {	
 	
@@ -91,23 +84,22 @@ public class TermViewConverterTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(converter);
 	}
 
 	@Test
-	public void testConvertExistingThesaurusTermViewNoLanguage() throws BusinessException {
+	public void testConvertExistingThesaurusTermViewNoLanguage() {
 
 		ThesaurusConcept fakeConcept = new ThesaurusConcept();
 		fakeConcept.setIdentifier("fakeConcept");
 		when(thesaurusConceptService
-				.getThesaurusConceptById(Mockito.anyString())).thenReturn(fakeConcept);
+				.getThesaurusConceptById("fakeConceptId")).thenReturn(fakeConcept);
 		
 		ThesaurusTermView view = buildThesaurusTermView("view1");		
-		view.setRole("any-role");
+		view.setRole("TA");
 		ThesaurusTermRole fakeRole = new ThesaurusTermRole();
 		fakeRole.setCode("TA");
 		when(thesaurusTermRoleService
-		.getTermRole(Mockito.anyString())).thenReturn(fakeRole);
+		.getTermRole("TA")).thenReturn(fakeRole);
 		
 		ThesaurusTerm termFromDB = new ThesaurusTerm();		
 		when(thesaurusTermService
@@ -125,7 +117,7 @@ public class TermViewConverterTest {
 	}
 	
 	@Test
-	public void testConvertExistingThesaurusTermNoConcept() throws BusinessException {		
+	public void testConvertExistingThesaurusTermNoConcept() {		
 		ThesaurusTermView view = buildThesaurusTermView("view1");		
 		
 		ThesaurusTerm termFromDB = new ThesaurusTerm();		

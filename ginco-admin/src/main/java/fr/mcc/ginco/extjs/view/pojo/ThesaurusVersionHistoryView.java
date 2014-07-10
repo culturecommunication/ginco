@@ -34,34 +34,33 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import java.io.Serializable;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import fr.mcc.ginco.beans.ThesaurusVersionHistory;
+import java.io.Serializable;
 
 /**
- * View class corresponding to {@link ThesaurusVersionHistory} bean, but fully serializable;
- * 
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusVersionHistory} bean, but fully serializable;
+ *
  * @see fr.mcc.ginco.beans
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusVersionHistoryView implements Serializable {
-	
-	private String identifier;
-    private String date;
-    private String versionNote;
-    private Integer status;
-    private Boolean thisVersion;
-    private String thesaurusId;
+public class ThesaurusVersionHistoryView implements Serializable, SecuredResourceView {
 
-    public ThesaurusVersionHistoryView() {}
+	private String identifier;
+	private String date;
+	private String versionNote;
+	private Integer status;
+	private Boolean thisVersion;
+	private String thesaurusId;
+
+	public ThesaurusVersionHistoryView() {
+	}
 
 	public String getIdentifier() {
 		return identifier;
 	}
-	
+
 	public String getDate() {
 		return date;
 	}
@@ -78,36 +77,29 @@ public class ThesaurusVersionHistoryView implements Serializable {
 		return versionNote;
 	}
 
-
 	public void setVersionNote(String versionNote) {
 		this.versionNote = versionNote;
 	}
-
 
 	public Integer getStatus() {
 		return status;
 	}
 
-
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-
 
 	public Boolean getThisVersion() {
 		return thisVersion;
 	}
 
-
 	public void setThisVersion(Boolean thisVersion) {
 		this.thisVersion = thisVersion;
 	}
 
-
 	public String getThesaurusId() {
 		return thesaurusId;
 	}
-
 
 	public void setThesaurusId(String thesaurusId) {
 		this.thesaurusId = thesaurusId;

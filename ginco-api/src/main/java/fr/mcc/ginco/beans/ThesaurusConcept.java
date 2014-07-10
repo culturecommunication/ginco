@@ -34,23 +34,22 @@
  */
 package fr.mcc.ginco.beans;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
-
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
-
 /**
  * Bean represents <b>thesaurus_concept</b> table, is container for
  * {@link ThesaurusTerm}.
  */
-@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag=true)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ThesaurusConcept implements Serializable, IAuditableBean {
 	private String identifier;
@@ -59,7 +58,7 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	private Integer status;
 	private String notation;
 	private Boolean topConcept;
-	
+
 	@XmlTransient
 	private Thesaurus thesaurus;
 	@XmlTransient
@@ -180,8 +179,13 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((identifier == null) ? 0 : identifier.hashCode());
+		if (identifier == null) {
+			result = prime * result
+					+ 0;
+		} else {
+			result = prime * result
+					+ identifier.hashCode();
+		}
 		return result;
 	}
 

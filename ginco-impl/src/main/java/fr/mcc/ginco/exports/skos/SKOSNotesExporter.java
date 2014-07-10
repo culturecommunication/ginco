@@ -34,63 +34,60 @@
  */
 package fr.mcc.ginco.exports.skos;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.skos.namespaces.SKOS;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.semanticweb.skos.AddAssertion;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSConcept;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataRelationAssertion;
-import org.semanticweb.skos.SKOSDataset;
-import org.springframework.stereotype.Component;
-
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.services.INoteService;
+import java.util.List;
 
 /**
  * This component is in charge of exporting concept notes to SKOS
- *
  */
 @Component("skosNotesExporter")
 public class SKOSNotesExporter {
-	
+
 	@Inject
 	@Named("noteService")
 	private INoteService noteService;
-	
-	
+
+
 	/**
 	 * Export concept notes to SKOS using the skos API
-	 * @param thesaurus
+	 *
 	 * @return
 	 */
-	public List<SKOSChange> exportNotes(String conceptId, SKOSDataFactory factory, SKOSConcept conceptSKOS, SKOSDataset vocab) {
-		List<SKOSChange> addList = new ArrayList<SKOSChange>();
+	public Model exportNotes(Model model, List<ThesaurusTerm> prefTerms, ThesaurusConcept concept) {
+
+		Resource conceptRes = model.createResource(concept.getIdentifier());
+
 		List<Note> notes = noteService.getConceptNotePaginatedList(
-				conceptId, 0, 0);
+				concept.getIdentifier(), 0, 0);
+		for (ThesaurusTerm prefTerm : prefTerms) {
+			List<Note> termNotes = noteService.getTermNotePaginatedList(prefTerm.getIdentifier(), 0, 0);
+			notes.addAll(termNotes);
+		}
+
 		for (Note note : notes) {
+			String lexicalValue = StringEscapeUtils.unescapeXml(note.getLexicalValue());
+			String lang = note.getLanguage().getId();
 			if ("historyNote".equals(note.getNoteType().getCode())) {
-				SKOSDataRelationAssertion noteAssertion = factory
-						.getSKOSDataRelationAssertion(conceptSKOS, factory
-								.getSKOSDataProperty(factory
-										.getSKOSHistoryNoteDataProperty()
-										.getURI()), note.getLexicalValue(),
-								note.getLanguage().getPart1());
-				addList.add(new AddAssertion(vocab, noteAssertion));
+				model.add(conceptRes, SKOS.HISTORY_NOTE, lexicalValue, lang);
 			} else if ("scopeNote".equals(note.getNoteType().getCode())) {
-				SKOSDataRelationAssertion noteAssertion = factory
-						.getSKOSDataRelationAssertion(conceptSKOS, factory
-								.getSKOSDataProperty(factory
-										.getSKOSScopeNoteDataProperty()
-										.getURI()), note.getLexicalValue(),
-								note.getLanguage().getPart1());
-				addList.add(new AddAssertion(vocab, noteAssertion));
+				model.add(conceptRes, SKOS.SCOPE_NOTE, lexicalValue, lang);
+			} else if ("example".equals(note.getNoteType().getCode())) {
+				model.add(conceptRes, SKOS.EXAMPLE, lexicalValue, lang);
+			} else if ("definition".equals(note.getNoteType().getCode())) {
+				model.add(conceptRes, SKOS.DEFINITION, lexicalValue, lang);
 			}
 		}
-		return addList;
-	}	
+		return model;
+	}
 }

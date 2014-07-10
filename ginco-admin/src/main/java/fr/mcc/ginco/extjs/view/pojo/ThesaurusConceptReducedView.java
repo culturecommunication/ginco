@@ -44,27 +44,28 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ThesaurusConceptReducedView implements Serializable {
-    private String identifier;
-    private String label;
-    private String lang;
+	private String identifier;
+	private String label;
+	private String lang;
 
-    public ThesaurusConceptReducedView() {}   
+	public ThesaurusConceptReducedView() {
+	}
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
-    public String getLabel() {
-        return label;
-    }
+	public String getLabel() {
+		return label;
+	}
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
 	public String getLang() {
 		return lang;
@@ -72,5 +73,5 @@ public class ThesaurusConceptReducedView implements Serializable {
 
 	public void setLang(String lang) {
 		this.lang = lang;
-	}    
+	}
 }

@@ -70,7 +70,7 @@ public class ThesaurusArrayRestServiceTest {
 	}
 	
 	@Test
-	public final void testDestroy() throws BusinessException {
+	public final void testDestroy() {
 		ThesaurusArray array  =new ThesaurusArray();
 		ThesaurusArrayView arrayView = new ThesaurusArrayView();		
 		Mockito.when(thesaurusArrayViewConverter.convert(Mockito.any(ThesaurusArrayView.class))).thenReturn(array);		

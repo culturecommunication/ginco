@@ -34,164 +34,175 @@
  */
 package fr.mcc.ginco.exports.skos;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.exports.ISKOSExportService;
+import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.skos.namespaces.GINCO;
+import fr.mcc.ginco.skos.namespaces.ISOTHES;
+import fr.mcc.ginco.skos.namespaces.SKOS;
+import fr.mcc.ginco.skos.namespaces.SKOSXL;
+import fr.mcc.ginco.utils.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.cxf.helpers.IOUtils;
-import org.semanticweb.skos.AddAssertion;
-import org.semanticweb.skos.SKOSChange;
-import org.semanticweb.skos.SKOSChangeException;
-import org.semanticweb.skos.SKOSConceptScheme;
-import org.semanticweb.skos.SKOSCreationException;
-import org.semanticweb.skos.SKOSDataFactory;
-import org.semanticweb.skos.SKOSDataset;
-import org.semanticweb.skos.SKOSEntityAssertion;
-import org.semanticweb.skos.SKOSStorageException;
-import org.semanticweb.skosapibinding.SKOSFormatExt;
-import org.semanticweb.skosapibinding.SKOSManager;
-import org.springframework.stereotype.Service;
-
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.exports.ISKOSExportService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.utils.DateUtil;
-
 @Service("skosExportService")
 public class SKOSExportServiceImpl implements ISKOSExportService {
+
+	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
-	
+
 	@Inject
 	@Named("skosArrayExporter")
 	private SKOSArrayExporter skosArrayExporter;
-	
+
 	@Inject
 	@Named("skosConceptExporter")
 	private SKOSConceptExporter skosConceptExporter;
-	
+
 	@Inject
 	@Named("skosThesaurusExporter")
 	private SKOSThesaurusExporter skosThesaurusExporter;
 
+	@Inject
+	@Named("skosGroupsExporter")
+	private SKOSGroupsExporter skosGroupsExporter;
+
+	@Inject
+	@Named("skosAssociativeRelationshipRolesExporter")
+	private SKOSAssociativeRelationshipRolesExporter skosAssociativeRelationshipRolesExporter;
+
+	@Inject
+	@Named("skosHierarchicalRelationshipRolesExporter")
+	private SKOSHierarchicalRelationshipRolesExporter skosHierarshicalRelationshipRolesExporter;
+
+	@Inject
+	@Named("thesaurusConceptGroupTypeService")
+	private IThesaurusConceptGroupTypeService thesaurusConceptGroupTypeService;
+
+	@Inject
+	@Named("skosComplexConceptExporter")
+	private SKOSComplexConceptExporter skosComplexConceptExporter;
+
+	private Logger logger = LoggerFactory.getLogger(SKOSExportServiceImpl.class);
+
 
 	@Override
-	public File getSKOSExport(Thesaurus thesaurus) throws BusinessException {
-
-		final String baseURI = thesaurus.getIdentifier();
-
-		SKOSManager man;
-		SKOSDataset vocab;
-		SKOSConceptScheme scheme;
-		SKOSDataFactory factory;
-
-		try {
-			man = new SKOSManager();
-			vocab = man.createSKOSDataset(URI.create(baseURI));
-		} catch (SKOSCreationException e) {
-			throw new BusinessException("Error creating dataset from URI.",
-					"error-in-skos-objects", e);
-		}
+	public File getSKOSExport(Thesaurus thesaurus) {
 
 		List<ThesaurusConcept> tt = thesaurusConceptService
 				.getTopTermThesaurusConcepts(thesaurus.getIdentifier());
 
-		factory = man.getSKOSDataFactory();
+		Model model = ModelFactory.createDefaultModel();
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 
-		scheme = factory.getSKOSConceptScheme(URI.create(baseURI));
-
-		SKOSEntityAssertion schemaAssertion = factory
-				.getSKOSEntityAssertion(scheme);
-
-		List<SKOSChange> addList = new ArrayList<SKOSChange>();
-		addList.add(new AddAssertion(vocab, schemaAssertion));
-
-		addList.addAll(skosThesaurusExporter.exportThesaurusSKOS(thesaurus, factory,  vocab,  scheme));		
+		skosThesaurusExporter.exportThesaurusSKOS(thesaurus, model);
 
 		for (ThesaurusConcept conceptTT : tt) {
-			addList.addAll(skosConceptExporter.exportConceptSKOS(conceptTT, null, scheme, factory, vocab));
+			skosConceptExporter.exportConceptSKOS(conceptTT, null, model, ontModel);
+
+		}
+		skosArrayExporter.exportCollections(thesaurus, model);
+		skosGroupsExporter.exportGroups(thesaurus, model, ontModel);
+		skosAssociativeRelationshipRolesExporter.exportAssociativeRelationshipRoles(model, ontModel);
+		skosHierarshicalRelationshipRolesExporter.exportHierarchicalRelationshipRoles(model, ontModel);
+		skosComplexConceptExporter.exportComplexConcept(thesaurus, model);
+
+		model.setNsPrefix("skos", SKOS.getURI());
+		model.setNsPrefix("dct", DCTerms.getURI());
+		model.setNsPrefix("iso-thes", ISOTHES.getURI());
+		model.setNsPrefix("ginco", GINCO.getURI());
+		model.setNsPrefix("xl", SKOSXL.getURI());
+		model.setNsPrefix("foaf", FOAF.getURI());
+
+		List<Resource> rootTypes = new ArrayList<Resource>();
+		rootTypes.add(OWL.Ontology);
+		rootTypes.add(RDFS.Datatype);
+		rootTypes.add(RDFS.Class);
+		rootTypes.add(OWL.Class);
+		rootTypes.add(OWL.ObjectProperty);
+		rootTypes.add(RDF.Property);
+		rootTypes.add(OWL.DatatypeProperty);
+		rootTypes.add(OWL.TransitiveProperty);
+		rootTypes.add(OWL.SymmetricProperty);
+		rootTypes.add(OWL.FunctionalProperty);
+		rootTypes.add(OWL.InverseFunctionalProperty);
+		rootTypes.add(SKOS.CONCEPT);
+		rootTypes.add(SKOS.CONCEPTSCHEME);
+		rootTypes.add(ISOTHES.PREFERRED_TERM);
+		rootTypes.add(ISOTHES.SIMPLE_NON_PREFERRED_TERM);
+		rootTypes.add(SKOS.COLLECTION);
+
+		for (ThesaurusConceptGroupType groupType : thesaurusConceptGroupTypeService.getConceptGroupTypeList()) {
+			rootTypes.add(GINCO.getResource(groupType.getSkosLabel()));
 		}
 
-		try {
 
-			String collections = skosArrayExporter.exportCollections(thesaurus);
-			man.applyChanges(addList);
+		RDFWriter w = model.getWriter("RDF/XML-ABBREV");
+		w.setProperty("tab", 4);
+		w.setProperty("prettyTypes", rootTypes.toArray(new Resource[rootTypes.size()]));
+		StringWriter sw = new StringWriter();
+		sw.write(XML_HEADER);
+		w.write(model, sw, null);
+		String res = sw.toString();
+
+		logger.debug("termModels = " + res);
+
+		try {
 
 			File temp = File.createTempFile("skosExport"
 					+ DateUtil.nowDate().getTime(), ".rdf");
 			temp.deleteOnExit();
 
-			man.save(vocab, SKOSFormatExt.RDFXML, temp.toURI());
-
 			FileInputStream fis = new FileInputStream(temp);
 
-			String content = IOUtils.toString(fis);
 			fis.close();
 
-			String foaf = "xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"";
-			String dc = "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"";
-
-			String dct_old = "xmlns:dct=\"http://purl.org/dct#\"";
-			String dct = "xmlns:dct=\"http://purl.org/dc/terms/\"";
-			
-			String xmlhead_old = "xml version=\"1.0\"";
-			String xmlhead = "xml version=\"1.0\" encoding=\"UTF-8\"";
-
-			content = content.replaceAll(dc, dc + "\n" + foaf)
-					.replaceAll(dct_old, dct)
-					.replaceAll("</rdf:RDF>", collections + "</rdf:RDF>")
-					.replaceAll(xmlhead_old, xmlhead);
-
-			if (thesaurus.getCreator() != null) {
-
-				String org = "\n\t\t<foaf:Organization>\n"
-						+ "\t\t\t<foaf:name>NAME</foaf:name>\n"
-						+ "\t\t\t<foaf:homepage>URL</foaf:homepage>\n"
-						+ "\t\t</foaf:Organization>";
-
-				org = org
-						.replaceAll("NAME", thesaurus.getCreator().getName())
-						.replaceAll("URL", thesaurus.getCreator().getHomepage());
-
-				String creator = "<dc:creator rdf:datatype=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral\">";
-
-				content = content.replaceAll(creator, "<dc:creator>")
-						.replaceAll("_X_CREATOR_", org);
-			}
-
 			BufferedOutputStream bos;
+
 			FileOutputStream fos = new FileOutputStream(temp);
 
 			bos = new BufferedOutputStream(fos);
-			bos.write(content.getBytes());
+			bos.write(res.getBytes());
 			bos.flush();
 			fos.close();
 
 			return temp;
 
-		} catch (SKOSChangeException e) {
-			throw new BusinessException("Error saving data into dataset.",
-					"error-in-skos-objects", e);
-		} catch (SKOSStorageException e) {
-			throw new BusinessException("Error saving dataset to temp file.",
-					"error-in-skos-objects", e);
 		} catch (IOException e) {
 			throw new BusinessException(
 					"Error storing temporarty file for export SKOS",
 					"export-unable-to-write-temporary-file", e);
 		}
 	}
-	
 
 }

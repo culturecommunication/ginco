@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- We define the context of the application for business layer and reference 
+<!-- We define the context of the application for business layer and reference
 	beans to the DAOs -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
@@ -32,7 +32,7 @@
                 <value>hibernate/GincoRevModifiedEntityType.hbm.xml</value>
                 <value>hibernate/AssociativeRelationship.hbm.xml</value>
                 <value>hibernate/AssociativeRelationshipRole.hbm.xml</value>
-                <value>hibernate/ConceptHierarchicalRelationship.hbm.xml</value>      
+                <value>hibernate/ConceptHierarchicalRelationship.hbm.xml</value>
                 <value>hibernate/NodeLabel.hbm.xml</value>
                 <value>hibernate/ThesaurusArray.hbm.xml</value>
                 <value>hibernate/ThesaurusConceptGroup.hbm.xml</value>
@@ -42,10 +42,17 @@
                 <value>hibernate/ThesaurusArk.hbm.xml</value>
                 <value>hibernate/CustomConceptAttributeType.hbm.xml</value>
                 <value>hibernate/CustomTermAttributeType.hbm.xml</value>
-                <value>hibernate/ThesaurusArrayConcept.hbm.xml</value>                
+                <value>hibernate/ThesaurusArrayConcept.hbm.xml</value>
                 <value>hibernate/SplitNonPreferredTerm.hbm.xml</value>
                 <value>hibernate/CustomConceptAttribute.hbm.xml</value>
                 <value>hibernate/CustomTermAttribute.hbm.xml</value>
+                <value>hibernate/Alignment.hbm.xml</value>
+                <value>hibernate/AlignmentConcept.hbm.xml</value>
+                <value>hibernate/AlignmentType.hbm.xml</value>
+                <value>hibernate/ExternalThesaurus.hbm.xml</value>
+                <value>hibernate/ExternalThesaurusType.hbm.xml</value>
+                <value>hibernate/UserRole.hbm.xml</value>
+                <value>hibernate/Suggestion.hbm.xml</value>                
             </list>
         </property>
         <property name="hibernateProperties">
@@ -56,11 +63,12 @@
                 <prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
                 <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
                 <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
-                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop> 
-                <prop key="org.hibernate.envers.revision_listener">fr.mcc.ginco.audit.tracking.GincoRevListener</prop>  
+                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+                <prop key="org.hibernate.envers.revision_listener">fr.mcc.ginco.audit.tracking.GincoRevListener</prop>
                 <!-- Reset to true due to this : https://hibernate.onjira.com/browse/HHH-6542?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel -->
                 <prop key="org.hibernate.envers.revision_on_collection_change">true</prop>
                 <prop key="org.hibernate.envers.modified_flag_suffix">_mod</prop>
+                <prop key="hibernate.listeners.envers.autoRegister">false</prop>
             </props>
         </property>
 	</bean>
@@ -78,16 +86,24 @@
 		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusFormat" />
 	</bean>
 
-	<bean id="thesaurusOrganizationDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
-		<constructor-arg value="fr.mcc.ginco.beans.ThesaurusOrganization" />
-	</bean>
-	
 	<bean id="adminUserDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
         <constructor-arg value="fr.mcc.ginco.beans.AdminUser" />
     </bean>
 
     <bean id="thesaurusArkDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
         <constructor-arg value="fr.mcc.ginco.beans.ThesaurusArk" />
+    </bean>
+
+    <bean id="alignmentTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.AlignmentType" />
+    </bean>
+
+   <bean id="alignmentConceptDAO"  class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.AlignmentConcept" />
+    </bean>
+
+    <bean id="externalThesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.ExternalThesaurusType" />
     </bean>
 
 </beans>

@@ -44,5 +44,5 @@ Ext.define('GincoApp.locale.fr.controller.ComplexConceptPanelController',
 			xProblemLabel : 'Erreur !',
 			xProblemSaveMsg : 'Impossible de sauvegarder le concept complexe !',
 			xProblemDeleteMsg : 'Impossible to supprimer le concept complexe !',
-			xProblemLoadMsg : 'Impossible de charger le concept complexe',
+			xProblemLoadMsg : 'Impossible de charger le concept complexe'
 		});

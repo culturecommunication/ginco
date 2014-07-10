@@ -34,17 +34,9 @@
  */
 package fr.mcc.ginco.tests.extjs.view.utils;
 
-import fr.mcc.ginco.beans.Language;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
-import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
-import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,9 +46,15 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.extjs.view.node.IThesaurusListNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListBasicNode;
+import fr.mcc.ginco.extjs.view.node.ThesaurusListNodeFactory;
+import fr.mcc.ginco.extjs.view.utils.TopTermGenerator;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 public class TopTermGeneratorTest {
 
@@ -64,7 +62,7 @@ public class TopTermGeneratorTest {
     private IThesaurusConceptService thesaurusConceptService;
 
     @InjectMocks
-    private TopTermGenerator topTermGenerator = new TopTermGenerator();
+    private TopTermGenerator topTermGenerator;
     
     @Mock(name = "thesaurusListNodeFactory")
     private ThesaurusListNodeFactory thesaurusListNodeFactory;
@@ -72,11 +70,12 @@ public class TopTermGeneratorTest {
     @Before
     public final void setUp() {
         MockitoAnnotations.initMocks(this);
-        LoggerTestUtil.initLogger(topTermGenerator);
+        ReflectionTestUtils.setField(topTermGenerator, "maxResults",
+				5000);
     }
 
     @Test
-    public void testGenerateTopTerms() throws BusinessException {
+    public void testGenerateTopTerms(){
         List<ThesaurusConcept> concepts = new ArrayList<ThesaurusConcept>();
         
         Mockito.when(
@@ -101,7 +100,7 @@ public class TopTermGeneratorTest {
         concepts.add(co2);
 
         Mockito.when(thesaurusConceptService
-                .getTopTermThesaurusConcepts(Mockito.anyString())).thenReturn(concepts);
+                .getTopTermThesaurusConcepts(Mockito.anyString(), Mockito.eq(5001))).thenReturn(concepts);
         Mockito.when(thesaurusConceptService.getConceptLabel("co1")).thenReturn("zzzz");
         Mockito.when(thesaurusConceptService.getConceptLabel("co2")).thenReturn("aaaa");
         List<IThesaurusListNode> nodes = topTermGenerator.generateTopTerm("anystring");

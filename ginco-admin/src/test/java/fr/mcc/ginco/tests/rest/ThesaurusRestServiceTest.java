@@ -37,6 +37,7 @@ package fr.mcc.ginco.tests.rest;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +52,6 @@ import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusView;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusViewConverter;
@@ -60,7 +60,7 @@ import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusFormatService;
 import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTypeService;
-import fr.mcc.ginco.tests.LoggerTestUtil;
+import fr.mcc.ginco.solr.IThesaurusIndexerService;
 
 public class ThesaurusRestServiceTest {
 
@@ -75,26 +75,36 @@ public class ThesaurusRestServiceTest {
 
 	@Mock(name = "thesaurusTypeService")
 	private IThesaurusTypeService thesaurusTypeService;
-	
+
 	@Mock(name = "thesaurusViewConverter")
 	private ThesaurusViewConverter thesaurusViewConverter;
 
+	@Mock(name = "thesaurusIndexerService")
+	private IThesaurusIndexerService thesaurusIndexerService;
+
+	
 	@InjectMocks
 	private ThesaurusRestService thesaurusRestService = new ThesaurusRestService();
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		LoggerTestUtil.initLogger(thesaurusRestService);
-	}	
+	}
+
+	@Test
+	public final void testGetDefaultThesaurus(){
+		String thesaurusId = "";
+		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
+		ThesaurusView view = thesaurusRestService.getVocabularyById(thesaurusId);
+		Assert.assertNotNull(view);
+	}
 
 	/**
 	 * Test the putVocabularyById method with a mock vocabulary
-	 * @throws BusinessException 
-	 * 
+	 *
 	 */
 	@Test
-	public final void testCreateThesaurus() throws BusinessException {
+	public final void testCreateThesaurus() {
 		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn( new Thesaurus());
 		when(thesaurusService.updateThesaurus(any(Thesaurus.class))).thenReturn(new Thesaurus());
 		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
@@ -103,31 +113,32 @@ public class ThesaurusRestServiceTest {
 				.updateVocabulary(new ThesaurusView());
 
 		Assert.assertNotNull(view);
-		
-	}
-	
-	@Test
-	public final void testUpdateThesaurus() throws BusinessException {
-		Thesaurus existingTh = new Thesaurus();
-		existingTh.setIdentifier("any-id");
-		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn(existingTh);		
-		when(thesaurusService.updateThesaurus(any(Thesaurus.class))).thenReturn(new Thesaurus());
-		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
 
+	}
+
+	@Test
+	public final void testUpdateThesaurus() {
+		Thesaurus existingTh = new Thesaurus();
+		existingTh.setTitle("title-updated");
+		existingTh.setIdentifier("any-id");
+		when(thesaurusViewConverter.convert(any(ThesaurusView.class))).thenReturn(existingTh);
+		when(thesaurusService.updateThesaurus(any(Thesaurus.class))).thenReturn(new Thesaurus());
+		when(thesaurusService.getThesaurusById(anyString())).thenReturn(existingTh);
+		when(thesaurusViewConverter.convert(any(Thesaurus.class))).thenReturn( new ThesaurusView());
+		
 		// Testing putVocabularyById method
 		ThesaurusView view = thesaurusRestService
 				.updateVocabulary(new ThesaurusView());
-
+		verify(thesaurusIndexerService).indexThesaurus(any(Thesaurus.class));
 		Assert.assertNotNull(view);
 	}
-	
+
 
 	/**
 	 * Gets all top languages
-	 * @throws BusinessException 
 	 */
 	@Test
-	public final void testGetTopLanguagesAll() throws BusinessException {
+	public final void testGetTopLanguagesAll() {
 		List<Language> langs = getFakeLanguages();
 		when(languagesService.getTopLanguagesList()).thenReturn(langs);
 		ExtJsonFormLoadData<List<Language>> allLanguages = thesaurusRestService
@@ -139,7 +150,7 @@ public class ThesaurusRestServiceTest {
 	 * Gets the languages relative to a thesaurus
 	 */
 	@Test
-	public final void testGetTopLanguagesByThesaurus() throws BusinessException{
+	public final void testGetTopLanguagesByThesaurus(){
 		List<Language> langs = getFakeLanguages();
 		when(thesaurusService.getThesaurusLanguages(anyString())).thenReturn(
 				langs);
@@ -149,7 +160,7 @@ public class ThesaurusRestServiceTest {
 		Assert.assertEquals("fra", allLanguages.getData().get(0).getId());
 
 	}
-	
+
 	private List<Language> getFakeLanguages() {
 		List<Language> langs = new LinkedList<Language>();
 		Language lang1 = new Language();

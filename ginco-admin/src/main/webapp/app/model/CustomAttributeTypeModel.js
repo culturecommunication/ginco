@@ -52,6 +52,10 @@ Ext.define('GincoApp.model.CustomAttributeTypeModel', {
         {
             name: 'thesaurusId',
             type: 'string'
+        },
+        {
+        	name: 'exportable',
+        	type: 'boolean'
         }
     ],
 

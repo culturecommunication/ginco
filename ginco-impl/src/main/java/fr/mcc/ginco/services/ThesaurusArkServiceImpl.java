@@ -41,21 +41,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
  */
-@Transactional(readOnly=true,rollbackFor = BusinessException.class)
+@Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("thesaurusArkService")
 public class ThesaurusArkServiceImpl implements IThesaurusArkService {
-	
-	@Inject
-	@Named("thesaurusArkDAO")
-    private IGenericDAO<ThesaurusArk, Integer> thesaurusArkDAO;
 
-    @Override
-    public ThesaurusArk createThesaurusArk(ThesaurusArk thesaurusArk) {
-        return thesaurusArkDAO.update(thesaurusArk);
-    }
+	@Inject
+	private IGenericDAO<ThesaurusArk, Integer> thesaurusArkDAO;
+
+	@Override
+	public ThesaurusArk createThesaurusArk(ThesaurusArk thesaurusArk) {
+		return thesaurusArkDAO.update(thesaurusArk);
+	}
 }

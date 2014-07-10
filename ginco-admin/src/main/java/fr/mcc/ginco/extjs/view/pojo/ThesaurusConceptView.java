@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.pojo;
 
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -42,12 +41,13 @@ import java.util.List;
 
 
 /**
- * View class corresponding to {@link ThesaurusConcept} bean, but fully serializable
+ * View class corresponding to {@link fr.mcc.ginco.beans.ThesaurusConcept} bean,
+ * but fully serializable
  */
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class ThesaurusConceptView implements Serializable {
-	
+public class ThesaurusConceptView implements Serializable, SecuredResourceView {
+
 	private String identifier;
 	private String created;
 	private String modified;
@@ -56,50 +56,54 @@ public class ThesaurusConceptView implements Serializable {
 	private Integer status;
 	private String notation;
 	private List<ThesaurusTermView> terms;
-    private List<HierarchicalRelationshipView> parentConcepts;
-    private List<HierarchicalRelationshipView> childConcepts;
-    private List<String> rootConcepts;
+	private List<HierarchicalRelationshipView> parentConcepts;
+	private List<HierarchicalRelationshipView> childConcepts;
+	private List<String> rootConcepts;
 	private List<AssociativeRelationshipView> associatedConcepts;
+	private List<String> conceptsPath;
+	private Boolean topistopterm;
+	private List<AlignmentView> alignments;
 
-	
-	public ThesaurusConceptView() {}	
+
+	public ThesaurusConceptView() {
+	}
 
 	public String getIdentifier() {
 		return identifier;
 	}
-	
+
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
-	
+
 	public String getCreated() {
 		return created;
 	}
-	
+
 	public void setCreated(String created) {
 		this.created = created;
 	}
-	
+
 	public String getModified() {
 		return modified;
 	}
-	
+
 	public void setModified(String modified) {
 		this.modified = modified;
 	}
-	
+
 	public String getThesaurusId() {
 		return thesaurusId;
 	}
-	
+
 	public void setThesaurusId(String thesaurusId) {
 		this.thesaurusId = thesaurusId;
 	}
-	
+
 	public List<ThesaurusTermView> getTerms() {
 		return terms;
 	}
-	
+
 	public void setTerms(List<ThesaurusTermView> terms) {
 		this.terms = terms;
 	}
@@ -118,15 +122,15 @@ public class ThesaurusConceptView implements Serializable {
 
 	public void setAssociatedConcepts(List<AssociativeRelationshipView> associatedConcepts) {
 		this.associatedConcepts = associatedConcepts;
-	}	
+	}
 
-    public List<String> getRootConcepts() {
-        return rootConcepts;
-    }
+	public List<String> getRootConcepts() {
+		return rootConcepts;
+	}
 
-    public void setRootConcepts(List<String> rootConcepts) {
-        this.rootConcepts = rootConcepts;
-    }
+	public void setRootConcepts(List<String> rootConcepts) {
+		this.rootConcepts = rootConcepts;
+	}
 
 	public Integer getStatus() {
 		return status;
@@ -158,5 +162,29 @@ public class ThesaurusConceptView implements Serializable {
 
 	public void setChildConcepts(List<HierarchicalRelationshipView> childConcepts) {
 		this.childConcepts = childConcepts;
+	}
+
+	public List<String> getConceptsPath() {
+		return conceptsPath;
+	}
+
+	public void setConceptsPath(List<String> conceptsPath) {
+		this.conceptsPath = conceptsPath;
+	}
+
+	public Boolean getTopistopterm() {
+		return topistopterm;
+	}
+
+	public void setTopistopterm(Boolean topistopterm) {
+		this.topistopterm = topistopterm;
+	}
+
+	public List<AlignmentView> getAlignments() {
+		return alignments;
+	}
+
+	public void setAlignments(List<AlignmentView> alignments) {
+		this.alignments = alignments;
 	}
 }

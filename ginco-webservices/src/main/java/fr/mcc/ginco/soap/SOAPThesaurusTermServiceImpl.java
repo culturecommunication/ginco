@@ -48,15 +48,14 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
-import fr.mcc.ginco.services.IIndexerService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.solr.ISearcherService;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
 import fr.mcc.ginco.solr.SortCriteria;
 
 /**
  * This class is the implementation of all SOAP services related to term objects
- * 
  */
 @WebService(endpointInterface = "fr.mcc.ginco.soap.ISOAPThesaurusTermService")
 public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
@@ -66,12 +65,12 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	private IThesaurusTermService thesaurusTermService;
 
 	@Inject
-	@Named("indexerService")
-	private IIndexerService indexerService;
+	@Named("searcherService")
+	private ISearcherService searcherService;
 
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
-			String languageId) throws BusinessException {
+	                                 String languageId) {
 		if (StringUtils.isNotEmpty(lexicalValue)
 				&& StringUtils.isNotEmpty(thesaurusId)
 				&& StringUtils.isNotEmpty(languageId)) {
@@ -85,7 +84,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue,
-			String thesaurusId, String languageId) throws BusinessException {
+	                                                   String thesaurusId, String languageId) {
 		if (StringUtils.isNotEmpty(lexicalValue)
 				&& StringUtils.isNotEmpty(thesaurusId)
 				&& StringUtils.isNotEmpty(languageId)) {
@@ -113,7 +112,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public Boolean isPreferred(String lexicalValue, String thesaurusId,
-			String languageId) throws BusinessException {
+	                           String languageId) {
 		if (StringUtils.isNotEmpty(lexicalValue)
 				&& StringUtils.isNotEmpty(thesaurusId)
 				&& StringUtils.isNotEmpty(languageId)) {
@@ -127,13 +126,13 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request,
-			int startIndex, int limit) throws BusinessException {
+	                                                              int startIndex, int limit) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
 				String requestFormat = request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(null, null);
-				SearchResultList searchResultList = indexerService.search(
+				SearchResultList searchResultList = searcherService.search(
 						requestFormat, 2, null, null, null, null, null, crit,
 						startIndex, limit);
 				if (searchResultList != null) {
@@ -154,4 +153,35 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 					"empty-parameters");
 		}
 	}
+
+	@Override
+	public List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(String request, String thesaurusId,
+	                                                                         int startIndex, int limit) {
+		if (StringUtils.isNotEmpty(request) && limit != 0) {
+			try {
+				String requestFormat = request + "*";
+				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
+				SortCriteria crit = new SortCriteria(null, null);
+				SearchResultList searchResultList = searcherService.search(
+						requestFormat, 2, thesaurusId, null, null, null, null, crit,
+						startIndex, limit);
+				if (searchResultList != null) {
+					for (SearchResult searchResult : searchResultList) {
+						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+						reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
+						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
+						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
+						reducedThesaurusTermList.add(reducedThesaurusTerm);
+					}
+				}
+				return reducedThesaurusTermList;
+			} catch (SolrServerException e) {
+				throw new TechnicalException("Search exception", e);
+			}
+		} else {
+			throw new BusinessException("One or more parameters are empty",
+					"empty-parameters");
+		}
+	}
+
 }

@@ -34,9 +34,11 @@
  */
 package fr.mcc.ginco.audit.tracking;
 
-import java.io.Serializable;
-import java.util.List;
-
+import fr.mcc.ginco.audit.utils.AuditQueryBuilder;
+import fr.mcc.ginco.beans.GincoRevEntity;
+import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
+import fr.mcc.ginco.beans.IAuditableBean;
+import fr.mcc.ginco.dao.hibernate.GenericHibernateDAO;
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.envers.AuditReader;
@@ -55,11 +57,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import fr.mcc.ginco.audit.utils.AuditQueryBuilder;
-import fr.mcc.ginco.beans.GincoRevEntity;
-import fr.mcc.ginco.beans.GincoRevModifiedEntityType;
-import fr.mcc.ginco.beans.IAuditableBean;
-import fr.mcc.ginco.dao.hibernate.GenericHibernateDAO;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Takes control on audit.
@@ -73,8 +72,8 @@ public class GincoRevListener implements EntityTrackingRevisionListener,
 
 	@Override
 	public void entityChanged(Class entityClass, String entityName,
-			Serializable entityId, RevisionType revisionType,
-			Object revisionEntity) {
+	                          Serializable entityId, RevisionType revisionType,
+	                          Object revisionEntity) {
 		GincoRevModifiedEntityType revEntity = new GincoRevModifiedEntityType();
 		revEntity.setEntityClassName(entityClass.getName());
 		revEntity.setRevision(((GincoRevEntity) revisionEntity).getId());
@@ -101,12 +100,12 @@ public class GincoRevListener implements EntityTrackingRevisionListener,
 					query = queryBuilder.getEntityAddedQuery(reader,
 							Class.forName(entityName), entityId);
 					try {
-					List<Object[]> createdEvent = (List<Object[]>) query.getResultList();
-					if (createdEvent != null && createdEvent.size()>0) {
-						((GincoRevEntity) revisionEntity)
-								.setThesaurusId(((GincoRevEntity) createdEvent.get(0)[1])
-										.getThesaurusId());
-					}
+						List<Object[]> createdEvent = (List<Object[]>) query.getResultList();
+						if (createdEvent != null && createdEvent.size() > 0) {
+							((GincoRevEntity) revisionEntity)
+									.setThesaurusId(((GincoRevEntity) createdEvent.get(0)[1])
+											.getThesaurusId());
+						}
 					} catch (AuditException ae) {
 						logger.warn("Unable to get the creation revision of the destroyed object", ae);
 					}

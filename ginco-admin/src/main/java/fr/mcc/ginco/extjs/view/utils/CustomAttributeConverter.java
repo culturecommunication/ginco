@@ -34,15 +34,6 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.hibernate.type.CustomCollectionType;
-import org.springframework.stereotype.Component;
-
 import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.CustomConceptAttribute;
 import fr.mcc.ginco.beans.CustomConceptAttributeType;
@@ -57,8 +48,13 @@ import fr.mcc.ginco.services.ICustomTermAttributeService;
 import fr.mcc.ginco.services.ICustomTermAttributeTypeService;
 import fr.mcc.ginco.services.ILanguagesService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -66,110 +62,103 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 @Component(value = "customAttributeConverter")
 public class CustomAttributeConverter {
 
-    @Inject
-    @Named("customConceptAttributeService")
-    private ICustomConceptAttributeService customConceptAttributeService;
+	@Inject
+	@Named("customConceptAttributeService")
+	private ICustomConceptAttributeService customConceptAttributeService;
 
-    @Inject
-    @Named("thesaurusService")
-    private IThesaurusService thesaurusService;
-    
-    @Inject 
-    @Named("thesaurusTermService")
-    private IThesaurusTermService thesaurusTermService;
-    
-    @Inject 
-    @Named("languagesService")
-    private ILanguagesService languagesService;
-    
+	@Inject
+	@Named("thesaurusTermService")
+	private IThesaurusTermService thesaurusTermService;
+
+	@Inject
+	@Named("languagesService")
+	private ILanguagesService languagesService;
+
 	@Inject
 	@Named("generatorService")
 	private IIDGeneratorService generatorService;
 
-    @Inject
-    @Named("customTermAttributeService")
-    private ICustomTermAttributeService customTermAttributeService;
-    
-    @Inject
-    @Named("customTermAttributeTypeService")
-    private ICustomTermAttributeTypeService customTermAttributeTypeService;
-    
-    @Inject
-    @Named("customConceptAttributeTypeService")
-    private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
-    
-    @Inject
-    @Named("thesaurusConceptService")
-    private IThesaurusConceptService thesaurusConceptService;
+	@Inject
+	@Named("customTermAttributeService")
+	private ICustomTermAttributeService customTermAttributeService;
+
+	@Inject
+	@Named("customTermAttributeTypeService")
+	private ICustomTermAttributeTypeService customTermAttributeTypeService;
+
+	@Inject
+	@Named("customConceptAttributeTypeService")
+	private ICustomConceptAttributeTypeService customConceptAttributeTypeService;
+
+	@Inject
+	@Named("thesaurusConceptService")
+	private IThesaurusConceptService thesaurusConceptService;
 
 
-    public GenericCustomAttributeView convertTermAttribute(CustomTermAttribute source) {
-    	GenericCustomAttributeView view = new GenericCustomAttributeView();
-    	view.setEntityid(source.getEntity().getIdentifier());
-    	view.setLang(source.getLanguage().getId());
-    	view.setLexicalValue(source.getLexicalValue());
-    	view.setTypeid(source.getType().getIdentifier());
-        return view;
-    }
-    
-    public GenericCustomAttributeView convertConceptAttribute(CustomConceptAttribute source) {
-    	GenericCustomAttributeView view = new GenericCustomAttributeView();
-    	view.setEntityid(source.getEntity().getIdentifier());
-    	view.setLang(source.getLanguage().getId());
-    	view.setLexicalValue(source.getLexicalValue());
-    	view.setTypeid(source.getType().getIdentifier());
-        return view;
-    }
-    
-    public CustomConceptAttribute convertConceptAttribute(GenericCustomAttributeView view) {
-    	ThesaurusConcept entity = thesaurusConceptService.getThesaurusConceptById(view.getEntityid());
-    	CustomConceptAttributeType type = customConceptAttributeTypeService.getAttributeTypeById(view.getTypeid());
-    	CustomConceptAttribute hibernateRes = customConceptAttributeService.getAttributeByType(entity, type);
-    	if (hibernateRes == null)
-    	{
-    		hibernateRes = new CustomConceptAttribute();
-    		hibernateRes.setIdentifier(generatorService.generate(CustomConceptAttribute.class));
-    	}
-    	hibernateRes.setEntity(entity);
-    	hibernateRes.setLanguage(languagesService.getLanguageById(view.getLang()));
-    	hibernateRes.setLexicalValue(view.getLexicalValue());
-    	hibernateRes.setType(type);
-    	return hibernateRes;
-    }
-    
-    public CustomTermAttribute convertTermAttribute(GenericCustomAttributeView view) {
-    	ThesaurusTerm entity = thesaurusTermService.getThesaurusTermById(view.getEntityid());
-    	CustomTermAttributeType type = customTermAttributeTypeService.getAttributeTypeById(view.getTypeid());
-    	CustomTermAttribute hibernateRes = customTermAttributeService.getAttributeByType(entity, type);
-    	if (hibernateRes == null)
-    	{
-    		hibernateRes = new CustomTermAttribute();
-    		hibernateRes.setIdentifier(generatorService.generate(CustomTermAttribute.class));
-    	}
-    	hibernateRes.setEntity(entity);
-    	hibernateRes.setLanguage(languagesService.getLanguageById(view.getLang()));
-    	hibernateRes.setLexicalValue(view.getLexicalValue());
-    	hibernateRes.setType(type);
-    	return hibernateRes;
-    }
-    
-    
+	public GenericCustomAttributeView convertTermAttribute(CustomTermAttribute source) {
+		GenericCustomAttributeView view = new GenericCustomAttributeView();
+		view.setEntityid(source.getEntity().getIdentifier());
+		view.setLang(source.getLanguage().getId());
+		view.setLexicalValue(source.getLexicalValue());
+		view.setTypeid(source.getType().getIdentifier());
+		return view;
+	}
 
-    public List<GenericCustomAttributeView> convertListTerm(List<CustomTermAttribute> sourceList) {
-        List<GenericCustomAttributeView> list = new ArrayList<GenericCustomAttributeView>();
-        for(CustomTermAttribute attribute : sourceList) {
-            list.add(convertTermAttribute(attribute));
-        }
-        return list;
-    }
-    
-    
-    public List<GenericCustomAttributeView> convertListConcept(List<CustomConceptAttribute> sourceList) {
-        List<GenericCustomAttributeView> list = new ArrayList<GenericCustomAttributeView>();
-        for(CustomConceptAttribute attribute : sourceList) {
-            list.add(convertConceptAttribute(attribute));
-        }
-        return list;
-    }
-    
+	public GenericCustomAttributeView convertConceptAttribute(CustomConceptAttribute source) {
+		GenericCustomAttributeView view = new GenericCustomAttributeView();
+		view.setEntityid(source.getEntity().getIdentifier());
+		view.setLang(source.getLanguage().getId());
+		view.setLexicalValue(source.getLexicalValue());
+		view.setTypeid(source.getType().getIdentifier());
+		return view;
+	}
+
+	public CustomConceptAttribute convertConceptAttribute(GenericCustomAttributeView view) {
+		ThesaurusConcept entity = thesaurusConceptService.getThesaurusConceptById(view.getEntityid());
+		CustomConceptAttributeType type = customConceptAttributeTypeService.getAttributeTypeById(view.getTypeid());
+		CustomConceptAttribute hibernateRes = customConceptAttributeService.getAttributeByType(entity, type);
+		if (hibernateRes == null) {
+			hibernateRes = new CustomConceptAttribute();
+			hibernateRes.setIdentifier(generatorService.generate(CustomConceptAttribute.class));
+		}
+		hibernateRes.setEntity(entity);
+		hibernateRes.setLanguage(languagesService.getLanguageById(view.getLang()));
+		hibernateRes.setLexicalValue(view.getLexicalValue());
+		hibernateRes.setType(type);
+		return hibernateRes;
+	}
+
+	public CustomTermAttribute convertTermAttribute(GenericCustomAttributeView view) {
+		ThesaurusTerm entity = thesaurusTermService.getThesaurusTermById(view.getEntityid());
+		CustomTermAttributeType type = customTermAttributeTypeService.getAttributeTypeById(view.getTypeid());
+		CustomTermAttribute hibernateRes = customTermAttributeService.getAttributeByType(entity, type);
+		if (hibernateRes == null) {
+			hibernateRes = new CustomTermAttribute();
+			hibernateRes.setIdentifier(generatorService.generate(CustomTermAttribute.class));
+		}
+		hibernateRes.setEntity(entity);
+		hibernateRes.setLanguage(languagesService.getLanguageById(view.getLang()));
+		hibernateRes.setLexicalValue(view.getLexicalValue());
+		hibernateRes.setType(type);
+		return hibernateRes;
+	}
+
+
+	public List<GenericCustomAttributeView> convertListTerm(List<CustomTermAttribute> sourceList) {
+		List<GenericCustomAttributeView> list = new ArrayList<GenericCustomAttributeView>();
+		for (CustomTermAttribute attribute : sourceList) {
+			list.add(convertTermAttribute(attribute));
+		}
+		return list;
+	}
+
+
+	public List<GenericCustomAttributeView> convertListConcept(List<CustomConceptAttribute> sourceList) {
+		List<GenericCustomAttributeView> list = new ArrayList<GenericCustomAttributeView>();
+		for (CustomConceptAttribute attribute : sourceList) {
+			list.add(convertConceptAttribute(attribute));
+		}
+		return list;
+	}
+
 }

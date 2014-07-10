@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+    <class name="Alignment" table="alignment">
+        <cache usage="read-write" />
+        <id name="identifier" column="identifier">
+            <generator class="assigned" />
+        </id>
+        <property name="created"  type="timestamp" not-null="true" />
+        <property name="modified" type="timestamp" not-null="true" />
+        <property name="author" />
+        <many-to-one name="sourceConcept" column="source_concept_id" lazy="false" />
+         <set name="targetConcepts" table="alignment_concept" cascade="all">
+            <key column="alignment_id" />
+            <one-to-many class="AlignmentConcept"/>
+        </set> 
+        <many-to-one name="alignmentType" column="alignment_type" lazy="false" />        
+        <property name="andRelation" column="and_relation" not-null="true" />
+        <many-to-one name="externalTargetThesaurus" class="fr.mcc.ginco.beans.ExternalThesaurus" column="external_target_thesaurus_id" lazy="false" />
+        <many-to-one name="internalTargetThesaurus" class="fr.mcc.ginco.beans.Thesaurus" column="internal_target_thesaurus_id" lazy="false" />
+        </class>
+</hibernate-mapping>
