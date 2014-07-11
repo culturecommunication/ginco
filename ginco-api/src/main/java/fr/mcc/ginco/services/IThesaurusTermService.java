@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 
 import java.util.List;
@@ -193,4 +194,11 @@ public interface IThesaurusTermService {
 	 * @return
 	 */
 	Boolean isTermExist(ThesaurusTerm term);
+
+  /**
+   * Check if the Terms is used in a Concept
+   * @param term list of ThesaurusTerms
+   * @return
+   */
+  Boolean isTermAlreadyUsedInConcept(ThesaurusTerm term);
 }

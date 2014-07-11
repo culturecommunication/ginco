@@ -34,6 +34,7 @@
  */
 package fr.mcc.ginco.rest.services;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -48,6 +49,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import fr.mcc.ginco.services.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.Nullable;
 import org.slf4j.Logger;
@@ -81,10 +83,6 @@ import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.HierarchicalRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
-import fr.mcc.ginco.services.INoteService;
-import fr.mcc.ginco.services.IThesaurusConceptService;
-import fr.mcc.ginco.services.IThesaurusTermService;
-import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.solr.IConceptIndexerService;
 import fr.mcc.ginco.solr.INoteIndexerService;
 import fr.mcc.ginco.solr.ITermIndexerService;
@@ -223,6 +221,7 @@ public class ThesaurusConceptRestService {
 		List<ThesaurusConcept> childrenToAttach = thesaurusConceptViewConverter
 				.convertAddedChildren(conceptView);
 		logger.info("Number of added children terms : " + childrenToAttach.size());
+
 		List<ThesaurusTerm> terms = termViewConverter
 				.convertTermViewsInTerms(conceptView
 						.getTerms(), true);
@@ -252,7 +251,12 @@ public class ThesaurusConceptRestService {
 			}
 		}
 
-		//We save or update the concept
+    // For creation only, check that all terms in conceptView are not already used in a concept
+    if(convertedConcept.getIdentifier() == null) {
+      checkNotAlreadyUsedTerms(convertedConcept, terms);
+    }
+
+    //We save or update the concept
 		logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
 				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach, childrenToAttach, alignments);
@@ -265,7 +269,15 @@ public class ThesaurusConceptRestService {
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
 
-	/**
+  private void checkNotAlreadyUsedTerms(ThesaurusConcept convertedConcept, List<ThesaurusTerm> terms) throws BusinessException {
+    for(ThesaurusTerm term : terms) {
+      if (thesaurusTermService.isTermAlreadyUsedInConcept(term)) {
+        throw new BusinessException("A concept cannot be created with a term (" + term.getLexicalValue() + ") already linked to a Concept", "term-already-used-in-an-existing-concept", term.getLexicalValue());
+      }
+    }
+  }
+
+  /**
 	 * Gets the AssociativeRElationships for the given conceptId
 	 *
 	 * @param conceptId

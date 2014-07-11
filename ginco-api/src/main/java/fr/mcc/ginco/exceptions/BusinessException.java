@@ -65,7 +65,7 @@ public class BusinessException extends RuntimeException {
 		this.userMessageKey = userMessageKey;
 	}
 
-	public BusinessException(String logMessage, String userMessageKey, Object[] toFormat) {
+	public BusinessException(String logMessage, String userMessageKey, Object...toFormat) {
 		super(logMessage);
 		this.userMessageKey = userMessageKey;
 		this.toFormat = toFormat;

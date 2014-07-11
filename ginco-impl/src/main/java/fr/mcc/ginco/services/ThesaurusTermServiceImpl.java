@@ -255,4 +255,12 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 		}
 		return updatedTerms;
 	}
+
+  public Boolean isTermAlreadyUsedInConcept(ThesaurusTerm term) {
+    ThesaurusTerm thesaurusTerm = thesaurusTermDAO
+            .getTermByLexicalValueThesaurusIdLanguageId(term.getLexicalValue(),
+                    term.getThesaurusId(), term.getLanguage().getId());
+
+    return (thesaurusTerm != null && thesaurusTerm.getConcept() != null)?true:false;
+  }
 }

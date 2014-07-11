@@ -88,20 +88,20 @@ public class ThesaurusConceptRestServiceTest {
 	@Mock(name="termViewConverter")
     private TermViewConverter termViewConverter;
 
-    @Mock(name="conceptIndexerService")
-    private IConceptIndexerService conceptIndexerService;
+  @Mock(name="conceptIndexerService")
+  private IConceptIndexerService conceptIndexerService;
 
-    @Mock(name="termIndexerService")
+  @Mock(name="termIndexerService")
 	private ITermIndexerService termIndexerService;
 
 	@Mock(name="thesaurusConceptViewConverter")
-    private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
+  private ThesaurusConceptViewConverter thesaurusConceptViewConverter;
 
-    @Mock(name="associativeRelationshipViewConverter")
-    private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
+  @Mock(name="associativeRelationshipViewConverter")
+  private AssociativeRelationshipViewConverter associativeRelationshipViewConverter;
 
-    @Mock(name="userRoleService")
-  	private IUserRoleService userRoleService;
+  @Mock(name="userRoleService")
+  private IUserRoleService userRoleService;
 
 	@InjectMocks
 	private ThesaurusConceptRestService thesaurusConceptRestService = new ThesaurusConceptRestService();
@@ -111,6 +111,60 @@ public class ThesaurusConceptRestServiceTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
+
+
+  @Test(expected = BusinessException.class)
+  public final void createAConceptWithAlreadyUsedTerm() {
+    Authentication authent = Mockito.mock(Authentication.class);
+    SecurityContextHolder.getContext()
+            .setAuthentication(authent);
+    Mockito.when(userRoleService.hasRole(Mockito.anyString(), Mockito.anyString(),  Mockito.any(Role.class))).thenReturn(false);
+
+    ThesaurusTerm fakeTerm1 = getFakeThesaurusTermWithNonMandatoryEmptyFields("fakeTerm1");
+    fakeTerm1.setPrefered(true);
+    fakeTerm1.setStatus(TermStatusEnum.VALIDATED.getStatus());
+
+    ThesaurusTermView fakeTermView1 = new TermViewConverter().convert(fakeTerm1);
+
+    List<ThesaurusTerm> terms = new ArrayList<ThesaurusTerm>();
+    terms.add(fakeTerm1);
+
+    List<ThesaurusTerm> preferedTerms = new ArrayList<ThesaurusTerm>();
+    preferedTerms.add(fakeTerm1);
+
+    List<ThesaurusTermView> termViews = new ArrayList<ThesaurusTermView>();
+    termViews.add(fakeTermView1);
+    List<AssociativeRelationshipView> associatedConceptsView = new ArrayList<AssociativeRelationshipView>();
+
+    ThesaurusConcept fakeThesaurusConcept2 = getFakeThesaurusConceptWithNonMandatoryEmptyFields(null);
+    ThesaurusConceptView fakeConceptView = new ThesaurusConceptView();
+    fakeConceptView.setIdentifier("");
+    fakeConceptView.setCreated("");
+    fakeConceptView.setModified("");
+    fakeConceptView.setTopconcept(false);
+    fakeConceptView.setThesaurusId("1");
+    fakeConceptView.setTerms(termViews);
+    fakeConceptView.setAssociatedConcepts(associatedConceptsView);
+
+
+    List<AssociativeRelationship> associatedConcepts = new ArrayList<AssociativeRelationship>();
+    List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
+    List<ThesaurusConcept> childToRemove = new ArrayList<ThesaurusConcept>();
+    List<ThesaurusConcept> childToAdd = new ArrayList<ThesaurusConcept>();
+    List<Alignment> alignments = new ArrayList<Alignment>();
+
+    Mockito.when(thesaurusConceptViewConverter.convert(fakeConceptView)).thenReturn(fakeThesaurusConcept2);
+    Mockito.when(termViewConverter.convertTermViewsInTerms(termViews, true)).thenReturn(terms);
+
+    //This make throws the Exception on updateConcept
+    Mockito.when(thesaurusTermService.isTermAlreadyUsedInConcept(fakeTerm1)).thenReturn(true);
+
+    Mockito.when(thesaurusConceptService.updateThesaurusConcept(fakeThesaurusConcept2, terms, associatedConcepts, hierarchicalRelationships,childToAdd, childToRemove, alignments)).thenReturn(fakeThesaurusConcept2);
+    Mockito.when(thesaurusConceptViewConverter.convert(Mockito.any(ThesaurusConcept.class), Mockito.anyListOf(ThesaurusTerm.class))).thenReturn(fakeConceptView);
+
+    ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);
+
+  }
 
 	/**
 	 * Test to put a concept with two terms (which one is prefered)
@@ -142,7 +196,7 @@ public class ThesaurusConceptRestServiceTest {
 		termViews.add(fakeTermView1);
 		termViews.add(fakeTermView2);
 
-        List<AssociativeRelationshipView> associatedConceptsView = new ArrayList<AssociativeRelationshipView>();
+    List<AssociativeRelationshipView> associatedConceptsView = new ArrayList<AssociativeRelationshipView>();
 
 		ThesaurusConcept fakeThesaurusConcept = getFakeThesaurusConceptWithNonMandatoryEmptyFields("fakeConcept1");
 		ThesaurusConceptView fakeConceptView = new ThesaurusConceptView();
@@ -152,14 +206,14 @@ public class ThesaurusConceptRestServiceTest {
 		fakeConceptView.setTopconcept(false);
 		fakeConceptView.setThesaurusId("1");
 		fakeConceptView.setTerms(termViews);
-        fakeConceptView.setAssociatedConcepts(associatedConceptsView);
+    fakeConceptView.setAssociatedConcepts(associatedConceptsView);
 
 
-        List<AssociativeRelationship> associatedConcepts = new ArrayList<AssociativeRelationship>();
-        List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
-        List<ThesaurusConcept> childToRemove = new ArrayList<ThesaurusConcept>();
-        List<ThesaurusConcept> childToAdd = new ArrayList<ThesaurusConcept>();
-        List<Alignment> alignments = new ArrayList<Alignment>();
+    List<AssociativeRelationship> associatedConcepts = new ArrayList<AssociativeRelationship>();
+    List<ConceptHierarchicalRelationship> hierarchicalRelationships = new ArrayList<ConceptHierarchicalRelationship>();
+    List<ThesaurusConcept> childToRemove = new ArrayList<ThesaurusConcept>();
+    List<ThesaurusConcept> childToAdd = new ArrayList<ThesaurusConcept>();
+    List<Alignment> alignments = new ArrayList<Alignment>();
 
 		Mockito.when(thesaurusConceptViewConverter.convert(fakeConceptView)).thenReturn(fakeThesaurusConcept);
 		Mockito.when(termViewConverter.convertTermViewsInTerms(termViews, true)).thenReturn(terms);
