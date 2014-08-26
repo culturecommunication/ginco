@@ -27,13 +27,6 @@
 Ext.define('GincoApp.controller.SearchPanelController', {
 	extend : 'Ext.app.Controller',
 
-	onSearchGridLoad : function (theGrid)
-	{
-		var thePanel = theGrid.up('searchPanel');
-		thePanel.setTitle(thePanel.title + ' : '
-				+ thePanel.searchQuery);
-	},
-
 	onDisplayResultBtn : function(theButton) {
 		var theGrid = theButton.up("gridpanel");
 		this.onResultDblClick(theGrid);
@@ -83,9 +76,10 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 
 	onSearchPanelLoad: function (thePanel)
 	{
-		var model = Ext.create('GincoApp.model.FilterCriteriaModel');
+        var model = Ext.create('GincoApp.model.FilterCriteriaModel');
 		model.set('query',thePanel.up('searchPanel').searchQuery);
 		model.set('thesaurus', thePanel.up('searchPanel').searchThesaurus);
+
 		thePanel.loadRecord(model);
 		this.onFilterBtn(thePanel.down('#filterBtn'));
 	},
@@ -96,8 +90,19 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 		theForm.getForm().updateRecord();
 		var theQueryModel = theForm.getForm().getRecord();
 		var thePanel = theForm.up("searchPanel");
-		var theGrid = thePanel.down('gridpanel');
 
+         var titlePanel;
+         //Check if title is : "rechercher : <query>"
+         if(thePanel.title.indexOf(":") > 0){
+            titlePanel = thePanel.title.substring(0,thePanel.title.indexOf(":"))
+         + ' : ' + theQueryModel.data.query;
+         } else {
+            titlePanel = thePanel.title + ' : ' + theQueryModel.data.query;
+         }
+         thePanel.setTitle(titlePanel);
+
+
+        var theGrid = thePanel.down('gridpanel');
 		var theStore = theGrid.getStore();
 		theStore.getProxy().setExtraParam('query',
 				thePanel.searchQuery);
@@ -126,7 +131,6 @@ Ext.define('GincoApp.controller.SearchPanelController', {
 				click : this.onFilterBtn
 			},
 			'searchPanel gridpanel' : {
-				afterrender : this.onSearchGridLoad,
 				itemdblclick : this.onResultDblClick
 			},
 			'#displayResultBtn' :  {
