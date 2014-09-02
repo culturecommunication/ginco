@@ -246,15 +246,17 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 				var gridStore = gridPanel.getStore();
 				if(gridStore.getModifiedRecords().length>0 || gridStore.getRemovedRecords().length>0 )
 				{
+                    var curForm;
 					if (gridPanel.up('form') != null){
-						dirtyForms.push(gridPanel.up('form'));
+                        curForm = gridPanel.up('form');
 					} else {
 						if (gridPanel.up('panel').down('form') != null){
-							dirtyForms.push(gridPanel.up('panel').down('form'));
+                            curForm = gridPanel.up('panel').down('form');
 						} else {
-							dirtyForms.push(gridPanel);
+                            curForm = gridPanel
 						}
 					}
+                    me.pushToDirtyForms(dirtyForms,curForm);
 				}
 			});
 
@@ -262,13 +264,9 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 			Ext.Array.forEach(theForms,function (aForm) {
 				if (aForm.getForm().isDirty())
 				{
-					if (Ext.Array.indexOf(dirtyForms, aForm)==-1)
-					{
-						dirtyForms.push(aForm);
-					}
+                    me.pushToDirtyForms(dirtyForms,aForm);
 				}
-			}
-			);
+			});
 
 			if (dirtyForms.length>0) {
 				if  (Thesaurus.ext.utils.userInfo != null ) {
@@ -325,6 +323,14 @@ Ext.define('GincoApp.controller.ThesaurusTabPanelController', {
 		}
 		return true;
 	},
+
+    pushToDirtyForms : function(dirtyForms,formToPush)
+    {
+        if (Ext.Array.indexOf(dirtyForms, formToPush)==-1)
+        {
+            dirtyForms.push(formToPush);
+        }
+    },
 	onThesaurusUpdated : function(thePanel, thesaurusData)
 	{
 		thePanel.thesaurusData = thesaurusData;
