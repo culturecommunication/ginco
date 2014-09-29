@@ -219,7 +219,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	@Override
 	public void publishThesaurus(Thesaurus object) {
 		File export = exportService.getSKOSExport(object);
-		File ready = new File(publishPath + object.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + " "
+		File ready = new File(publishPath + object.getTitle().replaceAll("[^a-zA-Z0-9\\._]+", "_") + "_"
 				+ DateUtil.toString(DateUtil.nowDate()).replaceAll(" ", "_").replaceAll(":", "_")
 				+ ".rdf");
 		try {
