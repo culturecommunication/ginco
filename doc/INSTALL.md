@@ -58,8 +58,7 @@ Rename the example directory:
 
 * Installing Solr server
 
-Go in Installing the available configuration Solr of Ginco
-Copy available configuration from the Solr to install the Solr server:
+Copy available configuration:
 > cp -r ginco-solr-conf/solr /usr/local/solr-4.2.1/ginco/ 
 
 * Init script SolR
