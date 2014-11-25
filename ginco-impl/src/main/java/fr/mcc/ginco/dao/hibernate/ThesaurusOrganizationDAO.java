@@ -5,6 +5,7 @@ import fr.mcc.ginco.beans.ThesaurusOrganization;
 import fr.mcc.ginco.dao.IThesaurusOrganizationDAO;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
@@ -17,27 +18,24 @@ import java.util.List;
  * DAO for Thesaurus organization
  */
 @Repository
-public class ThesaurusOrganizationDAO extends GenericHibernateDAO<ThesaurusOrganization, Integer>
-		implements IThesaurusOrganizationDAO {
+public class ThesaurusOrganizationDAO extends
+		GenericHibernateDAO<ThesaurusOrganization, Integer> implements
+		IThesaurusOrganizationDAO {
 
 	public ThesaurusOrganizationDAO() {
 		super(ThesaurusOrganization.class);
 	}
 
 	@Override
-	public List<ThesaurusOrganization> getFilteredOrganizations() {
+	public List<ThesaurusOrganization> getFilteredOrganizationNames() {
 		Criteria criteria = getCurrentSession().createCriteria(Thesaurus.class, "t")
 				.add(Restrictions.isNotNull("t.creator"))
 				.createCriteria("creator", "c", JoinType.RIGHT_OUTER_JOIN)
-				.setProjection(Projections.projectionList()
-						.add(Projections.groupProperty("c.identifier"))
-						.add(Projections.property("c.identifier").as("identifier"))
-						.add(Projections.property("c.name").as("name"))
-						.add(Projections.property("c.homepage").as("homepage"))
-						.add(Projections.property("c.email").as("email")))
+				.setProjection(
+						Projections.distinct(Projections.projectionList().add(
+								Projections.property("c.name").as("name"))))
 				.setResultTransformer(Transformers.aliasToBean(ThesaurusOrganization.class))
 				.addOrder(Order.asc("name"));
-
 		return criteria.list();
 	}
 }

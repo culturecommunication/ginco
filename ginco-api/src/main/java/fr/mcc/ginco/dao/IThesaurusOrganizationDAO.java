@@ -10,9 +10,9 @@ import java.util.List;
 public interface IThesaurusOrganizationDAO extends IGenericDAO<ThesaurusOrganization, Integer> {
 
 	/**
-	 * Gets list of all organizations that have at lease one thesaurus.
+	 * Gets list of all organization's names that have at lease one thesaurus.
 	 *
 	 * @return
 	 */
-	List<ThesaurusOrganization> getFilteredOrganizations();
+	List<ThesaurusOrganization> getFilteredOrganizationNames();
 }

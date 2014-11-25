@@ -61,6 +61,6 @@ public class ThesaurusOrganizationServiceImpl implements IThesaurusOrganizationS
 
 	@Override
 	public List<ThesaurusOrganization> getOrganizationsWithData() throws TechnicalException {
-		return thesaurusOrganizationDAO.getFilteredOrganizations();
+		return thesaurusOrganizationDAO.getFilteredOrganizationNames();
 	}
 }

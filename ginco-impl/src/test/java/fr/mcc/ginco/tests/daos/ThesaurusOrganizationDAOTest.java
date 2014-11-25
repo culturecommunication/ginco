@@ -21,10 +21,10 @@ public class ThesaurusOrganizationDAOTest extends BaseDAOTest {
 	}
 
 	@Test
-	public void testGetFilteredOrganizations() {
-		List<ThesaurusOrganization> list = thesaurusOrganizationDAO.getFilteredOrganizations();
+	public void testGetFilteredOrganizationNames() {
+		List<ThesaurusOrganization> list = thesaurusOrganizationDAO.getFilteredOrganizationNames();
 		Assert.assertEquals("Should contain only one organization.", 1, list.size());
-		Assert.assertEquals("Should be the first organization", (Integer)0, list.get(0).getIdentifier());
+		Assert.assertEquals("Should be the first organization", "Smile", list.get(0).getName());
 	}
 
 	@Override
