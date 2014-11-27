@@ -162,18 +162,17 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
         Ext.Ajax.request({
             url: url,
+            timeout: 1200000,
             method: 'GET',
             success: function(response) {
             	theForm.getEl().unmask();
-            	var jsonData = Ext.JSON.decode(response.responseText);            	
-            	if (jsonData.success) {
-            		Thesaurus.ext.utils.msg(me.xSucessLabel,
-                 		   me.xPublishSuccess);
-                     me.application.fireEvent('thesaurusupdated');
-            	}else {
-                    Thesaurus.ext.utils.msg(me.xProblemLabel, jsonData.message);
-            	}
-               
+        		Thesaurus.ext.utils.msg(me.xSucessLabel,
+             		   me.xPublishSuccess);
+                 me.application.fireEvent('thesaurusupdated');
+            },
+            failure: function() {
+                theForm.getEl().unmask();
+                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemPublishMsg);
             }
         });
     },
@@ -186,25 +185,22 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		theForm.getEl().mask(me.xArchiveInProgress);
         Ext.Ajax.request({
             url: url,
+            timeout: 1200000,
             method: 'GET',
             success: function(response) {
-            	theForm.getEl().unmask();
-            	var jsonData = Ext.JSON.decode(response.responseText);            	
-            	if (jsonData.success) {
-            		 var record = theForm.getForm().getRecord();
-                     record.set("archived",true);
-                     record.set("canBeDeleted",true);
-                     theButton.up('thesaurusTabPanel').fireEvent('thesaurusupdated',theButton.up('thesaurusTabPanel'),record.data);
-                     me.loadData(theForm, record);
-                     Thesaurus.ext.utils.msg(me.xSucessLabel,
-                         me.xArchiveSuccess);
-                     me.application.fireEvent('thesaurusupdated');
-
-				} else 
-				{
-                    Thesaurus.ext.utils.msg(me.xProblemLabel, jsonData.message);
-
-				}
+                theForm.getEl().unmask();
+        		var record = theForm.getForm().getRecord();
+                record.set("archived",true);
+                record.set("canBeDeleted",true);
+                theButton.up('thesaurusTabPanel').fireEvent('thesaurusupdated',theButton.up('thesaurusTabPanel'),record.data);
+                me.loadData(theForm, record);
+                Thesaurus.ext.utils.msg(me.xSucessLabel,
+                    me.xArchiveSuccess);
+                me.application.fireEvent('thesaurusupdated');
+            },
+            failure: function() {
+                theForm.getEl().unmask();
+                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemArchiveMsg);
             }
         });
     },
