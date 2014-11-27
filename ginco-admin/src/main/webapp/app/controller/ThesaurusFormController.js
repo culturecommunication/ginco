@@ -162,7 +162,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 
         Ext.Ajax.request({
             url: url,
-            timeout: 1200000,
+            timeout: 600000,
             method: 'GET',
             success: function(response) {
             	theForm.getEl().unmask();
@@ -185,7 +185,7 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
 		theForm.getEl().mask(me.xArchiveInProgress);
         Ext.Ajax.request({
             url: url,
-            timeout: 1200000,
+            timeout: 600000,
             method: 'GET',
             success: function(response) {
                 theForm.getEl().unmask();
