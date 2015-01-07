@@ -34,7 +34,6 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -49,7 +48,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import fr.mcc.ginco.services.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.Nullable;
 import org.slf4j.Logger;
@@ -83,6 +81,10 @@ import fr.mcc.ginco.extjs.view.utils.ChildrenGenerator;
 import fr.mcc.ginco.extjs.view.utils.HierarchicalRelationshipViewConverter;
 import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
+import fr.mcc.ginco.services.INoteService;
+import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusTermService;
+import fr.mcc.ginco.services.IUserRoleService;
 import fr.mcc.ginco.solr.IConceptIndexerService;
 import fr.mcc.ginco.solr.INoteIndexerService;
 import fr.mcc.ginco.solr.ITermIndexerService;

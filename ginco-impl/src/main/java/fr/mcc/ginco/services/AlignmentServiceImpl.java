@@ -120,6 +120,7 @@ public class AlignmentServiceImpl implements IAlignmentService {
 			alignmentDAO.update(alignment);
 		}
 
+		alignmentDAO.flush();
 		return concept;
 	}
 
@@ -128,18 +129,27 @@ public class AlignmentServiceImpl implements IAlignmentService {
 
 		for (Alignment alignment : alignments) {
 			ExternalThesaurus externalThesaurus = alignment.getExternalTargetThesaurus();
-
 			if (externalThesaurus != null) {
 				if (!externalThesaurusesToSave.contains(externalThesaurus)) {
 					externalThesaurusesToSave.add(externalThesaurus);
 				} else {
-					ExternalThesaurus existingExternalThes = externalThesaurusesToSave.get(externalThesaurusesToSave.indexOf(externalThesaurus));
+					ExternalThesaurus existingExternalThes = externalThesaurusesToSave
+							.get(externalThesaurusesToSave
+									.indexOf(externalThesaurus));
 					alignment.setExternalTargetThesaurus(existingExternalThes);
 				}
 			}
 		}
 		for (ExternalThesaurus extThesaurus : externalThesaurusesToSave) {
 			externalThesaurusDAO.update(extThesaurus);
+		}
+	}
+
+	public void deleteExternalThesauruses() {
+		for (ExternalThesaurus externalThesaurus : externalThesaurusDAO.findAll()) {
+			if (alignmentDAO.findByExternalThesaurus(externalThesaurus.getIdentifier()).isEmpty()){
+				externalThesaurusDAO.delete(externalThesaurus);
+			}
 		}
 	}
 

@@ -42,7 +42,7 @@ import fr.mcc.ginco.beans.Alignment;
  * Data Access Object for alignment
  */
 public interface IAlignmentDAO extends IGenericDAO<Alignment, String> {
-	
+
 	/**
 	 * @param sourceConceptId
 	 * @return
@@ -50,4 +50,7 @@ public interface IAlignmentDAO extends IGenericDAO<Alignment, String> {
 	List<Alignment> findBySourceConceptId(String sourceConceptId);
 
 	List<Alignment> findByTargetConceptId(String targetConceptId);
+
+	List<Alignment> findByExternalThesaurus(Integer externalThesaurusId);
+
 }

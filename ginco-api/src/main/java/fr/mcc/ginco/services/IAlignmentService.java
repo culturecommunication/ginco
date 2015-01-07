@@ -42,14 +42,18 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 /**
  * Service used to deal with {@link Alignment} objects, contains basic methods
  * exposed to client part.
- * 
+ *
  * @see fr.mcc.ginco.beans
+ */
+/**
+ * @author sofas
+ *
  */
 public interface IAlignmentService {
 
 	/**
 	 * Get the alignment by it's id
-	 * 
+	 *
 	 * @param identifier
 	 * @return
 	 */
@@ -57,7 +61,7 @@ public interface IAlignmentService {
 
 	/**
 	 * return all alignments for a given source concept
-	 * 
+	 *
 	 * @param conceptIdentifier
 	 * @return
 	 */
@@ -70,7 +74,9 @@ public interface IAlignmentService {
 	 */
 	ThesaurusConcept saveAlignments(ThesaurusConcept concept,
 			List<Alignment> alignments);
-	
+
 	void saveExternalThesauruses(List<Alignment> alignments);
+
+	void deleteExternalThesauruses();
 
 }

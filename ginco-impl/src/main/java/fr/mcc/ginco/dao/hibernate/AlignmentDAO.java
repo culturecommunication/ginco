@@ -72,4 +72,11 @@ public class AlignmentDAO extends
 		return criteria.list();
 	}
 
+	@Override
+	public List<Alignment> findByExternalThesaurus(Integer externalThesaurusId) {
+		Criteria criteria = getCurrentSession().createCriteria(Alignment.class);
+		criteria.add(Restrictions.eq("externalTargetThesaurus.identifier", externalThesaurusId));
+		return criteria.list();
+	}
+
 }

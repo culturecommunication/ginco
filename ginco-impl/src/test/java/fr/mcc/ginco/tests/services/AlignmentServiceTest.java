@@ -35,6 +35,7 @@
 
 package fr.mcc.ginco.tests.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -52,6 +53,7 @@ import fr.mcc.ginco.ark.IIDGeneratorService;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.ExternalThesaurus;
+import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
@@ -60,28 +62,28 @@ import fr.mcc.ginco.services.AlignmentServiceImpl;
 import fr.mcc.ginco.services.UserRoleServiceImpl;
 
 public class AlignmentServiceTest {
-	
+
 	@InjectMocks
 	private AlignmentServiceImpl alignmentService = new AlignmentServiceImpl();
-	
+
 	@Mock
 	private IExternalThesaurusDAO externalThesaurusDAO;
-	
+
 	@Mock
 	private IAlignmentDAO alignmentDAO;
-	
+
 	@Mock
-	private IIDGeneratorService generatorService;	
-	
+	private IIDGeneratorService generatorService;
+
 	@Mock
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
 
-	
+
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
 	public void saveAlignmentsTest()
 	{
@@ -96,7 +98,7 @@ public class AlignmentServiceTest {
 		Mockito.verify(alignmentDAO, Mockito.times(2)).update(alignTest1);
 		Mockito.verify(alignmentConceptDAO, Mockito.times(1)).update(alignConcept1);
 	}
-	
+
 	@Test
 	public void saveExternalThesaurusesTest()
 	{
@@ -109,6 +111,23 @@ public class AlignmentServiceTest {
 		List<Alignment> alignList=Arrays.asList(alignTest1,alignTest2);
 		alignmentService.saveExternalThesauruses(alignList);
 		Mockito.verify(externalThesaurusDAO, Mockito.times(1)).update(thes);
+	}
+
+	@Test
+	public void deleteExternalThesaurusesTest()
+	{
+		ExternalThesaurus thes = new ExternalThesaurus();
+		thes.setIdentifier(1);
+
+		List<Alignment> alignements = new ArrayList<Alignment>();
+		List<ExternalThesaurus> thesauruses = new ArrayList<ExternalThesaurus>();
+		thesauruses.add(thes);
+
+		Mockito.when(alignmentDAO.findByExternalThesaurus(thes.getIdentifier()))
+				.thenReturn(alignements);
+		Mockito.when(externalThesaurusDAO.findAll()).thenReturn(thesauruses);
+		alignmentService.deleteExternalThesauruses();
+		Mockito.verify(externalThesaurusDAO, Mockito.times(1)).delete(thes);
 	}
 
 

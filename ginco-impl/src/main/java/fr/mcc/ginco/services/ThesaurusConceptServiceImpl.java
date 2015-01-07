@@ -383,7 +383,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		updateConceptTerms(concept, terms);
 
 		alignmentService.saveAlignments(concept, alignments);
-
+		if (!alignments.isEmpty()){
+			alignmentService.deleteExternalThesauruses();
+		}
 		return thesaurusConceptDAO.update(saveAssociativeRelationship(concept, associatedConcepts));
 	}
 
