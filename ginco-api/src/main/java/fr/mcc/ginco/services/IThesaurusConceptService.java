@@ -181,6 +181,39 @@ public interface IThesaurusConceptService {
 
 
 	/**
+	 * Search paginated concepts of thesaurus excluding given conceptId
+	 * with given parameter (orphan or not).
+	 *
+	 * @param startIndex
+	 * @param limit
+	 * @param excludeConceptId      id of concept to exclude.
+	 * @param thesaurusId           id of thesaurus.
+	 * @param searchOrphans         indicates if concepts with topConcept==false should be
+	 *                              included in result. Could be null if doesn't matters.
+	 * @param onlyValidatedConcepts indicates if returned concepts will be filtered on status = VALIDATED.
+	 * @return list of objects.
+	 */
+	List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(
+			Integer startIndex, Integer limit, String excludeConceptId,
+			String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts);
+
+	/**
+	 *
+	 * Get the number of thesaurus concepts excluding given conceptId
+	 * with given parameter (orphan or not).
+	 *
+	 * @param excludeConceptId
+	 * @param thesaurusId
+	 * @param searchOrphans
+	 * @param onlyValidatedConcepts
+	 * @return
+	 */
+	Long getConceptsByThesaurusIdCount(String excludeConceptId,
+			String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts);
+
+	/**
 	 * Search concepts of thesaurus excluding given conceptId
 	 * with given parameter (orphan or not).
 	 *
@@ -227,6 +260,18 @@ public interface IThesaurusConceptService {
 	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId, String thesaurusId);
 
 	/**
+	 * Get paginated concepts eligible for an array
+	 *
+	 * @param startIndex
+	 * @param limit
+	 * @param arrayId
+	 * @param thesaurusId
+	 * @return List of concepts eligible for an array
+	 */
+	List<ThesaurusConcept> getAvailableConceptsOfArray(Integer startIndex,
+			Integer limit, String arrayId, String thesaurusId);
+
+	/**
 	 * Get all concepts eligible for a group
 	 *
 	 * @param groupId
@@ -234,6 +279,17 @@ public interface IThesaurusConceptService {
 	 * @return List of concepts eligible for a group
 	 */
 	List<ThesaurusConcept> getAvailableConceptsOfGroup(String groupId, String thesaurusId);
+
+	/**
+	 * Get paginated concepts eligible for a group
+	 *
+	 * @param startIndex
+	 * @param limit
+	 * @param groupId
+	 * @param thesaurusId
+	 * @return List of concepts eligible for a group
+	 */
+	List<ThesaurusConcept> getAvailableConceptsOfGroup(Integer startIndex, Integer limit, String groupId, String thesaurusId);
 
 	/**
 	 * For indexing purposes.

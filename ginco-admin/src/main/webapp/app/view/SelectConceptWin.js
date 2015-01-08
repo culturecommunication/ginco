@@ -70,6 +70,7 @@ Ext
 					xSelect : "Select",
 
 					width : 500,
+					height : 530,
 					title : 'Sélectionner un concept',
 					titleAlign : 'center',
 					modal : true,
@@ -110,7 +111,10 @@ Ext
 								conceptId : me.conceptId
 							};
 						}
+
+						me.conceptReducedStore.pageSize = 20;
 						me.conceptReducedStore.load();
+
 						me.addEvents('selectBtn');
 
 						Ext
@@ -120,7 +124,6 @@ Ext
 											items : [ {
 												xtype : 'gridpanel',
 												autoScroll : true,
-												height : 300,
 												flex : 1,
 												store : me.conceptReducedStore,
 												columns : [
@@ -133,7 +136,12 @@ Ext
 															text : me.xLexicalValueColumnLabel,
 															flex : 1
 														} ],
-												dockedItems : [ {
+												dockedItems : [{
+											        xtype: 'pagingtoolbar',
+											        store :  me.conceptReducedStore,
+											        dock: 'bottom',
+											        displayInfo: true
+											    },{
 													xtype : 'toolbar',
 													dock : 'top',
 													items : [ {

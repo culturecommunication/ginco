@@ -128,7 +128,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 			List<String> childrenOfCurrentParentIds = ThesaurusConceptUtils
 					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId, 0));
 			List<String> commonIds = new ArrayList<String>(newParentConceptIds);
-			// Compare both lists and see which elements are in common. 
+			// Compare both lists and see which elements are in common.
 			// Those elements are both parents and brothers to the considered concept.
 			commonIds.retainAll(childrenOfCurrentParentIds);
 

@@ -256,9 +256,25 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public List<ThesaurusConcept> getConceptsByThesaurusId(
 			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
 			Boolean onlyValidatedConcepts) {
-		return thesaurusConceptDAO.getAllConceptsByThesaurusId(
+		return thesaurusConceptDAO.getPaginatedConceptsByThesaurusId(0, 0,
 				excludeConceptId, thesaurusId, searchOrphans,
 				onlyValidatedConcepts);
+	}
+
+	@Override
+	public List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(Integer startIndex, Integer limit,
+			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts) {
+		return thesaurusConceptDAO.getPaginatedConceptsByThesaurusId(startIndex, limit,
+				excludeConceptId, thesaurusId, searchOrphans,
+				onlyValidatedConcepts);
+	}
+
+	@Override
+	public Long getConceptsByThesaurusIdCount(String excludeConceptId, String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts) {
+		return thesaurusConceptDAO.getConceptsByThesaurusIdCount(
+				excludeConceptId, thesaurusId, searchOrphans, onlyValidatedConcepts);
 	}
 
 	@Override
@@ -542,6 +558,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId,
+			String thesaurusId) {
+		return getAvailableConceptsOfArray(0, 0, arrayId, thesaurusId);
+	}
+
+	@Override
+	public List<ThesaurusConcept> getAvailableConceptsOfArray(Integer startIndex, Integer limit, String arrayId,
 	                                                          String thesaurusId) {
 		ThesaurusArray currentArray = new ThesaurusArray();
 		List<ThesaurusConcept> returnAvailableConcepts = new ArrayList<ThesaurusConcept>();
@@ -560,8 +582,8 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 							currentArray.getIdentifier()
 					);
 			returnAvailableConcepts = thesaurusConceptDAO
-					.getChildrenConcepts(currentArray.getSuperOrdinateConcept()
-							.getIdentifier(), 0);
+					.getChildrenConcepts(startIndex, limit, currentArray.getSuperOrdinateConcept()
+							.getIdentifier());
 
 			for (ThesaurusArray thesaurusArray : arrayWithSameSuperOrdinate) {
 				Set<ThesaurusArrayConcept> conceptOfEachArray = thesaurusArray
@@ -593,10 +615,17 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public List<ThesaurusConcept> getAvailableConceptsOfGroup(String groupId, String thesaurusId) {
+	public List<ThesaurusConcept> getAvailableConceptsOfGroup(String groupId,
+			String thesaurusId) {
+		return getAvailableConceptsOfGroup(0, 0, groupId, thesaurusId);
+	}
+
+	@Override
+	public List<ThesaurusConcept> getAvailableConceptsOfGroup(
+			Integer startIndex, Integer limit, String groupId, String thesaurusId) {
 		ThesaurusConceptGroup currentGroup = new ThesaurusConceptGroup();
 		List<ThesaurusConcept> availableConcepts = thesaurusConceptDAO
-				.getAllConceptsByThesaurusId(null, thesaurusId, null, false);
+				.getPaginatedConceptsByThesaurusId(startIndex, limit, null, thesaurusId, null, false);
 		if (StringUtils.isNotEmpty(groupId)) {
 			currentGroup = thesaurusConceptGroupDAO.getById(groupId);
 			Set<ThesaurusConcept> existedConcepts = currentGroup.getConcepts();

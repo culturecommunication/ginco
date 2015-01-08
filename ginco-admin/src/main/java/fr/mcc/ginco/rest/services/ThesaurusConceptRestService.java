@@ -307,7 +307,9 @@ public class ThesaurusConceptRestService {
 	@GET
 	@Path("/getConcepts")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<ThesaurusConceptReducedView> getConceptsByThesaurusId(
+	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getConceptsByThesaurusId(
+			@QueryParam("start") Integer startIndex,
+            @QueryParam("limit") Integer limit,
 			@QueryParam("id") String conceptId,
 			@QueryParam("thesaurusId") String thesaurusId,
 			@QueryParam("searchOrphans") @Nullable String searchOrphans,
@@ -329,9 +331,16 @@ public class ThesaurusConceptRestService {
 			onlyValidated = false;
 		}
 
-		return thesaurusConceptViewConverter.convert(thesaurusConceptService
-				.getConceptsByThesaurusId(conceptId, thesaurusId,
-						searchOrphanParam, onlyValidated));
+		List<ThesaurusConcept> thesaurusConcepts = thesaurusConceptService
+				.getPaginatedConceptsByThesaurusId(startIndex, limit, conceptId, thesaurusId,
+						searchOrphanParam, onlyValidated);
+		Long total = thesaurusConceptService.getConceptsByThesaurusIdCount(conceptId, thesaurusId, searchOrphanParam, onlyValidated);
+		List<ThesaurusConceptReducedView> results =thesaurusConceptViewConverter.convert(thesaurusConcepts);
+		ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> extConcepts = new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
+				results);
+		extConcepts.setTotal(total);
+		return extConcepts;
+
 	}
 
 	/**
@@ -385,34 +394,50 @@ public class ThesaurusConceptRestService {
 	@Path("/getAvailableConceptsOfArray")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getAvailableConceptsOfArray(
+			@QueryParam("start") Integer startIndex,
+            @QueryParam("limit") Integer limit,
 			@QueryParam("arrayId") String arrayId,
 			@QueryParam("thesaurusId") String thesaurusId) {
 
 		List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
 		List<ThesaurusConcept> children = thesaurusConceptService
-				.getAvailableConceptsOfArray(arrayId, thesaurusId);
+				.getAvailableConceptsOfArray(startIndex, limit, arrayId, thesaurusId);
 		for (ThesaurusConcept child : children) {
 			reducedConcepts.add(thesaurusConceptViewConverter.convert(child));
 		}
-		return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
+
+		Long total = new Long(thesaurusConceptService
+				.getAvailableConceptsOfArray(arrayId, thesaurusId).size());
+		ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> extConcepts = new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
 				reducedConcepts);
+		extConcepts.setTotal(total);
+		return extConcepts;
 	}
 
 	@GET
 	@Path("/getAvailableConceptsOfGroup")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getAvailableConceptsOfGroup(
+			@QueryParam("start") Integer startIndex,
+            @QueryParam("limit") Integer limit,
 			@QueryParam("groupId") String groupId,
 			@QueryParam("thesaurusId") String thesaurusId) {
 
 		List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
 		List<ThesaurusConcept> availableGroupConcepts = thesaurusConceptService
-				.getAvailableConceptsOfGroup(groupId, thesaurusId);
+				.getAvailableConceptsOfGroup(startIndex, limit, groupId, thesaurusId);
 		for (ThesaurusConcept concept : availableGroupConcepts) {
 			reducedConcepts.add(thesaurusConceptViewConverter.convert(concept));
 		}
-		return new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
+
+		Long total = new Long(thesaurusConceptService
+				.getAvailableConceptsOfGroup(groupId, thesaurusId).size());
+
+		ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> extConcepts = new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
 				reducedConcepts);
+		extConcepts.setTotal(total);
+		return extConcepts;
+
 	}
 
 	/**

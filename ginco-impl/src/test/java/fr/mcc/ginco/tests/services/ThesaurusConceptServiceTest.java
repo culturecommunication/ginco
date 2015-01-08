@@ -509,19 +509,19 @@ public class ThesaurusConceptServiceTest {
 
 		// Mocks
 		when(thesaurusConceptDAO
-				.getAllConceptsByThesaurusId(anyString(), anyString(), any(Boolean.class), any(Boolean.class))).thenReturn(fakeAvailableConcepts);
+				.getPaginatedConceptsByThesaurusId(any(Integer.class), any(Integer.class), anyString(), anyString(), any(Boolean.class), any(Boolean.class))).thenReturn(fakeAvailableConcepts);
 		when(thesaurusConceptGroupDAO.getById(anyString())).thenReturn(fakeCurrentGroup);
 
 		fakeAvailableConcepts = thesaurusConceptService.getAvailableConceptsOfGroup ("fakeCurrentGroup", "fakeThesaurus");
 		Assert.assertEquals("The list with 'concept2' expected",fakeAvailableConcepts, resultAvailableConcepts);
 	}
-	
+
 	@Test
 	public void testGetRecursiveParentsByConceptId() {
 		String conceptId1 = "http://c1";
 		ThesaurusConcept concept1 = new ThesaurusConcept();
 		concept1.setIdentifier(conceptId1);
-		
+
 		String conceptId11 = "http://c11";
 		ThesaurusConcept concept11 = new ThesaurusConcept();
 		concept11.setIdentifier(conceptId11);
@@ -536,12 +536,12 @@ public class ThesaurusConceptServiceTest {
 		ThesaurusConcept concept121 = new ThesaurusConcept();
 		concept121.setIdentifier(conceptId121);
 		concept121.setParentConcepts(new HashSet<ThesaurusConcept>(Arrays.asList(concept12)));
-		
+
 		String conceptId1211 = "http://c1211";
 		ThesaurusConcept concept1211 = new ThesaurusConcept();
 		concept1211.setIdentifier(conceptId1211);
 		concept1211.setParentConcepts(new HashSet<ThesaurusConcept>(Arrays.asList(concept121)));
-		
+
 		Mockito.when( thesaurusConceptDAO
 				.getById("http://c1211")).thenReturn(concept1211);
 		List<ThesaurusConcept> parentConcepts = thesaurusConceptService.getRecursiveParentsByConceptId(conceptId1211);
@@ -550,9 +550,9 @@ public class ThesaurusConceptServiceTest {
 		ListAssert.assertContains(parentConcepts, concept12);
 		ListAssert.assertContains(parentConcepts, concept121);
 	}
-	
-	
-	
+
+
+
 	@Test
 	public void testGetRecursiveChildrenByConceptId() {
 		String conceptId1 = "http://c1";

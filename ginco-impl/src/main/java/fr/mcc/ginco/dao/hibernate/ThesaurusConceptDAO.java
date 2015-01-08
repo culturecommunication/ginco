@@ -69,7 +69,7 @@ public class ThesaurusConceptDAO extends
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConcept
 	 */
 	@Override
@@ -80,7 +80,7 @@ public class ThesaurusConceptDAO extends
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getOrphansThesaurusConceptCount
 	 * (fr.mcc.ginco.beans.Thesaurus)
@@ -92,7 +92,7 @@ public class ThesaurusConceptDAO extends
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConcept
 	 */
 	@Override
@@ -103,7 +103,7 @@ public class ThesaurusConceptDAO extends
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConceptCount
 	 * (fr.mcc.ginco.beans.Thesaurus)
@@ -116,7 +116,7 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getRootConcepts(String thesaurusId,
 	                                              Boolean searchOrphans) {
-		return getConcepts(null, thesaurusId, searchOrphans, 0);
+		return getConcepts(0, 0, null, thesaurusId, searchOrphans);
 	}
 
 	@Override
@@ -131,13 +131,19 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public List<ThesaurusConcept> getChildrenConcepts(String conceptId,
-	                                                  int maxResults) {
-		return getConcepts(conceptId, null, null, maxResults);
+	public List<ThesaurusConcept> getChildrenConcepts(Integer startIndex,
+			Integer limit, String conceptId) {
+		return getConcepts(startIndex, limit, conceptId, null, null);
 	}
 
-	private List<ThesaurusConcept> getConcepts(String conceptId,
-	                                           String thesaurusId, Boolean searchOrphans, int maxResults) {
+	@Override
+	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, Integer limit) {
+		return getConcepts(0, limit, conceptId, null, null);
+	}
+
+	private List<ThesaurusConcept> getConcepts(Integer startIndex,
+			Integer limit, String conceptId, String thesaurusId,
+			Boolean searchOrphans) {
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConcept.class, "tc");
 
@@ -152,14 +158,31 @@ public class ThesaurusConceptDAO extends
 		}
 
 		selectOrphans(criteria, searchOrphans);
-		if (maxResults > 0) {
-			criteria.setMaxResults(maxResults);
-		}
+		if (limit > 0)
+			criteria.setMaxResults(limit);
+		criteria.setFirstResult(startIndex);
 		return criteria.list();
 	}
 
 	@Override
-	public List<ThesaurusConcept> getAllConceptsByThesaurusId(
+	public List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(
+			Integer startIndex, Integer limit, String excludeConceptId,
+			String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts) {
+		Criteria criteria = getCurrentSession().createCriteria(
+				ThesaurusConcept.class, "tc");
+		selectThesaurus(criteria, thesaurusId);
+		selectOrphans(criteria, searchOrphans);
+		excludeConcept(criteria, excludeConceptId);
+		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
+		if (limit > 0)
+			criteria.setMaxResults(limit);
+		criteria.setFirstResult(startIndex);
+		return criteria.list();
+	}
+
+	@Override
+	public Long getConceptsByThesaurusIdCount(
 			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
 			Boolean onlyValidatedConcepts) {
 		Criteria criteria = getCurrentSession().createCriteria(
@@ -169,8 +192,8 @@ public class ThesaurusConceptDAO extends
 		selectOrphans(criteria, searchOrphans);
 		excludeConcept(criteria, excludeConceptId);
 		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
-
-		return criteria.list();
+		criteria.setProjection(Projections.rowCount());
+		return (Long) criteria.list().get(0);
 	}
 
 	@Override

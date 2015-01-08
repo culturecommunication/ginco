@@ -34,10 +34,10 @@
  */
 package fr.mcc.ginco.dao;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-
-import java.util.List;
 
 /**
  * Data Access Object for thesaurus_concept
@@ -97,22 +97,48 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
     List<ThesaurusConcept> getRootConcepts(String thesaurusId, Boolean searchOrphans);
 
     /**
-     * Get list of all children concepts by id of parent Concept.
+     * Get list of paginated children concepts by id of parent Concept.
      * @param conceptId
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults);
+	List<ThesaurusConcept> getChildrenConcepts(Integer startIndex,
+			Integer limit, String conceptId);
+
+	/**
+     * Get limited list of paginated children concepts by id of parent Concept.
+     * @param conceptId
+     * @return list of children or all root concepts if conceptId is null.
+     */
+	List<ThesaurusConcept> getChildrenConcepts(String conceptId, Integer limit);
 
     /**
-     * Get list of all concepts by id of Thesaurus, excluding given conceptId and
+     * Get paginated list of all concepts by id of Thesaurus, excluding given conceptId and
      * filtering by TopTerm property.
+     * @param startIndex
+     * @param limit
      * @param excludeConceptId
      * @param thesaurusId
      * @param searchOrphans could be null if doesn't matter.
      * @return list of children or all root concepts if conceptId is null.
      */
-    List<ThesaurusConcept> getAllConceptsByThesaurusId(String excludeConceptId, String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
+	List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(
+			Integer startIndex, Integer limit, String excludeConceptId,
+			String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
 
+	/**
+	 *
+	 * Get the number of all concepts by id of Thesaurus, excluding given conceptId and
+     * filtering by TopTerm property.
+	 *
+	 * @param excludeConceptId
+	 * @param thesaurusId
+	 * @param searchOrphans
+	 * @param onlyValidatedConcepts
+	 * @return
+	 */
+	Long getConceptsByThesaurusIdCount(
+			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts);
 
     /**
      * Returns all children (recursive) from the given root
@@ -133,7 +159,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 * @return
 	 */
 	Long countConceptsWoNotes(String idThesaurus);
-	
+
 	/**
 	 * Gets a list a of the concepts whithout notes
 	 * @param idThesaurus

@@ -198,17 +198,17 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 
 		List<ThesaurusConcept> list = thesaurusConceptDAO
-				.getAllConceptsByThesaurusId(null, thesaurusId, null, false);
+				.getPaginatedConceptsByThesaurusId(0, 0, null, thesaurusId, null, false);
 		Assert.assertEquals(5, list.size());
 
 		List<ThesaurusConcept> listExclude = thesaurusConceptDAO
-				.getAllConceptsByThesaurusId(
+				.getPaginatedConceptsByThesaurusId(0, 0,
 						"http://www.culturecommunication.gouv.fr/co1",
 						thesaurusId, null, false);
 		Assert.assertEquals(4, listExclude.size());
 
 		List<ThesaurusConcept> listExcludeTopTerm = thesaurusConceptDAO
-				.getAllConceptsByThesaurusId(
+				.getPaginatedConceptsByThesaurusId(0, 0,
 						"http://www.culturecommunication.gouv.fr/co1",
 						thesaurusId, false, false);
 		Assert.assertEquals(1, listExcludeTopTerm.size());
@@ -253,7 +253,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 				.countConceptsAlignedToMyThes(thesaurusId);
 		Assert.assertEquals(1, nbConceptsAlignedToMyThes.longValue());
 	}
-	
+
 	@Test
 	public void testCountConceptsWoNotes(){
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
@@ -261,7 +261,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 				.countConceptsWoNotes(thesaurusId);
 		Assert.assertEquals(4, nbConceptsWoNotes.longValue());
 	}
-	
+
 	@Test
 	public void testGetConceptsWoNotes(){
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
@@ -272,8 +272,8 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 				.getConceptsWoNotes(thesaurusId, 0, 100);
 		Assert.assertEquals(4, conceptsWoNotes.size());
 	}
-	
-	@Test 
+
+	@Test
 	public void testGetConceptsAlignedToMyThes()
 	{
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
