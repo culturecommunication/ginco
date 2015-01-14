@@ -395,7 +395,7 @@ public class ThesaurusConceptRestService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getAvailableConceptsOfArray(
 			@QueryParam("start") Integer startIndex,
-            @QueryParam("limit") Integer limit,
+			@QueryParam("limit") Integer limit,
 			@QueryParam("arrayId") String arrayId,
 			@QueryParam("thesaurusId") String thesaurusId) {
 

@@ -96,24 +96,17 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      */
     List<ThesaurusConcept> getRootConcepts(String thesaurusId, Boolean searchOrphans);
 
-    /**
-     * Get list of paginated children concepts by id of parent Concept.
-     * @param conceptId
-     * @return list of children or all root concepts if conceptId is null.
-     */
-	List<ThesaurusConcept> getChildrenConcepts(Integer startIndex,
-			Integer limit, String conceptId);
-
 	/**
      * Get limited list of paginated children concepts by id of parent Concept.
      * @param conceptId
      * @return list of children or all root concepts if conceptId is null.
      */
-	List<ThesaurusConcept> getChildrenConcepts(String conceptId, Integer limit);
+	List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults);
 
-    /**
+	/**
      * Get paginated list of all concepts by id of Thesaurus, excluding given conceptId and
      * filtering by TopTerm property.
+     *
      * @param startIndex
      * @param limit
      * @param excludeConceptId
@@ -123,7 +116,26 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      */
 	List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(
 			Integer startIndex, Integer limit, String excludeConceptId,
-			String thesaurusId, Boolean searchOrphans, Boolean onlyValidatedConcepts);
+			String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts);
+
+
+	List<ThesaurusConcept> getPaginatedAvailableConceptsOfGroup(
+			Integer startIndex, Integer limit, String groupId,
+			String thesaurusId, Boolean onlyValidatedConcepts);
+
+    /**
+     * Get list of all concepts by id of Thesaurus, excluding given conceptId and
+     * filtering by TopTerm property.
+     *
+     * @param excludeConceptId
+     * @param thesaurusId
+     * @param searchOrphans could be null if doesn't matter.
+     * @return list of children or all root concepts if conceptId is null.
+     */
+	List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId,
+			String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts);
 
 	/**
 	 *

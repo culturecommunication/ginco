@@ -35,6 +35,8 @@
 package fr.mcc.ginco.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +61,6 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
@@ -256,8 +257,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	public List<ThesaurusConcept> getConceptsByThesaurusId(
 			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
 			Boolean onlyValidatedConcepts) {
-		return thesaurusConceptDAO.getPaginatedConceptsByThesaurusId(0, 0,
-				excludeConceptId, thesaurusId, searchOrphans,
+		return thesaurusConceptDAO.getConceptsByThesaurusId(excludeConceptId, thesaurusId, searchOrphans,
 				onlyValidatedConcepts);
 	}
 
@@ -559,12 +559,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId,
 			String thesaurusId) {
-		return getAvailableConceptsOfArray(0, 0, arrayId, thesaurusId);
-	}
-
-	@Override
-	public List<ThesaurusConcept> getAvailableConceptsOfArray(Integer startIndex, Integer limit, String arrayId,
-	                                                          String thesaurusId) {
 		ThesaurusArray currentArray = new ThesaurusArray();
 		List<ThesaurusConcept> returnAvailableConcepts = new ArrayList<ThesaurusConcept>();
 
@@ -582,8 +576,8 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 							currentArray.getIdentifier()
 					);
 			returnAvailableConcepts = thesaurusConceptDAO
-					.getChildrenConcepts(startIndex, limit, currentArray.getSuperOrdinateConcept()
-							.getIdentifier());
+					.getChildrenConcepts(currentArray.getSuperOrdinateConcept()
+							.getIdentifier(), 0);
 
 			for (ThesaurusArray thesaurusArray : arrayWithSameSuperOrdinate) {
 				Set<ThesaurusArrayConcept> conceptOfEachArray = thesaurusArray
@@ -609,9 +603,28 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 							.getConcepts());
 				}
 			}
-
 		}
 		return returnAvailableConcepts;
+	}
+
+	@Override
+	public List<ThesaurusConcept> getAvailableConceptsOfArray(Integer startIndex, Integer limit, String arrayId,
+	                                                          String thesaurusId) {
+		List<ThesaurusConcept> returnAvailableConcepts = getAvailableConceptsOfArray(arrayId, thesaurusId);
+		// Sort concepts by alphabetical order
+		Collections.sort(returnAvailableConcepts,
+				new Comparator<ThesaurusConcept>() {
+					public int compare(ThesaurusConcept c1, ThesaurusConcept c2) {
+						return getConceptLabel(c1.getIdentifier()).compareTo(
+								getConceptLabel(c2.getIdentifier()));
+					}
+				});
+		// Paginate concepts
+		Integer toIndex = startIndex + limit;
+		if (toIndex < returnAvailableConcepts.size()){
+			return returnAvailableConcepts.subList(startIndex, toIndex);
+		}
+		return returnAvailableConcepts.subList(startIndex, returnAvailableConcepts.size());
 	}
 
 	@Override
@@ -623,17 +636,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public List<ThesaurusConcept> getAvailableConceptsOfGroup(
 			Integer startIndex, Integer limit, String groupId, String thesaurusId) {
-		ThesaurusConceptGroup currentGroup = new ThesaurusConceptGroup();
-		List<ThesaurusConcept> availableConcepts = thesaurusConceptDAO
-				.getPaginatedConceptsByThesaurusId(startIndex, limit, null, thesaurusId, null, false);
-		if (StringUtils.isNotEmpty(groupId)) {
-			currentGroup = thesaurusConceptGroupDAO.getById(groupId);
-			Set<ThesaurusConcept> existedConcepts = currentGroup.getConcepts();
-			for (ThesaurusConcept concept : existedConcepts) {
-				availableConcepts.remove(concept);
-			}
-		}
-		return availableConcepts;
+		return thesaurusConceptDAO.getPaginatedAvailableConceptsOfGroup(startIndex, limit, groupId,
+				thesaurusId, false);
+
 	}
 
 	@Override

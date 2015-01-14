@@ -1,18 +1,18 @@
 package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusOrganization;
-import fr.mcc.ginco.dao.IThesaurusOrganizationDAO;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusOrganization;
+import fr.mcc.ginco.dao.IThesaurusOrganizationDAO;
 
 /**
  * DAO for Thesaurus organization

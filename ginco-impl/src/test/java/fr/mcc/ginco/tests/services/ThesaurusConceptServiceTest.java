@@ -484,38 +484,6 @@ public class ThesaurusConceptServiceTest {
 				new ArrayList<ThesaurusConcept>());
 	}
 
-
-	@Test
-	public final void testGetAvailableConceptsOfGroup(){
-
-		// Creation of concepts and group
-		ThesaurusConcept concept1 = new ThesaurusConcept();
-		concept1.setIdentifier("concept1");
-		ThesaurusConcept concept2 = new ThesaurusConcept();
-		concept2.setIdentifier("concept2");
-
-		List<ThesaurusConcept> fakeAvailableConcepts = new ArrayList<ThesaurusConcept>();
-		fakeAvailableConcepts.add(concept1);
-		fakeAvailableConcepts.add(concept2);
-
-		ThesaurusConceptGroup fakeCurrentGroup = new ThesaurusConceptGroup();
-		fakeCurrentGroup.setIdentifier("fakeCurrentGroup");
-		Set<ThesaurusConcept> existedConcepts = new HashSet<ThesaurusConcept>();
-		existedConcepts.add(concept1);
-		fakeCurrentGroup.setConcepts(existedConcepts);
-
-		List<ThesaurusConcept> resultAvailableConcepts = new ArrayList<ThesaurusConcept>();
-		resultAvailableConcepts.add(concept2);
-
-		// Mocks
-		when(thesaurusConceptDAO
-				.getPaginatedConceptsByThesaurusId(any(Integer.class), any(Integer.class), anyString(), anyString(), any(Boolean.class), any(Boolean.class))).thenReturn(fakeAvailableConcepts);
-		when(thesaurusConceptGroupDAO.getById(anyString())).thenReturn(fakeCurrentGroup);
-
-		fakeAvailableConcepts = thesaurusConceptService.getAvailableConceptsOfGroup ("fakeCurrentGroup", "fakeThesaurus");
-		Assert.assertEquals("The list with 'concept2' expected",fakeAvailableConcepts, resultAvailableConcepts);
-	}
-
 	@Test
 	public void testGetRecursiveParentsByConceptId() {
 		String conceptId1 = "http://c1";

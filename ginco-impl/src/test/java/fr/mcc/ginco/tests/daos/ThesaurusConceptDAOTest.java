@@ -39,14 +39,21 @@ import java.util.List;
 
 import junitx.framework.ListAssert;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.dao.hibernate.ThesaurusConceptDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class ThesaurusConceptDAOTest extends BaseDAOTest {
@@ -57,6 +64,8 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	public void handleSetUpOperation() throws Exception {
 		super.handleSetUpOperation();
 		thesaurusConceptDAO.setSessionFactory(getSessionFactory());
+		ReflectionTestUtils.setField(thesaurusConceptDAO, "defaultLang",
+				"fr-FR");
 	}
 
 	@Test
@@ -218,6 +227,28 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 						"http://www.culturecommunication.gouv.fr/co3",
 						thesaurusId, false, true);
 		Assert.assertEquals(1, listOnlyValidated.size());*/
+	}
+
+	@Test
+	public void testPaginatedConceptsByThesaurusId() {
+		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+
+		List<ThesaurusConcept> listMaxResults = thesaurusConceptDAO
+				.getPaginatedConceptsByThesaurusId(0, 3, null, thesaurusId, null, false);
+		Assert.assertEquals(3, listMaxResults.size());
+
+		List<ThesaurusConcept> listStartIndex = thesaurusConceptDAO
+				.getPaginatedConceptsByThesaurusId(1, 0, null, thesaurusId, null, false);
+		Assert.assertEquals(4, listStartIndex.size());
+	}
+
+	@Test
+	public void testAlphabeticalOrderConceptsByThesaurusId() {
+		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
+
+		List<ThesaurusConcept> list = thesaurusConceptDAO
+				.getPaginatedConceptsByThesaurusId(0, 0, null, thesaurusId, null, false);
+		Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list.get(0).getIdentifier());
 	}
 
 	/*

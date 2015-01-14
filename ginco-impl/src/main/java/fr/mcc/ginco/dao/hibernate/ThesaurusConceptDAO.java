@@ -34,22 +34,29 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.math.BigInteger;
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinType;
+import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigInteger;
-import java.util.List;
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -62,6 +69,9 @@ public class ThesaurusConceptDAO extends
 	private static final String AL_SOURCE_CONCEPT_IDENTIFIER = "al.sourceConcept.identifier";
 	private static final String TC_IDENTIFIER = "tc.identifier";
 	private static final String THESAURUS_IDENTIFIER = "thesaurus.identifier";
+
+	@Value("${ginco.default.language}")
+	private String defaultLang;
 
 	public ThesaurusConceptDAO() {
 		super(ThesaurusConcept.class);
@@ -116,7 +126,7 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getRootConcepts(String thesaurusId,
 	                                              Boolean searchOrphans) {
-		return getConcepts(0, 0, null, thesaurusId, searchOrphans);
+		return getConcepts(null, thesaurusId, searchOrphans, 0);
 	}
 
 	@Override
@@ -131,19 +141,12 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public List<ThesaurusConcept> getChildrenConcepts(Integer startIndex,
-			Integer limit, String conceptId) {
-		return getConcepts(startIndex, limit, conceptId, null, null);
+	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults) {
+		return getConcepts(conceptId, null, null, maxResults);
 	}
 
-	@Override
-	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, Integer limit) {
-		return getConcepts(0, limit, conceptId, null, null);
-	}
-
-	private List<ThesaurusConcept> getConcepts(Integer startIndex,
-			Integer limit, String conceptId, String thesaurusId,
-			Boolean searchOrphans) {
+	private List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId,
+			Boolean searchOrphans, int maxResults) {
 		Criteria criteria = getCurrentSession().createCriteria(
 				ThesaurusConcept.class, "tc");
 
@@ -158,15 +161,13 @@ public class ThesaurusConceptDAO extends
 		}
 
 		selectOrphans(criteria, searchOrphans);
-		if (limit > 0)
-			criteria.setMaxResults(limit);
-		criteria.setFirstResult(startIndex);
+		if (maxResults > 0)
+			criteria.setMaxResults(maxResults);
 		return criteria.list();
 	}
 
 	@Override
-	public List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(
-			Integer startIndex, Integer limit, String excludeConceptId,
+	public List<ThesaurusConcept> getConceptsByThesaurusId(String excludeConceptId,
 			String thesaurusId, Boolean searchOrphans,
 			Boolean onlyValidatedConcepts) {
 		Criteria criteria = getCurrentSession().createCriteria(
@@ -175,9 +176,41 @@ public class ThesaurusConceptDAO extends
 		selectOrphans(criteria, searchOrphans);
 		excludeConcept(criteria, excludeConceptId);
 		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
-		if (limit > 0)
-			criteria.setMaxResults(limit);
-		criteria.setFirstResult(startIndex);
+		return criteria.list();
+	}
+
+	@Override
+	public List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(
+			Integer startIndex, Integer limit, String excludeConceptId,
+			String thesaurusId, Boolean searchOrphans,
+			Boolean onlyValidatedConcepts) {
+
+		Criteria criteria = selectPaginatedConceptsByAlphabeticalOrder(startIndex, limit);
+
+		selectThesaurus(criteria, thesaurusId);
+		selectOrphans(criteria, searchOrphans);
+		excludeConcept(criteria, excludeConceptId);
+		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
+
+		return criteria.list();
+	}
+
+	@Override
+	public List<ThesaurusConcept> getPaginatedAvailableConceptsOfGroup(
+			Integer startIndex, Integer limit, String groupId,
+			String thesaurusId, Boolean onlyValidatedConcepts) {
+
+		DetachedCriteria dc = DetachedCriteria.forClass(ThesaurusConceptGroup.class, "gr");
+		dc.createCriteria("concepts", "tc", JoinType.RIGHT_OUTER_JOIN);
+		dc.setProjection(Projections.projectionList().add(Projections.property("tc.identifier")));
+		dc.add(Restrictions.eq("gr.identifier", groupId));
+
+		Criteria criteria = selectPaginatedConceptsByAlphabeticalOrder(startIndex, limit);
+		criteria.add(Subqueries.propertyNotIn("tc.identifier", dc));
+
+		selectThesaurus(criteria, thesaurusId);
+		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
+
 		return criteria.list();
 	}
 
@@ -204,6 +237,32 @@ public class ThesaurusConceptDAO extends
 				Restrictions.eq("rc.identifier", concept.getIdentifier()));
 		return criteria.list();
 
+	}
+
+	private Criteria selectPaginatedConceptsByAlphabeticalOrder(Integer startIndex,
+			Integer limit) {
+		Criteria criteria = getCurrentSession()
+				.createCriteria(ThesaurusTerm.class, "tt")
+				.add(Restrictions.isNotNull("tt.concept"))
+				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+
+		criteria.add(Restrictions.eq("tt.prefered", Boolean.TRUE));
+		criteria.add(Restrictions.eq("tt.language.id", defaultLang));
+
+		criteria.setProjection(
+				Projections
+						.projectionList()
+						.add(Projections.property("tt.lexicalValue"))
+						.add(Projections.property("tc.identifier").as(
+								"identifier"))).setResultTransformer(
+				Transformers.aliasToBean(ThesaurusConcept.class));
+
+		if (limit > 0) {
+			criteria.setMaxResults(limit);
+		}
+		criteria.setFirstResult(startIndex);
+		criteria.addOrder(Order.asc("tt.lexicalValue"));
+		return criteria;
 	}
 
 	/**

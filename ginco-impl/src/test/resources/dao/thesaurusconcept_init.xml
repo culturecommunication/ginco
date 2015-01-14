@@ -121,8 +121,8 @@
 		<column>thesaurusid</column>
 		<column>lang</column>
 		<row>
-			<value>http://www.culturecommunication.gouv.fr/ter1</value>
-			<value>yellow submarine</value>
+			<value>http://www.culturecommunication.gouv.fr/ter1_1</value>
+			<value>yellow submarine (song)</value>
 			<value>2013-02-05 15:29:59.66325</value>
 			<value>2013-02-05 15:29:59.66325</value>
 			<value>revolver</value>
@@ -131,21 +131,100 @@
             <null />
 			<value>http://www.culturecommunication.gouv.fr/co1</value>
 			<value>http://www.culturecommunication.gouv.fr/th1</value>
-			<value>eng</value>
+			<value>en-US</value>
 		</row>
-		  <row>
-            <value>http://www.culturecommunication.gouv.fr/ter2</value>
-            <value>yellow submarine</value>
-            <value>2013-02-05 15:29:59.66325</value>
-            <value>2013-02-05 15:29:59.66325</value>
-            <value>revolver</value>
-            <value>false</value>
-            <value>0</value>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter1_2</value>
+			<value>yellow submarine</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>true</value>
+			<value>0</value>
             <null />
-            <value>http://www.culturecommunication.gouv.fr/co3</value>
-            <value>http://www.culturecommunication.gouv.fr/th1</value>
-            <value>eng</value>
-        </row>
+			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>en-US</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter1_3</value>
+			<value>sous-marin jaune</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>true</value>
+			<value>0</value>
+            <null />
+			<value>http://www.culturecommunication.gouv.fr/co1</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>fr-FR</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter2_1</value>
+			<value>demain ne sait jamais</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>true</value>
+			<value>0</value>
+            <null />
+			<value>http://www.culturecommunication.gouv.fr/co2</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>fr-FR</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter2_1</value>
+			<value>édition demain ne sait jamais</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>true</value>
+			<value>0</value>
+            <null />
+			<value>http://www.culturecommunication.gouv.fr/co2_1</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>fr-FR</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter2_1</value>
+			<value>ringo starr</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>true</value>
+			<value>0</value>
+            <null />
+			<value>http://www.culturecommunication.gouv.fr/co2_2</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>fr-FR</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter3</value>
+			<value>eleanor rigby</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>revolver</value>
+			<value>true</value>
+			<value>0</value>
+            <null />
+			<value>http://www.culturecommunication.gouv.fr/co3</value>
+			<value>http://www.culturecommunication.gouv.fr/th1</value>
+			<value>fr-FR</value>
+		</row>
+		<row>
+			<value>http://www.culturecommunication.gouv.fr/ter5</value>
+			<value>black dog</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>2013-02-05 15:29:59.66325</value>
+			<value>Led Zeppelin IVr</value>
+			<value>true</value>
+			<value>0</value>
+            <null />
+			<value>http://www.culturecommunication.gouv.fr/co5</value>
+			<value>http://www.culturecommunication.gouv.fr/th2</value>
+			<value>fr-FR</value>
+		</row>
+
 	</table>
 
     <table name="hierarchical_relationship">
@@ -312,5 +391,23 @@
 			<null />
 			<value>http://t1</value>
 		</row>
+	</table>
+	<table name="languages_iso639">
+		<column>id</column>
+		<column>part1</column>
+		<column>ref_name</column>
+		<column>toplanguage</column>
+		<row>
+			<value>fr-FR</value>
+			<value>fr</value>
+			<value>French</value>
+			<value>true</value>
+		</row>
+		<row>
+            <value>en-US</value>
+            <value>en</value>
+            <value>English</value>
+            <value>true</value>
+        </row>
 	</table>
 </dataset>
