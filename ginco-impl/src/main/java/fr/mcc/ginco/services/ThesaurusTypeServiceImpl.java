@@ -35,6 +35,7 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,7 @@ public class ThesaurusTypeServiceImpl implements IThesaurusTypeService {
 	 */
 	@Override
 	public List<ThesaurusType> getThesaurusTypeList() {
-		return thesaurusTypeDAO.findAll();
+		return thesaurusTypeDAO.findAll("label", SortingTypes.asc);
 	}
 
 	/* (non-Javadoc)

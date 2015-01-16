@@ -46,30 +46,31 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.ThesaurusType;
+import fr.mcc.ginco.dao.IGenericDAO.SortingTypes;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.services.ThesaurusTypeServiceImpl;
 
-public class ThesaurusTypeServiceTest {	
-	
+public class ThesaurusTypeServiceTest {
+
 	@Mock
     private IThesaurusTypeDAO thesaurusTypeDAO;
-	
+
 	@InjectMocks
-	private ThesaurusTypeServiceImpl thesaurusTypeService;	
-	
+	private ThesaurusTypeServiceImpl thesaurusTypeService;
+
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
     public final void testGetThesaurusTypeList() {
 		List<ThesaurusType> allTypes = new ArrayList<ThesaurusType>();
 		ThesaurusType type = new ThesaurusType();
 		allTypes.add(type);
-		Mockito.when(thesaurusTypeDAO.findAll()).thenReturn(allTypes);
+		Mockito.when(thesaurusTypeDAO.findAll("label", SortingTypes.asc)).thenReturn(allTypes);
         List<ThesaurusType> actualResponse = thesaurusTypeService.getThesaurusTypeList();
 		Assert.assertEquals("Error fetching all ThesaurusType", 1, actualResponse.size());
-    }	
+    }
 
 }
