@@ -37,6 +37,7 @@ package fr.mcc.ginco.extjs.view.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -108,9 +109,12 @@ public class ChildrenGenerator {
 		for (ThesaurusConcept topTerm : children) {
 			ThesaurusListBasicNode childNode = thesaurusListNodeFactory
 					.getListBasicNode();
+			String uniqueSalt = "";
+			// This random id is for handling unicity on multiparent concept.
+			uniqueSalt=UUID.randomUUID().toString();
 			childNode.setTitle(thesaurusConceptService.getConceptLabel(topTerm
 					.getIdentifier()));
-			childNode.setId(ID_PREFIX + resultId + PARENT_SEPARATOR
+			childNode.setId(ID_PREFIX +uniqueSalt+"_"+ resultId + PARENT_SEPARATOR
 					+ topTerm.getIdentifier());
 			childNode.setType(ThesaurusListNodeType.CONCEPT);
 			childNode.setThesaurusId(topTerm.getThesaurusId());
