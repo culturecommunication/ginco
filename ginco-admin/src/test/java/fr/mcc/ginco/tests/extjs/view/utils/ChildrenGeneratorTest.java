@@ -122,11 +122,10 @@ public class ChildrenGeneratorTest {
 
         Assert.assertEquals("Number of children does not correspond!", 2, nodes.size());
         Assert.assertEquals("Title does not correspond!", "a", nodes.get(0).getTitle());
-        Assert.assertEquals("ID does not correspond!",
-                ChildrenGenerator.ID_PREFIX
-                        + "5"
+        Assert.assertTrue("ID does not correspond!",nodes.get(0).getId().endsWith(
+                 "5"
                         + ChildrenGenerator.PARENT_SEPARATOR
-                        + "co1" , nodes.get(0).getId());
+                        + "co1" ));
         Assert.assertEquals("Type does not correspond!", ThesaurusListNodeType.CONCEPT, nodes.get(0).getType());
         Assert.assertEquals("Thesaurus was badly recuperated!", thesaurus.getIdentifier(), nodes.get(0).getThesaurusId());
         Assert.assertTrue("Node should be leaf!", nodes.get(0).isLeaf());
@@ -186,11 +185,11 @@ public class ChildrenGeneratorTest {
 
         Assert.assertEquals("Number of children does not correspond!", 2, nodes.size());
         //Test alphabetical order
-        Assert.assertEquals("CONCEPT_5*co2", nodes.get(0).getId());
+        Assert.assertTrue(nodes.get(0).getId().endsWith("5*co2"));
 
         
         Assert.assertEquals("Title does not correspond!", "aaaa", nodes.get(0).getTitle());
-        Assert.assertEquals("ID does not correspond!", "CONCEPT_5*co2", nodes.get(0).getId());
+        Assert.assertTrue("ID does not correspond!", nodes.get(0).getId().endsWith("5*co2"));
         Assert.assertEquals("Type does not correspond!", ThesaurusListNodeType.CONCEPT, nodes.get(0).getType());
         Assert.assertEquals("Thesaurus was badly recuperated!", thesaurus.getIdentifier(), nodes.get(0).getThesaurusId());
         Assert.assertFalse("Node should not be leaf!", nodes.get(0).isLeaf());
