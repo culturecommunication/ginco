@@ -224,9 +224,9 @@ public class ThesaurusTermServiceImpl implements IThesaurusTermService {
 
 	@Override
 	public List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(
-			Integer startIndex, Integer limit, String idThesaurus) {
+			Integer startIndex, Integer limit, String idThesaurus,  Boolean onlyNotOrphanConcepts) {
 		return thesaurusTermDAO.findPaginatedPreferredItems(startIndex, limit,
-				idThesaurus);
+				idThesaurus,onlyNotOrphanConcepts);
 	}
 
 	@Transactional(readOnly = false)

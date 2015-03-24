@@ -152,7 +152,7 @@ public interface IThesaurusTermDAO extends IGenericDAO<ThesaurusTerm, String> {
 	 * specified Thesaurus
 	 */
 	List<ThesaurusTerm> findPaginatedPreferredItems(
-			Integer startIndex, Integer limit, String idThesaurus);
+			Integer startIndex, Integer limit, String idThesaurus, Boolean onlyNotOrphanConcepts);
 
 	/**
 	 * Returns the identifier of a concept by the term

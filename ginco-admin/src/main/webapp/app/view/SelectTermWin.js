@@ -47,6 +47,7 @@ Ext
 					gincoId : null,
 					onlyValidatedTerms : false,
 					existingPreferredTerms : false,
+					onlyNotOrphan : false,
 
 
 				    /*Fields prompting values*/
@@ -73,7 +74,7 @@ Ext
 							me.termStore = Ext.create('GincoApp.store.ThesaurusTermStore');
 						}
 						me.termStore.pageSize=20;
-						me.termStore.getProxy().extraParams = {onlyValidatedTerms: me.onlyValidatedTerms, existingPreferredTerms:me.existingPreferredTerms};
+						me.termStore.getProxy().extraParams = {onlyValidatedTerms: me.onlyValidatedTerms, existingPreferredTerms:me.existingPreferredTerms, onlyNotOrphanConcepts:me.onlyNotOrphan};
 						
 						Ext
 								.applyIf(

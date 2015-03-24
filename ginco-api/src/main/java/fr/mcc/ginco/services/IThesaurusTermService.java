@@ -71,7 +71,7 @@ public interface IThesaurusTermService {
 	 *
 	 * @return List of Thesaurus Terms (the number given in argument), from the start index
 	 */
-	List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(Integer startIndex, Integer limit, String idThesaurus);
+	List<ThesaurusTerm> getPaginatedThesaurusPreferredTermsList(Integer startIndex, Integer limit, String idThesaurus,  Boolean onlyNotOrphanConcepts);
 
 
 	/**

@@ -183,13 +183,14 @@ public class ThesaurusTermRestService {
 	public ExtJsonFormLoadData<List<ThesaurusTermView>>
 	getPreferredThesaurusTerms(@QueryParam("start") Integer startIndex,
 	                           @QueryParam("limit") Integer limit,
-	                           @QueryParam("idThesaurus") String idThesaurus) {
+	                           @QueryParam("idThesaurus") String idThesaurus,
+	                           @QueryParam("onlyNotOrphanConcepts") Boolean onlyNotOrphanConcepts) {
 
 		logger.info("Getting Thesaurus Preferred Terms with following parameters : "
 				+ "index start " + startIndex + " with a limit of " + limit);
 
 		List<ThesaurusTerm> thesaurusTerms;
-		thesaurusTerms = thesaurusTermService.getPaginatedThesaurusPreferredTermsList(startIndex, limit, idThesaurus);
+		thesaurusTerms = thesaurusTermService.getPaginatedThesaurusPreferredTermsList(startIndex, limit, idThesaurus, onlyNotOrphanConcepts);
 		Long total = thesaurusTermService.getPreferredTermsCount(idThesaurus);
 		List<ThesaurusTermView> results = new ArrayList<ThesaurusTermView>();
 		for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {

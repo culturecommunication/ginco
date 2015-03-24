@@ -194,7 +194,8 @@ Ext.define('GincoApp.controller.ComplexConceptPanelController', {
 		var thePanel = theButton.up('complexconceptPanel');
 		var win = Ext.create('GincoApp.view.SelectTermWin', {
 			onlyValidatedTerms : true,
-			existingPreferredTerms : true
+			existingPreferredTerms : true,
+			onlyNotOrphan : true
 		});
 		var theGrid = theButton.up('#gridPanelPreferredTerms');
 		win.conceptGrid = theGrid;

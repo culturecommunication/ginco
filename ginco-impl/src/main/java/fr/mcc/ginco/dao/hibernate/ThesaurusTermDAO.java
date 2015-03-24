@@ -43,9 +43,11 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusTermDAO;
 import fr.mcc.ginco.enums.TermStatusEnum;
@@ -316,13 +318,22 @@ public class ThesaurusTermDAO extends
 	 */
 	@Override
 	public List<ThesaurusTerm> findPaginatedPreferredItems(Integer startIndex,
-	                                                       Integer limit, String idThesaurus) {
-		Criteria criteria = getCurrentSession().createCriteria(ThesaurusTerm.class);
-		criteria.setMaxResults(limit)
-				.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+	                                                       Integer limit, String idThesaurus, Boolean onlyNotOrphanConcepts) {
+		
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusTerm.class,"tt");
+		if (onlyNotOrphanConcepts!=null && onlyNotOrphanConcepts==true)
+		{
+			criteria = criteria.createAlias("concept","tc")
+					.add(Restrictions.or(Restrictions.and(Restrictions.isNotNull("tc.parentConcepts"),
+					Restrictions.isNotEmpty("tc.parentConcepts")),
+					Restrictions.eq("tc.topConcept",  Boolean.TRUE)));
+		}
+		criteria.add(Restrictions.eq("tt.prefered", Boolean.TRUE));
+		criteria.add(Restrictions.eq(THESAURUS_IDENTIFIER, idThesaurus))
+				
 				.add(Restrictions.isNotNull(CONCEPT))
-				.add(Restrictions.eq(PREFERED, true))
 				.setFirstResult(startIndex).addOrder(Order.asc(LEXICAL_VALUE));
+		criteria = criteria.setMaxResults(limit);
 		return criteria.list();
 	}
 
