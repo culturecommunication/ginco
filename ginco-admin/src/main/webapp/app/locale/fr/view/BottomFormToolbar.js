@@ -34,6 +34,6 @@
  */
 
 Ext.define('GincoApp.locale.fr.view.BottomFormToolbar', {
-	xRequiredLabel : "les champs suffixés d'une astérisque <span class=\"mandatory-field\">*</span> sont obligatoires",
+	xRequiredLabel : "Les champs suffixés d'un astérisque <span class=\"mandatory-field\">*</span> sont obligatoires.",
     xArchivedLabel : "Ce thesaurus est archivé"
 });
