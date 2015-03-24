@@ -587,16 +587,24 @@ Ext.define('GincoApp.controller.ConceptController', {
 		childrenConceptsGridStore.removeAll();
 		childrenConceptsGridStore.add(children);
 		this.setupStoreListener(childrenGrid);
-
-		// Load alignments to the grid's store
-		conceptPanel.alignmentTypeStore.load(function () {
+		var loadAlignmentFunc = function () {
 			var alignments = aModel.alignments().getRange();
 			var alignmentsGrid = aForm.down('#gridPanelAlignments');
 			var alignmentsGridStore = alignmentsGrid.getStore();
 			alignmentsGridStore.removeAll();
 			alignmentsGridStore.add(alignments);
 			me.setupStoreListener(alignmentsGrid);
-		});
+		}
+
+		// Load alignments to the grid's store
+		if (conceptPanel.alignmentTypeStore.getCount()!=0) {
+			loadAlignmentFunc();
+		} else 
+		{
+			conceptPanel.alignmentTypeStore.load(function () {
+				loadAlignmentFunc();
+			});
+		}
 
 		var rootConceptsGrid = aForm.down('#gridPanelRootConcepts');
 		var rootConceptsGridStore = rootConceptsGrid.getStore();
@@ -839,8 +847,8 @@ Ext.define('GincoApp.controller.ConceptController', {
 						var resultRecord = operation.getResultSet().records[0];
 						me.saveCustomFieldAttributes(theForm, resultRecord
 										.get("identifier"));
-						me.loadData(theForm, resultRecord);
-						theForm.getEl().unmask();
+						//me.loadData(theForm, resultRecord);
+						//theForm.getEl().unmask();
 						Thesaurus.ext.utils.msg(me.xSucessLabel,
 								me.xSucessSavedMsg);
 						me.application.fireEvent('conceptupdated',

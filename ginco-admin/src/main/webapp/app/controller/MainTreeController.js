@@ -133,7 +133,8 @@ Ext.define('GincoApp.controller.MainTreeController', {
             }
 		}
 		var theFilterCombo = theTree.down('#authorFilter');
-		theFilterCombo.getStore().load();	
+		if (theFilterCombo.getStore().getCount()==0)
+			theFilterCombo.getStore().load();	
 		var MainTreeStore = this.getMainTreeStoreStore();
 		if (MainTreeStore.isLoading()==false) {
 			MainTreeStore.load({
