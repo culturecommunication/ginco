@@ -847,8 +847,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 						var resultRecord = operation.getResultSet().records[0];
 						me.saveCustomFieldAttributes(theForm, resultRecord
 										.get("identifier"));
-						//me.loadData(theForm, resultRecord);
-						//theForm.getEl().unmask();
+						thePanel.gincoId=resultRecord.get("identifier");
 						Thesaurus.ext.utils.msg(me.xSucessLabel,
 								me.xSucessSavedMsg);
 						me.application.fireEvent('conceptupdated',
