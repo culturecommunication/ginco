@@ -52,6 +52,7 @@ import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.solr.ISearcherService;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SolrField;
 import fr.mcc.ginco.solr.SortCriteria;
 
 /**
@@ -129,7 +130,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	                                                              int startIndex, int limit) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
-				String requestFormat = request + "*";
+				String requestFormat = SolrField.LEXICALVALUE+":"+request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(null, null);
 				SearchResultList searchResultList = searcherService.search(
@@ -159,7 +160,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	                                                                         int startIndex, int limit) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
-				String requestFormat = request + "*";
+				String requestFormat = SolrField.LEXICALVALUE+":"+request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(null, null);
 				SearchResultList searchResultList = searcherService.search(
