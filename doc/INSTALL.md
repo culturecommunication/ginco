@@ -312,6 +312,7 @@ Default values of ginco.properties
 #ARK Preferences
 application.ark.nma=http://data.culture.fr/thesaurus/resource
 application.ark.naan=67717
+application.ark.enabled=true
 
 #################################################
 # General configuration

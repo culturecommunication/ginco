@@ -26,11 +26,11 @@
 
     <beans:bean id="gincoUserDetailsContextMapper" class="fr.mcc.ginco.security.GincoUserDetailsContextMapper"/>
 
-    <ldap-server url="${ldap.base.provider.url}/o=gouv,c=fr"
+    <ldap-server url="${ldap.base.provider.url}"
                  manager-dn="${ldap.security.principal}" manager-password="${ldap.security.credentials}"/>
     <authentication-manager alias="authenticationManager" erase-credentials="false">
         <ldap-authentication-provider
-                user-search-base="ou=personnes" user-search-filter="uid={0}"
+                user-search-base="${ldap.user.base.dn}" user-search-filter="${ldap.auth.search.filter}"
                 user-context-mapper-ref="gincoUserDetailsContextMapper"/>
         <authentication-provider>
             <user-service>
