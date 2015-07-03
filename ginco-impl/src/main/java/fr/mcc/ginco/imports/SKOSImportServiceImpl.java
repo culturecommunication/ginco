@@ -69,6 +69,7 @@ import fr.mcc.ginco.audit.utils.AuditContext;
 import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusVersionHistory;
 import fr.mcc.ginco.dao.IThesaurusDAO;
 import fr.mcc.ginco.dao.IThesaurusVersionHistoryDAO;
@@ -107,6 +108,10 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 	@Inject
 	@Named("skosArraysBuilder")
 	private ThesaurusArraysBuilder arraysBuilder;
+	
+	@Inject
+	@Named("skosConceptGroupsBuilder")
+	private ThesaurusConceptGroupsBuilder conceptGroupsBuilder;
 	
 	@Inject
 	@Named("skosImportUtils")
@@ -170,8 +175,17 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 			conceptsBuilder.buildConceptsAssociations(thesaurus, skosConcepts, skosImportUtils.getBroaderTypeProperty(ontModel), skosImportUtils.getRelatedTypeProperty(ontModel));
 			conceptsBuilder.buildConceptsRoot(thesaurus, skosConcepts);
 			Map<String, ThesaurusArray> builtArrays = new HashMap<String, ThesaurusArray>();
-			arraysBuilder.buildArrays(thesaurus, model, builtArrays);
-			arraysBuilder.buildChildrenArrays(thesaurus, model, builtArrays);
+			
+			// TODO : on désactive l'import des ThesaurusArray pour l'instant, en considerant toutes les collections comme des ConceptGroups
+			// il faudrait voir precisement quelle logique mettre en place pour le traitement des collections SKOS
+			// l'idée serait de pouvoir identifier à partir de la structure du SKOS si la Collection doit être importée comme un ThesaurusArray
+			// ou comme un ConceptGroup
+//			arraysBuilder.buildArrays(thesaurus, model, builtArrays);
+//			arraysBuilder.buildChildrenArrays(thesaurus, model, builtArrays);
+			// now try to import Collections as ConceptGroups and not Thesaurus Arrays
+			Map<String, ThesaurusConceptGroup> builtGroups = new HashMap<String, ThesaurusConceptGroup>();
+			conceptGroupsBuilder.buildConceptGroups(thesaurus, model, builtGroups, builtArrays.keySet());
+			conceptGroupsBuilder.buildChildrenGroups(thesaurus, model, builtGroups);
 
 			res.put(thesaurus, bannedAlignments);
 

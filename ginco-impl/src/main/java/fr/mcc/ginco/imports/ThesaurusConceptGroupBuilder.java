@@ -34,36 +34,43 @@
  */
 package fr.mcc.ginco.imports;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusArray;
-import fr.mcc.ginco.beans.ThesaurusArrayConcept;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.dao.IThesaurusConceptDAO;
-import fr.mcc.ginco.skos.namespaces.SKOS;
-import fr.mcc.ginco.utils.ConceptHierarchyUtil;
-import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * builder in charge of building thesaurus arrays
- */
-@Service("skosArrayBuilder")
-public class ThesaurusArrayBuilder extends AbstractBuilder {
+import javax.inject.Inject;
 
+import org.springframework.stereotype.Service;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+
+import fr.mcc.ginco.beans.Thesaurus;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.ThesaurusConceptGroup;
+import fr.mcc.ginco.dao.IThesaurusConceptDAO;
+import fr.mcc.ginco.dao.IThesaurusConceptGroupTypeDAO;
+import fr.mcc.ginco.skos.namespaces.SKOS;
+
+/**
+ * builder in charge of building thesaurus concept groups
+ */
+@Service("skosConceptGroupBuilder")
+public class ThesaurusConceptGroupBuilder extends AbstractBuilder {
+
+	private static final String CONCEPT_GROUP_TYPE_DOMAIN = "D";
+	
 	@Inject
 	private IThesaurusConceptDAO thesaurusConceptDAO;
+	
+	@Inject
+	private IThesaurusConceptGroupTypeDAO thesaurusConceptGroupTypeDAO;
 
-	public ThesaurusArrayBuilder() {
+	public ThesaurusConceptGroupBuilder() {
 		super();
 	}
 
@@ -75,12 +82,17 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	 * @param thesaurus
 	 * @return
 	 */
-	public ThesaurusArray buildArray(Resource skosCollection, Model model,
-	                                 Thesaurus thesaurus, Map<String, ThesaurusArray> builtArrays) {
+	public ThesaurusConceptGroup buildConceptGroup(Resource skosCollection, Model model,
+	                                 Thesaurus thesaurus, Map<String, ThesaurusConceptGroup> builtConceptGroups) {
 
-		ThesaurusArray array = new ThesaurusArray();
-		array.setIdentifier(skosCollection.getURI());
-		array.setThesaurus(thesaurus);
+		ThesaurusConceptGroup group = new ThesaurusConceptGroup();
+		group.setIdentifier(skosCollection.getURI());
+		group.setThesaurus(thesaurus);
+		
+		// set the concept group type
+		group.setConceptGroupType(thesaurusConceptGroupTypeDAO.getById(CONCEPT_GROUP_TYPE_DOMAIN));
+		
+		// TODO : set the notation
 
 		StmtIterator stmtMembersItr = skosCollection
 				.listProperties(SKOS.MEMBER);
@@ -95,28 +107,11 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 				membersConcepts.add(memberConcept);
 			}
 		}
-		Set<ThesaurusArrayConcept> thesaurusArrayConcepts = new HashSet<ThesaurusArrayConcept>();
-		int i = 0;
-		for (ThesaurusConcept concept : membersConcepts) {
-			ThesaurusArrayConcept arrayConcept = new ThesaurusArrayConcept();
-			ThesaurusArrayConcept.Id arrayConceptId = new ThesaurusArrayConcept.Id();
-			arrayConceptId.setConceptId(concept.getIdentifier());
-			arrayConceptId.setThesaurusArrayId(skosCollection.getURI());
-			arrayConcept.setIdentifier(arrayConceptId);
-			arrayConcept.setConcepts(concept);
-			arrayConcept.setArrayOrder(i);
-			i++;
-			thesaurusArrayConcepts.add(arrayConcept);
-		}
-		array.setConcepts(thesaurusArrayConcepts);
 
-		// throws an exception if no common parent concept can be found
-		array.setSuperOrdinateConcept(ConceptHierarchyUtil.getSuperOrdinate(membersConcepts));
+		group.setConcepts(membersConcepts);
 
-		array.setOrdered(true);
-
-		builtArrays.put(skosCollection.getURI(), array);
-		return array;
+		builtConceptGroups.put(skosCollection.getURI(), group);
+		return group;
 	}
 
 	/**
@@ -126,23 +121,23 @@ public class ThesaurusArrayBuilder extends AbstractBuilder {
 	 * @param thesaurus
 	 * @return
 	 */
-	public List<ThesaurusArray> getChildrenArrays(Resource skosCollection,
-	                                              Thesaurus thesaurus, Map<String, ThesaurusArray> builtArrays) {
+	public List<ThesaurusConceptGroup> getChildrenGroups(Resource skosCollection,
+	                                              Thesaurus thesaurus, Map<String, ThesaurusConceptGroup> builtConceptGroups) {
 
 		StmtIterator stmtMembersItr = skosCollection
 				.listProperties(SKOS.MEMBER);
-		List<ThesaurusArray> membersArrays = new ArrayList<ThesaurusArray>();
+		List<ThesaurusConceptGroup> membersGroup = new ArrayList<ThesaurusConceptGroup>();
 		while (stmtMembersItr.hasNext()) {
 			Statement stmt = stmtMembersItr.next();
 			Resource memberRes = stmt.getObject().asResource();
-			String relatedURI = memberRes.getURI();
-			if (builtArrays.get(relatedURI) != null) {
-				ThesaurusArray memberArray = builtArrays.get(relatedURI);
-				memberArray.setParent(builtArrays.get(skosCollection.getURI()));
-				membersArrays.add(memberArray);
+			String childGroupURI = memberRes.getURI();
+			if (builtConceptGroups.get(childGroupURI) != null) {
+				ThesaurusConceptGroup memberGroup = builtConceptGroups.get(childGroupURI);
+				memberGroup.setParent(builtConceptGroups.get(skosCollection.getURI()));
+				membersGroup.add(memberGroup);
 			}
 		}
-		return membersArrays;
+		return membersGroup;
 	}
 
 }

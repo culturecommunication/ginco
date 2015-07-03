@@ -64,6 +64,7 @@ import fr.mcc.ginco.imports.SKOSImportServiceImpl;
 import fr.mcc.ginco.imports.SKOSImportUtils;
 import fr.mcc.ginco.imports.ThesaurusArraysBuilder;
 import fr.mcc.ginco.imports.ThesaurusBuilder;
+import fr.mcc.ginco.imports.ThesaurusConceptGroupsBuilder;
 
 
 public class SKOSImportServiceTest {
@@ -84,6 +85,9 @@ public class SKOSImportServiceTest {
 
 	@Mock(name = "skosArraysBuilder")
 	private ThesaurusArraysBuilder arraysBuilder;
+	
+	@Mock(name = "skosConceptGroupsBuilder")
+	private ThesaurusConceptGroupsBuilder conceptGroupsBuilder;
 	
 	@Mock(name = "skosImportUtils")
 	private SKOSImportUtils skosImportUtils;
