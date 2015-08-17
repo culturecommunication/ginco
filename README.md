@@ -70,7 +70,7 @@ GINCO is a tool dedicated to the management of vocabularies. The delivery platfo
 
 User documentation
 ------------------
-The first version of the user documentation is available [here] (http://culturecommunication.github.io/ginco/doc/* C2UvCE6Zk6gYAFEVT578Ub). Your feedback is welcome.
+The first version of the user documentation is available [here] (http://culturecommunication.github.io/ginco/doc/#C2UvCE6Zk6gYAFEVT578Ub). Your feedback is welcome.
 
 Installation
 ------------
