@@ -39,6 +39,7 @@ public class ReducedThesaurusTerm {
 	private String identifier;
 	private String lexicalValue;
 	private String languageId;
+	private String conceptId;
 	
 	public String getIdentifier() {
 		return identifier;
@@ -57,6 +58,12 @@ public class ReducedThesaurusTerm {
 	}
 	public void setLanguageId(String languageId) {
 		this.languageId = languageId;
+	}
+	public String getConceptId() {
+		return conceptId;
+	}
+	public void setConceptId(String conceptId) {
+		this.conceptId = conceptId;
 	}
 
 }

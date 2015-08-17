@@ -44,6 +44,7 @@ import javax.jws.WebService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -95,6 +96,10 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 							languageId);
 
 			if (thesaurusTerm != null) {
+				ThesaurusConcept termConcept = thesaurusTerm.getConcept();
+				if (termConcept != null) {
+					reducedThesaurusTerm.setConceptId(termConcept.getIdentifier());
+				}
 				reducedThesaurusTerm.setIdentifier(thesaurusTerm
 						.getIdentifier());
 				reducedThesaurusTerm.setLexicalValue(thesaurusTerm
@@ -130,7 +135,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	                                                              int startIndex, int limit) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
-				String requestFormat = SolrField.LEXICALVALUE+":"+request + "*";
+				String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(null, null);
 				SearchResultList searchResultList = searcherService.search(
@@ -139,6 +144,15 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				if (searchResultList != null) {
 					for (SearchResult searchResult : searchResultList) {
 						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+						ThesaurusTerm searchedTerm = thesaurusTermService.getThesaurusTermById(searchResult.getIdentifier());
+						if (searchedTerm != null)
+						{
+							ThesaurusConcept searchedConcept = searchedTerm.getConcept();
+							if (searchedConcept !=null)
+							{
+								reducedThesaurusTerm.setConceptId(searchedConcept.getIdentifier());
+							}
+						}
 						reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
 						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
 						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
@@ -160,7 +174,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	                                                                         int startIndex, int limit) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
-				String requestFormat = SolrField.LEXICALVALUE+":"+request + "*";
+				String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(null, null);
 				SearchResultList searchResultList = searcherService.search(
@@ -169,7 +183,17 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				if (searchResultList != null) {
 					for (SearchResult searchResult : searchResultList) {
 						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+						
 						reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
+						ThesaurusTerm searchedTerm = thesaurusTermService.getThesaurusTermById(searchResult.getIdentifier());
+						if (searchedTerm != null)
+						{
+							ThesaurusConcept searchedConcept = searchedTerm.getConcept();
+							if (searchedConcept !=null)
+							{
+								reducedThesaurusTerm.setConceptId(searchedConcept.getIdentifier());
+							}
+						}
 						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
 						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
 						reducedThesaurusTermList.add(reducedThesaurusTerm);
