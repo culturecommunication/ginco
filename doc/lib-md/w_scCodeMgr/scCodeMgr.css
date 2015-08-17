@@ -1,0 +1,23 @@
+/* ========== scCodeMgr structural CSS ========== */
+.scCodeHidden{
+	display:none;
+}
+.scCodeActive{
+	position:relative;
+}
+.scCodeActive .scCodeCode,
+.scCodeActive .scCodeRaw{
+	position:relative;
+	max-height:630px;
+	overflow:auto;
+	margin:0;
+}
+.scCodeRaw-invisible .scCodeRaw{
+	display:none;
+}
+.scCodeRaw-visible .scCodeCode{
+	display:none;
+}
+.scCodeWrap-on .scCodeCode pre{
+	white-space:  pre-wrap !important;
+}

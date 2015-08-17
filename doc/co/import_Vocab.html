@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+ <head>
+  <title>Import d'un vocabulaire complet</title>
+  <meta charset="UTF-8">
+  <meta name="keywords" content>
+  <link rel="stylesheet" type="text/css" href="../lib-md/w_scCodeMgr/scCodeMgr.css">
+  <link rel="stylesheet" type="text/css" href="../lib-md/w_scImgMgr/scImgMgr.css">
+  <script type="text/JavaScript">
+/*0*/ var scServices = {};
+/*1*/ window.scLoadParams = {destUri:"/co/import_Vocab.html", pathToRoot:"../"};
+</script>
+  <!--[if lt IE 9]><script type="text/JavaScript" src="../lib-md/w_html5shiv/html5shiv.js"></script><![endif]--><script type="text/JavaScript" src="../lib-sc/scCoLib.js"></script>
+  <script type="text/JavaScript" src="../lib-sc/scPaLib.js"></script>
+  <script type="text/JavaScript" src="../lib-sc/scTiLib.js"></script>
+  <script type="text/JavaScript" src="../lib-sc/scSiLib.js"></script>
+  <script type="text/JavaScript" src="../lib-sc/scTooltipMgr.js"></script>
+  <script type="text/JavaScript" src="../lib-sc/scDynUiMgr.js"></script>
+  <script type="text/JavaScript" src="../lib-md/w_tplMgr/tplMgr.js"></script>
+  <script type="text/JavaScript" src="../lib-md/s_scSearch/scSearch.js"></script>
+  <script type="text/JavaScript" src="../lib-md/w_treeMgr/treeMgr.js"></script>
+  <script type="text/JavaScript" src="../lib-md/w_scCodeMgr/scCodeMgr.js"></script>
+  <script type="text/JavaScript" src="../lib-md/w_scImgMgr/scImgMgr.js"></script>
+  <script type="text/JavaScript" src="../lib-md/w_dokielMgr/dokielMgr.js"></script>
+  <script type="text/JavaScript">
+scCodeMgr.registerCode("des:div.code");
+
+scImgMgr.registerAnimation("des:div.screenSeqFra",{auto:false,loop:false,counter:true});
+
+scImgMgr.registerZoom("des:a.imgZoom",{titlePath:"anc:.caption/des:.caption_ti"});
+
+scImgMgr.registerZoom("des:a.screenZoom",{mag:1,titlePath:"anc:.caption/des:.caption_ti"});
+
+scImgMgr.registerZoom("des:a.zoneZoom",{titlePath:"anc:.screenZone/des:.screenZone_ti"});
+
+scImgMgr.setDisplayRoot(window.parent.document.body);
+
+scImgMgr.setPathPgeFra("ide:page");
+
+</script>
+  <meta name="generator" content="SCENARI 4.2 / dokielRefDoc 4.2.019 - http://www.dokiel.fr">
+  <meta name="revision" content="2015-05-29 14:17">
+  <link rel="start" href="../index.html" title>
+  <link type="text/css" rel="stylesheet" href="../skin/page/css/main.css">
+  <link type="text/css" rel="stylesheet" href="../skin/page/css/skin.css">
+ </head>
+ <body>
+  <div id="page" class="tplPage"><div id="content"><div class="tplCoFra"><article class="headCo hBk section"><h1 class="headCo_ti hBk_ti"><span>Import d'un vocabulaire complet</span></h1><div class="headCo_co hBk_co "><div class="content "><section id="i7" class="stepList block"><h2 id="CRDK7X1MljjmkKDFdtRRl" class="stepList_ti block_ti"><span class="block_ti_co"><span class="blockType noIndex">Proc&eacute;dure</span><span class="blockTitle">Importer un vocabulaire</span></span><a class="blockAnchor" href="#CRDK7X1MljjmkKDFdtRRl" title="lier vers cette section"><span>⚓</span></a></h2><div class="stepList_co block_co"><div class="prereq "><div class="prereq_ti"><span>Pr&eacute;requis</span></div><div class="infoblock"><div class="infoblock_co"><div class="text "><p class="txt_p ">Vous avez enregistr&eacute;, sur votre disque dur, un vocabulaire (au format <a class="txt_web_ul " target="_blank" href="http://www.w3.org/2004/02/skos/" id="i8" title="SKOS - Simple Knowledge Organization System (nouvelle fen&ecirc;tre)"><span>SKOS</span></a><sup class="txt_web_ref tooltip_ref"><a href="#kFootBsktN55"><span>[</span>1<span>]</span></a></sup> ou au format XML GINCO (issu d'un <a class="txt_coLnk_ul " target="_self" href="export_Voca.html" title="Export d'un vocabulaire"><span><span class="sec_ico"></span>export de vocabulaire</span></a> depuis une application <span class="txt_vName_el ">Ginco</span>)).</p></div></div></div></div><div class="stepListPlayer"><ol class="steps"><li class="step"><div class="stepTitle "><p class="txt_p ">Cliquez sur le bouton  <code class="txt_textButton_tl ">Imports</code> du cadre <code class="txt_win_tl ">Administration</code>, en haut de l'application.</p></div><ol class="ssteps"><li class="sstep result"><div class="infoblock"><div class="infoblock_co"><div class="text "><p class="txt_p ">Un menu d&eacute;roulant s'affiche.</p></div></div></div></li></ol></li><li class="step"><div class="stepTitle "><p class="txt_p ">S&eacute;lectionnez le type de fichier (<code class="txt_menuPath_tl ">Import SKOS</code> ou <code class="txt_menuPath_tl ">Import XML GINCO</code>) que vous souhaitez importer.</p></div><ol class="ssteps"><li class="sstep result"><div class="infoblock"><div class="infoblock_co"><div class="text "><p class="txt_p ">La fen&ecirc;tre <code class="txt_win_tl ">Import</code> s'affiche.</p><div class="txt_fig_ex "><figure role="group" class="caption png"><div class="caption_co "><img src="../res/vocab_importXML.png" alt width="500" height="147"></div></figure></div></div></div></div></li></ol></li><li class="step"><div class="stepTitle "><p class="txt_p ">Cliquez sur le bouton <span class="txt_ico_tim "><img src="../res/selectFichier.png" alt width="23" height="22"></span> pour s&eacute;lectionner le fichier &agrave; importer.</p></div><ol class="ssteps"><li class="sstep result"><div class="infoblock"><div class="infoblock_co"><div class="text "><p class="txt_p ">Une fen&ecirc;tre d'exploration de votre disque dur s'affiche.</p></div></div></div></li></ol></li><li class="step"><div class="stepTitle "><p class="txt_p ">Parcourez votre espace de stockage jusqu'au fichier &agrave; importer et s&eacute;lectionnez-le par un double-clic.</p></div></li><li class="step"><div class="stepTitle "><p class="txt_p ">Cliquez sur le bouton <code class="txt_textButton_tl ">Importer</code> de la fen&ecirc;tre <code class="txt_win_tl ">Import</code>.</p></div></li><li class="result step"><div class="infoblock"><div class="infoblock_co"><div class="text "><p class="txt_p ">Le vocabulaire est import&eacute;. Un dossier correspondant &agrave; ce vocabulaire est automatiquement ajout&eacute; dans l'explorateur de vocabulaires <span class="txt_vName_el ">Ginco</span>.</p></div></div></div><div class="note block"><h3 id="Ax63Ks3HZ3c5u960GHVrFc" class="note_ti block_ti"><span class="block_ti_co"><span class="blockType noIndex">Remarque</span><span class="blockTitle">Remarque</span><a class="blockAnchor" href="#Ax63Ks3HZ3c5u960GHVrFc" title="lier vers cette section"><span>⚓</span></a></span></h3><div class="note_co block_co"><div class="text "><p class="txt_p ">En cas de probl&egrave;me lors de l'import, un message d'erreur s'affiche.</p><p class="txt_p ">Il peut s'agir d'un format de fichier non reconnu, d'un vocabulaire comportant des doublons, d'une langue inconnue qu'il faudra pr&eacute;alablement d&eacute;clarer dans le fichier de param&eacute;trage des langues,...</p></div></div></div></li></ol></div></div></section></div></div></article></div></div><aside class=" basket"><h1 class="basket_ti">R&eacute;f&eacute;rences</h1><ol class="basket_li" data-titled-basket="true"><li class="basket_it" id="kFootBsktN55"><div class="basket_itti">
+						
+							
+								
+									SKOS - Simple Knowledge Organization System
+								
+							
+						
+					</div><div class="basket_itco"></div></li></ol></aside></div>
+  <script type="text/javascript">tplMgr.init();dokielMgr.init();treeMgr.init();scCodeMgr.init();scImgMgr.init();scTooltipMgr.registerTooltip("i8","kFootBsktN55","onmouseover","txt_web tooltip","",{STICKY:true,MAXHEIGHT:400});</script>
+ </body>
+</html>

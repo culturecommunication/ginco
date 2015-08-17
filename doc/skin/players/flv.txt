@@ -1,0 +1,8 @@
+bgcolor1=267B94
+bgcolor2=006685
+playercolor=888888
+slidercolor1=267B94
+slidercolor2=006685
+buttonovercolor=006685
+sliderovercolor=006685
+

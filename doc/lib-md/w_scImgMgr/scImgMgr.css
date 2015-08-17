@@ -1,0 +1,134 @@
+/* ========== scImgMgr structural CSS ========== */
+
+/* ---------- gallery ---------- */
+.galFra{
+	position: relative;
+}
+.galPv{
+	float: left;
+	display: block;
+	text-align: center;
+	padding: 5px;
+}
+.galPvLnk {
+	display:block;
+	text-align: center;
+	vertical-align:middle;
+	width: 122px;
+	height: 82px;
+	text-decoration: none;
+	overflow: hidden;
+}
+.galPvLnk:hover {
+	text-decoration: none;
+}
+.galClr{
+	clear: both;
+}
+.scImgGalOver{
+	position: absolute;
+	top:0px;
+	left:0px;
+	z-index:2000;
+	width:100%;
+	height:100%;
+}
+.scImgGalCvs{
+	position: fixed;
+	top:50%;
+	left:50%;
+	z-index:2001;
+	width:720px;
+	height:550px;
+	margin: -275px 0px 0px -360px;
+	text-align: center;
+}
+.scImgGalFra{
+	position: absolute;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+}
+.scImgGalCo{
+	position: absolute;
+	width:700px;
+	height:500px;
+	top:10px;
+	left:10px;
+	list-style: none;
+	padding:0;
+	margin:0;
+}
+.scImgGalImgFra{
+	position: absolute;
+	width:700px;
+	height:500px;
+	top:0px;
+	left:0px;
+	overflow:hidden;
+	padding:0;
+	margin:0;
+}
+.scImgGalTbr{
+	position: absolute;
+	width:720px;
+	bottom:0px;
+	left:0px;
+	height: 40px;
+}
+.scImgGalTbr .scImgGalCount{
+	display:inline;
+	bottom:3px;
+	right: 50px;
+}
+
+/* ---------- zoom ---------- */
+.scImgZmOver{
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:2000;
+	width:100%;
+	height:100%;
+}
+.scImgZmCvs{
+	position:fixed;
+	top:5%;
+	left:5%;
+	z-index:2001;
+	width:90%;
+	height:90%;
+	overflow: hidden;
+}
+.scImgZmFra{
+}
+.scImgZmCo{
+	text-align: center;
+}
+.scImgZmCo div{
+	z-index: 2002;
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	border:0px;
+}
+.scImgZmCo iframe{
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	border:0px;
+}
+.scImgZmCo a{
+	text-decoration: none;
+}
+.scImgZmCo a img{
+	border:0px;
+}
+
+/* ---------- animation ---------- */
+
