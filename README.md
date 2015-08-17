@@ -33,6 +33,10 @@ GINCO est mis à la disposition des utilisateurs et des développeurs. Pour faci
 
 Le "[backlog] (https://www.pivotaltracker.com/s/projects/926794)" du projet suggère à la communauté des évolutions possibles de l'application.
 
+# Documentation utilsateurs
+
+La première version de la documentation utilisateurs est disponible [ici] (http://culturecommunication.github.io/ginco/doc/#C2UvCE6Zk6gYAFEVT578Ub). Les retours sont les bienvenus.
+
 
 
 What is GINCO ?
