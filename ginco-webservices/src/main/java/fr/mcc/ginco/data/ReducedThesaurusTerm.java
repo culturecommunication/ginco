@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.data;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class ReducedThesaurusTerm {
 	
 	private String identifier;
@@ -51,7 +53,7 @@ public class ReducedThesaurusTerm {
 		return lexicalValue;
 	}
 	public void setLexicalValue(String lexicalValue) {
-		this.lexicalValue = lexicalValue;
+		this.lexicalValue = StringEscapeUtils.unescapeXml(lexicalValue);
 	}
 	public String getLanguageId() {
 		return languageId;

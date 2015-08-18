@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.data;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class ReducedThesaurus {
 
 	private String identifier;
@@ -53,7 +55,7 @@ public class ReducedThesaurus {
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = StringEscapeUtils.unescapeXml(title);
 	}	
 	
 }

@@ -37,6 +37,8 @@ package fr.mcc.ginco.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  * POJO to return a full thesaurus informations when requesting for one thesaurus details
  */
@@ -66,7 +68,7 @@ public class FullThesaurus extends ReducedThesaurus {
 	}
 
 	public void setContributor(String contributor) {
-		this.contributor = contributor;
+		this.contributor = StringEscapeUtils.unescapeXml(contributor);
 	}
 
 	public String getCoverage() {
@@ -74,7 +76,7 @@ public class FullThesaurus extends ReducedThesaurus {
 	}
 
 	public void setCoverage(String coverage) {
-		this.coverage = coverage;
+		this.coverage = StringEscapeUtils.unescapeXml(coverage);
 	}
 
 	public String getModified() {
@@ -90,7 +92,7 @@ public class FullThesaurus extends ReducedThesaurus {
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		this.description = StringEscapeUtils.unescapeXml(description);
 	}
 
 	public String getPublisher() {
@@ -114,7 +116,7 @@ public class FullThesaurus extends ReducedThesaurus {
 	}
 
 	public void setRights(String rights) {
-		this.rights = rights;
+		this.rights = StringEscapeUtils.unescapeXml(rights);
 	}
 
 	public String getSource() {
@@ -122,7 +124,7 @@ public class FullThesaurus extends ReducedThesaurus {
 	}
 
 	public void setSource(String source) {
-		this.source = source;
+		this.source = StringEscapeUtils.unescapeXml(source);
 	}
 
 	public String getSubject() {
@@ -130,7 +132,7 @@ public class FullThesaurus extends ReducedThesaurus {
 	}
 
 	public void setSubject(String subject) {
-		this.subject = subject;
+		this.subject = StringEscapeUtils.unescapeXml(subject);
 	}
 
 	public String getCreated() {
