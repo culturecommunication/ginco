@@ -51,6 +51,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.solr.ISearcherService;
+import fr.mcc.ginco.solr.SearchEntityType;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
 import fr.mcc.ginco.solr.SolrField;
@@ -69,7 +70,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	@Inject
 	@Named("searcherService")
 	private ISearcherService searcherService;
-
+	
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
 	                                 String languageId) {
@@ -131,54 +132,26 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	}
 
 	@Override
-	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request,
+	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request, Boolean preferredTermOnly,
 	                                                              int startIndex, int limit) {
-		if (StringUtils.isNotEmpty(request) && limit != 0) {
-			try {
-				String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
-				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
-				SortCriteria crit = new SortCriteria(null, null);
-				SearchResultList searchResultList = searcherService.search(
-						requestFormat, 2, null, null, null, null, null, crit,
-						startIndex, limit);
-				if (searchResultList != null) {
-					for (SearchResult searchResult : searchResultList) {
-						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
-						ThesaurusTerm searchedTerm = thesaurusTermService.getThesaurusTermById(searchResult.getIdentifier());
-						if (searchedTerm != null)
-						{
-							ThesaurusConcept searchedConcept = searchedTerm.getConcept();
-							if (searchedConcept !=null)
-							{
-								reducedThesaurusTerm.setConceptId(searchedConcept.getIdentifier());
-							}
-						}
-						reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
-						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
-						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
-						reducedThesaurusTermList.add(reducedThesaurusTerm);
-					}
-				}
-				return reducedThesaurusTermList;
-			} catch (SolrServerException e) {
-				throw new TechnicalException("Search exception", e);
-			}
-		} else {
-			throw new BusinessException("One or more parameters are empty",
-					"empty-parameters");
-		}
+		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit);
 	}
 
 	@Override
-	public List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(String request, String thesaurusId,
+	public List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(String request, String thesaurusId, Boolean preferredTermOnly, 
 	                                                                         int startIndex, int limit) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
 				String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(null, null);
+				Integer searchType = SearchEntityType.TERM;
+				if (preferredTermOnly)
+				{
+					searchType = SearchEntityType.TERM_PREF;
+				}
 				SearchResultList searchResultList = searcherService.search(
-						requestFormat, 2, thesaurusId, null, null, null, null, crit,
+						requestFormat, searchType, thesaurusId, null, null, null, null, crit,
 						startIndex, limit);
 				if (searchResultList != null) {
 					for (SearchResult searchResult : searchResultList) {
