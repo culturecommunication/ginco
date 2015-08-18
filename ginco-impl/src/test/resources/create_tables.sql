@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS thesaurus_array;
 DROP TABLE IF EXISTS concept_group_label;
 DROP TABLE IF EXISTS concept_group_type;
 DROP TABLE IF EXISTS concept_group;
+DROP TABLE IF EXISTS concept_group_concepts;
 DROP TABLE IF EXISTS node_label;
 DROP TABLE IF EXISTS thesaurus_array_concept;
 DROP TABLE IF EXISTS revinfo;
@@ -144,6 +145,11 @@ CREATE TABLE thesaurus_term
   thesaurusid text NOT NULL,
   lang character varying(5) NOT NULL,
   hidden boolean DEFAULT false NOT NULL
+);
+
+CREATE TABLE concept_group_concepts (
+    conceptgroupid text NOT NULL,
+    conceptid text NOT NULL
 );
 
 CREATE TABLE hierarchical_relationship

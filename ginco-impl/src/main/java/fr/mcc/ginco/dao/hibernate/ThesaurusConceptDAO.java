@@ -205,10 +205,19 @@ public class ThesaurusConceptDAO extends
 		dc.setProjection(Projections.projectionList().add(Projections.property("tc.identifier")));
 		dc.add(Restrictions.eq("gr.identifier", groupId));
 
+
 		Criteria criteria = selectPaginatedConceptsByAlphabeticalOrder(startIndex, limit);
 		criteria.add(Subqueries.propertyNotIn("tc.identifier", dc));
 
 		selectThesaurus(criteria, thesaurusId);
+		criteria.add(
+				Restrictions.not(Restrictions.and(
+						Restrictions.eq("topConcept", false),
+						Restrictions.or(Restrictions.isNull("tc.parentConcepts"),
+								Restrictions.isEmpty("tc.parentConcepts"))
+				
+				)));
+
 		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
 
 		return criteria.list();

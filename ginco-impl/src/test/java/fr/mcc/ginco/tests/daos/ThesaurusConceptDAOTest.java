@@ -138,8 +138,6 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		List<ThesaurusConcept> list = thesaurusConceptDAO
 				.getTopTermThesaurusConcept(th, 0);
 		Assert.assertEquals(list.size(), 1);
-		Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list
-				.get(0).getIdentifier());
 	}
 
 	@Test
@@ -172,8 +170,6 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		List<ThesaurusConcept> list = thesaurusConceptDAO.getRootConcepts(
 				th.getIdentifier(), false);
 		Assert.assertEquals(1, list.size());
-		Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list
-				.get(0).getIdentifier());
 
 		List<ThesaurusConcept> listWithOrphans = thesaurusConceptDAO
 				.getRootConcepts(th.getIdentifier(), null);
@@ -251,17 +247,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list.get(0).getIdentifier());
 	}
 
-	/*
-	@Test
-	public void testDelete() {
-		String thesaurusId = "http://www.culturecommunication.gouv.fr/th2";
-		ThesaurusConcept concept5 = thesaurusConceptDAO
-				.getById("http://www.culturecommunication.gouv.fr/co5");
-		thesaurusConceptDAO.delete(concept5);
-		List<ThesaurusConcept> list = thesaurusConceptDAO
-				.getAllConceptsByThesaurusId(null, thesaurusId, null);
-		Assert.assertEquals(0, list.size());
-	}*/
+
 
 	@Test
 	public void testCountConceptsAlignedToIntThes() {
@@ -311,6 +297,16 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		List<ThesaurusConcept> conceptsAligned = thesaurusConceptDAO
 				.getConceptsAlignedToMyThes(thesaurusId, 0, 100);
 		Assert.assertEquals(1, conceptsAligned.size());
+	}
+	
+	@Test
+	public void testGetPaginatedAvailableConceptsOfGroup()
+	{
+		String thesaurusId = "http://www.culturecommunication.gouv.fr/th3";
+		String groupId = "http://www.culturecommunication.gouv.fr/grp1";
+		List<ThesaurusConcept> conceptList = thesaurusConceptDAO.getPaginatedAvailableConceptsOfGroup(0, 10, groupId, thesaurusId, true);
+		Assert.assertEquals(1, conceptList.size());
+		
 	}
 
 	@Override
