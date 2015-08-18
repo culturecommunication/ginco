@@ -33,7 +33,7 @@ GINCO est mis à la disposition des utilisateurs et des développeurs. Pour faci
 
 Le "[backlog] (https://www.pivotaltracker.com/s/projects/926794)" du projet suggère à la communauté des évolutions possibles de l'application.
 
-# Documentation utilsateurs
+# Documentation utilisateurs
 
 La première version de la documentation utilisateurs est disponible [ici] (http://culturecommunication.github.io/ginco/doc/#C2UvCE6Zk6gYAFEVT578Ub). Les retours sont les bienvenus.
 
@@ -67,6 +67,10 @@ From production to diffusion
 ----------------------------
 
 GINCO is a tool dedicated to the management of vocabularies. The delivery platform GINCO-DIFF is also available [here] (https://github.com/culturecommunication/ginco-diff). It allows to upload SKOS vocabularies and make them available according to the recommendations of the semantic web.
+
+User documentation
+------------------
+The first version of the user documentation is available [here] (http://culturecommunication.github.io/ginco/doc/#C2UvCE6Zk6gYAFEVT578Ub). Your feedback is welcome.
 
 Installation
 ------------
