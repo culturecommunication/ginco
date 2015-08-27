@@ -1,5 +1,5 @@
 GINCO
-=====
+======
 
 [English version see below] (#what-is-ginco-)
 
