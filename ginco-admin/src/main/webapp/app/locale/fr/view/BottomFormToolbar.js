@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright or © or Copr. Ministère Français chargé de la Culture
  * et de la Communication (2013)
  * <p/>
