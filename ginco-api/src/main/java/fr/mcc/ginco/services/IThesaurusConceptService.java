@@ -196,7 +196,7 @@ public interface IThesaurusConceptService {
 	List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(
 			Integer startIndex, Integer limit, String excludeConceptId,
 			String thesaurusId, Boolean searchOrphans,
-			Boolean onlyValidatedConcepts);
+			Boolean onlyValidatedConcepts, String like);
 
 	/**
 	 *

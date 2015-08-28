@@ -203,19 +203,19 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 
 		List<ThesaurusConcept> list = thesaurusConceptDAO
-				.getPaginatedConceptsByThesaurusId(0, 0, null, thesaurusId, null, false);
+				.getPaginatedConceptsByThesaurusId(0, 0, null, thesaurusId, null, false,null);
 		Assert.assertEquals(5, list.size());
 
 		List<ThesaurusConcept> listExclude = thesaurusConceptDAO
 				.getPaginatedConceptsByThesaurusId(0, 0,
 						"http://www.culturecommunication.gouv.fr/co1",
-						thesaurusId, null, false);
+						thesaurusId, null, false,null);
 		Assert.assertEquals(4, listExclude.size());
 
 		List<ThesaurusConcept> listExcludeTopTerm = thesaurusConceptDAO
 				.getPaginatedConceptsByThesaurusId(0, 0,
 						"http://www.culturecommunication.gouv.fr/co1",
-						thesaurusId, false, false);
+						thesaurusId, false, false,null);
 		Assert.assertEquals(1, listExcludeTopTerm.size());
 
 		/*List<ThesaurusConcept> listOnlyValidated = thesaurusConceptDAO
@@ -230,11 +230,11 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 
 		List<ThesaurusConcept> listMaxResults = thesaurusConceptDAO
-				.getPaginatedConceptsByThesaurusId(0, 3, null, thesaurusId, null, false);
+				.getPaginatedConceptsByThesaurusId(0, 3, null, thesaurusId, null, false,null);
 		Assert.assertEquals(3, listMaxResults.size());
 
 		List<ThesaurusConcept> listStartIndex = thesaurusConceptDAO
-				.getPaginatedConceptsByThesaurusId(1, 0, null, thesaurusId, null, false);
+				.getPaginatedConceptsByThesaurusId(1, 0, null, thesaurusId, null, false,null);
 		Assert.assertEquals(4, listStartIndex.size());
 	}
 
@@ -243,7 +243,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th1";
 
 		List<ThesaurusConcept> list = thesaurusConceptDAO
-				.getPaginatedConceptsByThesaurusId(0, 0, null, thesaurusId, null, false);
+				.getPaginatedConceptsByThesaurusId(0, 0, null, thesaurusId, null, false,null);
 		Assert.assertEquals("http://www.culturecommunication.gouv.fr/co2", list.get(0).getIdentifier());
 	}
 
