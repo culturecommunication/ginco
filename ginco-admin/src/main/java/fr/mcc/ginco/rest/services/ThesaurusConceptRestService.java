@@ -343,7 +343,7 @@ public class ThesaurusConceptRestService {
 		List<ThesaurusConcept> thesaurusConcepts = thesaurusConceptService
 				.getPaginatedConceptsByThesaurusId(startIndex, limit, conceptId, thesaurusId,
 						searchOrphanParam, onlyValidated,likeParam);
-		Long total = thesaurusConceptService.getConceptsByThesaurusIdCount(conceptId, thesaurusId, searchOrphanParam, onlyValidated);
+		Long total = thesaurusConceptService.getConceptsByThesaurusIdCount(conceptId, thesaurusId, searchOrphanParam, onlyValidated,likeParam);
 		List<ThesaurusConceptReducedView> results =thesaurusConceptViewConverter.convert(thesaurusConcepts);
 		ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> extConcepts = new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
 				results);

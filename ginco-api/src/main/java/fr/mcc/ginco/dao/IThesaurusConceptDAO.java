@@ -150,7 +150,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 	 */
 	Long getConceptsByThesaurusIdCount(
 			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
-			Boolean onlyValidatedConcepts);
+			Boolean onlyValidatedConcepts,String like);
 
     /**
      * Returns all children (recursive) from the given root

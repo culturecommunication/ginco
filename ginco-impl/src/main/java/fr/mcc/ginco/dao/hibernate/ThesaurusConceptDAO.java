@@ -228,14 +228,20 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public Long getConceptsByThesaurusIdCount(
 			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
-			Boolean onlyValidatedConcepts) {
-		Criteria criteria = getCurrentSession().createCriteria(
-				ThesaurusConcept.class, "tc");
+			Boolean onlyValidatedConcepts,String like) {
+		Criteria criteria = getCurrentSession()
+				.createCriteria(ThesaurusTerm.class, "tt")
+				.add(Restrictions.isNotNull("tt.concept"))
+				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
 
+		criteria.add(Restrictions.eq("tt.prefered", Boolean.TRUE));
+		criteria.add(Restrictions.eq("tt.language.id", defaultLang));
+		
 		selectThesaurus(criteria, thesaurusId);
 		selectOrphans(criteria, searchOrphans);
 		excludeConcept(criteria, excludeConceptId);
 		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
+		conceptNameIsLike(criteria,like);
 		criteria.setProjection(Projections.rowCount());
 		return (Long) criteria.list().get(0);
 	}

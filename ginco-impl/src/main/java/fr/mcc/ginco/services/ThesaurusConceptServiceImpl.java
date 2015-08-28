@@ -272,9 +272,9 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public Long getConceptsByThesaurusIdCount(String excludeConceptId, String thesaurusId, Boolean searchOrphans,
-			Boolean onlyValidatedConcepts) {
+			Boolean onlyValidatedConcepts,String like) {
 		return thesaurusConceptDAO.getConceptsByThesaurusIdCount(
-				excludeConceptId, thesaurusId, searchOrphans, onlyValidatedConcepts);
+				excludeConceptId, thesaurusId, searchOrphans, onlyValidatedConcepts,like);
 	}
 
 	@Override

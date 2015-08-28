@@ -211,7 +211,7 @@ public interface IThesaurusConceptService {
 	 */
 	Long getConceptsByThesaurusIdCount(String excludeConceptId,
 			String thesaurusId, Boolean searchOrphans,
-			Boolean onlyValidatedConcepts);
+			Boolean onlyValidatedConcepts,String like);
 
 	/**
 	 * Search concepts of thesaurus excluding given conceptId
