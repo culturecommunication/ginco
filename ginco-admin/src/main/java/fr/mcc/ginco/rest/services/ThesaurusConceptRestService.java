@@ -41,6 +41,7 @@ import java.util.MissingResourceException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -304,6 +305,8 @@ public class ThesaurusConceptRestService {
 	 * @param onlyValidatedConcepts
 	 * @return
 	 */
+	
+	
 	@GET
 	@Path("/getConcepts")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -313,7 +316,8 @@ public class ThesaurusConceptRestService {
 			@QueryParam("id") String conceptId,
 			@QueryParam("thesaurusId") String thesaurusId,
 			@QueryParam("searchOrphans") @Nullable String searchOrphans,
-			@QueryParam("onlyValidatedConcepts") @Nullable Boolean onlyValidatedConcepts) {
+			@QueryParam("onlyValidatedConcepts") @Nullable Boolean onlyValidatedConcepts,
+			@DefaultValue("") @QueryParam("like") @Nullable String like) {
 
 		Boolean searchOrphanParam;
 
@@ -330,10 +334,15 @@ public class ThesaurusConceptRestService {
 			// By default, if the value is not set, we return all concepts
 			onlyValidated = false;
 		}
+		
+		String likeParam = like;
+		if (like.isEmpty()){
+			likeParam = null;
+		}
 
 		List<ThesaurusConcept> thesaurusConcepts = thesaurusConceptService
 				.getPaginatedConceptsByThesaurusId(startIndex, limit, conceptId, thesaurusId,
-						searchOrphanParam, onlyValidated);
+						searchOrphanParam, onlyValidated,likeParam);
 		Long total = thesaurusConceptService.getConceptsByThesaurusIdCount(conceptId, thesaurusId, searchOrphanParam, onlyValidated);
 		List<ThesaurusConceptReducedView> results =thesaurusConceptViewConverter.convert(thesaurusConcepts);
 		ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> extConcepts = new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(

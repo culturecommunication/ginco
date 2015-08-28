@@ -57,6 +57,7 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -183,7 +184,7 @@ public class ThesaurusConceptDAO extends
 	public List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(
 			Integer startIndex, Integer limit, String excludeConceptId,
 			String thesaurusId, Boolean searchOrphans,
-			Boolean onlyValidatedConcepts) {
+			Boolean onlyValidatedConcepts,String like) {
 
 		Criteria criteria = selectPaginatedConceptsByAlphabeticalOrder(startIndex, limit);
 
@@ -191,6 +192,7 @@ public class ThesaurusConceptDAO extends
 		selectOrphans(criteria, searchOrphans);
 		excludeConcept(criteria, excludeConceptId);
 		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
+		conceptNameIsLike(criteria,like);
 
 		return criteria.list();
 	}
@@ -331,6 +333,14 @@ public class ThesaurusConceptDAO extends
 		if (onlyValidatedConcepts) {
 			criteria.add(Restrictions.eq("status",
 					ConceptStatusEnum.VALIDATED.getStatus()));
+		}
+	}
+	
+	private void conceptNameIsLike(Criteria criteria,String like) {
+		if (null == like) {
+			return;
+		}else {
+			criteria.add(Restrictions.like("tt.lexicalValue","%"+like+"%"));
 		}
 	}
 

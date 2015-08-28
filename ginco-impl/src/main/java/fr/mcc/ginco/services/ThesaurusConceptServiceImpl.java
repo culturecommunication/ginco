@@ -264,10 +264,10 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public List<ThesaurusConcept> getPaginatedConceptsByThesaurusId(Integer startIndex, Integer limit,
 			String excludeConceptId, String thesaurusId, Boolean searchOrphans,
-			Boolean onlyValidatedConcepts) {
+			Boolean onlyValidatedConcepts,String like) {
 		return thesaurusConceptDAO.getPaginatedConceptsByThesaurusId(startIndex, limit,
 				excludeConceptId, thesaurusId, searchOrphans,
-				onlyValidatedConcepts);
+				onlyValidatedConcepts,like);
 	}
 
 	@Override
