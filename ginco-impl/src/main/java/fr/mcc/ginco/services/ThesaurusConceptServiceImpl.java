@@ -203,7 +203,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	@Override
 	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, int maxResults) {
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
-		return thesaurusConceptDAO.getTopTermThesaurusConcept(thesaurus, maxResults);
+		return thesaurusConceptDAO.getTopTermThesaurusConcept(thesaurus, maxResults,null);
 	}
 
 	@Override
@@ -219,7 +219,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults) {
-		return thesaurusConceptDAO.getChildrenConcepts(conceptId, maxResults);
+		return thesaurusConceptDAO.getChildrenConcepts(conceptId, maxResults,null);
 	}
 
 	@Override
@@ -239,7 +239,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			String conceptId, String originalParentId,
 			List<ThesaurusConcept> allRecursiveChildren) {
 		List<ThesaurusConcept> childrenConcepts = thesaurusConceptDAO
-				.getChildrenConcepts(conceptId, 0);
+				.getChildrenConcepts(conceptId, 0,null);
 
 		for (ThesaurusConcept concept : childrenConcepts) {
 			if (concept.getIdentifier() != originalParentId) {
@@ -279,7 +279,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public boolean hasChildren(String conceptId) {
-		return (thesaurusConceptDAO.getChildrenConcepts(conceptId, 1).size() > 0);
+		return (thesaurusConceptDAO.getChildrenConcepts(conceptId, 1,null).size() > 0);
 	}
 
 	@Override
@@ -558,7 +558,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId,
-			String thesaurusId) {
+			String thesaurusId,String like) {
 		ThesaurusArray currentArray = new ThesaurusArray();
 		List<ThesaurusConcept> returnAvailableConcepts = new ArrayList<ThesaurusConcept>();
 
@@ -577,7 +577,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					);
 			returnAvailableConcepts = thesaurusConceptDAO
 					.getChildrenConcepts(currentArray.getSuperOrdinateConcept()
-							.getIdentifier(), 0);
+							.getIdentifier(), 0,like);
 
 			for (ThesaurusArray thesaurusArray : arrayWithSameSuperOrdinate) {
 				Set<ThesaurusArrayConcept> conceptOfEachArray = thesaurusArray
@@ -594,7 +594,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 					.getConceptSuperOrdinateArrays(null);
 			returnAvailableConcepts = thesaurusConceptDAO
 					.getTopTermThesaurusConcept(thesaurusDAO
-							.getById(thesaurusId), 0);
+							.getById(thesaurusId), 0,like);
 			for (ThesaurusArray thesaurusArray : arrayWithNoSuperOrdinate) {
 				Set<ThesaurusArrayConcept> conceptOfEachArrayWithoutSuperordinate = thesaurusArray
 						.getConcepts();
@@ -607,10 +607,11 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		return returnAvailableConcepts;
 	}
 
+	// TODO way
 	@Override
 	public List<ThesaurusConcept> getAvailableConceptsOfArray(Integer startIndex, Integer limit, String arrayId,
-	                                                          String thesaurusId) {
-		List<ThesaurusConcept> returnAvailableConcepts = getAvailableConceptsOfArray(arrayId, thesaurusId);
+	                                                          String thesaurusId,String like) {
+		List<ThesaurusConcept> returnAvailableConcepts = getAvailableConceptsOfArray(arrayId, thesaurusId,like);
 		// Sort concepts by alphabetical order
 		Collections.sort(returnAvailableConcepts,
 				new Comparator<ThesaurusConcept>() {
@@ -662,12 +663,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 				.getById(secondConceptId);
 
 		if (firstConcept != null && secondConcept != null) {
-			if (thesaurusConceptDAO.getChildrenConcepts(firstConceptId, 0)
+			if (thesaurusConceptDAO.getChildrenConcepts(firstConceptId, 0,null)
 					.contains(secondConcept)) {
 				return ConceptHierarchicalRelationsEnum.PARENT.getStatus();
 			}
 
-			if (thesaurusConceptDAO.getChildrenConcepts(secondConceptId, 0)
+			if (thesaurusConceptDAO.getChildrenConcepts(secondConceptId, 0,null)
 					.contains(firstConcept)) {
 				return ConceptHierarchicalRelationsEnum.CHILD.getStatus();
 			} else {

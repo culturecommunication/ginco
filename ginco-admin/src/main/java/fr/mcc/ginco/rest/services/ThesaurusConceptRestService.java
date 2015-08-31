@@ -406,17 +406,23 @@ public class ThesaurusConceptRestService {
 			@QueryParam("start") Integer startIndex,
 			@QueryParam("limit") Integer limit,
 			@QueryParam("arrayId") String arrayId,
-			@QueryParam("thesaurusId") String thesaurusId) {
+			@QueryParam("thesaurusId") String thesaurusId,
+			@DefaultValue("") @QueryParam("like") @Nullable String like) {
+		
+		String likeParam = like;
+		if (like.isEmpty()){
+			likeParam = null;
+		}
 
 		List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
 		List<ThesaurusConcept> children = thesaurusConceptService
-				.getAvailableConceptsOfArray(startIndex, limit, arrayId, thesaurusId);
+				.getAvailableConceptsOfArray(startIndex, limit, arrayId, thesaurusId,likeParam);
 		for (ThesaurusConcept child : children) {
 			reducedConcepts.add(thesaurusConceptViewConverter.convert(child));
 		}
 
 		Long total = new Long(thesaurusConceptService
-				.getAvailableConceptsOfArray(arrayId, thesaurusId).size());
+				.getAvailableConceptsOfArray(arrayId, thesaurusId,likeParam).size());
 		ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> extConcepts = new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
 				reducedConcepts);
 		extConcepts.setTotal(total);

@@ -69,7 +69,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param thesaurus object Thesaurus
      * @return
      */
-	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults);
+	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults,String like);
 
 
 	/**
@@ -101,7 +101,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @param conceptId
      * @return list of children or all root concepts if conceptId is null.
      */
-	List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults);
+	List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults,String like);
 
 	/**
      * Get paginated list of all concepts by id of Thesaurus, excluding given conceptId and

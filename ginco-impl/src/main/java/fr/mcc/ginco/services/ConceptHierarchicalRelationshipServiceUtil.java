@@ -126,7 +126,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		// Verify if the concept doesn't have one of its brothers as parent
 		for (String currentParentId : newParentConceptIds) {
 			List<String> childrenOfCurrentParentIds = ThesaurusConceptUtils
-					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId, 0));
+					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(currentParentId, 0,null));
 			List<String> commonIds = new ArrayList<String>(newParentConceptIds);
 			// Compare both lists and see which elements are in common.
 			// Those elements are both parents and brothers to the considered concept.
@@ -148,7 +148,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 		List<String> brotherIds = new ArrayList<String>();
 		for (ThesaurusConcept parentConcept : conceptToUpdate.getParentConcepts()) {
 			brotherIds.addAll(ThesaurusConceptUtils
-					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(parentConcept.getIdentifier(), 0)));
+					.getIdsFromConceptList(thesaurusConceptDAO.getChildrenConcepts(parentConcept.getIdentifier(), 0,null)));
 		}
 		// Verify if the concept doesn't have one of its brothers as child
 		for (String currentChildId : newChildConceptIds) {
@@ -255,7 +255,7 @@ public class ConceptHierarchicalRelationshipServiceUtil implements
 
 	public void calculateChildrenRoots(String parentId, String originalParentId) {
 		List<ThesaurusConcept> childrenConcepts = thesaurusConceptDAO
-				.getChildrenConcepts(parentId, 0);
+				.getChildrenConcepts(parentId, 0,null);
 		for (ThesaurusConcept concept : childrenConcepts) {
 			if (concept.getIdentifier() != originalParentId) {
 				logger.info("calculating root concept for chiled with concept Id : "

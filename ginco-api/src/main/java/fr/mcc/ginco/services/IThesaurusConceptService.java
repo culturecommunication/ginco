@@ -257,7 +257,7 @@ public interface IThesaurusConceptService {
 	 * @param thesaurusId
 	 * @return List of concepts eligible for an array
 	 */
-	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId, String thesaurusId);
+	List<ThesaurusConcept> getAvailableConceptsOfArray(String arrayId, String thesaurusId,String like);
 
 	/**
 	 * Get paginated concepts eligible for an array
@@ -269,7 +269,7 @@ public interface IThesaurusConceptService {
 	 * @return List of concepts eligible for an array
 	 */
 	List<ThesaurusConcept> getAvailableConceptsOfArray(Integer startIndex,
-			Integer limit, String arrayId, String thesaurusId);
+			Integer limit, String arrayId, String thesaurusId,String like);
 
 	/**
 	 * Get all concepts eligible for a group

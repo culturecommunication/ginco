@@ -86,7 +86,7 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getOrphansThesaurusConcept(
 			Thesaurus thesaurus, int maxResults) {
-		return getListByThesaurusAndTopConcept(thesaurus, false, maxResults);
+		return getListByThesaurusAndTopConcept(thesaurus, false, maxResults,null);
 	}
 
 	/*
@@ -108,8 +108,8 @@ public class ThesaurusConceptDAO extends
 	 */
 	@Override
 	public List<ThesaurusConcept> getTopTermThesaurusConcept(
-			Thesaurus thesaurus, int maxResults) {
-		return getListByThesaurusAndTopConcept(thesaurus, true, maxResults);
+			Thesaurus thesaurus, int maxResults,String like) {
+		return getListByThesaurusAndTopConcept(thesaurus, true, maxResults,like);
 	}
 
 	/*
@@ -127,7 +127,7 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getRootConcepts(String thesaurusId,
 	                                              Boolean searchOrphans) {
-		return getConcepts(null, thesaurusId, searchOrphans, 0);
+		return getConcepts(null, thesaurusId, searchOrphans, 0,null);
 	}
 
 	@Override
@@ -142,15 +142,31 @@ public class ThesaurusConceptDAO extends
 	}
 
 	@Override
-	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults) {
-		return getConcepts(conceptId, null, null, maxResults);
+	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults,String like) {
+		return getConcepts(conceptId, null, null, maxResults,like);
 	}
 
 	private List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId,
-			Boolean searchOrphans, int maxResults) {
-		Criteria criteria = getCurrentSession().createCriteria(
-				ThesaurusConcept.class, "tc");
-
+			Boolean searchOrphans, int maxResults,String like) {
+		
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
+		
+		if(null != like){
+			criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
+					.add(Restrictions.isNotNull("tt.concept"))
+					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+					
+					criteria.setProjection(
+							Projections
+									.projectionList()
+									.add(Projections.property("tt.lexicalValue"))
+									.add(Projections.property("tc.identifier").as(
+											"identifier"))).setResultTransformer(
+							Transformers.aliasToBean(ThesaurusConcept.class));
+			conceptNameIsLike(criteria,like);
+		}
+		
+		//TODO
 		if ((conceptId != null && !conceptId.isEmpty())
 				&& (thesaurusId != null && !thesaurusId.isEmpty())) {
 			selectRoot(criteria, thesaurusId, conceptId);
@@ -159,6 +175,10 @@ public class ThesaurusConceptDAO extends
 		} else {
 			criteria.createCriteria("tc.parentConcepts", "pc").add(
 					Restrictions.eq("pc.identifier", conceptId));
+		}
+		
+		if(null != like){
+			conceptNameIsLike(criteria,like);
 		}
 
 		selectOrphans(criteria, searchOrphans);
@@ -351,14 +371,13 @@ public class ThesaurusConceptDAO extends
 	}
 
 	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
-			Thesaurus thesaurus, boolean topConcept, int maxResults) {
+			Thesaurus thesaurus, boolean topConcept, int maxResults,String like) {
 
 		if (thesaurus == null) {
 			throw new BusinessException("Object thesaurus can't be null !",
 					"empty-thesaurus");
 		}
-		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
-				topConcept);
+		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,topConcept,like);
 		if (maxResults > 0) {
 			crit.setMaxResults(maxResults);
 		}
@@ -373,15 +392,29 @@ public class ThesaurusConceptDAO extends
 					"empty-thesaurus");
 		}
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
-				topConcept).setProjection(Projections.rowCount());
+				topConcept,null).setProjection(Projections.rowCount());
 		return (Long) crit.list().get(0);
 	}
 
 	private Criteria getCriteriaByThesaurusAndTopConcept(Thesaurus thesaurus,
-	                                                     boolean topConcept) {
-
-		Criteria criteria = getCurrentSession().createCriteria(
-				ThesaurusConcept.class, "tc");
+	                                                     boolean topConcept,String like) {
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
+		
+		if(null != like){
+			criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
+					.add(Restrictions.isNotNull("tt.concept"))
+					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+					
+					criteria.setProjection(
+							Projections
+									.projectionList()
+									.add(Projections.property("tt.lexicalValue"))
+									.add(Projections.property("tc.identifier").as(
+											"identifier"))).setResultTransformer(
+							Transformers.aliasToBean(ThesaurusConcept.class));
+			conceptNameIsLike(criteria,like);
+		}
+		
 		selectThesaurus(criteria, thesaurus.getIdentifier());
 		selectOrphans(criteria, !topConcept);
 		selectNoParents(criteria);
