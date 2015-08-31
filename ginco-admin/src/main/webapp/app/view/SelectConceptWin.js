@@ -139,6 +139,7 @@ Ext
 															}
 														}
 													},
+													{ xtype: 'tbseparator' },
 													{
 											            xtype    : 'textfield',
 											            name: 'conceptNameLike',
