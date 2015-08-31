@@ -54,7 +54,7 @@ Ext
 						searchOrphans : null,
 						showTree : false,
 						checkstore : null,
-						onlyValidatedConcepts : false
+						onlyValidatedConcepts : false,
 					},
 
 					viewConfig : {
@@ -81,36 +81,7 @@ Ext
 
 						me.conceptReducedStore = Ext.create('GincoApp.store.ConceptReducedStore');
 
-						if (!me.getChildren && !me.getArrayConcepts && !me.getGroupConcepts) {
-							// Searching all concepts in the thesaurus
-							me.conceptReducedStore.getProxy().extraParams = {
-								id : me.conceptId,
-								thesaurusId : me.thesaurusData.id,
-								searchOrphans : me.searchOrphans,
-								onlyValidatedConcepts: me.onlyValidatedConcepts
-							};
-						} else if(me.getArrayConcepts) {
-							// Searching only the children concepts of a concept
-							// which id is defined in conceptId variable
-							me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getAvailableConceptsOfArray';
-							me.conceptReducedStore.getProxy().extraParams = {
-								arrayId : me.arrayId,
-								thesaurusId : me.thesaurusData.id
-							};
-						} else if (me.getGroupConcepts){
-							me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getAvailableConceptsOfGroup';
-							me.conceptReducedStore.getProxy().extraParams = {
-								groupId : me.groupId,
-								thesaurusId : me.thesaurusData.id
-							};
-						} else {
-							// Searching only the children concepts of a concept
-							// which id is defined in conceptId variable
-							me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
-							me.conceptReducedStore.getProxy().extraParams = {
-								conceptId : me.conceptId
-							};
-						}
+						me = defineCase(me,'');
 
 						me.conceptReducedStore.pageSize = 20;
 						me.conceptReducedStore.load();
@@ -121,7 +92,7 @@ Ext
 								.applyIf(
 										me,
 										{
-											items : [ {
+											items : [{
 												xtype : 'gridpanel',
 												autoScroll : true,
 												flex : 1,
@@ -167,7 +138,28 @@ Ext
 																me.close();
 															}
 														}
-													} ]
+													},
+													{
+											            xtype    : 'textfield',
+											            name: 'conceptNameLike',
+											            emptyText: 'affiner votre recherche',
+										                allowBlank: true,
+										                id : 'conceptNameLikeField',
+										                listeners: {
+										                    change : {
+										                        fn: function(){ 
+										                        	var conceptNameLike = Ext.getCmp('conceptNameLikeField').getValue();
+										                        	
+										                        	me = defineCase(me,conceptNameLike);
+										                        	
+										                        	me.conceptReducedStore.pageSize = 20;
+										                        	me.conceptReducedStore.currentPage = 1;
+										    						me.conceptReducedStore.load();
+										                        }
+										                    }
+										                }
+											        }
+													]
 												} ],
 												listeners : {
 													select : function(view,
@@ -203,3 +195,43 @@ Ext
 						me.callParent(arguments);
 					}
 				});
+
+
+function defineCase(me,conceptNameLike) {
+	if (!me.getChildren && !me.getArrayConcepts && !me.getGroupConcepts) {
+		// Searching all concepts in the thesaurus
+		me.conceptReducedStore.getProxy().extraParams = {
+			like : conceptNameLike,
+			id : me.conceptId,
+			thesaurusId : me.thesaurusData.id,
+			searchOrphans : me.searchOrphans,
+			onlyValidatedConcepts: me.onlyValidatedConcepts
+		};
+	} else if(me.getArrayConcepts) {
+		// Searching only the children concepts of a concept
+		// which id is defined in conceptId variable
+		me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getAvailableConceptsOfArray';
+		me.conceptReducedStore.getProxy().extraParams = {
+			like : conceptNameLike,
+			arrayId : me.arrayId,
+			thesaurusId : me.thesaurusData.id
+		};
+	} else if (me.getGroupConcepts){
+		me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getAvailableConceptsOfGroup';
+		me.conceptReducedStore.getProxy().extraParams = {
+			like : conceptNameLike,
+			groupId : me.groupId,
+			thesaurusId : me.thesaurusData.id
+		};
+	} else {
+		// Searching only the children concepts of a concept
+		// which id is defined in conceptId variable
+		me.conceptReducedStore.getProxy().url = 'services/ui/thesaurusconceptservice/getSimpleChildrenConcepts';
+		me.conceptReducedStore.getProxy().extraParams = {
+			like : conceptNameLike,
+			conceptId : me.conceptId
+		};
+	}
+	return me;
+}
+
