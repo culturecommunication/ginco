@@ -97,7 +97,7 @@ public class ChildrenGenerator {
 				conceptTopTermId.length());
 
 		List<ThesaurusConcept> children = thesaurusConceptService
-				.getChildrenByConceptId(resultId, maxResults + 1);
+				.getChildrenByConceptId(resultId, maxResults + 1,null);
 		logger.debug(children.size() + " children found");
 		Boolean hasTooMany = false;
 		if (children.size() > maxResults) {

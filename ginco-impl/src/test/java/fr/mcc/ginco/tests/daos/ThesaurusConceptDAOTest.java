@@ -304,7 +304,7 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 	{
 		String thesaurusId = "http://www.culturecommunication.gouv.fr/th3";
 		String groupId = "http://www.culturecommunication.gouv.fr/grp1";
-		List<ThesaurusConcept> conceptList = thesaurusConceptDAO.getPaginatedAvailableConceptsOfGroup(0, 10, groupId, thesaurusId, true);
+		List<ThesaurusConcept> conceptList = thesaurusConceptDAO.getPaginatedAvailableConceptsOfGroup(0, 10, groupId, thesaurusId, true,null);
 		Assert.assertEquals(1, conceptList.size());
 		
 	}

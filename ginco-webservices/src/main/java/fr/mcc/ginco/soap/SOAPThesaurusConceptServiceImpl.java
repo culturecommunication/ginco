@@ -139,7 +139,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			List<String> results = new ArrayList<String>();
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null) {
-				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId);
+				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId,null);
 				for (ThesaurusConcept conceptChild : thesaurusConceptList) {
 					results.add(conceptChild.getIdentifier());
 				}

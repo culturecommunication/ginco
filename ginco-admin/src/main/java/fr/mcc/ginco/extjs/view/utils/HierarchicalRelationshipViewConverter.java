@@ -94,7 +94,7 @@ public class HierarchicalRelationshipViewConverter {
 	public List<HierarchicalRelationshipView> getChildrenViews(ThesaurusConcept concept) {
 		List<HierarchicalRelationshipView> result = new ArrayList<HierarchicalRelationshipView>();
 		if (concept != null) {
-			List<ThesaurusConcept> children = thesaurusConceptService.getChildrenByConceptId(concept.getIdentifier());
+			List<ThesaurusConcept> children = thesaurusConceptService.getChildrenByConceptId(concept.getIdentifier(),null);
 
 			if (children != null) {
 				for (ThesaurusConcept thesaurusConcept : children) {

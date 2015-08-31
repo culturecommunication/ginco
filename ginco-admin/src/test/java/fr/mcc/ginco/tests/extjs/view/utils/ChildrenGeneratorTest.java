@@ -97,7 +97,7 @@ public class ChildrenGeneratorTest {
 
         Mockito.when(
                 thesaurusConceptService
-                        .getChildrenByConceptId(Matchers.anyString(), Matchers.eq(5001)))
+                        .getChildrenByConceptId(Matchers.anyString(), Matchers.eq(5001),null))
                 .thenReturn(children);
         
         Mockito.when(
@@ -151,7 +151,7 @@ public class ChildrenGeneratorTest {
 
         Mockito.when(
                 thesaurusConceptService
-                        .getChildrenByConceptId(Matchers.anyString(),Matchers.eq(5001)))
+                        .getChildrenByConceptId(Matchers.anyString(),Matchers.eq(5001),null))
                 .thenReturn(children);
         
         Mockito.when(

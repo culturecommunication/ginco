@@ -152,6 +152,7 @@ public class ThesaurusConceptDAO extends
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
 		if(null != like){
+			//override previous criteria
 			criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
 					.add(Restrictions.isNotNull("tt.concept"))
 					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
@@ -166,7 +167,6 @@ public class ThesaurusConceptDAO extends
 			conceptNameIsLike(criteria,like);
 		}
 		
-		//TODO
 		if ((conceptId != null && !conceptId.isEmpty())
 				&& (thesaurusId != null && !thesaurusId.isEmpty())) {
 			selectRoot(criteria, thesaurusId, conceptId);
@@ -175,10 +175,6 @@ public class ThesaurusConceptDAO extends
 		} else {
 			criteria.createCriteria("tc.parentConcepts", "pc").add(
 					Restrictions.eq("pc.identifier", conceptId));
-		}
-		
-		if(null != like){
-			conceptNameIsLike(criteria,like);
 		}
 
 		selectOrphans(criteria, searchOrphans);
@@ -220,17 +216,17 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getPaginatedAvailableConceptsOfGroup(
 			Integer startIndex, Integer limit, String groupId,
-			String thesaurusId, Boolean onlyValidatedConcepts) {
+			String thesaurusId, Boolean onlyValidatedConcepts,String like) {
 
 		DetachedCriteria dc = DetachedCriteria.forClass(ThesaurusConceptGroup.class, "gr");
 		dc.createCriteria("concepts", "tc", JoinType.RIGHT_OUTER_JOIN);
 		dc.setProjection(Projections.projectionList().add(Projections.property("tc.identifier")));
 		dc.add(Restrictions.eq("gr.identifier", groupId));
 
-
+		
 		Criteria criteria = selectPaginatedConceptsByAlphabeticalOrder(startIndex, limit);
 		criteria.add(Subqueries.propertyNotIn("tc.identifier", dc));
-
+		
 		selectThesaurus(criteria, thesaurusId);
 		criteria.add(
 				Restrictions.not(Restrictions.and(
@@ -240,6 +236,9 @@ public class ThesaurusConceptDAO extends
 				
 				)));
 
+		if(null != like){
+			conceptNameIsLike(criteria,like);
+		}
 		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
 
 		return criteria.list();
@@ -366,7 +365,7 @@ public class ThesaurusConceptDAO extends
 		if (null == like) {
 			return;
 		}else {
-			criteria.add(Restrictions.like("tt.lexicalValue","%"+like+"%"));
+			criteria.add(Restrictions.ilike("tt.lexicalValue","%"+like+"%"));
 		}
 	}
 

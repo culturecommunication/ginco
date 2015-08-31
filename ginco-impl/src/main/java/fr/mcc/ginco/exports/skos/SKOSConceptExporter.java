@@ -125,7 +125,7 @@ public class SKOSConceptExporter {
 
 		if (thesaurusConceptService.hasChildren(concept.getIdentifier())) {
 			for (ThesaurusConcept child : thesaurusConceptService
-					.getChildrenByConceptId(concept.getIdentifier())) {
+					.getChildrenByConceptId(concept.getIdentifier(),null)) {
 
 				exportConceptSKOS(child, concept, model, ontModel);
 

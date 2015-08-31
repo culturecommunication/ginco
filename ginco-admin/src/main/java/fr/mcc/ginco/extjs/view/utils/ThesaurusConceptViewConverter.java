@@ -255,7 +255,7 @@ public class ThesaurusConceptViewConverter {
 	 */
 	public List<ThesaurusConcept> convertAddedChildren(ThesaurusConceptView conceptView) {
 		List<ThesaurusConcept> addedChildren = new ArrayList<ThesaurusConcept>();
-		Set<ThesaurusConcept> oldChildren = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(conceptView.getIdentifier()));
+		Set<ThesaurusConcept> oldChildren = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(conceptView.getIdentifier(),null));
 		List<String> oldChildrenIds = getIdsFromConceptList(oldChildren);
 
 		List<String> newChildrenIds = new ArrayList<String>();
@@ -284,7 +284,7 @@ public class ThesaurusConceptViewConverter {
 	 */
 	public List<ThesaurusConcept> convertRemovedChildren(ThesaurusConceptView conceptView) {
 		List<ThesaurusConcept> removedChildren = new ArrayList<ThesaurusConcept>();
-		Set<ThesaurusConcept> oldChildren = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(conceptView.getIdentifier()));
+		Set<ThesaurusConcept> oldChildren = new HashSet<ThesaurusConcept>(thesaurusConceptService.getChildrenByConceptId(conceptView.getIdentifier(),null));
 		List<String> oldChildrenIds = getIdsFromConceptList(oldChildren);
 
 		List<String> newChildrenIds = new ArrayList<String>();

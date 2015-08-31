@@ -218,13 +218,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 
 	@Override
-	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults) {
-		return thesaurusConceptDAO.getChildrenConcepts(conceptId, maxResults,null);
+	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults,String like) {
+		return thesaurusConceptDAO.getChildrenConcepts(conceptId, maxResults,like);
 	}
 
 	@Override
-	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId) {
-		return getChildrenByConceptId(conceptId, 0);
+	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId,String like) {
+		return getChildrenByConceptId(conceptId, 0,like);
 	}
 
 	@Override
@@ -484,7 +484,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			}
 
 			List<ThesaurusConcept> childrenConcepts = getChildrenByConceptId(object
-					.getIdentifier());
+					.getIdentifier(),null);
 			for (ThesaurusConcept childConcept : childrenConcepts) {
 				childConcept.getParentConcepts().remove(object);
 				thesaurusConceptDAO.update(childConcept);
@@ -630,15 +630,15 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public List<ThesaurusConcept> getAvailableConceptsOfGroup(String groupId,
-			String thesaurusId) {
-		return getAvailableConceptsOfGroup(0, 0, groupId, thesaurusId);
+			String thesaurusId,String like) {
+		return getAvailableConceptsOfGroup(0, 0, groupId, thesaurusId, like);
 	}
 
 	@Override
 	public List<ThesaurusConcept> getAvailableConceptsOfGroup(
-			Integer startIndex, Integer limit, String groupId, String thesaurusId) {
+			Integer startIndex, Integer limit, String groupId, String thesaurusId,String like) {
 		return thesaurusConceptDAO.getPaginatedAvailableConceptsOfGroup(startIndex, limit, groupId,
-				thesaurusId, false);
+				thesaurusId, false,like);
 
 	}
 

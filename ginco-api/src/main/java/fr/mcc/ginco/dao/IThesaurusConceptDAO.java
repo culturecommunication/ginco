@@ -122,7 +122,7 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
 
 	List<ThesaurusConcept> getPaginatedAvailableConceptsOfGroup(
 			Integer startIndex, Integer limit, String groupId,
-			String thesaurusId, Boolean onlyValidatedConcepts);
+			String thesaurusId, Boolean onlyValidatedConcepts,String like);
 
     /**
      * Get list of all concepts by id of Thesaurus, excluding given conceptId and

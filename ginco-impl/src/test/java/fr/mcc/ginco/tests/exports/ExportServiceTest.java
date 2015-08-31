@@ -348,7 +348,7 @@ public class ExportServiceTest {
 
 		Mockito.when(
 				thesaurusConceptService.getChildrenByConceptId(co1
-						.getIdentifier())).thenReturn(
+						.getIdentifier(),null)).thenReturn(
 				new ArrayList<ThesaurusConcept>() {
 					{
 						add(co1_1);
@@ -357,7 +357,7 @@ public class ExportServiceTest {
 
 		Mockito.when(
 				thesaurusConceptService.getChildrenByConceptId(co2
-						.getIdentifier())).thenReturn(
+						.getIdentifier(),null)).thenReturn(
 				new ArrayList<ThesaurusConcept>() {
 					{
 						add(co2_1);
@@ -366,7 +366,7 @@ public class ExportServiceTest {
 
 		Mockito.when(
 				thesaurusConceptService.getChildrenByConceptId(co3
-						.getIdentifier())).thenReturn(
+						.getIdentifier(),null)).thenReturn(
 				new ArrayList<ThesaurusConcept>() {
 					{
 						add(co3_1);

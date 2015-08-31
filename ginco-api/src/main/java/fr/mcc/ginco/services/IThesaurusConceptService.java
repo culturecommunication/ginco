@@ -169,7 +169,7 @@ public interface IThesaurusConceptService {
 	 * @param conceptId id of concept.
 	 * @return list of objects.
 	 */
-	List<ThesaurusConcept> getChildrenByConceptId(String conceptId);
+	List<ThesaurusConcept> getChildrenByConceptId(String conceptId,String like);
 
 	/**
 	 * Search children of concept with given id (orphan or not).
@@ -177,7 +177,7 @@ public interface IThesaurusConceptService {
 	 * @param conceptId id of concept.
 	 * @return list of objects.
 	 */
-	List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults);
+	List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults,String like);
 
 
 	/**
@@ -278,7 +278,7 @@ public interface IThesaurusConceptService {
 	 * @param thesaurusId
 	 * @return List of concepts eligible for a group
 	 */
-	List<ThesaurusConcept> getAvailableConceptsOfGroup(String groupId, String thesaurusId);
+	List<ThesaurusConcept> getAvailableConceptsOfGroup(String groupId, String thesaurusId,String like);
 
 	/**
 	 * Get paginated concepts eligible for a group
@@ -289,7 +289,7 @@ public interface IThesaurusConceptService {
 	 * @param thesaurusId
 	 * @return List of concepts eligible for a group
 	 */
-	List<ThesaurusConcept> getAvailableConceptsOfGroup(Integer startIndex, Integer limit, String groupId, String thesaurusId);
+	List<ThesaurusConcept> getAvailableConceptsOfGroup(Integer startIndex, Integer limit, String groupId, String thesaurusId,String like);
 
 	/**
 	 * For indexing purposes.

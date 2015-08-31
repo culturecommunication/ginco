@@ -383,10 +383,17 @@ public class ThesaurusConceptRestService {
 	@Path("/getSimpleChildrenConcepts")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> getSimpleChildrenConcepts(
-			@QueryParam("conceptId") String conceptId) {
+			@QueryParam("conceptId") String conceptId,
+			@DefaultValue("") @QueryParam("like") @Nullable String like) {
+		
+		String likeParam = like;
+		if (like.isEmpty()){
+			likeParam = null;
+		}
+		
 		List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
 		List<ThesaurusConcept> children = thesaurusConceptService
-				.getChildrenByConceptId(conceptId);
+				.getChildrenByConceptId(conceptId,likeParam);
 		for (ThesaurusConcept child : children) {
 			reducedConcepts.add(thesaurusConceptViewConverter.convert(child));
 		}
@@ -436,17 +443,23 @@ public class ThesaurusConceptRestService {
 			@QueryParam("start") Integer startIndex,
             @QueryParam("limit") Integer limit,
 			@QueryParam("groupId") String groupId,
-			@QueryParam("thesaurusId") String thesaurusId) {
+			@QueryParam("thesaurusId") String thesaurusId,
+			@DefaultValue("") @QueryParam("like") @Nullable String like) {
+		
+		String likeParam = like;
+		if (like.isEmpty()){
+			likeParam = null;
+		}
 
 		List<ThesaurusConceptReducedView> reducedConcepts = new ArrayList<ThesaurusConceptReducedView>();
 		List<ThesaurusConcept> availableGroupConcepts = thesaurusConceptService
-				.getAvailableConceptsOfGroup(startIndex, limit, groupId, thesaurusId);
+				.getAvailableConceptsOfGroup(startIndex, limit, groupId, thesaurusId,likeParam);
 		for (ThesaurusConcept concept : availableGroupConcepts) {
 			reducedConcepts.add(thesaurusConceptViewConverter.convert(concept));
 		}
 
 		Long total = new Long(thesaurusConceptService
-				.getAvailableConceptsOfGroup(groupId, thesaurusId).size());
+				.getAvailableConceptsOfGroup(groupId, thesaurusId,like).size());
 
 		ExtJsonFormLoadData<List<ThesaurusConceptReducedView>> extConcepts = new ExtJsonFormLoadData<List<ThesaurusConceptReducedView>>(
 				reducedConcepts);

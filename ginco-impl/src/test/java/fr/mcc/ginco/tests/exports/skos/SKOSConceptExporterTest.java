@@ -143,7 +143,7 @@ public class SKOSConceptExporterTest {
 		Mockito.when(thesaurusConceptService.hasChildren("http://c1"))
 				.thenReturn(true);
 		Mockito.when(
-				thesaurusConceptService.getChildrenByConceptId("http://c1"))
+				thesaurusConceptService.getChildrenByConceptId("http://c1",null))
 				.thenReturn(children);
 
 		Model model = ModelFactory.createDefaultModel();

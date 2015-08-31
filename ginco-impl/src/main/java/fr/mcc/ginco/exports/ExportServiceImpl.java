@@ -218,7 +218,7 @@ public class ExportServiceImpl implements IExportService {
 
 		List<ThesaurusConcept> children = new ArrayList<ThesaurusConcept>(
 				thesaurusConceptService.getChildrenByConceptId(concept
-						.getIdentifier())
+						.getIdentifier(),null)
 		);
 		Collections.sort(children, thesaurusConceptComparator);
 

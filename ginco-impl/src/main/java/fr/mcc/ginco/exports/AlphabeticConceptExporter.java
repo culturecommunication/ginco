@@ -155,7 +155,7 @@ public class AlphabeticConceptExporter {
 		}
 
 		for (ThesaurusConcept child : thesaurusConceptService
-				.getChildrenByConceptId(concept.getIdentifier())) {
+				.getChildrenByConceptId(concept.getIdentifier(),null)) {
 
 			ThesaurusTerm term = thesaurusConceptService
 					.getConceptPreferredTerm(child.getIdentifier());
