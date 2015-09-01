@@ -254,7 +254,6 @@ public class ThesaurusConceptDAO extends
 				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
 
 		criteria.add(Restrictions.eq("tt.prefered", Boolean.TRUE));
-		criteria.add(Restrictions.eq("tt.language.id", defaultLang));
 		
 		selectThesaurus(criteria, thesaurusId);
 		selectOrphans(criteria, searchOrphans);
@@ -283,7 +282,6 @@ public class ThesaurusConceptDAO extends
 				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
 
 		criteria.add(Restrictions.eq("tt.prefered", Boolean.TRUE));
-		criteria.add(Restrictions.eq("tt.language.id", defaultLang));
 
 		criteria.setProjection(
 				Projections
