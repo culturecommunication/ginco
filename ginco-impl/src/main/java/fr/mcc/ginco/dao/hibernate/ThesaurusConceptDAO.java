@@ -203,8 +203,9 @@ public class ThesaurusConceptDAO extends
 			Boolean onlyValidatedConcepts,String like) {
 
 		Criteria criteria = selectPaginatedConceptsByAlphabeticalOrder(startIndex, limit);
-
+		
 		selectThesaurus(criteria, thesaurusId);
+		matchLanguage(criteria, thesaurusId);
 		selectOrphans(criteria, searchOrphans);
 		excludeConcept(criteria, excludeConceptId);
 		onlyValidatedConcepts(criteria, onlyValidatedConcepts);
@@ -254,6 +255,7 @@ public class ThesaurusConceptDAO extends
 				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
 
 		criteria.add(Restrictions.eq("tt.prefered", Boolean.TRUE));
+		//criteria.add(Restrictions.eq("tt.language.id", defaultLang));
 		
 		selectThesaurus(criteria, thesaurusId);
 		selectOrphans(criteria, searchOrphans);
@@ -282,7 +284,7 @@ public class ThesaurusConceptDAO extends
 				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
 
 		criteria.add(Restrictions.eq("tt.prefered", Boolean.TRUE));
-
+		
 		criteria.setProjection(
 				Projections
 						.projectionList()
@@ -365,6 +367,17 @@ public class ThesaurusConceptDAO extends
 		}else {
 			criteria.add(Restrictions.ilike("tt.lexicalValue","%"+like+"%"));
 		}
+	}
+	
+
+	private void matchLanguage(Criteria criteria,String thesaurusId) {
+		Criteria thesaurusCriteria = getCurrentSession().createCriteria(Thesaurus.class, "t")
+				.add(Restrictions.eq("t.identifier", thesaurusId));
+		
+		List<Thesaurus> lThesaurus = thesaurusCriteria.list();
+		Thesaurus thesaurus = lThesaurus.get(0);
+		
+		criteria.add(Restrictions.in("tt.language", thesaurus.getLang()));
 	}
 
 	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
