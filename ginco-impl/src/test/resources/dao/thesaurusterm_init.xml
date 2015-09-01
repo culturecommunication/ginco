@@ -12,6 +12,24 @@
             <value>album let it be</value>
         </row>
     </table>
+    
+<table name="thesaurus_languages">
+        <column>iso639_id</column>
+        <column>thesaurus_identifier</column>
+        <row>
+            <value>fr-FR</value>
+            <value>http://www.culturecommunication.gouv.fr/th1</value>
+        </row>
+        <row>
+            <value>fr-FR</value>
+            <value>http://www.culturecommunication.gouv.fr/th2</value>
+        </row>
+        <row>
+            <value>fr-FR</value>
+            <value>http://www.culturecommunication.gouv.fr/th3</value>
+        </row>
+    </table>    
+    
     <table name="thesaurus_concept">
         <column>identifier</column>
         <column>created</column>

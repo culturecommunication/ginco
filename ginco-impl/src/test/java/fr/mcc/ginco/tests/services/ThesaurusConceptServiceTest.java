@@ -43,9 +43,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import junitx.framework.ListAssert;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -60,7 +57,6 @@ import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
@@ -73,6 +69,7 @@ import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.ConceptHierarchicalRelationshipServiceUtil;
 import fr.mcc.ginco.services.ThesaurusConceptServiceImpl;
+import junitx.framework.ListAssert;
 
 public class ThesaurusConceptServiceTest {
 
@@ -159,11 +156,11 @@ public class ThesaurusConceptServiceTest {
 		list.add(co1);
 		when(
 				thesaurusConceptDAO
-						.getTopTermThesaurusConcept(any(Thesaurus.class), eq(0),null))
+						.getTopTermThesaurusConcept(any(Thesaurus.class), eq(0),anyString()))
 				.thenReturn(list);
 
 		Assert.assertNotNull("Not null list expected", thesaurusConceptDAO
-				.getTopTermThesaurusConcept(any(Thesaurus.class), eq(0),null));
+				.getTopTermThesaurusConcept(any(Thesaurus.class), eq(0),anyString()));
 	}
 
 	// ------------------------------------------
@@ -384,7 +381,7 @@ public class ThesaurusConceptServiceTest {
 		final ThesaurusConcept node2 = new ThesaurusConcept();
 		node2.setIdentifier("concept2");
 		List<ThesaurusConcept> conceptList = new ArrayList<ThesaurusConcept>();
-		when(thesaurusConceptDAO.getChildrenConcepts(anyString(), eq(0),null)).thenReturn(conceptList);
+		when(thesaurusConceptDAO.getChildrenConcepts(anyString(), eq(0),anyString())).thenReturn(conceptList);
 
 		when(thesaurusConceptDAO.getAllRootChildren(any(ThesaurusConcept.class))).thenReturn(conceptList);
 

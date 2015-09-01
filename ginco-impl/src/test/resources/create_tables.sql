@@ -2,6 +2,7 @@
 
 DROP TABLE IF EXISTS thesaurus;
 DROP TABLE IF EXISTS thesaurus_type;
+DROP TABLE IF EXISTS thesaurus_languages;
 DROP TABLE IF EXISTS thesaurus_format;
 DROP TABLE IF EXISTS thesaurus_formats;
 DROP TABLE IF EXISTS thesaurus_formats_aud;
@@ -68,6 +69,11 @@ CREATE TABLE thesaurus
   archived boolean DEFAULT FALSE,
   ispolyhierarchical boolean DEFAULT FALSE
 
+);
+
+CREATE TABLE thesaurus_languages (
+    iso639_id character varying(5) NOT NULL,
+    thesaurus_identifier text NOT NULL,
 );
 
 CREATE TABLE thesaurus_type (

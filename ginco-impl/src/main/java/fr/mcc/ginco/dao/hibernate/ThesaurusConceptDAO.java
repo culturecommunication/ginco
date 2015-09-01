@@ -106,6 +106,7 @@ public class ThesaurusConceptDAO extends
 	 *
 	 * @see fr.mcc.ginco.dao.IThesaurusConceptDAO#getTopTermThesaurusConcept
 	 */
+	
 	@Override
 	public List<ThesaurusConcept> getTopTermThesaurusConcept(
 			Thesaurus thesaurus, int maxResults,String like) {
@@ -140,7 +141,7 @@ public class ThesaurusConceptDAO extends
 		query.setParameter("pthesaurusid", thesaurusId);
 		return (List<String>) query.list();
 	}
-
+	
 	@Override
 	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults,String like) {
 		return getConcepts(conceptId, null, null, maxResults,like);

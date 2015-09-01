@@ -216,7 +216,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
 		return thesaurusConceptDAO.getTopTermThesaurusConceptCount(thesaurus);
 	}
-
+	
 	@Override
 	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults,String like) {
 		return thesaurusConceptDAO.getChildrenConcepts(conceptId, maxResults,like);
