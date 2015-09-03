@@ -280,11 +280,15 @@ public class ThesaurusRestService {
 		if (object != null) {
 			thesaurusService.publishThesaurus(object);
 			thesaurusVersionHistoryService.publishThesaurus(object, userId);
+			
+			//Update vocabulary date
+			thesaurusService.updateThesaurusDate(object);
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
 				object));
+		
 		return StringEscapeUtils.unescapeHtml4(serialized);
 	}
 
@@ -310,6 +314,8 @@ public class ThesaurusRestService {
 
 			if (result != null) {
 				view = thesaurusViewConverter.convert(result);
+				//Update vocabulary date
+				thesaurusService.updateThesaurusDate(object);
 			} else {
 				logger.error("Failed to archive thesaurus");
 			}

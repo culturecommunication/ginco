@@ -46,6 +46,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.mcc.ginco.beans.NodeLabel;
@@ -57,6 +58,7 @@ import fr.mcc.ginco.helpers.ThesaurusArrayHelper;
 import fr.mcc.ginco.services.INodeLabelService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
 import fr.mcc.ginco.services.ThesaurusArrayServiceImpl;
+import fr.mcc.ginco.services.ThesaurusServiceImpl;
 
 public class ThesaurusArrayServiceTest {
 
@@ -68,6 +70,9 @@ public class ThesaurusArrayServiceTest {
     
     @Mock(name = "thesaurusArrayHelper")
     private ThesaurusArrayHelper thesaurusArrayHelper;
+    
+    @InjectMocks
+	private ThesaurusServiceImpl thesaurusService;
 
     @InjectMocks
     private IThesaurusArrayService thesaurusArrayService = new ThesaurusArrayServiceImpl();
@@ -132,11 +137,11 @@ public class ThesaurusArrayServiceTest {
     @Test
     public final void testDestroy() {
         ThesaurusArray mockArray = new ThesaurusArray();
-        mockArray.setIdentifier("1");
 
         when(thesaurusArrayDAO.delete(any(ThesaurusArray.class))).thenReturn(mockArray);
-
+        
         ThesaurusArray actualArray = thesaurusArrayService.destroyThesaurusArray(mockArray);
+        
         Assert.assertEquals(mockArray.getIdentifier(), actualArray.getIdentifier());
     }
 

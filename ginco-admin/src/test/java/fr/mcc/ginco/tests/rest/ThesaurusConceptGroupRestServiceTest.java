@@ -37,6 +37,9 @@ package fr.mcc.ginco.tests.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -46,6 +49,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
@@ -56,6 +60,7 @@ import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusConceptGroupRestService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
+import fr.mcc.ginco.services.IThesaurusService;
 
 public class ThesaurusConceptGroupRestServiceTest {
 	
@@ -68,6 +73,9 @@ public class ThesaurusConceptGroupRestServiceTest {
 	
 	@Mock(name="thesaurusConceptGroupViewConverter")
     private ThesaurusConceptGroupViewConverter thesaurusConceptGroupViewConverter;
+	
+	@Mock (name="thesaurusService")
+	private IThesaurusService thesaurusService;
 	
 	@Mock(name="thesaurusConceptGroupLabelViewConverter")
     private ThesaurusConceptGroupLabelViewConverter thesaurusConceptGroupLabelViewConverter;
@@ -144,6 +152,8 @@ public class ThesaurusConceptGroupRestServiceTest {
 		ThesaurusConceptGroup myGroup = getFakeThesaurusConceptGroup("fake1");
 		ThesaurusConceptGroupView myGroupView = getFakeThesaurusConceptGroupView("fake1");
 		ThesaurusConceptGroupLabel myGroupLabel = getFakeThesaurusConceptGroupLabel(1);
+		Thesaurus thesaurus = new Thesaurus();
+		myGroup.setThesaurus(thesaurus);
 		
 		Mockito.when(thesaurusConceptGroupLabelViewConverter.convert(Mockito.any(ThesaurusConceptGroupView.class))).thenReturn(myGroupLabel);
 		Mockito.when(thesaurusConceptGroupViewConverter.convert(Mockito.any(ThesaurusConceptGroupView.class))).thenReturn(myGroup);

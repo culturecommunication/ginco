@@ -35,6 +35,7 @@
 package fr.mcc.ginco.rest.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.MissingResourceException;
 
@@ -64,6 +65,7 @@ import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Role;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
@@ -84,13 +86,17 @@ import fr.mcc.ginco.extjs.view.utils.TermViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptViewConverter;
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
+import fr.mcc.ginco.services.IThesaurusService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.services.IUserRoleService;
+import fr.mcc.ginco.services.ThesaurusServiceImpl;
 import fr.mcc.ginco.solr.IConceptIndexerService;
 import fr.mcc.ginco.solr.INoteIndexerService;
 import fr.mcc.ginco.solr.ITermIndexerService;
 import fr.mcc.ginco.utils.DateUtil;
 import fr.mcc.ginco.utils.LabelUtil;
+
+import java.text.DateFormat;
 
 /**
  * Thesaurus Concept REST service for all operation on a thesaurus' concepts
@@ -108,6 +114,10 @@ public class ThesaurusConceptRestService {
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
+	
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
 	@Inject
 	@Named("termViewConverter")
@@ -194,8 +204,7 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#conceptView, '0') or hasPermission(#conceptView, '1')")
 	public ThesaurusConceptView updateConcept(ThesaurusConceptView conceptView) {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getName();
 
 		if (userRoleService.hasRole(username, conceptView.getThesaurusId(),
@@ -213,8 +222,7 @@ public class ThesaurusConceptRestService {
 
 		}
 
-		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter
-				.convert(conceptView);
+		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter.convert(conceptView);
 
 		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
 		List<ThesaurusConcept> childrenToDetach = thesaurusConceptViewConverter
@@ -254,12 +262,12 @@ public class ThesaurusConceptRestService {
 			}
 		}
 
-    // For creation only, check that all terms in conceptView are not already used in a concept
-    if(convertedConcept.getIdentifier() == null) {
-      checkNotAlreadyUsedTerms(convertedConcept, terms);
-    }
+	    // For creation only, check that all terms in conceptView are not already used in a concept
+	    if(convertedConcept.getIdentifier() == null) {
+	      checkNotAlreadyUsedTerms(convertedConcept, terms);
+	    }
 
-    //We save or update the concept
+    	//We save or update the concept
 		logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
 				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach, childrenToAttach, alignments);
@@ -268,6 +276,11 @@ public class ThesaurusConceptRestService {
 			termIndexerService.addTerm(term);
 		}
 		conceptIndexerService.addConcept(convertedConcept);
+		
+		//Update vocabulary date
+		Thesaurus thesaurus = convertedConcept.getThesaurus();
+		thesaurusService.updateThesaurusDate(thesaurus);
+		
 		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}
@@ -493,6 +506,10 @@ public class ThesaurusConceptRestService {
 			object.setModified(DateUtil.nowDate());
 			thesaurusConceptService.destroyThesaurusConcept(object);
 			conceptIndexerService.removeConcept(object);
+			
+			//Update vocabulary date
+			Thesaurus thesaurus = object.getThesaurus();
+			thesaurusService.updateThesaurusDate(thesaurus);
 		}
 	}
 

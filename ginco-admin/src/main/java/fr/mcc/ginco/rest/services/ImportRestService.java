@@ -192,8 +192,7 @@ public class ImportRestService {
 		response.setConceptsMissingAlignments(conceptsMissingAlignments);
 		response.setExternalConceptIds(externalConceptIds);
 		ObjectMapper mapper = new ObjectMapper();
-		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				response));
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(response));
 		return StringEscapeUtils.unescapeHtml4(serialized);
 	}
 
@@ -239,9 +238,9 @@ public class ImportRestService {
 		}
 		response.setConceptsMissingAlignments(missingExternalConcepts);
 		ObjectMapper mapper = new ObjectMapper();
-		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				response));
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(response));
 		AuditContext.enableAudit();
+		
 		return serialized;
 	}
 
@@ -288,8 +287,12 @@ public class ImportRestService {
 		} else {
 			response.setTargetInternalConceptsMissing(false);
 		}
-		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-				response));
+		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(response));
+		
+		//Update vocabulary date
+		Thesaurus thesaurus = concept.getThesaurus();
+		thesaurusService.updateThesaurusDate(thesaurus);
+		
 		return serialized;
 	}
 
@@ -367,8 +370,12 @@ public class ImportRestService {
 			ImportedTermsResponse response = new ImportedTermsResponse();
 			response.setTermsInError(termsInError);
 			ObjectMapper mapper = new ObjectMapper();
-			String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(
-					response));
+			String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(response));
+			
+			//Update vocabulary date
+			Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
+			thesaurusService.updateThesaurusDate(thesaurus);
+			
 			return serialized;
 		}
 	}

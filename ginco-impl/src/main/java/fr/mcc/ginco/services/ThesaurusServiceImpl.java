@@ -39,6 +39,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -167,6 +168,22 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 			versions.add(defaultVersion);
 			thesaurusVersionHistoryDAO.update(defaultVersion);
 		}
+		return result;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * fr.mcc.ginco.IThesaurusService#updateThesaurusDate(fr.mcc.ginco.beans.Thesaurus
+	 * , fr.mcc.ginco.beans.users.IUser)
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public Thesaurus updateThesaurusDate(Thesaurus object) {
+		Date aujourdhui = new Date();
+		object.setDate(aujourdhui);
+		Thesaurus result = updateThesaurus(object);
 		return result;
 	}
 

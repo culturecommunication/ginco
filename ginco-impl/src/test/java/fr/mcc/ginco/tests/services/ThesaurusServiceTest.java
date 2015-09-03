@@ -40,6 +40,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,9 +48,12 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import fr.mcc.ginco.ark.CustomGeneratorService;
 import fr.mcc.ginco.beans.Language;
@@ -61,6 +65,7 @@ import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.helpers.ThesaurusHelper;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.ThesaurusServiceImpl;
+import fr.mcc.ginco.utils.DateUtil;
 
 public class ThesaurusServiceTest {
 
@@ -122,6 +127,30 @@ public class ThesaurusServiceTest {
 		Thesaurus thesaurusRes = thesaurusService.updateThesaurus(
 				mockThesaurus);
 		Assert.assertNotNull("Error while updating Thesaurus", thesaurusRes);
+	}
+	
+	@Test
+	public final void testupdateThesaurusDate() {
+		
+		when(thesaurusDAO.update(any(Thesaurus.class))).thenAnswer(new Answer<Thesaurus>() {
+			@Override
+			public Thesaurus answer(InvocationOnMock invocation) throws Throwable {
+				Object[] args = invocation.getArguments();
+				return (Thesaurus) args[0];
+			}
+		});
+		
+		Thesaurus testThesaurus = new Thesaurus();
+		testThesaurus.setDate(null);
+		testThesaurus.setIdentifier("YO");
+		
+		Date today = DateUtil.nowDate();
+		Thesaurus thesaurusRes = thesaurusService.updateThesaurusDate(testThesaurus);
+		
+		Assert.assertEquals(today.getYear(),thesaurusRes.getDate().getYear());
+		Assert.assertEquals(today.getMonth(),thesaurusRes.getDate().getMonth());
+		Assert.assertEquals(today.getDay(),thesaurusRes.getDate().getDay());
+		Assert.assertEquals(today.getHours(),thesaurusRes.getDate().getHours());
 	}
 
 	@Test

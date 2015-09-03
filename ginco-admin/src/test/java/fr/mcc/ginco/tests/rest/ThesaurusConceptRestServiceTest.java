@@ -35,6 +35,7 @@
 package fr.mcc.ginco.tests.rest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -165,6 +166,7 @@ public class ThesaurusConceptRestServiceTest {
     ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);
 
   }
+  
 
 	/**
 	 * Test to put a concept with two terms (which one is prefered)
@@ -222,6 +224,7 @@ public class ThesaurusConceptRestServiceTest {
 		Mockito.when(thesaurusConceptViewConverter.convert(Mockito.any(ThesaurusConcept.class), Mockito.anyListOf(ThesaurusTerm.class))).thenReturn(fakeConceptView);
 
 		ThesaurusConceptView actualResponse = thesaurusConceptRestService.updateConcept(fakeConceptView);
+		Assert.assertEquals(fakeConceptView.getTerms().get(0).getIdentifier(), actualResponse.getTerms().get(0).getIdentifier());
 		Assert.assertEquals(fakeConceptView.getTerms().get(0).getIdentifier(), actualResponse.getTerms().get(0).getIdentifier());
 		Assert.assertEquals(fakeConceptView.getTerms().get(1).getIdentifier(), actualResponse.getTerms().get(1).getIdentifier());
 	}

@@ -50,6 +50,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConceptGroup;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupLabel;
 import fr.mcc.ginco.beans.ThesaurusConceptGroupType;
@@ -59,6 +60,7 @@ import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusConceptGroupViewConverter;
 import fr.mcc.ginco.services.IThesaurusConceptGroupService;
 import fr.mcc.ginco.services.IThesaurusConceptGroupTypeService;
+import fr.mcc.ginco.services.IThesaurusService;
 
 /**
  * Thesaurus Concept Group REST service for all operation on concept groups
@@ -72,6 +74,10 @@ public class ThesaurusConceptGroupRestService {
 	@Inject
 	@Named("thesaurusConceptGroupService")
 	private IThesaurusConceptGroupService thesaurusConceptGroupService;
+	
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
 	@Inject
 	@Named("thesaurusConceptGroupTypeService")
@@ -161,6 +167,10 @@ public class ThesaurusConceptGroupRestService {
 
 		ThesaurusConceptGroup updated = thesaurusConceptGroupService.updateThesaurusConceptGroup(
 				convertedConceptGroup, conceptGroupLabel);
+		
+		//Update vocabulary date
+		Thesaurus thesaurus = updated.getThesaurus();
+		thesaurusService.updateThesaurusDate(thesaurus);
 
 		return thesaurusConceptGroupViewConverter.convert(updated);
 	}
@@ -178,6 +188,9 @@ public class ThesaurusConceptGroupRestService {
 		ThesaurusConceptGroup object = thesaurusConceptGroupViewConverter.convert(thesaurusConceptGroupViewJAXBElement);
 		if (object != null) {
 			thesaurusConceptGroupService.destroyThesaurusConceptGroup(object);
+			//Update vocabulary date
+			Thesaurus thesaurus = object.getThesaurus();
+			thesaurusService.updateThesaurusDate(thesaurus);
 		}
 	}
 

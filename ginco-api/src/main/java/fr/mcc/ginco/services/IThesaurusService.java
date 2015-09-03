@@ -72,9 +72,13 @@ public interface IThesaurusService {
     /**
      * Update a single ThesaurusObject
      */
-
     Thesaurus updateThesaurus(Thesaurus object);
 
+    /**
+     * Update the date of an existing ThesaurusObject
+     * for example, after one of his concept was update
+     */
+    Thesaurus updateThesaurusDate(Thesaurus object);
 
     /**
      * Builds the list of the thesauruses languages, where the first language is

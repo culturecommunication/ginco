@@ -52,6 +52,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import fr.mcc.ginco.beans.NodeLabel;
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.beans.ThesaurusArrayConcept;
 import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
@@ -61,6 +62,7 @@ import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayConceptViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusService;
 
 /**
  * Service contains methods, exposed to user to control ThesaurusArray objects.
@@ -78,6 +80,10 @@ public class ThesaurusArrayRestService {
 	@Inject
 	@Named("nodeLabelViewConverter")
 	private NodeLabelViewConverter nodeLabelViewConverter;
+	
+	@Inject
+	@Named("thesaurusService")
+	private IThesaurusService thesaurusService;
 
 	@Inject
 	@Named("thesaurusArrayViewConverter")
@@ -161,6 +167,11 @@ public class ThesaurusArrayRestService {
 
 		ThesaurusArray updated = thesaurusArrayService.updateThesaurusArray(
 				convertedArray, nodeLabel, arrayConcepts);
+		
+		//Update vocabulary date
+		Thesaurus thesaurus = updated.getThesaurus();
+		thesaurusService.updateThesaurusDate(thesaurus);
+				
 		return thesaurusArrayViewConverter.convert(updated);
 	}
 
@@ -182,6 +193,9 @@ public class ThesaurusArrayRestService {
 
 		if (object != null) {
 			thesaurusArrayService.destroyThesaurusArray(object);
+			//Update vocabulary date
+			Thesaurus thesaurus = object.getThesaurus();
+			thesaurusService.updateThesaurusDate(thesaurus);
 		}
 	}
 }
