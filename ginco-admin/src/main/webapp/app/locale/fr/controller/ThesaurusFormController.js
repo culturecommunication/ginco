@@ -52,5 +52,7 @@ Ext.define('GincoApp.locale.fr.controller.ThesaurusFormController', {
     xPublishSuccess: "Le thesaurus a été publié!",
     xProblemArchiveMsg: "Erreur lors de l'archivage du thésaurus",
     xPublishInProgress: "Publication en cours...",
-    xArchiveInProgress: "Archivage en cours..."
+    xArchiveInProgress: "Archivage en cours...",
+    xArchiveMsgTitle:'Archiver le thesaurus ?',
+    xArchiveMsgLabel:'Êtes-vous sûr de vouloir archiver ce thesaurus ?'
 });

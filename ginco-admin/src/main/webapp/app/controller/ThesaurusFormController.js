@@ -58,6 +58,8 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     xPublishSuccess: 'thesaurus has been published!',
     xPublishInProgress: "Publishing in progress",
     xArchiveInProgress: "Archiving in progress",
+    xArchiveMsgTitle:'Archive this thesaurus ?',
+    xArchiveMsgLabel:'Are you sure to archive this thesaurus ?',
 
 
 	loadPanel : function(theForm) {
@@ -178,30 +180,47 @@ Ext.define('GincoApp.controller.ThesaurusFormController', {
     },
 
     archiveThesaurus : function(theButton) {
+    	// TODO
         var me = this;
         var theForm = theButton.up('form');
-        var url = "services/ui/thesaurusservice/archiveVocabulary?thesaurusId="
-            + encodeURIComponent(theForm.up('thesaurusTabPanel').thesaurusData.id);
-		theForm.getEl().mask(me.xArchiveInProgress);
-        Ext.Ajax.request({
-            url: url,
-            timeout: 600000,
-            method: 'GET',
-            success: function(response) {
-                theForm.getEl().unmask();
-        		var record = theForm.getForm().getRecord();
-                record.set("archived",true);
-                record.set("canBeDeleted",true);
-                theButton.up('thesaurusTabPanel').fireEvent('thesaurusupdated',theButton.up('thesaurusTabPanel'),record.data);
-                me.loadData(theForm, record);
-                Thesaurus.ext.utils.msg(me.xSucessLabel,
-                    me.xArchiveSuccess);
-                me.application.fireEvent('thesaurusupdated');
+        var url = "services/ui/thesaurusservice/archiveVocabulary?thesaurusId="+ encodeURIComponent(theForm.up('thesaurusTabPanel').thesaurusData.id);
+		
+		Ext.MessageBox.show({
+            title : me.xArchiveMsgTitle,
+            msg : me.xArchiveMsgLabel,
+            icon: Ext.Msg.QUESTION,
+            buttons : Ext.MessageBox.YESNOCANCEL,
+            fn : function(buttonId) {
+                switch (buttonId) {
+                    case 'no':
+                        break;
+                    case 'yes':
+                    	
+                    	theForm.getEl().mask(me.xArchiveInProgress);
+                    	Ext.Ajax.request({
+                            url: url,
+                            timeout: 600000,
+                            method: 'GET',
+                            success: function(response) {
+                                theForm.getEl().unmask();
+                        		var record = theForm.getForm().getRecord();
+                                record.set("archived",true);
+                                record.set("canBeDeleted",true);
+                                theButton.up('thesaurusTabPanel').fireEvent('thesaurusupdated',theButton.up('thesaurusTabPanel'),record.data);
+                                me.loadData(theForm, record);
+                                Thesaurus.ext.utils.msg(me.xSucessLabel,
+                                    me.xArchiveSuccess);
+                                me.application.fireEvent('thesaurusupdated');
+                            },
+                            failure: function() {
+                                theForm.getEl().unmask();
+                                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemArchiveMsg);
+                            }
+                        });
+                        break;
+                }
             },
-            failure: function() {
-                theForm.getEl().unmask();
-                Thesaurus.ext.utils.msg(me.xProblemLabel, me.xProblemArchiveMsg);
-            }
+            scope : this
         });
     },
 
