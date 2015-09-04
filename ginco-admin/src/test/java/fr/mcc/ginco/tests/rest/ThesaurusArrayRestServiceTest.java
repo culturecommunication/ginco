@@ -34,13 +34,22 @@
  */
 package fr.mcc.ginco.tests.rest;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.extjs.view.pojo.ThesaurusArrayView;
@@ -48,6 +57,8 @@ import fr.mcc.ginco.extjs.view.utils.NodeLabelViewConverter;
 import fr.mcc.ginco.extjs.view.utils.ThesaurusArrayViewConverter;
 import fr.mcc.ginco.rest.services.ThesaurusArrayRestService;
 import fr.mcc.ginco.services.IThesaurusArrayService;
+import fr.mcc.ginco.services.IThesaurusService;
+import fr.mcc.ginco.services.ThesaurusServiceImpl;
 
 public class ThesaurusArrayRestServiceTest {   
     
@@ -60,6 +71,9 @@ public class ThesaurusArrayRestServiceTest {
 
     @Mock(name="thesaurusArrayViewConverter")
 	private ThesaurusArrayViewConverter thesaurusArrayViewConverter;
+    
+    @Mock(name="thesaurusService")
+   	private IThesaurusService thesaurusService;
 	
 	@InjectMocks
 	private ThesaurusArrayRestService thesaurusArrayRestService = new ThesaurusArrayRestService();
@@ -71,9 +85,13 @@ public class ThesaurusArrayRestServiceTest {
 	
 	@Test
 	public final void testDestroy() {
+		
 		ThesaurusArray array  =new ThesaurusArray();
-		ThesaurusArrayView arrayView = new ThesaurusArrayView();		
-		Mockito.when(thesaurusArrayViewConverter.convert(Mockito.any(ThesaurusArrayView.class))).thenReturn(array);		
+		ThesaurusArrayView arrayView = new ThesaurusArrayView();
+		
+		Mockito.when(thesaurusArrayViewConverter.convert(Mockito.any(ThesaurusArrayView.class))).thenReturn(array);
+		Mockito.when(thesaurusService.updateThesaurusDate(Mockito.any(Thesaurus.class))).thenReturn(Mockito.any(Thesaurus.class));
+		
 		thesaurusArrayRestService.destroyArray(arrayView);
 	}	
 	
