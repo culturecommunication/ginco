@@ -269,14 +269,13 @@ public class ImportRestService {
 
 		String content = file.getObject(String.class);
 		String fileName = file.getDataHandler().getName();
-		File tempDir = (File) servletContext
-				.getAttribute("javax.servlet.context.tempdir");
+		File tempDir = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
 
 		Map<ThesaurusConcept, Set<Alignment>> importResult = gincoImportService
 				.importGincoBranchXmlFile(content, fileName, tempDir,
 						thesaurusId);
-		thesaurusIndexerService.indexThesaurus(thesaurusService
-				.getThesaurusById(thesaurusId));
+		Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
+		thesaurusIndexerService.indexThesaurus(thesaurus);
 		ThesaurusConcept concept = importResult.keySet().iterator().next();
 		ObjectMapper mapper = new ObjectMapper();
 		ImportedBranchResponse response = new ImportedBranchResponse();
@@ -290,7 +289,6 @@ public class ImportRestService {
 		String serialized = mapper.writeValueAsString(new ExtJsonFormLoadData(response));
 		
 		//Update vocabulary date
-		Thesaurus thesaurus = concept.getThesaurus();
 		thesaurusService.updateThesaurusDate(thesaurus);
 		
 		return serialized;
