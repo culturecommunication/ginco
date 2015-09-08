@@ -37,6 +37,7 @@ package fr.mcc.ginco.dao.hibernate;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.Query;
@@ -292,6 +293,7 @@ public class ThesaurusTermDAO extends
 	 */
 	@Override
 	public ThesaurusTerm getTermByLexicalValueThesaurusIdLanguageId(String lexicalValue, String thesaurusId, String languageId) {
+		lexicalValue = lexicalValue.replace("'", "&apos;");
 		return (ThesaurusTerm) getCurrentSession().createCriteria(ThesaurusTerm.class)
 				.add(Restrictions.eq(LEXICAL_VALUE, lexicalValue))
 				.add(Restrictions.eq(THESAURUS_IDENTIFIER, thesaurusId))
