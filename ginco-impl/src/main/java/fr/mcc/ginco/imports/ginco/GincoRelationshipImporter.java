@@ -91,10 +91,11 @@ public class GincoRelationshipImporter {
 	 * @param relationsToImport
 	 * @return The list of the updated parent concepts
 	 */
-	public List<ThesaurusConcept> storeHierarchicalRelationship(Map<String,
-			JaxbList<ConceptHierarchicalRelationship>> relationsToImport) {
+	public List<ThesaurusConcept> storeHierarchicalRelationship(Map<String,JaxbList<ConceptHierarchicalRelationship>> relationsToImport) {
+		
 		List<ThesaurusConcept> updatedChildrenConcepts = new ArrayList<ThesaurusConcept>();
 		String childId;
+		
 		if (relationsToImport != null && !relationsToImport.isEmpty()) {
 			Iterator<Map.Entry<String, JaxbList<ConceptHierarchicalRelationship>>> entries = relationsToImport.entrySet().iterator();
 			List<ConceptHierarchicalRelationship> parents = null;
@@ -106,16 +107,29 @@ public class GincoRelationshipImporter {
 				}
 
 				for (ConceptHierarchicalRelationship conceptHierarchicalRelationship : parents) {
+					
 					conceptHierarchicalRelationshipDAO.update(conceptHierarchicalRelationship);
-					updatedChildrenConcepts.add(thesaurusConceptDAO.getById(childId));
+					ThesaurusConcept thesaurusConceptChild = thesaurusConceptDAO.getById(childId);
+					
+					//Get and set the parent of the child
+					String parentId = conceptHierarchicalRelationship.getIdentifier().getParentconceptid();
+					ThesaurusConcept thesaurusConceptParent = thesaurusConceptDAO.getById(parentId);
+					HashSet<ThesaurusConcept> parentsConcept= new HashSet<ThesaurusConcept>();
+					parentsConcept.add(thesaurusConceptParent);
+					thesaurusConceptChild.setParentConcepts(parentsConcept);
+						
+					updatedChildrenConcepts.add(thesaurusConceptChild);
 				}
 			}
 		}
 
 		//Processing and setting for all children concepts their root concept
+		HashSet<ThesaurusConcept> empty= new HashSet<ThesaurusConcept>();
 		for (ThesaurusConcept thesaurusConcept : updatedChildrenConcepts) {
 			List<ThesaurusConcept> roots = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
 			thesaurusConcept.setRootConcepts(new HashSet<ThesaurusConcept>(roots));
+			//we should remove the parent before update, to provide SQL error
+			thesaurusConcept.setParentConcepts(empty);
 			thesaurusConceptDAO.update(thesaurusConcept);
 		}
 
