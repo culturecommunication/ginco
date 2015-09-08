@@ -37,7 +37,6 @@ package fr.mcc.ginco.dao.hibernate;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.Query;
