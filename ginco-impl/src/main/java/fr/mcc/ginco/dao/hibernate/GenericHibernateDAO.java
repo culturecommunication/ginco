@@ -40,11 +40,15 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
+import fr.mcc.ginco.beans.ExternalThesaurus;
+import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IGenericDAO;
 
 /**
@@ -73,6 +77,12 @@ public class GenericHibernateDAO<T, ID extends Serializable> implements IGeneric
 	@Override
 	public final T getById(ID id) {
 		return (T) getCurrentSession().get(persistentClass, id);
+	}
+	
+	@Override
+	public final List<T> getByExternalId(String externalId) {
+		Criteria criteria = getCurrentSession().createCriteria(ExternalThesaurus.class, "et").add(Restrictions.eq("et.externalId", externalId));
+		return criteria.list();
 	}
 
 	@Override

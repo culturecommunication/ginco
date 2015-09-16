@@ -40,6 +40,7 @@ import fr.mcc.ginco.beans.Alignment;
 import fr.mcc.ginco.beans.AlignmentConcept;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.beans.ExternalThesaurus;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
@@ -62,6 +63,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -198,6 +200,7 @@ public class ConceptsBuilder extends AbstractBuilder {
 		Set<Alignment> bannedAlignments = new HashSet<Alignment>();
 		Set<String> importedLexicalValues = new HashSet<String>();
 		int counter = 1;
+		List<ExternalThesaurus> lExternalThesaurusUpdated = new LinkedList<ExternalThesaurus>();
 		logger.info("Beginning importing " + skosConcepts.size() + " concepts");
 		for (Resource skosConcept : skosConcepts) {
 			if (counter % 100 == 0) {
@@ -238,25 +241,62 @@ public class ConceptsBuilder extends AbstractBuilder {
 				noteDAO.update(conceptNote);
 			}
 
-			// Concept alignments
-			List<Alignment> alignments = alignmentsBuilder.buildAlignments(
-					skosConcept, concept);
+			// Concept alignments and External Thesaurus
+			List<Alignment> alignments = alignmentsBuilder.buildAlignments(skosConcept, concept);
+			ExternalThesaurus externalThesaurusToSet = null;
+			
 			for (Alignment alignment : alignments) {
+				
+				externalThesaurusToSet = null;
+				
 				if (alignment.getExternalTargetThesaurus() != null) {
-					externalThesaurusDAO.update(alignment
-							.getExternalTargetThesaurus());
+					
+					ExternalThesaurus externalThesaurusHere = alignment.getExternalTargetThesaurus();
+					
+					//ExternalThesaurus already updated in base ?
+					int i = 0;
+					while(null == externalThesaurusToSet && i < lExternalThesaurusUpdated.size()){
+						ExternalThesaurus externalThesaurusUpdated = lExternalThesaurusUpdated.get(i);
+						if(externalThesaurusUpdated.getExternalId().equals(externalThesaurusHere.getExternalId())){
+							if(externalThesaurusUpdated.getExternalThesaurusType() == externalThesaurusHere.getExternalThesaurusType()){
+								externalThesaurusToSet = externalThesaurusUpdated;
+							}
+						}
+						i++;
+					}
+					
+					//ExternalThesaurus already in base ? (if not updated)
+					if(null == externalThesaurusToSet){
+						List<ExternalThesaurus> lExternalsThesaurusMatchOnBase = externalThesaurusDAO.getByExternalId(externalThesaurusHere.getExternalId());
+						int j =0;
+						while(null == externalThesaurusToSet && j < lExternalsThesaurusMatchOnBase.size()){
+							ExternalThesaurus externalThesaurusMatchOnBase = lExternalsThesaurusMatchOnBase.get(j);
+							if(externalThesaurusMatchOnBase.getExternalThesaurusType() == externalThesaurusHere.getExternalThesaurusType()){
+								externalThesaurusToSet = externalThesaurusMatchOnBase;
+							}
+							j++;
+						}
+					}
+					
+					//ExternalThesaurus update in base (if not already done and not already present)
+					if(null == externalThesaurusToSet){
+						externalThesaurusToSet = externalThesaurusDAO.update(alignment.getExternalTargetThesaurus());
+						lExternalThesaurusUpdated.add(externalThesaurusToSet);
+					}
+					
+					alignment.setExternalTargetThesaurus(externalThesaurusToSet);
+					
 				}
-				if (alignment.getInternalTargetThesaurus() != null
-						|| alignment.getExternalTargetThesaurus() != null) {
-					for (AlignmentConcept alignmentConcept : alignment
-							.getTargetConcepts()) {
+				
+				if (alignment.getInternalTargetThesaurus() != null || alignment.getExternalTargetThesaurus() != null) {
+					for (AlignmentConcept alignmentConcept : alignment.getTargetConcepts()) {
 						alignmentConceptDAO.update(alignmentConcept);
 					}
 					alignmentDAO.update(alignment);
 				} else {
 					bannedAlignments.add(alignment);
 				}
-
+				
 			}
 			counter++;
 		}
