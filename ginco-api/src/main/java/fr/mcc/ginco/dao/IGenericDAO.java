@@ -61,6 +61,14 @@ public interface IGenericDAO<T, ID extends Serializable> {
 	 * @return An object of type T matching with the given id
 	 */
 	T getById(ID id);
+	
+	/**
+	 * Get an object of type T by external id
+	 * 
+	 * @param external_id
+	 * @return An object of type T matching with the given external_id
+	 */
+	List<T> getByExternalId(String externalId);
 
 
     /**
