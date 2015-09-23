@@ -142,6 +142,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	                                                                         int startIndex, int limit) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
+				request = request.replaceAll(" ", "\\\\ ");
 				String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(null, null);
