@@ -146,6 +146,7 @@ public class SearcherServiceUtil {
 		result.setModified(getSolrDateField(doc, SolrField.MODIFIED));
 		result.setStatus(getSolrField(doc, SolrField.STATUS));
 		result.setTypeExt(getSolrField(doc, SolrField.EXT_TYPE));
+		result.setConceptId(getSolrField(doc, SolrField.CONCEPTID));
 		List<String> languages = new ArrayList<String>();
 		for (Object lang : doc.getFieldValues(SolrField.LANGUAGE)) {
 			languages.add(lang.toString());

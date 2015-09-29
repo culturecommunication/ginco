@@ -56,6 +56,7 @@ public final class SolrField {
 	public static final String EXT_TYPE = "ext_type";
 	public static final String LANGUAGE = "language";
 	public static final String TEXT = "text";
+	public static final String CONCEPTID = "conceptId";
 
 	public static String getCheckedValue(String fieldName) {
 		for (Field f : SolrField.class.getFields()) {

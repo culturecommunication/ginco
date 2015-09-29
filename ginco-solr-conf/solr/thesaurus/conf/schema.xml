@@ -16,6 +16,7 @@
                 <field name="ext_type" type="int" indexed="true" stored="true" multiValued="false"/>
                 <field name="notes" type="text_fr" indexed="true" stored="true" multiValued="true"/>
                 <field name="_version_" type="long" indexed="true" stored="true"/>
+                <field name="conceptId" type="string" indexed="false" stored="true" multiValued="false" />
             </fields>
 
             <uniqueKey>identifier</uniqueKey>
