@@ -69,6 +69,10 @@ public class TermSolrConverter {
 		doc.addField(SolrField.LEXICALVALUE, thesaurusTerm.getLexicalValue());
 		doc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
 		doc.addField(SolrField.LANGUAGE, thesaurusTerm.getLanguage().getId());
+		if (thesaurusTerm.getConcept()!=null)
+		{
+			doc.addField(SolrField.CONCEPTID, thesaurusTerm.getConcept().getIdentifier());
+		}
 
 		boolean preferred;
 

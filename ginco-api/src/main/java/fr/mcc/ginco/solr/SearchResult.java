@@ -47,6 +47,7 @@ public class SearchResult {
     private String modified;
     private String created;
     private String status;
+    private String conceptId;
 	private List<String> languages;
 
 	public String getIdentifier() {
@@ -127,5 +128,13 @@ public class SearchResult {
 
 	public void setLanguages(List<String> languages) {
 		this.languages = languages;
+	}
+
+	public String getConceptId() {
+		return conceptId;
+	}
+
+	public void setConceptId(String conceptId) {
+		this.conceptId = conceptId;
 	}
 }
