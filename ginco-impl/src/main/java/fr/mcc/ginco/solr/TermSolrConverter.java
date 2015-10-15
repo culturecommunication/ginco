@@ -38,6 +38,8 @@ package fr.mcc.ginco.solr;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.INoteService;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +68,7 @@ public class TermSolrConverter {
 		doc.addField(SolrField.THESAURUSTITLE, thesaurusTerm.getThesaurus()
 				.getTitle());
 		doc.addField(SolrField.IDENTIFIER, thesaurusTerm.getIdentifier());
-		doc.addField(SolrField.LEXICALVALUE, thesaurusTerm.getLexicalValue());
+		doc.addField(SolrField.LEXICALVALUE, StringEscapeUtils.unescapeHtml4(thesaurusTerm.getLexicalValue().replace("&apos;", "'")));
 		doc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
 		doc.addField(SolrField.LANGUAGE, thesaurusTerm.getLanguage().getId());
 		if (thesaurusTerm.getConcept()!=null)
