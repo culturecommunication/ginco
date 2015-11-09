@@ -106,6 +106,21 @@ public class AlignmentViewConverter {
 			view.setInternalThesaurusId(alignment.getInternalTargetThesaurus()
 					.getIdentifier());
 		}
+		if(alignment.getInternalTargetThesaurus() == null &&
+				alignment.getExternalTargetThesaurus() == null) {
+			Set<AlignmentResource> alignmentResources = alignment.getTargetResources();
+			List<AlignmentResourceView> targetExternalResources = new ArrayList<AlignmentResourceView>();
+			for(AlignmentResource alignmentResource : alignmentResources) {
+				AlignmentResourceView alignmentResourceView = new AlignmentResourceView();
+				alignmentResourceView.setIdentifier(alignmentResource.getIdentifier());
+				if(alignmentResource.getExternalTargetResource() != null) {
+					alignmentResourceView.setExternalTargetResource(alignmentResource
+						.getExternalTargetResource());
+				}
+				targetExternalResources.add(alignmentResourceView);
+			}
+			view.setTargetResources(targetExternalResources);
+		}
 		view.setModified(DateUtil.toString(alignment.getModified()));
 		Set<AlignmentConcept> targetConcepts = alignment.getTargetConcepts();
 		List<AlignmentConceptView> targetInternalConcepts = new ArrayList<AlignmentConceptView>();
