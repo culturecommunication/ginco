@@ -33,48 +33,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-/*
- * Concept Note Type Store 
- * This file contains all note types displayed in dropdown lists
- */
-Ext.define('GincoApp.store.AlignmentTypeStore', {
-    extend: 'Ext.data.Store',
-    currentFilter: null,
-    isAnResource: false,
+Ext.define('GincoApp.model.AlignmentTargetResourceModel', {
+    extend: 'Ext.data.Model',
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            proxy: {
-                type: 'ajax',
-                url: 'services/ui/thesaurusalignmentservice/getAlignmentTypes',
-                reader: {
-                    type: 'json',
-                    idProperty: 'identifier',
-                    root: 'data'
-                }
-            },
-            fields: [
-                {
-                    name: 'identifier',
-                    type: 'integer'
-                },
-                {
-                    name: 'label',
-                    type: 'string'
-                },
-                {
-                    name: 'multiConcept',
-                    type: 'boolean'
-                },
-                {
-                    name: 'resource',
-                    type: 'boolean'
-                }
-            ]
-        }, cfg)]);
-    }
+    fields: [
+        {
+            name: 'identifier',
+            type: 'string'
+        },
+        {
+            name: 'externalTargetResource',
+            type: 'string'
+        }
+    ],
+   idProperty : 'identifier'
 
 });

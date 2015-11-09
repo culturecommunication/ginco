@@ -43,9 +43,11 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 		var me = this, targetConcepts = '', i = 0, prefix = Ext.baseCSSPrefix;
 		var data = [];
 		if (record.targetConcepts) {
+			console.log('record.targetConcepts : '+record.targetConcepts );
 			Ext.Array.each(record.targetConcepts().getRange(), function(
 					targetConcept, index, array) {
 				if (targetConcept.get('internalTargetConcept')) {
+					console.log("internalTargetConcept");
 					var btnComp = Ext.create('Ext.button.Button', {
 								text : me.btnLbl,
 								iconCls : 'icon-display',
@@ -64,21 +66,20 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 								button : btnComp
 							});
 				} else if (targetConcept.get('externalTargetConcept')) {
+					console.log("externalTargetConcept");
 					var btnComp = Ext.create('Ext.button.Button', {
 								text : me.btnLbl,
 								iconCls : 'icon-display',
 								handler : function(btn) {
 									me.onBtnClick(btn);
 								},
-								conceptId : targetConcept
-										.get('externalTargetConcept'),
+								conceptId : targetConcept.get('externalTargetConcept'),
 								thesaurusId : '',
 								internalAlign : false
 							});
 					me.btnComponents.push(btnComp);
 					data.push({
-								url : targetConcept
-										.get('externalTargetConcept'),
+								url : targetConcept.get('externalTargetConcept'),
 								button : btnComp
 							});
 				}

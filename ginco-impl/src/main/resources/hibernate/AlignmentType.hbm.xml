@@ -11,6 +11,7 @@
 		<property name="label" />
 		<property name="defaultType" column="default_type" />
 		<property name="multiConcept" column="multi_concept" />
-		<property name="isoCode" column="isocode" />		
+		<property name="isoCode" column="isocode" />
+		<property name="resource" column="is_resource" />
 	</class>
 </hibernate-mapping>

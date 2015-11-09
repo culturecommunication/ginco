@@ -39,7 +39,8 @@ public class AlignmentType {
     private String label;
     private String isoCode;
     private boolean defaultType;
-    private boolean multiConcept;  
+    private boolean multiConcept;
+    private boolean resource;
     
 	
 	public Integer getIdentifier() {
@@ -72,4 +73,10 @@ public class AlignmentType {
 	public void setIsoCode(String isoCode) {
 		this.isoCode = isoCode;
 	}	
+	public void setResource(boolean resource) {
+		this.resource = resource;
+	}
+	public boolean isResource() {
+		return resource;
+	}
 }

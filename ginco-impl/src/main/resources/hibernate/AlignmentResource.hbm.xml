@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 	"-//Hibernate/Hibernate Mapping DTD 4.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="fr.mcc.ginco.beans">
+	<class name="AlignmentResource" table="alignment_resource">
+		<cache usage="read-write" />
+		<id name="identifier" column="identifier">
+             <generator class="sequence">
+                <param name="sequence">alignment_resource_identifier_seq</param>
+            </generator>
+        </id>
+        <property name="externalTargetResource" column="external_target_resource_id" />
+        <many-to-one name="alignment" class="fr.mcc.ginco.beans.Alignment" column="alignment_id" lazy="false" />
+    </class>
+</hibernate-mapping>

@@ -46,6 +46,7 @@ public class AlignmentView {
 	private String internalThesaurusId;
 	private List<ExternalThesaurusView> externalThesaurus;
     private List<AlignmentConceptView> targetConcepts;
+	private List<AlignmentResourceView> targetResources;
 
 	public String getIdentifier() {
 		return identifier;
@@ -110,4 +111,12 @@ public class AlignmentView {
     public void setTargetConcepts(List<AlignmentConceptView> targetConcepts) {
         this.targetConcepts = targetConcepts;
     }
+
+	public List<AlignmentResourceView> getTargetResources() {
+		return targetResources;
+	}
+
+	public void setTargetResources(List<AlignmentResourceView> targetResources) {
+		this.targetResources = targetResources;
+	}
 }
