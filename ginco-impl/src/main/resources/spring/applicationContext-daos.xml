@@ -48,6 +48,7 @@
                 <value>hibernate/CustomTermAttribute.hbm.xml</value>
                 <value>hibernate/Alignment.hbm.xml</value>
                 <value>hibernate/AlignmentConcept.hbm.xml</value>
+                <value>hibernate/AlignmentResource.hbm.xml</value>
                 <value>hibernate/AlignmentType.hbm.xml</value>
                 <value>hibernate/ExternalThesaurus.hbm.xml</value>
                 <value>hibernate/ExternalThesaurusType.hbm.xml</value>
@@ -101,6 +102,10 @@
 
    <bean id="alignmentConceptDAO"  class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
         <constructor-arg value="fr.mcc.ginco.beans.AlignmentConcept" />
+    </bean>
+
+    <bean id="alignmentResourceDAO"  class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">
+        <constructor-arg value="fr.mcc.ginco.beans.AlignmentResource" />
     </bean>
 
     <bean id="externalThesaurusTypeDAO" class="fr.mcc.ginco.dao.hibernate.GenericHibernateDAO">

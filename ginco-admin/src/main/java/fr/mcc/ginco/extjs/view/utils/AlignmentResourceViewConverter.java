@@ -34,49 +34,45 @@
  */
 package fr.mcc.ginco.extjs.view.utils;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.mcc.ginco.beans.Alignment;
+import fr.mcc.ginco.beans.AlignmentConcept;
+import fr.mcc.ginco.beans.AlignmentResource;
+import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.exceptions.BusinessException;
+import fr.mcc.ginco.extjs.view.pojo.AlignmentConceptView;
+import fr.mcc.ginco.extjs.view.pojo.AlignmentResourceView;
+import fr.mcc.ginco.services.IThesaurusConceptService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.AlignmentConcept;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.extjs.view.pojo.AlignmentConceptView;
-import fr.mcc.ginco.services.IThesaurusConceptService;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  */
-@Component("alignmentConceptViewConverter")
-public class AlignmentConceptViewConverter {
+@Component("alignmentResourceViewConverter")
+public class AlignmentResourceViewConverter {
 	
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
 
-	private Logger logger = LoggerFactory.getLogger(AlignmentConceptViewConverter.class);
+	private Logger logger = LoggerFactory.getLogger(AlignmentResourceViewConverter.class);
 	/**
 	 * convert an Alignment object to an AlignmentView suitable for display
 	 * 
 	 * @param alignment
 	 * @return
 	 */
-	public AlignmentConceptView convertAlignmentConcept(
-			AlignmentConcept alignmentConcept) {
-		AlignmentConceptView view = new AlignmentConceptView();
+	public AlignmentResourceView convertResourceConcept(
+			AlignmentResource alignmentResource) {
+		AlignmentResourceView view = new AlignmentResourceView();
 
-		view.setIdentifier(alignmentConcept.getIdentifier());
-		if (alignmentConcept.getInternalTargetConcept() != null) {
-			view.setInternalTargetConcept(alignmentConcept
-					.getInternalTargetConcept().getIdentifier());
-		}
-		view.setExternalTargetConcept(alignmentConcept
-				.getExternalTargetConcept());
+		view.setIdentifier(alignmentResource.getIdentifier());
+		view.setExternalTargetResource(alignmentResource.getExternalTargetResource());
 
 		return view;
 	}
@@ -86,30 +82,20 @@ public class AlignmentConceptViewConverter {
 	 * object
 	 * 
 	 * @param alignmentView
-	 * @param convertedConcept
+	 * @param convertedResource
 	 * @return
 	 */
-	public AlignmentConcept convertAlignmentConceptView(
-			AlignmentConceptView alignmentConceptView, Alignment alignment) {
-		logger.debug("AlignmentConceptView to store : " + alignmentConceptView.toString());
-		AlignmentConcept alignmentConcept = new AlignmentConcept();
-		alignmentConcept.setAlignment(alignment);
+	public AlignmentResource convertAlignmentResourceView(AlignmentResourceView alignmentResourceView, Alignment alignment) {
+		logger.debug("AlignmentResourceView to store : " + alignmentResourceView.toString());
+		AlignmentResource alignmentResource = new AlignmentResource();
+		alignmentResource.setAlignment(alignment);
 		
-		if (StringUtils.isNotEmpty(alignmentConceptView.getExternalTargetConcept())) {
-			alignmentConcept.setExternalTargetConcept(alignmentConceptView.getExternalTargetConcept());
+		if (StringUtils.isNotEmpty(alignmentResourceView.getExternalTargetResource())) {
+			alignmentResource.setExternalTargetResource(alignmentResourceView.getExternalTargetResource());
 		}
-		if (StringUtils.isNotEmpty(alignmentConceptView.getInternalTargetConcept())) {
-			ThesaurusConcept target = thesaurusConceptService.getThesaurusConceptById(alignmentConceptView.getInternalTargetConcept().trim());
-			if (target == null) {
-				throw new BusinessException("Alignment internal target concept does not exist",
-						"missing-alignment-internal-target-concept", new Object[]{alignmentConceptView.getInternalTargetConcept()});
-			}
-			
-			alignmentConcept.setInternalTargetConcept(target);
+		if (null != alignmentResourceView.getIdentifier()) {
+			alignmentResource.setIdentifier(alignmentResourceView.getIdentifier());
 		}
-		if (null != alignmentConceptView.getIdentifier()) {
-			alignmentConcept.setIdentifier(alignmentConceptView.getIdentifier());
-		}
-		return alignmentConcept;
+		return alignmentResource;
 	}
 }

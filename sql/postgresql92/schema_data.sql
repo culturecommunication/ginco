@@ -108,7 +108,6 @@ CREATE SEQUENCE alignment_concept_identifier_seq
     NO MAXVALUE
     CACHE 1;
 
-
 --
 -- TOC entry 3388 (class 0 OID 0)
 -- Dependencies: 226
@@ -116,6 +115,38 @@ CREATE SEQUENCE alignment_concept_identifier_seq
 --
 
 ALTER SEQUENCE alignment_concept_identifier_seq OWNED BY alignment_concept.identifier;
+
+--
+-- TOC entry 223 (class 1259 OID 20947)
+-- Name: alignment_resource; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE alignment_resource (
+    identifier integer NOT NULL,
+    external_target_resource_id text,
+    alignment_id text
+);
+
+
+--
+-- TOC entry 226 (class 1259 OID 20975)
+-- Name: alignment_resource_identifier_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE alignment_resource_identifier_seq
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
+
+--
+-- TOC entry 3388 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: alignment_resource_identifier_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE alignment_resource_identifier_seq OWNED BY alignment_resource.identifier;
 
 
 --
@@ -128,7 +159,8 @@ CREATE TABLE alignment_type (
     label text NOT NULL,
     isocode text NOT NULL,
     default_type boolean NOT NULL,
-    multi_concept boolean NOT NULL
+    multi_concept boolean NOT NULL,
+    is_resource boolean NOT NULL
 );
 
 
@@ -1223,6 +1255,14 @@ INSERT INTO admin_user_id (identifier) VALUES ('admin');
 
 SELECT pg_catalog.setval('alignment_concept_identifier_seq', 1, false);
 
+--
+-- TOC entry 3405 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: alignment_resource_identifier_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('alignment_resource_identifier_seq', 1, false);
+
 
 --
 -- TOC entry 3370 (class 0 OID 20965)
@@ -1230,17 +1270,19 @@ SELECT pg_catalog.setval('alignment_concept_identifier_seq', 1, false);
 -- Data for Name: alignment_type; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (1, 'Equivalence exacte', '=EQ', false, true);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (2, 'Equivalence inexacte', '~EQ', false, true);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (3, 'Alignement générique', 'BM', false, false);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (4, 'Alignement spécifique', 'NM', false, false);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (5, 'Alignement générique générique', 'BMG', false, false);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (6, 'Alignement spécifique générique', 'NMG', false, false);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (7, 'Alignement générique partitif', 'BMP', false, false);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (8, 'Alignement spécifique partitif', 'NMP', false, false);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (9, 'Alignement générique instance', 'BMI', false, false);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (10, 'Alignement spécifique instance', 'NMI', false, false);
-INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept) VALUES (11, 'Alignement associatif', 'RM', false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (1, 'Equivalence exacte', '=EQ', false, true, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (2, 'Equivalence inexacte', '~EQ', false, true, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (3, 'Alignement générique', 'BM', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (4, 'Alignement spécifique', 'NM', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (5, 'Alignement générique générique', 'BMG', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (6, 'Alignement spécifique générique', 'NMG', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (7, 'Alignement générique partitif', 'BMP', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (8, 'Alignement spécifique partitif', 'NMP', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (9, 'Alignement générique instance', 'BMI', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (10, 'Alignement spécifique instance', 'NMI', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (11, 'Alignement associatif', 'RM', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (12, 'Image', 'IMG', false, false, true);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (13, 'Ressource', 'RES', false, false, true);
 
 
 --
@@ -1882,6 +1924,14 @@ ALTER TABLE ONLY alignment
 
 ALTER TABLE ONLY alignment_concept
     ADD CONSTRAINT pk_alignment_concept PRIMARY KEY (identifier);
+
+--
+-- TOC entry 3125 (class 2606 OID 20954)
+-- Name: pk_alignment_resource; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY alignment_resource
+ADD CONSTRAINT pk_alignment_resource PRIMARY KEY (identifier);
 
 
 --
@@ -2617,6 +2667,14 @@ ALTER TABLE ONLY thesaurus_thesaurusterm_aud
 
 ALTER TABLE ONLY alignment_concept
     ADD CONSTRAINT fk_alignment FOREIGN KEY (alignment_id) REFERENCES alignment(identifier) ON DELETE CASCADE;
+
+--
+-- TOC entry 3204 (class 2606 OID 20960)
+-- Name: fk_alignment; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY alignment_resource
+ADD CONSTRAINT fk_alignment FOREIGN KEY (alignment_id) REFERENCES alignment(identifier) ON DELETE CASCADE;
 
 
 --

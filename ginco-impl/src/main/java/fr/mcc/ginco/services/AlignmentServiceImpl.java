@@ -35,10 +35,7 @@
 package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.AlignmentConcept;
-import fr.mcc.ginco.beans.ExternalThesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
@@ -60,6 +57,9 @@ public class AlignmentServiceImpl implements IAlignmentService {
 
 	@Inject
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
+
+	@Inject
+	private IGenericDAO<AlignmentResource, Integer> alignmentResourceDAO;
 
 	@Inject
 	private IExternalThesaurusDAO externalThesaurusDAO;
@@ -101,8 +101,12 @@ public class AlignmentServiceImpl implements IAlignmentService {
 		for (Alignment existingAlignment : existingAlignments) {
 			if (!alignments.contains(existingAlignment)) {
 				Set<AlignmentConcept> concepts = existingAlignment.getTargetConcepts();
+				Set<AlignmentResource> resources = existingAlignment.getTargetResources();
 				for (AlignmentConcept alignmentConcept : concepts) {
 					alignmentConceptDAO.delete(alignmentConcept);
+				}
+				for (AlignmentResource alignmentResource : resources) {
+					alignmentResourceDAO.delete(alignmentResource);
 				}
 				alignmentDAO.delete(existingAlignment);
 			}
@@ -115,6 +119,10 @@ public class AlignmentServiceImpl implements IAlignmentService {
 			Set<AlignmentConcept> concepts = alignment.getTargetConcepts();
 			for (AlignmentConcept alignmentConcept : concepts) {
 				alignmentConceptDAO.update(alignmentConcept);
+			}
+			Set<AlignmentResource> resources = alignment.getTargetResources();
+			for (AlignmentResource alignmentResource : resources) {
+				alignmentResourceDAO.update(alignmentResource);
 			}
 
 			alignmentDAO.update(alignment);

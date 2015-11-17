@@ -42,12 +42,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import fr.mcc.ginco.beans.*;
 import org.springframework.stereotype.Component;
 
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.AlignmentConcept;
-import fr.mcc.ginco.beans.ExternalThesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IExternalThesaurusDAO;
 import fr.mcc.ginco.dao.IGenericDAO;
@@ -67,6 +64,9 @@ public class GincoAlignmentImporter {
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
 
 	@Inject
+	private IGenericDAO<AlignmentResource, Integer> alignmentResourceDAO;
+
+	@Inject
 	private IThesaurusConceptDAO thesaurusConceptDAO;
 
 	@Inject
@@ -84,42 +84,52 @@ public class GincoAlignmentImporter {
 		for (String conceptKey : alignments.keySet()) {
 			JaxbList<Alignment> alignmentImported = alignments.get(conceptKey);
 			for (Alignment ali : alignmentImported.getList()) {
-				Set<AlignmentConcept> concepts = ali.getTargetConcepts();
-				List<ThesaurusConcept> existingInternalConcepts = new ArrayList<ThesaurusConcept>();
-				for (AlignmentConcept alignmentConcept : concepts) {
-					if (alignmentConcept.getInternalTargetConcept() != null) {
-						ThesaurusConcept existingTarget = thesaurusConceptDAO
-								.getById(alignmentConcept
-										.getInternalTargetConcept()
-										.getIdentifier());
-						if (existingTarget == null) {
-							if (missingInternalconcepts.containsKey(ali)) {
-								List<AlignmentConcept> aliConcepts = missingInternalconcepts
-										.get(ali);
-								aliConcepts.add(alignmentConcept);
-								missingInternalconcepts.put(ali, aliConcepts);
+				AlignmentType alignmentType = ali.getAlignmentType();
+				if(alignmentType.isResource()){
+					Set<AlignmentResource> resources = ali.getTargetResources();
+					for (AlignmentResource alignmentResource : resources) {
+						alignmentResource.setAlignment(ali);
+						alignmentResourceDAO.update(alignmentResource);
+					}
+					alignmentDAO.update(ali);
+				}else {
+					Set<AlignmentConcept> concepts = ali.getTargetConcepts();
+					List<ThesaurusConcept> existingInternalConcepts = new ArrayList<ThesaurusConcept>();
+					for (AlignmentConcept alignmentConcept : concepts) {
+						if (alignmentConcept.getInternalTargetConcept() != null) {
+							ThesaurusConcept existingTarget = thesaurusConceptDAO
+									.getById(alignmentConcept
+											.getInternalTargetConcept()
+											.getIdentifier());
+							if (existingTarget == null) {
+								if (missingInternalconcepts.containsKey(ali)) {
+									List<AlignmentConcept> aliConcepts = missingInternalconcepts
+											.get(ali);
+									aliConcepts.add(alignmentConcept);
+									missingInternalconcepts.put(ali, aliConcepts);
+
+								} else {
+									List<AlignmentConcept> aliConcepts = new ArrayList<AlignmentConcept>();
+									aliConcepts.add(alignmentConcept);
+									missingInternalconcepts.put(ali, aliConcepts);
+								}
 
 							} else {
-								List<AlignmentConcept> aliConcepts = new ArrayList<AlignmentConcept>();
-								aliConcepts.add(alignmentConcept);
-								missingInternalconcepts.put(ali, aliConcepts);
+								existingInternalConcepts.add(existingTarget);
+								alignmentConcept
+										.setInternalTargetConcept(existingTarget);
+								ali.setInternalTargetThesaurus(existingTarget.getThesaurus());
+								alignmentConcept.setAlignment(ali);
+								alignmentConceptDAO.update(alignmentConcept);
 							}
-
 						} else {
-							existingInternalConcepts.add(existingTarget);
-							alignmentConcept
-									.setInternalTargetConcept(existingTarget);
-							ali.setInternalTargetThesaurus(existingTarget.getThesaurus());
 							alignmentConcept.setAlignment(ali);
 							alignmentConceptDAO.update(alignmentConcept);
 						}
-					} else {
-						alignmentConcept.setAlignment(ali);
-						alignmentConceptDAO.update(alignmentConcept);
 					}
-				}
-				if (!missingInternalconcepts.containsKey(ali)) {
-					alignmentDAO.update(ali);
+					if (!missingInternalconcepts.containsKey(ali)) {
+						alignmentDAO.update(ali);
+					}
 				}
 			}
 		}

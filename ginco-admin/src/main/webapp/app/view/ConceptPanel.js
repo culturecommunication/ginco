@@ -33,7 +33,7 @@ Ext.Loader.setPath('Ext.ux', 'extjs/ux');
 Ext.require(['Ext.ux.CheckColumn', 'GincoApp.view.NoteConceptPanel',
 		'GincoApp.view.RightNotePanel', 'GincoApp.view.CustomAttrForm',
 		'GincoApp.view.AlignmentColumn', 'GincoApp.view.MetaDataPanel',
-		'GincoApp.view.SuggestionPanel']);
+		'GincoApp.view.AlignmentColumnResource','GincoApp.view.SuggestionPanel']);
 
 Ext.define('GincoApp.view.ConceptPanel', {
 	extend : 'GincoApp.view.ThesaurusEntityPanel',
@@ -100,6 +100,7 @@ Ext.define('GincoApp.view.ConceptPanel', {
 	xAlignmentOrRelation : 'OR',
 	xAlignmentEdit : 'Edit alignment',
 	xAlignmentGoBtn : 'View',
+	xAlignmentResources : 'Resources',
 	xSuggestionsTab : 'Suggestions',
 
 	conceptHierarchicalRoleRenderer : function(value, record) {
@@ -623,6 +624,13 @@ Ext.define('GincoApp.view.ConceptPanel', {
 												xtype : 'alignmentcolumn',
 												btnLbl : me.xAlignmentGoBtn,
 												flex : 1
+											},{
+												text : me.xAlignmentResources,
+												dataIndex : 'targetResources',
+												itemId : 'alignmentUrlResourcesColumn',
+												xtype : 'alignmentcolumnresource',
+												btnLbl : me.xAlignmentGoBtn,
+												flex : 2
 											}, {
 												xtype : 'actioncolumn',
 												itemId : 'alignmentActionColumn',
@@ -632,7 +640,7 @@ Ext.define('GincoApp.view.ConceptPanel', {
 													altText: me.xAlignmentEdit,
 													tooltip : me.xAlignmentEdit,
 													iconCls : 'icon-edit'
-												}, {
+													}, {
 													icon : 'images/detach.png',
 													altText: me.xAlignmentRemove,
 													tooltip : me.xAlignmentRemove,

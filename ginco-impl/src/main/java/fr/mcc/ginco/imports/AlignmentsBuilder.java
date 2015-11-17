@@ -41,6 +41,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,7 @@ import fr.mcc.ginco.beans.AlignmentType;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.services.IAlignmentTypeService;
 import fr.mcc.ginco.skos.namespaces.SKOS;
+import fr.mcc.ginco.foaf.namespaces.FOAF;
 
 /**
  * Builder in charge of building concept alignments
@@ -92,12 +94,17 @@ public class AlignmentsBuilder extends AbstractBuilder {
 		for (AlignmentType alignmentType : alignmentTypes) {
 			String isoCode = alignmentType.getIsoCode();
 			if (SKOS.SKOS_ALIGNMENTS.containsKey(isoCode)) {
-				StmtIterator stmtItr = skosConcept
-						.listProperties(SKOS.SKOS_ALIGNMENTS.get(isoCode));
+				StmtIterator stmtItr = skosConcept.listProperties(SKOS.SKOS_ALIGNMENTS.get(isoCode));
 				while (stmtItr.hasNext()) {
 					Statement stmtAlignment = stmtItr.next();
-					alignments.add(alignmentBuilder.buildAlignment(stmtAlignment, alignmentType,
-							concept));
+					alignments.add(alignmentBuilder.buildAlignment(stmtAlignment, alignmentType, concept));
+				}
+			}
+			if(FOAF.FOAF_ALIGNMENTS.containsKey(isoCode)){
+				StmtIterator stmtItr = skosConcept.listProperties(FOAF.FOAF_ALIGNMENTS.get(isoCode));
+				while (stmtItr.hasNext()) {
+					Statement stmtAlignment = stmtItr.next();
+					alignments.add(alignmentBuilder.buildAlignment(stmtAlignment, alignmentType, concept));
 				}
 			}
 		}

@@ -70,15 +70,13 @@ Ext.define('GincoApp.view.AlignmentColumn', {
 								handler : function(btn) {
 									me.onBtnClick(btn);
 								},
-								conceptId : targetConcept
-										.get('externalTargetConcept'),
+								conceptId : targetConcept.get('externalTargetConcept'),
 								thesaurusId : '',
 								internalAlign : false
 							});
 					me.btnComponents.push(btnComp);
 					data.push({
-								url : targetConcept
-										.get('externalTargetConcept'),
+								url : targetConcept.get('externalTargetConcept'),
 								button : btnComp
 							});
 				}

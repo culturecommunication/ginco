@@ -361,11 +361,25 @@ Ext.define('GincoApp.controller.ConceptController', {
 
 	createAlignmentWin : function(thePanel, theGrid, record) {
 		var me = this;
+		var sAlignmentTypeStore = Ext.create('GincoApp.store.AlignmentTypeStore', {
+			model: 'User',
+			filters: [{
+				property: 'resource',
+				value: false
+			}]
+		});
+		var sAlignmentTypeStoreResource = Ext.create('GincoApp.store.AlignmentTypeStore', {
+			model: 'User',
+			filters: [{
+				property: 'resource',
+				value: true
+			}]
+		});
 		var win = Ext.create('GincoApp.view.AlignmentWin', {
 					thesaurusData : thePanel.thesaurusData,
 					conceptId : thePanel.gincoId,
-					storeAlignmentTypes : Ext
-							.create('GincoApp.store.AlignmentTypeStore'),
+					storeAlignmentTypes : sAlignmentTypeStore,
+					storeAlignmentTypesResource : sAlignmentTypeStoreResource,
 					listeners : {
 						addAlignment : {
 							fn : function(theButton) {
@@ -373,7 +387,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 							}
 						}
 					}
-
 				});
 		return win;
 	},
@@ -393,11 +406,11 @@ Ext.define('GincoApp.controller.ConceptController', {
 		model.data.andRelation = theForm.down('#isAndCheckbox').value;
 		model.data.alignmentType = theForm.down('#typeCombo').value;
 
-		var externalThesaurusModel = Ext
-				.create('GincoApp.model.ExternalThesaurusModel');
+		var externalThesaurusModel = Ext.create('GincoApp.model.ExternalThesaurusModel');
 
 		var fields = theForm.getForm().getFields();
 		model.targetConcepts().removeAll();
+		model.targetResources().removeAll();
 		for (idx in fields.items) {
 			field = fields.items[idx];
 			if(field.getName() == 'internal_concept'  && field.value && Ext.String.trim(field.value) != '') {
@@ -410,6 +423,12 @@ Ext.define('GincoApp.controller.ConceptController', {
             	alignmentConceptModel.set('externalTargetConcept',field.value);
 				model.targetConcepts().add(alignmentConceptModel);
             }
+			if (field.getName() == 'external_resource' && field.value  && Ext.String.trim(field.value) != '') {
+				model.data.alignmentType = theForm.down('#typeComboResource').value;
+				var alignmentResourceModel = Ext.create('GincoApp.model.AlignmentTargetResourceModel');
+				alignmentResourceModel.set('externalTargetResource',field.value);
+				model.targetResources().add(alignmentResourceModel);
+			}
 			if (field.getName() == 'external_thesaurus') {
 				externalThesaurusModel.set('externalId', field.getValue());
 			}
@@ -419,12 +438,12 @@ Ext.define('GincoApp.controller.ConceptController', {
 				}
 			}
 			if (field.getName() == 'external_thesaurus_type') {
-				externalThesaurusModel
-						.set('externalThesaurusType', field.value);
+				externalThesaurusModel.set('externalThesaurusType', field.value);
 			}
 		}
 		model.externalThesaurus().removeAll();
 		model.externalThesaurus().add(externalThesaurusModel);
+
 		if (theAlignmentGridStore.findRecord('identifier',
 				model.data.identifier) == null
 				&& !record) {
@@ -811,8 +830,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var associatedData = associatedGridStore.getRange();
 
 		var hierarchicalParentGrid = theForm.down('#gridPanelParentConcepts');
-		var hierarchicalParentData = hierarchicalParentGrid.getStore()
-				.getRange();
+		var hierarchicalParentData = hierarchicalParentGrid.getStore().getRange();
 
 		var hierarchicalChildGrid = theForm.down('#gridPanelChildrenConcepts');
 		var hierarchicalChildData = hierarchicalChildGrid.getStore().getRange();
@@ -820,10 +838,12 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var alignmentsGrid = theForm.down('#gridPanelAlignments');
 		var alignmentsData = alignmentsGrid.getStore().getRange();
 		Ext.Array.each(alignmentsData, function(alignment) {
-					var targetConceptData = alignment.targetConceptsStore
-							.getRange();
+					var targetConceptData = alignment.targetConceptsStore.getRange();
+					var targetResourceData = alignment.targetResourcesStore.getRange();
 					alignment.targetConcepts().removeAll();
+					alignment.targetResources().removeAll();
 					alignment.targetConcepts().add(targetConceptData);
+					alignment.targetResources().add(targetResourceData);
 				});
 		var thePanel = me.getActivePanel(theButton);
 
@@ -841,7 +861,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 		updatedModel.alignments().add(alignmentsData);
 
 		updatedModel.data.rootConcepts = rootIds;
-
 		updatedModel.save({
 					success : function(record, operation) {
 						var resultRecord = operation.getResultSet().records[0];
@@ -1065,7 +1084,10 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'conceptPanel  button[cls=addAlignment]' : {
 				click : this.addAlignment
 			},
-			'conceptPanel #gridPanelAlignments  #alignmentUrlColumn' : {
+			'conceptPanel #gridPanelAlignments  #alignmentcolumn' : {
+				gotoconcept : this.onGotoAlignedConcept
+			},
+			'conceptPanel #gridPanelAlignments  #alignmentUrlResourcesColumn' : {
 				gotoconcept : this.onGotoAlignedConcept
 			},
 			'conceptPanel #gridPanelAlignments #alignmentActionColumn' : {

@@ -43,6 +43,7 @@ Ext
 					localized : true,
 					config : {
 						storeAlignmentTypes : null	,
+						storeAlignmentTypesResource : null,
 						alignmentId : null
 					},
 
@@ -57,8 +58,9 @@ Ext
 					xAlignmentWinTitle: "Create alignment",
 					xTypeLabel: "Aligment type",
 					xAndOrOr: "AND between concepts",
-					xAddInternalConceptId: "Add a ginco concept",	
-					xAddExternalConceptId : "Add an external concept",
+					xAddInternalConceptId: "Ginco concept",	
+					xAddExternalConceptId : "External concept",
+					xAddExternalResource : "External resource",
 					xSaveBtn : "Save",
 					width : 500,					
 					titleAlign : 'center',
@@ -108,6 +110,13 @@ Ext
 												iconCls : 'icon-add',
 												itemId : 'addExternalConceptId',
 												cls: 'addExternalConcept'
+											},{
+												xtype : 'button',
+												text : me.xAddExternalResource,
+												disabled : false,
+												iconCls : 'icon-add',
+												itemId : 'addExternalResource',
+												cls: 'addExternalResource'
 											}]
 										} ],
 										defaults : {
@@ -127,6 +136,19 @@ Ext
 													forceSelection : true,
 													store : me.storeAlignmentTypes,
 													allowBlank : false													
+												},{
+													xtype : 'combobox',
+													name : 'alignmentTypeResource',
+													itemId : 'typeComboResource',
+													fieldLabel : me.xTypeLabel,
+													editable : false,
+													displayField : 'label',
+													valueField : 'identifier',
+													forceSelection : true,
+													disabled:true,
+													hidden:true,
+													store : me.storeAlignmentTypesResource,
+													allowBlank : false
 												},{
 													xtype : 'checkbox',
 													name : 'isAnd',

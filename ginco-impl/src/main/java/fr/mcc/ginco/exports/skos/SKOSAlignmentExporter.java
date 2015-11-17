@@ -39,6 +39,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.mcc.ginco.foaf.namespaces.FOAF;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -78,15 +79,23 @@ public class SKOSAlignmentExporter {
 		List<Alignment> alignments = alignmentService
 				.getAlignmentsBySourceConceptId(conceptId);
 		for (Alignment alignment : alignments) {
-			ThesaurusConcept internalTargetConcept = alignment
-					.getTargetConcepts().iterator().next()
-					.getInternalTargetConcept();
+            ThesaurusConcept internalTargetConcept = null;
+            if(alignment.getTargetConcepts() != null &&
+                    !alignment.getTargetConcepts().isEmpty()) {
+                internalTargetConcept = alignment
+                        .getTargetConcepts().iterator().next()
+                        .getInternalTargetConcept();
+            }
 			String targetConceptId = "";
 			if (internalTargetConcept != null) {
 				targetConceptId = internalTargetConcept.getIdentifier();
-			} else {
+			} else if(alignment.getTargetConcepts() != null &&
+                    !alignment.getTargetConcepts().isEmpty()) {
 				targetConceptId = alignment.getTargetConcepts().iterator()
 						.next().getExternalTargetConcept();
+			} else {
+				targetConceptId = alignment.getTargetResources().iterator()
+						.next().getExternalTargetResource();
 			}
 			Resource alignmentRes = defaultModel
 					.createResource(targetConceptId);
@@ -118,7 +127,13 @@ public class SKOSAlignmentExporter {
 
 				defaultModel.add(conceptResource, SKOS.RELATED_MATCH,
 						alignmentRes);
-			}
+			} else if ("IMG".equals(alignmentType)) {
+                defaultModel.add(conceptResource, FOAF.depiction,
+                        alignmentRes);
+            } else if ("RES".equals(alignmentType)) {
+                defaultModel.add(conceptResource, FOAF.focus,
+                        alignmentRes);
+            }
 		}
 		return defaultModel;
 	}

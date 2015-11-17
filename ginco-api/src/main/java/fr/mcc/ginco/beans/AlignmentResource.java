@@ -32,49 +32,83 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.beans;
 
-/*
- * Concept Note Type Store 
- * This file contains all note types displayed in dropdown lists
- */
-Ext.define('GincoApp.store.AlignmentTypeStore', {
-    extend: 'Ext.data.Store',
-    currentFilter: null,
-    isAnResource: false,
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            proxy: {
-                type: 'ajax',
-                url: 'services/ui/thesaurusalignmentservice/getAlignmentTypes',
-                reader: {
-                    type: 'json',
-                    idProperty: 'identifier',
-                    root: 'data'
-                }
-            },
-            fields: [
-                {
-                    name: 'identifier',
-                    type: 'integer'
-                },
-                {
-                    name: 'label',
-                    type: 'string'
-                },
-                {
-                    name: 'multiConcept',
-                    type: 'boolean'
-                },
-                {
-                    name: 'resource',
-                    type: 'boolean'
-                }
-            ]
-        }, cfg)]);
-    }
+@XmlAccessorType(XmlAccessType.FIELD)
+public class AlignmentResource {
+	@XmlTransient
+	private Integer identifier;
+	private String externalTargetResource;
 
-});
+	@XmlTransient
+	private Alignment alignment;
+
+	public Integer getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getExternalTargetResource() {
+		return externalTargetResource;
+	}
+
+	public void setExternalTargetResource(String externalTargetResource) {
+		this.externalTargetResource = externalTargetResource;
+	}
+
+	public Alignment getAlignment() {
+		return alignment;
+	}
+
+	public void setAlignment(Alignment alignment) {
+		this.alignment = alignment;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		if (externalTargetResource == null) {
+			result = prime
+					* result
+					+ 0;
+		} else {
+			result = prime
+					* result
+					+ externalTargetResource
+					.hashCode();
+		}
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		AlignmentResource other = (AlignmentResource) obj;
+		if (externalTargetResource == null) {
+			if (other.externalTargetResource != null) {
+				return false;
+			}
+		} else if (!externalTargetResource.equals(other.externalTargetResource)) {
+			return false;
+		}
+		return true;
+	}
+
+
+}

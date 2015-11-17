@@ -50,6 +50,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.Nullable;
 import org.slf4j.Logger;
@@ -204,13 +205,12 @@ public class ThesaurusConceptRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@PreAuthorize("hasPermission(#conceptView, '0') or hasPermission(#conceptView, '1')")
 	public ThesaurusConceptView updateConcept(ThesaurusConceptView conceptView) {
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getName();
 
-		if (userRoleService.hasRole(username, conceptView.getThesaurusId(),
-				Role.EXPERT)) {
-			ThesaurusConcept existingConcept = thesaurusConceptService
-					.getThesaurusConceptById(conceptView.getIdentifier());
+		if (userRoleService.hasRole(username, conceptView.getThesaurusId(), Role.EXPERT)) {
+			ThesaurusConcept existingConcept = thesaurusConceptService.getThesaurusConceptById(conceptView.getIdentifier());
 			if ((existingConcept != null
 					&& (existingConcept.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()
 							|| existingConcept.getTopConcept()))
@@ -224,18 +224,15 @@ public class ThesaurusConceptRestService {
 
 		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter.convert(conceptView);
 
-		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
-		List<ThesaurusConcept> childrenToDetach = thesaurusConceptViewConverter
-				.convertRemovedChildren(conceptView);
 
 		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
-		List<ThesaurusConcept> childrenToAttach = thesaurusConceptViewConverter
-				.convertAddedChildren(conceptView);
+		List<ThesaurusConcept> childrenToDetach = thesaurusConceptViewConverter.convertRemovedChildren(conceptView);
+
+		//This method gets from the concept view a list of concepts we have to detach (because they are not still children of the concept we update)
+		List<ThesaurusConcept> childrenToAttach = thesaurusConceptViewConverter.convertAddedChildren(conceptView);
 		logger.info("Number of added children terms : " + childrenToAttach.size());
 
-		List<ThesaurusTerm> terms = termViewConverter
-				.convertTermViewsInTerms(conceptView
-						.getTerms(), true);
+		List<ThesaurusTerm> terms = termViewConverter.convertTermViewsInTerms(conceptView.getTerms(), true);
 		logger.info("Number of converted terms : " + terms.size());
 
 
@@ -270,17 +267,21 @@ public class ThesaurusConceptRestService {
     	//We save or update the concept
 		logger.info("Saving concept in DB");
 		ThesaurusConcept returnConcept = thesaurusConceptService
-				.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach, childrenToAttach, alignments);
+		.updateThesaurusConcept(convertedConcept, terms, associations, hierarchicalRelationships, childrenToDetach, childrenToAttach, alignments);
+
 
 		for (ThesaurusTerm term : terms) {
 			termIndexerService.addTerm(term);
 		}
 		conceptIndexerService.addConcept(convertedConcept);
-		
+
+
+
 		//Update vocabulary date
 		Thesaurus thesaurus = convertedConcept.getThesaurus();
 		thesaurusService.updateThesaurusDate(thesaurus);
-		
+
+
 		// Return ThesaurusConceptView created/updated
 		return thesaurusConceptViewConverter.convert(returnConcept, terms);
 	}

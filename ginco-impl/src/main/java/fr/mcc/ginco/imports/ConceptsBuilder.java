@@ -36,15 +36,7 @@ package fr.mcc.ginco.imports;
 
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.rdf.model.Resource;
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.AlignmentConcept;
-import fr.mcc.ginco.beans.AssociativeRelationship;
-import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
-import fr.mcc.ginco.beans.ExternalThesaurus;
-import fr.mcc.ginco.beans.Note;
-import fr.mcc.ginco.beans.Thesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
-import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.dao.IAlignmentDAO;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
 import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
@@ -103,6 +95,9 @@ public class ConceptsBuilder extends AbstractBuilder {
 
 	@Inject
 	private IGenericDAO<AlignmentConcept, Integer> alignmentConceptDAO;
+
+	@Inject
+	private IGenericDAO<AlignmentResource, Integer> alignmentResourceDAO;
 
 	@Inject
 	private IExternalThesaurusDAO externalThesaurusDAO;
@@ -248,9 +243,9 @@ public class ConceptsBuilder extends AbstractBuilder {
 			for (Alignment alignment : alignments) {
 				
 				externalThesaurusToSet = null;
-				
+
+				//ExternalThesaurus already updated in base ?
 				if (alignment.getExternalTargetThesaurus() != null) {
-					
 					ExternalThesaurus externalThesaurusHere = alignment.getExternalTargetThesaurus();
 					
 					//ExternalThesaurus already updated in base ?
@@ -287,10 +282,13 @@ public class ConceptsBuilder extends AbstractBuilder {
 					alignment.setExternalTargetThesaurus(externalThesaurusToSet);
 					
 				}
-				
-				if (alignment.getInternalTargetThesaurus() != null || alignment.getExternalTargetThesaurus() != null) {
+
+				if (alignment.getInternalTargetThesaurus() != null || alignment.getExternalTargetThesaurus() != null || alignment.getTargetResources().size() != 0 ) {
 					for (AlignmentConcept alignmentConcept : alignment.getTargetConcepts()) {
 						alignmentConceptDAO.update(alignmentConcept);
+					}
+					for (AlignmentResource alignmentResource : alignment.getTargetResources()) {
+						alignmentResourceDAO.update(alignmentResource);
 					}
 					alignmentDAO.update(alignment);
 				} else {

@@ -36,7 +36,9 @@
 Ext.define('GincoApp.model.AlignmentModel', {
     extend: 'Ext.data.Model',
     requires: ['GincoApp.model.AlignmentTargetConceptModel',
-               'GincoApp.model.ExternalThesaurusModel'],
+               'GincoApp.model.ExternalThesaurusModel',
+                'GincoApp.model.AlignmentTargetResourceModel',
+    ],
 
     fields: [
         {
@@ -66,14 +68,18 @@ Ext.define('GincoApp.model.AlignmentModel', {
     ],   
    idProperty : 'identifier',
    associations: [
-                  {
-                	  type: 'hasMany', 
-                	  model: 'GincoApp.model.AlignmentTargetConceptModel',
-                	  name: 'targetConcepts'
-                  },{
-                	  type: 'hasMany',
-                	  model: 'GincoApp.model.ExternalThesaurusModel',
-                	  name: 'externalThesaurus'
-                  }           
+        {
+            type: 'hasMany',
+            model: 'GincoApp.model.AlignmentTargetConceptModel',
+            name: 'targetConcepts'
+        },{
+            type: 'hasMany',
+            model: 'GincoApp.model.ExternalThesaurusModel',
+            name: 'externalThesaurus'
+        },{
+            type: 'hasMany',
+            model: 'GincoApp.model.AlignmentTargetResourceModel',
+            name: 'targetResources'
+        }
   ]    
 });

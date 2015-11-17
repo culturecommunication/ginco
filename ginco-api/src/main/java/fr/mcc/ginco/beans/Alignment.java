@@ -56,6 +56,7 @@ public class Alignment implements Serializable {
 	private String author;
 	private ThesaurusConcept sourceConcept;
 	private Set<AlignmentConcept> targetConcepts = new HashSet<AlignmentConcept>();
+	private Set<AlignmentResource> targetResources = new HashSet<AlignmentResource>();
 	private AlignmentType alignmentType;
 	private ExternalThesaurus externalTargetThesaurus;
 
@@ -109,6 +110,14 @@ public class Alignment implements Serializable {
 
 	public void setTargetConcepts(Set<AlignmentConcept> targetConcepts) {
 		this.targetConcepts = targetConcepts;
+	}
+
+	public Set<AlignmentResource> getTargetResources() {
+		return targetResources;
+	}
+
+	public void setTargetResources(Set<AlignmentResource> targetResources) {
+		this.targetResources =targetResources ;
 	}
 
 	public AlignmentType getAlignmentType() {

@@ -84,5 +84,6 @@ Ext.define('GincoApp.locale.fr.view.ConceptPanel',
 	xAlignmentOrRelation: 'OU',
 	xAlignmentEdit: 'Modifier l\'alignement',
 	xAlignmentGoBtn : 'Aller à',
+	xAlignmentResources : 'Ressources',
 	xSuggestionsTab : 'Suggestions'
 });

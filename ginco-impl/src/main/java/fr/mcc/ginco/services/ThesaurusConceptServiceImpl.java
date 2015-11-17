@@ -340,16 +340,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		alignmentService.saveExternalThesauruses(alignments);
 
 		if (StringUtils.isNotEmpty(object.getIdentifier())) {
-			List<ThesaurusTerm> existingTerms = thesaurusTermDAO
-					.findTermsByConceptId(object.getIdentifier());
+			List<ThesaurusTerm> existingTerms = thesaurusTermDAO.findTermsByConceptId(object.getIdentifier());
 			for (ThesaurusTerm existingTerm : existingTerms) {
 				if (!terms.contains(existingTerm)) {
-					ThesaurusTerm term = thesaurusTermDAO.getById(existingTerm
-							.getIdentifier());
+					ThesaurusTerm term = thesaurusTermDAO.getById(existingTerm.getIdentifier());
 					term.setConcept(null);
 					thesaurusTermDAO.update(term);
-					logger.info("Marking Term with ID "
-							+ existingTerm.getIdentifier() + " as SandBoxed.");
+					logger.info("Marking Term with ID "+ existingTerm.getIdentifier() + " as SandBoxed.");
 				}
 			}
 		} else {
@@ -365,9 +362,8 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		List<ThesaurusConcept> allRecursiveChild = getRecursiveChildrenByConceptId(object.getIdentifier());
 		List<ThesaurusConcept> allRecursiveParents = getRecursiveParentsByConceptId(object.getIdentifier());
 
-		object = conceptHierarchicalRelationshipServiceUtil
-				.saveHierarchicalRelationship(object,
-						hierarchicalRelationships, allRecursiveParents, allRecursiveChild, childrenConceptToDetach, childrenConceptToAttach);
+		object = conceptHierarchicalRelationshipServiceUtil.saveHierarchicalRelationship(object,
+				hierarchicalRelationships, allRecursiveParents, allRecursiveChild, childrenConceptToDetach, childrenConceptToAttach);
 
 		if (object.getStatus() == ConceptStatusEnum.CANDIDATE.getStatus()) {
 			// We can set status = candidate only if concept has not relation
@@ -385,8 +381,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 			// Test if parent concepts are validated
 			Set<ThesaurusConcept> parents = object.getParentConcepts();
 			for (ThesaurusConcept parent : parents) {
-				if (parent.getStatus() != ConceptStatusEnum.VALIDATED
-						.getStatus()) {
+				if (parent.getStatus() != ConceptStatusEnum.VALIDATED.getStatus()) {
 					throw new BusinessException(
 							"A concept cannot have a parent which status is not validated",
 							"concept-parent-not-validated");
@@ -402,7 +397,7 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		if (!alignments.isEmpty()){
 			alignmentService.deleteExternalThesauruses();
 		}
-		return thesaurusConceptDAO.update(saveAssociativeRelationship(concept, associatedConcepts));
+		return saveAssociativeRelationship(concept, associatedConcepts);
 	}
 
 	private ThesaurusConcept saveAssociativeRelationship(

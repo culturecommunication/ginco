@@ -13,7 +13,11 @@
          <set name="targetConcepts" table="alignment_concept" cascade="all">
             <key column="alignment_id" />
             <one-to-many class="AlignmentConcept"/>
-        </set> 
+        </set>
+        <set name="targetResources" table="alignment_resource" cascade="all">
+            <key column="alignment_id" />
+            <one-to-many class="AlignmentResource"/>
+        </set>
         <many-to-one name="alignmentType" column="alignment_type" lazy="false" />        
         <property name="andRelation" column="and_relation" not-null="true" />
         <many-to-one name="externalTargetThesaurus" class="fr.mcc.ginco.beans.ExternalThesaurus" column="external_target_thesaurus_id" lazy="false" />

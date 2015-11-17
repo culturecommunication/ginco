@@ -32,49 +32,29 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.extjs.view.pojo;
 
-/*
- * Concept Note Type Store 
- * This file contains all note types displayed in dropdown lists
- */
-Ext.define('GincoApp.store.AlignmentTypeStore', {
-    extend: 'Ext.data.Store',
-    currentFilter: null,
-    isAnResource: false,
 
-    constructor: function(cfg) {
-        var me = this;
-        cfg = cfg || {};
-        me.callParent([Ext.apply({
-            autoLoad: false,
-            proxy: {
-                type: 'ajax',
-                url: 'services/ui/thesaurusalignmentservice/getAlignmentTypes',
-                reader: {
-                    type: 'json',
-                    idProperty: 'identifier',
-                    root: 'data'
-                }
-            },
-            fields: [
-                {
-                    name: 'identifier',
-                    type: 'integer'
-                },
-                {
-                    name: 'label',
-                    type: 'string'
-                },
-                {
-                    name: 'multiConcept',
-                    type: 'boolean'
-                },
-                {
-                    name: 'resource',
-                    type: 'boolean'
-                }
-            ]
-        }, cfg)]);
-    }
+public class AlignmentResourceView {
 
-});
+	private Integer identifier;
+
+	private String externalTargetResource;
+
+	public Integer getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getExternalTargetResource() {
+		return externalTargetResource;
+	}
+
+	public void setExternalTargetResource(String externalTargetResource) {
+		this.externalTargetResource = externalTargetResource;
+	}
+
+}

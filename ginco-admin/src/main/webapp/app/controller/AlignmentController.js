@@ -39,12 +39,13 @@ Ext.define('GincoApp.controller.AlignmentController',
 			localized : true,
 			xInternalConceptId: "Internal identifier",
 			xExternalConceptId: "External identifier", 
+			xExternalResource: "External resource identifier",
 			xExternalThesaurusId: "External thesaurus identifier",
 			xExternalThesaurusType: "External thesaurus type",
 			xEditAlignmentWinTitle: 'Edit alignment',
 
 			stores : [ 'AlignmentsStore', 'ExternalThesaurusTypeStore', 'ExternalThesaurusStore'],
-			models : [ 'AlignmentModel' ],			
+			models : [ 'AlignmentModel' ],
 			
 			storeExternalThesaurusType: Ext.create('GincoApp.store.ExternalThesaurusTypeStore'),
 			storeExternalThesaurus: Ext.create('GincoApp.store.ExternalThesaurusStore'),		
@@ -58,11 +59,14 @@ Ext.define('GincoApp.controller.AlignmentController',
 				} else {
 					multiCheckbox.hide();
 					if (form.getForm().findField("internal_concept")) {
-						form.down('#addInternalConceptId').setDisabled(true);			
+						form.down('#addInternalConceptId').setDisabled(true);
 						this.hideMultiFields(form, 'internal_concept');						
 					} else if (form.getForm().findField("external_concept")) {
 						form.down('#addExternalConceptId').setDisabled(true);
 						this.hideMultiFields(form, 'external_concept');						
+					} else if (form.getForm().findField("external_resource")){
+						form.down('#addExternalResource').setDisabled(true);
+						this.hideMultiFields(form, 'external_resource');
 					} else {
 						this.enableAddButtons(form);						
 					}
@@ -72,11 +76,13 @@ Ext.define('GincoApp.controller.AlignmentController',
 			disableAddButtons: function(form) {
 				form.down('#addInternalConceptId').setDisabled(true);
 				form.down('#addExternalConceptId').setDisabled(true);
+				form.down('#addExternalResource').setDisabled(true);
 			},
 			
 			enableAddButtons: function(form) {
 				form.down('#addInternalConceptId').setDisabled(false);
 				form.down('#addExternalConceptId').setDisabled(false);
+				form.down('#addExternalResource').setDisabled(false);
 			},
 			
 			hideMultiFields : function(form, fieldName) {
@@ -98,11 +104,33 @@ Ext.define('GincoApp.controller.AlignmentController',
 		        for(idx in fields.items) {
 		        	field = fields.items[idx];
 		            if(field.getName() == fieldName) {
-		            	form.remove(field);		            			           
+		            	form.remove(field);
 		            }
 		        }
 			},
-			
+
+			hideField : function(form, fieldName) {
+				var fields = form.getForm().getFields();
+				for(idx in fields.items) {
+					field = fields.items[idx];
+					if(field.getName() == fieldName) {
+						field.disable(true);
+						field.hide();
+					}
+				}
+			},
+
+			showField : function(form, fieldName) {
+				var fields = form.getForm().getFields();
+				for(idx in fields.items) {
+					field = fields.items[idx];
+					if(field.getName() == fieldName) {
+						field.enable(true);
+						field.show();
+					}
+				}
+			},
+
 			displayAddInternalConceptFieldByBytton: function(theButton, e, eOpts) {
 				var alignmentForm = theButton.up('form');
 				this.displayAddInternalConceptField(alignmentForm);
@@ -115,31 +143,38 @@ Ext.define('GincoApp.controller.AlignmentController',
 	                   name: 'internal_concept',
 	                   fieldLabel: me.xInternalConceptId
 				});
-				alignmentForm.add(tf);	
-				
+				alignmentForm.add(tf);
+
+				this.hideField(alignmentForm, 'alignmentTypeResource');
+				this.showField(alignmentForm, 'alignmentType');
 				this.removeField(alignmentForm, 'external_thesaurus');
+				this.removeField(alignmentForm, 'external_resource');
 				this.removeField(alignmentForm, 'external_thesaurus_type');
 				this.removeField(alignmentForm, 'external_concept');
 				this.removeField(alignmentForm, 'external_thesaurus_id');
 
 				
 				var multiCheckbox=alignmentForm.down('#typeCombo');
-			
-				var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
-				if (!theRecord.data.multiConcept) {		
-					if (alignmentForm.getForm().findField("internal_concept")) {
+				var checkbox=alignmentForm.down('#isAndCheckbox');
+
+				if(multiCheckbox.getValue() != undefined){
+					var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
+					if (!theRecord.data.multiConcept) {
 						alignmentForm.down('#addInternalConceptId').setDisabled(true);
 						alignmentForm.down('#addExternalConceptId').setDisabled(false);
-					}	else {
-						alignmentForm.down('#addInternalConceptId').setDisabled(false);
-						alignmentForm.down('#addExternalConceptId').setDisabled(true);
+						alignmentForm.down('#addExternalResource').setDisabled(false);
+						checkbox.hide();
+					} else {
+						this.enableAddButtons(alignmentForm);
+						checkbox.show();
 					}
 				} else {
 					this.enableAddButtons(alignmentForm);
+					checkbox.hide();
 				}
 				return tf;
 			},
-			
+
 			displayAddExternalConceptFieldsByButton: function(theButton, e, eOpts) {
 				var alignmentForm = theButton.up('form');	
 				this.displayAddExternalConceptFields(alignmentForm, e, eOpts);
@@ -187,24 +222,79 @@ Ext.define('GincoApp.controller.AlignmentController',
 	                   fieldLabel: me.xExternalConceptId,
 	                   vtype : 'url'
 				});
-				alignmentForm.add(tf3);	
-				
+				alignmentForm.add(tf3);
+
+				this.hideField(alignmentForm, 'alignmentTypeResource');
+				this.showField(alignmentForm, 'alignmentType');
 				this.removeField(alignmentForm, 'internal_concept');
+				this.removeField(alignmentForm, 'external_resource');
 				
-				var multiCheckbox=alignmentForm.down('#typeCombo');				
-				var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
-				if (!theRecord.data.multiConcept) {		
-					if (alignmentForm.getForm().findField("external_concept")) {
+				var multiCheckbox=alignmentForm.down('#typeCombo');
+				var checkbox=alignmentForm.down('#isAndCheckbox');
+
+				if(multiCheckbox.getValue() != undefined) {
+					var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
+					if (!theRecord.data.multiConcept) {
 						alignmentForm.down('#addInternalConceptId').setDisabled(false);
 						alignmentForm.down('#addExternalConceptId').setDisabled(true);
+						alignmentForm.down('#addExternalResource').setDisabled(false);
+						checkbox.hide();
 					} else {
-						alignmentForm.down('#addInternalConceptId').setDisabled(true);
-						alignmentForm.down('#addExternalConceptId').setDisabled(false);
+						this.enableAddButtons(alignmentForm);
+						checkbox.show();
 					}
 				} else {
 					this.enableAddButtons(alignmentForm);
+					checkbox.hide();
 				}
 				return tf3;
+			},
+
+			displayAddExternalResourceFieldsByButton: function(theButton, e, eOpts) {
+				var alignmentForm = theButton.up('form');	
+				this.displayAddExternalResourceFields(alignmentForm, e, eOpts);
+			},
+			
+			displayAddExternalResourceFields: function(alignmentForm, e, eOpts) {
+				var me=this;							
+				
+				var tf = Ext.create('Ext.form.field.Text', {
+					name: 'external_resource',
+					fieldLabel: me.xExternalResource,
+					allowBlank : false,
+					editable: true,
+					vtype : 'url'
+				});
+				alignmentForm.add(tf);
+
+				this.hideField(alignmentForm, 'alignmentType');
+				this.showField(alignmentForm, 'alignmentTypeResource');
+				this.removeField(alignmentForm, 'external_thesaurus');
+				this.removeField(alignmentForm, 'internal_concept');
+				this.removeField(alignmentForm, 'external_thesaurus_type');
+				this.removeField(alignmentForm, 'external_concept');
+				this.removeField(alignmentForm, 'external_thesaurus_id');
+				
+				var multiCheckbox=alignmentForm.down('#typeComboResource');
+				var checkbox=alignmentForm.down('#isAndCheckbox');
+
+				if(multiCheckbox.getValue() != undefined) {
+					var theRecord = multiCheckbox.findRecordByValue(multiCheckbox.getValue());
+					if (!theRecord.data.multiConcept) {
+						alignmentForm.down('#addInternalConceptId').setDisabled(false);
+						alignmentForm.down('#addExternalConceptId').setDisabled(false);
+						alignmentForm.down('#addExternalResource').setDisabled(true);
+						checkbox.hide();
+					} else {
+						this.enableAddButtons(alignmentForm);
+						checkbox.show();
+					}
+				} else {
+					this.enableAddButtons(alignmentForm);
+					checkbox.hide();
+				}
+				
+				return tf;
 			},
 			
 			updateExternalThesaurusType: function(theCombobox, theRecord,	eOpts) {
@@ -219,47 +309,73 @@ Ext.define('GincoApp.controller.AlignmentController',
 			loadData: function(rec,win) {
 				var me=this;
 
+				me.alignmentTypeStore = win.storeAlignmentTypes;
+				me.alignmentTypeStoreResource = win.storeAlignmentTypesResource;
+
 				win.title=me.xEditAlignmentWinTitle;
-				
+
 				var alignmentTypeStore = win.storeAlignmentTypes;
+				var alignmentTypeStoreResource = win.storeAlignmentTypesResource;
 				var alignmentForm = win.down('form');
 				var isExternal = false;
 
-				alignmentTypeStore.load(function(records, operation, success) {
-					var selectedType = alignmentTypeStore.findRecord( 'identifier', rec.data.alignmentType);
-					win.down("#typeCombo").select(selectedType);
-					win.down("#typeCombo").fireEvent('select',win.down("#typeCombo"), [selectedType]);
-					win.down("#isAndCheckbox").setValue(rec.data.andRelation);		
-					var targetConceptData = rec.targetConceptsStore.getRange();
-					Ext.Array.each(targetConceptData, function(targetConcept) {
-						if (targetConcept.data.internalTargetConcept) {
-							var internalField = me.displayAddInternalConceptField(alignmentForm) ;
-							internalField.setValue(targetConcept.data.internalTargetConcept);						
-						}
-						if (targetConcept.data.externalTargetConcept) {
-							var externalField = me.displayAddExternalConceptFields(alignmentForm) ;
-							externalField.setValue(targetConcept.data.externalTargetConcept);
-							isExternal = true;
-						}
-					});	
-					if (isExternal) {
-						var externalThesaurusStore = me.storeExternalThesaurus;
-						externalThesaurusStore.load(function(records, operation, success) {		
-							var selectedThesaurus= externalThesaurusStore.findRecord( 'identifier',rec.externalThesaurus().data.items[0].data.identifier);
-							if (selectedThesaurus) {
-								alignmentForm.getForm().findField('external_thesaurus').select(selectedThesaurus);
-								alignmentForm.getForm().findField('external_thesaurus_id').setValue(selectedThesaurus.data.identifier);
+				//Alignment with Resource
+				alignmentTypeStoreResource.load(function(records, operation, success) {
 
-							} else {
-								alignmentForm.getForm().findField('external_thesaurus').select(rec.externalThesaurus().data.items[0].data.externalId);
-								alignmentForm.getForm().findField('external_thesaurus_id').setValue(rec.externalThesaurus().data.items[0].data.identifier);
+					var selectedType = alignmentTypeStoreResource.findRecord( 'identifier', rec.data.alignmentType);
+					if(null != selectedType ){
+						win.down("#typeComboResource").select(selectedType);
+						win.down("#typeComboResource").fireEvent('select',win.down("#typeComboResource"), [selectedType]);
+						win.down("#isAndCheckbox").setValue(rec.data.andRelation);
+						var targetResourceData = rec.targetResourcesStore.getRange();
+						Ext.Array.each(targetResourceData, function(targetResource) {
+							if (targetResource.data.externalTargetResource) {
+								var externalResourceField = me.displayAddExternalResourceFields(alignmentForm) ;
+								externalResourceField.setValue(targetResource.data.externalTargetResource);
 							}
-							alignmentForm.getForm().findField('external_thesaurus_type').select(rec.externalThesaurus().data.items[0].data.externalThesaurusType);
-
-						});						
+						});
 					}
 				});
-				
+
+				//Alignment with Concept
+				alignmentTypeStore.load(function(records, operation, success) {
+
+					var selectedType = alignmentTypeStore.findRecord( 'identifier', rec.data.alignmentType);
+
+					if(null != selectedType ){
+						win.down("#typeCombo").select(selectedType);
+						win.down("#typeCombo").fireEvent('select',win.down("#typeCombo"), [selectedType]);
+						win.down("#isAndCheckbox").setValue(rec.data.andRelation);
+						var targetConceptData = rec.targetConceptsStore.getRange();
+						Ext.Array.each(targetConceptData, function(targetConcept) {
+							if (targetConcept.data.internalTargetConcept) {
+								var internalField = me.displayAddInternalConceptField(alignmentForm) ;
+								internalField.setValue(targetConcept.data.internalTargetConcept);
+							}
+							if (targetConcept.data.externalTargetConcept) {
+								var externalField = me.displayAddExternalConceptFields(alignmentForm) ;
+								externalField.setValue(targetConcept.data.externalTargetConcept);
+								isExternal = true;
+							}
+						});
+						if (isExternal) {
+							var externalThesaurusStore = me.storeExternalThesaurus;
+							externalThesaurusStore.load(function(records, operation, success) {
+								var selectedThesaurus= externalThesaurusStore.findRecord( 'identifier',rec.externalThesaurus().data.items[0].data.identifier);
+								if (selectedThesaurus) {
+									alignmentForm.getForm().findField('external_thesaurus').select(selectedThesaurus);
+									alignmentForm.getForm().findField('external_thesaurus_id').setValue(selectedThesaurus.data.identifier);
+
+								} else {
+									alignmentForm.getForm().findField('external_thesaurus').select(rec.externalThesaurus().data.items[0].data.externalId);
+									alignmentForm.getForm().findField('external_thesaurus_id').setValue(rec.externalThesaurus().data.items[0].data.identifier);
+								}
+								alignmentForm.getForm().findField('external_thesaurus_type').select(rec.externalThesaurus().data.items[0].data.externalThesaurusType);
+
+							});
+						}
+					}
+				});
 
 			},			
 			
@@ -270,14 +386,17 @@ Ext.define('GincoApp.controller.AlignmentController',
 					'alignmentWin #typeCombo' : {
 						select : this.chooseAlignmentType
 					},
+					'alignmentWin #typeComboResource' : {
+						select : this.chooseAlignmentType
+					},
 					'alignmentWin  #addInternalConceptId' : {
 						click : this.displayAddInternalConceptFieldByBytton
 					},
 					'alignmentWin  #addExternalConceptId' : {
 						click: this.displayAddExternalConceptFieldsByButton
-					},					
-					'alignmentWin  #externalThesaurus' : {
-						select: this.updateExternalThesaurusType
+					},
+					'alignmentWin  #addExternalResource' : {
+						click: this.displayAddExternalResourceFieldsByButton
 					},
 					'alignmentWin' :{
 						loadAlignment: this.loadData

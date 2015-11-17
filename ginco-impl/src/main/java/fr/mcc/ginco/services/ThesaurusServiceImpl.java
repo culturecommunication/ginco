@@ -160,15 +160,14 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 
 		//We get the versions of the thesaurus we are creating/updating
 		//If no version, we initialize one with status PROJECT
-		List<ThesaurusVersionHistory> versionsOfCurrentThesaurus =
-				thesaurusVersionHistoryDAO.findVersionsByThesaurusId(result.getIdentifier());
+		List<ThesaurusVersionHistory> versionsOfCurrentThesaurus =thesaurusVersionHistoryDAO.findVersionsByThesaurusId(result.getIdentifier());
 		if (versionsOfCurrentThesaurus == null || versionsOfCurrentThesaurus.isEmpty()) {
 			ThesaurusVersionHistory defaultVersion = thesaurusHelper.buildDefaultVersion(result);
 			Set<ThesaurusVersionHistory> versions = new HashSet<ThesaurusVersionHistory>();
 			versions.add(defaultVersion);
 			thesaurusVersionHistoryDAO.update(defaultVersion);
 		}
-		return result;
+		return object;
 	}
 	
 	/*
@@ -178,6 +177,7 @@ public class ThesaurusServiceImpl implements IThesaurusService {
 	 * fr.mcc.ginco.IThesaurusService#updateThesaurusDate(fr.mcc.ginco.beans.Thesaurus
 	 * , fr.mcc.ginco.beans.users.IUser)
 	 */
+
 	@Transactional(readOnly = false)
 	@Override
 	public Thesaurus updateThesaurusDate(Thesaurus object) {
