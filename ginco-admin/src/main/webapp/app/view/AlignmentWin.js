@@ -146,7 +146,7 @@ Ext
 													valueField : 'identifier',
 													forceSelection : true,
 													disabled:true,
-													hidden:false,
+													hidden:true,
 													store : me.storeAlignmentTypesResource,
 													allowBlank : false
 												},{

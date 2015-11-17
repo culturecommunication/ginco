@@ -39,7 +39,7 @@ Ext.define('GincoApp.controller.AlignmentController',
 			localized : true,
 			xInternalConceptId: "Internal identifier",
 			xExternalConceptId: "External identifier", 
-			xExternalResource: "External resource",
+			xExternalResource: "External resource identifier",
 			xExternalThesaurusId: "External thesaurus identifier",
 			xExternalThesaurusType: "External thesaurus type",
 			xEditAlignmentWinTitle: 'Edit alignment',
@@ -115,7 +115,7 @@ Ext.define('GincoApp.controller.AlignmentController',
 					field = fields.items[idx];
 					if(field.getName() == fieldName) {
 						field.disable(true);
-						//field.hide();
+						field.hide();
 					}
 				}
 			},
@@ -126,12 +126,11 @@ Ext.define('GincoApp.controller.AlignmentController',
 					field = fields.items[idx];
 					if(field.getName() == fieldName) {
 						field.enable(true);
-						//field.show();
+						field.show();
 					}
 				}
 			},
-			
-			// TODO Internal Concept
+
 			displayAddInternalConceptFieldByBytton: function(theButton, e, eOpts) {
 				var alignmentForm = theButton.up('form');
 				this.displayAddInternalConceptField(alignmentForm);
@@ -175,8 +174,7 @@ Ext.define('GincoApp.controller.AlignmentController',
 				}
 				return tf;
 			},
-			
-			// TODO External Concept
+
 			displayAddExternalConceptFieldsByButton: function(theButton, e, eOpts) {
 				var alignmentForm = theButton.up('form');	
 				this.displayAddExternalConceptFields(alignmentForm, e, eOpts);
@@ -251,8 +249,7 @@ Ext.define('GincoApp.controller.AlignmentController',
 				}
 				return tf3;
 			},
-			
-			// TODO External Resource
+
 			displayAddExternalResourceFieldsByButton: function(theButton, e, eOpts) {
 				var alignmentForm = theButton.up('form');	
 				this.displayAddExternalResourceFields(alignmentForm, e, eOpts);
@@ -313,49 +310,72 @@ Ext.define('GincoApp.controller.AlignmentController',
 				var me=this;
 
 				me.alignmentTypeStore = win.storeAlignmentTypes;
-				me.alignmentTypeStoreResource = win.storeAlignmentTypeResource;
+				me.alignmentTypeStoreResource = win.storeAlignmentTypesResource;
 
 				win.title=me.xEditAlignmentWinTitle;
 
 				var alignmentTypeStore = win.storeAlignmentTypes;
+				var alignmentTypeStoreResource = win.storeAlignmentTypesResource;
 				var alignmentForm = win.down('form');
 				var isExternal = false;
 
-				alignmentTypeStore.load(function(records, operation, success) {
-					var selectedType = alignmentTypeStore.findRecord( 'identifier', rec.data.alignmentType);
-					win.down("#typeCombo").select(selectedType);
-					win.down("#typeCombo").fireEvent('select',win.down("#typeCombo"), [selectedType]);
-					win.down("#isAndCheckbox").setValue(rec.data.andRelation);		
-					var targetConceptData = rec.targetConceptsStore.getRange();
-					Ext.Array.each(targetConceptData, function(targetConcept) {
-						if (targetConcept.data.internalTargetConcept) {
-							var internalField = me.displayAddInternalConceptField(alignmentForm) ;
-							internalField.setValue(targetConcept.data.internalTargetConcept);						
-						}
-						if (targetConcept.data.externalTargetConcept) {
-							var externalField = me.displayAddExternalConceptFields(alignmentForm) ;
-							externalField.setValue(targetConcept.data.externalTargetConcept);
-							isExternal = true;
-						}
-					});	
-					if (isExternal) {
-						var externalThesaurusStore = me.storeExternalThesaurus;
-						externalThesaurusStore.load(function(records, operation, success) {		
-							var selectedThesaurus= externalThesaurusStore.findRecord( 'identifier',rec.externalThesaurus().data.items[0].data.identifier);
-							if (selectedThesaurus) {
-								alignmentForm.getForm().findField('external_thesaurus').select(selectedThesaurus);
-								alignmentForm.getForm().findField('external_thesaurus_id').setValue(selectedThesaurus.data.identifier);
+				//Alignment with Resource
+				alignmentTypeStoreResource.load(function(records, operation, success) {
 
-							} else {
-								alignmentForm.getForm().findField('external_thesaurus').select(rec.externalThesaurus().data.items[0].data.externalId);
-								alignmentForm.getForm().findField('external_thesaurus_id').setValue(rec.externalThesaurus().data.items[0].data.identifier);
+					var selectedType = alignmentTypeStoreResource.findRecord( 'identifier', rec.data.alignmentType);
+					if(null != selectedType ){
+						win.down("#typeComboResource").select(selectedType);
+						win.down("#typeComboResource").fireEvent('select',win.down("#typeComboResource"), [selectedType]);
+						win.down("#isAndCheckbox").setValue(rec.data.andRelation);
+						var targetResourceData = rec.targetResourcesStore.getRange();
+						Ext.Array.each(targetResourceData, function(targetResource) {
+							if (targetResource.data.externalTargetResource) {
+								var externalResourceField = me.displayAddExternalResourceFields(alignmentForm) ;
+								externalResourceField.setValue(targetResource.data.externalTargetResource);
 							}
-							alignmentForm.getForm().findField('external_thesaurus_type').select(rec.externalThesaurus().data.items[0].data.externalThesaurusType);
-
-						});						
+						});
 					}
 				});
-				
+
+				//Alignment with Concept
+				alignmentTypeStore.load(function(records, operation, success) {
+
+					var selectedType = alignmentTypeStore.findRecord( 'identifier', rec.data.alignmentType);
+
+					if(null != selectedType ){
+						win.down("#typeCombo").select(selectedType);
+						win.down("#typeCombo").fireEvent('select',win.down("#typeCombo"), [selectedType]);
+						win.down("#isAndCheckbox").setValue(rec.data.andRelation);
+						var targetConceptData = rec.targetConceptsStore.getRange();
+						Ext.Array.each(targetConceptData, function(targetConcept) {
+							if (targetConcept.data.internalTargetConcept) {
+								var internalField = me.displayAddInternalConceptField(alignmentForm) ;
+								internalField.setValue(targetConcept.data.internalTargetConcept);
+							}
+							if (targetConcept.data.externalTargetConcept) {
+								var externalField = me.displayAddExternalConceptFields(alignmentForm) ;
+								externalField.setValue(targetConcept.data.externalTargetConcept);
+								isExternal = true;
+							}
+						});
+						if (isExternal) {
+							var externalThesaurusStore = me.storeExternalThesaurus;
+							externalThesaurusStore.load(function(records, operation, success) {
+								var selectedThesaurus= externalThesaurusStore.findRecord( 'identifier',rec.externalThesaurus().data.items[0].data.identifier);
+								if (selectedThesaurus) {
+									alignmentForm.getForm().findField('external_thesaurus').select(selectedThesaurus);
+									alignmentForm.getForm().findField('external_thesaurus_id').setValue(selectedThesaurus.data.identifier);
+
+								} else {
+									alignmentForm.getForm().findField('external_thesaurus').select(rec.externalThesaurus().data.items[0].data.externalId);
+									alignmentForm.getForm().findField('external_thesaurus_id').setValue(rec.externalThesaurus().data.items[0].data.identifier);
+								}
+								alignmentForm.getForm().findField('external_thesaurus_type').select(rec.externalThesaurus().data.items[0].data.externalThesaurusType);
+
+							});
+						}
+					}
+				});
 
 			},			
 			

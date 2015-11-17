@@ -32,12 +32,9 @@ Ext.define('GincoApp.view.AlignmentColumnResource', {
 		var me = this, targetResources = '', i = 0, prefix = Ext.baseCSSPrefix;
 		var data = [];
 		if (record.targetResources) {
-			console.log('record.targetRessources : ');
-			console.log(record.targetResources );
 			Ext.Array.each(record.targetResources().getRange(), function(
 				targetResources, index, array) {
 				if (targetResources.get('externalTargetResource')) {
-					console.log("externalTargetResource : "+targetResources.get('externalTargetResource'));
 					var btnComp = Ext.create('Ext.button.Button', {
 						text : me.btnLbl,
 						iconCls : 'icon-display',

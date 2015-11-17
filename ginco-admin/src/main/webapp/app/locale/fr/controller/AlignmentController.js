@@ -38,5 +38,6 @@ Ext.define('GincoApp.locale.fr.controller.AlignmentController', {
 	xExternalThesaurusId: "Identifiant du vocabulaire",
 	xExternalThesaurusType: "Type de vocabulaire",
 	xExternalConceptId: "Identifiant du concept",
+	xExternalResource: "Identifiant de la ressource",
 	xEditAlignmentWinTitle : 'Mise à jour de l\'alignement'
 });

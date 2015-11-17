@@ -150,84 +150,76 @@ public class AlignmentViewConverter {
 	 * @param convertedConcept
 	 * @return
 	 */
-	public Alignment convertAlignmentView(AlignmentView alignmentView,
-	                                      ThesaurusConcept convertedConcept) {
-		Alignment alignment;
+	public Alignment convertAlignmentView(AlignmentView alignmentView,ThesaurusConcept convertedConcept) {
 
+		//Param
+		Alignment alignment;
+		Set<AlignmentConcept> targets = new HashSet<AlignmentConcept>();
+		Set<AlignmentResource> resourcesTargets = new HashSet<AlignmentResource>();
+
+		//new or old Alignment
 		if (StringUtils.isEmpty(alignmentView.getIdentifier())) {
 			alignment = new Alignment();
 			alignment.setCreated(DateUtil.nowDate());
 			logger.info("Creating a new alignment");
 		} else {
-			alignment = alignmentService.getAlignmentById(alignmentView
-					.getIdentifier());
+			alignment = alignmentService.getAlignmentById(alignmentView.getIdentifier());
 			logger.info("Getting an existing alignment");
 		}
 
-		alignment.setAlignmentType(alignmentTypeService
-				.getAlignmentTypeById(alignmentView.getAlignmentType()));
+		//General Param
+		alignment.setAlignmentType(alignmentTypeService.getAlignmentTypeById(alignmentView.getAlignmentType()));
 		alignment.setAndRelation(alignmentView.getAndRelation());
+		alignment.setSourceConcept(convertedConcept);
+		alignment.setModified(DateUtil.nowDate());
 
-		if (alignmentView.getExternalThesaurus() != null
-				&& alignmentView.getExternalThesaurus().size() > 0
+		// is External Thesaurus
+		if (alignmentView.getExternalThesaurus() != null && alignmentView.getExternalThesaurus().size() > 0
 				&& StringUtils.isNotEmpty(alignmentView.getExternalThesaurus().get(0).getExternalId())) {
 
-			alignment.setExternalTargetThesaurus(externalThesaurusViewConverter
-					.convertExternalThesaurusView(alignmentView
-							.getExternalThesaurus().get(0)));
+			ExternalThesaurusView externalThesaurusView =alignmentView.getExternalThesaurus().get(0);
+			ExternalThesaurus externalThesaurus = externalThesaurusViewConverter.convertExternalThesaurusView(externalThesaurusView);
+
+			alignment.setExternalTargetThesaurus(externalThesaurus);
 		}
-		alignment.setModified(DateUtil.nowDate());
-		alignment.setSourceConcept(convertedConcept);
 
-		Set<AlignmentConcept> targets = new HashSet<AlignmentConcept>();
-		Set<AlignmentResource> resourcesTargets = new HashSet<AlignmentResource>();
-		if (alignmentView.getTargetConcepts() != null
-				&& !alignmentView.getTargetConcepts().isEmpty()) {
+		// is alignment with concept
+		if (alignmentView.getTargetConcepts() != null && !alignmentView.getTargetConcepts().isEmpty()) {
 			String targetInternalThesaurusId = "";
-			for (AlignmentConceptView alignmentConceptview : alignmentView
-					.getTargetConcepts()) {
-				logger.debug("Found "
-						+ alignmentView.getTargetConcepts().size()
-						+ " target concepts view to convert");
+			for (AlignmentConceptView alignmentConceptview : alignmentView.getTargetConcepts()) {
 
-				AlignmentConcept target = alignmentConceptViewConverter
-						.convertAlignmentConceptView(alignmentConceptview,
-								alignment);
+				logger.debug("Found "+ alignmentView.getTargetConcepts().size()+ " target concepts view to convert");
+
+				AlignmentConcept target = alignmentConceptViewConverter.convertAlignmentConceptView(alignmentConceptview, alignment);
 				targets.add(target);
 
-				if (StringUtils.isEmpty(targetInternalThesaurusId)
-						&& target.getInternalTargetConcept() != null) {
-					targetInternalThesaurusId = target
-							.getInternalTargetConcept().getThesaurusId();
+				if (StringUtils.isEmpty(targetInternalThesaurusId) && target.getInternalTargetConcept() != null) {
+					targetInternalThesaurusId = target.getInternalTargetConcept().getThesaurusId();
 				} else if (target.getInternalTargetConcept() != null
-						&& !targetInternalThesaurusId.equals(target
-						.getInternalTargetConcept().getThesaurusId())) {
+						&& !targetInternalThesaurusId.equals(target.getInternalTargetConcept().getThesaurusId())) {
 					throw new BusinessException(
-							"Internal target concepts not in the same thesaurus",
-							"no-unique-thesaurus-for-internal-target-concepts");
+							"Internal target concepts not in the same thesaurus","no-unique-thesaurus-for-internal-target-concepts");
 				}
 			}
+		// is alignment with resource
 		} else if(alignmentView.getTargetResources() != null && !alignmentView.getTargetResources().isEmpty()){
 
 			for (AlignmentResourceView alignmentResourceview : alignmentView.getTargetResources()) {
-				logger.debug("Found "
-						+ alignmentView.getTargetResources().size()
-						+ " target resources view to convert");
+				logger.debug("Found "+ alignmentView.getTargetResources().size()+ " target resources view to convert");
 
 				AlignmentResource target = alignmentResourceViewConverter.convertAlignmentResourceView(alignmentResourceview,alignment);
 				resourcesTargets.add(target);
 			}
 
+		// Error
 		} else{
-			throw new BusinessException("Missing target concept for alignment",
-					"missing-target-concepts-for-alignment");
+			throw new BusinessException("Missing target concept for alignment","missing-target-concepts-for-alignment");
 		}
 
 		if(targets != null  && !targets.isEmpty()){
 			AlignmentConcept firstTarget = targets.iterator().next();
 			if (firstTarget.getInternalTargetConcept() != null) {
-				Thesaurus internalTargetThesaurus = firstTarget
-						.getInternalTargetConcept().getThesaurus();
+				Thesaurus internalTargetThesaurus = firstTarget.getInternalTargetConcept().getThesaurus();
 				alignment.setInternalTargetThesaurus(internalTargetThesaurus);
 			}
 			alignment.setTargetConcepts(targets);

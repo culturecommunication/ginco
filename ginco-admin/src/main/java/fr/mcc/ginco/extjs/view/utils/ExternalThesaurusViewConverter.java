@@ -96,7 +96,7 @@ public class ExternalThesaurusViewConverter {
 		if (externalThesaurus == null) {			
 				externalThesaurus = new ExternalThesaurus();
 				logger.info("Creating a new external thesaurus");
-		} 
+		}
 		
 		externalThesaurus.setExternalId(externalThesaurusView.getExternalId());
 		externalThesaurus.setExternalThesaurusType(externalThesaurusTypeService.getExternalThesaurusTypeById(externalThesaurusView.getExternalThesaurusType()));

@@ -37,11 +37,7 @@ package fr.mcc.ginco.imports;
 
 import com.hp.hpl.jena.rdf.model.Statement;
 import fr.mcc.ginco.ark.IIDGeneratorService;
-import fr.mcc.ginco.beans.Alignment;
-import fr.mcc.ginco.beans.AlignmentConcept;
-import fr.mcc.ginco.beans.AlignmentType;
-import fr.mcc.ginco.beans.ExternalThesaurus;
-import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.beans.*;
 import fr.mcc.ginco.services.IExternalThesaurusService;
 import fr.mcc.ginco.services.IExternalThesaurusTypeService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -91,7 +87,6 @@ public class AlignmentBuilder extends AbstractBuilder {
 	                                AlignmentType alignmentType, ThesaurusConcept concept) {
 		logger.debug("Building alignment " + stmt.getObject().toString());
 
-
 		Alignment alignment = new Alignment();
 		alignment.setIdentifier(generatorService.generate(Alignment.class));
 		alignment.setAlignmentType(alignmentType);
@@ -100,33 +95,48 @@ public class AlignmentBuilder extends AbstractBuilder {
 		alignment.setModified(concept.getModified());
 		alignment.setSourceConcept(concept);
 
-		Set<AlignmentConcept> targetConcepts = new HashSet<AlignmentConcept>();
+		if(alignmentType.isResource()){
 
-		AlignmentConcept targetConcept = new AlignmentConcept();
-		targetConcept.setAlignment(alignment);
+			Set<AlignmentResource> targetResources = new HashSet<AlignmentResource>();
+			AlignmentResource targetResource = new AlignmentResource();
 
-		String targetConceptId = stmt.getObject().toString();
-		ThesaurusConcept internalTargetConcept = thesaurusConceptService
-				.getThesaurusConceptById(targetConceptId);
-		if (internalTargetConcept != null) {
-			targetConcept.setInternalTargetConcept(internalTargetConcept);
-			alignment.setInternalTargetThesaurus(internalTargetConcept
-					.getThesaurus());
-		} else {
-			// Check if the concept has an ark indentifier.
+			String externalTargetResource = stmt.getObject().toString();
 
-			Matcher arkMt = arkPt.matcher(targetConceptId);
-			Matcher urlMt = urlPt.matcher(targetConceptId);
+			targetResource.setAlignment(alignment);
+			targetResource.setExternalTargetResource(externalTargetResource);
 
-			if (arkMt.find()) {
-				setExternalThesaurus(alignment, arkMt.group());
-			} else if (urlMt.find()) {
-				setExternalThesaurus(alignment, urlMt.group());
+			targetResources.add(targetResource);
+			alignment.setTargetResources(targetResources);
+
+		}else{
+
+			Set<AlignmentConcept> targetConcepts = new HashSet<AlignmentConcept>();
+
+			AlignmentConcept targetConcept = new AlignmentConcept();
+			targetConcept.setAlignment(alignment);
+
+			String targetConceptId = stmt.getObject().toString();
+			ThesaurusConcept internalTargetConcept = thesaurusConceptService.getThesaurusConceptById(targetConceptId);
+			if (internalTargetConcept != null) {
+				targetConcept.setInternalTargetConcept(internalTargetConcept);
+				alignment.setInternalTargetThesaurus(internalTargetConcept.getThesaurus());
+			} else {
+				// Check if the concept has an ark indentifier.
+
+				Matcher arkMt = arkPt.matcher(targetConceptId);
+				Matcher urlMt = urlPt.matcher(targetConceptId);
+
+				if (arkMt.find()) {
+					setExternalThesaurus(alignment, arkMt.group());
+				} else if (urlMt.find()) {
+					setExternalThesaurus(alignment, urlMt.group());
+				}
+				targetConcept.setExternalTargetConcept(targetConceptId);
 			}
-			targetConcept.setExternalTargetConcept(targetConceptId);
+
+			targetConcepts.add(targetConcept);
+			alignment.setTargetConcepts(targetConcepts);
 		}
-		targetConcepts.add(targetConcept);
-		alignment.setTargetConcepts(targetConcepts);
 		return alignment;
 	}
 

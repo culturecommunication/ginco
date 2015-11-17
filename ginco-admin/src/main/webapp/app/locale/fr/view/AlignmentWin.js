@@ -45,6 +45,6 @@ Ext.define('GincoApp.locale.fr.view.AlignmentWin', {
 	xAndOrOr: "ET entre les concepts",
 	xAddInternalConceptId: "Concept Ginco",
 	xAddExternalConceptId : "Concept externe",
-	xAddExternalRessource : "Ressource externe",
+	xAddExternalResource : "Ressource externe",
 	xSaveBtn : "Enregistrer"
 });

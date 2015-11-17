@@ -608,8 +608,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 		this.setupStoreListener(childrenGrid);
 		var loadAlignmentFunc = function () {
 			var alignments = aModel.alignments().getRange();
-			console.log("#carpediem");
-			console.log(alignments);
 			var alignmentsGrid = aForm.down('#gridPanelAlignments');
 			var alignmentsGridStore = alignmentsGrid.getStore();
 			alignmentsGridStore.removeAll();
@@ -837,19 +835,11 @@ Ext.define('GincoApp.controller.ConceptController', {
 		var hierarchicalChildGrid = theForm.down('#gridPanelChildrenConcepts');
 		var hierarchicalChildData = hierarchicalChildGrid.getStore().getRange();
 
-		console.log('++++ start ++++');
 		var alignmentsGrid = theForm.down('#gridPanelAlignments');
-		console.log(alignmentsGrid);
 		var alignmentsData = alignmentsGrid.getStore().getRange();
-		console.log(alignmentsData);
 		Ext.Array.each(alignmentsData, function(alignment) {
 					var targetConceptData = alignment.targetConceptsStore.getRange();
 					var targetResourceData = alignment.targetResourcesStore.getRange();
-					console.log('++++ A ++++');
-					console.log(alignmentsData);
-					console.log(targetConceptData);
-					console.log(targetResourceData);
-					console.log('++++ B ++++');
 					alignment.targetConcepts().removeAll();
 					alignment.targetResources().removeAll();
 					alignment.targetConcepts().add(targetConceptData);
@@ -869,8 +859,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 		updatedModel.childConcepts().add(hierarchicalChildData);
 		updatedModel.alignments().removeAll();
 		updatedModel.alignments().add(alignmentsData);
-		console.log(updatedModel);
-		console.log('++++ end ++++');
 
 		updatedModel.data.rootConcepts = rootIds;
 		updatedModel.save({
@@ -955,7 +943,6 @@ Ext.define('GincoApp.controller.ConceptController', {
 	},
 	onGotoAlignedConcept : function(theButton, thesaurusId, conceptId,
 			internalAlign) {
-		console.log('onGotoAlignedConcept : '+internalAlign);
 		var me = this;
 		if (internalAlign == true) {
 			if (thesaurusId != "") {

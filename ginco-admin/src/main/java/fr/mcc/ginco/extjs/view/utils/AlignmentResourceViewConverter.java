@@ -85,14 +85,16 @@ public class AlignmentResourceViewConverter {
 	 * @param convertedResource
 	 * @return
 	 */
-	public AlignmentResource convertAlignmentResourceView(
-			AlignmentResourceView alignmentResourceView, Alignment alignment) {
+	public AlignmentResource convertAlignmentResourceView(AlignmentResourceView alignmentResourceView, Alignment alignment) {
 		logger.debug("AlignmentResourceView to store : " + alignmentResourceView.toString());
 		AlignmentResource alignmentResource = new AlignmentResource();
 		alignmentResource.setAlignment(alignment);
 		
 		if (StringUtils.isNotEmpty(alignmentResourceView.getExternalTargetResource())) {
 			alignmentResource.setExternalTargetResource(alignmentResourceView.getExternalTargetResource());
+		}
+		if (null != alignmentResourceView.getIdentifier()) {
+			alignmentResource.setIdentifier(alignmentResourceView.getIdentifier());
 		}
 		return alignmentResource;
 	}

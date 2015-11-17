@@ -107,6 +107,9 @@ public class AlignmentConceptViewConverter {
 			
 			alignmentConcept.setInternalTargetConcept(target);
 		}
+		if (null != alignmentConceptView.getIdentifier()) {
+			alignmentConcept.setIdentifier(alignmentConceptView.getIdentifier());
+		}
 		return alignmentConcept;
 	}
 }

@@ -43,7 +43,6 @@ public class AlignmentConcept {
 	@XmlTransient
 	private Integer identifier;
 	private String externalTargetConcept;
-
 	private ThesaurusConcept internalTargetConcept;
 
 	@XmlTransient
