@@ -292,9 +292,8 @@ public class ThesaurusTermDAO extends
 	 */
 	@Override
 	public ThesaurusTerm getTermByLexicalValueThesaurusIdLanguageId(String lexicalValue, String thesaurusId, String languageId) {
-		lexicalValue = lexicalValue.replace("'", "&apos;");
 		return (ThesaurusTerm) getCurrentSession().createCriteria(ThesaurusTerm.class)
-				.add(Restrictions.eq(LEXICAL_VALUE, lexicalValue))
+				.add(Restrictions.or(Restrictions.eq(LEXICAL_VALUE, lexicalValue.replace("'", "&apos;")),Restrictions.eq(LEXICAL_VALUE, lexicalValue)))
 				.add(Restrictions.eq(THESAURUS_IDENTIFIER, thesaurusId))
 				.add(Restrictions.eq(LANGUAGE_ID, languageId)).uniqueResult();
 	}
