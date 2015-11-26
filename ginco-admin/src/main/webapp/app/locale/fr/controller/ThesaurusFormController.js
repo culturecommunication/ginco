@@ -45,7 +45,7 @@ Ext.define('GincoApp.locale.fr.controller.ThesaurusFormController', {
     xProblemDeleteMsg : 'Impossible de supprimer le thesaurus !',
     xProblemPublishMsg : "Impossible de publier le thesaurus !",
     xWarningChangedPoly : "Attention! Vous passez d'un thésaurus polyhiérarchique à un thésaurus monohiérarchique, veuillez vérifier les relations hiérarchiques des concepts.",
-    xWarningChangedLanguages : "Il existe peut-être des termes dans la langue que vous essayez de supprimer. Veuillez vérifier la langues des termes de ce thésaurus.",
+    xWarningChangedLanguages : "Il existe peut-être des termes dans la langue que vous essayez de supprimer. Veuillez vérifier la langue des termes de ce thésaurus.",
     xImportTermsTitle : "Importer des termes",
     xImportBranchTitle : "Importer une branche",
     xArchiveSuccess: "Le thesaurus a été archivé!",
