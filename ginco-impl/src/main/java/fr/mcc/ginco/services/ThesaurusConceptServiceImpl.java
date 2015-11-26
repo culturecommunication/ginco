@@ -321,6 +321,12 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 	@Override
 	public String getConceptLabel(String conceptId) {
+		ThesaurusConcept concept = getThesaurusConceptById(conceptId);
+		if (concept==null)
+		{
+			logger.warn("ConceptId : " + conceptId+ " does not exist...");
+			return null;
+		}
 		ThesaurusTerm term = getConceptPreferredTerm(conceptId);
 		return LabelUtil.getLocalizedLabel(term.getLexicalValue(),
 				term.getLanguage(), defaultLang);

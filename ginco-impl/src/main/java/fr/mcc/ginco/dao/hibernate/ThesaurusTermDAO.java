@@ -377,8 +377,8 @@ public class ThesaurusTermDAO extends
 				.list();
 
 		if (list.size() == 0) {
-			throw new BusinessException("No preferred term found ! "
-					+ "Please check your database !", "no-preferred-term-found");
+			throw new BusinessException("No preferred term found ! for concept : "+conceptId
+					+ " Please check your database !", "no-preferred-term-found");
 		}
 		return list;
 	}

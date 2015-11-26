@@ -37,6 +37,7 @@ package fr.mcc.ginco.audit.csv;
 import fr.mcc.ginco.beans.GincoRevEntity;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -44,6 +45,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -113,7 +115,8 @@ public class JournalLineBuilder {
 		} else {
 			journal.setTermRole("TNP");
 		}
-		journal.setConceptId(term.getConcept().getIdentifier());
+		if (term.getConcept()!=null)
+			journal.setConceptId(term.getConcept().getIdentifier());
 		return journal;
 	}
 
@@ -190,7 +193,13 @@ public class JournalLineBuilder {
 		Set<String> conceptLabels = new HashSet<String>();
 		for (ThesaurusConcept concept : concepts) {
 			String conceptId = concept.getIdentifier();
-			String conceptLexicalValue = StringEscapeUtils.unescapeXml(thesaurusConceptService.getConceptLabel(concept.getIdentifier()));
+			String conceptLexicalValue = "";
+			try {
+			   conceptLexicalValue = StringEscapeUtils.unescapeXml(thesaurusConceptService.getConceptLabel(concept.getIdentifier()));
+			} catch (BusinessException bex)
+			{
+				
+			}
 			conceptLabels.add(conceptLexicalValue + " (" + conceptId + ")");
 		}
 		return conceptLabels;
