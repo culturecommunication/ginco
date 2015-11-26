@@ -389,6 +389,9 @@ Ext.define('GincoApp.controller.AlignmentController',
 					'alignmentWin #typeComboResource' : {
 						select : this.chooseAlignmentType
 					},
+					'alignmentWin  #externalThesaurus' : {
+						select: this.updateExternalThesaurusType
+					},
 					'alignmentWin  #addInternalConceptId' : {
 						click : this.displayAddInternalConceptFieldByBytton
 					},
