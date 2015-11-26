@@ -20,8 +20,8 @@ public class FOAF extends com.hp.hpl.jena.sparql.vocabulary.FOAF {
      * MAP of all alignment types
      */
     public static final Map<String, Property> FOAF_ALIGNMENTS = new HashMap<String, Property>() { {
-        put("IMG", focus );
-        put("RES", depiction);
+        put("IMG", depiction );
+        put("RES", focus);
     } };
 
 }

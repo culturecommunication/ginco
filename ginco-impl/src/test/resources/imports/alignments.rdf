@@ -239,6 +239,8 @@ indiscrets</skos:hiddenLabel>
 		<skos:related rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-1942"/>
 		<skos:exactMatch>http://data.bnf.fr/ark:/12148/cb13318807v</skos:exactMatch>
 		<skos:closeMatch>http://dbpedia.org/resources/bidule</skos:closeMatch>
+		<foaf:depiction rdf:resource="https://upload.wikimedia.org/wikipedia/commons/2/24/Imrul_qays_calligraphie.JPG"/>
+		<foaf:focus rdf:resource="https://fr.wikipedia.org/wiki/Calligraphie"/>
 	</skos:Concept>
 	<skos:Concept rdf:about="http://data.culture.fr/thesaurus/resource/ark:/67717/T69-413">
 		<skos:inScheme rdf:resource="http://data.culture.fr/thesaurus/resource/ark:/67717/T69"/>
@@ -250,5 +252,7 @@ indiscrets</skos:hiddenLabel>
 		<skos:broadMatch>http://data.culture.fr/thesaurus/resource/ark:/67717/T69-2852</skos:broadMatch>
 		<skos:narrowMatch>http://data.culture.fr/thesaurus/resource/ark:/67717/T69-409</skos:narrowMatch>
 		<skos:relatedMatch>http://data.culture.fr/thesaurus/resource/ark:/67717/T69-411</skos:relatedMatch>
+		<foaf:depiction rdf:resource="https://upload.wikimedia.org/wikipedia/commons/2/24/Imrul_qays_calligraphie.JPG"/>
+		<foaf:focus rdf:resource="https://fr.wikipedia.org/wiki/Calligraphie"/>
 	</skos:Concept>
 </rdf:RDF>

@@ -111,13 +111,23 @@ public class AlignmentsBuilderTest {
 		AlignmentType related = new AlignmentType();
 		related.setIsoCode("RM");
 		alignmentTypes.add(related);
+		
+		AlignmentType focus = new AlignmentType();
+		focus.setIsoCode("RES");
+		focus.setResource(true);
+		alignmentTypes.add(focus);
+		
+		AlignmentType depiction = new AlignmentType();
+		depiction.setResource(true);
+		depiction.setIsoCode("IMG");
+		alignmentTypes.add(depiction);
 
 		Mockito.when(alignmentTypeService.getAlignmentTypeList()).thenReturn(
 				alignmentTypes);
 
 		List<Alignment> alignements = alignmentsBuilder.buildAlignments(skosConcept, concept);
 
-		Assert.assertEquals(5, alignements.size());
+		Assert.assertEquals(7, alignements.size());
 	}
 
 	
