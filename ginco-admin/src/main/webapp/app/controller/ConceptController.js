@@ -1084,7 +1084,7 @@ Ext.define('GincoApp.controller.ConceptController', {
 			'conceptPanel  button[cls=addAlignment]' : {
 				click : this.addAlignment
 			},
-			'conceptPanel #gridPanelAlignments  #alignmentcolumn' : {
+			'conceptPanel #gridPanelAlignments  #alignmentUrlColumn' : {
 				gotoconcept : this.onGotoAlignedConcept
 			},
 			'conceptPanel #gridPanelAlignments  #alignmentUrlResourcesColumn' : {
