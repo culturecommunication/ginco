@@ -47,6 +47,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -148,29 +149,41 @@ public class BaseRestService {
 			String vocId = getIdFromParam(nodeParam,
 					FolderGenerator.GROUPS_PREFIX);
 			result = thesaurusGroupGenerator.generateGroups(vocId);
-		} else {
+		} else if (nodeParam.startsWith("http"))
+		{
+			// refresh only a thesaurus
+			Thesaurus thesaurus = thesaurusService.getThesaurusById(nodeParam);
+			result = foldersGenerator.generateFolders(thesaurus
+					.getIdentifier());
+		}
+		else {
 			result = new ArrayList<IThesaurusListNode>();
 			for (Thesaurus thesaurus : thesaurusService.getThesaurusList()) {
-				IThesaurusListNode node = new ThesaurusListBasicNode();
-				node.setExpanded(false);
-				node.setTitle(thesaurus.getTitle());
-				node.setId(thesaurus.getIdentifier());
-				node.setType(ThesaurusListNodeType.THESAURUS);
-				if (thesaurus.getCreator() != null) {
-					node.setOrganizationName(thesaurus.getCreator().getName());
-				}
-				node.setChildren(foldersGenerator.generateFolders(thesaurus
-						.getIdentifier()));
-				node.setDisplayable(true);
-				if (thesaurus.isArchived() != null
-						&& thesaurus.isArchived()) {
-					node.setIconCls("archived");
-				}
-
-				result.add(node);
+				displayThesaurus(result, thesaurus);
 			}
 		}
+		
 		return result;
+	}
+	
+	private void displayThesaurus(List<IThesaurusListNode> result, Thesaurus thesaurus) {
+		IThesaurusListNode node = new ThesaurusListBasicNode();
+		node.setExpanded(false);
+		node.setTitle(thesaurus.getTitle());
+		node.setId(thesaurus.getIdentifier());
+		node.setType(ThesaurusListNodeType.THESAURUS);
+		if (thesaurus.getCreator() != null) {
+			node.setOrganizationName(thesaurus.getCreator().getName());
+		}
+		node.setChildren(foldersGenerator.generateFolders(thesaurus
+				.getIdentifier()));
+		node.setDisplayable(true);
+		if (thesaurus.isArchived() != null
+				&& thesaurus.isArchived()) {
+			node.setIconCls("archived");
+		}
+
+		result.add(node);
 	}
 
 	private String getIdFromParam(String param, String prefix) {

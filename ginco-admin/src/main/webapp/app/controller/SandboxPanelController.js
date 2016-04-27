@@ -68,8 +68,8 @@ Ext.define('GincoApp.controller.SandboxPanelController',
 						sandBoxGrid.getStore().load();
 					}
 				});	
-				
-				this.application.fireEvent('refreshtree', thesaurusData);
+				/*No need to refresh sand box list here*/
+				//this.application.fireEvent('refreshtree', thesaurusData);
 			},
 
 			init : function() {

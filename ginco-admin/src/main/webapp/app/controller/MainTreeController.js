@@ -176,6 +176,47 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
 		this.loadTreeView(theTree);
 	},
+	onRefreshConceptTreeEvent : function(aThesaurus, aConceptId)
+	{
+		var me = this;
+		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
+		var treeStore = this.getMainTreeStoreStore();
+		var thesNode = treeStore.getNodeById(aThesaurus.id);
+		if (thesNode != null) {
+			if (theTree)
+			{
+			    scrollPosition = theTree.getEl().down('.x-grid-view').getScroll();
+				treeState = theTree.getState();
+	            if (theTree.getSelectionModel().hasSelection()) {
+	                focusedRecordId = theTree.getSelectionModel().getSelection()[0].data.id;
+	            }
+			}
+			treeStore.load({ node: thesNode,
+				callback: function (theStore, aOperation){
+					if (aOperation.success==false)
+					{
+						Thesaurus.ext.utils.msg(me.xProblemLabel,
+								me.xProblemLoadMsg+ " : "+ aOperation.error.statusText);
+					} else{
+                        theTree.setLoading(false);
+						this.getRootNode().expand();
+						if (treeState)
+						{
+							theTree.applyState(treeState, function() {
+                                theTree.getEl().down('.x-grid-view').scrollTo('top', scrollPosition.top, false);
+                                var selectModel = theTree.getSelectionModel();
+                                selectModel.select(theTree.store.getNodeById(focusedRecordId));
+                                focusedRecordId = null;
+                            });
+                        }
+
+                        me.treeViewLoaded = true;
+                        me.treeViewLoading = false;
+					}
+			    }});
+		}
+		
+	},
 	onItemSelect : function(theTree, theRecord)
 	{
 		theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
@@ -260,7 +301,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		 this.application.on({		
 			    userinfoloaded: this.onUserInfoLoaded,
 			 	thesaurusupdated: this.onRefreshTreeEvent,
-			 	conceptupdated: this.onRefreshTreeEvent,
+			 	conceptupdated: this.onRefreshConceptTreeEvent,
 			 	conceptdeleted: this.onRefreshTreeEvent,
                 thesaurusdeleted: this.onRefreshTreeEvent,
                 conceptgroupupdated: this.onRefreshTreeEvent,
