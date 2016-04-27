@@ -623,7 +623,7 @@
     </distributionManagement>
 
     <modules>
-        <module>ginco-quality-tool-conf</module>
+        <!-- <module>ginco-quality-tool-conf</module>-->
         <module>ginco-api</module>
         <module>ginco-commons</module>
         <module>ginco-impl</module>
