@@ -36,6 +36,7 @@ package fr.mcc.ginco.tests.audit.csv;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -56,12 +57,12 @@ public class JournalLineTest {
 		line.setConceptId("http://fakeconcept");
 		line.setEventDate(DateUtil.dateFromString("2013-01-20 20:30:00"));
 		line.setEventType(JournalEventsEnum.THESAURUSCONCEPT_CREATED);
-		Set<String> newGenericTerms = new HashSet<String>();
+		Set<String> newGenericTerms = new LinkedHashSet<String>();
 		newGenericTerms.add("http://fakeconcept1");
 		newGenericTerms.add("http://fakeconcept2");
 		line.setNewGenericTerm(newGenericTerms);
 		line.setNewLexicalValue("New term lexical Value");
-		Set<String> oldGenericTerms = new HashSet<String>();
+		Set<String> oldGenericTerms = new LinkedHashSet<String>();
 		oldGenericTerms.add("http://fakeconcept1");
 		line.setOldGenericTerm(oldGenericTerms);
 		line.setOldLexicalValue("Old term lexical value");
