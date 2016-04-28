@@ -61,13 +61,15 @@ public final class ConceptHierarchyUtil {
 		
 		Set<ThesaurusConcept> result = new HashSet<ThesaurusConcept>();
 		boolean allRoot = true;
+		boolean first = true;
 		for (ThesaurusConcept thesaurusConcept : membersConcepts) {
 			if (!thesaurusConcept.getParentConcepts().isEmpty()) {
 				allRoot = false;
 				Set<ThesaurusConcept> parentConcepts = thesaurusConcept
 						.getParentConcepts();
-				if (result.isEmpty()) {
+				if (first) {
 					result.addAll(parentConcepts);
+					first = false;
 				} else {
 					result.retainAll(parentConcepts);
 				}

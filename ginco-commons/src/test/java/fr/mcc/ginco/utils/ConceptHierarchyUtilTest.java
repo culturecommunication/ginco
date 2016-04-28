@@ -121,9 +121,13 @@ public class ConceptHierarchyUtilTest {
 		membersConcepts.add(c21);
 		membersConcepts.add(c22);
 		membersConcepts.add(c23);
-
+		try {
 		ConceptHierarchyUtil
 				.getSuperOrdinate(membersConcepts);
+		} catch (BusinessException be) {
+			Assert.assertEquals("import-no-superordinate", be.getUserMessageKey());
+			throw be;
+		}
 	}
 	
 	@Test(expected = BusinessException.class)
@@ -154,6 +158,8 @@ public class ConceptHierarchyUtilTest {
 		ThesaurusConcept c23 = new ThesaurusConcept();
 		c23.setIdentifier("c23");
 		Set<ThesaurusConcept> c23Parents = new HashSet<ThesaurusConcept>();
+		c23Parents.add(c2);
+		c23Parents.add(c1);
 		c23Parents.add(c3);
 		c23.setParentConcepts(c23Parents);
 
@@ -161,9 +167,56 @@ public class ConceptHierarchyUtilTest {
 		membersConcepts.add(c21);
 		membersConcepts.add(c22);
 		membersConcepts.add(c23);
-
-		ConceptHierarchyUtil
+		try {
+			ConceptHierarchyUtil
 				.getSuperOrdinate(membersConcepts);
+		} catch (BusinessException be) {
+			Assert.assertEquals("import-too-many-superordinate", be.getUserMessageKey());
+			throw be;
+			
+		}
+	}
+	
+	@Test
+	public void testOneSuperOrdinate() {
+		ThesaurusConcept c1 = new ThesaurusConcept();
+		c1.setIdentifier("c1");
+		ThesaurusConcept c2 = new ThesaurusConcept();
+		c2.setIdentifier("c2");
+		ThesaurusConcept c3 = new ThesaurusConcept();
+		c3.setIdentifier("c3");
+
+
+		ThesaurusConcept c21 = new ThesaurusConcept();
+		c21.setIdentifier("c21");
+		Set<ThesaurusConcept> c21Parents = new HashSet<ThesaurusConcept>();
+		c21Parents.add(c1);
+		c21Parents.add(c2);
+		c21.setParentConcepts(c21Parents);
+
+		ThesaurusConcept c22 = new ThesaurusConcept();
+		c22.setIdentifier("c22");
+		Set<ThesaurusConcept> c22Parents = new HashSet<ThesaurusConcept>();
+		c22Parents.add(c2);
+		c22Parents.add(c1);
+		c22Parents.add(c3);
+		c22.setParentConcepts(c22Parents);
+
+		ThesaurusConcept c23 = new ThesaurusConcept();
+		c23.setIdentifier("c23");
+		Set<ThesaurusConcept> c23Parents = new HashSet<ThesaurusConcept>();
+		c23Parents.add(c2);
+		c23.setParentConcepts(c23Parents);
+
+		Set<ThesaurusConcept> membersConcepts = new HashSet<ThesaurusConcept>();
+		membersConcepts.add(c21);
+		membersConcepts.add(c22);
+		membersConcepts.add(c23);
+
+		ThesaurusConcept superOrdinate = ConceptHierarchyUtil
+				.getSuperOrdinate(membersConcepts);
+		Assert.assertEquals("c2", superOrdinate.getIdentifier());
+		
 	}
 
 }
