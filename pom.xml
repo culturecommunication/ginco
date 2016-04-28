@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.smile.mcc.ginco</groupId>
     <artifactId>ginco</artifactId>
-    <version>2.0.8-SNAPSHOT</version>
+    <version>2.0.9-SNAPSHOT</version>
     <name>Ginco</name>
     <packaging>pom</packaging>
 
@@ -124,7 +124,8 @@
         <url>scm:git:https://github.com/culturecommunication/ginco.git</url>
         <connection>scm:git:git://github.com/culturecommunication/ginco.git</connection>
         <developerConnection>scm:git:git@github.com:culturecommunication/ginco.git</developerConnection>
-    </scm>
+      <tag>HEAD</tag>
+  </scm>
 
     <ciManagement>
         <system>continuum</system>
