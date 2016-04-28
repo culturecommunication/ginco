@@ -176,12 +176,19 @@ Ext.define('GincoApp.controller.MainTreeController', {
 		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
 		this.loadTreeView(theTree);
 	},
-	onRefreshConceptTreeEvent : function(aThesaurus, aConceptId)
+	onRefreshConceptTreeEvent : function(aThesaurus, aConceptId, refreshTree)
 	{
 		var me = this;
+		if (!refreshTree)
+			return;
+		if (me.treeViewLoading)
+			return;
+		me.treeViewLoading = true;
+		
 		var theTree = Ext.ComponentQuery.query('#mainTreeView')[0];
 		var treeStore = this.getMainTreeStoreStore();
 		var thesNode = treeStore.getNodeById(aThesaurus.id);
+		var thesNode = thesNode.firstChild;
 		if (thesNode != null) {
 			if (theTree)
 			{
@@ -191,6 +198,7 @@ Ext.define('GincoApp.controller.MainTreeController', {
 	                focusedRecordId = theTree.getSelectionModel().getSelection()[0].data.id;
 	            }
 			}
+			//thesNode.removeAll();
 			treeStore.load({ node: thesNode,
 				callback: function (theStore, aOperation){
 					if (aOperation.success==false)

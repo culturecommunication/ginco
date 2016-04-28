@@ -871,11 +871,11 @@ Ext.define('GincoApp.controller.ConceptController', {
 								me.xSucessSavedMsg);
 						me.application.fireEvent('conceptupdated',
 								thePanel.getThesaurusData(),resultRecord
-										.get("identifier"));
+										.get("identifier"),true);
 
                         Ext.Array.forEach(resultRecord.raw.parentConcepts, function (parent) {
                             me.application.fireEvent('conceptupdated',
-                            thePanel.getThesaurusData(), parent.identifier);
+                            thePanel.getThesaurusData(), parent.identifier,false);
                         });
 
 						if (!Ext.isEmpty(thePanel.parentConceptId)) {
