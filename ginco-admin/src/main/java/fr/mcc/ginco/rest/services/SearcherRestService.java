@@ -74,7 +74,7 @@ public class SearcherRestService {
 		try {
 			SortCriteria sort = new SortCriteria(filter.getSortfield(), filter.getSortdir());
 			SearchResultList searchResults =
-					searcherService.search(StringEscapeUtils.unescapeHtml4(filter.getQuery()), filter.getType(),
+					searcherService.search(StringEscapeUtils.unescapeXml(filter.getQuery()), filter.getType(),
 					filter.getThesaurus(), filter.getStatus(),
 					filter.getCreationdate(), filter.getModificationdate(),
 					filter.getLanguage(), sort, filter.getStart(), filter.getLimit());
