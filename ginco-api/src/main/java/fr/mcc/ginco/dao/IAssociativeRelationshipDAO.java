@@ -36,6 +36,7 @@ package fr.mcc.ginco.dao;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 
 import java.util.List;
 
@@ -43,6 +44,15 @@ import java.util.List;
  * Data Access Object for thesaurus_concept
  */
 public interface IAssociativeRelationshipDAO extends IGenericDAO<AssociativeRelationship, String> {
+	
+    /**
+     * Gets the list of asssociated concepts
+     * @param concept
+     * @param status
+     * @return
+     */
+    List<String> getAssociatedConcepts(ThesaurusConcept concept, ConceptStatusEnum status);
+	
     /**
      * Gets the list of asssociated concepts
      * @param concept

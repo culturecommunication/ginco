@@ -40,6 +40,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 
 /**
  * This class exposes all SOAP services related to concept objects
@@ -92,15 +93,15 @@ public interface ISOAPThesaurusConceptService {
 	 * @param conceptId identifier of a concept
 	 * @return list of objects
 	 */
-	List<String> getChildrenByConceptId(@WebParam(name = "conceptId") String conceptId);
-
+	List<String> getChildrenByConceptId(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
+	
 	/**
 	 * Returns root concepts for given concept
 	 *
 	 * @param conceptId identifier of a concept
 	 * @return list of root concepts
 	 */
-	List<String> getRootConcepts(@WebParam(name = "conceptId") String conceptId);
+	List<String> getRootConcepts(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
 
 	/**
 	 * Returns parent concepts for given concept
@@ -108,7 +109,7 @@ public interface ISOAPThesaurusConceptService {
 	 * @param conceptId identifier of a concept
 	 * @return list of parent concepts
 	 */
-	List<String> getParentConcepts(@WebParam(name = "conceptId") String conceptId);
+	List<String> getParentConcepts(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
 
 	/**
 	 * Returns associative concepts for given concept
@@ -116,14 +117,16 @@ public interface ISOAPThesaurusConceptService {
 	 * @param conceptId identifier of a concept
 	 * @return list of associative concepts
 	 */
-	List<String> getAssociativeConcepts(@WebParam(name = "conceptId") String conceptId);
+	List<String> getAssociativeConcepts(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
+
 
 	/**
 	 * Returns top concepts for a thesaurus
 	 *
 	 * @param thesaurusId identifier of a thesaurus
+	 * @param status of concepts
 	 * @return list of top concepts
 	 */
-	List<String> getTopConceptsByThesaurusId(@WebParam(name = "thesaurusId") String thesaurusId);
+	List<String> getTopConceptsByThesaurusId(@WebParam(name = "thesaurusId") String thesaurusId, @WebParam(name="status") ConceptStatusEnum status);
 }
 

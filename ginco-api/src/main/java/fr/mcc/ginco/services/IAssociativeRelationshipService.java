@@ -36,6 +36,7 @@ package fr.mcc.ginco.services;
 
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 
 import java.util.List;
 
@@ -46,6 +47,15 @@ import java.util.List;
  * @see fr.mcc.ginco.beans
  */
 public interface IAssociativeRelationshipService {
+	
+	/**
+	 * Returns list of string of all associated concepts to given concept.
+	 *
+	 * @param concept
+	 * @return
+	 */
+	List<String> getAssociatedConceptsId(ThesaurusConcept concept, ConceptStatusEnum status);
+	
 	/**
 	 * Returns list of string of all associated concepts to given concept.
 	 *

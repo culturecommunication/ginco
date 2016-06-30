@@ -37,6 +37,8 @@ package fr.mcc.ginco.exports.skos;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -57,7 +59,9 @@ import fr.mcc.ginco.skos.namespaces.SKOS;
  */
 @Component("skosHierarchicalRelationshipExporter")
 public class SKOSHierarchicalRelationshipExporter {	
-
+	
+	private Logger logger = LoggerFactory.getLogger(SKOSHierarchicalRelationshipExporter.class);
+	
 	@Inject
 	@Named("conceptHierarchicalRelationshipService")
 	private IConceptHierarchicalRelationshipService conceptHierarchicalRelationshipService;
@@ -65,7 +69,6 @@ public class SKOSHierarchicalRelationshipExporter {
 	public Model exportHierarchicalRelationships(Model model,
 			ThesaurusConcept parentConcept, ThesaurusConcept childConcept) {
 		Resource childRes = model.createResource(childConcept.getIdentifier());
-
 		if (parentConcept != null) {
 			Resource parentRes = model.createResource(parentConcept
 					.getIdentifier());
@@ -93,9 +96,10 @@ public class SKOSHierarchicalRelationshipExporter {
 		return model;
 	}
 
-	private Model buildHierarchicalRelationship(Model defaultModel,
+	private void buildHierarchicalRelationship(Model defaultModel,
 			Resource sourceConcept, Resource relatedConcept,
 			Property skosRelation, String skosLabel) {
+		logger.info("Relation "+skosRelation.toString()+" "+relatedConcept.getURI()+" "+sourceConcept.getURI());
 		defaultModel.add(sourceConcept, skosRelation, relatedConcept);
 		if (!skosLabel.isEmpty()) {
 			Property gincoRelProperty = defaultModel.createProperty(GINCO
@@ -104,6 +108,5 @@ public class SKOSHierarchicalRelationshipExporter {
 			defaultModel.add(sourceConcept, gincoRelProperty, relatedConcept);
 
 		}
-		return defaultModel;
 	}
 }

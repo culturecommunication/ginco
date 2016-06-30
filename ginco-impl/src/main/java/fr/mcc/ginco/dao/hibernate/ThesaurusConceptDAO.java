@@ -57,7 +57,6 @@ import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.dao.IThesaurusConceptDAO;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
-import fr.mcc.ginco.services.IThesaurusConceptService;
 
 /**
  * Implementation of the data access object to the thesaurus_term database table
@@ -86,7 +85,7 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getOrphansThesaurusConcept(
 			Thesaurus thesaurus, int maxResults) {
-		return getListByThesaurusAndTopConcept(thesaurus, false, maxResults,null);
+		return getListByThesaurusAndTopConcept(thesaurus, false, maxResults,null,null);
 	}
 
 	/*
@@ -110,7 +109,14 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getTopTermThesaurusConcept(
 			Thesaurus thesaurus, int maxResults,String like) {
-		return getListByThesaurusAndTopConcept(thesaurus, true, maxResults,like);
+		return getTopTermThesaurusConcept(thesaurus,  maxResults, like, null);
+	}
+	
+	@Override
+	public List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults, String like,
+			ConceptStatusEnum status) {
+		// TODO Auto-generated method stub
+		return getListByThesaurusAndTopConcept(thesaurus, true, maxResults,like, status);
 	}
 
 	/*
@@ -128,7 +134,7 @@ public class ThesaurusConceptDAO extends
 	@Override
 	public List<ThesaurusConcept> getRootConcepts(String thesaurusId,
 	                                              Boolean searchOrphans) {
-		return getConcepts(null, thesaurusId, searchOrphans, 0,null);
+		return getConcepts(null, thesaurusId, searchOrphans, 0,null,null);
 	}
 
 	@Override
@@ -143,12 +149,17 @@ public class ThesaurusConceptDAO extends
 	}
 	
 	@Override
+	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults,String like, ConceptStatusEnum status) {
+		return getConcepts(conceptId, null, null, maxResults,like, status);
+	}
+	
+	@Override
 	public List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults,String like) {
-		return getConcepts(conceptId, null, null, maxResults,like);
+		return getConcepts(conceptId, null, null, maxResults,like, null);
 	}
 
 	private List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId,
-			Boolean searchOrphans, int maxResults,String like) {
+			Boolean searchOrphans, int maxResults,String like, ConceptStatusEnum status) {
 		
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
@@ -179,6 +190,7 @@ public class ThesaurusConceptDAO extends
 		}
 
 		selectOrphans(criteria, searchOrphans);
+		selectStatus(criteria, status);
 		if (maxResults > 0)
 			criteria.setMaxResults(maxResults);
 		return criteria.list();
@@ -357,8 +369,14 @@ public class ThesaurusConceptDAO extends
 		}
 
 		if (onlyValidatedConcepts) {
+			selectStatus(criteria , ConceptStatusEnum.VALIDATED);
+		}
+	}
+	
+	private void selectStatus (Criteria criteria, ConceptStatusEnum status) {
+		if (status != null) {
 			criteria.add(Restrictions.eq("status",
-					ConceptStatusEnum.VALIDATED.getStatus()));
+					status.getStatus()));
 		}
 	}
 	
@@ -382,13 +400,13 @@ public class ThesaurusConceptDAO extends
 	}
 
 	private List<ThesaurusConcept> getListByThesaurusAndTopConcept(
-			Thesaurus thesaurus, boolean topConcept, int maxResults,String like) {
+			Thesaurus thesaurus, boolean topConcept, int maxResults,String like, ConceptStatusEnum status) {
 
 		if (thesaurus == null) {
 			throw new BusinessException("Object thesaurus can't be null !",
 					"empty-thesaurus");
 		}
-		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,topConcept,like);
+		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,topConcept,like, status);
 		if (maxResults > 0) {
 			crit.setMaxResults(maxResults);
 		}
@@ -403,12 +421,12 @@ public class ThesaurusConceptDAO extends
 					"empty-thesaurus");
 		}
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
-				topConcept,null).setProjection(Projections.rowCount());
+				topConcept,null,null).setProjection(Projections.rowCount());
 		return (Long) crit.list().get(0);
 	}
 
 	private Criteria getCriteriaByThesaurusAndTopConcept(Thesaurus thesaurus,
-	                                                     boolean topConcept,String like) {
+	                                                     boolean topConcept,String like, ConceptStatusEnum status) {
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
 		if(null != like){
@@ -429,6 +447,7 @@ public class ThesaurusConceptDAO extends
 		selectThesaurus(criteria, thesaurus.getIdentifier());
 		selectOrphans(criteria, !topConcept);
 		selectNoParents(criteria);
+		selectStatus(criteria, status);
 		return criteria;
 	}
 
@@ -568,5 +587,7 @@ public class ThesaurusConceptDAO extends
 
 		return (List<ThesaurusConcept>) criteria.list();
 	}
+
+
 
 }

@@ -38,6 +38,7 @@ import java.util.List;
 
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 
 /**
  * Data Access Object for thesaurus_concept
@@ -71,7 +72,15 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      */
 	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults,String like);
 
-
+	  /**
+     * Gets the list of ThesaurusConcept which are top term given
+     * a thesaurusID
+     * @param thesaurus object Thesaurus
+     * @return
+     */
+	List<ThesaurusConcept> getTopTermThesaurusConcept(Thesaurus thesaurus, int maxResults,String like, ConceptStatusEnum status);
+	
+	
 	/**
 	 * Gets the number of orphan concepts for a given thesaurus
 	 * @param thesaurus
@@ -95,6 +104,14 @@ public interface IThesaurusConceptDAO extends IGenericDAO<ThesaurusConcept, Stri
      * @return list
      */
     List<ThesaurusConcept> getRootConcepts(String thesaurusId, Boolean searchOrphans);
+    
+    
+	/**
+     * Get limited list of paginated children concepts by id of parent Concept.
+     * @param conceptId
+     * @return list of children or all root concepts if conceptId is null.
+     */
+	List<ThesaurusConcept> getChildrenConcepts(String conceptId, int maxResults,String like, ConceptStatusEnum status);
 
 	/**
      * Get limited list of paginated children concepts by id of parent Concept.

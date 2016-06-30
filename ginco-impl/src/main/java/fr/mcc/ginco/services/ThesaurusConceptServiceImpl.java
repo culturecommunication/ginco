@@ -202,13 +202,18 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	 */
 	@Override
 	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, int maxResults) {
-		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
-		return thesaurusConceptDAO.getTopTermThesaurusConcept(thesaurus, maxResults,null);
+		return getTopTermThesaurusConcepts(thesaurusId, null, maxResults);
 	}
 
 	@Override
 	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId) {
 		return getTopTermThesaurusConcepts(thesaurusId, 0);
+	}
+	
+	@Override
+	public List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, ConceptStatusEnum status, int maxResults) {
+		Thesaurus thesaurus = checkThesaurusId(thesaurusId);
+		return thesaurusConceptDAO.getTopTermThesaurusConcept(thesaurus, maxResults,null, status);
 	}
 
 	@Override
@@ -218,8 +223,13 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 	}
 	
 	@Override
+	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults,String like, ConceptStatusEnum status) {
+		return thesaurusConceptDAO.getChildrenConcepts(conceptId, maxResults,like,status);
+	}
+	
+	@Override
 	public List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults,String like) {
-		return thesaurusConceptDAO.getChildrenConcepts(conceptId, maxResults,like);
+		return getChildrenByConceptId(conceptId, maxResults,like,null);
 	}
 
 	@Override
@@ -742,4 +752,6 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 		}
 		return arrayOfParent;
 	}
+
+
 }

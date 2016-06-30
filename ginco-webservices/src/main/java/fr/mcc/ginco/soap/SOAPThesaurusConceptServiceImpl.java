@@ -39,6 +39,7 @@ import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
@@ -134,12 +135,12 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 
 	@Override
-	public List<String> getChildrenByConceptId(String conceptId) {
+	public List<String> getChildrenByConceptId(String conceptId, ConceptStatusEnum status) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			List<String> results = new ArrayList<String>();
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null) {
-				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId,null);
+				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId,0 ,null, status);
 				for (ThesaurusConcept conceptChild : thesaurusConceptList) {
 					results.add(conceptChild.getIdentifier());
 				}
@@ -153,13 +154,18 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 
 	@Override
-	public List<String> getRootConcepts(String conceptId) {
+	public List<String> getRootConcepts(String conceptId, ConceptStatusEnum status) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null) {
 				List<String> results = new ArrayList<String>();
 				List<ThesaurusConcept> thesaurusConceptList = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
 				for (ThesaurusConcept conceptChild : thesaurusConceptList) {
+					if (status != null) {
+						if (conceptChild.getStatus().intValue()==status.getStatus()) {
+							results.add(conceptChild.getIdentifier());
+						}
+					} else 
 					results.add(conceptChild.getIdentifier());
 				}
 				return results;
@@ -172,13 +178,19 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 
 	@Override
-	public List<String> getParentConcepts(String conceptId) {
+	public List<String> getParentConcepts(String conceptId, ConceptStatusEnum status) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null) {
 				List<String> results = new ArrayList<String>();
 				Set<ThesaurusConcept> parentConceptList = thesaurusConcept.getParentConcepts();
 				for (ThesaurusConcept parentConcept : parentConceptList) {
+					if (status != null)
+					{
+						if (parentConcept.getStatus().intValue()==status.getStatus()) {
+							results.add(parentConcept.getIdentifier());
+						}
+					} else
 					results.add(parentConcept.getIdentifier());
 				}
 				return results;
@@ -191,11 +203,11 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 
 	@Override
-	public List<String> getAssociativeConcepts(String conceptId) {
+	public List<String> getAssociativeConcepts(String conceptId, ConceptStatusEnum status) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null) {
-				return associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept);
+				return associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept, status);
 			} else {
 				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
 			}
@@ -204,12 +216,13 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		}
 	}
 
-	public List<String> getTopConceptsByThesaurusId(String thesaurusId) {
+	@Override
+	public List<String> getTopConceptsByThesaurusId(String thesaurusId, ConceptStatusEnum status) {
 		if (StringUtils.isNotEmpty(thesaurusId)) {
 			Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
 			if (thesaurus != null) {
 				List<String> results = new ArrayList<String>();
-				List<ThesaurusConcept> topConceptList = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurusId);
+				List<ThesaurusConcept> topConceptList = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurusId, status, 0);
 				for (ThesaurusConcept topConcept : topConceptList) {
 					results.add(topConcept.getIdentifier());
 				}

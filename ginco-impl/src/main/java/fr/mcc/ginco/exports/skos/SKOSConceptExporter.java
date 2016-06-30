@@ -40,6 +40,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.jena.atlas.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.ontology.DatatypeProperty;
@@ -49,6 +52,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
+import fr.mcc.ginco.audit.tracking.GincoRevListener;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.services.IThesaurusConceptService;
@@ -62,6 +66,8 @@ import fr.mcc.ginco.utils.DateUtil;
  */
 @Component("skosConceptExporter")
 public class SKOSConceptExporter {
+	
+	private Logger logger = LoggerFactory.getLogger(SKOSConceptExporter.class);
 
 	@Inject
 	@Named("thesaurusConceptService")
@@ -103,6 +109,36 @@ public class SKOSConceptExporter {
 	 */
 	public Model exportConceptSKOS(ThesaurusConcept concept,
 			ThesaurusConcept parent, Model model, OntModel ontModel) {
+		
+		exportConceptSKOSWoRelations(concept, parent, model, ontModel);
+		exportConceptSKOSRelations(concept, parent, model, ontModel);
+
+
+		return model;
+	}
+	
+	private void exportConceptSKOSRelations(ThesaurusConcept concept,
+			ThesaurusConcept parent, Model model, OntModel ontModel) {
+		skosAssociativeRelationshipExporter.exportAssociativeRelationships(
+				concept, model);
+		
+		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
+				model, parent, concept);
+
+		skosAlignmentExporter.exportAlignments(concept.getIdentifier(), model);
+		if (thesaurusConceptService.hasChildren(concept.getIdentifier())) {
+			for (ThesaurusConcept child : thesaurusConceptService
+					.getChildrenByConceptId(concept.getIdentifier(),null)) {
+
+				exportConceptSKOSRelations(child, concept, model, ontModel);
+
+			}
+		}
+	}
+	
+	private void exportConceptSKOSWoRelations(ThesaurusConcept concept,
+			ThesaurusConcept parent, Model model, OntModel ontModel) {
+		logger.info("Exporting concept WoRelations: "+concept.getIdentifier());
 
 		Resource conceptResource = model.createResource(
 				concept.getIdentifier(), SKOS.CONCEPT);
@@ -120,27 +156,20 @@ public class SKOSConceptExporter {
 
 		skosNotesExporter.exportNotes(model, prefTerms, concept);
 
-		skosAssociativeRelationshipExporter.exportAssociativeRelationships(
-				concept, model);
+
+		
+		skosCustomConceptAttributeExporter.exportCustomConceptAttributes(
+				concept, model, conceptResource, ontModel);
 
 		if (thesaurusConceptService.hasChildren(concept.getIdentifier())) {
 			for (ThesaurusConcept child : thesaurusConceptService
 					.getChildrenByConceptId(concept.getIdentifier(),null)) {
 
-				exportConceptSKOS(child, concept, model, ontModel);
+				exportConceptSKOSWoRelations(child, concept, model, ontModel);
 
 			}
 		}
 
-		skosHierarchicalRelationshipExporter.exportHierarchicalRelationships(
-				model, parent, concept);
-
-		skosAlignmentExporter.exportAlignments(concept.getIdentifier(), model);
-
-		skosCustomConceptAttributeExporter.exportCustomConceptAttributes(
-				concept, model, conceptResource, ontModel);
-
-		return model;
 	}
 
 	/**

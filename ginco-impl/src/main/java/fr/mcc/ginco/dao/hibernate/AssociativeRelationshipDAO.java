@@ -37,6 +37,8 @@ package fr.mcc.ginco.dao.hibernate;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -60,8 +62,7 @@ public class AssociativeRelationshipDAO extends
 	}
 
 	@Override
-	public List<String> getAssociatedConcepts(ThesaurusConcept concept) {
-
+	public List<String> getAssociatedConcepts(ThesaurusConcept concept, ConceptStatusEnum status) {
 		DetachedCriteria d1 = DetachedCriteria.forClass(AssociativeRelationship.class, "ar1");
 		d1.setProjection(Projections.projectionList().add(Projections.property("ar1.identifier.concept2")));
 		d1.add(Restrictions.eq("identifier.concept1", concept.getIdentifier()));
@@ -75,8 +76,17 @@ public class AssociativeRelationshipDAO extends
 						Subqueries.propertyIn("tc.identifier", d1),
 						Subqueries.propertyIn("tc.identifier", d2)))
 				.setProjection(Projections.property("tc.identifier"));
+		if (status!=null) {
+			criteria.add(Restrictions.eq("tc.status",
+					status.getStatus()));
+		}
 
 		return criteria.list();
+	}
+	
+	@Override
+	public List<String> getAssociatedConcepts(ThesaurusConcept concept) {
+		return getAssociatedConcepts(concept, null);
 	}
 
 

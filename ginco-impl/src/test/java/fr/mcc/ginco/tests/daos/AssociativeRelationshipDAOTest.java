@@ -45,6 +45,7 @@ import org.junit.Test;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.hibernate.AssociativeRelationshipDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.tests.BaseDAOTest;
 
 public class AssociativeRelationshipDAOTest extends BaseDAOTest {
@@ -67,6 +68,15 @@ public class AssociativeRelationshipDAOTest extends BaseDAOTest {
 		ListAssert.assertContains(associatedConcepts, "http://www.culturecommunication.gouv.fr/co4");
 		ListAssert.assertContains(associatedConcepts, "http://www.culturecommunication.gouv.fr/co6");
 
+	}
+	
+	@Test
+	public void testGetDefaultAssociativeRelationshipRoleStatus() {
+		ThesaurusConcept concept1 = new ThesaurusConcept();
+		concept1.setIdentifier("http://www.culturecommunication.gouv.fr/co1");
+		List<String> associatedConcepts =  associativeRelationshipDAO.getAssociatedConcepts(concept1, ConceptStatusEnum.DEPRECATED);
+		Assert.assertEquals(1, associatedConcepts.size());
+		ListAssert.assertContains(associatedConcepts, "http://www.culturecommunication.gouv.fr/co2");
 	}
 
     @Test

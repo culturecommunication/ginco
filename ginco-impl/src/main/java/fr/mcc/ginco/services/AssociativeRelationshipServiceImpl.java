@@ -37,6 +37,7 @@ package fr.mcc.ginco.services;
 import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.dao.IAssociativeRelationshipDAO;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,11 @@ public class AssociativeRelationshipServiceImpl implements IAssociativeRelations
 	@Override
 	public AssociativeRelationship getAssociativeRelationshipById(String id1, String id2) {
 		return associativeRelationshipDAO.getAssociativeRelationship(id1, id2);
+	}
+	
+	@Override
+	public List<String> getAssociatedConceptsId(ThesaurusConcept concept, ConceptStatusEnum status) {
+		return associativeRelationshipDAO.getAssociatedConcepts(concept, status);
 	}
 
 	@Override

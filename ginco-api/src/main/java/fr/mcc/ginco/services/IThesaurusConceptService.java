@@ -42,6 +42,7 @@ import fr.mcc.ginco.beans.AssociativeRelationship;
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 
 /**
  * Service used to work with {@link ThesaurusConcept} objects, contains basic
@@ -137,6 +138,14 @@ public interface IThesaurusConceptService {
 	 * @return
 	 */
 	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId);
+	
+	/**
+	 * Get the ThesaurusConcepts which are top term in a given thesaurus
+	 *
+	 * @param thesaurusId
+	 * @return
+	 */
+	List<ThesaurusConcept> getTopTermThesaurusConcepts(String thesaurusId, ConceptStatusEnum status, int maxResults);
 
 	/**
 	 * Get the ThesaurusConcepts which are top term in a given thesaurus
@@ -178,6 +187,14 @@ public interface IThesaurusConceptService {
 	 * @return list of objects.
 	 */
 	List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults,String like);
+	
+	/**
+	 * Search children of concept with given id (orphan or not).
+	 *
+	 * @param conceptId id of concept.
+	 * @return list of objects.
+	 */
+	List<ThesaurusConcept> getChildrenByConceptId(String conceptId, int maxResults,String like, ConceptStatusEnum status);
 
 
 	/**
