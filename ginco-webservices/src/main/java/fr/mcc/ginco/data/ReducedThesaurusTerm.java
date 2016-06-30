@@ -36,12 +36,15 @@ package fr.mcc.ginco.data;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import fr.mcc.ginco.enums.TermStatusEnum;
+
 public class ReducedThesaurusTerm {
 	
 	private String identifier;
 	private String lexicalValue;
 	private String languageId;
 	private String conceptId;
+	private TermStatusEnum status;
 	
 	public String getIdentifier() {
 		return identifier;
@@ -66,6 +69,12 @@ public class ReducedThesaurusTerm {
 	}
 	public void setConceptId(String conceptId) {
 		this.conceptId = conceptId;
+	}
+	public TermStatusEnum getStatus() {
+		return status;
+	}
+	public void setStatus(TermStatusEnum status) {
+		this.status = status;
 	}
 
 }

@@ -46,7 +46,7 @@ public class SearchResult {
     private String typeExt;
     private String modified;
     private String created;
-    private String status;
+    private Integer status;
     private String conceptId;
 	private List<String> languages;
 
@@ -114,11 +114,11 @@ public class SearchResult {
         this.created = created;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

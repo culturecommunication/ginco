@@ -40,6 +40,7 @@ import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
@@ -122,6 +123,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
 		reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
 		reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
+		reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(thesaurusTerm.getStatus()));
 		return reducedThesaurusTerm;
 	}
 

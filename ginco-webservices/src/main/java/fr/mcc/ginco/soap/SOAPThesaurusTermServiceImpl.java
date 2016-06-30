@@ -47,6 +47,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
+import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.services.IThesaurusTermService;
@@ -133,13 +134,13 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request, Boolean preferredTermOnly,
-	                                                              int startIndex, int limit) {
-		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit);
+	                                                              int startIndex, int limit, TermStatusEnum status) {
+		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status);
 	}
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(String request, String thesaurusId, Boolean preferredTermOnly, 
-	                                                                         int startIndex, int limit) {
+	                                                                         int startIndex, int limit, TermStatusEnum status) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
 				request = request.replaceAll(" ", "\\\\ ");
@@ -151,8 +152,12 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				{
 					searchType = SearchEntityType.TERM_PREF;
 				}
+				Integer intStatus = null;
+				if (status!=null) {
+					intStatus = status.getStatus();
+				}
 				SearchResultList searchResultList = searcherService.search(
-						requestFormat, searchType, thesaurusId, null, null, null, null, crit,
+						requestFormat, searchType, thesaurusId, intStatus, null, null, null, crit,
 						startIndex, limit);
 				if (searchResultList != null) {
 					for (SearchResult searchResult : searchResultList) {
@@ -162,6 +167,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
 						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
 						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
+						reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(searchResult.getStatus()));
 						reducedThesaurusTermList.add(reducedThesaurusTerm);
 					}
 				}

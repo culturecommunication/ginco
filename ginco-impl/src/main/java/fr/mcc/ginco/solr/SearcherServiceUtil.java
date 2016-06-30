@@ -144,7 +144,7 @@ public class SearcherServiceUtil {
 		result.setThesaurusTitle(getSolrField(doc, SolrField.THESAURUSTITLE));
 		result.setCreated(getSolrDateField(doc, SolrField.CREATED));
 		result.setModified(getSolrDateField(doc, SolrField.MODIFIED));
-		result.setStatus(getSolrField(doc, SolrField.STATUS));
+		result.setStatus(getSolrIntField(doc, SolrField.STATUS));
 		result.setTypeExt(getSolrField(doc, SolrField.EXT_TYPE));
 		result.setConceptId(getSolrField(doc, SolrField.CONCEPTID));
 		List<String> languages = new ArrayList<String>();
@@ -160,6 +160,14 @@ public class SearcherServiceUtil {
 			return doc.getFieldValue(solrField).toString();
 		} else {
 			return BLANK;
+		}
+	}
+	
+	private Integer getSolrIntField(SolrDocument doc, String solrField) {
+		if (doc.getFieldValue(solrField) != null) {
+			return Integer.parseInt(doc.getFieldValue(solrField).toString());
+		} else {
+			return 0;
 		}
 	}
 

@@ -40,6 +40,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
+import fr.mcc.ginco.enums.TermStatusEnum;
 
 @WebService
 public interface ISOAPThesaurusTermService {
@@ -111,7 +112,8 @@ public interface ISOAPThesaurusTermService {
 			@WebParam(name = "request") String request,
 			@WebParam(name = "preferredTermOnly") Boolean preferredTermOnly,
 			@WebParam(name = "startIndex") int startIndex,
-			@WebParam(name = "limit") int limit);
+			@WebParam(name = "limit") int limit,
+			@WebParam(name = "status") TermStatusEnum status);
 			
 	/**
 	 * This service returns list of reduced terms that begin with input string
@@ -129,7 +131,8 @@ public interface ISOAPThesaurusTermService {
 			@WebParam(name = "thesaurusId") String thesaurusId,
 			@WebParam(name = "preferredTermOnly") Boolean preferredTermOnly,
 			@WebParam(name = "startIndex") int startIndex,
-			@WebParam(name = "limit") int limit);
+			@WebParam(name = "limit") int limit,
+			@WebParam(name = "status") TermStatusEnum status);
 
 
 }

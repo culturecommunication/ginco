@@ -132,7 +132,7 @@ public class SearcherServiceUtilTest {
 		Assert.assertEquals(searchResult.getTypeExt(), String.valueOf(ExtEntityType.TERM_NON_PREF));
 		Assert.assertEquals(searchResult.getModified(), "2013-11-21 18:19:47");
 		Assert.assertEquals(searchResult.getCreated(), "2013-11-21 15:51:00");
-		Assert.assertEquals(searchResult.getStatus(), "0");
+		Assert.assertEquals(searchResult.getStatus(), Integer.valueOf(0));
 		Assert.assertEquals(searchResult.getLanguages().get(0), "lang1");
 
 	}

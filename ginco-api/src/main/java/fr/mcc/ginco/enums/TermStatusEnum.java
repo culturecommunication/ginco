@@ -50,4 +50,14 @@ public enum TermStatusEnum {
     public int getStatus() {
     	return status;
     }
+    
+    public static TermStatusEnum getStatusByCode(int i) {
+		for (TermStatusEnum s : values()) {
+			if (s.getStatus() == i) {
+				return s;
+			}
+		}
+
+		return null;
+	}
 }
