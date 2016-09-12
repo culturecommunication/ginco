@@ -8,6 +8,8 @@ public class ReducedThesaurusArray {
 	
 	private String title;
 	
+	private Boolean ordered;
+	
 	private List<ReducedThesaurusTerm> terms;
 	
 	public String getIdentifier() {
@@ -32,6 +34,14 @@ public class ReducedThesaurusArray {
 
 	public void setTerms(List<ReducedThesaurusTerm> terms) {
 		this.terms = terms;
+	}
+
+	public Boolean getOrdered() {
+		return ordered;
+	}
+
+	public void setOrdered(Boolean ordered) {
+		this.ordered = ordered;
 	}
 
 

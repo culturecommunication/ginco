@@ -39,17 +39,20 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import fr.mcc.ginco.beans.Note;
+import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.enums.ConceptStatusEnum;
 import fr.mcc.ginco.enums.TermStatusEnum;
 
-public class ReducedThesaurusTerm {
+public class ReducedThesaurusConcept {
 	
 	private String identifier;
-	private String lexicalValue;
-	private String languageId;
-	private String conceptId;
-	private TermStatusEnum status;
 	private List<Note> notes;
+	private ConceptStatusEnum status;
+	
+	private List<ReducedThesaurusConcept> associates;
+	
+	private List<ReducedThesaurusConcept> parents;
 	
 	public String getIdentifier() {
 		return identifier;
@@ -57,46 +60,39 @@ public class ReducedThesaurusTerm {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
-	public String getLexicalValue() {
-		return lexicalValue;
-	}
-	public void setLexicalValue(String lexicalValue) {
-		this.lexicalValue = StringEscapeUtils.unescapeXml(lexicalValue);
-	}
-	public String getLanguageId() {
-		return languageId;
-	}
-	public void setLanguageId(String languageId) {
-		this.languageId = languageId;
-	}
-	public String getConceptId() {
-		return conceptId;
-	}
-	public void setConceptId(String conceptId) {
-		this.conceptId = conceptId;
-	}
-	public TermStatusEnum getStatus() {
-		return status;
-	}
-	public void setStatus(TermStatusEnum status) {
-		this.status = status;
-	}
 	
 	
 	
-	public static ReducedThesaurusTerm getReducedThesaurusTerm(ThesaurusTerm term) {
-		ReducedThesaurusTerm reducedTerm = new ReducedThesaurusTerm();
-		reducedTerm.setConceptId(term.getConcept().getIdentifier());
-		reducedTerm.setStatus(TermStatusEnum.getStatusByCode(term.getStatus()));
-		reducedTerm.setLanguageId(term.getLanguage().getId());
-		reducedTerm.setLexicalValue(term.getLexicalValue());
-		return reducedTerm;
+	
+	public static ReducedThesaurusConcept getReducedThesaurusConcept(ThesaurusConcept concept) {
+		ReducedThesaurusConcept reducedConcept = new ReducedThesaurusConcept();
+		reducedConcept.setIdentifier(concept.getIdentifier());
+		reducedConcept.setStatus(ConceptStatusEnum.getStatusByCode(concept.getStatus()));
+		return reducedConcept;
 	}
 	public List<Note> getNotes() {
 		return notes;
 	}
 	public void setNotes(List<Note> notes) {
 		this.notes = notes;
+	}
+	public ConceptStatusEnum getStatus() {
+		return status;
+	}
+	public void setStatus(ConceptStatusEnum status) {
+		this.status = status;
+	}
+	public List<ReducedThesaurusConcept> getAssociates() {
+		return associates;
+	}
+	public void setAssociates(List<ReducedThesaurusConcept> associates) {
+		this.associates = associates;
+	}
+	public List<ReducedThesaurusConcept> getParents() {
+		return parents;
+	}
+	public void setParents(List<ReducedThesaurusConcept> parents) {
+		this.parents = parents;
 	}
 
 }

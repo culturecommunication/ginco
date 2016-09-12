@@ -34,22 +34,29 @@
  */
 package fr.mcc.ginco.soap;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
+import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.solr.ISearcherService;
 import fr.mcc.ginco.solr.SearchEntityType;
@@ -67,6 +74,10 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
+	
+	@Inject
+	@Named("noteService")
+	private INoteService noteService;
 
 	@Inject
 	@Named("searcherService")
@@ -88,7 +99,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public ReducedThesaurusTerm getPreferredTermByTerm(String lexicalValue,
-	                                                   String thesaurusId, String languageId) {
+	                                                   String thesaurusId, String languageId, Boolean withNotes) {
 		if (StringUtils.isNotEmpty(lexicalValue)
 				&& StringUtils.isNotEmpty(thesaurusId)
 				&& StringUtils.isNotEmpty(languageId)) {
@@ -108,6 +119,9 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						.getLexicalValue());
 				reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage()
 						.getId());
+				if (withNotes!=null && withNotes==true) {
+					addNotesToTerm(reducedThesaurusTerm);
+				}
 				return reducedThesaurusTerm;
 			} else {
 				return null;
@@ -134,13 +148,18 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request, Boolean preferredTermOnly,
-	                                                              int startIndex, int limit, TermStatusEnum status) {
-		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status);
+	                                                              int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
+		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status, withNotes);
+	}
+	
+	public void addNotesToTerm (ReducedThesaurusTerm rterm) {
+		List<Note> notes= noteService.getTermNotePaginatedList(rterm.getIdentifier(), 0, 1000);
+		rterm.setNotes(notes);
 	}
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(String request, String thesaurusId, Boolean preferredTermOnly, 
-	                                                                         int startIndex, int limit, TermStatusEnum status) {
+	                                                                         int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
 				request = request.replaceAll(" ", "\\\\ ");
@@ -168,9 +187,19 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
 						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
 						reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(searchResult.getStatus()));
+						if (withNotes!=null && withNotes==true) {
+							addNotesToTerm(reducedThesaurusTerm);
+						}
 						reducedThesaurusTermList.add(reducedThesaurusTerm);
 					}
 				}
+				Collections.sort(reducedThesaurusTermList, new Comparator<ReducedThesaurusTerm>() {
+								Collator frCollator = Collator.getInstance(Locale.FRENCH);
+					
+								public int compare(ReducedThesaurusTerm t1, ReducedThesaurusTerm t2) {
+									return frCollator.compare(t1.getLexicalValue(), t2.getLexicalValue());
+								}
+				});
 				return reducedThesaurusTermList;
 			} catch (SolrServerException e) {
 				throw new TechnicalException("Search exception", e);

@@ -39,6 +39,7 @@ import java.util.List;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
+import fr.mcc.ginco.data.ReducedThesaurusConcept;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
 
@@ -69,7 +70,7 @@ public interface ISOAPThesaurusConceptService {
 	 */
 
 
-	List<ReducedThesaurusTerm> getPreferredTermByConceptId(@WebParam(name = "conceptId") String conceptId);
+	List<ReducedThesaurusTerm> getPreferredTermByConceptId(@WebParam(name = "conceptId") String conceptId, @WebParam(name = "withNotes") Boolean withNotes);
 
 	/**
 	 * Returns the list of not preferred ThesaurusTerms by a concept
@@ -77,7 +78,7 @@ public interface ISOAPThesaurusConceptService {
 	 * @param conceptId identifier of a concept
 	 * @return list of not preferred terms
 	 */
-	List<ReducedThesaurusTerm> getConceptNotPreferredTerms(@WebParam(name = "conceptId") String conceptId);
+	List<ReducedThesaurusTerm> getConceptNotPreferredTerms(@WebParam(name = "conceptId") String conceptId, @WebParam(name = "withNotes") Boolean withNotes);
 
 	/**
 	 * Returns the status of a concept
@@ -96,6 +97,17 @@ public interface ISOAPThesaurusConceptService {
 	List<String> getChildrenByConceptId(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
 	
 	/**
+	 * Returns children of a concept
+	 *
+	 * @param conceptId identifier of a concept
+	 * @return list of objects
+	 */
+	List<ReducedThesaurusConcept> getChildrenByConceptId_v2(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status,
+			@WebParam(name="withAssociates") Boolean withAssociates,
+			@WebParam(name="withNotes") Boolean withNotes);
+	
+	
+	/**
 	 * Returns root concepts for given concept
 	 *
 	 * @param conceptId identifier of a concept
@@ -104,6 +116,17 @@ public interface ISOAPThesaurusConceptService {
 	List<String> getRootConcepts(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
 
 	/**
+	 * Returns root concepts for given concept
+	 *
+	 * @param conceptId identifier of a concept
+	 * @return list of root concepts
+	 */
+	 List<ReducedThesaurusConcept> getRootConcepts_v2(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status,
+			 @WebParam(name="withAssociates") Boolean withAssociates,
+			 @WebParam(name="withNotes") Boolean withNotes);
+
+	
+	/**
 	 * Returns parent concepts for given concept
 	 *
 	 * @param conceptId identifier of a concept
@@ -111,6 +134,17 @@ public interface ISOAPThesaurusConceptService {
 	 */
 	List<String> getParentConcepts(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
 
+	/**
+	 * Returns parent concepts for given concept
+	 *
+	 * @param conceptId identifier of a concept
+	 * @return list of parent concepts
+	 */
+	List<ReducedThesaurusConcept> getParentConcepts_v2(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status, 
+			@WebParam(name="withAssociates") Boolean withAssociates,
+			@WebParam(name="withNotes") Boolean withNotes);
+
+	
 	/**
 	 * Returns associative concepts for given concept
 	 *
@@ -128,5 +162,16 @@ public interface ISOAPThesaurusConceptService {
 	 * @return list of top concepts
 	 */
 	List<String> getTopConceptsByThesaurusId(@WebParam(name = "thesaurusId") String thesaurusId, @WebParam(name="status") ConceptStatusEnum status);
+	
+	/**
+	 * Returns top concepts for a thesaurus
+	 *
+	 * @param thesaurusId identifier of a thesaurus
+	 * @param status of concepts
+	 * @return list of top concepts
+	 */
+	List<ReducedThesaurusConcept> getTopConceptsByThesaurusId_v2(@WebParam(name = "thesaurusId") String thesaurusId, @WebParam(name="status") ConceptStatusEnum status, 
+			@WebParam(name="withAssociates") Boolean withAssociates,
+			@WebParam(name="withNotes") Boolean withNotes);
 }
 

@@ -35,15 +35,17 @@
 
 package fr.mcc.ginco.soap;
 
+import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.data.ReducedThesaurusConcept;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.enums.ConceptStatusEnum;
-import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.services.IAssociativeRelationshipService;
 import fr.mcc.ginco.services.IConceptHierarchicalRelationshipServiceUtil;
+import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusConceptService;
 import fr.mcc.ginco.services.IThesaurusService;
 import org.codehaus.plexus.util.StringUtils;
@@ -51,8 +53,13 @@ import org.codehaus.plexus.util.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
+
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -79,6 +86,10 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	@Inject
 	@Named("thesaurusService")
 	private IThesaurusService thesaurusService;
+	
+	@Inject
+	@Named("noteService")
+	private INoteService noteService;
 
 	@Override
 	public int getConceptsHierarchicalRelations(String firstConceptId, String secondConceptId) {
@@ -90,41 +101,85 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 
 	@Override
-	public List<ReducedThesaurusTerm> getPreferredTermByConceptId(String conceptId) {
+	public List<ReducedThesaurusTerm> getPreferredTermByConceptId(String conceptId, Boolean withNotes) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
 			List<ThesaurusTerm> thesaurusTerms = thesaurusConceptService.getConceptPreferredTerms(conceptId);
 
 			for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
-				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));
+				ReducedThesaurusTerm reducedThesaurusTerm = ReducedThesaurusTerm.getReducedThesaurusTerm(thesaurusTerm);
+				if (withNotes!=null && withNotes==true) {
+					addNotesToTerm(reducedThesaurusTerm);
+				}
+				results.add(reducedThesaurusTerm);
 			}
+			Collections.sort(results, new Comparator<ReducedThesaurusTerm>() {
+				Collator frCollator = Collator.getInstance(Locale.FRENCH);
+	
+				public int compare(ReducedThesaurusTerm t1, ReducedThesaurusTerm t2) {
+					return frCollator.compare(t1.getLexicalValue(), t2.getLexicalValue());
+				}
+			});
 			return results;
 		} else {
 			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
+		}
+	}
+	
+	private void addNotesToTerm (ReducedThesaurusTerm rterm) {
+		List<Note> notes= noteService.getTermNotePaginatedList(rterm.getIdentifier(), 0, 1000);
+		rterm.setNotes(notes);
+	}
+	
+	private void addNotesToConcept (ReducedThesaurusConcept rconcept) {
+		List<Note> notes= noteService.getConceptNotePaginatedList(rconcept.getIdentifier(), 0, 1000);
+		rconcept.setNotes(notes);
+	}
+	
+	private void addAssociatesToConcept (ReducedThesaurusConcept rconcept) {
+		ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(rconcept.getIdentifier());
+		if (thesaurusConcept != null) {
+			rconcept.setParents(new ArrayList<ReducedThesaurusConcept>());
+			rconcept.setAssociates(new ArrayList<ReducedThesaurusConcept>());
+			for (ThesaurusConcept parentConcept : thesaurusConcept.getParentConcepts())
+			{
+				rconcept.getParents().add(ReducedThesaurusConcept.getReducedThesaurusConcept(parentConcept));
+			}
+			
+			for (String associatedId : associativeRelationshipService.getAssociatedConceptsId(thesaurusConcept))
+			{
+				ReducedThesaurusConcept associated = new ReducedThesaurusConcept();
+				associated.setIdentifier(associatedId);
+				rconcept.getAssociates().add(associated);
+			}
+			
 		}
 	}
 
 	@Override
-	public List<ReducedThesaurusTerm> getConceptNotPreferredTerms(String conceptId) {
+	public List<ReducedThesaurusTerm> getConceptNotPreferredTerms(String conceptId, Boolean withNotes) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			List<ReducedThesaurusTerm> results = new ArrayList<ReducedThesaurusTerm>();
 			List<ThesaurusTerm> thesaurusTerms = thesaurusConceptService.getConceptNotPreferredTerms(conceptId);
 			for (ThesaurusTerm thesaurusTerm : thesaurusTerms) {
-				results.add(this.conversionThesaurusTermInReduced(thesaurusTerm));
+				ReducedThesaurusTerm reducedThesaurusTerm = ReducedThesaurusTerm.getReducedThesaurusTerm(thesaurusTerm);
+				if (withNotes!=null && withNotes==true) {
+					addNotesToTerm(reducedThesaurusTerm);
+				}
+				results.add(reducedThesaurusTerm);
 			}
+			Collections.sort(results, new Comparator<ReducedThesaurusTerm>() {
+				Collator frCollator = Collator.getInstance(Locale.FRENCH);
+	
+				public int compare(ReducedThesaurusTerm t1, ReducedThesaurusTerm t2) {
+					return frCollator.compare(t1.getLexicalValue(), t2.getLexicalValue());
+				}
+			});
+			
 			return results;
 		} else {
 			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
-	}
-
-	private ReducedThesaurusTerm conversionThesaurusTermInReduced(ThesaurusTerm thesaurusTerm) {
-		ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
-		reducedThesaurusTerm.setIdentifier(thesaurusTerm.getIdentifier());
-		reducedThesaurusTerm.setLexicalValue(thesaurusTerm.getLexicalValue());
-		reducedThesaurusTerm.setLanguageId(thesaurusTerm.getLanguage().getId());
-		reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(thesaurusTerm.getStatus()));
-		return reducedThesaurusTerm;
 	}
 
 	@Override
@@ -145,6 +200,35 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId,0 ,null, status);
 				for (ThesaurusConcept conceptChild : thesaurusConceptList) {
 					results.add(conceptChild.getIdentifier());
+				}
+				return results;
+			} else {
+				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
+			}
+		} else {
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
+		}
+	}
+	
+	@Override
+	public List<ReducedThesaurusConcept> getChildrenByConceptId_v2(String conceptId, ConceptStatusEnum status,
+			Boolean withAssociates,
+			Boolean withNotes) {
+		if (StringUtils.isNotEmpty(conceptId)) {
+			List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
+			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+			if (thesaurusConcept != null) {
+				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId,0 ,null, status);
+				for (ThesaurusConcept conceptChild : thesaurusConceptList) {
+					ReducedThesaurusConcept rChildConcept = ReducedThesaurusConcept.getReducedThesaurusConcept(conceptChild);
+					if (withNotes!=null && withNotes==true) {
+						addNotesToConcept(rChildConcept);
+					}
+					if (withAssociates != null && withAssociates == true)
+					{
+						addAssociatesToConcept(rChildConcept);
+					}
+					results.add(rChildConcept);
 				}
 				return results;
 			} else {
@@ -178,6 +262,40 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
+	
+	@Override
+	public List<ReducedThesaurusConcept> getRootConcepts_v2(String conceptId, ConceptStatusEnum status,
+			Boolean withAssociates,
+			Boolean withNotes) {
+		if (StringUtils.isNotEmpty(conceptId)) {
+			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+			if (thesaurusConcept != null) {
+				List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
+				List<ThesaurusConcept> thesaurusConceptList = conceptHierarchicalRelationshipServiceUtil.getRootConcepts(thesaurusConcept);
+				for (ThesaurusConcept rootConcept : thesaurusConceptList) {
+					ReducedThesaurusConcept rRootConcept = ReducedThesaurusConcept.getReducedThesaurusConcept(rootConcept);
+					if (withNotes!=null && withNotes==true) {
+						addNotesToConcept(rRootConcept);
+					}
+					if (withAssociates != null && withAssociates == true)
+					{
+						addAssociatesToConcept(rRootConcept);
+					}
+					if (status != null) {
+						if (rootConcept.getStatus().intValue()==status.getStatus()) {
+							results.add(rRootConcept);
+						}
+					} else 
+					results.add(rRootConcept);
+				}
+				return results;
+			} else {
+				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
+			}
+		} else {
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
+		}
+	}
 
 	@Override
 	public List<String> getParentConcepts(String conceptId, ConceptStatusEnum status) {
@@ -194,6 +312,40 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 						}
 					} else
 					results.add(parentConcept.getIdentifier());
+				}
+				return results;
+			} else {
+				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
+			}
+		} else {
+			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
+		}
+	}
+	
+	@Override
+	public List<ReducedThesaurusConcept> getParentConcepts_v2(String conceptId, ConceptStatusEnum status,
+			Boolean withAssociates,Boolean withNotes) {
+		if (StringUtils.isNotEmpty(conceptId)) {
+			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
+			if (thesaurusConcept != null) {
+				List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
+				Set<ThesaurusConcept> parentConceptList = thesaurusConcept.getParentConcepts();
+				for (ThesaurusConcept parentConcept : parentConceptList) {
+					ReducedThesaurusConcept rParentConcept = ReducedThesaurusConcept.getReducedThesaurusConcept(parentConcept);
+					if (withNotes!=null && withNotes==true) {
+						addNotesToConcept(rParentConcept);
+					}
+					if (withAssociates != null && withAssociates == true)
+					{
+						addAssociatesToConcept(rParentConcept);
+					}
+					if (status != null)
+					{
+						if (parentConcept.getStatus().intValue()==status.getStatus()) {
+							results.add(rParentConcept);
+						}
+					} else
+					results.add(rParentConcept);
 				}
 				return results;
 			} else {
@@ -236,4 +388,42 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			throw new BusinessException("Thesaurus identifier is empty", EMPTY_PARAMETER);
 		}
 	}
+
+	@Override
+	public List<ReducedThesaurusConcept> getTopConceptsByThesaurusId_v2(String thesaurusId, ConceptStatusEnum status,
+			Boolean withAssociates,
+			Boolean withNotes) {
+		if (StringUtils.isNotEmpty(thesaurusId)) {
+			Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
+			if (thesaurus != null) {
+				List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
+				List<ThesaurusConcept> topConceptList = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurusId, status, 0);
+				for (ThesaurusConcept topConcept : topConceptList) {
+					ReducedThesaurusConcept rTopConcept = ReducedThesaurusConcept.getReducedThesaurusConcept(topConcept);
+					if (withNotes!=null && withNotes==true) {
+						addNotesToConcept(rTopConcept);
+					}
+					if (withAssociates != null && withAssociates == true)
+					{
+						addAssociatesToConcept(rTopConcept);
+					}
+					if (status != null)
+					{
+						if (topConcept.getStatus().intValue()==status.getStatus()) {
+							results.add(rTopConcept);
+						}
+					} else
+						results.add(rTopConcept);
+				}
+				return results;
+			} else {
+				throw new BusinessException("Thesaurus with identifier " + thesaurusId + " does not exist", "thesaurus-does-not-exist");
+			}
+		} else {
+			throw new BusinessException("Thesaurus identifier is empty", EMPTY_PARAMETER);
+		}
+	}
+
+
+
 }

@@ -79,7 +79,8 @@ public interface ISOAPThesaurusTermService {
 	ReducedThesaurusTerm getPreferredTermByTerm(
 			@WebParam(name = "lexicalValue") String lexicalValue,
 			@WebParam(name = "thesaurusId") String thesaurusId,
-			@WebParam(name = "languageId") String languageId);
+			@WebParam(name = "languageId") String languageId,
+			@WebParam(name = "withNotes") Boolean withNotes);
 
 	/**
 	 * This service returns true if the term is preferred, false if the term
@@ -113,7 +114,8 @@ public interface ISOAPThesaurusTermService {
 			@WebParam(name = "preferredTermOnly") Boolean preferredTermOnly,
 			@WebParam(name = "startIndex") int startIndex,
 			@WebParam(name = "limit") int limit,
-			@WebParam(name = "status") TermStatusEnum status);
+			@WebParam(name = "status") TermStatusEnum status,
+			@WebParam(name = "withNotes") Boolean withNotes);
 			
 	/**
 	 * This service returns list of reduced terms that begin with input string
@@ -132,7 +134,8 @@ public interface ISOAPThesaurusTermService {
 			@WebParam(name = "preferredTermOnly") Boolean preferredTermOnly,
 			@WebParam(name = "startIndex") int startIndex,
 			@WebParam(name = "limit") int limit,
-			@WebParam(name = "status") TermStatusEnum status);
+			@WebParam(name = "status") TermStatusEnum status,
+			@WebParam(name = "withNotes") Boolean withNotes);
 
 
 }

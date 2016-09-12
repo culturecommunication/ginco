@@ -54,5 +54,9 @@ public interface ISOAPThesaurusArrayService {
 	 * @return
 	 */
 	List<ReducedThesaurusArray> getThesaurusArraysByThesaurusId(@WebParam(name = "thesaurusId") String thesaurusId);
+	
+	List<ReducedThesaurusArray> getThesaurusArraysWithTermsByThesaurusId(@WebParam(name = "thesaurusId") String thesaurusId);
+	
+	ReducedThesaurusArray getThesaurusArrayWithTerms(@WebParam(name = "thesaurusArrayId") String thesaurusArrayId);
 
 }

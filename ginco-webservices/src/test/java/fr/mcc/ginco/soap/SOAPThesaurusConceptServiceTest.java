@@ -73,6 +73,6 @@ public class SOAPThesaurusConceptServiceTest {
 	
 	@Test(expected=BusinessException.class)
 	public final void testGetPreferredTermByConceptId(){
-		soapThesaurusConceptService.getPreferredTermByConceptId("");
+		soapThesaurusConceptService.getPreferredTermByConceptId("",true);
 	}
 }
