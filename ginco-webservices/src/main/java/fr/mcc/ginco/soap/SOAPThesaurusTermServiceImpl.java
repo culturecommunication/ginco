@@ -47,6 +47,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 
 import fr.mcc.ginco.beans.Note;
@@ -62,6 +63,7 @@ import fr.mcc.ginco.solr.ISearcherService;
 import fr.mcc.ginco.solr.SearchEntityType;
 import fr.mcc.ginco.solr.SearchResult;
 import fr.mcc.ginco.solr.SearchResultList;
+import fr.mcc.ginco.solr.SolrConstants;
 import fr.mcc.ginco.solr.SolrField;
 import fr.mcc.ginco.solr.SortCriteria;
 
@@ -165,7 +167,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				request = request.replaceAll(" ", "\\\\ ");
 				String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
-				SortCriteria crit = new SortCriteria(null, null);
+				SortCriteria crit = new SortCriteria(SolrField.LEXICALVALUE, SolrConstants.ASCENDING);
 				Integer searchType = SearchEntityType.TERM;
 				if (preferredTermOnly)
 				{
