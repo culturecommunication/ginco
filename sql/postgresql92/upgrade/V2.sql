@@ -55,6 +55,7 @@ CREATE TABLE alignment_type
   isocode text NOT NULL,
   default_type boolean NOT NULL,
   multi_concept boolean NOT NULL,
+  is_resource boolean NOT NULL,
   CONSTRAINT pk_alignment_type PRIMARY KEY (identifier)
 );
 
@@ -132,17 +133,20 @@ CREATE INDEX idx_thesaurus_externalid
   USING btree
   (external_id COLLATE pg_catalog."default" );
   
-INSERT INTO  alignment_type VALUES (1, 'Equivalence exacte', '=EQ', false, true);
-INSERT INTO  alignment_type VALUES (2, 'Equivalence inexacte', '~EQ', false, true);
-INSERT INTO  alignment_type VALUES (3, 'Alignement générique', 'BM', false, false);
-INSERT INTO  alignment_type VALUES (4, 'Alignement spécifique', 'NM', false, false);
-INSERT INTO  alignment_type VALUES (5, 'Alignement générique générique', 'BMG', false, false);
-INSERT INTO  alignment_type VALUES (6, 'Alignement spécifique générique', 'NMG', false, false);
-INSERT INTO  alignment_type VALUES (7, 'Alignement générique partitif', 'BMP', false, false);
-INSERT INTO  alignment_type VALUES (8, 'Alignement spécifique partitif', 'NMP', false, false);
-INSERT INTO  alignment_type VALUES (9, 'Alignement générique instance', 'BMI', false, false);
-INSERT INTO  alignment_type VALUES (10, 'Alignement spécifique instance', 'NMI', false, false);
-INSERT INTO  alignment_type VALUES (11, 'Alignement associatif', 'RM', false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (1, 'Equivalence exacte', '=EQ', false, true, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (2, 'Equivalence inexacte', '~EQ', false, true, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (3, 'Alignement générique', 'BM', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (4, 'Alignement spécifique', 'NM', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (5, 'Alignement générique générique', 'BMG', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (6, 'Alignement spécifique générique', 'NMG', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (7, 'Alignement générique partitif', 'BMP', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (8, 'Alignement spécifique partitif', 'NMP', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (9, 'Alignement générique instance', 'BMI', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (10, 'Alignement spécifique instance', 'NMI', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (11, 'Alignement associatif', 'RM', false, false, false);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (12, 'Image', 'IMG', false, false, true);
+INSERT INTO alignment_type (identifier, label, isocode, default_type, multi_concept, is_resource) VALUES (13, 'Ressource', 'RES', false, false, true);
+ 
 
 INSERT INTO  external_thesaurus_type VALUES (1, 'Autorités');
 INSERT INTO  external_thesaurus_type VALUES (2, 'Classification');
@@ -260,4 +264,27 @@ ALTER TABLE split_nonpreferredterm
    ALTER COLUMN lang TYPE character varying(5);
 
 ALTER TABLE thesaurus_term
-   ALTER COLUMN lang TYPE character varying(5);   
+   ALTER COLUMN lang TYPE character varying(5); 
+   
+CREATE TABLE alignment_resource (
+    identifier integer NOT NULL,
+    external_target_resource_id text,
+    alignment_id text
+);
+
+CREATE SEQUENCE alignment_resource_identifier_seq
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
+
+ALTER SEQUENCE alignment_resource_identifier_seq OWNED BY alignment_resource.identifier;
+
+SELECT pg_catalog.setval('alignment_resource_identifier_seq', 1, false);
+
+ALTER TABLE ONLY alignment_resource
+ADD CONSTRAINT pk_alignment_resource PRIMARY KEY (identifier);
+
+ALTER TABLE ONLY alignment_resource
+ADD CONSTRAINT fk_alignment FOREIGN KEY (alignment_id) REFERENCES alignment(identifier) ON DELETE CASCADE;
