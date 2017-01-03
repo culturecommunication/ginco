@@ -7,7 +7,6 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>fr.smile.mcc.ginco</groupId>
 	<artifactId>ginco-solr-conf</artifactId>
 
 	<name>Ginco Solr Configuration configuration</name>
