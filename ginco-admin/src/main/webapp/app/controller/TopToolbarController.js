@@ -50,7 +50,17 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	},
 
 	onDocEnLigneClick : function(button, e, options){
-		window.open('http://culturecommunication.github.io/ginco/doc','_blank'); 
+		Ext.Ajax.request({
+			url: 'services/ui/infoservice/getOnlineDocUrl',
+			method : 'GET',
+			success : function(response){
+				var jsonData = Ext.JSON.decode(response.responseText);
+				if(jsonData.success){
+					window.open(jsonData.data,'_blank'); 
+				}
+			}
+		})
+		
 	},
 	
 	onNewThesaurusBtnClick : function(button, e, options) {

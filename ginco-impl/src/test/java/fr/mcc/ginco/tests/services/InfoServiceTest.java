@@ -32,63 +32,35 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package fr.mcc.ginco.rest.services;
-
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.services.IInfoService;
-import fr.mcc.ginco.utils.GitInfo;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
+package fr.mcc.ginco.tests.services;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
-/**
- * Base REST service intended to be used for getting tree of {@link fr.mcc.ginco.beans.Thesaurus},
- * and its children.
- */
-@Service
-@Path("/infoservice")
-@PreAuthorize("isAuthenticated()")
-public class InfoRestService {
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-	@Inject
-	@Named("gitInfoService")
-	private GitInfo gitInfo;
+import fr.mcc.ginco.services.IInfoService;
+import junit.framework.Assert;
+
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:applicationContext.xml",
+        "classpath:spring/applicationContext-*.xml"
+})
+public class InfoServiceTest {
 
 	@Inject
 	@Named("infoService")
-	private IInfoService infoService;
+	IInfoService infoService;
 	
-	/**
-	 * Public method used to get the status of the last  git commit
-	 * in database.
-	 *
-	 * @return list of objects, if not found - {@code null}
-	 */
-	@GET
-	@Path("/getGitInfo")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<GitInfo> getGitInfo() {
-
-		return new ExtJsonFormLoadData<GitInfo>(gitInfo);
-	}
-	
-	/**
-	 * Public method used to get the url of the online documentation.
-	 *
-	 * @return string representing the url
-	 */
-	@GET
-	@Path("/getOnlineDocUrl")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public ExtJsonFormLoadData<String> getOnlineDocUrl() {
-		
-		return new ExtJsonFormLoadData<String>(infoService.getDocumentationUrl());
-		
+	@Test
+    public final void testGetDocumentationUrl() {
+		 String expectedResponse= "http://test.url";
+		 String actualResponse = infoService.getDocumentationUrl();
+		 Assert.assertEquals("Error while getting online documentation URL !", expectedResponse, actualResponse);
 	}
 }
