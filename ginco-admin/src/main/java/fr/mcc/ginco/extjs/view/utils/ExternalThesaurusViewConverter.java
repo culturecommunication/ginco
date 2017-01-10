@@ -75,7 +75,7 @@ public class ExternalThesaurusViewConverter {
 			ExternalThesaurus externalThesaurus) {
 		ExternalThesaurusView view = new ExternalThesaurusView();
 
-		view.setIdentifier(externalThesaurus.getIdentifier());
+		view.setIdentifier(Integer.parseInt(externalThesaurus.getIdentifier()));
 		view.setExternalId(externalThesaurus.getExternalId());
 		view.setExternalThesaurusType(externalThesaurus.getExternalThesaurusType().getIdentifier());	
 

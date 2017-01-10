@@ -51,6 +51,6 @@ public interface IAlignmentDAO extends IGenericDAO<Alignment, String> {
 
 	List<Alignment> findByTargetConceptId(String targetConceptId);
 
-	List<Alignment> findByExternalThesaurus(Integer externalThesaurusId);
+	List<Alignment> findByExternalThesaurus(String externalThesaurusId);
 
 }

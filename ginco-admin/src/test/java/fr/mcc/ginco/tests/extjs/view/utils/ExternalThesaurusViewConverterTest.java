@@ -68,7 +68,7 @@ public class ExternalThesaurusViewConverterTest {
 	@Test
 	public void testConvertExternalThesaurus() {
 		ExternalThesaurus externalThesaurus = new ExternalThesaurus();
-		externalThesaurus.setIdentifier(1);
+		externalThesaurus.setIdentifier("1");
 		externalThesaurus
 				.setExternalId("http://catalogue.bnf.fr/ark:/12148/cb15929801j");
 
@@ -122,7 +122,7 @@ public class ExternalThesaurusViewConverterTest {
 		externalThesaurusView.setExternalThesaurusType(3);
 		ExternalThesaurusType type = new ExternalThesaurusType();
 		ExternalThesaurus existingThesaurus = new ExternalThesaurus();
-		existingThesaurus.setIdentifier(1);
+		existingThesaurus.setIdentifier("1");
 		Mockito.when(
 				externalThesaurusService
 						.getThesaurusByExternalId("http://catalogue.bnf.fr/ark:/12148/cb15929801j"))
@@ -134,7 +134,7 @@ public class ExternalThesaurusViewConverterTest {
 		ExternalThesaurus actualExternalThesaurus = converter
 				.convertExternalThesaurusView(externalThesaurusView);
 
-		Assert.assertEquals(new Integer(1),
+		Assert.assertEquals("1",
 				actualExternalThesaurus.getIdentifier());
 
 		Assert.assertEquals("http://catalogue.bnf.fr/ark:/12148/cb15929801j",

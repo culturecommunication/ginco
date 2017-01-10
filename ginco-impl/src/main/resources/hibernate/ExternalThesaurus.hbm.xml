@@ -4,7 +4,7 @@
 	<class name="ExternalThesaurus" table="external_thesaurus">
 		<cache usage="read-write" />
 		<id name="identifier" column="identifier">
-            <generator class="sequence">
+            <generator class="fr.mcc.ginco.utils.StringSequenceGenerator" >
                 <param name="sequence">external_thesaurus_identifier_seq</param>
             </generator>
         </id>

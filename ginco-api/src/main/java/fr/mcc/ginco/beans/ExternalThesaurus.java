@@ -41,18 +41,18 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ExternalThesaurus {
 	@XmlTransient
-	private Integer identifier;
+	private String identifier;
 
 	private String externalId;
 
 	private ExternalThesaurusType externalThesaurusType;
 
 
-	public Integer getIdentifier() {
+	public String getIdentifier() {
 		return identifier;
 	}
 
-	public void setIdentifier(Integer identifier) {
+	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
 

@@ -113,7 +113,7 @@ public class AlignmentServiceTest {
 	public void deleteExternalThesaurusesTest()
 	{
 		ExternalThesaurus thes = new ExternalThesaurus();
-		thes.setIdentifier(1);
+		thes.setIdentifier("1");
 
 		List<Alignment> alignements = new ArrayList<Alignment>();
 		List<ExternalThesaurus> thesauruses = new ArrayList<ExternalThesaurus>();

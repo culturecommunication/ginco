@@ -73,7 +73,7 @@ public class AlignmentDAO extends
 	}
 
 	@Override
-	public List<Alignment> findByExternalThesaurus(Integer externalThesaurusId) {
+	public List<Alignment> findByExternalThesaurus(String externalThesaurusId) {
 		Criteria criteria = getCurrentSession().createCriteria(Alignment.class);
 		criteria.add(Restrictions.eq("externalTargetThesaurus.identifier", externalThesaurusId));
 		return criteria.list();
