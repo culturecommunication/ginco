@@ -48,6 +48,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	onAproposClick : function(button, e, options) {
 		Ext.create('GincoApp.view.AProposWin');
 	},
+	onDocumentationClick : function(button, e, options) {
+		window.open("http://culturecommunication.github.io/ginco/doc/");
+	},
 
 	onNewThesaurusBtnClick : function(button, e, options) {
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
@@ -118,6 +121,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		this.control({
 			"#aproposbtn" : {
 				click : this.onAproposClick
+			},
+			"#documentationbtn" : {
+				click : this.onDocumentationClick
 			},
 			"#newThesaurusBtn" : {
 				click : this.onNewThesaurusBtnClick
