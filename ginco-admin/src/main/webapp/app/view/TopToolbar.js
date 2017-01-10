@@ -45,11 +45,13 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xImportSkosLabel : "SKOS Import",
 	xImportGincoXmlLabel : "Hadoc GINCO XML Import",
 	xAboutLabel : "About",
+	xDocEnLigneLabel : "Online Documentation",
 	xSearchLabel : "Search",
 	xSearchFieldText : "Search a term",
 	xConnectedAsLabel : "Connected as",
 	xNewMenu_ThesaurusLabel : "Thesaurus",
-	xHelpLabel : "Help",
+	xHelpLabel : "?",
+	xHelp : "Help",
 	xAccessibilityLabel : "Accessibility",
 	xLogoutBtnLabel : "Logout",
 	xSearchBtnTitle : "Click here to launch search",
@@ -122,7 +124,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 							xtype : 'keymenuitem',
 							text : me.xImportGincoXmlLabel,
 							requiredRoles : ['ADMIN'],
-							itemId: 'importGincoXmlBtn'
+							itemId: 'importGincoXmlBtn' 
 						}]
 					}
 				} ]
@@ -132,8 +134,22 @@ Ext.define('GincoApp.view.TopToolbar', {
 				columns : 2,
 				items : [ {
 					xtype : 'button',
-					itemId : 'aproposbtn',
-					text : me.xAboutLabel
+					disabled : false,
+					text : me.xHelp,
+					menu : {
+						xtype : 'menu',
+						width : 200,
+						items : [{
+							xtype : 'keymenuitem',
+							text : me.xAboutLabel,
+							itemId: 'aproposbtn'
+						},
+						{
+							xtype : 'keymenuitem',
+							text : me.xDocEnLigneLabel,
+							itemId: 'docEnLigneBtn'
+						}]
+					}
 				} ]
 			}, {
 				xtype : 'tbseparator',
