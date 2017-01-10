@@ -49,7 +49,22 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		Ext.create('GincoApp.view.AProposWin');
 	},
 	onDocumentationClick : function(button, e, options) {
-		window.open("http://culturecommunication.github.io/ginco/doc/");
+		
+        Ext.Ajax.request({
+            url: 'services/ui/infoservice/getDocumentationInfo',
+            success: function(response){
+            	var jsonData = Ext.JSON.decode(response.responseText);
+            	if(jsonData.success === true){
+            		window.open(jsonData.data);
+            	}
+            },
+            failure: function()
+            {
+            	Ext.Msg.alert("Error","Error communicating with the server");
+            	
+		 	}
+        });
+    	    
 	},
 
 	onNewThesaurusBtnClick : function(button, e, options) {
