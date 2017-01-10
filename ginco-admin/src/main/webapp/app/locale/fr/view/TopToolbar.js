@@ -40,7 +40,7 @@ Ext.define('GincoApp.locale.fr.view.TopToolbar', {
     xTopWelcomeLabel: "Gestionnaire Hadoc GINCO",
     xJournalLabel: "Journal",
     xAboutLabel: "À propos",
-    xDocEnLigneLabel : "Documentation en ligne",
+    xOnlineDocLabel : "Documentation en ligne",
     xSearchLabel: "Recherche",
     xSearchFieldText: "Rechercher un terme",
     xConnectedAsLabel: "Connecté en tant que",

@@ -45,7 +45,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 	xImportSkosLabel : "SKOS Import",
 	xImportGincoXmlLabel : "Hadoc GINCO XML Import",
 	xAboutLabel : "About",
-	xDocEnLigneLabel : "Online Documentation",
+	xOnlineDocLabel : "Online Documentation",
 	xSearchLabel : "Search",
 	xSearchFieldText : "Search a term",
 	xConnectedAsLabel : "Connected as",
@@ -146,7 +146,7 @@ Ext.define('GincoApp.view.TopToolbar', {
 						},
 						{
 							xtype : 'keymenuitem',
-							text : me.xDocEnLigneLabel,
+							text : me.xOnlineDocLabel,
 							itemId: 'docEnLigneBtn'
 						}]
 					}
