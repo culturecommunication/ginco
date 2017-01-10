@@ -79,6 +79,11 @@ Ext
 														items : [
 																{
 																	xtype : 'displayfield',
+																	name : 'mavenVersion',
+																	fieldLabel : 'Version'
+																},
+																{
+																	xtype : 'displayfield',
 																	name : 'commitId',
 																	fieldLabel : 'commitId'
 																},
@@ -96,7 +101,7 @@ Ext
 																	xtype : 'displayfield',
 																	name : 'gitBuildTime',
 																	fieldLabel : 'Date du build'
-																} ]
+															}]
 													} ]
 										});
 
