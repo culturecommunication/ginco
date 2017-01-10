@@ -14,6 +14,7 @@ public class GitInfo {
 	@Value("${git.branch}") private String gitBranch;
 	@Value("${git.build.time}") private String gitBuildTime;
 	@Value("${git.commit.user.name}") private String gitCommitUserName;
+	@Value("${mvn.project.version}") private String mavenVersion;
 
 	public String getGitBuildTime() {
 		return gitBuildTime;
@@ -46,4 +47,13 @@ public class GitInfo {
 	public void setCommitId(String commitId) {
 		this.commitId = commitId;
 	}
+
+	public String getMavenVersion() {
+		return mavenVersion;
+	}
+
+	public void setMavenVersion(String mavenVersion) {
+		this.mavenVersion = mavenVersion;
+	}
+	
 }
