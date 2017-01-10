@@ -50,6 +50,7 @@ public class GitInfoServiceTest {
 	@Value("${git.branch}") private String gitBranch;
 	@Value("${git.build.time}") private String buildTime;
 	@Value("${git.commit.user.name}") private String commitUsername;
+	@Value("${mvn.project.version}") private String mvnVersion;
 
 	 /**
 	 * Test getting Git Commit Id from properties
@@ -90,4 +91,16 @@ public class GitInfoServiceTest {
 		 String actualResponse = gitInfo.getGitCommitUserName();
 		 Assert.assertEquals("Error while getting git build time !", expectedResponse, actualResponse);
 	 }
+	
+	/**
+	 * Test getting Version from properties
+	 */
+	@Test
+	 public final void getMavenVersion(){
+		 String expectedResponse= mvnVersion ;
+		 String actualResponse = gitInfo.getMavenVersion();
+		 Assert.assertEquals("Error while getting version !", expectedResponse, actualResponse);
+	 }
+	
+	
 }
