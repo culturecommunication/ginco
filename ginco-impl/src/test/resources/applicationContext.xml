@@ -46,6 +46,7 @@
 				<value>classpath:git.properties</value>
 				<value>classpath:labels.properties</value>
 				<value>classpath:default.properties</value>
+				<value>classpath:test.properties</value>
 				<value>file:${ginco-properties}</value>
 			</list>
 		</property>
