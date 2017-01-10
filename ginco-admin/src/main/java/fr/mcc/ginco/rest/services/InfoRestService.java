@@ -34,17 +34,19 @@
  */
 package fr.mcc.ginco.rest.services;
 
-import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
-import fr.mcc.ginco.utils.GitInfo;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.extjs.view.ExtJsonFormLoadData;
+import fr.mcc.ginco.services.IInfoService;
+import fr.mcc.ginco.utils.GitInfo;
 
 /**
  * Base REST service intended to be used for getting tree of {@link fr.mcc.ginco.beans.Thesaurus},
@@ -56,10 +58,13 @@ import javax.ws.rs.core.MediaType;
 public class InfoRestService {
 
 	@Inject
+	@Named("infoService")
+	IInfoService infoService; 
+	
+	@Inject
 	@Named("gitInfoService")
 	private GitInfo gitInfo;
-
-
+	
 	/**
 	 * Public method used to get the status of the last  git commit
 	 * in database.
@@ -72,5 +77,12 @@ public class InfoRestService {
 	public ExtJsonFormLoadData<GitInfo> getGitInfo() {
 
 		return new ExtJsonFormLoadData<GitInfo>(gitInfo);
+	}
+	
+	@GET
+	@Path("/getDocumentationInfo")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ExtJsonFormLoadData<String> getDocumentationInfo() {
+		return new ExtJsonFormLoadData<String>(infoService.getDocumentationUrl());
 	}
 }

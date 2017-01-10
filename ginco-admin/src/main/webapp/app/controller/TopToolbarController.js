@@ -48,6 +48,24 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 	onAproposClick : function(button, e, options) {
 		Ext.create('GincoApp.view.AProposWin');
 	},
+	onDocumentationClick : function(button, e, options) {
+		
+        Ext.Ajax.request({
+            url: 'services/ui/infoservice/getDocumentationInfo',
+            success: function(response){
+            	var jsonData = Ext.JSON.decode(response.responseText);
+            	if(jsonData.success === true){
+            		window.open(jsonData.data);
+            	}
+            },
+            failure: function()
+            {
+            	Ext.Msg.alert("Error","Error communicating with the server");
+            	
+		 	}
+        });
+    	    
+	},
 
 	onNewThesaurusBtnClick : function(button, e, options) {
 		var thesaurusTabs = Ext.ComponentQuery.query('thesaurusTabs')[0];
@@ -118,6 +136,9 @@ Ext.define('GincoApp.controller.TopToolbarController', {
 		this.control({
 			"#aproposbtn" : {
 				click : this.onAproposClick
+			},
+			"#documentationbtn" : {
+				click : this.onDocumentationClick
 			},
 			"#newThesaurusBtn" : {
 				click : this.onNewThesaurusBtnClick

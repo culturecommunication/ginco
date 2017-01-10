@@ -32,26 +32,8 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+package fr.mcc.ginco.services;
 
-Ext.define('GincoApp.locale.fr.view.TopToolbar', {
-    xNewLabel: "Nouveau",
-    xAdministrationLabel: "Administration",
-    xControlLabel: "Gestion",
-    xTopWelcomeLabel: "Gestionnaire Hadoc GINCO",
-    xJournalLabel: "Journal",
-    xAboutLabel: "À propos",
-    xSearchLabel: "Recherche",
-    xSearchFieldText: "Rechercher un terme",
-    xConnectedAsLabel: "Connecté en tant que",
-    xNewMenu_ThesaurusLabel: "Vocabulaire",
-    xImports: "Imports",
-    xImportSkosLabel: "Import SKOS",
-    xImportGincoXmlLabel : "Import XML GINCO",
-    xHelpLabel: "?",
-    xHelpButton: "Aide",
-    xDocumentationButton: "Documentation",
-    xAccessibilityLabel : "Accessibilité",
-    xLogoutBtnLabel : "Déconnexion",
-    xSearchBtnTitle : "Lancer la recherche",
-    xSuggestionBtnLabel : "Suggestions"
-});
+public interface IInfoService {
+	public String getDocumentationUrl();
+}

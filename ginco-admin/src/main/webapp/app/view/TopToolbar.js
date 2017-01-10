@@ -132,8 +132,21 @@ Ext.define('GincoApp.view.TopToolbar', {
 				columns : 2,
 				items : [ {
 					xtype : 'button',
-					itemId : 'aproposbtn',
-					text : me.xAboutLabel
+					text : me.xHelpButton,
+					menu : {
+						xtype : 'menu',
+						width : 200,
+						items : [{
+							xtype : 'keymenuitem',
+							text : me.xAboutLabel,
+							itemId: 'aproposbtn'
+						},
+						{
+							xtype : 'keymenuitem',
+							text : me.xDocumentationButton,
+							itemId: 'documentationbtn'
+						}]
+					}
 				} ]
 			}, {
 				xtype : 'tbseparator',
