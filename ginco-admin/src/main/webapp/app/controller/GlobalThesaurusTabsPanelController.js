@@ -157,6 +157,22 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 		return false;
 	},
 
+	doubleClickPanel:function(panel){
+		var thesaurusTabs = Ext.ComponentQuery
+			.query('thesaurusTabs thesaurusTabPanel');
+		var tabExists = false;
+		
+		Ext.Array.each(thesaurusTabs, function(element, index, array) {
+			if (element.thesaurusData != null){
+				tabExists = element;
+				if(panel.activeTab.text == tabExists.thesaurusData.title 
+						&& tabExists.down('thesaurusPanel') == null){
+					tabExists.fireEvent('openthesaurusform', tabExists);
+				}
+			}
+		});
+	},
+	
 	init : function(application) {
 		this.application.on({
 			scope : this
@@ -179,7 +195,8 @@ Ext.define('GincoApp.controller.GlobalThesaurusTabsPanelController', {
 				tabchange : this.onTabChange,
 				add : this.onTabAdd,
 				opensuggestions : this.onSuggestionsRequest,
-				refreshmysuggestions: this.refreshMySuggestions
+				refreshmysuggestions: this.refreshMySuggestions,
+				doubleclickpanel : this.doubleClickPanel
 			}
 
 		});
