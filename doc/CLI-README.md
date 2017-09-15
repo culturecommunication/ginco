@@ -1,3 +1,5 @@
+Import / export command line tool
+
 #Installation et compilation
  go to ginco directory and run maven command:
 > cd ginco
