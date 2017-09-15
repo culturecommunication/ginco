@@ -1,4 +1,4 @@
- #Installation et compilation
+#Installation et compilation
  go to ginco directory and run maven command:
 > cd ginco
 > mvn clean package
