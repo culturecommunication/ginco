@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.imports;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.hp.hpl.jena.rdf.model.Property;
@@ -68,6 +70,50 @@ public abstract class AbstractBuilder {
 		} else {
 			if (altProp != null) {
 				return getSimpleStringInfo(skosResource, altProp);
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the value of the given property for the given resource, in the given language
+	 *
+	 * @param skosResource
+	 * @param prop
+	 * @param altProp      if prop is not found, try altProp
+	 * @param language	   language value to select
+	 * @return
+	 */
+	public final String getSimpleStringInfo(Resource skosResource, Property prop, Property altProp, String language) {
+		Statement stmt = getPropertyWithLang(skosResource, prop, language);
+		if(stmt != null) {
+			String toReturn = stmt.getString();
+			if (toReturn != null) {
+				return StringEscapeUtils.escapeXml(toReturn.trim());
+			}
+		} else {
+			if (altProp != null) {
+				return getSimpleStringInfo(skosResource, altProp, null, language);
+			}
+		}
+		return null;
+	}
+	
+	public final Statement getPropertyWithLang(Resource skosResource, Property prop, String lang) {
+		StmtIterator it = skosResource.listProperties(prop);
+		while(it.hasNext()) {
+			Statement aStatement = it.next();
+			if(
+					aStatement.getObject().isLiteral()
+					&&
+					aStatement.getObject().asLiteral().getLanguage() != null
+					&&
+					// simply compare the language Strings
+					aStatement.getObject().asLiteral().getLanguage().equals(lang)
+					&&
+					aStatement.getObject().asLiteral().getString() != null
+			) {
+				return aStatement;
 			}
 		}
 		return null;

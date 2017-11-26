@@ -59,6 +59,8 @@ public class CustomGeneratorService implements IIDGeneratorService {
 	private String nma;
 	@Value("${application.ark.naan}")
 	private String naan;
+	@Value("${application.ark.enabled}")
+	private boolean useArk = true;
 
 	@Inject
 	@Named("thesaurusArkService")
@@ -68,7 +70,7 @@ public class CustomGeneratorService implements IIDGeneratorService {
 	public String generate(Class entity) {
 		String arkId;
 		UUID nq = UUID.randomUUID();
-		arkId = nma + "/ark:/" + naan + "/" + nq.toString();
+		arkId = nma + ((useArk)?"/ark:/" + naan + "/":"/") + nq.toString();
 
 		ThesaurusArk arkHistory = new ThesaurusArk();
 		arkHistory.setCreated(DateUtil.nowDate());

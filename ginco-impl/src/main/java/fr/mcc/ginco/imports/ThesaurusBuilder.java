@@ -41,6 +41,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+
 import fr.mcc.ginco.beans.Language;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusFormat;
@@ -49,14 +51,17 @@ import fr.mcc.ginco.dao.IGenericDAO;
 import fr.mcc.ginco.dao.ILanguageDAO;
 import fr.mcc.ginco.dao.IThesaurusTypeDAO;
 import fr.mcc.ginco.exceptions.BusinessException;
+
 import org.apache.cxf.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -86,6 +91,9 @@ public class ThesaurusBuilder extends AbstractBuilder {
 
 	@Value("${import.skos.default.type}")
 	private Integer defaultThesaurusType;
+	
+	@Value("${ginco.default.language}")
+	private String defaultLang;
 
 	@Inject
 	@Named("skosImportUtils")
@@ -105,7 +113,18 @@ public class ThesaurusBuilder extends AbstractBuilder {
 	public Thesaurus buildThesaurus(Resource skosThesaurus, Model model) {
 		Thesaurus thesaurus = new Thesaurus();
 		thesaurus.setIdentifier(skosThesaurus.getURI());
-		String title = getSimpleStringInfo(skosThesaurus, DC.title, DCTerms.title);
+		
+		// search for a title in default language
+		String title = getSimpleStringInfo(skosThesaurus, DC.title, DCTerms.title, defaultLang);
+		if(title == null) {
+			// search for a title in default language - language only
+			title = getSimpleStringInfo(skosThesaurus, DC.title, DCTerms.title, Locale.forLanguageTag(defaultLang).getLanguage());
+		}
+		if(title == null) {
+			// search for title in any language
+			title = getSimpleStringInfo(skosThesaurus, DC.title, DCTerms.title);
+		}
+		
 		if (StringUtils.isEmpty(title)) {
 			throw new BusinessException(
 					"Missing title for imported thesaurus ",

@@ -36,16 +36,22 @@ package fr.mcc.ginco.imports;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+
 import fr.mcc.ginco.beans.NodeLabel;
 import fr.mcc.ginco.beans.Thesaurus;
 import fr.mcc.ginco.beans.ThesaurusArray;
 import fr.mcc.ginco.dao.INodeLabelDAO;
 import fr.mcc.ginco.dao.IThesaurusArrayDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.skos.namespaces.SKOS;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +60,9 @@ import java.util.Map;
  */
 @Service("skosArraysBuilder")
 public class ThesaurusArraysBuilder extends AbstractBuilder {
+	
+	private static Logger logger = LoggerFactory.getLogger(ThesaurusArraysBuilder.class);
+	
 	@Inject
 	@Named("skosArrayBuilder")
 	private ThesaurusArrayBuilder arrayBuilder;
@@ -82,8 +91,14 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 		List<Resource> skosCollections = skosImportUtils.getSKOSRessources(model,
 				SKOS.COLLECTION);
 		for (Resource skosCollection : skosCollections) {
-			ThesaurusArray array = arrayBuilder.buildArray(skosCollection,
-					model, thesaurus, builtArrays);
+			ThesaurusArray array = null;
+			try {
+				array = arrayBuilder.buildArray(skosCollection,
+						model, thesaurus, builtArrays);
+			} catch (BusinessException be) {
+				logger.debug("SKOS Collection "+skosCollection.getURI()+" not considered like a thesaurus array - will be attempted like a concept group");
+				continue;
+			}
 			thesaurusArrayDAO.update(array);
 			NodeLabel nodeLabel = nodeLabelBuilder.buildNodeLabel(
 					skosCollection, thesaurus, array);
@@ -105,15 +120,19 @@ public class ThesaurusArraysBuilder extends AbstractBuilder {
 			List<ThesaurusArray> childrenArrays = arrayBuilder
 					.getChildrenArrays(skosCollection, thesaurus, builtArrays);
 			ThesaurusArray array = thesaurusArrayDAO.getById(skosCollection.getURI());
-			if (array.getConcepts().size() == 0 && childrenArrays.size() > 0) {
-				for (ThesaurusArray childrenArray : childrenArrays) {
-					if (childrenArray.getSuperOrdinateConcept() != null) {
-						array.setSuperOrdinateConcept(childrenArray.getSuperOrdinateConcept());
+			
+			// if we had this skos:Collection as an array...
+			if(array != null) {				
+				if (array.getConcepts().size() == 0 && childrenArrays.size() > 0) {
+					for (ThesaurusArray childrenArray : childrenArrays) {
+						if (childrenArray.getSuperOrdinateConcept() != null) {
+							array.setSuperOrdinateConcept(childrenArray.getSuperOrdinateConcept());
+						}
 					}
 				}
-			}
-			for (ThesaurusArray childrenArray : childrenArrays) {
-				thesaurusArrayDAO.update(childrenArray);
+				for (ThesaurusArray childrenArray : childrenArrays) {
+					thesaurusArrayDAO.update(childrenArray);
+				}
 			}
 		}
 	}

@@ -84,11 +84,12 @@ public class ThesaurusBuilderTest {
 
 	@InjectMocks
 	private ThesaurusBuilder thesaurusBuilder;
-
+	
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);	
 		ReflectionTestUtils.setField(thesaurusBuilder, "defaultThesaurusFormat", 3);
+		ReflectionTestUtils.setField(thesaurusBuilder, "defaultLang", "fr-FR");
 	}
 
 	@Test
