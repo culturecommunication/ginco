@@ -73,6 +73,21 @@ public class ThesaurusTerm implements Serializable, IAuditableBean {
 		return identifier;
 	}
 
+	// AAM EVO 2017 début
+	private String notation;
+	
+	public String getNotation() {
+		return notation;
+	}
+
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
+	// AAM EVO 2017 fin
+	
+	
+	
+
 	@Field
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
