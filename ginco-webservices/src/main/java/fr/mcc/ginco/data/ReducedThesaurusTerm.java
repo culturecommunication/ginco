@@ -51,6 +51,18 @@ public class ReducedThesaurusTerm {
 	private TermStatusEnum status;
 	private List<Note> notes;
 	
+	// AAM EVO 2017 début
+	private String notation;
+	
+	public String getNotation() {
+		return notation;
+	}
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
+	// AAM EVO 2017 fin
+	
+	
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -87,9 +99,22 @@ public class ReducedThesaurusTerm {
 	public static ReducedThesaurusTerm getReducedThesaurusTerm(ThesaurusTerm term) {
 		ReducedThesaurusTerm reducedTerm = new ReducedThesaurusTerm();
 		reducedTerm.setConceptId(term.getConcept().getIdentifier());
-		reducedTerm.setStatus(TermStatusEnum.getStatusByCode(term.getStatus()));
+		
+		// AAM EVO 2017 début
+		if (reducedTerm != null && term != null && term.getStatus() != null) {
+			reducedTerm.setStatus(TermStatusEnum.getStatusByCode(term.getStatus()));
+		}
+		
+		reducedTerm.setNotation(term.getNotation());
+		// old 
+		// reducedTerm.setStatus(TermStatusEnum.getStatusByCode(term.getStatus()));
+		// AAM EVO 2017 fin
+		
 		reducedTerm.setLanguageId(term.getLanguage().getId());
 		reducedTerm.setLexicalValue(term.getLexicalValue());
+		
+		
+	
 		return reducedTerm;
 	}
 	public List<Note> getNotes() {
