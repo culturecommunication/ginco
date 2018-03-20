@@ -35,6 +35,7 @@
 package fr.mcc.ginco.dao.hibernate;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -46,6 +47,8 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.Transformers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -66,6 +69,10 @@ public class ThesaurusConceptDAO extends
 		GenericHibernateDAO<ThesaurusConcept, String> implements
 		IThesaurusConceptDAO {
 
+	
+	private Logger logger = LoggerFactory.getLogger(ThesaurusConceptDAO.class);
+	
+	
 	private static final String AL_SOURCE_CONCEPT_IDENTIFIER = "al.sourceConcept.identifier";
 	private static final String TC_IDENTIFIER = "tc.identifier";
 	private static final String THESAURUS_IDENTIFIER = "thesaurus.identifier";
@@ -161,7 +168,10 @@ public class ThesaurusConceptDAO extends
 	private List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId,
 			Boolean searchOrphans, int maxResults,String like, ConceptStatusEnum status) {
 		
-		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
+		
+		// AAM EVO 2018 old OLD
+		/*
+		 Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
 		if(null != like){
 			//override previous criteria
@@ -179,6 +189,36 @@ public class ThesaurusConceptDAO extends
 			conceptNameIsLike(criteria,like);
 		}
 		
+		 
+		 */
+		
+		
+		
+		
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
+				.add(Restrictions.isNotNull("tt.concept"))
+				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+		
+
+		criteria.setProjection(
+				Projections
+						.projectionList()
+						
+						.add(Projections.property("tc.identifier").as(
+								"identifier"))
+						.add(Projections.property("tc.notation").as(
+								"notation"))
+						.add(Projections.property("tt.lexicalValue").as(
+								"lexicalValue"))
+								
+						
+						);
+		
+		
+		if(null != like){
+			conceptNameIsLike(criteria,like);
+		}
+		
 		if ((conceptId != null && !conceptId.isEmpty())
 				&& (thesaurusId != null && !thesaurusId.isEmpty())) {
 			selectRoot(criteria, thesaurusId, conceptId);
@@ -193,7 +233,31 @@ public class ThesaurusConceptDAO extends
 		selectStatus(criteria, status);
 		if (maxResults > 0)
 			criteria.setMaxResults(maxResults);
-		return criteria.list();
+		
+		List<Object> rows = criteria.list();
+		List<ThesaurusConcept> listResults = new ArrayList<ThesaurusConcept>();
+		for(Object objectRow: rows) {
+			ThesaurusConcept tc = new ThesaurusConcept();
+			Object[] arrayObjectRow = (Object[]) objectRow;
+			if (arrayObjectRow != null && arrayObjectRow.length > 0 && arrayObjectRow[0] != null) {
+				tc.setIdentifier(arrayObjectRow[0].toString());
+			}
+			
+			if (arrayObjectRow != null && arrayObjectRow.length > 1 && arrayObjectRow[1] != null) {
+				tc.setNotation(arrayObjectRow[1].toString());
+			}
+			
+			if (arrayObjectRow != null && arrayObjectRow.length > 2 && arrayObjectRow[2] != null) {
+				tc.setLexicalValue(arrayObjectRow[2].toString());
+			}
+			
+			listResults.add(tc);
+		}
+		
+		
+		logger.warn("\n\n\n\tgetConcepts ()  conceptId [" + conceptId + "], thesaurusId [" + thesaurusId +"] núm Resultados [" + criteria.list().size() + "]: \n\n\n ");
+		
+		return listResults;
 	}
 
 	@Override
@@ -410,7 +474,32 @@ public class ThesaurusConceptDAO extends
 		if (maxResults > 0) {
 			crit.setMaxResults(maxResults);
 		}
-		return crit.list();
+		
+		
+		List<Object> rows = crit.list();
+		List<ThesaurusConcept> listResults = new ArrayList<ThesaurusConcept>();
+		for(Object objectRow: rows) {
+			ThesaurusConcept tc = new ThesaurusConcept();
+			Object[] arrayObjectRow = (Object[]) objectRow;
+			if (arrayObjectRow != null && arrayObjectRow.length > 0 && arrayObjectRow[0] != null) {
+				tc.setIdentifier(arrayObjectRow[0].toString());
+			}
+			
+			if (arrayObjectRow != null && arrayObjectRow.length > 1 && arrayObjectRow[1] != null) {
+				tc.setNotation(arrayObjectRow[1].toString());
+			}
+			
+			if (arrayObjectRow != null && arrayObjectRow.length > 2 && arrayObjectRow[2] != null) {
+				tc.setLexicalValue(arrayObjectRow[2].toString());
+			}
+			
+			listResults.add(tc);
+		}
+		
+		
+		//FIXME TODO getListByThesaurusAndTopConcept editar
+		
+		return listResults;
 	}
 
 	private long getListByThesaurusAndTopConceptCount(Thesaurus thesaurus,
@@ -427,6 +516,28 @@ public class ThesaurusConceptDAO extends
 
 	private Criteria getCriteriaByThesaurusAndTopConcept(Thesaurus thesaurus,
 	                                                     boolean topConcept,String like, ConceptStatusEnum status) {
+		
+		//FIXME TODO getCriteriaByThesaurusAndTopConcept
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
+				.add(Restrictions.isNotNull("tt.concept"))
+				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+				
+				criteria.setProjection(
+						Projections
+								.projectionList()
+								
+								.add(Projections.property("tc.identifier").as(
+										"identifier"))
+								.add(Projections.property("tc.notation").as(
+										"notation"))
+								.add(Projections.property("tt.lexicalValue").as(
+										"lexicalValue")));
+										
+								
+								
+		
+		//AAM EVO 2017 old 
+		/*
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
 		if(null != like){
@@ -443,7 +554,12 @@ public class ThesaurusConceptDAO extends
 							Transformers.aliasToBean(ThesaurusConcept.class));
 			conceptNameIsLike(criteria,like);
 		}
+		*/
 		
+		if(null != like){
+			conceptNameIsLike(criteria,like);
+		}
+								
 		selectThesaurus(criteria, thesaurus.getIdentifier());
 		selectOrphans(criteria, !topConcept);
 		selectNoParents(criteria);
