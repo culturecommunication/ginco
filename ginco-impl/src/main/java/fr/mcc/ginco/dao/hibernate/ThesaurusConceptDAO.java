@@ -163,22 +163,24 @@ public class ThesaurusConceptDAO extends
 		
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
+		//JLSO 29055 21/06/2018 début
+		//override previous criteria
+		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
+				.add(Restrictions.isNotNull("tt.concept"))
+				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+				
+				criteria.setProjection(
+						Projections
+								.projectionList()
+								.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
+								.add(Projections.property("tc.notation").as("notation"))
+								.add(Projections.property("tc.identifier").as(
+										"identifier"))).setResultTransformer(
+						Transformers.aliasToBean(ThesaurusConcept.class));
 		if(null != like){
-			//override previous criteria
-			criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
-					.add(Restrictions.isNotNull("tt.concept"))
-					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
-					
-					criteria.setProjection(
-							Projections
-									.projectionList()
-									.add(Projections.property("tt.lexicalValue"))
-									.add(Projections.property("tc.identifier").as(
-											"identifier"))).setResultTransformer(
-							Transformers.aliasToBean(ThesaurusConcept.class));
 			conceptNameIsLike(criteria,like);
 		}
-		
+		//JLSO 29055 21/06/2018 fin
 		if ((conceptId != null && !conceptId.isEmpty())
 				&& (thesaurusId != null && !thesaurusId.isEmpty())) {
 			selectRoot(criteria, thesaurusId, conceptId);
@@ -427,23 +429,26 @@ public class ThesaurusConceptDAO extends
 
 	private Criteria getCriteriaByThesaurusAndTopConcept(Thesaurus thesaurus,
 	                                                     boolean topConcept,String like, ConceptStatusEnum status) {
-		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
-		if(null != like){
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");	
+		
+		//JLSO 29055 21/06/2018 début
 			criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
 					.add(Restrictions.isNotNull("tt.concept"))
 					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
-					
-					criteria.setProjection(
-							Projections
-									.projectionList()
-									.add(Projections.property("tt.lexicalValue"))
-									.add(Projections.property("tc.identifier").as(
-											"identifier"))).setResultTransformer(
-							Transformers.aliasToBean(ThesaurusConcept.class));
+			
+			criteria.setProjection(
+					Projections
+							.projectionList()
+							.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
+							.add(Projections.property("tc.notation").as("notation"))
+							.add(Projections.property("tc.identifier").as(
+									"identifier"))).setResultTransformer(
+					Transformers.aliasToBean(ThesaurusConcept.class));
+		if(null != like){	
 			conceptNameIsLike(criteria,like);
 		}
-		
+		//JLSO 29055 21/06/2018 fin
 		selectThesaurus(criteria, thesaurus.getIdentifier());
 		selectOrphans(criteria, !topConcept);
 		selectNoParents(criteria);

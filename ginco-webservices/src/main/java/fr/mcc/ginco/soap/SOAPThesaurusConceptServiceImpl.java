@@ -190,26 +190,13 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
 		}
 	}
-
-	@Override
-	public List<String> getChildrenByConceptId(String conceptId, ConceptStatusEnum status) {
-		if (StringUtils.isNotEmpty(conceptId)) {
-			List<String> results = new ArrayList<String>();
-			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
-			if (thesaurusConcept != null) {
-				List<ThesaurusConcept> thesaurusConceptList = thesaurusConceptService.getChildrenByConceptId(conceptId,0 ,null, status);
-				for (ThesaurusConcept conceptChild : thesaurusConceptList) {
-					results.add(conceptChild.getIdentifier());
-				}
-				return results;
-			} else {
-				throw new BusinessException("Concept with identifier " + conceptId + " does not exist", "concept-does-not-exist");
-			}
-		} else {
-			throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
-		}
-	}
 	
+	//JLSO 29055 21/06/2018 début
+	@Override
+	public List<ReducedThesaurusConcept> getChildrenByConceptId(String conceptId, ConceptStatusEnum status) {
+		return getChildrenByConceptId_v2(conceptId, status, null, null);
+	}
+	//JLSO 29055 21/06/2018 fin
 	@Override
 	public List<ReducedThesaurusConcept> getChildrenByConceptId_v2(String conceptId, ConceptStatusEnum status,
 			Boolean withAssociates,
@@ -370,25 +357,13 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 		}
 	}
 
+	//JLSO 29055 21/06/2018 début
 	@Override
-	public List<String> getTopConceptsByThesaurusId(String thesaurusId, ConceptStatusEnum status) {
-		if (StringUtils.isNotEmpty(thesaurusId)) {
-			Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
-			if (thesaurus != null) {
-				List<String> results = new ArrayList<String>();
-				List<ThesaurusConcept> topConceptList = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurusId, status, 0);
-				for (ThesaurusConcept topConcept : topConceptList) {
-					results.add(topConcept.getIdentifier());
-				}
-				return results;
-			} else {
-				throw new BusinessException("Thesaurus with identifier " + thesaurusId + " does not exist", "thesaurus-does-not-exist");
-			}
-		} else {
-			throw new BusinessException("Thesaurus identifier is empty", EMPTY_PARAMETER);
-		}
+	public List<ReducedThesaurusConcept> getTopConceptsByThesaurusId(String thesaurusId, ConceptStatusEnum status) {
+		return getTopConceptsByThesaurusId_v2(thesaurusId, status, null, null);
 	}
-
+	//JLSO 29055 21/06/2018 fin
+	
 	@Override
 	public List<ReducedThesaurusConcept> getTopConceptsByThesaurusId_v2(String thesaurusId, ConceptStatusEnum status,
 			Boolean withAssociates,

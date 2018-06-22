@@ -196,9 +196,11 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						startIndex, limit);*/
 				
 				//JLSO Evolutions V5 E0 15/01/2018 début
+				//JLSO 29055 21/06/2018 début
 				SearchResultList searchResultList2 = searcherService.search(
 						"*", searchType, thesaurusId, intStatus, null, null, null, crit,
-						startIndex, limit);
+						startIndex, 1000000000);
+				//JLSO 29055 21/06/2018 fin
 				
 				String cleanRequest = StringUtils.stripAccents(request);
 				String cleanRequestChecked = cleanRequest;
@@ -236,7 +238,11 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 							if (withNotes!=null && withNotes==true) {
 								addNotesToTerm(reducedThesaurusTerm);
 							}
-							reducedThesaurusTermList.add(reducedThesaurusTerm);
+							//JLSO 29055 21/06/2018 début
+							if(reducedThesaurusTermList.size() < limit){
+								reducedThesaurusTermList.add(reducedThesaurusTerm);
+							}
+							//JLSO 29055 21/06/2018 fin
 						}
 					}
 				}
@@ -312,14 +318,16 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				if (status!=null) {
 					intStatus = status.getStatus();
 				}
-				SearchResultList searchResultList = searcherService.search(
+				//JLSO 29055 21/06/2018 début
+				/*SearchResultList searchResultList = searcherService.search(
 						requestFormat, searchType, thesaurusId, intStatus, null, null, null, crit,
-						startIndex, limit);
+						startIndex, 1000000000);*/
 				
 				//JLSO Evolutions V5 E0 15/01/2018 début
 				SearchResultList searchResultList2 = searcherService.search(
 						"*", searchType, thesaurusId, intStatus, null, null, null, crit,
-						startIndex, limit);
+						startIndex, 1000000000);
+				//JLSO 29055 21/06/2018 fin
 				
 				String cleanRequest = StringUtils.stripAccents(request);
 				String cleanRequestChecked = cleanRequest;
@@ -357,7 +365,11 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 							if (withNotes!=null && withNotes==true) {
 								addNotesToTerm(reducedThesaurusTerm);
 							}
-							reducedThesaurusTermList.add(reducedThesaurusTerm);
+							//JLSO 29055 21/06/2018 début
+							if(reducedThesaurusTermList.size() < limit){
+								reducedThesaurusTermList.add(reducedThesaurusTerm);
+							}
+							//JLSO 29055 21/06/2018 fin
 						}
 					}
 				}
