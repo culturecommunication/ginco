@@ -41,6 +41,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
@@ -163,6 +164,7 @@ public class ThesaurusConceptDAO extends
 		
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
+		if(null != like){
 		//JLSO 29055 21/06/2018 début
 		//override previous criteria
 		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
@@ -177,7 +179,7 @@ public class ThesaurusConceptDAO extends
 								.add(Projections.property("tc.identifier").as(
 										"identifier"))).setResultTransformer(
 						Transformers.aliasToBean(ThesaurusConcept.class));
-		if(null != like){
+		
 			conceptNameIsLike(criteria,like);
 		}
 		//JLSO 29055 21/06/2018 fin
@@ -422,8 +424,10 @@ public class ThesaurusConceptDAO extends
 			throw new BusinessException("Object thesaurus can't be null !",
 					"empty-thesaurus");
 		}
+		//JLSO 0030087 04/07/2018 debut
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
-				topConcept,null,null).setProjection(Projections.rowCount());
+				topConcept,null,null).setProjection(Projections.countDistinct("identifier"));
+		//JLSO 0030087 04/07/2018 fin
 		return (Long) crit.list().get(0);
 	}
 
@@ -431,9 +435,28 @@ public class ThesaurusConceptDAO extends
 	                                                     boolean topConcept,String like, ConceptStatusEnum status) {
 		
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");	
-		
 		//JLSO 29055 21/06/2018 début
-			criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
+		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
+				.add(Restrictions.isNotNull("tt.concept"))
+				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+		
+		criteria.setProjection(
+				Projections
+						.projectionList()
+						.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
+						.add(Projections.property("tc.notation").as("notation"))
+						.add(Projections.property("tc.identifier").as("identifier")))
+						.setResultTransformer(Transformers.aliasToBean(ThesaurusConcept.class));
+		
+		//JLSO 0030087 04/07/2018 debut
+		criteria.setProjection(Projections.distinct(Projections.property("identifier")));
+		//JLSO 0030087 04/07/2018 fin
+		
+		if(null != like){	
+			
+			//JLSO 0030087 04/07/2018 debut
+			
+			/*criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
 					.add(Restrictions.isNotNull("tt.concept"))
 					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
 			
@@ -444,8 +467,10 @@ public class ThesaurusConceptDAO extends
 							.add(Projections.property("tc.notation").as("notation"))
 							.add(Projections.property("tc.identifier").as(
 									"identifier"))).setResultTransformer(
-					Transformers.aliasToBean(ThesaurusConcept.class));
-		if(null != like){	
+					Transformers.aliasToBean(ThesaurusConcept.class));*/
+			
+			//JLSO 0030087 04/07/2018 fin
+			
 			conceptNameIsLike(criteria,like);
 		}
 		//JLSO 29055 21/06/2018 fin
