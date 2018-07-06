@@ -435,49 +435,30 @@ public class ThesaurusConceptDAO extends
 	                                                     boolean topConcept,String like, ConceptStatusEnum status) {
 		
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");	
-		//JLSO 29055 21/06/2018 début
+		
 		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
-				.add(Restrictions.isNotNull("tt.concept"))
-				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+                .add(Restrictions.isNotNull("tt.concept"))
+                .createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
 		
 		criteria.setProjection(
 				Projections
 						.projectionList()
 						.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
 						.add(Projections.property("tc.notation").as("notation"))
-						.add(Projections.property("tc.identifier").as("identifier")))
-						.setResultTransformer(Transformers.aliasToBean(ThesaurusConcept.class));
-		
-		//JLSO 0030087 04/07/2018 debut
-		criteria.setProjection(Projections.distinct(Projections.property("identifier")));
+						.add(Projections.property("tc.identifier").as(
+								"identifier"))).setResultTransformer(
+				Transformers.aliasToBean(ThesaurusConcept.class));
+					
+		if(null != like){
 		//JLSO 0030087 04/07/2018 fin
-		
-		if(null != like){	
-			
-			//JLSO 0030087 04/07/2018 debut
-			
-			/*criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
-					.add(Restrictions.isNotNull("tt.concept"))
-					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
-			
-			criteria.setProjection(
-					Projections
-							.projectionList()
-							.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
-							.add(Projections.property("tc.notation").as("notation"))
-							.add(Projections.property("tc.identifier").as(
-									"identifier"))).setResultTransformer(
-					Transformers.aliasToBean(ThesaurusConcept.class));*/
-			
-			//JLSO 0030087 04/07/2018 fin
-			
-			conceptNameIsLike(criteria,like);
+		conceptNameIsLike(criteria,like);
 		}
 		//JLSO 29055 21/06/2018 fin
 		selectThesaurus(criteria, thesaurus.getIdentifier());
 		selectOrphans(criteria, !topConcept);
 		selectNoParents(criteria);
 		selectStatus(criteria, status);
+		criteria.list();
 		return criteria;
 	}
 
