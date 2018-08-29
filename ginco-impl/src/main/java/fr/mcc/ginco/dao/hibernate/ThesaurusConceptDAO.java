@@ -164,7 +164,7 @@ public class ThesaurusConceptDAO extends
 		
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
-		if(null != like){
+		
 		//JLSO 29055 21/06/2018 début
 		//override previous criteria
 		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
@@ -174,12 +174,14 @@ public class ThesaurusConceptDAO extends
 				criteria.setProjection(
 						Projections
 								.projectionList()
+								.add(Projections.property("tc.thesaurus").as("thesaurus"))
 								.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
 								.add(Projections.property("tc.notation").as("notation"))
+								.add(Projections.property("tc.status").as("status"))
 								.add(Projections.property("tc.identifier").as(
 										"identifier"))).setResultTransformer(
 						Transformers.aliasToBean(ThesaurusConcept.class));
-		
+		if(null != like){
 			conceptNameIsLike(criteria,like);
 		}
 		//JLSO 29055 21/06/2018 fin
@@ -411,6 +413,11 @@ public class ThesaurusConceptDAO extends
 					"empty-thesaurus");
 		}
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,topConcept,like, status);
+		
+		//MPL 0030210 28/08/2018 debut
+		crit.addOrder(Order.asc("tt.concept.identifier"));
+		//MPL 0030210 28/08/2018 fin
+		
 		if (maxResults > 0) {
 			crit.setMaxResults(maxResults);
 		}
@@ -436,23 +443,32 @@ public class ThesaurusConceptDAO extends
 		
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");	
 		
+		//JLSO 29055 21/06/2018 fin
 		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
-                .add(Restrictions.isNotNull("tt.concept"))
-                .createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+				.add(Restrictions.isNotNull("tt.concept"))
+				//MPL 0030210 06/08/2018 debut
+				.add(Restrictions.eq("tt.prefered", true))
+				//MPL 0030210 06/08/2018 fin
+				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
 		
-		criteria.setProjection(
-				Projections
-						.projectionList()
-						.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
-						.add(Projections.property("tc.notation").as("notation"))
-						.add(Projections.property("tc.identifier").as(
-								"identifier"))).setResultTransformer(
-				Transformers.aliasToBean(ThesaurusConcept.class));
-					
+				criteria.setProjection(
+						Projections
+								.projectionList()
+								.add(Projections.property("tc.thesaurus").as("thesaurus"))
+								.add(Projections.property("tc.notation").as("notation"))
+								.add(Projections.property("tc.identifier").as("identifier"))
+								.add(Projections.property("tc.status").as("status"))
+								.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
+						).setResultTransformer(
+						Transformers.aliasToBean(ThesaurusConcept.class));
+				
 		if(null != like){
-		//JLSO 0030087 04/07/2018 fin
-		conceptNameIsLike(criteria,like);
+			conceptNameIsLike(criteria,like);
 		}
+					
+		//JLSO 0030087 04/07/2018 fin
+		//conceptNameIsLike(criteria,like);
+		
 		//JLSO 29055 21/06/2018 fin
 		selectThesaurus(criteria, thesaurus.getIdentifier());
 		selectOrphans(criteria, !topConcept);

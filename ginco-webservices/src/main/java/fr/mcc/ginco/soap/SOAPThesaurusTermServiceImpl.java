@@ -54,9 +54,11 @@ import org.apache.solr.common.params.SolrParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
@@ -92,6 +94,11 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	@Inject
 	@Named("searcherService")
 	private ISearcherService searcherService;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipDAO")
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+	
 	
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
@@ -158,8 +165,8 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request, Boolean preferredTermOnly,
-	                                                              int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
-		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status, withNotes);
+	                                                              int startIndex, int limit, TermStatusEnum status, Boolean withNotes, String languageId, Boolean leaves) {
+		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status, withNotes, languageId, leaves);
 	}
 	
 	public void addNotesToTerm (ReducedThesaurusTerm rterm) {
@@ -169,7 +176,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(String request, String thesaurusId, Boolean preferredTermOnly, 
-	                                                                         int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
+	                                                                         int startIndex, int limit, TermStatusEnum status, Boolean withNotes, String languageId, Boolean leaves) {
 		String copyRequest = StringUtils.stripAccents(request);
 		
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
@@ -227,8 +234,17 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						if(cleanRequest.contains("a")){
 							cleanRequestChecked2 = cleanRequestChecked2.replace("a", "æ");
 						}
+						String resultNoAccent = cleanResult.replace("'", " ");
+						String[] splitString = resultNoAccent.split(" ");
+						Boolean encontrado = false;
 						
-						if(cleanResult.startsWith(cleanRequest.toLowerCase()) || cleanResult.startsWith(cleanRequestChecked.toLowerCase()) || cleanResult.startsWith(cleanRequestChecked2.toLowerCase()) || cleanResult.startsWith(copyRequest.toLowerCase())){
+						for(String palabra : splitString) {
+							if(palabra.startsWith(cleanRequest.toLowerCase()) || palabra.startsWith(cleanRequestChecked.toLowerCase()) || palabra.startsWith(cleanRequestChecked2.toLowerCase()) || palabra.startsWith(copyRequest.toLowerCase())){
+								encontrado = true;
+							}
+						}
+						
+						if(encontrado){
 							//JLSO Evolutions V5 E0 15/01/2018 fin
 							reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
 							reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
@@ -240,7 +256,26 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 							}
 							//JLSO 29055 21/06/2018 début
 							if(reducedThesaurusTermList.size() < limit){
-								reducedThesaurusTermList.add(reducedThesaurusTerm);
+								List<ConceptHierarchicalRelationship> parents = conceptHierarchicalRelationshipDAO.findParentsByChildId(reducedThesaurusTerm.getConceptId());
+								if(null != languageId && !languageId.isEmpty() && !languageId.equals("?")){
+									if(reducedThesaurusTerm.getLanguageId().toLowerCase().equals(languageId.replace("_", "-").toLowerCase())){
+										if(null != leaves && leaves == true && (null == parents || parents.size() == 0)){
+											reducedThesaurusTermList.add(reducedThesaurusTerm);
+										} else {
+											if (null == leaves || !leaves) {
+												reducedThesaurusTermList.add(reducedThesaurusTerm);
+											}
+										}
+									} 
+								} else {
+									if(null != leaves && leaves == true && (null == parents || parents.size() == 0)){
+										reducedThesaurusTermList.add(reducedThesaurusTerm);
+									} else {
+										if(null == leaves || !leaves) {
+											reducedThesaurusTermList.add(reducedThesaurusTerm);
+										}
+									}
+								}
 							}
 							//JLSO 29055 21/06/2018 fin
 						}
@@ -288,13 +323,13 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	}
 
 	@Override
-	public List<String> getStringBeginWithSomeString(String request, Boolean preferredTermOnly,
+	public List<ReducedThesaurusTerm> getStringBeginWithSomeString(String request, Boolean preferredTermOnly,
 			int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
 		return getStringBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status, withNotes);
 	}
 
 	@Override
-	public List<String> getStringBeginWithSomeStringByThesaurus(String request, String thesaurusId,
+	public List<ReducedThesaurusTerm> getStringBeginWithSomeStringByThesaurus(String request, String thesaurusId,
 			Boolean preferredTermOnly, int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
 
 		String copyRequest = StringUtils.stripAccents(request);
@@ -399,11 +434,11 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 									//JLSO Evolutions V5 E0 15/01/2018 fin
 								}
 				});
-				List<String> listReturn = new ArrayList<String>();
+				/*List<String> listReturn = new ArrayList<String>();
 				for(ReducedThesaurusTerm element : reducedThesaurusTermList){
 					listReturn.add(element.getLexicalValue());
-				}
-				return listReturn;
+				}*/
+				return reducedThesaurusTermList;
 			} catch (SolrServerException e) {
 				logger.error("Excepción en SOAPThesaurusTermServiceImpl.getTermsBeginWithSomeStringByThesaurus. Exception [" + e.toString()+ "]. ", e);
 				
