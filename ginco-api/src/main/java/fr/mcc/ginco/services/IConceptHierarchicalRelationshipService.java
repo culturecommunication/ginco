@@ -34,6 +34,8 @@
  */
 package fr.mcc.ginco.services;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 
 /**
@@ -52,4 +54,10 @@ public interface IConceptHierarchicalRelationshipService {
 	 * @return ConceptHierarchicalRelationship
 	 */
 	ConceptHierarchicalRelationship getByChildAndParentIds(String childId, String parentId);
+	
+	/**
+	 * Get all the hierarchical associations between a child and its parent
+	 * @return List<ConceptHierarchicalRelationship>
+	 */
+	List<ConceptHierarchicalRelationship> findParentsByChildId(String id);
 }

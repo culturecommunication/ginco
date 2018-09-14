@@ -34,13 +34,21 @@
  */
 package fr.mcc.ginco.services;
 
-import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
-import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
-import fr.mcc.ginco.exceptions.BusinessException;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+
+import org.hibernate.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
+import fr.mcc.ginco.exceptions.BusinessException;
 
 @Transactional(readOnly = true, rollbackFor = BusinessException.class)
 @Service("conceptHierarchicalRelationshipService")
@@ -58,5 +66,13 @@ public class ConceptHierarchicalRelationshipServiceImpl implements IConceptHiera
 		relationshipId.setChildconceptid(childId);
 		relationshipId.setParentconceptid(parentId);
 		return conceptHierarchicalRelationshipDAO.getById(relationshipId);
+	}
+	
+	/* (non-Javadoc)
+	 * @see fr.mcc.ginco.services.IConceptHierarchicalRelationshipService#getByChildAndParentIds(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<ConceptHierarchicalRelationship> findParentsByChildId(String id) {	
+		return conceptHierarchicalRelationshipDAO.findParentsByChildId(id);
 	}
 }
