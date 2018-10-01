@@ -105,17 +105,38 @@ public class ChildrenGenerator {
 			hasTooMany = true;
 			children.remove(children.size() - 1);
 		}
+
+		//MPL 0030210 24/09/2018 debut
+		ThesaurusConcept previousTopTerm = new ThesaurusConcept();
+		//MPL 0030210 24/09/2018 fin
+		
 		List<IThesaurusListNode> childrenNodes = new ArrayList<IThesaurusListNode>();
 		for (ThesaurusConcept topTerm : children) {
 			ThesaurusListBasicNode childNode = thesaurusListNodeFactory
 					.getListBasicNode();
+
+			//MPL 0030210 24/09/2018 debut
+			if(isPreviouslyChecked(previousTopTerm, topTerm)) {
+				continue;
+			} else {
+				previousTopTerm = topTerm;
+			}
+			//MPL 0030210 24/09/2018 fin
+
+			//MPL 0030210 27/09/2018 debut (Problem shown since TMA-2.0.9.1)
+			childNode.setId(ID_PREFIX + resultId + PARENT_SEPARATOR
+					+ topTerm.getIdentifier());
+			/*
 			String uniqueSalt = "";
 			// This random id is for handling unicity on multiparent concept.
 			uniqueSalt=UUID.randomUUID().toString();
-			childNode.setTitle(thesaurusConceptService.getConceptLabel(topTerm
-					.getIdentifier()));
 			childNode.setId(ID_PREFIX +uniqueSalt+"_"+ resultId + PARENT_SEPARATOR
 					+ topTerm.getIdentifier());
+			*/
+			//MPL 0030210 27/09/2018 fin
+
+			childNode.setTitle(thesaurusConceptService.getConceptLabel(topTerm
+					.getIdentifier()));
 			childNode.setType(ThesaurusListNodeType.CONCEPT);
 			childNode.setThesaurusId(topTerm.getThesaurusId());
 			childNode.setDisplayable(true);
@@ -137,4 +158,11 @@ public class ChildrenGenerator {
 		}
 		return childrenNodes;
 	}
+
+	//MPL 0030210 24/09/2018 debut
+	private boolean isPreviouslyChecked(ThesaurusConcept previous, ThesaurusConcept actual) {
+		return previous.getIdentifier() != null && !previous.getIdentifier().isEmpty()
+				&& previous.getIdentifier().equals(actual.getIdentifier());
+	}
+	//MPL 0030210 24/09/2018 fin
 }
