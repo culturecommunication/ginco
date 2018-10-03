@@ -234,6 +234,11 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						if(cleanRequest.contains("a")){
 							cleanRequestChecked2 = cleanRequestChecked2.replace("a", "æ");
 						}
+						
+						//MPL 30861 (The request includes more than one word) 03/10/2018 debut
+						String[] requests = new String[] {cleanRequest, cleanRequestChecked, cleanRequestChecked2, copyRequest};
+						
+						/*
 						String resultNoAccent = cleanResult.replace("'", " ");
 						String[] splitString = resultNoAccent.split(" ");
 						Boolean encontrado = false;
@@ -243,9 +248,11 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 								encontrado = true;
 							}
 						}
-						
 						if(encontrado){
 							//JLSO Evolutions V5 E0 15/01/2018 fin
+						*/
+						if(isMatched(cleanResult, requests)) {
+						//MPL 30861 (The request includes more than one word) 03/10/2018 fin
 							reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
 							reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
 							reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
@@ -389,9 +396,15 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						if(cleanRequest.contains("a")){
 							cleanRequestChecked2 = cleanRequestChecked2.replace("a", "æ");
 						}
-						
+
+						//MPL 30861 (The request includes more than one word) 03/10/2018 debut
+						String[] requests = new String[] {cleanRequest, cleanRequestChecked, cleanRequestChecked2, copyRequest};
+						/*
 						if(cleanResult.startsWith(cleanRequest.toLowerCase()) || cleanResult.startsWith(cleanRequestChecked.toLowerCase()) || cleanResult.startsWith(cleanRequestChecked2.toLowerCase()) || cleanResult.startsWith(copyRequest.toLowerCase())){
-							//JLSO Evolutions V5 E0 15/01/2018 fin
+							//JLSO Evolutions V5 E0 15/01/2018 fin 
+						*/
+						if(isMatched(cleanResult, requests)) {
+							//MPL 30861 (The request includes more than one word) 03/10/2018 fin
 							reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
 							reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
 							reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
@@ -408,7 +421,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						}
 					}
 				}
-				
+						
 				Collections.sort(reducedThesaurusTermList, new Comparator<ReducedThesaurusTerm>() {
 								Collator frCollator = Collator.getInstance(Locale.FRENCH);
 					
@@ -454,4 +467,17 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 		//return getTermsBeginWithSomeString(request, preferredTermOnly, startIndex, limit, status, withNotes);
 	}
 
+	//MPL 30861 (The request includes more than one word) 03/10/2018 debut
+	private boolean isMatched(String resultDAO, String[] requests) {
+		char[] cleanResultChars = resultDAO.toCharArray();
+		for(int i = 0; i < requests.length; i++) {
+			if(resultDAO.indexOf(requests[i]) != -1 
+					&& (resultDAO.indexOf(requests[i]) == 0 
+					|| cleanResultChars[resultDAO.indexOf(requests[i]) - 1] == ' ')){
+				return true;
+			}
+		}
+		return false;
+	}
+	//MPL 30861 (The request includes more than one word) 03/10/2018 fin
 }
