@@ -61,4 +61,13 @@ public class ConceptHierarchicalRelationshipDAO extends
 		//Query query = getCurrentSession().createSQLQuery("SELECT * FROM hierarchical_relationship WHERE childconceptid = '"+id+"'");
 		return query.list();
 	}
+
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+	@Override
+	public List<ConceptHierarchicalRelationship> findChildrenByParentId(String parentConceptId) {
+		Query query = getCurrentSession().createQuery("SELECT chr FROM ConceptHierarchicalRelationship chr  WHERE chr.id.parentconceptid = '"+parentConceptId+"'");
+		//Query query = getCurrentSession().createSQLQuery("SELECT * FROM hierarchical_relationship WHERE parentconceptid = '"+parentConceptId+"'");
+		return query.list();
+	}
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 fin
 }

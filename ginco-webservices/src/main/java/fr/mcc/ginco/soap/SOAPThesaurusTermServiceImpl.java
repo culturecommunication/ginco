@@ -261,6 +261,13 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 							if (withNotes!=null && withNotes==true) {
 								addNotesToTerm(reducedThesaurusTerm);
 							}
+							//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+							if(reducedThesaurusTermList.size() < limit){
+								if(shouldIncludeInList(reducedThesaurusTerm, languageId, leaves)){
+									reducedThesaurusTermList.add(reducedThesaurusTerm);
+								} 
+							}
+							/*
 							//JLSO 29055 21/06/2018 début
 							if(reducedThesaurusTermList.size() < limit){
 								List<ConceptHierarchicalRelationship> parents = conceptHierarchicalRelationshipDAO.findParentsByChildId(reducedThesaurusTerm.getConceptId());
@@ -285,6 +292,8 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 								}
 							}
 							//JLSO 29055 21/06/2018 fin
+							 */
+							//MPL 30862 (Leaves are terms without children) 10/10/2018 fin
 						}
 					}
 				}
@@ -480,4 +489,22 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 		return false;
 	}
 	//MPL 30861 (The request includes more than one word) 03/10/2018 fin
+	
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+	private boolean shouldIncludeInList(ReducedThesaurusTerm reducedThesaurusTerm, String languageId, Boolean leaves) {
+		if(null != languageId && !languageId.isEmpty() && !languageId.equals("?")){
+			if(reducedThesaurusTerm.getLanguageId().toLowerCase().equals(languageId.replace("_", "-").toLowerCase())){
+				return leaves == null || !leaves || (leaves != null && leaves == true && (isLeaf(reducedThesaurusTerm)));
+			} 
+		} else {
+			return leaves == null || !leaves || (leaves != null && leaves == true && (isLeaf(reducedThesaurusTerm)));
+		}
+		return false;
+	}
+	
+	private boolean isLeaf(ReducedThesaurusTerm reducedThesaurusTerm) {
+		List<ConceptHierarchicalRelationship> children = conceptHierarchicalRelationshipDAO.findChildrenByParentId(reducedThesaurusTerm.getConceptId());
+		return children == null || children.isEmpty();
+	}
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 fin
 }

@@ -54,4 +54,15 @@ public interface IConceptHierarchicalRelationshipDAO extends IGenericDAO<Concept
 	 * specified Thesaurus
 	 */
 	List<ConceptHierarchicalRelationship> findParentsByChildId(String id);
+
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+	/**
+	 * Returns a list of ConceptHierarchicalRelationship filtered by conceptId
+	 *
+	 * @param the parent's concept id
+	 * @return List<ConceptHierarchicalRelationship> List of ConceptHierarchicalRelationship
+	 * for a specified parent's concept id.
+	 */
+	List<ConceptHierarchicalRelationship> findChildrenByParentId(String parentConceptId);
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 fin
 }
