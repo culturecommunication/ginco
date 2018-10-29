@@ -198,9 +198,8 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	}
 	//JLSO 29055 21/06/2018 fin
 	@Override
-	public List<ReducedThesaurusConcept> getChildrenByConceptId_v2(String conceptId, ConceptStatusEnum status,
-			Boolean withAssociates,
-			Boolean withNotes) {
+	public List<ReducedThesaurusConcept> getChildrenByConceptId_v2(String conceptId,
+			ConceptStatusEnum status, Boolean withAssociates, Boolean withNotes) {
 		if (StringUtils.isNotEmpty(conceptId)) {
 			List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);

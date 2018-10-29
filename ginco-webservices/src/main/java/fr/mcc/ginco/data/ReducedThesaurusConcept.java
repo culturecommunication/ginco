@@ -59,6 +59,10 @@ public class ReducedThesaurusConcept {
 	
 	/*** AAM EVO 2017 Evolutions v5  fin ***/
 	
+	/*** MPL 30965 29/10/2018 debut ***/
+	private String languageId;
+	/*** MPL 30965 29/10/2018 fin ***/
+	
 	/*** AAM EVO 2017 Evolutions v5  début ***/
 	
 	
@@ -78,6 +82,16 @@ public class ReducedThesaurusConcept {
 		this.lexicalValue = lexicalvalue;
 	}
 	/*** AAM EVO 2017 Evolutions v5  fin ***/
+	
+	/*** MPL 30965 29/10/2018 debut ***/
+	public String getLanguageId() {
+		return this.languageId;
+	}
+
+	public void setLanguageId(String languageId) {
+		this.languageId = languageId;
+	}
+	/*** MPL 30965 29/10/2018 fin ***/
 	
 	private List<ReducedThesaurusConcept> associates;
 	
@@ -101,6 +115,9 @@ public class ReducedThesaurusConcept {
 		}
 		reducedConcept.setLexicalValue(concept.getLexicalValue());
 		reducedConcept.setNotation(concept.getNotation());
+		//MPL 30965 29/10/2018 debut
+		reducedConcept.setLanguageId(concept.getLanguageId());
+		//MPL 30965 29/10/2018 fin
 		//FIXME TODO
 	//	reducedConcept.setLexicalValue("lexicalValue  aaaa");
 	//	reducedConcept.setNotation("notation bbbbbb");

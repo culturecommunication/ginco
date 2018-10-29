@@ -176,6 +176,9 @@ public class ThesaurusConceptDAO extends
 								.projectionList()
 								.add(Projections.property("tc.thesaurus").as("thesaurus"))
 								.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
+								//MPL 30965 29/10/2018 debut
+								.add(Projections.property("tt.language.id").as("languageId"))
+								//MPL 30965 29/10/2018 fin
 								.add(Projections.property("tc.notation").as("notation"))
 								.add(Projections.property("tc.status").as("status"))
 								.add(Projections.property("tc.identifier").as(
