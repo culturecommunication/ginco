@@ -181,6 +181,10 @@ public class ThesaurusConceptDAO extends
 								//MPL 30965 29/10/2018 fin
 								.add(Projections.property("tc.notation").as("notation"))
 								.add(Projections.property("tc.status").as("status"))
+								//JGJ 31989 11/01/2019 debut
+								.add(Projections.property("tc.created").as("created"))
+								.add(Projections.property("tc.modified").as("modified"))
+								//JGJ 31989 11/01/2019 fin
 								.add(Projections.property("tc.identifier").as(
 										"identifier"))).setResultTransformer(
 						Transformers.aliasToBean(ThesaurusConcept.class));
@@ -462,6 +466,10 @@ public class ThesaurusConceptDAO extends
 								.add(Projections.property("tc.identifier").as("identifier"))
 								.add(Projections.property("tc.status").as("status"))
 								.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
+								//JGJ 31989 11/01/2019 DEBUT
+								.add(Projections.property("tc.created").as("created"))
+								.add(Projections.property("tc.modified").as("modified"))
+								//JGJ 31989 11/01/2019 FIN
 						).setResultTransformer(
 						Transformers.aliasToBean(ThesaurusConcept.class));
 				
