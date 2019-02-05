@@ -396,7 +396,7 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			Boolean withNotes) {
 		if (StringUtils.isNotEmpty(thesaurusId)) {
 			
-			//EJNB 31243 21/06/2018 début
+			//EJNB 31243 21/06/2018 début 
 			if("*".equals(thesaurusId) || "***".equals(thesaurusId)){
 				List<Thesaurus> thesaurus2 = thesaurusService.getThesaurusList();
 				List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
