@@ -58,6 +58,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -201,6 +202,32 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 	public List<ReducedThesaurusConcept> getChildrenByConceptId_v2(String conceptId,
 			ConceptStatusEnum status, Boolean withAssociates, Boolean withNotes) {
 		if (StringUtils.isNotEmpty(conceptId)) {
+			
+			//EJNB 31243 21/06/2018 début
+			if("*".equals(conceptId) || "***".equals(conceptId)){
+				List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
+				List<ThesaurusConcept> thesaurusConcept = thesaurusConceptService.getAllConcepts();				
+				for (ThesaurusConcept conceptChild : thesaurusConcept) {
+					ReducedThesaurusConcept rChildConcept = ReducedThesaurusConcept.getReducedThesaurusConcept(conceptChild);
+					if (withNotes!=null && withNotes==true) {
+						addNotesToConcept(rChildConcept);
+					}
+					if (withAssociates != null && withAssociates == true){
+						addAssociatesToConcept(rChildConcept);
+					}
+					results.add(rChildConcept);
+				}
+				if(results.size()>0){
+					return results;
+				}
+				else{
+					throw new BusinessException(CONCEPT_IDENTIFIER_IS_EMPTY, EMPTY_PARAMETER);
+				}
+			}
+				
+			//EJNB 31243 21/06/2018 fin
+			
+			
 			List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
 			ThesaurusConcept thesaurusConcept = thesaurusConceptService.getThesaurusConceptById(conceptId);
 			if (thesaurusConcept != null) {
@@ -368,7 +395,44 @@ public class SOAPThesaurusConceptServiceImpl implements ISOAPThesaurusConceptSer
 			Boolean withAssociates,
 			Boolean withNotes) {
 		if (StringUtils.isNotEmpty(thesaurusId)) {
-			Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);
+			
+			//EJNB 31243 21/06/2018 début 
+			if("*".equals(thesaurusId) || "***".equals(thesaurusId)){
+				List<Thesaurus> thesaurus2 = thesaurusService.getThesaurusList();
+				List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
+				for (Iterator iterator = thesaurus2.iterator(); iterator.hasNext();) {
+					Thesaurus thesaurus = (Thesaurus) iterator.next();
+					thesaurus = thesaurusService.getThesaurusById(thesaurus.getIdentifier());					
+					List<ThesaurusConcept> topConceptList = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurus.getIdentifier(), status, 0);
+					for (ThesaurusConcept topConcept : topConceptList) {
+						ReducedThesaurusConcept rTopConcept = ReducedThesaurusConcept.getReducedThesaurusConcept(topConcept);
+						if (withNotes!=null && withNotes==true) {
+							addNotesToConcept(rTopConcept);
+						}
+						if (withAssociates != null && withAssociates == true)
+						{
+							addAssociatesToConcept(rTopConcept);
+						}
+						if (status != null)
+						{
+							if (topConcept.getStatus().intValue()==status.getStatus()) {
+								results.add(rTopConcept);
+							}
+						} else
+							results.add(rTopConcept);
+					}
+				}
+				if(results.size()>0){
+					return results;
+				}
+				else{
+					throw new BusinessException("Thesaurus identifier is empty", EMPTY_PARAMETER);
+				}
+				
+			}
+			//EJNB 31243 21/06/2018 fin
+			
+			Thesaurus thesaurus = thesaurusService.getThesaurusById(thesaurusId);			
 			if (thesaurus != null) {
 				List<ReducedThesaurusConcept> results = new ArrayList<ReducedThesaurusConcept>();
 				List<ThesaurusConcept> topConceptList = thesaurusConceptService.getTopTermThesaurusConcepts(thesaurusId, status, 0);
