@@ -2,9 +2,9 @@
     <schema name="terms" version="1.5">
             <fields>
                 <field name="identifier" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-                <field name="lexicalValue" type="text_fr" indexed="true" stored="true"/>
-                <field name="lexicalValue_sort" type="sort" indexed="true" stored="false"/>
-                <field name="lexicalValue_str" type="string_ci" indexed="true" stored="false"/>
+                <field name="lexicalValue" type="text_fr" indexed="true" stored="true" multiValued="true"/>
+                <field name="lexicalValue_sort" type="sort" indexed="true" stored="false" multiValued="true" />
+                <field name="lexicalValue_str" type="string_ci" indexed="true" stored="false" multiValued="true"/>
                 <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
                 <field name="thesaurusId" type="string" indexed="true" stored="true" multiValued="false"/>
                 <field name="thesaurusTitle" type="string" indexed="false" stored="true" multiValued="false"/>
