@@ -72,7 +72,11 @@ public class ComplexConceptSolrConverter {
 		doc.addField(SolrField.STATUS, complexConcept.getStatus());
 		doc.addField(SolrField.LANGUAGE, complexConcept.getLanguage().getId());
 
-		doc.addField(SolrField.LEXICALVALUE, complexConcept.getLexicalValue());
+		if (complexConcept.getLexicalValue().getBytes().length <= SolrField.MAX_SIZE ) {
+			doc.addField(SolrField.LEXICALVALUE, complexConcept.getLexicalValue());
+		} else {
+			doc.addField(SolrField.LEXICALVALUE, complexConcept.getLexicalValue().substring(0, SolrField.CUTOFF_SIZE - 1));
+		}
 		return doc;
 	}
 }

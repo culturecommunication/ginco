@@ -68,7 +68,12 @@ public class TermSolrConverter {
 		doc.addField(SolrField.THESAURUSTITLE, thesaurusTerm.getThesaurus()
 				.getTitle());
 		doc.addField(SolrField.IDENTIFIER, thesaurusTerm.getIdentifier());
-		doc.addField(SolrField.LEXICALVALUE, StringEscapeUtils.unescapeHtml4(thesaurusTerm.getLexicalValue().replace("&apos;", "'")));
+		String lexicalValue = StringEscapeUtils.unescapeHtml4(thesaurusTerm.getLexicalValue().replace("&apos;", "'"));
+		if (lexicalValue.getBytes().length <= SolrField.MAX_SIZE) {
+			doc.addField(SolrField.LEXICALVALUE, lexicalValue);
+		} else {
+			doc.addField(SolrField.LEXICALVALUE, lexicalValue.substring(0, SolrField.CUTOFF_SIZE - 1));
+		}
 		doc.addField(SolrField.TYPE, ThesaurusTerm.class.getSimpleName());
 		doc.addField(SolrField.LANGUAGE, thesaurusTerm.getLanguage().getId());
 		if (thesaurusTerm.getConcept()!=null)
@@ -103,7 +108,11 @@ public class TermSolrConverter {
 		List<Note> notes = noteService.getTermNotePaginatedList(
 				thesaurusTerm.getIdentifier(), 0, 0);
 		for (Note note : notes) {
-			doc.addField(SolrField.NOTES, note.getLexicalValue());
+			if (note.getLexicalValue().getBytes().length <= SolrField.MAX_SIZE) {
+				doc.addField(SolrField.LEXICALVALUE, note.getLexicalValue());
+			} else {
+				doc.addField(SolrField.LEXICALVALUE, note.getLexicalValue().substring(0, SolrField.CUTOFF_SIZE - 1));
+			}
 		}
 		return doc;
 	}
