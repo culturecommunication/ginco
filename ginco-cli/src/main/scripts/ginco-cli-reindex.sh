@@ -5,3 +5,4 @@ export "JAVA_OPTIONS=-Dfile.encoding=UTF-8 -jar ginco-cli-2.0.9.9.jar"
 
 cd $GINCO_CLI_DIR
 $JAVA_HOME/bin/java $JAVA_OPTIONS -x
+
