@@ -109,9 +109,10 @@ public class TermSolrConverter {
 				thesaurusTerm.getIdentifier(), 0, 0);
 		for (Note note : notes) {
 			if (note.getLexicalValue().getBytes().length <= SolrField.MAX_SIZE) {
-				doc.addField(SolrField.LEXICALVALUE, note.getLexicalValue());
+				doc.addField(SolrField.NOTES, note.getLexicalValue());
 			} else {
-				doc.addField(SolrField.LEXICALVALUE, note.getLexicalValue().substring(0, SolrField.CUTOFF_SIZE - 1));
+				doc.addField(SolrField.NOTES, note.getLexicalValue().substring(0, SolrField.CUTOFF_SIZE - 1));
+
 			}
 		}
 		return doc;

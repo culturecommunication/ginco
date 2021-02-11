@@ -99,11 +99,14 @@ public class ConceptSolrConverter {
 			logger.warn(ex.getMessage());
 			return null;
 		}
-		if (prefLabel.getBytes().length <= SolrField.MAX_SIZE) {
-			doc.addField(SolrField.LEXICALVALUE, prefLabel);
-		} else {
-			doc.addField(SolrField.LEXICALVALUE, prefLabel.substring(0, SolrField.CUTOFF_SIZE -1));
+		if (prefLabel != null) {
+			if (prefLabel.getBytes().length <= SolrField.MAX_SIZE) {
+				doc.addField(SolrField.LEXICALVALUE, prefLabel);
+			} else {
+				doc.addField(SolrField.LEXICALVALUE, prefLabel.substring(0, SolrField.CUTOFF_SIZE -1));
+			}
 		}
+
 
 		List<Note> notes = noteService.getConceptNotePaginatedList(
 				thesaurusConcept.getIdentifier(), 0, 0);
