@@ -57,7 +57,7 @@ public class SearcherServiceImpl implements ISearcherService {
 	@Override
 	public SearchResultList search(String request, Integer type,
 	                               String thesaurus, Integer status, String createdFrom,
-	                               String modifiedFrom, String language, SortCriteria sort, int startIndex, int limit)
+	                               String modifiedFrom, String language, SortCriteria sort, int startIndex, int limit, String parent)
 			throws SolrServerException {
 
 		ModifiableSolrParams params = new ModifiableSolrParams();
@@ -77,6 +77,7 @@ public class SearcherServiceImpl implements ISearcherService {
 						+ searcherServiceUtil.addAndQuery(SolrField.THESAURUSID, thesaurus, null, true)
 						+ searcherServiceUtil.addAndQuery(SolrField.STATUS, status, null, false)
 						+ searcherServiceUtil.addAndQuery(SolrField.LANGUAGE, language, null, false)
+						+ searcherServiceUtil.addAndQuery(SolrField.PARENT_CONCEPT, parent, null, true)
 						+ searcherServiceUtil.getExtTypeQuery(type)
 		);
 

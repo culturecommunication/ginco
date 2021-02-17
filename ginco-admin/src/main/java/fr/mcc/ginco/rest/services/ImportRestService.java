@@ -54,11 +54,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -99,6 +102,8 @@ import fr.mcc.ginco.solr.IThesaurusIndexerService;
 @Produces({ MediaType.TEXT_HTML })
 public class ImportRestService {
 	private static final String ATTACHMENT_NAME = "import-file-path";
+
+	private Logger logger  = LoggerFactory.getLogger(ImportRestService.class);
 
 	@Inject
 	@Context
@@ -166,7 +171,7 @@ public class ImportRestService {
 	public String uploadFile(MultipartBody body,
 	                         @Context HttpServletRequest request) throws IOException {
 		Attachment file = body.getAttachment(ATTACHMENT_NAME);
-		String content = file.getObject(String.class);
+		String content = IOUtils.toString(file.getDataHandler().getInputStream(),"UTF-8" );
 		String fileName = file.getDataHandler().getName();
 		File tempdir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");
@@ -218,7 +223,7 @@ public class ImportRestService {
 			throws IOException {
 		AuditContext.disableAudit();
 		Attachment file = body.getAttachment(ATTACHMENT_NAME);
-		String content = file.getObject(String.class);
+		String content = IOUtils.toString(file.getDataHandler().getInputStream(),"UTF-8" );
 		String fileName = file.getDataHandler().getName();
 		File tempDir = (File) servletContext
 				.getAttribute("javax.servlet.context.tempdir");

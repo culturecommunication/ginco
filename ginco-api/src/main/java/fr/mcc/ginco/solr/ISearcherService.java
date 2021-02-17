@@ -50,11 +50,12 @@ public interface ISearcherService {
 	 * @param sort
 	 * @param startIndex
 	 * @param limit
+	 * @param parent 
 	 * @return
 	 * @throws SolrServerException
 	 */
 	SearchResultList search(String request, Integer type,
 	                        String thesaurus, Integer status,
 	                        String createdFrom, String modifiedFrom,
-	                        String language, SortCriteria sort, int startIndex, int limit) throws SolrServerException;
+	                        String language, SortCriteria sort, int startIndex, int limit, String parent) throws SolrServerException;
 }

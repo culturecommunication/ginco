@@ -11,9 +11,11 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>logFile.%d{yyyy-MM-dd}.log</FileNamePattern>
         </rollingPolicy>
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <outputPatternAsHeader>true</outputPatternAsHeader>
             <pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern>
-        </layout>
+        </encoder>
     </appender>  
     
     <appender name="ROLEFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -21,9 +23,12 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>logFile.%d{yyyy-MM-dd}.log</FileNamePattern>
         </rollingPolicy>
-        <layout class="ch.qos.logback.classic.PatternLayout">
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <outputPatternAsHeader>true</outputPatternAsHeader>
             <pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern>
-        </layout>
+        </encoder>
     </appender> 
     
     <logger name="org.springframework" level="WARN" additivity="false">

@@ -36,8 +36,10 @@ package fr.mcc.ginco.rest.services;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,6 +51,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -170,7 +173,9 @@ public class ExportRestService {
 		try {
 			temp = File.createTempFile("pattern", ".suffix");
 			temp.deleteOnExit();
-			out = new BufferedWriter(new FileWriter(temp));
+
+			out = new BufferedWriter
+					(new OutputStreamWriter(new FileOutputStream(temp.getPath()), StandardCharsets.UTF_8));
 
 			if (alphabetical) {
 				out.write(LabelUtil.getResourceLabel("export-alphabetical")
@@ -222,16 +227,12 @@ public class ExportRestService {
 		Thesaurus targetThesaurus = thesaurusService
 				.getThesaurusById(thesaurusId);
 		File temp;
-		BufferedWriter out = null;
 		try {
 			temp = File.createTempFile("GINCO ", XML_EXTENSION);
 			temp.deleteOnExit();
-			out = new BufferedWriter(new FileWriter(temp));
 			String result = gincoThesaurusExportService
 					.getThesaurusExport(targetThesaurus);
-			out.write(result);
-			out.flush();
-			out.close();
+			FileUtils.write(temp,result,"UTF-8");
 		} catch (IOException e) {
 			throw new BusinessException("Cannot create temp file!",
 					"cannot-create-file", e);
@@ -257,7 +258,8 @@ public class ExportRestService {
 		try {
 			temp = File.createTempFile("GINCO ", XML_EXTENSION);
 			temp.deleteOnExit();
-			out = new BufferedWriter(new FileWriter(temp));
+			out = new BufferedWriter
+					(new OutputStreamWriter(new FileOutputStream(temp.getPath()), StandardCharsets.UTF_8));
 			String result = gincoBranchExportService.getBranchExport(targetConcept);
 			out.write(result);
 			out.flush();

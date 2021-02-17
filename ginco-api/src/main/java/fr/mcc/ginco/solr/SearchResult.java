@@ -49,6 +49,15 @@ public class SearchResult {
     private Integer status;
     private String conceptId;
 	private List<String> languages;
+	private List<String> broaders;
+
+	public List<String> getBroaders() {
+		return broaders;
+	}
+
+	public void setBroaders(List<String> broaders) {
+		this.broaders = broaders;
+	}
 
 	public String getIdentifier() {
 		return identifier;

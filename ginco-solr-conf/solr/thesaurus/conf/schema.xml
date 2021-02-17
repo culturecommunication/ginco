@@ -17,6 +17,7 @@
                 <field name="notes" type="text_fr" indexed="true" stored="true" multiValued="true"/>
                 <field name="_version_" type="long" indexed="true" stored="true"/>
                 <field name="conceptId" type="string" indexed="false" stored="true" multiValued="false" />
+                <field name="parentConcept" type="string" indexed="true" stored="true" multiValued="true" />
             </fields>
 
             <uniqueKey>identifier</uniqueKey>

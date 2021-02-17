@@ -44,6 +44,7 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
 import fr.mcc.ginco.imports.IGincoImportService;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -133,10 +133,7 @@ public class GincoImportServiceImpl implements IGincoImportService {
 		File file;
 		try {
 			file = File.createTempFile(prefix, ".tmp", tempDir);
-
-			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write(fileContent);
-			fileWriter.close();
+			FileUtils.write(file, fileContent,"UTF-8");
 		} catch (IOException e) {
 			throw new BusinessException(
 					"Error storing temporary file for import " + prefix,

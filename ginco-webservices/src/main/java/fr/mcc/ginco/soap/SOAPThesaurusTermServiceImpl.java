@@ -181,7 +181,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				}
 				SearchResultList searchResultList = searcherService.search(
 						requestFormat, searchType, thesaurusId, intStatus, null, null, null, crit,
-						startIndex, limit);
+						startIndex, limit, null);
 				if (searchResultList != null) {
 					for (SearchResult searchResult : searchResultList) {
 						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();

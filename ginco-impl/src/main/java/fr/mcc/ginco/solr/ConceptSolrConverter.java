@@ -35,6 +35,7 @@
 package fr.mcc.ginco.solr;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -88,7 +89,15 @@ public class ConceptSolrConverter {
 				.getConceptPreferredTerms(thesaurusConcept.getIdentifier())) {
 			doc.addField(SolrField.LANGUAGE, term.getLanguage().getId());
 		}
-
+		
+		List<String> parentPrefLabelPath = new ArrayList<>();
+		List<ThesaurusConcept> parentPath = thesaurusConceptService.getRecursiveParentsByConceptId(thesaurusConcept.getIdentifier());
+		for (int i = parentPath.size() - 1; i >= 0; i--) {
+			parentPrefLabelPath.add(thesaurusConceptService.getConceptTitle(parentPath.get(i)));
+		}
+		parentPrefLabelPath.add(thesaurusConceptService.getConceptTitle(thesaurusConcept));
+		doc.addField(SolrField.PARENT_CONCEPT, parentPrefLabelPath);
+		
 		String prefLabel;
 		try {
 			prefLabel = thesaurusConceptService.getConceptPreferredTerm(

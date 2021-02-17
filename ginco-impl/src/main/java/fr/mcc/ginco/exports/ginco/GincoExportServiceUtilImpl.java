@@ -38,6 +38,7 @@ import fr.mcc.ginco.exceptions.TechnicalException;
 import fr.mcc.ginco.exports.IGincoExportServiceUtil;
 import fr.mcc.ginco.exports.result.bean.GincoExportedBranch;
 import fr.mcc.ginco.exports.result.bean.GincoExportedThesaurus;
+import java.io.UnsupportedEncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -65,8 +66,8 @@ public class GincoExportServiceUtilImpl implements IGincoExportServiceUtil {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			marshaller.marshal(thesaurusToExport, output);
-			result = output.toString();
-		} catch (JAXBException e) {
+			result = output.toString("UTF-8");
+		} catch (JAXBException | UnsupportedEncodingException e) {
 			logger.error("Error when trying to serialize a thesaurus to XML with JAXB", e);
 			throw new TechnicalException(
 					"Error when trying to serialize a thesaurus to XML with JAXB",
@@ -88,8 +89,8 @@ public class GincoExportServiceUtilImpl implements IGincoExportServiceUtil {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			marshaller.marshal(branchToExport, output);
-			result = output.toString();
-		} catch (JAXBException e) {
+			result = output.toString("UTF-8");
+		} catch (JAXBException | UnsupportedEncodingException e) {
 			logger.error("Error when trying to serialize a thesaurus to XML with JAXB", e);
 			throw new TechnicalException(
 					"Error when trying to serialize a concept branch to XML with JAXB",
