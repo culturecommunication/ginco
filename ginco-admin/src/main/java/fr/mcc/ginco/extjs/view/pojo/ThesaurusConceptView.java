@@ -61,6 +61,7 @@ public class ThesaurusConceptView implements Serializable, SecuredResourceView {
 	private List<String> rootConcepts;
 	private List<AssociativeRelationshipView> associatedConcepts;
 	private List<String> conceptsPath;
+	private List<String> prefLabelsPath;
 	private Boolean topistopterm;
 	private List<AlignmentView> alignments;
 
@@ -170,6 +171,14 @@ public class ThesaurusConceptView implements Serializable, SecuredResourceView {
 
 	public void setConceptsPath(List<String> conceptsPath) {
 		this.conceptsPath = conceptsPath;
+	}
+
+	public List<String> getPrefLabelsPath() {
+		return prefLabelsPath;
+	}
+
+	public void setPrefLabelsPath(List<String> prefLabelsPath) {
+		this.prefLabelsPath = prefLabelsPath;
 	}
 
 	public Boolean getTopistopterm() {

@@ -57,16 +57,14 @@ import fr.mcc.ginco.skos.namespaces.ISOTHES;
 import fr.mcc.ginco.skos.namespaces.SKOS;
 import fr.mcc.ginco.skos.namespaces.SKOSXL;
 import fr.mcc.ginco.utils.DateUtil;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -182,20 +180,7 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 			File temp = File.createTempFile("skosExport"
 					+ DateUtil.nowDate().getTime(), ".rdf");
 			temp.deleteOnExit();
-
-			FileInputStream fis = new FileInputStream(temp);
-
-			fis.close();
-
-			BufferedOutputStream bos;
-
-			FileOutputStream fos = new FileOutputStream(temp);
-
-			bos = new BufferedOutputStream(fos);
-			bos.write(res.getBytes());
-			bos.flush();
-			fos.close();
-
+			FileUtils.write(temp,res,"UTF-8");
 			return temp;
 
 		} catch (IOException e) {

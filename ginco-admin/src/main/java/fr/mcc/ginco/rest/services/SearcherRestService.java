@@ -77,7 +77,7 @@ public class SearcherRestService {
 					searcherService.search(StringEscapeUtils.unescapeXml(filter.getQuery()), filter.getType(),
 					filter.getThesaurus(), filter.getStatus(),
 					filter.getCreationdate(), filter.getModificationdate(),
-					filter.getLanguage(), sort, filter.getStart(), filter.getLimit());
+					filter.getLanguage(), sort, filter.getStart(), filter.getLimit(), filter.getParent());
 
 			ExtJsonFormLoadData<List<SearchResult>> extSearchResults = new ExtJsonFormLoadData<List<SearchResult>>(searchResults);
 			extSearchResults.setTotal(searchResults.getNumFound());
