@@ -94,6 +94,10 @@
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
+						<!-- Ajout pour permettre une exécution direct si l'exécution est faite avec le pom parent-->
+						<manifestEntries>
+							<Class-Path>lib/ginco-api.jar lib/ginco-commons.jar lib/ginco-impl.jar</Class-Path>
+						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
