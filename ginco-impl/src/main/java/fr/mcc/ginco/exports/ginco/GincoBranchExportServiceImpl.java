@@ -139,7 +139,7 @@ public class GincoBranchExportServiceImpl implements IGincoBranchExportService {
 		List<String> conceptsIds = ThesaurusConceptUtils.getIdsFromConceptList(allConcepts);
 		for (ThesaurusConcept concept : childrenConcepts) {
 			JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship = gincoConceptExporter
-					.getExportHierarchicalConcepts(concept);
+					.getExportHierarchicalConcepts_v2(concept);
 			if (parentConceptHierarchicalRelationship != null
 					&& !parentConceptHierarchicalRelationship.isEmpty()) {
 

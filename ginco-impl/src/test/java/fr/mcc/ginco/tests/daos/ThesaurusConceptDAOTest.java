@@ -76,7 +76,8 @@ public class ThesaurusConceptDAOTest extends BaseDAOTest {
 		List<ThesaurusConcept> actualConcepts = thesaurusConceptDAO
 				.getOrphansThesaurusConcept(th, 0);
 		//MPL 0030087 09/08/2018 debut
-		Assert.assertEquals(3, actualConcepts.size());
+		Assert.assertEquals(2, actualConcepts.size());
+		//Assert.assertEquals(3, actualConcepts.size());
 		//Assert.assertEquals(4, actualConcepts.size());
 		//MPL 0030087 09/08/2018 fin
 	}

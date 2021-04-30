@@ -161,10 +161,10 @@ public class ThesaurusConceptDAO extends
 
 	private List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId,
 			Boolean searchOrphans, int maxResults,String like, ConceptStatusEnum status) {
-		
+
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
-		
+
 		//JLSO 29055 21/06/2018 début
 		//override previous criteria
 		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
@@ -422,7 +422,7 @@ public class ThesaurusConceptDAO extends
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,topConcept,like, status);
 		
 		//MPL 0030210 28/08/2018 debut
-		crit.addOrder(Order.asc("tt.concept.identifier"));
+		//crit.addOrder(Order.asc("tt.concept.identifier"));
 		//MPL 0030210 28/08/2018 fin
 		
 		if (maxResults > 0) {
@@ -449,29 +449,7 @@ public class ThesaurusConceptDAO extends
 	                                                     boolean topConcept,String like, ConceptStatusEnum status) {
 		
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");	
-		
-		//JLSO 29055 21/06/2018 fin
-		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
-				.add(Restrictions.isNotNull("tt.concept"))
-				//MPL 0030210 06/08/2018 debut
-				.add(Restrictions.eq("tt.prefered", true))
-				//MPL 0030210 06/08/2018 fin
-				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
-		
-				criteria.setProjection(
-						Projections
-								.projectionList()
-								.add(Projections.property("tc.thesaurus").as("thesaurus"))
-								.add(Projections.property("tc.notation").as("notation"))
-								.add(Projections.property("tc.identifier").as("identifier"))
-								.add(Projections.property("tc.status").as("status"))
-								.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
-								//JGJ 31989 11/01/2019 DEBUT
-								.add(Projections.property("tc.created").as("created"))
-								.add(Projections.property("tc.modified").as("modified"))
-								//JGJ 31989 11/01/2019 FIN
-						).setResultTransformer(
-						Transformers.aliasToBean(ThesaurusConcept.class));
+
 				
 		if(null != like){
 			conceptNameIsLike(criteria,like);
@@ -485,7 +463,6 @@ public class ThesaurusConceptDAO extends
 		selectOrphans(criteria, !topConcept);
 		selectNoParents(criteria);
 		selectStatus(criteria, status);
-		criteria.list();
 		return criteria;
 	}
 
