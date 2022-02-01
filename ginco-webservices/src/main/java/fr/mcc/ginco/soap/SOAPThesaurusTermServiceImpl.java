@@ -193,10 +193,20 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				if (preferredTermOnly)
 				{
 					searchType = SearchEntityType.TERM_PREF;
+				} else {
+					searchType = SearchEntityType.ALL_TYPE;
 				}
 				Integer intStatus = null;
 				if (status!=null) {
 					intStatus = status.getStatus();
+				} else {
+					intStatus = SearchEntityType.ALL_TYPE;
+				}
+				if (thesaurusId == null) {
+					thesaurusId = SearchEntityType.ALL_TYPE.toString();
+				}
+				if (languageId == null) {
+					languageId = SearchEntityType.ALL_TYPE.toString();
 				}
 				/*SearchResultList searchResultList = searcherService.search(
 						requestFormat, searchType, thesaurusId, intStatus, null, null, null, crit,
@@ -205,7 +215,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				//JLSO Evolutions V5 E0 15/01/2018 début
 				//JLSO 29055 21/06/2018 début
 				SearchResultList searchResultList2 = searcherService.search(
-						"*", searchType, thesaurusId, intStatus, null, null, null, crit,
+						request+"*", searchType, thesaurusId, intStatus, null, null, languageId, crit,
 						startIndex, 1000000000);
 				//JLSO 29055 21/06/2018 fin
 				
@@ -237,7 +247,16 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						
 						//MPL 30861 (The request includes more than one word) 03/10/2018 debut
 						String[] requests = new String[] {cleanRequest, cleanRequestChecked, cleanRequestChecked2, copyRequest};
-						
+
+						reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
+						reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
+						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
+						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
+						reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(searchResult.getStatus()));
+						if (withNotes!=null && withNotes==true) {
+							addNotesToTerm(reducedThesaurusTerm);
+						}
+						reducedThesaurusTermList.add(reducedThesaurusTerm);
 						/*
 						String resultNoAccent = cleanResult.replace("'", " ");
 						String[] splitString = resultNoAccent.split(" ");
@@ -251,6 +270,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 						if(encontrado){
 							//JLSO Evolutions V5 E0 15/01/2018 fin
 						*/
+						/*
 						if(isMatched(cleanResult, requests)) {
 						//MPL 30861 (The request includes more than one word) 03/10/2018 fin
 							reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
@@ -261,13 +281,16 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 							if (withNotes!=null && withNotes==true) {
 								addNotesToTerm(reducedThesaurusTerm);
 							}
+							reducedThesaurusTermList.add(reducedThesaurusTerm);
 							//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+							/*
 							if(reducedThesaurusTermList.size() < limit){
 								if(shouldIncludeInList(reducedThesaurusTerm, languageId, leaves)){
 									reducedThesaurusTermList.add(reducedThesaurusTerm);
 								} 
 							}
-							/*
+							 */
+						/*
 							//JLSO 29055 21/06/2018 début
 							if(reducedThesaurusTermList.size() < limit){
 								List<ConceptHierarchicalRelationship> parents = conceptHierarchicalRelationshipDAO.findParentsByChildId(reducedThesaurusTerm.getConceptId());
@@ -280,7 +303,7 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 												reducedThesaurusTermList.add(reducedThesaurusTerm);
 											}
 										}
-									} 
+									}
 								} else {
 									if(null != leaves && leaves == true && (null == parents || parents.size() == 0)){
 										reducedThesaurusTermList.add(reducedThesaurusTerm);
@@ -292,11 +315,9 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 								}
 							}
 							//JLSO 29055 21/06/2018 fin
-							 */
-							//MPL 30862 (Leaves are terms without children) 10/10/2018 fin
+						 */
 						}
 					}
-				}
 				
 				Collections.sort(reducedThesaurusTermList, new Comparator<ReducedThesaurusTerm>() {
 								Collator frCollator = Collator.getInstance(Locale.FRENCH);
