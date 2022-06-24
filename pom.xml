@@ -31,7 +31,7 @@
         <h2database.version>2.1.210</h2database.version>
         <dbcp.version>6.0.29</dbcp.version>
         <javax.inject.version>1</javax.inject.version>
-        <logback.version>1.0.9</logback.version>
+        <logback.version>1.2.0</logback.version>
         <org.slf4j.version>1.6.6</org.slf4j.version>
         <aspectj.version>1.7.1</aspectj.version>
         <org.apache.cxf.common.utils.version>2.5.9</org.apache.cxf.common.utils.version>
