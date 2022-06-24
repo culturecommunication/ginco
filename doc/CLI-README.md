@@ -7,7 +7,7 @@
 > mvn clean package
 ```
 
-which generate ginco-cli-0.0.1-SNAPSHOT.jar in ginco/ginco-cli/target directory.
+which generate ginco-cli-x.y.z-SNAPSHOT.jar in ginco/ginco-cli/target directory.
 check that ginco/ginco-cli/target/lib directory which contains necessary libraries, has been generated.
 
 ## Configuration
@@ -29,8 +29,8 @@ The command syntax: -i <inputFile> where:
 
 Ordering example:
 ```
-> cd ginco / ginco-cli / targer
-> java -jar ./ginco-cli-2.0.9-SNAPSHOT.jar -i "SKOS_Joconde_2014-02-05.rdf"
+> cd ginco / ginco-cli / target
+> java -jar ./ginco-cli-2.0.9-SNAPSHOT.jar -i "SKOS_Joconde_506.rdf"
 ```
 
 ### Export vocabulary to SKOS format
@@ -40,7 +40,7 @@ The command syntax: -e <thesaurusid> <outputFile> where:
 
 Ordering example:
 ```
-> cd ginco / ginco-cli / targer
-> java -jar ./ginco-cli-2.0.9-SNAPSHOT.jar -e http://data.culture.fr/thesaurus/resource/ark:/67717/T506 "SKOS_Joconde_2014-02-05.rdf"
+> cd ginco / ginco-cli / target
+> java -jar ./ginco-cli-2.0.9-SNAPSHOT.jar -e http://data.culture.fr/thesaurus/resource/ark:/67717/T506 "SKOS_Joconde_506.rdf"
 ```
 
