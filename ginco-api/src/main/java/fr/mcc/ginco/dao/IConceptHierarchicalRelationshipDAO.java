@@ -34,10 +34,35 @@
  */
 package fr.mcc.ginco.dao;
 
+import java.util.List;
+
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 
 /**
  * Data Access Object for hierarchical relation between thesaurus concepts
  */
 public interface IConceptHierarchicalRelationshipDAO extends IGenericDAO<ConceptHierarchicalRelationship, ConceptHierarchicalRelationship.Id> {
+	
+	/**
+	 * Returns a list of Thesaurus Terms filtered by thesaurusId
+	 * sorted alphabetically on the lexical value with
+	 * a starting index and a limit of items to be returned
+	 *
+	 * @param start Beginning index
+	 * @param limit Number of items
+	 * @return List<ThesaurusTerm> Paginated list of Thesaurus Terms for a
+	 * specified Thesaurus
+	 */
+	List<ConceptHierarchicalRelationship> findParentsByChildId(String id);
+
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+	/**
+	 * Returns a list of ConceptHierarchicalRelationship filtered by conceptId
+	 *
+	 * @param the parent's concept id
+	 * @return List<ConceptHierarchicalRelationship> List of ConceptHierarchicalRelationship
+	 * for a specified parent's concept id.
+	 */
+	List<ConceptHierarchicalRelationship> findChildrenByParentId(String parentConceptId);
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 fin
 }

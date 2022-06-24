@@ -304,12 +304,22 @@ public class ThesaurusConceptServiceImpl implements IThesaurusConceptService {
 
 		ThesaurusTerm preferredTerm = thesaurusTermDAO
 				.getConceptPreferredTerm(conceptId);
+		
+		//AAM EVO 2017 début
+		ThesaurusConcept thesaurusConcept = (ThesaurusConcept) 
+				thesaurusConceptDAO.getById(conceptId);
+		
+		//AAM EVO 2017 fin
 		if (preferredTerm == null) {
 			throw new BusinessException("The concept " + conceptId
 					+ "has no preferred term",
 					"concept-does-not-have-a-preferred-term"
 			);
+			// AAM EVO 2017 début
+		} else if (thesaurusConcept != null) {
+			preferredTerm.setNotation(thesaurusConcept.getNotation());
 		}
+		// AAM EVO 2017 fin
 		return preferredTerm;
 	}
 

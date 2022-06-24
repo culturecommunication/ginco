@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  tomcat:
+    image: library/tomcat:8-jdk8
+    container_name: tomcat
+    volumes:
+      - /opt/tomcat8/lib/postgresql-9.2-1004-jdbc4.jar:/usr/local/tomcat/lib/postgresql-9.2-1004-jdbc4.jar
+      - /opt/tomcat8/conf/context.xml:/usr/local/tomcat/conf/context.xml
+      - /opt/tomcat8/conf/ginco.properties:/usr/local/tomcat/conf/ginco.properties
+      - ./ginco-webservices/target/ginco-webservices.war:/usr/local/tomcat/webapps/ginco-webservices.war
+      - ./ginco-admin/target/ginco-admin.war:/usr/local/tomcat/webapps/ginco-admin.war
+    ports:
+      - "8080:8080"
+    environment:
+      - ginco-properties=/usr/local/tomcat/conf/ginco.properties
+
+
+
+  solr:
+    image: solr:8.5.2
+    container_name: solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - /mnt/c/Users/frup43047/Projects/Satis/ginco/workspaces/ginco/ginco-solr-conf/solr/thesaurus:/opt/solr/server/solr/thesaurus
+      - /mnt/c/Users/frup43047/Projects/Satis/ginco/workspaces/ginco/ginco-solr-conf/solr/thesaurus/conf:/opt/solr/server/solr/configsets/thesaurusconf
+    entrypoint:
+      - solr-precreate
+      - thesaurus
+      - /opt/solr/server/solr/configsets/thesaurusconf

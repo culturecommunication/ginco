@@ -51,14 +51,19 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.params.SolrParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
 import fr.mcc.ginco.beans.Note;
 import fr.mcc.ginco.beans.ThesaurusConcept;
 import fr.mcc.ginco.beans.ThesaurusTerm;
+import fr.mcc.ginco.dao.IConceptHierarchicalRelationshipDAO;
 import fr.mcc.ginco.data.ReducedThesaurusTerm;
 import fr.mcc.ginco.enums.TermStatusEnum;
 import fr.mcc.ginco.exceptions.BusinessException;
 import fr.mcc.ginco.exceptions.TechnicalException;
+
 import fr.mcc.ginco.services.INoteService;
 import fr.mcc.ginco.services.IThesaurusTermService;
 import fr.mcc.ginco.solr.ISearcherService;
@@ -75,6 +80,9 @@ import fr.mcc.ginco.solr.SortCriteria;
 @WebService(endpointInterface = "fr.mcc.ginco.soap.ISOAPThesaurusTermService")
 public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
+	
+	private Logger logger = LoggerFactory.getLogger(SOAPThesaurusTermServiceImpl.class);
+	
 	@Inject
 	@Named("thesaurusTermService")
 	private IThesaurusTermService thesaurusTermService;
@@ -86,6 +94,11 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 	@Inject
 	@Named("searcherService")
 	private ISearcherService searcherService;
+	
+	@Inject
+	@Named("conceptHierarchicalRelationshipDAO")
+	private IConceptHierarchicalRelationshipDAO conceptHierarchicalRelationshipDAO;
+	
 	
 	@Override
 	public String getConceptIdByTerm(String lexicalValue, String thesaurusId,
@@ -152,8 +165,8 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeString(String request, Boolean preferredTermOnly,
-	                                                              int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
-		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status, withNotes);
+	                                                              int startIndex, int limit, TermStatusEnum status, Boolean withNotes, String languageId, Boolean leaves) {
+		return getTermsBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status, withNotes, languageId, leaves);
 	}
 	
 	public void addNotesToTerm (ReducedThesaurusTerm rterm) {
@@ -163,11 +176,209 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 
 	@Override
 	public List<ReducedThesaurusTerm> getTermsBeginWithSomeStringByThesaurus(String request, String thesaurusId, Boolean preferredTermOnly, 
-	                                                                         int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
+	                                                                         int startIndex, int limit, TermStatusEnum status, Boolean withNotes, String languageId, Boolean leaves) {
+		String copyRequest = StringUtils.stripAccents(request);
+		
 		if (StringUtils.isNotEmpty(request) && limit != 0) {
 			try {
 				request = ClientUtils.escapeQueryChars(request);	
-				String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
+				// AAM EVO 2017 début
+				String requestFormat = SolrField.LEXICALVALUE+":"+request + "*";
+				// old 
+				// String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
+				// AAM EVO 2017 fin
+				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
+				SortCriteria crit = new SortCriteria(SolrField.LEXICALVALUE, SolrConstants.ASCENDING);
+				Integer searchType = SearchEntityType.TERM;
+				if (preferredTermOnly)
+				{
+					searchType = SearchEntityType.TERM_PREF;
+				} else {
+					searchType = SearchEntityType.ALL_TYPE;
+				}
+				Integer intStatus = null;
+				if (status!=null) {
+					intStatus = status.getStatus();
+				} else {
+					intStatus = SearchEntityType.ALL_TYPE;
+				}
+				if (thesaurusId == null) {
+					thesaurusId = SearchEntityType.ALL_TYPE.toString();
+				}
+				if (languageId == null) {
+					languageId = SearchEntityType.ALL_TYPE.toString();
+				}
+				/*SearchResultList searchResultList = searcherService.search(
+						requestFormat, searchType, thesaurusId, intStatus, null, null, null, crit,
+						startIndex, limit);*/
+				
+				//JLSO Evolutions V5 E0 15/01/2018 début
+				//JLSO 29055 21/06/2018 début
+				SearchResultList searchResultList2 = searcherService.search(
+						request+"*", searchType, thesaurusId, intStatus, null, null, languageId, crit,
+						startIndex, 1000000000);
+				//JLSO 29055 21/06/2018 fin
+				
+				String cleanRequest = StringUtils.stripAccents(request);
+				String cleanRequestChecked = cleanRequest;
+				String cleanRequestChecked2 = cleanRequest;
+				//JLSO Evolutions V5 E0 15/01/2018 fin
+				
+				if (searchResultList2 != null) {
+					for (SearchResult searchResult : searchResultList2) {
+						//JLSO Evolutions V5 E0 15/01/2018 début
+						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
+						
+						String cleanResult = StringUtils.stripAccents(searchResult.getLexicalValue()).toLowerCase();
+						
+						// Check œ and æ
+						if(cleanRequest.contains("œ")){
+							cleanRequestChecked = cleanRequestChecked.replace("œ", "o");
+						}
+						if(cleanRequest.contains("æ")){
+							cleanRequestChecked = cleanRequestChecked.replace("æ", "a");
+						}
+						if(cleanRequest.contains("o")){
+							cleanRequestChecked2 = cleanRequestChecked2.replace("o", "œ");
+						}
+						if(cleanRequest.contains("a")){
+							cleanRequestChecked2 = cleanRequestChecked2.replace("a", "æ");
+						}
+						
+						//MPL 30861 (The request includes more than one word) 03/10/2018 debut
+						String[] requests = new String[] {cleanRequest, cleanRequestChecked, cleanRequestChecked2, copyRequest};
+
+						reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
+						reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
+						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
+						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
+						reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(searchResult.getStatus()));
+						if (withNotes!=null && withNotes==true) {
+							addNotesToTerm(reducedThesaurusTerm);
+						}
+						reducedThesaurusTermList.add(reducedThesaurusTerm);
+						/*
+						String resultNoAccent = cleanResult.replace("'", " ");
+						String[] splitString = resultNoAccent.split(" ");
+						Boolean encontrado = false;
+						
+						for(String palabra : splitString) {
+							if(palabra.startsWith(cleanRequest.toLowerCase()) || palabra.startsWith(cleanRequestChecked.toLowerCase()) || palabra.startsWith(cleanRequestChecked2.toLowerCase()) || palabra.startsWith(copyRequest.toLowerCase())){
+								encontrado = true;
+							}
+						}
+						if(encontrado){
+							//JLSO Evolutions V5 E0 15/01/2018 fin
+						*/
+						/*
+						if(isMatched(cleanResult, requests)) {
+						//MPL 30861 (The request includes more than one word) 03/10/2018 fin
+							reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
+							reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
+							reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
+							reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
+							reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(searchResult.getStatus()));
+							if (withNotes!=null && withNotes==true) {
+								addNotesToTerm(reducedThesaurusTerm);
+							}
+							reducedThesaurusTermList.add(reducedThesaurusTerm);
+							//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+							/*
+							if(reducedThesaurusTermList.size() < limit){
+								if(shouldIncludeInList(reducedThesaurusTerm, languageId, leaves)){
+									reducedThesaurusTermList.add(reducedThesaurusTerm);
+								} 
+							}
+							 */
+						/*
+							//JLSO 29055 21/06/2018 début
+							if(reducedThesaurusTermList.size() < limit){
+								List<ConceptHierarchicalRelationship> parents = conceptHierarchicalRelationshipDAO.findParentsByChildId(reducedThesaurusTerm.getConceptId());
+								if(null != languageId && !languageId.isEmpty() && !languageId.equals("?")){
+									if(reducedThesaurusTerm.getLanguageId().toLowerCase().equals(languageId.replace("_", "-").toLowerCase())){
+										if(null != leaves && leaves == true && (null == parents || parents.size() == 0)){
+											reducedThesaurusTermList.add(reducedThesaurusTerm);
+										} else {
+											if (null == leaves || !leaves) {
+												reducedThesaurusTermList.add(reducedThesaurusTerm);
+											}
+										}
+									}
+								} else {
+									if(null != leaves && leaves == true && (null == parents || parents.size() == 0)){
+										reducedThesaurusTermList.add(reducedThesaurusTerm);
+									} else {
+										if(null == leaves || !leaves) {
+											reducedThesaurusTermList.add(reducedThesaurusTerm);
+										}
+									}
+								}
+							}
+							//JLSO 29055 21/06/2018 fin
+						 */
+						}
+					}
+				
+				Collections.sort(reducedThesaurusTermList, new Comparator<ReducedThesaurusTerm>() {
+								Collator frCollator = Collator.getInstance(Locale.FRENCH);
+					
+								public int compare(ReducedThesaurusTerm t1, ReducedThesaurusTerm t2) {
+									frCollator.setStrength(Collator.SECONDARY);
+									
+									//JLSO Evolutions V5 E0 15/01/2018 début
+									
+									String term1 = t1.getLexicalValue();
+									String term2 = t2.getLexicalValue();
+									
+									term1 = term1.replace(" ", "000");
+									term1 = term1.replace("œ", "oZZZ");
+									term1 = term1.replace("æ", "aZZZ");
+									term2 = term2.replace(" ", "000");
+									term2 = term2.replace("œ", "oZZZ");
+									term2 = term2.replace("æ", "aZZZ");
+									return frCollator.compare(term1, term2);
+									
+									//return frCollator.compare(t1.getLexicalValue().replace(" ", "000"), t2.getLexicalValue().replace(" ", "000"));
+									//return frCollator.compare(t1.getLexicalValue().replace(" ", "000").replace("œ", "oZZZ").replace("æ", "aZZZ"), t2.getLexicalValue().replace(" ", "000").replace("œ", "oZZZ").replace("æ", "aZZZ"));
+									
+									//JLSO Evolutions V5 E0 15/01/2018 fin
+								}
+				});
+				return reducedThesaurusTermList;
+			} catch (SolrServerException e) {
+				logger.error("Excepción en SOAPThesaurusTermServiceImpl.getTermsBeginWithSomeStringByThesaurus. Exception [" + e.toString()+ "]. ", e);
+				
+				throw new TechnicalException("Search exception", e);
+			} catch (Exception e) {
+				logger.error("Excepción en SOAPThesaurusTermServiceImpl.getTermsBeginWithSomeStringByThesaurus. Exception [" + e.toString()+ "]. ", e);
+				throw e;
+			}
+		} else {
+			throw new BusinessException("One or more parameters are empty",
+					"empty-parameters");
+		}
+	}
+
+	@Override
+	public List<ReducedThesaurusTerm> getStringBeginWithSomeString(String request, Boolean preferredTermOnly,
+			int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
+		return getStringBeginWithSomeStringByThesaurus(request, null,preferredTermOnly, startIndex, limit, status, withNotes);
+	}
+
+	@Override
+	public List<ReducedThesaurusTerm> getStringBeginWithSomeStringByThesaurus(String request, String thesaurusId,
+			Boolean preferredTermOnly, int startIndex, int limit, TermStatusEnum status, Boolean withNotes) {
+
+		String copyRequest = StringUtils.stripAccents(request);
+		
+		if (StringUtils.isNotEmpty(request) && limit != 0) {
+			try {
+				request = ClientUtils.escapeQueryChars(request);	
+				// AAM EVO 2017 début
+				String requestFormat = SolrField.LEXICALVALUE+":"+request + "*";
+				// old 
+				// String requestFormat = SolrField.LEXICALVALUE_STR+":"+request + "*";
+				// AAM EVO 2017 fin
 				List<ReducedThesaurusTerm> reducedThesaurusTermList = new ArrayList<ReducedThesaurusTerm>();
 				SortCriteria crit = new SortCriteria(SolrField.LEXICALVALUE, SolrConstants.ASCENDING);
 				Integer searchType = SearchEntityType.TERM;
@@ -179,39 +390,142 @@ public class SOAPThesaurusTermServiceImpl implements ISOAPThesaurusTermService {
 				if (status!=null) {
 					intStatus = status.getStatus();
 				}
-				SearchResultList searchResultList = searcherService.search(
+				//JLSO 29055 21/06/2018 début
+				/*SearchResultList searchResultList = searcherService.search(
 						requestFormat, searchType, thesaurusId, intStatus, null, null, null, crit,
-						startIndex, limit);
-				if (searchResultList != null) {
-					for (SearchResult searchResult : searchResultList) {
+						startIndex, 1000000000);*/
+				
+				//JLSO Evolutions V5 E0 15/01/2018 début
+				SearchResultList searchResultList2 = searcherService.search(
+						"*", searchType, thesaurusId, intStatus, null, null, null, crit,
+						startIndex, 1000000000);
+				//JLSO 29055 21/06/2018 fin
+				
+				String cleanRequest = StringUtils.stripAccents(request);
+				String cleanRequestChecked = cleanRequest;
+				String cleanRequestChecked2 = cleanRequest;
+				//JLSO Evolutions V5 E0 15/01/2018 fin
+				
+				if (searchResultList2 != null) {
+					for (SearchResult searchResult : searchResultList2) {
+						//JLSO Evolutions V5 E0 15/01/2018 début
 						ReducedThesaurusTerm reducedThesaurusTerm = new ReducedThesaurusTerm();
 						
-						reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
-						reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
-						reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
-						reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
-						reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(searchResult.getStatus()));
-						if (withNotes!=null && withNotes==true) {
-							addNotesToTerm(reducedThesaurusTerm);
+						String cleanResult = StringUtils.stripAccents(searchResult.getLexicalValue()).toLowerCase();
+						
+						// Check œ and æ
+						if(cleanRequest.contains("œ")){
+							cleanRequestChecked = cleanRequestChecked.replace("œ", "o");
 						}
-						reducedThesaurusTermList.add(reducedThesaurusTerm);
+						if(cleanRequest.contains("æ")){
+							cleanRequestChecked = cleanRequestChecked.replace("æ", "a");
+						}
+						if(cleanRequest.contains("o")){
+							cleanRequestChecked2 = cleanRequestChecked2.replace("o", "œ");
+						}
+						if(cleanRequest.contains("a")){
+							cleanRequestChecked2 = cleanRequestChecked2.replace("a", "æ");
+						}
+
+						//MPL 30861 (The request includes more than one word) 03/10/2018 debut
+						String[] requests = new String[] {cleanRequest, cleanRequestChecked, cleanRequestChecked2, copyRequest};
+						/*
+						if(cleanResult.startsWith(cleanRequest.toLowerCase()) || cleanResult.startsWith(cleanRequestChecked.toLowerCase()) || cleanResult.startsWith(cleanRequestChecked2.toLowerCase()) || cleanResult.startsWith(copyRequest.toLowerCase())){
+							//JLSO Evolutions V5 E0 15/01/2018 fin 
+						*/
+						if(isMatched(cleanResult, requests)) {
+							//MPL 30861 (The request includes more than one word) 03/10/2018 fin
+							reducedThesaurusTerm.setIdentifier(searchResult.getIdentifier());
+							reducedThesaurusTerm.setConceptId(searchResult.getConceptId());
+							reducedThesaurusTerm.setLexicalValue(searchResult.getLexicalValue());
+							reducedThesaurusTerm.setLanguageId(searchResult.getLanguages().get(0));
+							reducedThesaurusTerm.setStatus(TermStatusEnum.getStatusByCode(searchResult.getStatus()));
+							if (withNotes!=null && withNotes==true) {
+								addNotesToTerm(reducedThesaurusTerm);
+							}
+							//JLSO 29055 21/06/2018 début
+							if(reducedThesaurusTermList.size() < limit){
+								reducedThesaurusTermList.add(reducedThesaurusTerm);
+							}
+							//JLSO 29055 21/06/2018 fin
+						}
 					}
 				}
+						
 				Collections.sort(reducedThesaurusTermList, new Comparator<ReducedThesaurusTerm>() {
 								Collator frCollator = Collator.getInstance(Locale.FRENCH);
 					
 								public int compare(ReducedThesaurusTerm t1, ReducedThesaurusTerm t2) {
-									return frCollator.compare(t1.getLexicalValue(), t2.getLexicalValue());
+									frCollator.setStrength(Collator.SECONDARY);
+									
+									//JLSO Evolutions V5 E0 15/01/2018 début
+									
+									String term1 = t1.getLexicalValue();
+									String term2 = t2.getLexicalValue();
+									
+									term1 = term1.replace(" ", "000");
+									term1 = term1.replace("œ", "oZZZ");
+									term1 = term1.replace("æ", "aZZZ");
+									term2 = term2.replace(" ", "000");
+									term2 = term2.replace("œ", "oZZZ");
+									term2 = term2.replace("æ", "aZZZ");
+									return frCollator.compare(term1, term2);
+									
+									//return frCollator.compare(t1.getLexicalValue().replace(" ", "000"), t2.getLexicalValue().replace(" ", "000"));
+									//return frCollator.compare(t1.getLexicalValue().replace(" ", "000").replace("œ", "oZZZ").replace("æ", "aZZZ"), t2.getLexicalValue().replace(" ", "000").replace("œ", "oZZZ").replace("æ", "aZZZ"));
+									
+									//JLSO Evolutions V5 E0 15/01/2018 fin
 								}
 				});
+				/*List<String> listReturn = new ArrayList<String>();
+				for(ReducedThesaurusTerm element : reducedThesaurusTermList){
+					listReturn.add(element.getLexicalValue());
+				}*/
 				return reducedThesaurusTermList;
 			} catch (SolrServerException e) {
+				logger.error("Excepción en SOAPThesaurusTermServiceImpl.getTermsBeginWithSomeStringByThesaurus. Exception [" + e.toString()+ "]. ", e);
+				
 				throw new TechnicalException("Search exception", e);
+			} catch (Exception e) {
+				logger.error("Excepción en SOAPThesaurusTermServiceImpl.getTermsBeginWithSomeStringByThesaurus. Exception [" + e.toString()+ "]. ", e);
+				throw e;
 			}
 		} else {
 			throw new BusinessException("One or more parameters are empty",
 					"empty-parameters");
 		}
+		//return getTermsBeginWithSomeString(request, preferredTermOnly, startIndex, limit, status, withNotes);
 	}
 
+	//MPL 30861 (The request includes more than one word) 03/10/2018 debut
+	private boolean isMatched(String resultDAO, String[] requests) {
+		char[] cleanResultChars = resultDAO.toCharArray();
+		for(int i = 0; i < requests.length; i++) {
+			if(resultDAO.indexOf(requests[i]) != -1 
+					&& (resultDAO.indexOf(requests[i]) == 0 
+					|| cleanResultChars[resultDAO.indexOf(requests[i]) - 1] == ' ')){
+				return true;
+			}
+		}
+		return false;
+	}
+	//MPL 30861 (The request includes more than one word) 03/10/2018 fin
+	
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+	private boolean shouldIncludeInList(ReducedThesaurusTerm reducedThesaurusTerm, String languageId, Boolean leaves) {
+		if(null != languageId && !languageId.isEmpty() && !languageId.equals("?")){
+			if(reducedThesaurusTerm.getLanguageId().toLowerCase().equals(languageId.replace("_", "-").toLowerCase())){
+				return leaves == null || !leaves || (leaves != null && leaves == true && (isLeaf(reducedThesaurusTerm)));
+			} 
+		} else {
+			return leaves == null || !leaves || (leaves != null && leaves == true && (isLeaf(reducedThesaurusTerm)));
+		}
+		return false;
+	}
+	
+	private boolean isLeaf(ReducedThesaurusTerm reducedThesaurusTerm) {
+		List<ConceptHierarchicalRelationship> children = conceptHierarchicalRelationshipDAO.findChildrenByParentId(reducedThesaurusTerm.getConceptId());
+		return children == null || children.isEmpty();
+	}
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 fin
 }

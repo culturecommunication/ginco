@@ -59,6 +59,15 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	private Integer status;
 	private String notation;
 	private Boolean topConcept;
+	
+	/*** AAM EVO 2017 Evolutions v5  début ***/
+	private String lexicalValue;
+	/*** AAM EVO 2017 Evolutions v5  fin ***/
+	
+	/*** MPL 30965 29/10/2018 debut ***/
+	private String languageId;
+	/*** MPL 30965 29/10/2018 fin ***/
+	
 
 	@XmlTransient
 	private Thesaurus thesaurus;
@@ -72,10 +81,35 @@ public class ThesaurusConcept implements Serializable, IAuditableBean {
 	private Set<AssociativeRelationship> associativeRelationshipRight;
 	@XmlTransient
 	private Set<ThesaurusArray> conceptArrays;
+	
+	
+	/*** AAM EVO 2017 Evolutions v5  début ***/
+	public String getLexicalValue() {
+		return lexicalValue;
+	}
+
+	public void setLexicalValue(String lexicalvalue) {
+		this.lexicalValue = lexicalvalue;
+	}
+	/*** AAM EVO 2017 Evolutions v5  fin ***/
+	
+
+	/*** MPL 30965 29/10/2018 debut ***/
+	public String getLanguageId() {
+		return this.languageId;
+	}
+
+	public void setLanguageId(String languageId) {
+		this.languageId = languageId;
+	}
+	/*** MPL 30965 29/10/2018 fin ***/
+	
 
 	public String getIdentifier() {
 		return identifier;
 	}
+
+	
 
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
