@@ -19,9 +19,9 @@
         <org.springsecurity.version>3.1.3.RELEASE</org.springsecurity.version>
 
         <org.apache.cxf.version>2.7.2</org.apache.cxf.version>
-        <org.commons.collections.version>3.2.1</org.commons.collections.version>
-        <org.hibernate.version>5.4.24.Final</org.hibernate.version>
 
+        <org.commons.collections.version>3.2.2</org.commons.collections.version>
+        <org.hibernate.version>5.4.24.Final</org.hibernate.version>
         <org.codehaus.jackson.version>1.9.11</org.codehaus.jackson.version>
         <junit.version>4.13.1</junit.version>
         <junit.addons.version>1.4</junit.addons.version>
