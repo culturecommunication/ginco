@@ -50,6 +50,49 @@ public class ReducedThesaurusConcept {
 	private List<Note> notes;
 	private ConceptStatusEnum status;
 	
+	
+	/*** AAM EVO 2017 Evolutions v5  début ***/
+	
+	private String lexicalValue;
+	
+	private String notation;
+	
+	/*** AAM EVO 2017 Evolutions v5  fin ***/
+	
+	/*** MPL 30965 29/10/2018 debut ***/
+	private String languageId;
+	/*** MPL 30965 29/10/2018 fin ***/
+	
+	/*** AAM EVO 2017 Evolutions v5  début ***/
+	
+	
+	public String getNotation() {
+		return notation;
+	}
+
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
+	
+	public String getLexicalValue() {
+		return lexicalValue;
+	}
+
+	public void setLexicalValue(String lexicalvalue) {
+		this.lexicalValue = lexicalvalue;
+	}
+	/*** AAM EVO 2017 Evolutions v5  fin ***/
+	
+	/*** MPL 30965 29/10/2018 debut ***/
+	public String getLanguageId() {
+		return this.languageId;
+	}
+
+	public void setLanguageId(String languageId) {
+		this.languageId = languageId;
+	}
+	/*** MPL 30965 29/10/2018 fin ***/
+	
 	private List<ReducedThesaurusConcept> associates;
 	
 	private List<ReducedThesaurusConcept> parents;
@@ -67,7 +110,18 @@ public class ReducedThesaurusConcept {
 	public static ReducedThesaurusConcept getReducedThesaurusConcept(ThesaurusConcept concept) {
 		ReducedThesaurusConcept reducedConcept = new ReducedThesaurusConcept();
 		reducedConcept.setIdentifier(concept.getIdentifier());
-		reducedConcept.setStatus(ConceptStatusEnum.getStatusByCode(concept.getStatus()));
+		if (concept != null && concept.getStatus() != null) {
+			reducedConcept.setStatus(ConceptStatusEnum.getStatusByCode(concept.getStatus()));
+		}
+		reducedConcept.setLexicalValue(concept.getLexicalValue());
+		reducedConcept.setNotation(concept.getNotation());
+		//MPL 30965 29/10/2018 debut
+		reducedConcept.setLanguageId(concept.getLanguageId());
+		//MPL 30965 29/10/2018 fin
+		//FIXME TODO
+	//	reducedConcept.setLexicalValue("lexicalValue  aaaa");
+	//	reducedConcept.setNotation("notation bbbbbb");
+
 		return reducedConcept;
 	}
 	public List<Note> getNotes() {

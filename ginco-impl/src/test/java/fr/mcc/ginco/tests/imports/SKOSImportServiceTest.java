@@ -37,6 +37,9 @@ package fr.mcc.ginco.tests.imports;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Set;
 
@@ -98,7 +101,7 @@ public class SKOSImportServiceTest {
 	}
 
     @Test
-    public void testImportSKOSFile() throws IOException {
+    public void testImportSKOSFile() throws URISyntaxException, IOException  {
     	Thesaurus returnedThesaurus = new Thesaurus();
     	returnedThesaurus.setIdentifier("http://data.culture.fr/thesaurus/resource/ark:/67717/T69");
     	Mockito.when(thesaurusDAO.getById(Mockito.anyString())).thenReturn(null);
@@ -107,13 +110,18 @@ public class SKOSImportServiceTest {
 
       String fileName = "concept_collections_temp.rdf";
       String tempDir = System.getProperty("java.io.tmpdir");
-      InputStream is = ConceptBuilderTest.class
-				.getResourceAsStream("/imports/concept_collections.rdf");
-      String fileContent = IOUtils.toString(is);
 
-      Map<Thesaurus, Set<Alignment>> res = skosImportService.importSKOSFile(fileContent, fileName, new File(tempDir));
-      Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69", res.keySet().iterator().next().getIdentifier());
-    }
+		String fileContent = new String(
+				Files.readAllBytes(
+						Paths.get(this.getClass().getResource("/imports/concept_collections.rdf").toURI())
+				)
+		);
+
+
+		Map<Thesaurus, Set<Alignment>> res = skosImportService.importSKOSFile(fileContent, fileName, new File(tempDir));
+		Assert.assertEquals("http://data.culture.fr/thesaurus/resource/ark:/67717/T69", res.keySet().iterator().next().getIdentifier());
+
+	}
 
     @Test(expected=BusinessException.class)
     public void testImportSKOSFileExistingThesaurus() throws IOException {

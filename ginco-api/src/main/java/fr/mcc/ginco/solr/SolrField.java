@@ -43,6 +43,9 @@ public final class SolrField {
 	private SolrField() {
 	}
 
+	public static final Integer MAX_SIZE = 32766;
+	public static final Integer CUTOFF_SIZE = 8192;
+
 	public static final String LEXICALVALUE = "lexicalValue";
 	public static final String LEXICALVALUE_STR = "lexicalValue_str";
 	public static final String IDENTIFIER = "identifier";

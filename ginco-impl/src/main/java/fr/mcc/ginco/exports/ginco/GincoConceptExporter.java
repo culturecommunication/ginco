@@ -112,6 +112,31 @@ public class GincoConceptExporter {
 	}
 
 	/**
+	 * This method gets all the parent relationships of a concept in a JaxbList
+	 * object (use case of exporting relationship hierarchy of branch concept)
+	 *
+	 * @param thesaurusConcept
+	 * @return JaxbList<ConceptHierarchicalRelationship>
+	 *         parentConceptHierarchicalRelationship : A JaxbList that contains
+	 *         the hierarchical relationship objects
+	 */
+	public JaxbList<ConceptHierarchicalRelationship> getExportHierarchicalConcepts_v2(
+			ThesaurusConcept thesaurusConcept) {
+		JaxbList<ConceptHierarchicalRelationship> parentConceptHierarchicalRelationship = new JaxbList<ConceptHierarchicalRelationship>();
+		//Obtention d'une liste de concepts parents à partir de l'id du concept enfant
+		List<ConceptHierarchicalRelationship> parents = conceptHierarchicalRelationshipDAO.findParentsByChildId(thesaurusConcept.getIdentifier());
+
+		for (ConceptHierarchicalRelationship parent : parents) {
+			ConceptHierarchicalRelationship.Id relationshipId = new ConceptHierarchicalRelationship.Id();
+			relationshipId.setChildconceptid(thesaurusConcept.getIdentifier());
+			relationshipId.setParentconceptid(parent.getIdentifier().getParentconceptid());
+			parentConceptHierarchicalRelationship.getList().add(
+					conceptHierarchicalRelationshipDAO.getById(relationshipId));
+		}
+		return parentConceptHierarchicalRelationship;
+	}
+
+	/**
 	 * This method gets all the associative relations for a concept in a
 	 * JaxbList object
 	 * 

@@ -100,6 +100,8 @@ public class ConceptSolrConverterTest {
 
 		ThesaurusTerm fakeFRPrefTerm = new ThesaurusTerm();
 		fakeFRPrefTerm.setLanguage(langFR);
+		fakeFRPrefTerm.setLexicalValue("fakePrefLabel");
+
 
 		ThesaurusTerm fakeENPrefTerm = new ThesaurusTerm();
 		fakeENPrefTerm.setLanguage(langEN);
@@ -168,4 +170,36 @@ public class ConceptSolrConverterTest {
 		Assert.assertTrue(doc
 				.getFieldValues(SolrField.LANGUAGE).contains(fakeENPrefTerm.getLanguage().getId()));
 	}
+
+	@Test
+	public void testConvertSolrConceptWithPrefTermNull() throws SolrServerException, IOException {
+
+		Thesaurus fakeThesaurus = new Thesaurus();
+		fakeThesaurus.setIdentifier("http://th1");
+		fakeThesaurus.setTitle("Fake thesaurus");
+
+		Language langFR = new Language();
+		langFR.setId("fr-FR");
+
+		ThesaurusConcept fakeThesaurusConcept = new ThesaurusConcept();
+		fakeThesaurusConcept.setIdentifier("http://c1");
+		fakeThesaurusConcept.setThesaurus(fakeThesaurus);
+		fakeThesaurusConcept.setCreated(DateUtil.nowDate());
+		fakeThesaurusConcept.setModified(DateUtil.nowDate());
+		fakeThesaurusConcept.setStatus(1);
+
+		ThesaurusTerm fakeFRPrefTerm = new ThesaurusTerm();
+		fakeFRPrefTerm.setLanguage(langFR);
+		fakeFRPrefTerm.setLexicalValue(null);
+
+		Mockito.when(
+				thesaurusConceptService.getConceptPreferredTerm(fakeThesaurusConcept.getIdentifier())).thenReturn(fakeFRPrefTerm);
+
+		SolrInputDocument doc = conceptSolrConverter.convertSolrConcept(fakeThesaurusConcept);
+
+		Assert.assertNotNull(doc);
+
+		Assert.assertNull( doc.getFieldValue(SolrField.LEXICALVALUE));
+	}
+
 }

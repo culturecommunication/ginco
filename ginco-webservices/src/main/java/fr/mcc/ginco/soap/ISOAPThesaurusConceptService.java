@@ -89,13 +89,14 @@ public interface ISOAPThesaurusConceptService {
 	int getStatusByConceptId(@WebParam(name = "conceptId") String conceptId);
 
 	/**
+	 * JLSO 29055 21/06/2018 début
 	 * Returns children of a concept
 	 *
 	 * @param conceptId identifier of a concept
 	 * @return list of objects
 	 */
-	List<String> getChildrenByConceptId(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
-	
+	List<ReducedThesaurusConcept> getChildrenByConceptId(@WebParam(name = "conceptId") String conceptId, @WebParam(name="status") ConceptStatusEnum status);
+	//JLSO 29055 21/06/2018 fin
 	/**
 	 * Returns children of a concept
 	 *
@@ -155,14 +156,15 @@ public interface ISOAPThesaurusConceptService {
 
 
 	/**
+	 * JLSO 29055 21/06/2018 début
 	 * Returns top concepts for a thesaurus
 	 *
 	 * @param thesaurusId identifier of a thesaurus
 	 * @param status of concepts
 	 * @return list of top concepts
 	 */
-	List<String> getTopConceptsByThesaurusId(@WebParam(name = "thesaurusId") String thesaurusId, @WebParam(name="status") ConceptStatusEnum status);
-	
+	List<ReducedThesaurusConcept> getTopConceptsByThesaurusId(@WebParam(name = "thesaurusId") String thesaurusId, @WebParam(name="status") ConceptStatusEnum status);
+	//JLSO 29055 21/06/2018 fin
 	/**
 	 * Returns top concepts for a thesaurus
 	 *

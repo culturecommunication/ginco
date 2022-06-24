@@ -27,6 +27,7 @@ public class App {
 		Option skosExport = OptionBuilder.withArgName("thesaurusid> <outputFile").hasArgs(2).withValueSeparator(' ').withDescription("Export a thesaurus in skos format").create("e");
 		Option skosImport = OptionBuilder.withArgName("inputFile").hasArgs().withDescription("Import a thesaurus in skos format").create("i");
 		Option revisionsExport = OptionBuilder.withArgName("thesaurusid> <outputFile> <[timestamp]").hasArgs(3).withValueSeparator(' ').withDescription("Export (Mistral) revisions of a thesaurus").create("r");
+		Option reindex = OptionBuilder.hasArgs(0).withDescription("Reindexation").create("x");
 		Options options = new Options();
 
 		OptionGroup group = new OptionGroup();
@@ -34,6 +35,7 @@ public class App {
 		group.addOption(skosExport);
 		group.addOption(skosImport);
 		group.addOption(revisionsExport);
+		group.addOption(reindex);
 		group.setRequired(true);
 		options.addOptionGroup(group);
 		return options;
@@ -56,6 +58,12 @@ public class App {
 		log.info("Exporting " + thesaurusId + " to " + outputFile);
 		CliExporter exporter = (CliExporter) ctx.getBean("cliExporter");
 		exporter.exportRevisions(thesaurusId, outputFile, timestamp);
+	}
+
+	private static void reindex() {
+		log.info("Reindexing");
+		CliIndexer indexer = (CliIndexer) ctx.getBean("cliIndexer");
+		indexer.reindex();
 	}
 
 	public static void main(String[] args) {
@@ -81,6 +89,8 @@ public class App {
 
 			} else if (cmd.hasOption("i")) {
 				importSkos(cmd.getOptionValues("i")[0]);
+			} else if (cmd.hasOption("x")) {
+				reindex();
 			}
 
 		} catch (ParseException exp) {

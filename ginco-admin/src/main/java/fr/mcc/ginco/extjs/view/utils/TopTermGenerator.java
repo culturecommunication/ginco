@@ -95,8 +95,22 @@ public class TopTermGenerator {
 		}
 		List<IThesaurusListNode> topConcepts = new ArrayList<IThesaurusListNode>();
 		Set<String> conceptsWithChildren = thesaurusConceptService.getConceptWithChildrenIdentifers(thesaurusId);
+		
+		//MPL 0030210 28/08/2018 debut
+		ThesaurusConcept previousTopTerm = new ThesaurusConcept();
+		//MPL 0030210 28/08/2018 fin
+		
 		for (ThesaurusConcept topTerm : topTerms) {
 			ThesaurusListBasicNode topTermNode = thesaurusListNodeFactory.getListBasicNode();
+
+			//MPL 0030210 28/08/2018 debut
+			if(isPreviouslyChecked(previousTopTerm, topTerm)) {
+				continue;
+			} else {
+				previousTopTerm = topTerm;
+			}
+			//MPL 0030210 28/08/2018 fin
+			
 			topTermNode.setTitle(thesaurusConceptService
 					.getConceptLabel(topTerm.getIdentifier()));
 			topTermNode
@@ -124,4 +138,11 @@ public class TopTermGenerator {
 		}
 		return topConcepts;
 	}
+
+	//MPL 0030210 28/08/2018 debut
+	private boolean isPreviouslyChecked(ThesaurusConcept previous, ThesaurusConcept actual) {
+		return previous.getIdentifier() != null && !previous.getIdentifier().isEmpty()
+				&& previous.getIdentifier().equals(actual.getIdentifier());
+	}
+	//MPL 0030210 28/08/2018 fin
 }

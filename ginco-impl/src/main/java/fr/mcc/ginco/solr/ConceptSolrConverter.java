@@ -57,6 +57,8 @@ public class ConceptSolrConverter {
 
 	private static Logger logger = LoggerFactory.getLogger(ConceptSolrConverter.class);
 
+
+
 	@Inject
 	@Named("thesaurusConceptService")
 	private IThesaurusConceptService thesaurusConceptService;
@@ -97,11 +99,23 @@ public class ConceptSolrConverter {
 			logger.warn(ex.getMessage());
 			return null;
 		}
-		doc.addField(SolrField.LEXICALVALUE, prefLabel);
+		if (prefLabel != null) {
+			if (prefLabel.getBytes().length <= SolrField.MAX_SIZE) {
+				doc.addField(SolrField.LEXICALVALUE, prefLabel);
+			} else {
+				doc.addField(SolrField.LEXICALVALUE, prefLabel.substring(0, SolrField.CUTOFF_SIZE -1));
+			}
+		}
+
+
 		List<Note> notes = noteService.getConceptNotePaginatedList(
 				thesaurusConcept.getIdentifier(), 0, 0);
 		for (Note note : notes) {
-			doc.addField(SolrField.NOTES, note.getLexicalValue());
+			if (note.getLexicalValue().getBytes().length <= SolrField.MAX_SIZE) {
+				doc.addField(SolrField.NOTES, note.getLexicalValue());
+			} else {
+				doc.addField(SolrField.NOTES, note.getLexicalValue().substring(0, SolrField.CUTOFF_SIZE -1));
+			}
 		}
 		return doc;
 	}
