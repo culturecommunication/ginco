@@ -34,6 +34,9 @@
  */
 package fr.mcc.ginco.dao.hibernate;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import fr.mcc.ginco.beans.ConceptHierarchicalRelationship;
@@ -51,4 +54,20 @@ public class ConceptHierarchicalRelationshipDAO extends
 	public ConceptHierarchicalRelationshipDAO() {
 		super(ConceptHierarchicalRelationship.class);
 	}
+
+	@Override
+	public List<ConceptHierarchicalRelationship> findParentsByChildId(String id) {
+		Query query = getCurrentSession().createQuery("SELECT chr FROM ConceptHierarchicalRelationship chr  WHERE chr.id.childconceptid = '"+id+"'");
+		//Query query = getCurrentSession().createSQLQuery("SELECT * FROM hierarchical_relationship WHERE childconceptid = '"+id+"'");
+		return query.list();
+	}
+
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 debut
+	@Override
+	public List<ConceptHierarchicalRelationship> findChildrenByParentId(String parentConceptId) {
+		Query query = getCurrentSession().createQuery("SELECT chr FROM ConceptHierarchicalRelationship chr  WHERE chr.id.parentconceptid = '"+parentConceptId+"'");
+		//Query query = getCurrentSession().createSQLQuery("SELECT * FROM hierarchical_relationship WHERE parentconceptid = '"+parentConceptId+"'");
+		return query.list();
+	}
+	//MPL 30862 (Leaves are terms without children) 10/10/2018 fin
 }

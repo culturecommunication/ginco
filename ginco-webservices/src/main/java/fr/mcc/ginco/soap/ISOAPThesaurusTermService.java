@@ -115,7 +115,9 @@ public interface ISOAPThesaurusTermService {
 			@WebParam(name = "startIndex") int startIndex,
 			@WebParam(name = "limit") int limit,
 			@WebParam(name = "status") TermStatusEnum status,
-			@WebParam(name = "withNotes") Boolean withNotes);
+			@WebParam(name = "withNotes") Boolean withNotes,
+			@WebParam(name = "languageId") String languageId,
+			@WebParam(name = "leaves") Boolean leaves);
 			
 	/**
 	 * This service returns list of reduced terms that begin with input string
@@ -135,7 +137,49 @@ public interface ISOAPThesaurusTermService {
 			@WebParam(name = "startIndex") int startIndex,
 			@WebParam(name = "limit") int limit,
 			@WebParam(name = "status") TermStatusEnum status,
+			@WebParam(name = "withNotes") Boolean withNotes,
+			@WebParam(name = "languageId") String languageId,
+			@WebParam(name = "leaves") Boolean leaves);
+	
+	
+	/**
+	 * This service returns list of reduced terms that begin with input string
+	 * 
+	 * @param beginning string,
+	 * @param start index of search,
+	 * @param limit of result rows,
+	 * 
+	 * @return list of reduced terms
+	 */
+
+	List<ReducedThesaurusTerm> getStringBeginWithSomeString(
+			@WebParam(name = "request") String request,
+			@WebParam(name = "preferredTermOnly") Boolean preferredTermOnly,
+			@WebParam(name = "startIndex") int startIndex,
+			@WebParam(name = "limit") int limit,
+			@WebParam(name = "status") TermStatusEnum status,
 			@WebParam(name = "withNotes") Boolean withNotes);
+			
+	/**
+	 * This service returns list of reduced terms that begin with input string
+	 * 
+	 * @param beginning string,
+	 * @param return only preferred terms
+	 * @param start index of search,
+	 * @param limit of result rows,
+	 * 
+	 * @return list of reduced terms
+	 */
+
+	List<ReducedThesaurusTerm> getStringBeginWithSomeStringByThesaurus(
+			@WebParam(name = "request") String request,
+			@WebParam(name = "thesaurusId") String thesaurusId,
+			@WebParam(name = "preferredTermOnly") Boolean preferredTermOnly,
+			@WebParam(name = "startIndex") int startIndex,
+			@WebParam(name = "limit") int limit,
+			@WebParam(name = "status") TermStatusEnum status,
+			@WebParam(name = "withNotes") Boolean withNotes);
+
 
 
 }

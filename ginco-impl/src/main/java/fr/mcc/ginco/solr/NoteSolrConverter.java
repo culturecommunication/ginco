@@ -71,8 +71,11 @@ public class NoteSolrConverter {
 		}
 
 		doc.addField(SolrField.IDENTIFIER, thesaurusNote.getIdentifier());
-
-		doc.addField(SolrField.LEXICALVALUE, thesaurusNote.getLexicalValue());
+		if (thesaurusNote.getLexicalValue().getBytes().length <= SolrField.MAX_SIZE) {
+			doc.addField(SolrField.LEXICALVALUE, thesaurusNote.getLexicalValue());
+		} else {
+			doc.addField(SolrField.LEXICALVALUE, thesaurusNote.getLexicalValue().substring(0, SolrField.CUTOFF_SIZE -1));
+		}
 		doc.addField(SolrField.TYPE, Note.class.getSimpleName());
 
 		String noteTypeCode = thesaurusNote.getNoteType().getCode();

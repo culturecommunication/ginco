@@ -82,6 +82,8 @@ public class ComplexConceptSolrConverterTest {
 		fakeComplexConcept.setModified(DateUtil.nowDate());
 		fakeComplexConcept.setStatus(TermStatusEnum.VALIDATED.getStatus());
 		fakeComplexConcept.setLanguage(langFR);
+		fakeComplexConcept.setLexicalValue("fakeComplexConceptLexicalValue");
+
 
 		SolrInputDocument doc = complexConceptSolrConverter.convertSolrComplexConcept(fakeComplexConcept);
 

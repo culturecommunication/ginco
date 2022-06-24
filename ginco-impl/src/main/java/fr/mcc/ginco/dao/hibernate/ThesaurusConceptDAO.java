@@ -41,6 +41,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
@@ -160,25 +161,37 @@ public class ThesaurusConceptDAO extends
 
 	private List<ThesaurusConcept> getConcepts(String conceptId, String thesaurusId,
 			Boolean searchOrphans, int maxResults,String like, ConceptStatusEnum status) {
-		
+
 		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
+
+		//JLSO 29055 21/06/2018 début
+		//override previous criteria
+		criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
+				.add(Restrictions.isNotNull("tt.concept"))
+				.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
+				
+				criteria.setProjection(
+						Projections
+								.projectionList()
+								.add(Projections.property("tc.thesaurus").as("thesaurus"))
+								.add(Projections.property("tt.lexicalValue").as("lexicalValue"))
+								//MPL 30965 29/10/2018 debut
+								.add(Projections.property("tt.language.id").as("languageId"))
+								//MPL 30965 29/10/2018 fin
+								.add(Projections.property("tc.notation").as("notation"))
+								.add(Projections.property("tc.status").as("status"))
+								//JGJ 31989 11/01/2019 debut
+								.add(Projections.property("tc.created").as("created"))
+								.add(Projections.property("tc.modified").as("modified"))
+								//JGJ 31989 11/01/2019 fin
+								.add(Projections.property("tc.identifier").as(
+										"identifier"))).setResultTransformer(
+						Transformers.aliasToBean(ThesaurusConcept.class));
 		if(null != like){
-			//override previous criteria
-			criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
-					.add(Restrictions.isNotNull("tt.concept"))
-					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
-					
-					criteria.setProjection(
-							Projections
-									.projectionList()
-									.add(Projections.property("tt.lexicalValue"))
-									.add(Projections.property("tc.identifier").as(
-											"identifier"))).setResultTransformer(
-							Transformers.aliasToBean(ThesaurusConcept.class));
 			conceptNameIsLike(criteria,like);
 		}
-		
+		//JLSO 29055 21/06/2018 fin
 		if ((conceptId != null && !conceptId.isEmpty())
 				&& (thesaurusId != null && !thesaurusId.isEmpty())) {
 			selectRoot(criteria, thesaurusId, conceptId);
@@ -407,6 +420,11 @@ public class ThesaurusConceptDAO extends
 					"empty-thesaurus");
 		}
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,topConcept,like, status);
+		
+		//MPL 0030210 28/08/2018 debut
+		//crit.addOrder(Order.asc("tt.concept.identifier"));
+		//MPL 0030210 28/08/2018 fin
+		
 		if (maxResults > 0) {
 			crit.setMaxResults(maxResults);
 		}
@@ -420,30 +438,27 @@ public class ThesaurusConceptDAO extends
 			throw new BusinessException("Object thesaurus can't be null !",
 					"empty-thesaurus");
 		}
+		//JLSO 0030087 04/07/2018 debut
 		Criteria crit = getCriteriaByThesaurusAndTopConcept(thesaurus,
-				topConcept,null,null).setProjection(Projections.rowCount());
+				topConcept,null,null).setProjection(Projections.countDistinct("identifier"));
+		//JLSO 0030087 04/07/2018 fin
 		return (Long) crit.list().get(0);
 	}
 
 	private Criteria getCriteriaByThesaurusAndTopConcept(Thesaurus thesaurus,
 	                                                     boolean topConcept,String like, ConceptStatusEnum status) {
-		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");
 		
+		Criteria criteria = getCurrentSession().createCriteria(ThesaurusConcept.class, "tc");	
+
+				
 		if(null != like){
-			criteria = getCurrentSession().createCriteria(ThesaurusTerm.class, "tt")
-					.add(Restrictions.isNotNull("tt.concept"))
-					.createCriteria("concept", "tc", JoinType.RIGHT_OUTER_JOIN);
-					
-					criteria.setProjection(
-							Projections
-									.projectionList()
-									.add(Projections.property("tt.lexicalValue"))
-									.add(Projections.property("tc.identifier").as(
-											"identifier"))).setResultTransformer(
-							Transformers.aliasToBean(ThesaurusConcept.class));
 			conceptNameIsLike(criteria,like);
 		}
+					
+		//JLSO 0030087 04/07/2018 fin
+		//conceptNameIsLike(criteria,like);
 		
+		//JLSO 29055 21/06/2018 fin
 		selectThesaurus(criteria, thesaurus.getIdentifier());
 		selectOrphans(criteria, !topConcept);
 		selectNoParents(criteria);
