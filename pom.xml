@@ -20,7 +20,7 @@
 
         <org.apache.cxf.version>2.7.2</org.apache.cxf.version>
         <org.commons.collections.version>3.2.1</org.commons.collections.version>
-        <org.hibernate.version>4.1.10.Final</org.hibernate.version>
+        <org.hibernate.version>5.4.24.Final</org.hibernate.version>
 
         <org.codehaus.jackson.version>1.9.11</org.codehaus.jackson.version>
         <junit.version>4.8.2</junit.version>
