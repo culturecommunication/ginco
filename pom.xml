@@ -16,7 +16,7 @@
         <!-- dependencies versions -->
 
         <org.springframework.version>5.2.22.RELEASE</org.springframework.version>
-        <org.springsecurity.version>3.1.3.RELEASE</org.springsecurity.version>
+        <org.springsecurity.version>5.2.10.RELEASE</org.springsecurity.version>
 
         <org.apache.cxf.version>2.7.2</org.apache.cxf.version>
 
