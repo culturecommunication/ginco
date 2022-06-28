@@ -649,5 +649,10 @@
             <name>Smile Github repository</name>
             <url>http://smile-sa.github.com/maven-repository/releases-addon</url>
         </repository>
+        <repository>
+            <id>repo-maven-repository</id>
+            <name>Repo Maven Repository</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
     </repositories>
 </project>
