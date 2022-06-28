@@ -17,11 +17,11 @@
         <org.springframework.version>3.2.16.RELEASE</org.springframework.version>
         <org.springsecurity.version>3.1.3.RELEASE</org.springsecurity.version>
         <org.apache.cxf.version>2.7.2</org.apache.cxf.version>
-        <org.commons.collections.version>3.2.1</org.commons.collections.version>
+        <org.commons.collections.version>3.2.2</org.commons.collections.version>
         <org.hibernate.version>4.1.10.Final</org.hibernate.version>
 
         <org.codehaus.jackson.version>1.9.11</org.codehaus.jackson.version>
-        <junit.version>4.8.2</junit.version>
+        <junit.version>4.13.1</junit.version>
         <junit.addons.version>1.4</junit.addons.version>
         <mockito.version>1.9.5</mockito.version>
         <dbunit.version>2.4.8</dbunit.version>
@@ -29,7 +29,7 @@
         <h2database.version>1.3.168</h2database.version>
         <dbcp.version>6.0.29</dbcp.version>
         <javax.inject.version>1</javax.inject.version>
-        <logback.version>1.0.9</logback.version>
+        <logback.version>1.2.9</logback.version>
         <org.slf4j.version>1.6.6</org.slf4j.version>
         <aspectj.version>1.7.1</aspectj.version>
         <org.apache.cxf.common.utils.version>2.5.9</org.apache.cxf.common.utils.version>
@@ -124,8 +124,8 @@
         <url>scm:git:https://github.com/culturecommunication/ginco.git</url>
         <connection>scm:git:git://github.com/culturecommunication/ginco.git</connection>
         <developerConnection>scm:git:git@github.com:culturecommunication/ginco.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <ciManagement>
         <system>continuum</system>
@@ -434,11 +434,11 @@
                 <artifactId>solr-solrj</artifactId>
                 <version>${org.apache.solr}</version>
             </dependency>
-        	 <dependency>
-				<groupId>org.owasp</groupId>
-				<artifactId>csrfguard</artifactId>
-				<version>3.0.0</version>
-			</dependency>
+            <dependency>
+                <groupId>org.owasp</groupId>
+                <artifactId>csrfguard</artifactId>
+                <version>4.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
@@ -459,7 +459,7 @@
             </resource>
         </resources>
 
-           <pluginManagement>
+        <pluginManagement>
             <plugins>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -503,106 +503,106 @@
         <!-- Site Documentation
         inhereted by all sub mobule-->
         <plugins>
-	        <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-checkstyle-plugin</artifactId>
-	            <version>${checkstyle.plugin.version}</version>
-	            <dependencies>
-	                <dependency>
-	                    <groupId>fr.smile.mcc.ginco</groupId>
-	                    <artifactId>ginco-quality-tool-conf</artifactId>
-	                    <version>${project.version}</version>
-	                </dependency>
-	            </dependencies>
-	        </plugin>
-	        <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-pmd-plugin</artifactId>
-	            <version>${pmd.plugin.version}</version>
-	            <dependencies>
-	                <dependency>
-	                    <groupId>fr.smile.mcc.ginco</groupId>
-	                    <artifactId>ginco-quality-tool-conf</artifactId>
-	                    <version>${project.version}</version>
-	                </dependency>
-	            </dependencies>
-	        </plugin>
-	        <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-site-plugin</artifactId>
-	            <version>${maven.site.plugin.version}</version>
-	            <configuration>
-	                <skipDeploy>true</skipDeploy>
-	                <reportPlugins>
-	                    <plugin>
-	                        <groupId>org.apache.maven.plugins</groupId>
-	                        <artifactId>maven-project-info-reports-plugin</artifactId>
-	                        <version>${maven.info.report.plugin.version}</version>
-	                        <reportSets>
-	                            <reportSet>
-	                                <reports>
-	                                    <report>index</report>
-	                                </reports>
-	                            </reportSet>
-	                        </reportSets>
-	                    </plugin>
-	                    <plugin>
-	                        <groupId>org.apache.maven.plugins</groupId>
-	                        <artifactId>maven-jxr-plugin</artifactId>
-	                        <version>${maven.jxr.plugin.version}</version>
-	                    </plugin>
-	                    <plugin>
-	                        <groupId>org.apache.maven.plugins</groupId>
-	                        <artifactId>maven-pmd-plugin</artifactId>
-	                        <version>${pmd.plugin.version}</version>
-	                        <configuration>
-	                            <linkXRef>true</linkXRef>
-	                            <targetJdk>1.6</targetJdk>
-	                            <rulesets>
-	                                <ruleset>/ginco/pmd.xml</ruleset>
-	                            </rulesets>
-	                        </configuration>
-	                    </plugin>
-	
-	                    <plugin>
-	                        <groupId>org.apache.maven.plugins</groupId>
-	                        <artifactId>maven-checkstyle-plugin</artifactId>
-	                        <version>${checkstyle.plugin.version}</version>
-	                        <configuration>
-	                            <configLocation>ginco/checkstyle.xml</configLocation>
-	                        </configuration>
-	                    </plugin>
-	                </reportPlugins>
-	            </configuration>
-	        </plugin>
-	        <plugin>
-	            <groupId>com.github.github</groupId>
-	            <artifactId>site-maven-plugin</artifactId>
-	            <version>${github.site.maven.plugin.version}</version>
-	            <configuration>
-	                <message>Creating github report site ${project.name} - ${project.version}</message>
-	                <merge>true</merge>
-	            </configuration>
-	            <executions>
-	                <execution>
-	                    <goals>
-	                        <goal>site</goal>
-	                    </goals>
-	                    <phase>site</phase>
-	                </execution>
-	            </executions>
-	        </plugin>
-	
-	        <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-project-info-reports-plugin</artifactId>
-	            <version>${maven.info.report.plugin.version}</version>
-	        </plugin>
-	        <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-jxr-plugin</artifactId>
-	            <version>${maven.jxr.plugin.version}</version>
-	        </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>fr.smile.mcc.ginco</groupId>
+                        <artifactId>ginco-quality-tool-conf</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>fr.smile.mcc.ginco</groupId>
+                        <artifactId>ginco-quality-tool-conf</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${maven.site.plugin.version}</version>
+                <configuration>
+                    <skipDeploy>true</skipDeploy>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <version>${maven.info.report.plugin.version}</version>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>index</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-jxr-plugin</artifactId>
+                            <version>${maven.jxr.plugin.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-pmd-plugin</artifactId>
+                            <version>${pmd.plugin.version}</version>
+                            <configuration>
+                                <linkXRef>true</linkXRef>
+                                <targetJdk>1.6</targetJdk>
+                                <rulesets>
+                                    <ruleset>/ginco/pmd.xml</ruleset>
+                                </rulesets>
+                            </configuration>
+                        </plugin>
+
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-checkstyle-plugin</artifactId>
+                            <version>${checkstyle.plugin.version}</version>
+                            <configuration>
+                                <configLocation>ginco/checkstyle.xml</configLocation>
+                            </configuration>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${github.site.maven.plugin.version}</version>
+                <configuration>
+                    <message>Creating github report site ${project.name} - ${project.version}</message>
+                    <merge>true</merge>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${maven.info.report.plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven.jxr.plugin.version}</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -631,8 +631,8 @@
         <module>ginco-admin</module>
         <module>ginco-webservices</module>
         <module>ginco-solr-conf</module>
-    	<module>ginco-cli</module>
-  </modules>
+        <module>ginco-cli</module>
+    </modules>
 
     <dependencies>
         <dependency>
