@@ -38,6 +38,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -168,7 +169,7 @@ public class ExportRestService {
 		File temp;
 		BufferedWriter out = null;
 		try {
-			temp = File.createTempFile("pattern", ".suffix");
+			temp = Files.createTempFile("pattern",".suffix").toFile();
 			temp.deleteOnExit();
 			out = new BufferedWriter(new FileWriter(temp));
 
@@ -224,7 +225,7 @@ public class ExportRestService {
 		File temp;
 		BufferedWriter out = null;
 		try {
-			temp = File.createTempFile("GINCO ", XML_EXTENSION);
+			temp = Files.createTempFile("GINCO ",XML_EXTENSION).toFile();
 			temp.deleteOnExit();
 			out = new BufferedWriter(new FileWriter(temp));
 			String result = gincoThesaurusExportService
@@ -255,7 +256,7 @@ public class ExportRestService {
 		File temp;
 		BufferedWriter out = null;
 		try {
-			temp = File.createTempFile("GINCO ", XML_EXTENSION);
+			temp = Files.createTempFile("GINCO ",XML_EXTENSION).toFile();
 			temp.deleteOnExit();
 			out = new BufferedWriter(new FileWriter(temp));
 			String result = gincoBranchExportService.getBranchExport(targetConcept);

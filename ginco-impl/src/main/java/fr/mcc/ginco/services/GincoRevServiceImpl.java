@@ -38,6 +38,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -99,7 +100,7 @@ public class GincoRevServiceImpl implements IGincoRevService {
 	public File getLogJournal(Thesaurus thesaurus) {
 		File res;
 		try {
-			res = File.createTempFile("pattern", ".suffix");
+			res = Files.createTempFile("pattern",".suffix").toFile();
 
 			res.deleteOnExit();
 			BufferedWriter out = new BufferedWriter(new FileWriter(res));
