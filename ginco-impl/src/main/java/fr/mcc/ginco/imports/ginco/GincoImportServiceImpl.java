@@ -59,6 +59,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Set;
 
@@ -132,7 +133,7 @@ public class GincoImportServiceImpl implements IGincoImportService {
 		logger.debug("Filename : " + prefix);
 		File file;
 		try {
-			file = File.createTempFile(prefix, ".tmp", tempDir);
+			file = Files.createTempFile(tempDir.toPath(),prefix,".tmp").toFile();
 
 			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(fileContent);

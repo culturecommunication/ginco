@@ -69,6 +69,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -179,8 +180,8 @@ public class SKOSExportServiceImpl implements ISKOSExportService {
 
 		try {
 
-			File temp = File.createTempFile("skosExport"
-					+ DateUtil.nowDate().getTime(), ".rdf");
+			File temp = Files.createTempFile("skosExport"
+					+ DateUtil.nowDate().getTime(),".rdf").toFile();
 			temp.deleteOnExit();
 
 			FileInputStream fis = new FileInputStream(temp);

@@ -39,6 +39,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -225,7 +226,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 
 		File file;
 		try {
-			file = File.createTempFile("skosimport", ".tmp", tempDir);
+			file = Files.createTempFile(tempDir.toPath(),"skosimport",".tmp").toFile();
 			logger.debug("Filename : " + file.getName());
 			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(fileContent);

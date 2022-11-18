@@ -38,6 +38,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,7 +108,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 	                         Language language) throws IOException {
 		File res;
 		try {
-			res = File.createTempFile("pattern", ".suffix");
+			res = Files.createTempFile("pattern",".suffix").toFile();
 
 			res.deleteOnExit();
 			BufferedWriter out = new BufferedWriter(new FileWriter(res));
@@ -135,7 +136,7 @@ public class MistralRevServiceImpl implements IMistralRevService {
 		List<String> allThesaurusId = query.list();
 
 		try {
-			res = File.createTempFile("pattern", ".suffix");
+			res = Files.createTempFile("pattern",".suffix").toFile();
 
 			res.deleteOnExit();
 			BufferedWriter out = new BufferedWriter(new FileWriter(res));
