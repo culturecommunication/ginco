@@ -34,18 +34,22 @@
  */
 package fr.mcc.ginco.solr;
 
-import fr.mcc.ginco.utils.DateUtil;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import fr.mcc.ginco.utils.DateUtil;
+
 @Service
 public class SearcherServiceUtil {
-
+	private Logger logger = LoggerFactory.getLogger(SearcherServiceUtil.class);
 	private static final String CLOSE_PARENTHESIS = ")";
 	private static final String OPEN_PARENTHESIS = "(";
 	private static final String OR = " OR ";
@@ -152,6 +156,14 @@ public class SearcherServiceUtil {
 			languages.add(lang.toString());
 		}
 		result.setLanguages(languages);
+		List<String> broaders = new ArrayList<String>();
+		Collection<Object> values = doc.getFieldValues(SolrField.PARENT_CONCEPT);
+		if (values != null) {
+			for (Object broader : values) {
+				broaders.add(broader.toString());
+			}
+		}
+		result.setBroaders(broaders);
 		return result;
 	}
 

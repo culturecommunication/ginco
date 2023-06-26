@@ -17,6 +17,7 @@ public class FilterCriteria {
 	private String sortdir;
 	private int start;
 	private int limit;
+	private String parent;
 
 	public String getModificationdate() {
 		return modificationdate;
@@ -104,5 +105,13 @@ public class FilterCriteria {
 
 	public void setSortdir(String sortdir) {
 		this.sortdir = sortdir;
+	}
+
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
 	}
 }

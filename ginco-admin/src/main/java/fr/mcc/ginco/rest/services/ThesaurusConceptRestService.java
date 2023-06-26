@@ -206,21 +206,21 @@ public class ThesaurusConceptRestService {
 	@PreAuthorize("hasPermission(#conceptView, '0') or hasPermission(#conceptView, '1')")
 	public ThesaurusConceptView updateConcept(ThesaurusConceptView conceptView) {
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-
-		if (userRoleService.hasRole(username, conceptView.getThesaurusId(), Role.EXPERT)) {
-			ThesaurusConcept existingConcept = thesaurusConceptService.getThesaurusConceptById(conceptView.getIdentifier());
-			if ((existingConcept != null
-					&& (existingConcept.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()
-							|| existingConcept.getTopConcept()))
-					|| conceptView.getStatus() != ConceptStatusEnum.CANDIDATE
-					.getStatus() || conceptView.getTopconcept()) {
-				throw new AccessDeniedException(
-						"you-can-save-only-candidate-and-non-top-terms-concepts");
-			}
-
-		}
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String username = auth.getName();
+//
+//		if (userRoleService.hasRole(username, conceptView.getThesaurusId(), Role.EXPERT)) {
+//			ThesaurusConcept existingConcept = thesaurusConceptService.getThesaurusConceptById(conceptView.getIdentifier());
+//			if ((existingConcept != null
+//					&& (existingConcept.getStatus() != ConceptStatusEnum.CANDIDATE.getStatus()
+//							|| existingConcept.getTopConcept()))
+//					|| conceptView.getStatus() != ConceptStatusEnum.CANDIDATE
+//					.getStatus() || conceptView.getTopconcept()) {
+//				throw new AccessDeniedException(
+//						"you-can-save-only-candidate-and-non-top-terms-concepts");
+//			}
+//
+//		}
 
 		ThesaurusConcept convertedConcept = thesaurusConceptViewConverter.convert(conceptView);
 

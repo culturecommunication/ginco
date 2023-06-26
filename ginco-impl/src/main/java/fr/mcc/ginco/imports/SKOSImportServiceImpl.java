@@ -35,7 +35,6 @@
 package fr.mcc.ginco.imports;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -48,6 +47,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -227,9 +227,7 @@ public class SKOSImportServiceImpl implements ISKOSImportService {
 		try {
 			file = File.createTempFile("skosimport", ".tmp", tempDir);
 			logger.debug("Filename : " + file.getName());
-			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write(fileContent);
-			fileWriter.close();
+			FileUtils.write(file,fileContent,"UTF-8");
 		} catch (IOException e) {
 			throw new BusinessException(
 					"Error storing temporarty file for import " + fileName,

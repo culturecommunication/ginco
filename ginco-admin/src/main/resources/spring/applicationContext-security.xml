@@ -1,77 +1,132 @@
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-             xmlns:beans="http://www.springframework.org/schema/beans"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://www.springframework.org/schema/beans
+<beans:beans
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/security
     http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <beans:bean id="gincoPermissionEvaluator"
-                class="fr.mcc.ginco.security.BasePermissionEvaluator"/>
+	<beans:bean id="gincoPermissionEvaluator"
+		class="fr.mcc.ginco.security.BasePermissionEvaluator" />
 
-    <beans:bean id="gincoExpressionHandler"
-                class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
-        <beans:property name="permissionEvaluator" ref="gincoPermissionEvaluator"/>
-    </beans:bean>
+	<beans:bean id="gincoExpressionHandler"
+		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+		<beans:property name="permissionEvaluator"
+			ref="gincoPermissionEvaluator" />
+	</beans:bean>
 
-    <global-method-security pre-post-annotations="enabled">
-        <expression-handler ref="gincoExpressionHandler"/>
-    </global-method-security>
-
-
-    <beans:bean id="ApplicationEventListener"
-                class="fr.mcc.ginco.security.ApplicationEventListener">
-    </beans:bean>
+	<global-method-security
+		pre-post-annotations="enabled">
+		<expression-handler ref="gincoExpressionHandler" />
+	</global-method-security>
 
 
-    <beans:bean id="gincoUserDetailsContextMapper" class="fr.mcc.ginco.security.GincoUserDetailsContextMapper"/>
+	<beans:bean id="ApplicationEventListener"
+		class="fr.mcc.ginco.security.ApplicationEventListener">
+	</beans:bean>
 
-    <ldap-server url="${ldap.base.provider.url}/o=gouv,c=fr"
-                 manager-dn="${ldap.security.principal}" manager-password="${ldap.security.credentials}"/>
-    <authentication-manager alias="authenticationManager" erase-credentials="false">
-        <ldap-authentication-provider
-                user-search-base="ou=personnes" user-search-filter="uid={0}"
-                user-context-mapper-ref="gincoUserDetailsContextMapper"/>
-        <authentication-provider>
-            <user-service>
-                <user name="${default.user.login}" authorities="ROLE_ADMIN" disabled="false"
-                      password="${default.user.password}"/>
-                <user name="${default.expert.login}" authorities="ROLE_USER" disabled="false"
-                      password="${default.expert.password}"/>
-                <user name="${default.responsable.login}" authorities="ROLE_USER" disabled="false"
-                      password="${default.responsable.password}"/>
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>
 
-    <http pattern="/login.jsp" security="none"/>
-    <http pattern="/*.js" security="none"/>
-    <http pattern="/JavaScriptServlet" security="none"/>
-    <http pattern="/extjs/**" security="none"/>
-    <http pattern="/css/**" security="none"/>
-    <http pattern="/app/**" security="none"/>
-    <http pattern="/images/**" security="none"/>
-    <http pattern="/services/ui/revisionservice/**" security="none"/>
+	<beans:bean id="gincoUserDetailsContextMapper"
+		class="fr.mcc.ginco.security.GincoUserDetailsContextMapper" />
 
-    <http use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
-        <intercept-url pattern="/**" access="isAuthenticated()"/>
-        <logout logout-url="/logout"/>
-        <custom-filter ref="GincoAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
-    </http>
+	<ldap-server url="${ldap.base.provider.url}/o=gouv,c=fr"
+		manager-dn="${ldap.security.principal}"
+		manager-password="${ldap.security.credentials}" />
+	<authentication-manager
+		alias="authenticationManager" erase-credentials="false">
+		<ldap-authentication-provider
+			user-search-base="ou=personnes" user-search-filter="uid={0}"
+			user-context-mapper-ref="gincoUserDetailsContextMapper" />
+		<authentication-provider>
+			<user-service>
+				<user name="${default.user.login}" authorities="ROLE_ADMIN"
+					disabled="false" password="${default.user.password}" />
+				<user name="${default.expert.login}" authorities="ROLE_USER"
+					disabled="false" password="${default.expert.password}" />
+				<user name="${default.responsable.login}"
+					authorities="ROLE_USER" disabled="false"
+					password="${default.responsable.password}" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
 
-    <beans:bean id="loginUrlAuthenticationEntryPoint"
-                class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-        <beans:property name="loginFormUrl" value="/login.jsp"/>
-    </beans:bean>
-    <beans:bean id="GincoAuthenticationFilter"
-                class="fr.mcc.ginco.security.AuthenticationFilter">
-        <beans:property name="filterProcessesUrl" value="/login_security_check"/>
-        <beans:property name="authenticationManager" ref="authenticationManager"/>
-        <beans:property name="lockoutService" ref="lockoutService"/>
-        <beans:property name="authenticationFailureHandler">
-            <beans:bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-                <beans:property name="defaultFailureUrl" value="/login.jsp#failure"/>
-            </beans:bean>
-        </beans:property>
-    </beans:bean>
+	<http pattern="/login.jsp" security="none" />
+	<http pattern="/*.js" security="none" />
+	<http pattern="/JavaScriptServlet" security="none" />
+	<http pattern="/extjs/**" security="none" />
+	<http pattern="/css/**" security="none" />
+	<http pattern="/app/**" security="none" />
+	<http pattern="/images/**" security="none" />
+	<http pattern="/services/ui/revisionservice/**" security="none" />
+
+	<security:http
+		pattern="/services/ui/thesaurusconceptservice/**"
+		use-expressions="true" auto-config="true">
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<security:http-basic
+			entry-point-ref="authenticationEntryPoint" />
+	</security:http>
+
+	<security:http pattern="/services/ui/baseservice/**"
+		use-expressions="true" auto-config="true">
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<security:http-basic
+			entry-point-ref="authenticationEntryPoint" />
+	</security:http>
+
+	<security:http
+		pattern="/services/ui/customattributesservice/**"
+		use-expressions="true" auto-config="true">
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<security:http-basic
+			entry-point-ref="authenticationEntryPoint" />
+	</security:http>
+
+	<security:http pattern="/services/ui/searcherservice/**"
+		use-expressions="true" auto-config="true">
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<security:http-basic
+			entry-point-ref="authenticationEntryPoint" />
+	</security:http>
+
+	<security:http pattern="/services/ui/importservice/**" use-expressions="true" auto-config="true">
+		<intercept-url pattern="/**" access="isAuthenticated()"/>
+		<security:http-basic entry-point-ref="authenticationEntryPoint" />
+	</security:http>
+
+	<beans:bean id="authenticationEntryPoint"
+		class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+		<beans:property name="realmName" value="admin realm" />
+	</beans:bean>
+
+	<http use-expressions="true"
+		entry-point-ref="loginUrlAuthenticationEntryPoint">
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<logout logout-url="/logout" />
+		<custom-filter ref="GincoAuthenticationFilter"
+			position="FORM_LOGIN_FILTER" />
+	</http>
+
+	<beans:bean id="loginUrlAuthenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/login.jsp" />
+	</beans:bean>
+	<beans:bean id="GincoAuthenticationFilter"
+		class="fr.mcc.ginco.security.AuthenticationFilter">
+		<beans:property name="filterProcessesUrl"
+			value="/login_security_check" />
+		<beans:property name="authenticationManager"
+			ref="authenticationManager" />
+		<beans:property name="lockoutService"
+			ref="lockoutService" />
+		<beans:property name="authenticationFailureHandler">
+			<beans:bean
+				class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+				<beans:property name="defaultFailureUrl"
+					value="/login.jsp#failure" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
 </beans:beans>
